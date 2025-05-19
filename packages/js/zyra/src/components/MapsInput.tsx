@@ -41,7 +41,7 @@ const MapsInput: React.FC<MapsInputProps> = (props) => {
   
 
     // Add geocoder control to the map
-    map.addControl(geocoder);
+    map.addControl(geocoder as any);
 
     // Create a marker and set it to the current location
     markerRef.current = new mapboxgl.Marker({ color: "red" })
