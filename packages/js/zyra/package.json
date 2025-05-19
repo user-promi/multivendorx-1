@@ -9,10 +9,13 @@
     "build"
   ],
   "scripts": {
-    "build": "wireit"
+    "build": "pnpm --if-present --workspace-concurrency=Infinity --stream --filter=\"$npm_package_name...\" '/^build:project:.*$/'",
+		"build:project": "pnpm --if-present '/^build:project:.*$/'",
+		"build:project:bundle": "wireit",
+    "preinstall": "npx only-allow pnpm"
   },
   "wireit": {
-    "build": {
+    "build:project:bundle": {
       "command": "rollup -c rollup.config.js",
       "files": [
         "src/**",

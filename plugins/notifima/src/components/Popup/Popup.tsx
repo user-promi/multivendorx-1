@@ -3,7 +3,7 @@ import { __ } from "@wordpress/i18n";
 import { ProPopup } from "zyra";
 
 const proPopupContent = {
-    proUrl: appLocalizer.pro_url,
+    proUrl: appLocalizer?.pro_url,
     title: __(
         "Boost to Product Notifima Pro to access premium features!",
         "notifima"

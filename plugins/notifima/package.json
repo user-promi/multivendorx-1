@@ -2,7 +2,7 @@
     "name": "notifima",
     "displayName": "woocommerce-product-stock-manager",
     "version": "2.0.0",
-    "description": "",
+    "description": "=== WooCommerce Product Stock Manager ===",
     "main": "index.js",
     "engines": {
         "node": "^20.11.1"
@@ -40,7 +40,14 @@
         "minify": "node bin/minify.mjs",
         "makepot": "wp i18n make-pot --domain='notifima' --include='assets/js,classes,templates,config.php,product_stock_alert.php' . --headers='{\"Report-Msgid-Bugs-To\":\"https://notifima.com/contact/\"}' --file-comment=\"Copyright (c) $(date +'%Y') Notifima Inc. All Rights Reserved.\" languages/notifima.pot"
     },
-    "keywords": [],
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/multivendorx/woocommerce-product-stock-alert.git"
+    },
+    "bugs": {
+        "url": "https://github.com/multivendorx/woocommerce-product-stock-alert/issues"
+    },
+    "homepage": "https://github.com/multivendorx/woocommerce-product-stock-alert#readme",
     "author": "",
     "license": "ISC",
     "packageManager": "pnpm@10.11.0",
