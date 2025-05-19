@@ -1,0 +1,12 @@
+node_modules
+assets
+composer.lock
+!/src/assets/
+languages
+release
+vendor
+.circleci/
+.phpunit.result.cache
+docker-compose.yml
+bin/install-wp-tests.sh
+dist
