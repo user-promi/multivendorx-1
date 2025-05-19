@@ -13,7 +13,6 @@ import { __ } from "@wordpress/i18n";
 import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css"; // theme css file
 import "./subscribersList.scss";
-import "zyra/build/index.css";
 
 // Type declarations
 type SubscriberStatus = {

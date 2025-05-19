@@ -66,7 +66,10 @@ module.exports = {
             {
                 test: /\.css$/,
                 use: [ "style-loader", "css-loader" ],
-                include: /node_modules/,
+                include: [
+                    path.resolve(__dirname, "node_modules"),
+                    path.resolve(__dirname, "../../packages/js/zyra/build"),
+                ],
             },
             {
                 test: /\.(png|jpe?g|gif|svg)$/i,

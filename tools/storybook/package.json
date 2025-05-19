@@ -4,9 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "build": "pnpm --if-present --workspace-concurrency=Infinity --stream --filter=\"$npm_package_name...\" \"/^build:(project:|storybook).*$/\"",
+    "build": "pnpm --if-present --workspace-concurrency=Infinity --stream --filter \"${npm_package_name}\" \"/^build:(project:|storybook).*$/\"",
     "build:storybook": "storybook build",
-    "watch:build": "pnpm --if-present --workspace-concurrency=Infinity --filter=\"$npm_package_name...\" --parallel \"/^watch:build:storybook$/\"",
+    "watch:build": "pnpm --if-present --workspace-concurrency=Infinity --filter \"${npm_package_name}\" --parallel \"/^watch:build:storybook$/\"",
     "watch:build:storybook": "storybook dev -p 6006",
     "dev": "vite",
     "lint": "eslint .",

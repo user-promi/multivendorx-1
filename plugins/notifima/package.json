@@ -8,7 +8,7 @@
         "node": "^20.11.1"
     },
     "scripts": {
-        "build": "pnpm --if-present --workspace-concurrency=Infinity --stream --filter \"$npm_package_name...\" \"/^build:project:.*$/\"",
+        "build": "echo \"${npm_package_name}\" && pnpm --if-present --workspace-concurrency=Infinity --stream --filter \"${npm_package_name}\" \"/^build:project:.*$/\"",
         "build:zip": "pnpm install && pnpm run readme && pnpm --if-present \"/^build:project:.*$/\" && pnpm run makepot && node bin/release.mjs",
         "build:project": "pnpm --if-present \"/^build:project:.*$/\"",
         "build:project:bandle": "wp-scripts build --progress && pnpm run minify && node bin/move-files.mjs && pnpm run clean",
@@ -68,7 +68,7 @@
         "react-router-dom": "^7.6.0",
         "ts-loader": "9.5.x",
         "typescript": "5.8.x",
-        "zyra": "github:JoySarkar07/zyra"
+        "zyra": "workspace:*"
     },
     "devDependencies": {
         "@babel/preset-react": "^7.27.1",
