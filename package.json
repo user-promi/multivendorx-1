@@ -1,0 +1,46 @@
+{
+  "name": "multivendorx",
+  "version": "1.0.0",
+  "description": "Repo for MultiVendorX ecosystem",
+  "homepage": "https://multivendorx.com/",
+  "engines": {
+    "node": "^20.11.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/multivendorx"
+  },
+  "private": true,
+  "scripts": {
+    "build": "pnpm -r --workspace-concurrency=Infinity --stream \"/^build:project:.*$/\"",
+    "lint": "pnpm -r lint",
+    "test": "pnpm -r test",
+    "clean": "rimraf -v -g \"**/node_modules\" \"plugins/*/vendor\" \"plugins/*/languages\" && pnpm store prune",
+    "sync-dependencies": "pnpm exec syncpack -- fix-mismatches",
+    "preinstall": "npx only-allow pnpm"
+  },
+  "keywords": [],
+  "author": "MultiVendorX",
+  "license": "ISC",
+  "packageManager": "pnpm@10.11.0",
+  "devDependencies": {
+    "@babel/core": "^7.27.1",
+    "@babel/preset-env": "^7.27.2",
+    "@types/node": "22.x.x",
+    "@wordpress/eslint-plugin": "22.9.x",
+    "@wordpress/prettier-config": "4.23.x",
+    "@wordpress/scripts": "^30.16.0",
+    "autoprefixer": "^10.4.21",
+    "chalk": "^5.4.1",
+    "css-loader": "7.1.x",
+    "glob": "^11.0.2",
+    "postcss": "8.5.x",
+    "postcss-loader": "8.1.x",
+    "rimraf": "6.0.x",
+    "sass": "^1.88.0",
+    "sass-loader": "16.0.x",
+    "syncpack": "^13.0.4",
+    "webpack": "5.99.x",
+    "wp-readme-to-markdown": "^1.0.1"
+  }
+}
