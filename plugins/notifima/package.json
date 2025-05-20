@@ -27,7 +27,7 @@
         "test:php": "./vendor/bin/phpunit -c ./phpunit.xml.dist",
         "env:create": "pnpm wp-env start && node bin/create-docker-compose.mjs && docker compose up -d",
         "env:start": "pnpm wp-env start",
-        "env:dev": "pnpm wp-env start --update",
+        "env:dev": "pnpm wp-env start --update && pnpm --if-present --filter storybook run watch:build:storybook",
         "env:start:database": "node bin/create-docker-compose.mjs && docker compose up -d",
         "env:stop": "pnpm wp-env stop && docker compose down",
         "env:clean": "pnpm wp-env clean",
