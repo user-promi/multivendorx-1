@@ -2,7 +2,7 @@ import React, { ChangeEvent, MouseEvent, FocusEvent } from "react";
 
 export interface TextAreaProps {
     id?: string;
-    key:string,
+    key: string;
     name?: string;
     value?: string | number;
     maxLength?: number;
@@ -61,7 +61,10 @@ export const TextArea: React.FC<TextAreaProps> = ({
             />
             {proSetting && <span className="admin-pro-tag">pro</span>}
             {description && (
-                <p className={descClass} dangerouslySetInnerHTML={{ __html: description }}></p>
+                <p
+                    className={descClass}
+                    dangerouslySetInnerHTML={{ __html: description }}
+                ></p>
             )}
         </div>
     );

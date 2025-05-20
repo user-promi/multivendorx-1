@@ -1,4 +1,4 @@
-import React,{ useState } from 'react';
+import React, { useState } from "react";
 
 export interface DisplayButtonProp {
     customStyle: {
@@ -17,14 +17,18 @@ export interface DisplayButtonProp {
         button_text?: string;
     };
     children?: React.ReactNode;
-    onClick?: (e:React.MouseEvent<HTMLButtonElement>) => void;
-};
+    onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+}
 
-const DisplayButton: React.FC<DisplayButtonProp> = ({ customStyle, children, onClick }) => {
+const DisplayButton: React.FC<DisplayButtonProp> = ({
+    customStyle,
+    children,
+    onClick,
+}) => {
     const style = {
-        border: `${customStyle.button_border_size ?? 1}px solid ${customStyle.button_border_color ?? '#000000'}`,
-        backgroundColor: customStyle.button_background_color ?? '#ffffff',
-        color: customStyle.button_text_color ?? '#000000',
+        border: `${customStyle.button_border_size ?? 1}px solid ${customStyle.button_border_color ?? "#000000"}`,
+        backgroundColor: customStyle.button_background_color ?? "#ffffff",
+        color: customStyle.button_text_color ?? "#000000",
         borderRadius: `${customStyle.button_border_radious ?? 0}px`,
         fontSize: `${customStyle.button_font_size ?? 20}px`,
         fontWeight: `${customStyle.button_font_width ?? 1}rem`,
@@ -32,10 +36,11 @@ const DisplayButton: React.FC<DisplayButtonProp> = ({ customStyle, children, onC
         padding: `${customStyle.button_padding ?? 0}px`,
     };
 
-    const hoverStyle = { 
-        border: `1px solid ${customStyle.button_border_color_onhover ?? '#000000'}`,
-        color: customStyle.button_text_color_onhover ?? '#000000',
-        backgroundColor: customStyle.button_background_color_onhover ?? '#ffffff',
+    const hoverStyle = {
+        border: `1px solid ${customStyle.button_border_color_onhover ?? "#000000"}`,
+        color: customStyle.button_text_color_onhover ?? "#000000",
+        backgroundColor:
+            customStyle.button_background_color_onhover ?? "#ffffff",
     };
 
     const [hovered, setHovered] = useState(false);
@@ -50,6 +55,6 @@ const DisplayButton: React.FC<DisplayButtonProp> = ({ customStyle, children, onC
             {customStyle.button_text || children}
         </button>
     );
-}
+};
 
 export default DisplayButton;

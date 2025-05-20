@@ -1,11 +1,18 @@
-import React, { JSX,useState, useEffect, useRef } from "react";
+import React, { JSX, useState, useEffect, useRef } from "react";
 
 interface HoverInputRenderProps {
     label: string;
     placeholder?: string;
     onLabelChange: (newLabel: string) => void;
-    renderStaticContent: (props: { label: string; placeholder?: string }) => JSX.Element;
-    renderEditableContent: (props: { label: string; onLabelChange: (newLabel: string) => void; placeholder?: string }) => JSX.Element;
+    renderStaticContent: (props: {
+        label: string;
+        placeholder?: string;
+    }) => JSX.Element;
+    renderEditableContent: (props: {
+        label: string;
+        onLabelChange: (newLabel: string) => void;
+        placeholder?: string;
+    }) => JSX.Element;
 }
 
 const HoverInputRender: React.FC<HoverInputRenderProps> = ({
@@ -21,7 +28,11 @@ const HoverInputRender: React.FC<HoverInputRenderProps> = ({
 
     useEffect(() => {
         const closePopup = (event: MouseEvent) => {
-            if ((event.target as HTMLElement).closest(".meta-setting-modal, .react-draggable")) {
+            if (
+                (event.target as HTMLElement).closest(
+                    ".meta-setting-modal, .react-draggable"
+                )
+            ) {
                 return;
             }
             setIsClicked(false);
@@ -59,7 +70,11 @@ const HoverInputRender: React.FC<HoverInputRenderProps> = ({
                     onClick={() => setIsClicked(true)}
                     onMouseLeave={handleMouseLeave}
                 >
-                    {renderEditableContent({ label, onLabelChange, placeholder })}
+                    {renderEditableContent({
+                        label,
+                        onLabelChange,
+                        placeholder,
+                    })}
                 </div>
             )}
         </>

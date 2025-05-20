@@ -7,7 +7,11 @@ export interface WpEditorProps {
     onEditorChange: (content: string) => void;
 }
 
-const WpEditor: React.FC<WpEditorProps> = ({ apiKey, value, onEditorChange }) => {
+const WpEditor: React.FC<WpEditorProps> = ({
+    apiKey,
+    value,
+    onEditorChange,
+}) => {
     return (
         <>
             <Editor

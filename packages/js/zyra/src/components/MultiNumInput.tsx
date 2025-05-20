@@ -50,28 +50,44 @@ const MultiNumInput: React.FC<MultiNumInputProps> = ({
         <div className={parentWrapperClass}>
             <div className={childWrapperClass}>
                 {options.map((option, index) => {
-                    const selectedValue = value.find((val) => val.key === option.key)?.value ?? "";
+                    const selectedValue =
+                        value.find((val) => val.key === option.key)?.value ??
+                        "";
 
                     return (
                         <div key={option.key} className={inputWrapperClass}>
                             <div className={innerInputWrapperClass}>
-                                <div className={inputLabelClass}>{option.label}</div>
+                                <div className={inputLabelClass}>
+                                    {option.label}
+                                </div>
                                 <input
                                     id={`${idPrefix}-${option.key}`}
                                     className={inputClass}
                                     type={option.type}
                                     name={option.name}
                                     value={selectedValue}
-                                    onChange={(e) => onChange?.(e, keyName, option.key, index)}
+                                    onChange={(e) =>
+                                        onChange?.(
+                                            e,
+                                            keyName,
+                                            option.key,
+                                            index
+                                        )
+                                    }
                                 />
-                                {proSetting && <span className="admin-pro-tag">pro</span>}
+                                {proSetting && (
+                                    <span className="admin-pro-tag">pro</span>
+                                )}
                             </div>
                         </div>
                     );
                 })}
             </div>
             {description && (
-                <p className={descClass} dangerouslySetInnerHTML={{ __html: description }}></p>
+                <p
+                    className={descClass}
+                    dangerouslySetInnerHTML={{ __html: description }}
+                ></p>
             )}
         </div>
     );

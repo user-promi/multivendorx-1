@@ -1,13 +1,11 @@
 /* global appLocalizer */
 import React from "react";
 import { DialogContent, DialogContentText } from "@mui/material";
-import '../styles/web/popupContent.scss';
-
-
+import "../styles/web/popupContent.scss";
 
 export interface ProPopupProps {
     proUrl?: string;
-    title?:string;
+    title?: string;
     messages?: string[];
 }
 
@@ -21,16 +19,24 @@ const ProPopup: React.FC<ProPopupProps> = (props) => {
                     <div className="admin-image-overlay">
                         <div className="admin-overlay-content">
                             <h1 className="banner-header">
-                                Unlock <span className="banner-pro-tag">Pro</span>
+                                Unlock{" "}
+                                <span className="banner-pro-tag">Pro</span>
                             </h1>
                             <div className="admin-banner-content">
-                                <strong>{ props.title }</strong>
+                                <strong>{props.title}</strong>
                                 <p>&nbsp;</p>
                                 {props.messages?.map((message, index) => (
-                                    <p key={index}>{`${index+1}. ${message}`}</p>
+                                    <p
+                                        key={index}
+                                    >{`${index + 1}. ${message}`}</p>
                                 ))}
                             </div>
-                            <a className="admin-go-pro-btn" target="_blank" rel="noopener noreferrer" href={safeProUrl}>
+                            <a
+                                className="admin-go-pro-btn"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                href={safeProUrl}
+                            >
                                 Upgrade to Pro
                             </a>
                         </div>

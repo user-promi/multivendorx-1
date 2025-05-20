@@ -1,6 +1,5 @@
-import React from 'react';
-import '../styles/web/ShortCodeTable.scss';
-
+import React from "react";
+import "../styles/web/ShortCodeTable.scss";
 
 interface Option {
     label: string;
@@ -16,11 +15,12 @@ interface ShortCodeTableProps {
 }
 
 const ShortCodeTable: React.FC<ShortCodeTableProps> = (props) => {
-    const { wrapperClass, descClass, description, options, optionLabel } = props;
+    const { wrapperClass, descClass, description, options, optionLabel } =
+        props;
 
     return (
         <main className={wrapperClass}>
-            <table className='shortcode-table'>
+            <table className="shortcode-table">
                 <thead>
                     <tr>
                         {optionLabel && optionLabel.length > 0 ? (
@@ -36,17 +36,24 @@ const ShortCodeTable: React.FC<ShortCodeTableProps> = (props) => {
                     {options && options.length > 0 ? (
                         options.map((option, index) => (
                             <tr key={index}>
-                                <td><code>{option.label}</code></td>
+                                <td>
+                                    <code>{option.label}</code>
+                                </td>
                                 <td>{option.desc}</td>
                             </tr>
                         ))
                     ) : (
-                        <tr><td colSpan={2}>No Options Available</td></tr> // Fallback if no options exist
+                        <tr>
+                            <td colSpan={2}>No Options Available</td>
+                        </tr> // Fallback if no options exist
                     )}
                 </tbody>
             </table>
             {description && (
-                <p className={descClass} dangerouslySetInnerHTML={{ __html: description }} />
+                <p
+                    className={descClass}
+                    dangerouslySetInnerHTML={{ __html: description }}
+                />
             )}
         </main>
     );

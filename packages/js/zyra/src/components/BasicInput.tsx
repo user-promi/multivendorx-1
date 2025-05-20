@@ -5,7 +5,16 @@ export interface BasicInputProps {
     inputLabel?: string;
     inputClass?: string;
     id?: string;
-    type?: "text" | "button" | "number"| "color" | "password" | "email" | "file" | "range" |"url";
+    type?:
+        | "text"
+        | "button"
+        | "number"
+        | "color"
+        | "password"
+        | "email"
+        | "file"
+        | "range"
+        | "url";
     name?: string;
     value?: string | number;
     placeholder?: string;
@@ -45,7 +54,7 @@ const BasicInput: React.FC<BasicInputProps> = ({
     description,
     descClass,
     rangeUnit,
-    disabled = false
+    disabled = false,
 }) => {
     return (
         <div className={wrapperClass}>
@@ -65,9 +74,19 @@ const BasicInput: React.FC<BasicInputProps> = ({
                 onFocus={onFocus}
                 disabled={disabled}
             />
-            {parameter && <span className="parameter" dangerouslySetInnerHTML={{ __html: parameter }} />}
+            {parameter && (
+                <span
+                    className="parameter"
+                    dangerouslySetInnerHTML={{ __html: parameter }}
+                />
+            )}
             {proSetting && <span className="admin-pro-tag">pro</span>}
-            {description && <p className={descClass} dangerouslySetInnerHTML={{ __html: description }} />}
+            {description && (
+                <p
+                    className={descClass}
+                    dangerouslySetInnerHTML={{ __html: description }}
+                />
+            )}
             {type === "range" && (
                 <output className={descClass}>
                     {value ? value : 0}

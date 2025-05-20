@@ -1,15 +1,16 @@
-import React,{ useState, useEffect } from 'react';
-import Select, { MultiValue, SingleValue, ActionMeta } from 'react-select';
-import Button from './DisplayButton';
-import '../styles/web/FromViewer.scss';
-
-
+import React, { useState, useEffect } from "react";
+import Select, { MultiValue, SingleValue, ActionMeta } from "react-select";
+import Button from "./DisplayButton";
+import "../styles/web/FromViewer.scss";
 
 declare global {
     interface Window {
         grecaptcha?: {
             ready: (callback: () => void) => void;
-            execute: (siteKey: string, options: { action: string }) => Promise<string>;
+            execute: (
+                siteKey: string,
+                options: { action: string }
+            ) => Promise<string>;
         };
     }
 }
@@ -45,28 +46,39 @@ export interface FromViewerProps {
     onSubmit: (data: FormData) => void;
 }
 
-const Checkboxes: React.FC<{ options: Option[]; onChange: (data: string[]) => void; }> = ({ options, onChange }) => {
-    const [checkedItems, setCheckedItems] = useState<Option[]>(options.filter(({ isdefault }) => isdefault));
+const Checkboxes: React.FC<{
+    options: Option[];
+    onChange: (data: string[]) => void;
+}> = ({ options, onChange }) => {
+    const [checkedItems, setCheckedItems] = useState<Option[]>(
+        options.filter(({ isdefault }) => isdefault)
+    );
 
     useEffect(() => {
-        onChange(checkedItems.map(item => item.value));
+        onChange(checkedItems.map((item) => item.value));
     }, [checkedItems]);
 
     const handleChange = (option: Option, checked: boolean) => {
-        const newCheckedItems = checkedItems.filter(item => item.value !== option.value);
+        const newCheckedItems = checkedItems.filter(
+            (item) => item.value !== option.value
+        );
         if (checked) newCheckedItems.push(option);
         setCheckedItems(newCheckedItems);
     };
 
     return (
-        <div className='multiselect-container items-wrapper'>
-            {options.map(option => (
-                <div key={option.value} className='select-items'>
+        <div className="multiselect-container items-wrapper">
+            {options.map((option) => (
+                <div key={option.value} className="select-items">
                     <input
                         type="checkbox"
                         id={option.value}
-                        checked={!!checkedItems.find(item => item.value === option.value)}
-                        onChange={e => handleChange(option, e.target.checked)}
+                        checked={
+                            !!checkedItems.find(
+                                (item) => item.value === option.value
+                            )
+                        }
+                        onChange={(e) => handleChange(option, e.target.checked)}
                     />
                     <label htmlFor={option.value}>{option.label}</label>
                 </div>
@@ -75,19 +87,43 @@ const Checkboxes: React.FC<{ options: Option[]; onChange: (data: string[]) => vo
     );
 };
 
-const Multiselect: React.FC<{ options: Option[]; onChange: (value: string[] | string | null) => void; isMulti?: boolean }> = ({ options = [], onChange, isMulti = false }) => {
-    const [selectedOptions, setSelectedOptions] = useState<MultiValue<Option> | SingleValue<Option>>(isMulti ? options.filter(({ isdefault }) => isdefault) : options.find(({ isdefault }) => isdefault) || null);
+const Multiselect: React.FC<{
+    options: Option[];
+    onChange: (value: string[] | string | null) => void;
+    isMulti?: boolean;
+}> = ({ options = [], onChange, isMulti = false }) => {
+    const [selectedOptions, setSelectedOptions] = useState<
+        MultiValue<Option> | SingleValue<Option>
+    >(
+        isMulti
+            ? options.filter(({ isdefault }) => isdefault)
+            : options.find(({ isdefault }) => isdefault) || null
+    );
 
-    const handleChange = (newValue: MultiValue<Option> | SingleValue<Option>, actionMeta: ActionMeta<Option>) => {
+    const handleChange = (
+        newValue: MultiValue<Option> | SingleValue<Option>,
+        actionMeta: ActionMeta<Option>
+    ) => {
         setSelectedOptions(newValue);
         if (isMulti) {
-            onChange(Array.isArray(newValue) ? newValue.map(option => option.value) : []);
+            onChange(
+                Array.isArray(newValue)
+                    ? newValue.map((option) => option.value)
+                    : []
+            );
         } else {
             onChange(newValue ? (newValue as Option).value : null);
         }
     };
 
-    return <Select isMulti={isMulti} value={selectedOptions} onChange={handleChange} options={options} />;
+    return (
+        <Select
+            isMulti={isMulti}
+            value={selectedOptions}
+            onChange={handleChange}
+            options={options}
+        />
+    );
 };
 
 const FromViewer: React.FC<FromViewerProps> = ({ formFields, onSubmit }) => {
@@ -96,7 +132,7 @@ const FromViewer: React.FC<FromViewerProps> = ({ formFields, onSubmit }) => {
     const buttonSetting = formFields.butttonsetting || {};
     const [captchaToken, setCaptchaToken] = useState<string | null>(null);
     const [captchaError, setCaptchaError] = useState<boolean>(false);
-    const recaptchaField = formList.find(field => field.type === 'recaptcha');
+    const recaptchaField = formList.find((field) => field.type === "recaptcha");
     const siteKey = recaptchaField?.sitekey || null;
 
     useEffect(() => {
@@ -104,8 +140,9 @@ const FromViewer: React.FC<FromViewerProps> = ({ formFields, onSubmit }) => {
 
         const loadRecaptcha = () => {
             window.grecaptcha?.ready(() => {
-                window.grecaptcha?.execute(siteKey, { action: "form_submission" })
-                    .then(token => setCaptchaToken(token))
+                window.grecaptcha
+                    ?.execute(siteKey, { action: "form_submission" })
+                    .then((token) => setCaptchaToken(token))
                     .catch(() => setCaptchaError(true));
             });
         };
@@ -123,41 +160,67 @@ const FromViewer: React.FC<FromViewerProps> = ({ formFields, onSubmit }) => {
     }, [siteKey]);
 
     const handleChange = (name: string, value: any) => {
-        setInputs(prevData => ({ ...prevData, [name]: value }));
+        setInputs((prevData) => ({ ...prevData, [name]: value }));
     };
 
     const handleSubmit = () => {
         // e.preventDefault();
         const data = new FormData();
-        Object.keys(inputs).forEach(key => data.append(key, inputs[key]));
+        Object.keys(inputs).forEach((key) => data.append(key, inputs[key]));
         onSubmit(data);
     };
 
     return (
-        <main className='catalogx-enquiry-pro-form'>
-            {formList.map(field => {
+        <main className="catalogx-enquiry-pro-form">
+            {formList.map((field) => {
                 if (field.disabled) return null;
                 switch (field.type) {
-                    case 'text':
+                    case "text":
                         return (
-                            <section className='form-text form-pro-sections' key={field.name}>
+                            <section
+                                className="form-text form-pro-sections"
+                                key={field.name}
+                            >
                                 <label>{field.label}</label>
-                                <input type="text" name={field.name} placeholder={field.placeholder} onChange={e => handleChange(field.name!, e.target.value)} />
+                                <input
+                                    type="text"
+                                    name={field.name}
+                                    placeholder={field.placeholder}
+                                    onChange={(e) =>
+                                        handleChange(
+                                            field.name!,
+                                            e.target.value
+                                        )
+                                    }
+                                />
                             </section>
                         );
-                    case 'checkboxes':
+                    case "checkboxes":
                         return (
-                            <section className='form-pro-sections' key={field.name}>
+                            <section
+                                className="form-pro-sections"
+                                key={field.name}
+                            >
                                 <label>{field.label}</label>
-                                <Checkboxes options={field.options || []} onChange={data => handleChange(field.name!, data)} />
+                                <Checkboxes
+                                    options={field.options || []}
+                                    onChange={(data) =>
+                                        handleChange(field.name!, data)
+                                    }
+                                />
                             </section>
                         );
                     default:
                         return null;
                 }
             })}
-            <section className='popup-footer-section'>
-                <Button customStyle={buttonSetting} onClick={() => handleSubmit()}>Submit</Button>
+            <section className="popup-footer-section">
+                <Button
+                    customStyle={buttonSetting}
+                    onClick={() => handleSubmit()}
+                >
+                    Submit
+                </Button>
             </section>
         </main>
     );

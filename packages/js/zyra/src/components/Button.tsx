@@ -11,7 +11,7 @@ export interface ButtonProps {
     descClass?: string;
 }
 
- const Button: React.FC<ButtonProps> = ({
+const Button: React.FC<ButtonProps> = ({
     wrapperClass,
     inputClass,
     type = "button",
@@ -19,7 +19,7 @@ export interface ButtonProps {
     onClick,
     proSetting,
     description,
-    descClass
+    descClass,
 }) => {
     return (
         <div className={wrapperClass}>
@@ -31,7 +31,10 @@ export interface ButtonProps {
             />
             {proSetting && <span className="admin-pro-tag">pro</span>}
             {description && (
-                <p className={descClass} dangerouslySetInnerHTML={{ __html: description }} />
+                <p
+                    className={descClass}
+                    dangerouslySetInnerHTML={{ __html: description }}
+                />
             )}
         </div>
     );

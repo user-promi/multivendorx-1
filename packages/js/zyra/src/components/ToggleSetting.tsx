@@ -1,6 +1,5 @@
 import React from "react";
-import '../styles/web/ToggleSetting.scss';
-
+import "../styles/web/ToggleSetting.scss";
 
 interface Option {
     key: string;
@@ -25,14 +24,17 @@ const ToggleSetting: React.FC<ToggleSettingProps> = ({
     descClass = "",
     value,
     onChange,
-    proSetting = false
+    proSetting = false,
 }) => {
     return (
         <section className={wrapperClass}>
             <div className="toggle-setting-container">
                 <ul>
                     {options.map((option) => (
-                        <li key={option.key} onClick={() => onChange(option.value)}>
+                        <li
+                            key={option.key}
+                            onClick={() => onChange(option.value)}
+                        >
                             <input
                                 className="toggle-setting-form-input"
                                 type="radio"
@@ -49,7 +51,10 @@ const ToggleSetting: React.FC<ToggleSettingProps> = ({
             </div>
             {proSetting && <span className="admin-pro-tag">pro</span>}
             {description && (
-                <p className={descClass} dangerouslySetInnerHTML={{ __html: description }}></p>
+                <p
+                    className={descClass}
+                    dangerouslySetInnerHTML={{ __html: description }}
+                ></p>
             )}
         </section>
     );

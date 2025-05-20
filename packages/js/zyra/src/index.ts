@@ -63,7 +63,11 @@ export { default as ToggleSetting } from "./components/ToggleSetting";
 export { default as Tour } from "./components/TourSteps";
 export { default as WpEditor } from "./components/WpEditor";
 
-export { getApiResponse, sendApiResponse, getApiLink } from "./components/apiService";
+export {
+    getApiResponse,
+    sendApiResponse,
+    getApiLink,
+} from "./components/apiService";
 export * from "./utils/settingUtil";
 
 // Types
@@ -82,7 +86,10 @@ export type { FromViewerProps } from "./components/FormViewer";
 export type { LogProps } from "./components/Log";
 export type { ModulePopupProps } from "./components/ModulePopup";
 export type { MultiCheckBoxProps, Option } from "./components/MultiCheckbox";
-export type { MultiNumInputProps, MultiNumOption } from "./components/MultiNumInput";
+export type {
+    MultiNumInputProps,
+    MultiNumOption,
+} from "./components/MultiNumInput";
 export type { ProPopupProps } from "./components/ProPopup";
 export type { RadioInputProps } from "./components/RadioInput";
 export type { SelectOptions, SelectInputProps } from "./components/SelectInput";

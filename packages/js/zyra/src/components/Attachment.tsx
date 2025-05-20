@@ -28,8 +28,8 @@ const Attachment: React.FC<AttachmentProps> = ({ formField, onChange }) => {
                     <div className="wrapper">
                         <i className="adminLib-cloud-upload"></i>
                         <p className="heading">
-                            <span>{ "Click to upload" }</span>{" "}
-                            { "or drag and drop" }
+                            <span>{"Click to upload"}</span>{" "}
+                            {"or drag and drop"}
                         </p>
                     </div>
                 </label>

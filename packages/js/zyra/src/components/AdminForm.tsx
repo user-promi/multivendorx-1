@@ -30,10 +30,10 @@ import Log from "./Log";
 import CheckboxCustomImg from "./CheckboxCustomImg";
 import InputMailchimpList from "./InputMailchimpList";
 import ModulePopup, { ModulePopupProps } from "./ModulePopup";
-const LazyMapsInput = lazy(() => import('./MapsInput'));
+const LazyMapsInput = lazy(() => import("./MapsInput"));
 import GoogleMap from "./GoogleMap";
 
-import '../styles/web/AdminForm.scss';
+import "../styles/web/AdminForm.scss";
 
 declare const wp: any;
 
@@ -44,7 +44,6 @@ interface CountryState {
     label: string;
     value: string;
 }
-
 
 interface DependentCondition {
     key: string;
@@ -80,20 +79,51 @@ interface InputField {
     id: string;
     class: string;
     name: string;
-    type?: "text" | "select" | "multi-select" | "map" | "google-map" |
-    "checkbox" | "country" | "state" | "radio-color" |
-    "radio-select" | "stock-alert-checkbox"
-    | "radio" | "multi-number" | "button" |
-    "password" | "calender" | "color" |
-    "email" | "number" | "range" | "file" |
-    "url" | "textarea" | "normalfile" |
-    "settingToggle" | "wpeditor" | "label"
-    | "section" | "blocktext" | "button-customizer" |
-    "stock-alert-form-customizer" | "form-customizer"
-    | "catalog-customizer" | "multi-checkbox-table" |
-    "mergeComponent" | "shortCode-table" | "syncbutton" |
-    "sync-map" | "sso-key" | "testconnection" | "log" |
-    "checkbox-custom-img" | "api-connect" | "from-builder";
+    type?:
+        | "text"
+        | "select"
+        | "multi-select"
+        | "map"
+        | "google-map"
+        | "checkbox"
+        | "country"
+        | "state"
+        | "radio-color"
+        | "radio-select"
+        | "stock-alert-checkbox"
+        | "radio"
+        | "multi-number"
+        | "button"
+        | "password"
+        | "calender"
+        | "color"
+        | "email"
+        | "number"
+        | "range"
+        | "file"
+        | "url"
+        | "textarea"
+        | "normalfile"
+        | "settingToggle"
+        | "wpeditor"
+        | "label"
+        | "section"
+        | "blocktext"
+        | "button-customizer"
+        | "stock-alert-form-customizer"
+        | "form-customizer"
+        | "catalog-customizer"
+        | "multi-checkbox-table"
+        | "mergeComponent"
+        | "shortCode-table"
+        | "syncbutton"
+        | "sync-map"
+        | "sso-key"
+        | "testconnection"
+        | "log"
+        | "checkbox-custom-img"
+        | "api-connect"
+        | "from-builder";
     desc?: string;
     placeholder?: string;
     inputLabel?: string;
@@ -121,7 +151,11 @@ interface InputField {
     valuename?: string;
     hint?: string;
     blocktext?: string;
-    rows: { key: string; label: string; options?: { value: string | number; label: string }[] }[];
+    rows: {
+        key: string;
+        label: string;
+        options?: { value: string | number; label: string }[];
+    }[];
     columns: { key: string; label: string; moduleEnabled?: string }[];
     fields: Field[];
     options?: MultiNumOption;
@@ -129,7 +163,10 @@ interface InputField {
     apilink?: string;
     interval?: number;
     statusApiLink?: string;
-    syncFieldsMap?: Record<string, { heading: string; fields: Record<string, string> }>;
+    syncFieldsMap?: Record<
+        string,
+        { heading: string; fields: Record<string, string> }
+    >;
     apiLink?: string;
     tasks: Task[];
     fetchApiLink?: string;
@@ -145,15 +182,15 @@ interface InputField {
     selectKey?: string;
     label?: string;
     classes?: string;
-    Lat?:number;
-    Lng?:number;
-    center:Center;
+    Lat?: number;
+    Lng?: number;
+    center: Center;
 }
 
 type Center = {
-    lat:number;
-    lng:number;
-}
+    lat: number;
+    lng: number;
+};
 
 export interface SelectOption {
     value: string;
@@ -178,7 +215,18 @@ interface AdminFormProps {
     modulePopupFields?: ModulePopupProps;
 }
 
-const AdminForm: React.FC<AdminFormProps> = ({ setting, updateSetting, modules, appLocalizer, settings, vendorId, announcementId, knowladgebaseId, ProPopup, modulePopupFields }) => {
+const AdminForm: React.FC<AdminFormProps> = ({
+    setting,
+    updateSetting,
+    modules,
+    appLocalizer,
+    settings,
+    vendorId,
+    announcementId,
+    knowladgebaseId,
+    ProPopup,
+    modulePopupFields,
+}) => {
     const { modal, submitUrl, id } = settings;
     const settingChanged = useRef<boolean>(false);
     const counter = useRef<number>(0);
@@ -189,11 +237,10 @@ const AdminForm: React.FC<AdminFormProps> = ({ setting, updateSetting, modules, 
     const [modelModuleOpen, setModelModuleOpen] = useState<boolean>(false);
     const [countryState, setCountryState] = useState<CountryState[]>([]);
 
-
     const [modulePopupData, setModulePopupData] = useState<ModulePopupProps>({
-        moduleName: '',
-        settings: '',
-        plugin: '',
+        moduleName: "",
+        settings: "",
+        plugin: "",
     });
     // const { modules } = useModules();
 
@@ -215,13 +262,17 @@ const AdminForm: React.FC<AdminFormProps> = ({ setting, updateSetting, modules, 
 
                 // Cooldown complete, time for DB request
                 if (counter.current < 0) {
-                    sendApiResponse(appLocalizer, getApiLink(appLocalizer, submitUrl), {
-                        setting,
-                        settingName: id,
-                        vendor_id: vendorId || "",
-                        announcement_id: announcementId || "",
-                        knowladgebase_id: knowladgebaseId || "",
-                    }).then((response: any) => {
+                    sendApiResponse(
+                        appLocalizer,
+                        getApiLink(appLocalizer, submitUrl),
+                        {
+                            setting,
+                            settingName: id,
+                            vendor_id: vendorId || "",
+                            announcement_id: announcementId || "",
+                            knowladgebase_id: knowladgebaseId || "",
+                        }
+                    ).then((response: any) => {
                         // Set success message for 2 seconds
                         setSuccessMsg(response.error);
                         setTimeout(() => setSuccessMsg(""), 2000);
@@ -242,7 +293,6 @@ const AdminForm: React.FC<AdminFormProps> = ({ setting, updateSetting, modules, 
         }
     }, [setting]);
 
-
     const isProSetting = (proDependent: boolean): boolean => {
         return proDependent && !appLocalizer?.khali_dabba;
     };
@@ -259,7 +309,7 @@ const AdminForm: React.FC<AdminFormProps> = ({ setting, updateSetting, modules, 
         dependentSetting: string = "",
         dependentPlugin: boolean = false
     ): boolean => {
-        let popupData: ModulePopupProps= {
+        let popupData: ModulePopupProps = {
             moduleName: "",
             settings: "",
             plugin: "",
@@ -293,51 +343,65 @@ const AdminForm: React.FC<AdminFormProps> = ({ setting, updateSetting, modules, 
     const handleChange = (
         event: any,
         key: string,
-        type: 'single' | 'multiple' = 'single',
-        fromType: 'simple' | 'calender' | 'select' | 'multi-select' | 'wpeditor' | 'country' = 'simple',
+        type: "single" | "multiple" = "single",
+        fromType:
+            | "simple"
+            | "calender"
+            | "select"
+            | "multi-select"
+            | "wpeditor"
+            | "country" = "simple",
         arrayValue: any[] = []
     ) => {
         settingChanged.current = true;
 
-        if (type === 'single') {
-            if (fromType === 'simple') {
+        if (type === "single") {
+            if (fromType === "simple") {
                 updateSetting(key, event.target.value);
-            } else if (fromType === 'calender') {
+            } else if (fromType === "calender") {
                 let formattedDate: string;
 
                 if (Array.isArray(event)) {
                     // Check if all elements are date ranges (start and end)
-                    if (event.every((item) => Array.isArray(item) && item.length === 2)) {
+                    if (
+                        event.every(
+                            (item) => Array.isArray(item) && item.length === 2
+                        )
+                    ) {
                         formattedDate = event
                             .map((range) => {
                                 const startDate = range[0]?.toString();
                                 const endDate = range[1]?.toString();
                                 return `${startDate} - ${endDate}`;
                             })
-                            .join(', ');
+                            .join(", ");
                     } else {
-                        formattedDate = event.map((item) => item.toString()).join(','); // Multiple dates format
+                        formattedDate = event
+                            .map((item) => item.toString())
+                            .join(","); // Multiple dates format
                     }
                 } else {
                     formattedDate = event.toString();
                 }
 
                 updateSetting(key, formattedDate);
-            } else if (fromType === 'select') {
+            } else if (fromType === "select") {
                 updateSetting(key, arrayValue[event.index]);
-            } else if (fromType === 'multi-select' || fromType === 'wpeditor') {
+            } else if (fromType === "multi-select" || fromType === "wpeditor") {
                 updateSetting(key, event);
-            } else if (fromType === 'country') {
+            } else if (fromType === "country") {
                 updateSetting(key, arrayValue[event.index]);
 
                 const countryData: Record<string, string> = JSON.parse(
                     appLocalizer.countries.replace(/&quot;/g, '"')
                 )[event.value];
 
-                const countryListArray = Object.keys(countryData).map((key_country) => ({
-                    label: key_country,
-                    value: countryData[key_country],
-                }));
+                const countryListArray = Object.keys(countryData).map(
+                    (key_country) => ({
+                        label: key_country,
+                        value: countryData[key_country],
+                    })
+                );
 
                 setCountryState(countryListArray);
             }
@@ -362,13 +426,16 @@ const AdminForm: React.FC<AdminFormProps> = ({ setting, updateSetting, modules, 
         index?: number
     ) => {
         if (!key || !optionKey || index === undefined) {
-            console.error("Missing required parameters in handleMultiNumberChange");
+            console.error(
+                "Missing required parameters in handleMultiNumberChange"
+            );
             return;
         }
 
         settingChanged.current = true;
 
-        const multipleOptions: Record<number, { key: string; value: string }> = setting[key] || {};
+        const multipleOptions: Record<number, { key: string; value: string }> =
+            setting[key] || {};
 
         multipleOptions[index] = {
             key: optionKey,
@@ -381,7 +448,7 @@ const AdminForm: React.FC<AdminFormProps> = ({ setting, updateSetting, modules, 
     const handlMultiSelectDeselectChange = (
         key: string,
         options: { value: string; proSetting?: any }[],
-        type: string = ''
+        type: string = ""
     ) => {
         settingChanged.current = true;
 
@@ -389,7 +456,11 @@ const AdminForm: React.FC<AdminFormProps> = ({ setting, updateSetting, modules, 
             updateSetting(key, []);
         } else {
             const newValue: string[] = options
-                .filter((option) => type === 'multi-select' || !isProSetting(option.proSetting))
+                .filter(
+                    (option) =>
+                        type === "multi-select" ||
+                        !isProSetting(option.proSetting)
+                )
                 .map(({ value }) => value);
 
             updateSetting(key, newValue);
@@ -418,8 +489,10 @@ const AdminForm: React.FC<AdminFormProps> = ({ setting, updateSetting, modules, 
         frame.open();
     };
 
-
-    const onSelectChange = (newValue: SingleValue<SelectOptions> | MultiValue<SelectOptions>, actionMeta: ActionMeta<SelectOptions>) => {
+    const onSelectChange = (
+        newValue: SingleValue<SelectOptions> | MultiValue<SelectOptions>,
+        actionMeta: ActionMeta<SelectOptions>
+    ) => {
         settingChanged.current = true;
         if (Array.isArray(newValue)) {
             // Multi-select case
@@ -433,8 +506,10 @@ const AdminForm: React.FC<AdminFormProps> = ({ setting, updateSetting, modules, 
         }
     };
 
-
-    const isContain = (key: string, value: string | number | boolean | null = null): boolean => {
+    const isContain = (
+        key: string,
+        value: string | number | boolean | null = null
+    ): boolean => {
         const settingValue = setting[key];
 
         // If settingValue is an array
@@ -455,7 +530,6 @@ const AdminForm: React.FC<AdminFormProps> = ({ setting, updateSetting, modules, 
         return settingValue === value;
     };
 
-
     const shouldRender = (dependent: DependentCondition): boolean => {
         if (dependent.set === true && !isContain(dependent.key)) {
             return false;
@@ -463,7 +537,10 @@ const AdminForm: React.FC<AdminFormProps> = ({ setting, updateSetting, modules, 
         if (dependent.set === false && isContain(dependent.key)) {
             return false;
         }
-        if (dependent.value !== undefined && !isContain(dependent.key, dependent.value)) {
+        if (
+            dependent.value !== undefined &&
+            !isContain(dependent.key, dependent.value)
+        ) {
             return false;
         }
         return true;
@@ -471,7 +548,7 @@ const AdminForm: React.FC<AdminFormProps> = ({ setting, updateSetting, modules, 
 
     const handleSubmit = (e: any) => {
         console.log("hiii");
-    }
+    };
 
     const renderForm = () => {
         return modal.map((inputField: InputField, index: number) => {
@@ -514,9 +591,20 @@ const AdminForm: React.FC<AdminFormProps> = ({ setting, updateSetting, modules, 
                             min={inputField.min ?? 0} // for range min value
                             max={inputField.max ?? 50} // for range max value
                             value={value}
-                            proSetting={isProSetting(inputField.proSetting ?? false)}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                if (!proSettingChanged(inputField.proSetting ?? false) && !moduleEnabledChanged(String(inputField.moduleEnabled ?? ""))) {
+                            proSetting={isProSetting(
+                                inputField.proSetting ?? false
+                            )}
+                            onChange={(
+                                e: React.ChangeEvent<HTMLInputElement>
+                            ) => {
+                                if (
+                                    !proSettingChanged(
+                                        inputField.proSetting ?? false
+                                    ) &&
+                                    !moduleEnabledChanged(
+                                        String(inputField.moduleEnabled ?? "")
+                                    )
+                                ) {
                                     handleChange(e, inputField.key);
                                 }
                             }}
@@ -538,9 +626,18 @@ const AdminForm: React.FC<AdminFormProps> = ({ setting, updateSetting, modules, 
                             rowNumber={inputField.rowNumber} // for row number value
                             colNumber={inputField.colNumber} // for column number value
                             value={value}
-                            proSetting={isProSetting(inputField.proSetting ?? false)}
+                            proSetting={isProSetting(
+                                inputField.proSetting ?? false
+                            )}
                             onChange={(e) => {
-                                if (!proSettingChanged(inputField.proSetting ?? false) && !moduleEnabledChanged(String(inputField.moduleEnabled ?? ""))) {
+                                if (
+                                    !proSettingChanged(
+                                        inputField.proSetting ?? false
+                                    ) &&
+                                    !moduleEnabledChanged(
+                                        String(inputField.moduleEnabled ?? "")
+                                    )
+                                ) {
                                     handleChange(e, inputField.key);
                                 }
                             }}
@@ -555,9 +652,18 @@ const AdminForm: React.FC<AdminFormProps> = ({ setting, updateSetting, modules, 
                             key={inputField.key}
                             name={inputField.name}
                             value={value}
-                            proSetting={isProSetting(inputField.proSetting ?? false)}
+                            proSetting={isProSetting(
+                                inputField.proSetting ?? false
+                            )}
                             onChange={(e) => {
-                                if (!proSettingChanged(inputField.proSetting ?? false) && !moduleEnabledChanged(String(inputField.moduleEnabled ?? ""))) {
+                                if (
+                                    !proSettingChanged(
+                                        inputField.proSetting ?? false
+                                    ) &&
+                                    !moduleEnabledChanged(
+                                        String(inputField.moduleEnabled ?? "")
+                                    )
+                                ) {
                                     handleChange(e, inputField.key);
                                 }
                             }}
@@ -571,7 +677,11 @@ const AdminForm: React.FC<AdminFormProps> = ({ setting, updateSetting, modules, 
                             descClass="settings-metabox-description"
                             description={inputField.desc}
                             inputClass={`${inputField.key} form-input`}
-                            imageSrc={value !== undefined ? String(value) : appLocalizer?.default_logo}
+                            imageSrc={
+                                value !== undefined
+                                    ? String(value)
+                                    : appLocalizer?.default_logo
+                            }
                             imageWidth={inputField.width} // for width
                             imageHeight={inputField.height} // for height
                             buttonClass="btn btn-purple"
@@ -580,9 +690,18 @@ const AdminForm: React.FC<AdminFormProps> = ({ setting, updateSetting, modules, 
                             key={inputField.key}
                             name={inputField.name}
                             value={value !== undefined ? String(value) : ""}
-                            proSetting={isProSetting(inputField.proSetting ?? false)}
+                            proSetting={isProSetting(
+                                inputField.proSetting ?? false
+                            )}
                             onChange={(e) => {
-                                if (!proSettingChanged(inputField.proSetting ?? false) && !moduleEnabledChanged(String(inputField.moduleEnabled ?? ""))) {
+                                if (
+                                    !proSettingChanged(
+                                        inputField.proSetting ?? false
+                                    ) &&
+                                    !moduleEnabledChanged(
+                                        String(inputField.moduleEnabled ?? "")
+                                    )
+                                ) {
                                     handleChange(e, inputField.key);
                                 }
                             }}
@@ -604,9 +723,18 @@ const AdminForm: React.FC<AdminFormProps> = ({ setting, updateSetting, modules, 
                             name={inputField.name}
                             type={inputField.type}
                             value={value || "#000000"}
-                            proSetting={isProSetting(inputField.proSetting ?? false)}
+                            proSetting={isProSetting(
+                                inputField.proSetting ?? false
+                            )}
                             onChange={(e) => {
-                                if (!proSettingChanged(inputField.proSetting ?? false) && !moduleEnabledChanged(String(inputField.moduleEnabled ?? ""))) {
+                                if (
+                                    !proSettingChanged(
+                                        inputField.proSetting ?? false
+                                    ) &&
+                                    !moduleEnabledChanged(
+                                        String(inputField.moduleEnabled ?? "")
+                                    )
+                                ) {
                                     handleChange(e, inputField.key);
                                 }
                             }}
@@ -621,15 +749,35 @@ const AdminForm: React.FC<AdminFormProps> = ({ setting, updateSetting, modules, 
                             multiple={inputField.multiple || false} //for single or mutiple input (true/false)
                             range={inputField.range || false} // for range select (true/false)
                             value={setting[inputField.key] || ""}
-                            proSetting={isProSetting(inputField.proSetting ?? false)}
+                            proSetting={isProSetting(
+                                inputField.proSetting ?? false
+                            )}
                             onChange={(e) => {
-                                if (!proSettingChanged(inputField.proSetting ?? false) && !moduleEnabledChanged(String(inputField.moduleEnabled ?? ""))) {
+                                if (
+                                    !proSettingChanged(
+                                        inputField.proSetting ?? false
+                                    ) &&
+                                    !moduleEnabledChanged(
+                                        String(inputField.moduleEnabled ?? "")
+                                    )
+                                ) {
                                     handleChange(
                                         e,
                                         inputField.key,
                                         "single",
-                                        ["calender", "select", "multi-select", "wpeditor", "country"].includes(inputField.type ?? "")
-                                            ? (inputField.type as "calender" | "select" | "multi-select" | "wpeditor" | "country")
+                                        [
+                                            "calender",
+                                            "select",
+                                            "multi-select",
+                                            "wpeditor",
+                                            "country",
+                                        ].includes(inputField.type ?? "")
+                                            ? (inputField.type as
+                                                  | "calender"
+                                                  | "select"
+                                                  | "multi-select"
+                                                  | "wpeditor"
+                                                  | "country")
                                             : "simple" // Default for unsupported types
                                     );
                                 }
@@ -639,35 +787,37 @@ const AdminForm: React.FC<AdminFormProps> = ({ setting, updateSetting, modules, 
                     break;
                 case "map":
                     input = (
-                    <Suspense fallback={<div>Loading map...</div>}>
-                        <LazyMapsInput
-                        wrapperClass="settings-basic-input-class"
-                        descClass="settings-metabox-description"
-                        description={inputField.desc}
-                        containerId="store-maps"
-                        containerClass="store-maps gmap"
-                        proSetting={isProSetting(inputField.proSetting)}
-                        Lat={inputField.Lat} //for latitude
-                        Lng={inputField.Lng} // for longitude
-                        />
-                    </Suspense>
+                        <Suspense fallback={<div>Loading map...</div>}>
+                            <LazyMapsInput
+                                wrapperClass="settings-basic-input-class"
+                                descClass="settings-metabox-description"
+                                description={inputField.desc}
+                                containerId="store-maps"
+                                containerClass="store-maps gmap"
+                                proSetting={isProSetting(inputField.proSetting)}
+                                Lat={inputField.Lat} //for latitude
+                                Lng={inputField.Lng} // for longitude
+                            />
+                        </Suspense>
                     );
                     break;
 
                 case "google-map":
                     input = (
                         <GoogleMap
-                        wrapperClass="settings-basic-input-class"
-                        placeholder="Enter location"
-                        center={inputField.center} // for default location
+                            wrapperClass="settings-basic-input-class"
+                            placeholder="Enter location"
+                            center={inputField.center} // for default location
                         />
                     );
                     break;
-            
+
                 case "button":
                     input = (
                         <div className="form-button-group">
-                            <div className="setting-section-divider">&nbsp;</div>
+                            <div className="setting-section-divider">
+                                &nbsp;
+                            </div>
                             <label className="settings-form-label"></label>
                             <div className="settings-input-content">
                                 <BasicInput
@@ -677,8 +827,10 @@ const AdminForm: React.FC<AdminFormProps> = ({ setting, updateSetting, modules, 
                                     description={inputField.desc}
                                     type={inputField.type}
                                     placeholder={inputField.placeholder}
-                                    proSetting={isProSetting(inputField.proSetting ?? false)}
-                                // onChange={handleChange}
+                                    proSetting={isProSetting(
+                                        inputField.proSetting ?? false
+                                    )}
+                                    // onChange={handleChange}
                                 />
                             </div>
                         </div>
@@ -697,9 +849,17 @@ const AdminForm: React.FC<AdminFormProps> = ({ setting, updateSetting, modules, 
                             keyName={inputField.key}
                             inputClass={inputField.class}
                             value={setting[inputField.key]}
-                            options={Array.isArray(inputField.options) ? inputField.options : inputField.options ? [] : []}
+                            options={
+                                Array.isArray(inputField.options)
+                                    ? inputField.options
+                                    : inputField.options
+                                      ? []
+                                      : []
+                            }
                             onChange={handleMultiNumberChange}
-                            proSetting={isProSetting(inputField.proSetting ?? false)}
+                            proSetting={isProSetting(
+                                inputField.proSetting ?? false
+                            )}
                         />
                     );
                     break;
@@ -713,13 +873,26 @@ const AdminForm: React.FC<AdminFormProps> = ({ setting, updateSetting, modules, 
                             descClass="settings-metabox-description"
                             activeClass="radio-select-active"
                             description={inputField.desc}
-                            value={typeof value === "number" ? value.toString() : value}
+                            value={
+                                typeof value === "number"
+                                    ? value.toString()
+                                    : value
+                            }
                             name={inputField.name}
                             keyName={inputField.key}
                             options={Array.isArray(value) ? value : []}
-                            proSetting={isProSetting(inputField.proSetting ?? false)}
+                            proSetting={isProSetting(
+                                inputField.proSetting ?? false
+                            )}
                             onChange={(e) => {
-                                if (!proSettingChanged(inputField.proSetting ?? false) && !moduleEnabledChanged(String(inputField.moduleEnabled ?? ""))) {
+                                if (
+                                    !proSettingChanged(
+                                        inputField.proSetting ?? false
+                                    ) &&
+                                    !moduleEnabledChanged(
+                                        String(inputField.moduleEnabled ?? "")
+                                    )
+                                ) {
                                     handleChange(e, inputField.key);
                                 }
                             }}
@@ -742,13 +915,26 @@ const AdminForm: React.FC<AdminFormProps> = ({ setting, updateSetting, modules, 
                             activeClass="radio-select-active"
                             description={inputField.desc}
                             type="radio-select"
-                            value={typeof value === "number" ? value.toString() : value}
+                            value={
+                                typeof value === "number"
+                                    ? value.toString()
+                                    : value
+                            }
                             name={inputField.name}
                             keyName={inputField.key}
                             options={Array.isArray(value) ? value : []}
-                            proSetting={isProSetting(inputField.proSetting ?? false)}
+                            proSetting={isProSetting(
+                                inputField.proSetting ?? false
+                            )}
                             onChange={(e) => {
-                                if (!proSettingChanged(inputField.proSetting ?? false) && !moduleEnabledChanged(String(inputField.moduleEnabled ?? ""))) {
+                                if (
+                                    !proSettingChanged(
+                                        inputField.proSetting ?? false
+                                    ) &&
+                                    !moduleEnabledChanged(
+                                        String(inputField.moduleEnabled ?? "")
+                                    )
+                                ) {
                                     handleChange(e, inputField.key);
                                 }
                             }}
@@ -756,7 +942,7 @@ const AdminForm: React.FC<AdminFormProps> = ({ setting, updateSetting, modules, 
                     );
                     break;
 
-                // for radio color input 
+                // for radio color input
                 case "radio-color":
                     input = (
                         <RadioInput
@@ -768,13 +954,26 @@ const AdminForm: React.FC<AdminFormProps> = ({ setting, updateSetting, modules, 
                             descClass="settings-metabox-description"
                             description={inputField.desc}
                             type="radio-color"
-                            value={typeof value === "number" ? value.toString() : value}
+                            value={
+                                typeof value === "number"
+                                    ? value.toString()
+                                    : value
+                            }
                             name={inputField.name}
                             keyName={inputField.key}
                             options={Array.isArray(value) ? value : []}
-                            proSetting={isProSetting(inputField.proSetting ?? false)}
+                            proSetting={isProSetting(
+                                inputField.proSetting ?? false
+                            )}
                             onChange={(e) => {
-                                if (!proSettingChanged(inputField.proSetting ?? false) && !moduleEnabledChanged(String(inputField.moduleEnabled ?? ""))) {
+                                if (
+                                    !proSettingChanged(
+                                        inputField.proSetting ?? false
+                                    ) &&
+                                    !moduleEnabledChanged(
+                                        String(inputField.moduleEnabled ?? "")
+                                    )
+                                ) {
                                     handleChange(e, inputField.key);
                                 }
                             }}
@@ -792,13 +991,18 @@ const AdminForm: React.FC<AdminFormProps> = ({ setting, updateSetting, modules, 
                             description={inputField.desc}
                             inputClass={inputField.key}
                             options={Array.isArray(value) ? value : []}
-                            value={typeof value === "number" ? value.toString() : value}
-                            proSetting={isProSetting(inputField.proSetting ?? false)}
+                            value={
+                                typeof value === "number"
+                                    ? value.toString()
+                                    : value
+                            }
+                            proSetting={isProSetting(
+                                inputField.proSetting ?? false
+                            )}
                             onChange={onSelectChange}
                         />
                     );
                     break;
-
 
                 // for multiple select box with select/deselect button
                 case "multi-select":
@@ -814,17 +1018,24 @@ const AdminForm: React.FC<AdminFormProps> = ({ setting, updateSetting, modules, 
                             inputClass={inputField.key}
                             options={Array.isArray(value) ? value : []}
                             type="multi-select"
-                            value={typeof value === "number" ? value.toString() : value}
-                            proSetting={isProSetting(inputField.proSetting ?? false)}
+                            value={
+                                typeof value === "number"
+                                    ? value.toString()
+                                    : value
+                            }
+                            proSetting={isProSetting(
+                                inputField.proSetting ?? false
+                            )}
                             onChange={onSelectChange}
                             onMultiSelectDeselectChange={(e) =>
                                 handlMultiSelectDeselectChange(
                                     inputField.key,
-                                    Array.isArray(inputField.options) ? inputField.options : [], // Ensure options is always an array
+                                    Array.isArray(inputField.options)
+                                        ? inputField.options
+                                        : [], // Ensure options is always an array
                                     "multi-select"
                                 )
                             }
-
                         />
                     );
                     break;
@@ -837,16 +1048,31 @@ const AdminForm: React.FC<AdminFormProps> = ({ setting, updateSetting, modules, 
                             description={inputField.desc}
                             inputClass={inputField.key}
                             options={Array.isArray(value) ? value : []}
-                            value={typeof value === "number" ? value.toString() : value}
-                            proSetting={isProSetting(inputField.proSetting ?? false)}
+                            value={
+                                typeof value === "number"
+                                    ? value.toString()
+                                    : value
+                            }
+                            proSetting={isProSetting(
+                                inputField.proSetting ?? false
+                            )}
                             onChange={(selectedOption) => {
-                                if (!proSettingChanged(inputField.proSetting ?? false) && !moduleEnabledChanged(String(inputField.moduleEnabled ?? ""))) {
+                                if (
+                                    !proSettingChanged(
+                                        inputField.proSetting ?? false
+                                    ) &&
+                                    !moduleEnabledChanged(
+                                        String(inputField.moduleEnabled ?? "")
+                                    )
+                                ) {
                                     handleChange(
                                         selectedOption,
                                         inputField.key,
                                         "single",
                                         "country",
-                                        Array.isArray(selectedOption) ? selectedOption : [selectedOption]
+                                        Array.isArray(selectedOption)
+                                            ? selectedOption
+                                            : [selectedOption]
                                     );
                                 }
                             }}
@@ -862,20 +1088,34 @@ const AdminForm: React.FC<AdminFormProps> = ({ setting, updateSetting, modules, 
                             description={inputField.desc}
                             inputClass={inputField.key}
                             options={countryState}
-                            value={typeof value === "number" ? value.toString() : value}
-                            proSetting={isProSetting(inputField.proSetting ?? false)}
+                            value={
+                                typeof value === "number"
+                                    ? value.toString()
+                                    : value
+                            }
+                            proSetting={isProSetting(
+                                inputField.proSetting ?? false
+                            )}
                             onChange={(selectedOption) => {
-                                if (!proSettingChanged(inputField.proSetting ?? false) && !moduleEnabledChanged(String(inputField.moduleEnabled ?? ""))) {
+                                if (
+                                    !proSettingChanged(
+                                        inputField.proSetting ?? false
+                                    ) &&
+                                    !moduleEnabledChanged(
+                                        String(inputField.moduleEnabled ?? "")
+                                    )
+                                ) {
                                     handleChange(
                                         selectedOption,
                                         inputField.key,
                                         "single",
                                         "select",
-                                        Array.isArray(selectedOption) ? selectedOption : [selectedOption]
+                                        Array.isArray(selectedOption)
+                                            ? selectedOption
+                                            : [selectedOption]
                                     );
                                 }
                             }}
-
                         />
                     );
                     break;
@@ -888,7 +1128,11 @@ const AdminForm: React.FC<AdminFormProps> = ({ setting, updateSetting, modules, 
                             description={inputField.desc}
                             selectDeselectClass="btn-purple select-deselect-trigger"
                             inputWrapperClass="toggle-checkbox-header"
-                            inputInnerWrapperClass={inputField.look == 'toggle' ? "toggle-checkbox" : "default-checkbox"}// this props for change classes default/ Toggle
+                            inputInnerWrapperClass={
+                                inputField.look == "toggle"
+                                    ? "toggle-checkbox"
+                                    : "default-checkbox"
+                            } // this props for change classes default/ Toggle
                             inputClass={inputField.class}
                             tour={inputField.tour}
                             hintOuterClass="checkbox-description"
@@ -898,16 +1142,40 @@ const AdminForm: React.FC<AdminFormProps> = ({ setting, updateSetting, modules, 
                             selectDeselectValue="Select / Deselect All"
                             rightContentClass="settings-checkbox-description"
                             rightContent={inputField.right_content} // for place checkbox right
-                            options={Array.isArray(inputField.options) ? inputField.options : []}
-                            value={Array.isArray(value) ? value : typeof value === "string" ? [value] : []}
-                            proSetting={isProSetting(inputField.proSetting ?? false)}
+                            options={
+                                Array.isArray(inputField.options)
+                                    ? inputField.options
+                                    : []
+                            }
+                            value={
+                                Array.isArray(value)
+                                    ? value
+                                    : typeof value === "string"
+                                      ? [value]
+                                      : []
+                            }
+                            proSetting={isProSetting(
+                                inputField.proSetting ?? false
+                            )}
                             onChange={(e) => {
-                                if (!proSettingChanged(inputField.proSetting ?? false) && !moduleEnabledChanged(String(inputField.moduleEnabled ?? ""))) {
+                                if (
+                                    !proSettingChanged(
+                                        inputField.proSetting ?? false
+                                    ) &&
+                                    !moduleEnabledChanged(
+                                        String(inputField.moduleEnabled ?? "")
+                                    )
+                                ) {
                                     handleChange(e, inputField.key, "multiple");
                                 }
                             }}
                             onMultiSelectDeselectChange={(e) =>
-                                handlMultiSelectDeselectChange(inputField.key, Array.isArray(inputField.options) ? inputField.options : [])
+                                handlMultiSelectDeselectChange(
+                                    inputField.key,
+                                    Array.isArray(inputField.options)
+                                        ? inputField.options
+                                        : []
+                                )
                             }
                             proChanged={() => setModelOpen(true)}
                         />
@@ -931,14 +1199,40 @@ const AdminForm: React.FC<AdminFormProps> = ({ setting, updateSetting, modules, 
                             selectDeselectValue="Select / Deselect All"
                             rightContentClass="settings-metabox-description"
                             rightContent={inputField.right_content}
-                            options={Array.isArray(inputField.options) ? inputField.options : []}
-                            value={Array.isArray(value) ? value : typeof value === "string" ? [value] : []}
-                            proSetting={isProSetting(inputField.proSetting ?? false)}
+                            options={
+                                Array.isArray(inputField.options)
+                                    ? inputField.options
+                                    : []
+                            }
+                            value={
+                                Array.isArray(value)
+                                    ? value
+                                    : typeof value === "string"
+                                      ? [value]
+                                      : []
+                            }
+                            proSetting={isProSetting(
+                                inputField.proSetting ?? false
+                            )}
                             onChange={(e) => {
-                                const dependentPlugin = inputField.dependentPlugin ;
-                                if (!proSettingChanged(inputField.proSetting ?? false) && !moduleEnabledChanged(String(inputField.moduleEnabled ?? ""), inputField.dependentSetting, dependentPlugin)) {
+                                const dependentPlugin =
+                                    inputField.dependentPlugin;
+                                if (
+                                    !proSettingChanged(
+                                        inputField.proSetting ?? false
+                                    ) &&
+                                    !moduleEnabledChanged(
+                                        String(inputField.moduleEnabled ?? ""),
+                                        inputField.dependentSetting,
+                                        dependentPlugin
+                                    )
+                                ) {
                                     if (inputField.dependentPlugin) {
-                                        handleChange(e, inputField.key, "multiple");
+                                        handleChange(
+                                            e,
+                                            inputField.key,
+                                            "multiple"
+                                        );
                                     }
                                 }
                             }}
@@ -946,14 +1240,15 @@ const AdminForm: React.FC<AdminFormProps> = ({ setting, updateSetting, modules, 
                                 handlMultiSelectDeselectChange(
                                     inputField.key,
                                     Array.isArray(inputField.options)
-                                        ? inputField.options.map(({ value, proSetting }) => ({
-                                            value: String(value),  // Convert to string
-                                            proSetting
-                                        }))
+                                        ? inputField.options.map(
+                                              ({ value, proSetting }) => ({
+                                                  value: String(value), // Convert to string
+                                                  proSetting,
+                                              })
+                                          )
                                         : [] // Default to an empty array if it's not an array
                                 )
                             }
-
                         />
                     );
                     break;
@@ -965,13 +1260,28 @@ const AdminForm: React.FC<AdminFormProps> = ({ setting, updateSetting, modules, 
                             descClass="settings-metabox-description"
                             description={inputField.desc}
                             key={inputField.key}
-                            options={Array.isArray(inputField.options) ? inputField.options : []}
-                            value={String(value ?? inputField.defaultValue ?? "")}
-                            proSetting={isProSetting(inputField.proSetting ?? false)}
+                            options={
+                                Array.isArray(inputField.options)
+                                    ? inputField.options
+                                    : []
+                            }
+                            value={String(
+                                value ?? inputField.defaultValue ?? ""
+                            )}
+                            proSetting={isProSetting(
+                                inputField.proSetting ?? false
+                            )}
                             onChange={(data) => {
-                                if (!proSettingChanged(inputField.proSetting ?? false) && !moduleEnabledChanged(String(inputField.moduleEnabled ?? ""))) {
+                                if (
+                                    !proSettingChanged(
+                                        inputField.proSetting ?? false
+                                    ) &&
+                                    !moduleEnabledChanged(
+                                        String(inputField.moduleEnabled ?? "")
+                                    )
+                                ) {
                                     settingChanged.current = true;
-                                    updateSetting(inputField.key, data)
+                                    updateSetting(inputField.key, data);
                                 }
                             }}
                         />
@@ -983,8 +1293,20 @@ const AdminForm: React.FC<AdminFormProps> = ({ setting, updateSetting, modules, 
                             apiKey={String(appLocalizer?.mvx_tinymce_key || "")}
                             value={String(value)}
                             onEditorChange={(e) => {
-                                if (!proSettingChanged(inputField.proSetting ?? false) && !moduleEnabledChanged(String(inputField.moduleEnabled ?? ""))) {
-                                    handleChange(e, inputField.key, "single", "wpeditor");
+                                if (
+                                    !proSettingChanged(
+                                        inputField.proSetting ?? false
+                                    ) &&
+                                    !moduleEnabledChanged(
+                                        String(inputField.moduleEnabled ?? "")
+                                    )
+                                ) {
+                                    handleChange(
+                                        e,
+                                        inputField.key,
+                                        "single",
+                                        "wpeditor"
+                                    );
                                 }
                             }}
                         />
@@ -1006,7 +1328,8 @@ const AdminForm: React.FC<AdminFormProps> = ({ setting, updateSetting, modules, 
                         <Section
                             wrapperClass="setting-section-divider"
                             value={inputField.label}
-                            hint={inputField.hint} />
+                            hint={inputField.hint}
+                        />
                     );
                     break;
 
@@ -1024,16 +1347,35 @@ const AdminForm: React.FC<AdminFormProps> = ({ setting, updateSetting, modules, 
                 case "button-customizer":
                     input = (
                         <ButtonCustomizer
-                            text={(setting[inputField.key]?.button_text) || 'Button Text'}
-                            proSetting={isProSetting(inputField.proSetting ?? false)}
+                            text={
+                                setting[inputField.key]?.button_text ||
+                                "Button Text"
+                            }
+                            proSetting={isProSetting(
+                                inputField.proSetting ?? false
+                            )}
                             setting={setting[inputField.key]}
-                            onChange={(key, value, isRestoreDefaults = false) => {
-                                if (!proSettingChanged(inputField.proSetting ?? false) && !moduleEnabledChanged(String(inputField.moduleEnabled ?? ""))) {
+                            onChange={(
+                                key,
+                                value,
+                                isRestoreDefaults = false
+                            ) => {
+                                if (
+                                    !proSettingChanged(
+                                        inputField.proSetting ?? false
+                                    ) &&
+                                    !moduleEnabledChanged(
+                                        String(inputField.moduleEnabled ?? "")
+                                    )
+                                ) {
                                     settingChanged.current = true;
                                     if (isRestoreDefaults) {
                                         updateSetting(inputField.key, value);
                                     } else {
-                                        updateSetting(inputField.key, { ...setting[inputField.key], [key]: value });
+                                        updateSetting(inputField.key, {
+                                            ...setting[inputField.key],
+                                            [key]: value,
+                                        });
                                     }
                                 }
                             }}
@@ -1044,11 +1386,21 @@ const AdminForm: React.FC<AdminFormProps> = ({ setting, updateSetting, modules, 
                     input = (
                         <FormCustomizer
                             value={String(value)}
-                            buttonText={setting.customize_btn && setting.customize_btn.button_text || 'Submit'}
+                            buttonText={
+                                (setting.customize_btn &&
+                                    setting.customize_btn.button_text) ||
+                                "Submit"
+                            }
                             setting={setting[inputField.key]}
-                            proSetting={isProSetting(inputField.proSetting ?? false)}
+                            proSetting={isProSetting(
+                                inputField.proSetting ?? false
+                            )}
                             onChange={(e, key) => {
-                                if (!proSettingChanged(inputField.proSetting ?? false)) {
+                                if (
+                                    !proSettingChanged(
+                                        inputField.proSetting ?? false
+                                    )
+                                ) {
                                     settingChanged.current = true;
                                     updateSetting(e, key);
                                 }
@@ -1062,9 +1414,19 @@ const AdminForm: React.FC<AdminFormProps> = ({ setting, updateSetting, modules, 
                         <FreeProFormCustomizer
                             key={inputField.key}
                             setting={setting}
-                            proSetting={isProSetting(inputField.proSetting ?? false)}
-                            proSettingChange={() => proSettingChanged(inputField.proSetting ?? false)}
-                            moduleEnabledChange={() => moduleEnabledChanged(String(inputField.moduleEnabled ?? ""))}
+                            proSetting={isProSetting(
+                                inputField.proSetting ?? false
+                            )}
+                            proSettingChange={() =>
+                                proSettingChanged(
+                                    inputField.proSetting ?? false
+                                )
+                            }
+                            moduleEnabledChange={() =>
+                                moduleEnabledChanged(
+                                    String(inputField.moduleEnabled ?? "")
+                                )
+                            }
                             onChange={(key, value) => {
                                 settingChanged.current = true;
                                 updateSetting(key, value);
@@ -1095,10 +1457,19 @@ const AdminForm: React.FC<AdminFormProps> = ({ setting, updateSetting, modules, 
                             columns={inputField.columns} // columns array
                             description={String(inputField.desc)}
                             setting={setting}
-                            proSetting={isProSetting(inputField.proSetting ?? false)}
+                            proSetting={isProSetting(
+                                inputField.proSetting ?? false
+                            )}
                             modules={modules}
                             onChange={(key, value) => {
-                                if (!proSettingChanged(inputField.proSetting ?? false) && !moduleEnabledChanged(String(inputField.moduleEnabled ?? ""))) {
+                                if (
+                                    !proSettingChanged(
+                                        inputField.proSetting ?? false
+                                    ) &&
+                                    !moduleEnabledChanged(
+                                        String(inputField.moduleEnabled ?? "")
+                                    )
+                                ) {
                                     settingChanged.current = true;
                                     updateSetting(key, value);
                                 }
@@ -1107,10 +1478,9 @@ const AdminForm: React.FC<AdminFormProps> = ({ setting, updateSetting, modules, 
                                 setModelModuleOpen(true);
                                 setModulePopupData({
                                     moduleName: moduleEnabled,
-                                    settings: '',
-                                    plugin: '',
+                                    settings: "",
+                                    plugin: "",
                                 });
-
                             }}
                         />
                     );
@@ -1121,12 +1491,30 @@ const AdminForm: React.FC<AdminFormProps> = ({ setting, updateSetting, modules, 
                             wrapperClass={`setting-form-input`}
                             descClass="settings-metabox-description"
                             description={inputField.desc}
-                            value={typeof value === "object" && value !== null ? value : {}}
-                            fields={Array.isArray(inputField.fields) ? inputField.fields : []} proSetting={isProSetting(inputField.proSetting ?? false)}
+                            value={
+                                typeof value === "object" && value !== null
+                                    ? value
+                                    : {}
+                            }
+                            fields={
+                                Array.isArray(inputField.fields)
+                                    ? inputField.fields
+                                    : []
+                            }
+                            proSetting={isProSetting(
+                                inputField.proSetting ?? false
+                            )}
                             onChange={(data) => {
-                                if (!proSettingChanged(inputField.proSetting ?? false) && !moduleEnabledChanged(String(inputField.moduleEnabled ?? ""))) {
+                                if (
+                                    !proSettingChanged(
+                                        inputField.proSetting ?? false
+                                    ) &&
+                                    !moduleEnabledChanged(
+                                        String(inputField.moduleEnabled ?? "")
+                                    )
+                                ) {
                                     settingChanged.current = true;
-                                    updateSetting(inputField.key, data)
+                                    updateSetting(inputField.key, data);
                                 }
                             }}
                         />
@@ -1140,82 +1528,140 @@ const AdminForm: React.FC<AdminFormProps> = ({ setting, updateSetting, modules, 
                             descClass="settings-metabox-description"
                             description={inputField.desc}
                             key={inputField.key}
-                            options={Array.isArray(inputField.options) ? inputField.options : []} // array includes label and description
+                            options={
+                                Array.isArray(inputField.options)
+                                    ? inputField.options
+                                    : []
+                            } // array includes label and description
                             optionLabel={inputField.optionLabel}
                         />
                     );
                     break;
                 // Synchronize button (Changes later)
                 case "syncbutton":
-                    input = <SyncNow
-                        appLocalizer={appLocalizer}
-                        buttonKey={inputField.key}
-                        apilink={String(inputField.apilink)} // apilink 
-                        value={String(inputField.value)}
-                        description={String(inputField.desc)}
-                        proSetting={isProSetting(inputField.proSetting ?? false)}
-                        proSettingChanged={() => proSettingChanged(inputField.proSetting ?? false)}
-                        interval={Number(inputField.interval)}
-                        statusApiLink={String(inputField.statusApiLink)} // api for each status of synchronization
-                    />
+                    input = (
+                        <SyncNow
+                            appLocalizer={appLocalizer}
+                            buttonKey={inputField.key}
+                            apilink={String(inputField.apilink)} // apilink
+                            value={String(inputField.value)}
+                            description={String(inputField.desc)}
+                            proSetting={isProSetting(
+                                inputField.proSetting ?? false
+                            )}
+                            proSettingChanged={() =>
+                                proSettingChanged(
+                                    inputField.proSetting ?? false
+                                )
+                            }
+                            interval={Number(inputField.interval)}
+                            statusApiLink={String(inputField.statusApiLink)} // api for each status of synchronization
+                        />
+                    );
                     break;
                 // attribute mapping
                 case "sync-map":
-                    input = <SyncMap
-                        description={inputField.desc}
-                        proSetting={isProSetting(inputField.proSetting ?? false)}
-                        proSettingChanged={() => proSettingChanged(inputField.proSetting ?? false)}
-                        value={Array.isArray(value) ? (value as [string, string][]) : [["key", String(value)]]}
-                        syncFieldsMap={inputField.syncFieldsMap ?? {}} onChange={(value) => {
-                            if (!proSettingChanged(inputField.proSetting ?? false) && true) {
-                                settingChanged.current = true;
-                                updateSetting(inputField.key, value)
+                    input = (
+                        <SyncMap
+                            description={inputField.desc}
+                            proSetting={isProSetting(
+                                inputField.proSetting ?? false
+                            )}
+                            proSettingChanged={() =>
+                                proSettingChanged(
+                                    inputField.proSetting ?? false
+                                )
                             }
-                        }}
-                    />
+                            value={
+                                Array.isArray(value)
+                                    ? (value as [string, string][])
+                                    : [["key", String(value)]]
+                            }
+                            syncFieldsMap={inputField.syncFieldsMap ?? {}}
+                            onChange={(value) => {
+                                if (
+                                    !proSettingChanged(
+                                        inputField.proSetting ?? false
+                                    ) &&
+                                    true
+                                ) {
+                                    settingChanged.current = true;
+                                    updateSetting(inputField.key, value);
+                                }
+                            }}
+                        />
+                    );
                     break;
                 case "sso-key":
-                    input = <AutoGeneratedDefaultInput
-                        value={String(value)}
-                        description={inputField.desc}
-                        proSetting={isProSetting(inputField.proSetting ?? false)}
-                        onChange={(value) => {
-                            if (!proSettingChanged(inputField.proSetting ?? false) && true) {
-                                settingChanged.current = true;
-                                updateSetting(inputField.key, value)
-                            }
-                        }}
-                    />
+                    input = (
+                        <AutoGeneratedDefaultInput
+                            value={String(value)}
+                            description={inputField.desc}
+                            proSetting={isProSetting(
+                                inputField.proSetting ?? false
+                            )}
+                            onChange={(value) => {
+                                if (
+                                    !proSettingChanged(
+                                        inputField.proSetting ?? false
+                                    ) &&
+                                    true
+                                ) {
+                                    settingChanged.current = true;
+                                    updateSetting(inputField.key, value);
+                                }
+                            }}
+                        />
+                    );
                     break;
 
                 // Test connection button
                 case "testconnection":
-                    input = <ConnectButton
-                        appLocalizer={appLocalizer}
-                        apiLink={String(inputField.apiLink)} // apilink 
-                        tasks={inputField.tasks ?? []} /> // all tasks for test connection
+                    input = (
+                        <ConnectButton
+                            appLocalizer={appLocalizer}
+                            apiLink={String(inputField.apiLink)} // apilink
+                            tasks={inputField.tasks ?? []}
+                        />
+                    ); // all tasks for test connection
                     break;
                 case "log":
-                    input = <Log
-                        appLocalizer={appLocalizer}
-                        fetchApiLink={String(inputField.fetchApiLink)} // api to fetch the log content
-                        downloadApiLink={String(inputField.downloadApiLink)} // download the log file
-                        downloadFileName={String(inputField.fileName)} /> // log file name
+                    input = (
+                        <Log
+                            appLocalizer={appLocalizer}
+                            fetchApiLink={String(inputField.fetchApiLink)} // api to fetch the log content
+                            downloadApiLink={String(inputField.downloadApiLink)} // download the log file
+                            downloadFileName={String(inputField.fileName)}
+                        />
+                    ); // log file name
                     break;
                 // Checkbox with custom image
                 case "checkbox-custom-img":
-                    input = <CheckboxCustomImg
-                        proSetting={isProSetting(inputField.proSetting ?? false)}
-                        description={inputField.desc}
-                        value={Array.isArray(value) ? value : [String(value)]}
-                        syncDirections={inputField.syncDirections} // array includes label, value, img1, img2
-                        onChange={(data) => {
-                            if (!proSettingChanged(inputField.proSetting ?? false) && !moduleEnabledChanged(String(inputField.moduleEnabled ?? ""))) {
-                                settingChanged.current = true;
-                                updateSetting(inputField.key, data)
+                    input = (
+                        <CheckboxCustomImg
+                            proSetting={isProSetting(
+                                inputField.proSetting ?? false
+                            )}
+                            description={inputField.desc}
+                            value={
+                                Array.isArray(value) ? value : [String(value)]
                             }
-                        }}
-                    />
+                            syncDirections={inputField.syncDirections} // array includes label, value, img1, img2
+                            onChange={(data) => {
+                                if (
+                                    !proSettingChanged(
+                                        inputField.proSetting ?? false
+                                    ) &&
+                                    !moduleEnabledChanged(
+                                        String(inputField.moduleEnabled ?? "")
+                                    )
+                                ) {
+                                    settingChanged.current = true;
+                                    updateSetting(inputField.key, data);
+                                }
+                            }}
+                        />
+                    );
 
                     break;
                 // For mailchimp list
@@ -1229,30 +1675,37 @@ const AdminForm: React.FC<AdminFormProps> = ({ setting, updateSetting, modules, 
                             selectKey={String(inputField.selectKey)}
                             optionKey={String(inputField.optionKey)}
                             onChange={handleChange}
-                            proSettingChanged={
-                                () => proSettingChanged(inputField.proSetting ?? false)
+                            proSettingChanged={() =>
+                                proSettingChanged(
+                                    inputField.proSetting ?? false
+                                )
                             }
                             settingChanged={settingChanged}
                             apiLink={String(inputField.apiLink)} // fetch api
                         />
                     );
                     break;
-
             }
 
-            return inputField.type === "section" || inputField.label === "no_label" ? (
+            return inputField.type === "section" ||
+                inputField.label === "no_label" ? (
                 input
             ) : (
-                <div key={"g" + inputField.key} className={`form-group ${inputField.classes ? inputField.classes : ''}`}>
-                    {inputField.type !== "catalog-customizer" && inputField.type !== "from-builder" && inputField.type !== "form-customizer" && (
-                        <label
-                            className="settings-form-label"
-                            key={"l" + inputField.key}
-                            htmlFor={inputField.key}
-                        >
-                            <p>{inputField.label}</p>
-                        </label>
-                    )}
+                <div
+                    key={"g" + inputField.key}
+                    className={`form-group ${inputField.classes ? inputField.classes : ""}`}
+                >
+                    {inputField.type !== "catalog-customizer" &&
+                        inputField.type !== "from-builder" &&
+                        inputField.type !== "form-customizer" && (
+                            <label
+                                className="settings-form-label"
+                                key={"l" + inputField.key}
+                                htmlFor={inputField.key}
+                            >
+                                <p>{inputField.label}</p>
+                            </label>
+                        )}
 
                     <div className="settings-input-content">{input}</div>
                 </div>
@@ -1268,7 +1721,6 @@ const AdminForm: React.FC<AdminFormProps> = ({ setting, updateSetting, modules, 
         setModelModuleOpen(false);
     };
 
-
     return (
         <>
             <div className="dynamic-fields-wrapper">
@@ -1282,46 +1734,48 @@ const AdminForm: React.FC<AdminFormProps> = ({ setting, updateSetting, modules, 
                         className="admin-font adminLib-cross"
                         onClick={handleModelClose}
                     ></span>
-                    {<ProPopup/>}
+                    {<ProPopup />}
                 </Dialog>
                 <Dialog
                     className="admin-module-popup"
-                    open={ modelModuleOpen }
-                    onClose={ handleModulePopupClose }
+                    open={modelModuleOpen}
+                    onClose={handleModulePopupClose}
                     aria-labelledby="form-dialog-title"
                 >
                     <span
                         className="admin-font adminLib-cross"
-                        onClick={ handleModulePopupClose }
+                        onClick={handleModulePopupClose}
                     ></span>
                     <ModulePopup
-                        moduleName={ String(modulePopupData.moduleName) }
-                        settings={ modulePopupData.settings }
-                        plugin={ modulePopupData.plugin }
-                        moduleMessage={ modulePopupFields?.moduleMessage }
-                        moduleButton={ modulePopupFields?.moduleButton }
-                        pluginDescription={ modulePopupFields?.pluginDescription }
-                        SettingMessage={ modulePopupFields?.SettingMessage }
-                        pluginMessage={ modulePopupFields?.pluginMessage }
-                        pluginButton={ modulePopupFields?.pluginButton }
-                        SettingDescription={ modulePopupFields?.SettingDescription }
-                        pluginUrl={ modulePopupFields?.pluginUrl }
-                        modulePageUrl={ modulePopupFields?.modulePageUrl }
+                        moduleName={String(modulePopupData.moduleName)}
+                        settings={modulePopupData.settings}
+                        plugin={modulePopupData.plugin}
+                        moduleMessage={modulePopupFields?.moduleMessage}
+                        moduleButton={modulePopupFields?.moduleButton}
+                        pluginDescription={modulePopupFields?.pluginDescription}
+                        SettingMessage={modulePopupFields?.SettingMessage}
+                        pluginMessage={modulePopupFields?.pluginMessage}
+                        pluginButton={modulePopupFields?.pluginButton}
+                        SettingDescription={
+                            modulePopupFields?.SettingDescription
+                        }
+                        pluginUrl={modulePopupFields?.pluginUrl}
+                        modulePageUrl={modulePopupFields?.modulePageUrl}
                     />
                 </Dialog>
-                { successMsg && (
+                {successMsg && (
                     <div className="admin-notice-display-title">
                         <i className="admin-font adminLib-icon-yes"></i>
-                        { successMsg }
+                        {successMsg}
                     </div>
-                ) }
+                )}
                 <form
                     className="dynamic-form"
                     onSubmit={(e) => {
-                        handleSubmit( e );
+                        handleSubmit(e);
                     }}
                 >
-                    { renderForm() }
+                    {renderForm()}
                 </form>
             </div>
         </>

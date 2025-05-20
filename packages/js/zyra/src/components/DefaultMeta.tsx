@@ -4,58 +4,63 @@ interface DefaultMetaProps {
     defaultvalue: string;
     name: string;
     deactive: boolean;
-    onChange: (field: "deactive" | "name" | "defaultvalue", value: boolean | string) => void;
+    onChange: (
+        field: "deactive" | "name" | "defaultvalue",
+        value: boolean | string
+    ) => void;
     hideDefaultValue?: boolean;
-    hideName ?:boolean;
+    hideName?: boolean;
     hideDeactive?: boolean;
 }
-const DefaultMeta:React.FC<DefaultMetaProps> = ({
+const DefaultMeta: React.FC<DefaultMetaProps> = ({
     defaultvalue,
     name,
     deactive,
     onChange,
     hideDefaultValue,
     hideName,
-    hideDeactive
+    hideDeactive,
 }) => {
-
     return (
         <>
-            {
-                !hideDeactive &&
+            {!hideDeactive && (
                 <div className="deactive">
-                    <span>Deactive</span> 
+                    <span>Deactive</span>
                     <input
                         type="checkbox"
                         checked={deactive}
-                        onChange={(event) => { onChange( 'deactive', ! event.target.checked ) }}
+                        onChange={(event) => {
+                            onChange("deactive", !event.target.checked);
+                        }}
                     />
                 </div>
-            }
-            {
-                !hideName &&
+            )}
+            {!hideName && (
                 <div className="name">
-                    <span>Set name</span> 
+                    <span>Set name</span>
                     <input
                         type="text"
                         value={name}
-                        onChange={(event) => { onChange( 'name', ! event.target.name ) }}
+                        onChange={(event) => {
+                            onChange("name", !event.target.name);
+                        }}
                     />
                 </div>
-            }
-            {
-                !hideDefaultValue &&
+            )}
+            {!hideDefaultValue && (
                 <div className="default-value">
                     <span>Set Defaut Value</span>
                     <input
                         type="text"
                         value={defaultvalue}
-                        onChange={(event) => { onChange( 'defaultvalue', ! event.target.name ) }}
+                        onChange={(event) => {
+                            onChange("defaultvalue", !event.target.name);
+                        }}
                     />
                 </div>
-            }
+            )}
         </>
     );
-}
+};
 
 export default DefaultMeta;

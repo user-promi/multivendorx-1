@@ -1,28 +1,26 @@
 import React from "react";
 
 export interface LabelProps {
-    wrapperClass : string,
-    descClass : string,
-    description ?: string,
-    value : string
+    wrapperClass: string;
+    descClass: string;
+    description?: string;
+    value: string;
 }
 
-const Label : React.FC<LabelProps> =({
+const Label: React.FC<LabelProps> = ({
     wrapperClass,
     descClass,
     description,
-    value
-})=>{
+    value,
+}) => {
     return (
         <>
             <div className={wrapperClass}>
                 <label>{value}</label>
-                <p className={descClass}>
-                    {description}
-                </p>
+                <p className={descClass}>{description}</p>
             </div>
         </>
     );
-}
+};
 
 export default Label;

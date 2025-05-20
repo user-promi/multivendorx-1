@@ -2,9 +2,7 @@
 import React from "react";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
-import '../styles/web/popupContent.scss';
-
-
+import "../styles/web/popupContent.scss";
 
 export interface ModulePopupProps {
     moduleName?: string;
@@ -33,8 +31,8 @@ const ModulePopup: React.FC<ModulePopupProps> = ({
     pluginButton,
     SettingDescription,
     pluginUrl,
-    modulePageUrl
-    }) => {
+    modulePageUrl,
+}) => {
     return (
         <DialogContent>
             <DialogContentText>
@@ -44,30 +42,35 @@ const ModulePopup: React.FC<ModulePopupProps> = ({
                             <div className="admin-banner-content">
                                 {moduleName && (
                                     <>
-                                        <h2>
-                                            { moduleMessage }
-                                        </h2>
-                                        <a className="admin-go-pro-btn" href={ modulePageUrl }>{ moduleButton }</a>
+                                        <h2>{moduleMessage}</h2>
+                                        <a
+                                            className="admin-go-pro-btn"
+                                            href={modulePageUrl}
+                                        >
+                                            {moduleButton}
+                                        </a>
                                     </>
                                 )}
                             </div>
 
                             {settings && (
                                 <>
-                                    <h2>{ SettingMessage }</h2>
-                                    <p id="description">
-                                        { SettingDescription }
-                                    </p>
+                                    <h2>{SettingMessage}</h2>
+                                    <p id="description">{SettingDescription}</p>
                                 </>
                             )}
 
                             {plugin && (
                                 <div>
-                                    <h2>{ pluginMessage }</h2>
-                                    <p id="description">
-                                        { pluginDescription }
-                                    </p>
-                                    <a className="admin-go-pro-btn" target="_blank" href={ pluginUrl }>{ pluginButton }</a>
+                                    <h2>{pluginMessage}</h2>
+                                    <p id="description">{pluginDescription}</p>
+                                    <a
+                                        className="admin-go-pro-btn"
+                                        target="_blank"
+                                        href={pluginUrl}
+                                    >
+                                        {pluginButton}
+                                    </a>
                                 </div>
                             )}
                         </div>

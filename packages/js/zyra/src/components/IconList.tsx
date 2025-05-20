@@ -1,14 +1,12 @@
-import React from 'react';
+import React from "react";
 import "../styles/fonts.scss";
 import "../styles/web/IconList.scss";
 
-
-const IconList : React.FC = ()=>{
+const IconList: React.FC = () => {
     return (
         <>
-        <div className="icon-list">
+            <div className="icon-list">
                 <div className="icon-wrapper">
-
                     <div className="icon-box">
                         <span className="adminLib-person"></span>
                         <span className="mls"> adminLib-person</span>
@@ -21,7 +19,10 @@ const IconList : React.FC = ()=>{
                     </div>
                     <div className="icon-box">
                         <span className="adminLib-supervised-user-circle"></span>
-                        <span className="mls"> adminLib-supervised-user-circle</span>
+                        <span className="mls">
+                            {" "}
+                            adminLib-supervised-user-circle
+                        </span>
                         <span>(e702)</span>
                     </div>
                     <div className="icon-box">
@@ -126,12 +127,18 @@ const IconList : React.FC = ()=>{
                     </div>
                     <div className="icon-box">
                         <span className="adminLib-centralized-connections"></span>
-                        <span className="mls"> adminLib-centralized-connections</span>
+                        <span className="mls">
+                            {" "}
+                            adminLib-centralized-connections
+                        </span>
                         <span>(e900)</span>
                     </div>
                     <div className="icon-box">
                         <span className="adminLib-desktop-pc-valuation"></span>
-                        <span className="mls"> adminLib-desktop-pc-valuation</span>
+                        <span className="mls">
+                            {" "}
+                            adminLib-desktop-pc-valuation
+                        </span>
                         <span>(e901)</span>
                     </div>
                     <div className="icon-box">
@@ -146,7 +153,10 @@ const IconList : React.FC = ()=>{
                     </div>
                     <div className="icon-box">
                         <span className="adminLib-social-media-content"></span>
-                        <span className="mls"> adminLib-social-media-content</span>
+                        <span className="mls">
+                            {" "}
+                            adminLib-social-media-content
+                        </span>
                         <span>(e906)</span>
                     </div>
                     <div className="icon-box">
@@ -216,7 +226,10 @@ const IconList : React.FC = ()=>{
                     </div>
                     <div className="icon-box">
                         <span className="adminLib-submission-message"></span>
-                        <span className="mls"> adminLib-submission-message</span>
+                        <span className="mls">
+                            {" "}
+                            adminLib-submission-message
+                        </span>
                         <span>(e914)</span>
                     </div>
                     <div className="icon-box">
@@ -301,7 +314,10 @@ const IconList : React.FC = ()=>{
                     </div>
                     <div className="icon-box">
                         <span className="adminLib-keyboard-arrow-down"></span>
-                        <span className="mls"> adminLib-keyboard-arrow-down</span>
+                        <span className="mls">
+                            {" "}
+                            adminLib-keyboard-arrow-down
+                        </span>
                         <span>(e925)</span>
                     </div>
                     <div className="icon-box">
@@ -351,7 +367,10 @@ const IconList : React.FC = ()=>{
                     </div>
                     <div className="icon-box">
                         <span className="adminLib-success-notification"></span>
-                        <span className="mls"> adminLib-success-notification</span>
+                        <span className="mls">
+                            {" "}
+                            adminLib-success-notification
+                        </span>
                         <span>(e92f)</span>
                     </div>
                     <div className="icon-box">
@@ -361,7 +380,10 @@ const IconList : React.FC = ()=>{
                     </div>
                     <div className="icon-box">
                         <span className="adminLib-vendor-form-delete"></span>
-                        <span className="mls"> adminLib-vendor-form-delete</span>
+                        <span className="mls">
+                            {" "}
+                            adminLib-vendor-form-delete
+                        </span>
                         <span>(e931)</span>
                     </div>
                     <div className="icon-box">
@@ -376,7 +398,10 @@ const IconList : React.FC = ()=>{
                     </div>
                     <div className="icon-box">
                         <span className="adminLib-select-question-type"></span>
-                        <span className="mls"> adminLib-select-question-type</span>
+                        <span className="mls">
+                            {" "}
+                            adminLib-select-question-type
+                        </span>
                         <span>(e934)</span>
                     </div>
                     <div className="icon-box">
@@ -486,7 +511,10 @@ const IconList : React.FC = ()=>{
                     </div>
                     <div className="icon-box">
                         <span className="adminLib-form-store-description"></span>
-                        <span className="mls"> adminLib-form-store-description</span>
+                        <span className="mls">
+                            {" "}
+                            adminLib-form-store-description
+                        </span>
                         <span>(e94a)</span>
                     </div>
                     <div className="icon-box">
@@ -501,7 +529,10 @@ const IconList : React.FC = ()=>{
                     </div>
                     <div className="icon-box">
                         <span className="adminLib-dropdown-checklist"></span>
-                        <span className="mls"> adminLib-dropdown-checklist</span>
+                        <span className="mls">
+                            {" "}
+                            adminLib-dropdown-checklist
+                        </span>
                         <span>(e94d)</span>
                     </div>
                     <div className="icon-box">
@@ -511,7 +542,10 @@ const IconList : React.FC = ()=>{
                     </div>
                     <div className="icon-box">
                         <span className="adminLib-captcha-automatic-code"></span>
-                        <span className="mls"> adminLib-captcha-automatic-code</span>
+                        <span className="mls">
+                            {" "}
+                            adminLib-captcha-automatic-code
+                        </span>
                         <span>(e94f)</span>
                     </div>
                     <div className="icon-box">
@@ -571,7 +605,10 @@ const IconList : React.FC = ()=>{
                     </div>
                     <div className="icon-box">
                         <span className="adminLib-experiment-results"></span>
-                        <span className="mls"> adminLib-experiment-results</span>
+                        <span className="mls">
+                            {" "}
+                            adminLib-experiment-results
+                        </span>
                         <span>(e95b)</span>
                     </div>
                     <div className="icon-box">
@@ -636,7 +673,10 @@ const IconList : React.FC = ()=>{
                     </div>
                     <div className="icon-box">
                         <span className="adminLib-dots-three-horizontal"></span>
-                        <span className="mls"> adminLib-dots-three-horizontal</span>
+                        <span className="mls">
+                            {" "}
+                            adminLib-dots-three-horizontal
+                        </span>
                         <span>(e8eee)</span>
                     </div>
                     <div className="icon-box">
@@ -659,11 +699,10 @@ const IconList : React.FC = ()=>{
                         <span className="mls"> adminLib-star</span>
                         <span>(e961)</span>
                     </div>
-
                 </div>
             </div>
         </>
     );
-}
+};
 
 export default IconList;

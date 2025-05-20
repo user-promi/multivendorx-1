@@ -25,13 +25,19 @@ interface MultipleOptionsProps {
     selected: boolean;
 }
 
-const MultipleOptions: React.FC<MultipleOptionsProps> = ({ formField, onChange, type }) => {
+const MultipleOptions: React.FC<MultipleOptionsProps> = ({
+    formField,
+    onChange,
+    type,
+}) => {
     const settingHasChanged = useRef(false);
     const firstTimeRender = useRef(true);
     const [openOption, setOpenOption] = useState<number | null>(null);
 
     const [options, setOptions] = useState<Option[]>(() => {
-        return Array.isArray(formField.options) && formField.options.length ? formField.options : [];
+        return Array.isArray(formField.options) && formField.options.length
+            ? formField.options
+            : [];
     });
 
     const renderInputFields = (type: string) => {
@@ -39,15 +45,25 @@ const MultipleOptions: React.FC<MultipleOptionsProps> = ({ formField, onChange, 
             case "radio":
                 return options.map((option, idx) => (
                     <div className="radio-input-label-wrap" key={idx}>
-                        <input type="radio" id={`radio-${idx}`} value={option.value} />
+                        <input
+                            type="radio"
+                            id={`radio-${idx}`}
+                            value={option.value}
+                        />
                         <label htmlFor={`radio-${idx}`}>{option.label}</label>
                     </div>
                 ));
             case "checkboxes":
                 return options.map((option, idx) => (
                     <div className="radio-input-label-wrap" key={idx}>
-                        <input type="checkbox" id={`checkbox-${idx}`} value={option.value} />
-                        <label htmlFor={`checkbox-${idx}`}>{option.label}</label>
+                        <input
+                            type="checkbox"
+                            id={`checkbox-${idx}`}
+                            value={option.value}
+                        />
+                        <label htmlFor={`checkbox-${idx}`}>
+                            {option.label}
+                        </label>
                     </div>
                 ));
             case "dropdown":
@@ -69,7 +85,11 @@ const MultipleOptions: React.FC<MultipleOptionsProps> = ({ formField, onChange, 
         }
     };
 
-    const handleOptionFieldChange = (index: number, key: keyof Option, value: string | boolean) => {
+    const handleOptionFieldChange = (
+        index: number,
+        key: keyof Option,
+        value: string | boolean
+    ) => {
         const newOptions = [...options];
         newOptions[index] = { ...newOptions[index], [key]: value };
         setOptions(newOptions);
@@ -99,7 +119,9 @@ const MultipleOptions: React.FC<MultipleOptionsProps> = ({ formField, onChange, 
             renderStaticContent={({ label }) => (
                 <div className="edit-form-wrapper">
                     <p>{label}</p>
-                    <div className="settings-form-group-radio">{renderInputFields(type)}</div>
+                    <div className="settings-form-group-radio">
+                        {renderInputFields(type)}
+                    </div>
                 </div>
             )}
             renderEditableContent={({ label, onLabelChange }) => (
@@ -125,14 +147,21 @@ const MultipleOptions: React.FC<MultipleOptionsProps> = ({ formField, onChange, 
                         handle=".drag-handle-option"
                     >
                         {options.map((option, index) => (
-                            <div className="option-list-wrapper drag-handle-option" key={index}>
+                            <div
+                                className="option-list-wrapper drag-handle-option"
+                                key={index}
+                            >
                                 <div className="option-label">
                                     <input
                                         type="text"
                                         value={option.label}
                                         onChange={(event) => {
                                             settingHasChanged.current = true;
-                                            handleOptionFieldChange(index, "label", event.target.value);
+                                            handleOptionFieldChange(
+                                                index,
+                                                "label",
+                                                event.target.value
+                                            );
                                         }}
                                         readOnly
                                         onClick={(event) => {
@@ -155,26 +184,48 @@ const MultipleOptions: React.FC<MultipleOptionsProps> = ({ formField, onChange, 
                                         option={option}
                                         onChange={(key, value) => {
                                             settingHasChanged.current = true;
-                                            handleOptionFieldChange(index, key as keyof Option, value);
+                                            handleOptionFieldChange(
+                                                index,
+                                                key as keyof Option,
+                                                value
+                                            );
                                         }}
                                         setDefaultValue={() => {
-                                            let defaultValueIndex: number | null = null;
+                                            let defaultValueIndex:
+                                                | number
+                                                | null = null;
                                             options.forEach((option, idx) => {
-                                                if (option.isdefault) defaultValueIndex = idx;
+                                                if (option.isdefault)
+                                                    defaultValueIndex = idx;
                                             });
                                             if (defaultValueIndex !== null) {
-                                                settingHasChanged.current = true;
-                                                handleOptionFieldChange(defaultValueIndex, "isdefault", false);
+                                                settingHasChanged.current =
+                                                    true;
+                                                handleOptionFieldChange(
+                                                    defaultValueIndex,
+                                                    "isdefault",
+                                                    false
+                                                );
                                             }
-                                            handleOptionFieldChange(index, "isdefault", true);
+                                            handleOptionFieldChange(
+                                                index,
+                                                "isdefault",
+                                                true
+                                            );
                                         }}
                                     />
                                 </div>
                             </div>
                         ))}
 
-                        <div className="add-more-option-section" onClick={handleInsertOption}>
-                            Add new options <span><i className="admin-font adminLib-plus-circle-o"></i></span>
+                        <div
+                            className="add-more-option-section"
+                            onClick={handleInsertOption}
+                        >
+                            Add new options{" "}
+                            <span>
+                                <i className="admin-font adminLib-plus-circle-o"></i>
+                            </span>
                         </div>
                     </ReactSortable>
                 </>

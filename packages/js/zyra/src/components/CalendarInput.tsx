@@ -1,4 +1,4 @@
-import React,{ useState } from "react";
+import React, { useState } from "react";
 import DatePicker from "react-multi-date-picker";
 
 export interface CalendarInputProps {

@@ -17,15 +17,27 @@ interface AutoCompleteProps {
     placeholder?: string;
 }
 
-const AutoComplete: React.FC<AutoCompleteProps> = ({ map, mapApi, addPlace, placeholder }) => {
-    const [autoComplete, setAutoComplete] = useState<google.maps.places.Autocomplete | null>(null);
+const AutoComplete: React.FC<AutoCompleteProps> = ({
+    map,
+    mapApi,
+    addPlace,
+    placeholder,
+}) => {
+    const [autoComplete, setAutoComplete] =
+        useState<google.maps.places.Autocomplete | null>(null);
     const inputRef = useRef<HTMLInputElement | null>(null);
 
     useEffect(() => {
         if (mapApi?.places && inputRef.current) {
             const options = { types: ["address"] };
-            const autoCompleteInstance = new mapApi.places.Autocomplete(inputRef.current, options);
-            autoCompleteInstance.addListener("place_changed", handleOnPlaceChanged);
+            const autoCompleteInstance = new mapApi.places.Autocomplete(
+                inputRef.current,
+                options
+            );
+            autoCompleteInstance.addListener(
+                "place_changed",
+                handleOnPlaceChanged
+            );
             autoCompleteInstance.bindTo("bounds", map);
             setAutoComplete(autoCompleteInstance);
         }
@@ -68,28 +80,47 @@ interface GoogleMapProps {
 
 const GoogleMap: React.FC<GoogleMapProps> = (props) => {
     const [zoom, setZoom] = useState<number>(12);
-    const [center, setCenter] = useState<{ lat: number; lng: number }>(props.center);
+    const [center, setCenter] = useState<{ lat: number; lng: number }>(
+        props.center
+    );
     const [draggable, setDraggable] = useState<boolean>(true);
     const [address, setAddress] = useState<string | undefined>();
-    const [position, setPosition] = useState<{ lat: number | string; lng: number | string }>({
+    const [position, setPosition] = useState<{
+        lat: number | string;
+        lng: number | string;
+    }>({
         lat: "",
         lng: "",
     });
 
     const [mapApi, setMapApi] = useState<typeof google.maps | null>(null);
     const [mapApiLoaded, setMapApiLoaded] = useState<boolean>(false);
-    const [mapInstance, setMapInstance] = useState<google.maps.Map | null>(null);
+    const [mapInstance, setMapInstance] = useState<google.maps.Map | null>(
+        null
+    );
 
     useEffect(() => {
         if ("geolocation" in navigator) {
             navigator.geolocation.getCurrentPosition((pos) => {
-                setCenter({ lat: pos.coords.latitude, lng: pos.coords.longitude });
-                setPosition({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+                setCenter({
+                    lat: pos.coords.latitude,
+                    lng: pos.coords.longitude,
+                });
+                setPosition({
+                    lat: pos.coords.latitude,
+                    lng: pos.coords.longitude,
+                });
             });
         }
     }, []);
 
-    const handleOnChange = ({ center, zoom }: { center: { lat: number; lng: number }; zoom: number }) => {
+    const handleOnChange = ({
+        center,
+        zoom,
+    }: {
+        center: { lat: number; lng: number };
+        zoom: number;
+    }) => {
         setZoom(zoom);
         setCenter(center);
     };
@@ -98,7 +129,11 @@ const GoogleMap: React.FC<GoogleMapProps> = (props) => {
         setPosition({ lat: value.lat, lng: value.lng });
     };
 
-    const onMarkerInteraction = (_: any, __: any, mouse: { lat: number; lng: number }) => {
+    const onMarkerInteraction = (
+        _: any,
+        __: any,
+        mouse: { lat: number; lng: number }
+    ) => {
         setDraggable(false);
         setPosition({ lat: mouse.lat, lng: mouse.lng });
     };
@@ -128,14 +163,17 @@ const GoogleMap: React.FC<GoogleMapProps> = (props) => {
         if (!mapApi || !position.lat || !position.lng) return;
         const geocoder = new mapApi.Geocoder();
 
-        geocoder.geocode({ location: { lat: +position.lat, lng: +position.lng } }, (results, status) => {
-            if (status === "OK" && results?.[0]) {
-                setZoom(12);
-                setAddress(results[0].formatted_address);
-            } else {
-                window.alert("Geocoder failed due to: " + status);
+        geocoder.geocode(
+            { location: { lat: +position.lat, lng: +position.lng } },
+            (results, status) => {
+                if (status === "OK" && results?.[0]) {
+                    setZoom(12);
+                    setAddress(results[0].formatted_address);
+                } else {
+                    window.alert("Geocoder failed due to: " + status);
+                }
             }
-        });
+        );
     };
 
     return (
@@ -159,13 +197,15 @@ const GoogleMap: React.FC<GoogleMapProps> = (props) => {
                     onChildMouseDown={onMarkerInteraction}
                     onChildMouseUp={onMarkerInteractionMouseUp}
                     bootstrapURLKeys={{
-                        key: 'appLocalizer.google_api', // Ensure `appLocalizer` is properly typed
+                        key: "appLocalizer.google_api", // Ensure `appLocalizer` is properly typed
                         libraries: ["places", "geometry"],
                     }}
                     yesIWantToUseGoogleMapApiInternals
-                    onGoogleApiLoaded={({ map, maps }) => apiHasLoaded(map, maps)}
+                    onGoogleApiLoaded={({ map, maps }) =>
+                        apiHasLoaded(map, maps)
+                    }
                 >
-                    <AnyReactComponent text='{appLocalizer.marker_icon}' />
+                    <AnyReactComponent text="{appLocalizer.marker_icon}" />
                 </GoogleMapReact>
             </div>
         </div>

@@ -14,7 +14,12 @@ interface OptionMetaBoxProps {
     hasOpen: boolean;
 }
 
-const OptionMetaBox: React.FC<OptionMetaBoxProps> = ({ option, onChange, setDefaultValue, hasOpen }) => {
+const OptionMetaBox: React.FC<OptionMetaBoxProps> = ({
+    option,
+    onChange,
+    setDefaultValue,
+    hasOpen,
+}) => {
     const [hasOpened, setHasOpened] = useState(hasOpen);
     const modalRef = useRef<HTMLDivElement>(null); // Use HTMLDivElement instead of HTMLElement
 
@@ -31,8 +36,14 @@ const OptionMetaBox: React.FC<OptionMetaBoxProps> = ({ option, onChange, setDefa
         >
             <i className="admin-font adminLib-menu"></i>
             {hasOpened && (
-                <Draggable nodeRef={modalRef as unknown as React.RefObject<HTMLElement>}>
-                    <div ref={modalRef} className="meta-setting-modal"> {/* Change from <section> to <div> */}
+                <Draggable
+                    nodeRef={
+                        modalRef as unknown as React.RefObject<HTMLElement>
+                    }
+                >
+                    <div ref={modalRef} className="meta-setting-modal">
+                        {" "}
+                        {/* Change from <section> to <div> */}
                         {/* Close button */}
                         <button
                             className="meta-setting-modal-button"
@@ -43,7 +54,6 @@ const OptionMetaBox: React.FC<OptionMetaBoxProps> = ({ option, onChange, setDefa
                         >
                             <i className="admin-font adminLib-cross"></i>
                         </button>
-
                         {/* Main content */}
                         <main className="meta-setting-modal-content">
                             <h3>Input Field Settings</h3>
@@ -54,7 +64,9 @@ const OptionMetaBox: React.FC<OptionMetaBoxProps> = ({ option, onChange, setDefa
                                     <input
                                         type="text"
                                         value={option.value}
-                                        onChange={(e) => onChange("value", e.target.value)}
+                                        onChange={(e) =>
+                                            onChange("value", e.target.value)
+                                        }
                                     />
                                 </article>
 
@@ -63,7 +75,9 @@ const OptionMetaBox: React.FC<OptionMetaBoxProps> = ({ option, onChange, setDefa
                                     <input
                                         type="text"
                                         value={option.label}
-                                        onChange={(e) => onChange("label", e.target.value)}
+                                        onChange={(e) =>
+                                            onChange("label", e.target.value)
+                                        }
                                     />
                                 </article>
                             </div>

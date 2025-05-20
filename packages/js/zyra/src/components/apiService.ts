@@ -8,7 +8,10 @@ import axios, { AxiosRequestConfig } from "axios";
  * @param headers - Request headers
  * @returns API response data or null in case of an error
  */
-export const getApiResponse = async <T>(url: string, headers: AxiosRequestConfig = {}): Promise<T | null> => {
+export const getApiResponse = async <T>(
+    url: string,
+    headers: AxiosRequestConfig = {}
+): Promise<T | null> => {
     try {
         const result = await axios.get<T>(url, headers);
         return result.data;
@@ -54,6 +57,11 @@ export const sendApiResponse = async <T>(
  * @param rootUrl - API root URL (optional)
  * @returns Complete API URL
  */
-export const getApiLink = ( appLocalizer: Record<string, any>, endpoint: string, namespace?: string, rootUrl?: string): string => {
+export const getApiLink = (
+    appLocalizer: Record<string, any>,
+    endpoint: string,
+    namespace?: string,
+    rootUrl?: string
+): string => {
     return `${rootUrl || appLocalizer.apiUrl}/${namespace || appLocalizer.restUrl}/${endpoint}`;
 };

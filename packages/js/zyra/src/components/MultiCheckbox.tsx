@@ -50,17 +50,26 @@ const MultiCheckBox: React.FC<MultiCheckBoxProps> = (props) => {
             )}
             <div className="wrapper">
                 {props.options.map((option) => {
-                    const checked = props.value?.includes(option.value) ?? false;
+                    const checked =
+                        props.value?.includes(option.value) ?? false;
 
                     return (
-                        <div key={option.key} className={props.inputWrapperClass}>
+                        <div
+                            key={option.key}
+                            className={props.inputWrapperClass}
+                        >
                             {props.rightContent && (
                                 <p
                                     className={props.rightContentClass}
-                                    dangerouslySetInnerHTML={{ __html: option.label }}
+                                    dangerouslySetInnerHTML={{
+                                        __html: option.label,
+                                    }}
                                 ></p>
                             )}
-                            <div className={props.inputInnerWrapperClass} data-tour={props.tour}>
+                            <div
+                                className={props.inputInnerWrapperClass}
+                                data-tour={props.tour}
+                            >
                                 <input
                                     className={props.inputClass}
                                     id={`${props.idPrefix}-${option.key}`}
@@ -76,20 +85,30 @@ const MultiCheckBox: React.FC<MultiCheckBoxProps> = (props) => {
                                         }
                                     }}
                                 />
-                                <label htmlFor={`${props.idPrefix}-${option.key}`}></label>
+                                <label
+                                    htmlFor={`${props.idPrefix}-${option.key}`}
+                                ></label>
                             </div>
-                            {props.proSetting && <span className="admin-pro-tag">pro</span>}
+                            {props.proSetting && (
+                                <span className="admin-pro-tag">pro</span>
+                            )}
                             {!props.rightContent && (
                                 <p
                                     className={props.rightContentClass}
-                                    dangerouslySetInnerHTML={{ __html: option.label }}
+                                    dangerouslySetInnerHTML={{
+                                        __html: option.label,
+                                    }}
                                 ></p>
                             )}
-                            {option.proSetting && <span className="admin-pro-tag">pro</span>}
+                            {option.proSetting && (
+                                <span className="admin-pro-tag">pro</span>
+                            )}
                             {option.hints && (
                                 <span
                                     className={props.hintOuterClass}
-                                    dangerouslySetInnerHTML={{ __html: option.hints }}
+                                    dangerouslySetInnerHTML={{
+                                        __html: option.hints,
+                                    }}
                                 ></span>
                             )}
                         </div>
@@ -97,7 +116,10 @@ const MultiCheckBox: React.FC<MultiCheckBoxProps> = (props) => {
                 })}
             </div>
             {props.description && (
-                <p className={props.descClass} dangerouslySetInnerHTML={{ __html: props.description }}></p>
+                <p
+                    className={props.descClass}
+                    dangerouslySetInnerHTML={{ __html: props.description }}
+                ></p>
             )}
         </div>
     );

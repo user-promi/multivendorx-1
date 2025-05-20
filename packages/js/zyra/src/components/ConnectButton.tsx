@@ -1,8 +1,7 @@
-import React,{ useState, useRef } from "react";
-import {Link} from 'react-router-dom';
+import React, { useState, useRef } from "react";
+import { Link } from "react-router-dom";
 import { getApiLink, sendApiResponse } from "./apiService";
-import '../styles/web/ConnectButton.scss';
-
+import "../styles/web/ConnectButton.scss";
 
 interface Task {
     action: string;
@@ -16,12 +15,18 @@ export interface ConnectButtonProps {
     appLocalizer: Record<string, any>; // Allows any structure
 }
 
-const ConnectButton: React.FC<ConnectButtonProps> = ({ appLocalizer ,apiLink, tasks }) => {
+const ConnectButton: React.FC<ConnectButtonProps> = ({
+    appLocalizer,
+    apiLink,
+    tasks,
+}) => {
     const connectTaskStarted = useRef<boolean>(false);
     const additionalData = useRef<Record<string, any>>({});
     const taskNumber = useRef<number>(0);
     const [loading, setLoading] = useState<boolean>(false);
-    const [taskSequence, setTaskSequence] = useState<{ name: string; message: string; status: string }[]>([]);
+    const [taskSequence, setTaskSequence] = useState<
+        { name: string; message: string; status: string }[]
+    >([]);
     const [testStatus, setTestStatus] = useState<string>("");
 
     // Sleep for a given time.
@@ -52,15 +57,23 @@ const ConnectButton: React.FC<ConnectButtonProps> = ({ appLocalizer ,apiLink, ta
 
         setTaskSequence((tasks) => [
             ...tasks,
-            { name: currentTask.action, message: currentTask.message, status: "running" },
+            {
+                name: currentTask.action,
+                message: currentTask.message,
+                status: "running",
+            },
         ]);
 
         await sleep(2500);
 
-        const response = await sendApiResponse(appLocalizer,getApiLink(appLocalizer,apiLink), {
-            action: currentTask.action,
-            ...additionalData.current,
-        });
+        const response = await sendApiResponse(
+            appLocalizer,
+            getApiLink(appLocalizer, apiLink),
+            {
+                action: currentTask.action,
+                ...additionalData.current,
+            }
+        );
 
         let taskStatus: "success" | "failed" = "success";
 
@@ -82,7 +95,7 @@ const ConnectButton: React.FC<ConnectButtonProps> = ({ appLocalizer ,apiLink, ta
                 // additionalData.current["user_id"] = validUser.id;
                 additionalData.current["user_id"] = validUser;
             }
-        // } else if (!response.success) {
+            // } else if (!response.success) {
         } else if (!response) {
             taskStatus = "failed";
         }
@@ -124,24 +137,36 @@ const ConnectButton: React.FC<ConnectButtonProps> = ({ appLocalizer ,apiLink, ta
             </div>
             <div className="fetch-details-wrapper">
                 {taskSequence.map((task, index) => (
-                    <div key={index} className={`${task.status} details-status-row`}>
-                        {task.message} {task.status !== "running" && (
-                            <i className={`admin-font ${task.status === "failed" ? "adminLib-cross" : "adminLib-icon-yes"}`}></i>
+                    <div
+                        key={index}
+                        className={`${task.status} details-status-row`}
+                    >
+                        {task.message}{" "}
+                        {task.status !== "running" && (
+                            <i
+                                className={`admin-font ${task.status === "failed" ? "adminLib-cross" : "adminLib-icon-yes"}`}
+                            ></i>
                         )}
                     </div>
                 ))}
             </div>
             {testStatus && (
-                <div className={`fetch-display-output ${testStatus === "Failed" ? "failed" : "success"}`}>
+                <div
+                    className={`fetch-display-output ${testStatus === "Failed" ? "failed" : "success"}`}
+                >
                     {testStatus === "Failed" ? (
                         <p>
-                            { 'Test connection failed. Check further details in' } {' '}
-                            <Link className="errorlog-link" to={'?page=moowoodle#&tab=settings&subtab=log'}>
-                                { 'error log' }
-                            </Link>.
+                            {"Test connection failed. Check further details in"}{" "}
+                            <Link
+                                className="errorlog-link"
+                                to={"?page=moowoodle#&tab=settings&subtab=log"}
+                            >
+                                {"error log"}
+                            </Link>
+                            .
                         </p>
                     ) : (
-                         'Test connection successful'
+                        "Test connection successful"
                     )}
                 </div>
             )}

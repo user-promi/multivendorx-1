@@ -12,13 +12,18 @@ export interface SelectInputProps {
     selectDeselect?: boolean;
     selectDeselectClass?: string;
     selectDeselectValue?: string;
-    name?:string,
-    onMultiSelectDeselectChange?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+    name?: string;
+    onMultiSelectDeselectChange?: (
+        e: React.MouseEvent<HTMLButtonElement>
+    ) => void;
     options: SelectOptions[];
     value?: string | string[];
     inputClass?: string;
     type?: "single-select" | "multi-select";
-    onChange?: (newValue: SingleValue<SelectOptions> | MultiValue<SelectOptions>, actionMeta: ActionMeta<SelectOptions>) => void;
+    onChange?: (
+        newValue: SingleValue<SelectOptions> | MultiValue<SelectOptions>,
+        actionMeta: ActionMeta<SelectOptions>
+    ) => void;
     onClick?: (e: React.MouseEvent<HTMLInputElement>) => void;
     proSetting?: boolean;
     description?: string;
@@ -51,8 +56,8 @@ const SelectInput: React.FC<SelectInputProps> = ({
 
     // Find default selected value
     const defaultValue = Array.isArray(value)
-  ? optionsData.filter(opt => new Set(value).has(opt.value)) // If it's an array (multi-select), return null or handle differently
-  : optionsData.find((opt) => opt.value === value) || null;
+        ? optionsData.filter((opt) => new Set(value).has(opt.value)) // If it's an array (multi-select), return null or handle differently
+        : optionsData.find((opt) => opt.value === value) || null;
 
     return (
         <div className={wrapperClass}>
@@ -72,12 +77,17 @@ const SelectInput: React.FC<SelectInputProps> = ({
                 className={inputClass}
                 value={defaultValue}
                 options={optionsData}
-                onChange={(newValue, actionMeta) => onChange?.(newValue, actionMeta)}
+                onChange={(newValue, actionMeta) =>
+                    onChange?.(newValue, actionMeta)
+                }
                 isMulti={type === "multi-select"}
             />
             {proSetting && <span className="admin-pro-tag">pro</span>}
             {description && (
-                <p className={descClass} dangerouslySetInnerHTML={{ __html: description }}></p>
+                <p
+                    className={descClass}
+                    dangerouslySetInnerHTML={{ __html: description }}
+                ></p>
             )}
         </div>
     );
