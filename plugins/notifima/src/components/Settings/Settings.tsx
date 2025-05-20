@@ -22,7 +22,7 @@ import ShowProPopup from "../Popup/Popup";
 import { useLocation, Link } from "react-router-dom";
 
 // Types
-type SettingItem = Record< string, any >;
+type SettingItem = Record<string, any>;
 
 interface SettingsProps {
     id: string;
@@ -35,7 +35,7 @@ interface Products {
 
 const supportLink = [
     {
-        title: __( "Get in touch with Support", "notifima" ),
+        title: __("Get in touch with Support", "notifima"),
         icon: "mail",
         description: __(
             "Reach out to the support team for assistance or guidance.",
@@ -44,53 +44,50 @@ const supportLink = [
         link: "https://notifima.com/contact-us/",
     },
     {
-        title: __( "Explore Documentation", "notifima" ),
+        title: __("Explore Documentation", "notifima"),
         icon: "submission-message",
-        description: __(
-            "Understand the plugin and its settings.",
-            "notifima"
-        ),
+        description: __("Understand the plugin and its settings.", "notifima"),
         link: "https://notifima.com/docs/",
     },
     {
-        title: __( "Contribute Here", "notifima" ),
+        title: __("Contribute Here", "notifima"),
         icon: "support",
-        description: __( "Participate in product enhancement.", "notifima" ),
+        description: __("Participate in product enhancement.", "notifima"),
         link: "https://github.com/multivendorx/woocommerce-product-stock-alert/issues",
     },
 ];
 
 const products: Products[] = [
     {
-        title: __( "Double Opt-In", "notifima" ),
+        title: __("Double Opt-In", "notifima"),
         description: __(
             "Experience the power of Double Opt-In for our Stock Alert Form - Guaranteed precision in every notification!",
             "notifima"
         ),
     },
     {
-        title: __( "Your Subscription Hub", "notifima" ),
+        title: __("Your Subscription Hub", "notifima"),
         description: __(
             "Subscription Dashboard - Easily monitor and download lists of out-of-stock subscribers for seamless management.",
             "notifima"
         ),
     },
     {
-        title: __( "Mailchimp Bridge", "notifima" ),
+        title: __("Mailchimp Bridge", "notifima"),
         description: __(
             "Seamlessly link WooCommerce out-of-stock subscriptions with Mailchimp for effective marketing.",
             "notifima"
         ),
     },
     {
-        title: __( "Unsubscribe Notifications", "notifima" ),
+        title: __("Unsubscribe Notifications", "notifima"),
         description: __(
             "User-Initiated Unsubscribe from In-Stock Notifications.",
             "notifima"
         ),
     },
     {
-        title: __( "Ban Spam Emails", "notifima" ),
+        title: __("Ban Spam Emails", "notifima"),
         description: __(
             "Email and Domain Blacklist for Spam Prevention.",
             "notifima"
@@ -111,10 +108,7 @@ const faqs = [
         open: true,
     },
     {
-        question: __(
-            "Why is the out-of-stock form not appearing?",
-            "notifima"
-        ),
+        question: __("Why is the out-of-stock form not appearing?", "notifima"),
         answer: __(
             "There might be a theme conflict issue. To troubleshoot, switch to a default theme like Twenty Twenty-Four and check if the form appears.",
             "notifima"
@@ -145,72 +139,72 @@ const faqs = [
     },
 ];
 
-const Settings: React.FC< SettingsProps > = () => {
+const Settings: React.FC<SettingsProps> = () => {
     const settingsArray: SettingItem[] = getAvailableSettings(
         getTemplateData(),
         []
     );
-    const location = new URLSearchParams( useLocation().hash.substring( 1 ) );
+    const location = new URLSearchParams(useLocation().hash.substring(1));
 
     const getBanner = () => {
         return (
             <Banner
-                products={ products }
-                is_pro={ false }
-                pro_url={ appLocalizer.pro_url }
+                products={products}
+                is_pro={false}
+                pro_url={appLocalizer.pro_url}
             />
         );
     };
     // Render the dynamic form
-    const getForm = ( currentTab: string | null ): JSX.Element | null => {
-        if ( ! currentTab ) return null;
+    const getForm = (currentTab: string | null): JSX.Element | null => {
+        if (!currentTab) return null;
 
         const { setting, settingName, setSetting, updateSetting } =
             useSetting();
-        const settingModal = getSettingById( settingsArray as any, currentTab );
+        const settingModal = getSettingById(settingsArray as any, currentTab);
         const { modules } = useModules();
 
         // Ensure settings context is initialized
-        if ( settingName !== currentTab ) {
+        if (settingName !== currentTab) {
             setSetting(
                 currentTab,
-                appLocalizer.settings_databases_value[ currentTab ] || {}
+                appLocalizer.settings_databases_value[currentTab] || {}
             );
         }
 
-        useEffect( () => {
-            if ( settingName === currentTab ) {
-                appLocalizer.settings_databases_value[ settingName ] = setting;
+        useEffect(() => {
+            if (settingName === currentTab) {
+                appLocalizer.settings_databases_value[settingName] = setting;
             }
-        }, [ setting, settingName, currentTab ] );
+        }, [setting, settingName, currentTab]);
 
         // Special component
-        if ( currentTab === "faq" ) {
+        if (currentTab === "faq") {
             return (
                 <Support
                     title="Thank you for using Product Stock Manager & Notifier for WooCommerce"
                     subTitle="We want to help you enjoy a wonderful experience with all of our products."
                     url="https://www.youtube.com/embed/cgfeZH5z2dM?si=3zjG13RDOSiX2m1b"
-                    faqData={ faqs }
+                    faqData={faqs}
                 />
             );
         }
 
         return (
             <>
-                { settingName === currentTab ? (
+                {settingName === currentTab ? (
                     <AdminForm
-                        settings={ settingModal as SettingContent }
-                        proSetting={ appLocalizer.pro_settings_list }
-                        setting={ setting }
-                        updateSetting={ updateSetting }
-                        appLocalizer={ appLocalizer }
-                        modules={ modules }
-                        ProPopup={ ShowProPopup }
+                        settings={settingModal as SettingContent}
+                        proSetting={appLocalizer.pro_settings_list}
+                        setting={setting}
+                        updateSetting={updateSetting}
+                        appLocalizer={appLocalizer}
+                        modules={modules}
+                        ProPopup={ShowProPopup}
                     />
                 ) : (
                     <>Loading...</>
-                ) }
+                )}
             </>
         );
     };
@@ -218,18 +212,18 @@ const Settings: React.FC< SettingsProps > = () => {
     return (
         <SettingProvider>
             <Tabs
-                tabData={ settingsArray as any }
-                currentTab={ location.get( "subtab" ) as string }
-                getForm={ getForm }
-                BannerSection={ getBanner }
-                prepareUrl={ ( subTab: string ) =>
-                    `?page=notifima#&tab=settings&subtab=${ subTab }`
+                tabData={settingsArray as any}
+                currentTab={location.get("subtab") as string}
+                getForm={getForm}
+                BannerSection={getBanner}
+                prepareUrl={(subTab: string) =>
+                    `?page=notifima#&tab=settings&subtab=${subTab}`
                 }
-                appLocalizer={ appLocalizer }
-                brandImg={ Brand }
-                smallbrandImg={ BrandSmall }
-                supprot={ supportLink }
-                Link={ Link }
+                appLocalizer={appLocalizer}
+                brandImg={Brand}
+                smallbrandImg={BrandSmall}
+                supprot={supportLink}
+                Link={Link}
             />
         </SettingProvider>
     );

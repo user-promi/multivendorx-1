@@ -41,42 +41,40 @@ type FilterData = {
 export interface RealtimeFilter {
     name: string;
     render: (
-        updateFilter: ( key: string, value: any ) => void,
+        updateFilter: (key: string, value: any) => void,
         filterValue: any
     ) => ReactNode;
 }
 
 const SubscribersList: React.FC = () => {
-    const fetchSubscribersDataUrl = `${ appLocalizer.apiUrl }/notifima/v1/subscribers`;
-    const bulkActionUrl = `${ appLocalizer.apiUrl }/notifima/v1/subscribers`;
-    const [ rowSelection, setRowSelection ] = useState<
-        Record< string, boolean >
-    >( {} );
-    const dateRef = useRef< HTMLDivElement | null >( null );
-    const bulkSelectRef = useRef< HTMLSelectElement >( null );
-    const [ openModal, setOpenModal ] = useState( false );
-    const [ openDialog, setOpenDialog ] = useState( false );
-    const [ modalDetails, setModalDetails ] = useState< string | boolean >(
-        false
+    const fetchSubscribersDataUrl = `${appLocalizer.apiUrl}/notifima/v1/subscribers`;
+    const bulkActionUrl = `${appLocalizer.apiUrl}/notifima/v1/subscribers`;
+    const [rowSelection, setRowSelection] = useState<Record<string, boolean>>(
+        {}
     );
-    const [ pagination, setPagination ] = useState< PaginationState >( {
+    const dateRef = useRef<HTMLDivElement | null>(null);
+    const bulkSelectRef = useRef<HTMLSelectElement>(null);
+    const [openModal, setOpenModal] = useState(false);
+    const [openDialog, setOpenDialog] = useState(false);
+    const [modalDetails, setModalDetails] = useState<string | boolean>(false);
+    const [pagination, setPagination] = useState<PaginationState>({
         pageIndex: 0,
         pageSize: 10,
-    } );
-    const [ totalRows, setTotalRows ] = useState< number >( 0 );
-    const [ pageCount, setPageCount ] = useState( 0 );
-    const [ openDatePicker, setOpenDatePicker ] = useState( false );
-    const [ postStatus, setPostStatus ] = useState( "" );
-    const [ subscribersStatus, setSubscribersStatus ] = useState<
+    });
+    const [totalRows, setTotalRows] = useState<number>(0);
+    const [pageCount, setPageCount] = useState(0);
+    const [openDatePicker, setOpenDatePicker] = useState(false);
+    const [postStatus, setPostStatus] = useState("");
+    const [subscribersStatus, setSubscribersStatus] = useState<
         SubscriberStatus[] | null
-    >( null );
-    const [ filters, setFilters ] = useState< FilterData >( {} );
-    const [ data, setData ] = useState< Subscriber[] | null >( null );
-    const [ allData, setAllData ] = useState( [] );
+    >(null);
+    const [filters, setFilters] = useState<FilterData>({});
+    const [data, setData] = useState<Subscriber[] | null>(null);
+    const [allData, setAllData] = useState([]);
     const csvLink = useRef<
         CSVLink & HTMLAnchorElement & { link: HTMLAnchorElement }
-    >( null );
-    const [ selectedRange, setSelectedRange ] = useState( [
+    >(null);
+    const [selectedRange, setSelectedRange] = useState([
         {
             startDate: new Date(
                 new Date().getTime() - 30 * 24 * 60 * 60 * 1000
@@ -84,74 +82,74 @@ const SubscribersList: React.FC = () => {
             endDate: new Date(),
             key: "selection",
         },
-    ] );
+    ]);
 
     // Columns for the table
-    const columns: ColumnDef< Subscriber, any >[] = [
+    const columns: ColumnDef<Subscriber, any>[] = [
         {
             id: "select",
-            header: ( { table } ) => (
+            header: ({ table }) => (
                 <input
                     type="checkbox"
-                    checked={ table.getIsAllRowsSelected() }
-                    onChange={ table.getToggleAllRowsSelectedHandler() }
+                    checked={table.getIsAllRowsSelected()}
+                    onChange={table.getToggleAllRowsSelectedHandler()}
                 />
             ),
-            cell: ( { row } ) => (
+            cell: ({ row }) => (
                 <input
                     type="checkbox"
-                    checked={ row.getIsSelected() }
-                    onChange={ row.getToggleSelectedHandler() }
+                    checked={row.getIsSelected()}
+                    onChange={row.getToggleSelectedHandler()}
                 />
             ),
         },
         {
             header: "Product",
-            cell: ( { row } ) => (
+            cell: ({ row }) => (
                 <TableCell title="Product">
-                    <img src={ row.original.image } alt="product_image" />
-                    <p>{ row.original.product }</p>
+                    <img src={row.original.image} alt="product_image" />
+                    <p>{row.original.product}</p>
                 </TableCell>
             ),
         },
         {
             header: "Email",
-            cell: ( { row } ) => (
+            cell: ({ row }) => (
                 <TableCell title="Email">
-                    { row.original.email }
-                    { row.original.user_link && (
+                    {row.original.email}
+                    {row.original.user_link && (
                         <a
                             className="user-profile"
-                            href={ row.original.user_link }
+                            href={row.original.user_link}
                             target="_blank"
                             rel="noreferrer"
                         >
                             <i className="admin-font adminLib-person"></i>
                         </a>
-                    ) }
+                    )}
                 </TableCell>
             ),
         },
         {
             header: "Date",
-            cell: ( { row } ) => (
-                <TableCell title="Date"> { row.original.date } </TableCell>
+            cell: ({ row }) => (
+                <TableCell title="Date"> {row.original.date} </TableCell>
             ),
         },
         {
             header: "Status",
-            cell: ( { row } ) => (
+            cell: ({ row }) => (
                 <TableCell title="Status">
                     <p
                         className={
                             row.original.status_key === "mailsent"
                                 ? "sent"
                                 : row.original.status_key === "subscribed"
-                                ? "subscribed"
-                                : "unsubscribed"
+                                  ? "subscribed"
+                                  : "unsubscribed"
                         }
                     >
-                        { row.original.status }
+                        {row.original.status}
                     </p>
                 </TableCell>
             ),
@@ -159,35 +157,33 @@ const SubscribersList: React.FC = () => {
     ];
 
     // useEffects
-    useEffect( () => {
-        if ( appLocalizer.khali_dabba ) {
+    useEffect(() => {
+        if (appLocalizer.khali_dabba) {
             requestData();
         }
-    }, [ postStatus ] );
+    }, [postStatus]);
 
-    useEffect( () => {
-        if ( ! appLocalizer.khali_dabba ) return;
+    useEffect(() => {
+        if (!appLocalizer.khali_dabba) return;
         const currentPage = pagination.pageIndex + 1;
         const rowsPerPage = pagination.pageSize;
-        requestData( rowsPerPage, currentPage );
-        setPageCount( Math.ceil( totalRows / rowsPerPage ) );
-    }, [ pagination ] );
+        requestData(rowsPerPage, currentPage);
+        setPageCount(Math.ceil(totalRows / rowsPerPage));
+    }, [pagination]);
 
-    useEffect( () => {
-        if ( appLocalizer.khali_dabba ) {
-            axios< SubscriberResponse >( {
+    useEffect(() => {
+        if (appLocalizer.khali_dabba) {
+            axios<SubscriberResponse>({
                 method: "GET",
                 url: fetchSubscribersDataUrl,
                 headers: { "X-WP-Nonce": appLocalizer.nonce },
                 params: { action: "segment" },
-            } ).then( ( response ) => {
+            }).then((response) => {
                 const responseData = response.data;
-                setTotalRows( responseData.all );
-                setPageCount(
-                    Math.ceil( responseData.all / pagination.pageSize )
-                );
+                setTotalRows(responseData.all);
+                setPageCount(Math.ceil(responseData.all / pagination.pageSize));
 
-                setSubscribersStatus( [
+                setSubscribersStatus([
                     {
                         key: "all",
                         name: "All",
@@ -208,21 +204,21 @@ const SubscribersList: React.FC = () => {
                         name: "Mail Sent",
                         count: responseData.mailsent,
                     },
-                ] );
-            } );
+                ]);
+            });
         }
-    }, [ data ] );
+    }, [data]);
 
-    useEffect( () => {
-        document.body.addEventListener( "click", ( event ) => {
+    useEffect(() => {
+        document.body.addEventListener("click", (event) => {
             if (
                 event.target instanceof Node &&
-                ! dateRef?.current?.contains( event.target )
+                !dateRef?.current?.contains(event.target)
             ) {
-                setOpenDatePicker( false );
+                setOpenDatePicker(false);
             }
-        } );
-    }, [] );
+        });
+    }, []);
 
     const requestApiForData = (
         rowsPerPage: number,
@@ -237,7 +233,7 @@ const SubscribersList: React.FC = () => {
                         searchAction?: string;
                         searchField?: string;
                     }
-                 )?.searchAction
+                )?.searchAction
             ) !==
             Boolean(
                 (
@@ -245,13 +241,13 @@ const SubscribersList: React.FC = () => {
                         searchAction?: string;
                         searchField?: string;
                     }
-                 )?.searchField
+                )?.searchField
             )
         ) {
             return;
         }
 
-        setData( null );
+        setData(null);
         requestData(
             rowsPerPage,
             currentPage,
@@ -264,13 +260,11 @@ const SubscribersList: React.FC = () => {
     };
 
     const handleDateOpen = () => {
-        setOpenDatePicker( ! openDatePicker );
+        setOpenDatePicker(!openDatePicker);
     };
 
-    const getSelectedRows = ( selectedRows: any, rowData: Subscriber[] ) => {
-        return Object.keys( selectedRows ).map(
-            ( key ) => rowData[ parseInt( key ) ]
-        );
+    const getSelectedRows = (selectedRows: any, rowData: Subscriber[]) => {
+        return Object.keys(selectedRows).map((key) => rowData[parseInt(key)]);
     };
 
     function requestData(
@@ -278,13 +272,13 @@ const SubscribersList: React.FC = () => {
         currentPage = 1,
         searchField = "",
         searchAction = "",
-        start_date = new Date( 0 ),
+        start_date = new Date(0),
         end_date = new Date(),
         postStatus?: string
     ) {
         //Fetch the data to show in the table
-        setData( null );
-        axios( {
+        setData(null);
+        axios({
             method: "GET",
             url: fetchSubscribersDataUrl,
             headers: { "X-WP-Nonce": appLocalizer.nonce },
@@ -297,32 +291,32 @@ const SubscribersList: React.FC = () => {
                 start_date: start_date,
                 end_date: end_date,
             },
-        } ).then( ( response ) => {
-            console.log( "response", response.data );
-            const subscriberData = JSON.parse( response.data );
-            setData( subscriberData );
-        } );
+        }).then((response) => {
+            console.log("response", response.data);
+            const subscriberData = JSON.parse(response.data);
+            setData(subscriberData);
+        });
     }
 
-    const handleBulkAction = ( event: any ) => {
-        if ( ! appLocalizer.khali_dabba ) return;
+    const handleBulkAction = (event: any) => {
+        if (!appLocalizer.khali_dabba) return;
         const selectedRows = getSelectedRows(
             rowSelection,
             data as Subscriber[]
         );
-        if ( ! bulkSelectRef.current?.value ) {
-            setModalDetails( "Please select a action." );
-            setOpenModal( true );
+        if (!bulkSelectRef.current?.value) {
+            setModalDetails("Please select a action.");
+            setOpenModal(true);
         }
 
-        if ( ! selectedRows.length ) {
-            setModalDetails( "Please select products." );
-            setOpenModal( true );
+        if (!selectedRows.length) {
+            setModalDetails("Please select products.");
+            setOpenModal(true);
         }
 
-        setData( null );
+        setData(null);
 
-        axios( {
+        axios({
             method: "post",
             url: bulkActionUrl,
             headers: { "X-WP-Nonce": appLocalizer.nonce },
@@ -330,14 +324,14 @@ const SubscribersList: React.FC = () => {
                 action: bulkSelectRef.current?.value,
                 subscribers: selectedRows,
             },
-        } ).then( ( response ) => {
+        }).then((response) => {
             requestData();
-        } );
+        });
     };
 
     const handleClick = () => {
-        if ( appLocalizer.khali_dabba ) {
-            axios( {
+        if (appLocalizer.khali_dabba) {
+            axios({
                 method: "GET",
                 url: fetchSubscribersDataUrl,
                 headers: { "X-WP-Nonce": appLocalizer.nonce },
@@ -348,11 +342,11 @@ const SubscribersList: React.FC = () => {
                     start_date: filters.date?.start_date,
                     end_date: filters.date?.end_date,
                 },
-            } ).then( ( response ) => {
-                const subscriberData = JSON.parse( response.data );
-                setAllData( subscriberData );
+            }).then((response) => {
+                const subscriberData = JSON.parse(response.data);
+                setAllData(subscriberData);
                 csvLink.current?.link.click();
-            } );
+            });
         }
     };
 
@@ -364,22 +358,22 @@ const SubscribersList: React.FC = () => {
                 return (
                     <>
                         <div className="subscriber-bulk-action bulk-action">
-                            <select name="action" ref={ bulkSelectRef }>
+                            <select name="action" ref={bulkSelectRef}>
                                 <option value="">
-                                    { __( "Bulk Actions", "notifima" ) }
+                                    {__("Bulk Actions", "notifima")}
                                 </option>
                                 <option value="unsubscribe">
-                                    { __( "Unsubscribe Users", "notifima" ) }
+                                    {__("Unsubscribe Users", "notifima")}
                                 </option>
                                 <option value="delete">
-                                    { __( "Delete Users", "notifima" ) }
+                                    {__("Delete Users", "notifima")}
                                 </option>
                             </select>
                             <button
                                 name="bulk-action-apply"
-                                onClick={ handleBulkAction }
+                                onClick={handleBulkAction}
                             >
-                                { "Apply" }
+                                {"Apply"}
                             </button>
                         </div>
                     </>
@@ -388,32 +382,32 @@ const SubscribersList: React.FC = () => {
         },
         {
             name: "date",
-            render: ( updateFilter, value ) => (
-                <div ref={ dateRef }>
+            render: (updateFilter, value) => (
+                <div ref={dateRef}>
                     <div className="admin-header-search-section">
                         <input
-                            value={ `${ selectedRange[ 0 ].startDate.toLocaleDateString() } - ${ selectedRange[ 0 ].endDate.toLocaleDateString() }` }
-                            onClick={ () => handleDateOpen() }
+                            value={`${selectedRange[0].startDate.toLocaleDateString()} - ${selectedRange[0].endDate.toLocaleDateString()}`}
+                            onClick={() => handleDateOpen()}
                             className="date-picker-input-custom"
                             type="text"
-                            placeholder={ "DD/MM/YYYY" }
+                            placeholder={"DD/MM/YYYY"}
                         />
                     </div>
-                    { openDatePicker && (
+                    {openDatePicker && (
                         <div
                             className="date-picker-section-wrapper"
                             id="date-picker-wrapper"
                         >
                             <DateRangePicker
-                                ranges={ selectedRange }
-                                months={ 1 }
+                                ranges={selectedRange}
+                                months={1}
                                 direction="vertical"
-                                scroll={ { enabled: true } }
-                                maxDate={ new Date() }
-                                onChange={ ( ranges: RangeKeyDict ) => {
+                                scroll={{ enabled: true }}
+                                maxDate={new Date()}
+                                onChange={(ranges: RangeKeyDict) => {
                                     const selection: Range = ranges.selection;
 
-                                    if ( selection?.endDate instanceof Date ) {
+                                    if (selection?.endDate instanceof Date) {
                                         // Set end of day to endDate
                                         selection.endDate.setHours(
                                             23,
@@ -424,7 +418,7 @@ const SubscribersList: React.FC = () => {
                                     }
 
                                     // Update local range state
-                                    setSelectedRange( [
+                                    setSelectedRange([
                                         {
                                             startDate:
                                                 selection.startDate ||
@@ -433,51 +427,51 @@ const SubscribersList: React.FC = () => {
                                                 selection.endDate || new Date(),
                                             key: selection.key || "selection",
                                         },
-                                    ] );
+                                    ]);
 
                                     // Update external filters (could be used by table or search logic)
-                                    updateFilter( "date", {
+                                    updateFilter("date", {
                                         start_date: selection.startDate,
                                         end_date: selection.endDate,
-                                    } );
+                                    });
 
                                     // Optional: updating local filters state for UI sync
-                                    setFilters( ( prevFilters ) => ( {
+                                    setFilters((prevFilters) => ({
                                         ...prevFilters,
                                         date: {
                                             start_date:
                                                 selection.startDate ||
-                                                new Date( 0 ),
+                                                new Date(0),
                                             end_date:
                                                 selection.endDate || new Date(),
                                         },
-                                    } ) );
-                                } }
+                                    }));
+                                }}
                             />
                         </div>
-                    ) }
+                    )}
                 </div>
             ),
         },
         {
             name: "searchField",
-            render: ( updateFilter, filterValue ) => (
+            render: (updateFilter, filterValue) => (
                 <>
                     <div className="admin-header-search-section search-section">
                         <input
                             name="searchField"
                             type="text"
-                            placeholder={ __( "Search...", "notifima" ) }
-                            onChange={ ( e ) => {
-                                updateFilter( e.target.name, e.target.value );
-                                setFilters( ( previousfilters ) => {
+                            placeholder={__("Search...", "notifima")}
+                            onChange={(e) => {
+                                updateFilter(e.target.name, e.target.value);
+                                setFilters((previousfilters) => {
                                     return {
                                         ...previousfilters,
                                         searchField: e.target.value,
                                     };
-                                } );
-                            } }
-                            value={ filterValue || "" }
+                                });
+                            }}
+                            value={filterValue || ""}
                         />
                     </div>
                 </>
@@ -485,30 +479,28 @@ const SubscribersList: React.FC = () => {
         },
         {
             name: "searchAction",
-            render: ( updateFilter, filterValue ) => (
+            render: (updateFilter, filterValue) => (
                 <>
                     <div className="admin-header-search-section searchAction">
                         <select
                             name="searchAction"
-                            onChange={ ( e ) => {
-                                updateFilter( e.target.name, e.target.value );
-                                setFilters( ( previousfilters ) => {
+                            onChange={(e) => {
+                                updateFilter(e.target.name, e.target.value);
+                                setFilters((previousfilters) => {
                                     return {
                                         ...previousfilters,
                                         searchAction: e.target.value,
                                     };
-                                } );
-                            } }
-                            value={ filterValue || "" }
+                                });
+                            }}
+                            value={filterValue || ""}
                         >
-                            <option value="">
-                                { __( "All", "notifima" ) }
-                            </option>
+                            <option value="">{__("All", "notifima")}</option>
                             <option value="productField">
-                                { __( "Product Name", "notifima" ) }
+                                {__("Product Name", "notifima")}
                             </option>
                             <option value="emailField">
-                                { __( "Email", "notifima" ) }
+                                {__("Email", "notifima")}
                             </option>
                         </select>
                     </div>
@@ -519,116 +511,111 @@ const SubscribersList: React.FC = () => {
 
     return (
         <>
-            { ! appLocalizer.khali_dabba ? (
+            {!appLocalizer.khali_dabba ? (
                 <div>
                     <div className="free-reports-download-section">
                         <h2 className="section-heading">
-                            { __(
+                            {__(
                                 "Download product wise subscriber data.",
                                 "notifima"
-                            ) }
+                            )}
                         </h2>
                         <button>
-                            <a href={ appLocalizer.export_button }>
-                                { __( "Download CSV", "notifima" ) }
+                            <a href={appLocalizer.export_button}>
+                                {__("Download CSV", "notifima")}
                             </a>
                         </button>
                         <p
                             className="description"
-                            dangerouslySetInnerHTML={ {
+                            dangerouslySetInnerHTML={{
                                 __html: "This CSV file contains all subscriber data from your site. Upgrade to <a href='https://multivendorx.com/woocommerce-product-stock-manager-notifier-pro/?utm_source=wpadmin&utm_medium=pluginsettings&utm_campaign=stockmanager' target='_blank'>Notifima Pro</a> to generate CSV files based on specific products or users.",
-                            } }
+                            }}
                         ></p>
                     </div>
                     <Dialog
                         className="admin-module-popup"
-                        open={ openDialog }
-                        onClose={ () => {
-                            setOpenDialog( false );
-                        } }
+                        open={openDialog}
+                        onClose={() => {
+                            setOpenDialog(false);
+                        }}
                         aria-labelledby="form-dialog-title"
                     >
                         <span
                             className="admin-font adminLib-cross stock-manager-popup-cross"
-                            onClick={ () => {
-                                setOpenDialog( false );
-                            } }
+                            onClick={() => {
+                                setOpenDialog(false);
+                            }}
                         ></span>
                         <Popup />
                     </Dialog>
                     <div
                         className="subscriber-img"
-                        onClick={ () => {
-                            setOpenDialog( true );
-                        } }
+                        onClick={() => {
+                            setOpenDialog(true);
+                        }}
                     ></div>
                 </div>
             ) : (
                 <div className="admin-subscriber-list">
-                    { openModal && modalDetails && (
+                    {openModal && modalDetails && (
                         <div className="notice notice-error error-modal">
                             <div className="modal-wrapper">
-                                <p>{ modalDetails }</p>
+                                <p>{modalDetails}</p>
                                 <i
-                                    onClick={ () => setOpenModal( false ) }
+                                    onClick={() => setOpenModal(false)}
                                     className="admin-font adminLib-cross"
                                 ></i>
                             </div>
                         </div>
-                    ) }
+                    )}
                     <div className="admin-page-title">
-                        <p>{ __( "Subscriber List", "notifima" ) }</p>
+                        <p>{__("Subscriber List", "notifima")}</p>
                         <div className="download-btn-subscriber-list">
                             <button
-                                onClick={ handleClick }
+                                onClick={handleClick}
                                 className="admin-btn btn-purple"
                             >
                                 <div className="wp-menu-image dashicons-before dashicons-download"></div>
-                                { __( "Download CSV", "notifima" ) }
+                                {__("Download CSV", "notifima")}
                                 <i className="admin-font adminLib-icon-yes"></i>
                                 <i className="admin-font adminLib-icon-yes"></i>
                             </button>
                             <CSVLink
-                                data={ allData.map(
-                                    ( { date, product, email, status } ) => ( {
+                                data={allData.map(
+                                    ({ date, product, email, status }) => ({
                                         date,
                                         product,
                                         email,
                                         status,
-                                    } )
-                                ) }
-                                filename={ __( "Subscribers.csv", "notifima" ) }
+                                    })
+                                )}
+                                filename={__("Subscribers.csv", "notifima")}
                                 className="hidden"
-                                ref={ csvLink }
+                                ref={csvLink}
                             />
                         </div>
                     </div>
 
                     {
                         <CustomTable
-                            data={ data }
+                            data={data}
                             columns={
-                                columns as ColumnDef<
-                                    Record< string, any >,
-                                    any
-                                >[]
+                                columns as ColumnDef<Record<string, any>, any>[]
                             }
-                            rowSelection={ rowSelection }
-                            onRowSelectionChange={ setRowSelection }
-                            defaultRowsPerPage={ 10 }
-                            realtimeFilter={ realtimeFilter }
-                            pageCount={ pageCount }
-                            pagination={ pagination }
-                            onPaginationChange={ setPagination }
-                            typeCounts={
-                                subscribersStatus as SubscriberStatus[]
-                            }
-                            handlePagination={ requestApiForData }
-                            perPageOption={ [ 10, 25, 50 ] }
+                            rowSelection={rowSelection}
+                            onRowSelectionChange={setRowSelection}
+                            defaultRowsPerPage={10}
+                            realtimeFilter={realtimeFilter}
+                            pageCount={pageCount}
+                            pagination={pagination}
+                            onPaginationChange={setPagination}
+                            typeCounts={subscribersStatus as SubscriberStatus[]}
+                            handlePagination={requestApiForData}
+                            perPageOption={[10, 25, 50]}
                         />
                     }
                 </div>
-            ) }
+            )}
         </>
     );
 };

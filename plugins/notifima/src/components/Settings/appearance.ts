@@ -2,15 +2,15 @@ import { __ } from "@wordpress/i18n";
 export default {
     id: "appearance",
     priority: 1,
-    name: __( "Appearance", "notifima" ),
-    desc: __( "Customize stock alert form.", "notifima" ),
+    name: __("Appearance", "notifima"),
+    desc: __("Customize stock alert form.", "notifima"),
     icon: "adminLib-settings",
     submitUrl: "settings",
     modal: [
         {
             key: "subscribe_form",
             type: "stock-alert-form-customizer",
-            label: __( "Personalize Layout", "notifima" ),
+            label: __("Personalize Layout", "notifima"),
         },
         {
             key: "separator_content",
@@ -20,12 +20,12 @@ export default {
         {
             key: "unsubscribe_button_text",
             type: "text",
-            label: __( "'Unsubscribe' Button Caption", "notifima" ),
+            label: __("'Unsubscribe' Button Caption", "notifima"),
             desc: __(
                 'Modify the un-subscribe button text. By default we display "Unsubscribe".',
                 "notifima"
             ),
-            placeholder: __( "Unsubscribe", "notifima" ),
+            placeholder: __("Unsubscribe", "notifima"),
             classes: "unsubcribe-button-section",
         },
         {
@@ -36,7 +36,7 @@ export default {
         {
             key: "is_guest_subscriptions_enable",
             type: "checkbox",
-            label: __( "Guest Subscriptions", "notifima" ),
+            label: __("Guest Subscriptions", "notifima"),
             desc: __(
                 "Allow guests (non-logged-in users) to subscribe to notifications for out-of-stock products.",
                 "notifima"
@@ -53,7 +53,7 @@ export default {
         {
             key: "is_enable_backorders",
             type: "checkbox",
-            label: __( "Allow Backorder Subscriptions", "notifima" ),
+            label: __("Allow Backorder Subscriptions", "notifima"),
             desc: __(
                 "Enabling this setting allows users to subscribe to out-of-stock products, even when the backorder option is enabled.",
                 "notifima"
@@ -75,7 +75,7 @@ export default {
         {
             key: "display_lead_times",
             type: "checkbox",
-            label: __( "Stock Status for Lead Time", "notifima" ),
+            label: __("Stock Status for Lead Time", "notifima"),
             class: "woo-toggle-checkbox",
             desc: __(
                 "Lead time informs customers when a product will be available again. This setting lets you choose which stock statuses will display the restock estimate.",
@@ -84,12 +84,12 @@ export default {
             options: [
                 {
                     key: "outofstock",
-                    label: __( "Out of stock", "notifima" ),
+                    label: __("Out of stock", "notifima"),
                     value: "outofstock",
                 },
                 {
                     key: "onbackorder",
-                    label: __( "On backorder", "notifima" ),
+                    label: __("On backorder", "notifima"),
                     value: "onbackorder",
                 },
             ],
@@ -97,7 +97,7 @@ export default {
         {
             key: "lead_time_format",
             type: "settingToggle",
-            label: __( "Lead Format", "notifima" ),
+            label: __("Lead Format", "notifima"),
             desc: __(
                 "Choose the lead time format: Either dynamic (set unique lead time text for all out of stock product) or static (apply a default lead time text for out of stock products).",
                 "notifima"
@@ -110,12 +110,12 @@ export default {
             options: [
                 {
                     key: "static",
-                    label: __( "Static", "notifima" ),
+                    label: __("Static", "notifima"),
                     value: "static",
                 },
                 {
                     key: "dynamic",
-                    label: __( "Dynamic", "notifima" ),
+                    label: __("Dynamic", "notifima"),
                     value: "dynamic",
                 },
             ],
@@ -124,7 +124,7 @@ export default {
         {
             key: "lead_time_static_text",
             type: "text",
-            label: __( "Lead time static text", "notifima" ),
+            label: __("Lead time static text", "notifima"),
             desc: __(
                 "This will be the standard message displayed for all out-of-stock products unless a custom lead time is specified.",
                 "notifima"
@@ -148,10 +148,7 @@ export default {
         {
             key: "is_enable_no_interest",
             type: "checkbox",
-            label: __(
-                "Display subscriber count for out of stock",
-                "notifima"
-            ),
+            label: __("Display subscriber count for out of stock", "notifima"),
             desc: __(
                 "Enabling this setting shows the subscriber count on the single product page.",
                 "notifima"
@@ -170,7 +167,7 @@ export default {
             type: "textarea",
             classes: "conditional-section",
             class: "woo-setting-wpeditor-class",
-            label: __( "Subscriber count notification message", "notifima" ),
+            label: __("Subscriber count notification message", "notifima"),
             desc: __(
                 "Personalize the notification text to let users know about the quantity of subscribers for out-of-stock item. Note: Use %no_of_subscribed% as number of interest/subscribed persons.",
                 "notifima"
@@ -189,8 +186,8 @@ export default {
             key: "is_double_optin",
             type: "checkbox",
             class: "woo-toggle-checkbox",
-            label: __( "Subscriber double opt-in", "notifima" ),
-            desc: ! appLocalizer.khali_dabba
+            label: __("Subscriber double opt-in", "notifima"),
+            desc: !appLocalizer.khali_dabba
                 ? appLocalizer.is_double_optin_free
                 : appLocalizer.is_double_optin_pro,
             options: [
@@ -210,7 +207,7 @@ export default {
                 "Default: Kindly check your inbox to confirm the subscription.",
                 "notifima"
             ),
-            label: __( "Double opt-in success message", "notifima" ),
+            label: __("Double opt-in success message", "notifima"),
             dependent: {
                 key: "is_double_optin",
                 set: true,
@@ -225,9 +222,9 @@ export default {
         {
             key: "is_recaptcha_enable",
             type: "checkbox",
-            label: __( "Enable reCaptcha", "notifima" ),
+            label: __("Enable reCaptcha", "notifima"),
             class: "woo-toggle-checkbox",
-            desc: ! appLocalizer.khali_dabba
+            desc: !appLocalizer.khali_dabba
                 ? appLocalizer.is_recaptcha_enable_free
                 : appLocalizer.is_recaptcha_enable_pro,
             options: [
@@ -242,7 +239,7 @@ export default {
         {
             key: "v3_site_key",
             type: "text",
-            label: __( "Site Key", "notifima" ),
+            label: __("Site Key", "notifima"),
             dependent: {
                 key: "is_recaptcha_enable",
                 set: true,
@@ -251,7 +248,7 @@ export default {
         {
             key: "v3_secret_key",
             type: "text",
-            label: __( "Secret Key", "notifima" ),
+            label: __("Secret Key", "notifima"),
             dependent: {
                 key: "is_recaptcha_enable",
                 set: true,
@@ -270,7 +267,7 @@ export default {
                 "Set the email address to receive notifications when a user subscribes to an out-of-stock product. You can add multiple comma-separated emails.<br/> Default: The admin's email is set as the receiver. Exclude the admin's email from the list to exclude admin from receiving these notifications.",
                 "notifima"
             ),
-            label: __( "Recipient email for new subscriber", "notifima" ),
+            label: __("Recipient email for new subscriber", "notifima"),
         },
         {
             key: "note_blocktext",

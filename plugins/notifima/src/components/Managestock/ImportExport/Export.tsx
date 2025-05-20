@@ -35,9 +35,9 @@ interface HeaderItem {
 }
 
 const Export = () => {
-    const [ data, setData ] = useState< StockDataType[] >( [] );
-    const [ selectAll, setSelectAll ] = useState< boolean >( true );
-    const [ checkboxData, setCheckboxData ] = useState< CheckboxItem[] >( [
+    const [data, setData] = useState<StockDataType[]>([]);
+    const [selectAll, setSelectAll] = useState<boolean>(true);
+    const [checkboxData, setCheckboxData] = useState<CheckboxItem[]>([
         { name: "Id", value: "id", checked: true },
         { name: "Type", value: "type", checked: true },
         { name: "SKU", value: "sku", checked: true },
@@ -46,103 +46,103 @@ const Export = () => {
         { name: "Stock status", value: "stock_status", checked: true },
         { name: "Backorders", value: "backorders", checked: true },
         { name: "Stock", value: "stock_quantity", checked: true },
-    ] );
+    ]);
 
-    useEffect( () => {
-        if ( appLocalizer.khali_dabba ) {
-            axios( {
+    useEffect(() => {
+        if (appLocalizer.khali_dabba) {
+            axios({
                 method: "GET",
-                url: `${ appLocalizer.apiUrl }/notifima/v1/products`,
+                url: `${appLocalizer.apiUrl}/notifima/v1/products`,
                 headers: { "X-WP-Nonce": appLocalizer.nonce },
                 params: { action: "segment" },
-            } )
-                .then( ( response ) => {
+            })
+                .then((response) => {
                     const parsedData: StockDataType[] = Object.values(
-                        JSON.parse( response.data )
+                        JSON.parse(response.data)
                     );
-                    setData( parsedData );
-                } )
-                .catch( ( error ) => {
-                    console.error( "Error fetching data:", error );
-                } );
+                    setData(parsedData);
+                })
+                .catch((error) => {
+                    console.error("Error fetching data:", error);
+                });
         }
-    }, [] );
+    }, []);
 
     const getHeader = (): HeaderItem[] => {
         const header: HeaderItem[] = [];
-        checkboxData.forEach( ( { name, value, checked } ) => {
-            if ( checked ) {
-                header.push( { label: name, key: value } );
+        checkboxData.forEach(({ name, value, checked }) => {
+            if (checked) {
+                header.push({ label: name, key: value });
             }
-        } );
+        });
         return header;
     };
 
     // For getData
     const getData = (): ImportExportStockDataType[] => {
-        return data.map( ( row ) => {
+        return data.map((row) => {
             return {
                 ...row,
                 manage_stock: row.manage_stock ? "yes" : "no",
                 stock_quantity: row.stock_quantity ?? "-", // Use nullish coalescing for undefined or null
             };
-        } );
+        });
     };
 
     const handleCheck = (
-        e: React.ChangeEvent< HTMLInputElement >,
+        e: React.ChangeEvent<HTMLInputElement>,
         name: string,
         value: keyof StockDataType
     ): void => {
         // console.log( name, value );
-        setCheckboxData( ( prevCheckboxData ) =>
-            prevCheckboxData.map( ( checkbox ) =>
+        setCheckboxData((prevCheckboxData) =>
+            prevCheckboxData.map((checkbox) =>
                 checkbox.value === value
-                    ? { ...checkbox, checked: ! checkbox.checked }
+                    ? { ...checkbox, checked: !checkbox.checked }
                     : checkbox
             )
         );
     };
 
     const handleSelectAll = (): void => {
-        if ( ! selectAll ) {
+        if (!selectAll) {
             setCheckboxData(
-                checkboxData.map( ( item ) => ( { ...item, checked: true } ) )
+                checkboxData.map((item) => ({ ...item, checked: true }))
             );
-            setSelectAll( true );
+            setSelectAll(true);
         } else {
             setCheckboxData(
-                checkboxData.map( ( item ) => ( { ...item, checked: false } ) )
+                checkboxData.map((item) => ({ ...item, checked: false }))
             );
-            setSelectAll( false );
+            setSelectAll(false);
         }
     };
 
-    function splitCheckBoxData( parts: number ): JSX.Element[] {
+    function splitCheckBoxData(parts: number): JSX.Element[] {
         const chunks: JSX.Element[] = [];
 
-        for ( let i = 0; i < checkboxData.length; i += parts ) {
-            const chunk = checkboxData.slice( i, i + parts );
+        for (let i = 0; i < checkboxData.length; i += parts) {
+            const chunk = checkboxData.slice(i, i + parts);
 
-            const chunkElements = chunk.map( ( checkbox ) => (
-                <div className="export-feature-card" key={ checkbox.value }>
-                    <h1>{ checkbox.name }</h1>
+            const chunkElements = chunk.map((checkbox) => (
+                <div className="export-feature-card" key={checkbox.value}>
+                    <h1>{checkbox.name}</h1>
                     <div className="mvx-normal-checkbox-content">
                         <input
                             type="checkbox"
-                            id={ checkbox.name }
-                            checked={ checkbox.checked }
-                            onChange={ ( e ) =>
-                                handleCheck( e, checkbox.name, checkbox.value )
+                            id={checkbox.name}
+                            checked={checkbox.checked}
+                            onChange={(e) =>
+                                handleCheck(e, checkbox.name, checkbox.value)
                             }
                         />
                     </div>
                 </div>
-            ) );
+            ));
 
             chunks.push(
-                <div key={ i } className="chunk-container">
-                    { chunkElements }
+                <div key={i} className="chunk-container">
+                    {chunkElements}
                 </div>
             );
         }
@@ -154,52 +154,44 @@ const Export = () => {
         <div className="admin-container">
             <div className="export-page">
                 <div className="admin-page-title">
-                    <p>{ __( "Export", "notifima" ) }</p>
+                    <p>{__("Export", "notifima")}</p>
                     <button className="import-export-btn">
-                        <Link to={ "?page=notifima#&tab=manage-stock" }>
+                        <Link to={"?page=notifima#&tab=manage-stock"}>
                             <div className="wp-menu-image dashicons-before dashicons-arrow-left-alt"></div>
-                            { __( "Inventory Manager", "notifima" ) }
+                            {__("Inventory Manager", "notifima")}
                         </Link>
                     </button>
                 </div>
                 <div className="export-section">
                     <p>
-                        { __(
+                        {__(
                             "Download a CSV file containing stock data. Choose specific fields for CSV download.",
                             "notifima"
-                        ) }
+                        )}
                     </p>
                     <div className="export-page-content">
                         <div className="import-export-btn-section">
-                            <p>
-                                { __(
-                                    "Select fields for exports",
-                                    "notifima"
-                                ) }
-                            </p>
+                            <p>{__("Select fields for exports", "notifima")}</p>
                             <div>
                                 <button
                                     className="select-deselect-trigger"
-                                    onClick={ handleSelectAll }
+                                    onClick={handleSelectAll}
                                 >
-                                    { __(
-                                        "Select / Deselect All",
-                                        "notifima"
-                                    ) }
+                                    {__("Select / Deselect All", "notifima")}
                                 </button>
                             </div>
                         </div>
                         <div className="export-list-section">
                             <div className="checkbox-container">
-                                { splitCheckBoxData( 4 ) }
+                                {splitCheckBoxData(4)}
                             </div>
                         </div>
                         <button className="import-export-btn">
                             <div className="wp-menu-image dashicons-before dashicons-upload"></div>
-                            { data.length > 0 && (
+                            {data.length > 0 && (
                                 <CSVLink
-                                    enclosingCharacter={ `` }
-                                    data={ getData() }
+                                    enclosingCharacter={``}
+                                    data={getData()}
                                     headers={
                                         getHeader() as {
                                             label: string;
@@ -208,9 +200,9 @@ const Export = () => {
                                     }
                                     filename="Products.csv"
                                 >
-                                    { __( "Export CSV", "notifima" ) }
+                                    {__("Export CSV", "notifima")}
                                 </CSVLink>
-                            ) }
+                            )}
                         </button>
                     </div>
                 </div>

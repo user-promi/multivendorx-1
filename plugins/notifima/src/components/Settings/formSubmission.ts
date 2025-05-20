@@ -3,8 +3,8 @@ import { __ } from "@wordpress/i18n";
 export default {
     id: "form_submission",
     priority: 3,
-    name: __( "Prompt Messages", "notifima" ),
-    desc: __( "Manage post-form submission messages.", "notifima" ),
+    name: __("Prompt Messages", "notifima"),
+    desc: __("Manage post-form submission messages.", "notifima"),
     icon: "adminLib-submission-message",
     submitUrl: "settings",
     modal: [
@@ -17,7 +17,7 @@ export default {
                 "Tip: Utilize %product_title% for dynamic product titles and %customer_email% for personalized customer email addresses in your messages.",
                 "notifima"
             ),
-            label: __( "Successful form submission", "notifima" ),
+            label: __("Successful form submission", "notifima"),
         },
         {
             key: "separator_content",
@@ -33,7 +33,7 @@ export default {
                 "Tip: Enhance personalization by incorporating %product_title% for dynamic product titles and %customer_email% for individual customer emails.",
                 "notifima"
             ),
-            label: __( "Repeated subscription alert", "notifima" ),
+            label: __("Repeated subscription alert", "notifima"),
         },
         {
             key: "separator_content",
@@ -48,7 +48,7 @@ export default {
                 "Personalize the message shown to users when they try to subscribe with an invalid email address.",
                 "notifima"
             ),
-            label: __( "Email validation error", "notifima" ),
+            label: __("Email validation error", "notifima"),
         },
         {
             key: "separator_content",
@@ -63,7 +63,7 @@ export default {
                 "Modify the text that confirms user that they have successful unsubscribe.",
                 "notifima"
             ),
-            label: __( "Unsubscribe confirmation", "notifima" ),
+            label: __("Unsubscribe confirmation", "notifima"),
         },
         {
             key: "note_blocktext",
