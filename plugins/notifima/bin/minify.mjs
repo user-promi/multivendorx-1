@@ -34,12 +34,12 @@ const { name } = JSON.parse( fs.readFileSync( "package.json" ) );
                 let minified;
                 if ( ext === ".js" ) {
                     // min path for js
-                    outputFolder = "assets/js/";
+                    outputFolder = "release/assets/js/";
                     const result = await minifyJs( content );
                     minified = result.code;
                 } else if ( ext === ".css" ) {
                     // min path for css
-                    outputFolder = "assets/styles/";
+                    outputFolder = "release/assets/styles/";
                     const result = new CleanCSS().minify( content );
                     minified = result.styles;
                 }

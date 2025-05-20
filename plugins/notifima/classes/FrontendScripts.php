@@ -16,7 +16,7 @@ class FrontendScripts {
     public static function register_script( $handle, $path, $deps = array(), $version = '', $text_domain = '' ) {
         self::$scripts[] = $handle;
         wp_register_script( $handle, $path, $deps, $version, true );
-        wp_set_script_translations( $handle, $text_domain );
+        wp_set_script_translations( $handle, 'notifima' );
     }
 
     public static function register_style( $handle, $path, $deps = array(), $version = '' ) {

@@ -12,6 +12,7 @@
         "build:zip": "pnpm install && pnpm run readme && pnpm --if-present \"/^build:project:.*$/\" && pnpm run makepot && node bin/release.mjs",
         "build:project": "pnpm --if-present \"/^build:project:.*$/\"",
         "build:project:bundle": "wireit",
+        "build:project:translation:domains": "wireit",
         "watch:build": "pnpm --if-present run '/^watch:build:project:.*$/'",
         "watch:build:project:bandle": "wp-scripts start",
         "lint": "pnpm --if-present \"/^lint:lang:.*$/\"",
@@ -63,6 +64,14 @@
                 "assets/**"
             ],
             "clean": true
+        },
+        "build:project:translation:domains": {
+            "command": "node ./bin/package-update-textdomain.js",
+			"files": [
+				"classes/**",
+				"templates/**"
+			],
+			"output": []
         }
     },
     "dependencies": {

@@ -46,7 +46,7 @@ class Subscriber {
 				'exclude_from_search'       => true,
 				'show_in_admin_all_list'    => true,
 				'show_in_admin_status_list' => true, /* translators: %s: count */
-				'label_count'               => _n_noop( 'Subscribed <span class="count">( %s )</span>', 'Subscribed <span class="count">( %s )</span>' ),
+				'label_count'               => _n_noop( 'Subscribed <span class="count">( %s )</span>', 'Subscribed <span class="count">( %s )</span>', 'notifima' ),
 			)
         );
 
@@ -58,7 +58,7 @@ class Subscriber {
 				'exclude_from_search'       => true,
 				'show_in_admin_all_list'    => true,
 				'show_in_admin_status_list' => true, /* translators: %s: count */
-				'label_count'               => _n_noop( 'Unsubscribed <span class="count">( %s )</span>', 'Unsubscribed <span class="count">( %s )</span>' ),
+				'label_count'               => _n_noop( 'Unsubscribed <span class="count">( %s )</span>', 'Unsubscribed <span class="count">( %s )</span>', 'notifima' ),
 			)
         );
     }

@@ -4,10 +4,10 @@ import chalk from 'chalk';
 import path from 'path';
 import { glob } from 'glob';
 
-const targetFiles = [ "assets/js" ];
+const targetFiles = [ "release/assets/js" ];
 const dest = [
     {
-        dest: "assets/js/externals",
+        dest: "release/assets/js/externals",
         rule: "moveNum",
     },
 ];
@@ -41,5 +41,8 @@ targetFiles.forEach( ( file, ind ) => {
                 } );
             }
         } );
+    }
+    else{
+        // move all files
     }
 } );

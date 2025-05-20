@@ -15,7 +15,7 @@ module.exports = {
 
     output: {
         ...defaultConfig.output,
-        path: path.resolve(__dirname, "assets"),
+        path: path.resolve(__dirname, "release/assets"),
         filename: "js/[name].js",
         chunkFilename: "chunks/[name].[contenthash].js",
         clean: true,

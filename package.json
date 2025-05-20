@@ -15,7 +15,7 @@
     "build": "pnpm -r --workspace-concurrency=Infinity --stream \"/^build:project:.*$/\"",
     "lint": "pnpm -r lint",
     "test": "pnpm -r test",
-    "watch:storybook" : "pnpm -r --workspace-concurrency=Infinity --stream \"/^watch:build:storybook.*$/\"",
+    "watch:storybook": "pnpm -r --workspace-concurrency=Infinity --stream \"/^watch:build:storybook.*$/\"",
     "clean": "rimraf -v -g \"**/node_modules\" \"plugins/*/vendor\" \"plugins/*/languages\" && pnpm store prune",
     "clean:build": "rimraf -v -g \"**/build\" \"plugins/**/assets\" \"**/.wireit\"",
     "sync-dependencies": "pnpm exec syncpack -- fix-mismatches",
@@ -44,5 +44,8 @@
     "syncpack": "^13.0.4",
     "webpack": "5.99.x",
     "wp-readme-to-markdown": "^1.0.1"
+  },
+  "dependencies": {
+    "wp-textdomain": "^1.0.1"
   }
 }
