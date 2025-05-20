@@ -4,7 +4,7 @@
   "description": "Repo for MultiVendorX ecosystem",
   "homepage": "https://multivendorx.com/",
   "engines": {
-    "node": "^20.11.1"
+    "node": "^24.0.2"
   },
   "repository": {
     "type": "git",
@@ -16,8 +16,8 @@
     "lint": "pnpm -r lint",
     "test": "pnpm -r test",
     "watch:storybook" : "pnpm -r --workspace-concurrency=Infinity --stream \"/^watch:build:storybook.*$/\"",
-    "clean": "rimraf -v -g \"**/node_modules\" \"js/*/.witeit\" \"plugins/*/vendor\" \"plugins/*/languages\" && pnpm store prune",
-    "clean:build": "rimraf -v -g \"**/build\"",
+    "clean": "rimraf -v -g \"**/node_modules\" \"plugins/*/vendor\" \"plugins/*/languages\" && pnpm store prune",
+    "clean:build": "rimraf -v -g \"**/build\" \"plugins/**/assets\" \"**/.wireit\"",
     "sync-dependencies": "pnpm exec syncpack -- fix-mismatches",
     "preinstall": "npx only-allow pnpm"
   },
