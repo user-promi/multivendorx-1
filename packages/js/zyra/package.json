@@ -9,9 +9,12 @@
         "build"
     ],
     "scripts": {
-        "build": "pnpm --if-present --workspace-concurrency=Infinity --stream --filter \"${npm_package_name}\" '/^build:project:.*$/'",
+        "build": "pnpm --if-present --workspace-concurrency=Infinity --stream --filter \"${npm_package_name}\" \"/^build:project:.*$/\"",
         "build:project": "pnpm --if-present \"/^build:project:.*$/\"",
         "build:project:bundle": "wireit",
+        "watch:build": "pnpm --if-present --workspace-concurrency=Infinity --stream --filter \"${npm_package_name}\" \"/^watch:build:project:.*$/\"",
+        "watch:build:project": "pnpm --if-present run '/^watch:build:project:.*$/'",
+		"watch:build:project:bundle": "wireit",
         "lint": "pnpm --if-present \"/^lint:lang:.*$/\"",
         "lint:fix": "pnpm --if-present \"/^lint:fix:.*$/\"",
         "lint:lang:js": "eslint . --ext=js,ts,tsx",
@@ -28,7 +31,15 @@
             "output": [
                 "build"
             ]
-        }
+        },
+        "watch:build:project:bundle": {
+			"command": "rollup -c rollup.config.js --watch --sourcemap",
+            "files": [
+                "src/**",
+                "rollup.config.js"
+            ],
+			"service": true
+		}
     },
     "keywords": [
         "wordpress",

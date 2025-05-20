@@ -27,9 +27,9 @@
         "test:unit": "pnpm test:php",
         "test:php": "./vendor/bin/phpunit -c ./phpunit.xml.dist",
         "env:create": "pnpm wp-env start && node bin/create-docker-compose.mjs && docker compose up -d",
-        "env:start": "pnpm wp-env start",
-        "env:dev": "pnpm wp-env start --update && pnpm --if-present --filter storybook run watch:build:storybook",
+        "env:start": "pnpm wp-env start && pnpm run env:start:database",
         "env:start:database": "node bin/create-docker-compose.mjs && docker compose up -d",
+        "env:dev": "pnpm wp-env start --update && pnpm run env:start:database && pnpm --if-present --filter storybook run watch:build:storybook",
         "env:stop": "pnpm wp-env stop && docker compose down",
         "env:clean": "pnpm wp-env clean",
         "env:restart": "pnpm wp-env restart",
@@ -39,6 +39,7 @@
         "preinstall": "npx only-allow pnpm",
         "clean": "node bin/clean-files.mjs",
         "minify": "node bin/minify.mjs",
+        "changelog": "composer install --quiet && composer exec -- changelogger",
         "makepot": "wp i18n make-pot --domain='notifima' --include='assets/js,classes,templates,config.php,product_stock_alert.php' . --headers='{\"Report-Msgid-Bugs-To\":\"https://notifima.com/contact/\"}' --file-comment=\"Copyright (c) $(date +'%Y') Notifima Inc. All Rights Reserved.\" languages/notifima.pot"
     },
     "repository": {
@@ -67,11 +68,11 @@
         },
         "build:project:translation:domains": {
             "command": "node ./bin/package-update-textdomain.js",
-			"files": [
-				"classes/**",
-				"templates/**"
-			],
-			"output": []
+            "files": [
+                "classes/**",
+                "templates/**"
+            ],
+            "output": []
         }
     },
     "dependencies": {
