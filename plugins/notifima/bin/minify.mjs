@@ -11,7 +11,7 @@ import chalk from 'chalk';
  * format: (path start from the root of the project './')
  * 1. 'dist' (directory)
  */
-const sourceFolders = [ "scripts" ];
+const sourceFolders = [ "assets" ];
 
 let outputFolder;
 const { name } = JSON.parse( fs.readFileSync( "package.json" ) );

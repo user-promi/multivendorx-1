@@ -1,7 +1,7 @@
 node_modules
-assets
 composer.lock
 !/src/assets/
+final-release
 languages
 release
 vendor

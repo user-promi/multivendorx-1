@@ -46,7 +46,7 @@ services:
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     environment:
-      PMA_HOST: mysql
+      PMA_HOST: tests-mysql
       PMA_USER: root
       PMA_PASSWORD: password
     ports:

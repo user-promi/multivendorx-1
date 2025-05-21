@@ -2,15 +2,9 @@
 import fs from 'fs-extra';
 import { exec } from 'child_process';
 import chalk from 'chalk';
-// import path from 'path';
-// import _ from 'lodash';
-// import { glob } from 'glob';
 
-/**
- * Put the folder and files that is needed in the production. ( path start from the root of the project './' )
- */
 const pluginFiles = [
-    "assets/",
+    "release/assets/",
     "classes/",
     "languages/",
     "log/",
@@ -22,105 +16,78 @@ const pluginFiles = [
     "readme.txt",
 ];
 
-/**
- * Put the files that is not needed in the production. ( path start from the root of the project './' )
- * remove this files when the work is done.
- */
-const removeFiles = [ "composer.json", "composer.lock" ];
+const removeFiles = ["composer.json", "composer.lock"];
 
 const { version, displayName } = JSON.parse(
-    fs.readFileSync( "package.json" )
+    fs.readFileSync("package.json", "utf8")
 );
 
-exec(
-    "rm -rf *",
-    {
-        cwd: "release",
-    },
-    ( error ) => {
-        if ( error ) {
-            console.log(
-                chalk.yellow( `⚠️ Could not find the release directory.` )
-            );
-            console.log(
-                chalk.green( `🗂 Creating the release directory ...` )
-            );
-            // Making build folder.
-            fs.mkdirp( "release" );
+const releasePath = "release";
+
+// 1. Ensure final-release directory exists
+if (!fs.existsSync(releasePath)) {
+    console.log(chalk.yellow(`⚠️ release folder not found.`));
+    console.log(chalk.green(`🗂 Creating release directory...`));
+    fs.mkdirpSync(releasePath);
+}
+
+const dest = `${releasePath}/${displayName}`;
+fs.mkdirpSync(dest);
+
+console.log(`🗜 Started making the zip ...`);
+try {
+    console.log(`⚙️ Copying plugin files ...`);
+
+    pluginFiles.forEach((file) => {
+        if(file === "release/assets/"){
+            const destFile = file.replace("release/", "");
+            fs.moveSync(file, `${dest}/${destFile}`, { overwrite: true });
+        }else{
+            fs.copySync(file, `${dest}/${file}`);
         }
+    });
 
-        const dest = `release/${ displayName }`; // Temporary folder name after coping all the files here.
-        fs.mkdirp( dest );
+    console.log(`📂 Finished copying files.`);
+} catch (err) {
+    console.error(chalk.red("❌ Could not copy plugin files."), err);
+    process.exit(1);
+}
 
-        console.log( `🗜 Started making the zip ...` );
-        try {
-            console.log( `⚙️ Copying plugin files ...` );
-
-            // Coping all the files into build folder.
-            pluginFiles.forEach( ( file ) => {
-                fs.copySync( file, `${ dest }/${ file }` );
-            } );
-            console.log( `📂 Finished copying files.` );
-        } catch ( err ) {
-            console.error(
-                chalk.red( "❌ Could not copy plugin files." ),
-                err
-            );
+// 2. Install Composer packages
+exec(
+    'composer install --optimize-autoloader --no-dev',
+    { cwd: dest },
+    (error) => {
+        if (error) {
+            console.log(chalk.red(`❌ Composer install failed in ${dest}`));
+            console.log(chalk.bgRed.black(error));
             return;
         }
 
-        exec(
-            'composer install --optimize-autoloader --no-dev',
-            {
-                cwd: dest
-            },
-            ( error ) => {
-                if ( error ) {
-                    console.log(
-                        chalk.red(
-                            `❌ Could not install composer in ${ dest } directory.`
-                        )
-                    );
-                    console.log( chalk.bgRed.black( error ) );
+        console.log(`⚡️ Installed composer packages in ${dest}`);
 
+        // 3. Remove unnecessary files
+        removeFiles.forEach((file) => {
+            fs.removeSync(`${dest}/${file}`);
+        });
+
+        // 4. Create zip
+        const zipFile = `${displayName}-v${version}.zip`;
+        console.log(`📦 Making the zip file ${zipFile} ...`);
+
+        exec(
+            `zip ${zipFile} ${displayName} -rq`,
+            { cwd: releasePath },
+            (zipError) => {
+                if (zipError) {
+                    console.log(chalk.red(`❌ Could not make ${zipFile}.`));
+                    console.log(chalk.bgRed.black(zipError));
                     return;
                 }
 
-                console.log(
-                    `⚡️ Installed composer packages in ${ dest } directory.`
-                );
-
-        // Removing files that is not needed in the production now.
-        removeFiles.forEach( ( file ) => {
-            fs.removeSync( `${ dest }/${ file }` );
-        } );
-
-        // Output zip file name.
-        const zipFile = `${ displayName }-v${ version }.zip`;
-
-        console.log( `📦 Making the zip file ${ zipFile } ...` );
-
-        // Making the zip file here.
-        exec(
-            `zip ${ zipFile } ${ displayName } -rq`,
-            {
-                cwd: "release",
-            },
-            ( ziperror ) => {
-                if ( ziperror ) {
-                    console.log(
-                        chalk.red( `❌ Could not make ${ zipFile }.` )
-                    );
-                    console.log( chalk.bgRed.black( ziperror ) );
-
-                    return;
-                }
-
-                fs.removeSync( dest );
-                console.log( chalk.green( `✅  ${ zipFile } is ready. 🎉` ) );
+                fs.removeSync(dest);
+                console.log(chalk.green(`✅ ${zipFile} is ready. 🎉`));
             }
-        );
-        }
         );
     }
 );

@@ -26,15 +26,16 @@ class FrontendScripts {
 
     public static function register_scripts() {
         $version = Notifima()->version;
-        $suffix  = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
-
-        error_log( 'FrontendUrl : ' . print_r( Notifima()->plugin_url . 'assets/js/notifima-frontend' . $suffix . '.js', true ) );
+        $is_dev = defined('WP_ENV') && WP_ENV === 'development';
+        $suffix  = $is_dev ? '.min' : '';
+        $prefix = $is_dev ? 'notifima-' : '';
+        error_log( 'FrontendUrl : ' . print_r( Notifima()->plugin_url . 'assets/js/' . $prefix . 'frontend' . $suffix . '.js', true ) );
 
         $register_scripts = apply_filters(
             'notifima_register_scripts',
             array(
 				'notifima-frontend-script' => array(
-					'src'         => Notifima()->plugin_url . 'assets/js/notifima-frontend' . $suffix . '.js',
+					'src'         => Notifima()->plugin_url . 'assets/js/' . $prefix . 'frontend' . $suffix . '.js',
 					'deps'        => array( 'jquery', 'wp-element', 'wp-components' ),
 					'version'     => $version,
 					'text_domain' => 'notifima',
@@ -48,13 +49,14 @@ class FrontendScripts {
 
     public static function register_styles() {
         $version = Notifima()->version;
-        $suffix  = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
-
+        $is_dev = defined('WP_ENV') && WP_ENV === 'development';
+        $suffix  = $is_dev ? '.min' : '';
+        $prefix = $is_dev ? 'notifima-' : '';
         $register_styles = apply_filters(
             'notifima_register_styles',
             array(
 				'notifima-frontend-style' => array(
-					'src'     => Notifima()->plugin_url . 'assets/styles/notifima-frontend' . $suffix . '.css',
+					'src'     => Notifima()->plugin_url . 'assets/styles/' . $prefix . 'frontend' . $suffix . '.css',
 					'deps'    => array(),
 					'version' => $version,
 				),

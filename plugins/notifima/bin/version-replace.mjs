@@ -1,5 +1,5 @@
 import fs from 'fs-extra';
-import replace from 'replace-in-file';
+const replace = (await import('replace-in-file')).default;
 
 /**
  * List of folders in which to update the version string.
@@ -16,7 +16,7 @@ const pluginFiles = [
 
 const { version } = JSON.parse( fs.readFileSync( "package.json" ) );
 
-replace( {
+await replace( {
     files: pluginFiles,
     from: [ /PRODUCT_VERSION_SINCE/g, /PRO_PRODUCT_VERSION_SINCE/g ],
     to: version,

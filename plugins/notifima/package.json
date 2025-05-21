@@ -14,7 +14,7 @@
         "build:project:bundle": "wireit",
         "build:project:translation:domains": "wireit",
         "watch:build": "pnpm --if-present run '/^watch:build:project:.*$/'",
-        "watch:build:project:bandle": "wp-scripts start",
+        "watch:build:project:bandle": "wireit",
         "lint": "pnpm --if-present \"/^lint:lang:.*$/\"",
         "lint:fix": "pnpm --if-present \"/^lint:fix:.*$/\"",
         "lint:lang:js": "eslint . --ext=js,ts",
@@ -37,6 +37,7 @@
         "readme": "wp-readme-to-md",
         "composer": "composer dump-autoload && composer update",
         "preinstall": "npx only-allow pnpm",
+        "postinstall": "rimraf -g vendor release .wireit languages && composer install --quiet",
         "clean": "node bin/clean-files.mjs",
         "minify": "node bin/minify.mjs",
         "changelog": "composer install --quiet && composer exec -- changelogger",
@@ -62,7 +63,7 @@
                 "webpack.config.js"
             ],
             "output": [
-                "assets/**"
+                "release/assets/**"
             ],
             "clean": true
         },
@@ -73,6 +74,15 @@
                 "templates/**"
             ],
             "output": []
+        },
+        "watch:build:project:bandle": {
+            "command": "wp-scripts start",
+            "files": [
+                "src/**/*.{js,jsx,ts,tsx,scss}",
+                "tsconfig.json",
+                "webpack.config.js"
+            ],
+            "service": true
         }
     },
     "dependencies": {

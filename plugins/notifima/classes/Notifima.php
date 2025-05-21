@@ -137,8 +137,8 @@ class Notifima {
      * @return void
      */
     public function init_plugin( $file ) {
-        // $this->load_plugin_textdomain();
-        // $this->init_classes();
+        $this->load_plugin_textdomain();
+        $this->init_classes();
 
         do_action( 'notifima_loaded' );
     }

@@ -17,7 +17,7 @@
     "test": "pnpm -r test",
     "watch:storybook": "pnpm -r --workspace-concurrency=Infinity --stream \"/^watch:build:storybook.*$/\"",
     "clean": "rimraf -v -g \"**/node_modules\" \"plugins/*/vendor\" \"plugins/*/languages\" && pnpm store prune",
-    "clean:build": "rimraf -v -g \"**/build\" \"plugins/**/assets\" \"**/.wireit\"",
+    "clean:build": "rimraf -v -g \"**/build\" \"plugins/**/release\" \"**/.wireit\"",
     "sync-dependencies": "pnpm exec syncpack -- fix-mismatches",
     "preinstall": "npx only-allow pnpm"
   },
