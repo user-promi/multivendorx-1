@@ -11,6 +11,7 @@ class FrontendScripts {
 
     public function __construct() {
         add_action( 'wp_enqueue_scripts', array( $this, 'load_scripts' ) );
+        add_action( 'admin_enqueue_scripts', [ $this, 'admin_load_scripts' ] );
     }
 
     public static function register_script( $handle, $path, $deps = array(), $version = '', $text_domain = '' ) {
@@ -75,7 +76,118 @@ class FrontendScripts {
         self::register_styles();
     }
 
+    /**
+	 * Register/queue admin scripts.
+	 */
+	public static function admin_load_scripts() {
+        self::admin_register_scripts();
+		self::admin_register_styles();
+    }
+
+    public static function admin_register_scripts() {
+		$version = Notifima()->version;
+        $is_dev = defined('WP_ENV') && WP_ENV === 'development';
+        $build_path = 'assets';
+        if($is_dev){
+            $build_path = 'release/assets';
+        }
+        $index_asset = include plugin_dir_path( __FILE__ ) . '../' . $build_path . '/js/index.asset.php';
+        $component_asset = include plugin_dir_path( __FILE__ ) . '../' . $build_path . '/js/components.asset.php';
+        
+        // Enqueue all chunk files (External dependencies)
+        $chunks_dir = plugin_dir_path( __FILE__ ) . '../' . $build_path . '/js/externals/';
+        $chunks_url = Notifima()->plugin_url . $build_path . '/js/externals/';
+        $build_dir = Notifima()->plugin_url . $build_path;
+        $js_files   = glob( $chunks_dir . '*.js' );
+        error_log("path from admin : ".$build_dir);
+        error_log("chunks from admin : ".$chunks_dir);
+
+        foreach ( $js_files as $chunk_path ) {
+            $chunk_file   = basename( $chunk_path );
+            $chunk_handle = 'notifima-script-' . sanitize_title( $chunk_file );
+            $asset_file   = str_replace( '.js', '.asset.php', $chunk_path );
+            $deps         = array();
+            $version      = filemtime( $chunk_path );
+
+            if ( file_exists( $asset_file ) ) {
+                $asset   = include $asset_file;
+                $deps    = $asset['dependencies'] ?? array();
+                $version = $asset['version'] ?? $version;
+            }
+
+            wp_enqueue_script(
+                $chunk_handle,
+                $chunks_url . $chunk_file,
+                $deps,
+                $version,
+                true
+            );
+        }
+		$register_scripts = apply_filters('admin_notifima_register_scripts', array(
+			'notifima-admin-script' => [
+				'src'     => $build_dir . '/js/index.js',
+				'deps'    => $index_asset['dependencies'],
+				'version' => $version,
+                'text_domain' => 'Notifima'
+            ],
+			'notifima-components-script' => [
+				'src'     => $build_dir . '/js/components.js',
+				'deps'    => $component_asset['dependencies'],
+				'version' => $version,
+                'text_domain' => 'Notifima'
+            ],
+		) );
+		foreach ( $register_scripts as $name => $props ) {
+			self::register_script( $name, $props['src'], $props['deps'], $props['version'], $props['text_domain'] );
+		}
+
+	}
+
+    public static function admin_register_styles() {
+		$version = Notifima()->version;
+        $is_dev = defined('WP_ENV') && WP_ENV === 'development';
+        $suffix  = $is_dev ? '.min' : '';
+        $prefix = $is_dev ? 'notifima-' : '';
+        $build_path = 'assets';
+        if($is_dev){
+            $build_path = 'release/assets';
+        }
+        $build_dir = Notifima()->plugin_url . $build_path;
+		$register_styles = apply_filters('admin_notifima_register_styles', [
+			'notifima-style'   => [
+				'src'     => $build_dir . '/styles/index.css',
+				'deps'    => array(),
+				'version' => $version,
+            ],		
+			'notifima-components-style'   => [
+				'src'     => $build_dir . '/styles/components.css',
+				'deps'    => array(),
+				'version' => $version,
+            ],		
+			'notifima-admin-style'   => [
+				'src'     => Notifima()->plugin_url .'assets/styles/' . $suffix . 'admin' . $prefix . '.css',
+				'deps'    => array(),
+				'version' => $version,
+            ],		
+        ] );
+
+		foreach ( $register_styles as $name => $props ) {
+			self::register_style( $name, $props['src'], $props['deps'], $props['version'] );
+		}
+
+	}
+
+
     public static function localize_scripts( $handle ) {
+        // Get all tab setting's database value
+        $settings_databases_value = array();
+
+        $tabs_names = array( 'appearance', 'form_submission', 'email', 'mailchimp' );
+
+        foreach ( $tabs_names as $tab_name ) {
+            $settings_databases_value[ $tab_name ] = Notifima()->setting->get_option( 'notifima_' . $tab_name . '_settings' );
+        }
+
         $settings_array  = Utill::get_form_settings_array();
         $button_settings = $settings_array['customize_btn'];
 
@@ -125,6 +237,26 @@ class FrontendScripts {
 						'recaptcha_enabled'         => apply_filters( 'notifima_recaptcha_enabled', false ),
 					),
 				),
+                'notifima-admin-script' => array(
+                    'object_name' => 'appLocalizer',
+					'data'        => array(
+						'apiUrl'                   => untrailingslashit( get_rest_url() ),
+						'restUrl'                  => Notifima()->rest_namespace,
+						'nonce'                    => wp_create_nonce( 'wp_rest' ),
+						'subscriber_list'          => Notifima()->plugin_url . 'src/assets/images/subscriber-list.jpg',
+						'export_button'            => admin_url( 'admin-ajax.php?action=export_subscribers' ),
+						'khali_dabba'              => Utill::is_khali_dabba(),
+						'tab_name'                 => __( 'Notifima', 'notifima' ),
+						'settings_databases_value' => $settings_databases_value,
+						'pro_url'                  => esc_url( NOTIFIMA_PRO_SHOP_URL ),
+						/* translators: %s: Link to the Pro version. */
+						'is_double_optin_free'     => sprintf( __( 'Upgrade to <a href="%s" target="_blank"><span class="pro-strong">Pro</span></a> to enable Double Opt-in flow for subscription confirmation.', 'notifima' ), NOTIFIMA_PRO_SHOP_URL ),
+						'is_double_optin_pro'      => __( 'Enable Double Opt-in flow for subscription confirmation.', 'notifima' ),
+						/* translators: %s: Link to the Pro version. */
+						'is_recaptcha_enable_free' => sprintf( __( 'Upgrade to <a href="%s" target="_blank"><span class="pro-strong">Pro</span></a> for unlocking reCAPTCHA for out-of-stock form subscriptions.', 'notifima' ), NOTIFIMA_PRO_SHOP_URL ),
+						'is_recaptcha_enable_pro'  => __( 'Enable this to prevent automated bots from submitting forms. Get your v3 reCAPTCHA site key and secret key from <a href="https://developers.google.com/recaptcha" target="_blank">here</a>.', 'notifima' ),
+					),
+                ),
 				'notifima-stock-notification-block-script' => array(
 					'object_name' => 'stockNotificationBlock',
 					'data'        => array(

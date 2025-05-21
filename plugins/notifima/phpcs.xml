@@ -9,7 +9,7 @@
 	<exclude-pattern type="relative">*\.asset\.php$</exclude-pattern>
 	<exclude-pattern type="relative">^vendor/*</exclude-pattern>
 	<exclude-pattern type="relative">^src/*</exclude-pattern>
-	<exclude-pattern type="relative">^assets/*</exclude-pattern>
+	<exclude-pattern type="relative">^release/*</exclude-pattern>
     <exclude-pattern type="relative">^node_modules/*</exclude-pattern>
 	<exclude-pattern type="relative">^languages/*</exclude-pattern>
 	<exclude-pattern type="relative">^log/*</exclude-pattern>

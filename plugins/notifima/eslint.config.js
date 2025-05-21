@@ -53,7 +53,7 @@ export default [
         ignores: [
             "**/node_modules/**",
             "**/.wireit/**",
-            "**/assets/**",
+            "**/release/**",
             "**/vendor/**",
         ],
     },
