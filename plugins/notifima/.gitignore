@@ -11,3 +11,4 @@ docker-compose.yml
 bin/install-wp-tests.sh
 dist
 .wireit
+.cache

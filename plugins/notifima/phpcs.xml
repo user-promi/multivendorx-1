@@ -13,7 +13,7 @@
     <exclude-pattern type="relative">^node_modules/*</exclude-pattern>
 	<exclude-pattern type="relative">^languages/*</exclude-pattern>
 	<exclude-pattern type="relative">^log/*</exclude-pattern>
-	<exclude-pattern type="relative">^scripts/*</exclude-pattern>
+	<exclude-pattern type="relative">^assets/*</exclude-pattern>
 
 	<!-- Only check PHP files. -->
 	<arg name="extensions" value="php"/>

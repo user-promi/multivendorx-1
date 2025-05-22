@@ -10,7 +10,7 @@ module.exports = {
     entry: {
         index: "./src/index.tsx",
         "block/stock-notification-block/index":
-            "./src/block/stock-notification-block/index.tsx",
+            "./src/block/stock-notification-block/index.js",
     },
 
     output: {
@@ -61,9 +61,16 @@ module.exports = {
         ...defaultConfig.module,
         rules: [
             {
-                test: /\.tsx?$/,
-                use: "ts-loader",
-                include: path.resolve(__dirname, "./src"),
+                test: /\.(t|j)sx?$/,
+                exclude: /[\\/]node_modules[\\/]/,
+                use: {
+                loader: 'babel-loader',
+                options: {
+                    presets: ['@wordpress/babel-preset-default'],
+                    cacheDirectory: path.resolve(__dirname, '.cache/babel'),
+                    cacheCompression: false,
+                },
+                },
             },
             {
                 test: /\.css$/,

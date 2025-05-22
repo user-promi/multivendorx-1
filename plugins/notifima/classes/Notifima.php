@@ -27,6 +27,7 @@ class Notifima {
         $this->container['version']        = NOTIFIMA_PLUGIN_VERSION;
         $this->container['rest_namespace'] = 'notifima/v1';
         $this->container['block_paths']    = array();
+        $this->container['is_dev'] = defined('WP_ENV') && WP_ENV === 'development';
 
         add_action( 'init', array( $this, 'set_default_value' ) );
         // Activation Hooks

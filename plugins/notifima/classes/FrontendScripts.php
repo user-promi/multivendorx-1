@@ -14,6 +14,16 @@ class FrontendScripts {
         add_action( 'admin_enqueue_scripts', [ $this, 'admin_load_scripts' ] );
     }
 
+    public static function get_script_name($name){
+        if(Notifima()->is_dev) return $name;
+        return PLUGIN_SLUG . '-' . $name . '.min';
+    }
+
+    public static function get_build_path_name(){
+        if(Notifima()->is_dev) return "release/assets/";
+        return "assets/";
+    }
+
     public static function register_script( $handle, $path, $deps = array(), $version = '', $text_domain = '' ) {
         self::$scripts[] = $handle;
         wp_register_script( $handle, $path, $deps, $version, true );
@@ -27,16 +37,14 @@ class FrontendScripts {
 
     public static function register_scripts() {
         $version = Notifima()->version;
-        $is_dev = defined('WP_ENV') && WP_ENV === 'development';
-        $suffix  = $is_dev ? '.min' : '';
-        $prefix = $is_dev ? 'notifima-' : '';
-        error_log( 'FrontendUrl : ' . print_r( Notifima()->plugin_url . 'assets/js/' . $prefix . 'frontend' . $suffix . '.js', true ) );
+        
+        error_log( 'FrontendUrl : ' . print_r( Notifima()->plugin_url . 'assets/js/' . self::get_script_name('frontend') . '.js', true ) );
 
         $register_scripts = apply_filters(
             'notifima_register_scripts',
             array(
 				'notifima-frontend-script' => array(
-					'src'         => Notifima()->plugin_url . 'assets/js/' . $prefix . 'frontend' . $suffix . '.js',
+					'src'         => Notifima()->plugin_url . 'assets/js/' . self::get_script_name('frontend') . '.js',
 					'deps'        => array( 'jquery', 'wp-element', 'wp-components' ),
 					'version'     => $version,
 					'text_domain' => 'notifima',
@@ -50,14 +58,11 @@ class FrontendScripts {
 
     public static function register_styles() {
         $version = Notifima()->version;
-        $is_dev = defined('WP_ENV') && WP_ENV === 'development';
-        $suffix  = $is_dev ? '.min' : '';
-        $prefix = $is_dev ? 'notifima-' : '';
         $register_styles = apply_filters(
             'notifima_register_styles',
             array(
 				'notifima-frontend-style' => array(
-					'src'     => Notifima()->plugin_url . 'assets/styles/' . $prefix . 'frontend' . $suffix . '.css',
+					'src'     => Notifima()->plugin_url . 'assets/styles/' . self::get_script_name('frontend') . '.css',
 					'deps'    => array(),
 					'version' => $version,
 				),
@@ -84,23 +89,10 @@ class FrontendScripts {
 		self::admin_register_styles();
     }
 
-    public static function admin_register_scripts() {
-		$version = Notifima()->version;
-        $is_dev = defined('WP_ENV') && WP_ENV === 'development';
-        $build_path = 'assets';
-        if($is_dev){
-            $build_path = 'release/assets';
-        }
-        $index_asset = include plugin_dir_path( __FILE__ ) . '../' . $build_path . '/js/index.asset.php';
-        $component_asset = include plugin_dir_path( __FILE__ ) . '../' . $build_path . '/js/components.asset.php';
-        
-        // Enqueue all chunk files (External dependencies)
-        $chunks_dir = plugin_dir_path( __FILE__ ) . '../' . $build_path . '/js/externals/';
-        $chunks_url = Notifima()->plugin_url . $build_path . '/js/externals/';
-        $build_dir = Notifima()->plugin_url . $build_path;
+    public static function enqueue_external_scripts(){
+        $chunks_dir = plugin_dir_path( __FILE__ ) . '../' . self::get_build_path_name() . 'js/externals/';
+        $chunks_url = Notifima()->plugin_url . self::get_build_path_name() . 'js/externals/';
         $js_files   = glob( $chunks_dir . '*.js' );
-        error_log("path from admin : ".$build_dir);
-        error_log("chunks from admin : ".$chunks_dir);
 
         foreach ( $js_files as $chunk_path ) {
             $chunk_file   = basename( $chunk_path );
@@ -123,18 +115,26 @@ class FrontendScripts {
                 true
             );
         }
+    }
+
+    public static function admin_register_scripts() {
+		$version = Notifima()->version;
+        // Enqueue all chunk files (External dependencies)
+        self::enqueue_external_scripts();
+        $index_asset = include plugin_dir_path( __FILE__ ) . '../' . self::get_build_path_name() . 'js/index.asset.php';
+        $component_asset = include plugin_dir_path( __FILE__ ) . '../' . self::get_build_path_name() . 'js/components.asset.php';
 		$register_scripts = apply_filters('admin_notifima_register_scripts', array(
 			'notifima-admin-script' => [
-				'src'     => $build_dir . '/js/index.js',
+				'src'     => Notifima()->plugin_url . self::get_build_path_name() . 'js/index.js',
 				'deps'    => $index_asset['dependencies'],
 				'version' => $version,
-                'text_domain' => 'Notifima'
+                'text_domain' => 'notifima'
             ],
 			'notifima-components-script' => [
-				'src'     => $build_dir . '/js/components.js',
+				'src'     => Notifima()->plugin_url . self::get_build_path_name() . 'js/components.js',
 				'deps'    => $component_asset['dependencies'],
 				'version' => $version,
-                'text_domain' => 'Notifima'
+                'text_domain' => 'notifima'
             ],
 		) );
 		foreach ( $register_scripts as $name => $props ) {
@@ -145,27 +145,19 @@ class FrontendScripts {
 
     public static function admin_register_styles() {
 		$version = Notifima()->version;
-        $is_dev = defined('WP_ENV') && WP_ENV === 'development';
-        $suffix  = $is_dev ? '.min' : '';
-        $prefix = $is_dev ? 'notifima-' : '';
-        $build_path = 'assets';
-        if($is_dev){
-            $build_path = 'release/assets';
-        }
-        $build_dir = Notifima()->plugin_url . $build_path;
 		$register_styles = apply_filters('admin_notifima_register_styles', [
 			'notifima-style'   => [
-				'src'     => $build_dir . '/styles/index.css',
+				'src'     => Notifima()->plugin_url . self::get_build_path_name() . 'styles/index.css',
 				'deps'    => array(),
 				'version' => $version,
             ],		
 			'notifima-components-style'   => [
-				'src'     => $build_dir . '/styles/components.css',
+				'src'     => Notifima()->plugin_url . self::get_build_path_name() . 'styles/components.css',
 				'deps'    => array(),
 				'version' => $version,
             ],		
 			'notifima-admin-style'   => [
-				'src'     => Notifima()->plugin_url .'assets/styles/' . $suffix . 'admin' . $prefix . '.css',
+				'src'     => Notifima()->plugin_url .'assets/styles/' . self::get_script_name('admin') . '.css',
 				'deps'    => array(),
 				'version' => $version,
             ],		

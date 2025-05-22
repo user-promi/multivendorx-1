@@ -7,7 +7,7 @@ const replace = (await import('replace-in-file')).default;
  */
 const pluginFiles = [
     "classes/**/*",
-    "scripts/**/*",
+    "assets/**/*",
     "src/**/*",
     "templates/**/*",
     "config.php",
