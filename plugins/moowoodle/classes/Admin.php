@@ -66,7 +66,7 @@ class Admin {
 			$subtab = '';
 
 			if ( $submenu[ 'subtab' ] ) {
-				$subtab = '&sub-tab=' . $submenu[ 'subtab' ];
+				$subtab = '&subtab=' . $submenu[ 'subtab' ];
 			}
 
 			add_submenu_page(
@@ -109,6 +109,8 @@ class Admin {
 		if ( get_current_screen()->id == 'toplevel_page_moowoodle' ) {
 
 			FrontendScripts::admin_load_scripts();
+			FrontendScripts::enqueue_script( 'moowoodle-components-script' );
+			FrontendScripts::enqueue_style( 'moowoodle-components-style' );
 			FrontendScripts::enqueue_script( 'moowoodle-admin-script' );
 			FrontendScripts::enqueue_style( 'moowoodle-admin-style' );
 			FrontendScripts::localize_scripts( 'moowoodle-admin-script' );

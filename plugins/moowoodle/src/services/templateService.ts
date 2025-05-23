@@ -1,6 +1,10 @@
 /// <reference types="webpack-env" />
 
-const context = require.context("../components/Settings", true, /\.ts$/);
+// Predefined contexts
+const contexts: Record<string, __WebpackModuleApi.RequireContext> = {
+    settings: require.context("../components/Settings", true, /\.ts$/),
+    synchronizations: require.context("../components/Synchronization", true, /\.ts$/),
+};
 
 type SettingNode = {
     name: string;
@@ -35,15 +39,17 @@ const importAll = (
         currentFolder.push({
             name: fileName!.replace(".js", ""),
             type: "file",
-            content: context(key).default,
+            content: inpContext(key).default,
         });
     });
 
     return folderStructure;
 };
 
-const getTemplateData = (): SettingNode[] => {
-    return importAll(context);
+// Accept 'settings' or 'synchronizations' (defaults to 'settings')
+const getTemplateData = (type: "settings" | "synchronizations" = "settings"): SettingNode[] => {
+    const ctx = contexts[type];
+    return importAll(ctx);
 };
 
 const getModuleData = (): any | null => {

@@ -1555,7 +1555,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                                 )
                             }
                             interval={Number(inputField.interval)}
-                            statusApiLink={String(inputField.statusApiLink)} // api for each status of synchronization
+                            parameter={String(inputField.parameter)} // api for each status of synchronization
                         />
                     );
                     break;
@@ -1629,8 +1629,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                     input = (
                         <Log
                             appLocalizer={appLocalizer}
-                            fetchApiLink={String(inputField.fetchApiLink)} // api to fetch the log content
-                            downloadApiLink={String(inputField.downloadApiLink)} // download the log file
+                            apiLink={String(inputField.apiLink)} // api to fetch and download the log content
                             downloadFileName={String(inputField.fileName)}
                         />
                     ); // log file name

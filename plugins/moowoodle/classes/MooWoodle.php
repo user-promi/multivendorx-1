@@ -56,6 +56,7 @@ class MooWoodle {
         $this->container[ 'block_paths' ]            = [];
         $this->container[ 'rest_namespace' ]         = 'moowoodle/v1';
         $this->container[ 'moowoodle_logs_dir' ]     = ( trailingslashit( wp_upload_dir(null, false)['basedir'] ) . 'mw-logs' );
+        $this->container['is_dev'] = defined('WP_ENV') && WP_ENV === 'development';
 
         // activation and deactivation hook
         register_activation_hook( $file, [ $this, 'activate' ] );
@@ -130,11 +131,11 @@ class MooWoodle {
         $this->container[ 'setting' ]          = new Setting();
 		$this->container[ 'restAPI' ]          = new RestAPI();
 		// $this->container[ 'emails' ]           = new Emails\Emails();
-		// $this->container[ 'course' ]           = new Core\Course();
-		// $this->container[ 'category' ]         = new Core\Category();
-		// $this->container[ 'product' ]          = new Core\Product();
-        // $this->container[ 'external_service' ] = new ExternalService();
-		// $this->container[ 'enrollment' ]       = new Enrollment();
+		$this->container[ 'course' ]           = new Core\Course();
+		$this->container[ 'category' ]         = new Core\Category();
+		$this->container[ 'product' ]          = new Core\Product();
+        $this->container[ 'external_service' ] = new ExternalService();
+		$this->container[ 'enrollment' ]       = new Enrollment();
 		// $this->container[ 'frontend' ]         = new Frontend();
         // $this->container[ 'block' ] 		   = new Block();
         $this->container[ 'frontendscripts' ]  = new FrontendScripts();
