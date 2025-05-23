@@ -1,0 +1,7 @@
+{
+    "apiVersion": 2,
+    "name": "moowoodle/Moowoodle",
+    "version": "1.0.0",
+    "title": "Moowoodle",
+    "editorScript": "file:./index.tsx"
+}
