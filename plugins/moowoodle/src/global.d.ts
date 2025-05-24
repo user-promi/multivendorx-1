@@ -24,6 +24,7 @@ declare global {
         moodle_logo: string;
         wp_user_roles: any;
         md_user_roles: any;
+        pro_settings_list: any;
     }
 
     declare module "*.png";

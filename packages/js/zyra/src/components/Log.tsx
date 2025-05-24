@@ -4,15 +4,13 @@ import { getApiLink } from "./apiService";
 import "../styles/web/Log.scss";
 
 export interface LogProps {
-    fetchApiLink: string;
-    downloadApiLink: string;
+    apiLink: string;
     downloadFileName: string;
     appLocalizer: Record<string, any>; // Allows any structure
 }
 
 const Log: React.FC<LogProps> = ({
-    fetchApiLink,
-    downloadApiLink,
+    apiLink,
     downloadFileName,
     appLocalizer,
 }) => {
@@ -20,24 +18,30 @@ const Log: React.FC<LogProps> = ({
     const [copied, setCopied] = useState<boolean>(false);
 
     useEffect(() => {
-        axios
-            .post(
-                getApiLink(appLocalizer, fetchApiLink),
-                { logcount: 100 },
-                { headers: { "X-WP-Nonce": appLocalizer?.nonce } }
-            )
-            .then((response) => {
-                setLogData(response.data);
-            });
-    }, [fetchApiLink]);
+        axios({
+            url: getApiLink(appLocalizer, apiLink),
+            method: "GET",
+            headers: { "X-WP-Nonce": appLocalizer.nonce },
+            params: {
+                logcount: 100
+            },
+        })
+        .then((response) => {
+            setLogData(response.data);
+        });
+    }, []);
 
     const handleDownloadLog = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
+        const fileName = downloadFileName;
         axios({
-            url: getApiLink(appLocalizer, downloadApiLink),
-            method: "POST",
+            url: getApiLink(appLocalizer, apiLink),
+            method: "GET",
             headers: { "X-WP-Nonce": appLocalizer.nonce },
-            data: { file: downloadFileName },
+            params: {
+                action: 'download',
+                file: fileName 
+            },
             responseType: "blob",
         })
             .then((response) => {
@@ -47,7 +51,7 @@ const Log: React.FC<LogProps> = ({
                 const url = window.URL.createObjectURL(blob);
                 const link = document.createElement("a");
                 link.href = url;
-                link.setAttribute("download", downloadFileName);
+                link.setAttribute("download", fileName);
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
@@ -57,15 +61,18 @@ const Log: React.FC<LogProps> = ({
 
     const handleClearLog = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
-        axios
-            .post(
-                getApiLink(appLocalizer, fetchApiLink),
-                { logcount: 100, clear: true },
-                { headers: { "X-WP-Nonce": appLocalizer.nonce } }
-            )
-            .then(() => {
-                setLogData([]);
-            });
+        axios({
+            url: getApiLink(appLocalizer, apiLink),
+            method: "GET",
+            headers: { "X-WP-Nonce": appLocalizer.nonce },
+            params: {
+                logcount: 100,
+                clear: true 
+            },
+        })
+        .then(() => {
+            setLogData([]);
+        });
     };
 
     const handleCopyToClipboard = (
