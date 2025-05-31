@@ -59,24 +59,3 @@ body:
       placeholder: Add any other context about the problem here...
     validations:
       required: false
-
-  - type: textarea
-    id: environment
-    attributes:
-      label: Environment
-      description: Provide details about your environment, such as device, OS, browser, or software version.
-      placeholder: |
-        - OS: [e.g. Windows 11, macOS Ventura]
-        - Browser [e.g. Chrome, Firefox]
-        - Version [e.g. 1.0.2]
-    validations:
-      required: false
-
-  - type: checkboxes
-    id: terms
-    attributes:
-      label: Code of Conduct
-      description: By submitting this issue, you agree to follow our [Code of Conduct](https://example.com).
-      options:
-        - label: I agree to follow this project's Code of Conduct
-          required: true
