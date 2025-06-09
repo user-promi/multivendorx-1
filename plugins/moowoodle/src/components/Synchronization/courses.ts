@@ -3,7 +3,7 @@ import { __ } from "@wordpress/i18n";
 export default {
     id: "synchronize-course",
     priority: 10,
-    name: __("Courses and Products synchronization", "moowoodle"),
+    name: __( "Courses and Products synchronization", "moowoodle" ),
     desc: __(
         "Fetch Moodle courses & generate products on demand.",
         "moowoodle"
@@ -14,13 +14,13 @@ export default {
         {
             key: "sync-course-options",
             type: "checkbox",
-            desc: __("", "moowoodle"),
-            label: __("Course information mapping", "moowoodle"),
+            desc: __( "", "moowoodle" ),
+            label: __( "Course information mapping", "moowoodle" ),
             select_deselect: true,
             options: [
                 {
                     key: "sync_courses_category",
-                    label: __("Course categories", "moowoodle"),
+                    label: __( "Course categories", "moowoodle" ),
                     hints: __(
                         "Scan the entire Moodle course category structure and synchronize it with the WordPress category listings.",
                         "moowoodle"
@@ -29,7 +29,7 @@ export default {
                 },
                 {
                     key: "sync_courses_sku",
-                    label: __("Course ID number - Product SKU", "moowoodle"),
+                    label: __( "Course ID number - Product SKU", "moowoodle" ),
                     hints: __(
                         "Retrieves the course ID number and assigns it as the product SKU.",
                         "moowoodle"
@@ -39,7 +39,7 @@ export default {
                 },
                 {
                     key: "sync_image",
-                    label: __("Course image", "moowoodle"),
+                    label: __( "Course image", "moowoodle" ),
                     hints: __(
                         "Copies course images and sets them as WooCommerce product images.",
                         "moowoodle"
@@ -49,7 +49,7 @@ export default {
                 },
                 {
                     key: "sync_group",
-                    label: __("Course group", "moowoodle"),
+                    label: __( "Course group", "moowoodle" ),
                     hints: __(
                         "Copies course images and sets them as WooCommerce product images.",
                         "moowoodle"
@@ -67,13 +67,13 @@ export default {
         {
             key: "product_sync_option",
             type: "checkbox",
-            desc: __("", "moowoodle"),
-            label: __("Course & product synchronization", "moowoodle"),
+            desc: __( "", "moowoodle" ),
+            label: __( "Course & product synchronization", "moowoodle" ),
             select_deselect: true,
             options: [
                 {
                     key: "create",
-                    label: __("Create new products along with", "moowoodle"),
+                    label: __( "Create new products along with", "moowoodle" ),
                     hints: __(
                         "This will additionally create new products based on Moodle courses fetched, if they do not already exist in WordPress.",
                         "moowoodle"

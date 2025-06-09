@@ -3,8 +3,8 @@ import { __ } from "@wordpress/i18n";
 export default {
     id: "log",
     priority: 60,
-    name: __("Log", "moowoodle"),
-    desc: __("Review all system logs and errors", "moowoodle"),
+    name: __( "Log", "moowoodle" ),
+    desc: __( "Review all system logs and errors", "moowoodle" ),
     icon: "adminLib-credit_card",
     submitUrl: "settings",
     modal: [

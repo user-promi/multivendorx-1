@@ -3,8 +3,8 @@ import { __ } from "@wordpress/i18n";
 export default {
     id: "synchronize-cohort",
     priority: 30,
-    name: __("Cohort synchronization", "moowoodle"),
-    desc: __("Fetch Moodle cohort on demand.", "moowoodle"),
+    name: __( "Cohort synchronization", "moowoodle" ),
+    desc: __( "Fetch Moodle cohort on demand.", "moowoodle" ),
     icon: "adminLib-book",
     submitUrl: "settings",
     proDependent: true,
@@ -12,13 +12,13 @@ export default {
         {
             key: "cohort_sync_option",
             type: "checkbox",
-            desc: __("", "moowoodle"),
-            label: __("Cohort & product synchronization", "moowoodle"),
+            desc: __( "", "moowoodle" ),
+            label: __( "Cohort & product synchronization", "moowoodle" ),
             select_deselect: true,
             options: [
                 {
                     key: "create",
-                    label: __("Create new products along with", "moowoodle"),
+                    label: __( "Create new products along with", "moowoodle" ),
                     hints: __(
                         "This will additionally create new products based on Moodle cohort fetched, if they do not already exist in WordPress.",
                         "moowoodle"
