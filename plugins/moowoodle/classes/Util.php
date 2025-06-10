@@ -107,10 +107,7 @@ class Util {
 	 * @return bool
 	 */
 	public static function is_khali_dabba() {
-		if ( defined( 'MOOWOODLE_PRO_PLUGIN_TOKEN' ) ) {
-			return MooWoodlePro()->license->is_active();
-		}
-		return false;
+		return apply_filters( 'kothay_dabba', false );
 	}
 
 	/**
