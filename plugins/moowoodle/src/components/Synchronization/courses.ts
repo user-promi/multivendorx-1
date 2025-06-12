@@ -8,7 +8,7 @@ export default {
         "Fetch Moodle courses & generate products on demand.",
         "moowoodle"
     ),
-    icon: "adminLib-book",
+    icon: "adminlib-book",
     submitUrl: "settings",
     modal: [
         {

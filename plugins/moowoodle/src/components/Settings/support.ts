@@ -5,6 +5,6 @@ export default {
     priority: 70,
     name: __( "Support", "moowoodle" ),
     desc: __( "More about MooWoodle.", "moowoodle" ),
-    icon: "adminLib-support",
+    icon: "adminlib-support",
     modal: [],
 };

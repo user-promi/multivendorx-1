@@ -590,7 +590,7 @@ const Course: React.FC = () => {
                     aria-labelledby="form-dialog-title"
                 >
                     <span
-                        className="admin-font adminLib-cross stock-manager-popup-cross"
+                        className="admin-font adminlib-cross stock-manager-popup-cross"
                         onClick={ () => setOpenDialog( false ) }
                     ></span>
                     <ProPopup />
@@ -602,7 +602,7 @@ const Course: React.FC = () => {
                 </div>
                 { error && (
                     <div className="admin-notice-display-title error">
-                        <i className="admin-font adminLib-icon-no"></i>
+                        <i className="admin-font adminlib-icon-no"></i>
                         { error }
                     </div>
                 ) }

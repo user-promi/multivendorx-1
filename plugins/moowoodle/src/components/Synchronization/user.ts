@@ -9,7 +9,7 @@ export default {
         "Synchronization on demand with automatic, real-time updates.",
         "moowoodle"
     ),
-    icon: "adminLib-supervised_user_circle",
+    icon: "adminlib-supervised_user_circle",
     submitUrl: "settings",
     proDependent: true,
     modal: [

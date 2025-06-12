@@ -5,7 +5,7 @@ export default {
     priority: 40,
     name: __( "Classroom", "moowoodle" ),
     desc: __( "Manage group purchase", "moowoodle" ),
-    icon: "adminLib-vpn_key",
+    icon: "adminlib-vpn_key",
     submitUrl: "settings",
     proDependent: true,
     modal: [

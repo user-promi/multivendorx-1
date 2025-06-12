@@ -9,7 +9,7 @@ export default {
         "Manage seamless login and logout synchronization",
         "moowoodle"
     ),
-    icon: "adminLib-vpn_key",
+    icon: "adminlib-vpn_key",
     submitUrl: "settings",
     proDependent: true,
     modal: [

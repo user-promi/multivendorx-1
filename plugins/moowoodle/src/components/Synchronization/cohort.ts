@@ -5,7 +5,7 @@ export default {
     priority: 30,
     name: __( "Cohort synchronization", "moowoodle" ),
     desc: __( "Fetch Moodle cohort on demand.", "moowoodle" ),
-    icon: "adminLib-book",
+    icon: "adminlib-book",
     submitUrl: "settings",
     proDependent: true,
     modal: [

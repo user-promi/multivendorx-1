@@ -9,7 +9,7 @@ export default {
         "Effortlessly configure and verify your WordPress-Moodle connection.",
         "moowoodle"
     ),
-    icon: "adminLib-settings",
+    icon: "adminlib-settings",
     submitUrl: "settings",
     modal: [
         {

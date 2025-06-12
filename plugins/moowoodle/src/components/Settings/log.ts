@@ -5,7 +5,7 @@ export default {
     priority: 60,
     name: __( "Log", "moowoodle" ),
     desc: __( "Review all system logs and errors", "moowoodle" ),
-    icon: "adminLib-credit_card",
+    icon: "adminlib-credit_card",
     submitUrl: "settings",
     modal: [
         {
