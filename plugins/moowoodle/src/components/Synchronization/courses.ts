@@ -101,7 +101,7 @@ export default {
         },
         {
             key: "sync_course_btn",
-            type: "syncbutton",
+            type: "do-action-btn",
             interval: 2500,
             apilink: "sync",
             parameter: "course",

@@ -87,7 +87,7 @@ export default {
         },
         {
             key: "user_sync_options",
-            type: "sync-map",
+            type: "dropdown-mapping",
             desc: __(
                 "Define the user profile information mapping between WordPress and Moodle. Add multiple rows above to define all the profile data you wish to map. Any remaining profile field will be excluded from the synchronization process.<br>User will be created based on their e-mail id, hence email id can't be mapped.",
                 "moowoodle"
@@ -135,7 +135,7 @@ export default {
         },
         {
             key: "sync_user_btn",
-            type: "syncbutton",
+            type: "do-action-btn",
             interval: 2500,
             apilink: "sync",
             parameter: "user",

@@ -1,19 +1,19 @@
-#moowoodle_course_link_tab {
+#moowoodle-course-link-tab {
 	padding: 1rem;
 }
-#moowoodle_course_link_tab .moowoodle-radio-group {
+#moowoodle-course-link-tab .moowoodle-radio-group {
 	display: flex;
 	gap: 20px;
 	padding-left: 0.625rem;
 }
-#moowoodle_course_link_tab .moowoodle-radio-option {
+#moowoodle-course-link-tab .moowoodle-radio-option {
 	display: flex;
 	align-items: center;
 	gap: 8px;
 	font-weight: normal;
 	position: relative;
 }
-#moowoodle_course_link_tab .moowoodle-radio-option span {
+#moowoodle-course-link-tab .moowoodle-radio-option span {
 	background: #e35047;
 	border-radius: 2rem 0;
 	color: #f9f8fb;
@@ -26,20 +26,20 @@
 	right: -2.188rem;
 	top: -20%;
 }
-#moowoodle_course_link_tab p {
+#moowoodle-course-link-tab p {
 	display: flex;
 	align-items: center;
 	gap: 4rem;
 	padding: 0 1rem;
 	font-size: 0.938rem;
 }
-#moowoodle_course_link_tab br {
+#moowoodle-course-link-tab br {
 	display: none;
 }
-#moowoodle_course_link_tab .dynamic-link-select {
+#moowoodle-course-link-tab .dynamic-link-select {
 	display: none;
 }
-#moowoodle_course_link_tab .dynamic-link-select.show {
+#moowoodle-course-link-tab .dynamic-link-select.show {
 	display: block;
 }
 #dynamic-link-select select {

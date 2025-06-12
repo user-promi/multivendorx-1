@@ -36,7 +36,7 @@ export default {
         },
         {
             key: "test_connection",
-            type: "syncbutton",
+            type: "do-action-btn",
             apilink: "sync",
             parameter: "test",
             value: "Start Test",

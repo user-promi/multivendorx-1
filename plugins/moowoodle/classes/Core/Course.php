@@ -51,7 +51,7 @@ class Course {
 	public function add_additional_product_tab( $product_data_tabs ) {
 		$product_data_tabs['moowoodle'] = array(
 			'label'  => __( 'Moodle Linked Course or Cohort', 'moowoodle' ),
-			'target' => 'moowoodle_course_link_tab',
+			'target' => 'moowoodle-course-link-tab',
 		);
 		return $product_data_tabs;
 	}
@@ -68,7 +68,7 @@ class Course {
 		$linked_cohort_id = get_post_meta( $post->ID, 'linked_cohort_id', true );
 		$default_type     = $linked_course_id ? 'course' : ( $linked_cohort_id ? 'cohort' : '' );
 		?>
-		<div id="moowoodle_course_link_tab" class="panel">
+		<div id="moowoodle-course-link-tab" class="panel">
 			<p class="form-field moowoodle-link-type-field">
 				<label><?php esc_html_e( 'Link Type', 'moowoodle' ); ?></label><br>
 				<span class="moowoodle-radio-group">

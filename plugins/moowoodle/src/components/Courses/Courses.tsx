@@ -196,7 +196,7 @@ const Course: React.FC = () => {
             setData( null );
             axios( {
                 method: "post",
-                url: getApiLink( appLocalizer, `course-bulk-action` ),
+                url:  getApiLink( appLocalizer, "courses" ),
                 headers: { "X-WP-Nonce": appLocalizer.nonce },
                 data: {
                     selected_action: actionName,
@@ -232,7 +232,7 @@ const Course: React.FC = () => {
             setData( null );
             axios( {
                 method: "post",
-                url: getApiLink( appLocalizer, `course-bulk-action` ),
+                url:  getApiLink( appLocalizer, "courses" ),
                 headers: { "X-WP-Nonce": appLocalizer.nonce },
                 data: {
                     selected_action: bulkSelectRef.current?.value,
