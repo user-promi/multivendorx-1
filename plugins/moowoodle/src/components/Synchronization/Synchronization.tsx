@@ -116,8 +116,10 @@ const Synchronization: React.FC< SettingsProps > = () => {
         return (
             <Banner
                 products={ products }
-                is_pro={ false }
-                pro_url={ appLocalizer.shop_url }
+                isPro={ false }
+                proUrl={ appLocalizer.shop_url }
+                tag = "Why Premium"
+                buttonText = "View Pricing"
             />
         );
     };
@@ -154,7 +156,7 @@ const Synchronization: React.FC< SettingsProps > = () => {
                         updateSetting={ updateSetting }
                         appLocalizer={ appLocalizer }
                         modules={ modules }
-                        ProPopup={ ShowProPopup }
+                        Popup={ ShowProPopup }
                     />
                 ) : (
                     <>Loading...</>

@@ -54,7 +54,7 @@ export default {
                     };
                 }
             ),
-            select_deselect: true,
+            selectDeselect: true,
             proSetting: true,
             dependent: {
                 key: "user_sync_direction",
@@ -78,7 +78,7 @@ export default {
                     };
                 }
             ),
-            select_deselect: true,
+            selectDeselect: true,
             proSetting: true,
             dependent: {
                 key: "user_sync_direction",
@@ -93,7 +93,7 @@ export default {
                 "moowoodle"
             ),
             label: __( "Profile information mapping", "moowoodle" ),
-            select_deselect: true,
+            selectDeselect: true,
             syncFieldsMap: {
                 wordpress: {
                     heading: "WordPress",

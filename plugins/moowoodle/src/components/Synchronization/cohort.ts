@@ -14,7 +14,7 @@ export default {
             type: "checkbox",
             desc: __( "", "moowoodle" ),
             label: __( "Cohort & product synchronization", "moowoodle" ),
-            select_deselect: true,
+            selectDeselect: true,
             options: [
                 {
                     key: "create",

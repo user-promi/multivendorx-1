@@ -9,7 +9,7 @@ export default {
         "Manage seamless login and logout synchronization",
         "moowoodle"
     ),
-    icon: "adminlib-vpn_key",
+    icon: "adminlib-vpn-key",
     submitUrl: "settings",
     proDependent: true,
     modal: [
@@ -32,7 +32,7 @@ export default {
         },
         {
             key: "moowoodle_sso_secret_key",
-            type: "sso-key",
+            type: "text",
             desc: sprintf(
                 /* translators: %s: URL to Moodle SSO settings page */
                 __(
@@ -43,6 +43,7 @@ export default {
             ),
             label: __( "SSO Secret Key", "moowoodle" ),
             proSetting: true,
+            generate: true
         },
     ],
 };

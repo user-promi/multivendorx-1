@@ -36,7 +36,7 @@ interface Products {
 const supportLink = [
     {
         title: __( "Get in touch with Support", "moowoodle" ),
-        icon: "mail",
+        icon: "adminlib-mail",
         description: __(
             "Reach out to the support team for assistance or guidance.",
             "moowoodle"
@@ -45,7 +45,7 @@ const supportLink = [
     },
     {
         title: __( "Explore Documentation", "moowoodle" ),
-        icon: "submission-message",
+        icon: "adminlib-submission-message",
         description: __(
             "Understand the plugin and its settings.",
             "moowoodle"
@@ -54,7 +54,7 @@ const supportLink = [
     },
     {
         title: __( "Contribute Here", "moowoodle" ),
-        icon: "support",
+        icon: "adminlib-support",
         description: __( "Participate in product enhancement.", "moowoodle" ),
         link: "https://github.com/dualcube/moowoodle/issues",
     },
@@ -213,7 +213,7 @@ const Settings: React.FC< SettingsProps > = () => {
                         updateSetting={ updateSetting }
                         appLocalizer={ appLocalizer }
                         modules={ modules }
-                        ProPopup={ ShowProPopup }
+                        Popup={ ShowProPopup }
                     />
                 ) : (
                     <>Loading...</>

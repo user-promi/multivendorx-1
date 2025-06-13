@@ -16,7 +16,7 @@ export default {
             type: "checkbox",
             desc: __( "", "moowoodle" ),
             label: __( "Course information mapping", "moowoodle" ),
-            select_deselect: true,
+            selectDeselect: true,
             options: [
                 {
                     key: "sync_courses_category",
@@ -69,7 +69,7 @@ export default {
             type: "checkbox",
             desc: __( "", "moowoodle" ),
             label: __( "Course & product synchronization", "moowoodle" ),
-            select_deselect: true,
+            selectDeselect: true,
             options: [
                 {
                     key: "create",

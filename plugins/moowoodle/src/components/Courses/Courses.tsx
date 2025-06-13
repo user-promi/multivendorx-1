@@ -496,7 +496,7 @@ const Course: React.FC = () => {
                     ) }
                     <button
                         name="bulk-action-apply"
-                        className="btn-purple"
+                        className="admin-btn btn-purple"
                         onClick={ handleBulkAction }
                     >
                         { __( "Apply", "moowoodle" ) }
@@ -510,7 +510,7 @@ const Course: React.FC = () => {
                 updateFilter: ( key: string, value: string ) => void,
                 filterValue: string | undefined
             ) => (
-                <div className="admin-header-search-section catagoryField">
+                <div className="  catagoryField">
                     <select
                         name="catagoryField"
                         onChange={ ( e ) =>
@@ -538,7 +538,7 @@ const Course: React.FC = () => {
                 updateFilter: ( key: string, value: string ) => void,
                 filterValue: string | undefined
             ) => (
-                <div className="admin-header-search-section searchCourseField">
+                <div className="  searchCourseField">
                     <input
                         name="searchCourseField"
                         type="text"
@@ -557,7 +557,7 @@ const Course: React.FC = () => {
                 updateFilter: ( key: string, value: string ) => void,
                 filterValue: string | undefined
             ) => (
-                <div className="admin-header-search-section searchAction">
+                <div className="  searchAction">
                     <select
                         name="searchAction"
                         onChange={ ( e ) =>
