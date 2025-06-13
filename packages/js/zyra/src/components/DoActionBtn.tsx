@@ -1,13 +1,7 @@
-/**
- * External dependencies
- */
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
-/**
- * Internal dependencies
- */
 import { getApiLink, sendApiResponse } from '../utils/apiService';
 import '../styles/web/DoActionBtn.scss';
 

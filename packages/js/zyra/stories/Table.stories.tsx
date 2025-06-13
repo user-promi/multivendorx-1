@@ -366,7 +366,7 @@ const TableFree = () => {
 		{
 			name: 'searchField',
 			render: ( updateFilter = () => {}, filterValue = '' ) => (
-				<div className="admin-header-search-section search-section">
+				<div className="  search-section">
 					<input
 						name="searchField"
 						type="text"
@@ -382,7 +382,7 @@ const TableFree = () => {
 		{
 			name: 'searchAction',
 			render: ( updateFilter = () => {}, filterValue = '' ) => (
-				<div className="admin-header-search-section searchAction">
+				<div className="  searchAction">
 					<select
 						name="searchAction"
 						onChange={ ( e ) =>
