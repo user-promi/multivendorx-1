@@ -75,104 +75,104 @@ const MultiCheckBox: React.FC< MultiCheckBoxProps > = ( props ) => {
 					{ props.selectDeselectValue }
 				</button>
 			) }
-			<div className="wrapper">
-				{ props.options.map( ( option ) => {
-					const checked =
-						props.value?.includes( option.value ) ?? false;
+			
+			{ props.options.map( ( option ) => {
+				const checked =
+					props.value?.includes( option.value ) ?? false;
 
-					return (
+				return (
+					<div
+						key={ option.key }
+						className={ props.inputWrapperClass }
+					>
+						{ props.rightContent && (
+							<p
+								className={ props.rightContentClass }
+								dangerouslySetInnerHTML={ {
+									__html: option.label ?? '',
+								} }
+							></p>
+						) }
 						<div
-							key={ option.key }
-							className={ props.inputWrapperClass }
+							className={ props.inputInnerWrapperClass }
+							data-tour={ props.tour }
 						>
-							{ props.rightContent && (
-								<p
-									className={ props.rightContentClass }
-									dangerouslySetInnerHTML={ {
-										__html: option.label ?? '',
-									} }
-								></p>
-							) }
-							<div
-								className={ props.inputInnerWrapperClass }
-								data-tour={ props.tour }
-							>
-								<input
-									className={ props.inputClass }
-									id={ `${ props.idPrefix }-${ option.key }` }
-									type={
-										props.type?.split( '-' )[ 0 ] ||
-										'checkbox'
+							<input
+								className={ props.inputClass }
+								id={ `${ props.idPrefix }-${ option.key }` }
+								type={
+									props.type?.split( '-' )[ 0 ] ||
+									'checkbox'
+								}
+								name={ option.name || 'basic-input' }
+								value={ option.value }
+								checked={ checked }
+								onChange={ ( e ) => {
+									if (
+										props.type === 'checkbox-custom-img'
+									) {
+										handleCheckboxChange(
+											option.value,
+											e.target.checked
+										);
+									} else if (
+										option.proSetting &&
+										! props.khali_dabba
+									) {
+										props.proChanged?.();
+									} else {
+										props.onChange?.( e );
 									}
-									name={ option.name || 'basic-input' }
-									value={ option.value }
-									checked={ checked }
-									onChange={ ( e ) => {
-										if (
-											props.type === 'checkbox-custom-img'
-										) {
-											handleCheckboxChange(
-												option.value,
-												e.target.checked
-											);
-										} else if (
-											option.proSetting &&
-											! props.khali_dabba
-										) {
-											props.proChanged?.();
-										} else {
-											props.onChange?.( e );
-										}
-									} }
-								/>
-								{ /* eslint-disable-next-line jsx-a11y/label-has-associated-control */ }
-								{ props.type === 'checkbox-custom-img' ? (
-									<>
-										<div
-											className="sync-meta-wrapper"
-											key={ `${ option.key }-img-wrp` }
-										>
-											<img src={ option.img1 } alt="" />
-											<i className="admin-font adminlib-arrow-right"></i>
-											<img src={ option.img2 } alt="" />
-										</div>
-										<p className="sync-label">
-											{ option.label }
-										</p>
-									</>
-								) : (
-									// eslint-disable-next-line jsx-a11y/label-has-associated-control
-									<label
-										htmlFor={ `${ props.idPrefix }-${ option.key }` }
-									></label>
-								) }
-							</div>
-							{ props.proSetting && (
-								<span className="admin-pro-tag">pro</span>
-							) }
-							{ ! props.rightContent && (
-								<p
-									className={ props.rightContentClass }
-									dangerouslySetInnerHTML={ {
-										__html: option.label ?? '',
-									} }
-								></p>
-							) }
-							{ option.proSetting && ! props.khali_dabba && (
-								<span className="admin-pro-tag">pro</span>
-							) }
-							{ option.hints && (
-								<span
-									className={ props.hintOuterClass }
-									dangerouslySetInnerHTML={ {
-										__html: option.hints,
-									} }
-								></span>
+								} }
+							/>
+							{ /* eslint-disable-next-line jsx-a11y/label-has-associated-control */ }
+							{ props.type === 'checkbox-custom-img' ? (
+								<>
+									<div
+										className="sync-meta-wrapper"
+										key={ `${ option.key }-img-wrp` }
+									>
+										<img src={ option.img1 } alt="" />
+										<i className="admin-font adminlib-arrow-right"></i>
+										<img src={ option.img2 } alt="" />
+									</div>
+									<p className="sync-label">
+										{ option.label }
+									</p>
+								</>
+							) : (
+								// eslint-disable-next-line jsx-a11y/label-has-associated-control
+								<label
+									htmlFor={ `${ props.idPrefix }-${ option.key }` }
+								></label>
 							) }
 						</div>
-					);
-				} ) }
-			</div>
+						
+						{ ! props.rightContent && props.type !== 'checkbox-custom-img' && (
+							<p
+								className={ props.rightContentClass }
+								dangerouslySetInnerHTML={ {
+									__html: option.label ?? '',
+								} }
+							></p>
+						) }
+						{ option.proSetting && ! props.khali_dabba && (
+							<span className="admin-pro-tag">pro</span>
+						) }
+						{ option.hints && (
+							<span
+								className={ props.hintOuterClass }
+								dangerouslySetInnerHTML={ {
+									__html: option.hints,
+								} }
+							></span>
+						) }
+					</div>
+				);
+			} ) }
+			{ props.proSetting && (
+				<span className="admin-pro-tag">pro</span>
+			) }
 			{ props.description && (
 				<p
 					className={ props.descClass }

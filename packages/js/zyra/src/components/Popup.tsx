@@ -51,6 +51,7 @@ const ProPopup: React.FC< PopupProps > = ( props ) => {
 												}. ${ message }` }</p>
 											)
 										) }
+										<a className="admin-btn btn-red" target="_blank" href={props.proUrl}>Upgrade to Pro</a>
 									</>
 								) }
 								{ props.moduleName && (
