@@ -15,6 +15,8 @@ export default {
     modal: [
         {
             key: "user_sync_direction",
+            wrapperClass: 'custom-sync-section',
+		    inputWrapperClass: 'sync-direction-items',
             type: "checkbox-custom-img",
             desc: __(
                 "The synchronization flow specifies the direction of data transfer. To enable two-way synchronization, select both directions. This applies to existing users as well. With 'Real-time profile synchronization', user profile information will sync immediately whenever users update their profiles.<br><br> <span class='highlighted-part'>User uniqueness will be checked based on email. If the user exists in the other system, their profile information will be synchronized; otherwise, a new user will be created. <br>Synchronizing user information fails if the same username is found in another instance but linked to a different email address.</span>",
@@ -23,12 +25,14 @@ export default {
             label: __( "Synchronization flow between sites", "moowoodle" ),
             syncDirections: [
                 {
+                    key: "wordpress_to_moodle",
                     value: "wordpress_to_moodle",
                     label: "WordPress to Moodle",
                     img1: appLocalizer.wordpress_logo,
                     img2: appLocalizer.moodle_logo,
                 },
                 {
+                    key: "moodle_to_wordpress",
                     value: "moodle_to_wordpress",
                     label: "Moodle to WordPress",
                     img1: appLocalizer.moodle_logo,
