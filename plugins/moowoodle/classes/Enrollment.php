@@ -156,6 +156,8 @@ class Enrollment {
 				return false;
 			}
 
+			wp_new_user_notification( $user_id, null, 'user' );
+
 			// Assign role and update user meta.
 			wp_update_user(
                 array(
@@ -217,7 +219,6 @@ class Enrollment {
 				),
 			)
 		);
-
 		if ( ! empty( $response['error'] ) ) {
 			Util::log( "[MooWoodle] Enrollment failed for user {$enroll_data['purchaser_id']} in course {$enroll_data['course_id']}." );
 			return false;
@@ -245,6 +246,9 @@ class Enrollment {
 		$existing_enrollment = reset( $existing_enrollment );
 
 		if ( $existing_enrollment ) {
+			if ( $existing_enrollment['status'] === 'enrolled' ) {
+				return true;
+			}
 			// Add 'id' key to trigger update.
 			$enrollment_data['id'] = $existing_enrollment['id'];
 		}
@@ -413,22 +417,23 @@ class Enrollment {
 
 		$password = '';
 
-		// Append a character from each set - gets first 4 characters.
+		// Append one character from each set to ensure variety.
 		foreach ( $sets as $set ) {
-			$password .= $set[ array_rand( str_split( $set ) ) ];
+			$chars    = str_split( $set );
+			$password .= $chars[ array_rand( $chars ) ];
 		}
 
 		$password_length = strlen( $password );
-		// use all characters to fill up to $length.
-		while ( $password_length < $length ) {
-			// get a random set.
-			$random_set = $sets[ array_rand( $sets ) ];
 
-			// add a random char from the random set.
-			$password .= $random_set[ array_rand( str_split( $random_set ) ) ];
+		// Use all characters to fill up to $length.
+		while ( $password_length < $length ) {
+			$random_set = $sets[ array_rand( $sets ) ];
+			$chars      = str_split( $random_set );
+			$password  .= $chars[ array_rand( $chars ) ];
+			$password_length = strlen( $password );
 		}
 
-		// shuffle the password string before returning!
+		// Shuffle and return.
 		return str_shuffle( $password );
 	}
 
