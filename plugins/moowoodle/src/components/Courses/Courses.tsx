@@ -477,7 +477,7 @@ const Course: React.FC = () => {
             name: "bulk-action",
             render: () => (
                 <div className="course-bulk-action bulk-action">
-                    <select name="action" ref={ bulkSelectRef }>
+                    <select className="basic-select" name="action" ref={ bulkSelectRef }>
                         <option value="">
                             { __( "Bulk actions", "moowoodle" ) }
                         </option>
@@ -510,8 +510,9 @@ const Course: React.FC = () => {
                 updateFilter: ( key: string, value: string ) => void,
                 filterValue: string | undefined
             ) => (
-                <div className="  catagoryField">
+                <div className="catagoryField">
                     <select
+                        className="basic-select"
                         name="catagoryField"
                         onChange={ ( e ) =>
                             updateFilter( e.target.name, e.target.value )
@@ -538,8 +539,9 @@ const Course: React.FC = () => {
                 updateFilter: ( key: string, value: string ) => void,
                 filterValue: string | undefined
             ) => (
-                <div className="  searchCourseField">
+                <div className="searchCourseField">
                     <input
+                        className="basic-input"
                         name="searchCourseField"
                         type="text"
                         placeholder={ __( "Search…", "moowoodle" ) }
@@ -557,8 +559,9 @@ const Course: React.FC = () => {
                 updateFilter: ( key: string, value: string ) => void,
                 filterValue: string | undefined
             ) => (
-                <div className="  searchAction">
+                <div className="search-action">
                     <select
+                        className="basic-select"
                         name="searchAction"
                         onChange={ ( e ) =>
                             updateFilter( e.target.name, e.target.value )
