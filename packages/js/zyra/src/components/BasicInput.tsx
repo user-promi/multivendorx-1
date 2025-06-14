@@ -117,7 +117,7 @@ const BasicInput: React.FC<BasicInputProps> = ({
 
 	return (
 		<>
-		<div className={wrapperClass}>
+		<div className={`${wrapperClass} ${generate ? "generate" : ""}`}>
 			{inputLabel && <label htmlFor={id}>{inputLabel}</label>}
 
 			<input

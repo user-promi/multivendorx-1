@@ -20,23 +20,14 @@ p {
 a {
   text-decoration: none;
   color: $color-black;
-}
 
-// all input style start
-.setting-form-input {
-  position: relative;
-  display: flex;
-
-  .parameter {
-    position: absolute;
-    top: .41rem;
-    right: 0.313rem;
-    border-left: $border-light-small;
-    padding: 0 0.75rem;
-    font-size: 0.813rem;
+  &:hover,&:focus {
+    color: $color-active;
+    outline:none
   }
 }
 
+// all input style start
 .basic-input,
 .basic-select,
 .textarea-input,
@@ -49,17 +40,57 @@ a {
   background-color: transparent;
   font-size: 0.875rem;
   line-height: 1.5;
-  min-height: 2.063rem !important; // for overwrite woocommerce style
-
-  &:hover {
-    background: transparent;
-  }
+  min-height: 2.213rem !important; // for overwrite woocommerce style
 
   &:focus {
     outline: none;
-    box-shadow: none;
+    box-shadow: none !important; // for overwrite woocommerce style
   }
 
+}
+
+.setting-form-input {
+  position: relative;
+  display: flex;
+
+  .parameter {
+    position: absolute;
+    top: .41rem;
+    right: 0.313rem;
+    border-left: $border-light-small;
+    padding: 0 0.75rem;
+    font-size: 0.813rem;
+  }
+
+  &.generate {
+    .basic-input {
+      border-right: 0;
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+      margin-right: 0;
+    }
+
+    .admin-btn {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+
+    .copy-btn {
+      background: $theme-color;
+      color: #fff;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+
+    .clear-btn {
+      background: transparent;
+      padding: 0 0.5rem;
+      font-size: 1.4rem;
+      border: none;
+      border-top: 0.063rem solid #e0e4e9;
+      border-bottom: 0.063rem solid #e0e4e9;
+    }
+  }
 }
 
 input[type="color"] {
@@ -406,10 +437,6 @@ input[type="radio"] {
   background: #fff;
   border: none;
   position: relative;
-
-  .tool-clip {
-    // width: fit-content;
-  }
 
   .tooltip {
     font-size: 0.625rem;
@@ -900,12 +927,14 @@ input[type="radio"] {
   }
 }
 
-.settings-input-content{
+.settings-input-content {
   position: relative;
 }
-.select-deselect-trigger{
+
+.select-deselect-trigger {
   margin-bottom: 1rem;
 }
+
 .custom-sync-section {
   display: flex;
   align-items: flex-start;
@@ -924,24 +953,26 @@ input[type="radio"] {
     border-radius: $border-radius-small;
     border: $border-light-medium;
 
-    img{
+    img {
       width: 1.89rem;
     }
-    .sync-meta-wrapper{
+
+    .sync-meta-wrapper {
       display: flex;
       align-items: center;
       gap: 0.5rem;
       justify-content: center;
       margin-bottom: 0.5rem;
     }
+
     input[type="checkbox"] {
       position: absolute;
-      width: 100% ;
+      width: 100%;
       height: 100%;
       top: 0;
       left: 0;
       outline: none;
-      border: none ;
+      border: none;
       box-shadow: none;
       background: transparent;
 
@@ -961,5 +992,11 @@ input[type="radio"] {
       box-shadow: 0 0 0.0rem 0.126rem $color-active;
       background: linear-gradient(45deg, #0000001c, transparent);
     }
+  }
+}
+
+.checkbox-list-side-by-side{
+  .toggle-checkbox-header{
+    min-width: 32%;
   }
 }

@@ -479,7 +479,7 @@ const Table: React.FC< TableProps > = ( {
 											{ isSmallScreen && (
 												<td className="responsive-cell">
 													<details>
-														<summary></summary>
+														<span></span>
 														<ul className="text-sm">
 															{ getHiddenColumns(
 																row
@@ -547,8 +547,7 @@ const Table: React.FC< TableProps > = ( {
 											table.setPageIndex( 0 );
 										} }
 									>
-										<i className="adminlib-previous"></i>
-										<i className="adminlib-previous"></i>
+										<i className="adminlib-pagination-prev-arrow"></i>
 									</div>
 									<div
 										role="button"
@@ -564,9 +563,9 @@ const Table: React.FC< TableProps > = ( {
 											table.previousPage();
 										} }
 									>
-										<i className="adminlib-arrow-left"></i>
+										<i className="adminlib-pagination-left-arrow"></i>
 									</div>
-									<span style={ { margin: '0 1rem' } }>
+									<span>
 										Page{ ' ' }
 										{ table.getState().pagination
 											.pageIndex + 1 }{ ' ' }
@@ -586,7 +585,7 @@ const Table: React.FC< TableProps > = ( {
 											table.nextPage();
 										} }
 									>
-										<i className="adminlib-arrow-right"></i>
+										<i className="adminlib-pagination-right-arrow"></i>
 									</div>
 									<div
 										role="button"
@@ -602,8 +601,7 @@ const Table: React.FC< TableProps > = ( {
 											table.setPageIndex( pageCount - 1 );
 										} }
 									>
-										<i className="admin-font adminlib-next"></i>
-										<i className="admin-font adminlib-next"></i>
+										<i className="admin-font adminlib-pagination-next-arrow"></i>
 									</div>
 								</div>
 							</div>
