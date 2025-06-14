@@ -56,6 +56,7 @@ const DoActionBtn: React.FC<DoActionBtnProps> = ({
 	>([]);
 	const [testStatus, setTestStatus] = useState('');
 
+	const fetchStatus = useRef<string>('');
 	const fetchStatusRef = useRef<NodeJS.Timeout | null>(null);
 	const connectTaskStarted = useRef(false);
 	const additionalData = useRef<Record<string, any>>({});
@@ -192,6 +193,7 @@ const DoActionBtn: React.FC<DoActionBtnProps> = ({
 				}
 			} catch {
 				setSyncStarted(false);
+				fetchStatus.current = 'failed';
 			}
 		}
 	};
@@ -215,6 +217,12 @@ const DoActionBtn: React.FC<DoActionBtnProps> = ({
 			{syncStarted && (
 				<div className="fetch-display-output success">
 					Synchronization started, please wait.
+				</div>
+			)}
+
+			{fetchStatus.current == 'failed' && (
+				<div className="fetch-display-output failed">
+					Failed.
 				</div>
 			)}
 
@@ -256,7 +264,7 @@ const DoActionBtn: React.FC<DoActionBtnProps> = ({
 				</div>
 			)}
 
-			{syncStatus.length > 0 &&
+			{syncStatus && syncStatus.length > 0 &&
 				syncStatus.map((status, idx) => (
 					<div key={idx} className="details-status-row">
 						{status.action}
