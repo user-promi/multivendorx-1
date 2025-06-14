@@ -118,9 +118,9 @@ const change = ( e: React.ChangeEvent< HTMLInputElement > | string[] ) => {
 const commonProps = {
 	wrapperClass: 'checkbox-list-side-by-side',
 	descClass: 'settings-metabox-description',
-	selectDeselectClass: 'btn-purple select-deselect-trigger',
+	selectDeselectClass: 'admin-btn btn-purple',
 	inputWrapperClass: 'toggle-checkbox-header',
-	hintOuterClass: 'checkbox-description',
+	hintOuterClass: 'settings-metabox-description',
 	hintInnerClass: 'hover-tooltip',
 	idPrefix: 'toggle-switch',
 	selectDeselectValue: 'Select / Deselect All',

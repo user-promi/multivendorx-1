@@ -116,6 +116,7 @@ const BasicInput: React.FC<BasicInputProps> = ({
 	};
 
 	return (
+		<>
 		<div className={wrapperClass}>
 			{inputLabel && <label htmlFor={id}>{inputLabel}</label>}
 
@@ -187,13 +188,6 @@ const BasicInput: React.FC<BasicInputProps> = ({
 
 			{proSetting && <span className="admin-pro-tag">pro</span>}
 
-			{description && (
-				<p
-					className={descClass}
-					dangerouslySetInnerHTML={{ __html: description }}
-				/>
-			)}
-
 			{type === 'range' && (
 				<output className={descClass}>
 					{value ?? 0}
@@ -201,6 +195,13 @@ const BasicInput: React.FC<BasicInputProps> = ({
 				</output>
 			)}
 		</div>
+		{description && (
+			<p
+				className={descClass}
+				dangerouslySetInnerHTML={{ __html: description }}
+			/>
+		)}
+		</>
 	);
 };
 

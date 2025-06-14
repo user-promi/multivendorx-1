@@ -268,10 +268,6 @@ const DoActionBtn: React.FC<DoActionBtnProps> = ({
 								{status.current} / {status.total}
 							</span>
 						</div>
-						<span
-							className="progress-bar"
-							style={{ width: `${(status.current / status.total) * 100}%` }}
-						/>
 					</div>
 				))}
 		</>

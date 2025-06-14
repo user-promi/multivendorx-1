@@ -159,6 +159,11 @@
     .pagination-arrow{
         display: flex;
         gap: 0.5rem;
+
+
+        i{
+          cursor: pointer;
+        }
     }
 
     .pagination-number-wrapper{
@@ -233,11 +238,35 @@
   cursor: not-allowed;
 }
 
+.action-section{
+
+  .action-btn{
+  display: flex;
+  gap: 0.5rem;
+  visibility: hidden;
+  transition: all 0.3s linear;
+  align-items: flex-start;
+  justify-content: flex-start;
+  font-size: 0.75rem;
+  font-weight: 600;
+    a{
+      color: $theme-color;
+    }
+  }
+
+  &:hover{
+    .action-btn{
+      visibility: visible;
+    }
+  }
+}
+
 .no-data{
   padding: 5rem;
   background: #fff;
   text-align: center;
 }
+
 
 @keyframes shine-lines {
   0% {

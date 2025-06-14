@@ -45,7 +45,7 @@ export const TestSingleSelectInput: Story = {
 export const TestMultiSelectInput: Story = {
 	args: {
 		wrapperClass: 'settings-from-multi-select',
-		selectDeselectClass: 'btn-purple select-deselect-trigger',
+		selectDeselectClass: 'admin-btn btn-purple select-deselect-trigger',
 		selectDeselectValue: 'Select / Deselect All',
 		selectDeselect: true,
 		name: 'Sample Multi Select',

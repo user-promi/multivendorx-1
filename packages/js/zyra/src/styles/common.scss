@@ -25,6 +25,7 @@ a {
 // all input style start
 .setting-form-input {
   position: relative;
+  display: flex;
 
   .parameter {
     position: absolute;
@@ -48,7 +49,7 @@ a {
   background-color: transparent;
   font-size: 0.875rem;
   line-height: 1.5;
-  min-height: 2rem;
+  min-height: 2.063rem !important; // for overwrite woocommerce style
 
   &:hover {
     background: transparent;
@@ -56,6 +57,7 @@ a {
 
   &:focus {
     outline: none;
+    box-shadow: none;
   }
 
 }
@@ -663,10 +665,24 @@ input[type="radio"]{
 } // radio input end
 
 // toggle btn start
+.toggle-checkbox-header{
+  min-width: fit-content;
+  display: inline-flex;
+  gap: 0.5rem;
+  margin-right: 0.945rem;
+  margin-top: 1rem;
+  position: relative;
+  flex-wrap: wrap;
+  padding-bottom: 0.8rem;
+  z-index: 0;
+  .admin-pro-tag{
+    position: relative;  
+    height: fit-content;
+  }
+}
 .toggle-checkbox {
   margin-left: auto;
   position: relative;
-
 
   &::after {
     content: "";
@@ -826,34 +842,42 @@ input[type="radio"]{
   }
 } // page title end
 
-.fetch-details-wrapper {
-  margin-top: 0.75rem;
-  max-width: 18rem;
-  width: 100%;
 
-  .details-status-row {
-    i{
-      font-size: 1.125rem;
-      line-height: 0;
-    }
+// 
+.admin-notice-display-title {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.5rem;
+  background-color: rgba(12, 216, 12, 1);
+  color: $color-white;
+  max-width: 15rem;
+  width: fit-content;
+  padding: 0.5rem 0;
+  padding: 0.5rem;
+  font-weight: 400;
+  position: fixed;
+  top: 7.188rem;
+  right: 1.512rem;
+  z-index: 99999;
 
-    &:after {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 0.189rem;
-      background-color: blue;
-      content: "";
-      animation: loader 3s linear;
-    }
+  &:after {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    content: "";
+    width: 100%;
+    height: 0.252rem;
+    background: green;
+    animation: progress 2s linear;
 
-    @keyframes loader {
+    @keyframes progress {
       from {
-        width: 0;
-      }
-      to {
         width: 100%;
+      }
+
+      to {
+        width: 0%;
       }
     }
   }

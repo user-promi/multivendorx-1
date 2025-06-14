@@ -1111,7 +1111,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
 							wrapperClass="checkbox-list-side-by-side"
 							descClass="settings-metabox-description"
 							description={ inputField.desc }
-							selectDeselectClass="btn-purple select-deselect-trigger"
+							selectDeselectClass="admin-btn btn-purple select-deselect-trigger"
 							inputWrapperClass="toggle-checkbox-header"
 							inputInnerWrapperClass={
 								inputField.look === 'toggle'
@@ -1120,7 +1120,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
 							} // this props for change classes default/ Toggle
 							inputClass={ inputField.class }
 							tour={ inputField.tour }
-							hintOuterClass="checkbox-description"
+							hintOuterClass="settings-metabox-description"
 							hintInnerClass="hover-tooltip"
 							idPrefix="toggle-switch"
 							selectDeselect={ inputField.selectDeselect }
