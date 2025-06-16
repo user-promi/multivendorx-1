@@ -312,7 +312,7 @@ const Table: React.FC< TableProps > = ( {
 		}, 50 );
 		// Store the interval id.
 		counterId.current = intervalId as NodeJS.Timeout;
-	}, [ filterData, autoLoading, defaultRowsPerPage, handlePagination ] );
+	}, [ filterData, autoLoading, defaultRowsPerPage ] );
 
 	useEffect( () => {
 		setLoading( data === null );
