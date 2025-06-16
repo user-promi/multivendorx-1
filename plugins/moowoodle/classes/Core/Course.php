@@ -168,26 +168,27 @@ class Course {
 	 * @return void
 	 */
 	public function save_courses( $courses ) {
-		foreach ( $courses as $course ) {
-			// Skip site format courses.
-			if ( 'site' === $course['format'] ) {
-				continue;
-			}
+        foreach ( $courses as $course ) {
+            // Skip site format courses.
+            if ( 'site' === $course['format'] ) {
+                continue;
+            }
 
-			$args = array(
-				'moodle_course_id' => (int) $course['id'],
-				'shortname'        => sanitize_text_field( $course['shortname'] ?? '' ),
-				'category_id'      => (int) ( $course['categoryid'] ?? 0 ),
-				'fullname'         => sanitize_text_field( $course['fullname'] ?? '' ),
-				'startdate'        => (int) ( $course['startdate'] ?? 0 ),
-				'enddate'          => (int) ( $course['enddate'] ?? 0 ),
-			);
+            $args = array(
+                'moodle_course_id' => (int) $course['id'],
+                'shortname'        => sanitize_text_field( $course['shortname'] ?? '' ),
+                'category_id'      => (int) ( $course['categoryid'] ?? 0 ),
+                'fullname'         => sanitize_text_field( $course['fullname'] ?? '' ),
+                'startdate'        => (int) ( $course['startdate'] ?? 0 ),
+                'enddate'          => (int) ( $course['enddate'] ?? 0 ),
+            );
 
-			self::save_course( $args );
+            $updated_ids[] = self::save_course( $args );
 
-			\MooWoodle\Util::increment_sync_count( 'course' );
-		}
-	}
+            \MooWoodle\Util::increment_sync_count( 'course' );
+        }
+        self::remove_exclude_ids( $updated_ids );
+    }
 
 	/**
 	 * Insert or update a course record by Moodle course ID.
@@ -196,28 +197,35 @@ class Course {
 	 * @return int|false Rows affected or false on failure.
 	 */
 	public static function save_course( $args ) {
-		global $wpdb;
+        global $wpdb;
 
-		if ( empty( $args ) || empty( $args['moodle_course_id'] ) ) {
-			return false;
-		}
+        if ( empty( $args ) || empty( $args['moodle_course_id'] ) ) {
+            return false;
+        }
 
-		$table = $wpdb->prefix . Util::TABLES['course'];
+        $table = $wpdb->prefix . Util::TABLES['course'];
 
-		if ( self::get_course( array( 'moodle_course_id' => $args['moodle_course_id'] ) ) ) {
+        // Check if course already exists.
+        $existing = self::get_course( array( 'moodle_course_id' => $args['moodle_course_id'] ) );
+        $existing = reset( $existing );
+        if ( $existing ) {
 			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-			return $wpdb->update(
-				$table,
-				$args,
-				array( 'moodle_course_id' => $args['moodle_course_id'] )
-			);
-		}
+            $wpdb->update(
+                $table,
+                $args,
+                array( 'moodle_course_id' => $args['moodle_course_id'] )
+            );
 
-		$args['created'] = current_time( 'mysql' );
+            // Return existing course ID after update.
+            return isset( $existing ) ? $existing['id'] : 0;
+        }
 
-		$wpdb->insert( $table, $args ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
-		return $wpdb->insert_id;
-	}
+        $args['created'] = current_time( 'mysql' );
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+        $wpdb->insert( $table, $args );
+        return $wpdb->insert_id;
+    }
 
 	/**
 	 * Get course records from the database based on filters.
@@ -284,4 +292,26 @@ class Course {
 
 		return $results;
 	}
+
+	/**
+     * Delete all the course which id is not prasent in $exclude_ids array.
+     *
+     * @param array $exclude_ids course ids.
+     * @return void
+     */
+    public static function remove_exclude_ids( $exclude_ids ) {
+        global $wpdb;
+
+        $exclude_ids      = array_map( 'intval', (array) $exclude_ids );
+        $existing_courses = self::get_course( array() );
+        $existing_ids     = array_column( $existing_courses, 'id' );
+
+        $ids_to_delete = array_diff( $existing_ids, $exclude_ids );
+        $table_name    = $wpdb->prefix . Util::TABLES['course'];
+
+        foreach ( $ids_to_delete as $course_id ) {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+            $wpdb->delete( $table_name, array( 'id' => $course_id ) );
+        }
+    }
 }
