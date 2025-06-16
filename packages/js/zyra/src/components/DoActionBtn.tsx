@@ -242,7 +242,6 @@ const DoActionBtn: React.FC<DoActionBtnProps> = ({
 									/>
 								</span>
 							</div>
-							<span className="progress-bar" style={{ width: '100%' }} />
 						</>
 					)}
 				</div>

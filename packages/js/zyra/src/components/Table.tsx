@@ -31,19 +31,7 @@ const PENALTY = 28;
 const COOLDOWN = 1;
 
 // Types
-interface Subscriber {
-	date: string;
-	email: string;
-	image: string;
-	product: string;
-	product_id: number;
-	reg_user: string;
-	status: string;
-	status_key: string;
-	user_link: string;
-}
-
-type SubscriberStatus = {
+type Status = {
 	key: string;
 	name: string;
 	count: number;
@@ -221,7 +209,7 @@ interface TableProps {
 	pageCount: number;
 	pagination: PaginationState;
 	onPaginationChange: OnChangeFn< PaginationState >;
-	typeCounts: SubscriberStatus[];
+	typeCounts: Status[];
 	autoLoading?: boolean;
 	handlePagination?: (
 		rowsPerPage: number,
