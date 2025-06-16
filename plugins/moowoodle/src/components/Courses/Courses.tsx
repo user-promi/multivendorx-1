@@ -11,6 +11,7 @@ import {
     RowSelectionState,
     PaginationState,
 } from '@tanstack/react-table';
+import defaultImage from '../../assets/images/moowoodle-product-default.png';
 
 // Define RealtimeFilter interface with explicit types
 interface RealtimeFilter {
@@ -149,6 +150,7 @@ const Course: React.FC = () => {
         currentPage: number,
         filterData: FilterData
     ) => {
+        console.log('hit');
         if (
             Boolean(
                 (
@@ -277,10 +279,10 @@ const Course: React.FC = () => {
             header: __('Course', 'moowoodle'),
             cell: ({ row }) => (
                 <TableCell title={row.original.course_name || ''}>
-                    {/* <img
+                    <img
                         src={row.original.productimage || defaultImage}
                         alt={row.original.course_name || "Course Image"}
-                    /> */}
+                    />
                     <div className="action-section">
                         <p>{row.original.course_name}</p>
                     </div>
@@ -386,38 +388,8 @@ const Course: React.FC = () => {
                             );
                         }}
                     ></i>
-
-                    {/* <button
-                        className="sync-single-course button-primary"
-                        title={__("Sync course data", "moowoodle")}
-                        onClick={() => {
-                            handleSingleAction(
-                                "sync_courses",
-                                row.original.id!,
-                                row.original.moodle_course_id!
-                            );
-                        }}
-                    >
-                        <i className="dashicons dashicons-update"></i>
-                    </button> */}
                     {row.original.products &&
                     Object.keys(row.original.products).length ? (
-                        // <button
-                        //     className="update-existed-single-product button-secondary"
-                        //     title={__(
-                        //         "Sync Course Data & Update Product",
-                        //         "moowoodle"
-                        //     )}
-                        //     onClick={() => {
-                        //         handleSingleAction(
-                        //             "update_product",
-                        //             row.original.id!,
-                        //             row.original.moodle_course_id!
-                        //         );
-                        //     }}
-                        // >
-                        //     <i className="dashicons dashicons-admin-links"></i>
-                        // </button>
                         <i
                             className="dashicons dashicons-admin-links"
                             title={__(
@@ -433,19 +405,6 @@ const Course: React.FC = () => {
                             }}
                         ></i>
                     ) : (
-                        // <button
-                        //     className="create-single-product button-secondary"
-                        //     title={__("Create Product", "moowoodle")}
-                        //     onClick={() => {
-                        //         handleSingleAction(
-                        //             "create_product",
-                        //             row.original.id!,
-                        //             row.original.moodle_course_id!
-                        //         );
-                        //     }}
-                        // >
-                        //     <i className="dashicons dashicons-cloud-upload"></i>
-                        // </button>
                         <i
                             className="dashicons dashicons-cloud-upload"
                             title={__('Create Product', 'moowoodle')}
@@ -613,6 +572,7 @@ const Course: React.FC = () => {
                         pageCount={pageCount}
                         pagination={pagination}
                         onPaginationChange={setPagination}
+                        autoLoading={false}
                         handlePagination={requestApiForData}
                         perPageOption={[10, 25, 50]}
                         typeCounts={[]}
