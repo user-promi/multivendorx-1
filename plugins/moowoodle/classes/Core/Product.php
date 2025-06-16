@@ -109,7 +109,7 @@ class Product {
 		foreach ( $courses as $course ) {
 
 			// Do nothing when the course is a site course.
-			if ( $course['format'] === 'site' ) {
+			if ( 'site' === $course['format'] ) {
 				continue;
 			}
 
@@ -135,7 +135,7 @@ class Product {
 	 * @return int course id
 	 */
 	public static function update_product( $course, $force_create = true ) {
-		if ( empty( $course ) || $course['format'] === 'site' ) {
+		if ( 'site' === empty( $course ) || $course['format'] ) {
 			return 0;
         }
 
@@ -281,12 +281,12 @@ class Product {
 		$link_item = absint( filter_input( INPUT_POST, 'linked_item' ) ? filter_input( INPUT_POST, 'linked_item' ) : 0 );
 
 		// Only process if it's a course link.
-		if ( $link_type === 'course' ) {
+		if ( 'course' === $link_type ) {
 			if ( get_post_meta( $product_id, 'linked_cohort_id', true ) ) {
 				do_action( 'moowoodle_clean_cohort_previous_link', $product_id );
 			}
 
-			if ( $link_item === 0 ) {
+			if ( 0 === $link_item ) {
 				$this->clean_course_previous_link( $product_id );
 			} else {
 				$prev_course_id = absint( get_post_meta( $product_id, 'linked_course_id', true ) );
@@ -309,7 +309,7 @@ class Product {
 					);
 				}
 			}
-		} elseif ( $link_type === 'cohort' ) {
+		} elseif ( 'cohort' === $link_type ) {
 			do_action( 'moowoodle_process_product_meta', $product_id, $link_item );
 		}
 

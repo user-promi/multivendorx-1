@@ -344,7 +344,7 @@ class RestAPI {
 
         $status = $request->get_param( 'parameter' );
 
-        if ( $status === 'course' ) {
+        if ( 'course' === $status ) {
             $response = array(
                 'status'  => Util::get_sync_status( 'course' ),
                 'running' => get_transient( 'course_sync_running' ),
@@ -394,9 +394,9 @@ class RestAPI {
         }
 
         // Add search filter.
-        if ( $search_action === 'course' ) {
+        if ( 'course' === $search_action ) {
             $filters['fullname'] = $search_field;
-        } elseif ( $search_action === 'shortname' ) {
+        } elseif ( 'shortname' === $search_action ) {
             $filters['shortname'] = $search_field;
         }
 
@@ -542,7 +542,7 @@ class RestAPI {
         global $wp_filesystem;
         $action = $request->get_param( 'action' );
 
-        if ( $action === 'download' ) {
+        if ( 'download' === $action ) {
             $this->download_log( $request );
         }
 
@@ -594,8 +594,8 @@ class RestAPI {
             return new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'moowoodle' ), array( 'status' => 403 ) );
         }
         // Get the file parameter from the request.
-        $file     = $request->get_param( 'file' );
-        $file     = basename( $file );
+        $file      = $request->get_param( 'file' );
+        $file      = basename( $file );
         $file_path = MooWoodle()->moowoodle_logs_dir . '/' . $file;
 
         // Check if the file exists and has the right extension.

@@ -1,6 +1,6 @@
-declare module 'body-scroll-lock' {
-    export function disableBodyScroll(targetElement: Element): void;
-    export function enableBodyScroll(targetElement: Element): void;
+declare module "body-scroll-lock" {
+    export function disableBodyScroll( targetElement: Element ): void;
+    export function enableBodyScroll( targetElement: Element ): void;
 }
 
 // src/global.d.ts
@@ -34,9 +34,9 @@ declare global {
         moodle_site_url: string;
     }
 
-    declare module '*.png';
-    declare module '*.jpg';
-    declare module '*.jpeg';
+    declare module "*.png";
+    declare module "*.jpg";
+    declare module "*.jpeg";
 
     var appLocalizer: AppLocalizer;
     var courseMyAcc: CourseMyAcc;

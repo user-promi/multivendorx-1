@@ -1,7 +1,7 @@
-import { render } from '@wordpress/element';
-import { BrowserRouter } from 'react-router-dom';
-import App from './app';
-import 'zyra/build/index.css';
+import { render } from "@wordpress/element";
+import { BrowserRouter } from "react-router-dom";
+import App from "./app";
+import "zyra/build/index.css";
 /**
  * Import the stylesheet for the plugin.
  */
@@ -12,5 +12,5 @@ render(
     <BrowserRouter>
         <App />
     </BrowserRouter>,
-    document.getElementById('admin-main-wrapper')
+    document.getElementById( "admin-main-wrapper" )
 );

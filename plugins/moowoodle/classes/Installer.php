@@ -125,6 +125,7 @@ class Installer {
         global $wpdb;
 
         // Get terms with '_category_id' meta and optional '_parent' meta for 'course_cat' taxonomy.
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
         $terms = $wpdb->get_results(
             $wpdb->prepare(
                 "

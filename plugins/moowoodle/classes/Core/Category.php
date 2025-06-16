@@ -62,7 +62,7 @@ class Category {
         }
 
         // Get all rows.
-        $results = $wpdb->get_results( $query, ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+        $results = $wpdb->get_results( $query, ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
 
         return $results;
     }
@@ -113,10 +113,10 @@ class Category {
 		$table = $wpdb->prefix . Util::TABLES['category'];
 
 		if ( self::get_course_category( array( 'moodle_category_id' => (int) $args['moodle_category_id'] ) ) ) {
-			return $wpdb->update( $table, $args, array( 'moodle_category_id' => (int) $args['moodle_category_id'] ) );
+			return $wpdb->update( $table, $args, array( 'moodle_category_id' => (int) $args['moodle_category_id'] ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		}
 
-		return $wpdb->insert( $table, $args );
+		return $wpdb->insert( $table, $args ); //phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 	}
 
 	/**

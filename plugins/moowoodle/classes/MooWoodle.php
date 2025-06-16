@@ -270,7 +270,7 @@ class MooWoodle {
      * @param   mixed $class class.
      * @return  object | \WP_Error
      */
-    public function __get( $class ) {
+    public function __get( $class ) { // phpcs:ignore Universal.NamingConventions.NoReservedKeywordParameterNames.classFound
         if ( array_key_exists( $class, $this->container ) ) {
             return $this->container[ $class ];
         }
@@ -284,7 +284,7 @@ class MooWoodle {
      * @param string $class The class name or key to store the instance.
      * @param object $value The instance of the class to store.
      */
-    public function __set( $class, $value ) {
+    public function __set( $class, $value ) { // phpcs:ignore Universal.NamingConventions.NoReservedKeywordParameterNames.classFound
         $this->container[ $class ] = $value;
     }
 	/**

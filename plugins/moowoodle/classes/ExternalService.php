@@ -110,12 +110,12 @@ class ExternalService {
 	 * @return array $response
 	 */
 	private function check_connection( $response ) {
-		if ( $response === null ) {
+		if ( null === $response ) {
 			return array( 'error' => 'Response is not avialable' );
 		}
 
 		// if server response containe error.
-		if ( is_wp_error( $response ) || $response['response']['code'] !== 200 ) {
+		if ( is_wp_error( $response ) || 200 !== $response['response']['code'] ) {
 			// if response is object and multiple error codes.
 			if ( is_object( $response ) && is_array( $response->get_error_code() ) ) {
 				return array( 'error' => implode( ' | ', $response->get_error_code() ) . $response->get_error_message() );

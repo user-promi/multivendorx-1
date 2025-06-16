@@ -121,12 +121,12 @@ class Course {
 		}
 
 		// Retrieve and sanitize input.
-		$type    = sanitize_text_field( filter_input( INPUT_POST, 'type' ) ? filter_input( INPUT_POST, 'type' ) : '' );
-		$post_id = absint( filter_input( INPUT_POST, 'post_id' ) ? filter_input( INPUT_POST, 'post_id' ) : 0 );
+		$type             = sanitize_text_field( filter_input( INPUT_POST, 'type' ) ? filter_input( INPUT_POST, 'type' ) : '' );
+		$post_id          = absint( filter_input( INPUT_POST, 'post_id' ) ? filter_input( INPUT_POST, 'post_id' ) : 0 );
 		$linkable_courses = array();
 		$linked_course_id = null;
 
-		if ( $type === 'course' ) {
+		if ( 'course' === $type ) {
 			$linked_course_id = get_post_meta( $post_id, 'linked_course_id', true );
 
 			if ( $linked_course_id ) {
@@ -153,7 +153,7 @@ class Course {
 					'selected_id' => $linked_course_id,
                 )
             );
-		} elseif ( $type === 'cohort' ) {
+		} elseif ( 'cohort' === $type ) {
 			return apply_filters( 'get_linkable_cohorts', $post_id );
 		}
 
@@ -170,7 +170,7 @@ class Course {
 	public function save_courses( $courses ) {
 		foreach ( $courses as $course ) {
 			// Skip site format courses.
-			if ( $course['format'] === 'site' ) {
+			if ( 'site' === $course['format'] ) {
 				continue;
 			}
 
@@ -205,6 +205,7 @@ class Course {
 		$table = $wpdb->prefix . Util::TABLES['course'];
 
 		if ( self::get_course( array( 'moodle_course_id' => $args['moodle_course_id'] ) ) ) {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 			return $wpdb->update(
 				$table,
 				$args,
@@ -214,7 +215,7 @@ class Course {
 
 		$args['created'] = current_time( 'mysql' );
 
-		$wpdb->insert( $table, $args );
+		$wpdb->insert( $table, $args ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 		return $wpdb->insert_id;
 	}
 
@@ -279,7 +280,7 @@ class Course {
 			$query .= " LIMIT $limit OFFSET $offset";
 		}
 
-		$results = $wpdb->get_results( $query, ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		$results = $wpdb->get_results( $query, ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
 
 		return $results;
 	}
