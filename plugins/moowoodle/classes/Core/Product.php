@@ -135,7 +135,7 @@ class Product {
 	 * @return int course id
 	 */
 	public static function update_product( $course, $force_create = true ) {
-		if ( 'site' === empty( $course ) || $course['format'] ) {
+		if ( empty( $course ) || 'site' === $course['format'] ) {
 			return 0;
         }
 

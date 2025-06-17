@@ -154,7 +154,7 @@ class Course {
                 )
             );
 		} elseif ( 'cohort' === $type ) {
-			return apply_filters( 'get_linkable_cohorts', $post_id );
+			return apply_filters( 'moowoodle_get_linkable_cohorts', $post_id );
 		}
 
 		wp_send_json_error( __( 'Invalid type', 'moowoodle' ) );
@@ -164,10 +164,11 @@ class Course {
 	 * Update or insert multiple courses based on Moodle data.
 	 * Skips courses with format 'site'.
 	 *
-	 * @param array $courses List of courses to update or insert.
+	 * @param array $courses      List of courses to update or insert.
+	 * @param bool  $force_delete Whether to remove excluded course IDs after sync.
 	 * @return void
 	 */
-	public function save_courses( $courses ) {
+	public function save_courses( $courses, $force_delete = true ) {
         foreach ( $courses as $course ) {
             // Skip site format courses.
             if ( 'site' === $course['format'] ) {
@@ -187,7 +188,9 @@ class Course {
 
             \MooWoodle\Util::increment_sync_count( 'course' );
         }
-        self::remove_exclude_ids( $updated_ids );
+		if ( $force_delete ) {
+			self::remove_exclude_ids( $updated_ids );
+		}
     }
 
 	/**
@@ -217,7 +220,7 @@ class Course {
             );
 
             // Return existing course ID after update.
-            return isset( $existing ) ? $existing['id'] : 0;
+            return $existing['id'];
         }
 
         $args['created'] = current_time( 'mysql' );
@@ -247,7 +250,7 @@ class Course {
 		}
 
 		if ( isset( $where['shortname'] ) ) {
-			$query_segments[] = " ( shortname = '" . esc_sql( $where['shortname'] ) . "' ) ";
+			$query_segments[] = " ( shortname LIKE '%" . esc_sql( $where['shortname'] ) . "%' ) ";
 		}
 
 		if ( isset( $where['category_id'] ) ) {
@@ -259,7 +262,7 @@ class Course {
 		}
 
 		if ( isset( $where['fullname'] ) ) {
-			$query_segments[] = " ( fullname = '" . esc_sql( $where['fullname'] ) . "' ) ";
+			$query_segments[] = " ( fullname LIKE '%" . esc_sql( $where['fullname'] ) . "%' ) ";
 		}
 
 		if ( isset( $where['startdate'] ) ) {
