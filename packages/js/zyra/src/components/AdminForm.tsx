@@ -615,7 +615,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
 							onChange={ (
 								e: React.ChangeEvent< HTMLInputElement >
 							) => {
-								if ( hasAccess(inputField.proSetting ?? false, String( inputField.moduleEnabled ?? '' ))
+								if ( hasAccess(inputField.proSetting ?? false, String( inputField.moduleEnabled ?? ''), String( inputField.dependentSetting ?? ''), String( inputField.dependentPlugin ?? '' ) )
 								) {
 									handleChange( e, inputField.key );
 								}
@@ -643,7 +643,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
 								inputField.proSetting ?? false
 							) }
 							onChange={ ( e ) => {
-								if ( hasAccess(inputField.proSetting ?? false, String( inputField.moduleEnabled ?? '' ))
+								if ( hasAccess(inputField.proSetting ?? false, String( inputField.moduleEnabled ?? ''), String( inputField.dependentSetting ?? ''), String( inputField.dependentPlugin ?? '' ))
 								) {
 									handleChange( e, inputField.key );
 								}
@@ -663,7 +663,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
 								inputField.proSetting ?? false
 							) }
 							onChange={ ( e ) => {
-								if ( hasAccess(inputField.proSetting ?? false, String( inputField.moduleEnabled ?? '' ))
+								if ( hasAccess(inputField.proSetting ?? false, String( inputField.moduleEnabled ?? ''), String( inputField.dependentSetting ?? ''), String( inputField.dependentPlugin ?? '' ) )
 								) {
 									handleChange( e, inputField.key );
 								}
@@ -694,7 +694,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
 								inputField.proSetting ?? false
 							) }
 							onChange={ ( e ) => {
-								if ( hasAccess(inputField.proSetting ?? false, String( inputField.moduleEnabled ?? '' ))
+								if ( hasAccess(inputField.proSetting ?? false, String( inputField.moduleEnabled ?? ''), String( inputField.dependentSetting ?? ''), String( inputField.dependentPlugin ?? '' ) )
 								) {
 									handleChange( e, inputField.key );
 								}
@@ -722,7 +722,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
 								inputField.proSetting ?? false
 							) }
 							onChange={ ( e ) => {
-								if ( hasAccess(inputField.proSetting ?? false, String( inputField.moduleEnabled ?? '' ))
+								if ( hasAccess(inputField.proSetting ?? false, String( inputField.moduleEnabled ?? ''), String( inputField.dependentSetting ?? ''), String( inputField.dependentPlugin ?? '' ) )
 								) {
 									handleChange( e, inputField.key );
 								}
@@ -742,7 +742,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
 								inputField.proSetting ?? false
 							) }
 							onChange={ ( e ) => {
-								if ( hasAccess(inputField.proSetting ?? false, String( inputField.moduleEnabled ?? '' ))
+								if ( hasAccess(inputField.proSetting ?? false, String( inputField.moduleEnabled ?? ''), String( inputField.dependentSetting ?? ''), String( inputField.dependentPlugin ?? '' ) )
 								) {
 									handleChange(
 										e,
@@ -867,7 +867,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
 								inputField.proSetting ?? false
 							) }
 							onChange={ ( e ) => {
-								if ( hasAccess(inputField.proSetting ?? false, String( inputField.moduleEnabled ?? '' ))
+								if ( hasAccess(inputField.proSetting ?? false, String( inputField.moduleEnabled ?? ''), String( inputField.dependentSetting ?? ''), String( inputField.dependentPlugin ?? '' ) )
 								) {
 									handleChange( e, inputField.key );
 								}
@@ -903,7 +903,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
 								inputField.proSetting ?? false
 							) }
 							onChange={ ( e ) => {
-								if ( hasAccess(inputField.proSetting ?? false, String( inputField.moduleEnabled ?? '' ))
+								if ( hasAccess(inputField.proSetting ?? false, String( inputField.moduleEnabled ?? ''), String( inputField.dependentSetting ?? ''), String( inputField.dependentPlugin ?? '' ) )
 								) {
 									handleChange( e, inputField.key );
 								}
@@ -937,7 +937,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
 								inputField.proSetting ?? false
 							) }
 							onChange={ ( e ) => {
-								if ( hasAccess(inputField.proSetting ?? false, String( inputField.moduleEnabled ?? '' ))
+								if ( hasAccess(inputField.proSetting ?? false, String( inputField.moduleEnabled ?? ''), String( inputField.dependentSetting ?? ''), String( inputField.dependentPlugin ?? '' ) )
 								) {
 									handleChange( e, inputField.key );
 								}
@@ -1046,7 +1046,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
 								inputField.proSetting ?? false
 							) }
 							onChange={ ( selectedOption ) => {
-								if ( hasAccess(inputField.proSetting ?? false, String( inputField.moduleEnabled ?? '' ))
+								if ( hasAccess(inputField.proSetting ?? false, String( inputField.moduleEnabled ?? ''), String( inputField.dependentSetting ?? ''), String( inputField.dependentPlugin ?? '' ) )
 								) {
 									handleChange(
 										selectedOption,
@@ -1081,7 +1081,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
 								inputField.proSetting ?? false
 							) }
 							onChange={ ( selectedOption ) => {
-								if ( hasAccess(inputField.proSetting ?? false, String( inputField.moduleEnabled ?? '' ))
+								if ( hasAccess(inputField.proSetting ?? false, String( inputField.moduleEnabled ?? ''), String( inputField.dependentSetting ?? ''), String( inputField.dependentPlugin ?? '' ) )
 								) {
 									handleChange(
 										selectedOption,
@@ -1141,7 +1141,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
 								inputField.proSetting ?? false
 							) }
 							onChange={ ( e ) => {
-								if ( hasAccess(inputField.proSetting ?? false, String( inputField.moduleEnabled ?? '' ))
+								if ( hasAccess(inputField.proSetting ?? false, String( inputField.moduleEnabled ?? ''), String( inputField.dependentSetting ?? ''), String( inputField.dependentPlugin ?? '' ) )
 								) {
 									handleChange(
 										e,
@@ -1191,7 +1191,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
 							}
 							options={ inputField.syncDirections ?? [] } // array includes label, value, img1, img2
 							onChange={ ( data ) => {
-								if ( hasAccess(inputField.proSetting ?? false, String( inputField.moduleEnabled ?? '' ))
+								if ( hasAccess(inputField.proSetting ?? false, String( inputField.moduleEnabled ?? ''), String( inputField.dependentSetting ?? ''), String( inputField.dependentPlugin ?? '' ) )
 								) {
 									settingChanged.current = true;
 									updateSetting( inputField.key, data );
@@ -1224,7 +1224,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
 								inputField.proSetting ?? false
 							) }
 							onChange={ ( data ) => {
-								if ( hasAccess(inputField.proSetting ?? false, String( inputField.moduleEnabled ?? '' ))
+								if ( hasAccess(inputField.proSetting ?? false, String( inputField.moduleEnabled ?? ''), String( inputField.dependentSetting ?? ''), String( inputField.dependentPlugin ?? '' ) )
 								) {
 									settingChanged.current = true;
 									updateSetting( inputField.key, data );
@@ -1242,7 +1242,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
 							) }
 							value={ String( value ) }
 							onEditorChange={ ( e ) => {
-								if ( hasAccess(inputField.proSetting ?? false, String( inputField.moduleEnabled ?? '' ))
+								if ( hasAccess(inputField.proSetting ?? false, String( inputField.moduleEnabled ?? ''), String( inputField.dependentSetting ?? ''), String( inputField.dependentPlugin ?? '' ) )
 								) {
 									handleChange(
 										e,
@@ -1305,7 +1305,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
 								data,
 								isRestoreDefaults = false
 							) => {
-								if ( hasAccess(inputField.proSetting ?? false, String( inputField.moduleEnabled ?? '' ))
+								if ( hasAccess(inputField.proSetting ?? false, String( inputField.moduleEnabled ?? ''), String( inputField.dependentSetting ?? ''), String( inputField.dependentPlugin ?? '' ) )
 								) {
 									settingChanged.current = true;
 									if ( isRestoreDefaults ) {
@@ -1335,7 +1335,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
 								inputField.proSetting ?? false
 							) }
 							onChange={ ( e, key ) => {
-								if ( hasAccess(inputField.proSetting ?? false, String( inputField.moduleEnabled ?? '' ))
+								if ( hasAccess(inputField.proSetting ?? false, String( inputField.moduleEnabled ?? ''), String( inputField.dependentSetting ?? ''), String( inputField.dependentPlugin ?? '' ) )
 								) {
 									settingChanged.current = true;
 									updateSetting( e, key );
@@ -1398,7 +1398,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
 							) }
 							modules={ modules }
 							onChange={ ( key, data ) => {
-								if ( hasAccess(inputField.proSetting ?? false, String( inputField.moduleEnabled ?? '' ))
+								if ( hasAccess(inputField.proSetting ?? false, String( inputField.moduleEnabled ?? ''), String( inputField.dependentSetting ?? ''), String( inputField.dependentPlugin ?? '' ) )
 								) {
 									settingChanged.current = true;
 									updateSetting( key, data );
@@ -1436,7 +1436,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
 								inputField.proSetting ?? false
 							) }
 							onChange={ ( data ) => {
-								if ( hasAccess(inputField.proSetting ?? false, String( inputField.moduleEnabled ?? '' ))
+								if ( hasAccess(inputField.proSetting ?? false, String( inputField.moduleEnabled ?? ''), String( inputField.dependentSetting ?? ''), String( inputField.dependentPlugin ?? '' ) )
 								) {
 									settingChanged.current = true;
 									updateSetting( inputField.key, data );
@@ -1504,12 +1504,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
 							}
 							syncFieldsMap={ inputField.syncFieldsMap ?? {} }
 							onChange={ ( data ) => {
-								if (
-									! proSettingChanged(
-										inputField.proSetting ?? false
-									) &&
-									true
-								) {
+								if ( hasAccess(inputField.proSetting ?? false, String( inputField.moduleEnabled ?? ''), String( inputField.dependentSetting ?? ''), String( inputField.dependentPlugin ?? '' ) ) ) {
 									settingChanged.current = true;
 									updateSetting( inputField.key, data );
 								}

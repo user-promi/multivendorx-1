@@ -135,7 +135,7 @@ const MultipleOptions: React.FC< MultipleOptionsProps > = ( {
 			renderEditableContent={ ( { label, onLabelChange } ) => (
 				<>
 					<input
-						className="basic-input multipleOption-label"
+						className="basic-input multipleoption-label"
 						type="text"
 						value={ label }
 						onChange={ ( event ) =>

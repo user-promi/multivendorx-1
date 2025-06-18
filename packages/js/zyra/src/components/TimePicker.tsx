@@ -31,7 +31,7 @@ const TimePicker: React.FC< TimePickerProps > = ( { formField, onChange } ) => {
 			renderEditableContent={ ( { label, onLabelChange } ) => (
 				<>
 					<input
-						className="basic-input textArea-label"
+						className="basic-input textarea-label"
 						type="text"
 						value={ label }
 						onChange={ ( event ) =>

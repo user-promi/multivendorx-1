@@ -129,14 +129,14 @@ const MultiCheckBox: React.FC< MultiCheckBoxProps > = ( props ) => {
 							{ props.type === 'checkbox-custom-img' ? (
 								<>
 									<div
-										className="sync-meta-wrapper"
+										className="custom-img-meta-wrapper"
 										key={ `${ option.key }-img-wrp` }
 									>
 										<img src={ option.img1 } alt="" />
 										<i className="admin-font adminlib-arrow-right"></i>
 										<img src={ option.img2 } alt="" />
 									</div>
-									<p className="sync-label">
+									<p className="custom-img-label">
 										{ option.label }
 									</p>
 								</>

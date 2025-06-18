@@ -24,7 +24,7 @@ const Attachment: React.FC< AttachmentProps > = ( { formField, onChange } ) => {
 		<div className="main-input-wrapper">
 			{ /* Render label */ }
 			<input
-				className="basic-input textArea-label"
+				className="basic-input textarea-label"
 				type="text"
 				value={ formField.label }
 				placeholder={ formField.placeholder }

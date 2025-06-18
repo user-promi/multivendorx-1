@@ -40,7 +40,7 @@ const Datepicker: React.FC< DatepickerProps > = ( { formField, onChange } ) => {
 				<>
 					{ /* Editable label input */ }
 					<input
-						className="basic-input textArea-label"
+						className="basic-input textarea-label"
 						type="text"
 						value={ label }
 						placeholder={ placeholder }

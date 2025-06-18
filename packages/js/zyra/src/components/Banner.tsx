@@ -99,13 +99,13 @@ const Banner: React.FC< BannerProps > = ( {
 		startAutoSlide();
 
 		// Handle next button click
-		document.getElementById( 'nextBtn' )?.addEventListener( 'click', () => {
+		document.getElementById( 'next-btn' )?.addEventListener( 'click', () => {
 			nextSlide();
 			stopAutoSlide();
 			startAutoSlide();
 		} );
 
-		document.getElementById( 'prevBtn' )?.addEventListener( 'click', () => {
+		document.getElementById( 'prev-btn' )?.addEventListener( 'click', () => {
 			prevSlide();
 			stopAutoSlide();
 			startAutoSlide();
@@ -177,10 +177,10 @@ const Banner: React.FC< BannerProps > = ( {
 							</ul>
 						</div>
 						<div className="carousel-controls">
-							<button id="prevBtn">
+							<button id="prev-btn">
 								<i className="admin-font adminlib-arrow-left"></i>
 							</button>
-							<button id="nextBtn">
+							<button id="next-btn">
 								<i className="admin-font adminlib-arrow-right"></i>
 							</button>
 						</div>

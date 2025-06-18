@@ -145,7 +145,7 @@ const FreeProFormCustomizer: React.FC< FreeProFormCustomizerProps > = ( {
 						<h3 className="name">{ 'Field Name' }</h3>
 						<h3 className="set-name">{ 'Set new field name' }</h3>
 					</div>
-					<div className="registrationFrom-main-wrapper-section">
+					<div className="registrationfrom-main-wrapper-section">
 						<div className="form-field">
 							{ formFields.map( ( fields, index ) => (
 								<div
