@@ -48,7 +48,7 @@ class Admin {
 	 * Add Option page.
 	 */
 	public function add_submenu() {
-		$pro_sticker = apply_filters( 'is_moowoodle_pro_inactive', true ) ?
+		$pro_sticker = ! Util::is_khali_dabba() ?
 
 		'<span class="mw-pro-tag" style="font-size: 0.5rem; background: #e35047; padding: 0.125rem 0.5rem; color: #F9F8FB; font-weight: 700; line-height: 1.1; position: absolute; border-radius: 2rem 0; right: -0.75rem; top: 50%; transform: translateY(-50%)">Pro</span>' : '';
 

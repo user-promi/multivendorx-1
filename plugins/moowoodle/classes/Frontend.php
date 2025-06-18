@@ -21,6 +21,7 @@ class Frontend {
 	public function __construct() {
 		// Reset cart quantities after update.
 		add_action( 'woocommerce_cart_updated', array( $this, 'update_cart_quantity' ) );
+		add_action( 'woocommerce_product_options_pricing', array( $this, 'moowoodle_admin_price_notice' ) );
 	}
 
 	/**
@@ -37,6 +38,18 @@ class Frontend {
 			if ( $cart_item['quantity'] > 1 ) {
 				WC()->cart->set_quantity( $cart_item_key, 1 );
 			}
+		}
+	}
+	/**
+	 * Displays a custom admin notice after the product price input
+	 * on the WooCommerce product edit screen.
+	 */
+	public function moowoodle_admin_price_notice() {
+		if ( ! MooWoodle()->util->is_khali_dabba() ) {
+			printf(
+				'<div class="notice notice-info inline"><p>%s</p></div>',
+				esc_html__( 'In the free version, each product is limited to a quantity of 1 per cart. Upgrade to Pro for unlimited quantities!', 'moowoodle' )
+			);
 		}
 	}
 }

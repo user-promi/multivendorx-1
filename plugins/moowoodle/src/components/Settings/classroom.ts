@@ -37,5 +37,19 @@ export default {
             proSetting: true,
             look: "toggle",
         },
+        {
+            key: "gift_someone",
+            type: "checkbox",
+            desc: __( "Enabling gift someone", "moowoodle" ),
+            label: __( "Gift Someone", "moowoodle" ),
+            options: [
+                {
+                    key: "gift_someone",
+                    value: "gift_someone",
+                },
+            ],
+            proSetting: true,
+            look: "toggle",
+        },
     ],
 };
