@@ -1109,7 +1109,11 @@ const AdminForm: React.FC< AdminFormProps > = ( {
 					input = (
 						<MultiCheckBox
 							khali_dabba={ appLocalizer?.khali_dabba ?? false }
-							wrapperClass="checkbox-list-side-by-side"
+							wrapperClass={
+								inputField.look === 'toggle'
+									? ''
+									: 'checkbox-list-side-by-side'
+							}							
 							descClass="settings-metabox-description"
 							description={ inputField.desc }
 							selectDeselectClass="admin-btn btn-purple select-deselect-trigger"

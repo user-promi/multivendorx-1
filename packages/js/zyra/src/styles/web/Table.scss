@@ -41,7 +41,7 @@
   
   .table-wrapper{
     .admin-table{
-      width: 100%;
+      width: 99%;
       border-collapse: collapse;
       background: #fff;
       
@@ -55,9 +55,13 @@
   
         .header-col{
           text-align: left;
-          padding: 0.85rem;
+          padding: 0.313rem 0.85rem;
           font-size: 0.9rem;
           font-weight: 500;
+        }
+        
+        .header-col:nth-of-type(2) {
+          padding-left: 0;
         }
       }
   
@@ -92,11 +96,12 @@
   
           .admin-column{
             height: 3rem;
-            padding: 0.85rem;
+            padding: 0.313rem 0.85rem;
             font-size: 0.9rem;
 
             img{
               width: 3.125rem;
+              height: auto;
             }
 
             .main-input{
@@ -111,6 +116,10 @@
             .action-icons{
               display: flex;
               gap: 0.313rem;
+              
+              .adminlib-update-data{
+                font-size: 1rem;
+              }
   
               i{
                 cursor: pointer;
@@ -121,6 +130,13 @@
                 }
               }
             }
+          }
+          .admin-column:nth-of-type(1) {
+            width: 2rem;
+            padding-right: 0;
+          }
+          .admin-column:nth-of-type(2) {
+            padding-left: 0;
           }
         }
 
@@ -175,6 +191,7 @@
     padding: 0 1rem;
     height: 3rem;
     border-top: $border-light-small;
+    width: 99%;
 
     .pagination-arrow{
         display: flex;
@@ -272,6 +289,8 @@
   font-weight: 600;
     a{
       color: $theme-color;
+      cursor: pointer;
+      font-weight: 400;
     }
   }
 

@@ -28,7 +28,9 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
+.adminlib-update-data:before {
+  content: "\e969";
+}
 .adminlib-refresh:before {
   content: "\e968";
 }
