@@ -65,8 +65,6 @@ const Course: React.FC = () => {
     const [ error, setError ] = useState< string | null >( null );
     const bulkSelectRef = useRef< HTMLSelectElement >( null );
     const [ openDialog, setOpenDialog ] = useState( false );
-    const [openModal, setOpenModal] = useState(false);
-  	const [modalDetails, setModalDetails] = useState<string>('');
 
     // Fetch categories on mount
     useEffect( () => {
@@ -223,14 +221,10 @@ const Course: React.FC = () => {
     const handleBulkAction = () => {
         if ( appLocalizer.khali_dabba ) {
             if ( ! Object.keys( rowSelection ).length ) {
-                setModalDetails("Select rows.");
-		        setOpenModal(true);
-                return;
+                return window.alert( __( "Select rows", "moowoodle" ) );
             }
             if ( ! bulkSelectRef.current?.value ) {
-                setModalDetails("Please select a action.");
-		        setOpenModal(true);
-                return;
+                return window.alert( __( "Select bulk action", "moowoodle" ) );
             }
             setData( null );
             axios( {
@@ -249,8 +243,6 @@ const Course: React.FC = () => {
                 },
             } )
                 .then( () => {
-                    setModalDetails("");
-			        setOpenModal(false);
                     requestData();
                     setRowSelection( {} );
                 } )
@@ -407,7 +399,7 @@ const Course: React.FC = () => {
                     { row.original.products &&
                     Object.keys( row.original.products ).length ? (
                         <i
-                            className="adminlib-update-product"
+                            className="adminlib-update-data"
                             title={ __(
                                 "Sync Course Data & Update Product",
                                 "moowoodle"
@@ -422,7 +414,7 @@ const Course: React.FC = () => {
                         ></i>
                     ) : (
                         <i
-                            className="dashicons dashicons-cloud-upload"
+                            className="adminlib-cloud-upload"
                             title={ __( "Create Product", "moowoodle" ) }
                             onClick={ () => {
                                 handleSingleAction(
@@ -476,7 +468,7 @@ const Course: React.FC = () => {
                 updateFilter: ( key: string, value: string ) => void,
                 filterValue: string | undefined
             ) => (
-                <div className="catagory-field">
+                <div className="catagoryField">
                     <select
                         className="basic-select"
                         name="catagoryField"
@@ -505,7 +497,7 @@ const Course: React.FC = () => {
                 updateFilter: ( key: string, value: string ) => void,
                 filterValue: string | undefined
             ) => (
-                <div className="search-course-field">
+                <div className="searchCourseField">
                     <input
                         className="basic-input"
                         name="searchCourseField"
@@ -565,14 +557,6 @@ const Course: React.FC = () => {
                     <ProPopup />
                 </Dialog>
             ) }
-            {openModal && modalDetails &&
-                <div className="notice notice-error error-modal">
-                    <div className="modal-wrapper">
-                        <p>{modalDetails}</p>
-                        <i onClick={() => setOpenModal(false)} className="admin-font adminLib-cross"></i>
-                    </div>
-                </div>
-            }
             <div className="course-container-wrapper">
                 <div className="admin-page-title">
                     <p>{ __( "Courses", "moowoodle" ) }</p>
