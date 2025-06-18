@@ -65,6 +65,8 @@ const Course: React.FC = () => {
     const [ error, setError ] = useState< string | null >( null );
     const bulkSelectRef = useRef< HTMLSelectElement >( null );
     const [ openDialog, setOpenDialog ] = useState( false );
+    const [openModal, setOpenModal] = useState(false);
+  	const [modalDetails, setModalDetails] = useState<string>('');
 
     // Fetch categories on mount
     useEffect( () => {
@@ -221,10 +223,14 @@ const Course: React.FC = () => {
     const handleBulkAction = () => {
         if ( appLocalizer.khali_dabba ) {
             if ( ! Object.keys( rowSelection ).length ) {
-                return window.alert( __( "Select rows", "moowoodle" ) );
+                setModalDetails("Select rows.");
+		        setOpenModal(true);
+                return;
             }
             if ( ! bulkSelectRef.current?.value ) {
-                return window.alert( __( "Select bulk action", "moowoodle" ) );
+                setModalDetails("Please select a action.");
+		        setOpenModal(true);
+                return;
             }
             setData( null );
             axios( {
@@ -243,6 +249,8 @@ const Course: React.FC = () => {
                 },
             } )
                 .then( () => {
+                    setModalDetails("");
+			        setOpenModal(false);
                     requestData();
                     setRowSelection( {} );
                 } )
@@ -468,7 +476,7 @@ const Course: React.FC = () => {
                 updateFilter: ( key: string, value: string ) => void,
                 filterValue: string | undefined
             ) => (
-                <div className="catagoryField">
+                <div className="catagory-field">
                     <select
                         className="basic-select"
                         name="catagoryField"
@@ -497,7 +505,7 @@ const Course: React.FC = () => {
                 updateFilter: ( key: string, value: string ) => void,
                 filterValue: string | undefined
             ) => (
-                <div className="searchCourseField">
+                <div className="search-course-field">
                     <input
                         className="basic-input"
                         name="searchCourseField"
@@ -557,6 +565,14 @@ const Course: React.FC = () => {
                     <ProPopup />
                 </Dialog>
             ) }
+            {openModal && modalDetails &&
+                <div className="notice notice-error error-modal">
+                    <div className="modal-wrapper">
+                        <p>{modalDetails}</p>
+                        <i onClick={() => setOpenModal(false)} className="admin-font adminLib-cross"></i>
+                    </div>
+                </div>
+            }
             <div className="course-container-wrapper">
                 <div className="admin-page-title">
                     <p>{ __( "Courses", "moowoodle" ) }</p>
