@@ -57,7 +57,7 @@ class TestConnection {
 					MooWoodle()->util->log( "It seems that you are using MooWoodle Pro but Moodle external web service functions 'auth_moowoodle_user_sync' is not configured correctly.\n\n" );
                 }
 
-				if ( $response['downloadfiles'] !== 1 ) {
+				if ( 1 !== $response['downloadfiles'] ) {
 					MooWoodle()->util->log( "It seems that you are using MooWoodle Pro but Moodle external web service is not configured correctly. Please edit your Moodle External service and enable 'Can download files' (you can find it from 'Show more...' options)\n\n" );
                 }
 			}

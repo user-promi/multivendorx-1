@@ -41,7 +41,7 @@
         "clean": "node bin/clean-files.mjs",
         "minify": "node bin/minify.mjs",
         "changelog": "composer install --quiet && composer exec -- changelogger",
-        "makepot": "wp i18n make-pot --domain='moowoodle' --include='assets/js,classes,templates,config.php,product_stock_alert.php' . --headers='{\"Report-Msgid-Bugs-To\":\"https://dualcube.com/contact/\"}' --file-comment=\"Copyright (c) $(date +'%Y') Moowoodle Inc. All Rights Reserved.\" languages/moowoodle.pot"
+        "makepot": "wp i18n make-pot --domain='moowoodle' --include='assets/js,classes,templates,config.php,moowoodle.php' . --headers='{\"Report-Msgid-Bugs-To\":\"https://dualcube.com/contact/\"}' --file-comment=\"Copyright (c) $(date +'%Y') Moowoodle Inc. All Rights Reserved.\" languages/moowoodle.pot"
     },
     "repository": {
         "type": "git",
@@ -96,13 +96,16 @@
         "@wordpress/i18n": "wp-6.6",
         "@wordpress/react-i18n": "wp-6.6",
         "@wordpress/scripts": "^30.16.0",
+        "react": "18.3.1",
         "react-csv": "^2.2.2",
         "react-data-table-component": "^7.7.0",
         "react-date-range": "^2.0.1",
+        "react-dom": "18.3.1",
         "react-router-dom": "^7.6.0",
         "react-select": "^5.10.1",
         "ts-loader": "9.5.x",
         "typescript": "5.8.x",
+        "wp-textdomain": "^1.0.1",
         "zyra": "workspace:*"
     },
     "devDependencies": {

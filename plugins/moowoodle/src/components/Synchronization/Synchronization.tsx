@@ -48,7 +48,7 @@ const supportLink = [
     },
     {
         title: __( "Contribute Here", "moowoodle" ),
-        icon: "adminlib-pport",
+        icon: "adminlib-support",
         description: __( "Participate in product enhancement.", "moowoodle" ),
         link: "https://github.com/dualcube/moowoodle/issues",
     },
@@ -116,7 +116,7 @@ const Synchronization: React.FC< SettingsProps > = () => {
         return (
             <Banner
                 products={ products }
-                isPro={ false }
+                isPro={ appLocalizer.khali_dabba }
                 proUrl={ appLocalizer.shop_url }
                 tag = "Why Premium"
                 buttonText = "View Pricing"

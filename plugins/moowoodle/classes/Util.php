@@ -67,7 +67,7 @@ class Util {
 		}
 
 		// Write Log.
-		if ( $message !== '' ) {
+		if ( '' !== $message ) {
 			$log_entry        = gmdate( 'd/m/Y H:i:s', time() ) . ': ' . $message;
 			$existing_content = $wp_filesystem->get_contents( get_site_url( null, str_replace( ABSPATH, '', MooWoodle()->log_file ) ) );
 

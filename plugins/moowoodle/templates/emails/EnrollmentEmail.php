@@ -2,7 +2,11 @@
 /**
  * New enrollment email (HTML)
  *
- * @package MooWoodle
+ * Override this template by copying it to yourtheme/moowoodle/emails/EnrollmentEmail.php
+ *
+ * @author    Dualcube
+ * @package   moowoodle/templates
+ * @version   6.0.0
  */
 
 defined( 'ABSPATH' ) || exit();
@@ -12,19 +16,39 @@ do_action( 'woocommerce_email_header', $email_heading );
 $user = get_user_by( 'email', $args['user_email'] );
 ?>
 
-<p>Hi <?php echo esc_html( $user->first_name ?? '' ); ?>,</p>
-
-<p>Welcome to <strong><?php echo esc_html( get_bloginfo( 'name' ) ); ?></strong>! We’re excited to have you onboard.</p>
-
 <p>
-	An account has been created for you on our learning platform so you can begin your journey with us.
-	Below are your login details:
+	<?php
+		// translators: %s: User's first name.
+		echo esc_html( sprintf( __( 'Hi %s,', 'moowoodle' ), $user->first_name ?? '' ) );
+	?>
 </p>
 
-<h3>Your Account Information</h3>
 <p>
-	<strong>Website:</strong> <a href="<?php echo esc_url( home_url() ); ?>"><?php echo esc_html( home_url() ); ?></a><br>
-	<strong>Username:</strong> <?php echo esc_html( $user->user_login ?? '' ); ?><br>
+	<?php
+	echo wp_kses_post(
+		sprintf(
+			// translators: %s: Blog name.
+			__( 'Welcome to <strong>%s</strong>! We’re excited to have you onboard.', 'moowoodle' ),
+			esc_html( get_bloginfo( 'name' ) )
+		)
+	);
+	?>
+</p>
+
+<p>
+	<?php esc_html_e( 'An account has been created for you on our learning platform so you can begin your journey with us. Below are your login details:', 'moowoodle' ); ?>
+</p>
+
+<h3><?php esc_html_e( 'Your Account Information', 'moowoodle' ); ?></h3>
+
+<p>
+	<strong><?php esc_html_e( 'Website:', 'moowoodle' ); ?></strong>
+	<a href="<?php echo esc_url( home_url() ); ?>">
+		<?php echo esc_html( home_url() ); ?>
+	</a><br>
+
+	<strong><?php esc_html_e( 'Username:', 'moowoodle' ); ?></strong>
+	<?php echo esc_html( $user->user_login ?? '' ); ?><br>
 
 	<?php
 	$wp_pwd         = get_user_meta( $user->ID ?? 0, 'moowoodle_wordpress_user_pwd', true );
@@ -34,32 +58,56 @@ $user = get_user_by( 'email', $args['user_email'] );
 
 	if ( $wp_created && $moodle_created && $wp_pwd === $moodle_pwd ) :
 		?>
-		<strong>Password:</strong> <?php echo esc_html( $wp_pwd ); ?><br>
-		<em>This password will work for both your WordPress and Moodle accounts. You will be required to change your Moodle password after your first login.</em><br>
+		<p>
+			<strong><?php esc_html_e( 'Password:', 'moowoodle' ); ?></strong> <?php echo esc_html( $wp_pwd ); ?><br>
+			<em><?php esc_html_e( 'This password will work for both your WordPress and Moodle accounts. You will be required to change your Moodle password after your first login.', 'moowoodle' ); ?></em><br>
+		</p>
 	<?php else : ?>
 		<?php if ( $wp_created ) : ?>
-			<strong>WordPress Password:</strong> <?php echo esc_html( $wp_pwd ); ?><br>
+			<p>
+				<strong><?php esc_html_e( 'WordPress Password:', 'moowoodle' ); ?></strong> <?php echo esc_html( $wp_pwd ); ?><br>
+			</p>
 		<?php endif; ?>
 		<?php if ( $moodle_created ) : ?>
-			<strong>Moodle Password:</strong> <?php echo esc_html( $moodle_pwd ); ?><br>
-			<em>Note: You will be required to change your Moodle password after your first login.</em><br>
+			<p>
+				<strong><?php esc_html_e( 'Moodle Password:', 'moowoodle' ); ?></strong> <?php echo esc_html( $moodle_pwd ); ?><br>
+				<em><?php esc_html_e( 'Note: You will be required to change your Moodle password after your first login.', 'moowoodle' ); ?></em><br>
+			</p>
 		<?php endif; ?>
 	<?php endif; ?>
+
 </p>
 
-<h3>Enrollment Details</h3>
+<h3><?php esc_html_e( 'Enrollment Details', 'moowoodle' ); ?></h3>
+
 <?php if ( ! empty( $args['enrollments']['gift_email'] ) ) : ?>
 	<p>
-		This enrollment was gifted by <strong><?php echo esc_html( $args['enrollments']['gift_email'] ); ?></strong>.
+		<?php
+			echo wp_kses_post(
+				sprintf(
+					// translators: %s is the gifter's email address.
+					__( 'This enrollment was gifted by <strong>%s</strong>.', 'moowoodle' ),
+					esc_html( $args['enrollments']['gift_email'] )
+				)
+			);
+		?>
 	</p>
 <?php elseif ( ! empty( $args['enrollments']['teacher_email'] ) ) : ?>
 	<p>
-		You have been enrolled by <strong><?php echo esc_html( $args['enrollments']['teacher_email'] ); ?></strong>.
+		<?php
+		echo wp_kses_post(
+			sprintf(
+				// translators: %s is the teacher's email address.
+				__( 'You have been enrolled by <strong>%s</strong>.', 'moowoodle' ),
+				esc_html( $args['enrollments']['teacher_email'] )
+			)
+		);
+		?>
 	</p>
 <?php endif; ?>
 
 <?php if ( ! empty( $args['enrollments']['group_details'] ) ) : ?>
-	<p><strong>Group(s):</strong></p>
+	<p><strong><?php esc_html_e( 'Group(s):', 'moowoodle' ); ?></strong></p>
 	<ul>
 		<?php foreach ( $args['enrollments']['group_details'] as $group ) : ?>
 			<li><?php echo esc_html( $group['name'] ); ?></li>
@@ -68,7 +116,7 @@ $user = get_user_by( 'email', $args['user_email'] );
 <?php endif; ?>
 
 <?php if ( ! empty( $args['enrollments']['cohort_details'] ) ) : ?>
-	<p><strong>Cohort(s):</strong></p>
+	<p><strong><?php esc_html_e( 'Cohort(s):', 'moowoodle' ); ?></strong></p>
 	<ul>
 		<?php foreach ( $args['enrollments']['cohort_details'] as $cohort ) : ?>
 			<li><?php echo esc_html( $cohort['name'] ); ?></li>
@@ -77,11 +125,15 @@ $user = get_user_by( 'email', $args['user_email'] );
 <?php endif; ?>
 
 <?php if ( ! empty( $args['enrollments']['classroom_details'] ) && empty( $args['enrollments']['teacher_email'] ) ) : ?>
-	<p><strong>Classroom:</strong> <?php echo esc_html( $args['enrollments']['classroom_details'][0]['name'] ); ?></p>
+	<p>
+		<strong><?php esc_html_e( 'Classroom:', 'moowoodle' ); ?></strong>
+		<?php echo esc_html( $args['enrollments']['classroom_details'][0]['name'] ); ?>
+	</p>
+
 <?php endif; ?>
 
 <?php if ( ! empty( $args['enrollments']['course_details'] ) ) : ?>
-	<p><strong>Course(s):</strong></p>
+	<p><strong><?php esc_html_e( 'Course(s):', 'moowoodle' ); ?></strong></p>
 	<ul>
 		<?php foreach ( $args['enrollments']['course_details'] as $course ) : ?>
 			<li><?php echo esc_html( $course['name'] ); ?></li>
@@ -89,17 +141,30 @@ $user = get_user_by( 'email', $args['user_email'] );
 	</ul>
 <?php endif; ?>
 
-<h3>Access Your Courses</h3>
+<h3><?php esc_html_e( 'Access Your Courses', 'moowoodle' ); ?></h3>
+
 <p>
-	To get started with your courses, please click the link below:<br>
-	👉 <a href="<?php echo esc_url( wc_get_page_permalink( 'myaccount' ) . 'my-courses/' ); ?>" target="_blank"><?php echo esc_html( wc_get_page_permalink( 'myaccount' ) . 'my-courses/' ); ?></a>
+	<?php esc_html_e( 'To get started with your courses, please click the link below:', 'moowoodle' ); ?><br>
+	👉 <a href="<?php echo esc_url( wc_get_page_permalink( 'myaccount' ) . 'my-courses/' ); ?>" target="_blank">
+		<?php echo esc_html( wc_get_page_permalink( 'myaccount' ) . 'my-courses/' ); ?>
+	</a>
 </p>
 
 <p>
-	If you have any questions or face any issues logging in, feel free to reach out to our support team at 
-	<a href="mailto:<?php echo esc_attr( 'support@' . wp_parse_url( home_url(), PHP_URL_HOST ) ); ?>"><?php echo esc_html( 'support@' . wp_parse_url( home_url(), PHP_URL_HOST ) ); ?></a>.
+	<?php
+	$support_email = 'support@' . wp_parse_url( home_url(), PHP_URL_HOST );
+	echo wp_kses_post(
+		sprintf(
+			// translators: %s is the support email address.
+			__( 'If you have any questions or face any issues logging in, feel free to reach out to our support team at <a href="mailto:%1$s">%2$s</a>.', 'moowoodle' ),
+			esc_attr( $support_email ),
+			esc_html( $support_email )
+		)
+	);
+	?>
 </p>
 
-<p>Wishing you a great learning experience!</p>
+<p><?php esc_html_e( 'Wishing you a great learning experience!', 'moowoodle' ); ?></p>
+
 
 <?php do_action( 'woocommerce_email_footer' ); ?>

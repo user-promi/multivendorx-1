@@ -11,6 +11,7 @@ import {
     RowSelectionState,
     PaginationState,
 } from "@tanstack/react-table";
+import defaultImage from '../../assets/images/moowoodle-product-default.png';
 
 // Define RealtimeFilter interface with explicit types
 interface RealtimeFilter {
@@ -34,6 +35,7 @@ type CourseRow = {
     id?: number;
     moodle_course_id?: number;
     course_name?: string;
+    moodle_url?: string;
     course_short_name?: string;
     category_name?: string;
     category_url?: string;
@@ -63,6 +65,8 @@ const Course: React.FC = () => {
     const [ error, setError ] = useState< string | null >( null );
     const bulkSelectRef = useRef< HTMLSelectElement >( null );
     const [ openDialog, setOpenDialog ] = useState( false );
+    const [openModal, setOpenModal] = useState(false);
+  	const [modalDetails, setModalDetails] = useState<string>('');
 
     // Fetch categories on mount
     useEffect( () => {
@@ -98,11 +102,6 @@ const Course: React.FC = () => {
                 console.error( "Error fetching total rows:", fetchError );
                 setError( __( "Failed to load total rows", "moowoodle" ) );
             } );
-    }, [] );
-
-    // Fetch initial data
-    useEffect( () => {
-        requestData();
     }, [] );
 
     useEffect( () => {
@@ -224,10 +223,14 @@ const Course: React.FC = () => {
     const handleBulkAction = () => {
         if ( appLocalizer.khali_dabba ) {
             if ( ! Object.keys( rowSelection ).length ) {
-                return window.alert( __( "Select rows", "moowoodle" ) );
+                setModalDetails("Select rows.");
+		        setOpenModal(true);
+                return;
             }
             if ( ! bulkSelectRef.current?.value ) {
-                return window.alert( __( "Select bulk action", "moowoodle" ) );
+                setModalDetails("Please select a action.");
+		        setOpenModal(true);
+                return;
             }
             setData( null );
             axios( {
@@ -246,6 +249,8 @@ const Course: React.FC = () => {
                 },
             } )
                 .then( () => {
+                    setModalDetails("");
+			        setOpenModal(false);
                     requestData();
                     setRowSelection( {} );
                 } )
@@ -283,12 +288,15 @@ const Course: React.FC = () => {
             header: __( "Course", "moowoodle" ),
             cell: ( { row } ) => (
                 <TableCell title={ row.original.course_name || "" }>
-                    { /* <img
+                    <img
                         src={row.original.productimage || defaultImage}
                         alt={row.original.course_name || "Course Image"}
-                    /> */ }
+                    />
                     <div className="action-section">
                         <p>{ row.original.course_name }</p>
+                        <div className='action-btn'>
+                            <a target='_blank' href={row.original.moodle_url} className="">Edit course</a>
+                        </div>
                     </div>
                 </TableCell>
             ),
@@ -385,7 +393,7 @@ const Course: React.FC = () => {
             cell: ( { row } ) => (
                 <div className="action-icons">
                     <i
-                        className="dashicons dashicons-update"
+                        className="adminlib-refresh"
                         title="Sync course data"
                         onClick={ () => {
                             handleSingleAction(
@@ -396,39 +404,10 @@ const Course: React.FC = () => {
                         } }
                     ></i>
 
-                    { /* <button
-                        className="sync-single-course button-primary"
-                        title={__("Sync course data", "moowoodle")}
-                        onClick={() => {
-                            handleSingleAction(
-                                "sync_courses",
-                                row.original.id!,
-                                row.original.moodle_course_id!
-                            );
-                        }}
-                    >
-                        <i className="dashicons dashicons-update"></i>
-                    </button> */ }
                     { row.original.products &&
                     Object.keys( row.original.products ).length ? (
-                        // <button
-                        //     className="update-existed-single-product button-secondary"
-                        //     title={__(
-                        //         "Sync Course Data & Update Product",
-                        //         "moowoodle"
-                        //     )}
-                        //     onClick={() => {
-                        //         handleSingleAction(
-                        //             "update_product",
-                        //             row.original.id!,
-                        //             row.original.moodle_course_id!
-                        //         );
-                        //     }}
-                        // >
-                        //     <i className="dashicons dashicons-admin-links"></i>
-                        // </button>
                         <i
-                            className="dashicons dashicons-admin-links"
+                            className="adminlib-update-product"
                             title={ __(
                                 "Sync Course Data & Update Product",
                                 "moowoodle"
@@ -442,19 +421,6 @@ const Course: React.FC = () => {
                             } }
                         ></i>
                     ) : (
-                        // <button
-                        //     className="create-single-product button-secondary"
-                        //     title={__("Create Product", "moowoodle")}
-                        //     onClick={() => {
-                        //         handleSingleAction(
-                        //             "create_product",
-                        //             row.original.id!,
-                        //             row.original.moodle_course_id!
-                        //         );
-                        //     }}
-                        // >
-                        //     <i className="dashicons dashicons-cloud-upload"></i>
-                        // </button>
                         <i
                             className="dashicons dashicons-cloud-upload"
                             title={ __( "Create Product", "moowoodle" ) }
@@ -510,7 +476,7 @@ const Course: React.FC = () => {
                 updateFilter: ( key: string, value: string ) => void,
                 filterValue: string | undefined
             ) => (
-                <div className="catagoryField">
+                <div className="catagory-field">
                     <select
                         className="basic-select"
                         name="catagoryField"
@@ -539,7 +505,7 @@ const Course: React.FC = () => {
                 updateFilter: ( key: string, value: string ) => void,
                 filterValue: string | undefined
             ) => (
-                <div className="searchCourseField">
+                <div className="search-course-field">
                     <input
                         className="basic-input"
                         name="searchCourseField"
@@ -599,6 +565,14 @@ const Course: React.FC = () => {
                     <ProPopup />
                 </Dialog>
             ) }
+            {openModal && modalDetails &&
+                <div className="notice notice-error error-modal">
+                    <div className="modal-wrapper">
+                        <p>{modalDetails}</p>
+                        <i onClick={() => setOpenModal(false)} className="admin-font adminLib-cross"></i>
+                    </div>
+                </div>
+            }
             <div className="course-container-wrapper">
                 <div className="admin-page-title">
                     <p>{ __( "Courses", "moowoodle" ) }</p>
