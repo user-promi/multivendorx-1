@@ -4,7 +4,6 @@ import axios from "axios";
 import { __ } from "@wordpress/i18n";
 import ProPopup from "../Popup/Popup";
 import { Table, getApiLink, TableCell } from "zyra";
-import "./Courses.scss";
 import Dialog from "@mui/material/Dialog";
 import {
     ColumnDef,
