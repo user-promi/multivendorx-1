@@ -18,7 +18,7 @@ jQuery(document).ready(function ($) {
             },
             success: function (response) {
                 if (response.success) {
-                    const select = $('#linked_item');
+                    const select = $('#linked_item_id');
                     const selectedId = response.data.selected_id;
 
                     select
