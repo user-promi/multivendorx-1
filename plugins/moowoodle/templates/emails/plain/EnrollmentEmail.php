@@ -6,7 +6,7 @@
  *
  * @author    Dualcube
  * @package   moowoodle/templates
- * @version   6.0.0
+ * @version   3.3.0
  */
 
 defined( 'ABSPATH' ) || exit();

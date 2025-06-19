@@ -11,7 +11,7 @@ namespace MooWoodle\Emails;
  * MooWoodle EnrollmentEmail class
  *
  * @class       Emails class
- * @version     6.0.0
+ * @version     3.3.0
  * @author      Dualcube
  */
 class EnrollmentEmail extends \WC_Email {
