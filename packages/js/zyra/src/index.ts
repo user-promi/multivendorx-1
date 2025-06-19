@@ -56,9 +56,8 @@ export { default as Tour } from './components/TourSteps';
 export { default as WpEditor } from './components/WpEditor';
 
 export {
-	getApiResponse,
-	sendApiResponse,
-	getApiLink,
+    getApiResponse,
+    sendApiResponse,
+    getApiLink,
 } from './utils/apiService';
 export * from './utils/settingUtil';
-

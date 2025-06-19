@@ -8,7 +8,6 @@
 
 .details-status-row {
   max-width: 18.75rem;
-  position: relative;
   padding: 0.5rem 0.5rem 0.75rem;
   position: relative;
   display: flex;
@@ -26,7 +25,7 @@
     }
   }  
 
-  &:after {
+  &::after {
     position: absolute;
     bottom: 0;
     left: 0;
@@ -41,10 +40,12 @@
     from {
       width: 0;
     }
+
     to {
       width: 100%;
     }
   }
+
   &.failed{
     color: red;
 
@@ -64,7 +65,7 @@
 
 .fetch-display-output{
   margin: 0.5rem 0;
-  padding: 0.5rem 0.5rem;
+  padding: 0.5rem;
   position: relative;
   display: flex;
   justify-content: space-between;
@@ -72,7 +73,7 @@
 
   &.failed {
     color: red;
-    background: rgba(227, 79, 71, 0.1254901961);
+    background: rgb(227 79 71 / 12.5%);
   }
 
   &.success {
@@ -80,6 +81,7 @@
     background-color: #00800036;
   }
 }
+
 .errorlog-link{
     font-weight: 600;
     color: red;

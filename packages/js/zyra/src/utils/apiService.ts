@@ -12,18 +12,18 @@ import type { AxiosRequestConfig } from 'axios';
  *
  * @return API response data or null in case of an error
  */
-export const getApiResponse = async < T >(
-	url: string,
-	headers: AxiosRequestConfig = {}
-): Promise< T | null > => {
-	try {
-		const result = await axios.get< T >( url, headers );
-		return result.data;
-	} catch ( error ) {
-		// eslint-disable-next-line no-console
-		console.error( `❌ Error fetching data from ${ url }`, error );
-		return null;
-	}
+export const getApiResponse = async <T>(
+    url: string,
+    headers: AxiosRequestConfig = {}
+): Promise<T | null> => {
+    try {
+        const result = await axios.get<T>(url, headers);
+        return result.data;
+    } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(`❌ Error fetching data from ${url}`, error);
+        return null;
+    }
 };
 
 /**
@@ -36,27 +36,27 @@ export const getApiResponse = async < T >(
  *
  * @return API response data or null in case of an error
  */
-export const sendApiResponse = async < T >(
-	appLocalizer: Record< string, any >,
-	url: string,
-	data: any,
-	headers: AxiosRequestConfig = {}
-): Promise< T | null > => {
-	try {
-		const config: AxiosRequestConfig = {
-			headers: {
-				'X-WP-Nonce': appLocalizer.nonce,
-				...headers.headers,
-			},
-			...headers,
-		};
-		const result = await axios.post< T >( url, data, config );
-		return result.data;
-	} catch ( error ) {
-		// eslint-disable-next-line no-console
-		console.error( `❌ Error sending data to ${ url }`, error );
-		return null;
-	}
+export const sendApiResponse = async <T>(
+    appLocalizer: Record<string, any>,
+    url: string,
+    data: any,
+    headers: AxiosRequestConfig = {}
+): Promise<T | null> => {
+    try {
+        const config: AxiosRequestConfig = {
+            headers: {
+                'X-WP-Nonce': appLocalizer.nonce,
+                ...headers.headers,
+            },
+            ...headers,
+        };
+        const result = await axios.post<T>(url, data, config);
+        return result.data;
+    } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(`❌ Error sending data to ${url}`, error);
+        return null;
+    }
 };
 
 /**
@@ -70,12 +70,12 @@ export const sendApiResponse = async < T >(
  * @return Complete API URL
  */
 export const getApiLink = (
-	appLocalizer: Record< string, any >,
-	endpoint: string,
-	namespace?: string,
-	rootUrl?: string
+    appLocalizer: Record<string, any>,
+    endpoint: string,
+    namespace?: string,
+    rootUrl?: string
 ): string => {
-	return `${ rootUrl || appLocalizer.apiUrl }/${
-		namespace || appLocalizer.restUrl
-	}/${ endpoint }`;
+    return `${rootUrl || appLocalizer.apiUrl}/${
+        namespace || appLocalizer.restUrl
+    }/${endpoint}`;
 };

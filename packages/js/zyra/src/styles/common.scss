@@ -568,7 +568,6 @@ input[type="radio"] {
     }
 
     @keyframes wobble1 {
-
       0%,
       100% {
         transform: translateY(0%) scale(1);
@@ -582,7 +581,6 @@ input[type="radio"] {
     }
 
     @keyframes wobble2 {
-
       0%,
       100% {
         transform: translateY(0%) scale(1);
@@ -893,7 +891,7 @@ input[type="radio"] {
   align-items: center;
   justify-content: flex-start;
   gap: 0.5rem;
-  background-color: rgba(12, 216, 12, 1);
+  background-color: rgb(12 216 12 / 100%);
   color: $color-white;
   max-width: 15rem;
   width: fit-content;
@@ -905,7 +903,7 @@ input[type="radio"] {
   right: 1.512rem;
   z-index: 99999;
 
-  &:after {
+  &::after {
     position: absolute;
     bottom: 0;
     left: 0;
@@ -983,13 +981,13 @@ input[type="radio"] {
         width: 1.25rem;
         height: 1.25rem;
         border-radius: $border-radius-small;
-        box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.25);
+        box-shadow: 0 0 0.5rem rgb(0 0 0 / 25%);
         background: transparent;
       }
     }
 
     &:has(input:checked) {
-      box-shadow: 0 0 0.0rem 0.126rem $color-active;
+      box-shadow: 0 0 0.0 0.126rem $color-active;
       background: linear-gradient(45deg, #0000001c, transparent);
     }
   }

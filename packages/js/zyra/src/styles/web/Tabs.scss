@@ -63,6 +63,7 @@
     }
   }
 }
+
 .middle-child-container {
   position: relative;
   display: flex;
@@ -79,9 +80,11 @@
         img {
           width: 3.15rem;
         }
+
         .logo{
           display: none;
         }
+
         .logo-small{
           display: block;
         }
@@ -259,6 +262,7 @@
     }
   }
 }
+
 @media screen and (width <=50.211rem) {
   .current-tab-lists {
     max-width: 4.125rem;
