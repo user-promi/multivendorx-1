@@ -86,8 +86,8 @@ class Course {
 			</p>
 
 			<p id="dynamic-link-select" class="form-field <?php echo $default_type ? 'show' : ''; ?>">
-				<label for="linked_item"><?php esc_html_e( 'Select Item', 'moowoodle' ); ?></label>
-				<select id="linked_item" name="linked_item">
+				<label for="linked_item_id"><?php esc_html_e( 'Select Item', 'moowoodle' ); ?></label>
+				<select id="linked_item_id" name="linked_item_id">
 					<option value=""><?php esc_html_e( 'Select an item...', 'moowoodle' ); ?></option>
 				</select>
 			</p>
@@ -109,9 +109,12 @@ class Course {
 	}
 
 	/**
-	 * Handle AJAX request to fetch courses available for linking to a product.
+	 * Handle AJAX request to fetch courses or cohorts for linking to a product.
 	 *
-	 * @return void
+	 * Expects POST: nonce, type ('course' or 'cohort'), post_id.
+	 * Returns: available courses or cohorts and the selected one (even if not available).
+	 *
+	 * @return void Outputs JSON response.
 	 */
 	public function get_linkable_courses() {
 		// Verify nonce.
@@ -129,24 +132,13 @@ class Course {
 		if ( 'course' === $type ) {
 			$linked_course_id = get_post_meta( $post_id, 'linked_course_id', true );
 
-			if ( $linked_course_id ) {
-				$courses = MooWoodle()->course->get_course(
-                    array(
-						'id' => $linked_course_id,
-                    )
-                );
-
-				if ( ! empty( $courses ) ) {
-					$linkable_courses[] = $courses[0];
-				}
-			} else {
-				$linkable_courses = MooWoodle()->course->get_course(
-                    array(
-						'product_id' => 0,
-                    )
-                );
-			}
-
+			$linkable_courses = $this->get_course(
+				array(
+					'id'         => $linked_course_id,
+					'product_id' => 0,
+					'condition'  => 'OR',
+				)
+			);
 			wp_send_json_success(
                 array(
 					'items'       => $linkable_courses,
@@ -168,7 +160,7 @@ class Course {
 	 * @param bool  $force_delete Whether to remove excluded course IDs after sync.
 	 * @return void
 	 */
-	public function save_courses( $courses, $force_delete = true ) {
+	public function update_courses( $courses, $force_delete = true ) {
         foreach ( $courses as $course ) {
             // Skip site format courses.
             if ( 'site' === $course['format'] ) {
@@ -184,7 +176,7 @@ class Course {
                 'enddate'          => (int) ( $course['enddate'] ?? 0 ),
             );
 
-            $updated_ids[] = self::save_course( $args );
+            $updated_ids[] = self::update_course( $args );
 
             \MooWoodle\Util::increment_sync_count( 'course' );
         }
@@ -199,7 +191,7 @@ class Course {
 	 * @param array $args Course data. Must include 'moodle_course_id'.
 	 * @return int|false Rows affected or false on failure.
 	 */
-	public static function save_course( $args ) {
+	public static function update_course( $args ) {
         global $wpdb;
 
         if ( empty( $args ) || empty( $args['moodle_course_id'] ) ) {
@@ -231,10 +223,13 @@ class Course {
     }
 
 	/**
-	 * Get course records from the database based on filters.
+	 * Get courses based on filters.
 	 *
-	 * @param array $where Conditions to filter courses.
-	 * @return array List of matching courses.
+	 * Supported keys: id, moodle_course_id, shortname, fullname, category_id, product_id,
+	 * startdate, enddate, ids (array), condition (AND/OR), limit, offset.
+	 *
+	 * @param array $where Filter conditions.
+	 * @return array List of courses as associative arrays (each course as [ field => value ]).
 	 */
 	public static function get_course( $where ) {
 		global $wpdb;
@@ -282,7 +277,7 @@ class Course {
 		$query = "SELECT * FROM $table";
 
 		if ( ! empty( $query_segments ) ) {
-			$query .= ' WHERE ' . implode( ' AND ', $query_segments );
+			$query .= ' WHERE ' . implode( $where['condition'] ?? ' AND ', $query_segments );
 		}
 
 		if ( isset( $where['limit'] ) && isset( $where['offset'] ) ) {

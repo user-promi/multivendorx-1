@@ -187,7 +187,7 @@ class Product {
 		$product->set_status( 'publish' );
 		$product->save();
 
-		MooWoodle()->course->save_course(
+		MooWoodle()->course->update_course(
             array(
 				'moodle_course_id' => (int) $course['id'],
 				'product_id'       => (int) $product->get_id(),
@@ -277,42 +277,41 @@ class Product {
 			return $product_id;
 		}
 
-		$link_type = sanitize_text_field( filter_input( INPUT_POST, 'link_type' ) ? filter_input( INPUT_POST, 'link_type' ) : '' );
-		$link_item = absint( filter_input( INPUT_POST, 'linked_item' ) ? filter_input( INPUT_POST, 'linked_item' ) : 0 );
+		$link_type    = sanitize_text_field( filter_input( INPUT_POST, 'link_type' ) ? filter_input( INPUT_POST, 'link_type' ) : '' );
+		$link_item_id = absint( filter_input( INPUT_POST, 'linked_item_id' ) ? filter_input( INPUT_POST, 'linked_item_id' ) : 0 );
 
 		// Only process if it's a course link.
 		if ( 'course' === $link_type ) {
-			if ( get_post_meta( $product_id, 'linked_cohort_id', true ) ) {
-				do_action( 'moowoodle_clean_cohort_previous_link', $product_id );
-			}
+			do_action( 'moowoodle_clean_cohort_previous_link', $product_id );
 
-			if ( 0 === $link_item ) {
+			if ( 0 === $link_item_id ) {
 				$this->clean_course_previous_link( $product_id );
-			} else {
-				$prev_course_id = absint( get_post_meta( $product_id, 'linked_course_id', true ) );
-
-				if ( $prev_course_id === $link_item ) {
-					return $product_id;
-                }
-
-				update_post_meta( $product_id, 'linked_course_id', $link_item );
-
-				$course = MooWoodle()->course->get_course( array( 'id' => $link_item ) );
-				$course = reset( $course );
-				if ( ! empty( $course['moodle_course_id'] ) ) {
-					update_post_meta( $product_id, 'moodle_course_id', (int) $course['moodle_course_id'] );
-					MooWoodle()->course->save_course(
-						array(
-							'moodle_course_id' => (int) (int) $course['moodle_course_id'],
-							'product_id'       => (int) $product_id,
-						)
-					);
-				}
+				return;
 			}
-		} elseif ( 'cohort' === $link_type ) {
-			do_action( 'moowoodle_process_product_meta', $product_id, $link_item );
-		}
 
+			$prev_course_id = absint( get_post_meta( $product_id, 'linked_course_id', true ) );
+			if ( $prev_course_id === $link_item_id ) {
+				return $product_id;
+			}
+
+			$course = reset( MooWoodle()->course->get_course( array( 'id' => $link_item_id ) ) );
+
+			if ( empty( $course['moodle_course_id'] ) ) {
+				return;
+			}
+
+			update_post_meta( $product_id, 'linked_course_id', $link_item_id );
+			update_post_meta( $product_id, 'moodle_course_id', (int) $course['moodle_course_id'] );
+
+			MooWoodle()->course->update_course(
+				array(
+					'moodle_course_id' => (int) $course['moodle_course_id'],
+					'product_id'       => (int) $product_id,
+				)
+			);
+		} elseif ( 'cohort' === $link_type ) {
+			do_action( 'moowoodle_process_product_meta', $product_id, $link_item_id );
+		}
 		return $product_id;
 	}
 	/**
@@ -330,7 +329,7 @@ class Product {
 		$moodle_course_id = absint( get_post_meta( $product_id, 'moodle_course_id', true ) );
 
 		if ( ! empty( $moodle_course_id ) ) {
-			MooWoodle()->course->save_course(
+			MooWoodle()->course->update_course(
 				array(
 					'moodle_course_id' => (int) $moodle_course_id,
 					'product_id'       => 0,
@@ -376,7 +375,7 @@ class Product {
 		$moodle_course_id = get_post_meta( $product_id, 'moodle_course_id', true );
 
 		if ( ! empty( $moodle_course_id ) ) {
-			MooWoodle()->course->save_course(
+			MooWoodle()->course->update_course(
 				array(
 					'moodle_course_id' => $moodle_course_id,
 					'product_id'       => 0,
@@ -424,7 +423,7 @@ class Product {
 		$moodle_course_id = get_post_meta( $product_id, 'moodle_course_id', true );
 
 		if ( ! empty( $moodle_course_id ) ) {
-			MooWoodle()->course->save_course(
+			MooWoodle()->course->update_course(
 				array(
 					'moodle_course_id' => $moodle_course_id,
 					'product_id'       => $product_id,

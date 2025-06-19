@@ -19,12 +19,14 @@ use MooWoodle\Util;
 class Category {
 
 	/**
-     * Get course categories.
+	 * Get course categories from the database using optional filters.
 	 *
-	 * @param mixed $where Condition to get course categories.
-     *
-     * @return array|object|null
-     */
+	 * @param array $where Optional filters:
+	 *   - 'moodle_category_id' (int): Match a specific Moodle category ID.
+	 *   - 'category_ids' (int[]): Match any of the given Moodle category IDs.
+	 *
+	 * @return array List of matching categories as associative arrays, or empty array if none found.
+	 */
 	public static function get_course_category( $where ) {
         global $wpdb;
 
@@ -33,14 +35,6 @@ class Category {
 
         if ( isset( $where['moodle_category_id'] ) ) {
             $query_segments[] = ' ( moodle_category_id = ' . $where['moodle_category_id'] . ' ) ';
-        }
-
-        if ( isset( $where['name'] ) ) {
-            $query_segments[] = ' ( name = ' . $where['name'] . ' ) ';
-        }
-
-        if ( isset( $where['parent_id'] ) ) {
-            $query_segments[] = ' ( parent_id = ' . $where['parent_id'] . ' ) ';
         }
 
 		if ( isset( $where['category_ids'] ) ) {
@@ -68,13 +62,13 @@ class Category {
     }
 
 	/**
-	 * Save or update Moodle categories in the MooWoodle categories table.
+	 * Save or update multiple Moodle categories in the local table.
 	 *
-	 * This function loops through an array of categories and either inserts a new
-	 * category or updates an existing one based on the Moodle category ID.
-	 * It also increments the course sync count for each successful operation.
+	 * Goes through each category and adds it to the database or updates it
+	 * if it already exists (based on Moodle category ID).
+	 * Also updates the course sync count for each category.
 	 *
-	 * @param array $categories List of category data. Each item must have 'id' and 'name'.
+	 * @param array $categories List of categories. Each should have 'id', 'name', and optionally 'parent'.
 	 * @return void
 	 */
 	public static function update_course_categories( $categories ) {
@@ -85,7 +79,7 @@ class Category {
 				'parent_id'          => (int) ( $category['parent'] ?? 0 ),
 			);
 
-			self::save_course_category( $args );
+			self::update_course_category( $args );
 
 			\MooWoodle\Util::increment_sync_count( 'course' );
 		}
@@ -103,7 +97,7 @@ class Category {
 	 * }
 	 * @return bool|int False on failure, number of rows affected on success.
 	 */
-	public static function save_course_category( $args ) {
+	public static function update_course_category( $args ) {
 		global $wpdb;
 
 		if ( empty( $args['moodle_category_id'] ) ) {

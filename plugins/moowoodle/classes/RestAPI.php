@@ -311,7 +311,7 @@ class RestAPI {
             'course'
         );
 
-        MooWoodle()->course->save_courses( $courses );
+        MooWoodle()->course->update_courses( $courses );
 
         MooWoodle()->product->update_products( $courses );
 
@@ -392,7 +392,6 @@ class RestAPI {
         if ( ! empty( $category_field ) ) {
             $filters['category_id'] = $category_field;
         }
-
         // Add search filter.
         if ( 'course' === $search_action ) {
             $filters['fullname'] = $search_field;

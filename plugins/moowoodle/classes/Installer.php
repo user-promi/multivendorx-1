@@ -161,7 +161,7 @@ class Installer {
                 'parent_id'          => (int) $term['parent_id'],
             );
 
-            \MooWoodle\Core\Category::save_course_category( $args );
+            \MooWoodle\Core\Category::update_course_category( $args );
         }
     }
 
@@ -207,7 +207,7 @@ class Installer {
                 'enddate'          => $all_meta['_course_enddate'][0] ?? 0,
             );
 
-            $new_course_id = \MooWoodle\Core\Course::save_course( $course_data );
+            $new_course_id = \MooWoodle\Core\Course::update_course( $course_data );
 
             if ( ! empty( $course_data['product_id'] ) && $new_course_id ) {
                 update_post_meta( $course_data['product_id'], 'linked_course_id', $new_course_id );
