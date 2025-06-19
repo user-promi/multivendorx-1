@@ -4,9 +4,6 @@ node_modules/
 # Ignore minified files
 **/*.min.css
 
-# Ignore storybook styles
-**/stories/
-
 # Ignore generated SCSS/CSS files
 dist/
 build/
