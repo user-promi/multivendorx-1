@@ -12,7 +12,7 @@ namespace MooWoodle;
  *
  * @class       Admin class
  * @version     PRODUCT_VERSION
- * @author      Dualcube
+ * @author      DualCube
  */
 class Admin {
 	/**

@@ -12,7 +12,7 @@ namespace MooWoodle;
  *
  * @class       FrontendScripts class
  * @version     PRODUCT_VERSION
- * @author      Dualcube
+ * @author      DualCube
  */
 class FrontendScripts {
 	/**

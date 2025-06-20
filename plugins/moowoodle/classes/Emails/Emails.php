@@ -12,7 +12,7 @@ namespace MooWoodle\Emails;
  *
  * @class       Emails class
  * @version     PRODUCT_VERSION
- * @author      Dualcube
+ * @author      DualCube
  */
 class Emails {
 	/**

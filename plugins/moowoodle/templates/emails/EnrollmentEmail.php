@@ -4,9 +4,9 @@
  *
  * Override this template by copying it to yourtheme/moowoodle/emails/EnrollmentEmail.php
  *
- * @author    Dualcube
+ * @author    DualCube
  * @package   moowoodle/templates
- * @version   3.3.0
+ * @version   PRODUCT_VERSION
  */
 
 defined( 'ABSPATH' ) || exit();
