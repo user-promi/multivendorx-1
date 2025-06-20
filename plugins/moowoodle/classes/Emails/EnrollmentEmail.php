@@ -11,7 +11,7 @@ namespace MooWoodle\Emails;
  * MooWoodle EnrollmentEmail class
  *
  * @class       Emails class
- * @version     3.3.0
+ * @version     PRODUCT_VERSION
  * @author      Dualcube
  */
 class EnrollmentEmail extends \WC_Email {
@@ -69,10 +69,10 @@ class EnrollmentEmail extends \WC_Email {
 		);
 
 		$user = get_user_by( 'email', $recipient );
-		if ( $user && $user->ID ) {
-			delete_user_meta( $user->ID, 'moowoodle_wordpress_new_user_created' );
-			delete_user_meta( $user->ID, 'moowoodle_moodle_new_user_created' );
-		}
+		if ( $user && ( get_user_meta( $user->ID, 'moowoodle_moodle_new_user_created', true ) || get_user_meta( $user->ID, 'moowoodle_wordpress_new_user_created', true ) ) ) {
+            delete_user_meta( $user->ID, 'moowoodle_wordpress_new_user_created' );
+            delete_user_meta( $user->ID, 'moowoodle_moodle_new_user_created' );
+        }
 	}
 
 	/**

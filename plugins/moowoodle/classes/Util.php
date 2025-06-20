@@ -12,7 +12,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Plugin Helper functions
  *
- * @version     3.3.0
+ * @version     PRODUCT_VERSION
  * @package     MooWoodle
  * @author      DualCube
  */

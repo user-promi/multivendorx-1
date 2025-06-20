@@ -10,8 +10,8 @@ namespace MooWoodle;
 /**
  * MooWoodle Enrollment class
  *
- * @class       Emails class
- * @version     3.3.0
+ * @class       Enrollment class
+ * @version     PRODUCT_VERSION
  * @author      Dualcube
  */
 class Enrollment {
@@ -64,7 +64,7 @@ class Enrollment {
 				continue;
 			}
 
-			$this->enrol_moodle_user(
+			$response = $this->enrol_moodle_user(
                 array(
 					'first_name'       => $order->get_billing_first_name(),
 					'last_name'        => $order->get_billing_last_name(),
@@ -78,7 +78,7 @@ class Enrollment {
                 )
             );
 
-			if ( apply_filters( 'moowoodle_add_course_detail_for_email', false ) ) {
+			if ( $response ) {
 				$email_data['course'][] = $product->get_meta( 'linked_course_id', true );
 			}
 		}
@@ -158,13 +158,11 @@ class Enrollment {
 			$enrollment_data['id'] = $existing_enrollment['id'];
 		}
 
-		self::save_enrollment( $enrollment_data );
+		self::update_enrollment( $enrollment_data );
 
 		if ( $group_item_id ) {
 			do_action( 'moowoodle_seat_book', $enroll_data['group_item_id'] );
 		}
-
-		add_filter( 'moowoodle_add_course_detail_for_email', '__return_true' );
 
 		return true;
 	}
@@ -469,7 +467,7 @@ class Enrollment {
 	 * @param array $args Enrollment data. Must include 'user_email'. If 'id' is present, updates the record.
 	 * @return int|false Enrollment ID on success, false on failure.
 	 */
-	public static function save_enrollment( $args ) {
+	public static function update_enrollment( $args ) {
 		global $wpdb;
 
 		$table = $wpdb->prefix . Util::TABLES['enrollment'];
@@ -533,24 +531,26 @@ class Enrollment {
 			$query_segments[] = $wpdb->prepare( 'course_id = %d', $where['course_id'] );
 		}
 
-		if ( isset( $where['course_id_not'] ) ) {
-			$query_segments[] = $wpdb->prepare( 'course_id != %d', $where['course_id_not'] );
+		if ( ! empty( $where['meta_query'] ) ) {
+			foreach ( $where['meta_query'] as $meta ) {
+				if ( ! empty( $meta['key'] ) ) {
+					$key     = $meta['key'];
+					$compare = strtoupper( $meta['compare'] );
+					$value   = $meta['value'];
+
+					if ( in_array( $compare, array( '=', '!=', '>', '<', '>=', '<=', 'LIKE', 'NOT LIKE' ), true ) ) {
+						$query_segments[] = "`$key` $compare " . $wpdb->prepare( '%s', $value );
+					}
+				}
+			}
 		}
 
 		if ( isset( $where['cohort_id'] ) ) {
 			$query_segments[] = $wpdb->prepare( 'cohort_id = %d', $where['cohort_id'] );
 		}
 
-		if ( isset( $where['cohort_id_not'] ) ) {
-			$query_segments[] = $wpdb->prepare( 'cohort_id != %d', $where['cohort_id_not'] );
-		}
-
 		if ( isset( $where['group_id'] ) ) {
 			$query_segments[] = $wpdb->prepare( 'group_id = %d', $where['group_id'] );
-		}
-
-		if ( isset( $where['group_id_not'] ) ) {
-			$query_segments[] = $wpdb->prepare( 'group_id != %d', $where['group_id_not'] );
 		}
 
 		if ( isset( $where['order_id'] ) ) {
@@ -569,12 +569,12 @@ class Enrollment {
 			$query_segments[] = $wpdb->prepare( 'date = %s', $where['date'] );
 		}
 
-		if ( ! empty( $where['ids'] ) && is_array( $where['ids'] ) ) {
+		if ( ! empty( $where['ids'] ) ) {
 			$ids              = implode( ',', array_map( 'intval', $where['ids'] ) );
 			$query_segments[] = "id IN ($ids)";
 		}
 
-		if ( ! empty( $where['group_item_ids'] ) && is_array( $where['group_item_ids'] ) ) {
+		if ( ! empty( $where['group_item_ids'] ) ) {
 			$ids              = implode( ',', array_map( 'intval', $where['group_item_ids'] ) );
 			$query_segments[] = "group_item_id IN ($ids)";
 		}

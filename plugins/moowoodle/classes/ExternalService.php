@@ -12,9 +12,9 @@ defined( 'ABSPATH' ) || exit;
 /**
  * MooWoodle ExternalService class
  *
- * @version 3.3.0
- * @package MooWoodle
- * @author  DualCube
+ * @version     PRODUCT_VERSION
+ * @package     MooWoodle
+ * @author      DualCube
  */
 class ExternalService {
 
@@ -86,8 +86,7 @@ class ExternalService {
                 )
             );
 
-			$show_adv_log = MooWoodle()->setting->get_setting( 'moowoodle_adv_log' );
-			$show_adv_log = is_array( $show_adv_log ) ? $show_adv_log : array();
+			$show_adv_log = MooWoodle()->setting->get_setting( 'moowoodle_adv_log', array() );
 			$show_adv_log = in_array( 'moowoodle_adv_log', $show_adv_log, true );
 
             // Log the response result.

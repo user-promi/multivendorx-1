@@ -11,7 +11,7 @@ namespace MooWoodle;
  * MooWoodle Admin class
  *
  * @class       Admin class
- * @version     3.3.0
+ * @version     PRODUCT_VERSION
  * @author      Dualcube
  */
 class Admin {

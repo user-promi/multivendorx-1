@@ -12,7 +12,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * MooWoodle Installer class
  *
- * @version     3.3.0
+ * @version     PRODUCT_VERSION
  * @package     MooWoodle
  * @author      DualCube
  */
@@ -198,13 +198,13 @@ class Installer {
             }
 
             $course_data = array(
-                'moodle_course_id' => $all_meta['moodle_course_id'][0] ?? 0,
-                'shortname'        => $all_meta['_course_short_name'][0] ?? '',
-                'category_id'      => $all_meta['_category_id'][0] ?? 0,
+                'moodle_course_id' => reset( $all_meta['moodle_course_id'] ) ?? 0,
+                'shortname'        => reset( $all_meta['_course_short_name'] ) ?? '',
+                'category_id'      => reset( $all_meta['_category_id'] ) ?? 0,
                 'fullname'         => sanitize_text_field( $course->post_title ),
-                'product_id'       => $all_meta['linked_product_id'][0] ?? 0,
-                'startdate'        => $all_meta['_course_startdate'][0] ?? 0,
-                'enddate'          => $all_meta['_course_enddate'][0] ?? 0,
+                'product_id'       => reset( $all_meta['linked_product_id'] ) ?? 0,
+                'startdate'        => reset( $all_meta['_course_startdate'] ) ?? 0,
+                'enddate'          => reset( $all_meta['_course_enddate'] ) ?? 0,
             );
 
             $new_course_id = \MooWoodle\Core\Course::update_course( $course_data );

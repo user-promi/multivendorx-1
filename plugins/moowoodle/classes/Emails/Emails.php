@@ -11,7 +11,7 @@ namespace MooWoodle\Emails;
  * MooWoodle Emails class
  *
  * @class       Emails class
- * @version     3.3.0
+ * @version     PRODUCT_VERSION
  * @author      Dualcube
  */
 class Emails {
@@ -74,7 +74,7 @@ class Emails {
 			$email_content['teacher_email'] = sanitize_email( $enrollments['teacher_email'] );
 		}
 
-		if ( ! empty( $enrollments['gift_email'] ) && is_array( $enrollments['gift_email'] ) ) {
+		if ( ! empty( $enrollments['gift_email'] ) ) {
 			$gift_email_address = reset( $enrollments['gift_email'] );
 			if ( ! empty( $gift_email_address ) ) {
 				$email_content['gift_email'] = sanitize_email( $gift_email_address );
@@ -85,11 +85,11 @@ class Emails {
 		$email_content = apply_filters( 'moowoodle_enrollment_email_data', $email_content, $enrollments );
 
 		// Course data.
-		if ( ! empty( $enrollments['course'] ) && is_array( $enrollments['course'] ) ) {
+		if ( ! empty( $enrollments['course'] ) ) {
 			$enrolled_course_ids = array_map( 'intval', $enrollments['course'] );
 			$enrolled_courses    = MooWoodle()->course->get_course( array( 'ids' => $enrolled_course_ids ) );
 
-			if ( ! empty( $enrolled_courses ) && is_array( $enrolled_courses ) ) {
+			if ( ! empty( $enrolled_courses ) ) {
 				$email_content['course_details'] = array_map(
                     function ( $course ) {
                         return array(

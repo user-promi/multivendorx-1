@@ -10,9 +10,9 @@ namespace MooWoodle;
 /**
  * MooWoodle Frontend class
  *
- * @version 3.3.0
- * @package MooWoodle
- * @author  DualCube
+ * @version     PRODUCT_VERSION
+ * @package     MooWoodle
+ * @author      DualCube
  */
 class Frontend {
 	/**

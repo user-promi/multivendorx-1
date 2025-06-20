@@ -13,7 +13,7 @@ use MooWoodle\Util;
  * MooWoodle Category class
  *
  * @class       Category class
- * @version     3.3.0
+ * @version     PRODUCT_VERSION
  * @author      Dualcube
  */
 class Category {
@@ -98,20 +98,21 @@ class Category {
 	 * @return bool|int False on failure, number of rows affected on success.
 	 */
 	public static function update_course_category( $args ) {
-		global $wpdb;
+        global $wpdb;
 
-		if ( empty( $args['moodle_category_id'] ) ) {
-			return false;
-		}
+        if ( empty( $args['moodle_category_id'] ) ) {
+            return false;
+        }
 
-		$table = $wpdb->prefix . Util::TABLES['category'];
+        $table             = $wpdb->prefix . Util::TABLES['category'];
+        $existing_category = self::get_course_category( array( 'moodle_category_id' => (int) $args['moodle_category_id'] ) );
 
-		if ( self::get_course_category( array( 'moodle_category_id' => (int) $args['moodle_category_id'] ) ) ) {
-			return $wpdb->update( $table, $args, array( 'moodle_category_id' => (int) $args['moodle_category_id'] ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-		}
+		if ( ! empty( $existing_category ) ) {
+            return $wpdb->update( $table, $args, array( 'moodle_category_id' => (int) $args['moodle_category_id'] ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+        }
 
-		return $wpdb->insert( $table, $args ); //phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
-	}
+        return $wpdb->insert( $table, $args ); //phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+    }
 
 	/**
 	 * Returns term by Moodle category ID.
@@ -240,16 +241,18 @@ class Category {
 	 */
 	private static function remove_exclude_ids( $exclude_ids, $taxonomy ) {
 
-		$terms = get_terms( [ 
-			'taxonomy' => $taxonomy, 
-			'hide_empty' => false,
-			'meta_query' => [
-				[
-					'key'     => '_category_id',
-					'compare' => 'EXISTS',
-				],
-			] 
-		] );
+		$terms = get_terms(
+            array(
+				'taxonomy'   => $taxonomy,
+				'hide_empty' => false,
+				'meta_query' => array(
+					array(
+						'key'     => '_category_id',
+						'compare' => 'EXISTS',
+					),
+				),
+            )
+        );
 
 		if ( is_wp_error( $terms ) ) {
 			return;

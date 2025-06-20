@@ -13,7 +13,7 @@ use MooWoodle\Util;
  * MooWoodle Course class
  *
  * @class       Course class
- * @version     3.3.0
+ * @version     PRODUCT_VERSION
  * @author      Dualcube
  */
 class Course {
@@ -127,7 +127,6 @@ class Course {
 		$type             = sanitize_text_field( filter_input( INPUT_POST, 'type' ) ? filter_input( INPUT_POST, 'type' ) : '' );
 		$post_id          = absint( filter_input( INPUT_POST, 'post_id' ) ? filter_input( INPUT_POST, 'post_id' ) : 0 );
 		$linkable_courses = array();
-		$linked_course_id = null;
 
 		if ( 'course' === $type ) {
 			$linked_course_id = get_post_meta( $post_id, 'linked_course_id', true );
@@ -268,7 +267,7 @@ class Course {
 			$query_segments[] = ' ( enddate = ' . esc_sql( intval( $where['enddate'] ) ) . ' ) ';
 		}
 
-		if ( isset( $where['ids'] ) && is_array( $where['ids'] ) ) {
+		if ( isset( $where['ids'] ) ) {
 			$ids              = implode( ',', array_map( 'intval', $where['ids'] ) );
 			$query_segments[] = "id IN ($ids)";
 		}

@@ -14,7 +14,6 @@ declare global {
         shop_url: string;
         tab_name: string;
         khali_dabba: boolean;
-        pro_sticker: string;
         accountmenu: any;
         settings_databases_value: any; // Use a more specific type if possible
         log_url: string;

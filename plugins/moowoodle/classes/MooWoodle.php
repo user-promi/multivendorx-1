@@ -14,7 +14,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * MooWoodle Main Class
  *
- * @version     3.3.0
+ * @version     PRODUCT_VERSION
  * @package     MooWoodle
  * @author      DualCube
  *
@@ -153,8 +153,7 @@ class MooWoodle {
 		$this->container['frontend']         = new Frontend();
         $this->container['block']            = new Block();
         $this->container['frontendscripts']  = new FrontendScripts();
-
-        new EndPoint();
+        $this->container['endpoint']         = new EndPoint();
 
         $this->initialize_moowoodle_log_file();
     }

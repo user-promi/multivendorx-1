@@ -11,7 +11,7 @@ namespace MooWoodle;
  * MooWoodle FrontendScripts class
  *
  * @class       FrontendScripts class
- * @version     3.3.0
+ * @version     PRODUCT_VERSION
  * @author      Dualcube
  */
 class FrontendScripts {
@@ -311,10 +311,6 @@ class FrontendScripts {
 		$my_account_menu = wc_get_account_menu_items();
 		unset( $my_account_menu['my-courses'] );
 
-		$pro_sticker = apply_filters( 'is_moowoodle_pro_inactive', true ) ?
-
-		'<span class="mw-pro-tag" style="font-size: 0.5rem; background: #e35047; padding: 0.125rem 0.5rem; color: #F9F8FB; font-weight: 700; line-height: 1.1; position: absolute; border-radius: 2rem 0; right: -0.75rem; top: 50%; transform: translateY(-50%)">Pro</span>' : '';
-
         $localize_scripts = apply_filters(
             'moowoodle_localize_scripts',
             array(
@@ -335,7 +331,6 @@ class FrontendScripts {
 						'nonce'                    => wp_create_nonce( 'wp_rest' ),
 						'settings_databases_value' => $settings_databases_value,
 						'khali_dabba'              => Util::is_khali_dabba(),
-						'pro_sticker'              => $pro_sticker,
 						'shop_url'                 => MOOWOODLE_PRO_SHOP_URL,
 						'accountmenu'              => $my_account_menu,
 						'tab_name'                 => __( 'MooWoodle', 'moowoodle' ),

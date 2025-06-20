@@ -11,7 +11,10 @@ defined( 'ABSPATH' ) || exit;
 
 /**
  * MooWoodle Rest API class
- * Creates Rest API end point.
+ *
+ * @version     PRODUCT_VERSION
+ * @package     MooWoodle
+ * @author      DualCube
  */
 class RestAPI {
     /**
@@ -264,8 +267,7 @@ class RestAPI {
 
         set_transient( 'course_sync_running', true );
 
-        $sync_setting = MooWoodle()->setting->get_setting( 'sync-course-options' );
-        $sync_setting = is_array( $sync_setting ) ? $sync_setting : array();
+        $sync_setting = MooWoodle()->setting->get_setting( 'sync-course-options', array() );
 
         // update course and product categories.
         if ( in_array( 'sync_courses_category', $sync_setting, true ) ) {
@@ -662,11 +664,17 @@ class RestAPI {
         // Fetch paginated enrollments.
         $user_enrollments = MooWoodle()->enrollment->get_enrollments(
             array(
-				'user_id'       => $current_user->ID,
-				'status'        => 'enrolled',
-				'course_id_not' => 0,
-				'limit'         => $items_per_page,
-				'offset'        => $query_offset,
+				'user_id'    => $current_user->ID,
+				'status'     => 'enrolled',
+				'limit'      => $items_per_page,
+				'offset'     => $query_offset,
+                'meta_query' => array(
+                    array(
+                        'key'     => 'course_id',
+                        'value'   => '0',
+                        'compare' => '!=',
+					),
+                ),
             )
         );
 
@@ -684,12 +692,12 @@ class RestAPI {
 
         $formatted_courses = array_map(
             function ( $enrollment ) use ( $current_user, $moodle_password, $moodle_base_url ) {
-                $course_data = MooWoodle()->course->get_course(
+                $course = MooWoodle()->course->get_course(
                     array(
 						'id' => $enrollment['course_id'],
                     )
                 );
-                $course      = is_array( $course_data ) ? reset( $course_data ) : $course_data;
+                $course = reset( $course );
 
                 $formatted_enrolled_date = '';
                 if ( ! empty( $enrollment['enrolled_date'] ) && strtotime( $enrollment['enrolled_date'] ) ) {
