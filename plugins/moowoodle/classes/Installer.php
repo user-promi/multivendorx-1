@@ -65,10 +65,10 @@ class Installer {
 
         // SQL for category table.
         $sql_category = "CREATE TABLE `{$wpdb->prefix}" . Util::TABLES['category'] . "` (
-            `moodle_category_id` bigint(20) NOT NULL,
+            `id` bigint(20) NOT NULL,
             `name` varchar(255) NOT NULL,
             `parent_id` bigint(20) NOT NULL DEFAULT 0,
-            PRIMARY KEY (`moodle_category_id`)
+            PRIMARY KEY (`id`)
         ) $collate;";
 
         // SQL for course table.
@@ -130,9 +130,8 @@ class Installer {
             $wpdb->prepare(
                 "
                 SELECT 
-                    t.term_id,
                     t.name,
-                    CAST(tm.meta_value AS UNSIGNED) AS moodle_category_id,
+                    CAST(tm.meta_value AS UNSIGNED) AS id,
                     COALESCE(CAST(pm.meta_value AS UNSIGNED), 0) AS parent_id
                 FROM {$wpdb->terms} t
                 INNER JOIN {$wpdb->term_taxonomy} tt 
@@ -155,13 +154,7 @@ class Installer {
         }
 
         foreach ( $terms as $term ) {
-            $args = array(
-                'moodle_category_id' => (int) $term['moodle_category_id'],
-                'name'               => sanitize_text_field( $term['name'] ),
-                'parent_id'          => (int) $term['parent_id'],
-            );
-
-            \MooWoodle\Core\Category::update_course_category( $args );
+            \MooWoodle\Core\Category::update_course_category( $term );
         }
     }
 

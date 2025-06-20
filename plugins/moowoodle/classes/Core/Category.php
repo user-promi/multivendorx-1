@@ -19,65 +19,48 @@ use MooWoodle\Util;
 class Category {
 
 	/**
-	 * Get course categories from the database using optional filters.
+	 * Get course categories by ID(s).
 	 *
-	 * @param array $where Optional filters:
-	 *   - 'moodle_category_id' (int): Match a specific Moodle category ID.
-	 *   - 'category_ids' (int[]): Match any of the given Moodle category IDs.
+	 * If no ID is provided, all categories are returned.
 	 *
-	 * @return array List of matching categories as associative arrays, or empty array if none found.
+	 * @param int|int[] $ids One or more category IDs.
+	 * @return array List of categories.
 	 */
-	public static function get_course_category( $where ) {
-        global $wpdb;
+	public static function get_course_category_information( $ids ) {
+		global $wpdb;
 
-        // Store query segment.
-        $query_segments = array();
+		// Ensure it's an array of integers
+		$ids = is_array( $ids ) ? array_map( 'intval', $ids ) : array( (int) $ids );
+		$ids = array_filter( $ids ); // Remove zeros or falsy values
 
-        if ( isset( $where['moodle_category_id'] ) ) {
-            $query_segments[] = ' ( moodle_category_id = ' . $where['moodle_category_id'] . ' ) ';
-        }
+		$table = $wpdb->prefix . Util::TABLES['category'];
+		$query = "SELECT * FROM $table";
 
-		if ( isset( $where['category_ids'] ) ) {
-			$ids              = implode( ',', array_map( 'intval', $where['category_ids'] ) );
-			$query_segments[] = " ( moodle_category_id IN ($ids) ) ";
+		if ( ! empty( $ids ) ) {
+			$placeholders = implode( ',', array_fill( 0, count( $ids ), '%d' ) );
+			$query .= $wpdb->prepare( " WHERE id IN ($placeholders)", ...$ids );
 		}
 
-        // get the table.
-        $table = $wpdb->prefix . Util::TABLES['category'];
-
-        // Base query.
-        $query = "SELECT * FROM $table";
-
-        // Join the query parts with 'AND'.
-        $where_query = implode( ' AND ', $query_segments );
-
-        if ( $where_query ) {
-            $query .= " WHERE $where_query";
-        }
-
-        // Get all rows.
-        $results = $wpdb->get_results( $query, ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
-
-        return $results;
-    }
-
+		return $wpdb->get_results( $query, ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.*
+	}
 	/**
-	 * Save or update multiple Moodle categories in the local table.
+	 * Insert or update multiple course categories in the local table.
 	 *
-	 * Goes through each category and adds it to the database or updates it
-	 * if it already exists (based on Moodle category ID).
-	 * Also updates the course sync count for each category.
+	 * For each category, adds a new row or updates it based on the category ID.
+	 * Also increments the course sync count for tracking.
 	 *
-	 * @param array $categories List of categories. Each should have 'id', 'name', and optionally 'parent'.
-	 * @return void
+	 * @param array $categories Each item should include:
+	 *   - 'id' (int): Unique category ID (e.g., Moodle category ID).
+	 *   - 'name' (string): Category name.
+	 *   - 'parent' (int): Optional parent category ID.
 	 */
 	public static function update_course_categories( $categories ) {
 		foreach ( $categories as $category ) {
-			$args = array(
-				'moodle_category_id' => (int) $category['id'],
+			$args = [
+				'id'                 => (int) $category['id'],
 				'name'               => trim( sanitize_text_field( $category['name'] ) ),
-				'parent_id'          => (int) ( $category['parent'] ?? 0 ),
-			);
+				'parent_id'          => (int) ( $category['parent'] ),
+			];
 
 			self::update_course_category( $args );
 
@@ -86,12 +69,12 @@ class Category {
 	}
 
 	/**
-	 * Insert or update a category based on moodle_category_id.
+	 * Insert or update a category based on moodle category id.
 	 *
 	 * @param array $args {
 	 *     Array of category data.
 	 *
-	 *     @type int    $moodle_category_id Required. Moodle category ID.
+	 *     @type int    $id Required. Moodle category ID.
 	 *     @type string $name               Required. Category name.
 	 *     @type int    $parent_id          Optional. Parent category ID.
 	 * }
@@ -100,15 +83,15 @@ class Category {
 	public static function update_course_category( $args ) {
         global $wpdb;
 
-        if ( empty( $args['moodle_category_id'] ) ) {
+        if ( empty( $args['id'] ) ) {
             return false;
         }
 
         $table             = $wpdb->prefix . Util::TABLES['category'];
-        $existing_category = self::get_course_category( array( 'moodle_category_id' => (int) $args['moodle_category_id'] ) );
+        $existing_category = self::get_course_category_information( $args['id'] );
 
 		if ( ! empty( $existing_category ) ) {
-            return $wpdb->update( $table, $args, array( 'moodle_category_id' => (int) $args['moodle_category_id'] ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+            return $wpdb->update( $table, $args, array( 'id' => (int) $args['id'] ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
         }
 
         return $wpdb->insert( $table, $args ); //phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery

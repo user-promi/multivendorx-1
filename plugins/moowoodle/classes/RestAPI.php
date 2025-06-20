@@ -365,7 +365,6 @@ class RestAPI {
      * @return \WP_Error|\WP_REST_Response
      */
     public function get_courses( $request ) {
-
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             return new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'moowoodle' ), array( 'status' => 403 ) );
@@ -438,11 +437,7 @@ class RestAPI {
             $view_user_url = trailingslashit( MooWoodle()->setting->get_setting( 'moodle_url' ) ) . "user/index.php?id={$course['moodle_course_id']}";
 
             // Get categories.
-            $categories    = MooWoodle()->category->get_course_category(
-                array(
-					'moodle_category_id' => $course['category_id'],
-                )
-            );
+            $categories    = MooWoodle()->category->get_course_category_information($course['category_id']);
             $category_name = ! empty( $categories ) ? $categories[0]['name'] : __( 'Uncategorized', 'moowoodle' );
 
             // Get enrolled users count.
@@ -490,6 +485,7 @@ class RestAPI {
 
         // Fetch all courses.
         $courses = MooWoodle()->course->get_course( array() );
+        file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":orders:  : " . var_export($courses, true) . "\n", FILE_APPEND);
         if ( empty( $courses ) ) {
             return rest_ensure_response(
                 array(
@@ -503,11 +499,7 @@ class RestAPI {
         $category_ids = array_unique( wp_list_pluck( $courses, 'category_id' ) );
 
         // Fetch categories.
-        $category = MooWoodle()->category->get_course_category(
-            array(
-				'category_ids' => $category_ids,
-            )
-        );
+        $category = MooWoodle()->category->get_course_category_information($category_ids);
 
         // Prepare formatted course list.
         $all_courses = array();
@@ -518,7 +510,7 @@ class RestAPI {
         // Prepare formatted category list.
         $all_category = array();
         foreach ( $category as $cat ) {
-            $all_category[ $cat['moodle_category_id'] ] = $cat['name'] ? $cat['name'] : "Category {$cat['moodle_category_id']}";
+            $all_category[ $cat['id'] ] = $cat['name'] ? $cat['name'] : "Category {$cat['id']}";
         }
 
         return rest_ensure_response(

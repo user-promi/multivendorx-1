@@ -24,9 +24,9 @@ class Util {
      * @var array
      */
     const TABLES = array(
-        'enrollment' => 'moowoodle_enrollment',
-        'category'   => 'moowoodle_categories',
-        'course'     => 'moowoodle_courses',
+        'enrollment' => 'mw_enrollment',
+        'category'   => 'mw_moodle_categories',
+        'course'     => 'mw_courses',
     );
 
 	/**
