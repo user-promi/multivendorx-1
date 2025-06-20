@@ -48,7 +48,7 @@ $user = get_user_by( 'email', $args['user_email'] );
 	</a><br>
 
 	<strong><?php esc_html_e( 'Username:', 'moowoodle' ); ?></strong>
-	<?php echo esc_html( $user->user_login ?? '' ); ?><br>
+	<?php echo esc_html( $user->user_login ?? 'John Doe' ); ?><br>
 
 	<?php
 	$wp_pwd         = get_user_meta( $user->ID ?? 0, 'moowoodle_wordpress_user_pwd', true );
@@ -138,6 +138,11 @@ $user = get_user_by( 'email', $args['user_email'] );
 		<?php foreach ( $args['enrollments']['course_details'] as $course ) : ?>
 			<li><?php echo esc_html( $course['name'] ); ?></li>
 		<?php endforeach; ?>
+	</ul>
+<?php else : ?>
+	<p><strong><?php esc_html_e( 'Course(s):', 'moowoodle' ); ?></strong></p>
+	<ul>
+		<li><?php esc_html_e( 'Dummy Course', 'moowoodle' ); ?></li>
 	</ul>
 <?php endif; ?>
 

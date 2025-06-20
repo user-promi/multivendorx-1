@@ -32,7 +32,7 @@ esc_html_e( "=== Your Account Information ===\n", 'moowoodle' );
 echo esc_html( sprintf( __( 'Website: %s', 'moowoodle' ), home_url() ) ) . "\n";
 
 // translators: %s is the username.
-echo esc_html( sprintf( __( 'Username: %s', 'moowoodle' ), $user->user_login ?? '' ) ) . "\n";
+echo esc_html( sprintf( __( 'Username: %s', 'moowoodle' ), $user->user_login ?? 'John Doe' ) ) . "\n";
 
 $wp_pwd         = get_user_meta( $user->ID ?? 0, 'moowoodle_wordpress_user_pwd', true );
 $moodle_pwd     = get_user_meta( $user->ID ?? 0, 'moowoodle_moodle_user_pwd', true );
@@ -92,6 +92,9 @@ if ( ! empty( $args['enrollments']['course_details'] ) ) {
 	foreach ( $args['enrollments']['course_details'] as $course ) {
 		echo '- ' . esc_html( $course['fullname'] ) . "\n";
 	}
+} else {
+	esc_html_e( "Course(s):\n", 'moowoodle' );
+	echo '- Dummy Course\n';
 }
 
 echo "\n" . esc_html__( "=== Access Your Courses ===\n", 'moowoodle' );
