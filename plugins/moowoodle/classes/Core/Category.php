@@ -29,16 +29,17 @@ class Category {
 	public static function get_course_category_information( $ids ) {
 		global $wpdb;
 
-		// Ensure it's an array of integers
-		$ids = is_array( $ids ) ? array_map( 'intval', $ids ) : array( (int) $ids );
-		$ids = array_filter( $ids ); // Remove zeros or falsy values
+		// Normalize input to an array
+		if ( is_int( $ids ) ) {
+			$ids = array( $ids );
+		}
 
 		$table = $wpdb->prefix . Util::TABLES['category'];
 		$query = "SELECT * FROM $table";
 
 		if ( ! empty( $ids ) ) {
-			$placeholders = implode( ',', array_fill( 0, count( $ids ), '%d' ) );
-			$query .= $wpdb->prepare( " WHERE id IN ($placeholders)", ...$ids );
+			$in = implode( ',', array_map( 'intval', $ids ) );
+			$query .= " WHERE id IN ($in)";
 		}
 
 		return $wpdb->get_results( $query, ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.*
