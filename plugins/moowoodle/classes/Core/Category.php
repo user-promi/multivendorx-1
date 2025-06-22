@@ -127,7 +127,7 @@ class Category {
         );
 
 		// Check no category found.
-		if ( is_wp_error( $terms ) ) {
+		if ( empty( $terms ) && is_wp_error( $terms ) ) {
 			return null;
 		}
 
@@ -199,13 +199,13 @@ class Category {
 				)
 			);
 
-			if ( ! is_wp_error( $term ) ) {
+			if ( !empty( $term ) && ! is_wp_error( $term ) ) {
 				add_term_meta( $term['term_id'], '_category_id', $category['id'], false );
             }
 		}
 
 		// In success on update or insert sync meta data.
-		if ( ! is_wp_error( $term ) ) {
+		if ( ! empty( $term ) && ! is_wp_error( $term ) ) {
 			update_term_meta( $term['term_id'], '_parent', $category['parent'], '' );
 			update_term_meta( $term['term_id'], '_category_path', $category['path'], false );
 
@@ -239,7 +239,7 @@ class Category {
             )
         );
 
-		if ( is_wp_error( $terms ) ) {
+		if ( empty( $term) && is_wp_error( $terms ) ) {
 			return;
         }
 

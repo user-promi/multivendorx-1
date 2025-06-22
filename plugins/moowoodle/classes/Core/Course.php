@@ -61,52 +61,49 @@ class Course {
      *
 	 * @return void
 	 */
-	public function add_additional_product_data_panel() {
-		global $post;
+public function add_additional_product_data_panel() {
+	global $post;
+	?>
+	<div id="moowoodle-course-link-tab" class="panel">
+		<p class="form-field moowoodle-link-type-field">
+			<label><?php esc_html_e( 'Link Type', 'moowoodle' ); ?></label><br>
+			<span class="moowoodle-radio-group">
+				<label class="moowoodle-radio-option">
+					<input type="radio" name="link_type" value="course">
+					<?php esc_html_e( 'Course', 'moowoodle' ); ?>
+				</label>
+				<label class="moowoodle-radio-option cohort">
+					<input type="radio" name="link_type" value="cohort"
+						<?php echo MooWoodle()->util->is_khali_dabba() ? '' : 'disabled'; ?>>
+					<?php esc_html_e( 'Cohort', 'moowoodle' ); ?>
+					<?php echo MooWoodle()->util->is_khali_dabba() ? '' : '<span>Pro</span>'; ?>
+				</label>
+			</span>
+		</p>
 
-		$linked_course_id = get_post_meta( $post->ID, 'linked_course_id', true );
-		$linked_cohort_id = apply_filters( 'moowoodle_get_linked_cohort_id', null, $post->ID );
-		$default_type     = $linked_course_id ? 'course' : ( $linked_cohort_id ? 'cohort' : '' );
-		?>
-		<div id="moowoodle-course-link-tab" class="panel">
-			<p class="form-field moowoodle-link-type-field">
-				<label><?php esc_html_e( 'Link Type', 'moowoodle' ); ?></label><br>
-				<span class="moowoodle-radio-group">
-					<label class="moowoodle-radio-option">
-						<input type="radio" name="link_type" value="course" <?php checked( $default_type, 'course' ); ?>>
-						<?php esc_html_e( 'Course', 'moowoodle' ); ?>
-					</label>
-					<label class="moowoodle-radio-option cohort">
-						<input type="radio" name="link_type" value="cohort" <?php checked( $default_type, 'cohort' ); ?> 
-							<?php echo MooWoodle()->util->is_khali_dabba() ? '' : 'disabled'; ?>>
-						<?php esc_html_e( 'Cohort', 'moowoodle' ); ?>
-						<?php echo MooWoodle()->util->is_khali_dabba() ? '' : '<span>Pro</span>'; ?>
-					</label>
-				</span>
-			</p>
+		<p id="dynamic-link-select" class="form-field" style="display:none;">
+			<label for="linked_item_id"><?php esc_html_e( 'Select Item', 'moowoodle' ); ?></label>
+			<select id="linked_item_id" name="linked_item_id">
+				<option value=""><?php esc_html_e( 'Select an item...', 'moowoodle' ); ?></option>
+			</select>
+		</p>
 
-			<p id="dynamic-link-select" class="form-field <?php echo $default_type ? 'show' : ''; ?>">
-				<label for="linked_item_id"><?php esc_html_e( 'Select Item', 'moowoodle' ); ?></label>
-				<select id="linked_item_id" name="linked_item_id">
-					<option value=""><?php esc_html_e( 'Select an item...', 'moowoodle' ); ?></option>
-				</select>
-			</p>
+		<p>
+			<span>
+				<?php esc_html_e( "Can't find your course or cohort?", 'moowoodle' ); ?>
+				<a href="<?php echo esc_url( admin_url( 'admin.php?page=moowoodle-synchronization' ) ); ?>" target="_blank">
+					<?php esc_html_e( 'Synchronize Moodle data from here.', 'moowoodle' ); ?>
+				</a>
+			</span>
+		</p>
 
-			<p>
-				<span>
-					<?php esc_html_e( "Can't find your course or cohort?", 'moowoodle' ); ?>
-					<a href="<?php echo esc_url( admin_url( 'admin.php?page=moowoodle-synchronization' ) ); ?>" target="_blank">
-						<?php esc_html_e( 'Synchronize Moodle data from here.', 'moowoodle' ); ?>
-					</a>
-				</span>
-			</p>
+		<input type="hidden" name="moowoodle_meta_nonce" value="<?php echo esc_attr( wp_create_nonce( 'moowoodle_meta_nonce' ) ); ?>">
+		<input type="hidden" name="product_meta_nonce" value="<?php echo esc_attr( wp_create_nonce() ); ?>">
+		<input type="hidden" id="post_id" value="<?php echo esc_attr( $post->ID ); ?>">
+	</div>
+	<?php
+}
 
-			<input type="hidden" name="moowoodle_meta_nonce" value="<?php echo esc_attr( wp_create_nonce( 'moowoodle_meta_nonce' ) ); ?>">
-			<input type="hidden" name="product_meta_nonce" value="<?php echo esc_attr( wp_create_nonce() ); ?>">
-			<input type="hidden" id="post_id" value="<?php echo esc_attr( $post->ID ); ?>">
-		</div>
-		<?php
-	}
 
 	/**
 	 * Handle AJAX request to fetch courses or cohorts for linking to a product.
@@ -123,26 +120,26 @@ class Course {
 			return;
 		}
 
-		// Retrieve and sanitize input.
-		$post_id          = absint( filter_input( INPUT_POST, 'post_id' ) ? filter_input( INPUT_POST, 'post_id' ) : 0 );
-		$linkable_courses = array();
+	$post_id = absint( filter_input( INPUT_POST, 'post_id' ) ?: 0 );
+	$linked_course_id = get_post_meta( $post_id, 'linked_course_id', true );
 
-		$linked_course_id = get_post_meta( $post_id, 'linked_course_id', true );
+	$linkable_courses = $this->get_course_information(
+		array(
+			'id'         => $linked_course_id,
+			'product_id' => 0,
+			'condition'  => 'OR',
+		)
+	);
 
-		$linkable_courses = $this->get_course_information(
-			array(
-				'id'         => $linked_course_id,
-				'product_id' => 0,
-				'condition'  => 'OR',
-			)
-		);
-		wp_send_json_success(
-            array(
-				'items'       => $linkable_courses,
-				'selected_id' => $linked_course_id,
-            )
-        );
-	}
+	wp_send_json_success(
+		array(
+			'items'       => $linkable_courses,
+			'selected_id' => $linked_course_id,
+			'type'        => $linked_course_id ? 'course' : '',
+		)
+	);
+}
+
 
 	/**
 	 * Update or insert multiple courses based on Moodle data.
