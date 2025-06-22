@@ -122,14 +122,15 @@ class Installer {
      * @return void
      */
     public static function migrate_categories() {
-        global $wpdb;
+            global $wpdb;
 
-        // Get terms with '_category_id' meta and optional '_parent' meta for 'course_cat' taxonomy.
-        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-        $terms = $wpdb->get_results(
-            $wpdb->prepare(
+            $table_name = $wpdb->prefix . Util::TABLES['category'];
+
+            // Get terms with '_category_id' meta and optional '_parent' meta for 'course_cat' taxonomy.
+            $query = $wpdb->prepare(
                 "
                 SELECT 
+                    t.term_id,
                     t.name,
                     CAST(tm.meta_value AS UNSIGNED) AS id,
                     COALESCE(CAST(pm.meta_value AS UNSIGNED), 0) AS parent_id
@@ -137,27 +138,30 @@ class Installer {
                 INNER JOIN {$wpdb->term_taxonomy} tt 
                     ON t.term_id = tt.term_id
                 INNER JOIN {$wpdb->termmeta} tm 
-                    ON t.term_id = tm.term_id AND tm.meta_key = %s AND tm.meta_value > 0
+                    ON t.term_id = tm.term_id AND tm.meta_key = '_category_id' AND tm.meta_value > 0
                 LEFT JOIN {$wpdb->termmeta} pm 
-                    ON t.term_id = pm.term_id AND pm.meta_key = %s
+                    ON t.term_id = pm.term_id AND pm.meta_key = '_parent'
                 WHERE tt.taxonomy = %s
                 ",
-                '_category_id',
-                '_parent',
                 'course_cat'
-            ),
-            ARRAY_A
-        );
+            );
 
-        if ( empty( $terms ) ) {
-            return;
-        }
+            $terms = $wpdb->get_results( $query, ARRAY_A );
 
-        foreach ( $terms as $term ) {
-            \MooWoodle\Core\Category::update_course_category( $term );
-        }
+            if ( empty( $terms ) ) {
+                return;
+            }
+
+            foreach ( $terms as $term ) {
+                $args = [
+                    'id'                 => (int) $term['id'],
+                    'name'               => sanitize_text_field( $term['name'] ),
+                    'parent_id'          => (int) $term['parent_id'],
+                ];
+
+                \MooWoodle\Core\Category::update_course_category( $args );
+            }
     }
-
 
 
     /**
@@ -270,7 +274,7 @@ class Installer {
             $moodle_course_id = $product->get_meta( 'moodle_course_id', true );
             $linked_course_id = $product->get_meta( 'linked_course_id', true );
 
-            $course = \MooWoodle\Core\Course::get_course(
+            $course = \MooWoodle\Core\Course::get_course_information(
                 array( 'moodle_course_id' => $moodle_course_id )
             );
 

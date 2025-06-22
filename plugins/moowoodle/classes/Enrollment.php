@@ -140,7 +140,7 @@ class Enrollment {
 			'enrolled_date' => current_time( 'mysql' ),
 		);
 
-		$existing_enrollment = $this->get_enrollments(
+		$existing_enrollment = $this->get_enrollments_information(
 			array(
 				'user_email'    => $enroll_data['user_email'],
 				'course_id'     => $enroll_data['course_id'],
@@ -492,7 +492,7 @@ class Enrollment {
 	 * @param string $where SQL WHERE clause to filter enrollment records.
 	 * @return array List of enrollment records.
 	 */
-	public static function get_enrollments( $where ) {
+	public static function get_enrollments_information( $where ) {
 		global $wpdb;
 
 		$table          = $wpdb->prefix . Util::TABLES['enrollment'];
@@ -515,7 +515,9 @@ class Enrollment {
 
 		// Filters.
 		if ( isset( $where['id'] ) ) {
-			$query_segments[] = $wpdb->prepare( 'id = %d', $where['id'] );
+			$ids = is_array( $where['id'] ) ? $where['id'] : array( $where['id'] );
+			$ids = implode( ',', array_map( 'intval', $ids ) );
+			$query_segments[] = "id IN ($ids)";
 		}
 
 		if ( isset( $where['user_id'] ) ) {
@@ -558,7 +560,9 @@ class Enrollment {
 		}
 
 		if ( isset( $where['group_item_id'] ) ) {
-			$query_segments[] = $wpdb->prepare( 'group_item_id = %d', $where['group_item_id'] );
+			$ids = is_array( $where['group_item_id'] ) ? $where['group_item_id'] : array( $where['group_item_id'] );
+			$ids = implode( ',', array_map( 'intval', $ids ) );
+			$query_segments[] = "group_item_id IN ($ids)";
 		}
 
 		if ( isset( $where['status'] ) && '' !== $where['status'] ) {
@@ -567,16 +571,6 @@ class Enrollment {
 
 		if ( isset( $where['date'] ) && '' !== $where['date'] ) {
 			$query_segments[] = $wpdb->prepare( 'date = %s', $where['date'] );
-		}
-
-		if ( ! empty( $where['ids'] ) ) {
-			$ids              = implode( ',', array_map( 'intval', $where['ids'] ) );
-			$query_segments[] = "id IN ($ids)";
-		}
-
-		if ( ! empty( $where['group_item_ids'] ) ) {
-			$ids              = implode( ',', array_map( 'intval', $where['group_item_ids'] ) );
-			$query_segments[] = "group_item_id IN ($ids)";
 		}
 
 		// Build query.

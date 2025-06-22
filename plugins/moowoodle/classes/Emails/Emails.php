@@ -87,7 +87,7 @@ class Emails {
 		// Course data.
 		if ( ! empty( $enrollments['course'] ) ) {
 			$enrolled_course_ids = array_map( 'intval', $enrollments['course'] );
-			$enrolled_courses    = MooWoodle()->course->get_course( array( 'ids' => $enrolled_course_ids ) );
+			$enrolled_courses    = MooWoodle()->course->get_course_information( array( 'id' => $enrolled_course_ids ) );
 
 			if ( ! empty( $enrolled_courses ) ) {
 				$email_content['course_details'] = array_map(

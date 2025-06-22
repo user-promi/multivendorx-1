@@ -11,8 +11,7 @@ jQuery(document).ready(function ($) {
             url: moowoodle.ajaxurl,
             type: 'POST',
             data: {
-                action: 'get_linkable_courses_or_cohorts',
-                type: type,
+                action: type === 'course' ? 'get_linkable_courses' : 'get_linkable_cohorts',
                 nonce: $('input[name="moowoodle_meta_nonce"]').val(),
                 post_id: $('#post_ID').val(),
             },

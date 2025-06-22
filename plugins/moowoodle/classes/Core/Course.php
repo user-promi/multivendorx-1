@@ -24,7 +24,7 @@ class Course {
 		// Add Link Moodle Course in WooCommerce edit product tab.
 		add_filter( 'woocommerce_product_data_tabs', array( &$this, 'add_additional_product_tab' ), 99, 1 );
 		add_action( 'woocommerce_product_data_panels', array( &$this, 'add_additional_product_data_panel' ) );
-		add_action( 'wp_ajax_get_linkable_courses_or_cohorts', array( $this, 'get_linkable_courses' ) );
+		add_action( 'wp_ajax_get_linkable_courses', array( $this, 'get_linkable_courses' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_assets' ) );
 	}
 
@@ -65,7 +65,7 @@ class Course {
 		global $post;
 
 		$linked_course_id = get_post_meta( $post->ID, 'linked_course_id', true );
-		$linked_cohort_id = get_post_meta( $post->ID, 'linked_cohort_id', true );
+		$linked_cohort_id = apply_filters( 'moowoodle_get_linked_cohort_id', null, $post->ID );
 		$default_type     = $linked_course_id ? 'course' : ( $linked_cohort_id ? 'cohort' : '' );
 		?>
 		<div id="moowoodle-course-link-tab" class="panel">
@@ -124,31 +124,24 @@ class Course {
 		}
 
 		// Retrieve and sanitize input.
-		$type             = sanitize_text_field( filter_input( INPUT_POST, 'type' ) ? filter_input( INPUT_POST, 'type' ) : '' );
 		$post_id          = absint( filter_input( INPUT_POST, 'post_id' ) ? filter_input( INPUT_POST, 'post_id' ) : 0 );
 		$linkable_courses = array();
 
-		if ( 'course' === $type ) {
-			$linked_course_id = get_post_meta( $post_id, 'linked_course_id', true );
+		$linked_course_id = get_post_meta( $post_id, 'linked_course_id', true );
 
-			$linkable_courses = $this->get_course(
-				array(
-					'id'         => $linked_course_id,
-					'product_id' => 0,
-					'condition'  => 'OR',
-				)
-			);
-			wp_send_json_success(
-                array(
-					'items'       => $linkable_courses,
-					'selected_id' => $linked_course_id,
-                )
-            );
-		} elseif ( 'cohort' === $type ) {
-			return apply_filters( 'moowoodle_get_linkable_cohorts', $post_id );
-		}
-
-		wp_send_json_error( __( 'Invalid type', 'moowoodle' ) );
+		$linkable_courses = $this->get_course_information(
+			array(
+				'id'         => $linked_course_id,
+				'product_id' => 0,
+				'condition'  => 'OR',
+			)
+		);
+		wp_send_json_success(
+            array(
+				'items'       => $linkable_courses,
+				'selected_id' => $linked_course_id,
+            )
+        );
 	}
 
 	/**
@@ -200,7 +193,7 @@ class Course {
         $table = $wpdb->prefix . Util::TABLES['course'];
 
         // Check if course already exists.
-        $existing = self::get_course( array( 'moodle_course_id' => $args['moodle_course_id'] ) );
+        $existing = self::get_course_information( array( 'moodle_course_id' => $args['moodle_course_id'] ) );
         $existing = reset( $existing );
         if ( $existing ) {
 			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
@@ -230,13 +223,15 @@ class Course {
 	 * @param array $where Filter conditions.
 	 * @return array List of courses as associative arrays (each course as [ field => value ]).
 	 */
-	public static function get_course( $where ) {
+	public static function get_course_information( $where ) {
 		global $wpdb;
 
 		$query_segments = array();
 
 		if ( isset( $where['id'] ) ) {
-			$query_segments[] = ' ( id = ' . esc_sql( intval( $where['id'] ) ) . ' ) ';
+			$ids = is_array( $where['id'] ) ? $where['id'] : array( $where['id'] );
+			$ids = implode( ',', array_map( 'intval', $ids ) );
+			$query_segments[] = "id IN ($ids)";
 		}
 
 		if ( isset( $where['moodle_course_id'] ) ) {
@@ -267,11 +262,6 @@ class Course {
 			$query_segments[] = ' ( enddate = ' . esc_sql( intval( $where['enddate'] ) ) . ' ) ';
 		}
 
-		if ( isset( $where['ids'] ) ) {
-			$ids              = implode( ',', array_map( 'intval', $where['ids'] ) );
-			$query_segments[] = "id IN ($ids)";
-		}
-
 		$table = $wpdb->prefix . Util::TABLES['course'];
 		$query = "SELECT * FROM $table";
 
@@ -300,7 +290,7 @@ class Course {
         global $wpdb;
 
         $exclude_ids      = array_map( 'intval', (array) $exclude_ids );
-        $existing_courses = self::get_course( array() );
+        $existing_courses = self::get_course_information( array() );
         $existing_ids     = array_column( $existing_courses, 'id' );
 
         $ids_to_delete = array_diff( $existing_ids, $exclude_ids );

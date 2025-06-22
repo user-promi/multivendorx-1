@@ -380,7 +380,7 @@ class RestAPI {
 
         // If count_courses is requested, get the course count.
         if ( $count_courses ) {
-            $courses = MooWoodle()->course->get_course( array() );
+            $courses = MooWoodle()->course->get_course_information( array() );
             return rest_ensure_response( count( $courses ) );
         }
 
@@ -401,7 +401,7 @@ class RestAPI {
         }
 
         // Get paginated courses.
-        $courses = MooWoodle()->course->get_course( $filters );
+        $courses = MooWoodle()->course->get_course_information( $filters );
 
         if ( empty( $courses ) ) {
             return rest_ensure_response( array() );
@@ -441,7 +441,7 @@ class RestAPI {
             $category_name = ! empty( $categories ) ? $categories[0]['name'] : __( 'Uncategorized', 'moowoodle' );
 
             // Get enrolled users count.
-            $enroled_user = MooWoodle()->enrollment->get_enrollments(
+            $enroled_user = MooWoodle()->enrollment->get_enrollments_information(
                 array(
 					'course_id' => $course['id'],
                 )
@@ -484,7 +484,7 @@ class RestAPI {
         }
 
         // Fetch all courses.
-        $courses = MooWoodle()->course->get_course( array() );
+        $courses = MooWoodle()->course->get_course_information( array() );
         file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":orders:  : " . var_export($courses, true) . "\n", FILE_APPEND);
         if ( empty( $courses ) ) {
             return rest_ensure_response(
@@ -638,7 +638,7 @@ class RestAPI {
 
         // Handle count-only request.
         if ( $request->get_param( 'count' ) ) {
-            $user_enrollments = MooWoodle()->enrollment->get_enrollments(
+            $user_enrollments = MooWoodle()->enrollment->get_enrollments_information(
                 array(
 					'user_id' => $current_user->ID,
 					'status'  => 'enrolled',
@@ -654,7 +654,7 @@ class RestAPI {
         }
 
         // Fetch paginated enrollments.
-        $user_enrollments = MooWoodle()->enrollment->get_enrollments(
+        $user_enrollments = MooWoodle()->enrollment->get_enrollments_information(
             array(
 				'user_id'    => $current_user->ID,
 				'status'     => 'enrolled',
@@ -684,7 +684,7 @@ class RestAPI {
 
         $formatted_courses = array_map(
             function ( $enrollment ) use ( $current_user, $moodle_password, $moodle_base_url ) {
-                $course = MooWoodle()->course->get_course(
+                $course = MooWoodle()->course->get_course_information(
                     array(
 						'id' => $enrollment['course_id'],
                     )

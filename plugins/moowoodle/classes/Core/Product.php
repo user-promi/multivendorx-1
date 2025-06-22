@@ -171,7 +171,7 @@ class Product {
 		}
 
 		// get the course id linked with moodle.
-        $wp_course = MooWoodle()->course->get_course(
+        $wp_course = MooWoodle()->course->get_course_information(
             array(
 				'moodle_course_id' => $course['id'],
             )
@@ -294,7 +294,7 @@ class Product {
 				return $product_id;
 			}
 
-			$course = reset( MooWoodle()->course->get_course( array( 'id' => $link_item_id ) ) );
+			$course = reset( MooWoodle()->course->get_course_information( array( 'id' => $link_item_id ) ) );
 
 			if ( empty( $course['moodle_course_id'] ) ) {
 				return;
