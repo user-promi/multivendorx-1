@@ -43,6 +43,7 @@ class Category {
 
 		return $wpdb->get_results( $query, ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.*
 	}
+
 	/**
 	 * Insert or update multiple course categories in the local table.
 	 *

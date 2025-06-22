@@ -30,6 +30,9 @@ class RestAPI {
         if ( current_user_can( 'read' ) || current_user_can( 'customer' ) || current_user_can( 'manage_options' ) ) {
             add_action( 'rest_api_init', array( &$this, 'register_user_api' ) );
         }
+
+		add_action( 'moowoodle_sync_all_test', array( $this, 'test_connection' ) );
+		add_action( 'moowoodle_sync_all_course', array( $this, 'synchronize_course' ) );
     }
 
     /**
@@ -184,15 +187,8 @@ class RestAPI {
     public function synchronize( $request ) {
         $parameter = $request->get_param( 'parameter' );
 
-        if ( 'test' === $parameter ) {
-            return $this->test_connection( $request );
-        } elseif ( 'course' === $parameter ) {
-            $this->synchronize_course( $request );
-        } elseif ( 'user' === $parameter ) {
-            do_action( 'moowoodle_sync_all_users', $request );
-        } elseif ( 'cohort' === $parameter ) {
-            // Pro feature: Sync all cohorts in MooWoodle.
-            do_action( 'moowoodle_sync_all_cohorts', $request );
+        if ( ! empty( $parameter ) ) {
+            do_action( "moowoodle_sync_all_{$parameter}", $request );
         } else {
             do_action( 'moowoodle_sync' );
         }
