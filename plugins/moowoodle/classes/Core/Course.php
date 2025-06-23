@@ -56,56 +56,59 @@ class Course {
 		return $product_data_tabs;
 	}
 
-	/**
-	 * Add meta box panel.
+    /**
+     * Add meta box panel.
      *
-	 * @return void
-	 */
-public function add_additional_product_data_panel() {
-	global $post;
-	?>
-	<div id="moowoodle-course-link-tab" class="panel">
-		<p class="form-field moowoodle-link-type-field">
-			<label><?php esc_html_e( 'Link Type', 'moowoodle' ); ?></label><br>
-			<span class="moowoodle-radio-group">
-				<label class="moowoodle-radio-option">
-					<input type="radio" name="link_type" value="course">
-					<?php esc_html_e( 'Course', 'moowoodle' ); ?>
-				</label>
-				<label class="moowoodle-radio-option cohort">
-					<input type="radio" name="link_type" value="cohort"
-						<?php echo MooWoodle()->util->is_khali_dabba() ? '' : 'disabled'; ?>>
-					<?php esc_html_e( 'Cohort', 'moowoodle' ); ?>
-					<?php echo MooWoodle()->util->is_khali_dabba() ? '' : '<span>Pro</span>'; ?>
-				</label>
-			</span>
-		</p>
+     * @return void
+     */
+	public function add_additional_product_data_panel() {
+		global $post;
 
-		<p id="dynamic-link-select" class="form-field" style="display:none;">
-			<label for="linked_item_id"><?php esc_html_e( 'Select Item', 'moowoodle' ); ?></label>
-			<select id="linked_item_id" name="linked_item_id">
-				<option value=""><?php esc_html_e( 'Select an item...', 'moowoodle' ); ?></option>
-			</select>
-		</p>
+		$linked_course_id = get_post_meta( $post->ID, 'linked_course_id', true );
+		$linked_cohort_id = apply_filters( 'moowoodle_get_linked_cohort_id', null, $post->ID );
+		$default_type     = $linked_course_id ? 'course' : ( $linked_cohort_id ? 'cohort' : '' );
+		?>
+		<div id="moowoodle-course-link-tab" class="panel">
+			<p class="form-field moowoodle-link-type-field">
+				<label><?php esc_html_e( 'Link Type', 'moowoodle' ); ?></label><br>
+				<span class="moowoodle-radio-group">
+					<label class="moowoodle-radio-option">
+						<input type="radio" name="link_type" value="course" <?php checked( $default_type, 'course' ); ?>>
+						<?php esc_html_e( 'Course', 'moowoodle' ); ?>
+					</label>
+					<label class="moowoodle-radio-option cohort">
+						<input type="radio" name="link_type" value="cohort" <?php checked( $default_type, 'cohort' ); ?> 
+							<?php echo MooWoodle()->util->is_khali_dabba() ? '' : 'disabled'; ?>>
+						<?php esc_html_e( 'Cohort', 'moowoodle' ); ?>
+						<?php echo MooWoodle()->util->is_khali_dabba() ? '' : '<span>Pro</span>'; ?>
+					</label>
+				</span>
+			</p>
 
-		<p>
-			<span>
-				<?php esc_html_e( "Can't find your course or cohort?", 'moowoodle' ); ?>
-				<a href="<?php echo esc_url( admin_url( 'admin.php?page=moowoodle-synchronization' ) ); ?>" target="_blank">
-					<?php esc_html_e( 'Synchronize Moodle data from here.', 'moowoodle' ); ?>
-				</a>
-			</span>
-		</p>
+			<p id="dynamic-link-select" class="form-field <?php echo $default_type ? 'show' : ''; ?>">
+				<label for="linked_item_id"><?php esc_html_e( 'Select Item', 'moowoodle' ); ?></label>
+				<select id="linked_item_id" name="linked_item_id">
+					<option value=""><?php esc_html_e( 'Select an item...', 'moowoodle' ); ?></option>
+				</select>
+			</p>
 
-		<input type="hidden" name="moowoodle_meta_nonce" value="<?php echo esc_attr( wp_create_nonce( 'moowoodle_meta_nonce' ) ); ?>">
-		<input type="hidden" name="product_meta_nonce" value="<?php echo esc_attr( wp_create_nonce() ); ?>">
-		<input type="hidden" id="post_id" value="<?php echo esc_attr( $post->ID ); ?>">
-	</div>
-	<?php
-}
+			<p>
+				<span>
+					<?php esc_html_e( "Can't find your course or cohort?", 'moowoodle' ); ?>
+					<a href="<?php echo esc_url( admin_url( 'admin.php?page=moowoodle-synchronization' ) ); ?>" target="_blank">
+						<?php esc_html_e( 'Synchronize Moodle data from here.', 'moowoodle' ); ?>
+					</a>
+				</span>
+			</p>
 
+			<input type="hidden" name="moowoodle_meta_nonce" value="<?php echo esc_attr( wp_create_nonce( 'moowoodle_meta_nonce' ) ); ?>">
+			<input type="hidden" name="product_meta_nonce" value="<?php echo esc_attr( wp_create_nonce() ); ?>">
+			<input type="hidden" id="post_id" value="<?php echo esc_attr( $post->ID ); ?>">
+		</div>
+		<?php
+	}
 
-	/**
+    /**
 	 * Handle AJAX request to fetch courses or cohorts for linking to a product.
 	 *
 	 * Expects POST: nonce, type ('course' or 'cohort'), post_id.
@@ -120,26 +123,26 @@ public function add_additional_product_data_panel() {
 			return;
 		}
 
-	$post_id = absint( filter_input( INPUT_POST, 'post_id' ) ?: 0 );
-	$linked_course_id = get_post_meta( $post_id, 'linked_course_id', true );
+		// Retrieve and sanitize input.
+		$post_id          = absint( filter_input( INPUT_POST, 'post_id' ) ? filter_input( INPUT_POST, 'post_id' ) : 0 );
+		$linkable_courses = array();
 
-	$linkable_courses = $this->get_course_information(
-		array(
-			'id'         => $linked_course_id,
-			'product_id' => 0,
-			'condition'  => 'OR',
-		)
-	);
+		$linked_course_id = get_post_meta( $post_id, 'linked_course_id', true );
 
-	wp_send_json_success(
-		array(
-			'items'       => $linkable_courses,
-			'selected_id' => $linked_course_id,
-			'type'        => $linked_course_id ? 'course' : '',
-		)
-	);
-}
-
+		$linkable_courses = $this->get_course_information(
+			array(
+				'id'         => $linked_course_id,
+				'product_id' => 0,
+				'condition'  => 'OR',
+			)
+		);
+		wp_send_json_success(
+            array(
+				'items'       => $linkable_courses,
+				'selected_id' => $linked_course_id,
+            )
+        );
+	}
 
 	/**
 	 * Update or insert multiple courses based on Moodle data.
@@ -181,35 +184,27 @@ public function add_additional_product_data_panel() {
 	 * @return int|false Rows affected or false on failure.
 	 */
 	public static function update_course( $args ) {
-        global $wpdb;
+		global $wpdb;
 
-        if ( empty( $args ) || empty( $args['moodle_course_id'] ) ) {
-            return false;
-        }
+		if ( empty( $args['moodle_course_id'] ) ) {
+			return false;
+		}
 
-        $table = $wpdb->prefix . Util::TABLES['course'];
+		$table    = $wpdb->prefix . Util::TABLES['course'];
+		$existing = reset( self::get_course_information( array( 'moodle_course_id' => $args['moodle_course_id'] ) ) );
 
-        // Check if course already exists.
-        $existing = self::get_course_information( array( 'moodle_course_id' => $args['moodle_course_id'] ) );
-        $existing = reset( $existing );
-        if ( $existing ) {
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-            $wpdb->update(
-                $table,
-                $args,
-                array( 'moodle_course_id' => $args['moodle_course_id'] )
-            );
+		if ( $existing ) {
+			return $wpdb->update( $table, $args, array( 'moodle_course_id' => $args['moodle_course_id'] ) ) !== false
+				? $existing['id']
+				: false;
+		}
 
-            // Return existing course ID after update.
-            return $existing['id'];
-        }
+		$args['created'] = current_time( 'mysql' );
+		return $wpdb->insert( $table, $args ) !== false
+			? $wpdb->insert_id
+			: false;
+	}
 
-        $args['created'] = current_time( 'mysql' );
-
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
-        $wpdb->insert( $table, $args );
-        return $wpdb->insert_id;
-    }
 
 	/**
 	 * Get courses based on filters.
@@ -226,8 +221,8 @@ public function add_additional_product_data_panel() {
 		$query_segments = array();
 
 		if ( isset( $where['id'] ) ) {
-			$ids = is_array( $where['id'] ) ? $where['id'] : array( $where['id'] );
-			$ids = implode( ',', array_map( 'intval', $ids ) );
+			$ids              = is_array( $where['id'] ) ? $where['id'] : array( $where['id'] );
+			$ids              = implode( ',', array_map( 'intval', $ids ) );
 			$query_segments[] = "id IN ($ids)";
 		}
 
@@ -273,6 +268,10 @@ public function add_additional_product_data_panel() {
 		}
 
 		$results = $wpdb->get_results( $query, ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
+
+		if ( is_null( $results ) && ! empty( $wpdb->last_error ) ) {
+			return array();
+		}
 
 		return $results;
 	}

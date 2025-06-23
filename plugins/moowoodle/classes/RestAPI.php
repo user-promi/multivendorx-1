@@ -433,7 +433,7 @@ class RestAPI {
             $view_user_url = trailingslashit( MooWoodle()->setting->get_setting( 'moodle_url' ) ) . "user/index.php?id={$course['moodle_course_id']}";
 
             // Get categories.
-            $categories    = MooWoodle()->category->get_course_category_information($course['category_id']);
+            $categories    = MooWoodle()->category->get_course_category_information( $course['category_id'] );
             $category_name = ! empty( $categories ) ? $categories[0]['name'] : __( 'Uncategorized', 'moowoodle' );
 
             // Get enrolled users count.
@@ -495,7 +495,7 @@ class RestAPI {
         $category_ids = array_unique( wp_list_pluck( $courses, 'category_id' ) );
 
         // Fetch categories.
-        $category = MooWoodle()->category->get_course_category_information($category_ids);
+        $category = MooWoodle()->category->get_course_category_information( $category_ids );
 
         // Prepare formatted course list.
         $all_courses = array();

@@ -63,14 +63,14 @@ class Enrollment {
 
 			$response = $this->process_course_enrollment(
 				array(
-					'first_name'       => $order->get_billing_first_name(),
-					'last_name'        => $order->get_billing_last_name(),
-					'purchaser_id'     => $order->get_customer_id(),
-					'user_email'       => $order->get_billing_email(),
+					'first_name'   => $order->get_billing_first_name(),
+					'last_name'    => $order->get_billing_last_name(),
+					'purchaser_id' => $order->get_customer_id(),
+					'user_email'   => $order->get_billing_email(),
 				),
 				array(
-					'order_id'         => $order_id,
-					'item_id'          => $item_id,
+					'order_id' => $order_id,
+					'item_id'  => $item_id,
 				),
 				array(
 					'course_id'        => $linked_course_id,
@@ -130,14 +130,14 @@ class Enrollment {
 			'order_id'      => $order_data['order_id'],
 			'item_id'       => $order_data['item_id'] ?? 0,
 			'status'        => 'enrolled',
-			'group_item_id' =>  0,
+			'group_item_id' => 0,
 			'enrolled_date' => current_time( 'mysql' ),
 		);
 
 		$existing_enrollment = $this->get_enrollments_information(
 			array(
-				'user_email'    => $user_data['user_email'],
-				'course_id'     => $course_data['course_id'],
+				'user_email' => $user_data['user_email'],
+				'course_id'  => $course_data['course_id'],
 			)
 		);
 
@@ -147,7 +147,7 @@ class Enrollment {
 			if ( 'enrolled' === $existing_enrollment['status'] ) {
 				return true;
 			}
-			$enrollment_data['id'] = $existing_enrollment['id']; // For update.
+			$enrollment_data['id'] = $existing_enrollment['id'];
 		}
 
 		self::update_enrollment( $enrollment_data );
@@ -503,8 +503,8 @@ class Enrollment {
 
 		// Filters.
 		if ( isset( $where['id'] ) ) {
-			$ids = is_array( $where['id'] ) ? $where['id'] : array( $where['id'] );
-			$ids = implode( ',', array_map( 'intval', $ids ) );
+			$ids              = is_array( $where['id'] ) ? $where['id'] : array( $where['id'] );
+			$ids              = implode( ',', array_map( 'intval', $ids ) );
 			$query_segments[] = "id IN ($ids)";
 		}
 
@@ -548,8 +548,8 @@ class Enrollment {
 		}
 
 		if ( isset( $where['group_item_id'] ) ) {
-			$ids = is_array( $where['group_item_id'] ) ? $where['group_item_id'] : array( $where['group_item_id'] );
-			$ids = implode( ',', array_map( 'intval', $ids ) );
+			$ids              = is_array( $where['group_item_id'] ) ? $where['group_item_id'] : array( $where['group_item_id'] );
+			$ids              = implode( ',', array_map( 'intval', $ids ) );
 			$query_segments[] = "group_item_id IN ($ids)";
 		}
 
@@ -577,6 +577,10 @@ class Enrollment {
 		}
 
 		$results = $wpdb->get_results( $query, ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
+
+		if ( is_null( $results ) && ! empty( $wpdb->last_error ) ) {
+			return array();
+		}
 
 		// Decode JSON enrollments for grouped results.
 		if ( ! empty( $where['group_by_email'] ) ) {

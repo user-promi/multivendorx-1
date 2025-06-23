@@ -309,9 +309,8 @@ class Product {
 					'product_id'       => (int) $product_id,
 				)
 			);
-		} elseif ( 'cohort' === $link_type ) {
-			do_action( 'moowoodle_process_product_meta', $product_id, $link_item_id );
 		}
+
 		return $product_id;
 	}
 	/**
@@ -391,5 +390,4 @@ class Product {
 			);
 		}
 	}
-
 }
