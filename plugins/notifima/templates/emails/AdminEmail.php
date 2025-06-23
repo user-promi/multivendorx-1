@@ -11,7 +11,7 @@
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
-} // Exit if accessed directly
+} // Exit if accessed directly.
 
 do_action( 'woocommerce_email_header', $args['email_heading'], $email );
 $product = $args['product'];
@@ -37,8 +37,12 @@ $is_prices_including_tax = get_option( 'woocommerce_prices_include_tax' );
 			<th scope="col" style="text-align:left; border: 1px solid #eee;">
 				<?php
                     echo wp_kses_post( wc_price( wc_get_price_to_display( $product ) ) );
-				echo ( isset( $is_prices_including_tax ) && ( $is_prices_including_tax != 'yes' ) ) ? WC()->countries->ex_tax_or_vat() : WC()->countries->inc_tax_or_vat();
-				?>
+					echo esc_html(
+						( isset( $is_prices_including_tax ) && 'yes' !== $is_prices_including_tax )
+							? WC()->countries->ex_tax_or_vat()
+							: WC()->countries->inc_tax_or_vat()
+					);
+					?>
 			</th>
 		</tr>
 	</tbody>

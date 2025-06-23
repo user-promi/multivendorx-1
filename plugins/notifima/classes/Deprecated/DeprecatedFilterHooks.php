@@ -1,4 +1,9 @@
 <?php
+/**
+ * DeprecatedFilterHooks class file.
+ *
+ * @package Notifima
+ */
 
 namespace Notifima\Deprecated;
 

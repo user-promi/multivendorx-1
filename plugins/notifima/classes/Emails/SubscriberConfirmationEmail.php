@@ -1,8 +1,13 @@
 <?php
+/**
+ * SubscriberConfirmationEmail class file.
+ *
+ * @package Notifima
+ */
 
 namespace Notifima\Emails;
 
-defined( 'ABSPATH' ) || exit; // Exit if accessed directly
+defined( 'ABSPATH' ) || exit; // Exit if accessed directly.
 
 if ( ! class_exists( 'SubscriberConfirmationEmail' ) ) :
 
@@ -11,14 +16,24 @@ if ( ! class_exists( 'SubscriberConfirmationEmail' ) ) :
      *
      * An confirmation email will be sent to the customer when they subscribe product.
      *
-     * @class       SubscriberConfirmationEmail
-     * @version     1.3.0
+     * @version     PRODUCT_VERION
      * @author      MultivendorX
      * @extends     \WC_Email
      */
     class SubscriberConfirmationEmail extends \WC_Email {
 
+        /**
+         * The product associated with the subscription.
+         *
+         * @var WC_Product|int|null
+         */
         public $product;
+
+        /**
+         * The email recipient. Can be overridden manually.
+         *
+         * @var string
+         */
         public $recipient = '';
 
         /**
@@ -35,14 +50,15 @@ if ( ! class_exists( 'SubscriberConfirmationEmail' ) ) :
             $this->template_plain = 'emails/plain/SubscriberConfirmationEmail.php';
             $this->template_base  = Notifima()->plugin_path . 'templates/';
 
-            // Call parent constuctor
+            // Call parent constuctor.
             parent::__construct();
         }
 
         /**
-         * trigger function.
+         * Trigger function.
          *
-         * @access public
+         * @param string     $recipient      The recipient's email address.
+         * @param WC_Product $product        The WooCommerce product object.
          * @return void
          */
         public function trigger( $recipient, $product ) {
@@ -78,7 +94,7 @@ if ( ! class_exists( 'SubscriberConfirmationEmail' ) ) :
         }
 
         /**
-         * get_content_html function.
+         * Get content html function.
          *
          * @access public
          * @return string
@@ -101,7 +117,7 @@ if ( ! class_exists( 'SubscriberConfirmationEmail' ) ) :
         }
 
         /**
-         * get_content_plain function.
+         * Get content plain function.
          *
          * @access public
          * @return string

@@ -1,24 +1,39 @@
 <?php
+/**
+ * Ajax class file.
+ *
+ * @package Notifima
+ */
 
 namespace Notifima;
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * Notifima Ajax class
+ *
+ * @class       Ajax class
+ * @version     PRODUCT_VERSION
+ * @author      MultivendorX
+ */
 class Ajax {
 
+    /**
+     * Ajax constructor.
+     */
     public function __construct() {
-        // Save customer email in database
+        // Save customer email in database.
         add_action( 'wp_ajax_alert_ajax', array( &$this, 'subscribe_users' ) );
         add_action( 'wp_ajax_nopriv_alert_ajax', array( &$this, 'subscribe_users' ) );
-        // Delete unsubscribed users
+        // Delete unsubscribed users.
         add_action( 'wp_ajax_unsubscribe_button', array( $this, 'unsubscribe_users' ) );
         add_action( 'wp_ajax_nopriv_unsubscribe_button', array( $this, 'unsubscribe_users' ) );
-        // Export data
-        add_action( 'wp_ajax_export_subscribers', array( $this, 'export_CSV_data' ) );
-        // add fields for variation product shortcode
+        // Export data.
+        add_action( 'wp_ajax_export_subscribers', array( $this, 'export_csv_data' ) );
+        // add fields for variation product shortcode.
         add_action( 'wp_ajax_nopriv_get_variation_box_ajax', array( $this, 'get_variation_box_ajax' ) );
         add_action( 'wp_ajax_get_variation_box_ajax', array( $this, 'get_variation_box_ajax' ) );
-        // recaptcha version-3 validate
+        // recaptcha version-3 validate.
         add_action( 'wp_ajax_recaptcha_validate_ajax', array( $this, 'recaptcha_validate_ajax' ) );
         add_action( 'wp_ajax_nopriv_recaptcha_validate_ajax', array( $this, 'recaptcha_validate_ajax' ) );
     }
@@ -33,8 +48,8 @@ class Ajax {
             wp_send_json_error( 'Invalid security token sent.' );
             wp_die();
         }
-        $recaptcha_secret   = filter_input( INPUT_POST, 'recaptcha_secret', FILTER_SANITIZE_SPECIAL_CHARS ) ?: '';
-        $recaptcha_response = filter_input( INPUT_POST, 'recaptcha_response', FILTER_SANITIZE_SPECIAL_CHARS ) ?: '';
+        $recaptcha_secret   = filter_input( INPUT_POST, 'recaptcha_secret', FILTER_SANITIZE_SPECIAL_CHARS ) ? filter_input( INPUT_POST, 'recaptcha_secret', FILTER_SANITIZE_SPECIAL_CHARS ) : '';
+        $recaptcha_response = filter_input( INPUT_POST, 'recaptcha_response', FILTER_SANITIZE_SPECIAL_CHARS ) ? filter_input( INPUT_POST, 'recaptcha_response', FILTER_SANITIZE_SPECIAL_CHARS ) : '';
         $recaptcha_url      = 'https://www.google.com/recaptcha/api/siteverify';
 
         $recaptcha = wp_remote_get( $recaptcha_url . '?secret=' . $recaptcha_secret . '&response=' . $recaptcha_response );
@@ -48,11 +63,14 @@ class Ajax {
     }
 
     /**
-     * Preaper data for CSV. CSV contain all stockmanager subscribtion details.
+     * Prepare data for CSV export.
      *
-     * @return never
+     * Generates and outputs a CSV file containing all Notifima subscription details.
+     *
+     * @param array $argument arguments for data filtering or customization.
+     * @return void
      */
-    public function export_CSV_data( $argument = array() ) {
+    public function export_csv_data( $argument = array() ) {
         $get_subscribed_user = array();
 
         // Merge the arguments with default arguments.
@@ -81,15 +99,16 @@ class Ajax {
         }
 
         $csv_header_string = '';
-        $csv_headers_array = $csv_body_arrays = $subscribers_list = array();
+        $csv_headers_array = array();
+        $csv_body_arrays   = array();
         $file_name         = 'list_subscribers.csv';
 
-        // Set page headers to force download of CSV
+        // Set page headers to force download of CSV.
         header( 'Content-type: text/x-csv' );
         header( 'Content-Disposition: File Transfar' );
         header( "Content-Disposition: attachment;filename= {$file_name} " );
 
-        // Set CSV headers
+        // Set CSV headers.
         $csv_headings = array(
             'product_id',
             'product_name',
@@ -118,11 +137,11 @@ class Ajax {
             }
         }
 
-        echo $csv_header_string;
+        echo esc_html( $csv_header_string );
         if ( isset( $csv_body_arrays ) && ! empty( $csv_body_arrays ) ) {
             foreach ( $csv_body_arrays as $csv_body_array ) {
                 echo "\r\n";
-                echo implode( ', ', $csv_body_array );
+                echo esc_html( implode( ', ', $csv_body_array ) );
             }
         }
         exit();
@@ -139,9 +158,9 @@ class Ajax {
             wp_die();
         }
 
-        $customer_email = filter_input( INPUT_POST, 'customer_email', FILTER_SANITIZE_EMAIL ) ?: '';
-        $product_id     = filter_input( INPUT_POST, 'product_id', FILTER_VALIDATE_INT ) ?: '';
-        $variation_id   = filter_input( INPUT_POST, 'variation_id', FILTER_VALIDATE_INT ) ?: 0;
+        $customer_email = filter_input( INPUT_POST, 'customer_email', FILTER_SANITIZE_EMAIL ) ? filter_input( INPUT_POST, 'customer_email', FILTER_SANITIZE_EMAIL ) : '';
+        $product_id     = filter_input( INPUT_POST, 'product_id', FILTER_VALIDATE_INT ) ? filter_input( INPUT_POST, 'product_id', FILTER_VALIDATE_INT ) : '';
+        $variation_id   = filter_input( INPUT_POST, 'variation_id', FILTER_VALIDATE_INT ) ? filter_input( INPUT_POST, 'variation_id', FILTER_VALIDATE_INT ) : 0;
 
         $success = false;
 
@@ -168,13 +187,13 @@ class Ajax {
             wp_die();
         }
 
-        $customer_email = filter_input( INPUT_POST, 'customer_email', FILTER_SANITIZE_EMAIL ) ?: '';
-        $product_id     = filter_input( INPUT_POST, 'product_id', FILTER_VALIDATE_INT ) ?: '';
-        $variation_id   = filter_input( INPUT_POST, 'variation_id', FILTER_VALIDATE_INT ) ?: 0;
+        $customer_email = filter_input( INPUT_POST, 'customer_email', FILTER_SANITIZE_EMAIL ) ? filter_input( INPUT_POST, 'customer_email', FILTER_SANITIZE_EMAIL ) : '';
+        $product_id     = filter_input( INPUT_POST, 'product_id', FILTER_VALIDATE_INT ) ? filter_input( INPUT_POST, 'product_id', FILTER_VALIDATE_INT ) : '';
+        $variation_id   = filter_input( INPUT_POST, 'variation_id', FILTER_VALIDATE_INT ) ? filter_input( INPUT_POST, 'variation_id', FILTER_VALIDATE_INT ) : 0;
         $status         = '';
 
         /**
-         * Action hook before subscription
+         * Action hook before subscription.
          *
          * @var string $customer_email
          * @var int    $product_id
@@ -214,14 +233,14 @@ class Ajax {
             wp_send_json_error( 'Invalid security token sent.' );
             wp_die();
         }
-        $product_id   = filter_input( INPUT_POST, 'product_id', FILTER_VALIDATE_INT ) ?: '';
-        $variation_id = filter_input( INPUT_POST, 'variation_id', FILTER_VALIDATE_INT ) ?: '';
+        $product_id   = filter_input( INPUT_POST, 'product_id', FILTER_VALIDATE_INT ) ? filter_input( INPUT_POST, 'product_id', FILTER_VALIDATE_INT ) : '';
+        $variation_id = filter_input( INPUT_POST, 'variation_id', FILTER_VALIDATE_INT ) ? filter_input( INPUT_POST, 'variation_id', FILTER_VALIDATE_INT ) : '';
         $product      = wc_get_product( $product_id );
         $child_obj    = null;
         if ( $variation_id && ! empty( $variation_id ) ) {
             $child_obj = new \WC_Product_Variation( $variation_id );
         }
-        echo Notifima()->frontend->get_subscribe_form( $product, $child_obj );
+        echo wp_kses_post( Notifima()->frontend->get_subscribe_form( $product, $child_obj ) );
         die();
     }
 }

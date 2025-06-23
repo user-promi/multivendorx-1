@@ -1,29 +1,50 @@
 <?php
+/**
+ * AdminEmail class file.
+ *
+ * @package Notifima
+ */
 
 namespace Notifima\Emails;
 
-defined( 'ABSPATH' ) || exit; // Exit if accessed directly
+defined( 'ABSPATH' ) || exit; // Exit if accessed directly.
 
 if ( ! class_exists( 'AdminEmail' ) ) :
 
     /**
-     * Email to Admin for notifima
+     * Email to Admin for notifima.
      *
      * An email will be sent to the admin when customer subscribe an out of stock product.
      *
-     * @class       WC_Admin_Email_Notifima
-     * @version     1.3.0
+     * @version     PRODUCT_VERSION
      * @author      MultivendorX
      * @extends     \WC_Email
      */
     class AdminEmail extends \WC_Email {
 
+        /**
+         * The product associated with the subscription.
+         *
+         * @var WC_Product|int|null
+         */
         public $product;
+
+        /**
+         * The customer's email address.
+         *
+         * @var string
+         */
         public $customer_email;
+
+        /**
+         * The email recipient. Can be overridden manually.
+         *
+         * @var string
+         */
         public $recipient = '';
 
         /**
-         * Constructor
+         * Admin email Constructor.
          *
          * @access public
          * @return void
@@ -36,14 +57,16 @@ if ( ! class_exists( 'AdminEmail' ) ) :
             $this->template_plain = 'emails/plain/AdminEmail.php';
             $this->template_base  = Notifima()->plugin_path . 'templates/';
 
-            // Call parent constuctor
+            // Call parent constuctor.
             parent::__construct();
         }
 
         /**
-         * trigger function.
+         * Trigger function.
          *
-         * @access public
+         * @param string     $recipient      The recipient's email address.
+         * @param WC_Product $product        The WooCommerce product object.
+         * @param string     $customer_email The customer's email address.
          * @return void
          */
         public function trigger( $recipient, $product, $customer_email ) {
@@ -62,7 +85,6 @@ if ( ! class_exists( 'AdminEmail' ) ) :
         /**
          * Get email subject.
          *
-         * @since  1.4.7
          * @return string
          */
         public function get_default_subject() {
@@ -72,7 +94,6 @@ if ( ! class_exists( 'AdminEmail' ) ) :
         /**
          * Get email heading.
          *
-         * @since  1.4.7
          * @return string
          */
         public function get_default_heading() {
@@ -80,7 +101,7 @@ if ( ! class_exists( 'AdminEmail' ) ) :
         }
 
         /**
-         * get_content_html function.
+         * Get content html function.
          *
          * @access public
          * @return string
@@ -103,7 +124,7 @@ if ( ! class_exists( 'AdminEmail' ) ) :
         }
 
         /**
-         * get_content_plain function.
+         * Get content plain function.
          *
          * @access public
          * @return string

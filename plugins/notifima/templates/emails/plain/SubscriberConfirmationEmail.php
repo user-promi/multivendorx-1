@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Notifima Subscription Confirmation Email
  *

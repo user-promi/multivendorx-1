@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Notifima Email
  *
@@ -9,6 +8,7 @@
  * @package   woocommerce-product-stock-alert/templates
  * @version   1.3.0
  */
+
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 } // Exit if accessed directly
