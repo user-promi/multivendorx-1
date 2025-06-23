@@ -24,7 +24,7 @@ class Course {
 		// Add Link Moodle Course in WooCommerce edit product tab.
 		add_filter( 'woocommerce_product_data_tabs', array( &$this, 'add_additional_product_tab' ), 99, 1 );
 		add_action( 'woocommerce_product_data_panels', array( &$this, 'add_additional_product_data_panel' ) );
-		add_action( 'wp_ajax_get_linkable_courses', array( $this, 'get_linkable_courses' ) );
+		add_action( 'wp_ajax_get_linkable_course', array( $this, 'get_linkable_courses' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_assets' ) );
 	}
 
@@ -108,13 +108,13 @@ class Course {
 		<?php
 	}
 
-    /**
-	 * Handle AJAX request to fetch courses or cohorts for linking to a product.
+	/**
+	 * Handle AJAX request to fetch linkable courses for a product.
 	 *
-	 * Expects POST: nonce, type ('course' or 'cohort'), post_id.
-	 * Returns: available courses or cohorts and the selected one (even if not available).
+	 * Expects POST: nonce, post_id.
+	 * Returns the list of available courses and the currently linked course.
 	 *
-	 * @return void Outputs JSON response.
+	 * @return void
 	 */
 	public function get_linkable_courses() {
 		// Verify nonce.
@@ -124,8 +124,7 @@ class Course {
 		}
 
 		// Retrieve and sanitize input.
-		$post_id          = absint( filter_input( INPUT_POST, 'post_id' ) ? filter_input( INPUT_POST, 'post_id' ) : 0 );
-		$linkable_courses = array();
+		$post_id = absint( filter_input( INPUT_POST, 'post_id' ) );
 
 		$linked_course_id = get_post_meta( $post_id, 'linked_course_id', true );
 
@@ -207,13 +206,13 @@ class Course {
 
 
 	/**
-	 * Get courses based on filters.
+	 * Retrieve courses based on filter conditions.
 	 *
-	 * Supported keys: id, moodle_course_id, shortname, fullname, category_id, product_id,
-	 * startdate, enddate, ids (array), condition (AND/OR), limit, offset.
+	 * Filters supported: id, moodle_course_id, shortname, fullname, category_id,
+	 * product_id, startdate, enddate, condition (AND/OR), limit, offset.
 	 *
-	 * @param array $where Filter conditions.
-	 * @return array List of courses as associative arrays (each course as [ field => value ]).
+	 * @param array $where Associative array of filters.
+	 * @return array List of matched courses as associative arrays.
 	 */
 	public static function get_course_information( $where ) {
 		global $wpdb;
@@ -269,11 +268,7 @@ class Course {
 
 		$results = $wpdb->get_results( $query, ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
 
-		if ( is_null( $results ) && ! empty( $wpdb->last_error ) ) {
-			return array();
-		}
-
-		return $results;
+		return $results ?? array();
 	}
 
 	/**
