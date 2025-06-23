@@ -30,11 +30,12 @@ const Support: React.FC<SupprotProps> = ({
 }) => {
     const [faqs, setFaqs] = useState(faqData);
     const toggleFAQ = (index: number) => {
-        setFaqs((prevFaqs) =>
-            prevFaqs?.map((faq, i) => ({
-                ...faq,
-                open: i === index ? !faq.open : false,
-            }))
+        setFaqs(
+            (prevFaqs) =>
+                prevFaqs?.map((faq, i) => ({
+                    ...faq,
+                    open: i === index ? !faq.open : false,
+                }))
         );
     };
 

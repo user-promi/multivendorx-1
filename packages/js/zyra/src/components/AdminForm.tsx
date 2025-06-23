@@ -1446,7 +1446,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                                     setting.customize_btn.button_text) ||
                                 'Submit'
                             }
-                            setting={setting[inputField.key]}
+                            setting={setting}
                             proSetting={isProSetting(
                                 inputField.proSetting ?? false
                             )}

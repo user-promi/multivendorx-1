@@ -1,14 +1,12 @@
-/**
- * External dependencies
- */
-import React, { ChangeEvent, MouseEvent, FocusEvent, useState } from 'react';
+import React, {
+    ChangeEvent,
+    MouseEvent,
+    FocusEvent,
+    useState,
+    forwardRef,
+} from 'react';
 import DisplayButton from './DisplayButton';
 
-/**
- * Internal dependencies
- */
-
-// Types
 interface BasicInputProps {
     wrapperClass?: string;
     inputLabel?: string;
@@ -42,171 +40,187 @@ interface BasicInputProps {
     descClass?: string;
     rangeUnit?: string;
     disabled?: boolean;
+    readOnly?: boolean;
 }
 
-const BasicInput: React.FC<BasicInputProps> = ({
-    wrapperClass,
-    inputLabel,
-    inputClass,
-    id,
-    type = 'text',
-    name = 'basic-input',
-    value,
-    placeholder,
-    min,
-    max,
-    onChange,
-    onClick,
-    onMouseOver,
-    onMouseOut,
-    onFocus,
-    onBlur,
-    parameter,
-    generate,
-    proSetting,
-    description,
-    descClass,
-    rangeUnit,
-    disabled = false,
-}) => {
-    const [copied, setCopied] = useState(false);
+const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
+    (
+        {
+            wrapperClass,
+            inputLabel,
+            inputClass,
+            id,
+            type = 'text',
+            name = 'basic-input',
+            value,
+            placeholder,
+            min,
+            max,
+            onChange,
+            onClick,
+            onMouseOver,
+            onMouseOut,
+            onFocus,
+            onBlur,
+            parameter,
+            generate,
+            proSetting,
+            description,
+            descClass,
+            rangeUnit,
+            disabled = false,
+            readOnly = false,
+        },
+        ref
+    ) => {
+        const [copied, setCopied] = useState(false);
 
-    const generateRandomKey = (length = 8): string => {
-        const characters =
-            'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        return Array.from({ length })
-            .map(() =>
-                characters.charAt(Math.floor(Math.random() * characters.length))
-            )
-            .join('');
-    };
+        const generateRandomKey = (length = 8): string => {
+            const characters =
+                'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            return Array.from({ length })
+                .map(() =>
+                    characters.charAt(
+                        Math.floor(Math.random() * characters.length)
+                    )
+                )
+                .join('');
+        };
 
-    const generateSSOKey = (e: MouseEvent<HTMLButtonElement>) => {
-        e.preventDefault();
-        const key = generateRandomKey(8);
-        if (onChange) {
-            const event = {
-                target: { value: key },
-            } as unknown as ChangeEvent<HTMLInputElement>;
-            onChange(event);
-        }
-    };
+        const generateSSOKey = (e: MouseEvent<HTMLButtonElement>) => {
+            e.preventDefault();
+            const key = generateRandomKey(8);
+            if (onChange) {
+                const event = {
+                    target: { value: key },
+                } as unknown as ChangeEvent<HTMLInputElement>;
+                onChange(event);
+            }
+        };
 
-    const handleCopy = (e: MouseEvent<HTMLButtonElement>) => {
-        e.preventDefault();
-        if (value) {
-            navigator.clipboard.writeText(String(value)).then(() => {
-                setCopied(true);
-                setTimeout(() => setCopied(false), 10000);
-            });
-        }
-    };
+        const handleCopy = (e: MouseEvent<HTMLButtonElement>) => {
+            e.preventDefault();
+            if (value) {
+                navigator.clipboard.writeText(String(value)).then(() => {
+                    setCopied(true);
+                    setTimeout(() => setCopied(false), 10000);
+                });
+            }
+        };
 
-    const handleClear = (e: MouseEvent<HTMLButtonElement>) => {
-        e.preventDefault();
-        if (onChange) {
-            const event = {
-                target: { value: '' },
-            } as unknown as ChangeEvent<HTMLInputElement>;
-            onChange(event);
-        }
-    };
+        const handleClear = (e: MouseEvent<HTMLButtonElement>) => {
+            e.preventDefault();
+            if (onChange) {
+                const event = {
+                    target: { value: '' },
+                } as unknown as ChangeEvent<HTMLInputElement>;
+                onChange(event);
+            }
+        };
 
-    return (
-        <>
-            <div className={`${wrapperClass} ${generate ? 'generate' : ''}`}>
-                {inputLabel && <label htmlFor={id}>{inputLabel}</label>}
+        return (
+            <>
+                <div
+                    className={`${wrapperClass || ''} ${
+                        generate ? 'generate' : ''
+                    }`}
+                >
+                    {inputLabel && <label htmlFor={id}>{inputLabel}</label>}
 
-                <input
-                    className={['basic-input', inputClass].join(' ')}
-                    id={id}
-                    type={type}
-                    name={name}
-                    placeholder={placeholder}
-                    {...(type !== 'file' && onChange ? { value } : {})}
-                    {...(type === 'number' || type === 'range'
-                        ? { min, max }
-                        : {})}
-                    onChange={onChange}
-                    onClick={onClick}
-                    onMouseOver={onMouseOver}
-                    onMouseOut={onMouseOut}
-                    onFocus={onFocus}
-                    onBlur={onBlur}
-                    disabled={disabled}
-                />
-
-                {parameter && (
-                    <span
-                        className="parameter"
-                        dangerouslySetInnerHTML={{ __html: parameter }}
+                    <input
+                        ref={ref}
+                        className={['basic-input', inputClass].join(' ')}
+                        id={id}
+                        type={type}
+                        name={name}
+                        placeholder={placeholder}
+                        {...(type !== 'file' && onChange ? { value } : {})}
+                        {...(type === 'number' || type === 'range'
+                            ? { min, max }
+                            : {})}
+                        onChange={onChange}
+                        onClick={onClick}
+                        onMouseOver={onMouseOver}
+                        onMouseOut={onMouseOut}
+                        onFocus={onFocus}
+                        onBlur={onBlur}
+                        disabled={disabled}
+                        readOnly={readOnly}
                     />
-                )}
 
-                {generate &&
-                    (value === '' ? (
-                        <DisplayButton
-                            wraperClass="admin-btn btn-purple"
-                            onClick={generateSSOKey}
-                        >
-                            <>
-                                <i className="adminlib-star-icon"></i>
-                                <span className="text">Generate</span>
-                            </>
-                        </DisplayButton>
-                    ) : (
-                        <>
-                            <DisplayButton
-                                wraperClass="clear-btn"
-                                onClick={handleClear}
-                            >
-                                <i className="adminlib-delete"></i>
-                            </DisplayButton>
+                    {parameter && (
+                        <span
+                            className="parameter"
+                            dangerouslySetInnerHTML={{ __html: parameter }}
+                        />
+                    )}
 
+                    {generate &&
+                        (value === '' ? (
                             <DisplayButton
-                                wraperClass="copy-btn"
-                                onClick={handleCopy}
+                                wraperClass="admin-btn btn-purple"
+                                onClick={generateSSOKey}
                             >
                                 <>
-                                    <i className="adminlib-vendor-form-copy"></i>
-                                    <span
-                                        className={
-                                            !copied
-                                                ? 'tooltip'
-                                                : 'tooltip tool-clip'
-                                        }
-                                    >
-                                        {copied ? (
-                                            <>
-                                                <i className="adminlib-success-notification"></i>
-                                                Copied
-                                            </>
-                                        ) : (
-                                            'Copy to clipboard'
-                                        )}
-                                    </span>
+                                    <i className="adminlib-star-icon"></i>
+                                    <span className="text">Generate</span>
                                 </>
                             </DisplayButton>
-                        </>
-                    ))}
+                        ) : (
+                            <>
+                                <DisplayButton
+                                    wraperClass="clear-btn"
+                                    onClick={handleClear}
+                                >
+                                    <i className="adminlib-delete"></i>
+                                </DisplayButton>
 
-                {proSetting && <span className="admin-pro-tag">pro</span>}
+                                <DisplayButton
+                                    wraperClass="copy-btn"
+                                    onClick={handleCopy}
+                                >
+                                    <>
+                                        <i className="adminlib-vendor-form-copy"></i>
+                                        <span
+                                            className={
+                                                !copied
+                                                    ? 'tooltip'
+                                                    : 'tooltip tool-clip'
+                                            }
+                                        >
+                                            {copied ? (
+                                                <>
+                                                    <i className="adminlib-success-notification"></i>
+                                                    Copied
+                                                </>
+                                            ) : (
+                                                'Copy to clipboard'
+                                            )}
+                                        </span>
+                                    </>
+                                </DisplayButton>
+                            </>
+                        ))}
 
-                {type === 'range' && (
-                    <output className={descClass}>
-                        {value ?? 0}
-                        {rangeUnit}
-                    </output>
+                    {proSetting && <span className="admin-pro-tag">pro</span>}
+
+                    {type === 'range' && (
+                        <output className={descClass}>
+                            {value ?? 0}
+                            {rangeUnit}
+                        </output>
+                    )}
+                </div>
+
+                {description && (
+                    <p
+                        className={descClass}
+                        dangerouslySetInnerHTML={{ __html: description }}
+                    />
                 )}
-            </div>
-            {description && (
-                <p
-                    className={descClass}
-                    dangerouslySetInnerHTML={{ __html: description }}
-                />
-            )}
-        </>
-    );
-};
+            </>
+        );
+    }
+);
 
 export default BasicInput;

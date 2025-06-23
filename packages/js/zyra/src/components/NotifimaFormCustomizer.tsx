@@ -8,6 +8,7 @@ import React, { useEffect, useRef, useState } from 'react';
  */
 import ButtonCustomizer from './ButtonCustomiser';
 import '../styles/web/NotifimaFormCustomizer.scss';
+import BasicInput from './BasicInput';
 
 // Types
 interface FormCustomizerProps {
@@ -50,16 +51,18 @@ const NotifimaFormCustomizer: React.FC<FormCustomizerProps> = ({
         <div className="formcustomizer-wrapper">
             <div className="wrapper-content">
                 <div className="label-section">
-                    <input
-                        ref={currentHoverOn === 'description' ? inputRef : null} // Use inputRef for inputs
-                        className={
+                    <BasicInput
+                        wrapperClass=""
+                        inputClass={
                             currentHoverOn === 'description' ? 'active' : ''
                         }
+                        ref={currentHoverOn === 'description' ? inputRef : null}
+                        value={setting?.alert_text || ''}
                         onClick={() => setCurrentHoverOn('description')}
                         onChange={(e) => onChange('alert_text', e.target.value)}
-                        value={setting?.alert_text || ''}
                     />
                 </div>
+
                 <div className="form-section">
                     <div
                         ref={
@@ -67,14 +70,14 @@ const NotifimaFormCustomizer: React.FC<FormCustomizerProps> = ({
                         }
                         className="input-section"
                     >
-                        <input
+                        <BasicInput
+                            type="email"
                             readOnly
-                            onClick={() => setCurrentHoverOn('email_input')}
-                            className={
+                            inputClass={
                                 currentHoverOn === 'email_input' ? 'active' : ''
                             }
-                            type="email"
                             placeholder={setting?.email_placeholder_text || ''}
+                            onClick={() => setCurrentHoverOn('email_input')}
                         />
 
                         {currentHoverOn === 'email_input' && (
@@ -104,12 +107,13 @@ const NotifimaFormCustomizer: React.FC<FormCustomizerProps> = ({
                                     >
                                         <i className="admin-font adminlib-cross"></i>
                                     </button>
+
                                     <div className="setting-section-dev">
                                         <span className="label">
                                             Placeholder text
                                         </span>
                                         <div className="property-section">
-                                            <input
+                                            <BasicInput
                                                 type="text"
                                                 value={
                                                     setting?.email_placeholder_text ||
@@ -127,6 +131,7 @@ const NotifimaFormCustomizer: React.FC<FormCustomizerProps> = ({
                                 </div>
                             )}
                     </div>
+
                     <div className="button-section">
                         <ButtonCustomizer
                             text={buttonText}

@@ -42,7 +42,7 @@ const Modules: React.FC<ModuleProps> = ({
         const module = modulesArray.find(
             (moduleData) => moduleData.id === moduleId
         );
-        return module?.pro_module ? (appLocalizer.khali_dabba ?? false) : true;
+        return module?.pro_module ? appLocalizer.khali_dabba ?? false : true;
     };
 
     const handleOnChange = async (

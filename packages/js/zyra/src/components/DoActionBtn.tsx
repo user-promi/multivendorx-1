@@ -264,7 +264,9 @@ const DoActionBtn: React.FC<DoActionBtnProps> = ({
 
             {testStatus && (
                 <div
-                    className={`fetch-display-output ${testStatus === 'Failed' ? 'failed' : 'success'}`}
+                    className={`fetch-display-output ${
+                        testStatus === 'Failed' ? 'failed' : 'success'
+                    }`}
                 >
                     {testStatus === 'Failed' ? (
                         <p>
