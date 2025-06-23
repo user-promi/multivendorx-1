@@ -21,17 +21,16 @@ class Installer {
      * Installer Constructor.
      */
     public function __construct() {
-        if ( get_option( 'moowoodle_version' ) !== MOOWOODLE_PLUGIN_VERSION ) {
-            $this->set_default_settings();
-
-            $this->create_databases();
+            if ( false === get_option( 'moowoodle_version', false ) ) {
+                $this->set_default_settings();
+                $this->create_databases();
+            }
 
             $this->run_default_migration();
 
             update_option( 'moowoodle_version', MOOWOODLE_PLUGIN_VERSION );
 
             do_action( 'moowoodle_updated' );
-        }
     }
 
     /**
@@ -106,7 +105,8 @@ class Installer {
     public static function run_default_migration() {
         $previous_version = get_option( 'moowoodle_version', '' );
 
-        if ( version_compare( $previous_version, '3.2.12', '<' ) ) {
+        if ( version_compare( $previous_version, '3.3.0', '<' ) ) {
+            self::create_databases();
             self::migrate_categories();
             self::migrate_courses();
             self::migrate_enrollments();
@@ -123,8 +123,6 @@ class Installer {
      */
     public static function migrate_categories() {
             global $wpdb;
-
-            $table_name = $wpdb->prefix . Util::TABLES['category'];
 
             // Get terms with '_category_id' meta and optional '_parent' meta for 'course_cat' taxonomy.
             $query = $wpdb->prepare(

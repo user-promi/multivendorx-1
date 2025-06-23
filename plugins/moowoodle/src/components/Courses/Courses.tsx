@@ -69,7 +69,7 @@ const Course: React.FC = () => {
     useEffect(() => {
         axios({
             method: 'get',
-            url: getApiLink(appLocalizer, 'all-filters'),
+            url: getApiLink(appLocalizer, 'filters'),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
         })
             .then((response) => {

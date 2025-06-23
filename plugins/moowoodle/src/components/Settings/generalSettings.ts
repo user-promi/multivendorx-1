@@ -37,8 +37,8 @@ export default {
         {
             key: 'test_connection',
             type: 'do-action-btn',
-            apilink: 'sync',
-            parameter: 'test',
+            apilink: 'synchronize',
+            parameter: 'connection_test',
             value: 'Start Test',
             interval: 2500,
             desc: '',

@@ -45,7 +45,7 @@ export default {
             key: 'sync_cohort_btn',
             type: 'do-action-btn',
             interval: 2500,
-            apilink: 'sync',
+            apilink: 'synchronize',
             parameter: 'cohort',
             proSetting: true,
             value: 'Synchronize cohort now!',

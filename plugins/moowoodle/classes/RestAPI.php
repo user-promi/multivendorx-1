@@ -31,8 +31,9 @@ class RestAPI {
             add_action( 'rest_api_init', array( &$this, 'register_user_api' ) );
         }
 
-		add_action( 'moowoodle_sync_all_test', array( $this, 'test_connection' ) );
-		add_action( 'moowoodle_sync_all_course', array( $this, 'synchronize_course' ) );
+		add_action( 'moowoodle_process_connection_test_synchonization', array( $this, 'test_connection' ) );
+		add_action( 'moowoodle_process_course_synchonization', array( $this, 'synchronize_course' ) );
+
     }
 
     /**
@@ -53,7 +54,7 @@ class RestAPI {
 
         register_rest_route(
             MooWoodle()->rest_namespace,
-            '/sync',
+            '/synchronize',
             array(
 				array(
 					'methods'             => 'POST',
@@ -80,7 +81,7 @@ class RestAPI {
         );
         register_rest_route(
             MooWoodle()->rest_namespace,
-            '/all-filters',
+            '/filters',
             array(
 				'methods'             => \WP_REST_Server::ALLMETHODS,
 				'callback'            => array( $this, 'get_all_filters' ),
@@ -174,7 +175,7 @@ class RestAPI {
      * Handles synchronization requests based on the 'parameter' value.
      *
      * Supported parameters:
-     * - 'test'     : Tests the connection to the remote system.
+     * - 'connection_test'     : Tests the connection to the remote system.
      * - 'course'   : Synchronizes all courses.
      * - 'user'     : Triggers synchronization of all users.
      * - 'cohort'   : (Pro feature) Triggers synchronization of all cohorts.
@@ -188,7 +189,7 @@ class RestAPI {
         $parameter = $request->get_param( 'parameter' );
 
         if ( ! empty( $parameter ) ) {
-            do_action( "moowoodle_sync_all_{$parameter}", $request );
+            do_action( "moowoodle_process_{$parameter}_synchonization", $request );
         } else {
             do_action( 'moowoodle_sync' );
         }
@@ -433,7 +434,7 @@ class RestAPI {
             $view_user_url = trailingslashit( MooWoodle()->setting->get_setting( 'moodle_url' ) ) . "user/index.php?id={$course['moodle_course_id']}";
 
             // Get categories.
-            $categories    = MooWoodle()->category->get_course_category_information( $course['category_id'] );
+            $categories    = MooWoodle()->category->get_course_category_information($course['category_id']);
             $category_name = ! empty( $categories ) ? $categories[0]['name'] : __( 'Uncategorized', 'moowoodle' );
 
             // Get enrolled users count.
@@ -481,7 +482,6 @@ class RestAPI {
 
         // Fetch all courses.
         $courses = MooWoodle()->course->get_course_information( array() );
-        file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":orders:  : " . var_export($courses, true) . "\n", FILE_APPEND);
         if ( empty( $courses ) ) {
             return rest_ensure_response(
                 array(
@@ -495,7 +495,7 @@ class RestAPI {
         $category_ids = array_unique( wp_list_pluck( $courses, 'category_id' ) );
 
         // Fetch categories.
-        $category = MooWoodle()->category->get_course_category_information( $category_ids );
+        $category = MooWoodle()->category->get_course_category_information($category_ids);
 
         // Prepare formatted course list.
         $all_courses = array();
@@ -519,7 +519,6 @@ class RestAPI {
             )
         );
     }
-
 
     /**
      * Save the setting set in react's admin setting page.
