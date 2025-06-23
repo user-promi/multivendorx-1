@@ -20,33 +20,32 @@ class Category {
 
 
 	/**
-	 * Retrieve course categories by one or more IDs.
+	 * Retrieve course categories by ID(s).
 	 *
-	 * Accepts a single ID, an array of IDs, or a non-array/numeric value.
-	 * If no valid IDs are provided, all categories are returned.
+	 * Accepts a single ID or an array of IDs. If the input is invalid or empty,
+	 * all categories will be returned.
 	 *
-	 * @param int|int[]|mixed $where Single category ID, array of IDs, or other input to normalize.
+	 * @param int|int[] $args A single category ID or an array of IDs.
 	 * @return array List of course categories as associative arrays.
 	 */
-	public static function get_course_category_information( $where ) {
+	public static function get_course_category_information( $args ) {
         global $wpdb;
         // Normalize input to an array
-        if ( is_int( $where ) ) {
-            $where = array( $where );
-        } elseif ( ! is_array( $where ) ) {
-			$where = array( (int) $where );
+        if ( is_int( $args ) ) {
+            $args = array( $args );
+        } elseif ( ! is_array( $args ) ) {
+			$args = array();
 		}
 
         $table = $wpdb->prefix . Util::TABLES['category'];
-        $query = "SELECT * FROM $table";
-        if ( ! empty( $where ) ) {
-            $in = implode( ',', array_map( 'intval', $where ) );
-            $query .= " WHERE id IN ($in)";
+        $where = "SELECT * FROM $table";
+        if ( ! empty( $args ) ) {
+            $in     = implode( ',', array_map( 'intval', $args ) );
+            $where .= " WHERE id IN ($in)";
         }
-        $results = $wpdb->get_results( $query, ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.*
+        $results = $wpdb->get_results( $where, ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.*
 		return $results ?? array();
     }
-
 
 	/**
 	 * Insert or update multiple course categories in the local table.

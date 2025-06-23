@@ -277,7 +277,7 @@ class Product {
 			return $product_id;
 		}
 
-		$link_type = sanitize_text_field( filter_input( INPUT_POST, 'link_type', FILTER_SANITIZE_FULL_SPECIAL_CHARS ) ?? '' );
+		$link_type    = sanitize_text_field( filter_input( INPUT_POST, 'link_type', FILTER_SANITIZE_FULL_SPECIAL_CHARS ) ?? '' );
 		$link_item_id = absint( filter_input( INPUT_POST, 'linked_item_id' ) );
 		// Only process if it's a course link.
 		if ( 'course' === $link_type ) {
@@ -312,6 +312,7 @@ class Product {
 
 		return $product_id;
 	}
+
 	/**
 	 * Unlinks the course from the given WooCommerce product.
 	 *

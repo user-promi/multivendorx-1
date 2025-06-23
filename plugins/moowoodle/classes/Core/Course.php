@@ -23,8 +23,8 @@ class Course {
 	public function __construct() {
 		// Add Link Moodle Course in WooCommerce edit product tab.
 		add_filter( 'woocommerce_product_data_tabs', array( &$this, 'add_additional_product_tab' ), 99, 1 );
-		add_action( 'woocommerce_product_data_panels', array( &$this, 'add_additional_product_data_panel' ) );
-		add_action( 'wp_ajax_get_linkable_course', array( $this, 'get_linkable_courses' ) );
+		add_action( 'woocommerce_product_data_panels', array( &$this, 'add_additional_product_data_panels' ) );
+		add_action( 'wp_ajax_get_linkable_course', array( $this, 'get_linkable_course' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_assets' ) );
 	}
 
@@ -61,7 +61,7 @@ class Course {
      *
      * @return void
      */
-	public function add_additional_product_data_panel() {
+	public function add_additional_product_data_panels() {
 		global $post;
 
 		$linked_course_id = get_post_meta( $post->ID, 'linked_course_id', true );
@@ -116,7 +116,7 @@ class Course {
 	 *
 	 * @return void
 	 */
-	public function get_linkable_courses() {
+	public function get_linkable_course() {
 		// Verify nonce.
 		if ( ! check_ajax_referer( 'moowoodle_meta_nonce', 'nonce', false ) ) {
 			wp_send_json_error( __( 'Invalid nonce', 'moowoodle' ) );
@@ -204,7 +204,6 @@ class Course {
 			: false;
 	}
 
-
 	/**
 	 * Retrieve courses based on filter conditions.
 	 *
@@ -214,59 +213,60 @@ class Course {
 	 * @param array $where Associative array of filters.
 	 * @return array List of matched courses as associative arrays.
 	 */
-	public static function get_course_information( $where ) {
+	public static function get_course_information( $args ) {
 		global $wpdb;
 
-		$query_segments = array();
+		$where = array();
 
-		if ( isset( $where['id'] ) ) {
-			$ids              = is_array( $where['id'] ) ? $where['id'] : array( $where['id'] );
-			$ids              = implode( ',', array_map( 'intval', $ids ) );
-			$query_segments[] = "id IN ($ids)";
+		if ( isset( $args['id'] ) ) {
+			$ids     = is_array( $args['id'] ) ? $args['id'] : array( $args['id'] );
+			$ids     = implode( ',', array_map( 'intval', $ids ) );
+			$where[] = "id IN ($ids)";
 		}
 
-		if ( isset( $where['moodle_course_id'] ) ) {
-			$query_segments[] = ' ( moodle_course_id = ' . esc_sql( intval( $where['moodle_course_id'] ) ) . ' ) ';
+		if ( isset( $args['moodle_course_id'] ) ) {
+			$where[] = ' ( moodle_course_id = ' . esc_sql( intval( $args['moodle_course_id'] ) ) . ' ) ';
 		}
 
-		if ( isset( $where['shortname'] ) ) {
-			$query_segments[] = " ( shortname LIKE '%" . esc_sql( $where['shortname'] ) . "%' ) ";
+		if ( isset( $args['shortname'] ) ) {
+			$where[] = " ( shortname LIKE '%" . esc_sql( $args['shortname'] ) . "%' ) ";
 		}
 
-		if ( isset( $where['category_id'] ) ) {
-			$query_segments[] = ' ( category_id = ' . esc_sql( intval( $where['category_id'] ) ) . ' ) ';
+		if ( isset( $args['category_id'] ) ) {
+			$where[] = ' ( category_id = ' . esc_sql( intval( $args['category_id'] ) ) . ' ) ';
 		}
 
-		if ( isset( $where['product_id'] ) ) {
-			$query_segments[] = ' ( product_id = ' . esc_sql( intval( $where['product_id'] ) ) . ' ) ';
+		if ( isset( $args['product_id'] ) ) {
+			$where[] = ' ( product_id = ' . esc_sql( intval( $args['product_id'] ) ) . ' ) ';
 		}
 
-		if ( isset( $where['fullname'] ) ) {
-			$query_segments[] = " ( fullname LIKE '%" . esc_sql( $where['fullname'] ) . "%' ) ";
+		if ( isset( $args['fullname'] ) ) {
+			$where[] = " ( fullname LIKE '%" . esc_sql( $args['fullname'] ) . "%' ) ";
 		}
 
-		if ( isset( $where['startdate'] ) ) {
-			$query_segments[] = ' ( startdate = ' . esc_sql( intval( $where['startdate'] ) ) . ' ) ';
+		if ( isset( $args['startdate'] ) ) {
+			$where[] = ' ( startdate = ' . esc_sql( intval( $args['startdate'] ) ) . ' ) ';
 		}
 
-		if ( isset( $where['enddate'] ) ) {
-			$query_segments[] = ' ( enddate = ' . esc_sql( intval( $where['enddate'] ) ) . ' ) ';
+		if ( isset( $args['enddate'] ) ) {
+			$where[] = ' ( enddate = ' . esc_sql( intval( $args['enddate'] ) ) . ' ) ';
 		}
 
 		$table = $wpdb->prefix . Util::TABLES['course'];
 		$query = "SELECT * FROM $table";
 
-		if ( ! empty( $query_segments ) ) {
-			$query .= ' WHERE ' . implode( $where['condition'] ?? ' AND ', $query_segments );
+		if ( ! empty( $where ) ) {
+			$condition = $args['condition'] ?? ' AND ';
+			$query    .= ' WHERE ' . implode( $condition, $where );
 		}
 
-		if ( isset( $where['limit'] ) && isset( $where['offset'] ) ) {
-			$limit  = esc_sql( intval( $where['limit'] ) );
-			$offset = esc_sql( intval( $where['offset'] ) );
+		if ( isset( $args['limit'] ) && isset( $args['offset'] ) ) {
+			$limit  = esc_sql( intval( $args['limit'] ) );
+			$offset = esc_sql( intval( $args['offset'] ) );
 			$query .= " LIMIT $limit OFFSET $offset";
 		}
 
-		$results = $wpdb->get_results( $query, ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
+		$results = $wpdb->get_results( $query, ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.*
 
 		return $results ?? array();
 	}
