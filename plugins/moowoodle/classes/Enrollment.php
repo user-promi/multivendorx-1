@@ -531,12 +531,6 @@ class Enrollment {
 			$where[] = $wpdb->prepare( 'order_id = %d', $args['order_id'] );
 		}
 
-		if ( isset( $args['group_item_id'] ) ) {
-			$ids     = is_array( $args['group_item_id'] ) ? $args['group_item_id'] : array( $args['group_item_id'] );
-			$ids     = implode( ',', array_map( 'intval', $ids ) );
-			$where[] = "group_item_id IN ($ids)";
-		}
-
 		if ( isset( $args['status'] ) && '' !== $args['status'] ) {
 			$where[] = $wpdb->prepare( 'status = %s', $args['status'] );
 		}
