@@ -193,25 +193,27 @@ class Course {
 		$existing = reset( self::get_course_information( array( 'moodle_course_id' => $args['moodle_course_id'] ) ) );
 
 		if ( $existing ) {
-			return $wpdb->update( $table, $args, array( 'moodle_course_id' => $args['moodle_course_id'] ) ) !== false
+			return $wpdb->update( $table, $args, array( 'moodle_course_id' => $args['moodle_course_id'] ) ) !== false // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 				? $existing['id']
 				: false;
 		}
 
 		$args['created'] = current_time( 'mysql' );
-		return $wpdb->insert( $table, $args ) !== false
-			? $wpdb->insert_id
-			: false;
+		return $wpdb->insert( $table, $args ) !== false // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		? $wpdb->insert_id
+		: false;
 	}
 
 	/**
-	 * Retrieve courses based on filter conditions.
+	 * Get course details based on filter options.
 	 *
-	 * Filters supported: id, moodle_course_id, shortname, fullname, category_id,
-	 * product_id, startdate, enddate, condition (AND/OR), limit, offset.
+	 * Filters supported in $args:
+	 * - id, moodle_course_id, shortname, fullname
+	 * - category_id, product_id, startdate, enddate
+	 * - condition (AND/OR), limit, offset
 	 *
-	 * @param array $where Associative array of filters.
-	 * @return array List of matched courses as associative arrays.
+	 * @param array $args Filter options.
+	 * @return array List of matching courses.
 	 */
 	public static function get_course_information( $args ) {
 		global $wpdb;
@@ -266,7 +268,7 @@ class Course {
 			$query .= " LIMIT $limit OFFSET $offset";
 		}
 
-		$results = $wpdb->get_results( $query, ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.*
+		$results = $wpdb->get_results( $query, ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
 
 		return $results ?? array();
 	}

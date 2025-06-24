@@ -30,7 +30,7 @@ class Category {
 	 */
 	public static function get_course_category_information( $args ) {
         global $wpdb;
-        // Normalize input to an array
+        // Normalize input to an array.
         if ( is_int( $args ) ) {
             $args = array( $args );
         } elseif ( ! is_array( $args ) ) {
@@ -43,7 +43,7 @@ class Category {
             $in     = implode( ',', array_map( 'intval', $args ) );
             $where .= " WHERE id IN ($in)";
         }
-        $results = $wpdb->get_results( $where, ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.*
+		$results = $wpdb->get_results( $where, ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
 		return $results ?? array();
     }
 

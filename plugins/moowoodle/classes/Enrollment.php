@@ -35,10 +35,10 @@ class Enrollment {
 	 * @param int $order_id The ID of the WooCommerce order.
 	 */
 	public function process_order( $order_id ) {
-		$order       = wc_get_order( $order_id );
+		$order = wc_get_order( $order_id );
 
 		if ( ! $order->get_customer_id() ) {
-			Util::log( "Order #{$order_id}: Unable to enroll user — customer ID not found.");
+			Util::log( "Order #{$order_id}: Unable to enroll user — customer ID not found." );
 		}
 
 		$email_data = array();
@@ -136,7 +136,6 @@ class Enrollment {
 		$existing_enrollment = reset( $existing_enrollment );
 
 		if ( $existing_enrollment ) {
-			
 			$enrollment_data['id'] = $existing_enrollment['id'];
 		}
 
@@ -541,7 +540,7 @@ class Enrollment {
 			$query .= $wpdb->prepare( ' LIMIT %d OFFSET %d', intval( $args['limit'] ), intval( $args['offset'] ) );
 		}
 
-		$results = $wpdb->get_results( $query, ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.*
+		$results = $wpdb->get_results( $query, ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
 
 		if ( is_null( $results ) && ! empty( $wpdb->last_error ) ) {
 			return array();
