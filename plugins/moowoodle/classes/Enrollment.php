@@ -11,16 +11,10 @@ namespace MooWoodle;
  * MooWoodle Enrollment class
  *
  * @class       Enrollment class
- * @version     PRODUCT_VERSION
+ * @version     3.3.0
  * @author      DualCube
  */
 class Enrollment {
-	/**
-	 * Variable store woocommerce order object
-     *
-	 * @var \WC_Order | null
-	 */
-	public $order = null;
 
 	/**
      * Enrollment constructor.
@@ -41,11 +35,10 @@ class Enrollment {
 	 * @param int $order_id The ID of the WooCommerce order.
 	 */
 	public function process_order( $order_id ) {
-		$order       = wc_get_order( $order_id );
-		$this->order = $order;
+		$order = wc_get_order( $order_id );
 
 		if ( ! $order->get_customer_id() ) {
-			Util::log( 'Unable to enroll user — customer ID not found (user not created).' );
+			Util::log( "Order #{$order_id}: Unable to enroll user — customer ID not found." );
 		}
 
 		$email_data = array();
@@ -57,7 +50,7 @@ class Enrollment {
             $linked_course_id = $product->get_meta( 'linked_course_id', true );
 
 			if ( ! $moodle_course_id ) {
-				Util::log( "Unable to enroll on order complete (Order ID: {$order_id}). Order item is not linked with any course." );
+				Util::log( "Skipping enrollment - Moodle course ID is missing. Linked Course ID: #{$linked_course_id}" );
 				continue;
 			}
 
@@ -79,7 +72,7 @@ class Enrollment {
             );
 
 			if ( $response ) {
-				$email_data['course'][] = $linked_course_id;
+				$email_data['course'][ $linked_course_id ] = $linked_course_id;
 			}
 		}
 
@@ -143,9 +136,6 @@ class Enrollment {
 		$existing_enrollment = reset( $existing_enrollment );
 
 		if ( $existing_enrollment ) {
-			if ( 'enrolled' === $existing_enrollment['status'] ) {
-				return true;
-			}
 			$enrollment_data['id'] = $existing_enrollment['id'];
 		}
 
@@ -394,7 +384,7 @@ class Enrollment {
 		 * @var array $user_data
 		 * @var \WC_Order $order
 		 */
-		return apply_filters( 'moowoodle_moodle_users_data', $user_data, $this->order );
+		return apply_filters( 'moowoodle_moodle_users_data', $user_data );
 	}
 
     /**
@@ -485,7 +475,7 @@ class Enrollment {
 		$table = $wpdb->prefix . Util::TABLES['enrollment'];
 		$where = array();
 
-		// Filters
+		// Filters.
 		if ( isset( $args['id'] ) ) {
 			$ids     = is_array( $args['id'] ) ? $args['id'] : array( $args['id'] );
 			$ids     = implode( ',', array_map( 'intval', $ids ) );
@@ -539,7 +529,7 @@ class Enrollment {
 			$where[] = $wpdb->prepare( 'date = %s', $args['date'] );
 		}
 
-		// Build query
+		// Build query.
 		$query = "SELECT * FROM $table";
 
 		if ( ! empty( $where ) ) {
@@ -550,7 +540,7 @@ class Enrollment {
 			$query .= $wpdb->prepare( ' LIMIT %d OFFSET %d', intval( $args['limit'] ), intval( $args['offset'] ) );
 		}
 
-		$results = $wpdb->get_results( $query, ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.*
+		$results = $wpdb->get_results( $query, ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
 
 		if ( is_null( $results ) && ! empty( $wpdb->last_error ) ) {
 			return array();
