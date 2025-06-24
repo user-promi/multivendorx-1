@@ -240,7 +240,7 @@ class Ajax {
         if ( $variation_id && ! empty( $variation_id ) ) {
             $child_obj = new \WC_Product_Variation( $variation_id );
         }
-        echo wp_kses_post( Notifima()->frontend->get_subscribe_form( $product, $child_obj ) );
+        echo wp_kses( Notifima()->frontend->get_subscribe_form( $product, $child_obj ), FrontEnd::$allowed_html );
         die();
     }
 }

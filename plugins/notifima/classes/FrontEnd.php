@@ -17,6 +17,37 @@ defined( 'ABSPATH' ) || exit;
  * @author      MultivendorX
  */
 class FrontEnd {
+    /**
+     * Allowed HTML tags and attributes for frontend output.
+     *
+     * @var array
+     */
+    public static $allowed_html = array(
+        'div'    => array(
+            'class' => true,
+            'style' => true,
+        ),
+        'h5'     => array(
+            'class' => true,
+            'style' => true,
+        ),
+        'p'      => array(),
+        'input'  => array(
+            'type'        => true,
+            'name'        => true,
+            'value'       => true,
+            'class'       => true,
+            'id'          => true,
+            'placeholder' => true,
+        ),
+        'button' => array(
+            'type'  => true,
+            'class' => true,
+            'style' => true,
+            'name'  => true,
+        ),
+        'script' => array(),
+    );
 
     /**
      * Frontend constructor.
@@ -144,10 +175,10 @@ class FrontEnd {
             if ( $get_variations ) {
                 echo '<div class="notifima-shortcode-subscribe-form" data-product-id="' . esc_attr( $product_obj->get_id() ) . '"></div>';
             } else {
-                echo wp_kses_post( $this->get_subscribe_form( $product_obj ) );
+                echo wp_kses( $this->get_subscribe_form( $product_obj ), self::$allowed_html );
             }
         } else {
-            echo wp_kses_post( $this->get_subscribe_form( $product_obj ) );
+            echo wp_kses( $this->get_subscribe_form( $product_obj ), self::$allowed_html );
         }
     }
 
@@ -228,7 +259,7 @@ class FrontEnd {
                         $notifima_fields_array[] = $recaptcha_script . $recaptcha_response_input . $recaptcha_site_key_input . $recaptcha_secret_key_input;
                         break;
                     default:
-                        $notifima_fields_array[] = '<input id="notifima_' . $key . '" type="' . $type . '" name="' . $key . '" class="' . $class . '" value="' . $value . '" placeholder="' . $placeholder . '" >';
+                        $notifima_fields_array[] = '<input id="notifima_' . $key . '" type="' . $type . '" name="' . $key . '" class="' . $class . '" value="' . esc_attr( $value ) . '" placeholder="' . $placeholder . '" >';
                         break;
                 }
             }

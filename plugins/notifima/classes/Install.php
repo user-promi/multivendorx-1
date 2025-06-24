@@ -63,7 +63,7 @@ class Install {
     public function __construct() {
         $this->notifima_data_migrate();
 
-        if ( false === get_option( 'notifima_version', false ) ) {
+        if ( ! empty( get_option( 'notifima_version', false ) ) ) {
             $this->set_default_settings();
             $this->create_database_table();
         }
@@ -186,6 +186,11 @@ class Install {
                 UNIQUE KEY unique_product_email_status (product_id, email, status),
                 PRIMARY KEY (`id`)
             ) $collate;";
+
+        // Include upgrade functions if not loaded.
+        if ( ! function_exists( 'dbDelta' ) ) {
+            require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+        }
 
         dbDelta( $sql_subscribers );
     }
