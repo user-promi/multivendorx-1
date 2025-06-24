@@ -24,6 +24,7 @@ class Enrollment {
 		add_action( 'woocommerce_thankyou', array( &$this, 'enrollment_modified_details' ) );
 		add_action( 'woocommerce_after_shop_loop_item_title', array( &$this, 'add_dates_with_product' ) );
 		add_action( 'woocommerce_product_meta_start', array( &$this, 'add_dates_with_product' ) );
+		add_action( 'woocommerce_cart_updated', array( $this, 'restrict_cart_quantity_on_update' ) );
 	}
 
 	/**
@@ -72,7 +73,7 @@ class Enrollment {
             );
 
 			if ( $response ) {
-				$email_data['course'][ $linked_course_id ] = $linked_course_id;
+				$email_data['course'][ (int) $linked_course_id ] = (int) $linked_course_id;
 			}
 		}
 
@@ -411,8 +412,8 @@ class Enrollment {
 	public function add_dates_with_product() {
 		global $product;
 
-		$startdate = get_post_meta( $product->get_id(), '_course_startdate', true );
-		$enddate   = get_post_meta( $product->get_id(), '_course_enddate', true );
+		$startdate = $product->get_meta( '_course_startdate', true );
+		$enddate   = $product->get_meta( '_course_enddate', true );
 
 		// Get start end date setting.
 		$start_end_date = MooWoodle()->setting->get_setting( 'start_end_date', array() );
@@ -547,5 +548,17 @@ class Enrollment {
 		}
 
 		return $results;
+	}
+
+	/**
+	 * Enforce quantity restriction based on plugin version and settings.
+	 */
+	public function restrict_cart_quantity_on_update() {
+		foreach ( WC()->cart->get_cart() as $cart_item_key => $cart_item ) {
+			if ( $cart_item['quantity'] > 1 ) {
+				WC()->cart->set_quantity( $cart_item_key, 1 );
+				wc_add_notice( __( 'You can only purchase one unit of this product.', 'moowoodle' ), 'error' );
+			}
+		}
 	}
 }

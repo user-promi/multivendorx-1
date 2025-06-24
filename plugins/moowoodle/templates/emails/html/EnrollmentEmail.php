@@ -6,7 +6,7 @@
  *
  * @author    DualCube
  * @package   moowoodle/templates
- * @version   PRODUCT_VERSION
+ * @version   3.3.0
  */
 
 defined( 'ABSPATH' ) || exit();
@@ -127,9 +127,11 @@ $user = get_user_by( 'email', $args['user_email'] );
 <?php if ( ! empty( $args['enrollments']['classroom_details'] ) && empty( $args['enrollments']['teacher_email'] ) ) : ?>
 	<p>
 		<strong><?php esc_html_e( 'Classroom:', 'moowoodle' ); ?></strong>
-		<?php echo esc_html( $args['enrollments']['classroom_details'][0]['name'] ); ?>
+		<?php
+		$classroom = reset( $args['enrollments']['classroom_details'] );
+		echo esc_html( $classroom['name'] ?? '' );
+		?>
 	</p>
-
 <?php endif; ?>
 
 <?php if ( ! empty( $args['enrollments']['course_details'] ) ) : ?>
@@ -170,6 +172,5 @@ $user = get_user_by( 'email', $args['user_email'] );
 </p>
 
 <p><?php esc_html_e( 'Wishing you a great learning experience!', 'moowoodle' ); ?></p>
-
 
 <?php do_action( 'woocommerce_email_footer' ); ?>

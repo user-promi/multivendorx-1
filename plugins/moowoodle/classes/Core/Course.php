@@ -128,19 +128,29 @@ class Course {
 
 		$linked_course_id = get_post_meta( $post_id, 'linked_course_id', true );
 
-		$linkable_courses = $this->get_course_information(
+		if ( ! empty( $linked_course_id ) ) {
+			$linkable_courses = $this->get_course_information(
+				array(
+					'id'         => $linked_course_id,
+					'product_id' => 0,
+					'condition'  => 'OR',
+				)
+			);
+
+			wp_send_json_success(
+				array(
+					'items'       => $linkable_courses,
+					'selected_id' => $linked_course_id,
+				)
+			);
+		}
+
+		wp_send_json_success(
 			array(
-				'id'         => $linked_course_id,
-				'product_id' => 0,
-				'condition'  => 'OR',
+				'items'       => array(),
+				'selected_id' => 0,
 			)
 		);
-		wp_send_json_success(
-            array(
-				'items'       => $linkable_courses,
-				'selected_id' => $linked_course_id,
-            )
-        );
 	}
 
 	/**

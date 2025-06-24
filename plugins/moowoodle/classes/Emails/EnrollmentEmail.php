@@ -11,7 +11,7 @@ namespace MooWoodle\Emails;
  * MooWoodle EnrollmentEmail class
  *
  * @class       Emails class
- * @version     PRODUCT_VERSION
+ * @version     3.3.0
  * @author      DualCube
  */
 class EnrollmentEmail extends \WC_Email {
@@ -36,7 +36,7 @@ class EnrollmentEmail extends \WC_Email {
 		$this->title          = __( 'New Moodle Enrollment', 'moowoodle' );
 		$this->description    = __( 'This is a notification email sent to the enrollees for new enrollment.', 'moowoodle' );
 		$this->heading        = __( 'Welcome to {site_title}!', 'moowoodle' );
-		$this->template_html  = 'emails/EnrollmentEmail.php';
+		$this->template_html  = 'emails/html/EnrollmentEmail.php';
 		$this->template_plain = 'emails/plain/EnrollmentEmail.php';
 		$this->template_base  = MooWoodle()->plugin_path . 'templates/';
 
