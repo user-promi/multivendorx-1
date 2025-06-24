@@ -21,7 +21,7 @@ class Installer {
      * Installer Constructor.
      */
     public function __construct() {
-		if ( ! empty( get_option( 'moowoodle_version', false ) ) ) {
+		if ( ! get_option( 'moowoodle_version', false ) ) {
 			$this->set_default_settings();
 			$this->create_databases();
 		}
@@ -130,8 +130,8 @@ class Installer {
                 SELECT 
                     t.term_id,
                     t.name,
-                    CAST(tm.meta_value AS UNSIGNED) AS id,
-                    COALESCE(CAST(pm.meta_value AS UNSIGNED), 0) AS parent_id
+                    tm.meta_value AS id,
+                    pm.meta_value AS parent_id
                 FROM {$wpdb->terms} t
                 INNER JOIN {$wpdb->term_taxonomy} tt 
                     ON t.term_id = tt.term_id
@@ -140,7 +140,7 @@ class Installer {
                 LEFT JOIN {$wpdb->termmeta} pm 
                     ON t.term_id = pm.term_id AND pm.meta_key = '_parent'
                 WHERE tt.taxonomy = %s
-                ",
+            ",
                 'course_cat'
             );
 

@@ -6,7 +6,7 @@
  *
  * @author    DualCube
  * @package   moowoodle/templates
- * @version   PRODUCT_VERSION
+ * @version   3.3.0
  */
 
 defined( 'ABSPATH' ) || exit();
@@ -80,17 +80,18 @@ if ( ! empty( $args['enrollments']['cohort_details'] ) ) {
 }
 
 if ( ! empty( $args['enrollments']['classroom_details'] ) && empty( $args['enrollments']['teacher_email'] ) ) {
+	$classroom = reset( $args['enrollments']['classroom_details'] );
 	printf(
 		// translators: %s is the name of the classroom.
 		esc_html__( 'Classroom: %s', 'moowoodle' ) . "\n",
-		esc_html( $args['enrollments']['classroom_details'][0]['name'] )
+		esc_html( $classroom['name'] ?? '' )
 	);
 }
 
 if ( ! empty( $args['enrollments']['course_details'] ) ) {
 	esc_html_e( "Course(s):\n", 'moowoodle' );
 	foreach ( $args['enrollments']['course_details'] as $course ) {
-		echo '- ' . esc_html( $course['fullname'] ) . "\n";
+		echo '- ' . esc_html( $course['name'] ) . "\n";
 	}
 } else {
 	esc_html_e( "Course(s):\n", 'moowoodle' );
@@ -108,6 +109,5 @@ printf(
 	esc_html__( "If you have questions or face issues logging in, contact us at: %s\n\n", 'moowoodle' ),
 	esc_html( $support_email )
 );
-
 
 esc_html_e( "Wishing you a great learning experience!\n", 'moowoodle' );
