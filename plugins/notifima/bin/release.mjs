@@ -10,12 +10,13 @@ const pluginFiles = [
     "log/",
     "templates/",
     "config.php",
+    "composer.lock",
     "composer.json",
     "product_stock_alert.php",
     "readme.txt",
 ];
 
-const removeFiles = ["composer.json"];
+const removeFiles = ["composer.json", "composer.lock"];
 
 const { version, displayName } = JSON.parse(
     fs.readFileSync("package.json", "utf8")

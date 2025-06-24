@@ -1,7 +1,7 @@
 {
     "name": "notifima",
     "displayName": "woocommerce-product-stock-manager",
-    "version": "2.0.0",
+    "version": "3.0.0",
     "description": "=== WooCommerce Product Stock Manager ===",
     "main": "index.js",
     "engines": {
@@ -39,6 +39,7 @@
         "postinstall": "rimraf -g vendor release .wireit composer.lock languages && composer install",
         "clean": "node bin/clean-files.mjs",
         "minify": "node bin/minify.mjs",
+        "version": "node bin/version-replace.mjs",
         "changelog": "composer install --quiet && composer exec -- changelogger",
         "makepot": "wp i18n make-pot --domain='notifima' --include='assets/js,classes,templates,config.php,product_stock_alert.php' . --headers='{\"Report-Msgid-Bugs-To\":\"https://notifima.com/contact/\"}' --file-comment=\"Copyright (c) $(date +'%Y') Notifima Inc. All Rights Reserved.\" languages/notifima.pot"
     },
