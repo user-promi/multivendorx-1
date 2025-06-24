@@ -21,7 +21,7 @@ class Installer {
      * Installer Constructor.
      */
     public function __construct() {
-            if ( false === get_option( 'moowoodle_version', false ) ) {
+            if ( !empty( get_option( 'moowoodle_version', false ) ) ) {
                 $this->set_default_settings();
                 $this->create_databases();
             }
