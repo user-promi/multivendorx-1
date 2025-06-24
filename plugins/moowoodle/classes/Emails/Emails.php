@@ -11,7 +11,7 @@ namespace MooWoodle\Emails;
  * MooWoodle Emails class
  *
  * @class       Emails class
- * @version     PRODUCT_VERSION
+ * @version     3.3.0
  * @author      DualCube
  */
 class Emails {
@@ -60,7 +60,6 @@ class Emails {
 	 * @return void
 	 */
 	public function send_enrollment_confirmation( $enrollments, $user_id ) {
-
 		$user = get_userdata( $user_id );
 
 		if ( ! $user || empty( $user->user_email ) ) {
@@ -86,19 +85,19 @@ class Emails {
 
 		// Course data.
 		if ( ! empty( $enrollments['course'] ) ) {
-			$enrolled_course_ids = array_map( 'intval', $enrollments['course'] );
+			$enrolled_course_ids = array_map( 'intval', array_keys( $enrollments['course'] ) );
 			$enrolled_courses    = MooWoodle()->course->get_course_information( array( 'id' => $enrolled_course_ids ) );
 
 			if ( ! empty( $enrolled_courses ) ) {
 				$email_content['course_details'] = array_map(
-                    function ( $course ) {
-                        return array(
-							'id'   => intval( $course['id'] ?? 0 ),
+					function ( $course ) {
+						return array(
+							'id'   => (int) ( $course['id'] ?? 0 ),
 							'name' => $course['fullname'] ?? '',
-                        );
-                    },
-                    $enrolled_courses
-                );
+						);
+					},
+					$enrolled_courses
+				);
 			}
 		}
 
