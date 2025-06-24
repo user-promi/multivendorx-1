@@ -31,8 +31,8 @@ class RestAPI {
             add_action( 'rest_api_init', array( &$this, 'register_user_api' ) );
         }
 
-		add_action( 'moowoodle_process_connection_test_synchonization', array( $this, 'test_connection' ) );
-		add_action( 'moowoodle_process_course_synchonization', array( $this, 'synchronize_course' ) );
+		add_action( 'moowoodle_process_connection_test_synchronization', array( $this, 'test_connection' ) );
+		add_action( 'moowoodle_process_course_synchronization', array( $this, 'synchronize_course' ) );
     }
 
     /**
@@ -53,11 +53,11 @@ class RestAPI {
 
         register_rest_route(
             MooWoodle()->rest_namespace,
-            '/synchronize',
+            '/synchronization',
             array(
 				array(
 					'methods'             => 'POST',
-					'callback'            => array( $this, 'synchronize' ),
+					'callback'            => array( $this, 'synchronization' ),
 					'permission_callback' => array( $this, 'moowoodle_permission' ),
 				),
 				array(
@@ -108,7 +108,7 @@ class RestAPI {
 
         register_rest_route(
             MooWoodle()->rest_namespace,
-            '/courses',
+            '/my-acc-courses',
             array(
 				'methods'             => \WP_REST_Server::READABLE,
 				'callback'            => array( $this, 'get_user_courses' ),
@@ -175,7 +175,7 @@ class RestAPI {
      *
      * Supported parameters:
      * - 'connection_test'     : Tests the connection to the remote system.
-     * - 'course'   : Synchronizes all courses.
+     * - 'course'   : synchronization all courses.
      * - 'user'     : Triggers synchronization of all users.
      * - 'cohort'   : (Pro feature) Triggers synchronization of all cohorts.
      * - Default    : Triggers general synchronization.
@@ -184,11 +184,11 @@ class RestAPI {
      *
      * @return mixed Response from the specific sync handler or null.
      */
-    public function synchronize( $request ) {
+    public function synchronization( $request ) {
         $parameter = $request->get_param( 'parameter' );
 
         if ( ! empty( $parameter ) ) {
-            do_action( "moowoodle_process_{$parameter}_synchonization", $request );
+            do_action( "moowoodle_process_{$parameter}_synchronization", $request );
         } else {
             do_action( 'moowoodle_sync' );
         }
