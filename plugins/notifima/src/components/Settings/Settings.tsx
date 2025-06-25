@@ -150,7 +150,7 @@ const Settings: React.FC<SettingsProps> = () => {
         return (
             <Banner
                 products={products}
-                isPro={false}
+                isPro={appLocalizer.khali_dabba}
                 proUrl={appLocalizer.pro_url}
                 tag="Why Premium"
                 buttonText="View Pricing"

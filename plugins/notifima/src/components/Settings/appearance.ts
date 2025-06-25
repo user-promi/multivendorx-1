@@ -26,7 +26,6 @@ export default {
                 'notifima'
             ),
             placeholder: __('Unsubscribe', 'notifima'),
-            classes: 'unsubcribe-button-section',
         },
         {
             key: 'separator_content',
@@ -96,7 +95,7 @@ export default {
         },
         {
             key: 'lead_time_format',
-            type: 'settingToggle',
+            type: 'setting-toggle',
             label: __('Lead Format', 'notifima'),
             desc: __(
                 'Choose the lead time format: Either dynamic (set unique lead time text for all out of stock product) or static (apply a default lead time text for out of stock products).',
@@ -165,7 +164,6 @@ export default {
         {
             key: 'shown_interest_text',
             type: 'textarea',
-            classes: 'conditional-section',
             class: 'woo-setting-wpeditor-class',
             label: __('Subscriber count notification message', 'notifima'),
             desc: __(

@@ -12,7 +12,6 @@ export default {
         {
             key: 'is_mailchimp_enable',
             type: 'checkbox',
-            class: 'woo-toggle-checkbox',
             label: __('Enable Mailchimp', 'notifima'),
             desc: __(
                 "Get your MailChimp API from your MailChimp <a href='https://us20.admin.mailchimp.com/account/api/manage/#create'>account</a>. For further help, please check this doc.",

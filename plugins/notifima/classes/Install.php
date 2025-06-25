@@ -60,7 +60,7 @@ class Install {
         global $wpdb;
 
         if ( ! get_option( 'notifima_version', false ) ) {
-            self::migration_from_old_to_new();
+            self::migration_from_old_to_new_3_0_0();
         }
 
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
@@ -277,7 +277,7 @@ class Install {
      *
      * @return void
      */
-    private static function migration_from_old_to_new() {
+    private static function migration_from_old_to_new_3_0_0() {
         global $wpdb;
         $current_version  = Notifima()->version;
         $previous_version = get_option( 'notifima_version', '' );

@@ -1,7 +1,4 @@
-/**
- * from pro
- */
-
+/* global appLocalizer */
 import React from 'react';
 import { __ } from '@wordpress/i18n';
 import { ProPopup } from 'zyra';
