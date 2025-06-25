@@ -77,6 +77,7 @@ class MooWoodle {
         add_action( 'woocommerce_loaded', array( $this, 'load_plugin' ) );
         add_action( 'plugins_loaded', array( $this, 'is_woocommerce_loaded' ) );
         add_action( 'init', array( $this, 'migrate_from_previous_version' ) );
+        add_filter( 'woocommerce_email_classes', array( &$this, 'setup_email_class' ) );
 	}
 
     /**
@@ -144,7 +145,6 @@ class MooWoodle {
 		$this->container['util']             = new Util();
         $this->container['setting']          = new Setting();
 		$this->container['restAPI']          = new RestAPI();
-		$this->container['emails']           = new MooWoodleEmails();
 		$this->container['course']           = new Core\Course();
 		$this->container['category']         = new Core\Category();
 		$this->container['product']          = new Core\Product();
@@ -299,5 +299,16 @@ class MooWoodle {
         }
 
         return self::$instance;
+    }
+
+    /**
+     * Add the Enrollment Email class to WooCommerce emails.
+     *
+     * @param array $emails WooCommerce email classes.
+     * @return array Updated email classes with EnrollmentEmail.
+     */
+    public function setup_email_class( $emails ) {
+        $emails['EnrollmentEmail'] = new Emails\EnrollmentEmail();
+        return $emails;
     }
 }

@@ -12,7 +12,6 @@
 defined( 'ABSPATH' ) || exit();
 
 do_action( 'woocommerce_email_header', $email_heading );
-
 $user = get_user_by( 'email', $args['user_email'] );
 ?>
 
@@ -80,65 +79,11 @@ $user = get_user_by( 'email', $args['user_email'] );
 
 <h3><?php esc_html_e( 'Enrollment Details', 'moowoodle' ); ?></h3>
 
-<?php if ( ! empty( $args['enrollments']['gift_email'] ) ) : ?>
-	<p>
-		<?php
-			echo wp_kses_post(
-				sprintf(
-					// translators: %s is the gifter's email address.
-					__( 'This enrollment was gifted by <strong>%s</strong>.', 'moowoodle' ),
-					esc_html( $args['enrollments']['gift_email'] )
-				)
-			);
-		?>
-	</p>
-<?php elseif ( ! empty( $args['enrollments']['teacher_email'] ) ) : ?>
-	<p>
-		<?php
-		echo wp_kses_post(
-			sprintf(
-				// translators: %s is the teacher's email address.
-				__( 'You have been enrolled by <strong>%s</strong>.', 'moowoodle' ),
-				esc_html( $args['enrollments']['teacher_email'] )
-			)
-		);
-		?>
-	</p>
-<?php endif; ?>
-
-<?php if ( ! empty( $args['enrollments']['group_details'] ) ) : ?>
-	<p><strong><?php esc_html_e( 'Group(s):', 'moowoodle' ); ?></strong></p>
-	<ul>
-		<?php foreach ( $args['enrollments']['group_details'] as $group ) : ?>
-			<li><?php echo esc_html( $group['name'] ); ?></li>
-		<?php endforeach; ?>
-	</ul>
-<?php endif; ?>
-
-<?php if ( ! empty( $args['enrollments']['cohort_details'] ) ) : ?>
-	<p><strong><?php esc_html_e( 'Cohort(s):', 'moowoodle' ); ?></strong></p>
-	<ul>
-		<?php foreach ( $args['enrollments']['cohort_details'] as $cohort ) : ?>
-			<li><?php echo esc_html( $cohort['name'] ); ?></li>
-		<?php endforeach; ?>
-	</ul>
-<?php endif; ?>
-
-<?php if ( ! empty( $args['enrollments']['classroom_details'] ) && empty( $args['enrollments']['teacher_email'] ) ) : ?>
-	<p>
-		<strong><?php esc_html_e( 'Classroom:', 'moowoodle' ); ?></strong>
-		<?php
-		$classroom = reset( $args['enrollments']['classroom_details'] );
-		echo esc_html( $classroom['name'] ?? '' );
-		?>
-	</p>
-<?php endif; ?>
-
-<?php if ( ! empty( $args['enrollments']['course_details'] ) ) : ?>
+<?php if ( ! empty( $args['enrollments']['course'] ) ) : ?>
 	<p><strong><?php esc_html_e( 'Course(s):', 'moowoodle' ); ?></strong></p>
 	<ul>
-		<?php foreach ( $args['enrollments']['course_details'] as $course ) : ?>
-			<li><?php echo esc_html( $course['name'] ); ?></li>
+		<?php foreach ( $args['enrollments']['course'] as $product_id => $product_name ) : ?>
+			<li><?php echo esc_html( $product_name ); ?></li>
 		<?php endforeach; ?>
 	</ul>
 <?php else : ?>
@@ -147,6 +92,7 @@ $user = get_user_by( 'email', $args['user_email'] );
 		<li><?php esc_html_e( 'Dummy Course', 'moowoodle' ); ?></li>
 	</ul>
 <?php endif; ?>
+
 
 <h3><?php esc_html_e( 'Access Your Courses', 'moowoodle' ); ?></h3>
 
