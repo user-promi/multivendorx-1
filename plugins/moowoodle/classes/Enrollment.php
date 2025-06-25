@@ -72,11 +72,16 @@ class Enrollment {
             );
 
 			if ( $response ) {
-				$email_data['course'][ (int) $linked_course_id ] = (int) $linked_course_id;
+				$email_data['course'][ $product->get_id() ] = $product->get_name();
 			}
 		}
+		$emails = WC()->mailer()->get_emails();
 
-		do_action( 'moowoodle_after_enrol_moodle_user', $email_data, $order->get_customer_id() );
+		if ( isset( $emails['EnrollmentEmail'] ) ) {
+			$emails['EnrollmentEmail']->trigger( $order->get_billing_email(), $email_data );
+		}
+
+		do_action( 'moowoodle_after_enrol_moodle_user', $order_id );
 	}
 
 	/**
