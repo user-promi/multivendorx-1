@@ -77,7 +77,7 @@ const Log: React.FC<LogProps> = ({
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
             params: {
                 logcount: 100,
-                clear: true,
+                action: 'clear',
             },
         }).then(() => {
             setLogData([]);
