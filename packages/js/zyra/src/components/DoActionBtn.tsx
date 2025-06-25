@@ -186,7 +186,7 @@ const DoActionBtn: React.FC<DoActionBtnProps> = ({
         e.preventDefault();
         if (proSettingChanged()) return;
 
-        if (parameter === 'test') {
+        if (parameter === 'connection_test') {
             startConnectionTask();
         } else {
             setSyncStarted(true);
