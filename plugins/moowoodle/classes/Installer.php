@@ -21,12 +21,12 @@ class Installer {
      * Installer Constructor.
      */
     public function __construct() {
-		if ( ! get_option( 'moowoodle_version', false ) ) {
-			$this->set_default_settings();
-			$this->create_databases();
-		}
-
-            $this->run_default_migration();
+            if ( !( get_option( 'moowoodle_version', false ) ) ) {
+                $this->set_default_settings();
+                $this->create_databases();
+            } else {
+                $this->run_default_migration();
+            }
 
             update_option( 'moowoodle_version', MOOWOODLE_PLUGIN_VERSION );
 
@@ -107,9 +107,9 @@ class Installer {
 
         if ( version_compare( $previous_version, '3.3.0', '<' ) ) {
             self::create_databases();
-            self::migrate_categories();
-            self::migrate_courses();
-            self::migrate_enrollments();
+            self::migrate_categories_3_3_0();
+            self::migrate_courses_3_3_0();
+            self::migrate_enrollments_3_3_0();
         }
     }
 
@@ -121,7 +121,7 @@ class Installer {
      *
      * @return void
      */
-    public static function migrate_categories() {
+    public static function migrate_categories_3_3_0() {
             global $wpdb;
 
             // Get terms with '_category_id' meta and optional '_parent' meta for 'course_cat' taxonomy.
@@ -146,19 +146,19 @@ class Installer {
 
             $terms = $wpdb->get_results( $query, ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
 
-		if ( empty( $terms ) ) {
-			return;
-		}
+            if ( empty( $terms ) ) {
+                return;
+            }
 
-		foreach ( $terms as $term ) {
-			$args = array(
-				'id'        => (int) $term['id'],
-				'name'      => sanitize_text_field( $term['name'] ),
-				'parent_id' => (int) $term['parent_id'],
-			);
+            foreach ( $terms as $term ) {
+                $args = [
+                    'id'                 => (int) $term['id'],
+                    'name'               => sanitize_text_field( $term['name'] ),
+                    'parent_id'          => (int) $term['parent_id'],
+                ];
 
-			\MooWoodle\Core\Category::update_course_category( $args );
-		}
+                \MooWoodle\Core\Category::update_course_category( $args );
+            }
     }
 
 
@@ -171,7 +171,7 @@ class Installer {
      *
      * @return void
      */
-    public static function migrate_courses() {
+    public static function migrate_courses_3_3_0() {
         $courses = get_posts(
             array(
                 'post_type'      => 'course',
@@ -217,7 +217,7 @@ class Installer {
      *
      * @return void
      */
-    public static function migrate_enrollments() {
+    public static function migrate_enrollments_3_3_0() {
         // Get all enrollment data.
         $order_ids = wc_get_orders(
             array(
