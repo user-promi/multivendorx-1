@@ -108,7 +108,7 @@ class RestAPI {
 
         register_rest_route(
             MooWoodle()->rest_namespace,
-            '/my_acc_courses',
+            '/my-acc-courses',
             array(
 				'methods'             => \WP_REST_Server::READABLE,
 				'callback'            => array( $this, 'get_user_courses' ),
