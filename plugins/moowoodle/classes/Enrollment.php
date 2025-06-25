@@ -79,7 +79,7 @@ class Enrollment {
 
 		$email->trigger( $order->get_billing_email(), $email_data );
 
-		do_action( 'moowoodle_after_enrol_moodle_user', $order_id );
+		do_action( 'moowoodle_after_enrol_moodle_user', $order );
 	}
 
 	/**
