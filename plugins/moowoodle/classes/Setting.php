@@ -82,7 +82,6 @@ class Setting {
 				'moowoodle_extra_settings',
 				'moowoodle_general_settings',
 				'moowoodle_display_settings',
-				'moowoodle_sso_settings',
 				'moowoodle_notification_settings',
 				'moowoodle_tool_settings',
 				'moowoodle_log_settings',

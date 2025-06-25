@@ -34,6 +34,65 @@ class Installer {
     }
 
     /**
+     * Set default moowoodle admin settings.
+     *
+     * @return void
+     */
+    private function set_default_settings() {
+        $general_settings = array(
+            'moodle_url'          => '',
+            'moodle_access_token' => '',
+        );
+        // Default value for sso setting.
+        $sso_settings = array(
+            'moowoodle_sso_enable'     => array(),
+            'moowoodle_sso_secret_key' => '',
+        );
+        // Default value for display setting.
+        $display_settings = array(
+            'start_end_date'                    => array( 'start_end_date' ),
+            'my_courses_priority'               => 0,
+            'my_groups_priority'                => 1,
+            'moowoodle_create_user_custom_mail' => array(),
+        );
+        // Default value for log setting.
+        $tool_settings = array(
+            'moowoodle_adv_log' => array(),
+            'moodle_timeout'    => 5,
+            'schedule_interval' => 1,
+        );
+        // Default value sync course setting.
+        $course_settings = array(
+            'sync-course-options' => array( 'sync_courses_category', 'sync_courses_sku' ),
+            'product_sync_option' => array( 'create', 'update' ),
+        );
+        // Default value for sync user setting.
+        $user_settings = array(
+            'wordpress_user_role' => array( 'customer' ),
+            'moodle_user_role'    => array( '5' ),
+        );
+        // Update default settings.
+        update_option(
+            'moowoodle_general_settings',
+            array_merge(
+                $general_settings,
+                get_option( 'moowoodle_general_settings', array() )
+            )
+        );
+        update_option(
+            'moowoodle_sso_settings',
+            array_merge(
+                $sso_settings,
+                get_option( 'moowoodle_sso_settings', array() )
+            )
+        );
+        update_option( 'moowoodle_display_settings', $display_settings );
+        update_option( 'moowoodle_tool_settings', $tool_settings );
+        update_option( 'moowoodle_synchronize_course_settings', $course_settings );
+        update_option( 'moowoodle_synchronize_user_settings', $user_settings );
+    }
+
+    /**
      * Database creation functions.
      *
      * @return void
@@ -157,7 +216,11 @@ class Installer {
 				'parent_id' => (int) $term['parent_id'],
 			);
 
-			\MooWoodle\Core\Category::update_course_category( $args );
+			$response = \MooWoodle\Core\Category::update_course_category( $args );
+            
+            if( $response ) {
+                wp_delete_term( (int) $term['term_id'], 'course_cat' );
+            }
 		}
     }
 
@@ -206,9 +269,8 @@ class Installer {
 
             if ( ! empty( $course_data['product_id'] ) && $new_course_id ) {
                 update_post_meta( $course_data['product_id'], 'linked_course_id', $new_course_id );
+                wp_delete_post( $course->ID, true );
             }
-
-            wp_delete_post( $course->ID, true );
         }
     }
 
@@ -294,62 +356,4 @@ class Installer {
             \MooWoodle\Enrollment::save_enrollment( $enrollment_data );        }
     }
 
-    /**
-     * Set default moowoodle admin settings.
-     *
-     * @return void
-     */
-    private function set_default_settings() {
-        $general_settings = array(
-            'moodle_url'          => '',
-            'moodle_access_token' => '',
-        );
-        // Default value for sso setting.
-        $sso_settings = array(
-            'moowoodle_sso_enable'     => array(),
-            'moowoodle_sso_secret_key' => '',
-        );
-        // Default value for display setting.
-        $display_settings = array(
-            'start_end_date'                    => array( 'start_end_date' ),
-            'my_courses_priority'               => 0,
-            'my_groups_priority'                => 1,
-            'moowoodle_create_user_custom_mail' => array(),
-        );
-        // Default value for log setting.
-        $tool_settings = array(
-            'moowoodle_adv_log' => array(),
-            'moodle_timeout'    => 5,
-            'schedule_interval' => 1,
-        );
-        // Default value sync course setting.
-        $course_settings = array(
-            'sync-course-options' => array( 'sync_courses_category', 'sync_courses_sku' ),
-            'product_sync_option' => array( 'create', 'update' ),
-        );
-        // Default value for sync user setting.
-        $user_settings = array(
-            'wordpress_user_role' => array( 'customer' ),
-            'moodle_user_role'    => array( '5' ),
-        );
-        // Update default settings.
-        update_option(
-            'moowoodle_general_settings',
-            array_merge(
-                $general_settings,
-                get_option( 'moowoodle_general_settings', array() )
-            )
-        );
-        update_option(
-            'moowoodle_sso_settings',
-            array_merge(
-                $sso_settings,
-                get_option( 'moowoodle_sso_settings', array() )
-            )
-        );
-        update_option( 'moowoodle_display_settings', $display_settings );
-        update_option( 'moowoodle_tool_settings', $tool_settings );
-        update_option( 'moowoodle_synchronize_course_settings', $course_settings );
-        update_option( 'moowoodle_synchronize_user_settings', $user_settings );
-    }
 }
