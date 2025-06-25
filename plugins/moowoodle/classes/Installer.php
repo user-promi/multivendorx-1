@@ -21,12 +21,12 @@ class Installer {
      * Installer Constructor.
      */
     public function __construct() {
-            if ( !( get_option( 'moowoodle_version', false ) ) ) {
-                $this->set_default_settings();
-                $this->create_databases();
-            } else {
-                $this->run_default_migration();
-            }
+		if ( ! ( get_option( 'moowoodle_version', false ) ) ) {
+			$this->set_default_settings();
+			$this->create_databases();
+		} else {
+			$this->run_default_migration();
+		}
 
             update_option( 'moowoodle_version', MOOWOODLE_PLUGIN_VERSION );
 
@@ -146,19 +146,19 @@ class Installer {
 
             $terms = $wpdb->get_results( $query, ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
 
-            if ( empty( $terms ) ) {
-                return;
-            }
+		if ( empty( $terms ) ) {
+			return;
+		}
 
-            foreach ( $terms as $term ) {
-                $args = [
-                    'id'                 => (int) $term['id'],
-                    'name'               => sanitize_text_field( $term['name'] ),
-                    'parent_id'          => (int) $term['parent_id'],
-                ];
+		foreach ( $terms as $term ) {
+			$args = array(
+				'id'        => (int) $term['id'],
+				'name'      => sanitize_text_field( $term['name'] ),
+				'parent_id' => (int) $term['parent_id'],
+			);
 
-                \MooWoodle\Core\Category::update_course_category( $args );
-            }
+			\MooWoodle\Core\Category::update_course_category( $args );
+		}
     }
 
 
