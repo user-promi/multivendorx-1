@@ -35,7 +35,7 @@ import Log from './Log';
 import InputMailchimpList from './InputMailchimpList';
 const LazyMapsInput = lazy(() => import('./MapsInput'));
 import GoogleMap from './GoogleMap';
-import AllPopup, { PopupProps } from './Popup';
+import Popup, { PopupProps } from './Popup';
 import '../styles/web/AdminForm.scss';
 
 // Types
@@ -201,7 +201,7 @@ interface AdminFormProps {
     updateSetting: any;
     modules: any;
     appLocalizer: Record<string, any>; // Allows any structure
-    Popup: typeof AllPopup;
+    Popup: typeof Popup;
     modulePopupFields?: PopupProps;
 }
 
@@ -211,6 +211,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
     modules,
     appLocalizer,
     settings,
+    Popup,
     modulePopupFields,
 }) => {
     const { modal, submitUrl, id } = settings;
@@ -1696,9 +1697,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
 
             return inputField.type === 'section' ||
                 inputField.label === 'no_label' ? (
-                    <>
-                        {input}
-                    </>
+                <>{input}</>
             ) : (
                 <div
                     key={'g' + inputField.key}
@@ -1743,7 +1742,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                         onClick={handleModelClose}
                     ></span>
                     {
-                        <AllPopup
+                        <Popup
                             moduleName={String(modulePopupData.moduleName)}
                             settings={modulePopupData.settings}
                             plugin={modulePopupData.plugin}
