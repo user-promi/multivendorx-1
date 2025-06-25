@@ -31,7 +31,7 @@ class RestAPI {
             add_action( 'rest_api_init', array( &$this, 'register_user_api' ) );
         }
 
-		add_filter( 'moowoodle_process_connection_test_synchronization', array( $this, 'test_connection' ) );
+		add_filter( 'moowoodle_process_connection_test_synchronization', array( $this, 'connection_test_synchronization' ) );
 		add_filter( 'moowoodle_process_course_synchronization', array( $this, 'synchronize_course' ) );
     }
 
@@ -202,7 +202,7 @@ class RestAPI {
      * @param mixed $request rest request object.
      * @return \WP_Error| \WP_REST_Response
      */
-    public function test_connection( $request ) {
+    public function connection_test_synchronization( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             return new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'moowoodle' ), array( 'status' => 403 ) );
@@ -252,7 +252,7 @@ class RestAPI {
      * @param mixed $request rest api request object.
      * @return \WP_Error | \WP_REST_Response
      */
-    public function synchronize_course( $request ) {
+    public function course_synchronization( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             return new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'moowoodle' ), array( 'status' => 403 ) );
@@ -526,47 +526,42 @@ class RestAPI {
      */
     public function get_log( $request ) {
         global $wp_filesystem;
-        $action = $request->get_param( 'action' );
-
-        if ( 'download' === $action ) {
-            $this->download_log( $request );
+        $nonce = $request->get_header( 'X-WP-Nonce' );
+        $log_count = $request->get_param( 'logcount' );
+        $log_count = $log_count ? $log_count : 100;
+        if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
+            return new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'moowoodle' ), array( 'status' => 403 ) );
         }
-
         if ( ! $wp_filesystem ) {
             require_once ABSPATH . '/wp-admin/includes/file.php';
             WP_Filesystem();
         }
-
-        $nonce = $request->get_header( 'X-WP-Nonce' );
-        if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
-            return new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'moowoodle' ), array( 'status' => 403 ) );
+        $action = $request->get_param( 'action' );
+        switch ( $action ) {
+            case 'download':
+                $this->download_log( $request );
+                break;
+            case 'clear':
+                $wp_filesystem->delete( MooWoodle()->log_file );
+                delete_option( 'moowoodle_log_file' ); // Remove log file reference from options table.
+                return rest_ensure_response( true );
+            default:
+                $logs = array();
+                if ( file_exists( MooWoodle()->log_file ) ) {
+                    $log_content = $wp_filesystem->get_contents( MooWoodle()->log_file );
+                    if ( ! empty( $log_content ) ) {
+                        $logs = explode( "\n", $log_content );
+                    }
+                }
+                return rest_ensure_response( array_reverse( array_slice( $logs, - $log_count ) ) );
         }
-
-        $log_count = $request->get_param( 'logcount' );
-        $log_count = $log_count ? $log_count : 100;
-
-        $clear = $request->get_param( 'clear' );
-
-        if ( $clear ) {
-            $wp_filesystem->delete( MooWoodle()->log_file );
-            // delete the logfile name from options table.
-            delete_option( 'moowoodle_log_file' );
-
-            return rest_ensure_response( true );
-        }
-
-        $logs = array();
-
-        if ( file_exists( MooWoodle()->log_file ) ) {
-            // Get the contents of the log file using the filesystem API.
-            $log_content = $wp_filesystem->get_contents( MooWoodle()->log_file );
-            if ( ! empty( $log_content ) ) {
-                $logs = explode( "\n", $log_content );
-            }
-        }
-
-        return rest_ensure_response( array_reverse( array_slice( $logs, - $log_count ) ) );
     }
+
+
+
+
+
+
 
     /**
      * Download the log.

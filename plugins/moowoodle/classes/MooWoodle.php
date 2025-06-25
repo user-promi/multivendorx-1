@@ -175,7 +175,7 @@ class MooWoodle {
     public function migrate_from_previous_version() {
         $previous_version = get_option( 'moowoodle_version', '' );
 
-        if ( version_compare( $previous_version, '3.2.12', '<' ) ) {
+        if ( version_compare( $previous_version, MooWoodle()->version , '<' ) ) {
             new Installer();
         }
     }
@@ -303,10 +303,9 @@ class MooWoodle {
     }
 
     /**
-     * Add the Enrollment Email class to WooCommerce emails.
+     * Add Enrollment Email Class
      *
-     * @param array $emails WooCommerce email classes.
-     * @return array Updated email classes with EnrollmentEmail.
+     * @return void
      */
     public function setup_email_class( $emails ) {
         $emails['EnrollmentEmail'] = new Emails\EnrollmentEmail();

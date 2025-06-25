@@ -37,13 +37,6 @@ class ExternalService {
 				'enrol_users'         => 'enrol_manual_enrol_users',
 				'get_course_id'       => 'core_course_get_courses_by_field',
 				'unenrol_users'       => 'enrol_manual_unenrol_users',
-				'get_cohort'          => 'core_cohort_get_cohorts',
-				'add_cohort_member'   => 'core_cohort_add_cohort_members',
-				'delete_member'       => 'core_cohort_delete_cohort_members',
-				'get_groups'          => 'core_group_get_course_groups',
-				'create_group'        => 'core_group_create_groups',
-				'add_group_member'    => 'core_group_add_group_members',
-				'remove_group_member' => 'core_group_delete_group_members',
 			)
         );
 	}
@@ -96,7 +89,7 @@ class ExternalService {
 		}
 
 		// check the response containe error.
-		$response = self::check_connection( $response );
+		$response = self::analyse_moodle_response( $response );
 
 		// return response on success.
 		return $response;
@@ -108,7 +101,7 @@ class ExternalService {
 	 * @param object | null $response response.
 	 * @return array $response
 	 */
-	private function check_connection( $response ) {
+	private function analyse_moodle_response( $response ) {
 		if ( null === $response ) {
 			return array( 'error' => 'Response is not avialable' );
 		}

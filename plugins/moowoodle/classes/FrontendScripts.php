@@ -289,17 +289,17 @@ class FrontendScripts {
     public static function localize_scripts( $handle ) {
 		$settings_databases_value = array();
 
-		$tabs_names = array(
-			'general',
-			'display',
-			'sso',
-			'tool',
-			'log',
-			'notification',
-			'synchronize-course',
-			'synchronize-user',
-			'classroom',
-			'synchronize-cohort',
+		$tabs_names = apply_filters(
+			'additional_tabs_names',
+			array(
+				'general',
+				'display',
+				'tool',
+				'log',
+				'notification',
+				'synchronize-course',
+				'synchronize-user',
+			)
 		);
 
 		foreach ( $tabs_names as $tab_name ) {
