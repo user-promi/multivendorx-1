@@ -75,11 +75,9 @@ class Enrollment {
 				$email_data['course'][ $product->get_id() ] = $product->get_name();
 			}
 		}
-		$emails = WC()->mailer()->get_emails();
+		$email = WC()->mailer()->emails['EnrollmentEmail'];
 
-		if ( isset( $emails['EnrollmentEmail'] ) ) {
-			$emails['EnrollmentEmail']->trigger( $order->get_billing_email(), $email_data );
-		}
+		$email->trigger( $order->get_billing_email(), $email_data );
 
 		do_action( 'moowoodle_after_enrol_moodle_user', $order_id );
 	}
