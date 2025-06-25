@@ -30,10 +30,9 @@ class Enrollment {
 	/**
 	 * Process WooCommerce order for Moodle enrollment.
 	 *
-	 * Creates user if needed, then enrolls user in courses, groups, or cohorts
-	 * based on the products in the order.
+	 * Enrolls the user into Moodle courses based on the products in the order.
 	 *
-	 * @param int $order_id The ID of the WooCommerce order.
+	 * @param int $order_id WooCommerce order ID.
 	 */
 	public function process_order( $order_id ) {
 		$order = wc_get_order( $order_id );
@@ -81,11 +80,11 @@ class Enrollment {
 	}
 
 	/**
-	 * Process the enrollment when the order status is complete or a user is added to a group.
+	 * Enroll the user in a Moodle course.
 	 *
-	 * @param array $user_data   User data.
-	 * @param array $order_data  Order-related data.
-	 * @param array $course_data Course and Moodle course data.
+	 * @param array $user_data   User info.
+	 * @param array $order_data  Order info.
+	 * @param array $course_data Course info.
 	 * @return bool
 	 */
 	public function process_course_enrollment( $user_data, $order_data, $course_data ) {
@@ -288,7 +287,7 @@ class Enrollment {
 	 * @param int $length default length is 12.
 	 * @return string generated password.
 	 */
-	private function generate_password( $length = 12 ) {
+	public function generate_password( $length = 12 ) {
 		$sets   = array();
 		$sets[] = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
 		$sets[] = 'abcdefghjkmnpqrstuvwxyz';
@@ -508,14 +507,6 @@ class Enrollment {
 					}
 				}
 			}
-		}
-
-		if ( isset( $args['cohort_id'] ) ) {
-			$where[] = $wpdb->prepare( 'cohort_id = %d', $args['cohort_id'] );
-		}
-
-		if ( isset( $args['group_id'] ) ) {
-			$where[] = $wpdb->prepare( 'group_id = %d', $args['group_id'] );
 		}
 
 		if ( isset( $args['order_id'] ) ) {
