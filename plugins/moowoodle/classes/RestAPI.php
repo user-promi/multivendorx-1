@@ -31,8 +31,8 @@ class RestAPI {
             add_action( 'rest_api_init', array( &$this, 'register_user_api' ) );
         }
 
-		add_action( 'moowoodle_process_connection_test_synchonization', array( $this, 'test_connection' ) );
-		add_action( 'moowoodle_process_course_synchonization', array( $this, 'synchronize_course' ) );
+		add_filter( 'moowoodle_process_connection_test_synchronization', array( $this, 'test_connection' ) );
+		add_filter( 'moowoodle_process_course_synchronization', array( $this, 'synchronize_course' ) );
     }
 
     /**
@@ -53,11 +53,11 @@ class RestAPI {
 
         register_rest_route(
             MooWoodle()->rest_namespace,
-            '/synchronize',
+            '/synchronization',
             array(
 				array(
 					'methods'             => 'POST',
-					'callback'            => array( $this, 'synchronize' ),
+					'callback'            => array( $this, 'synchronization' ),
 					'permission_callback' => array( $this, 'moowoodle_permission' ),
 				),
 				array(
@@ -108,7 +108,7 @@ class RestAPI {
 
         register_rest_route(
             MooWoodle()->rest_namespace,
-            '/courses',
+            '/my_acc_courses',
             array(
 				'methods'             => \WP_REST_Server::READABLE,
 				'callback'            => array( $this, 'get_user_courses' ),
@@ -184,11 +184,11 @@ class RestAPI {
      *
      * @return mixed Response from the specific sync handler or null.
      */
-    public function synchronize( $request ) {
+    public function synchronization( $request ) {
         $parameter = $request->get_param( 'parameter' );
 
         if ( ! empty( $parameter ) ) {
-            do_action( "moowoodle_process_{$parameter}_synchonization", $request );
+            return apply_filters( "moowoodle_process_{$parameter}_synchronization", $request );
         } else {
             do_action( 'moowoodle_sync' );
         }
@@ -211,7 +211,6 @@ class RestAPI {
         $user_id   = $request->get_param( 'user_id' );
         $course_id = $request->get_param( 'course_id' );
         $response  = array();
-
         switch ( $action ) {
             case 'get_site_info':
                 $response = TestConnection::get_site_info();

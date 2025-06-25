@@ -11,7 +11,7 @@ namespace MooWoodle;
  * MooWoodle Enrollment class
  *
  * @class       Enrollment class
- * @version     3.3.0
+ * @version     PRODUCT_VERSION
  * @author      DualCube
  */
 class Enrollment {

@@ -11,7 +11,7 @@ namespace MooWoodle;
  * MooWoodle Emails class
  *
  * @class       Emails class
- * @version     3.3.0
+ * @version     PRODUCT_VERSION
  * @author      DualCube
  */
 class MooWoodleEmails {
@@ -19,8 +19,8 @@ class MooWoodleEmails {
      * Emails constructor.
      */
 	public function __construct() {
-		add_action( 'moowoodle_after_enrol_moodle_user', array( &$this, 'send_enrollment_confirmation' ), 10, 2 );
 		add_filter( 'woocommerce_email_classes', array( &$this, 'moowoodle_emails' ) );
+		add_action( 'moowoodle_after_enrol_moodle_user', array( &$this, 'send_enrollment_confirmation_email' ), 10, 2 );
 	}
 
 	/**
@@ -37,25 +37,24 @@ class MooWoodleEmails {
 	/**
 	 * Send confirmation for enrollment in Moodle courses.
 	 *
-	 * @param array $enrollments List of enrolled course IDs or structured data.
-	 * @param int   $user_id     WordPress user ID.
+	 * @param array $enrollment_details Detailed data about enrollments (e.g., course IDs).
+	 * @param int   $user_id            WordPress user ID.
 	 * @return void
 	 */
-	public function send_enrollment_confirmation( $enrollments, $user_id ) {
+	public function send_enrollment_confirmation_email( $enrollment_details, $user_id ) {
 		$emails = WC()->mailer()->get_emails();
 
 		$user = get_userdata( $user_id );
-
 		if ( empty( $user ) || empty( $user->user_email ) ) {
 			return;
 		}
 
 		// Allow deeply customizable data injection via filter.
-		$email_data = apply_filters( 'moowoodle_enrollment_email_data', array(), $enrollments );
+		$email_data = apply_filters( 'moowoodle_enrollment_email_data', array(), $enrollment_details );
 
 		// Gracefully gather course information if available.
-		if ( ! empty( $enrollments['course'] ) ) {
-			$course_ids = array_keys( $enrollments['course'] );
+		if ( ! empty( $enrollment_details['course'] ) ) {
+			$course_ids = array_keys( $enrollment_details['course'] );
 			$courses    = MooWoodle()->course->get_course_information( array( 'id' => $course_ids ) );
 
 			if ( ! empty( $courses ) ) {
@@ -69,6 +68,6 @@ class MooWoodleEmails {
 			}
 		}
 
-        return $emails['EnrollmentEmail']->trigger( $user->user_email, $email_data );
+		return $emails['EnrollmentEmail']->trigger( $user->user_email, $email_data );
 	}
 }
