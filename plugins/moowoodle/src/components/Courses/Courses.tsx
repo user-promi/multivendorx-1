@@ -557,35 +557,33 @@ const Course: React.FC = () => {
                     </div>
                 </div>
             )}
-            <div className="course-container-wrapper">
-                <div className="admin-page-title">
-                    <p>{__('Courses', 'moowoodle')}</p>
-                </div>
-                {error && (
-                    <div className="admin-notice-display-title error">
-                        <i className="admin-font adminlib-icon-no"></i>
-                        {error}
-                    </div>
-                )}
-                <div className="admin-table-wrapper">
-                    <Table
-                        data={data}
-                        columns={
-                            columns as ColumnDef<Record<string, any>, any>[]
-                        }
-                        rowSelection={rowSelection}
-                        onRowSelectionChange={setRowSelection}
-                        realtimeFilter={realtimeFilter}
-                        defaultRowsPerPage={10}
-                        pageCount={pageCount}
-                        pagination={pagination}
-                        onPaginationChange={setPagination}
-                        handlePagination={requestApiForData}
-                        perPageOption={[10, 25, 50]}
-                        typeCounts={[]}
-                    />
-                </div>
+            <div className="admin-page-title">
+                <p>{__('Courses', 'moowoodle')}</p>
             </div>
+            {error && (
+                <div className="admin-notice-display-title error">
+                    <i className="admin-font adminlib-icon-no"></i>
+                    {error}
+                </div>
+            )}
+            <div className="admin-table-wrapper">
+                <Table
+                    data={data}
+                    columns={
+                        columns as ColumnDef<Record<string, any>, any>[]
+                    }
+                    rowSelection={rowSelection}
+                    onRowSelectionChange={setRowSelection}
+                    realtimeFilter={realtimeFilter}
+                    defaultRowsPerPage={10}
+                    pageCount={pageCount}
+                    pagination={pagination}
+                    onPaginationChange={setPagination}
+                    handlePagination={requestApiForData}
+                    perPageOption={[10, 25, 50]}
+                    typeCounts={[]}
+                />
+            </div>            
         </>
     );
 };
