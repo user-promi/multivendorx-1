@@ -523,7 +523,7 @@ const Table: React.FC<TableProps> = ({
                                             table.setPageIndex(0);
                                         }}
                                     >
-                                        <i className="adminlib-pagination-prev-arrow"></i>
+                                        <i className="admin-font adminlib-pagination-prev-arrow"></i>
                                     </div>
                                     <div
                                         role="button"
@@ -539,7 +539,7 @@ const Table: React.FC<TableProps> = ({
                                             table.previousPage();
                                         }}
                                     >
-                                        <i className="adminlib-pagination-left-arrow"></i>
+                                        <i className="admin-font adminlib-pagination-left-arrow"></i>
                                     </div>
                                     <span>
                                         Page{' '}
@@ -560,7 +560,7 @@ const Table: React.FC<TableProps> = ({
                                             table.nextPage();
                                         }}
                                     >
-                                        <i className="adminlib-pagination-right-arrow"></i>
+                                        <i className="admin-font adminlib-pagination-right-arrow"></i>
                                     </div>
                                     <div
                                         role="button"

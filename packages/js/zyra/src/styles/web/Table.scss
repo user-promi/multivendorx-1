@@ -98,6 +98,7 @@
             height: 3rem;
             padding: 0.313rem 0.85rem;
             font-size: 0.9rem;
+            vertical-align: top;
 
             img{
               width: 3.125rem;
@@ -124,10 +125,7 @@
               i{
                 cursor: pointer;
                 font-size: 1.313rem;
-  
-                &:hover{
-                  color: $theme-color;
-                }
+                color: #7f36d9;
               }
             }
           }
@@ -200,7 +198,7 @@
         gap: 0.5rem;
         align-items: center;
 
-        i{
+        .admin-font{
           cursor: pointer;
           font-size: 1.313rem;
         }

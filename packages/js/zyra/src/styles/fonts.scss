@@ -11,7 +11,7 @@
 
 [class^="adminlib-"], [class*=" adminlib-"] {
   /* use !important to prevent issues with browser extensions that change fonts */
-  font-family: adminlibrary !important;
+  font-family: adminlibrary , sans-serif !important;
   font-style: normal;
   font-weight: normal;
   font-variant: normal;
@@ -165,15 +165,15 @@
   content: "\e906";
 }
 
-.adminlib-uniE903::before {
+.adminlib-uni::before {
   content: "\e907";
 }
 
-.adminlib-uniE904::before {
+.adminlib-icon::before {
   content: "\e908";
 }
 
-.adminlib-uniE905::before {
+.adminlib-map::before {
   content: "\e909";
 }
 
@@ -561,7 +561,7 @@
   content: "\e9d1";
 }
 
-.adminlib-text-fields::before {
+.adminlib-text-field::before {
   content: "\e5201";
 }
 

@@ -70,35 +70,6 @@
   color: #121116;
   line-height: 1.5;
 
-  &.show-menu {
-    .current-tab-lists {
-      max-width: 4.125rem;
-
-      .brand {
-        margin: 0 auto;
-
-        img {
-          width: 3.15rem;
-        }
-
-        .logo{
-          display: none;
-        }
-
-        .logo-small{
-          display: block;
-        }
-
-      }
-
-      .menu-coll-btn {
-        span {
-          transform: rotate(180deg);
-        }
-      }
-    }
-  }
-
   .current-tab-lists {
     display: flex;
     flex-direction: column;
@@ -126,6 +97,16 @@
 
     .current-tab-lists-container {
       position: relative;
+
+      .menu-coll-btn {
+        font-size: 0.8125rem;
+        font-weight: 500;
+        border-radius: 0; 
+
+        i {
+          font-size: 1.25rem;
+        }
+      }
 
       a,
       .menu-coll-btn {
@@ -172,14 +153,11 @@
         &:hover {
           background: $color-white;
           border-left: 0.126rem solid $color-active !important; // To overwrite default common.scss
+          color: $color-active;
         }
 
         &:focus {
           box-shadow: none;
-        }
-
-        &:hover {
-          color: $color-active;
         }
 
         i {
@@ -190,16 +168,7 @@
         }
       }
 
-      .menu-coll-btn {
-        font-size: 0.8125rem;
-        font-weight: 500;
-        border-radius: 0; // To overwrite common btn style
-
-        i {
-          font-size: 1.25rem;
-        }
-      }
-
+      
       .active-current-tab {
         color: $color-active;
         background: $color-white;
@@ -261,6 +230,36 @@
       }
     }
   }
+
+  &.show-menu {
+    .current-tab-lists {
+      max-width: 4.125rem;
+
+      .brand {
+        margin: 0 auto;
+
+        img {
+          width: 3.15rem;
+        }
+
+        .logo{
+          display: none;
+        }
+
+        .logo-small{
+          display: block;
+        }
+
+      }
+
+      .menu-coll-btn {
+        span {
+          transform: rotate(180deg);
+        }
+      }
+    }
+  }
+  
 }
 
 @media screen and (width <=50.211rem) {

@@ -101,6 +101,43 @@
                     transition: 300ms linear;
                 }
 
+                .container-items-controls {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 1.2rem;
+                    position: absolute;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    right: 0.313rem;
+
+                    .items-controls {
+                        border-radius: 50%;
+                        width: 1.2rem;
+                        height: 1.2rem;
+                        cursor: pointer;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        padding: 0;
+                    }
+
+                    .clear-all-data {
+                        background: transparent;
+                        transition: all 0.3s linear;
+                        font-size: 0.75rem;
+
+                        &:hover {
+                            background-color: #f9f9f9;
+                        }
+                    }
+
+                    .open-modal {
+                        font-size: 0.65rem;
+                        color: #fff;
+                        background: #65438f;
+                    }
+                }
 
                 .grid-table-main-container {
                     position: relative;
@@ -129,6 +166,16 @@
                             &:has(.container-items-controls .open-modal) {
                                 .container-items-controls {
                                     width: 2.5rem;
+                                }
+                            }
+
+                            span {
+                                position: absolute;
+                                top: 0.438rem;
+                                right: 0.313rem;
+
+                                i {
+                                    font-size: 1.15rem;
                                 }
                             }
 
@@ -168,46 +215,6 @@
                                     }
                                 }
                             }
-
-                            .container-items-controls {
-                                display: flex;
-                                align-items: center;
-                                justify-content: center;
-                                width: 1.2rem;
-                                position: absolute;
-                                top: 50%;
-                                transform: translateY(-50%);
-                                right: 0.313rem;
-
-                                .items-controls {
-                                    border-radius: 50%;
-                                    width: 1.2rem;
-                                    height: 1.2rem;
-                                    cursor: pointer;
-                                    display: flex;
-                                    align-items: center;
-                                    justify-content: center;
-                                    padding: 0;
-                                }
-
-                                .clear-all-data {
-                                    background: transparent;
-                                    transition: all 0.3s linear;
-                                    font-size: 0.75rem;
-
-                                    &:hover {
-                                        background-color: #f9f9f9;
-                                    }
-                                }
-
-                                .open-modal {
-                                    font-size: 0.65rem;
-                                    color: #fff;
-                                    background: #65438f;
-                                }
-                            }
-
-
                         }
 
                         .selected-input {
@@ -222,15 +229,7 @@
                                 }
                             }
 
-                            span {
-                                position: absolute;
-                                top: 0.438rem;
-                                right: 0.313rem;
 
-                                i {
-                                    font-size: 1.15rem;
-                                }
-                            }
                         }
                     }
 
