@@ -32,7 +32,7 @@ class RestAPI {
         }
 
 		add_filter( 'moowoodle_process_connection_test_synchronization', array( $this, 'connection_test_synchronization' ) );
-		add_filter( 'moowoodle_process_course_synchronization', array( $this, 'synchronize_course' ) );
+		add_filter( 'moowoodle_process_course_synchronization', array( $this, 'course_synchronization' ) );
     }
 
     /**
@@ -526,7 +526,7 @@ class RestAPI {
      */
     public function get_log( $request ) {
         global $wp_filesystem;
-        $nonce = $request->get_header( 'X-WP-Nonce' );
+        $nonce     = $request->get_header( 'X-WP-Nonce' );
         $log_count = $request->get_param( 'logcount' );
         $log_count = $log_count ? $log_count : 100;
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {

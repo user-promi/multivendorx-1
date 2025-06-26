@@ -27,16 +27,16 @@ class ExternalService {
 		return apply_filters(
             'additional_core_functions',
             array(
-				'get_site_info'       => 'core_webservice_get_site_info',
-				'get_categories'      => 'core_course_get_categories',
-				'get_courses'         => 'core_course_get_courses',
-				'get_moodle_users'    => 'core_user_get_users',
-				'create_users'        => 'core_user_create_users',
-				'update_users'        => 'core_user_update_users',
-				'delete_users'        => 'core_user_delete_users',
-				'enrol_users'         => 'enrol_manual_enrol_users',
-				'get_course_id'       => 'core_course_get_courses_by_field',
-				'unenrol_users'       => 'enrol_manual_unenrol_users',
+				'get_site_info'    => 'core_webservice_get_site_info',
+				'get_categories'   => 'core_course_get_categories',
+				'get_courses'      => 'core_course_get_courses',
+				'get_moodle_users' => 'core_user_get_users',
+				'create_users'     => 'core_user_create_users',
+				'update_users'     => 'core_user_update_users',
+				'delete_users'     => 'core_user_delete_users',
+				'enrol_users'      => 'enrol_manual_enrol_users',
+				'get_course_id'    => 'core_course_get_courses_by_field',
+				'unenrol_users'    => 'enrol_manual_unenrol_users',
 			)
         );
 	}

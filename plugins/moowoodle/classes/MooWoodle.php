@@ -117,7 +117,7 @@ class MooWoodle {
         if ( is_admin() && ! defined( 'DOING_AJAX' ) ) {
             add_filter( 'plugin_action_links_' . plugin_basename( $this->file ), array( $this, 'plugin_links' ) );
         }
-        
+
         add_filter( 'woocommerce_email_classes', array( &$this, 'setup_email_class' ) );
 
         // Init required classes.
@@ -175,7 +175,7 @@ class MooWoodle {
     public function migrate_from_previous_version() {
         $previous_version = get_option( 'moowoodle_version', '' );
 
-        if ( version_compare( $previous_version, MooWoodle()->version , '<' ) ) {
+        if ( version_compare( $previous_version, MooWoodle()->version, '<' ) ) {
             new Installer();
         }
     }
@@ -305,7 +305,8 @@ class MooWoodle {
     /**
      * Add Enrollment Email Class
      *
-     * @return void
+     * @param array $emails List of WooCommerce email classes.
+     * @return array Modified list of email classes including EnrollmentEmail.
      */
     public function setup_email_class( $emails ) {
         $emails['EnrollmentEmail'] = new Emails\EnrollmentEmail();

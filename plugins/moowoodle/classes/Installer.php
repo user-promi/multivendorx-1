@@ -217,8 +217,8 @@ class Installer {
 			);
 
 			$response = \MooWoodle\Core\Category::update_course_category( $args );
-            
-            if( $response ) {
+
+            if ( $response ) {
                 wp_delete_term( (int) $term['term_id'], 'course_cat' );
             }
 		}
@@ -355,5 +355,4 @@ class Installer {
 
             \MooWoodle\Enrollment::save_enrollment( $enrollment_data );        }
     }
-
 }
