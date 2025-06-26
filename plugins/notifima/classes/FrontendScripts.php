@@ -287,7 +287,10 @@ class FrontendScripts {
         // Get all tab setting's database value.
         $settings_databases_value = array();
 
-        $tabs_names = array( 'appearance', 'form_submission', 'email', 'mailchimp' );
+		$tabs_names = apply_filters(
+			'notifima_additional_tabs_names',
+			array( 'appearance', 'form_submission' )
+		);
 
         foreach ( $tabs_names as $tab_name ) {
             $settings_databases_value[ $tab_name ] = Notifima()->setting->get_option( 'notifima_' . $tab_name . '_settings' );

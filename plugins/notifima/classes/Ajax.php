@@ -175,25 +175,26 @@ class Ajax {
         do_action( 'notifima_before_subscribe_product', $customer_email, $product_id, $variation_id );
 
         if ( $product_id && ! empty( $product_id ) && ! empty( $customer_email ) ) {
-            $product_id                  = ( $variation_id && $variation_id > 0 ) ? $variation_id : $product_id;
+            $product_id = ( $variation_id && $variation_id > 0 ) ? $variation_id : $product_id;
 
             if ( Subscriber::is_already_subscribed( $customer_email, $product_id ) ) {
                 $status = 'already_registered';
             } else {
-                $response = [
-                    'status' => true,
-                    'message' => ''
-                ];
-                
+                $response = array(
+                    'status'  => true,
+                    'message' => '',
+                );
+
                 $eligible = apply_filters( 'notifima_eligible_to_subscribe', $response, $customer_email, $product_id );
-                
-                if ($eligible['status']) {
+
+                if ( $eligible['status'] ) {
                     Subscriber::insert_subscriber( $customer_email, $product_id );
                     Subscriber::insert_subscriber_email_trigger( wc_get_product( $product_id ), $customer_email );
                     $status = true;
 
                     /**
                      * Action hook after subscriber email trigger.
+                     *
                      * @var $customer_email customer email address.
                      */
                     do_action( 'notifima_subscriber_added', $customer_email );

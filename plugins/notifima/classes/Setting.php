@@ -85,8 +85,6 @@ class Setting {
 				'notifima_extra_settings',
 				'notifima_appearance_settings',
 				'notifima_form_submission_settings',
-				'notifima_email_settings',
-				'notifima_mailchimp_settings',
 			)
         );
 

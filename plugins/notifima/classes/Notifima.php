@@ -72,7 +72,6 @@ class Notifima {
         add_action( 'plugins_loaded', array( $this, 'is_woocommerce_loaded' ) );
         add_filter( 'plugin_row_meta', array( $this, 'plugin_row_meta' ), 10, 2 );
         add_action( 'init', array( $this, 'migrate_from_previous_version' ) );
-
     }
 
     /**
@@ -180,7 +179,6 @@ class Notifima {
         do_action( 'notifima_loaded' );
 
         add_filter( 'woocommerce_email_classes', array( &$this, 'setup_email_class' ) );
-
     }
 
     /**
@@ -211,9 +209,9 @@ class Notifima {
      * @return array
      */
     public function setup_email_class( $emails ) {
-        $emails['Admin_New_Subscriber_Email']       = new Emails\AdminNewSubscriberEmail();
-        $emails['Subscriber_Confirmation_Email']    = new Emails\SubscriberConfirmationEmail();
-        $emails['Product_Back_In_Stock_Email']      = new Emails\ProductBackInStockEmail();
+        $emails['Admin_New_Subscriber_Email']    = new Emails\AdminNewSubscriberEmail();
+        $emails['Subscriber_Confirmation_Email'] = new Emails\SubscriberConfirmationEmail();
+        $emails['Product_Back_In_Stock_Email']   = new Emails\ProductBackInStockEmail();
 
         return $emails;
     }
