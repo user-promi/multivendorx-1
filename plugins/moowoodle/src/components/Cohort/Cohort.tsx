@@ -1,4 +1,3 @@
-/* global appLocalizer */
 import React, { useState } from 'react';
 import ProPopup from '../Popup/Popup';
 import { Dialog } from '@mui/material';
@@ -9,30 +8,26 @@ const Cohort: React.FC = () => {
 
     return (
         <>
-            {!appLocalizer.khali_dabba ? (
-                <div>
-                    <Dialog
-                        className="admin-module-popup"
-                        open={openDialog}
-                        onClose={() => setOpenDialog(false)}
-                        aria-labelledby="form-dialog-title"
-                    >
-                        <span
-                            className="admin-font adminlib-cross"
-                            onClick={() => setOpenDialog(false)}
-                        ></span>
-                        <ProPopup />
-                    </Dialog>
-                    <div
-                        className="cohort-img"
-                        onClick={() => {
-                            setOpenDialog(true);
-                        }}
-                    ></div>
-                </div>
-            ) : (
-                <div id="cohort-list-table"></div>
-            )}
+            <div id="cohort-list-table">
+                <Dialog
+                    className="admin-module-popup"
+                    open={openDialog}
+                    onClose={() => setOpenDialog(false)}
+                    aria-labelledby="form-dialog-title"
+                >
+                    <span
+                        className="admin-font adminlib-cross"
+                        onClick={() => setOpenDialog(false)}
+                    ></span>
+                    <ProPopup />
+                </Dialog>
+                <div
+                    className="cohort-img"
+                    onClick={() => {
+                        setOpenDialog(true);
+                    }}
+                ></div>
+            </div>
         </>
     );
 };
