@@ -146,14 +146,12 @@ class Product {
 
 		$update_product = in_array( 'update', $product_sync_setting, true );
 
-		if(!$update_product) {
+		// create a new product if not exist.
+        if ( ! $product && $force_create ) {
+			$product = new \WC_Product_Simple();
+        } elseif ( isset( $product ) && ! $update_product && $force_create ) {
 			return $product->get_id();
 		}
-
-        // create a new product if not exist.
-        if ( ! $product && $force_create ) {
-            $product = new \WC_Product_Simple();
-        }
 
 		// Product is not exist.
 		if ( ! $product ) {
