@@ -524,8 +524,11 @@ class Enrollment {
 			$where[] = $wpdb->prepare( 'date = %s', $args['date'] );
 		}
 
-		// Build query.
-		$query = "SELECT * FROM $table";
+		if ( isset( $args['count'] ) ) {
+			$query = "SELECT COUNT(*) FROM $table";
+		} else {
+			$query = "SELECT * FROM $table";
+		}
 
 		if ( ! empty( $where ) ) {
 			$query .= ' WHERE ' . implode( ' AND ', $where );
@@ -535,13 +538,13 @@ class Enrollment {
 			$query .= $wpdb->prepare( ' LIMIT %d OFFSET %d', intval( $args['limit'] ), intval( $args['offset'] ) );
 		}
 
-		$results = $wpdb->get_results( $query, ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
-
-		if ( is_null( $results ) && ! empty( $wpdb->last_error ) ) {
-			return array();
+		if ( isset( $args['count'] ) ) {
+			$results = $wpdb->get_var( $query ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
+			return $results ?? 0;
+		} else {
+			$results = $wpdb->get_results( $query, ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
+			return $results ?? array();
 		}
-
-		return $results;
 	}
 
 	/**

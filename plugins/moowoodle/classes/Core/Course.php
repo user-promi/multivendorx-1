@@ -256,8 +256,11 @@ class Course {
 		}
 
 		$table = $wpdb->prefix . Util::TABLES['course'];
-		$query = "SELECT * FROM $table";
-
+		if ( isset( $args['count'] ) ) {
+			$query = "SELECT COUNT(*) FROM $table";
+		} else {
+			$query = "SELECT * FROM $table";
+		}
 		if ( ! empty( $where ) ) {
 			$condition = $args['condition'] ?? ' AND ';
 			$query    .= ' WHERE ' . implode( $condition, $where );
@@ -268,10 +271,13 @@ class Course {
 			$offset = esc_sql( intval( $args['offset'] ) );
 			$query .= " LIMIT $limit OFFSET $offset";
 		}
-
-		$results = $wpdb->get_results( $query, ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
-
-		return $results ?? array();
+		if ( isset( $args['count'] ) ) {
+			$results = $wpdb->get_var( $query ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
+			return $results ?? 0;
+		} else {
+			$results = $wpdb->get_results( $query, ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
+			return $results ?? array();
+		}
 	}
 
 	/**
