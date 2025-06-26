@@ -8,8 +8,8 @@ jQuery(function ($) {
      * @return {undefined}
      */
     function init() {
-        $(document).on('click', '.notifima-button', subscribe);
-        $(document).on('click', '.unsubscribe-button', unsubscribe);
+        $(document).on('click', '.notifima-subscribe', subscribe);
+        $(document).on('click', '.notifima-unsubscribe', unsubscribe);
         $(document).on(
             'change',
             'input.variation_id',
@@ -76,9 +76,9 @@ jQuery(function ($) {
     function processForm(form) {
         // Get data from form.
         const customerEmail = form.find('.notifima-email').val();
-        const productId = form.find('.current-product-id').val();
-        const variationId = form.find('.current-variation-id').val();
-        const productTitle = form.find('.current-product-name').val();
+        const productId = form.find('.notifima-product-id').val();
+        const variationId = form.find('.notifima-variation-id').val();
+        const productTitle = form.find('.notifima-product-name').val();
 
         // Get data from localizer
         const buttonHtml = localizeData.button_html;
@@ -87,9 +87,6 @@ jQuery(function ($) {
         const tryAgainMessage = localizeData.try_again;
         let emailExist = localizeData.alert_email_exist;
         const validEmail = localizeData.valid_email;
-        const banEmailDomin = localizeData.ban_email_domain_text;
-        const banEmailAddress = localizeData.ban_email_address_text;
-        const doubleOptInText = localizeData.double_opt_in_success;
         const unsubButtonHtml = localizeData.unsubscribe_button;
 
         // Prepare success message
@@ -111,7 +108,7 @@ jQuery(function ($) {
 
             // Request data for subscription
             const requestData = {
-                action: 'alert_ajax',
+                action: 'subscribe_users',
                 nonce: localizeData.nonce,
                 customer_email: customerEmail,
                 product_id: productId,
@@ -130,34 +127,21 @@ jQuery(function ($) {
                     form.html(
                         `<div class="registered-message"> ${errorMessage} <a href="${window.location}"> ${tryAgainMessage} </a></div>`
                     );
-                } else if (response === '/*?%already_registered%?*/') {
-                    form.html(
-                        `<div class="registered-message">${emailExist}</div>${unsubButtonHtml}<input type="hidden" class="subscribed_email" value="${customerEmail}" /><input type="hidden" class="product_id" value="${productId}" /><input type="hidden" class="variation_id" value="${variationId}" />`
-                    );
-                } else if (response === '/*?%ban_email_address%?*/') {
-                    form.find(`.responsedata-error-message`).remove() &&
-                        form.append(
-                            $(
-                                `<p class="responsedata-error-message ban-email-address">${banEmailAddress}</p>`
-                            )
+                } else if (response != '') {
+                    if (response === 'already_registered') {
+                        form.html(
+                            `<div class="registered-message">${emailExist}</div>${unsubButtonHtml}<input type="hidden" class="notifima_subscribed_email" value="${customerEmail}" /><input type="hidden" class="notifima_product_id" value="${productId}" /><input type="hidden" class="notifima_variation_id" value="${variationId}" />`
                         );
-                } else if (response === '/*?%ban_email_domain%?*/') {
-                    form.find(`.responsedata-error-message`).remove() &&
-                        form.append(
-                            $(
-                                `<p class="responsedata-error-message ban-email-address">${banEmailDomin}</p>`
-                            )
-                        );
-                } else if (response === '/*?%double_opt_in%?*/') {
-                    form.html(
-                        `<div class="registered-message"> ${doubleOptInText}</div>`
-                    );
+                    } else {
+                        form.find(`.responsedata-error-message`).remove() &&
+                            form.html(response.message);
+                    }
                 } else {
                     form.html(
                         `<div class="registered-message">${successMessage}</div>`
                     );
                 }
-                form.find('.notifima-button').replaceWith(buttonHtml);
+                form.find('.notifima-subscribe').replaceWith(buttonHtml);
             });
         } else {
             form.find('.responsedata-error-message').remove() &&
@@ -166,7 +150,7 @@ jQuery(function ($) {
                         `<p style="color:#e2401c;" class="responsedata-error-message">${validEmail}</p>`
                     )
                 );
-            form.find('.notifima-button').replaceWith(buttonHtml);
+            form.find('.notifima-subscribe').replaceWith(buttonHtml);
         }
     }
 
@@ -191,11 +175,11 @@ jQuery(function ($) {
 
         // Unsubscribe request data
         const unsubscribeRequest = {
-            action: 'unsubscribe_button',
+            action: 'unsubscribe_users',
             nonce: localizeData.nonce,
-            customer_email: form.find('.subscribed_email').val(),
-            product_id: form.find('.product_id').val(),
-            variation_id: form.find('.variation_id').val(),
+            customer_email: form.find('.notifima_subscribed_email').val(),
+            product_id: form.find('.notifima_product_id').val(),
+            variation_id: form.find('.notifima_variation_id').val(),
         };
 
         // Prepare success message on subscribe.
@@ -237,7 +221,7 @@ jQuery(function ($) {
         if ($('.notifima-shortcode-subscribe-form').length && variationId) {
             // Request body for subscription form
             const subscriptionFormRequest = {
-                action: 'get_variation_box_ajax',
+                action: 'get_subscription_form_for_variation',
                 nonce: localizeData.nonce,
                 product_id: productId,
                 variation_id: variationId,

@@ -315,8 +315,8 @@ class FrontendScripts {
             $button_css .= 'border-radius:' . $button_settings['button_border_redious'] . 'px;';
         }
 
-        $subscribe_button_html   = '<button style="' . $button_css . '" class="notifima-button alert_button_hover" name="alert_button">' . $button_settings['button_text'] . '</button>';
-        $unsubscribe_button_html = '<button class="unsubscribe-button" style="' . $button_css . '">' . $settings_array['unsubscribe_button_text'] . '</button>';
+        $subscribe_button_html   = '<button style="' . $button_css . '" class="notifima-subscribe notifima-button alert_button_hover" name="alert_button">' . $button_settings['button_text'] . '</button>';
+        $unsubscribe_button_html = '<button class="notifima-unsubscribe unsubscribe-button" style="' . $button_css . '">' . $settings_array['unsubscribe_button_text'] . '</button>';
 
         $localize_scripts = apply_filters(
             'notifima_localize_scripts',

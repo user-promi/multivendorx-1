@@ -66,12 +66,13 @@ class Notifima {
 
         add_filter( 'plugin_action_links_' . plugin_basename( $file ), array( &$this, 'notifima_settings' ) );
         add_action( 'admin_notices', array( &$this, 'database_migration_notice' ) );
-        add_filter( 'woocommerce_email_classes', array( &$this, 'setup_email_class' ) );
 
         add_action( 'before_woocommerce_init', array( $this, 'declare_compatibility' ) );
         add_action( 'woocommerce_loaded', array( $this, 'init_plugin' ) );
         add_action( 'plugins_loaded', array( $this, 'is_woocommerce_loaded' ) );
         add_filter( 'plugin_row_meta', array( $this, 'plugin_row_meta' ), 10, 2 );
+        add_action( 'init', array( $this, 'migrate_from_previous_version' ) );
+
     }
 
     /**
@@ -177,6 +178,9 @@ class Notifima {
         $this->init_classes();
 
         do_action( 'notifima_loaded' );
+
+        add_filter( 'woocommerce_email_classes', array( &$this, 'setup_email_class' ) );
+
     }
 
     /**
@@ -207,9 +211,9 @@ class Notifima {
      * @return array
      */
     public function setup_email_class( $emails ) {
-        $emails['WC_Admin_Email_Notifima']                   = new Emails\AdminEmail();
-        $emails['WC_Subscriber_Confirmation_Email_Notifima'] = new Emails\SubscriberConfirmationEmail();
-        $emails['WC_Email_Notifima']                         = new Emails\Emails();
+        $emails['Admin_New_Subscriber_Email']       = new Emails\AdminNewSubscriberEmail();
+        $emails['Subscriber_Confirmation_Email']    = new Emails\SubscriberConfirmationEmail();
+        $emails['Product_Back_In_Stock_Email']      = new Emails\ProductBackInStockEmail();
 
         return $emails;
     }
@@ -224,6 +228,17 @@ class Notifima {
             return;
         }
         add_action( 'admin_notices', array( $this, 'woocommerce_admin_notice' ) );
+    }
+
+    /**
+     * Migrate data from previous version.
+     */
+    public function migrate_from_previous_version() {
+        $previous_version = get_option( 'notifima_version', '' );
+
+        if ( version_compare( $previous_version, Notifima()->version, '<' ) ) {
+            new Install();
+        }
     }
 
     /**
@@ -332,7 +347,7 @@ class Notifima {
             '<a href="https://notifima.com/support/" target="_blank">' . __( 'Support', 'notifima' ) . '</a>',
             '<a href="https://notifima.com/docs/" target="_blank">' . __( 'Docs', 'notifima' ) . '</a>',
         );
-        if ( apply_filters( 'is_notifima_pro_inactive', true ) ) {
+        if ( ! Utill::is_khali_dabba() ) {
             $links['go_pro'] = '<a href="' . NOTIFIMA_PRO_SHOP_URL . '" class="notifima-pro-plugin" target="_blank">' . __( 'Get Pro', 'notifima' ) . '</a>';
         }
 

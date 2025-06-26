@@ -28,9 +28,9 @@ class Admin {
         add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_script' ) );
 
         // create custom column.
-        add_action( 'manage_edit-product_columns', array( $this, 'set_custom_column_header' ) );
+        add_action( 'manage_edit-product_columns', array( $this, 'display_subscriber_header' ) );
         // manage notifima column.
-        add_action( 'manage_product_posts_custom_column', array( $this, 'display_subscriber_count_in_custom_column' ), 10, 2 );
+        add_action( 'manage_product_posts_custom_column', array( $this, 'display_subscriber_count_in_column' ), 10, 2 );
 
         // show number of subscribers for individual product.
         add_action( 'woocommerce_product_options_inventory_product_data', array( $this, 'display_product_subscriber_count_in_metabox' ), 10 );
@@ -50,7 +50,7 @@ class Admin {
      * Add options page.
      */
     public function add_settings_page() {
-        $pro_sticker = apply_filters( 'is_notifima_pro_inactive', true ) ?
+        $pro_sticker = ! Utill::is_khali_dabba() ?
         '<span 
             class="notifima-pro-tag"
             style="
@@ -221,7 +221,7 @@ class Admin {
      * @param array $columns Existing column headers.
      * @return array Modified column headers.
      */
-    public function set_custom_column_header( $columns ) {
+    public function display_subscriber_header( $columns ) {
         return array_merge( $columns, array( 'product_subscriber' => __( 'Interested Person( s )', 'notifima' ) ) );
     }
 
@@ -231,7 +231,7 @@ class Admin {
      * @param string $column_name The name of the column to display.
      * @param int    $post_id     The current post ID.
      */
-    public function display_subscriber_count_in_custom_column( $column_name, $post_id ) {
+    public function display_subscriber_count_in_column( $column_name, $post_id ) {
         if ( 'product_subscriber' === $column_name ) {
             $no_of_subscriber = get_post_meta( $post_id, 'no_of_subscribers', true );
             echo '<div class="product-subscribtion-column">' . esc_html( ( isset( $no_of_subscriber ) && $no_of_subscriber > 0 ) ? $no_of_subscriber : 0 ) . '</div>';

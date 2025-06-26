@@ -1,8 +1,8 @@
 <?php
 /**
- * Notifima Email Admin Email
+ * Notifima Admin New Subscriber Email
  *
- * Override this template by copying it to yourtheme/woocommerce-product-stock-alert/emails/plain/AdminEmail.php
+ * Override this template by copying it to yourtheme/woocommerce-product-stock-alert/emails/plain/AdminNewSubscriberEmail.php
  *
  * @author    MultiVendorX
  * @package   woocommerce-product-stock-alert/templates

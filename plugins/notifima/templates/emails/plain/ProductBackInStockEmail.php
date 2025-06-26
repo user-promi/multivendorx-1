@@ -1,8 +1,8 @@
 <?php
 /**
- * Notifima Email
+ * Notifima Product Back In Stock Email
  *
- * Override this template by copying it to yourtheme/woocommerce-product-stock-alert/emails/plain/Email.php
+ * Override this template by copying it to yourtheme/woocommerce-product-stock-alert/emails/plain/ProductBackInStockEmail.php
  *
  * @author    MultiVendorX
  * @package   woocommerce-product-stock-alert/templates

@@ -128,7 +128,7 @@ class Subscriber {
         $product_subscribers = self::get_product_subscribers_email( $product->get_id() );
 
         if ( isset( $product_subscribers ) && ! empty( $product_subscribers ) ) {
-            $email = WC()->mailer()->emails['WC_Email_Notifima'];
+            $email = WC()->mailer()->emails['Product_Back_In_Stock_Email'];
 
             foreach ( $product_subscribers as $subscribe_id => $to ) {
                 $email->trigger( $to, $product );
@@ -345,8 +345,8 @@ class Subscriber {
      */
     public static function insert_subscriber_email_trigger( $product, $customer_email ) {
         // Get email object.
-        $admin_mail = WC()->mailer()->emails['WC_Admin_Email_Notifima'];
-        $cust_mail  = WC()->mailer()->emails['WC_Subscriber_Confirmation_Email_Notifima'];
+        $admin_mail = WC()->mailer()->emails['Admin_New_Subscriber_Email'];
+        $cust_mail  = WC()->mailer()->emails['Subscriber_Confirmation_Email'];
 
         // Get additional email from global setting.
         $additional_email = Notifima()->setting->get_setting( 'additional_alert_email' );

@@ -48,7 +48,7 @@ class RestAPI {
             '/stock-notification-form',
             array(
 				'methods'             => 'GET',
-				'callback'            => array( $this, 'render_notifima_form' ),
+				'callback'            => array( $this, 'render_notifima_subscription_form' ),
 				'permission_callback' => array( $this, 'notifima_permission' ),
 			)
         );
@@ -95,7 +95,7 @@ class RestAPI {
      *
      * @return string Rendered form HTML.
      */
-    public function render_notifima_form( $request ) {
+    public function render_notifima_subscription_form( $request ) {
         $product_id = $request->get_param( 'product_id' );
 
         // Start output buffering.

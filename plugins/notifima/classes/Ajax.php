@@ -23,43 +23,16 @@ class Ajax {
      */
     public function __construct() {
         // Save customer email in database.
-        add_action( 'wp_ajax_alert_ajax', array( &$this, 'subscribe_users' ) );
-        add_action( 'wp_ajax_nopriv_alert_ajax', array( &$this, 'subscribe_users' ) );
+        add_action( 'wp_ajax_subscribe_users', array( &$this, 'subscribe_users' ) );
+        add_action( 'wp_ajax_nopriv_subscribe_users', array( &$this, 'subscribe_users' ) );
         // Delete unsubscribed users.
-        add_action( 'wp_ajax_unsubscribe_button', array( $this, 'unsubscribe_users' ) );
-        add_action( 'wp_ajax_nopriv_unsubscribe_button', array( $this, 'unsubscribe_users' ) );
+        add_action( 'wp_ajax_unsubscribe_users', array( $this, 'unsubscribe_users' ) );
+        add_action( 'wp_ajax_nopriv_unsubscribe_users', array( $this, 'unsubscribe_users' ) );
         // Export data.
         add_action( 'wp_ajax_export_subscribers', array( $this, 'export_csv_data' ) );
         // add fields for variation product shortcode.
-        add_action( 'wp_ajax_nopriv_get_variation_box_ajax', array( $this, 'get_variation_box_ajax' ) );
-        add_action( 'wp_ajax_get_variation_box_ajax', array( $this, 'get_variation_box_ajax' ) );
-        // recaptcha version-3 validate.
-        add_action( 'wp_ajax_recaptcha_validate_ajax', array( $this, 'recaptcha_validate_ajax' ) );
-        add_action( 'wp_ajax_nopriv_recaptcha_validate_ajax', array( $this, 'recaptcha_validate_ajax' ) );
-    }
-
-    /**
-     * This funtion check recaptcha validation.
-     *
-     * @return never
-     */
-    public function recaptcha_validate_ajax() {
-        if ( ! check_ajax_referer( 'notifima-security-nonce', 'nonce', false ) ) {
-            wp_send_json_error( 'Invalid security token sent.' );
-            wp_die();
-        }
-        $recaptcha_secret   = filter_input( INPUT_POST, 'recaptcha_secret', FILTER_SANITIZE_SPECIAL_CHARS ) ? filter_input( INPUT_POST, 'recaptcha_secret', FILTER_SANITIZE_SPECIAL_CHARS ) : '';
-        $recaptcha_response = filter_input( INPUT_POST, 'recaptcha_response', FILTER_SANITIZE_SPECIAL_CHARS ) ? filter_input( INPUT_POST, 'recaptcha_response', FILTER_SANITIZE_SPECIAL_CHARS ) : '';
-        $recaptcha_url      = 'https://www.google.com/recaptcha/api/siteverify';
-
-        $recaptcha = wp_remote_get( $recaptcha_url . '?secret=' . $recaptcha_secret . '&response=' . $recaptcha_response );
-
-        if ( ! $recaptcha->success || $recaptcha->score < 0.5 ) {
-            echo 0;
-        } else {
-            echo 1;
-        }
-        die();
+        add_action( 'wp_ajax_nopriv_get_subscription_form_for_variation', array( $this, 'get_subscription_form_for_variation' ) );
+        add_action( 'wp_ajax_get_subscription_form_for_variation', array( $this, 'get_subscription_form_for_variation' ) );
     }
 
     /**
@@ -203,19 +176,30 @@ class Ajax {
 
         if ( $product_id && ! empty( $product_id ) && ! empty( $customer_email ) ) {
             $product_id                  = ( $variation_id && $variation_id > 0 ) ? $variation_id : $product_id;
-            $do_complete_additional_task = apply_filters( 'notifima_double_optin_enabled', false );
-            $is_accept_email_address     = apply_filters( 'notifima_is_accept_ban_email_address', false );
 
             if ( Subscriber::is_already_subscribed( $customer_email, $product_id ) ) {
-                $status = '/*?%already_registered%?*/';
-            } elseif ( $do_complete_additional_task ) {
-                $status = apply_filters( 'notifima_new_subscriber_added', true, $customer_email, $product_id );
-            } elseif ( $is_accept_email_address ) {
-                $status = apply_filters( 'notifima_accept_ban_email', true, $customer_email, $product_id );
+                $status = 'already_registered';
             } else {
-                Subscriber::insert_subscriber( $customer_email, $product_id );
-                Subscriber::insert_subscriber_email_trigger( wc_get_product( $product_id ), $customer_email );
-                $status = true;
+                $response = [
+                    'status' => true,
+                    'message' => ''
+                ];
+                
+                $eligible = apply_filters( 'notifima_eligible_to_subscribe', $response, $customer_email, $product_id );
+                
+                if ($eligible['status']) {
+                    Subscriber::insert_subscriber( $customer_email, $product_id );
+                    Subscriber::insert_subscriber_email_trigger( wc_get_product( $product_id ), $customer_email );
+                    $status = true;
+
+                    /**
+                     * Action hook after subscriber email trigger.
+                     * @var $customer_email customer email address.
+                     */
+                    do_action( 'notifima_subscriber_added', $customer_email );
+                } else {
+                    $status = $eligible['message'];
+                }
             }
         }
 
@@ -228,7 +212,7 @@ class Ajax {
      *
      * @return never
      */
-    public function get_variation_box_ajax() {
+    public function get_subscription_form_for_variation() {
         if ( ! check_ajax_referer( 'notifima-security-nonce', 'nonce', false ) ) {
             wp_send_json_error( 'Invalid security token sent.' );
             wp_die();

@@ -35,7 +35,7 @@ class Shortcode {
      */
     public function notifima_subscription_form( $attr ) {
         ob_start();
-        $product_id = isset( $attr['product_id'] ) ? (int) $attr['product_id'] : 0;
+        $product_id = isset( $attr['product_id'] ) ? (int) $attr['product_id'] : null;
 
         do_action( 'notifima_before_subscription_form' );
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Emails class file.
+ * AdminNewSubscriberEmail class file.
  *
  * @package Notifima
  */
@@ -9,18 +9,18 @@ namespace Notifima\Emails;
 
 defined( 'ABSPATH' ) || exit; // Exit if accessed directly.
 
-if ( ! class_exists( 'Emails' ) ) :
+if ( ! class_exists( 'AdminNewSubscriberEmail' ) ) :
 
     /**
-     * Email for Notifima.
+     * Email to Admin for notifima.
      *
-     * An email will be sent to the customer when their subscribed product is available.
+     * An email will be sent to the admin when customer subscribe an out of stock product.
      *
      * @version     PRODUCT_VERSION
      * @author      MultivendorX
      * @extends     \WC_Email
      */
-    class Emails extends \WC_Email {
+    class AdminNewSubscriberEmail extends \WC_Email {
 
         /**
          * The product associated with the subscription.
@@ -44,18 +44,17 @@ if ( ! class_exists( 'Emails' ) ) :
         public $recipient = '';
 
         /**
-         * Constructor
+         * Admin email Constructor.
          *
          * @access public
          * @return void
          */
         public function __construct() {
-
-            $this->id             = 'notifima_subscribe_product_back_stock';
-            $this->title          = __( 'Alert Subscriber', 'notifima' );
-            $this->description    = __( 'Alert customer when their subscribed product becomes in stock', 'notifima' );
-            $this->template_html  = 'emails/Email.php';
-            $this->template_plain = 'emails/plain/Email.php';
+            $this->id             = 'notifima_subscriber_confimation_admin';
+            $this->title          = __( 'Alert admin', 'notifima' );
+            $this->description    = __( 'Admin will get an alert when customer subscribe any out of stock product', 'notifima' );
+            $this->template_html  = 'emails/AdminNewSubscriberEmail.php';
+            $this->template_plain = 'emails/plain/AdminNewSubscriberEmail.php';
             $this->template_base  = Notifima()->plugin_path . 'templates/';
 
             // Call parent constuctor.
@@ -67,17 +66,15 @@ if ( ! class_exists( 'Emails' ) ) :
          *
          * @param string     $recipient      The recipient's email address.
          * @param WC_Product $product        The WooCommerce product object.
+         * @param string     $customer_email The customer's email address.
          * @return void
          */
-        public function trigger( $recipient, $product ) {
+        public function trigger( $recipient, $product, $customer_email ) {
 
-            $this->customer_email = $recipient;
             $this->recipient      = $recipient;
             $this->product        = $product;
+            $this->customer_email = $customer_email;
 
-            if ( apply_filters( 'product_backin_stock_send_admin', false ) ) {
-                $this->recipient .= ', ' . get_option( 'admin_email' );
-            }
             if ( ! $this->is_enabled() || ! $this->get_recipient() ) {
                 return;
             }
@@ -88,21 +85,19 @@ if ( ! class_exists( 'Emails' ) ) :
         /**
          * Get email subject.
          *
-         * @since  1.4.7
          * @return string
          */
         public function get_default_subject() {
-            return apply_filters( 'notifima_subscribe_product_back_stock_email_subject', __( 'Your Subscribed product on {site_title} is available now', 'notifima' ), $this->object );
+            return apply_filters( 'notifima_customer_subscription_admin_email_subject', __( 'A Customer has subscribed to a product on {site_title} ', 'notifima' ), $this->object );
         }
 
         /**
          * Get email heading.
          *
-         * @since  1.4.7
          * @return string
          */
         public function get_default_heading() {
-            return apply_filters( 'notifima_subscribe_product_back_stock_email_heading', __( 'Welcome to {site_title} ', 'notifima' ), $this->object );
+            return apply_filters( 'notifima_customer_subscription_admin_email_heading', __( 'Welcome to {site_title} ', 'notifima' ), $this->object );
         }
 
         /**
@@ -119,8 +114,9 @@ if ( ! class_exists( 'Emails' ) ) :
 					'email_heading'  => $this->get_heading(),
 					'product'        => $this->product,
 					'customer_email' => $this->customer_email,
-					'sent_to_admin'  => false,
-					'plain_text'     => true,
+					'sent_to_admin'  => true,
+					'plain_text'     => false,
+					'email'          => $this,
 				)
             );
 
@@ -141,8 +137,9 @@ if ( ! class_exists( 'Emails' ) ) :
 					'email_heading'  => $this->get_heading(),
 					'product'        => $this->product,
 					'customer_email' => $this->customer_email,
-					'sent_to_admin'  => false,
-					'plain_text'     => true,
+					'sent_to_admin'  => true,
+					'plain_text'     => false,
+					'email'          => $this,
 				)
             );
 

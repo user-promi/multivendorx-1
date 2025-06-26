@@ -238,25 +238,7 @@ class FrontEnd {
                 $placeholder = isset( $fvalue['placeholder'] ) ? esc_attr( $fvalue['placeholder'] ) : '';
                 switch ( $fvalue['type'] ) {
                     case 'recaptcha-v3':
-                        $recaptcha_type = isset( $fvalue['version'] ) ? esc_attr( $fvalue['version'] ) : 'v3';
-                        $sitekey        = isset( $fvalue['sitekey'] ) ? esc_attr( $fvalue['sitekey'] ) : '';
-                        $secretkey      = isset( $fvalue['secretkey'] ) ? esc_attr( $fvalue['secretkey'] ) : '';
-
-                        $recaptcha_script = '
-                        <script>
-                            grecaptcha.ready( function () {
-                                grecaptcha.execute( "' . $sitekey . '" ).then( function ( token ) {
-                                    var recaptchaResponse = document.getElementById( "recaptchav3_response" );
-                                    recaptchaResponse.value = token;
-                                }  );
-                            }  );
-                        </script>';
-
-                        $recaptcha_response_input   = '<input type="hidden" id="recaptchav3_response" name="recaptchav3_response" value="" />';
-                        $recaptcha_site_key_input   = '<input type="hidden" id="recaptchav3_sitekey" name="recaptchav3_sitekey" value="' . esc_html( $sitekey ) . '" />';
-                        $recaptcha_secret_key_input = '<input type="hidden" id="recaptchav3_secretkey" name="recaptchav3_secretkey" value="' . esc_html( $secretkey ) . '" />';
-
-                        $notifima_fields_array[] = $recaptcha_script . $recaptcha_response_input . $recaptcha_site_key_input . $recaptcha_secret_key_input;
+                        $notifima_fields_array[] = apply_filters( 'notifima_render_recaptcha_v3_field', $fvalue );
                         break;
                     default:
                         $notifima_fields_array[] = '<input id="notifima_' . $key . '" type="' . $type . '" name="' . $key . '" class="' . $class . '" value="' . esc_attr( $value ) . '" placeholder="' . $placeholder . '" >';
@@ -288,7 +270,7 @@ class FrontEnd {
             $button_css .= 'border-radius:' . esc_html( $button_settings['button_border_radious'] ) . 'px;';
         }
 
-        $button_html = '<button style="' . $button_css . '" class="notifima-button alert_button_hover" name="alert_button">' . esc_html( $button_settings['button_text'] ) . '</button>';
+        $button_html = '<button style="' . $button_css . '" class="notifima-subscribe notifima-button alert_button_hover" name="alert_button">' . esc_html( $button_settings['button_text'] ) . '</button>';
 
         $interested_person = get_post_meta( $variation ? $variation->get_id() : $product->get_id(), 'no_of_subscribers', true );
         $interested_person = ( isset( $interested_person ) && $interested_person > 0 ) ? $interested_person : 0;
@@ -311,9 +293,9 @@ class FrontEnd {
             ' . $alert_text_html . '
             <div class="fields_wrap"> ' . $notifima_fields_html . '' . $button_html . '
             </div>
-            <input type="hidden" class="current-product-id" value="' . esc_attr( $product->get_id() ) . '" />
-            <input type="hidden" class="current-variation-id" value="' . esc_attr( $variation ? $variation->get_id() : 0 ) . '" />
-            <input type="hidden" class="current-product-name" value="' . esc_attr( $product->get_title() ) . '" />
+            <input type="hidden" class="notifima-product-id" value="' . esc_attr( $product->get_id() ) . '" />
+            <input type="hidden" class="notifima-variation-id" value="' . esc_attr( $variation ? $variation->get_id() : 0 ) . '" />
+            <input type="hidden" class="notifima-product-name" value="' . esc_attr( $product->get_title() ) . '" />
             ' . $shown_interest_html . '
         </div>';
     }
