@@ -72,7 +72,6 @@ class FrontEnd {
     public function load_subscription_form() {
         if ( is_product() ) {
             add_action( 'woocommerce_simple_add_to_cart', array( $this, 'display_product_subscription_form' ), 31 );
-            add_action( 'woocommerce_woosb_add_to_cart', array( $this, 'display_product_subscription_form' ), 31 );
             add_action( 'woocommerce_after_variations_form', array( $this, 'display_product_subscription_form' ), 31 );
             // support for grouped products.
             add_filter( 'woocommerce_grouped_product_list_column_price', array( $this, 'display_in_grouped_product' ), 10, 2 );
