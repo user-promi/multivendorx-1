@@ -27,6 +27,190 @@ a {
   }
 }
 
+// button style start
+.admin-btn {
+  outline: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  text-align: center;
+  padding: 0.5rem 1rem;
+  border-radius: $border-radius-small;
+  font-size: 0.875rem;
+  transition: all 0.3s linear;
+  color: $color-white;
+  width: fit-content;
+  gap: 0.5rem;
+
+  &.btn-preview {
+    padding: 0;
+  }
+}
+
+.btn-purple {
+  background: $theme-color;
+  color: $color-white;
+
+  &:hover {
+    color: $color-white;
+  }
+}
+
+.btn-yellow {
+  background: #d3a93a;
+  color: $color-white;
+}
+
+.btn-red {
+  background: #e34f4a;
+  color: $color-white;
+}
+
+.btn-light-blue {
+  background: #bfdeed;
+  color: #003d66;
+}
+
+.btn-light-green {
+  background: #b7b03c91;
+}
+
+.btn-reject {
+  background-color: #e5e5e5;
+}
+
+// button style end
+
+// copy btn start
+.copy-btn {
+  width: 2rem;
+  height: 2rem;
+  box-shadow: 0 0 1rem rgb(0 0 0 / 16.4%);
+  padding: 0;
+  border-radius: 0.25rem;
+  background: #fff;
+  border: none;
+  position: relative;
+
+  .tooltip {
+    font-size: 0.625rem;
+    position: absolute;
+    background: #65438f;
+    padding: 0.5rem 0.75rem;
+    top: -2rem;
+    border-radius: 0.25rem;
+    color: #fff;
+    display: none;
+    width: 7rem;
+    right: 0%;
+
+    &::after {
+      position: absolute;
+      content: "";
+      bottom: -0.189rem;
+      transform: translateX(-50%) rotate(45deg);
+      width: 0.504rem;
+      height: 0.504rem;
+      background: $color-active;
+      right: 8%;
+    }
+
+    &.tool-clip {
+      display: flex;
+      gap: 0.313rem;
+      width: fit-content;
+    }
+  }
+
+  &:hover {
+    .tooltip {
+      display: flex;
+    }
+  }
+} // copy btn end
+
+// radio input start
+.radio-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+
+  label {
+    font-size: 0.875rem;
+    margin-left: 0.313rem;
+  }
+
+  // color radio
+  .color-radio {
+    width: 49%;
+
+    .color-palette {
+      display: flex;
+      margin-top: 0.5rem;
+
+      div {
+        width: 25%;
+      }
+    }
+  }
+
+  .image-radio {
+    padding: 0.6rem 1rem 0.8rem;
+    border-radius: 0.25rem;
+    border: 0.063rem solid #e0e4e9;
+    position: relative;
+    transition: height 0.4s ease;
+
+    input {
+      position: absolute;
+      top: 0.9rem;
+      right: 0.813rem;
+      border-radius: 0.125rem;
+      opacity: 0;
+      width: 1rem;
+    }
+
+    label {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+
+      .image-radio-overlay {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        background-color: #795b9d;
+        color: #fff;
+        opacity: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 0.25rem;
+        transition: all 0.3s ease;
+      }
+    }
+
+    &.active {
+      input {
+        opacity: 1;
+      }
+    }
+
+    &:hover {
+      .image-radio-overlay {
+        opacity: 0.5;
+      }
+    }
+  }
+}
+
+// radio input end
+
 // all input style start
 .basic-input,
 .basic-select,
@@ -112,62 +296,6 @@ input[type="radio"] {
 
 // all input style end
 
-// button style start
-.admin-btn {
-  outline: none;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-decoration: none;
-  text-align: center;
-  padding: 0.5rem 1rem;
-  border-radius: $border-radius-small;
-  font-size: 0.875rem;
-  transition: all 0.3s linear;
-  color: $color-white;
-  width: fit-content;
-  gap: 0.5rem;
-
-  &.btn-preview {
-    padding: 0;
-  }
-}
-
-.btn-purple {
-  background: $theme-color;
-  color: $color-white;
-
-  &:hover {
-    color: $color-white;
-  }
-}
-
-.btn-yellow {
-  background: #d3a93a;
-  color: $color-white;
-}
-
-.btn-red {
-  background: #e34f4a;
-  color: $color-white;
-}
-
-.btn-light-blue {
-  background: #bfdeed;
-  color: #003d66;
-}
-
-.btn-light-green {
-  background: #b7b03c91;
-}
-
-.btn-reject {
-  background-color: #e5e5e5;
-}
-
-// button style end
 
 // metabox description start
 .settings-metabox-description-code {
@@ -352,7 +480,22 @@ input[type="radio"] {
 
 // form divider end
 
+// page title start
+.admin-page-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+  position: relative;
+  gap: 0.5rem;
+  flex-wrap: wrap;
 
+  p {
+    font-size: 1.5rem;
+  }
+}
+
+// page title end
 
 // form Elements start
 .elements-section {
@@ -426,56 +569,6 @@ input[type="radio"] {
 }
 
 // section divider end
-
-// copy btn start
-.copy-btn {
-  width: 2rem;
-  height: 2rem;
-  box-shadow: 0 0 1rem rgb(0 0 0 / 16.4%);
-  padding: 0;
-  border-radius: 0.25rem;
-  background: #fff;
-  border: none;
-  position: relative;
-
-  .tooltip {
-    font-size: 0.625rem;
-    position: absolute;
-    background: #65438f;
-    padding: 0.5rem 0.75rem;
-    top: -2rem;
-    border-radius: 0.25rem;
-    color: #fff;
-    display: none;
-    width: 7rem;
-    right: 0%;
-
-    &::after {
-      position: absolute;
-      content: "";
-      bottom: -0.189rem;
-      transform: translateX(-50%) rotate(45deg);
-      width: 0.504rem;
-      height: 0.504rem;
-      background: $color-active;
-      right: 8%;
-    }
-
-    &.tool-clip {
-      display: flex;
-      gap: 0.313rem;
-      width: fit-content;
-    }
-  }
-
-  &:hover {
-    .tooltip {
-      display: flex;
-    }
-  }
-}
-
-// copy btn end
 
 // calender style start
 .settings-calender {
@@ -622,85 +715,6 @@ input[type="radio"] {
 
 // merge components end
 
-// radio input start
-.radio-group {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-
-  label {
-    font-size: 0.875rem;
-    margin-left: 0.313rem;
-  }
-
-  // color radio
-  .color-radio {
-    width: 49%;
-
-    .color-palette {
-      display: flex;
-      margin-top: 0.5rem;
-
-      div {
-        width: 25%;
-      }
-    }
-  }
-
-  .image-radio {
-    padding: 0.6rem 1rem 0.8rem;
-    border-radius: 0.25rem;
-    border: 0.063rem solid #e0e4e9;
-    position: relative;
-    transition: height 0.4s ease;
-
-    input {
-      position: absolute;
-      top: 0.9rem;
-      right: 0.813rem;
-      border-radius: 0.125rem;
-      opacity: 0;
-      width: 1rem;
-    }
-
-    label {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-
-      .image-radio-overlay {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        top: 0;
-        left: 0;
-        background-color: #795b9d;
-        color: #fff;
-        opacity: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 0.25rem;
-        transition: all 0.3s ease;
-      }
-    }
-
-    &.active {
-      input {
-        opacity: 1;
-      }
-    }
-
-    &:hover {
-      .image-radio-overlay {
-        opacity: 0.5;
-      }
-    }
-  }
-}
-
-// radio input end
-
 // toggle btn start
 .toggle-checkbox-header {
   min-width: fit-content;
@@ -722,20 +736,7 @@ input[type="radio"] {
   margin-left: auto;
   position: relative;
 
-  &::after {
-    content: "";
-    position: absolute;
-    top: 0.55rem;
-    left: 2.3rem;
-    width: 0.25rem;
-    height: 0.25rem;
-    border: $border-theme-small;
-    border-radius: $border-radius-button;
-    transition: 0.3s;
-    z-index: 0;
-  }
-
-  input {
+  input[type="checkbox"]{
     height: 0;
     width: 0;
     visibility: hidden;
@@ -779,6 +780,19 @@ input[type="radio"] {
     }
   }
 
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0.55rem;
+    left: 2.3rem;
+    width: 0.25rem;
+    height: 0.25rem;
+    border: $border-theme-small;
+    border-radius: $border-radius-button;
+    transition: 0.3s;
+    z-index: 0;
+  }
+
   input:checked+label {
     background: $color-active;
     border: $border-theme-medius;
@@ -793,6 +807,16 @@ input[type="radio"] {
 
 
 // visibility control container
+.glider {
+  position: absolute;
+  display: flex;
+  height: 1.563rem;
+  width: 3.125rem;
+  background-color: #e7d3ff;
+  z-index: 1;
+  transition: 0.25s ease-out;
+}
+
 .tabs {
   display: flex;
   position: relative;
@@ -836,16 +860,6 @@ input[type="radio"] {
   }
 }
 
-.glider {
-  position: absolute;
-  display: flex;
-  height: 1.563rem;
-  width: 3.125rem;
-  background-color: #e7d3ff;
-  z-index: 1;
-  transition: 0.25s ease-out;
-}
-
 // visibility control container end
 
 // cross btn start
@@ -867,25 +881,7 @@ input[type="radio"] {
   border: none;
 }
 
-// page title start
-.admin-page-title {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 0.75rem;
-  position: relative;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-
-  p {
-    font-size: 1.5rem;
-  }
-}
-
-// page title end
-
-
-// 
+// admin notice 
 .admin-notice-display-title {
   display: flex;
   align-items: center;

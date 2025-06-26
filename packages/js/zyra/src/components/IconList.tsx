@@ -154,8 +154,8 @@ const IconList: React.FC = () => {
                         <span>(e902)</span>
                     </div>
                     <div className="icon-box">
-                        <span className="adminlib-uniE903"></span>
-                        <span className="mls"> adminlib-uniE903</span>
+                        <span className="adminlib-uni"></span>
+                        <span className="mls"> adminlib-uni</span>
                         <span>(e903)</span>
                     </div>
                     <div className="icon-box">

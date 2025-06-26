@@ -9,20 +9,6 @@
       position: relative;
       padding-left: 2.2rem;
 
-      &:hover {
-        background-color: #65438f;
-        color: #fff;
-
-        &::before {
-          border-color: #cdefbd;
-        }
-
-        &::after {
-          border-top-color: #cdefbd;
-          animation-play-state: running;
-        }
-      }
-
       &::before {
         content: " ";
         display: block;
@@ -51,6 +37,20 @@
         border-top-color: inherit;
         animation: downloadarrow 1s linear infinite;
         animation-play-state: paused;
+      }
+      
+      &:hover {
+        background-color: #65438f;
+        color: #fff;
+
+        &::before {
+          border-color: #cdefbd;
+        }
+
+        &::after {
+          border-top-color: #cdefbd;
+          animation-play-state: running;
+        }
       }
 
       @keyframes downloadarrow {
