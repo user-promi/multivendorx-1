@@ -290,7 +290,7 @@ class FrontendScripts {
 		$settings_databases_value = array();
 
 		$tabs_names = apply_filters(
-			'additional_tabs_names',
+			'moowoodle_additional_tabs_names',
 			array(
 				'general',
 				'display',
