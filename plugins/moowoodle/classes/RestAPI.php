@@ -366,15 +366,13 @@ class RestAPI {
             return new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'moowoodle' ), array( 'status' => 403 ) );
         }
 
-        $count_courses  = $request->get_param( 'count' );
         $limit          = max( intval( $request->get_param( 'row' ) ), 10 );
         $page           = max( intval( $request->get_param( 'page' ) ), 1 );
         $offset         = ( $page - 1 ) * $limit;
         $category_field = $request->get_param( 'catagory' );
         $search_action  = $request->get_param( 'searchaction' );
         $search_field   = $request->get_param( 'search' );
-        $total_courses  = MooWoodle()->course->get_course_information( array() );
-
+        $total_courses  = MooWoodle()->course->get_course_information( array( 'count' => true ) );
         // Base filter array.
         $filters = array(
             'limit'  => $limit,
@@ -457,7 +455,7 @@ class RestAPI {
         }
 
         $response = array(
-            'count'   => count( $total_courses ),
+            'count'   => $total_courses,
             'courses' => $formatted_courses,
         );
         return rest_ensure_response( $response );
@@ -622,9 +620,9 @@ class RestAPI {
             array(
                 'user_id' => $current_user->ID,
                 'status'  => 'enrolled',
+                'count'   => true,
             )
         );
-
         // Allow pre-filtering by custom filters.
         $user_courses_data = apply_filters( 'moowoodle_user_courses_cohorts_groups_data', null, $request );
         if ( ! empty( $user_courses_data ) ) {
@@ -694,7 +692,7 @@ class RestAPI {
         return rest_ensure_response(
             array(
 				'data'   => $formatted_courses,
-                'count'  => count( $total_user_enrollments ),
+                'count'  => $total_user_enrollments,
 				'status' => 'success',
             )
         );
