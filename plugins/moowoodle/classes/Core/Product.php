@@ -141,6 +141,15 @@ class Product {
 
 		$product = self::get_product_from_moodle_course( $course['id'] );
 
+		// Manage setting of product sync option.
+		$product_sync_setting = MooWoodle()->setting->get_setting( 'product_sync_option', array() );
+
+		$update_product = in_array( 'update', $product_sync_setting, true );
+
+		if(!$update_product) {
+			return $product->get_id();
+		}
+
         // create a new product if not exist.
         if ( ! $product && $force_create ) {
             $product = new \WC_Product_Simple();
