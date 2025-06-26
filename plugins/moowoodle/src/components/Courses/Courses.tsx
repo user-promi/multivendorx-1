@@ -569,9 +569,7 @@ const Course: React.FC = () => {
             <div className="admin-table-wrapper">
                 <Table
                     data={data}
-                    columns={
-                        columns as ColumnDef<Record<string, any>, any>[]
-                    }
+                    columns={columns as ColumnDef<Record<string, any>, any>[]}
                     rowSelection={rowSelection}
                     onRowSelectionChange={setRowSelection}
                     realtimeFilter={realtimeFilter}
@@ -583,7 +581,7 @@ const Course: React.FC = () => {
                     perPageOption={[10, 25, 50]}
                     typeCounts={[]}
                 />
-            </div>            
+            </div>
         </>
     );
 };
