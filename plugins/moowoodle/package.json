@@ -22,7 +22,7 @@
         "lint:lang:php": "composer run-script phpcs",
         "lint:lang:css": "wp-scripts lint-style",
         "lint:fix:css": "stylelint '**/*.{css,scss}' --fix",
-        "lint:fix:js": "wp-scripts format",
+        "lint:fix:js": "wp-scripts format --fix",
         "lint:fix:php": "composer run-script phpfix",
         "test": "pnpm test:unit",
         "test:unit": "pnpm test:php",

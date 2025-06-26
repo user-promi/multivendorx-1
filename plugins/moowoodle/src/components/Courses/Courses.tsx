@@ -115,7 +115,9 @@ const Course: React.FC = () => {
             .then((response) => {
                 setData(response.data.courses || []);
                 setTotalRows(response.data.count || 0);
-                setPageCount(Math.ceil(response.data.count / pagination.pageSize));
+                setPageCount(
+                    Math.ceil(response.data.count / pagination.pageSize)
+                );
             })
             .catch(() => {
                 setError(__('Failed to load courses', 'moowoodle'));
