@@ -557,12 +557,6 @@ class RestAPI {
         }
     }
 
-
-
-
-
-
-
     /**
      * Download the log.
      *

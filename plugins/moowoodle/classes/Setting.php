@@ -191,6 +191,6 @@ class Setting {
             }
         }
 
-        return 'stockmanager_extra_settings';
+        return 'moowoodle_extra_settings';
     }
 }
