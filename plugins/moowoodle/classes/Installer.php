@@ -28,9 +28,9 @@ class Installer {
 			$this->run_default_migration();
 		}
 
-            update_option( 'moowoodle_version', MOOWOODLE_PLUGIN_VERSION );
+        update_option( 'moowoodle_version', MOOWOODLE_PLUGIN_VERSION );
 
-            do_action( 'moowoodle_updated' );
+        do_action( 'moowoodle_updated' );
     }
 
     /**

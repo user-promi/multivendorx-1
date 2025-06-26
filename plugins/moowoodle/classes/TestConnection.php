@@ -47,7 +47,7 @@ class TestConnection {
 				MooWoodle()->util->log( 'It seems that Moodle external web service functions [' . implode( ', ', $missing_functions ) . '] not configured correctly.' );
 			}
 
-			do_action( 'moowoodle_after_missing_functions_check',  $missing_functions, $response );
+			do_action( 'moowoodle_after_missing_functions_check', $missing_functions, $response );
 
 			update_option( 'moowoodle_moodle_site_name', $response['sitename'] );
 			$response['success'] = true;
