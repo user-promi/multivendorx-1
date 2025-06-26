@@ -108,10 +108,10 @@ class RestAPI {
 
         register_rest_route(
             MooWoodle()->rest_namespace,
-            '/my-acc-courses',
+            '/my-courses',
             array(
 				'methods'             => \WP_REST_Server::READABLE,
-				'callback'            => array( $this, 'get_user_courses' ),
+				'callback'            => array( $this, 'get_my_courses' ),
 				'permission_callback' => array( $this, 'user_has_api_access' ),
 			)
         );
@@ -170,6 +170,7 @@ class RestAPI {
             return rest_ensure_response( __( 'Unabled to Saved', 'moowoodle' ) );
         }
     }
+
     /**
      * Handles synchronization requests based on the 'parameter' value.
      *
@@ -372,12 +373,7 @@ class RestAPI {
         $category_field = $request->get_param( 'catagory' );
         $search_action  = $request->get_param( 'searchaction' );
         $search_field   = $request->get_param( 'search' );
-
-        // If count_courses is requested, get the course count.
-        if ( $count_courses ) {
-            $courses = MooWoodle()->course->get_course_information( array() );
-            return rest_ensure_response( count( $courses ) );
-        }
+        $total_courses  = MooWoodle()->course->get_course_information( array() );
 
         // Base filter array.
         $filters = array(
@@ -432,8 +428,8 @@ class RestAPI {
             $view_user_url = trailingslashit( MooWoodle()->setting->get_setting( 'moodle_url' ) ) . "user/index.php?id={$course['moodle_course_id']}";
 
             // Get categories.
-            $categories    = MooWoodle()->category->get_course_category_information( $course['category_id'] );
-            $category_name = ! empty( $categories ) ? $categories[0]['name'] : __( 'Uncategorized', 'moowoodle' );
+            $categories = MooWoodle()->category->get_course_category_information( (int) $course['category_id'] );
+            $categories = reset( $categories );
 
             // Get enrolled users count.
             $enroled_user = MooWoodle()->enrollment->get_enrollments_information(
@@ -452,7 +448,7 @@ class RestAPI {
 					'course_name'       => $course['fullname'],
 					'products'          => $synced_products,
 					'productimage'      => $product_image,
-					'category_name'     => $category_name,
+					'category_name'     => $categories['name'],
 					'enroled_user'      => count( $enroled_user ),
 					'view_users_url'    => $view_user_url,
 					'date'              => $date,
@@ -460,7 +456,11 @@ class RestAPI {
             );
         }
 
-        return rest_ensure_response( $formatted_courses );
+        $response = array(
+            'count'   => count( $total_courses ),
+            'courses' => $formatted_courses,
+        );
+        return rest_ensure_response( $response );
     }
 
     /**
@@ -602,10 +602,10 @@ class RestAPI {
      *
      * @return WP_REST_Response|\WP_Error JSON response containing enrolled courses and pagination details.
      */
-    public function get_user_courses( $request ) {
+    public function get_my_courses( $request ) {
         $current_user = wp_get_current_user();
         if ( empty( $current_user->ID ) ) {
-            Util::log( '[MooWoodle] get_user_courses(): No logged-in user found.' );
+            Util::log( '[MooWoodle] get_my_courses(): No logged-in user found.' );
             return rest_ensure_response(
                 array(
 					'status'  => 'error',
@@ -618,16 +618,12 @@ class RestAPI {
         $page_number    = max( 1, (int) $request->get_param( 'page' ) ? $request->get_param( 'page' ) : 1 );
         $query_offset   = ( $page_number - 1 ) * $items_per_page;
 
-        // Handle count-only request.
-        if ( $request->get_param( 'count' ) ) {
-            $user_enrollments = MooWoodle()->enrollment->get_enrollments_information(
-                array(
-					'user_id' => $current_user->ID,
-					'status'  => 'enrolled',
-                )
-            );
-            return rest_ensure_response( count( $user_enrollments ) );
-        }
+        $total_user_enrollments = MooWoodle()->enrollment->get_enrollments_information(
+            array(
+                'user_id' => $current_user->ID,
+                'status'  => 'enrolled',
+            )
+        );
 
         // Allow pre-filtering by custom filters.
         $user_courses_data = apply_filters( 'moowoodle_user_courses_cohorts_groups_data', null, $request );
@@ -698,6 +694,7 @@ class RestAPI {
         return rest_ensure_response(
             array(
 				'data'   => $formatted_courses,
+                'count'  => count( $total_user_enrollments ),
 				'status' => 'success',
             )
         );

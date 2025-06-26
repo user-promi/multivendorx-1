@@ -21,23 +21,12 @@ const MyCourse: React.FC = () => {
 
     const totalPages = Math.ceil(totalRows / rowsPerPage);
 
-    const fetchTotalCourses = useCallback(() => {
-        axios({
-            method: 'GET',
-            url: `${courseMyAcc.apiUrl}/moowoodle/v1/my-acc-courses`,
-            headers: { 'X-WP-Nonce': (window as any).courseMyAcc.nonce },
-            params: { count: true },
-        })
-            .then((res) => setTotalRows(res.data))
-            .catch(() => setTotalRows(0));
-    }, []);
-
     const fetchCourses = useCallback(() => {
         setLoading(true);
         setError('');
         axios({
             method: 'GET',
-            url: `${courseMyAcc.apiUrl}/moowoodle/v1/my-acc-courses`,
+            url: `${courseMyAcc.apiUrl}/moowoodle/v1/my-courses`,
             headers: { 'X-WP-Nonce': (window as any).courseMyAcc.nonce },
             params: {
                 page: currentPage,
@@ -46,16 +35,13 @@ const MyCourse: React.FC = () => {
         })
             .then((response) => {
                 setCourses(response.data.data || []);
+                setTotalRows(response.data.count || 0);
             })
             .catch(() => {
                 setError(__('Failed to fetch courses.', 'moowoodle'));
             })
             .finally(() => setLoading(false));
     }, [currentPage, rowsPerPage]);
-
-    useEffect(() => {
-        fetchTotalCourses();
-    }, [fetchTotalCourses]);
 
     useEffect(() => {
         fetchCourses();
