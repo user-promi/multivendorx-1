@@ -2,7 +2,7 @@
 /**
  * New enrollment email (HTML)
  *
- * Override this template by copying it to yourtheme/moowoodle/emails/EnrollmentEmail.php
+ * Override this template by copying it to yourtheme/moowoodle/emails/html/EnrollmentEmail.php
  *
  * @author    DualCube
  * @package   moowoodle/templates
