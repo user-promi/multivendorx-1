@@ -353,6 +353,6 @@ class Installer {
                 'date'       => $enrollment_date,
             );
 
-            \MooWoodle\Enrollment::save_enrollment( $enrollment_data );        }
+            \MooWoodle\Enrollment::update_enrollment( $enrollment_data );        }
     }
 }
