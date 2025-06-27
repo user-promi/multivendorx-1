@@ -135,7 +135,16 @@ class Ajax {
         $product_id     = filter_input( INPUT_POST, 'product_id', FILTER_VALIDATE_INT ) ? filter_input( INPUT_POST, 'product_id', FILTER_VALIDATE_INT ) : '';
         $variation_id   = filter_input( INPUT_POST, 'variation_id', FILTER_VALIDATE_INT ) ? filter_input( INPUT_POST, 'variation_id', FILTER_VALIDATE_INT ) : 0;
 
-        $success = false;
+        $settings_array  = Utill::get_form_settings_array();
+        $success_msg = $settings_array['alert_unsubscribe_message'];
+        // Prepare success msg data
+        $success_msg = str_replace('%customer_email%', $customer_email, $success_msg);
+
+        // $success = false;
+        $response = array(
+            'status'  => false,
+            'message' => '<div class="registered-message">' . __('Some error occurs', 'notifima') . ' <a href="${window.location}">' . __('Please try again.', 'notifima') . '</a></div>',
+        );
 
         if ( $product_id && ! empty( $product_id ) && ! empty( $customer_email ) ) {
             $product = wc_get_product( $product_id );
@@ -144,15 +153,21 @@ class Ajax {
             } else {
                 $success = Subscriber::remove_subscriber( $product_id, $customer_email );
             }
+            if ($success) {
+                $response = array(
+                    'status'  => true,
+                    'message' => '<div class="registered-message">' . $success_msg . '</div>',
+                );
+            }
         }
-        echo esc_html( $success );
+        wp_send_json( $response );
         die();
     }
 
     /**
      * Subscribe a user through ajax call.
      *
-     * @return never
+     * @return void
      */
     public function subscribe_users() {
         if ( ! check_ajax_referer( 'notifima-security-nonce', 'nonce', false ) ) {
@@ -162,9 +177,47 @@ class Ajax {
 
         $customer_email = filter_input( INPUT_POST, 'customer_email', FILTER_SANITIZE_EMAIL ) ? filter_input( INPUT_POST, 'customer_email', FILTER_SANITIZE_EMAIL ) : '';
         $product_id     = filter_input( INPUT_POST, 'product_id', FILTER_VALIDATE_INT ) ? filter_input( INPUT_POST, 'product_id', FILTER_VALIDATE_INT ) : '';
+        $product_title =  filter_input( INPUT_POST, 'product_title', FILTER_UNSAFE_RAW ) ? sanitize_text_field( filter_input( INPUT_POST, 'product_title', FILTER_UNSAFE_RAW ) ) : '';
         $variation_id   = filter_input( INPUT_POST, 'variation_id', FILTER_VALIDATE_INT ) ? filter_input( INPUT_POST, 'variation_id', FILTER_VALIDATE_INT ) : 0;
-        $status         = '';
+        $response = array(
+            'status'  => true,
+            'message' => '',
+        );
+    
+        $settings_array  = Utill::get_form_settings_array();
+        $button_settings = $settings_array['customize_btn'];
 
+        $border_size = ( ! empty( $button_settings['button_border_size'] ) ) ? $button_settings['button_border_size'] . 'px' : '1px';
+
+        $button_css = '';
+        if ( ! empty( $button_settings['button_background_color'] ) ) {
+            $button_css .= 'background:' . $button_settings['button_background_color'] . '; ';
+        }
+        if ( ! empty( $button_settings['button_text_color'] ) ) {
+            $button_css .= 'color:' . $button_settings['button_text_color'] . '; ';
+        }
+        if ( ! empty( $button_settings['button_border_color'] ) ) {
+            $button_css .= 'border: ' . $border_size . ' solid ' . $button_settings['button_border_color'] . '; ';
+        }
+        if ( ! empty( $button_settings['button_font_size'] ) ) {
+            $button_css .= 'font-size:' . $button_settings['button_font_size'] . 'px; ';
+        }
+        if ( ! empty( $button_settings['button_border_redious'] ) ) {
+            $button_css .= 'border-radius:' . $button_settings['button_border_redious'] . 'px;';
+        }
+
+        $unsubscribe_button_html = '<button class="notifima-unsubscribe unsubscribe-button" style="' . $button_css . '">' . $settings_array['unsubscribe_button_text'] . '</button>';
+
+        $valid_email = $settings_array['valid_email'];
+        $email_exist = $settings_array['alert_email_exist'];
+        // Prepare email exist data
+        $email_exist = str_replace('%product_title%', $product_title, $email_exist);
+        $email_exist = str_replace('%customer_email%', $customer_email, $email_exist);
+
+        $success_msg = $settings_array['alert_success'];
+        // Prepare success msg data
+        $success_msg = str_replace('%product_title%', $product_title, $success_msg);
+        $success_msg = str_replace('%customer_email%', $customer_email, $success_msg);
         /**
          * Action hook before subscription.
          *
@@ -174,23 +227,34 @@ class Ajax {
          */
         do_action( 'notifima_before_subscribe_product', $customer_email, $product_id, $variation_id );
 
+        if ( ! $this->is_email_valid($customer_email) ) {
+            $response = array(
+                'status'  => false,
+                'message' => '<p style="color:#e2401c;" class="responsedata-error-message">' . $valid_email . '</p>',
+            );
+            wp_send_json( $response );
+            return;
+        }
+
         if ( $product_id && ! empty( $product_id ) && ! empty( $customer_email ) ) {
             $product_id = ( $variation_id && $variation_id > 0 ) ? $variation_id : $product_id;
-
+            
             if ( Subscriber::is_already_subscribed( $customer_email, $product_id ) ) {
-                $status = 'already_registered';
-            } else {
                 $response = array(
-                    'status'  => true,
-                    'message' => '',
+                    'status'  => false,
+                    'message' => '<div class="registered-message">' . $email_exist . '</div>' . $unsubscribe_button_html . '<input type="hidden" class="notifima_subscribed_email" value="' . esc_attr( $customer_email ) . '" />' . '<input type="hidden" class="notifima_product_id" value="' . esc_attr( $product_id ) . '" />' . '<input type="hidden" class="notifima_variation_id" value="' . esc_attr( $variation_id ) . '" />',
                 );
 
+            } else {
                 $eligible = apply_filters( 'notifima_eligible_to_subscribe', $response, $customer_email, $product_id );
 
                 if ( $eligible['status'] ) {
                     Subscriber::insert_subscriber( $customer_email, $product_id );
                     Subscriber::insert_subscriber_email_trigger( wc_get_product( $product_id ), $customer_email );
-                    $status = true;
+                    $response = array(
+                        'status'  => true,
+                        'message' => '<div class="registered-message">' . $success_msg . '</div>',
+                    );
 
                     /**
                      * Action hook after subscriber email trigger.
@@ -199,13 +263,17 @@ class Ajax {
                      */
                     do_action( 'notifima_subscriber_added', $customer_email );
                 } else {
-                    $status = $eligible['message'];
+                    $response = $eligible;
                 }
             }
         }
 
-        echo esc_html( $status );
+        wp_send_json( $response );
         die();
+    }
+
+    public function is_email_valid( $email ) {
+        return (bool) preg_match( '/^([a-zA-Z0-9_\.\-\+])+@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/', $email );
     }
 
     /**

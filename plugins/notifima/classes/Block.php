@@ -48,7 +48,7 @@ class Block {
         $blocks[] = array(
             'name'       => 'stock-notification-block', // block name.
             'textdomain' => 'notifima',
-            'block_path' => Notifima()->plugin_path . FrontendScripts::get_build_path_name() . 'block/',
+            'block_path' => Notifima()->plugin_path . FrontendScripts::get_build_path_name() . 'js/block/',
         );
 
         Notifima()->block_paths += array(

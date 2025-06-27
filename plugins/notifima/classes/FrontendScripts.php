@@ -319,29 +319,18 @@ class FrontendScripts {
         }
 
         $subscribe_button_html   = '<button style="' . $button_css . '" class="notifima-subscribe notifima-button alert_button_hover" name="alert_button">' . $button_settings['button_text'] . '</button>';
-        $unsubscribe_button_html = '<button class="notifima-unsubscribe unsubscribe-button" style="' . $button_css . '">' . $settings_array['unsubscribe_button_text'] . '</button>';
 
         $localize_scripts = apply_filters(
             'notifima_localize_scripts',
             array(
 				'notifima-frontend-script'                 => array(
-					'object_name' => 'localizeData',
+					'object_name' => 'frontendLocalizer',
 					'data'        => array(
 						'ajax_url'                  => admin_url( 'admin-ajax.php', 'relative' ),
 						'nonce'                     => wp_create_nonce( 'notifima-security-nonce' ),
 						'additional_fields'         => apply_filters( 'notifima_subscription_form_additional_fields', array() ),
 						'button_html'               => $subscribe_button_html,
-						'alert_success'             => $settings_array['alert_success'],
-						'alert_email_exist'         => $settings_array['alert_email_exist'],
-						'valid_email'               => $settings_array['valid_email'],
-						'ban_email_domain_text'     => $settings_array['ban_email_domain_text'],
-						'ban_email_address_text'    => $settings_array['ban_email_address_text'],
-						'double_opt_in_success'     => $settings_array['double_opt_in_success'],
 						'processing'                => __( 'Processing...', 'notifima' ),
-						'error_occurs'              => __( 'Some error occurs', 'notifima' ),
-						'try_again'                 => __( 'Please try again.', 'notifima' ),
-						'unsubscribe_button'        => $unsubscribe_button_html,
-						'alert_unsubscribe_message' => $settings_array['alert_unsubscribe_message'],
 						'recaptcha_enabled'         => apply_filters( 'notifima_recaptcha_enabled', false ),
 					),
 				),
@@ -368,7 +357,7 @@ class FrontendScripts {
 				'notifima-stock-notification-block-script' => array(
 					'object_name' => 'stockNotificationBlock',
 					'data'        => array(
-						'apiurl'  => untrailingslashit( get_rest_url() ),
+						'apiUrl'  => untrailingslashit( get_rest_url() ),
 						'restUrl' => Notifima()->rest_namespace,
 						'nonce'   => wp_create_nonce( 'notifima-security-nonce' ),
 					),
@@ -376,7 +365,7 @@ class FrontendScripts {
 				'notifima-stock-notification-block-editor-script' => array(
 					'object_name' => 'stockNotificationBlock',
 					'data'        => array(
-						'apiurl'  => untrailingslashit( get_rest_url() ),
+						'apiUrl'  => untrailingslashit( get_rest_url() ),
 						'restUrl' => Notifima()->rest_namespace,
 						'nonce'   => wp_create_nonce( 'notifima-security-nonce' ),
 					),
