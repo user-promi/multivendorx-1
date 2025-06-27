@@ -53,7 +53,7 @@ if ( ! class_exists( 'AdminNewSubscriberEmail' ) ) :
             $this->id             = 'notifima_subscriber_confimation_admin';
             $this->title          = __( 'Alert admin', 'notifima' );
             $this->description    = __( 'Admin will get an alert when customer subscribe any out of stock product', 'notifima' );
-            $this->template_html  = 'emails/AdminNewSubscriberEmail.php';
+            $this->template_html  = 'emails/html/AdminNewSubscriberEmail.php';
             $this->template_plain = 'emails/plain/AdminNewSubscriberEmail.php';
             $this->template_base  = Notifima()->plugin_path . 'templates/';
 

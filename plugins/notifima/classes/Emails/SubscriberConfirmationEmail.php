@@ -16,7 +16,7 @@ if ( ! class_exists( 'SubscriberConfirmationEmail' ) ) :
      *
      * An confirmation email will be sent to the customer when they subscribe product.
      *
-     * @version     PRODUCT_VERION
+     * @version     PRODUCT_VERSION
      * @author      MultivendorX
      * @extends     \WC_Email
      */
@@ -46,7 +46,7 @@ if ( ! class_exists( 'SubscriberConfirmationEmail' ) ) :
             $this->id             = 'notifima_subscriber_confirmation';
             $this->title          = __( 'Confirm subscriber', 'notifima' );
             $this->description    = __( 'Confirm customer when they subscribe a product', 'notifima' );
-            $this->template_html  = 'emails/SubscriberConfirmationEmail.php';
+            $this->template_html  = 'emails/html/SubscriberConfirmationEmail.php';
             $this->template_plain = 'emails/plain/SubscriberConfirmationEmail.php';
             $this->template_base  = Notifima()->plugin_path . 'templates/';
 

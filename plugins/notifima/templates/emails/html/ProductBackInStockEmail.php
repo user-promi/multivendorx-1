@@ -1,11 +1,11 @@
 <?php
 /**
- * Notifima Subscription Confirmation Email
+ * Notifima Product Back In Stock Email
  *
- * Override this template by copying it to yourtheme/woocommerce-product-stock-alert/emails/SubscriberConfirmationEmail.php
+ * Override this template by copying it to yourtheme/woocommerce-product-stock-alert/emails/html/ProductBackInStockEmail.php
  *
  * @author    MultiVendorX
- * @package   woocommerce-product-stock-alert/templates
+ * @package   notifima/templates
  * @version   1.3.0
  */
 
@@ -19,9 +19,9 @@ $product = $args['product'];
 
 <p>
 <?php
-printf( esc_html__( 'Hi there. You have successfully subscribed to a product. We will inform you when the product becomes available. Product details are shown below for your reference:', 'notifima' ) );
+printf( esc_html__( 'Hi there. You have subscribed to a product. Your subscribed product is available now. Product details are shown below for your reference:', 'notifima' ) );
 
-$is_prices_including_tax = get_option( 'woocommerce_prices_include_tax' );
+$is_prices_including_tax = esc_html( get_option( 'woocommerce_prices_include_tax' ) );
 ?>
 <h3><?php esc_html_e( 'Product Details', 'notifima' ); ?></h3>
 <table cellspacing="0" cellpadding="6" style="width: 100%; border: 1px solid #eee;" border="1" bordercolor="#eee">
@@ -39,7 +39,7 @@ $is_prices_including_tax = get_option( 'woocommerce_prices_include_tax' );
 			<th scope="col" style="text-align:left; border: 1px solid #eee;">
 				<?php
                     echo wp_kses_post( wc_price( wc_get_price_to_display( $product ) ) );
-				echo esc_html( ( 'yes' !== $is_prices_including_tax ) ? WC()->countries->ex_tax_or_vat() : WC()->countries->inc_tax_or_vat() );
+				echo esc_html( ( isset( $is_prices_including_tax ) && ( 'yes' !== $is_prices_including_tax ) ) ? WC()->countries->ex_tax_or_vat() : WC()->countries->inc_tax_or_vat() );
 				?>
 			</th>
 		</tr>
@@ -56,5 +56,4 @@ $is_prices_including_tax = get_option( 'woocommerce_prices_include_tax' );
 
 </p>
 <?php
-do_action( 'notifima_subscriber_confirmation_email_footer', $product->get_id(), $args['customer_email'] );
 do_action( 'woocommerce_email_footer' );

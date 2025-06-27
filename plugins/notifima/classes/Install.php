@@ -41,7 +41,7 @@ class Install {
      */
     public function __construct() {
 
-        add_action( 'init', array( $this, 'old_migration' ) );
+        $this->old_migration();
 
         if ( ! get_option( 'notifima_version', false ) ) {
             $this->create_database_table();

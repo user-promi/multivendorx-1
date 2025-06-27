@@ -54,7 +54,7 @@ if ( ! class_exists( 'ProductBackInStockEmail' ) ) :
             $this->id             = 'notifima_subscribe_product_back_stock';
             $this->title          = __( 'Alert Subscriber', 'notifima' );
             $this->description    = __( 'Alert customer when their subscribed product becomes in stock', 'notifima' );
-            $this->template_html  = 'emails/ProductBackInStockEmail.php';
+            $this->template_html  = 'emails/html/ProductBackInStockEmail.php';
             $this->template_plain = 'emails/plain/ProductBackInStockEmail.php';
             $this->template_base  = Notifima()->plugin_path . 'templates/';
 

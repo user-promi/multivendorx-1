@@ -1,24 +1,26 @@
 <?php
 /**
- * Notifima Admin New Subscriber Email
+ * Notifima Subscription Confirmation Email
  *
- * Override this template by copying it to yourtheme/woocommerce-product-stock-alert/emails/AdminNewSubscriberEmail.php
+ * Override this template by copying it to yourtheme/woocommerce-product-stock-alert/emails/html/SubscriberConfirmationEmail.php
  *
  * @author    MultiVendorX
- * @package   woocommerce-product-stock-alert/templates
+ * @package   notifima/templates
  * @version   1.3.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
-} // Exit if accessed directly.
+} // Exit if accessed directly
 
 do_action( 'woocommerce_email_header', $args['email_heading'], $email );
 $product = $args['product'];
 ?>
 
-<p><?php printf( esc_html__( 'Hi there. A customer has subscribed to a product on your shop. Product details are shown below for your reference:', 'notifima' ) ); ?></p>
+<p>
 <?php
+printf( esc_html__( 'Hi there. You have successfully subscribed to a product. We will inform you when the product becomes available. Product details are shown below for your reference:', 'notifima' ) );
+
 $is_prices_including_tax = get_option( 'woocommerce_prices_include_tax' );
 ?>
 <h3><?php esc_html_e( 'Product Details', 'notifima' ); ?></h3>
@@ -37,12 +39,8 @@ $is_prices_including_tax = get_option( 'woocommerce_prices_include_tax' );
 			<th scope="col" style="text-align:left; border: 1px solid #eee;">
 				<?php
                     echo wp_kses_post( wc_price( wc_get_price_to_display( $product ) ) );
-					echo esc_html(
-						( isset( $is_prices_including_tax ) && 'yes' !== $is_prices_including_tax )
-							? WC()->countries->ex_tax_or_vat()
-							: WC()->countries->inc_tax_or_vat()
-					);
-					?>
+				echo esc_html( ( 'yes' !== $is_prices_including_tax ) ? WC()->countries->ex_tax_or_vat() : WC()->countries->inc_tax_or_vat() );
+				?>
 			</th>
 		</tr>
 	</tbody>
@@ -56,5 +54,7 @@ $is_prices_including_tax = get_option( 'woocommerce_prices_include_tax' );
 	<a target="_blank" href="mailto:<?php echo esc_html( $args['customer_email'] ); ?>"><?php echo esc_html( $args['customer_email'] ); ?></a>
 </p>
 
+</p>
 <?php
+do_action( 'notifima_subscriber_confirmation_email_footer', $product->get_id(), $args['customer_email'] );
 do_action( 'woocommerce_email_footer' );
