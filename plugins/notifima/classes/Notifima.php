@@ -182,7 +182,7 @@ class Notifima {
     }
 
     /**
-     * Init all Stock Manageer classess.
+     * Init all Notifima classess.
      * Access this classes using magic method.
      *
      * @return void

@@ -243,9 +243,9 @@ class Admin {
      */
     public function display_product_subscriber_count_in_metabox() {
         global $post;
-
-        if ( Subscriber::is_product_outofstock( wc_get_product( $post->ID ) ) ) {
-            $no_of_subscriber = get_post_meta( $post->ID, 'no_of_subscribers', true );
+        $product = wc_get_product( $post->ID );
+        if ( Subscriber::is_product_outofstock( $product ) ) {
+            $no_of_subscriber = $product->get_meta( 'no_of_subscribers', true );
             ?>
             <p class="form-field _stock_field">
                 <label class=""><?php esc_attr_e( 'Number of Interested Person( s )', 'notifima' ); ?></label>
@@ -265,8 +265,9 @@ class Admin {
      * @param WP_Post $variation       The WP_Post object for the variation.
      */
     public function display_product_subscriber_count_in_variation_metabox( $loop, $variation_data, $variation ) {
-        if ( Subscriber::is_product_outofstock( wc_get_product( $variation->ID ) ) ) {
-            $product_subscriber = get_post_meta( $variation->ID, 'no_of_subscribers', true );
+        $product = wc_get_product( $variation->ID );
+        if ( Subscriber::is_product_outofstock( $product ) ) {
+            $product_subscriber = $product->get_meta( 'no_of_subscribers', true );
             ?>
             <p class="form-row form-row-full interested_person">
                 <label class="stock_label"><?php esc_attr_e( 'Number of Interested Person( s ) : ', 'notifima' ); ?></label>
