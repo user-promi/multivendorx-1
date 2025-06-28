@@ -175,10 +175,10 @@ class Notifima {
     public function init_plugin() {
         $this->load_plugin_textdomain();
         $this->init_classes();
-
+        add_filter( 'woocommerce_email_classes', [ $this, 'setup_email_class' ] );
+ 
         do_action( 'notifima_loaded' );
 
-        add_filter( 'woocommerce_email_classes', array( &$this, 'setup_email_class' ) );
     }
 
     /**
