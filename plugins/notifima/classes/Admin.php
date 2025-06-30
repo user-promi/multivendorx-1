@@ -81,18 +81,17 @@ class Admin {
                 "
             > Pro </span>' : '';
 
-
             // Array contain notifima submenu.
             $submenus = array(
-                'settings'        => array(
+                'settings'         => array(
                     'name'   => __( 'Settings', 'notifima' ),
                     'subtab' => 'appearance',
                 ),
-                'subscribers-list'      => array(
+                'subscribers-list' => array(
                     'name'   => __( 'Subscriber List', 'notifima' ) . $pro_sticker,
                     'subtab' => '',
                 ),
-                'manage-stock'         => array(
+                'manage-stock'     => array(
                     'name'   => __( 'Inventory Manager', 'notifima' ) . $pro_sticker,
                     'subtab' => '',
                 ),
@@ -136,14 +135,6 @@ class Admin {
 
             remove_submenu_page( 'notifima', 'notifima' );
         }
-    }
-
-    /**
-	 * Add Option page.
-	 */
-	public static function add_submenu() {
-
-        
     }
 
     /**

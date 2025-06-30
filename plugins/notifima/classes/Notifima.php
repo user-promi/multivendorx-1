@@ -175,10 +175,9 @@ class Notifima {
     public function init_plugin() {
         $this->load_plugin_textdomain();
         $this->init_classes();
-        add_filter( 'woocommerce_email_classes', [ $this, 'setup_email_class' ] );
- 
-        do_action( 'notifima_loaded' );
+        add_filter( 'woocommerce_email_classes', array( $this, 'setup_email_class' ) );
 
+        do_action( 'notifima_loaded' );
     }
 
     /**
@@ -347,7 +346,7 @@ class Notifima {
             '<a href="https://notifima.com/docs/" target="_blank">' . __( 'Docs', 'notifima' ) . '</a>',
         );
         if ( ! Utill::is_khali_dabba() ) {
-            $links['go_pro'] = '<a href="' . NOTIFIMA_PRO_SHOP_URL . '" class="notifima-pro-plugin" target="_blank" style="font-weight: 700;background: linear-gradient(110deg, rgb(63, 20, 115) 0%, 25%, rgb(175 59 116) 50%, 75%, rgb(219 75 84) 100%);-webkit-background-clip: text;-webkit-text-fill-color: transparent;">' . __( 'Upgrade to Pro', 'notifima' ) . '</a>';            
+            $links['go_pro'] = '<a href="' . NOTIFIMA_PRO_SHOP_URL . '" class="notifima-pro-plugin" target="_blank" style="font-weight: 700;background: linear-gradient(110deg, rgb(63, 20, 115) 0%, 25%, rgb(175 59 116) 50%, 75%, rgb(219 75 84) 100%);-webkit-background-clip: text;-webkit-text-fill-color: transparent;">' . __( 'Upgrade to Pro', 'notifima' ) . '</a>';
         }
 
         return array_merge( $plugin_links, $links );

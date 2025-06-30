@@ -31,7 +31,7 @@ jQuery( function ( $ ) {
 
         // Set button as processing and disable click event.
         $( this ).text( frontendLocalizer.processing );
-        $( this ).addClass( 'notifima_submit_btn_disabled' );
+        $( this ).addClass( 'disabled' );
 
         // Get data from form.
         const customerEmail = form.find( '.notifima-email' ).val();
@@ -42,7 +42,7 @@ jQuery( function ( $ ) {
         // Get data from localizer
         const buttonHtml = frontendLocalizer.button_html;
 
-        $( this ).toggleClass( 'alert_loader' ).blur();
+        $( this ).toggleClass( 'notifima-loader' ).blur();
 
         // Request data for subscription
         const requestData = {
@@ -69,7 +69,7 @@ jQuery( function ( $ ) {
             if ( response.status ) {
                 form.html( response.message );
             } else {
-                form.find( `.responsedata-error-message` ).remove() &&
+                form.find( `.notifima-error-message` ).remove() &&
                     form.html( response.message );
             }
             form.find( '.notifima-subscribe' ).replaceWith( buttonHtml );
@@ -93,7 +93,7 @@ jQuery( function ( $ ) {
 
         // Set button as processing and disable click event.
         $( this ).text( frontendLocalizer.processing );
-        $( this ).addClass( 'notifima_submit_btn_disabled' );
+        $( this ).addClass( 'disabled' );
 
         // Unsubscribe request data
         const unsubscribeRequest = {
@@ -114,7 +114,7 @@ jQuery( function ( $ ) {
                     form.html( response.message );
                 }
                 // Enable submit button.
-                $( this ).removeClass( 'notifima_submit_btn_disabled' );
+                $( this ).removeClass( 'disabled' );
             }
         );
     }

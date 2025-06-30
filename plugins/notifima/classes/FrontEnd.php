@@ -47,7 +47,7 @@ class FrontEnd {
             'name'  => true,
         ),
         'script' => array(
-            'src'   => true
+            'src' => true,
         ),
     );
 
@@ -140,6 +140,11 @@ class FrontEnd {
         }
     }
 
+    /**
+     * Get styles for the button on the frontend.
+     *
+     * @return string
+     */
     public function subscribe_button_styles() {
         $settings_array  = Utill::get_form_settings_array();
         $button_settings = $settings_array['customize_btn'];
@@ -242,10 +247,10 @@ class FrontEnd {
             $current_user = wp_get_current_user();
             $user_email   = $current_user->data->user_email;
         }
-        $placeholder  = $settings_array['email_placeholder_text'];
+        $placeholder = $settings_array['email_placeholder_text'];
 
         $additional_fields[] = apply_filters( 'notifima_subscription_form_additional_fields', '' );
-        
+
         if ( ! empty( $additional_fields ) ) {
             foreach ( $additional_fields as $field ) {
                 $notifima_fields_array[] = $field;
@@ -259,7 +264,7 @@ class FrontEnd {
 
         $alert_text_html = '<h5 style="color:' . esc_html( $settings_array['alert_text_color'] ) . '" class="subscribe_for_interest_text">' . esc_html( $settings_array['alert_text'] ) . '</h5>';
 
-        $button_css  = $this->subscribe_button_styles();
+        $button_css = $this->subscribe_button_styles();
 
         $button_html = '<button style="' . $button_css . '" class="notifima-subscribe notifima-button alert_button_hover" name="alert_button">' . esc_html( $button_settings['button_text'] ) . '</button>';
 

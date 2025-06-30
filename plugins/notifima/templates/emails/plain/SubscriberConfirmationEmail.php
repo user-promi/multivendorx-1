@@ -24,17 +24,17 @@ echo esc_html__(
 
 echo "****************************************************\n\n";
 
-// Product Name
+// Product Name.
 echo esc_html__( 'Product Name:', 'notifima' ) . ' ';
 echo ! empty( $product ) ? esc_html( $product->get_name() ) : esc_html__( 'Dummy Product', 'notifima' );
 echo "\n";
 
-// Product Price
+// Product Price.
 echo esc_html__( 'Product Price:', 'notifima' ) . ' ';
 echo ! empty( $product ) ? esc_html( wc_price( wc_get_price_to_display( $product ) ) ) : esc_html__( '$20.00', 'notifima' );
 echo "\n";
 
-// Product Link
+// Product Link.
 if ( ! empty( $product ) ) {
     echo esc_html__( 'Product Link:', 'notifima' ) . ' ' . esc_url( $product->get_permalink() ) . "\n";
 }
@@ -42,7 +42,7 @@ echo "\n\n";
 
 echo "****************************************************\n\n";
 
-// Customer Email
+// Customer Email.
 echo esc_html__( 'Customer Details:', 'notifima' ) . ' ';
 echo ! empty( $args['customer_email'] ) ? esc_html( $args['customer_email'] ) : esc_html__( 'test@example.com', 'notifima' );
 echo "\n\n";

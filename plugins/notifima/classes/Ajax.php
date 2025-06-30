@@ -135,15 +135,9 @@ class Ajax {
         $product_id     = filter_input( INPUT_POST, 'product_id', FILTER_VALIDATE_INT ) ? filter_input( INPUT_POST, 'product_id', FILTER_VALIDATE_INT ) : '';
         $variation_id   = filter_input( INPUT_POST, 'variation_id', FILTER_VALIDATE_INT ) ? filter_input( INPUT_POST, 'variation_id', FILTER_VALIDATE_INT ) : 0;
 
-        $settings_array  = Utill::get_form_settings_array();
-        $success_msg = $settings_array['alert_unsubscribe_message'];
-        // Prepare success msg data
-        $success_msg = str_replace('%customer_email%', $customer_email, $success_msg);
-
-        // $success = false;
         $response = array(
             'status'  => false,
-            'message' => '<div class="registered-message">' . __('Some error occurs', 'notifima') . ' <a href="${window.location}">' . __('Please try again.', 'notifima') . '</a></div>',
+            'message' => '<div class="registered-message">' . __( 'Some error occurs', 'notifima' ) . ' <a href="${window.location}">' . __( 'Please try again.', 'notifima' ) . '</a></div>',
         );
 
         if ( $product_id && ! empty( $product_id ) && ! empty( $customer_email ) ) {
@@ -153,7 +147,12 @@ class Ajax {
             } else {
                 $success = Subscriber::remove_subscriber( $product_id, $customer_email );
             }
-            if ($success) {
+            if ( $success ) {
+                $settings_array = Utill::get_form_settings_array();
+                $success_msg    = $settings_array['alert_unsubscribe_message'];
+                // Prepare success msg data.
+                $success_msg = str_replace( '%customer_email%', $customer_email, $success_msg );
+
                 $response = array(
                     'status'  => true,
                     'message' => '<div class="registered-message">' . $success_msg . '</div>',
@@ -177,29 +176,19 @@ class Ajax {
 
         $customer_email = filter_input( INPUT_POST, 'customer_email', FILTER_SANITIZE_EMAIL ) ? filter_input( INPUT_POST, 'customer_email', FILTER_SANITIZE_EMAIL ) : '';
         $product_id     = filter_input( INPUT_POST, 'product_id', FILTER_VALIDATE_INT ) ? filter_input( INPUT_POST, 'product_id', FILTER_VALIDATE_INT ) : '';
-        $product_title =  filter_input( INPUT_POST, 'product_title', FILTER_UNSAFE_RAW ) ? sanitize_text_field( filter_input( INPUT_POST, 'product_title', FILTER_UNSAFE_RAW ) ) : '';
+        $product_title  = filter_input( INPUT_POST, 'product_title', FILTER_UNSAFE_RAW ) ? sanitize_text_field( filter_input( INPUT_POST, 'product_title', FILTER_UNSAFE_RAW ) ) : '';
         $variation_id   = filter_input( INPUT_POST, 'variation_id', FILTER_VALIDATE_INT ) ? filter_input( INPUT_POST, 'variation_id', FILTER_VALIDATE_INT ) : 0;
-        
+
         $response = array(
             'status'  => true,
             'message' => '',
         );
-    
+
         $request_data = filter_input_array( INPUT_POST, FILTER_SANITIZE_FULL_SPECIAL_CHARS );
-        $response = apply_filters( 'notifima_handle_subscription_form_data', $response, $request_data );
+        $response     = apply_filters( 'notifima_handle_subscription_form_data', $response, $request_data );
 
-        $settings_array  = Utill::get_form_settings_array();
+        $settings_array = Utill::get_form_settings_array();
 
-        $valid_email = $settings_array['valid_email'];
-        $email_exist = $settings_array['alert_email_exist'];
-        // Prepare email exist data
-        $email_exist = str_replace('%product_title%', $product_title, $email_exist);
-        $email_exist = str_replace('%customer_email%', $customer_email, $email_exist);
-
-        $success_msg = $settings_array['alert_success'];
-        // Prepare success msg data
-        $success_msg = str_replace('%product_title%', $product_title, $success_msg);
-        $success_msg = str_replace('%customer_email%', $customer_email, $success_msg);
         /**
          * Action hook before subscription.
          *
@@ -209,10 +198,12 @@ class Ajax {
          */
         do_action( 'notifima_before_subscribe_product', $customer_email, $product_id, $variation_id );
 
-        if ( ! $this->is_email_valid($customer_email) ) {
+        if ( ! $this->is_email_valid( $customer_email ) ) {
+            $valid_email = $settings_array['valid_email'];
+
             $response = array(
                 'status'  => false,
-                'message' => '<p style="color:#e2401c;" class="responsedata-error-message">' . $valid_email . '</p>',
+                'message' => '<p style="color:#e2401c;" class="notifima-error-message">' . $valid_email . '</p>',
             );
             wp_send_json( $response );
             return;
@@ -220,22 +211,38 @@ class Ajax {
 
         if ( $product_id && ! empty( $product_id ) && ! empty( $customer_email ) ) {
             $product_id = ( $variation_id && $variation_id > 0 ) ? $variation_id : $product_id;
-            
+
             if ( Subscriber::is_already_subscribed( $customer_email, $product_id ) ) {
-                $button_css = Notifima()->frontend->subscribe_button_styles();
+                $button_css              = Notifima()->frontend->subscribe_button_styles();
                 $unsubscribe_button_html = '<button class="notifima-unsubscribe unsubscribe-button" style="' . $button_css . '">' . $settings_array['unsubscribe_button_text'] . '</button>';
+
+                $email_exist = $settings_array['alert_email_exist'];
+                // Prepare email exist data.
+                $email_exist = str_replace( '%product_title%', $product_title, $email_exist );
+                $email_exist = str_replace( '%customer_email%', $customer_email, $email_exist );
 
                 $response = array(
                     'status'  => false,
-                    'message' => '<div class="registered-message">' . $email_exist . '</div>' . $unsubscribe_button_html . '<input type="hidden" class="notifima_subscribed_email" value="' . esc_attr( $customer_email ) . '" />' . '<input type="hidden" class="notifima_product_id" value="' . esc_attr( $product_id ) . '" />' . '<input type="hidden" class="notifima_variation_id" value="' . esc_attr( $variation_id ) . '" />',
+                    'message' => sprintf(
+                        '<div class="registered-message">%s</div>%s<input type="hidden" class="notifima_subscribed_email" value="%s" /><input type="hidden" class="notifima_product_id" value="%s" /><input type="hidden" class="notifima_variation_id" value="%s" />',
+                        esc_html( $email_exist ),
+                        $unsubscribe_button_html,
+                        esc_attr( $customer_email ),
+                        esc_attr( $product_id ),
+                        esc_attr( $variation_id )
+                    ),
                 );
-
             } else {
                 $eligible = apply_filters( 'notifima_eligible_to_subscribe', $response, $customer_email, $product_id );
 
                 if ( $eligible['status'] ) {
                     Subscriber::insert_subscriber( $customer_email, $product_id );
                     Subscriber::insert_subscriber_email_trigger( wc_get_product( $product_id ), $customer_email );
+                    $success_msg = $settings_array['alert_success'];
+                    // Prepare success msg data.
+                    $success_msg = str_replace( '%product_title%', $product_title, $success_msg );
+                    $success_msg = str_replace( '%customer_email%', $customer_email, $success_msg );
+
                     $response = array(
                         'status'  => true,
                         'message' => '<div class="registered-message">' . $success_msg . '</div>',
@@ -257,6 +264,12 @@ class Ajax {
         die();
     }
 
+    /**
+     * Validate email address format.
+     *
+     * @param string $email The email address to validate.
+     * @return bool True if the email is valid, false otherwise.
+     */
     public function is_email_valid( $email ) {
         return (bool) preg_match( '/^([a-zA-Z0-9_\.\-\+])+@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/', $email );
     }

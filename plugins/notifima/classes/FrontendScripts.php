@@ -301,7 +301,7 @@ class FrontendScripts {
 
         $button_css = Notifima()->frontend->subscribe_button_styles();
 
-        $subscribe_button_html   = '<button style="' . $button_css . '" class="notifima-subscribe notifima-button alert_button_hover" name="alert_button">' . $button_settings['button_text'] . '</button>';
+        $subscribe_button_html = '<button style="' . $button_css . '" class="notifima-subscribe notifima-button alert_button_hover" name="alert_button">' . $button_settings['button_text'] . '</button>';
 
         $localize_scripts = apply_filters(
             'notifima_localize_scripts',
@@ -309,12 +309,12 @@ class FrontendScripts {
 				'notifima-frontend-script'                 => array(
 					'object_name' => 'frontendLocalizer',
 					'data'        => array(
-						'ajax_url'                  => admin_url( 'admin-ajax.php', 'relative' ),
-						'nonce'                     => wp_create_nonce( 'notifima-security-nonce' ),
-						'additional_fields'         => apply_filters( 'notifima_subscription_form_additional_fields', '' ),
-						'button_html'               => $subscribe_button_html,
-						'processing'                => __( 'Processing...', 'notifima' ),
-						'recaptcha_enabled'         => apply_filters( 'notifima_recaptcha_enabled', false ),
+						'ajax_url'          => admin_url( 'admin-ajax.php', 'relative' ),
+						'nonce'             => wp_create_nonce( 'notifima-security-nonce' ),
+						'additional_fields' => apply_filters( 'notifima_subscription_form_additional_fields', '' ),
+						'button_html'       => $subscribe_button_html,
+						'processing'        => __( 'Processing...', 'notifima' ),
+						'recaptcha_enabled' => apply_filters( 'notifima_recaptcha_enabled', false ),
 					),
 				),
                 'notifima-admin-script'                    => array(
