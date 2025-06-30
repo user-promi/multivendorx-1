@@ -99,9 +99,9 @@ jQuery( function ( $ ) {
         const unsubscribeRequest = {
             action: 'unsubscribe_users',
             nonce: frontendLocalizer.nonce,
-            customer_email: form.find( '.notifima_subscribed_email' ).val(),
-            product_id: form.find( '.notifima_product_id' ).val(),
-            variation_id: form.find( '.notifima_variation_id' ).val(),
+            customer_email: form.find( '.notifima-subscribed-email' ).val(),
+            product_id: form.find( '.notifima-product-id' ).val(),
+            variation_id: form.find( '.notifima-variation-id' ).val(),
         };
 
         // Request for unsubscribe user.

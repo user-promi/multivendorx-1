@@ -91,7 +91,7 @@ class Admin {
                     'name'   => __( 'Subscriber List', 'notifima' ) . $pro_sticker,
                     'subtab' => '',
                 ),
-                'manage-stock'     => array(
+                'inventory-manager'     => array(
                     'name'   => __( 'Inventory Manager', 'notifima' ) . $pro_sticker,
                     'subtab' => '',
                 ),

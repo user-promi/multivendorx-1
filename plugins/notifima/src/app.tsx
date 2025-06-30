@@ -15,7 +15,7 @@ const Route = () => {
             { currentTab.get( 'tab' ) === 'subscribers-list' && (
                 <SubscribersList />
             ) }
-            { currentTab.get( 'tab' ) === 'manage-stock' && <ManageStock /> }
+            { currentTab.get( 'tab' ) === 'inventory-manager' && <ManageStock /> }
         </>
     );
 };

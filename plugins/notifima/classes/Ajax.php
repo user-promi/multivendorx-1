@@ -224,7 +224,7 @@ class Ajax {
                 $response = array(
                     'status'  => false,
                     'message' => sprintf(
-                        '<div class="registered-message">%s</div>%s<input type="hidden" class="notifima_subscribed_email" value="%s" /><input type="hidden" class="notifima_product_id" value="%s" /><input type="hidden" class="notifima_variation_id" value="%s" />',
+                        '<div class="registered-message">%s</div>%s<input type="hidden" class="notifima-subscribed-email" value="%s" /><input type="hidden" class="notifima-product-id" value="%s" /><input type="hidden" class="notifima-variation-id" value="%s" />',
                         esc_html( $email_exist ),
                         $unsubscribe_button_html,
                         esc_attr( $customer_email ),
