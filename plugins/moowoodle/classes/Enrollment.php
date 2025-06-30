@@ -120,13 +120,13 @@ class Enrollment {
 		);
 
 		$enrollment_data = array(
-			'user_id'       => $user_data['purchaser_id'],
-			'user_email'    => $user_data['user_email'],
-			'course_id'     => $course_data['course_id'],
-			'order_id'      => $order_data['order_id'],
-			'item_id'       => $order_data['item_id'],
-			'status'        => 'enrolled',
-			'enrolled_date' => current_time( 'mysql' ),
+			'user_id'         => $user_data['purchaser_id'],
+			'user_email'      => $user_data['user_email'],
+			'course_id'       => $course_data['course_id'],
+			'order_id'        => $order_data['order_id'],
+			'item_id'         => $order_data['item_id'],
+			'status'          => 'enrolled',
+			'enrollment_date' => current_time( 'mysql' ),
 		);
 
 		$existing_enrollment = $this->get_enrollments_information(

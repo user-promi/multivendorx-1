@@ -72,7 +72,6 @@ class MooWoodle {
         register_deactivation_hook( $file, array( $this, 'deactivate' ) );
 
         // initialise plugin.
-        add_action( 'admin_menu', array( Admin::class, 'add_menu' ) );
         add_action( 'before_woocommerce_init', array( $this, 'declare_compatibility' ) );
         add_action( 'woocommerce_loaded', array( $this, 'load_plugin' ) );
         add_action( 'plugins_loaded', array( $this, 'is_woocommerce_loaded' ) );

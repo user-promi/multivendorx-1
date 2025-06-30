@@ -114,9 +114,9 @@ class Installer {
             `order_id` bigint(20) NOT NULL,
             `item_id` bigint(20) NOT NULL,
             `status` varchar(20) NOT NULL,
-            `enrolled_date` timestamp NULL DEFAULT NULL,
-            `unenrolled_date` timestamp NULL DEFAULT NULL,
-            `reason` text DEFAULT NULL,
+            `enrollment_date` timestamp NULL DEFAULT NULL,
+            `unenrollment_date` timestamp NULL DEFAULT NULL,
+            `unenrollment_reason` text DEFAULT NULL,
             `group_item_id` bigint(20) NOT NULL,
             PRIMARY KEY (`id`)
         ) $collate;";
@@ -154,7 +154,6 @@ class Installer {
         dbDelta( $sql_category );
         dbDelta( $sql_course );
     }
-
 
     /**
      * Migrate database.
@@ -344,13 +343,13 @@ class Installer {
             }
 
             $enrollment_data = array(
-                'user_id'       => $customer->ID,
-                'user_email'    => $customer->user_email,
-                'course_id'     => (int) $course['id'],
-                'order_id'      => $order->get_id(),
-                'item_id'       => $item->get_id(),
-                'status'        => in_array( $linked_course_id, $unenrolled_courses, true ) ? 'unenrolled' : 'enrolled',
-                'enrolled_date' => $enrollment_date,
+                'user_id'         => $customer->ID,
+                'user_email'      => $customer->user_email,
+                'course_id'       => (int) $course['id'],
+                'order_id'        => $order->get_id(),
+                'item_id'         => $item->get_id(),
+                'status'          => in_array( $linked_course_id, $unenrolled_courses, true ) ? 'unenrolled' : 'enrolled',
+                'enrollment_date' => $enrollment_date,
             );
 
             \MooWoodle\Enrollment::update_enrollment( $enrollment_data );        }
