@@ -6,7 +6,7 @@ import axios from 'axios';
 interface Course {
     user_name?: string;
     course_name?: string;
-    enrolment_date?: string;
+    enrolled_date?: string;
     password?: string;
     moodle_url?: string;
 }
@@ -88,7 +88,7 @@ const MyCourse: React.FC = () => {
                     {course.course_name || __('Unknown Course', 'moowoodle')}
                 </td>
                 <td data-label={__('Enrolment Date', 'moowoodle')}>
-                    {course.enrolment_date ||
+                    {course.enrolled_date ||
                         __('No Date Available', 'moowoodle')}
                 </td>
                 <td
