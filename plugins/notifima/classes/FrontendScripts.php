@@ -301,7 +301,7 @@ class FrontendScripts {
 
         $button_css = Notifima()->frontend->subscribe_button_styles();
 
-        $subscribe_button_html = '<button style="' . $button_css . '" class="notifima-subscribe notifima-button alert_button_hover" name="alert_button">' . $button_settings['button_text'] . '</button>';
+        $subscribe_button_html = '<button style="' . $button_css . '" class="notifima-subscribe notifima-button subscribe-button-hover">' . $button_settings['button_text'] . '</button>';
 
         $localize_scripts = apply_filters(
             'notifima_localize_scripts',
@@ -314,7 +314,6 @@ class FrontendScripts {
 						'additional_fields' => apply_filters( 'notifima_subscription_form_additional_fields', '' ),
 						'button_html'       => $subscribe_button_html,
 						'processing'        => __( 'Processing...', 'notifima' ),
-						'recaptcha_enabled' => apply_filters( 'notifima_recaptcha_enabled', false ),
 					),
 				),
                 'notifima-admin-script'                    => array(
@@ -329,12 +328,6 @@ class FrontendScripts {
 						'tab_name'                 => __( 'Notifima', 'notifima' ),
 						'settings_databases_value' => $settings_databases_value,
 						'pro_url'                  => esc_url( NOTIFIMA_PRO_SHOP_URL ),
-						/* translators: %s: Link to the Pro version. */
-						'is_double_optin_free'     => sprintf( __( 'Upgrade to <a href="%s" target="_blank"><span class="pro-strong">Pro</span></a> to enable Double Opt-in flow for subscription confirmation.', 'notifima' ), NOTIFIMA_PRO_SHOP_URL ),
-						'is_double_optin_pro'      => __( 'Enable Double Opt-in flow for subscription confirmation.', 'notifima' ),
-						/* translators: %s: Link to the Pro version. */
-						'is_recaptcha_enable_free' => sprintf( __( 'Upgrade to <a href="%s" target="_blank"><span class="pro-strong">Pro</span></a> for unlocking reCAPTCHA for out-of-stock form subscriptions.', 'notifima' ), NOTIFIMA_PRO_SHOP_URL ),
-						'is_recaptcha_enable_pro'  => __( 'Enable this to prevent automated bots from submitting forms. Get your v3 reCAPTCHA site key and secret key from <a href="https://developers.google.com/recaptcha" target="_blank">here</a>.', 'notifima' ),
 					),
                 ),
 				'notifima-stock-notification-block-script' => array(

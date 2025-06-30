@@ -50,7 +50,7 @@ if ( ! class_exists( 'AdminNewSubscriberEmail' ) ) :
          * @return void
          */
         public function __construct() {
-            $this->id             = 'notifima_subscriber_confimation_admin';
+            $this->id             = 'notifima_admin_alert_new_subscriber';
             $this->title          = __( 'Alert admin', 'notifima' );
             $this->description    = __( 'Admin will get an alert when customer subscribe any out of stock product', 'notifima' );
             $this->template_html  = 'emails/html/AdminNewSubscriberEmail.php';

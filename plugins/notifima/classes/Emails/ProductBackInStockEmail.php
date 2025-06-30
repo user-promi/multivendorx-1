@@ -51,7 +51,7 @@ if ( ! class_exists( 'ProductBackInStockEmail' ) ) :
          */
         public function __construct() {
 
-            $this->id             = 'notifima_subscribe_product_back_stock';
+            $this->id             = 'notifima_product_back_stock';
             $this->title          = __( 'Alert Subscriber', 'notifima' );
             $this->description    = __( 'Alert customer when their subscribed product becomes in stock', 'notifima' );
             $this->template_html  = 'emails/html/ProductBackInStockEmail.php';

@@ -133,7 +133,7 @@ class FrontEnd {
         }
         if ( $button_onhover_style ) {
             echo '<style>
-                button.alert_button_hover:hover, button.unsubscribe_button:hover {
+                button.subscribe-button-hover:hover, button.unsubscribe_button:hover {
                 ' . esc_html( $button_onhover_style ) . '
                 } 
             </style>';
@@ -266,7 +266,7 @@ class FrontEnd {
 
         $button_css = $this->subscribe_button_styles();
 
-        $button_html = '<button style="' . $button_css . '" class="notifima-subscribe notifima-button alert_button_hover" name="alert_button">' . esc_html( $button_settings['button_text'] ) . '</button>';
+        $button_html = '<button style="' . $button_css . '" class="notifima-subscribe notifima-button subscribe-button-hover">' . esc_html( $button_settings['button_text'] ) . '</button>';
 
         $interested_person = get_post_meta( $variation ? $variation->get_id() : $product->get_id(), 'no_of_subscribers', true );
         $interested_person = ( isset( $interested_person ) && $interested_person > 0 ) ? $interested_person : 0;

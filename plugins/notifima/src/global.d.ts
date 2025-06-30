@@ -17,10 +17,6 @@ declare global {
         tab_name: string;
         settings_databases_value: any; // Use a more specific type if possible
         pro_url: string;
-        is_double_optin_free: string;
-        is_double_optin_pro: string;
-        is_recaptcha_enable_free: string;
-        is_recaptcha_enable_pro: string;
         pro_settings_list: any;
     }
 
