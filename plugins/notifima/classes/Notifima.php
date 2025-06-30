@@ -15,7 +15,7 @@ use Automattic\WooCommerce\Utilities\FeaturesUtil;
  *
  * @class       Main class
  * @version     PRODUCT_VERSION
- * @author      MultivendorX
+ * @author      MultiVendorX
  */
 class Notifima {
 
@@ -209,6 +209,7 @@ class Notifima {
      * @return array
      */
     public function setup_email_class( $emails ) {
+
         $emails['Admin_New_Subscriber_Email']    = new Emails\AdminNewSubscriberEmail();
         $emails['Subscriber_Confirmation_Email'] = new Emails\SubscriberConfirmationEmail();
         $emails['Product_Back_In_Stock_Email']   = new Emails\ProductBackInStockEmail();
@@ -346,14 +347,14 @@ class Notifima {
             '<a href="https://notifima.com/docs/" target="_blank">' . __( 'Docs', 'notifima' ) . '</a>',
         );
         if ( ! Utill::is_khali_dabba() ) {
-            $links['go_pro'] = '<a href="' . NOTIFIMA_PRO_SHOP_URL . '" class="notifima-pro-plugin" target="_blank">' . __( 'Get Pro', 'notifima' ) . '</a>';
+            $links['go_pro'] = '<a href="' . NOTIFIMA_PRO_SHOP_URL . '" class="notifima-pro-plugin" target="_blank" style="font-weight: 700;background: linear-gradient(110deg, rgb(63, 20, 115) 0%, 25%, rgb(175 59 116) 50%, 75%, rgb(219 75 84) 100%);-webkit-background-clip: text;-webkit-text-fill-color: transparent;">' . __( 'Upgrade to Pro', 'notifima' ) . '</a>';            
         }
 
         return array_merge( $plugin_links, $links );
     }
 
     /**
-     * Initializes the MultiVendorX class.
+     * Initializes the Notifima class.
      * Checks for an existing instance
      * And if it doesn't find one, create it.
      *

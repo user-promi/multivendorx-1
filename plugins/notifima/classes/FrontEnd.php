@@ -14,7 +14,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * @class       Frontend class
  * @version     PRODUCT_VERSION
- * @author      MultivendorX
+ * @author      MultiVendorX
  */
 class FrontEnd {
     /**
@@ -46,7 +46,9 @@ class FrontEnd {
             'style' => true,
             'name'  => true,
         ),
-        'script' => array(),
+        'script' => array(
+            'src'   => true
+        ),
     );
 
     /**
@@ -136,6 +138,32 @@ class FrontEnd {
                 } 
             </style>';
         }
+    }
+
+    public function subscribe_button_styles() {
+        $settings_array  = Utill::get_form_settings_array();
+        $button_settings = $settings_array['customize_btn'];
+
+        $border_size = ( ! empty( $button_settings['button_border_size'] ) ) ? $button_settings['button_border_size'] . 'px' : '1px';
+
+        $button_css = '';
+        if ( ! empty( $button_settings['button_background_color'] ) ) {
+            $button_css .= 'background:' . $button_settings['button_background_color'] . '; ';
+        }
+        if ( ! empty( $button_settings['button_text_color'] ) ) {
+            $button_css .= 'color:' . $button_settings['button_text_color'] . '; ';
+        }
+        if ( ! empty( $button_settings['button_border_color'] ) ) {
+            $button_css .= 'border: ' . $border_size . ' solid ' . $button_settings['button_border_color'] . '; ';
+        }
+        if ( ! empty( $button_settings['button_font_size'] ) ) {
+            $button_css .= 'font-size:' . $button_settings['button_font_size'] . 'px; ';
+        }
+        if ( ! empty( $button_settings['button_border_redious'] ) ) {
+            $button_css .= 'border-radius:' . $button_settings['button_border_redious'] . 'px;';
+        }
+
+        return $button_css;
     }
 
     /**
@@ -231,23 +259,7 @@ class FrontEnd {
 
         $alert_text_html = '<h5 style="color:' . esc_html( $settings_array['alert_text_color'] ) . '" class="subscribe_for_interest_text">' . esc_html( $settings_array['alert_text'] ) . '</h5>';
 
-        $button_css  = '';
-        $border_size = ( ! empty( $button_settings['button_border_size'] ) ) ? esc_html( $button_settings['button_border_size'] ) . 'px' : '1px';
-        if ( ! empty( $button_settings['button_background_color'] ) ) {
-            $button_css .= 'background:' . esc_html( $button_settings['button_background_color'] ) . ';';
-        }
-        if ( ! empty( $button_settings['button_text_color'] ) ) {
-            $button_css .= 'color:' . esc_html( $button_settings['button_text_color'] ) . ';';
-        }
-        if ( ! empty( $button_settings['button_border_color'] ) ) {
-            $button_css .= 'border: ' . $border_size . ' solid ' . esc_html( $button_settings['button_border_color'] ) . ';';
-        }
-        if ( ! empty( $button_settings['button_font_size'] ) ) {
-            $button_css .= 'font-size:' . esc_html( $button_settings['button_font_size'] ) . 'px;';
-        }
-        if ( ! empty( $button_settings['button_border_radious'] ) ) {
-            $button_css .= 'border-radius:' . esc_html( $button_settings['button_border_radious'] ) . 'px;';
-        }
+        $button_css  = $this->subscribe_button_styles();
 
         $button_html = '<button style="' . $button_css . '" class="notifima-subscribe notifima-button alert_button_hover" name="alert_button">' . esc_html( $button_settings['button_text'] ) . '</button>';
 

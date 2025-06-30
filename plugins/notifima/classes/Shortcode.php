@@ -14,7 +14,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * @class       Shortcode class
  * @version     PRODUCT_VERSION
- * @author      MultivendorX
+ * @author      MultiVendorX
  */
 class Shortcode {
 

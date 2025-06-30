@@ -14,7 +14,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * @class       FrontendScripts class
  * @version     PRODUCT_VERSION
- * @author      MultivendorX
+ * @author      MultiVendorX
  */
 class FrontendScripts {
 
@@ -299,24 +299,7 @@ class FrontendScripts {
         $settings_array  = Utill::get_form_settings_array();
         $button_settings = $settings_array['customize_btn'];
 
-        $border_size = ( ! empty( $button_settings['button_border_size'] ) ) ? $button_settings['button_border_size'] . 'px' : '1px';
-
-        $button_css = '';
-        if ( ! empty( $button_settings['button_background_color'] ) ) {
-            $button_css .= 'background:' . $button_settings['button_background_color'] . '; ';
-        }
-        if ( ! empty( $button_settings['button_text_color'] ) ) {
-            $button_css .= 'color:' . $button_settings['button_text_color'] . '; ';
-        }
-        if ( ! empty( $button_settings['button_border_color'] ) ) {
-            $button_css .= 'border: ' . $border_size . ' solid ' . $button_settings['button_border_color'] . '; ';
-        }
-        if ( ! empty( $button_settings['button_font_size'] ) ) {
-            $button_css .= 'font-size:' . $button_settings['button_font_size'] . 'px; ';
-        }
-        if ( ! empty( $button_settings['button_border_redious'] ) ) {
-            $button_css .= 'border-radius:' . $button_settings['button_border_redious'] . 'px;';
-        }
+        $button_css = Notifima()->frontend->subscribe_button_styles();
 
         $subscribe_button_html   = '<button style="' . $button_css . '" class="notifima-subscribe notifima-button alert_button_hover" name="alert_button">' . $button_settings['button_text'] . '</button>';
 

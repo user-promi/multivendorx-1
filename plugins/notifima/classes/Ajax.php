@@ -14,7 +14,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * @class       Ajax class
  * @version     PRODUCT_VERSION
- * @author      MultivendorX
+ * @author      MultiVendorX
  */
 class Ajax {
 
@@ -189,28 +189,6 @@ class Ajax {
         $response = apply_filters( 'notifima_handle_subscription_form_data', $response, $request_data );
 
         $settings_array  = Utill::get_form_settings_array();
-        $button_settings = $settings_array['customize_btn'];
-
-        $border_size = ( ! empty( $button_settings['button_border_size'] ) ) ? $button_settings['button_border_size'] . 'px' : '1px';
-
-        $button_css = '';
-        if ( ! empty( $button_settings['button_background_color'] ) ) {
-            $button_css .= 'background:' . $button_settings['button_background_color'] . '; ';
-        }
-        if ( ! empty( $button_settings['button_text_color'] ) ) {
-            $button_css .= 'color:' . $button_settings['button_text_color'] . '; ';
-        }
-        if ( ! empty( $button_settings['button_border_color'] ) ) {
-            $button_css .= 'border: ' . $border_size . ' solid ' . $button_settings['button_border_color'] . '; ';
-        }
-        if ( ! empty( $button_settings['button_font_size'] ) ) {
-            $button_css .= 'font-size:' . $button_settings['button_font_size'] . 'px; ';
-        }
-        if ( ! empty( $button_settings['button_border_redious'] ) ) {
-            $button_css .= 'border-radius:' . $button_settings['button_border_redious'] . 'px;';
-        }
-
-        $unsubscribe_button_html = '<button class="notifima-unsubscribe unsubscribe-button" style="' . $button_css . '">' . $settings_array['unsubscribe_button_text'] . '</button>';
 
         $valid_email = $settings_array['valid_email'];
         $email_exist = $settings_array['alert_email_exist'];
@@ -244,6 +222,9 @@ class Ajax {
             $product_id = ( $variation_id && $variation_id > 0 ) ? $variation_id : $product_id;
             
             if ( Subscriber::is_already_subscribed( $customer_email, $product_id ) ) {
+                $button_css = Notifima()->frontend->subscribe_button_styles();
+                $unsubscribe_button_html = '<button class="notifima-unsubscribe unsubscribe-button" style="' . $button_css . '">' . $settings_array['unsubscribe_button_text'] . '</button>';
+
                 $response = array(
                     'status'  => false,
                     'message' => '<div class="registered-message">' . $email_exist . '</div>' . $unsubscribe_button_html . '<input type="hidden" class="notifima_subscribed_email" value="' . esc_attr( $customer_email ) . '" />' . '<input type="hidden" class="notifima_product_id" value="' . esc_attr( $product_id ) . '" />' . '<input type="hidden" class="notifima_variation_id" value="' . esc_attr( $variation_id ) . '" />',

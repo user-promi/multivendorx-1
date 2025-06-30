@@ -14,7 +14,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * @class       Admin class
  * @version     PRODUCT_VERSION
- * @author      MultivendorX
+ * @author      MultiVendorX
  */
 class Admin {
 
@@ -23,7 +23,7 @@ class Admin {
      */
     public function __construct() {
         // admin pages manu and submenu.
-        add_action( 'admin_menu', array( $this, 'add_settings_page' ), 100 );
+        add_action( 'admin_menu', array( $this, 'add_menus' ), 10 );
         // admin script and style.
         add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_script' ) );
 
@@ -40,75 +40,110 @@ class Admin {
         add_filter( 'bulk_actions-edit-product', array( $this, 'register_subscribers_bulk_actions' ) );
         add_filter( 'handle_bulk_actions-edit-product', array( $this, 'subscribers_bulk_action_handler' ), 10, 3 );
         add_action( 'admin_notices', array( $this, 'subscribers_bulk_action_admin_notice' ) );
-        add_action( 'admin_print_styles-plugins.php', array( $this, 'admin_plugin_page_style' ) );
 
-        // For translation.
+        // Allow URL.
+        add_filter( 'allowed_redirect_hosts', array( $this, 'allow_notifima_redirect_host' ) );
+        // For loco translation.
         add_action( 'load_script_textdomain_relative_path', array( $this, 'textdomain_relative_path' ), 10, 2 );
     }
 
     /**
      * Add options page.
      */
-    public function add_settings_page() {
-        $pro_sticker = ! Utill::is_khali_dabba() ?
-        '<span 
-            class="notifima-pro-tag"
-            style="
-            font-size: 0.5rem;
-            background: #e35047;
-            padding: 0.125rem 0.5rem;
-            color: #F9F8FB;
-            font-weight: 700;
-            line-height: 1;
-            position: absolute;
-            margin-left: 0.25rem;
-            border-radius: 2rem 0;
-            right: 0.25rem;
-            top: 50%;
-            transform: translateY(-50%);
-            "
-        > Pro </span>' : '';
+    public function add_menus() {
+        if ( is_admin() ) {
+            add_menu_page(
+                'Notifima',
+                'Notifima',
+                'manage_options',
+                'notifima',
+                array( $this, 'create_setting_page' ),
+                'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMCAyMCI+PGcgZmlsbD0iI2E3YWFhZCIgZmlsbC1ydWxlPSJub256ZXJvIj4KICAgICAgICAgICAgPHBhdGggZD0iTTE5LjksNS43YzAuMiwwLjktMC4zLDEuOC0xLjEsMmMtMC4yLDAuMS0wLjUsMC4xLTAuNywwYy0wLjYtMC4xLTEuMS0wLjUtMS4zLTEuMiAgICBjLTAuMi0wLjYsMC0xLjIsMC40LTEuNmMwLjItMC4yLDAuNC0wLjMsMC43LTAuNEMxOC44LDQuMywxOS43LDQuOCwxOS45LDUuN3ogTTE3LjgsOC45bC0zLjIsOS45Yy0wLjIsMC41LTAuNywwLjctMS4yLDAuNgogICAgICAgICAgICBMMC42LDE1LjJDMC4xLDE1LTAuMSwxNC41LDAsMTRMNC4zLDEuMmMwLjItMC41LDAuNy0wLjcsMS4yLTAuNkwxNiw0LjFjLTAuNSwwLjctMC43LDEuNy0wLjUsMi42QzE1LjgsNy45LDE2LjcsOC43LDE3LjgsOC45egogICAgICAgICAgICBNMTAuOCw0LjljMC41LDAuMiwxLDAuNSwxLjUsMC43YzAuMi0wLjQsMC0wLjktMC40LTEuMUMxMS40LDQuNCwxMSw0LjUsMTAuOCw0Ljl6IE05LjUsMTUuMmMtMC45LTAuMS0xLjctMC4yLTIuNi0wLjIKICAgICAgICAgICAgYzAuMSwwLjcsMC42LDEuMiwxLjIsMS4yQzguNywxNi4yLDkuMywxNS44LDkuNSwxNS4yeiBNMTIuNyw5YzAtMS43LTEuNC0zLjEtMy4xLTMuMmMtMS4yLDAtMi4yLDAuNS0yLjgsMS41CiAgICAgICAgICAgIGMtMC42LDAuOS0xLjEsMS44LTEuNywyLjdjLTAuMSwwLjEtMC4yLDAuMi0wLjMsMC4xYy0wLjUtMC4yLTAuOCwwLTEuMSwwLjZjLTAuMiwwLjQsMCwwLjgsMC40LDFjMC43LDAuNCwxLjQsMC43LDIuMiwxLjEKICAgICAgICAgICAgYzEuNCwwLjcsMi44LDEuNCw0LjIsMi4xYzAuNCwwLjIsMC44LDAuMSwxLjEtMC40YzAtMC4xLDAuMS0wLjEsMC4xLTAuMmMwLjEtMC4zLDAtMC43LTAuMy0wLjljLTAuMi0wLjEtMC4yLTAuMi0wLjEtMC40CiAgICAgICAgICAgIGMwLjQtMSwwLjgtMiwxLjEtM0MxMi43LDkuNywxMi43LDksMTIuNyw5eiIvPjwvZz48L3N2Zz4=',
+                50
+            );
 
-        add_menu_page(
-            'Notifima',
-            'Notifima',
-            'manage_options',
-            'notifima',
-            array( $this, 'create_setting_page' ),
-            'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMCAyMCI+PGcgZmlsbD0iI2E3YWFhZCIgZmlsbC1ydWxlPSJub256ZXJvIj4KICAgICAgICAgICAgPHBhdGggZD0iTTE5LjksNS43YzAuMiwwLjktMC4zLDEuOC0xLjEsMmMtMC4yLDAuMS0wLjUsMC4xLTAuNywwYy0wLjYtMC4xLTEuMS0wLjUtMS4zLTEuMiAgICBjLTAuMi0wLjYsMC0xLjIsMC40LTEuNmMwLjItMC4yLDAuNC0wLjMsMC43LTAuNEMxOC44LDQuMywxOS43LDQuOCwxOS45LDUuN3ogTTE3LjgsOC45bC0zLjIsOS45Yy0wLjIsMC41LTAuNywwLjctMS4yLDAuNgogICAgICAgICAgICBMMC42LDE1LjJDMC4xLDE1LTAuMSwxNC41LDAsMTRMNC4zLDEuMmMwLjItMC41LDAuNy0wLjcsMS4yLTAuNkwxNiw0LjFjLTAuNSwwLjctMC43LDEuNy0wLjUsMi42QzE1LjgsNy45LDE2LjcsOC43LDE3LjgsOC45egogICAgICAgICAgICBNMTAuOCw0LjljMC41LDAuMiwxLDAuNSwxLjUsMC43YzAuMi0wLjQsMC0wLjktMC40LTEuMUMxMS40LDQuNCwxMSw0LjUsMTAuOCw0Ljl6IE05LjUsMTUuMmMtMC45LTAuMS0xLjctMC4yLTIuNi0wLjIKICAgICAgICAgICAgYzAuMSwwLjcsMC42LDEuMiwxLjIsMS4yQzguNywxNi4yLDkuMywxNS44LDkuNSwxNS4yeiBNMTIuNyw5YzAtMS43LTEuNC0zLjEtMy4xLTMuMmMtMS4yLDAtMi4yLDAuNS0yLjgsMS41CiAgICAgICAgICAgIGMtMC42LDAuOS0xLjEsMS44LTEuNywyLjdjLTAuMSwwLjEtMC4yLDAuMi0wLjMsMC4xYy0wLjUtMC4yLTAuOCwwLTEuMSwwLjZjLTAuMiwwLjQsMCwwLjgsMC40LDFjMC43LDAuNCwxLjQsMC43LDIuMiwxLjEKICAgICAgICAgICAgYzEuNCwwLjcsMi44LDEuNCw0LjIsMi4xYzAuNCwwLjIsMC44LDAuMSwxLjEtMC40YzAtMC4xLDAuMS0wLjEsMC4xLTAuMmMwLjEtMC4zLDAtMC43LTAuMy0wLjljLTAuMi0wLjEtMC4yLTAuMi0wLjEtMC40CiAgICAgICAgICAgIGMwLjQtMSwwLjgtMiwxLjEtM0MxMi43LDkuNywxMi43LDksMTIuNyw5eiIvPjwvZz48L3N2Zz4=',
-            50
-        );
+            $pro_sticker = ! Utill::is_khali_dabba() ?
+            '<span 
+                class="notifima-pro-tag"
+                style="
+                font-size: 0.5rem;
+                background: #e35047;
+                padding: 0.125rem 0.5rem;
+                color: #F9F8FB;
+                font-weight: 700;
+                line-height: 1;
+                position: absolute;
+                margin-left: 0.25rem;
+                border-radius: 2rem 0;
+                right: 0.25rem;
+                top: 50%;
+                transform: translateY(-50%);
+                "
+            > Pro </span>' : '';
 
-        add_submenu_page(
-            'notifima',
-            __( 'Settings', 'notifima' ),
-            __( 'Settings', 'notifima' ),
-            'manage_options',
-            'notifima#&tab=settings&subtab=appearance',
-            '__return_null'
-        );
 
-        add_submenu_page(
-            'notifima',
-            __( 'Subscriber List', 'notifima' ),
-            // Translators: Subscriber list with a pro sticker.Variable $pro_sticker contains the sticker text.
-            __( 'Subscriber List ', 'notifima' ) . $pro_sticker,
-            'manage_woocommerce',
-            'notifima#&tab=subscribers-list',
-            '__return_null'
-        );
+            // Array contain notifima submenu.
+            $submenus = array(
+                'settings'        => array(
+                    'name'   => __( 'Settings', 'notifima' ),
+                    'subtab' => 'appearance',
+                ),
+                'subscribers-list'      => array(
+                    'name'   => __( 'Subscriber List', 'notifima' ) . $pro_sticker,
+                    'subtab' => '',
+                ),
+                'manage-stock'         => array(
+                    'name'   => __( 'Inventory Manager', 'notifima' ) . $pro_sticker,
+                    'subtab' => '',
+                ),
+            );
 
-        add_submenu_page(
-            'notifima',
-            __( 'Inventory Manager', 'notifima' ),
-            // Translators: Inventory Manager list with a pro sticker.Variable $pro_sticker contains the sticker text.
-            __( 'Inventory Manager', 'notifima' ) . $pro_sticker,
-            'manage_woocommerce',
-            'notifima#&tab=manage-stock',
-            '__return_null'
-        );
+            foreach ( $submenus as $slug => $submenu ) {
+                // prepare subtab if subtab is exist.
+                $subtab = '';
 
-        remove_submenu_page( 'notifima', 'notifima' );
+                if ( $submenu['subtab'] ) {
+                    $subtab = '&subtab=' . $submenu['subtab'];
+                }
+
+                add_submenu_page(
+                    'notifima',
+                    $submenu['name'],
+                    "<span style='position: relative; display: block; width: 100%;' class='admin-menu'>" . $submenu['name'] . '</span>',
+                    'manage_options',
+                    'notifima#&tab=' . $slug . $subtab,
+                    '_-return_null'
+                );
+            }
+
+            // Register upgrade to pro submenu page.
+            if ( ! Utill::is_khali_dabba() ) {
+                add_submenu_page(
+                    'notifima',
+                    __( 'Upgrade to Pro', 'notifima' ),
+                    '<style>
+                        a:has(.upgrade-to-pro){
+                            background: linear-gradient(-28deg, #f6a091, #bb939c, #5f6eb3) !important;
+                            color: White !important;
+                        };
+                    </style>
+                    <div class="upgrade-to-pro"><i class="dashicons dashicons-awards"></i>' . esc_html__( 'Upgrade to Pro', 'notifima' ) . '</div> ',
+                    'manage_options',
+                    '',
+                    array( self::class, 'handle_external_redirects' )
+                );
+            }
+
+            remove_submenu_page( 'notifima', 'notifima' );
+        }
+    }
+
+    /**
+	 * Add Option page.
+	 */
+	public static function add_submenu() {
+
+        
     }
 
     /**
@@ -170,29 +205,6 @@ class Admin {
             // Translators: This message is to display removed subscribers count for the product.
             printf( '<div id="message" class="updated fade"><p>' . esc_html( _n( 'Removed subscribers from %s product.', 'Removed subscribers from %s products.', $bulk_remove_count, 'notifima' ) ) . '</p></div>', esc_html( $bulk_remove_count ) );
         }
-    }
-
-    /**
-     * Set style for admin's setting pages.
-     *
-     * @return void
-     */
-    public function admin_plugin_page_style() {
-        ?>
-        <style>
-            a.notifima-pro-plugin {
-                font-weight: 700;
-                background: linear-gradient( 110deg, rgb( 63, 20, 115 ) 0%, 25%, rgb( 175 59 116 ) 50%, 75%, rgb( 219 75 84 ) 100% );
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-            } 
-            a.notifima-pro-plugin:hover {
-                background: #3f1473;
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-            } 
-        </style>
-        <?php
     }
 
     /**
@@ -301,5 +313,31 @@ class Admin {
         }
 
         return $path;
+    }
+
+    /**
+	 * Redirct to pro shop url.
+     *
+	 * @return never
+	 */
+	public static function handle_external_redirects() {
+		wp_safe_redirect( esc_url_raw( NOTIFIMA_PRO_SHOP_URL ) );
+		exit;
+	}
+
+    /**
+     * Allow Notifima domain for safe redirection using wp_safe_redirect().
+     *
+     * @param string[] $hosts List of allowed hosts.
+     * @return string[] Modified list with Notifima domain included.
+     */
+    public function allow_notifima_redirect_host( $hosts ) {
+        $parsed_url = wp_parse_url( NOTIFIMA_PRO_SHOP_URL );
+
+        if ( isset( $parsed_url['host'] ) ) {
+            $hosts[] = $parsed_url['host'];
+        }
+
+        return $hosts;
     }
 }

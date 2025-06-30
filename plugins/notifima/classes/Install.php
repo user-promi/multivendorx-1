@@ -14,7 +14,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * @class       Install class
  * @version     PRODUCT_VERSION
- * @author      MultivendorX
+ * @author      MultiVendorX
  */
 class Install {
 

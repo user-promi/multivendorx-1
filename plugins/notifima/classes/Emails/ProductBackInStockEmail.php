@@ -17,7 +17,7 @@ if ( ! class_exists( 'ProductBackInStockEmail' ) ) :
      * An email will be sent to the customer when their subscribed product is available.
      *
      * @version     PRODUCT_VERSION
-     * @author      MultivendorX
+     * @author      MultiVendorX
      * @extends     \WC_Email
      */
     class ProductBackInStockEmail extends \WC_Email {

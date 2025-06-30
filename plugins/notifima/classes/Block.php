@@ -16,7 +16,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * @class       Block class
  * @version     PRODUCT_VERSION
- * @author      MultivendorX
+ * @author      MultiVendorX
  */
 class Block {
     /**
