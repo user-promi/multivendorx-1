@@ -2,6 +2,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { __, sprintf } from '@wordpress/i18n';
 import axios from 'axios';
+import "./MyCourse.scss";
 
 interface Course {
     user_name?: string;
