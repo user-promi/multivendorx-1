@@ -155,7 +155,6 @@ class Installer {
         dbDelta( $sql_course );
     }
 
-
     /**
      * Migrate database.
      *
