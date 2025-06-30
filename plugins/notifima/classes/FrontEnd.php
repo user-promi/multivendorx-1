@@ -262,7 +262,7 @@ class FrontEnd {
             $notifima_fields_html = implode( $separator, $notifima_fields_array );
         }
 
-        $alert_text_html = '<h5 style="color:' . esc_html( $settings_array['alert_text_color'] ) . '" class="subscribe_for_interest_text">' . esc_html( $settings_array['alert_text'] ) . '</h5>';
+        $alert_text_html = '<h5 style="color:' . esc_html( $settings_array['alert_text_color'] ) . '" class="subscribe-for-interest-text">' . esc_html( $settings_array['alert_text'] ) . '</h5>';
 
         $button_css = $this->subscribe_button_styles();
 

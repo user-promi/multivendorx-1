@@ -137,7 +137,7 @@ class Ajax {
 
         $response = array(
             'status'  => false,
-            'message' => '<div class="registered-message">' . __( 'Some error occurs', 'notifima' ) . ' <a href="${window.location}">' . __( 'Please try again.', 'notifima' ) . '</a></div>',
+            'message' => '<div class="notifima-registered-message">' . __( 'Some error occurs', 'notifima' ) . ' <a href="${window.location}">' . __( 'Please try again.', 'notifima' ) . '</a></div>',
         );
 
         if ( $product_id && ! empty( $product_id ) && ! empty( $customer_email ) ) {
@@ -155,7 +155,7 @@ class Ajax {
 
                 $response = array(
                     'status'  => true,
-                    'message' => '<div class="registered-message">' . $success_msg . '</div>',
+                    'message' => '<div class="notifima-registered-message">' . $success_msg . '</div>',
                 );
             }
         }
@@ -214,7 +214,7 @@ class Ajax {
 
             if ( Subscriber::is_already_subscribed( $customer_email, $product_id ) ) {
                 $button_css              = Notifima()->frontend->subscribe_button_styles();
-                $unsubscribe_button_html = '<button class="notifima-unsubscribe unsubscribe-button" style="' . $button_css . '">' . $settings_array['unsubscribe_button_text'] . '</button>';
+                $unsubscribe_button_html = '<button class="notifima-unsubscribe" style="' . $button_css . '">' . $settings_array['unsubscribe_button_text'] . '</button>';
 
                 $email_exist = $settings_array['alert_email_exist'];
                 // Prepare email exist data.
@@ -224,7 +224,7 @@ class Ajax {
                 $response = array(
                     'status'  => false,
                     'message' => sprintf(
-                        '<div class="registered-message">%s</div>%s<input type="hidden" class="notifima-subscribed-email" value="%s" /><input type="hidden" class="notifima-product-id" value="%s" /><input type="hidden" class="notifima-variation-id" value="%s" />',
+                        '<div class="notifima-registered-message">%s</div>%s<input type="hidden" class="notifima-subscribed-email" value="%s" /><input type="hidden" class="notifima-product-id" value="%s" /><input type="hidden" class="notifima-variation-id" value="%s" />',
                         esc_html( $email_exist ),
                         $unsubscribe_button_html,
                         esc_attr( $customer_email ),
@@ -245,7 +245,7 @@ class Ajax {
 
                     $response = array(
                         'status'  => true,
-                        'message' => '<div class="registered-message">' . $success_msg . '</div>',
+                        'message' => '<div class="notifima-registered-message">' . $success_msg . '</div>',
                     );
 
                     /**
