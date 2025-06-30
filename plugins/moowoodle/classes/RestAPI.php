@@ -668,16 +668,16 @@ class RestAPI {
                 $course = reset( $course );
 
                 $formatted_enrolled_date = '';
-                if ( ! empty( $enrollment['enrolled_date'] ) && strtotime( $enrollment['enrolled_date'] ) ) {
-                    $formatted_enrolled_date = gmdate( 'M j, Y - H:i', strtotime( $enrollment['enrolled_date'] ) );
+                if ( ! empty( $enrollment['enrollment_date'] ) && strtotime( $enrollment['enrollment_date'] ) ) {
+                    $formatted_enrolled_date = gmdate( 'M j, Y - H:i', strtotime( $enrollment['enrollment_date'] ) );
                 }
 
                 return array(
-					'user_name'     => $current_user->user_login,
-					'course_name'   => $course['fullname'] ?? '',
-					'enrolled_date' => $formatted_enrolled_date,
-					'password'      => $moodle_password,
-					'moodle_url'    => ! empty( $course['moodle_course_id'] )
+					'user_name'       => $current_user->user_login,
+					'course_name'     => $course['fullname'] ?? '',
+					'enrollment_date' => $formatted_enrolled_date,
+					'password'        => $moodle_password,
+					'moodle_url'      => ! empty( $course['moodle_course_id'] )
 					? apply_filters(
 						'moodle_course_view_url',
 						"{$moodle_base_url}course/view.php?id={$course['moodle_course_id']}",

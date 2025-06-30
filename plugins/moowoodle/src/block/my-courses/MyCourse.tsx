@@ -7,7 +7,7 @@ import "./MyCourse.scss";
 interface Course {
     user_name?: string;
     course_name?: string;
-    enrolled_date?: string;
+    enrollment_date?: string;
     password?: string;
     moodle_url?: string;
 }
@@ -89,7 +89,7 @@ const MyCourse: React.FC = () => {
                     {course.course_name || __('Unknown Course', 'moowoodle')}
                 </td>
                 <td data-label={__('Enrolment Date', 'moowoodle')}>
-                    {course.enrolled_date ||
+                    {course.enrollment_date ||
                         __('No Date Available', 'moowoodle')}
                 </td>
                 <td
