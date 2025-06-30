@@ -344,15 +344,15 @@ class Installer {
             }
 
             $enrollment_data = array(
-                'user_id'    => $customer->ID,
-                'user_email' => $customer->user_email,
-                'course_id'  => (int) $course['id'],
-                'order_id'   => $order->get_id(),
-                'item_id'    => $item->get_id(),
-                'status'     => in_array( $linked_course_id, $unenrolled_courses, true ) ? 'unenrolled' : 'enrolled',
-                'date'       => $enrollment_date,
+                'user_id'       => $customer->ID,
+                'user_email'    => $customer->user_email,
+                'course_id'     => (int) $course['id'],
+                'order_id'      => $order->get_id(),
+                'item_id'       => $item->get_id(),
+                'status'        => in_array( $linked_course_id, $unenrolled_courses, true ) ? 'unenrolled' : 'enrolled',
+                'enrolled_date' => $enrollment_date,
             );
 
-            \MooWoodle\Enrollment::save_enrollment( $enrollment_data );        }
+            \MooWoodle\Enrollment::update_enrollment( $enrollment_data );        }
     }
 }
