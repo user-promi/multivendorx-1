@@ -215,34 +215,16 @@ class FrontEnd {
             $user_email   = $current_user->data->user_email;
         }
         $placeholder  = $settings_array['email_placeholder_text'];
-        $alert_fields = apply_filters(
-            'notifima_add_fields_in_subscription_form',
-            array(
-				'alert_email' => array(
-					'type'        => 'text',
-					'class'       => 'notifima-email',
-					'value'       => $user_email,
-					'placeholder' => $placeholder,
-				),
-			),
-            $settings_array
-        );
-        if ( $alert_fields ) {
-            foreach ( $alert_fields as $key => $fvalue ) {
-                $type        = in_array( $fvalue['type'], array( 'recaptcha-v3', 'text', 'number', 'email' ), true ) ? esc_attr( $fvalue['type'] ) : 'text';
-                $class       = isset( $fvalue['class'] ) ? esc_attr( $fvalue['class'] ) : 'notifima_' . $key;
-                $value       = isset( $fvalue['value'] ) ? esc_attr( $fvalue['value'] ) : '';
-                $placeholder = isset( $fvalue['placeholder'] ) ? esc_attr( $fvalue['placeholder'] ) : '';
-                switch ( $fvalue['type'] ) {
-                    case 'recaptcha-v3':
-                        $notifima_fields_array[] = apply_filters( 'notifima_render_recaptcha_v3_field', $fvalue );
-                        break;
-                    default:
-                        $notifima_fields_array[] = '<input id="notifima_' . $key . '" type="' . $type . '" name="' . $key . '" class="' . $class . '" value="' . esc_attr( $value ) . '" placeholder="' . $placeholder . '" >';
-                        break;
-                }
+
+        $additional_fields[] = apply_filters( 'notifima_subscription_form_additional_fields', '' );
+        
+        if ( ! empty( $additional_fields ) ) {
+            foreach ( $additional_fields as $field ) {
+                $notifima_fields_array[] = $field;
             }
         }
+
+        $notifima_fields_array[] = '<input id="notifima_alert_email" type="text" name="alert_email" class="notifima-email" value="' . esc_attr( $user_email ) . '" placeholder="' . $placeholder . '" >';
         if ( $notifima_fields_array ) {
             $notifima_fields_html = implode( $separator, $notifima_fields_array );
         }

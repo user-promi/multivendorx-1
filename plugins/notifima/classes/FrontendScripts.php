@@ -328,7 +328,7 @@ class FrontendScripts {
 					'data'        => array(
 						'ajax_url'                  => admin_url( 'admin-ajax.php', 'relative' ),
 						'nonce'                     => wp_create_nonce( 'notifima-security-nonce' ),
-						'additional_fields'         => apply_filters( 'notifima_subscription_form_additional_fields', array() ),
+						'additional_fields'         => apply_filters( 'notifima_subscription_form_additional_fields', '' ),
 						'button_html'               => $subscribe_button_html,
 						'processing'                => __( 'Processing...', 'notifima' ),
 						'recaptcha_enabled'         => apply_filters( 'notifima_recaptcha_enabled', false ),

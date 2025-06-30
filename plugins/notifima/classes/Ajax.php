@@ -179,11 +179,15 @@ class Ajax {
         $product_id     = filter_input( INPUT_POST, 'product_id', FILTER_VALIDATE_INT ) ? filter_input( INPUT_POST, 'product_id', FILTER_VALIDATE_INT ) : '';
         $product_title =  filter_input( INPUT_POST, 'product_title', FILTER_UNSAFE_RAW ) ? sanitize_text_field( filter_input( INPUT_POST, 'product_title', FILTER_UNSAFE_RAW ) ) : '';
         $variation_id   = filter_input( INPUT_POST, 'variation_id', FILTER_VALIDATE_INT ) ? filter_input( INPUT_POST, 'variation_id', FILTER_VALIDATE_INT ) : 0;
+        
         $response = array(
             'status'  => true,
             'message' => '',
         );
     
+        $request_data = filter_input_array( INPUT_POST, FILTER_SANITIZE_FULL_SPECIAL_CHARS );
+        $response = apply_filters( 'notifima_handle_subscription_form_data', $response, $request_data );
+
         $settings_array  = Utill::get_form_settings_array();
         $button_settings = $settings_array['customize_btn'];
 

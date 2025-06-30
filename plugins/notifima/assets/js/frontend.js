@@ -37,46 +37,6 @@ jQuery(function ($) {
         $(this).text(frontendLocalizer.processing);
         $(this).addClass('submit_btn_disabled');
 
-        const recaptchaEnabled = frontendLocalizer.recaptcha_enabled;
-
-        // Recaptcha is enabled validate recaptcha then process form
-        if (recaptchaEnabled) {
-            const recaptchaSecret = form.find('#recaptchav3_secretkey').val();
-            const recaptchaResponse = form.find('#recaptchav3_response').val();
-
-            // Prepare recaptcha request data.
-            const recaptchRequest = {
-                action: 'recaptcha_validate_ajax',
-                nonce: frontendLocalizer.nonce,
-                recaptcha_secret: recaptchaSecret,
-                recaptcha_response: recaptchaResponse,
-            };
-
-            // Request for recaptcha validation
-            $.post(
-                frontendLocalizer.ajax_url,
-                recaptchRequest,
-                function (response) {
-                    // If valid response process form submition.
-                    if (response) {
-                        processForm(form);
-                    } else {
-                        // Response is not a valid response alert and enable click.
-                        alert('Oops, recaptcha not verified!');
-                        $(this).removeClass('submit_btn_disabled');
-                    }
-                }
-            );
-        } else {
-            processForm(form);
-        }
-    }
-
-    /**
-     * Process subscription
-     * @param {Object}
-     */
-    function processForm(form) {
         // Get data from form.
         const customerEmail = form.find('.notifima-email').val();
         const productId = form.find('.notifima-product-id').val();
@@ -98,14 +58,17 @@ jQuery(function ($) {
             variation_id: variationId,
         };
 
-        // Add additional fields data
-        frontendLocalizer.additional_fields.forEach((element) => {
-            requestData[element] = $('#notifima_' + element).val();
+        form.append(frontendLocalizer.additional_fields_html);
+        form.find('input[id^="notifima_"]').each(function () {
+            const name = $(this).attr('name');
+            const value = $(this).val();
+            if (name) {
+                requestData[name] = value;
+            }
         });
 
         // Request for subscription
         $.post(frontendLocalizer.ajax_url, requestData, function (response) {
-            console.log(response);
             // Handle response
             if (response.status) {
                 form.html(response.message);
