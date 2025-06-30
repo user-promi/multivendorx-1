@@ -7,7 +7,7 @@ const Managestock: React.FC = () => {
     const [ openDialog, setOpenDialog ] = useState( false );
     return (
         <>
-            <div id="manage_stock_table">
+            <div id="manage-stock-table">
                 <Dialog
                     className="admin-module-popup"
                     open={ openDialog }

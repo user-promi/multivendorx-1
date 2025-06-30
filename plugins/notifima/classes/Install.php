@@ -113,7 +113,7 @@ class Install {
 
         try {
             // Get woosubscribe post and post meta.
-            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.SlowDBQuery.slow_db_query_meta_key
             $subscribe_datas = $wpdb->get_results(
                 "SELECT posts.ID as id,
                     posts.post_date as date,
@@ -323,6 +323,7 @@ class Install {
 
             // Equevelent to check plugin version <= 2.3.0.
             if ( $dc_was_installed || $woo_was_installed ) {
+                // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
                 $all_product_ids = get_posts(
                     array(
 						'post_type'   => 'product',

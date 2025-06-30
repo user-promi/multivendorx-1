@@ -41,7 +41,7 @@ const supportLink = [
             'Reach out to the support team for assistance or guidance.',
             'notifima'
         ),
-        link: 'https://notifima.com/contact-us/',
+        link: 'https://notifima.com/contact-us/?utm_source=wpadmin&utm_medium=pluginsettings&utm_campaign=notifima',
     },
     {
         title: __( 'Explore Documentation', 'notifima' ),
@@ -50,13 +50,13 @@ const supportLink = [
             'Understand the plugin and its settings.',
             'notifima'
         ),
-        link: 'https://notifima.com/docs/',
+        link: 'https://notifima.com/docs/?utm_source=wpadmin&utm_medium=pluginsettings&utm_campaign=notifima',
     },
     {
         title: __( 'Contribute Here', 'notifima' ),
         icon: 'support',
         description: __( 'Participate in product enhancement.', 'notifima' ),
-        link: 'https://github.com/multivendorx/woocommerce-product-stock-alert/issues',
+        link: 'https://github.com/multivendorx/multivendorx/issues/?utm_source=wpadmin&utm_medium=pluginsettings&utm_campaign=notifima',
     },
 ];
 
@@ -138,7 +138,7 @@ const faqs = [
             'notifima'
         ),
         answer: __(
-            'Yes, <a href="https://notifima.com/pricing/" target="_blank">Product Stock Manager & Notifier Pro</a> has support for reCaptcha.',
+            'Yes, <a href="https://notifima.com/pricing/?utm_source=wpadmin&utm_medium=pluginsettings&utm_campaign=notifima" target="_blank">Product Stock Manager & Notifier Pro</a> has support for reCaptcha.',
             'notifima'
         ),
         open: false,

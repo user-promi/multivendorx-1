@@ -24,7 +24,7 @@ const SubscribersList: React.FC = () => {
                     <p
                         className="description"
                         dangerouslySetInnerHTML={ {
-                            __html: "This CSV file contains all subscriber data from your site. Upgrade to <a href='https://multivendorx.com/woocommerce-product-stock-manager-notifier-pro/?utm_source=wpadmin&utm_medium=pluginsettings&utm_campaign=stockmanager' target='_blank'>Notifima Pro</a> to generate CSV files based on specific products or users.",
+                            __html: "This CSV file contains all subscriber data from your site. Upgrade to <a href='https://notifima.com/pricing/?utm_source=wpadmin&utm_medium=pluginsettings&utm_campaign=notifima' target='_blank'>Notifima Pro</a> to generate CSV files based on specific products or users.",
                         } }
                     ></p>
                 </div>
