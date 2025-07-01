@@ -69,12 +69,13 @@ class FrontendScripts {
 	 *
 	 * @return void
 	 */
-	public static function enqueue_external_scripts() {
+	public static function enqueue_external_scripts($handle_name, $pro_url) {
         $base_dir = plugin_dir_path( __FILE__ ) . '../' . self::get_build_path_name() . 'js/';
-        $base_url = Notifima()->plugin_url . self::get_build_path_name() . 'js/';
-        self::enqueue_scripts_from_dir( $base_dir . 'externals/', $base_url . 'externals/' );
+        $base_url = $pro_url . self::get_build_path_name() . 'js/';
+        self::enqueue_scripts_from_dir( $handle_name, $base_dir . 'externals/', $base_url . 'externals/' );
         if ( Notifima()->is_dev ) {
             self::enqueue_scripts_from_dir(
+				$handle_name,
                 $base_dir,
                 $base_url,
                 array( 'index.js', 'components.js' ),
@@ -92,7 +93,7 @@ class FrontendScripts {
 	 * @param string   $exclude_pattern Optional regex pattern to exclude.
 	 * @return void
 	 */
-    private static function enqueue_scripts_from_dir( $dir, $url, $exclude_files = array(), $exclude_pattern = '' ) {
+    private static function enqueue_scripts_from_dir( $handle_name, $dir, $url, $exclude_files = array(), $exclude_pattern = '' ) {
         if ( ! is_dir( $dir ) ) {
             return;
         }
@@ -105,7 +106,7 @@ class FrontendScripts {
             ) {
                 continue;
             }
-            $chunk_handle = 'notifima-script-' . sanitize_title( $chunk_file );
+            $chunk_handle = $handle_name . sanitize_title( $chunk_file );
             $asset_file   = str_replace( '.js', '.asset.php', $chunk_path );
             $deps         = array();
             $version      = filemtime( $chunk_path );
@@ -220,7 +221,7 @@ class FrontendScripts {
     public static function admin_register_scripts() {
 		$version = Notifima()->version;
         // Enqueue all chunk files (External dependencies).
-        self::enqueue_external_scripts();
+        self::enqueue_external_scripts('notifima-script', Notifima()->plugin_url);
         $index_asset      = include plugin_dir_path( __FILE__ ) . '../' . self::get_build_path_name() . 'js/index.asset.php';
         $component_asset  = include plugin_dir_path( __FILE__ ) . '../' . self::get_build_path_name() . 'js/components.asset.php';
 		$register_scripts = apply_filters(
