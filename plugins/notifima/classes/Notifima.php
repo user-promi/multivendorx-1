@@ -123,7 +123,7 @@ class Notifima {
         if ( Notifima()->plugin_base === $file ) {
             $row_meta = array(
                 'docs'    => '<a href="https://notifima.com/docs/?utm_source=wpadmin&utm_medium=pluginsettings&utm_campaign=notifima" aria-label="' . esc_attr__( 'View WooCommerce documentation', 'notifima' ) . '" target="_blank">' . esc_html__( 'Docs', 'notifima' ) . '</a>',
-                'support' => '<a href="https://wordpress.org/support/plugin/woocommerce-product-stock-alert/?utm_source=wpadmin&utm_medium=pluginsettings&utm_campaign=notifima" aria-label="' . esc_attr__( 'Visit community forums', 'notifima' ) . '" target="_blank">' . esc_html__( 'Support', 'notifima' ) . '</a>',
+                'support' => '<a href="https://wordpress.org/support/plugin/woocommerce-product-stock-alert/" aria-label="' . esc_attr__( 'Visit community forums', 'notifima' ) . '" target="_blank">' . esc_html__( 'Support', 'notifima' ) . '</a>',
             );
 
             return array_merge( $links, $row_meta );

@@ -323,12 +323,12 @@ class Install {
 
             // Equevelent to check plugin version <= 2.3.0.
             if ( $dc_was_installed || $woo_was_installed ) {
-                // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
                 $all_product_ids = get_posts(
                     array(
 						'post_type'   => 'product',
 						'post_status' => 'publish',
 						'fields'      => 'ids',
+                        // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
 						'meta_query'  => array(
 							array(
 								'key'     => '_product_subscriber',

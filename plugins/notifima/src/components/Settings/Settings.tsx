@@ -56,7 +56,7 @@ const supportLink = [
         title: __( 'Contribute Here', 'notifima' ),
         icon: 'support',
         description: __( 'Participate in product enhancement.', 'notifima' ),
-        link: 'https://github.com/multivendorx/multivendorx/issues/?utm_source=wpadmin&utm_medium=pluginsettings&utm_campaign=notifima',
+        link: 'https://github.com/multivendorx/multivendorx/issues/',
     },
 ];
 

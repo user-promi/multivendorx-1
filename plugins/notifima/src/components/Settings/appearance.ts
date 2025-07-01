@@ -189,8 +189,18 @@ export default {
             class: 'woo-toggle-checkbox',
             label: __( 'Subscriber double opt-in', 'notifima' ),
             desc: ! appLocalizer.khali_dabba
-                ? sprintf( __( 'Upgrade to <a href="%s" target="_blank"><span class="pro-strong">Pro</span></a> to enable Double Opt-in flow for subscription confirmation.', 'notifima' ), appLocalizer.pro_url )
-                : __( 'Enable Double Opt-in flow for subscription confirmation.', 'notifima' ),
+                ? sprintf(
+                      /* translators: %s is the Pro upgrade URL */
+                      __(
+                          'Upgrade to <a href="%s" target="_blank"><span class="pro-strong">Pro</span></a> to enable Double Opt-in flow for subscription confirmation.',
+                          'notifima'
+                      ),
+                      appLocalizer.pro_url
+                  )
+                : __(
+                      'Enable Double Opt-in flow for subscription confirmation.',
+                      'notifima'
+                  ),
             options: [
                 {
                     key: 'is_double_optin',
@@ -225,12 +235,19 @@ export default {
             type: 'checkbox',
             label: __( 'Enable reCaptcha', 'notifima' ),
             class: 'woo-toggle-checkbox',
-            desc: !appLocalizer.khali_dabba
+            desc: ! appLocalizer.khali_dabba
                 ? sprintf(
-                    __( 'Upgrade to <a href="%s" target="_blank"><span class="pro-strong">Pro</span></a> for unlocking reCAPTCHA for out-of-stock form subscriptions.', 'notifima' ),
-                    appLocalizer.pro_url
-                )
-                : __( 'Enable this to prevent automated bots from submitting forms. Get your v3 reCAPTCHA site key and secret key from <a href="https://developers.google.com/recaptcha" target="_blank">here</a>.', 'notifima' ),
+                      /* translators: %s is the Pro upgrade URL */
+                      __(
+                          'Upgrade to <a href="%s" target="_blank"><span class="pro-strong">Pro</span></a> for unlocking reCAPTCHA for out-of-stock form subscriptions.',
+                          'notifima'
+                      ),
+                      appLocalizer.pro_url
+                  )
+                : __(
+                      'Enable this to prevent automated bots from submitting forms. Get your v3 reCAPTCHA site key and secret key from <a href="https://developers.google.com/recaptcha" target="_blank">here</a>.',
+                      'notifima'
+                  ),
             options: [
                 {
                     key: 'is_recaptcha_enable',

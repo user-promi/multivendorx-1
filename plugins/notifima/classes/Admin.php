@@ -83,15 +83,15 @@ class Admin {
 
             // Array contain notifima submenu.
             $submenus = array(
-                'settings'         => array(
+                'settings'          => array(
                     'name'   => __( 'Settings', 'notifima' ),
                     'subtab' => 'appearance',
                 ),
-                'subscribers-list' => array(
+                'subscribers-list'  => array(
                     'name'   => __( 'Subscriber List', 'notifima' ) . $pro_sticker,
                     'subtab' => '',
                 ),
-                'inventory-manager'     => array(
+                'inventory-manager' => array(
                     'name'   => __( 'Inventory Manager', 'notifima' ) . $pro_sticker,
                     'subtab' => '',
                 ),
@@ -250,7 +250,7 @@ class Admin {
         if ( Subscriber::is_product_outofstock( $product ) ) {
             $no_of_subscriber = $product->get_meta( 'no_of_subscribers', true );
             ?>
-            <p class="form-field _stock_field">
+            <p class="form-field">
                 <label class=""><?php esc_attr_e( 'Number of Interested Person( s )', 'notifima' ); ?></label>
                 <span class="no_subscriber"><?php echo esc_html( ( isset( $no_of_subscriber ) && $no_of_subscriber > 0 ) ? $no_of_subscriber : 0 ); ?></span>
             </p>

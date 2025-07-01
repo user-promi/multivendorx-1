@@ -9,7 +9,7 @@
     },
     "scripts": {
         "build": "echo \"${npm_package_name}\" && pnpm --if-present --workspace-concurrency=Infinity --stream --filter \"${npm_package_name}\" \"/^build:project:.*$/\"",
-        "build:zip": "pnpm install && pnpm run readme && pnpm --if-present \"/^build:project:.*$/\" && pnpm run makepot && node bin/release.mjs",
+        "build:zip": "pnpm run readme && pnpm --if-present \"/^build:project:.*$/\" && pnpm run makepot && node bin/release.mjs",
         "build:release": "pnpm install && pnpm run readme  && pnpm run version && pnpm --if-present \"/^build:project:.*$/\" && pnpm run makepot && node bin/release.mjs",
         "build:project": "pnpm --if-present \"/^build:project:.*$/\"",
         "build:project:bundle": "wireit",
@@ -37,7 +37,7 @@
         "readme": "wp-readme-to-md",
         "composer": "composer dump-autoload && composer update",
         "preinstall": "npx only-allow pnpm",
-        "postinstall": "rimraf -g vendor release .wireit composer.lock languages && composer install",
+        "postinstall": "rimraf -g vendor release .wireit composer.lock languages",
         "clean": "node bin/clean-files.mjs",
         "minify": "node bin/minify.mjs",
         "version": "node bin/version-replace.mjs",
@@ -136,6 +136,7 @@
         "replace-in-file": "^8.3.0",
         "style-loader": "^4.0.0",
         "terser": "^5.39.1",
-        "wireit": "^0.14.12"
+        "wireit": "^0.14.12",
+        "wp-readme-to-markdown": "^1.0.1"
     }
 }
