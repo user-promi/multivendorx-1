@@ -1,25 +1,46 @@
 <?php
+/**
+ * ProductBackInStockEmail class file.
+ *
+ * @package Notifima
+ */
 
 namespace Notifima\Emails;
 
-defined( 'ABSPATH' ) || exit; // Exit if accessed directly
+defined( 'ABSPATH' ) || exit; // Exit if accessed directly.
 
-if ( ! class_exists( 'Emails' ) ) :
+if ( ! class_exists( 'ProductBackInStockEmail' ) ) :
 
     /**
-     * Email for Notifima
+     * Email for Notifima.
      *
      * An email will be sent to the customer when their subscribed product is available.
      *
-     * @class       WC_Email_Notifima
-     * @version     1.3.0
-     * @author      MultivendorX
+     * @version     PRODUCT_VERSION
+     * @author      MultiVendorX
      * @extends     \WC_Email
      */
-    class Emails extends \WC_Email {
+    class ProductBackInStockEmail extends \WC_Email {
 
+        /**
+         * The product associated with the subscription.
+         *
+         * @var WC_Product|int|null
+         */
         public $product;
+
+        /**
+         * The customer's email address.
+         *
+         * @var string
+         */
         public $customer_email;
+
+        /**
+         * The email recipient. Can be overridden manually.
+         *
+         * @var string
+         */
         public $recipient = '';
 
         /**
@@ -30,21 +51,22 @@ if ( ! class_exists( 'Emails' ) ) :
          */
         public function __construct() {
 
-            $this->id             = 'notifima_subscribe_product_back_stock';
+            $this->id             = 'notifima_product_back_stock';
             $this->title          = __( 'Alert Subscriber', 'notifima' );
             $this->description    = __( 'Alert customer when their subscribed product becomes in stock', 'notifima' );
-            $this->template_html  = 'emails/Email.php';
-            $this->template_plain = 'emails/plain/Email.php';
+            $this->template_html  = 'emails/html/ProductBackInStockEmail.php';
+            $this->template_plain = 'emails/plain/ProductBackInStockEmail.php';
             $this->template_base  = Notifima()->plugin_path . 'templates/';
 
-            // Call parent constuctor
+            // Call parent constuctor.
             parent::__construct();
         }
 
         /**
-         * trigger function.
+         * Trigger function.
          *
-         * @access public
+         * @param string     $recipient      The recipient's email address.
+         * @param WC_Product $product        The WooCommerce product object.
          * @return void
          */
         public function trigger( $recipient, $product ) {
@@ -84,7 +106,7 @@ if ( ! class_exists( 'Emails' ) ) :
         }
 
         /**
-         * get_content_html function.
+         * Get content html function.
          *
          * @access public
          * @return string
@@ -106,7 +128,7 @@ if ( ! class_exists( 'Emails' ) ) :
         }
 
         /**
-         * get_content_plain function.
+         * Get content plain function.
          *
          * @access public
          * @return string

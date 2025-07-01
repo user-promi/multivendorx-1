@@ -1,6 +1,6 @@
 === Product Stock Waitlist Manager for WooCommerce ===
 Contributors: MultiVendorX
-Plugin URI: https://notifima.com/
+Plugin URI: https://notifima.com/?utm_source=wpadmin&utm_medium=pluginsettings&utm_campaign=notifima
 Description: Boost sales with real-time stock alerts! Notify customers instantly when products are back in stock. Simplify data management by exporting and importing stock data with ease.
 Author: MultiVendorX
 Version: 2.5.17
