@@ -36,9 +36,9 @@ class Course {
 	public function enqueue_admin_assets() {
 
 		\MooWoodle\FrontendScripts::admin_load_scripts();
-		\MooWoodle\FrontendScripts::enqueue_script( 'moowoodle-product-tab-js' );
-		\MooWoodle\FrontendScripts::enqueue_style( 'moowoodle-product-tab-css' );
-		\MooWoodle\FrontendScripts::localize_scripts( 'moowoodle-product-tab-js' );
+		\MooWoodle\FrontendScripts::enqueue_script( 'moowoodle-product-tab-script' );
+		\MooWoodle\FrontendScripts::enqueue_style( 'moowoodle-product-tab-style' );
+		\MooWoodle\FrontendScripts::localize_scripts( 'moowoodle-product-tab-script' );
 	}
 
 

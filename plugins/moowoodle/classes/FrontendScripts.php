@@ -217,7 +217,7 @@ class FrontendScripts {
 					'version'     => $version,
 					'text_domain' => 'moowoodle',
 				),
-				'moowoodle-product-tab-js'    => array(
+				'moowoodle-product-tab-script'    => array(
 					'src'         => MooWoodle()->plugin_url . 'assets/js/' . self::get_script_name( 'product-tab' ) . '.js',
 					'deps'        => array( 'jquery', 'jquery-blockui', 'wp-element', 'wp-i18n', 'react-jsx-runtime' ),
 					'version'     => $version,
@@ -252,7 +252,7 @@ class FrontendScripts {
 					'version' => $version,
 				),
 
-				'moowoodle-product-tab-css'  => array(
+				'moowoodle-product-tab-style'  => array(
 					'src'     => MooWoodle()->plugin_url . 'assets/styles/' . self::get_script_name( 'product-tab' ) . '.css',
 					'deps'    => array(),
 					'version' => $version,
@@ -350,7 +350,7 @@ class FrontendScripts {
 						),
 					),
 				),
-				'moowoodle-product-tab-js'    => array(
+				'moowoodle-product-tab-script'    => array(
 					'object_name' => 'moowoodle',
 					'data'        => array(
 						'ajaxurl'     => admin_url( 'admin-ajax.php' ),
