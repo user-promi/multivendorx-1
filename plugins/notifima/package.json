@@ -136,7 +136,6 @@
         "replace-in-file": "^8.3.0",
         "style-loader": "^4.0.0",
         "terser": "^5.39.1",
-        "wireit": "^0.14.12",
-        "wp-readme-to-markdown": "^1.0.1"
+        "wireit": "^0.14.12"
     }
 }

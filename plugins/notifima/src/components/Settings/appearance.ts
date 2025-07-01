@@ -167,7 +167,7 @@ export default {
         {
             key: 'shown_interest_text',
             type: 'textarea',
-            class: 'woo-setting-wpeditor-class',
+            class: 'textarea-input',
             label: __( 'Subscriber count notification message', 'notifima' ),
             desc: __(
                 'Personalize the notification text to let users know about the quantity of subscribers for out-of-stock item. Note: Use %no_of_subscribed% as number of interest/subscribed persons.',
@@ -189,18 +189,8 @@ export default {
             class: 'woo-toggle-checkbox',
             label: __( 'Subscriber double opt-in', 'notifima' ),
             desc: ! appLocalizer.khali_dabba
-                ? sprintf(
-                      /* translators: %s is the Pro upgrade URL */
-                      __(
-                          'Upgrade to <a href="%s" target="_blank"><span class="pro-strong">Pro</span></a> to enable Double Opt-in flow for subscription confirmation.',
-                          'notifima'
-                      ),
-                      appLocalizer.pro_url
-                  )
-                : __(
-                      'Enable Double Opt-in flow for subscription confirmation.',
-                      'notifima'
-                  ),
+                ? sprintf( __( 'Upgrade to <a href="%s" target="_blank"><span class="pro-strong">Pro</span></a> to enable Double Opt-in flow for subscription confirmation.', 'notifima' ), appLocalizer.pro_url )
+                : __( 'Enable Double Opt-in flow for subscription confirmation.', 'notifima' ),
             options: [
                 {
                     key: 'is_double_optin',
@@ -213,7 +203,7 @@ export default {
         {
             key: 'double_opt_in_success',
             type: 'textarea',
-            class: 'woo-setting-wpeditor-class',
+            class: 'textarea-input',
             desc: __(
                 'Default: Kindly check your inbox to confirm the subscription.',
                 'notifima'
@@ -235,19 +225,12 @@ export default {
             type: 'checkbox',
             label: __( 'Enable reCaptcha', 'notifima' ),
             class: 'woo-toggle-checkbox',
-            desc: ! appLocalizer.khali_dabba
+            desc: !appLocalizer.khali_dabba
                 ? sprintf(
-                      /* translators: %s is the Pro upgrade URL */
-                      __(
-                          'Upgrade to <a href="%s" target="_blank"><span class="pro-strong">Pro</span></a> for unlocking reCAPTCHA for out-of-stock form subscriptions.',
-                          'notifima'
-                      ),
-                      appLocalizer.pro_url
-                  )
-                : __(
-                      'Enable this to prevent automated bots from submitting forms. Get your v3 reCAPTCHA site key and secret key from <a href="https://developers.google.com/recaptcha" target="_blank">here</a>.',
-                      'notifima'
-                  ),
+                    __( 'Upgrade to <a href="%s" target="_blank"><span class="pro-strong">Pro</span></a> for unlocking reCAPTCHA for out-of-stock form subscriptions.', 'notifima' ),
+                    appLocalizer.pro_url
+                )
+                : __( 'Enable this to prevent automated bots from submitting forms. Get your v3 reCAPTCHA site key and secret key from <a href="https://developers.google.com/recaptcha" target="_blank">here</a>.', 'notifima' ),
             options: [
                 {
                     key: 'is_recaptcha_enable',
@@ -283,7 +266,7 @@ export default {
         {
             key: 'additional_alert_email',
             type: 'textarea',
-            class: 'woo-setting-wpeditor-class',
+            class: 'textarea-input',
             desc: __(
                 "Set the email address to receive notifications when a user subscribes to an out-of-stock product. You can add multiple comma-separated emails.<br/> Default: The admin's email is set as the receiver. Exclude the admin's email from the list to exclude admin from receiving these notifications.",
                 'notifima'
