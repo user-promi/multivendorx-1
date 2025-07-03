@@ -63,7 +63,7 @@ class Installer {
         );
         // Default value sync course setting.
         $course_settings = array(
-            'sync-course-options' => array( 'sync_courses_category', 'sync_courses_sku' ),
+            'sync-course-options' => array( 'sync_courses_category' ),
             'product_sync_option' => array( 'create', 'update' ),
         );
         // Default value for sync user setting.
