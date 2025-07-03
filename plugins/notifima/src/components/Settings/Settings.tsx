@@ -1,6 +1,6 @@
 // /* global appLocalizer */
-import Brand from '../../assets/images/Brand.png';
-import BrandSmall from '../../assets/images/Brand-small.png';
+import Brand from '../../assets/images/brand-logo.png';
+import BrandSmall from '../../assets/images/brand-icon.png';
 import React, { useEffect, JSX } from 'react';
 import { __ } from '@wordpress/i18n';
 // Context
@@ -36,7 +36,7 @@ interface Products {
 const supportLink = [
     {
         title: __( 'Get in touch with Support', 'notifima' ),
-        icon: 'mail',
+        icon: 'adminlib-mail',
         description: __(
             'Reach out to the support team for assistance or guidance.',
             'notifima'
@@ -45,7 +45,7 @@ const supportLink = [
     },
     {
         title: __( 'Explore Documentation', 'notifima' ),
-        icon: 'submission-message',
+        icon: 'adminlib-submission-message',
         description: __(
             'Understand the plugin and its settings.',
             'notifima'
@@ -54,7 +54,7 @@ const supportLink = [
     },
     {
         title: __( 'Contribute Here', 'notifima' ),
-        icon: 'support',
+        icon: 'adminlib-support',
         description: __( 'Participate in product enhancement.', 'notifima' ),
         link: 'https://github.com/multivendorx/multivendorx/issues/',
     },

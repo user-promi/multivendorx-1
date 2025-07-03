@@ -252,7 +252,7 @@ class Admin {
             ?>
             <p class="form-field">
                 <label class=""><?php esc_attr_e( 'Number of Interested Person( s )', 'notifima' ); ?></label>
-                <span class="no_subscriber"><?php echo esc_html( ( isset( $no_of_subscriber ) && $no_of_subscriber > 0 ) ? $no_of_subscriber : 0 ); ?></span>
+                <span class="no-subscriber"><?php echo esc_html( ( isset( $no_of_subscriber ) && $no_of_subscriber > 0 ) ? $no_of_subscriber : 0 ); ?></span>
             </p>
             <?php
         }
@@ -272,9 +272,9 @@ class Admin {
         if ( Subscriber::is_product_outofstock( $product ) ) {
             $product_subscriber = $product->get_meta( 'no_of_subscribers', true );
             ?>
-            <p class="form-row form-row-full interested_person">
-                <label class="stock_label"><?php esc_attr_e( 'Number of Interested Person( s ) : ', 'notifima' ); ?></label>
-                <div class="variation_no_subscriber"><?php echo esc_html( ( isset( $product_subscriber ) && $product_subscriber > 0 ) ? $product_subscriber : 0 ); ?></div>
+            <p class="form-row form-row-full interested-person">
+                <label class="stock-label"><?php esc_attr_e( 'Number of Interested Person( s ) : ', 'notifima' ); ?></label>
+                <div class="variation-no-subscriber"><?php echo esc_html( ( isset( $product_subscriber ) && $product_subscriber > 0 ) ? $product_subscriber : 0 ); ?></div>
             </p>
             <?php
         }
