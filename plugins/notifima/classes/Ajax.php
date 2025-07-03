@@ -136,7 +136,7 @@ class Ajax {
         $variation_id   = filter_input( INPUT_POST, 'variation_id', FILTER_VALIDATE_INT ) ? filter_input( INPUT_POST, 'variation_id', FILTER_VALIDATE_INT ) : 0;
 
         $current_user  = wp_get_current_user();
-        $customer_email = !empty($customer_email) ? $customer_email : $current_user->user_email;
+        $customer_email = $customer_email ?? $current_user->user_email;
 
         $response = array(
             'status'  => false,
