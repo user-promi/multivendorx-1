@@ -138,7 +138,9 @@ class Ajax {
         $current_user  = wp_get_current_user();
         if ( !empty($current_user) && empty($customer_email) ) {
             $customer_email = $current_user->user_email;
-        } else {
+        }
+
+        if (empty($customer_email)) {
             wp_send_json_error( 'Empty customer Email' );
             wp_die();
         }
