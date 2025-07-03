@@ -136,7 +136,14 @@ class Ajax {
         $variation_id   = filter_input( INPUT_POST, 'variation_id', FILTER_VALIDATE_INT ) ? filter_input( INPUT_POST, 'variation_id', FILTER_VALIDATE_INT ) : 0;
 
         $current_user  = wp_get_current_user();
-        $customer_email = $customer_email ?? $current_user->user_email;
+        if ( !empty($current_user) && empty($customer_email) ) {
+            $customer_email = $current_user->user_email;
+        }
+
+        if (empty($customer_email)) {
+            wp_send_json_error( 'Empty customer Email' );
+            wp_die();
+        }
 
         $response = array(
             'status'  => false,
