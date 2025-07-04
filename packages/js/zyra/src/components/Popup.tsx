@@ -66,7 +66,7 @@ const ProPopup: React.FC<PopupProps> = (props) => {
                                         className='admin-btn btn-purple' 
                                         target="_blank"
                                         rel="noreferrer"
-                                        href={props.pluginUrl}>
+                                        href={props.proUrl}>
                                             Upgrade to pro
                                     </a>
                                 </div>

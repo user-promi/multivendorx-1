@@ -56,7 +56,7 @@
       width: 55%;
       padding: 1.5rem;
       h4{
-        font-size: 3.5rem;
+        font-size: 2.5rem;
         font-weight: 400;
         color: #852aff;
         margin: 0;
@@ -80,19 +80,19 @@
           display: flex;
           align-items: center;
           gap: 1rem;
-          margin-bottom: 1.5rem;
+          margin-bottom: 1rem;
   
           i{
-            font-size: 1.8rem;
+            font-size: 1.4rem;
             color: #431580;
           }
           p{
-            font-size: 1rem;
+            font-size: 0.875rem;
           }
         }
       }
       .more-text{
-        font-size: 1.2rem;
+        font-size: 1rem;
         font-weight: 500;
         color: #431580;
         margin-top: 0.5rem;
@@ -103,12 +103,11 @@
         padding-top: 1rem;
   
         a{
-          padding: 1rem 1.5rem;
-          font-size: 1.3rem;
+          padding: 0.5rem 1rem;
+          font-size: 1rem;
           font-weight: 700;
           background: #210A40;
         }
       }
     }
   }
-
