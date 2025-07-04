@@ -29,7 +29,6 @@ class ExternalService {
             array(
 				'get_site_info'    => 'core_webservice_get_site_info',
 				'get_categories'   => 'core_course_get_categories',
-				'get_course_id'    => 'core_course_get_courses_by_field',
 				'get_courses'      => 'core_course_get_courses',
 				'get_moodle_users' => 'core_user_get_users',
 				'create_users'     => 'core_user_create_users',
