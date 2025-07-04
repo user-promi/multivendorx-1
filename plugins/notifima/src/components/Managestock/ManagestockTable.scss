@@ -6,90 +6,91 @@
     box-shadow: 0 0 0.125rem rgba(0, 0, 0, 0.125);
 }
 
-@import '../config';
+// @import '../config';
+// @use '../config' as *;
 
 .admin-middle-container-wrapper {
-  .title-section {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 0.75rem;
-    position: relative;
-    flex-wrap: wrap;
-    gap: 0.5rem;
+  // .title-section {
+  //   display: flex;
+  //   align-items: center;
+  //   justify-content: space-between;
+  //   margin-bottom: 0.75rem;
+  //   position: relative;
+  //   flex-wrap: wrap;
+  //   gap: 0.5rem;
 
-    p {
-      font-size: 1.5rem;
-    }
+  //   p {
+  //     font-size: 1.5rem;
+  //   }
 
-    .stock-reports-download {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 0.5rem;
+  //   .stock-reports-download {
+  //     display: flex;
+  //     justify-content: center;
+  //     align-items: center;
+  //     gap: 0.5rem;
 
-      .import-export-btn {
-        border-radius: 0.25rem;
-        background-color: $color-active;
-        padding: 0.5rem 1rem;
+  //     // .import-export-btn {
+  //     //   border-radius: 0.25rem;
+  //     //   background-color: #fff;
+  //     //   padding: 0.5rem 1rem;
 
-        a {
-          color: $color-white;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 0.5rem;
-          text-decoration: none;
+  //     //   a {
+  //     //     color: #fff;
+  //     //     display: flex;
+  //     //     align-items: center;
+  //     //     justify-content: center;
+  //     //     gap: 0.5rem;
+  //     //     text-decoration: none;
 
-          .dashicons-before {
-            &::before {
-              padding: 0;
-            }
-          }
-        }
-      }
-    }
-  }
+  //     //     .dashicons-before {
+  //     //       &::before {
+  //     //         padding: 0;
+  //     //       }
+  //     //     }
+  //     //   }
+  //     // }
+  //   }
+  // }
 
-  .inventory-manager-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    flex-wrap: wrap;
-    margin-bottom: 1rem;
+  // .inventory-manager-wrapper {
+  //   display: flex;
+  //   align-items: center;
+  //   justify-content: space-between;
+  //   gap: 1rem;
+  //   flex-wrap: wrap;
+  //   margin-bottom: 1rem;
 
-    .admin-wrap-bulk-all-date {
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-      width: 100%;
+  //   .admin-wrap-bulk-all-date {
+  //     display: flex;
+  //     align-items: center;
+  //     justify-content: flex-start;
+  //     gap: 0.5rem;
+  //     flex-wrap: wrap;
+  //     width: 100%;
 
-      input,
-      select,
-      textarea {
-        border: 0.115rem solid rgba(0, 0, 0, 0.125) !important; // To overwrite default wordpress css
-        border-radius: 0.25rem !important; // To overwrite default wordpress css
+  //     input,
+  //     select,
+  //     textarea {
+  //       border: 0.115rem solid rgba(0, 0, 0, 0.125) !important; // To overwrite default wordpress css
+  //       border-radius: 0.25rem !important; // To overwrite default wordpress css
 
-        &:focus {
-          box-shadow: none;
-        }
-      }
+  //       &:focus {
+  //         box-shadow: none;
+  //       }
+  //     }
 
-      &>div {
-        flex: 1 0 8.19rem;
-        max-width: 10rem;
+  //     &>div {
+  //       flex: 1 0 8.19rem;
+  //       max-width: 10rem;
 
-        input,
-        select {
-          width: 100%;
-          padding: 0.25rem 0.5rem;
-        }
-      }
-    }
-  }
+  //       input,
+  //       select {
+  //         width: 100%;
+  //         padding: 0.25rem 0.5rem;
+  //       }
+  //     }
+  //   }
+  // }
 
   .inventory-manager-table {
     width: 100%;
@@ -373,7 +374,7 @@
       }
 
       tr {
-        background: $color-white;
+        background: #fff;
         position: relative;
         display: flex;
         align-items: stretch;
@@ -385,7 +386,7 @@
         min-height: 4.5rem;
 
         &:nth-child(odd) {
-          background: $background-color;
+          background: #f9f9f9;
         }
 
         .table-row {
@@ -400,7 +401,7 @@
           min-width: 6.3rem;
           width: 100%;
 
-          &.product_image {
+          &.product-image {
             .table-data-container {
               a {
                 display: flex;
@@ -504,7 +505,7 @@
               padding-right: 0.35rem;
 
               &.active {
-                border: 0.125rem solid rgba($color: $color-active, $alpha: 0.125);
+                border: 0.125rem solid rgba($color: #fff, $alpha: 0.125);
               }
             }
           }
@@ -566,7 +567,7 @@
         background-color: #fff;
 
         a {
-          color: $color-active;
+          color: #fff;
         }
       }
 
@@ -581,7 +582,7 @@
 
       li {
         border: 0.063rem solid #522c81;
-        background: $color-active;
+        background: #fff;
 
         a {
           color: white;
@@ -599,7 +600,7 @@
   min-width: 8rem !important; // To overwrite default min-width
 }
 
-.product_regular_price,
+.product-regular-price,
 .product_sale_price,
 .product_backorders {
   min-width: 5rem !important; // To overwrite default min-width
