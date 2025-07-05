@@ -90,7 +90,7 @@ export const TableCell: React.FC< TableCellProps > = ( {
                     <div className="table-data-container">
                         <BasicInput
                             inputClass="main-input"
-                            type="text"
+                            type={header.type}
                             value={
                                 type === 'number'
                                     ? String( ( cellData as string ) || 0 )
@@ -125,49 +125,19 @@ export const TableCell: React.FC< TableCellProps > = ( {
 
         case 'expander':
             content = (
-                <td className={ `table-row ${ header.class }` }>
-                    <div
-                        onClick={ () => rowId && onToggleRow?.( rowId ) }
-                        className={ `table-data-container ${
-                            header.dependent ? '' : 'disable'
-                        }` }
-                    >
-                        <button
-                            className="setting-btn"
-                            disabled={ ! header.dependent }
-                        >
-                            <span className="bar bar1"></span>
-                            <span className="bar bar2"></span>
-                            <span className="bar bar1"></span>
-                        </button>
-                    </div>
-                </td>
-            );
-            break;
-
-        case 'rowExpander':
-            content = (
-                <td
-                    className={ `table-row ${ header.class } ${
-                        isExpanded[ rowId ] ? 'active' : ''
-                    }` }
+                <div
+                    onClick={() => rowId && onToggleRow?.(rowId)}
+                    className={`table-data-container ${header.dependent ? '' : 'disable'} ${header.class || ''}`}
                 >
                     <button
-                        onClick={ () => rowId && onToggleActive?.( rowId ) }
-                        className="expander-btn"
+                        className="setting-btn"
+                        disabled={!header.dependent}
                     >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="bi bi-arrow-right-short"
-                            viewBox="0 0 16 16"
-                        >
-                            <path
-                                fill-rule="evenodd"
-                                d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8"
-                            />
-                        </svg>
+                        <span className="bar bar1"></span>
+                        <span className="bar bar2"></span>
+                        <span className="bar bar1"></span>
                     </button>
-                </td>
+                </div>
             );
             break;
 
@@ -523,17 +493,16 @@ const Table: React.FC< TableProps > = ( {
 
                                         return (
                                             <tr
-                                                key={ productId }
-                                                className={ `admin-row ${
-                                                    isVariation
-                                                        ? 'variation-row'
-                                                        : ''
+                                                key={productId}
+                                                className={`admin-row ${
+                                                    isVariation ? 'variation-row' : ''
                                                 } ${
-                                                    expandElement?.[ productId ]
-                                                        ? 'active'
-                                                        : ''
-                                                }` }
+                                                    product.type === 'Variable' ? 'variable' : 'simple'
+                                                } ${
+                                                    expandElement?.[productId] ? 'active' : ''
+                                                }`}
                                             >
+
                                                 { row
                                                     .getVisibleCells()
                                                     .filter( ( cell ) =>
