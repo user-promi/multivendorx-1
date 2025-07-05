@@ -14,38 +14,39 @@ import BasicInput from './BasicInput';
 interface FormCustomizerProps {
     value?: string;
     buttonText?: string;
-    setting: Record<string, any>;
+    setting: Record< string, any >;
     proSetting?: any;
-    onChange: (key: string, value: any, isRestoreDefaults?: boolean) => void;
+    onChange: ( key: string, value: any, isRestoreDefaults?: boolean ) => void;
 }
 
-const NotifimaFormCustomizer: React.FC<FormCustomizerProps> = ({
+const NotifimaFormCustomizer: React.FC< FormCustomizerProps > = ( {
     buttonText = 'Submit',
     setting,
     proSetting,
     onChange,
-}) => {
-    const [currentHoverOn, setCurrentHoverOn] = useState<string>('');
-    const [currentEditSection, setCurrentEditSection] = useState<string>('');
-    const inputRef = useRef<HTMLInputElement | null>(null);
-    const buttonRef = useRef<HTMLDivElement | null>(null);
+} ) => {
+    const [ currentHoverOn, setCurrentHoverOn ] = useState< string >( '' );
+    const [ currentEditSection, setCurrentEditSection ] =
+        useState< string >( '' );
+    const inputRef = useRef< HTMLInputElement | null >( null );
+    const buttonRef = useRef< HTMLDivElement | null >( null );
 
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
+    useEffect( () => {
+        const handleClickOutside = ( event: MouseEvent ) => {
             if (
                 buttonRef.current &&
-                !buttonRef.current.contains(event.target as Node)
+                ! buttonRef.current.contains( event.target as Node )
             ) {
-                setCurrentHoverOn('');
-                setCurrentEditSection('');
+                setCurrentHoverOn( '' );
+                setCurrentEditSection( '' );
             }
         };
 
-        document.body.addEventListener('click', handleClickOutside);
+        document.body.addEventListener( 'click', handleClickOutside );
         return () => {
-            document.body.removeEventListener('click', handleClickOutside);
+            document.body.removeEventListener( 'click', handleClickOutside );
         };
-    }, []);
+    }, [] );
 
     return (
         <div className="notifima-form-customizer">
@@ -55,18 +56,18 @@ const NotifimaFormCustomizer: React.FC<FormCustomizerProps> = ({
                     inputClass={
                         currentHoverOn === 'description' ? 'active' : ''
                     }
-                    ref={currentHoverOn === 'description' ? inputRef : null}
-                    value={setting?.alert_text || ''}
-                    onClick={() => setCurrentHoverOn('description')}
-                    onChange={(e) => onChange('alert_text', e.target.value)}
+                    ref={ currentHoverOn === 'description' ? inputRef : null }
+                    value={ setting?.alert_text || '' }
+                    onClick={ () => setCurrentHoverOn( 'description' ) }
+                    onChange={ ( e ) =>
+                        onChange( 'alert_text', e.target.value )
+                    }
                 />
             </div>
 
             <div className="form-section">
                 <div
-                    ref={
-                        currentHoverOn === 'email_input' ? buttonRef : null
-                    }
+                    ref={ currentHoverOn === 'email_input' ? buttonRef : null }
                     className="input-section"
                 >
                     <BasicInput
@@ -76,32 +77,32 @@ const NotifimaFormCustomizer: React.FC<FormCustomizerProps> = ({
                         inputClass={
                             currentHoverOn === 'email_input' ? 'active' : ''
                         }
-                        placeholder={setting?.email_placeholder_text || ''}
-                        onClick={() => setCurrentHoverOn('email_input')}
+                        placeholder={ setting?.email_placeholder_text || '' }
+                        onClick={ () => setCurrentHoverOn( 'email_input' ) }
                     />
 
-                    {currentHoverOn === 'email_input' && (
+                    { currentHoverOn === 'email_input' && (
                         <div
                             className="input-editor"
                             role="button"
-                            tabIndex={0}
-                            onClick={() => setCurrentEditSection('text')}
+                            tabIndex={ 0 }
+                            onClick={ () => setCurrentEditSection( 'text' ) }
                         >
                             <p>Edit</p>
                             <span>
                                 <i className="admin-font adminlib-edit"></i>
                             </span>
                         </div>
-                    )}
+                    ) }
 
-                    {currentHoverOn === 'email_input' &&
+                    { currentHoverOn === 'email_input' &&
                         currentEditSection === 'text' && (
                             <div className="setting-wrapper">
                                 <button
-                                    onClick={(e) => {
+                                    onClick={ ( e ) => {
                                         e.preventDefault();
-                                        setCurrentEditSection('');
-                                    }}
+                                        setCurrentEditSection( '' );
+                                    } }
                                     className="wrapper-close"
                                 >
                                     <i className="admin-font adminlib-cross"></i>
@@ -118,7 +119,7 @@ const NotifimaFormCustomizer: React.FC<FormCustomizerProps> = ({
                                                 setting?.email_placeholder_text ||
                                                 ''
                                             }
-                                            onChange={(e) =>
+                                            onChange={ ( e ) =>
                                                 onChange(
                                                     'email_placeholder_text',
                                                     e.target.value
@@ -128,30 +129,30 @@ const NotifimaFormCustomizer: React.FC<FormCustomizerProps> = ({
                                     </div>
                                 </div>
                             </div>
-                        )}
+                        ) }
                 </div>
 
                 <div className="button-section">
                     <ButtonCustomizer
-                        text={buttonText}
-                        proSetting={proSetting}
-                        setting={setting?.customize_btn}
-                        onChange={(
+                        text={ buttonText }
+                        proSetting={ proSetting }
+                        setting={ setting?.customize_btn }
+                        onChange={ (
                             key,
                             value,
                             isRestoreDefaults = false
                         ) => {
                             const previousSetting =
                                 setting?.customize_btn || {};
-                            if (isRestoreDefaults) {
-                                onChange('customize_btn', value);
+                            if ( isRestoreDefaults ) {
+                                onChange( 'customize_btn', value );
                             } else {
-                                onChange('customize_btn', {
+                                onChange( 'customize_btn', {
                                     ...previousSetting,
-                                    [key]: value,
-                                });
+                                    [ key ]: value,
+                                } );
                             }
-                        }}
+                        } }
                     />
                 </div>
             </div>
