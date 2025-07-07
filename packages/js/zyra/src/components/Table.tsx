@@ -177,20 +177,21 @@ export const TableCell: React.FC< TableCellProps > = ( {
                 } )
             );
             content = (
-                <SelectInput
-                    wrapperClass="select-wrapper"
-                    inputClass={ `${ header.class } dropdown-select` }
-                    options={ optionsVal }
-                    value={ fieldValue as string }
-                    proSetting={ false }
-                    onChange={ ( e ) => {
-                        if ( onChange ) {
-                            onChange(
-                                e as unknown as React.ChangeEvent< HTMLInputElement >
-                            );
+                <select
+                    className={`${header.class} dropdown-select ${fieldValue}`}
+                    value={fieldValue as string}
+                    onChange={(e) => {
+                        if (onChange) {
+                            onChange(e.target as unknown as React.ChangeEvent< HTMLInputElement >);
                         }
-                    } }
-                />
+                    }}
+                >
+                    {optionsVal.map((option) => (
+                        <option key={option.key} value={option.value}>
+                            {option.label}
+                        </option>
+                    ))}
+                </select>
             );
             break;
         default:

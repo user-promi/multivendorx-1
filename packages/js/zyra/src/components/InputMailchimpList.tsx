@@ -134,7 +134,7 @@ const InputMailchimpList: React.FC< InputMailchimpListProps > = ( {
                         }
                     } }
                     options={ selectOption }
-                    value={ value }
+                    value={ setting[ selectKey ] }
                 />
             ) }
         </div>
