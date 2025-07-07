@@ -14,17 +14,6 @@ const proPopupContent = {
         'More surprises? Oh yes.',
         'notifima'
     ),
-    // messages: [
-    //     __( 'Double Opt-in.', 'notifima' ),
-    //     __( 'Ban Spam Mail.', 'notifima' ),
-    //     __( 'Export Subscribers.', 'notifima' ),
-    //     __( 'Subscription Dashboard.', 'notifima' ),
-    //     __( 'MailChimp Integration.', 'notifima' ),
-    //     __( 'Recaptcha Support.', 'notifima' ),
-    //     __( 'Subscription Details.', 'notifima' ),
-    //     __( 'Notifima Dashboard.', 'notifima' ),
-    //     __( 'Export/Import Stock.', 'notifima' ),
-    // ],
     messages: [
         { icon: 'popup-icon-double-opt-in', text: __('Double Opt-in.', 'notifima') },
         { icon: 'popup-icon-ban-spam-mail', text: __('Ban Spam Mail.', 'notifima') },
