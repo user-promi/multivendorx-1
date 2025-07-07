@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 } // Exit if accessed directly
 
-do_action( 'woocommerce_email_header', $args['email_heading'], $email );
+do_action( 'woocommerce_email_header', $args['email_heading'] );
 $product = $args['product'];
 ?>
 
