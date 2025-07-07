@@ -5,10 +5,10 @@
  * Description: Boost sales with real-time stock alerts! Notify customers instantly when products are back in stock. Simplify data management by exporting and importing stock data with ease.
  * Author: MultiVendorX
  * Version: 3.0.0
- * Requires at least: 5.4
- * Tested up to: 6.7.2
+ * Requires at least: 6.4
+ * Tested up to: 6.8.1
  * WC requires at least: 8.2.2
- * WC tested up to: 9.6.2
+ * WC tested up to: 9.9.5
  * Author URI: https://multivendorx.com/
  * Text Domain: notifima
  * Requires Plugins: woocommerce
