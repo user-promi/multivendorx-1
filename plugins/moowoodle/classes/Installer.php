@@ -112,12 +112,12 @@ class Installer {
             `cohort_id` bigint(20) NOT NULL,
             `group_id` bigint(20) NOT NULL,
             `order_id` bigint(20) NOT NULL,
-            `item_id` bigint(20) NOT NULL,
+            `order_item_id` bigint(20) NOT NULL,
             `status` varchar(20) NOT NULL,
             `enrollment_date` timestamp NULL DEFAULT NULL,
             `unenrollment_date` timestamp NULL DEFAULT NULL,
             `unenrollment_reason` text DEFAULT NULL,
-            `group_item_id` bigint(20) NOT NULL,
+            `bulk_purchase_id` bigint(20) NOT NULL,
             PRIMARY KEY (`id`)
         ) $collate;";
 
@@ -347,7 +347,7 @@ class Installer {
                 'user_email'      => $customer->user_email,
                 'course_id'       => (int) $course['id'],
                 'order_id'        => $order->get_id(),
-                'item_id'         => $item->get_id(),
+                'order_item_id'   => $item->get_id(),
                 'status'          => in_array( $linked_course_id, $unenrolled_courses, true ) ? 'unenrolled' : 'enrolled',
                 'enrollment_date' => $enrollment_date,
             );
