@@ -40,6 +40,7 @@
 }
   
   .table-wrapper{
+    box-shadow: 0 0 1rem rgba(77, 76, 76, 0.13);
     .admin-table{
       width: 100%;
       border-collapse: collapse;
@@ -131,10 +132,6 @@
             .main-input{
                 background: transparent;
                 border-color: transparent;
-
-                &:focus{
-                  border: $border-light-small;
-                }
             }
 
             .action-icons{
@@ -169,9 +166,6 @@
               gap: 0.5rem;
             }
           }
-          // .admin-column:last-child {
-          //   display: none;
-          // }
           .admin-column:has(.product-expand) {
             min-width: 3rem;
           }
@@ -179,7 +173,7 @@
             border: none !important; /*for overwrite common style*/
           }
           .basic-input:focus{
-            border: 0.063rem solid #e0e4e9 !important; /*for overwrite common style*/
+            border: 0.063rem solid #ccd0d5 !important; /*for overwrite common style*/
           }
         }
 
