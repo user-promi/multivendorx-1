@@ -166,10 +166,10 @@ const MultiCheckBox: React.FC< MultiCheckBoxProps > = ( props ) => {
                                 } }
                             ></span>
                         ) }
+                        { props.proSetting && <span className="admin-pro-tag">pro</span> }
                     </div>
                 );
             } ) }
-            { props.proSetting && <span className="admin-pro-tag">pro</span> }
             { props.description && (
                 <p
                     className={ props.descClass }

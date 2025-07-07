@@ -104,6 +104,7 @@ const Customizer: React.FC< CustomizerProps > = ( {
                                     Background Color
                                     <div className="property-section">
                                         <input
+                                            className="basic-input"
                                             type="color"
                                             value={
                                                 setting.button_background_color
@@ -119,6 +120,7 @@ const Customizer: React.FC< CustomizerProps > = ( {
                                         />
                                         <input
                                             type="text"
+                                            className="basic-input"
                                             value={
                                                 setting.button_background_color
                                                     ? setting.button_background_color
@@ -138,6 +140,7 @@ const Customizer: React.FC< CustomizerProps > = ( {
                                     <div className="property-section">
                                         <input
                                             type="color"
+                                            className="basic-input"
                                             value={
                                                 setting.button_text_color
                                                     ? setting.button_text_color
@@ -152,6 +155,7 @@ const Customizer: React.FC< CustomizerProps > = ( {
                                         />
                                         <input
                                             type="text"
+                                            className="basic-input"
                                             value={
                                                 setting.button_text_color
                                                     ? setting.button_text_color
@@ -173,6 +177,7 @@ const Customizer: React.FC< CustomizerProps > = ( {
                                     <div className="property-section">
                                         <input
                                             type="color"
+                                            className="basic-input"
                                             value={
                                                 setting.button_background_color_onhover
                                                     ? setting.button_background_color_onhover
@@ -187,6 +192,7 @@ const Customizer: React.FC< CustomizerProps > = ( {
                                         />
                                         <input
                                             type="text"
+                                            className="basic-input"
                                             value={
                                                 setting.button_background_color_onhover
                                                     ? setting.button_background_color_onhover
@@ -206,6 +212,7 @@ const Customizer: React.FC< CustomizerProps > = ( {
                                     <div className="property-section">
                                         <input
                                             type="color"
+                                            className="basic-input"
                                             value={
                                                 setting.button_text_color_onhover
                                                     ? setting.button_text_color_onhover
@@ -496,7 +503,7 @@ const Customizer: React.FC< CustomizerProps > = ( {
                             <div className="simple">
                                 <div className="link-box">
                                     <input
-                                        className="link-input"
+                                        className="basic-input"
                                         type="text"
                                         value={ buttonLink }
                                         onChange={ ( e ) =>
@@ -527,7 +534,7 @@ const Customizer: React.FC< CustomizerProps > = ( {
                     { select === 'setting' && (
                         <div className="section-wrapper settings">
                             <div className="section">
-                                <p>{ 'System settings' }</p>
+                                <p className="system-setting">{ 'System settings' }</p>
                                 <div className="property-section">
                                     <button
                                         className="admin-btn btn-purple"
