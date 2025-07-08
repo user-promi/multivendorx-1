@@ -40,7 +40,7 @@ The ultimate solution to keep your customers engaged and informed when products 
 * 🎨 Customize the form’s heading, button text, colors, hover effects, submission alerts, and more.
 * 📝 Personalize email headings and subjects sent to customers. 
 * ⚙️ Work seamlessly with product backorder option enabled. 
-* 🔧 Reposition and display the stock alert form on product pages with a shortcode: **[display_stock_alert_form]** 
+* 🔧 Reposition and display the stock alert form on product pages with a shortcode: **[notifima_subscription_form]** 
 * 📂 Export your subscriber list easily via WordPress’s Tools settings. 
 * 📊 Export all stock data for your shop. 
 * ❌ Customers can unsubscribe from products from their My Account page. **[PRO]** 
@@ -97,7 +97,7 @@ Are you tired of losing potential sales because your customers can't buy the out
 [Notifima Pro](https://notifima.com/pricing/?utm_source=wporg&utm_medium=plugindescription&utm_campaign=notifimawporg)
 
 ## Shortcodes
-- **[display_stock_manager_form]**: You can display stock alert form anywhere using this shortcode.
+- **[notifima_subscription_form]**: You can display stock alert form anywhere using this shortcode.
 
 ## 🌟 Upcoming Features: 
 * 🚫 Mark products as ‘Discontinued’ in your WooCommerce catalog. 
@@ -431,7 +431,7 @@ Manual installation method requires downloading the [Notifima] (https://wordpres
 = 1.3.0 =
 * Features : Customer can unsubscribe a product which he/she already subscribed.
 * Feature : A confirmation mail will be sent to subscriber after subscribe a product.
-* Feature : [display_stock_alert_form] => Shortcode to display stock alert form in product page.
+* Feature : [notifima_subscription_form] => Shortcode to display stock alert form in product page.
 * Feature : An export option is added inside 'Tools->WC Stock Alert Export' to export subscribers' list.
 
 = 1.2.0 =
@@ -518,7 +518,7 @@ Manual installation method requires downloading the [Notifima] (https://wordpres
 = 1.3.0 =
 * Features : Customer can unsubscribe a product which he/she already subscribed.
 * Feature : A confirmation mail will be sent to subscriber after subscribe a product.
-* Feature : [display_stock_alert_form] => Shortcode to display stock alert form in product page.
+* Feature : [notifima_subscription_form] => Shortcode to display stock alert form in product page.
 * Feature : An export option is added inside 'Tools->WC Stock Alert Export' to export subscribers' list.
 
 = 1.2.0 =
