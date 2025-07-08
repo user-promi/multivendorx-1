@@ -21,6 +21,10 @@ interface BannerProps {
     proUrl: string;
     tag: string;
     buttonText: string;
+    bgCode: string;
+    textCode: string;
+    btnCode: string;
+    btnBgCode: string;
 }
 
 const Banner: React.FC< BannerProps > = ( {
@@ -29,6 +33,7 @@ const Banner: React.FC< BannerProps > = ( {
     proUrl,
     tag,
     buttonText,
+    bgCode, textCode, btnCode, btnBgCode
 } ) => {
     // Ensure localStorage is initialized correctly
     if ( localStorage.getItem( 'banner' ) !== 'false' ) {
@@ -134,7 +139,7 @@ const Banner: React.FC< BannerProps > = ( {
                         ></span>
                         <ProPopup />
                     </Dialog>
-                    <div className="admin-carousel-container">
+                    <div className="admin-carousel-container" style={{ '--bg-color': bgCode } as React.CSSProperties}>
                         <div className="carousel-container">
                             <div
                                 className="admin-font adminlib-cross pro-slider-cross"
@@ -145,6 +150,7 @@ const Banner: React.FC< BannerProps > = ( {
                             { tag && (
                                 <div
                                     className="why-go-pro-tag"
+                                    style={{ '--btn-color': btnCode, '--btn-bg-color': btnBgCode } as React.CSSProperties}
                                     role="button"
                                     tabIndex={ 0 }
                                     onClick={ handleOpen }
@@ -162,14 +168,15 @@ const Banner: React.FC< BannerProps > = ( {
                                             }` }
                                         >
                                             <div className="admin-pro-txt-items">
-                                                <h3>{ product.title }</h3>
-                                                <p>{ product.description }</p>
+                                                <h3 style={{ '--bg-color': bgCode } as React.CSSProperties}>{ product.title }</h3>
+                                                <p style={{ '--text-color': textCode } as React.CSSProperties}>{ product.description }</p>
                                                 { buttonText && (
                                                     <a
                                                         href={ proUrl }
                                                         target="_blank"
                                                         rel="noreferrer"
                                                         className="admin-btn btn-red"
+                                                        style={{ '--btn-color': btnCode, '--btn-bg-color': btnBgCode } as React.CSSProperties}
                                                     >
                                                         { buttonText }
                                                     </a>
@@ -181,10 +188,10 @@ const Banner: React.FC< BannerProps > = ( {
                             </ul>
                         </div>
                         <div className="carousel-controls">
-                            <button id="prev-btn">
+                            <button id="prev-btn" style={{ '--text-color': textCode } as React.CSSProperties}>
                                 <i className="admin-font adminlib-arrow-left"></i>
                             </button>
-                            <button id="next-btn">
+                            <button id="next-btn" style={{ '--text-color': textCode } as React.CSSProperties}>
                                 <i className="admin-font adminlib-arrow-right"></i>
                             </button>
                         </div>
