@@ -21,6 +21,8 @@ The ultimate solution to keep your customers engaged and informed when products 
 
 🌟 Learn More About [Pro](https://notifima.com/pricing/?utm_source=wporg&utm_medium=plugindescription&utm_campaign=notifimawporg)
 
+👉 Official Demo Link: Try out Free and Pro **Notifima** [Demo site](https://multivendordemo.com/notifima/)
+
 ==📦Supported Product Types of WooCommerce ==
 👉Simple
 👉Variable
@@ -40,7 +42,6 @@ The ultimate solution to keep your customers engaged and informed when products 
 * 🎨 Customize the form’s heading, button text, colors, hover effects, submission alerts, and more.
 * 📝 Personalize email headings and subjects sent to customers. 
 * ⚙️ Work seamlessly with product backorder option enabled. 
-* 🔧 Reposition and display the stock alert form on product pages with a shortcode: **[notifima_subscription_form]** 
 * 📂 Export your subscriber list easily via WordPress’s Tools settings. 
 * 📊 Export all stock data for your shop. 
 * ❌ Customers can unsubscribe from products from their My Account page. **[PRO]** 
@@ -73,6 +74,8 @@ Are you tired of losing potential sales because your customers can't buy the out
 
 👉 UPGRADE TO [**Notifima PRO**](https://notifima.com/pricing/?utm_source=wporg&utm_medium=plugindescription&utm_campaign=notifimawporg)  
 
+👉 Official Demo Link: Try out Free and Pro **Notifima** [Demo site](https://multivendordemo.com/notifima/)
+
 ✔️ **Double Opt In [PRO]**: Double opt-in for stock alert subscription is a two-step confirmation process that ensures subscribers genuinely want to receive notifications about product availability. 
 
 📨 **Mailchimp Connect [PRO]**: Effortlessly connect your WooCommerce out-of-stock user subscriptions with Mailchimp for seamless communication and marketing strategies. Admins can easily manage and sync user data with Mailchimp lists. 
@@ -93,8 +96,9 @@ Are you tired of losing potential sales because your customers can't buy the out
 📉 **Product Stock History [PRO]**: Dive into the Notifima's Stock Manager for WooCommerce’s Stock Log page, offering a detailed history of each product’s stock movements. Track changes over time to gain insights into product availability trends. **[COMING SOON]**
 
 
-## 👩‍🏫 Learn More About Pro
-[Notifima Pro](https://notifima.com/pricing/?utm_source=wporg&utm_medium=plugindescription&utm_campaign=notifimawporg)
+## 👩‍🏫 Learn More About Pro [Notifima Pro](https://notifima.com/pricing/?utm_source=wporg&utm_medium=plugindescription&utm_campaign=notifimawporg)
+👉 Official Demo Link: Try out Free and Pro **Notifima** [Demo site](https://multivendordemo.com/notifima/)
+
 
 ## Shortcodes
 - **[notifima_subscription_form]**: You can display stock alert form anywhere using this shortcode.
@@ -128,10 +132,10 @@ Manual installation method requires downloading the [Notifima] (https://wordpres
   *A: Certainly, we provide a complete panel for each displayed text or alert, allowing you to customize the messages according to your preferences.*
 
 **Q: How can I export subscribers' data to my new site?**
-  *A: Navigate to WP-admin >> Tools >> WC Stock Alert and export the subscriber lists. The CSV will contain product names and their corresponding subscriber email IDs.*
+  *A: Navigate to Notifima >> Subscriber List >> Download CSV and export the subscriber lists. The CSV will contain product names and their corresponding subscriber email IDs.*
 
 **Q: Is it possible to exclude the admin from receiving out-of-stock subscription notifications?**
-  *A: Certainly, go to Settings >> Recipient Email for New Subscriber and remove the admin's email ID from there.*
+  *A: Certainly, go to Settings >> Appearence >> Recipient Email for New Subscriber and remove the admin's email ID from there.*
 
 == Screenshots ==
 1. Stock alert plugin settings panel
