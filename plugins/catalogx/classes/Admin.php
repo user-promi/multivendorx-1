@@ -7,6 +7,8 @@
 
 namespace CatalogX;
 
+defined( 'ABSPATH' ) || exit;
+
 /**
  * CatalogX Admin class
  *
@@ -35,7 +37,6 @@ class Admin {
      * @return void
      */
     public function add_menu() {
-        global $submenu;
 
         add_menu_page(
             'CatalogX',
@@ -47,59 +48,50 @@ class Admin {
             50
         );
 
-        add_submenu_page(
-            'catalogx',
-            __( 'Enquiry Messages', 'catalogx' ),
-            __( 'Enquiry Messages', 'catalogx' ),
-            'manage_woocommerce',
-            'catalogx#&tab=enquiry-messages',
-            '__return_null'
+        $submenus = array(
+            'enquiry-messages' => array(
+                'name'   => __( 'Enquiry Messages', 'catalogx' ),
+                'subtab' => '',
+            ),
+            'quote-requests'   => array(
+                'name'   => __( 'Quotation Requests', 'catalogx' ),
+                'subtab' => '',
+            ),
+            'wholesale-users'  => array(
+                'name'   => __( 'Wholesale Users', 'catalogx' ),
+                'subtab' => '',
+            ),
+            'rules'            => array(
+                'name'   => __( 'Dynamic Pricing Rules', 'catalogx' ),
+                'subtab' => '',
+            ),
+            'settings'         => array(
+                'name'   => __( 'Settings', 'catalogx' ),
+                'subtab' => 'all-settings',
+            ),
+            'modules'          => array(
+                'name'   => __( 'Modules', 'catalogx' ),
+                'subtab' => '',
+            ),
         );
 
-        add_submenu_page(
-            'catalogx',
-            __( 'Quotation Requests', 'catalogx' ),
-            __( 'Quotation Requests', 'catalogx' ),
-            'manage_woocommerce',
-            'catalogx#&tab=quote-requests',
-            '__return_null'
-        );
+        foreach ( $submenus as $slug => $submenu ) {
+            // prepare subtab if subtab is exist.
+            $subtab = '';
 
-        add_submenu_page(
-            'catalogx',
-            __( 'Wholesale Users', 'catalogx' ),
-            __( 'Wholesale Users', 'catalogx' ),
-            'manage_woocommerce',
-            'catalogx#&tab=wholesale-users',
-            '__return_null'
-        );
+            if ( $submenu['subtab'] ) {
+                $subtab = '&subtab=' . $submenu['subtab'];
+            }
 
-        add_submenu_page(
-            'catalogx',
-            __( 'Dynamic Pricing Rules', 'catalogx' ),
-            __( 'Dynamic Pricing Rules', 'catalogx' ),
-            'manage_woocommerce',
-            'catalogx#&tab=rules',
-            '__return_null'
-        );
-
-        add_submenu_page(
-            'catalogx',
-            __( 'Settings', 'catalogx' ),
-            __( 'Settings', 'catalogx' ),
-            'manage_woocommerce',
-            'catalogx#&tab=settings&subtab=all-settings',
-            '__return_null'
-        );
-
-        add_submenu_page(
-            'catalogx',
-            __( 'Modules', 'catalogx' ),
-            __( 'Modules', 'catalogx' ),
-            'manage_woocommerce',
-            'catalogx#&tab=modules',
-            '__return_null'
-        );
+            add_submenu_page(
+                'catalogx',
+                $submenu['name'],
+                $submenu['name'],
+                'manage_woocommerce',
+                'catalogx#&tab=' . $slug . $subtab,
+                '__return_null'
+            );
+        }
 
         if ( ! Utill::is_khali_dabba() ) {
             add_submenu_page(

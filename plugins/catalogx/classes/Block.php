@@ -40,18 +40,6 @@ class Block {
     }
 
     /**
-     * Get the build path depending on dev mode.
-     *
-     * @return string
-     */
-    public static function get_build_path_name() {
-        if ( CatalogX()->is_dev ) {
-			return 'release/assets/';
-        }
-        return 'assets/';
-    }
-
-    /**
      * Initialize blocks based on active modules.
      *
      * @return array List of blocks with their configuration.
@@ -63,13 +51,13 @@ class Block {
             $blocks[] = array(
                 'name'       => 'enquiry-button', // block name.
                 'textdomain' => 'catalogx',
-                'block_path' => CatalogX()->plugin_path . self::get_build_path_name() . 'js/block/',
+                'block_path' => CatalogX()->plugin_path . FrontendScripts::get_build_path_name() . 'js/block/',
             );
 
             // this path is set for load the translation.
             CatalogX()->block_paths += array(
-                'block/enquiry-button' => self::get_build_path_name() . 'js/block/enquiry-button/index.js',
-                'block/enquiryForm'    => self::get_build_path_name() . 'js/block/enquiryForm/index.js',
+                'block/enquiry-button' => FrontendScripts::get_build_path_name() . 'js/block/enquiry-button/index.js',
+                'block/enquiryForm'    => FrontendScripts::get_build_path_name() . 'js/block/enquiryForm/index.js',
             );
         }
 
@@ -77,19 +65,19 @@ class Block {
             $blocks[] = array(
                 'name'       => 'quote-button', // block name.
                 'textdomain' => 'catalogx',
-                'block_path' => CatalogX()->plugin_path . self::get_build_path_name() . 'js/block/',
+                'block_path' => CatalogX()->plugin_path . FrontendScripts::get_build_path_name() . 'js/block/',
             );
 
             $blocks[] = array(
                 'name'       => 'quote-cart', // block name.
                 'textdomain' => 'catalogx',
-                'block_path' => CatalogX()->plugin_path . self::get_build_path_name() . 'js/block/',
+                'block_path' => CatalogX()->plugin_path . FrontendScripts::get_build_path_name() . 'js/block/',
             );
 
             // this path is set for load the translation.
             CatalogX()->block_paths += array(
-                'block/quote-cart'   => self::get_build_path_name() . 'js/block/quote-cart/index.js',
-                'block/quote-button' => self::get_build_path_name() . 'js/block/quote-button/index.js',
+                'block/quote-cart'   => FrontendScripts::get_build_path_name() . 'js/block/quote-cart/index.js',
+                'block/quote-button' => FrontendScripts::get_build_path_name() . 'js/block/quote-button/index.js',
             );
         }
 

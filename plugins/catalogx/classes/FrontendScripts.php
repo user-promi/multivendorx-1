@@ -8,6 +8,9 @@
 namespace CatalogX;
 
 use Catalogx\Enquiry\Frontend as EnquiryFrontend;
+
+defined( 'ABSPATH' ) || exit;
+
 /**
  * CatalogX FrontendScripts class
  *

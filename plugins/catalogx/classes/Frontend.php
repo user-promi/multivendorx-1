@@ -7,6 +7,8 @@
 
 namespace CatalogX;
 
+defined( 'ABSPATH' ) || exit;
+
 /**
  * CatalogX frontend class
  *

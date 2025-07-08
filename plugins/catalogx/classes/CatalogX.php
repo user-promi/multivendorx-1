@@ -9,6 +9,8 @@ namespace CatalogX;
 
 use Automattic\WooCommerce\Utilities\FeaturesUtil;
 
+defined( 'ABSPATH' ) || exit;
+
 /**
  * CatalogX class main function
  *

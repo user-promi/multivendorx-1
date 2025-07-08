@@ -7,6 +7,8 @@
 
 namespace CatalogX;
 
+defined( 'ABSPATH' ) || exit;
+
 /**
  * Catalog Modules Class
  *

@@ -10,6 +10,8 @@ namespace CatalogX;
 use CatalogX\Enquiry\Module as EnquiryModule;
 use CatalogX\Quote\Module as QuoteModule;
 
+defined( 'ABSPATH' ) || exit;
+
 /**
  * CatalogX Rest class
  *

@@ -7,16 +7,7 @@
 
 namespace CatalogX;
 
-/**
- * CatalogX Setup wizard class
- *
- * @class       SetupWizard class
- * @version     6.0.0
- * @author      MultivendorX
- */
-if ( ! defined( 'ABSPATH' ) ) {
-    exit;
-}
+defined( 'ABSPATH' ) || exit;
 
 /**
  * CatalogX SetupWizard class
