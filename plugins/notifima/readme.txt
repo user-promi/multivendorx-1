@@ -1,4 +1,4 @@
-=== Notifima – WooCommerce Stock Manager, Inventory Management, Wishlist ===
+=== Notifima – WooCommerce Stock Manager, Inventory Management, Waitlist ===
 
 Contributors: wcmp
 Tags: woocommerce stock manager, woocommerce stock management, woocommerce inventory management, stock waitlist, in stock alert
