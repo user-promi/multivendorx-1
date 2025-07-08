@@ -5,7 +5,7 @@ export default {
     priority: 90,
     name: __('Tools', 'catalogx'),
     desc: __('Review all system logs and errors', 'catalogx'),
-    icon: 'adminLib-paint-brush',
+    icon: 'adminlib-paint-brush',
     submitUrl: 'settings',
     modal: [
         {

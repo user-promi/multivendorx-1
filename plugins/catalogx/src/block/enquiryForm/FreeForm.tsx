@@ -212,7 +212,7 @@ const FreeForm = (props: any) => {
                                         className="attachment-label"
                                     >
                                         <div className="wrapper">
-                                            <i className="adminLib-cloud-upload"></i>
+                                            <i className="adminlib-cloud-upload"></i>
                                             <p className="heading">
                                                 {fileName === '' ? (
                                                     <>

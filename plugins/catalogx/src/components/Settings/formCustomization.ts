@@ -8,7 +8,7 @@ export default {
         'Design a personalized enquiry form with built-in form builder.',
         'catalogx'
     ),
-    icon: 'adminLib-contact-form',
+    icon: 'adminlib-contact-form',
     submitUrl: 'settings',
     modal: [
         {

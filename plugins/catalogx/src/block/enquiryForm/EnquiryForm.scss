@@ -9,7 +9,7 @@
     font-style: normal;
     font-display: block;
   }
-  [class^="adminLib-"], [class*=" adminLib-"] {
+  [class^="adminlib-"], [class*=" adminlib-"] {
     /* use !important to prevent issues with browser extensions that change fonts */
     font-family: 'AdminLibrary' !important;
     speak: never;
@@ -31,7 +31,7 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
-  .adminLib-cross:before {
+  .adminlib-cross:before {
     content: "\e916";
   }
 .catalogx-modal {

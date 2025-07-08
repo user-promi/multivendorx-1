@@ -8,7 +8,7 @@ export default {
         'Exclude catalog viewing, enquiries, and quotes by user roles and product attributes.',
         'catalogx'
     ),
-    icon: 'adminLib-exclude',
+    icon: 'adminlib-exclude',
     submitUrl: 'settings',
     modal: [
         {

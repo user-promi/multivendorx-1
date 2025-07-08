@@ -8,7 +8,7 @@ export default {
         'Drag-and-drop to create and customize single product page elements.',
         'catalogx'
     ),
-    icon: 'adminLib-web-page-website',
+    icon: 'adminlib-web-page-website',
     submitUrl: 'settings',
     modal: [
         {

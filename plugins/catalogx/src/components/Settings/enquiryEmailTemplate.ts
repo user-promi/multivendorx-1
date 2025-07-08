@@ -8,7 +8,7 @@ export default {
         'Select your preferred enquiry details email template',
         'catalogx'
     ),
-    icon: 'adminLib-mail',
+    icon: 'adminlib-mail',
     submitUrl: 'settings',
     modal: [
         {

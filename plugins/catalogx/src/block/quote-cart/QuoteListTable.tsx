@@ -244,7 +244,7 @@ const QuoteList = () => {
                     ></p>
                     {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */}
                     <p
-                        className="adminLib-cross"
+                        className="adminlib-cross"
                         onClick={(e) =>
                             handleRemoveCart(
                                 e,
