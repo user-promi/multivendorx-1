@@ -322,7 +322,7 @@ class FrontendScripts {
 						'apiUrl'                   => untrailingslashit( get_rest_url() ),
 						'restUrl'                  => Notifima()->rest_namespace,
 						'nonce'                    => wp_create_nonce( 'wp_rest' ),
-						'subscriber_list'          => Notifima()->plugin_url . 'src/assets/images/subscriber-list.jpg',
+						'subscriber_list'          => Notifima()->plugin_url . 'src/assets/images/subscriber-list.png',
 						'export_button'            => admin_url( 'admin-ajax.php?action=export_subscribers' ),
 						'khali_dabba'              => Utill::is_khali_dabba(),
 						'tab_name'                 => __( 'Notifima', 'notifima' ),
