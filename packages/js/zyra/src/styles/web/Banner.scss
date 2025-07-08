@@ -7,7 +7,7 @@
   .admin-carousel-container {
     padding: 0;
     position: relative;
-    background: $background-color;
+    background: #862dff33;
 
     .carousel-container {
       position: relative;
@@ -38,7 +38,7 @@
         right: 0.625rem;
         top: 0.625rem;
         font-size: 1.25rem;
-        color: #c9c5c3;
+        color: #fff;
       }
 
       .why-go-pro-tag {
@@ -111,7 +111,7 @@
 
       button {
         color: $color-active;
-        background-color: #c9c5c3;
+        background-color: #fff;
         font-size: 0.65rem;
         border-radius: 50%;
         margin: 0;
