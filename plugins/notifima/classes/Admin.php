@@ -123,9 +123,10 @@ class Admin {
                         a:has(.upgrade-to-pro){
                             background: #65438f !important;
                             color: White !important;
-                        };
+                        }
+                        padding: 5px 0;
                     </style>
-                    <div class="upgrade-to-pro"><i class="dashicons dashicons-awards"></i>' . esc_html__( 'Upgrade to Pro', 'notifima' ) . '</div> ',
+                    <div style="margin-left: -12px;" class="upgrade-to-pro"><i class="dashicons dashicons-awards"></i>' . esc_html__( 'Upgrade to Pro', 'notifima' ) . '</div> ',
                     'manage_options',
                     '',
                     array( self::class, 'handle_external_redirects' )
