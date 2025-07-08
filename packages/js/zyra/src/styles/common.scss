@@ -297,7 +297,9 @@ input[type="radio"] {
   appearance: none;
   border-radius: 50%;
 }
-
+input[type="checkbox"] {
+  vertical-align: middle;
+}
 // all input style end
 
 
