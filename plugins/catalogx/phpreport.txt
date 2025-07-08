@@ -1,0 +1,16 @@
+
+FILE: classes/Core/Session.php
+-----------------------------------------------------------------------------------------------------------------------------------------
+FOUND 0 ERRORS AND 4 WARNINGS AFFECTING 4 LINES
+-----------------------------------------------------------------------------------------------------------------------------------------
+ 31 | WARNING | Property name "$_cookie" should not be prefixed with an underscore to indicate visibility
+    |         | (PSR2.Classes.PropertyDeclaration.Underscore)
+ 38 | WARNING | Property name "$_session_expiring" should not be prefixed with an underscore to indicate visibility
+    |         | (PSR2.Classes.PropertyDeclaration.Underscore)
+ 45 | WARNING | Property name "$_session_expiration" should not be prefixed with an underscore to indicate visibility
+    |         | (PSR2.Classes.PropertyDeclaration.Underscore)
+ 52 | WARNING | Property name "$_has_cookie" should not be prefixed with an underscore to indicate visibility
+    |         | (PSR2.Classes.PropertyDeclaration.Underscore)
+-----------------------------------------------------------------------------------------------------------------------------------------
+
+
