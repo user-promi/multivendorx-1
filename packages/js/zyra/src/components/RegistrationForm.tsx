@@ -464,6 +464,7 @@ const CustomFrom: React.FC<CustomFormProps> = ({
                                 const newInput = appendNewFormField(0);
                                 setOpendInput(newInput);
                             }}
+							btnType='button'
                         />
                     </div>
                 }
@@ -525,6 +526,7 @@ const CustomFrom: React.FC<CustomFormProps> = ({
                                                         children={
                                                             <i className="admin-font adminlib-close"></i>
                                                         }
+							                            btnType='button'
                                                     />
                                                 </div>
                                                 <SettingMetaBox
@@ -703,6 +705,7 @@ const CustomFrom: React.FC<CustomFormProps> = ({
                                                     appendNewFormField(index);
                                                 setOpendInput(newInput);
                                             }}
+							                btnType='button'
                                         />
                                     </main>
                                 );
@@ -747,6 +750,7 @@ const CustomFrom: React.FC<CustomFormProps> = ({
                         );
                         setOpendInput(newInput);
                     }}
+					btnType='button'
                 />
             </div>
         </div>
