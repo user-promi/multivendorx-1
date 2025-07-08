@@ -68,8 +68,13 @@ const InputMailchimpList: React.FC< InputMailchimpListProps > = ( {
             try {
                 const options: SelectOption[] =
                     ( await getApiResponse(
-                        getApiLink( appLocalizer, apiLink )
-                    ) ) ?? []; // ✅ Ensure it's always an array
+                        getApiLink( appLocalizer, apiLink ),
+                        {
+                            headers: {
+                                'X-WP-Nonce': appLocalizer.nonce,
+                            },
+                        }
+                    ) ) ?? [];
                 settingChanged.current = true;
                 updateSetting( optionKey, options );
                 setSelectOption( options );
