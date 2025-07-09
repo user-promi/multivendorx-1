@@ -127,8 +127,8 @@ class Notifima {
             );
 
             if ( ! Utill::is_khali_dabba() ) {
-            $row_meta['go_pro'] = '<a href="' . NOTIFIMA_PRO_SHOP_URL . '" class="notifima-pro-plugin" target="_blank" style="font-weight: 700;background: linear-gradient(110deg, rgb(63, 20, 115) 0%, 25%, rgb(175 59 116) 50%, 75%, rgb(219 75 84) 100%);-webkit-background-clip: text;-webkit-text-fill-color: transparent;">' . __( 'Upgrade to Pro', 'notifima' ) . '</a>';
-        }
+                $row_meta['go_pro'] = '<a href="' . NOTIFIMA_PRO_SHOP_URL . '" class="notifima-pro-plugin" target="_blank" style="font-weight: 700;background: linear-gradient(110deg, rgb(63, 20, 115) 0%, 25%, rgb(175 59 116) 50%, 75%, rgb(219 75 84) 100%);-webkit-background-clip: text;-webkit-text-fill-color: transparent;">' . __( 'Upgrade to Pro', 'notifima' ) . '</a>';
+            }
 
             return array_merge( $links, $row_meta );
         }
@@ -347,6 +347,10 @@ class Notifima {
         $plugin_links = array(
             '<a href="' . admin_url( 'admin.php?page=notifima#&tab=settings&subtab=appearance' ) . '">' . __( 'Settings', 'notifima' ) . '</a>',
         );
+
+        if ( ! Utill::is_khali_dabba() ) {
+            $links['go_pro'] = '<a href="' . NOTIFIMA_PRO_SHOP_URL . '" class="notifima-pro-plugin" target="_blank" style="font-weight: 700;background: linear-gradient(110deg, rgb(63, 20, 115) 0%, 25%, rgb(175 59 116) 50%, 75%, rgb(219 75 84) 100%);-webkit-background-clip: text;-webkit-text-fill-color: transparent;">' . __( 'Upgrade to Pro', 'notifima' ) . '</a>';
+        }
 
         return array_merge( $plugin_links, $links );
     }
