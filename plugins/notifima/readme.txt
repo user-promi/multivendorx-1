@@ -5,7 +5,7 @@ Tags: woocommerce stock manager, woocommerce stock management, woocommerce inven
 Requires at least: 5.4
 Tested up to: 6.8.1
 Requires PHP: 8.0
-Stable tag: 3.0.1
+Stable tag: 3.0.2
 Donate link: https://multivendorx.com/donate/
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -96,7 +96,7 @@ Are you tired of losing potential sales because your customers can't buy the out
 📉 **Product Stock History [PRO]**: Dive into the Notifima's Stock Manager for WooCommerce’s Stock Log page, offering a detailed history of each product’s stock movements. Track changes over time to gain insights into product availability trends. **[COMING SOON]**
 
 
-## 👩‍🏫 Learn More About Pro [Notifima Pro](https://notifima.com/pricing/?utm_source=wporg&utm_medium=plugindescription&utm_campaign=notifimawporg)
+👩‍🏫 Learn More About Pro [Notifima Pro](https://notifima.com/pricing/?utm_source=wporg&utm_medium=plugindescription&utm_campaign=notifimawporg)
 👉 Official Demo Link: Try out Free and Pro **Notifima** [Demo site](https://multivendordemo.com/notifima/)
 
 
@@ -146,6 +146,9 @@ Manual installation method requires downloading the [Notifima] (https://wordpres
 6. Inventory manager
 
 == Changelog ==
+
+= 3.0.2 - 2025-07-09 =
+* Fixed     - Resolved the persistent notice regarding plugin update.
 
 = 3.0.1 - 2025-07-09 =
 * Added     - CSS issue fix for improved layout consistency.

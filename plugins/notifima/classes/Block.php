@@ -15,7 +15,7 @@ defined( 'ABSPATH' ) || exit;
  * Notifima Block class
  *
  * @class       Block class
- * @version     PRODUCT_VERSION
+ * @version     3.0.0
  * @author      MultiVendorX
  */
 class Block {

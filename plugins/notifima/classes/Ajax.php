@@ -13,7 +13,7 @@ defined( 'ABSPATH' ) || exit;
  * Notifima Ajax class
  *
  * @class       Ajax class
- * @version     PRODUCT_VERSION
+ * @version     3.0.0
  * @author      MultiVendorX
  */
 class Ajax {

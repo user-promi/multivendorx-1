@@ -13,7 +13,7 @@ defined( 'ABSPATH' ) || exit;
  * Notifima Install class
  *
  * @class       Install class
- * @version     PRODUCT_VERSION
+ * @version     3.0.0
  * @author      MultiVendorX
  */
 class Install {
@@ -51,6 +51,8 @@ class Install {
         }
 
         $this->start_cron_job();
+
+        update_option( 'notifima_version', NOTIFIMA_PLUGIN_VERSION );
     }
 
     /**
