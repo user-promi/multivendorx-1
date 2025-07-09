@@ -36,9 +36,9 @@ class Course {
 	public function enqueue_admin_assets() {
 
 		\MooWoodle\FrontendScripts::admin_load_scripts();
-		\MooWoodle\FrontendScripts::enqueue_script( 'moowoodle-product-tab-script' );
-		\MooWoodle\FrontendScripts::enqueue_style( 'moowoodle-product-tab-style' );
-		\MooWoodle\FrontendScripts::localize_scripts( 'moowoodle-product-tab-script' );
+		\MooWoodle\FrontendScripts::enqueue_script( 'moowoodle-product-tab-js' );
+		\MooWoodle\FrontendScripts::enqueue_style( 'moowoodle-product-tab-css' );
+		\MooWoodle\FrontendScripts::localize_scripts( 'moowoodle-product-tab-js' );
 	}
 	
 	/**
@@ -120,6 +120,34 @@ class Course {
 	}
 
 	/**
+	 * Insert or update a course record by Moodle course ID.
+	 *
+	 * @param array $args Course data. Must include 'moodle_course_id'.
+	 * @return int|false Rows affected or false on failure.
+	 */
+	public static function update_course_information( $args ) {
+		global $wpdb;
+
+		if ( empty( $args['moodle_course_id'] ) ) {
+			return false;
+		}
+
+		$table    = $wpdb->prefix . Util::TABLES['course'];
+		$existing = reset( self::get_course_information( array( 'moodle_course_id' => $args['moodle_course_id'] ) ) );
+
+		if ( $existing ) {
+			return $wpdb->update( $table, $args, array( 'moodle_course_id' => $args['moodle_course_id'] ) ) !== false // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+				? $existing['id']
+				: false;
+		}
+
+		$args['created'] = current_time( 'mysql' );
+		return $wpdb->insert( $table, $args ) !== false // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		? $wpdb->insert_id
+		: false;
+	}
+
+	/**
 	 * Update or insert multiple courses based on Moodle data.
 	 * Skips courses with format 'site'.
 	 *
@@ -151,34 +179,6 @@ class Course {
 			self::remove_exclude_ids( $updated_ids );
 		}
     }
-
-	/**
-	 * Insert or update a course record by Moodle course ID.
-	 *
-	 * @param array $args Course data. Must include 'moodle_course_id'.
-	 * @return int|false Rows affected or false on failure.
-	 */
-	public static function update_course_information( $args ) {
-		global $wpdb;
-
-		if ( empty( $args['moodle_course_id'] ) ) {
-			return false;
-		}
-
-		$table    = $wpdb->prefix . Util::TABLES['course'];
-		$existing = reset( self::get_course_information( array( 'moodle_course_id' => $args['moodle_course_id'] ) ) );
-
-		if ( $existing ) {
-			return $wpdb->update( $table, $args, array( 'moodle_course_id' => $args['moodle_course_id'] ) ) !== false // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-				? $existing['id']
-				: false;
-		}
-
-		$args['created'] = current_time( 'mysql' );
-		return $wpdb->insert( $table, $args ) !== false // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-		? $wpdb->insert_id
-		: false;
-	}
 
 	/**
 	 * Creates custom tab for product types.

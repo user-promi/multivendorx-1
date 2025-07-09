@@ -28,27 +28,13 @@ class Product {
 		// Support for woocommerce product custom metadata query.
 		add_filter( 'woocommerce_product_data_store_cpt_get_products_query', array( &$this, 'handling_custom_meta_query_keys' ), 10, 2 );
 
+		add_action( 'moowoodle_clean_course_previous_link', array( $this, 'clean_course_previous_link' ), 10, 1 );
+
 		add_action( 'wp_trash_post', array( $this, 'handle_woocommerce_product_trash' ), 10, 1 );
 
 		add_action( 'untrash_post', array( $this, 'handle_woocommerce_product_restore' ), 10, 1 );
 
-		add_action( 'moowoodle_clean_course_previous_link', array( $this, 'clean_course_previous_link' ), 10, 1 );
     }
-
-	/**
-	 * Custom metadata query support for WooCommerce product.
-	 *
-	 * @param mixed $wp_query_args   The arguments passed to WP_Query.
-	 * @param mixed $query_vars      Query variables including meta_query.
-	 * @return mixed Modified WP_Query arguments.
-	 */
-	public function handling_custom_meta_query_keys( $wp_query_args, $query_vars ) {
-		if ( ! empty( $query_vars['meta_query'] ) ) {
-			$wp_query_args['meta_query'][] = $query_vars['meta_query'];
-		}
-
-		return $wp_query_args;
-	}
 
 	/**
 	 * Retrieves a WooCommerce product associated with a Moodle course ID.
@@ -75,56 +61,6 @@ class Product {
 		// Return the first product or null.
 		return reset( $products ) ? reset( $products ) : null;
 	}
-
-    /**
-     * Update All product
-     *
-     * @param mixed $courses all courses.
-     * @return void
-     */
-	public static function update_products( $courses ) {
-		$updated_ids = array();
-
-		// Manage setting of product sync option.
-		$product_sync_setting = MooWoodle()->setting->get_setting( 'product_sync_option', array() );
-
-		$create_product = in_array( 'create', $product_sync_setting, true );
-		$update_product = in_array( 'update', $product_sync_setting, true );
-
-		// None of the options are chosen.
-		if ( ! $create_product && ! $update_product ) {
-			return;
-		}
-
-		// Update all products.
-		\MooWoodle\Util::set_sync_status(
-            array(
-				'action'  => __( 'Update Product', 'moowoodle' ),
-				'total'   => count( $courses ) - 1,
-				'current' => 0,
-            ),
-            'course'
-        );
-
-		foreach ( $courses as $course ) {
-
-			// Do nothing when the course is a site course.
-			if ( 'site' === $course['format'] ) {
-				continue;
-			}
-
-			$product_id = self::update_product( $course, $create_product );
-
-			if ( $product_id ) {
-				$updated_ids[] = $product_id;
-			}
-
-			\MooWoodle\Util::increment_sync_count( 'course' );
-		}
-
-		self::remove_exclude_ids( $updated_ids );
-	}
-
 
     /**
 	 * Update moodle product data in WordPress WooCommerce.
@@ -204,38 +140,56 @@ class Product {
 		return $product->get_id();
 	}
 
-
-	/**
-	 * Delete all the product which id is not prasent in $exclude_ids array.
+    /**
+     * Update All product
      *
-	 * @param array $exclude_ids product ids.
-	 * @return void
-	 */
-	public static function remove_exclude_ids( $exclude_ids ) {
-        // get all product except $exclude_ids array.
-		$product_ids = \wc_get_products(
+     * @param mixed $courses all courses.
+     * @return void
+     */
+	public static function update_products( $courses ) {
+		$updated_ids = array();
+
+		// Manage setting of product sync option.
+		$product_sync_setting = MooWoodle()->setting->get_setting( 'product_sync_option', array() );
+
+		$create_product = in_array( 'create', $product_sync_setting, true );
+		$update_product = in_array( 'update', $product_sync_setting, true );
+
+		// None of the options are chosen.
+		if ( ! $create_product && ! $update_product ) {
+			return;
+		}
+
+		// Update all products.
+		\MooWoodle\Util::set_sync_status(
             array(
-				'exclude'    => $exclude_ids,
-				'status'     => 'publish',
-				'return'     => 'ids',
-				'meta_query' => array(
-					array(
-						'key'     => 'linked_course_id',
-						'compare' => 'EXISTS',
-					),
-				),
-            )
+				'action'  => __( 'Update Product', 'moowoodle' ),
+				'total'   => count( $courses ) - 1,
+				'current' => 0,
+            ),
+            'course'
         );
 
-		// delete product.
-		foreach ( $product_ids as $product_id ) {
-            $product = wc_get_product( $product_id );
-            $product->set_status( 'draft' );
-			$product->save();
+		foreach ( $courses as $course ) {
+
+			// Do nothing when the course is a site course.
+			if ( 'site' === $course['format'] ) {
+				continue;
+			}
+
+			$product_id = self::update_product( $course, $create_product );
+
+			if ( $product_id ) {
+				$updated_ids[] = $product_id;
+			}
+
+			\MooWoodle\Util::increment_sync_count( 'course' );
 		}
+
+		self::remove_exclude_ids( $updated_ids );
 	}
 
-    /**
+	/**
 	 * Adds an admin notice if certain WooCommerce extensions are active without MooWoodle Pro.
 	 *
 	 * @param array $classnames The product type classnames.
@@ -347,6 +301,21 @@ class Product {
 	}
 
 	/**
+	 * Custom metadata query support for WooCommerce product.
+	 *
+	 * @param mixed $wp_query_args   The arguments passed to WP_Query.
+	 * @param mixed $query_vars      Query variables including meta_query.
+	 * @return mixed Modified WP_Query arguments.
+	 */
+	public function handling_custom_meta_query_keys( $wp_query_args, $query_vars ) {
+		if ( ! empty( $query_vars['meta_query'] ) ) {
+			$wp_query_args['meta_query'][] = $query_vars['meta_query'];
+		}
+
+		return $wp_query_args;
+	}
+
+	/**
 	 * Unlinks the Moodle course when a WooCommerce product is trashed.
 	 *
 	 * This sets the associated `product_id` in the Moodle course table to 0,
@@ -395,6 +364,36 @@ class Product {
 					'product_id'       => $product_id,
 				)
 			);
+		}
+	}
+
+	/**
+	 * Delete all the product which id is not prasent in $exclude_ids array.
+     *
+	 * @param array $exclude_ids product ids.
+	 * @return void
+	 */
+	public static function remove_exclude_ids( $exclude_ids ) {
+        // get all product except $exclude_ids array.
+		$product_ids = \wc_get_products(
+            array(
+				'exclude'    => $exclude_ids,
+				'status'     => 'publish',
+				'return'     => 'ids',
+				'meta_query' => array(
+					array(
+						'key'     => 'linked_course_id',
+						'compare' => 'EXISTS',
+					),
+				),
+            )
+        );
+
+		// delete product.
+		foreach ( $product_ids as $product_id ) {
+            $product = wc_get_product( $product_id );
+            $product->set_status( 'draft' );
+			$product->save();
 		}
 	}
 }

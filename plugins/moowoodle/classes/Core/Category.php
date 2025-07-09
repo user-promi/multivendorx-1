@@ -48,31 +48,6 @@ class Category {
     }
 
 	/**
-	 * Insert or update multiple course categories in the local table.
-	 *
-	 * For each category, adds a new row or updates it based on the category ID.
-	 * Also increments the course sync count for tracking.
-	 *
-	 * @param array $categories Each item should include:
-	 *   - 'id' (int): Unique category ID (e.g., Moodle category ID).
-	 *   - 'name' (string): Category name.
-	 *   - 'parent' (int): Optional parent category ID.
-	 */
-	public static function update_course_categories_information( $categories ) {
-		foreach ( $categories as $category ) {
-			$args = array(
-				'id'        => (int) $category['id'],
-				'name'      => trim( sanitize_text_field( $category['name'] ) ),
-				'parent_id' => (int) ( $category['parent'] ),
-			);
-
-			self::update_course_category_information( $args );
-
-			\MooWoodle\Util::increment_sync_count( 'course' );
-		}
-	}
-
-	/**
 	 * Insert or update a category based on moodle category id.
 	 *
 	 * @param array $args {
@@ -100,6 +75,31 @@ class Category {
 
         return $wpdb->insert( $table, $args ); //phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
     }
+
+	/**
+	 * Insert or update multiple course categories in the local table.
+	 *
+	 * For each category, adds a new row or updates it based on the category ID.
+	 * Also increments the course sync count for tracking.
+	 *
+	 * @param array $categories Each item should include:
+	 *   - 'id' (int): Unique category ID (e.g., Moodle category ID).
+	 *   - 'name' (string): Category name.
+	 *   - 'parent' (int): Optional parent category ID.
+	 */
+	public static function update_course_categories_information( $categories ) {
+		foreach ( $categories as $category ) {
+			$args = array(
+				'id'        => (int) $category['id'],
+				'name'      => trim( sanitize_text_field( $category['name'] ) ),
+				'parent_id' => (int) ( $category['parent'] ),
+			);
+
+			self::update_course_category_information( $args );
+
+			\MooWoodle\Util::increment_sync_count( 'course' );
+		}
+	}
 
 	/**
 	 * Returns term by Moodle category ID.
@@ -134,38 +134,6 @@ class Category {
 		}
 
 		return $terms[0];
-	}
-
-    /**
-	 * Update Moodle course categories in WordPress site.
-	 *
-	 * @param array  $categories List of categories to update.
-	 * @param string $taxonomy   Taxonomy name.
-	 * @return void
-	 */
-	public static function update_product_categories_information( $categories, $taxonomy ) {
-		if ( empty( $taxonomy ) || ! taxonomy_exists( $taxonomy ) ) {
-			return;
-		}
-
-		$updated_ids = array();
-
-		if ( $categories ) {
-			foreach ( $categories as $category ) {
-				// Update category.
-				$categorie_id = self::update_product_category_information( $category, $taxonomy );
-
-				// Store updated category id.
-				if ( $categorie_id ) {
-					$updated_ids[] = $categorie_id;
-				}
-
-				\MooWoodle\Util::increment_sync_count( 'course' );
-			}
-		}
-
-		// Remove all term exclude updated ids.
-		self::remove_exclude_ids( $updated_ids, $taxonomy );
 	}
 
 	/**
@@ -217,6 +185,38 @@ class Category {
 		}
 
 		return null;
+	}
+
+    /**
+	 * Update Moodle course categories in WordPress site.
+	 *
+	 * @param array  $categories List of categories to update.
+	 * @param string $taxonomy   Taxonomy name.
+	 * @return void
+	 */
+	public static function update_product_categories_information( $categories, $taxonomy ) {
+		if ( empty( $taxonomy ) || ! taxonomy_exists( $taxonomy ) ) {
+			return;
+		}
+
+		$updated_ids = array();
+
+		if ( $categories ) {
+			foreach ( $categories as $category ) {
+				// Update category.
+				$categorie_id = self::update_product_category_information( $category, $taxonomy );
+
+				// Store updated category id.
+				if ( $categorie_id ) {
+					$updated_ids[] = $categorie_id;
+				}
+
+				\MooWoodle\Util::increment_sync_count( 'course' );
+			}
+		}
+
+		// Remove all term exclude updated ids.
+		self::remove_exclude_ids( $updated_ids, $taxonomy );
 	}
 
 	/**
