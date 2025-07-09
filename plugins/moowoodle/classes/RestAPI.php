@@ -509,7 +509,7 @@ class RestAPI {
         $page_number    = max( 1, (int) $request->get_param( 'page' ) ? $request->get_param( 'page' ) : 1 );
         $query_offset   = ( $page_number - 1 ) * $items_per_page;
 
-        $total_user_enrollments = MooWoodle()->enrollment->get_enrollments_information(
+        $total_user_enrollments = MooWoodle()->enrollment->get_enrollment_information(
             array(
                 'user_id' => $current_user->ID,
                 'status'  => 'enrolled',
@@ -523,7 +523,7 @@ class RestAPI {
         }
 
         // Fetch paginated enrollments.
-        $user_enrollments = MooWoodle()->enrollment->get_enrollments_information(
+        $user_enrollments = MooWoodle()->enrollment->get_enrollment_information(
             array(
 				'user_id'    => $current_user->ID,
 				'status'     => 'enrolled',

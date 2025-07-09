@@ -386,7 +386,7 @@ class Course {
             $categories = reset( $categories );
 
             // Get enrolled users count.
-            $enroled_user = MooWoodle()->enrollment->get_enrollments_information(
+            $enroled_user = MooWoodle()->enrollment->get_enrollment_information(
                 array(
 					'course_id' => $course['id'],
                 )

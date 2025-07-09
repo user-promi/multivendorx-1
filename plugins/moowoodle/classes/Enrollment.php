@@ -33,7 +33,7 @@ class Enrollment {
 	 * @param array $args Filter conditions.
 	 * @return array List of enrollment records.
 	 */
-	public static function get_enrollments_information( $args ) {
+	public static function get_enrollment_information( $args ) {
 		global $wpdb;
 
 		$table = $wpdb->prefix . Util::TABLES['enrollment'];
@@ -235,7 +235,7 @@ class Enrollment {
 			'enrollment_date' => gmdate( 'Y-m-d H:i:s' ),
 		);
 
-		$existing_enrollment = $this->get_enrollments_information(
+		$existing_enrollment = $this->get_enrollment_information(
 			array(
 				'user_email' => $user_data['user_email'],
 				'course_id'  => $course_data['course_id'],
