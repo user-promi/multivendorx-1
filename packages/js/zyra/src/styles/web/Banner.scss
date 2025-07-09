@@ -8,6 +8,7 @@
     padding: 0;
     position: relative;
     background: $background-color;
+    background-color: var(--bg-color);
 
     .carousel-container {
       position: relative;
@@ -38,7 +39,7 @@
         right: 0.625rem;
         top: 0.625rem;
         font-size: 1.25rem;
-        color: #c9c5c3;
+        color: #fff;
       }
 
       .why-go-pro-tag {
@@ -47,7 +48,8 @@
         left: -1.75rem;
         top: 1.563rem;
         background: $accent-color;
-        color: $color-white;
+        background-color: var(--btn-bg-color);
+        color: var(--btn-color);
         padding: 0.25rem 1.5rem;
         transform: rotate(-45deg);
       }
@@ -77,18 +79,18 @@
       h3 {
         font-size: 1.25rem;
         font-weight: 500;
-        color: $color-black;
+        color: var(--text-color);
       }
       
       p {
         margin: 0.5rem 0 1.5rem !important; // To overwrite default common.scss margin
         font-size: 1rem;
-        color: $color-black;
+        color: var(--text-color);
       }
 
       a.admin-btn.btn-red {
-        background-color: $accent-color;
-        color: $color-white;
+        background-color: var(--btn-bg-color);
+        color: var(--btn-color);
         border: 0.06rem solid $accent-color;
         transition: all 0.3s ease;
         border-radius: $border-radius-small;
@@ -111,7 +113,7 @@
 
       button {
         color: $color-active;
-        background-color: #c9c5c3;
+        background-color: var(--text-color);
         font-size: 0.65rem;
         border-radius: 50%;
         margin: 0;
@@ -123,6 +125,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        cursor: pointer;
       }
     }
   }

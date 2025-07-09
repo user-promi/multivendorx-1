@@ -1,7 +1,7 @@
 {
     "name": "notifima",
     "displayName": "woocommerce-product-stock-manager",
-    "version": "3.0.0",
+    "version": "3.0.2",
     "description": "=== WooCommerce Product Stock Manager ===",
     "main": "index.js",
     "engines": {

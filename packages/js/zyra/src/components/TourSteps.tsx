@@ -19,58 +19,58 @@ interface TourProps {
 
 const Tour: React.FC<TourProps> = ( { appLocalizer } ) => {
     const { setIsOpen, setSteps, setCurrentStep } = useTour();
-    const [isNavigating, setIsNavigating] = useState<boolean>(false);
+    const [ isNavigating, setIsNavigating ] = useState< boolean >( false );
 
-    const waitForElement = (selector: string): Promise<Element> =>
-        new Promise((resolve) => {
+    const waitForElement = ( selector: string ): Promise< Element > =>
+        new Promise( ( resolve ) => {
             const checkElement = () => {
-                const element = document.querySelector(selector);
-                if (element) {
-                    resolve(element);
+                const element = document.querySelector( selector );
+                if ( element ) {
+                    resolve( element );
                 } else {
-                    setTimeout(checkElement, 100);
+                    setTimeout( checkElement, 100 );
                 }
             };
 
             // Ensure the page is fully loaded before checking for the element
-            if (document.readyState === 'complete') {
+            if ( document.readyState === 'complete' ) {
                 checkElement();
             } else {
-                window.addEventListener('load', checkElement, { once: true });
+                window.addEventListener( 'load', checkElement, { once: true } );
             }
-        });
+        } );
 
     const navigateTo = async (
         url: string,
         step: number,
         selector: string
-    ): Promise<void> => {
-        setIsNavigating(true);
-        setIsOpen(false); // Close the tour
+    ): Promise< void > => {
+        setIsNavigating( true );
+        setIsOpen( false ); // Close the tour
         window.location.href = url; // Navigate to the new page
 
         // Wait for the element to load
-        await waitForElement(selector);
+        await waitForElement( selector );
 
         // Ensure a short delay to handle rendering latencies
-        setTimeout(() => {
-            setCurrentStep(step); // Move to the next step
-            setIsOpen(true); // Reopen the tour
-            setIsNavigating(false);
-        }, 500); // Adjust delay as needed
+        setTimeout( () => {
+            setCurrentStep( step ); // Move to the next step
+            setIsOpen( true ); // Reopen the tour
+            setIsNavigating( false );
+        }, 500 ); // Adjust delay as needed
     };
 
-    const finishTour = async (): Promise<void> => {
-        setIsOpen(false); // Close the tour
+    const finishTour = async (): Promise< void > => {
+        setIsOpen( false ); // Close the tour
 
         try {
-            await axios.post(`${appLocalizer.apiUrl}/catalogx/v1/tour`, {
+            await axios.post( `${ appLocalizer.apiUrl }/catalogx/v1/tour`, {
                 active: false,
-            });
+            } );
             // console.log( "Tour marked as complete." );
-        } catch (error) {
+        } catch ( error ) {
             // eslint-disable-next-line no-console
-            console.error('Error updating tour flag:', error);
+            console.error( 'Error updating tour flag:', error );
         }
     };
 
@@ -89,13 +89,13 @@ const Tour: React.FC<TourProps> = ( { appLocalizer } ) => {
                     <div className="tour-footer">
                         <button
                             className="admin-btn btn-purple"
-                            onClick={() => setCurrentStep(1)}
+                            onClick={ () => setCurrentStep( 1 ) }
                         >
                             Next
                         </button>
                         <button
                             className="admin-btn btn-purple end-tour-btn"
-                            onClick={() => finishTour()}
+                            onClick={ () => finishTour() }
                         >
                             End Tour
                         </button>
@@ -117,28 +117,28 @@ const Tour: React.FC<TourProps> = ( { appLocalizer } ) => {
                     <div className="tour-footer">
                         <button
                             className="admin-btn btn-purple"
-                            onClick={() => {
+                            onClick={ () => {
                                 const checkbox =
-                                    document.querySelector<HTMLInputElement>(
+                                    document.querySelector< HTMLInputElement >(
                                         `[id="toggle-switch-enquiry"]`
                                     );
 
-                                if (checkbox?.checked) {
+                                if ( checkbox?.checked ) {
                                     navigateTo(
                                         appLocalizer.enquiry_form_settings_url,
                                         2,
                                         '.button-visibility'
                                     );
                                 } else {
-                                    setCurrentStep(3);
+                                    setCurrentStep( 3 );
                                 }
-                            }}
+                            } }
                         >
                             Next
                         </button>
                         <button
                             className="admin-btn btn-purple end-tour-btn"
-                            onClick={() => finishTour()}
+                            onClick={ () => finishTour() }
                         >
                             End Tour
                         </button>
@@ -159,7 +159,7 @@ const Tour: React.FC<TourProps> = ( { appLocalizer } ) => {
                     <div className="tour-footer">
                         <button
                             className="admin-btn btn-purple"
-                            onClick={() =>
+                            onClick={ () =>
                                 navigateTo(
                                     appLocalizer.module_page_url,
                                     3,
@@ -171,7 +171,7 @@ const Tour: React.FC<TourProps> = ( { appLocalizer } ) => {
                         </button>
                         <button
                             className="admin-btn btn-purple end-tour-btn"
-                            onClick={() => finishTour()}
+                            onClick={ () => finishTour() }
                         >
                             End Tour
                         </button>
@@ -193,13 +193,13 @@ const Tour: React.FC<TourProps> = ( { appLocalizer } ) => {
                     <div className="tour-footer">
                         <button
                             className="admin-btn btn-purple"
-                            onClick={() => {
+                            onClick={ () => {
                                 const checkbox =
-                                    document.querySelector<HTMLInputElement>(
+                                    document.querySelector< HTMLInputElement >(
                                         `[id="toggle-switch-quote"]`
                                     );
 
-                                if (checkbox?.checked) {
+                                if ( checkbox?.checked ) {
                                     navigateTo(
                                         appLocalizer.settings_page_url,
                                         4,
@@ -212,13 +212,13 @@ const Tour: React.FC<TourProps> = ( { appLocalizer } ) => {
                                         '.enquiry-btn'
                                     );
                                 }
-                            }}
+                            } }
                         >
                             Next
                         </button>
                         <button
                             className="admin-btn btn-purple end-tour-btn"
-                            onClick={() => finishTour()}
+                            onClick={ () => finishTour() }
                         >
                             End Tour
                         </button>
@@ -238,7 +238,7 @@ const Tour: React.FC<TourProps> = ( { appLocalizer } ) => {
                     <div className="tour-footer">
                         <button
                             className="admin-btn btn-purple"
-                            onClick={() =>
+                            onClick={ () =>
                                 navigateTo(
                                     appLocalizer.customization_settings_url,
                                     5,
@@ -250,7 +250,7 @@ const Tour: React.FC<TourProps> = ( { appLocalizer } ) => {
                         </button>
                         <button
                             className="admin-btn btn-purple end-tour-btn"
-                            onClick={() => finishTour()}
+                            onClick={ () => finishTour() }
                         >
                             End Tour
                         </button>
@@ -264,11 +264,11 @@ const Tour: React.FC<TourProps> = ( { appLocalizer } ) => {
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 const handleImageLoad = () => {
                     // Recalculate position after the image is loaded
-                    const element = document.querySelector('.enquiry-btn');
-                    element?.scrollIntoView({
+                    const element = document.querySelector( '.enquiry-btn' );
+                    element?.scrollIntoView( {
                         behavior: 'smooth',
                         block: 'center',
-                    });
+                    } );
                 };
 
                 return (
@@ -287,7 +287,7 @@ const Tour: React.FC<TourProps> = ( { appLocalizer } ) => {
                         <div className="tour-footer">
                             <button
                                 className="admin-btn btn-purple"
-                                onClick={() => finishTour()}
+                                onClick={ () => finishTour() }
                             >
                                 Finish
                             </button>
@@ -299,33 +299,33 @@ const Tour: React.FC<TourProps> = ( { appLocalizer } ) => {
         },
     ];
 
-    useEffect(() => {
+    useEffect( () => {
         // Fetch tour status API call
-        const fetchTourState = async (): Promise<void> => {
-            if (window.location.href === appLocalizer.module_page_url) {
+        const fetchTourState = async (): Promise< void > => {
+            if ( window.location.href === appLocalizer.module_page_url ) {
                 try {
-                    const response = await axios.get<{ active: string }>(
-                        `${appLocalizer.apiUrl}/catalogx/v1/tour`
+                    const response = await axios.get< { active: string } >(
+                        `${ appLocalizer.apiUrl }/catalogx/v1/tour`
                     );
 
-                    if (response.data.active !== '') {
-                        if (setSteps) {
-                            setSteps(settingsTourSteps);
+                    if ( response.data.active !== '' ) {
+                        if ( setSteps ) {
+                            setSteps( settingsTourSteps );
                         }
-                        setIsOpen(true); // Start the tour
+                        setIsOpen( true ); // Start the tour
                     }
-                } catch (error) {
+                } catch ( error ) {
                     // eslint-disable-next-line no-console
-                    console.error('Error fetching tour flag:', error);
+                    console.error( 'Error fetching tour flag:', error );
                 }
             }
         };
 
-        if (!isNavigating) {
+        if ( ! isNavigating ) {
             fetchTourState();
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isNavigating, setSteps]);
+    }, [ isNavigating, setSteps ] );
 
     return null;
 };

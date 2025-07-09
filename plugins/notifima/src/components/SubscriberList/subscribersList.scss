@@ -1,5 +1,5 @@
 .subscriber-img {
-    background-image: url(../../assets/images/subscriber-list.jpg);
+    background-image: var(--url);
     background-repeat: no-repeat;
     background-position: top left;
     background-size: contain;
@@ -14,5 +14,10 @@
   .section-heading{
     font-size: 1.5rem;
     font-weight: 500;
+  }
+}
+.admin-subscriber-list{
+  .user-profile .adminlib-create{
+    font-size: 0.625rem;
   }
 }
