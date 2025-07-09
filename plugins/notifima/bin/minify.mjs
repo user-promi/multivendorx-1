@@ -23,7 +23,7 @@ const { name } = JSON.parse( fs.readFileSync( "package.json" ) );
                 `🧹Minification start in ${ sourceFolder }`
             )
         );
-        const files = glob.sync( `${ sourceFolder }/**/*.{js,css}` );
+        const files = glob.sync( `${ sourceFolder }/**/*.{js,scss}` );
 
         for ( const file of files ) {
             try {
@@ -37,7 +37,7 @@ const { name } = JSON.parse( fs.readFileSync( "package.json" ) );
                     outputFolder = "release/assets/js/";
                     const result = await minifyJs( content );
                     minified = result.code;
-                } else if ( ext === ".css" ) {
+                } else if ( ext === ".scss" ) {
                     // min path for css
                     outputFolder = "release/assets/styles/";
                     const result = new CleanCSS().minify( content );
