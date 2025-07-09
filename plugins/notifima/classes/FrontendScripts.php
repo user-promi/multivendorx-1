@@ -323,6 +323,7 @@ class FrontendScripts {
 						'restUrl'                  => Notifima()->rest_namespace,
 						'nonce'                    => wp_create_nonce( 'wp_rest' ),
 						'subscriber_list'          => Notifima()->plugin_url . 'src/assets/images/subscriber-list.png',
+						'inventory_manager'        => Notifima()->plugin_url . 'src/assets/images/inventory-manager.png',
 						'export_button'            => admin_url( 'admin-ajax.php?action=export_subscribers' ),
 						'khali_dabba'              => Utill::is_khali_dabba(),
 						'tab_name'                 => __( 'Notifima', 'notifima' ),
