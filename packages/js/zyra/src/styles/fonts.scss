@@ -29,6 +29,12 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.adminlib-import:before {
+  content: "\e96a";
+}
+.adminlib-export:before {
+  content: "\e96b";
+}
 .adminlib-update-data::before {
   content: "\e969";
 }
@@ -533,7 +539,7 @@
   content: "\e95f";
 }
 
-.adminlib-setting-1::before {
+.adminlib-setting::before {
   content: "\e960";
 }
 
