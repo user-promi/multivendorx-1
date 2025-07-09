@@ -123,11 +123,11 @@ const faqs = [
     },
     {
         question: __(
-            'Does Product Stock Manager & Notifier support product variations?',
+            'Does Notifima support product variations?',
             'notifima'
         ),
         answer: __(
-            'Yes, product variations are fully supported and editable from the Inventory Manager. Product Stock Manager & Notifier handles variable products with ease and uses an expandable feature to make managing variations clear and straightforward.',
+            'Yes, product variations are fully supported and editable from the Inventory Manager. Notifima handles variable products with ease and uses an expandable feature to make managing variations clear and straightforward.',
             'notifima'
         ),
         open: false,
@@ -138,7 +138,7 @@ const faqs = [
             'notifima'
         ),
         answer: __(
-            'Yes, <a href="https://notifima.com/pricing/?utm_source=wpadmin&utm_medium=pluginsettings&utm_campaign=notifima" target="_blank">Product Stock Manager & Notifier Pro</a> has support for reCaptcha.',
+            'Yes, <a href="https://notifima.com/pricing/?utm_source=wpadmin&utm_medium=pluginsettings&utm_campaign=notifima" target="_blank">Notifima Pro</a> has support for reCaptcha.',
             'notifima'
         ),
         open: false,
@@ -160,6 +160,10 @@ const Settings: React.FC< SettingsProps > = () => {
                 proUrl={ appLocalizer.pro_url }
                 tag="Why Premium"
                 buttonText="View Pricing"
+                bgCode="#852aff" // backgroud color
+                textCode="#fff" // text code
+                btnCode="#fff" // button color
+                btnBgCode="#e35047" // button backgroud color
             />
         );
     };
@@ -192,7 +196,7 @@ const Settings: React.FC< SettingsProps > = () => {
         if ( currentTab === 'faq' ) {
             return (
                 <Support
-                    title="Thank you for using Product Stock Manager & Notifier for WooCommerce"
+                    title="Thank you for using Notifima"
                     subTitle="We want to help you enjoy a wonderful experience with all of our products."
                     url="https://www.youtube.com/embed/cgfeZH5z2dM?si=3zjG13RDOSiX2m1b"
                     faqData={ faqs }

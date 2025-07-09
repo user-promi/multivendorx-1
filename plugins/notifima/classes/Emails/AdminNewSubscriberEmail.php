@@ -16,7 +16,7 @@ if ( ! class_exists( 'AdminNewSubscriberEmail' ) ) :
      *
      * An email will be sent to the admin when customer subscribe an out of stock product.
      *
-     * @version     PRODUCT_VERSION
+     * @version     3.0.0
      * @author      MultiVendorX
      * @extends     \WC_Email
      */

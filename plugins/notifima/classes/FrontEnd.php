@@ -13,7 +13,7 @@ defined( 'ABSPATH' ) || exit;
  * Notifima Frontend class
  *
  * @class       Frontend class
- * @version     PRODUCT_VERSION
+ * @version     3.0.0
  * @author      MultiVendorX
  */
 class FrontEnd {

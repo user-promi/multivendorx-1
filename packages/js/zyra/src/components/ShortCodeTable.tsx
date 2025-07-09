@@ -21,7 +21,7 @@ interface ShortCodeTableProps {
     optionLabel?: string[]; // Assuming optionLabel is an array
 }
 
-const ShortCodeTable: React.FC<ShortCodeTableProps> = (props) => {
+const ShortCodeTable: React.FC< ShortCodeTableProps > = ( props ) => {
     const { descClass, description, options, optionLabel } = props;
 
     return (
@@ -29,38 +29,38 @@ const ShortCodeTable: React.FC<ShortCodeTableProps> = (props) => {
             <table className="shortcode-table">
                 <thead>
                     <tr>
-                        {optionLabel && optionLabel.length > 0 ? (
-                            optionLabel.map((label, index) => (
-                                <th key={index}>{label}</th>
-                            ))
+                        { optionLabel && optionLabel.length > 0 ? (
+                            optionLabel.map( ( label, index ) => (
+                                <th key={ index }>{ label }</th>
+                            ) )
                         ) : (
                             <th>No Labels</th> // Fallback if no labels exist
-                        )}
+                        ) }
                     </tr>
                 </thead>
                 <tbody>
-                    {options && options.length > 0 ? (
-                        options.map((option, index) => (
-                            <tr key={index}>
+                    { options && options.length > 0 ? (
+                        options.map( ( option, index ) => (
+                            <tr key={ index }>
                                 <td>
-                                    <code>{option.label}</code>
+                                    <code>{ option.label }</code>
                                 </td>
-                                <td>{option.desc}</td>
+                                <td>{ option.desc }</td>
                             </tr>
-                        ))
+                        ) )
                     ) : (
                         <tr>
-                            <td colSpan={2}>No Options Available</td>
+                            <td colSpan={ 2 }>No Options Available</td>
                         </tr> // Fallback if no options exist
-                    )}
+                    ) }
                 </tbody>
             </table>
-            {description && (
+            { description && (
                 <p
-                    className={descClass}
-                    dangerouslySetInnerHTML={{ __html: description }}
+                    className={ descClass }
+                    dangerouslySetInnerHTML={ { __html: description } }
                 />
-            )}
+            ) }
         </>
     );
 };
