@@ -203,7 +203,7 @@ const Tour: React.FC<TourProps> = ( { appLocalizer } ) => {
                                     navigateTo(
                                         appLocalizer.settings_page_url,
                                         4,
-                                        '[data="quote-permission"]'
+                                        '[data-tour="quote-permission"]'
                                     );
                                 } else {
                                     navigateTo(
@@ -227,7 +227,7 @@ const Tour: React.FC<TourProps> = ( { appLocalizer } ) => {
             ),
         },
         {
-            selector: '[data="quote-permission"]',
+            selector: '[data-tour="quote-permission"]',
             content: () => (
                 <div className="tour-box">
                     <h3>Configure Quote Settings</h3>
@@ -237,7 +237,7 @@ const Tour: React.FC<TourProps> = ( { appLocalizer } ) => {
                     </h4>
                     <div className="tour-footer">
                         <button
-                            className="btn-purple"
+                            className="admin-btn btn-purple"
                             onClick={() =>
                                 navigateTo(
                                     appLocalizer.customization_settings_url,
