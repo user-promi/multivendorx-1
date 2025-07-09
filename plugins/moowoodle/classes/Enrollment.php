@@ -28,6 +28,112 @@ class Enrollment {
 	}
 
 	/**
+	 * Retrieves enrollment records based on the given conditions.
+	 *
+	 * @param array $args Filter conditions.
+	 * @return array List of enrollment records.
+	 */
+	public static function get_enrollment_information( $args ) {
+		global $wpdb;
+
+		$table = $wpdb->prefix . Util::TABLES['enrollment'];
+		$where = array();
+
+		// Filters.
+		if ( isset( $args['id'] ) ) {
+			$ids     = is_array( $args['id'] ) ? $args['id'] : array( $args['id'] );
+			$ids     = implode( ',', array_map( 'intval', $ids ) );
+			$where[] = "id IN ($ids)";
+		}
+
+		if ( isset( $args['user_id'] ) ) {
+			$where[] = $wpdb->prepare( 'user_id = %d', $args['user_id'] );
+		}
+
+		if ( isset( $args['user_email'] ) && '' !== $args['user_email'] ) {
+			$email   = sanitize_email( strtolower( trim( $args['user_email'] ) ) );
+			$where[] = $wpdb->prepare( 'LOWER(user_email) = %s', $email );
+		}
+
+		if ( isset( $args['course_id'] ) ) {
+			$where[] = $wpdb->prepare( 'course_id = %d', $args['course_id'] );
+		}
+
+		if ( ! empty( $args['meta_query'] ) ) {
+			foreach ( $args['meta_query'] as $meta ) {
+				if ( ! empty( $meta['key'] ) ) {
+					$key     = $meta['key'];
+					$compare = strtoupper( $meta['compare'] );
+					$value   = $meta['value'];
+
+					if ( in_array( $compare, array( '=', '!=', '>', '<', '>=', '<=', 'LIKE', 'NOT LIKE' ), true ) ) {
+						$where[] = "`$key` $compare " . $wpdb->prepare( '%s', $value );
+					}
+				}
+			}
+		}
+
+		if ( isset( $args['order_id'] ) ) {
+			$where[] = $wpdb->prepare( 'order_id = %d', $args['order_id'] );
+		}
+
+		if ( isset( $args['status'] ) && '' !== $args['status'] ) {
+			$where[] = $wpdb->prepare( 'status = %s', $args['status'] );
+		}
+
+		if ( isset( $args['date'] ) && '' !== $args['date'] ) {
+			$where[] = $wpdb->prepare( 'date = %s', $args['date'] );
+		}
+
+		if ( isset( $args['count'] ) ) {
+			$query = "SELECT COUNT(*) FROM $table";
+		} else {
+			$query = "SELECT * FROM $table";
+		}
+
+		if ( ! empty( $where ) ) {
+			$query .= ' WHERE ' . implode( ' AND ', $where );
+		}
+
+		if ( isset( $args['limit'] ) && isset( $args['offset'] ) ) {
+			$query .= $wpdb->prepare( ' LIMIT %d OFFSET %d', intval( $args['limit'] ), intval( $args['offset'] ) );
+		}
+
+		if ( isset( $args['count'] ) ) {
+			$results = $wpdb->get_var( $query ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
+			return $results ?? 0;
+		} else {
+			$results = $wpdb->get_results( $query, ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
+			return $results ?? array();
+		}
+	}
+
+	/**
+	 * Insert or update an enrollment record.
+	 *
+	 * @param array $args Enrollment data. Must include 'user_email'. If 'id' is present, updates the record.
+	 * @return int|false Enrollment ID on success, false on failure.
+	 */
+	public static function update_enrollment_information( $args ) {
+		global $wpdb;
+
+		$table = $wpdb->prefix . Util::TABLES['enrollment'];
+		$id    = isset( $args['id'] ) ? (int) $args['id'] : 0;
+
+		unset( $args['id'] );
+
+		if ( $id > 0 ) {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+			$updated = $wpdb->update( $table, $args, array( 'id' => $id ) );
+			return ( false === $updated ) ? false : $id;
+		}
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+		$inserted = $wpdb->insert( $table, $args );
+		return $inserted ? $wpdb->insert_id : false;
+	}
+
+	/**
 	 * Process WooCommerce order for Moodle enrollment.
 	 *
 	 * Enrolls the user into Moodle courses based on the products in the order.
@@ -62,8 +168,8 @@ class Enrollment {
 					'user_email'   => $order->get_billing_email(),
 				),
 				array(
-					'order_id' => $order_id,
-					'item_id'  => $item_id,
+					'order_id'      => $order_id,
+					'order_item_id' => $item_id,
 				),
 				array(
 					'course_id'        => $linked_course_id,
@@ -124,12 +230,12 @@ class Enrollment {
 			'user_email'      => $user_data['user_email'],
 			'course_id'       => $course_data['course_id'],
 			'order_id'        => $order_data['order_id'],
-			'item_id'         => $order_data['item_id'],
+			'order_item_id'   => $order_data['order_item_id'],
 			'status'          => 'enrolled',
-			'enrollment_date' => current_time( 'mysql' ),
+			'enrollment_date' => gmdate( 'Y-m-d H:i:s' ),
 		);
 
-		$existing_enrollment = $this->get_enrollments_information(
+		$existing_enrollment = $this->get_enrollment_information(
 			array(
 				'user_email' => $user_data['user_email'],
 				'course_id'  => $course_data['course_id'],
@@ -142,7 +248,7 @@ class Enrollment {
 			$enrollment_data['id'] = $existing_enrollment['id'];
 		}
 
-		self::update_enrollment( $enrollment_data );
+		self::update_enrollment_information( $enrollment_data );
 
 		return true;
 	}
@@ -438,112 +544,6 @@ class Enrollment {
 					esc_html( gmdate( 'Y-m-d', $enddate ) )
 				);
 			}
-		}
-	}
-
-	/**
-	 * Insert or update an enrollment record.
-	 *
-	 * @param array $args Enrollment data. Must include 'user_email'. If 'id' is present, updates the record.
-	 * @return int|false Enrollment ID on success, false on failure.
-	 */
-	public static function update_enrollment( $args ) {
-		global $wpdb;
-
-		$table = $wpdb->prefix . Util::TABLES['enrollment'];
-		$id    = isset( $args['id'] ) ? (int) $args['id'] : 0;
-
-		unset( $args['id'] );
-
-		if ( $id > 0 ) {
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-			$updated = $wpdb->update( $table, $args, array( 'id' => $id ) );
-			return ( false === $updated ) ? false : $id;
-		}
-
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
-		$inserted = $wpdb->insert( $table, $args );
-		return $inserted ? $wpdb->insert_id : false;
-	}
-
-	/**
-	 * Retrieves enrollment records based on the given conditions.
-	 *
-	 * @param array $args Filter conditions.
-	 * @return array List of enrollment records.
-	 */
-	public static function get_enrollments_information( $args ) {
-		global $wpdb;
-
-		$table = $wpdb->prefix . Util::TABLES['enrollment'];
-		$where = array();
-
-		// Filters.
-		if ( isset( $args['id'] ) ) {
-			$ids     = is_array( $args['id'] ) ? $args['id'] : array( $args['id'] );
-			$ids     = implode( ',', array_map( 'intval', $ids ) );
-			$where[] = "id IN ($ids)";
-		}
-
-		if ( isset( $args['user_id'] ) ) {
-			$where[] = $wpdb->prepare( 'user_id = %d', $args['user_id'] );
-		}
-
-		if ( isset( $args['user_email'] ) && '' !== $args['user_email'] ) {
-			$email   = sanitize_email( strtolower( trim( $args['user_email'] ) ) );
-			$where[] = $wpdb->prepare( 'LOWER(user_email) = %s', $email );
-		}
-
-		if ( isset( $args['course_id'] ) ) {
-			$where[] = $wpdb->prepare( 'course_id = %d', $args['course_id'] );
-		}
-
-		if ( ! empty( $args['meta_query'] ) ) {
-			foreach ( $args['meta_query'] as $meta ) {
-				if ( ! empty( $meta['key'] ) ) {
-					$key     = $meta['key'];
-					$compare = strtoupper( $meta['compare'] );
-					$value   = $meta['value'];
-
-					if ( in_array( $compare, array( '=', '!=', '>', '<', '>=', '<=', 'LIKE', 'NOT LIKE' ), true ) ) {
-						$where[] = "`$key` $compare " . $wpdb->prepare( '%s', $value );
-					}
-				}
-			}
-		}
-
-		if ( isset( $args['order_id'] ) ) {
-			$where[] = $wpdb->prepare( 'order_id = %d', $args['order_id'] );
-		}
-
-		if ( isset( $args['status'] ) && '' !== $args['status'] ) {
-			$where[] = $wpdb->prepare( 'status = %s', $args['status'] );
-		}
-
-		if ( isset( $args['date'] ) && '' !== $args['date'] ) {
-			$where[] = $wpdb->prepare( 'date = %s', $args['date'] );
-		}
-
-		if ( isset( $args['count'] ) ) {
-			$query = "SELECT COUNT(*) FROM $table";
-		} else {
-			$query = "SELECT * FROM $table";
-		}
-
-		if ( ! empty( $where ) ) {
-			$query .= ' WHERE ' . implode( ' AND ', $where );
-		}
-
-		if ( isset( $args['limit'] ) && isset( $args['offset'] ) ) {
-			$query .= $wpdb->prepare( ' LIMIT %d OFFSET %d', intval( $args['limit'] ), intval( $args['offset'] ) );
-		}
-
-		if ( isset( $args['count'] ) ) {
-			$results = $wpdb->get_var( $query ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
-			return $results ?? 0;
-		} else {
-			$results = $wpdb->get_results( $query, ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
-			return $results ?? array();
 		}
 	}
 
