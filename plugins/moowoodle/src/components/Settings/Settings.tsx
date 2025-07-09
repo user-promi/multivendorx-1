@@ -163,6 +163,10 @@ const Settings: React.FC<SettingsProps> = () => {
                 proUrl={appLocalizer.shop_url}
                 tag="Why Premium"
                 buttonText="View Pricing"
+                bgCode="#0a3981" // background color
+                textCode="#fff" // text code
+                btnCode="#fff" // button color
+                btnBgCode="#ff9843" // button backgroud color
             />
         );
     };

@@ -199,13 +199,13 @@ const Course: React.FC = () => {
                     ],
                 },
             })
-                .then(() => {
-                    requestData();
-                })
-                .catch(() => {
-                    setError(__('Failed to perform action', 'moowoodle'));
-                    setData([]);
-                });
+            .then(() => {
+                requestData();
+            })
+            .catch(() => {
+                setError(__('Failed to perform action', 'moowoodle'));
+                setData([]);
+            });
         } else {
             setOpenDialog(true);
         }
