@@ -1,6 +1,7 @@
 declare module 'body-scroll-lock' {
-    export function disableBodyScroll(targetElement: Element): void;
-    export function enableBodyScroll(targetElement: Element): void;
+    export function disableBodyScroll(targetElement: HTMLElement | Element, options?: { reserveScrollBarGap?: boolean }): void;
+    export function enableBodyScroll(targetElement: HTMLElement | Element): void;
+    export function clearAllBodyScrollLocks(): void;
 }
 
 // src/global.d.ts

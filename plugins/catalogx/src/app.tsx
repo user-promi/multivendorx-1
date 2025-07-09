@@ -8,12 +8,12 @@ import QuoteRequests from './components/QuoteRequests/quoteRequests';
 import EnquiryMessages from './components/EnquiryMessages/enquiryMessages';
 import WholesaleUser from './components/WholesaleUser/wholesaleUser';
 import Rules from './components/Rules/Rules';
-// import { TourProvider } from '@reactour/tour';
-// import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock';
-// import Tour from './components/TourSteps/Settings/TourSteps.jsx';
+import { TourProvider } from '@reactour/tour';
+import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock';
+import { Tour } from 'zyra';
 
-// const disableBody = (target) => disableBodyScroll(target);
-// const enableBody = (target) => enableBodyScroll(target);
+const disableBody = (target: any) => disableBodyScroll(target);
+const enableBody = (target: any) => enableBodyScroll(target);
 
 const Route = () => {
     const currentTab = new URLSearchParams(useLocation().hash);
@@ -59,16 +59,16 @@ const App = () => {
                 modules={(window as any).appLocalizer?.active_modules || []}
             >
                 {/*this is for tour provider */}
-                {/* <TourProvider
+                <TourProvider
                     steps={[]}
                     afterOpen={disableBody}
                     beforeClose={enableBody}
                     disableDotsNavigation={true}
                     showNavigation={false}
-                    showCloseButton= {false}
+                    showCloseButton={false}
                 >
-                    <Tour />
-                </TourProvider> */}
+                    <Tour appLocalizer={(window as any).appLocalizer} />
+                </TourProvider>
                 <Route />
             </ModuleProvider>
         </>
