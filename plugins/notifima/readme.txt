@@ -66,7 +66,7 @@ Are you tired of losing potential sales because your customers can't buy the out
 **👤 User Management**: Easily manage your subscriber list and their preferences. 
 **🖋️ Customizable Messages**: Tailor the notification messages to match your brand’s tone and style. 
 **🛍️ Stock Alert for Backorders**: Enable customers to subscribe for in-stock notifications, even for products that are currently out of stock but have backorders enabled. Keep your customers informed and engaged. 
-**🔄 Import/Export Functionality**: Simplify data management by exporting and importing stock data with ease. Export all your stock information, make necessary edits, and seamlessly import the updated data using CSV files.[COMING SOON] 
+**🔄 Import/Export Functionality**: Simplify data management by exporting and importing stock data with ease. Export all your stock information, make necessary edits, and seamlessly import the updated data using CSV files.
 **🌐 Multilingual Support**: Reach a global audience by offering notifications in multiple languages. 
 **📱 Responsive Design**: The plugin’s design is fully responsive, ensuring a seamless experience on all devices. To match with your theme’s structure. 
 **🆕 Instant Updates**: Get real-time updates on your subscribers and their preferences. 
