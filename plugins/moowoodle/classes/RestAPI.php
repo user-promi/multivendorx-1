@@ -281,7 +281,7 @@ class RestAPI {
                 'course'
             );
 
-            MooWoodle()->category->update_course_categories( $categories );
+            MooWoodle()->category->update_course_categories_information( $categories );
 
             Util::set_sync_status(
                 array(
@@ -292,7 +292,7 @@ class RestAPI {
                 'course'
             );
 
-            MooWoodle()->category->update_product_categories( $categories, 'product_cat' );
+            MooWoodle()->category->update_product_categories_information( $categories, 'product_cat' );
         }
 
 		// get all caurses from moodle.
@@ -309,7 +309,7 @@ class RestAPI {
             'course'
         );
 
-        MooWoodle()->course->update_courses( $courses );
+        MooWoodle()->course->update_courses_information( $courses );
 
         MooWoodle()->product->update_products( $courses );
 

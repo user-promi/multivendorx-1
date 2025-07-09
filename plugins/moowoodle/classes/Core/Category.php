@@ -58,7 +58,7 @@ class Category {
 	 *   - 'name' (string): Category name.
 	 *   - 'parent' (int): Optional parent category ID.
 	 */
-	public static function update_course_categories( $categories ) {
+	public static function update_course_categories_information( $categories ) {
 		foreach ( $categories as $category ) {
 			$args = array(
 				'id'        => (int) $category['id'],
@@ -66,7 +66,7 @@ class Category {
 				'parent_id' => (int) ( $category['parent'] ),
 			);
 
-			self::update_course_category( $args );
+			self::update_course_category_information( $args );
 
 			\MooWoodle\Util::increment_sync_count( 'course' );
 		}
@@ -84,7 +84,7 @@ class Category {
 	 * }
 	 * @return bool|int False on failure, number of rows affected on success.
 	 */
-	public static function update_course_category( $args ) {
+	public static function update_course_category_information( $args ) {
         global $wpdb;
 
         if ( empty( $args['id'] ) ) {
@@ -108,7 +108,7 @@ class Category {
 	 * @param string|null $taxonomy    Optional. Taxonomy name. Default null.
 	 * @return object|null Term object on success, or null if not found.
 	 */
-	public static function get_product_category( $category_id, $taxonomy = '' ) {
+	public static function get_product_category_information( $category_id, $taxonomy = '' ) {
 		if ( ! $category_id || empty( $taxonomy ) || ! taxonomy_exists( $taxonomy ) ) {
 			return null;
 		}
@@ -143,7 +143,7 @@ class Category {
 	 * @param string $taxonomy   Taxonomy name.
 	 * @return void
 	 */
-	public static function update_product_categories( $categories, $taxonomy ) {
+	public static function update_product_categories_information( $categories, $taxonomy ) {
 		if ( empty( $taxonomy ) || ! taxonomy_exists( $taxonomy ) ) {
 			return;
 		}
@@ -153,7 +153,7 @@ class Category {
 		if ( $categories ) {
 			foreach ( $categories as $category ) {
 				// Update category.
-				$categorie_id = self::update_product_category( $category, $taxonomy );
+				$categorie_id = self::update_product_category_information( $category, $taxonomy );
 
 				// Store updated category id.
 				if ( $categorie_id ) {
@@ -175,9 +175,9 @@ class Category {
 	 * @param string $taxonomy Taxonomy name.
 	 * @return int|null Category ID on success, or null on failure.
 	 */
-	public static function update_product_category( $category, $taxonomy ) {
+	public static function update_product_category_information( $category, $taxonomy ) {
 
-		$term = self::get_product_category( $category['id'], $taxonomy );
+		$term = self::get_product_category_information( $category['id'], $taxonomy );
 
 		// If term is exist update it.
 		if ( $term ) {
@@ -253,7 +253,7 @@ class Category {
 				$parent_category_id = get_term_meta( $term->term_id, '_parent', true );
 
 				// get parent term id and continue if not exist.
-				$parent_term = self::get_product_category( $parent_category_id, $taxonomy );
+				$parent_term = self::get_product_category_information( $parent_category_id, $taxonomy );
 				if ( empty( $parent_term ) ) {
 					continue;
                 }
