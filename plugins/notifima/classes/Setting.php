@@ -13,7 +13,7 @@ defined( 'ABSPATH' ) || exit;
  * Notifima Setting class
  *
  * @class       Setting class
- * @version     PRODUCT_VERSION
+ * @version     3.0.0
  * @author      MultiVendorX
  */
 class Setting {

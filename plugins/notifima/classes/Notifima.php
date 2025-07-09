@@ -14,7 +14,7 @@ use Automattic\WooCommerce\Utilities\FeaturesUtil;
  * Notifima Main class
  *
  * @class       Main class
- * @version     PRODUCT_VERSION
+ * @version     3.0.0
  * @author      MultiVendorX
  */
 class Notifima {
@@ -125,6 +125,10 @@ class Notifima {
                 'docs'    => '<a href="https://notifima.com/docs/?utm_source=wpadmin&utm_medium=pluginsettings&utm_campaign=notifima" aria-label="' . esc_attr__( 'View WooCommerce documentation', 'notifima' ) . '" target="_blank">' . esc_html__( 'Docs', 'notifima' ) . '</a>',
                 'support' => '<a href="https://wordpress.org/support/plugin/woocommerce-product-stock-alert/" aria-label="' . esc_attr__( 'Visit community forums', 'notifima' ) . '" target="_blank">' . esc_html__( 'Support', 'notifima' ) . '</a>',
             );
+
+            if ( ! Utill::is_khali_dabba() ) {
+                $row_meta['go_pro'] = '<a href="' . NOTIFIMA_PRO_SHOP_URL . '" class="notifima-pro-plugin" target="_blank" style="font-weight: 700;background: linear-gradient(110deg, rgb(63, 20, 115) 0%, 25%, rgb(175 59 116) 50%, 75%, rgb(219 75 84) 100%);-webkit-background-clip: text;-webkit-text-fill-color: transparent;">' . __( 'Upgrade to Pro', 'notifima' ) . '</a>';
+            }
 
             return array_merge( $links, $row_meta );
         }
@@ -341,10 +345,9 @@ class Notifima {
      */
     public static function notifima_settings( $links ) {
         $plugin_links = array(
-            '<a href="' . admin_url( 'admin.php?page=notifima#&tab=settings&subtab=general' ) . '">' . __( 'Settings', 'notifima' ) . '</a>',
-            '<a href="https://notifima.com/support/?utm_source=wpadmin&utm_medium=pluginsettings&utm_campaign=notifima" target="_blank">' . __( 'Support', 'notifima' ) . '</a>',
-            '<a href="https://notifima.com/docs/?utm_source=wpadmin&utm_medium=pluginsettings&utm_campaign=notifima" target="_blank">' . __( 'Docs', 'notifima' ) . '</a>',
+            '<a href="' . admin_url( 'admin.php?page=notifima#&tab=settings&subtab=appearance' ) . '">' . __( 'Settings', 'notifima' ) . '</a>',
         );
+
         if ( ! Utill::is_khali_dabba() ) {
             $links['go_pro'] = '<a href="' . NOTIFIMA_PRO_SHOP_URL . '" class="notifima-pro-plugin" target="_blank" style="font-weight: 700;background: linear-gradient(110deg, rgb(63, 20, 115) 0%, 25%, rgb(175 59 116) 50%, 75%, rgb(219 75 84) 100%);-webkit-background-clip: text;-webkit-text-fill-color: transparent;">' . __( 'Upgrade to Pro', 'notifima' ) . '</a>';
         }

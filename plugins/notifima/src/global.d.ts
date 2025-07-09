@@ -12,6 +12,7 @@ declare global {
         restUrl: string;
         nonce: string;
         subscriber_list: string;
+        inventory_manager: string;
         export_button: string;
         khali_dabba: boolean;
         tab_name: string;
