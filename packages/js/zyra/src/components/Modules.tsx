@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Dialog from '@mui/material/Dialog';
 
 /**
@@ -23,6 +23,7 @@ interface Module {
 }
 
 interface ModuleProps {
+	modules: any;
     insertModule?: ( moduleId: string ) => void;
     removeModule?: ( moduleId: string ) => void;
     modulesArray?: Module[];
@@ -30,6 +31,7 @@ interface ModuleProps {
 }
 
 const Modules: React.FC< ModuleProps > = ( {
+	modules,
     insertModule = () => {},
     removeModule = () => {},
     modulesArray = [],
@@ -37,6 +39,7 @@ const Modules: React.FC< ModuleProps > = ( {
 } ) => {
     const [ modelOpen, setModelOpen ] = useState< boolean >( false );
     const [ successMsg, setSuccessMsg ] = useState< string >( '' );
+	const [ activeModules, setActiveModules ] = useState< Array< any > >( [] );
 
     const isModuleAvailable = ( moduleId: string ): boolean => {
         const module = modulesArray.find(
@@ -57,8 +60,10 @@ const Modules: React.FC< ModuleProps > = ( {
         const action = event.target.checked ? 'activate' : 'deactivate';
         if ( action === 'activate' ) {
             insertModule?.( moduleId );
+			setActiveModules( ( prev ) => [...prev, moduleId] );
         } else {
             removeModule?.( moduleId );
+			setActiveModules( ( prev ) => prev.filter( ( id ) => id !== moduleId ) );
         }
 
         await sendApiResponse(
@@ -69,6 +74,10 @@ const Modules: React.FC< ModuleProps > = ( {
         setSuccessMsg( 'Module activated' );
         setTimeout( () => setSuccessMsg( '' ), 2000 );
     };
+
+	useEffect( () => {
+		setActiveModules( modules );
+	}, [ modules ] );
 
     return (
         <div className="module-container">
@@ -137,6 +146,7 @@ const Modules: React.FC< ModuleProps > = ( {
                                     type="checkbox"
                                     className="woo-toggle-checkbox"
                                     id={ `toggle-switch-${ module.id }` }
+									checked={ activeModules.includes( module.id ) }
                                     onChange={ ( e ) =>
                                         handleOnChange( e, module.id )
                                     }
