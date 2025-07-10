@@ -146,6 +146,10 @@ class MooWoodle {
 
 		$this->container['util']             = new Util();
         $this->container['setting']          = new Setting();
+
+        $show_adv_log = MooWoodle()->setting->get_setting( 'moowoodle_adv_log', array() );
+        $this->container['show_advanced_log'] = in_array( 'moowoodle_adv_log', $show_adv_log, true );
+
 		$this->container['restAPI']          = new RestAPI();
 		$this->container['course']           = new Core\Course();
 		$this->container['category']         = new Core\Category();
