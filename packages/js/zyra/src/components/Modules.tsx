@@ -22,12 +22,23 @@ interface Module {
     pro_module?: boolean;
 }
 
+interface ProPopupContent {
+    proUrl: string;
+    title: string;
+    messages: {
+        icon: string;
+        text: string;
+    }[];
+}
+
 interface ModuleProps {
 	modules: any;
     insertModule?: ( moduleId: string ) => void;
     removeModule?: ( moduleId: string ) => void;
     modulesArray?: Module[];
     appLocalizer: Record< string, any >; // Allows any structure
+    apiLink: string;
+    proPopupContent: ProPopupContent;
 }
 
 const Modules: React.FC< ModuleProps > = ( {
@@ -36,6 +47,8 @@ const Modules: React.FC< ModuleProps > = ( {
     removeModule = () => {},
     modulesArray = [],
     appLocalizer,
+    apiLink,
+    proPopupContent,
 } ) => {
     const [ modelOpen, setModelOpen ] = useState< boolean >( false );
     const [ successMsg, setSuccessMsg ] = useState< string >( '' );
@@ -68,10 +81,10 @@ const Modules: React.FC< ModuleProps > = ( {
 
         await sendApiResponse(
             appLocalizer,
-            getApiLink( appLocalizer, 'modules' ),
+            getApiLink( appLocalizer, apiLink ),
             { id: moduleId, action }
         );
-        setSuccessMsg( 'Module activated' );
+        setSuccessMsg( `Module ${action}d` );
         setTimeout( () => setSuccessMsg( '' ), 2000 );
     };
 
@@ -92,7 +105,11 @@ const Modules: React.FC< ModuleProps > = ( {
                     tabIndex={ 0 }
                     onClick={ () => setModelOpen( false ) }
                 ></span>
-                <Popoup />
+                <Popoup
+                    proUrl={proPopupContent.proUrl}
+                    title={proPopupContent.title}
+                    messages={proPopupContent.messages}
+                />
             </Dialog>
 
             { successMsg && (
