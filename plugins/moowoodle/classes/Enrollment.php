@@ -499,7 +499,7 @@ class Enrollment {
 	public function enrollment_modified_details( $order_id ) {
 		$order = wc_get_order( $order_id );
 
-		if ( $order->get_status() === 'completed' ) {
+		if ( 'completed' === $order->get_status() ) {
 			esc_html_e( 'Please check your mail or go to My Courses page to access your courses.', 'moowoodle' );
 		} else {
 			esc_html_e( 'Order status is :- ', 'moowoodle' ) . $order->get_status() . '<br>';

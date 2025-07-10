@@ -62,26 +62,26 @@ class Product {
 		return reset( $products ) ? reset( $products ) : null;
 	}
 
-    /**
-	 * Update moodle product data in WordPress WooCommerce.
-	 * If product not exist create new product.
-     *
-	 * @param array $course moodle course data.
-	 * @param bool  $force_create create or not.
-	 * @return int course id
+	/**
+	 * Create or update a WooCommerce product from a Moodle course.
+	 *
+	 * @param array $course        Moodle course data.
+	 * @param bool  $force_create  Create product if not exists.
+	 * @param bool  $force_update  Force update if product exists.
+	 * @return int WooCommerce product ID or 0 on failure.
 	 */
 	public static function update_product( $course, $force_create = true, $force_update = false ) {
-		if ( empty( $course ) || $course['format'] === 'site' ) {
+		if ( empty( $course ) || 'site' === $course['format'] ) {
 			return 0;
 		}
 
 		$product = self::get_product_from_moodle_course( $course['id'] );
 
 		if ( ! $product && $force_create ) {
-			// Create a new product if it doesn't exist and creation is allowed
+			// Create a new product if it doesn't exist and creation is allowed.
 			$product = new \WC_Product_Simple();
 		} elseif ( $product && ! $force_update && $force_create ) {
-			// If product exists, but updates are not allowed, return existing ID
+			// If product exists, but updates are not allowed, return existing ID.
 			return $product->get_id();
 		}
 
@@ -192,29 +192,45 @@ class Product {
 	 * @return array Modified classnames.
 	 */
 	public function product_type_warning( $classnames ) {
-		// Get all active plugins.
-		$active_plugins = get_option( 'active_plugins', array() );
-		if ( is_multisite() ) {
-			$active_plugins = array_merge( $active_plugins, get_site_option( 'active_sitewide_plugins', array() ) );
-		}
-		if (
-			in_array( 'woocommerce-subscriptions/woocommerce-subscriptions.php', $active_plugins, true )
-			|| array_key_exists( 'woocommerce-product/woocommerce-subscriptions.php', $active_plugins )
-			|| in_array( 'woocommerce-product-bundles/woocommerce-product-bundles.php', $active_plugins, true )
-			|| array_key_exists( 'woocommerce-product-bundles/woocommerce-product-bundles.php', $active_plugins )
-		) {
-			add_action(
-				'admin_notices',
-				function () {
-					if ( MooWoodle()->util->is_khali_dabba() ) {
-						echo '<div class="notice notice-warning is-dismissible"><p>' .
-							esc_html__( 'WooCommerce Subscription and WooCommerce Product Bundles is supported only with ', 'moowoodle' ) .
-							'<a href="' . esc_url( MOOWOODLE_PRO_SHOP_URL ) . '">' .
-							esc_html__( 'MooWoodle Pro', 'moowoodle' ) .
-							'</a></p></div>';
-					}
+		$plugins_to_check = array(
+			'woocommerce-subscriptions/woocommerce-subscriptions.php'     => 'WooCommerce Subscription',
+			'woocommerce-product-bundles/woocommerce-product-bundles.php' => 'WooCommerce Product Bundles',
+		);
+
+		if ( MooWoodle()->util->is_khali_dabba() ) {
+			// Get all active plugins.
+			$active_plugins = get_option( 'active_plugins', array() );
+			if ( is_multisite() ) {
+				$active_plugins = array_merge( $active_plugins, get_site_option( 'active_sitewide_plugins', array() ) );
+			}
+
+			// Find unsupported active plugins.
+			$unsupported_plugins = array();
+			foreach ( $plugins_to_check as $plugin_file => $plugin_name ) {
+				if ( in_array( $plugin_file, $active_plugins, true ) || array_key_exists( $plugin_file, $active_plugins ) ) {
+					$unsupported_plugins[] = $plugin_name;
 				}
-			);
+			}
+
+			if ( ! empty( $unsupported_plugins ) ) {
+				add_action(
+                    'admin_notices',
+                    function () use ( $unsupported_plugins ) {
+						$message = sprintf(
+						// Translators: %1$s = plugin list, %2$s = verb.
+                            esc_html__( '%1$s %2$s supported only with ', 'moowoodle' ),
+                            esc_html( implode( ' and ', $unsupported_plugins ) ),
+                            esc_html__( 'is', 'moowoodle' )
+						);
+
+						echo '<div class="notice notice-warning is-dismissible"><p>' .
+						esc_html( $message ) . ' ' .
+						'<a href="' . esc_url( MOOWOODLE_PRO_SHOP_URL ) . '">' .
+						esc_html__( 'MooWoodle Pro', 'moowoodle' ) .
+						'</a></p></div>';
+					}
+                );
+			}
 		}
 
 		return $classnames;
