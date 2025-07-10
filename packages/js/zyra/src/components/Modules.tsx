@@ -157,7 +157,7 @@ const Modules: React.FC< ModuleProps > = ( {
                             </div>
                             <div
                                 className="toggle-checkbox"
-                                data-showcase-tour={ `${ module.id }-showcase-tour` }
+                                data-tour={ `${ module.id }-showcase-tour` }
                             >
                                 <input
                                     type="checkbox"

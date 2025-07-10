@@ -76,7 +76,7 @@ const Tour: React.FC<TourProps> = ( { appLocalizer } ) => {
 
     const settingsTourSteps: TourStep[] = [
         {
-            selector: '[data-showcase-tour="catalog-showcase-tour"]',
+            selector: '[data-tour="catalog-showcase-tour"]',
             placement: 'top',
             content: () => (
                 <div className="tour-box">
@@ -104,7 +104,7 @@ const Tour: React.FC<TourProps> = ( { appLocalizer } ) => {
             ),
         },
         {
-            selector: '[data-showcase-tour="enquiry-showcase-tour"]',
+            selector: '[data-tour="enquiry-showcase-tour"]',
             content: () => (
                 <div className="tour-box">
                     <h3>Enable Enquiry Mode</h3>
@@ -163,7 +163,7 @@ const Tour: React.FC<TourProps> = ( { appLocalizer } ) => {
                                 navigateTo(
                                     appLocalizer.module_page_url,
                                     3,
-                                    '[data-showcase-tour="quote-showcase-tour"]'
+                                    '[data-tour="quote-showcase-tour"]'
                                 )
                             }
                         >
@@ -180,7 +180,7 @@ const Tour: React.FC<TourProps> = ( { appLocalizer } ) => {
             ),
         },
         {
-            selector: '[data-showcase-tour="quote-showcase-tour"]',
+            selector: '[data-tour="quote-showcase-tour"]',
             content: () => (
                 <div className="tour-box">
                     <h3>Enable Quote Module</h3>
