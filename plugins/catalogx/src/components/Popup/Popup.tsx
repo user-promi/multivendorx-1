@@ -9,32 +9,42 @@ const proPopupContent = {
         'catalogx'
     ),
     messages: [
-        __('Speed up sales with personalized quotes.', 'catalogx'),
-        __(
-            'Boost bulk sales with exclusive pricing and wholesale order forms.',
-            'catalogx'
-        ),
-        __(
-            'Enable multiple product enquiries at once to boost customer engagement.',
-            'catalogx'
-        ),
-        __(
-            'Advanced enquiry messaging with file uploads, tagging, etc.',
-            'catalogx'
-        ),
-        __(
-            'Increase revenue with tailored pricing for different user roles.',
-            'catalogx'
-        ),
-        __(
-            'Drive higher sales with customized pricing for product categories.',
-            'catalogx'
-        ),
+        { text: __( 'Speed up sales with personalized quotes.', 'catalogx' ) },
+        {
+            text: __(
+                'Boost bulk sales with exclusive pricing and wholesale order forms.',
+                'catalogx'
+            ),
+        },
+        {
+            text: __(
+                'Enable multiple product enquiries at once to boost customer engagement.',
+                'catalogx'
+            ),
+        },
+        {
+            text: __(
+                'Advanced enquiry messaging with file uploads, tagging, etc.',
+                'catalogx'
+            ),
+        },
+        {
+            text: __(
+                'Increase revenue with tailored pricing for different user roles.',
+                'catalogx'
+            ),
+        },
+        {
+            text: __(
+                'Drive higher sales with customized pricing for product categories.',
+                'catalogx'
+            ),
+        },
     ],
 };
 
 const ShowProPopup: React.FC = () => {
-    return <ProPopup {...proPopupContent} />;
+    return <ProPopup { ...proPopupContent } />;
 };
 
 export default ShowProPopup;

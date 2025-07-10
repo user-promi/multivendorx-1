@@ -5,7 +5,7 @@ interface PopupProps {
     name: string;
 }
 
-const ModulePopup: React.FC<PopupProps> = (props) => {
+const ModulePopup: React.FC< PopupProps > = ( props ) => {
     const proPopupContent = {
         moduleName: props.name,
         message: sprintf(
@@ -19,7 +19,7 @@ const ModulePopup: React.FC<PopupProps> = (props) => {
                 : '#',
     };
 
-    return <ProPopup {...proPopupContent} />;
+    return <ProPopup { ...proPopupContent } />;
 };
 
 export default ModulePopup;

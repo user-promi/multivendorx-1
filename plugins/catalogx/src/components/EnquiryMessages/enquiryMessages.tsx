@@ -8,61 +8,71 @@ import Modulepopup from '../Popup/ModulePopup';
 const EnquiryMessages = () => {
     // Check pro is active and module is active or not.
     const { modules } = useModules();
-    const [openDialog, setOpenDialog] = useState(false);
+    const [ openDialog, setOpenDialog ] = useState( false );
 
-    if (!appLocalizer.khali_dabba) {
+    if ( ! appLocalizer.khali_dabba ) {
         return (
             <>
                 <Dialog
                     className="admin-module-popup"
-                    open={openDialog}
-                    onClose={() => {
-                        setOpenDialog(false);
-                    }}
+                    open={ openDialog }
+                    onClose={ () => {
+                        setOpenDialog( false );
+                    } }
                     aria-labelledby="form-dialog-title"
                 >
                     <span
                         className="admin-font adminlib-cross"
-                        onClick={() => {
-                            setOpenDialog(false);
-                        }}
+                        onClick={ () => {
+                            setOpenDialog( false );
+                        } }
                     ></span>
                     <Popoup />
                 </Dialog>
                 <div
                     className="enquiry-img"
-                    onClick={() => {
-                        setOpenDialog(true);
-                    }}
+                    style={
+                        {
+                            '--url': `url(${ appLocalizer.enquiry_messages_bg })`,
+                        } as any
+                    }
+                    onClick={ () => {
+                        setOpenDialog( true );
+                    } }
                 ></div>
             </>
         );
     }
 
-    if (!modules.includes('enquiry')) {
+    if ( ! modules.includes( 'enquiry' ) ) {
         return (
             <>
                 <Dialog
                     className="admin-module-popup"
-                    open={openDialog}
-                    onClose={() => {
-                        setOpenDialog(false);
-                    }}
+                    open={ openDialog }
+                    onClose={ () => {
+                        setOpenDialog( false );
+                    } }
                     aria-labelledby="form-dialog-title"
                 >
                     <span
                         className="admin-font adminlib-cross stock-manager-popup-cross"
-                        onClick={() => {
-                            setOpenDialog(false);
-                        }}
+                        onClick={ () => {
+                            setOpenDialog( false );
+                        } }
                     ></span>
                     <Modulepopup name="Enquiry" />
                 </Dialog>
                 <div
                     className="enquiry-img"
-                    onClick={() => {
-                        setOpenDialog(true);
-                    }}
+                    style={
+                        {
+                            '--url': `url(${ appLocalizer.enquiry_messages_bg })`,
+                        } as any
+                    }
+                    onClick={ () => {
+                        setOpenDialog( true );
+                    } }
                 ></div>
             </>
         );

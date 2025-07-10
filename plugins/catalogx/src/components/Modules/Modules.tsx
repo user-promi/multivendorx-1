@@ -11,9 +11,9 @@ const PluginModules = () => {
 
     return (
         <Modules
-            modules={modules}
-            modulesArray={modulesArray}
-            appLocalizer={appLocalizer}
+            modules={ modules }
+            modulesArray={ modulesArray }
+            appLocalizer={ appLocalizer }
         />
     );
 };

@@ -12,61 +12,71 @@ const Rules = () => {
     const { modules } = useModules();
 
     // State variable declearation
-    const [openDialog, setOpenDialog] = useState(false);
+    const [ openDialog, setOpenDialog ] = useState( false );
 
-    if (!appLocalizer.khali_dabba) {
+    if ( ! appLocalizer.khali_dabba ) {
         return (
             <>
                 <Dialog
                     className="admin-module-popup"
-                    open={openDialog}
-                    onClose={() => {
-                        setOpenDialog(false);
-                    }}
+                    open={ openDialog }
+                    onClose={ () => {
+                        setOpenDialog( false );
+                    } }
                     aria-labelledby="form-dialog-title"
                 >
                     <span
                         className="admin-font adminlib-cross"
-                        onClick={() => {
-                            setOpenDialog(false);
-                        }}
+                        onClick={ () => {
+                            setOpenDialog( false );
+                        } }
                     ></span>
                     <Popoup />
                 </Dialog>
                 <div
                     className="dynamic-rule-img"
-                    onClick={() => {
-                        setOpenDialog(true);
-                    }}
+                    style={
+                        {
+                            '--url': `url(${ appLocalizer.dynamic_rules_bg })`,
+                        } as any
+                    }
+                    onClick={ () => {
+                        setOpenDialog( true );
+                    } }
                 ></div>
             </>
         );
     }
 
-    if (!modules.includes('rules')) {
+    if ( ! modules.includes( 'rules' ) ) {
         return (
             <>
                 <Dialog
                     className="admin-module-popup"
-                    open={openDialog}
-                    onClose={() => {
-                        setOpenDialog(false);
-                    }}
+                    open={ openDialog }
+                    onClose={ () => {
+                        setOpenDialog( false );
+                    } }
                     aria-labelledby="form-dialog-title"
                 >
                     <span
                         className="admin-font adminlib-cross stock-manager-popup-cross"
-                        onClick={() => {
-                            setOpenDialog(false);
-                        }}
+                        onClick={ () => {
+                            setOpenDialog( false );
+                        } }
                     ></span>
                     <Modulepopup name="Rules" />
                 </Dialog>
                 <div
                     className="dynamic-rule-img"
-                    onClick={() => {
-                        setOpenDialog(true);
-                    }}
+                    style={
+                        {
+                            '--url': `url(${ appLocalizer.dynamic_rules_bg })`,
+                        } as any
+                    }
+                    onClick={ () => {
+                        setOpenDialog( true );
+                    } }
                 ></div>
             </>
         );

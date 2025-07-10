@@ -11,61 +11,71 @@ import 'react-date-range/dist/theme/default.css'; // theme css file
 const WholesaleUser = () => {
     // Check pro is active and module is active or not.
     const { modules } = useModules();
-    const [openDialog, setOpenDialog] = useState(false);
+    const [ openDialog, setOpenDialog ] = useState( false );
 
-    if (!appLocalizer.khali_dabba) {
+    if ( ! appLocalizer.khali_dabba ) {
         return (
             <>
                 <Dialog
                     className="admin-module-popup"
-                    open={openDialog}
-                    onClose={() => {
-                        setOpenDialog(false);
-                    }}
+                    open={ openDialog }
+                    onClose={ () => {
+                        setOpenDialog( false );
+                    } }
                     aria-labelledby="form-dialog-title"
                 >
                     <span
                         className="admin-font adminlib-cross"
-                        onClick={() => {
-                            setOpenDialog(false);
-                        }}
+                        onClick={ () => {
+                            setOpenDialog( false );
+                        } }
                     ></span>
                     <Popoup />
                 </Dialog>
                 <div
                     className="wholesale-user-image"
-                    onClick={() => {
-                        setOpenDialog(true);
-                    }}
+                    style={
+                        {
+                            '--url': `url(${ appLocalizer.wholesale_users_bg })`,
+                        } as any
+                    }
+                    onClick={ () => {
+                        setOpenDialog( true );
+                    } }
                 ></div>
             </>
         );
     }
 
-    if (!modules.includes('wholesale')) {
+    if ( ! modules.includes( 'wholesale' ) ) {
         return (
             <>
                 <Dialog
                     className="admin-module-popup"
-                    open={openDialog}
-                    onClose={() => {
-                        setOpenDialog(false);
-                    }}
+                    open={ openDialog }
+                    onClose={ () => {
+                        setOpenDialog( false );
+                    } }
                     aria-labelledby="form-dialog-title"
                 >
                     <span
                         className="admin-font adminlib-cross stock-manager-popup-cross"
-                        onClick={() => {
-                            setOpenDialog(false);
-                        }}
+                        onClick={ () => {
+                            setOpenDialog( false );
+                        } }
                     ></span>
                     <Modulepopup name="Wholesale" />
                 </Dialog>
                 <div
                     className="wholesale-user-image"
-                    onClick={() => {
-                        setOpenDialog(true);
-                    }}
+                    style={
+                        {
+                            '--url': `url(${ appLocalizer.wholesale_users_bg })`,
+                        } as any
+                    }
+                    onClick={ () => {
+                        setOpenDialog( true );
+                    } }
                 ></div>
             </>
         );

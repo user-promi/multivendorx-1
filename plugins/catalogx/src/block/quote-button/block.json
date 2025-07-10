@@ -8,7 +8,7 @@
     "supports": {
         "html": false
     },
-    "editorScript": ["file:./index.js", "catalogx-add-to-quote-cart-script"],
-    "script": ["file:./index.js", "catalogx-add-to-quote-cart-script"],
+    "editorScript": [ "file:./index.js", "catalogx-add-to-quote-cart-script" ],
+    "script": [ "file:./index.js", "catalogx-add-to-quote-cart-script" ],
     "render": "file:./render.php"
 }

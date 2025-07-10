@@ -1,7 +1,7 @@
 @use '/src/components/config' as *;
 
 .quote-img {
-    background-image: url("../../assets/images/quote-page-desktop.png");
+    background-image: var(--url);
     background-repeat: no-repeat;
     background-position: top center;
     background-size: contain;

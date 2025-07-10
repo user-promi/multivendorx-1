@@ -2,18 +2,20 @@ import React, { useState } from 'react';
 import { getApiLink } from 'zyra';
 import axios from 'axios';
 
-const Quote = (props: any) => {
+const Quote = ( props: any ) => {
     const { onFinish, onPrev } = props;
-    const [restrictUserQuote, setRestrictUserQuote] = useState<string[]>([]);
+    const [ restrictUserQuote, setRestrictUserQuote ] = useState< string[] >(
+        []
+    );
 
     const handleRestrictUserQuoteChange = (
-        event: React.ChangeEvent<HTMLInputElement>
+        event: React.ChangeEvent< HTMLInputElement >
     ) => {
         const { checked, name } = event.target;
-        setRestrictUserQuote((prevState) =>
+        setRestrictUserQuote( ( prevState ) =>
             checked
-                ? [...prevState, name]
-                : prevState.filter((value) => value !== name)
+                ? [ ...prevState, name ]
+                : prevState.filter( ( value ) => value !== name )
         );
     };
 
@@ -23,14 +25,14 @@ const Quote = (props: any) => {
             restrictUserQuote,
         };
 
-        axios({
+        axios( {
             method: 'post',
-            url: getApiLink('settings'),
+            url: getApiLink( 'settings' ),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
             data,
-        }).then(() => {
+        } ).then( () => {
             onFinish();
-        });
+        } );
     };
 
     return (
@@ -50,10 +52,12 @@ const Quote = (props: any) => {
                             type="checkbox"
                             id="logged_out"
                             name="logged_out"
-                            checked={restrictUserQuote.includes('logged_out')}
-                            onChange={handleRestrictUserQuoteChange}
+                            checked={ restrictUserQuote.includes(
+                                'logged_out'
+                            ) }
+                            onChange={ handleRestrictUserQuoteChange }
                         />
-                        {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+                        { /* eslint-disable-next-line jsx-a11y/label-has-associated-control */ }
                         <label htmlFor="logged_out"></label>
                     </div>
                 </div>
@@ -61,16 +65,16 @@ const Quote = (props: any) => {
 
             <footer className="setup-footer-btn-wrapper">
                 <div>
-                    <button className="footer-btn pre-btn" onClick={onPrev}>
+                    <button className="footer-btn pre-btn" onClick={ onPrev }>
                         Prev
                     </button>
-                    <button className="footer-btn" onClick={onFinish}>
+                    <button className="footer-btn" onClick={ onFinish }>
                         Skip
                     </button>
                 </div>
                 <button
                     className="footer-btn next-btn"
-                    onClick={saveQuoteSettings}
+                    onClick={ saveQuoteSettings }
                 >
                     Finish
                 </button>
