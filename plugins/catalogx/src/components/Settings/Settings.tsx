@@ -19,7 +19,7 @@ import {
     Tabs,
 } from 'zyra';
 import { useModules } from '../../contexts/ModuleContext';
-import ShowProPopup from '../Popup/Popup';
+import ShowPopup from '../Popup/Popup';
 import { useLocation, Link } from 'react-router-dom';
 
 // Types
@@ -176,7 +176,7 @@ const Settings: React.FC< SettingsProps > = () => {
                         updateSetting={ updateSetting }
                         appLocalizer={ appLocalizer }
                         modules={ modules }
-                        Popup={ ShowProPopup }
+                        Popup={ ShowPopup }
                     />
                 ) : (
                     // <>Hii There</>

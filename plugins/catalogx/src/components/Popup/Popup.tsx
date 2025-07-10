@@ -1,8 +1,12 @@
 import React from 'react';
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import { ProPopup } from 'zyra';
 
-const proPopupContent = {
+interface PopupProps {
+    moduleName?: string;
+}
+
+export const proPopupContent = {
     proUrl: typeof appLocalizer !== 'undefined' ? appLocalizer.pro_url : '#',
     title: __(
         'Unlock revenue-boosting features with CatalogX Pro today!',
@@ -43,8 +47,29 @@ const proPopupContent = {
     ],
 };
 
-const ShowProPopup: React.FC = () => {
-    return <ProPopup { ...proPopupContent } />;
+const ShowPopup: React.FC< PopupProps > = ( props ) => {
+    const modulePopupContent = {
+        moduleName: props.moduleName,
+        message: sprintf(
+            'To activate please enable the %s module first',
+            props.moduleName
+        ),
+        moduleButton: 'Enable Now',
+        modulePageUrl:
+            typeof appLocalizer !== 'undefined'
+                ? appLocalizer.module_page_url
+                : '#',
+    };
+
+    return (
+        <>
+            {props.moduleName
+                ? <ProPopup { ...modulePopupContent } />
+                : <ProPopup { ...proPopupContent } />
+            }
+        </>
+        // <ProPopup { ...proPopupContent } />
+    );
 };
 
-export default ShowProPopup;
+export default ShowPopup;

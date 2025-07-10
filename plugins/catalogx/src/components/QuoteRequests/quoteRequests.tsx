@@ -1,7 +1,6 @@
 import Dialog from '@mui/material/Dialog';
 import React, { useState } from 'react';
-import Popoup from '../Popup/Popup';
-import Modulepopup from '../Popup/ModulePopup';
+import ShowPopup from '../Popup/Popup';
 import { useModules } from '../../contexts/ModuleContext';
 import './quoteRequests.scss';
 // import '../AdminLibrary/CustomTable/table.scss';
@@ -12,7 +11,7 @@ export default function QuotesList() {
     const { modules } = useModules();
     const [ openDialog, setOpenDialog ] = useState( false );
 
-    if ( ! appLocalizer.khali_dabba ) {
+    if ( ! appLocalizer.khali_dabba || ! modules.includes( 'quote' ) ) {
         return (
             <>
                 <Dialog
@@ -29,41 +28,10 @@ export default function QuotesList() {
                             setOpenDialog( false );
                         } }
                     ></span>
-                    <Popoup />
-                </Dialog>
-                <div
-                    className="quote-img"
-                    style={
-                        {
-                            '--url': `url(${ appLocalizer.quote_requests_bg })`,
-                        } as any
+                    {! appLocalizer.khali_dabba
+                        ? <ShowPopup />
+                        : <ShowPopup moduleName="Quote" />
                     }
-                    onClick={ () => {
-                        setOpenDialog( true );
-                    } }
-                ></div>
-            </>
-        );
-    }
-
-    if ( ! modules.includes( 'quote' ) ) {
-        return (
-            <>
-                <Dialog
-                    className="admin-module-popup"
-                    open={ openDialog }
-                    onClose={ () => {
-                        setOpenDialog( false );
-                    } }
-                    aria-labelledby="form-dialog-title"
-                >
-                    <span
-                        className="admin-font adminlib-cross stock-manager-popup-cross"
-                        onClick={ () => {
-                            setOpenDialog( false );
-                        } }
-                    ></span>
-                    <Modulepopup name="Quote" />
                 </Dialog>
                 <div
                     className="quote-img"
