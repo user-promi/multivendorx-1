@@ -114,7 +114,7 @@ const Course: React.FC = () => {
         searchAction = '',
         searchCourseField = ''
     ) {
-        setError(null);
+        setData(null);
         axios({
             method: 'GET',
             url: getApiLink(appLocalizer, 'courses'),
@@ -199,13 +199,13 @@ const Course: React.FC = () => {
                     ],
                 },
             })
-                .then(() => {
-                    requestData();
-                })
-                .catch(() => {
-                    setError(__('Failed to perform action', 'moowoodle'));
-                    setData([]);
-                });
+            .then(() => {
+                requestData();
+            })
+            .catch(() => {
+                setError(__('Failed to perform action', 'moowoodle'));
+                setData([]);
+            });
         } else {
             setOpenDialog(true);
         }
