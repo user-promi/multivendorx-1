@@ -156,7 +156,7 @@ class MooWoodle {
         $this->container['frontendscripts']  = new FrontendScripts();
         $this->container['endpoint']         = new EndPoint();
 
-        $this->initialize_moowoodle_log_file();
+        $this->initialize_moowoodle_log();
     }
 
     /**
@@ -275,7 +275,7 @@ class MooWoodle {
     /**
      * Get moowoodle log file name.
      */
-    public function initialize_moowoodle_log_file() {
+    public function initialize_moowoodle_log() {
         // The log file name is stored in the options table because it is generated with an arbitrary name.
         $log_file_name = get_option( 'moowoodle_log_file' );
 
@@ -285,6 +285,7 @@ class MooWoodle {
         }
 
         $this->container['log_file'] = MooWoodle()->moowoodle_logs_dir . '/' . $log_file_name;
+        $this->container['show_advanced_log'] = in_array( 'moowoodle_adv_log', MooWoodle()->setting->get_setting( 'moowoodle_adv_log', array() ), true );
     }
 
 	/**
@@ -320,7 +321,7 @@ class MooWoodle {
      * @return object | null
      */
 	public static function init( $file ) {
-        if ( self::$instance === null ) {
+        if ( null === self::$instance ) {
             self::$instance = new self( $file );
         }
 

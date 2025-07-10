@@ -47,7 +47,7 @@ const supportLink = [
         title: __('Contribute Here', 'moowoodle'),
         icon: 'adminlib-support',
         description: __('Participate in product enhancement.', 'moowoodle'),
-        link: 'https://github.com/dualcube/moowoodle/issues',
+        link: 'https://github.com/multivendorx/multivendorx/issues',
     },
 ];
 
