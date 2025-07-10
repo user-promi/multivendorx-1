@@ -203,6 +203,6 @@ class Rest {
      * @return bool
      */
     public function catalogx_permission() {
-        return true;
+        return current_user_can( 'manage_options' );
     }
 }

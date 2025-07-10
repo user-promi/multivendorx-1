@@ -34,33 +34,21 @@ class Utill {
      * @param mixed $str The data to be logged (string, array, object, etc.).
      * @return void
      */
-    public static function log( $str ) {
-        global $wp_filesystem;
-
-        // Initialize the filesystem API.
-        if ( ! function_exists( 'WP_Filesystem' ) ) {
-            require_once ABSPATH . '/wp-admin/includes/file.php';
+    public static function log( $data ) {
+        if ( ! defined( 'WP_DEBUG' ) || ! WP_DEBUG ) {
+            return;
         }
 
+        require_once ABSPATH . 'wp-admin/includes/file.php';
         WP_Filesystem();
 
-        $file = apply_filters( 'catalogx_log_file_path', CatalogX()->plugin_path . 'log/catalogx.txt' );
+        global $wp_filesystem;
 
-        if ( $wp_filesystem->exists( $file ) ) {
-            $str     = var_export( $str, true ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_var_export
-            $current = $wp_filesystem->get_contents( $file );
+        $log_file = CatalogX()->plugin_path . 'log/catalogx.log';
+        $message  = wp_json_encode( $data, JSON_PRETTY_PRINT ) . "\n---------------------------\n";
 
-            if ( $current ) {
-                // Append a new content to the file.
-                $current .= "$str\r\n";
-                $current .= "-------------------------------------\r\n";
-            } else {
-                $current  = "$str\r\n";
-                $current .= "-------------------------------------\r\n";
-            }
-
-            $wp_filesystem->put_contents( $file, $current, FS_CHMOD_FILE );
-        }
+        $existing = $wp_filesystem->exists( $log_file ) ? $wp_filesystem->get_contents( $log_file ) : '';
+        $wp_filesystem->put_contents( $log_file, $existing . $message, FS_CHMOD_FILE );
     }
 
     /**

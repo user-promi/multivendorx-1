@@ -13,48 +13,49 @@ const Rules = () => {
     // State variable declearation
     const [ openDialog, setOpenDialog ] = useState( false );
 
-    if ( ! appLocalizer.khali_dabba || ! modules.includes( 'rules' ) ) {
-        return (
-            <>
-                <Dialog
-                    className="admin-module-popup"
-                    open={ openDialog }
-                    onClose={ () => {
-                        setOpenDialog( false );
-                    } }
-                    aria-labelledby="form-dialog-title"
-                >
-                    <span
-                        className="admin-font adminlib-cross"
-                        onClick={ () => {
+    return (
+        <>
+            { ! appLocalizer.khali_dabba || ! modules.includes( 'rules' ) ? (
+                <>
+                    <Dialog
+                        className="admin-module-popup"
+                        open={ openDialog }
+                        onClose={ () => {
                             setOpenDialog( false );
                         } }
-                    ></span>
-                    {! appLocalizer.khali_dabba
-                        ? <ShowPopup />
-                        : <ShowPopup moduleName="Rules" />
-                    }
-                </Dialog>
-                <div
-                    className="dynamic-rule-img"
-                    style={
-                        {
-                            '--url': `url(${ appLocalizer.dynamic_rules_bg })`,
-                        } as any
-                    }
-                    onClick={ () => {
-                        setOpenDialog( true );
-                    } }
-                ></div>
-            </>
-        );
-    }
-
-    return (
-        <main
-            className="catalog-rules-main-container"
-            id="rules-list-table"
-        ></main>
+                        aria-labelledby="form-dialog-title"
+                    >
+                        <span
+                            className="admin-font adminlib-cross"
+                            onClick={ () => {
+                                setOpenDialog( false );
+                            } }
+                        ></span>
+                        { ! appLocalizer.khali_dabba ? (
+                            <ShowPopup />
+                        ) : (
+                            <ShowPopup moduleName="Rules" />
+                        ) }
+                    </Dialog>
+                    <div
+                        className="dynamic-rule-img"
+                        style={
+                            {
+                                '--url': `url(${ appLocalizer.dynamic_rules_bg })`,
+                            } as any
+                        }
+                        onClick={ () => {
+                            setOpenDialog( true );
+                        } }
+                    ></div>
+                </>
+            ) : (
+                <main
+                    className="catalog-rules-main-container"
+                    id="rules-list-table"
+                ></main>
+            ) }
+        </>
     );
 };
 

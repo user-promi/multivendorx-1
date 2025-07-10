@@ -52,6 +52,7 @@ final class CatalogX {
         $this->file                                = $file;
         $this->container['plugin_url']             = trailingslashit( plugins_url( '', $plugin = $file ) );
         $this->container['plugin_path']            = trailingslashit( dirname( $file ) );
+        $this->container['plugin_base']            = plugin_basename( $file );
         $this->container['version']                = CATALOGX_PLUGIN_VERSION;
         $this->container['rest_namespace']         = 'catalogx/v1';
         $this->container['block_paths']            = array();
@@ -230,7 +231,7 @@ final class CatalogX {
     public function plugin_link( $links ) {
         $plugin_links = array(
             '<a href="' . admin_url( 'admin.php?page=catalogx#&tab=settings&subtab=general' ) . '">' . __( 'Settings', 'catalogx' ) . '</a>',
-            '<a href="https://catalogx.com/support/?utm_source=wpadmin&utm_medium=pluginsettings&utm_campaign=catalogx">' . __( 'Support', 'catalogx' ) . '</a>',
+            // '<a href="https://catalogx.com/support/?utm_source=wpadmin&utm_medium=pluginsettings&utm_campaign=catalogx">' . __( 'Support', 'catalogx' ) . '</a>',
         );
         $links        = array_merge( $plugin_links, $links );
         if ( apply_filters( 'catalogx_free_active', true ) ) {
@@ -249,10 +250,16 @@ final class CatalogX {
      * @return array Modified array of plugin metadata links.
      */
     public function plugin_row_meta( $links, $file ) {
-        if ( 'catalogx/Woocommerce_Catalog_Enquiry.php' === $file && apply_filters( 'catalogx_free_active', true ) ) {
+        if ( CatalogX()->plugin_base === $file ) {
             $row_meta = array(
-                'pro' => '<a href="' . esc_url( CATALOGX_PRO_SHOP_URL ) . '" class="notifima-pro-plugin" target="_blank" style="font-weight: 700;background: linear-gradient(110deg, rgb(63, 20, 115) 0%, 25%, rgb(175 59 116) 50%, 75%, rgb(219 75 84) 100%);-webkit-background-clip: text;-webkit-text-fill-color: transparent;" title="' . esc_attr( __( 'Upgrade to Pro', 'catalogx' ) ) . '">' . __( 'Upgrade to Pro', 'catalogx' ) . '</a>',
+                'docs'    => '<a href="https://catalogx.com/docs/?utm_source=wpadmin&utm_medium=pluginsettings&utm_campaign=catalogx" target="_blank">' . esc_html__( 'Docs', 'notifima' ) . '</a>',
+                'support' => '<a href="https://catalogx.com/support/?utm_source=wpadmin&utm_medium=pluginsettings&utm_campaign=catalogx" target="_blank">' . __( 'Support', 'catalogx' ) . '</a>',
             );
+
+            if ( apply_filters( 'catalogx_free_active', true ) ) {
+                $row_meta['pro'] = '<a href="' . esc_url( CATALOGX_PRO_SHOP_URL ) . '" class="notifima-pro-plugin" target="_blank" style="font-weight: 700;background: linear-gradient(110deg, rgb(63, 20, 115) 0%, 25%, rgb(175 59 116) 50%, 75%, rgb(219 75 84) 100%);-webkit-background-clip: text;-webkit-text-fill-color: transparent;" title="' . esc_attr( __( 'Upgrade to Pro', 'catalogx' ) ) . '">' . __( 'Upgrade to Pro', 'catalogx' ) . '</a>';
+            }
+
             return array_merge( $links, $row_meta );
         } else {
             return $links;

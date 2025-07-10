@@ -83,6 +83,11 @@ class Install {
         // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
         global $wpdb;
 
+        // Include upgrade functions if not loaded.
+        if ( ! function_exists( 'dbDelta' ) ) {
+            require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+        }
+
         $collate = '';
 
         if ( $wpdb->has_cap( 'collation' ) ) {
@@ -115,57 +120,57 @@ class Install {
             );
         } else {
             // Create message table.
-            $wpdb->query(
-                "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}" . Utill::TABLES['message'] . "` (
-                    `chat_message_id` bigint(20) NOT NULL AUTO_INCREMENT,
-                    `to_user_id` bigint(20) NOT NULL,
-                    `from_user_id` bigint(20) NOT NULL,
-                    `chat_message` text NOT NULL,
-                    `product_id` text NOT NULL,
-                    `enquiry_id` bigint(20) NOT NULL,
-                    `status` varchar(20) NOT NULL,
-                    `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                    `attachment` bigint(20),
-                    `reaction` varchar(20),
-                    `star` boolean,
-                    `reply` text DEFAULT NULL,
-                    PRIMARY KEY (`chat_message_id`)
-                ) $collate;"
-            );
+            $sql_message = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}" . Utill::TABLES['message'] . "` (
+                `chat_message_id` bigint(20) NOT NULL AUTO_INCREMENT,
+                `to_user_id` bigint(20) NOT NULL,
+                `from_user_id` bigint(20) NOT NULL,
+                `chat_message` text NOT NULL,
+                `product_id` text NOT NULL,
+                `enquiry_id` bigint(20) NOT NULL,
+                `status` varchar(20) NOT NULL,
+                `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                `attachment` bigint(20),
+                `reaction` varchar(20),
+                `star` boolean,
+                `reply` text DEFAULT NULL,
+                PRIMARY KEY (`chat_message_id`)
+            ) $collate;";
+
+            dbDelta( $sql_message );
         }
 
         // Create enquiry table.
-        $wpdb->query(
-            "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}" . Utill::TABLES['enquiry'] . "` (
-                `id` bigint(20) NOT NULL AUTO_INCREMENT,
-                `product_info` text NOT NULL,
-                `user_id` bigint(20) NOT NULL DEFAULT 0,
-                `user_name` varchar(50) NOT NULL,
-                `user_email` varchar(50) NOT NULL,
-                `user_additional_fields` text NOT NULL,
-                `pin_msg_id` bigint(20) DEFAULT NULL,
-                `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                PRIMARY KEY (`id`)
-            ) $collate;"
-        );
+            $sql_enquiry = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}" . Utill::TABLES['enquiry'] . "` (
+            `id` bigint(20) NOT NULL AUTO_INCREMENT,
+            `product_info` text NOT NULL,
+            `user_id` bigint(20) NOT NULL DEFAULT 0,
+            `user_name` varchar(50) NOT NULL,
+            `user_email` varchar(50) NOT NULL,
+            `user_additional_fields` text NOT NULL,
+            `pin_msg_id` bigint(20) DEFAULT NULL,
+            `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (`id`)
+        ) $collate;";
+
+        dbDelta( $sql_enquiry );
 
         // Create rules table.
-        $wpdb->query(
-            "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}" . Utill::TABLES['rule'] . "` (
-                `id` bigint(20) NOT NULL AUTO_INCREMENT,
-                `name` text,
-                `user_id` bigint(20),
-                `role_id` varchar(100),
-                `product_id` bigint(20),
-                `category_id` bigint(20),
-                `quentity` bigint(20) NOT NULL,
-                `type` varchar(20) NOT NULL,
-                `amount` bigint(20) NOT NULL,
-                `priority` bigint(20) NOT NULL,
-                `active` boolean NOT NULL DEFAULT true,
-                PRIMARY KEY ( `id` )
-            ) $collate;"
-        );
+        $sql_rule = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}" . Utill::TABLES['rule'] . "` (
+            `id` bigint(20) NOT NULL AUTO_INCREMENT,
+            `name` text,
+            `user_id` bigint(20),
+            `role_id` varchar(100),
+            `product_id` bigint(20),
+            `category_id` bigint(20),
+            `quentity` bigint(20) NOT NULL,
+            `type` varchar(20) NOT NULL,
+            `amount` bigint(20) NOT NULL,
+            `priority` bigint(20) NOT NULL,
+            `active` boolean NOT NULL DEFAULT true,
+            PRIMARY KEY ( `id` )
+        ) $collate;";
+
+        dbDelta( $sql_rule );
         // phpcs:enable
     }
 

@@ -233,7 +233,7 @@ export default {
                 'catalogx'
             ),
             parameter: __( 'days', 'catalogx' ),
-            // proSetting: true,
+            proSetting: true,
             moduleEnabled: 'quote',
         },
         {

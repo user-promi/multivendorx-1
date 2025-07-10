@@ -175,30 +175,26 @@ class FrontendScripts {
 					'src'         => CatalogX()->plugin_url . 'modules/Enquiry/assets/js/frontend.js',
 					'deps'        => array( 'jquery', 'jquery-blockui' ),
 					'version'     => $version,
-					'text_domain' => 'catalogx',
 				),
 				'catalogx-enquiry-form-script'      => array(
 					'src'         => CatalogX()->plugin_url . self::get_build_path_name() . 'js/block/enquiryForm/index.js',
 					'deps'        => array( 'jquery', 'jquery-blockui', 'wp-element', 'wp-i18n', 'wp-blocks', 'wp-hooks' ),
 					'version'     => $version,
-					'text_domain' => 'catalogx',
 				),
 				'catalogx-quote-cart-script'        => array(
 					'src'         => CatalogX()->plugin_url . self::get_build_path_name() . 'js/block/quote-cart/index.js',
 					'deps'        => array( 'jquery', 'jquery-blockui', 'wp-element', 'wp-i18n', 'wp-blocks' ),
 					'version'     => $version,
-					'text_domain' => 'catalogx',
 				),
 				'catalogx-add-to-quote-cart-script' => array(
 					'src'         => CatalogX()->plugin_url . 'modules/Quote/js/frontend.js',
 					'deps'        => array( 'jquery' ),
 					'version'     => $version,
-					'text_domain' => 'catalogx',
 				),
             )
         );
 		foreach ( $register_scripts as $name => $props ) {
-			self::register_script( $name, $props['src'], $props['deps'], $props['version'], $props['text_domain'] );
+			self::register_script( $name, $props['src'], $props['deps'], $props['version'] );
 		}
 	}
 
@@ -255,18 +251,16 @@ class FrontendScripts {
 					'src'         => CatalogX()->plugin_url . self::get_build_path_name() . 'js/index.js',
 					'deps'        => $index_asset['dependencies'],
 					'version'     => $version,
-					'text_domain' => 'catalogx',
 				),
 				'catalogx-components-script' => array(
 					'src'         => CatalogX()->plugin_url . self::get_build_path_name() . 'js/components.js',
 					'deps'        => $component_asset['dependencies'],
 					'version'     => $version,
-					'text_domain' => 'catalogx',
 				),
             )
         );
 		foreach ( $register_scripts as $name => $props ) {
-			self::register_script( $name, $props['src'], $props['deps'], $props['version'], $props['text_domain'] );
+			self::register_script( $name, $props['src'], $props['deps'], $props['version'] );
 		}
 	}
 

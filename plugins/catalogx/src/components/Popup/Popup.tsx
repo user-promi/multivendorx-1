@@ -63,12 +63,12 @@ const ShowPopup: React.FC< PopupProps > = ( props ) => {
 
     return (
         <>
-            {props.moduleName
-                ? <ProPopup { ...modulePopupContent } />
-                : <ProPopup { ...proPopupContent } />
-            }
+            { props.moduleName ? (
+                <ProPopup { ...modulePopupContent } />
+            ) : (
+                <ProPopup { ...proPopupContent } />
+            ) }
         </>
-        // <ProPopup { ...proPopupContent } />
     );
 };
 
