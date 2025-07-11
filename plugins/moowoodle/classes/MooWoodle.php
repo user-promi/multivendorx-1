@@ -245,7 +245,7 @@ class MooWoodle {
 
         // Create moowoodle plugin page link.
         $plugin_links = array(
-            '<a href="' . admin_url( 'admin.php?page=moowoodle#&tab=settings&sub-tab=general' ) . '">' . __( 'Settings', 'moowoodle' ) . '</a>',
+            '<a href="' . admin_url( 'admin.php?page=moowoodle#&tab=settings&subtab=general' ) . '">' . __( 'Settings', 'moowoodle' ) . '</a>',
         );
 
         // Append the link.
