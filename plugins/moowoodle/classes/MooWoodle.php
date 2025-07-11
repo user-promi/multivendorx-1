@@ -284,7 +284,7 @@ class MooWoodle {
             update_option( 'moowoodle_log_file', $log_file_name );
         }
 
-        $this->container['log_file'] = MooWoodle()->moowoodle_logs_dir . '/' . $log_file_name;
+        $this->container['log_file']          = MooWoodle()->moowoodle_logs_dir . '/' . $log_file_name;
         $this->container['show_advanced_log'] = in_array( 'moowoodle_adv_log', MooWoodle()->setting->get_setting( 'moowoodle_adv_log', array() ), true );
     }
 
