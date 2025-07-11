@@ -66,6 +66,7 @@ class MooWoodle {
         $this->container['rest_namespace']     = 'moowoodle/v1';
         $this->container['moowoodle_logs_dir'] = ( trailingslashit( wp_upload_dir( null, false )['basedir'] ) . 'mw-logs' );
         $this->container['is_dev']             = defined( 'WP_ENV' ) && WP_ENV === 'development';
+        $this->container['plugin_base']        = plugin_basename( $file );
 
         // activation and deactivation hook.
         register_activation_hook( $file, array( $this, 'activate' ) );
@@ -75,6 +76,7 @@ class MooWoodle {
         add_action( 'before_woocommerce_init', array( $this, 'declare_compatibility' ) );
         add_action( 'woocommerce_loaded', array( $this, 'load_plugin' ) );
         add_action( 'plugins_loaded', array( $this, 'is_woocommerce_loaded' ) );
+        add_filter( 'plugin_row_meta', array( $this, 'plugin_row_meta' ), 10, 2 );
         add_action( 'init', array( $this, 'migrate_from_previous_version' ) );
 	}
 
@@ -154,7 +156,7 @@ class MooWoodle {
         $this->container['frontendscripts']  = new FrontendScripts();
         $this->container['endpoint']         = new EndPoint();
 
-        $this->initialize_moowoodle_log_file();
+        $this->initialize_moowoodle_log();
     }
 
     /**
@@ -209,6 +211,31 @@ class MooWoodle {
 	}
 
     /**
+     * Add metadata links (e.g. documentation, support) to the plugin row on the Plugins screen.
+     *
+     * @param array  $links An array of the plugin's metadata links.
+     * @param string $file  The path to the plugin file relative to the plugins directory.
+     *
+     * @return array Modified array of metadata links.
+     */
+    public function plugin_row_meta( $links, $file ) {
+        if ( MooWoodle()->plugin_base === $file ) {
+            $row_meta = array(
+                'docs'    => '<a href="https://dualcube.com/docs/moowoodle-set-up-guide/" aria-label="' . esc_attr__( 'View documentation', 'moowoodle' ) . '" target="_blank">' . esc_html__( 'Docs', 'moowoodle' ) . '</a>',
+                'support' => '<a href="https://wordpress.org/support/plugin/moowoodle/" aria-label="' . esc_attr__( 'Visit community forums', 'moowoodle' ) . '" target="_blank">' . esc_html__( 'Support', 'moowoodle' ) . '</a>',
+            );
+
+            if ( ! Util::is_khali_dabba() ) {
+                $row_meta['go_pro'] = '<a href="' . MOOWOODLE_PRO_SHOP_URL . '" class="moowoodle-pro-plugin" target="_blank" style="font-weight: 700;background: linear-gradient(110deg, rgb(63, 20, 115) 0%, 25%, rgb(175 59 116) 50%, 75%, rgb(219 75 84) 100%);-webkit-background-clip: text;-webkit-text-fill-color: transparent;">' . __( 'Upgrade to Pro', 'moowoodle' ) . '</a>';
+            }
+
+            return array_merge( $links, $row_meta );
+        }
+
+        return $links;
+    }
+
+    /**
      * Render plugin page links.
      *
      * @param array $links all links.
@@ -219,7 +246,6 @@ class MooWoodle {
         // Create moowoodle plugin page link.
         $plugin_links = array(
             '<a href="' . admin_url( 'admin.php?page=moowoodle#&tab=settings&sub-tab=general' ) . '">' . __( 'Settings', 'moowoodle' ) . '</a>',
-            '<a href="' . MOOWOODLE_SUPPORT_URL . '">' . __( 'Support', 'moowoodle' ) . '</a>',
         );
 
         // Append the link.
@@ -249,7 +275,7 @@ class MooWoodle {
     /**
      * Get moowoodle log file name.
      */
-    public function initialize_moowoodle_log_file() {
+    public function initialize_moowoodle_log() {
         // The log file name is stored in the options table because it is generated with an arbitrary name.
         $log_file_name = get_option( 'moowoodle_log_file' );
 
@@ -259,6 +285,7 @@ class MooWoodle {
         }
 
         $this->container['log_file'] = MooWoodle()->moowoodle_logs_dir . '/' . $log_file_name;
+        $this->container['show_advanced_log'] = in_array( 'moowoodle_adv_log', MooWoodle()->setting->get_setting( 'moowoodle_adv_log', array() ), true );
     }
 
 	/**
@@ -294,7 +321,7 @@ class MooWoodle {
      * @return object | null
      */
 	public static function init( $file ) {
-        if ( self::$instance === null ) {
+        if ( null === self::$instance ) {
             self::$instance = new self( $file );
         }
 
