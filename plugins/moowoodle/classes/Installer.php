@@ -112,12 +112,12 @@ class Installer {
             `cohort_id` bigint(20) NOT NULL,
             `group_id` bigint(20) NOT NULL,
             `order_id` bigint(20) NOT NULL,
-            `item_id` bigint(20) NOT NULL,
+            `order_item_id` bigint(20) NOT NULL,
             `status` varchar(20) NOT NULL,
             `enrollment_date` timestamp NULL DEFAULT NULL,
             `unenrollment_date` timestamp NULL DEFAULT NULL,
             `unenrollment_reason` text DEFAULT NULL,
-            `group_item_id` bigint(20) NOT NULL,
+            `bulk_purchase_id` bigint(20) NOT NULL,
             PRIMARY KEY (`id`)
         ) $collate;";
 
@@ -215,7 +215,7 @@ class Installer {
 				'parent_id' => (int) $term['parent_id'],
 			);
 
-			$response = \MooWoodle\Core\Category::update_course_category( $args );
+			$response = \MooWoodle\Core\Category::update_course_category_information( $args );
 
             if ( $response ) {
                 wp_delete_term( (int) $term['term_id'], 'course_cat' );
@@ -264,7 +264,7 @@ class Installer {
                 'enddate'          => reset( $all_meta['_course_enddate'] ) ?? 0,
             );
 
-            $new_course_id = \MooWoodle\Core\Course::update_course( $course_data );
+            $new_course_id = \MooWoodle\Core\Course::update_course_information( $course_data );
 
             if ( ! empty( $course_data['product_id'] ) && $new_course_id ) {
                 update_post_meta( $course_data['product_id'], 'linked_course_id', $new_course_id );
@@ -347,11 +347,11 @@ class Installer {
                 'user_email'      => $customer->user_email,
                 'course_id'       => (int) $course['id'],
                 'order_id'        => $order->get_id(),
-                'item_id'         => $item->get_id(),
+                'order_item_id'   => $item->get_id(),
                 'status'          => in_array( $linked_course_id, $unenrolled_courses, true ) ? 'unenrolled' : 'enrolled',
                 'enrollment_date' => $enrollment_date,
             );
 
-            \MooWoodle\Enrollment::update_enrollment( $enrollment_data );        }
+            \MooWoodle\Enrollment::update_enrollment_information( $enrollment_data );        }
     }
 }

@@ -53,6 +53,9 @@ class Install {
         $this->start_cron_job();
 
         update_option( 'notifima_version', NOTIFIMA_PLUGIN_VERSION );
+
+        do_action('notifima_updated');
+
     }
 
     /**
