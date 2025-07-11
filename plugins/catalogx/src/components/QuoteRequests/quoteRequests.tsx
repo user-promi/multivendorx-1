@@ -13,7 +13,43 @@ export default function QuotesList() {
 
     return (
         <>
-            { ! appLocalizer.khali_dabba || ! modules.includes( 'quote' ) ? (
+            <div
+                className="admin-subscriber-list"
+                id="quote-list-table"
+            >
+                <Dialog
+                    className="admin-module-popup"
+                    open={ openDialog }
+                    onClose={ () => {
+                        setOpenDialog( false );
+                    } }
+                    aria-labelledby="form-dialog-title"
+                >
+                    <span
+                        className="admin-font adminlib-cross stock-manager-popup-cross"
+                        onClick={ () => {
+                            setOpenDialog( false );
+                        } }
+                    ></span>
+                    { ! appLocalizer.khali_dabba ? (
+                        <ShowPopup />
+                    ) : (
+                        <ShowPopup moduleName="Quote" />
+                    ) }
+                </Dialog>
+                <div
+                    className="quote-img"
+                    style={
+                        {
+                            '--url': `url(${ appLocalizer.quote_requests_bg })`,
+                        } as any
+                    }
+                    onClick={ () => {
+                        setOpenDialog( true );
+                    } }
+                ></div>
+            </div>
+            {/* { ! appLocalizer.khali_dabba || ! modules.includes( 'quote' ) ? (
                 <>
                     <Dialog
                         className="admin-module-popup"
@@ -56,7 +92,7 @@ export default function QuotesList() {
                         ></div>
                     </div>
                 </>
-            ) }
+            ) } */}
         </>
     );
 }
