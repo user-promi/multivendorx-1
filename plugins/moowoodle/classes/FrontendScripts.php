@@ -166,12 +166,11 @@ class FrontendScripts {
 					'src'         => MooWoodle()->plugin_url . self::get_build_path_name() . 'js/block/my-courses/index.js',
 					'deps'        => $index_asset['dependencies'],
 					'version'     => $version,
-					'text_domain' => 'moowoodle',
 				),
             )
         );
 		foreach ( $register_scripts as $name => $props ) {
-			self::register_script( $name, $props['src'], $props['deps'], $props['version'], $props['text_domain'] );
+			self::register_script( $name, $props['src'], $props['deps'], $props['version'] );
 		}
 	}
 
@@ -209,24 +208,21 @@ class FrontendScripts {
 					'src'         => MooWoodle()->plugin_url . self::get_build_path_name() . 'js/index.js',
 					'deps'        => $index_asset['dependencies'],
 					'version'     => $version,
-					'text_domain' => 'moowoodle',
 				),
 				'moowoodle-components-script' => array(
 					'src'         => MooWoodle()->plugin_url . self::get_build_path_name() . 'js/components.js',
 					'deps'        => $component_asset['dependencies'],
 					'version'     => $version,
-					'text_domain' => 'moowoodle',
 				),
 				'moowoodle-product-tab-script'    => array(
 					'src'         => MooWoodle()->plugin_url . 'assets/js/' . self::get_script_name( 'product-tab' ) . '.js',
 					'deps'        => array( 'jquery', 'jquery-blockui', 'wp-element', 'wp-i18n', 'react-jsx-runtime' ),
 					'version'     => $version,
-					'text_domain' => 'moowoodle',
 				),
             )
         );
 		foreach ( $register_scripts as $name => $props ) {
-			self::register_script( $name, $props['src'], $props['deps'], $props['version'], $props['text_domain'] );
+			self::register_script( $name, $props['src'], $props['deps'], $props['version'] );
 		}
 	}
 
@@ -339,6 +335,8 @@ class FrontendScripts {
 						'moodle_site_url'          => MooWoodle()->setting->get_setting( 'moodle_url' ),
 						'wordpress_logo'           => MooWoodle()->plugin_url . 'src/assets/images/WordPress.png',
 						'moodle_logo'              => MooWoodle()->plugin_url . 'src/assets/images/Moodle.png',
+						'enrollment_list'          => MooWoodle()->plugin_url . 'src/assets/images/Enrollment-pc.png',
+						'cohort_list'              => MooWoodle()->plugin_url . 'src/assets/images/Enrollment-pc.png',
 						'wp_user_roles'            => wp_roles()->get_names(),
 						'md_user_roles'            => array(
 							1 => __( 'Manager', 'moowoodle' ),

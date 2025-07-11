@@ -80,6 +80,23 @@ const Course: React.FC = () => {
             });
     }, []);
 
+    // Fetch total rows on mount
+    useEffect(() => {
+        axios({
+            method: 'GET',
+            url: getApiLink(appLocalizer, 'courses'),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            params: { count: true },
+        })
+            .then((response) => {
+                setTotalRows(response.data || 0);
+                setPageCount(Math.ceil(response.data / pagination.pageSize));
+            })
+            .catch(() => {
+                setError(__('Failed to load total rows', 'moowoodle'));
+            });
+    }, []);
+
     useEffect(() => {
         const currentPage = pagination.pageIndex + 1;
         const rowsPerPage = pagination.pageSize;
@@ -97,7 +114,7 @@ const Course: React.FC = () => {
         searchAction = '',
         searchCourseField = ''
     ) {
-        setError(null);
+        setData(null);
         axios({
             method: 'GET',
             url: getApiLink(appLocalizer, 'courses'),
@@ -113,11 +130,7 @@ const Course: React.FC = () => {
             },
         })
             .then((response) => {
-                setData(response.data.courses || []);
-                setTotalRows(response.data.count || 0);
-                setPageCount(
-                    Math.ceil(response.data.count / pagination.pageSize)
-                );
+                setData(response.data || []);
             })
             .catch(() => {
                 setError(__('Failed to load courses', 'moowoodle'));
@@ -186,13 +199,13 @@ const Course: React.FC = () => {
                     ],
                 },
             })
-                .then(() => {
-                    requestData();
-                })
-                .catch(() => {
-                    setError(__('Failed to perform action', 'moowoodle'));
-                    setData([]);
-                });
+            .then(() => {
+                requestData();
+            })
+            .catch(() => {
+                setError(__('Failed to perform action', 'moowoodle'));
+                setData([]);
+            });
         } else {
             setOpenDialog(true);
         }

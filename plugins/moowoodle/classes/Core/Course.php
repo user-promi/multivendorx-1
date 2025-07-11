@@ -40,7 +40,145 @@ class Course {
 		\MooWoodle\FrontendScripts::enqueue_style( 'moowoodle-product-tab-style' );
 		\MooWoodle\FrontendScripts::localize_scripts( 'moowoodle-product-tab-script' );
 	}
+	
+	/**
+	 * Get course details based on filter options.
+	 *
+	 * Filters supported in $args:
+	 * - id, moodle_course_id, shortname, fullname
+	 * - category_id, product_id, startdate, enddate
+	 * - condition (AND/OR), limit, offset
+	 *
+	 * @param array $args Filter options.
+	 * @return array List of matching courses.
+	 */
+	public static function get_course_information( $args ) {
+		global $wpdb;
 
+		$where = array();
+
+		if ( isset( $args['id'] ) ) {
+			$ids     = is_array( $args['id'] ) ? $args['id'] : array( $args['id'] );
+			$ids     = implode( ',', array_map( 'intval', $ids ) );
+			$where[] = "id IN ($ids)";
+		}
+
+		if ( isset( $args['moodle_course_id'] ) ) {
+			$where[] = ' ( moodle_course_id = ' . esc_sql( intval( $args['moodle_course_id'] ) ) . ' ) ';
+		}
+
+		if ( isset( $args['shortname'] ) ) {
+			$where[] = " ( shortname LIKE '%" . esc_sql( $args['shortname'] ) . "%' ) ";
+		}
+
+		if ( isset( $args['category_id'] ) ) {
+			$where[] = ' ( category_id = ' . esc_sql( intval( $args['category_id'] ) ) . ' ) ';
+		}
+
+		if ( isset( $args['product_id'] ) ) {
+			$where[] = ' ( product_id = ' . esc_sql( intval( $args['product_id'] ) ) . ' ) ';
+		}
+
+		if ( isset( $args['fullname'] ) ) {
+			$where[] = " ( fullname LIKE '%" . esc_sql( $args['fullname'] ) . "%' ) ";
+		}
+
+		if ( isset( $args['startdate'] ) ) {
+			$where[] = ' ( startdate = ' . esc_sql( intval( $args['startdate'] ) ) . ' ) ';
+		}
+
+		if ( isset( $args['enddate'] ) ) {
+			$where[] = ' ( enddate = ' . esc_sql( intval( $args['enddate'] ) ) . ' ) ';
+		}
+
+		$table = $wpdb->prefix . Util::TABLES['course'];
+
+		if ( isset( $args['count'] ) ) {
+			$query = "SELECT COUNT(*) FROM $table";
+		} else {
+			$query = "SELECT * FROM $table";
+		}
+
+		if ( ! empty( $where ) ) {
+			$condition = $args['condition'] ?? ' AND ';
+			$query    .= ' WHERE ' . implode( $condition, $where );
+		}
+
+		if ( isset( $args['limit'] ) && isset( $args['offset'] ) ) {
+			$limit  = esc_sql( intval( $args['limit'] ) );
+			$offset = esc_sql( intval( $args['offset'] ) );
+			$query .= " LIMIT $limit OFFSET $offset";
+		}
+
+		if ( isset( $args['count'] ) ) {
+			$results = $wpdb->get_var( $query ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
+			return $results ?? 0;
+		} else {
+			$results = $wpdb->get_results( $query, ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
+			return $results ?? array();
+		}
+	}
+
+	/**
+	 * Insert or update a course record by Moodle course ID.
+	 *
+	 * @param array $args Course data. Must include 'moodle_course_id'.
+	 * @return int|false Rows affected or false on failure.
+	 */
+	public static function update_course_information( $args ) {
+		global $wpdb;
+
+		if ( empty( $args['moodle_course_id'] ) ) {
+			return false;
+		}
+
+		$table    = $wpdb->prefix . Util::TABLES['course'];
+		$existing = reset( self::get_course_information( array( 'moodle_course_id' => $args['moodle_course_id'] ) ) );
+
+		if ( $existing ) {
+			return $wpdb->update( $table, $args, array( 'moodle_course_id' => $args['moodle_course_id'] ) ) !== false // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+				? $existing['id']
+				: false;
+		}
+
+		$args['created'] = current_time( 'mysql' );
+		return $wpdb->insert( $table, $args ) !== false // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		? $wpdb->insert_id
+		: false;
+	}
+
+	/**
+	 * Update or insert multiple courses based on Moodle data.
+	 * Skips courses with format 'site'.
+	 *
+	 * @param array $courses      List of courses to update or insert.
+	 * @param bool  $force_delete Whether to remove excluded course IDs after sync.
+	 * @return void
+	 */
+	public function update_courses_information( $courses, $force_delete = true ) {
+        foreach ( $courses as $course ) {
+            // Skip site format courses.
+            if ( 'site' === $course['format'] ) {
+                continue;
+            }
+
+            $args = array(
+                'moodle_course_id' => (int) $course['id'],
+                'shortname'        => sanitize_text_field( $course['shortname'] ?? '' ),
+                'category_id'      => (int) ( $course['categoryid'] ?? 0 ),
+                'fullname'         => sanitize_text_field( $course['fullname'] ?? '' ),
+                'startdate'        => (int) ( $course['startdate'] ?? 0 ),
+                'enddate'          => (int) ( $course['enddate'] ?? 0 ),
+            );
+
+            $updated_ids[] = self::update_course_information( $args );
+
+            \MooWoodle\Util::increment_sync_count( 'course' );
+        }
+		if ( $force_delete ) {
+			self::remove_exclude_ids( $updated_ids );
+		}
+    }
 
 	/**
 	 * Creates custom tab for product types.
@@ -145,145 +283,6 @@ class Course {
 	}
 
 	/**
-	 * Update or insert multiple courses based on Moodle data.
-	 * Skips courses with format 'site'.
-	 *
-	 * @param array $courses      List of courses to update or insert.
-	 * @param bool  $force_delete Whether to remove excluded course IDs after sync.
-	 * @return void
-	 */
-	public function update_courses( $courses, $force_delete = true ) {
-        foreach ( $courses as $course ) {
-            // Skip site format courses.
-            if ( 'site' === $course['format'] ) {
-                continue;
-            }
-
-            $args = array(
-                'moodle_course_id' => (int) $course['id'],
-                'shortname'        => sanitize_text_field( $course['shortname'] ?? '' ),
-                'category_id'      => (int) ( $course['categoryid'] ?? 0 ),
-                'fullname'         => sanitize_text_field( $course['fullname'] ?? '' ),
-                'startdate'        => (int) ( $course['startdate'] ?? 0 ),
-                'enddate'          => (int) ( $course['enddate'] ?? 0 ),
-            );
-
-            $updated_ids[] = self::update_course( $args );
-
-            \MooWoodle\Util::increment_sync_count( 'course' );
-        }
-		if ( $force_delete ) {
-			self::remove_exclude_ids( $updated_ids );
-		}
-    }
-
-	/**
-	 * Insert or update a course record by Moodle course ID.
-	 *
-	 * @param array $args Course data. Must include 'moodle_course_id'.
-	 * @return int|false Rows affected or false on failure.
-	 */
-	public static function update_course( $args ) {
-		global $wpdb;
-
-		if ( empty( $args['moodle_course_id'] ) ) {
-			return false;
-		}
-
-		$table    = $wpdb->prefix . Util::TABLES['course'];
-		$existing = reset( self::get_course_information( array( 'moodle_course_id' => $args['moodle_course_id'] ) ) );
-
-		if ( $existing ) {
-			return $wpdb->update( $table, $args, array( 'moodle_course_id' => $args['moodle_course_id'] ) ) !== false // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-				? $existing['id']
-				: false;
-		}
-
-		$args['created'] = current_time( 'mysql' );
-		return $wpdb->insert( $table, $args ) !== false // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-		? $wpdb->insert_id
-		: false;
-	}
-
-	/**
-	 * Get course details based on filter options.
-	 *
-	 * Filters supported in $args:
-	 * - id, moodle_course_id, shortname, fullname
-	 * - category_id, product_id, startdate, enddate
-	 * - condition (AND/OR), limit, offset
-	 *
-	 * @param array $args Filter options.
-	 * @return array List of matching courses.
-	 */
-	public static function get_course_information( $args ) {
-		global $wpdb;
-
-		$where = array();
-
-		if ( isset( $args['id'] ) ) {
-			$ids     = is_array( $args['id'] ) ? $args['id'] : array( $args['id'] );
-			$ids     = implode( ',', array_map( 'intval', $ids ) );
-			$where[] = "id IN ($ids)";
-		}
-
-		if ( isset( $args['moodle_course_id'] ) ) {
-			$where[] = ' ( moodle_course_id = ' . esc_sql( intval( $args['moodle_course_id'] ) ) . ' ) ';
-		}
-
-		if ( isset( $args['shortname'] ) ) {
-			$where[] = " ( shortname LIKE '%" . esc_sql( $args['shortname'] ) . "%' ) ";
-		}
-
-		if ( isset( $args['category_id'] ) ) {
-			$where[] = ' ( category_id = ' . esc_sql( intval( $args['category_id'] ) ) . ' ) ';
-		}
-
-		if ( isset( $args['product_id'] ) ) {
-			$where[] = ' ( product_id = ' . esc_sql( intval( $args['product_id'] ) ) . ' ) ';
-		}
-
-		if ( isset( $args['fullname'] ) ) {
-			$where[] = " ( fullname LIKE '%" . esc_sql( $args['fullname'] ) . "%' ) ";
-		}
-
-		if ( isset( $args['startdate'] ) ) {
-			$where[] = ' ( startdate = ' . esc_sql( intval( $args['startdate'] ) ) . ' ) ';
-		}
-
-		if ( isset( $args['enddate'] ) ) {
-			$where[] = ' ( enddate = ' . esc_sql( intval( $args['enddate'] ) ) . ' ) ';
-		}
-
-		$table = $wpdb->prefix . Util::TABLES['course'];
-
-		if ( isset( $args['count'] ) ) {
-			$query = "SELECT COUNT(*) FROM $table";
-		} else {
-			$query = "SELECT * FROM $table";
-		}
-
-		if ( ! empty( $where ) ) {
-			$condition = $args['condition'] ?? ' AND ';
-			$query    .= ' WHERE ' . implode( $condition, $where );
-		}
-
-		if ( isset( $args['limit'] ) && isset( $args['offset'] ) ) {
-			$limit  = esc_sql( intval( $args['limit'] ) );
-			$offset = esc_sql( intval( $args['offset'] ) );
-			$query .= " LIMIT $limit OFFSET $offset";
-		}
-
-		if ( isset( $args['count'] ) ) {
-			$results = $wpdb->get_var( $query ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
-			return $results ?? 0;
-		} else {
-			$results = $wpdb->get_results( $query, ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
-			return $results ?? array();
-		}
-	}
-
-	/**
      * Delete all the course which id is not prasent in $exclude_ids array.
      *
      * @param array $exclude_ids course ids.
@@ -303,5 +302,114 @@ class Course {
 			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
             $wpdb->delete( $table_name, array( 'id' => $course_id ) );
         }
+    }
+
+	/**
+     * Fetch all courses.
+     *
+     * @param mixed $request all requests params from api.
+     * @return \WP_Error|\WP_REST_Response
+     */
+    public function get_courses( $request ) {
+        $nonce = $request->get_header( 'X-WP-Nonce' );
+        if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
+            return new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'moowoodle' ), array( 'status' => 403 ) );
+        }
+
+        $limit          = max( intval( $request->get_param( 'row' ) ), 10 );
+        $page           = max( intval( $request->get_param( 'page' ) ), 1 );
+        $offset         = ( $page - 1 ) * $limit;
+        $category_field = $request->get_param( 'catagory' );
+        $search_action  = $request->get_param( 'searchaction' );
+        $search_field   = $request->get_param( 'search' );
+        $count_courses  = $request->get_param( 'count' );
+
+        if ( $count_courses ) {
+            $total_courses = $this->get_course_information( array( 'count' => true ) );
+            return rest_ensure_response( $total_courses );
+        }
+
+        // Base filter array.
+        $filters = array(
+            'limit'  => $limit,
+            'offset' => $offset,
+        );
+
+        if ( ! empty( $category_field ) ) {
+            $filters['category_id'] = $category_field;
+        }
+        // Add search filter.
+        if ( 'course' === $search_action ) {
+            $filters['fullname'] = $search_field;
+        } elseif ( 'shortname' === $search_action ) {
+            $filters['shortname'] = $search_field;
+        }
+
+        // Get paginated courses.
+        $courses = $this->get_course_information( $filters );
+
+        if ( empty( $courses ) ) {
+            return rest_ensure_response( array() );
+        }
+
+        $formatted_courses = array();
+
+        foreach ( $courses as $course ) {
+            $course_id       = (int) $course['id'];
+            $product_id      = (int) ( $course['product_id'] );
+            $synced_products = array();
+            $product_image   = '';
+
+            if ( $product_id ) {
+                $product = wc_get_product( $product_id );
+                if ( $product ) {
+                    $synced_products[ $product->get_name() ] = add_query_arg(
+                        array(
+							'post'   => $product->get_id(),
+							'action' => 'edit',
+                        ),
+                        admin_url( 'post.php' )
+                    );
+                    $product_image                           = wp_get_attachment_url( $product->get_image_id() );
+                }
+            }
+
+            $start = $course['startdate'] ? wp_date( 'M j, Y', $course['startdate'] ) : __( 'Not Set', 'moowoodle' );
+            $end   = $course['enddate'] ? wp_date( 'M j, Y', $course['enddate'] ) : __( 'Not Set', 'moowoodle' );
+            $date  = ( $course['startdate'] || $course['enddate'] ) ? "$start - $end" : 'NA';
+
+            $moodle_url    = trailingslashit( MooWoodle()->setting->get_setting( 'moodle_url' ) ) . "course/edit.php?id={$course['moodle_course_id']}";
+            $view_user_url = trailingslashit( MooWoodle()->setting->get_setting( 'moodle_url' ) ) . "user/index.php?id={$course['moodle_course_id']}";
+
+            // Get categories.
+            $categories = MooWoodle()->category->get_course_category_information( (int) $course['category_id'] );
+            $categories = reset( $categories );
+
+            // Get enrolled users count.
+            $enroled_user = MooWoodle()->enrollment->get_enrollment_information(
+                array(
+					'course_id' => $course['id'],
+                )
+            );
+
+            $formatted_courses[] = apply_filters(
+                'moowoodle_formatted_course',
+                array(
+					'id'                => $course_id,
+					'moodle_url'        => $moodle_url,
+					'moodle_course_id'  => $course['moodle_course_id'],
+					'course_short_name' => $course['shortname'],
+					'course_name'       => $course['fullname'],
+					'products'          => $synced_products,
+					'productimage'      => $product_image,
+					'category_name'     => $categories['name'],
+					'enroled_user'      => count( $enroled_user ),
+					'view_users_url'    => $view_user_url,
+					'date'              => $date,
+				)
+            );
+        }
+
+        return rest_ensure_response( $formatted_courses );
     }
 }

@@ -48,31 +48,6 @@ class Category {
     }
 
 	/**
-	 * Insert or update multiple course categories in the local table.
-	 *
-	 * For each category, adds a new row or updates it based on the category ID.
-	 * Also increments the course sync count for tracking.
-	 *
-	 * @param array $categories Each item should include:
-	 *   - 'id' (int): Unique category ID (e.g., Moodle category ID).
-	 *   - 'name' (string): Category name.
-	 *   - 'parent' (int): Optional parent category ID.
-	 */
-	public static function update_course_categories( $categories ) {
-		foreach ( $categories as $category ) {
-			$args = array(
-				'id'        => (int) $category['id'],
-				'name'      => trim( sanitize_text_field( $category['name'] ) ),
-				'parent_id' => (int) ( $category['parent'] ),
-			);
-
-			self::update_course_category( $args );
-
-			\MooWoodle\Util::increment_sync_count( 'course' );
-		}
-	}
-
-	/**
 	 * Insert or update a category based on moodle category id.
 	 *
 	 * @param array $args {
@@ -84,7 +59,7 @@ class Category {
 	 * }
 	 * @return bool|int False on failure, number of rows affected on success.
 	 */
-	public static function update_course_category( $args ) {
+	public static function update_course_category_information( $args ) {
         global $wpdb;
 
         if ( empty( $args['id'] ) ) {
@@ -102,13 +77,38 @@ class Category {
     }
 
 	/**
+	 * Insert or update multiple course categories in the local table.
+	 *
+	 * For each category, adds a new row or updates it based on the category ID.
+	 * Also increments the course sync count for tracking.
+	 *
+	 * @param array $categories Each item should include:
+	 *   - 'id' (int): Unique category ID (e.g., Moodle category ID).
+	 *   - 'name' (string): Category name.
+	 *   - 'parent' (int): Optional parent category ID.
+	 */
+	public static function update_course_categories_information( $categories ) {
+		foreach ( $categories as $category ) {
+			$args = array(
+				'id'        => (int) $category['id'],
+				'name'      => trim( sanitize_text_field( $category['name'] ) ),
+				'parent_id' => (int) ( $category['parent'] ),
+			);
+
+			self::update_course_category_information( $args );
+
+			\MooWoodle\Util::increment_sync_count( 'course' );
+		}
+	}
+
+	/**
 	 * Returns term by Moodle category ID.
 	 *
 	 * @param int         $category_id Moodle category ID.
 	 * @param string|null $taxonomy    Optional. Taxonomy name. Default null.
 	 * @return object|null Term object on success, or null if not found.
 	 */
-	public static function get_product_category( $category_id, $taxonomy = '' ) {
+	public static function get_product_category_information( $category_id, $taxonomy = '' ) {
 		if ( ! $category_id || empty( $taxonomy ) || ! taxonomy_exists( $taxonomy ) ) {
 			return null;
 		}
@@ -136,38 +136,6 @@ class Category {
 		return $terms[0];
 	}
 
-    /**
-	 * Update Moodle course categories in WordPress site.
-	 *
-	 * @param array  $categories List of categories to update.
-	 * @param string $taxonomy   Taxonomy name.
-	 * @return void
-	 */
-	public static function update_product_categories( $categories, $taxonomy ) {
-		if ( empty( $taxonomy ) || ! taxonomy_exists( $taxonomy ) ) {
-			return;
-		}
-
-		$updated_ids = array();
-
-		if ( $categories ) {
-			foreach ( $categories as $category ) {
-				// Update category.
-				$categorie_id = self::update_product_category( $category, $taxonomy );
-
-				// Store updated category id.
-				if ( $categorie_id ) {
-					$updated_ids[] = $categorie_id;
-				}
-
-				\MooWoodle\Util::increment_sync_count( 'course' );
-			}
-		}
-
-		// Remove all term exclude updated ids.
-		self::remove_exclude_ids( $updated_ids, $taxonomy );
-	}
-
 	/**
 	 * Update a single category. If the category does not exist, create a new category.
 	 *
@@ -175,9 +143,9 @@ class Category {
 	 * @param string $taxonomy Taxonomy name.
 	 * @return int|null Category ID on success, or null on failure.
 	 */
-	public static function update_product_category( $category, $taxonomy ) {
+	public static function update_product_category_information( $category, $taxonomy ) {
 
-		$term = self::get_product_category( $category['id'], $taxonomy );
+		$term = self::get_product_category_information( $category['id'], $taxonomy );
 
 		// If term is exist update it.
 		if ( $term ) {
@@ -219,6 +187,38 @@ class Category {
 		return null;
 	}
 
+    /**
+	 * Update Moodle course categories in WordPress site.
+	 *
+	 * @param array  $categories List of categories to update.
+	 * @param string $taxonomy   Taxonomy name.
+	 * @return void
+	 */
+	public static function update_product_categories_information( $categories, $taxonomy ) {
+		if ( empty( $taxonomy ) || ! taxonomy_exists( $taxonomy ) ) {
+			return;
+		}
+
+		$updated_ids = array();
+
+		if ( $categories ) {
+			foreach ( $categories as $category ) {
+				// Update category.
+				$categorie_id = self::update_product_category_information( $category, $taxonomy );
+
+				// Store updated category id.
+				if ( $categorie_id ) {
+					$updated_ids[] = $categorie_id;
+				}
+
+				\MooWoodle\Util::increment_sync_count( 'course' );
+			}
+		}
+
+		// Remove all term exclude updated ids.
+		self::remove_exclude_ids( $updated_ids, $taxonomy );
+	}
+
 	/**
 	 * Remove all categories except the provided IDs.
 	 *
@@ -253,7 +253,7 @@ class Category {
 				$parent_category_id = get_term_meta( $term->term_id, '_parent', true );
 
 				// get parent term id and continue if not exist.
-				$parent_term = self::get_product_category( $parent_category_id, $taxonomy );
+				$parent_term = self::get_product_category_information( $parent_category_id, $taxonomy );
 				if ( empty( $parent_term ) ) {
 					continue;
                 }
