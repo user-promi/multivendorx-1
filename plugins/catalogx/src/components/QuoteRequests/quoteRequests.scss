@@ -8,12 +8,12 @@
     height: 100vh;
   }
 
-.admin-subscriber-list {
+.admin-quote-list {
     .add-to-quotation-button,
     .filter-left-wrapper{
         margin-left: auto;
     }
-    .download-btn-subscriber-list, .add-to-quotation-button {
+    .download-btn-quote-list, .add-to-quotation-button {
         a {
             color: $color-white;
             display: flex;
@@ -77,7 +77,7 @@
 }
 
 @media only screen and (max-width: 32.125rem) {
-    .admin-subscriber-list {
+    .admin-quote-list {
         .admin-page-title {
             justify-content: flex-start; 
             p {

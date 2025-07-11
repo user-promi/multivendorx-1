@@ -14,7 +14,7 @@ export default function QuotesList() {
     return (
         <>
             <div
-                className="admin-subscriber-list"
+                className="admin-quote-list"
                 id="quote-list-table"
             >
                 <Dialog
@@ -87,7 +87,7 @@ export default function QuotesList() {
                 <>
                     <div>
                         <div
-                            className="admin-subscriber-list"
+                            className="admin-quote-list"
                             id="quote-list-table"
                         ></div>
                     </div>
