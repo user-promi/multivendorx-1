@@ -10,6 +10,7 @@ import Dialog from '@mui/material/Dialog';
 import Popoup from './Popup';
 import { getApiLink, sendApiResponse } from '../utils/apiService';
 import '../styles/web/Modules.scss';
+import { useModules } from '../contexts/ModuleContext';
 
 // Types
 interface Module {
@@ -32,9 +33,6 @@ interface ProPopupContent {
 }
 
 interface ModuleProps {
-	modules: any;
-    insertModule?: ( moduleId: string ) => void;
-    removeModule?: ( moduleId: string ) => void;
     modulesArray?: Module[];
     appLocalizer: Record< string, any >; // Allows any structure
     apiLink: string;
@@ -42,9 +40,6 @@ interface ModuleProps {
 }
 
 const Modules: React.FC< ModuleProps > = ( {
-	modules,
-    insertModule = () => {},
-    removeModule = () => {},
     modulesArray = [],
     appLocalizer,
     apiLink,
@@ -52,7 +47,8 @@ const Modules: React.FC< ModuleProps > = ( {
 } ) => {
     const [ modelOpen, setModelOpen ] = useState< boolean >( false );
     const [ successMsg, setSuccessMsg ] = useState< string >( '' );
-	const [ activeModules, setActiveModules ] = useState< Array< any > >( [] );
+
+    const { modules, insertModule, removeModule } = useModules()
 
     const isModuleAvailable = ( moduleId: string ): boolean => {
         const module = modulesArray.find(
@@ -73,10 +69,8 @@ const Modules: React.FC< ModuleProps > = ( {
         const action = event.target.checked ? 'activate' : 'deactivate';
         if ( action === 'activate' ) {
             insertModule?.( moduleId );
-			setActiveModules( ( prev ) => [...prev, moduleId] );
         } else {
             removeModule?.( moduleId );
-			setActiveModules( ( prev ) => prev.filter( ( id ) => id !== moduleId ) );
         }
 
         await sendApiResponse(
@@ -87,10 +81,6 @@ const Modules: React.FC< ModuleProps > = ( {
         setSuccessMsg( `Module ${action}d` );
         setTimeout( () => setSuccessMsg( '' ), 2000 );
     };
-
-	useEffect( () => {
-		setActiveModules( modules );
-	}, [ modules ] );
 
     return (
         <div className="module-container">
@@ -163,7 +153,7 @@ const Modules: React.FC< ModuleProps > = ( {
                                     type="checkbox"
                                     className="woo-toggle-checkbox"
                                     id={ `toggle-switch-${ module.id }` }
-									checked={ activeModules.includes( module.id ) }
+									checked={ modules.includes( module.id ) }
                                     onChange={ ( e ) =>
                                         handleOnChange( e, module.id )
                                     }
