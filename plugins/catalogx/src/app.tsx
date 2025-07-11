@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 
 import Settings from './components/Settings/Settings';
 import Modules from './components/Modules/Modules';
-import { ModuleProvider } from './contexts/ModuleContext';
+import { ModuleProvider } from 'zyra';
 import QuoteRequests from './components/QuoteRequests/quoteRequests';
 import EnquiryMessages from './components/EnquiryMessages/enquiryMessages';
 import WholesaleUser from './components/WholesaleUser/wholesaleUser';

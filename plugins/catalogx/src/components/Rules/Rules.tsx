@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useModules } from '../../contexts/ModuleContext';
+import { useModules } from 'zyra';
 
 import './Rules.scss';
 import Dialog from '@mui/material/Dialog';
@@ -8,7 +8,7 @@ import ShowPopup from '../Popup/Popup';
 
 const Rules = () => {
     // Check pro is active and module is active or not.
-    const { modules } = useModules();
+    const { modules }: { modules: string[] } = useModules();
 
     // State variable declearation
     const [ openDialog, setOpenDialog ] = useState( false );

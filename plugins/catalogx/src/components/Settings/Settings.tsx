@@ -4,8 +4,6 @@ import BrandSmall from '../../assets/images/Brand-small.png';
 import React, { useEffect, JSX } from 'react';
 import { __ } from '@wordpress/i18n';
 
-// Context
-import { SettingProvider, useSetting } from '../../contexts/SettingContext';
 // Services
 import { getTemplateData } from '../../services/templateService';
 // Utils
@@ -17,8 +15,11 @@ import {
     AdminForm,
     Banner,
     Tabs,
+    useModules,
+    SettingProvider,
+    useSetting,
+    type SettingContextType,
 } from 'zyra';
-import { useModules } from '../../contexts/ModuleContext';
 import ShowPopup from '../Popup/Popup';
 import { useLocation, Link } from 'react-router-dom';
 
@@ -132,7 +133,7 @@ const Settings: React.FC< SettingsProps > = () => {
     };
     // Render the dynamic form
     const GetForm = ( currentTab: string | null ): JSX.Element | null => {
-        const { setting, settingName, setSetting, updateSetting } =
+        const { setting, settingName, setSetting, updateSetting } : SettingContextType =
             useSetting();
         const { modules } = useModules();
 

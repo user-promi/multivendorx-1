@@ -1,14 +1,14 @@
 import Dialog from '@mui/material/Dialog';
 import React, { useState } from 'react';
 import ShowPopup from '../Popup/Popup';
-import { useModules } from '../../contexts/ModuleContext';
+import { useModules } from 'zyra';
 import './quoteRequests.scss';
 // import '../AdminLibrary/CustomTable/table.scss';
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 
 export default function QuotesList() {
-    const { modules } = useModules();
+    const { modules }: { modules: string[] } = useModules();
     const [ openDialog, setOpenDialog ] = useState( false );
 
     return (

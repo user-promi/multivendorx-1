@@ -25,7 +25,7 @@ declare global {
         all_product_cat: Array;
         all_product_tag: Array;
         settings_databases_value: any; // Use a more specific type if possible
-        active_modules: Array;
+        active_modules: string[];
         user_role: string;
         banner_img: string;
         default_img: string;
