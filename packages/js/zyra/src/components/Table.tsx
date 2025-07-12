@@ -572,6 +572,7 @@ const Table: React.FC< TableProps > = ( {
                                 <div className="pagination-number-wrapper">
                                     Rows per page:
                                     <select
+                                        className='basic-select'
                                         value={
                                             table.getState().pagination.pageSize
                                         }
