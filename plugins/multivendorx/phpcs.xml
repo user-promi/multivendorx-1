@@ -103,6 +103,6 @@
         <severity>0</severity>
     </rule>
 	<rule ref="WordPress">
-		<exclude-pattern>*/product_stock_alert.php</exclude-pattern>
+		<exclude-pattern>*/dc_product_vendor.php</exclude-pattern>
 	</rule>
 </ruleset>
