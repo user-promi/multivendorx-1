@@ -4,7 +4,7 @@ export default {
     priority: 40,
     name: __('Bulk Access & Gifting', 'moowoodle'),
     desc: __('Distribute courses through gifting and group enrollments', 'moowoodle'),
-    icon: 'adminlib-vpn-key',
+    icon: 'adminlib-contact-form',
     submitUrl: 'settings',
     proDependent: true,
     modal: [
