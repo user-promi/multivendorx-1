@@ -81,7 +81,7 @@ class EnrollmentEmail extends \WC_Email {
 	public function get_default_subject() {
 		return apply_filters(
 			'moowoodle_enrollment_email_heading',
-			sprintf( __( 'Your Enrolment Is Confirmed - Login Info Inside', 'moowoodle' ) )
+			sprintf( __( 'Your enrolment is confirmed - login info inside', 'moowoodle' ) )
 		);
 	}
 
