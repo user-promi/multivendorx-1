@@ -231,7 +231,6 @@ final class CatalogX {
     public function plugin_link( $links ) {
         $plugin_links = array(
             '<a href="' . admin_url( 'admin.php?page=catalogx#&tab=settings&subtab=general' ) . '">' . __( 'Settings', 'catalogx' ) . '</a>',
-            // '<a href="https://catalogx.com/support/?utm_source=wpadmin&utm_medium=pluginsettings&utm_campaign=catalogx">' . __( 'Support', 'catalogx' ) . '</a>',
         );
         $links        = array_merge( $plugin_links, $links );
         if ( apply_filters( 'catalogx_free_active', true ) ) {
@@ -252,7 +251,7 @@ final class CatalogX {
     public function plugin_row_meta( $links, $file ) {
         if ( CatalogX()->plugin_base === $file ) {
             $row_meta = array(
-                'docs'    => '<a href="https://catalogx.com/docs/?utm_source=wpadmin&utm_medium=pluginsettings&utm_campaign=catalogx" target="_blank">' . esc_html__( 'Docs', 'notifima' ) . '</a>',
+                'docs'    => '<a href="https://catalogx.com/docs/?utm_source=wpadmin&utm_medium=pluginsettings&utm_campaign=catalogx" target="_blank">' . esc_html__( 'Docs', 'catalogx' ) . '</a>',
                 'support' => '<a href="https://catalogx.com/support/?utm_source=wpadmin&utm_medium=pluginsettings&utm_campaign=catalogx" target="_blank">' . __( 'Support', 'catalogx' ) . '</a>',
             );
 

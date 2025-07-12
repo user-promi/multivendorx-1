@@ -51,11 +51,11 @@ export default {
         },
         {
             key: 'shortCode',
-            type: 'shortCode-table',
+            type: 'shortcode-table',
             label: __( 'Available Shortcodes', 'catalogx' ),
             desc: __( '', 'catalogx' ),
             optionLabel: [ 'Shortcodes', 'Description' ],
-            option: [
+            options: [
                 {
                     key: '',
                     label: '[catalogx_enquiry_cart]',
