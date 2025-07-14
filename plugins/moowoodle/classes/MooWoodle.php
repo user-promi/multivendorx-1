@@ -221,7 +221,7 @@ class MooWoodle {
     public function plugin_row_meta( $links, $file ) {
         if ( MooWoodle()->plugin_base === $file ) {
             $row_meta = array(
-                'docs'    => '<a href="https://dualcube.com/docs/moowoodle-set-up-guide/" aria-label="' . esc_attr__( 'View documentation', 'moowoodle' ) . '" target="_blank">' . esc_html__( 'Docs', 'moowoodle' ) . '</a>',
+                'docs'    => '<a href="https://dualcube.com/docs/moowoodle-set-up-guide/?utm_source=wpadmin&utm_medium=pluginsettings&utm_campaign=moowoodle" aria-label="' . esc_attr__( 'View documentation', 'moowoodle' ) . '" target="_blank">' . esc_html__( 'Docs', 'moowoodle' ) . '</a>',
                 'support' => '<a href="https://wordpress.org/support/plugin/moowoodle/" aria-label="' . esc_attr__( 'Visit community forums', 'moowoodle' ) . '" target="_blank">' . esc_html__( 'Support', 'moowoodle' ) . '</a>',
             );
 
