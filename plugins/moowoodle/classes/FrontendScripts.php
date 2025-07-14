@@ -11,7 +11,7 @@ namespace MooWoodle;
  * MooWoodle FrontendScripts class
  *
  * @class       FrontendScripts class
- * @version     PRODUCT_VERSION
+ * @version     3.3.0
  * @author      DualCube
  */
 class FrontendScripts {

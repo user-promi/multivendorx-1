@@ -14,7 +14,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * MooWoodle Main Class
  *
- * @version     PRODUCT_VERSION
+ * @version     3.3.0
  * @package     MooWoodle
  * @author      DualCube
  *

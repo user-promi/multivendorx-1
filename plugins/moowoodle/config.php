@@ -6,5 +6,5 @@
  */
 
 define( 'MOOWOODLE_PLUGIN_VERSION', '3.3.0' );
-define( 'MOOWOODLE_PRO_SHOP_URL', 'https://dualcube.com/product/moowoodle-pro/' );
+define( 'MOOWOODLE_PRO_SHOP_URL', 'https://dualcube.com/product/moowoodle-pro/?utm_source=wordpress.org&utm_medium=freelandingpage&utm_campaign=MooWoodleFree' );
 define( 'PLUGIN_SLUG', 'moowoodle' );

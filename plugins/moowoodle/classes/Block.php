@@ -15,7 +15,7 @@ defined( 'ABSPATH' ) || exit;
  * MooWoodle Block class
  *
  * @class       Block class
- * @version     PRODUCT_VERSION
+ * @version     3.3.0
  * @author      DualCube
  */
 class Block {

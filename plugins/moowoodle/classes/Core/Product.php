@@ -11,7 +11,7 @@ namespace MooWoodle\Core;
  * MooWoodle Product class
  *
  * @class       Product class
- * @version     PRODUCT_VERSION
+ * @version     3.3.0
  * @author      DualCube
  */
 class Product {
