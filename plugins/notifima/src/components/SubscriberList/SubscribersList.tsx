@@ -6,6 +6,7 @@ import './subscribersList.scss';
 
 const SubscribersList: React.FC = () => {
     const [ openDialog, setOpenDialog ] = useState( false );
+
     return (
         <>
             <div id='subscriber-list-table'>
@@ -43,7 +44,6 @@ const SubscribersList: React.FC = () => {
                 </Dialog>
                 <div
                     className="subscriber-img"
-                    style={{ '--url': `url(${appLocalizer.subscriber_list})` } as any}
                     onClick={ () => {
                         setOpenDialog( true );
                     } }
