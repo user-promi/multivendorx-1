@@ -23,7 +23,6 @@ const Enrollment: React.FC = () => {
                 </Dialog>
                 <div
                     className="enrollment-img"
-                    style={{ '--url': `url(${appLocalizer.enrollment_list})` } as any}
                     onClick={() => {
                         setOpenDialog(true);
                     }}

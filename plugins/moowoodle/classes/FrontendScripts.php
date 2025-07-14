@@ -11,7 +11,7 @@ namespace MooWoodle;
  * MooWoodle FrontendScripts class
  *
  * @class       FrontendScripts class
- * @version     PRODUCT_VERSION
+ * @version     3.3.0
  * @author      DualCube
  */
 class FrontendScripts {
@@ -249,7 +249,7 @@ class FrontendScripts {
 				),
 
 				'moowoodle-product-tab-style' => array(
-					'src'     => MooWoodle()->plugin_url . 'assets/styles/' . self::get_script_name( 'product-tab' ) . '.css',
+					'src'     => MooWoodle()->plugin_url . 'assets/styles/' . self::get_script_name( 'product-tab' ) . '.scss',
 					'deps'    => array(),
 					'version' => $version,
 				),
@@ -333,10 +333,6 @@ class FrontendScripts {
 						'log_url'                  => get_site_url( null, str_replace( ABSPATH, '', MooWoodle()->log_file ) ),
 						'wc_email_url'             => admin_url( '/admin.php?page=wc-settings&tab=email&section=enrollmentemail' ),
 						'moodle_site_url'          => MooWoodle()->setting->get_setting( 'moodle_url' ),
-						'wordpress_logo'           => MooWoodle()->plugin_url . 'src/assets/images/WordPress.png',
-						'moodle_logo'              => MooWoodle()->plugin_url . 'src/assets/images/Moodle.png',
-						'enrollment_list'          => MooWoodle()->plugin_url . 'src/assets/images/enrollment.png',
-						'cohort_list'              => MooWoodle()->plugin_url . 'src/assets/images/cohort.png',
 						'wp_user_roles'            => wp_roles()->get_names(),
 						'md_user_roles'            => array(
 							1 => __( 'Manager', 'moowoodle' ),
