@@ -1,7 +1,7 @@
 {
     "name": "notifima",
     "displayName": "woocommerce-product-stock-manager",
-    "version": "3.0.2",
+    "version": "3.0.3",
     "description": "=== WooCommerce Product Stock Manager ===",
     "main": "index.js",
     "engines": {
@@ -46,12 +46,12 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/multivendorx/woocommerce-product-stock-alert.git"
+        "url": "git+https://github.com/multivendorx/multivendorx.git"
     },
     "bugs": {
-        "url": "https://github.com/multivendorx/woocommerce-product-stock-alert/issues"
+        "url": "https://github.com/multivendorx/multivendorx/issues"
     },
-    "homepage": "https://github.com/multivendorx/woocommerce-product-stock-alert#readme",
+    "homepage": "https://github.com/multivendorx/multivendorx#readme",
     "author": "MultiVendorX",
     "license": "ISC",
     "packageManager": "pnpm@10.11.0",
