@@ -13,7 +13,7 @@ export default function QuotesList() {
 
     return (
         <>
-            {!appLocalizer.khali_dabba || !modules.includes("quote") ? (
+            { ! appLocalizer.khali_dabba || ! modules.includes( 'quote' ) ? (
                 <>
                     <Dialog
                         className="admin-module-popup"
@@ -48,10 +48,7 @@ export default function QuotesList() {
                     ></div>
                 </>
             ) : (
-                <div
-                    className="admin-quote-list"
-                    id="quote-list-table"
-                ></div>
+                <div className="admin-quote-list" id="quote-list-table"></div>
             ) }
         </>
     );

@@ -133,8 +133,12 @@ const Settings: React.FC< SettingsProps > = () => {
     };
     // Render the dynamic form
     const GetForm = ( currentTab: string | null ): JSX.Element | null => {
-        const { setting, settingName, setSetting, updateSetting } : SettingContextType =
-            useSetting();
+        const {
+            setting,
+            settingName,
+            setSetting,
+            updateSetting,
+        }: SettingContextType = useSetting();
         const { modules } = useModules();
 
         if ( ! currentTab ) return null;

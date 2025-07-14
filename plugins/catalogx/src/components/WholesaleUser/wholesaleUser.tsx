@@ -14,7 +14,8 @@ const WholesaleUser = () => {
 
     return (
         <>
-            {!appLocalizer.khali_dabba || !modules.includes("wholesale") ? (
+            { ! appLocalizer.khali_dabba ||
+            ! modules.includes( 'wholesale' ) ? (
                 <>
                     <Dialog
                         className="admin-module-popup"
@@ -53,7 +54,7 @@ const WholesaleUser = () => {
                     className="admin-wholesale-list"
                     id="wholesale-list-table"
                 ></div>
-            )}
+            ) }
         </>
     );
 };

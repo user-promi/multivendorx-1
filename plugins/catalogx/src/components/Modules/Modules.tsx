@@ -5,7 +5,6 @@ import './modules.scss';
 import { proPopupContent } from '../Popup/Popup';
 
 const PluginModules = () => {
-
     const modulesArray = getModuleData();
 
     return (

@@ -11,7 +11,7 @@ const EnquiryMessages = () => {
 
     return (
         <>
-            {!appLocalizer.khali_dabba || !modules.includes("enquiry") ? (
+            { ! appLocalizer.khali_dabba || ! modules.includes( 'enquiry' ) ? (
                 <>
                     <Dialog
                         className="admin-module-popup"
@@ -47,7 +47,7 @@ const EnquiryMessages = () => {
                 </>
             ) : (
                 <div className="container" id="enquiry-messages"></div>
-            )}
+            ) }
         </>
     );
 };

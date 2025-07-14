@@ -3,14 +3,13 @@ import { useLocation } from 'react-router-dom';
 
 import Settings from './components/Settings/Settings';
 import Modules from './components/Modules/Modules';
-import { ModuleProvider } from 'zyra';
 import QuoteRequests from './components/QuoteRequests/quoteRequests';
 import EnquiryMessages from './components/EnquiryMessages/enquiryMessages';
 import WholesaleUser from './components/WholesaleUser/wholesaleUser';
 import Rules from './components/Rules/Rules';
 import { TourProvider } from '@reactour/tour';
 import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock';
-import { Tour } from 'zyra';
+import { Tour, ModuleProvider } from 'zyra';
 
 const disableBody = ( target: any ) => disableBodyScroll( target );
 const enableBody = ( target: any ) => enableBodyScroll( target );

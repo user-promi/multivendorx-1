@@ -15,7 +15,7 @@ const Rules = () => {
 
     return (
         <>
-            {!appLocalizer.khali_dabba || !modules.includes("rules") ? (
+            { ! appLocalizer.khali_dabba || ! modules.includes( 'rules' ) ? (
                 <>
                     <Dialog
                         className="admin-module-popup"
@@ -54,7 +54,7 @@ const Rules = () => {
                     className="catalog-rules-main-container"
                     id="rules-list-table"
                 ></main>
-            )}
+            ) }
         </>
     );
 };
