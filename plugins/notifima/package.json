@@ -51,7 +51,7 @@
     "bugs": {
         "url": "https://github.com/multivendorx/multivendorx/issues"
     },
-    "homepage": "https://github.com/multivendorx/multivendorx#readme",
+    "homepage": "https://github.com/multivendorx/multivendorx/blob/main/plugins/notifima/README.md",
     "author": "MultiVendorX",
     "license": "ISC",
     "packageManager": "pnpm@10.11.0",
