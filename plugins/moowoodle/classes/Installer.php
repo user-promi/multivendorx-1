@@ -12,7 +12,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * MooWoodle Installer class
  *
- * @version     PRODUCT_VERSION
+ * @version     3.3.0
  * @package     MooWoodle
  * @author      DualCube
  */
