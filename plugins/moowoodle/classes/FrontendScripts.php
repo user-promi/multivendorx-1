@@ -249,7 +249,7 @@ class FrontendScripts {
 				),
 
 				'moowoodle-product-tab-style' => array(
-					'src'     => MooWoodle()->plugin_url . 'assets/styles/' . self::get_script_name( 'product-tab' ) . '.css',
+					'src'     => MooWoodle()->plugin_url . 'assets/styles/' . self::get_script_name( 'product-tab' ) . '.scss',
 					'deps'    => array(),
 					'version' => $version,
 				),
