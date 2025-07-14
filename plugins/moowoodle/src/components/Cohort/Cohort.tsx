@@ -23,7 +23,6 @@ const Cohort: React.FC = () => {
                 </Dialog>
                 <div
                     className="cohort-img"
-                    style={{ '--url': `url(${appLocalizer.cohort_list})` } as any}
                     onClick={() => {
                         setOpenDialog(true);
                     }}

@@ -1,5 +1,7 @@
 /* global appLocalizer */
 import { __ } from '@wordpress/i18n';
+import wordpressLogo from '@/assets/images/Wordpress.png';
+import moodleLogo from '@/assets/images/Moodle.png';
 
 export default {
     id: 'synchronize-user',
@@ -28,15 +30,15 @@ export default {
                     key: 'wordpress_to_moodle',
                     value: 'wordpress_to_moodle',
                     label: 'WordPress to Moodle',
-                    img1: appLocalizer.wordpress_logo,
-                    img2: appLocalizer.moodle_logo,
+                    img1: wordpressLogo,
+                    img2: moodleLogo,
                 },
                 {
                     key: 'moodle_to_wordpress',
                     value: 'moodle_to_wordpress',
                     label: 'Moodle to WordPress',
-                    img1: appLocalizer.moodle_logo,
-                    img2: appLocalizer.wordpress_logo,
+                    img1: moodleLogo,
+                    img2: wordpressLogo,
                 },
             ],
             proSetting: true,
