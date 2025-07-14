@@ -14,42 +14,46 @@ const WholesaleUser = () => {
 
     return (
         <>
-            <div
-                className="admin-wholesale-list"
-                id="wholesale-list-table"
-            >
-                <Dialog
-                    className="admin-module-popup"
-                    open={ openDialog }
-                    onClose={ () => {
-                        setOpenDialog( false );
-                    } }
-                    aria-labelledby="form-dialog-title"
-                >
-                    <span
-                        className="admin-font adminlib-cross"
-                        onClick={ () => {
+            {!appLocalizer.khali_dabba || !modules.includes("wholesale") ? (
+                <>
+                    <Dialog
+                        className="admin-module-popup"
+                        open={ openDialog }
+                        onClose={ () => {
                             setOpenDialog( false );
                         } }
-                    ></span>
-                    { ! appLocalizer.khali_dabba ? (
-                        <ShowPopup />
-                    ) : (
-                        <ShowPopup moduleName="Wholesale" />
-                    ) }
-                </Dialog>
+                        aria-labelledby="form-dialog-title"
+                    >
+                        <span
+                            className="admin-font adminlib-cross"
+                            onClick={ () => {
+                                setOpenDialog( false );
+                            } }
+                        ></span>
+                        { ! appLocalizer.khali_dabba ? (
+                            <ShowPopup />
+                        ) : (
+                            <ShowPopup moduleName="Wholesale" />
+                        ) }
+                    </Dialog>
+                    <div
+                        className="wholesale-user-image"
+                        style={
+                            {
+                                '--url': `url(${ appLocalizer.wholesale_users_bg })`,
+                            } as any
+                        }
+                        onClick={ () => {
+                            setOpenDialog( true );
+                        } }
+                    ></div>
+                </>
+            ) : (
                 <div
-                    className="wholesale-user-image"
-                    style={
-                        {
-                            '--url': `url(${ appLocalizer.wholesale_users_bg })`,
-                        } as any
-                    }
-                    onClick={ () => {
-                        setOpenDialog( true );
-                    } }
+                    className="admin-wholesale-list"
+                    id="wholesale-list-table"
                 ></div>
-            </div>
+            )}
         </>
     );
 };
