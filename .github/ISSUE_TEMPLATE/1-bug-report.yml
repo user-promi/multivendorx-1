@@ -2,6 +2,8 @@ name: 🐞 Bug Report
 description: Report a bug if something isn't working as expected in MultiVendorX.
 title: "[Bug]: "
 labels: ["Bug"]
+assignees: ''
+milestone: ''
 body:
   - type: markdown
     attributes:
