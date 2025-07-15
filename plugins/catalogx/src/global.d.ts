@@ -36,10 +36,6 @@ declare global {
         template5: string;
         template6: string;
         template7: string;
-        enquiry_messages_bg: string;
-        quote_requests_bg: string;
-        wholesale_users_bg: string;
-        dynamic_rules_bg: string;
         khali_dabba: boolean;
         pro_url: string;
         order_edit: string;

@@ -1,7 +1,7 @@
 @use '../config' as *;
 
 .enquiry-img {
-  background-image: var(--url);
+  background-image: url("../../assets/images/enquiry-page-desktop.png");
   background-repeat: no-repeat;
   background-position: top center;
   background-size: contain;
