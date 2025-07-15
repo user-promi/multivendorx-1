@@ -1,60 +1,99 @@
 name: 🐞 Bug Report
-description: Report a bug if something isn't working as expected.
-title: "[Bug]: "
+description: Report a bug if something isn't working as expected in WooCommerce Core.
 labels: ["Bug"]
-assignees:
-  - octocat
 body:
   - type: markdown
     attributes:
       value: |
-        Thanks for taking the time to fill out this bug report! Please provide as much detail as possible to help us address the issue.
-  
-  - type: textarea
-    id: bug-description
+        ### Thanks for contributing!
+
+        Please provide us with the information requested in this bug report. 
+        Without these details, we won't be able to fully evaluate this issue. 
+        Bug reports lacking detail, or for any other reason than to report a bug, may be closed without action.
+
+        While our goal is to address all the issues reported in this repository, GitHub should be treated as a place to report confirmed bugs only.
+        - If you have a support request or custom code related question please follow one of the steps below:
+        - Make a post on [MultiVendorX community forum](https://wordpress.org/support/plugin/dc-woocommerce-multi-vendor/)
+        
+        Make sure to look through the [existing `type: bug` issues](https://github.com/multivendorx/multivendorx/issues?q=is%3Aopen+is%3Aissue+label%3A%22type%3A+bug%22) to see whether your bug has already been submitted.
+        Feel free to contribute to any existing issues.
+        Search tip: You can filter our issues using [our labels](https://github.com/multivendorx/multivendorx/labels).
+        Search tip: Make use of [GitHub's search syntax to refine your search](https://help.github.com/en/github/searching-for-information-on-github/searching-issues-and-pull-requests).
+  - type: checkboxes
+    id: prerequisites
     attributes:
-      label: Bug Description
-      description: In a few sentences or paragraphs, describe the bug in detail. Include what the bug does, what was expected, steps to reproduce the bug, any error messages, and the impact of the bug on the application.
-      placeholder: Describe the bug here...
+      label: Prerequisites
+      description: Please confirm these before submitting the issue.
+      options:
+        - label: I have carried out troubleshooting steps and I believe I have found a bug.
+        - label: I have searched for similar bugs in both open and closed issues and cannot find a duplicate.
     validations:
       required: true
-
   - type: textarea
-    id: steps-to-reproduce
+    id: summary
     attributes:
-      label: Steps to Reproduce
-      description: List step-by-step instructions to reproduce the bug.
+      label: Describe the bug
+      description: A clear and concise description of what the bug is.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
       placeholder: |
-        1. Go to '...'
-        2. Click on '...'
-        3. Scroll down to '...'
+        A clear and concise description of what you expected to happen.
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      placeholder: |
+        A clear and concise description of what actually happens. Please be as descriptive as possible;
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Attach screenshot(s) or recording(s) directly by dragging & dropping.
+      placeholder: |
+        1. Go to
+        2. Click on
+        3. Scroll down to
         4. See error
     validations:
-      required: false
-
+      required: true
   - type: textarea
-    id: expected-behaviour
+    id: environment
     attributes:
-      label: Expected Behaviour
-      description: Describe what you expected to happen when performing the steps listed above.
-      placeholder: Describe the expected result...
+      label: WordPress Environment
+      description: |
+        We use the [WooCommerce System Status Report](https://woocommerce.com/document/understanding-the-woocommerce-system-status-report/) to help us evaluate the issue. 
+        Without this report we won't be able to fully evaluate this issue.
+      value: |
+        <details>
+
+        <summary>WordPress Environment</summary>
+
+        The System Status Report is found in your WordPress admin under **WooCommerce > Status**. 
+        Please select “Get system report”, then “Copy for GitHub”, and then paste it here.
+
+        </details>
     validations:
       required: true
-
-  - type: textarea
-    id: actual-behaviour
+  - type: checkboxes
+    id: isolating
     attributes:
-      label: Actual Behaviour
-      description: Describe what actually happened when performing the steps, highlighting the bug's behavior.
-      placeholder: Describe the actual result...
+      label: Isolating the problem
+      description: |
+        Please try testing your site for theme and plugins conflict. 
+        To do that deactivate all plugins except for WooCommerce and switch to a default WordPress theme or [Storefront](https://en-gb.wordpress.org/themes/storefront/). Then test again. 
+        If the issue is resolved with the default theme and all plugins deactivated, it means that one of your plugins or a theme is causing the issue. 
+        You will then need to enable it one by one and test every time you do that in order to figure out which plugin is causing the issue.
+      options:
+        - label: I have deactivated other plugins and confirmed this bug occurs when only WooCommerce plugin is active.
+        - label: This bug happens with a default WordPress theme active, or [Storefront](https://woocommerce.com/products/storefront/).
+        - label: I can reproduce this bug consistently using the steps above.
     validations:
       required: true
-
-  - type: textarea
-    id: additional-info
-    attributes:
-      label: Additional Information
-      description: Include any other relevant information, such as related issues, links to documentation, workarounds, screenshots, or videos.
-      placeholder: Add any other context about the problem here...
-    validations:
-      required: false
