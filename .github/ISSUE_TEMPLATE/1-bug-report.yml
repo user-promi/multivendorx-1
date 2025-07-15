@@ -44,15 +44,7 @@ body:
         A clear and concise description of what you expected to happen.
     validations:
       required: true
-  - type: textarea
-    id: actual
-    attributes:
-      label: Actual behavior
-      placeholder: |
-        A clear and concise description of what actually happens. Please be as descriptive as possible;
-    validations:
-      required: true
-  - type: textarea
+   - type: textarea
     id: steps
     attributes:
       label: Steps to reproduce
@@ -81,7 +73,6 @@ body:
 
         </details>
     validations:
-      required: true
   - type: checkboxes
     id: isolating
     attributes:
@@ -92,7 +83,7 @@ body:
         If the issue is resolved with the default theme and all plugins deactivated, it means that one of your plugins or a theme is causing the issue. 
         You will then need to enable it one by one and test every time you do that in order to figure out which plugin is causing the issue.
       options:
-        - label: I have deactivated other plugins and confirmed this bug occurs when only WooCommerce plugin is active.
+        - label: I have deactivated other plugins and confirmed this bug occurs when only WooCommerce and MultiVendorX plugin is active.
         - label: This bug happens with a default WordPress theme active, or [Storefront](https://woocommerce.com/products/storefront/).
         - label: I can reproduce this bug consistently using the steps above.
     validations:
