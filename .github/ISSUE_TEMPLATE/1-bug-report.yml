@@ -84,7 +84,7 @@ body:
       label: Isolating the problem
       description: |
         Please try testing your site for theme and plugin conflicts. 
-        To do that, deactivate all plugins except for WooCommerce and switch to a default WordPress theme like [Storefront](https://en-gb.wordpress.org/themes/storefront/). Then test again. 
+        To do that, deactivate all plugins except for WooCommerce, MultiVendorX and switch to a default WordPress theme like [Storefront](https://en-gb.wordpress.org/themes/storefront/). Then test again. 
         If the issue is resolved, it means one of your plugins or the theme is causing the issue. 
         Enable them one by one, testing each time, to find the culprit.
       options:
