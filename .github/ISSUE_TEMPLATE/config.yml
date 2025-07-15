@@ -1,4 +1,7 @@
-blank_issues_enabled: false
+blank_issues_enabled: true
+assignee: []
+milestone: []
+type: []
 contact_links:
   - name: MultiVendorX Community Support
     url: https://www.facebook.com/groups/226246620006065/
