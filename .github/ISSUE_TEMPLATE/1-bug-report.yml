@@ -12,13 +12,14 @@ body:
         Bug reports lacking detail, or for any other reason than to report a bug, may be closed without action.
 
         While our goal is to address all the issues reported in this repository, GitHub should be treated as a place to report confirmed bugs only.
-        - If you have a support request or custom code related question please follow one of the steps below:
+        - If you have a support request or custom code-related question, please follow one of the steps below:
         - Make a post on [MultiVendorX community forum](https://wordpress.org/support/plugin/dc-woocommerce-multi-vendor/)
         
         Make sure to look through the [existing `type: bug` issues](https://github.com/multivendorx/multivendorx/issues?q=is%3Aopen+is%3Aissue+label%3A%22type%3A+bug%22) to see whether your bug has already been submitted.
         Feel free to contribute to any existing issues.
         Search tip: You can filter our issues using [our labels](https://github.com/multivendorx/multivendorx/labels).
         Search tip: Make use of [GitHub's search syntax to refine your search](https://help.github.com/en/github/searching-for-information-on-github/searching-issues-and-pull-requests).
+
   - type: checkboxes
     id: prerequisites
     attributes:
@@ -29,6 +30,7 @@ body:
         - label: I have searched for similar bugs in both open and closed issues and cannot find a duplicate.
     validations:
       required: true
+
   - type: textarea
     id: summary
     attributes:
@@ -36,26 +38,30 @@ body:
       description: A clear and concise description of what the bug is.
     validations:
       required: true
+
   - type: textarea
     id: expected
     attributes:
       label: Expected behavior
+      description: A clear and concise description of what you expected to happen.
       placeholder: |
         A clear and concise description of what you expected to happen.
     validations:
       required: true
-   - type: textarea
+
+  - type: textarea
     id: steps
     attributes:
       label: Steps to reproduce
       description: Attach screenshot(s) or recording(s) directly by dragging & dropping.
       placeholder: |
-        1. Go to
-        2. Click on
-        3. Scroll down to
+        1. Go to...
+        2. Click on...
+        3. Scroll down to...
         4. See error
     validations:
       required: true
+
   - type: textarea
     id: environment
     attributes:
@@ -65,26 +71,25 @@ body:
         Without this report we won't be able to fully evaluate this issue.
       value: |
         <details>
-
         <summary>WordPress Environment</summary>
 
         The System Status Report is found in your WordPress admin under **WooCommerce > Status**. 
         Please select “Get system report”, then “Copy for GitHub”, and then paste it here.
 
         </details>
-    validations:
+
   - type: checkboxes
     id: isolating
     attributes:
       label: Isolating the problem
       description: |
-        Please try testing your site for theme and plugins conflict. 
-        To do that deactivate all plugins except for WooCommerce and switch to a default WordPress theme or [Storefront](https://en-gb.wordpress.org/themes/storefront/). Then test again. 
-        If the issue is resolved with the default theme and all plugins deactivated, it means that one of your plugins or a theme is causing the issue. 
-        You will then need to enable it one by one and test every time you do that in order to figure out which plugin is causing the issue.
+        Please try testing your site for theme and plugin conflicts. 
+        To do that, deactivate all plugins except for WooCommerce and switch to a default WordPress theme like [Storefront](https://en-gb.wordpress.org/themes/storefront/). Then test again. 
+        If the issue is resolved, it means one of your plugins or the theme is causing the issue. 
+        Enable them one by one, testing each time, to find the culprit.
       options:
-        - label: I have deactivated other plugins and confirmed this bug occurs when only WooCommerce and MultiVendorX plugin is active.
-        - label: This bug happens with a default WordPress theme active, or [Storefront](https://woocommerce.com/products/storefront/).
-        - label: I can reproduce this bug consistently using the steps above.
+        - label: I have deactivated other plugins and confirmed this bug occurs when only WooCommerce and MultiVendorX are active.
+        - label: This bug happens with a default WordPress theme active (e.g., Storefront).
+        - label: I can consistently reproduce this bug using the steps above.
     validations:
       required: true
