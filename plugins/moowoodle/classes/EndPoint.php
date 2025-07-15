@@ -11,7 +11,7 @@ namespace MooWoodle;
  * MooWoodle Endpoint class
  *
  * @class       Emails class
- * @version     PRODUCT_VERSION
+ * @version     3.3.0
  * @author      DualCube
  */
 class EndPoint {

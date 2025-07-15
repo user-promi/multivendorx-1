@@ -35,13 +35,13 @@ const supportLink = [
             'Reach out to the support team for assistance or guidance.',
             'moowoodle'
         ),
-        link: 'https://dualcube.com/forums/?utm_source=wordpress.org&utm_medium=freelandingpage&utm_campaign=MooWoodleFree',
+        link: 'https://dualcube.com/forums/?utm_source=wpadmin&utm_medium=pluginsettings&utm_campaign=moowoodle',
     },
     {
         title: __('Explore Documentation', 'moowoodle'),
         icon: 'adminlib-submission-message',
         description: __('Understand the plugin and its settings.', 'moowoodle'),
-        link: 'https://dualcube.com/knowledgebase/?utm_source=wordpress.org&utm_medium=freelandingpage&utm_campaign=MooWoodleFree',
+        link: 'https://dualcube.com/knowledgebase/?utm_source=wpadmin&utm_medium=pluginsettings&utm_campaign=moowoodle',
     },
     {
         title: __('Contribute Here', 'moowoodle'),

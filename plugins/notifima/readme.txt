@@ -5,7 +5,7 @@ Tags: woocommerce stock manager, woocommerce stock management, woocommerce inven
 Requires at least: 5.4
 Tested up to: 6.8.1
 Requires PHP: 8.0
-Stable tag: 3.0.2
+Stable tag: 3.0.3
 Donate link: https://multivendorx.com/donate/
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -146,6 +146,10 @@ Manual installation method requires downloading the [Notifima] (https://wordpres
 6. Inventory manager
 
 == Changelog ==
+
+= 3.0.3 - 2025-07-15 =
+* Fixed     - Image display issue on admin end.
+* Dev       - Added `notifima_updated` hook.
 
 = 3.0.2 - 2025-07-09 =
 * Fixed     - Resolved the persistent notice regarding plugin update.

@@ -11,7 +11,7 @@ namespace MooWoodle\Core;
  * MooWoodle Product class
  *
  * @class       Product class
- * @version     PRODUCT_VERSION
+ * @version     3.3.0
  * @author      DualCube
  */
 class Product {
@@ -33,7 +33,6 @@ class Product {
 		add_action( 'wp_trash_post', array( $this, 'handle_woocommerce_product_trash' ), 10, 1 );
 
 		add_action( 'untrash_post', array( $this, 'handle_woocommerce_product_restore' ), 10, 1 );
-
     }
 
 	/**

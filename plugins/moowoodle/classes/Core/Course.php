@@ -13,7 +13,7 @@ use MooWoodle\Util;
  * MooWoodle Course class
  *
  * @class       Course class
- * @version     PRODUCT_VERSION
+ * @version     3.3.0
  * @author      DualCube
  */
 class Course {
@@ -40,7 +40,7 @@ class Course {
 		\MooWoodle\FrontendScripts::enqueue_style( 'moowoodle-product-tab-style' );
 		\MooWoodle\FrontendScripts::localize_scripts( 'moowoodle-product-tab-script' );
 	}
-	
+
 	/**
 	 * Get course details based on filter options.
 	 *

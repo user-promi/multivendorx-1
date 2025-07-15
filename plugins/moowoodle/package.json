@@ -47,12 +47,12 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/dualcube/moowoodle.git"
+        "url": "git+https://github.com/multivendorx/multivendorx"
     },
     "bugs": {
-        "url": "https://github.com/dualcube/moowoodle/issues"
+        "url": "https://github.com/multivendorx/multivendorx/issues"
     },
-    "homepage": "https://github.com/dualcube/moowoodle#readme",
+    "homepage": "https://github.com/multivendorx/multivendorx/blob/main/plugins/moowoodle/README.md",
     "author": "Dualcube",
     "license": "ISC",
     "packageManager": "pnpm@10.11.0",
@@ -139,6 +139,7 @@
         "replace-in-file": "^8.3.0",
         "style-loader": "^4.0.0",
         "terser": "^5.39.1",
-        "wireit": "^0.14.12"
+        "wireit": "^0.14.12",
+        "wp-readme-to-markdown": "^1.0.1"
     }
 }
