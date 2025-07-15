@@ -27,7 +27,6 @@ const Managestock: React.FC = () => {
                         setOpenDialog( true );
                     } }
                     className="inventory-manager"
-                    style={{ '--url': `url(${appLocalizer.inventory_manager})` } as any}
                 ></div>
             </div>
         </>

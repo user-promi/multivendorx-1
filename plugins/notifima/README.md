@@ -5,7 +5,7 @@
 **Requires at least:** 5.4  
 **Tested up to:** 6.8.1  
 **Requires PHP:** 8.0  
-**Stable tag:** 3.0.1  
+**Stable tag:** 3.0.3  
 **Donate link:** https://multivendorx.com/donate/  
 **License:** GPLv2 or later  
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
@@ -66,7 +66,7 @@ Are you tired of losing potential sales because your customers can't buy the out
 **👤 User Management**: Easily manage your subscriber list and their preferences. 
 **🖋️ Customizable Messages**: Tailor the notification messages to match your brand’s tone and style. 
 **🛍️ Stock Alert for Backorders**: Enable customers to subscribe for in-stock notifications, even for products that are currently out of stock but have backorders enabled. Keep your customers informed and engaged. 
-**🔄 Import/Export Functionality**: Simplify data management by exporting and importing stock data with ease. Export all your stock information, make necessary edits, and seamlessly import the updated data using CSV files.[COMING SOON] 
+**🔄 Import/Export Functionality**: Simplify data management by exporting and importing stock data with ease. Export all your stock information, make necessary edits, and seamlessly import the updated data using CSV files.
 **🌐 Multilingual Support**: Reach a global audience by offering notifications in multiple languages. 
 **📱 Responsive Design**: The plugin’s design is fully responsive, ensuring a seamless experience on all devices. To match with your theme’s structure. 
 **🆕 Instant Updates**: Get real-time updates on your subscribers and their preferences. 
@@ -96,7 +96,7 @@ Are you tired of losing potential sales because your customers can't buy the out
 📉 **Product Stock History [PRO]**: Dive into the Notifima's Stock Manager for WooCommerce’s Stock Log page, offering a detailed history of each product’s stock movements. Track changes over time to gain insights into product availability trends. **[COMING SOON]**
 
 
-## 👩‍🏫 Learn More About Pro [Notifima Pro](https://notifima.com/pricing/?utm_source=wporg&utm_medium=plugindescription&utm_campaign=notifimawporg)
+👩‍🏫 Learn More About Pro [Notifima Pro](https://notifima.com/pricing/?utm_source=wporg&utm_medium=plugindescription&utm_campaign=notifimawporg)
 👉 Official Demo Link: Try out Free and Pro **Notifima** [Demo site](https://multivendordemo.com/notifima/)
 
 
@@ -146,6 +146,13 @@ Manual installation method requires downloading the [Notifima] (https://wordpres
 6. Inventory manager
 
 ## Changelog ##
+
+### 3.0.3 - 2025-07-15 ###
+* Fixed     - Image display issue on admin end.
+* Dev       - Added `notifima_updated` hook.
+
+### 3.0.2 - 2025-07-09 ###
+* Fixed     - Resolved the persistent notice regarding plugin update.
 
 ### 3.0.1 - 2025-07-09 ###
 * Added     - CSS issue fix for improved layout consistency.

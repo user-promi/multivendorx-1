@@ -17,6 +17,9 @@
         gap: 0.5rem;
         position: relative;
       }
+      .course-bulk-action button{
+        max-height: 2.1rem;
+      }
     }
   }
 
@@ -63,7 +66,7 @@
         }
         .header-col{
           text-align: left;
-          padding: 0.313rem 0.85rem;
+          padding: 0 0.85rem;
           font-size: 0.9rem;
           font-weight: 500;
           display: flex;
@@ -78,6 +81,7 @@
         }
         .header-col:first-child{
           max-width: 2rem;
+          padding-top: 0.4rem;
         }
       }
   
@@ -126,6 +130,7 @@
             img{
               width: 3.125rem;
               height: auto;
+              border: 0.063rem solid #e0e4e9;
             }
 
             .main-input{
@@ -136,6 +141,7 @@
             .action-icons{
               display: flex;
               gap: 0.313rem;
+              padding-top: 0.063rem;
               
               .adminlib-update-data{
                 font-size: 1rem;
@@ -146,6 +152,12 @@
                 font-size: 1.313rem;
                 color: #7f36d9;
               }
+              .adminlib-add-product{
+                color: #0080008a;
+              }
+              .adminlib-refresh{
+                color: #000000c0;
+              }
             }
             &:has(.product-expand) {
               min-width: 3rem;
@@ -155,6 +167,9 @@
           .admin-column:nth-of-type(1) {
             max-width: 2rem;
             padding-right: 0;
+          }
+          .admin-column:first-child {
+            padding-top: 0.45rem;
           }
 
           .admin-column:nth-of-type(2) {

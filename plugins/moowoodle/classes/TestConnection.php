@@ -10,7 +10,7 @@ namespace MooWoodle;
 /**
  * Plugin TestConnection class
  *
- * @version     PRODUCT_VERSION
+ * @version     3.3.0
  * @package     MooWoodle
  * @author      DualCube
  */

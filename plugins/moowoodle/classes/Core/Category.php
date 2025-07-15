@@ -13,7 +13,7 @@ use MooWoodle\Util;
  * MooWoodle Category class
  *
  * @class       Category class
- * @version     PRODUCT_VERSION
+ * @version     3.3.0
  * @author      DualCube
  */
 class Category {
