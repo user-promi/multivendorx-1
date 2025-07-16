@@ -13,6 +13,7 @@ import { Tour, ModuleProvider } from 'zyra';
 
 const disableBody = ( target: any ) => disableBodyScroll( target );
 const enableBody = ( target: any ) => enableBodyScroll( target );
+localStorage.setItem("force_module_reload", "false");
 
 const Route = () => {
     const currentTab = new URLSearchParams( useLocation().hash );
