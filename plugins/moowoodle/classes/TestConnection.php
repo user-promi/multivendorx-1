@@ -79,7 +79,7 @@ class TestConnection {
      *
 	 * @return array
 	 */
-	public static function get_catagory() {
+	public static function get_category() {
 		$response = MooWoodle()->external_service->do_request( 'get_categories' );
 
 		if ( $response && ! isset( $response['error'] ) ) {

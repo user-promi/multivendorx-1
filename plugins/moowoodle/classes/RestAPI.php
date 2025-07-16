@@ -219,8 +219,8 @@ class RestAPI {
             case 'get_course':
                 $response = TestConnection::get_course();
                 break;
-            case 'get_catagory':
-                $response = TestConnection::get_catagory();
+            case 'get_category':
+                $response = TestConnection::get_category();
                 break;
             case 'create_user':
                 $response = TestConnection::create_user();
@@ -430,7 +430,7 @@ class RestAPI {
         $action = $request->get_param( 'action' );
         switch ( $action ) {
             case 'download':
-                $this->download_log( $request );
+                return $this->download_log( $request );
                 break;
             case 'clear':
                 $wp_filesystem->delete( MooWoodle()->log_file );
