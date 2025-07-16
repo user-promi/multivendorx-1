@@ -72,6 +72,7 @@ const Modules: React.FC< ModuleProps > = ( {
         } else {
             removeModule?.( moduleId );
         }
+        localStorage.setItem("force_module_reload", "true");
 
         await sendApiResponse(
             appLocalizer,
