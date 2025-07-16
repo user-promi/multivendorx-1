@@ -13,6 +13,7 @@ const PluginModules = () => {
             appLocalizer={ appLocalizer }
             apiLink="modules"
             proPopupContent={ proPopupContent }
+            pluginName="catalogx"
         />
     );
 };

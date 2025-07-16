@@ -51,10 +51,17 @@ class Rest {
             CatalogX()->rest_namespace,
             '/modules',
             array(
-				'methods'             => 'POST',
-				'callback'            => array( $this, 'set_modules' ),
-				'permission_callback' => array( $this, 'catalogx_permission' ),
-			)
+                array(
+                    'methods'             => 'POST',
+                    'callback'            => array( $this, 'set_modules' ),
+                    'permission_callback' => array( $this, 'catalogx_permission' ),
+                ),
+                array(
+                    'methods'             => 'get',
+                    'callback'            => array( $this, 'get_modules' ),
+                    'permission_callback' => array( $this, 'catalogx_permission' ),
+                ),
+            )
         );
 
         register_rest_route(
@@ -168,6 +175,11 @@ class Rest {
                 CatalogX()->modules->deactivate_modules( array( $module_id ) );
                 break;
         }
+    }
+
+    public function get_modules() {
+        $modules_instance = new Modules();
+        return $modules_instance->get_active_modules();
     }
 
     /**

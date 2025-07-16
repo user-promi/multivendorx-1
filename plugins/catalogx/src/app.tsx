@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import Settings from './components/Settings/Settings';
@@ -9,11 +9,11 @@ import WholesaleUser from './components/WholesaleUser/wholesaleUser';
 import Rules from './components/Rules/Rules';
 import { TourProvider } from '@reactour/tour';
 import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock';
-import { Tour, ModuleProvider } from 'zyra';
+import { Tour, initializeModules } from 'zyra';
 
 const disableBody = ( target: any ) => disableBodyScroll( target );
 const enableBody = ( target: any ) => enableBodyScroll( target );
-localStorage.setItem( 'force_module_reload', 'false' );
+localStorage.setItem( 'force_catalogx_context_reload', 'true' );
 
 const Route = () => {
     const currentTab = new URLSearchParams( useLocation().hash );
@@ -64,24 +64,23 @@ const App = () => {
             }
         } );
 
+    useEffect( () => {
+        initializeModules( appLocalizer, 'catalogx', 'free' );
+    }, [] );
+
     return (
         <>
-            <ModuleProvider
-                modules={ ( window as any ).appLocalizer?.active_modules || [] }
+            <TourProvider
+                steps={ [] }
+                afterOpen={ disableBody }
+                beforeClose={ enableBody }
+                disableDotsNavigation={ true }
+                showNavigation={ false }
+                showCloseButton={ false }
             >
-                { /*this is for tour provider */ }
-                <TourProvider
-                    steps={ [] }
-                    afterOpen={ disableBody }
-                    beforeClose={ enableBody }
-                    disableDotsNavigation={ true }
-                    showNavigation={ false }
-                    showCloseButton={ false }
-                >
-                    <Tour appLocalizer={ ( window as any ).appLocalizer } />
-                </TourProvider>
-                <Route />
-            </ModuleProvider>
+                <Tour appLocalizer={ ( window as any ).appLocalizer } />
+            </TourProvider>
+            <Route />
         </>
     );
 };
