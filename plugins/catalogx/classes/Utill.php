@@ -31,7 +31,7 @@ class Utill {
     /**
      * Function to console and debug errors.
      *
-     * @param mixed $str The data to be logged (string, array, object, etc.).
+     * @param mixed $data The data to be logged (string, array, object, etc.).
      * @return void
      */
     public static function log( $data ) {

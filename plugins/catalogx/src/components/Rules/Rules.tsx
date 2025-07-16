@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useModules } from 'zyra';
 
 import './Rules.scss';
 import Dialog from '@mui/material/Dialog';
@@ -7,9 +6,6 @@ import ShowPopup from '../Popup/Popup';
 // import "../AdminLibrary/CustomTable/table.scss";
 
 const Rules = () => {
-    // Check pro is active and module is active or not.
-    const { modules }: { modules: string[] } = useModules();
-
     // State variable declearation
     const [ openDialog, setOpenDialog ] = useState( false );
 

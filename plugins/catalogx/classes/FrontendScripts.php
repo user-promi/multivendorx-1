@@ -172,24 +172,24 @@ class FrontendScripts {
             'catalogx_register_scripts',
             array(
 				'catalogx-enquiry-frontend-script'  => array(
-					'src'         => CatalogX()->plugin_url . 'modules/Enquiry/assets/js/frontend.js',
-					'deps'        => array( 'jquery', 'jquery-blockui' ),
-					'version'     => $version,
+					'src'     => CatalogX()->plugin_url . 'modules/Enquiry/assets/js/frontend.js',
+					'deps'    => array( 'jquery', 'jquery-blockui' ),
+					'version' => $version,
 				),
 				'catalogx-enquiry-form-script'      => array(
-					'src'         => CatalogX()->plugin_url . self::get_build_path_name() . 'js/block/enquiryForm/index.js',
-					'deps'        => array( 'jquery', 'jquery-blockui', 'wp-element', 'wp-i18n', 'wp-blocks', 'wp-hooks' ),
-					'version'     => $version,
+					'src'     => CatalogX()->plugin_url . self::get_build_path_name() . 'js/block/enquiryForm/index.js',
+					'deps'    => array( 'jquery', 'jquery-blockui', 'wp-element', 'wp-i18n', 'wp-blocks', 'wp-hooks' ),
+					'version' => $version,
 				),
 				'catalogx-quote-cart-script'        => array(
-					'src'         => CatalogX()->plugin_url . self::get_build_path_name() . 'js/block/quote-cart/index.js',
-					'deps'        => array( 'jquery', 'jquery-blockui', 'wp-element', 'wp-i18n', 'wp-blocks' ),
-					'version'     => $version,
+					'src'     => CatalogX()->plugin_url . self::get_build_path_name() . 'js/block/quote-cart/index.js',
+					'deps'    => array( 'jquery', 'jquery-blockui', 'wp-element', 'wp-i18n', 'wp-blocks' ),
+					'version' => $version,
 				),
 				'catalogx-add-to-quote-cart-script' => array(
-					'src'         => CatalogX()->plugin_url . 'modules/Quote/js/frontend.js',
-					'deps'        => array( 'jquery' ),
-					'version'     => $version,
+					'src'     => CatalogX()->plugin_url . 'modules/Quote/js/frontend.js',
+					'deps'    => array( 'jquery' ),
+					'version' => $version,
 				),
             )
         );
@@ -248,14 +248,14 @@ class FrontendScripts {
             'admin_catalogx_register_scripts',
             array(
 				'catalogx-admin-script'      => array(
-					'src'         => CatalogX()->plugin_url . self::get_build_path_name() . 'js/index.js',
-					'deps'        => $index_asset['dependencies'],
-					'version'     => $version,
+					'src'     => CatalogX()->plugin_url . self::get_build_path_name() . 'js/index.js',
+					'deps'    => $index_asset['dependencies'],
+					'version' => $version,
 				),
 				'catalogx-components-script' => array(
-					'src'         => CatalogX()->plugin_url . self::get_build_path_name() . 'js/components.js',
-					'deps'        => $component_asset['dependencies'],
-					'version'     => $version,
+					'src'     => CatalogX()->plugin_url . self::get_build_path_name() . 'js/components.js',
+					'deps'    => $component_asset['dependencies'],
+					'version' => $version,
 				),
             )
         );

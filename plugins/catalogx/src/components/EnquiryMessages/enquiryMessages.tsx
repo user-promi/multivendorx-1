@@ -1,12 +1,9 @@
 import React, { useState } from 'react';
 import './enquiryMessages.scss';
-import { useModules } from 'zyra';
 import Dialog from '@mui/material/Dialog';
 import ShowPopup from '../Popup/Popup';
 
 const EnquiryMessages = () => {
-    // Check pro is active and module is active or not.
-    const { modules }: { modules: string[] } = useModules();
     const [ openDialog, setOpenDialog ] = useState( false );
 
     return (
