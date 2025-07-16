@@ -1,7 +1,7 @@
 /* global appLocalizer */
 import { __ } from '@wordpress/i18n';
-import wordpressLogo from '@/assets/images/Wordpress.png';
-import moodleLogo from '@/assets/images/Moodle.png';
+import wordpressLogo from '@/assets/images/wordpress.png';
+import moodleLogo from '@/assets/images/moodle.png';
 
 export default {
     id: 'synchronize-user',
