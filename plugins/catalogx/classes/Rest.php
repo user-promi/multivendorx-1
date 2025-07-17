@@ -57,7 +57,7 @@ class Rest {
                     'permission_callback' => array( $this, 'catalogx_permission' ),
                 ),
                 array(
-                    'methods'             => 'get',
+                    'methods'             => 'GET',
                     'callback'            => array( $this, 'get_modules' ),
                     'permission_callback' => array( $this, 'catalogx_permission' ),
                 ),
@@ -177,6 +177,11 @@ class Rest {
         }
     }
 
+    /**
+     * Get the list of active CatalogX modules.
+     *
+     * @return array
+     */
     public function get_modules() {
         $modules_instance = new Modules();
         return $modules_instance->get_active_modules();

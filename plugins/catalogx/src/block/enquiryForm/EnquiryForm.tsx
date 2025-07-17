@@ -5,58 +5,57 @@ import { FormViewer } from 'zyra';
 import axios from 'axios';
 
 const EnquiryForm = () => {
-    const [ loading, setLoading ] = useState( false );
-    const [ toast, setToast ] = useState( false );
-    const [ responseMessage, setResponseMessage ] = useState( '' );
+    const [loading, setLoading] = useState(false);
+    const [toast, setToast] = useState(false);
+    const [responseMessage, setResponseMessage] = useState('');
     const formData = enquiryFormData;
     const proActive = formData.khali_dabba;
 
-    const submitUrl = `${ enquiryFormData.apiUrl }/catalogx/v1/enquiries`;
+    const submitUrl = `${enquiryFormData.apiUrl}/catalogx/v1/enquiries`;
 
-    const onSubmit = ( submittedFormData: any ) => {
-        setLoading( true );
+    const onSubmit = (submittedFormData: any) => {
+        setLoading(true);
 
         const productId =
-            document.querySelector< HTMLInputElement >(
-                '#product-id-for-enquiry'
-            )?.value ?? '';
+            document.querySelector<HTMLInputElement>('#product-id-for-enquiry')
+                ?.value ?? '';
         const quantity =
-            document.querySelector< HTMLInputElement >( '.quantity .qty' )
-                ?.value ?? '1';
+            document.querySelector<HTMLInputElement>('.quantity .qty')?.value ??
+            '1';
 
-        submittedFormData.append( 'productId', productId );
-        submittedFormData.append( 'quantity', quantity );
+        submittedFormData.append('productId', productId);
+        submittedFormData.append('quantity', quantity);
 
         axios
-            .post( submitUrl, submittedFormData, {
+            .post(submitUrl, submittedFormData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'X-WP-Nonce': enquiryFormData.nonce,
                 },
-            } )
-            .then( ( response ) => {
-                setResponseMessage( response.data.msg );
-                setLoading( false );
-                setToast( true );
-                if ( response.data.redirect_link !== '' ) {
+            })
+            .then((response) => {
+                setResponseMessage(response.data.msg);
+                setLoading(false);
+                setToast(true);
+                if (response.data.redirect_link !== '') {
                     window.location.href = response.data.redirect_link;
                 }
-                setTimeout( () => {
-                    setToast( false );
+                setTimeout(() => {
+                    setToast(false);
                     window.location.reload();
-                }, 3000 );
-            } );
+                }, 3000);
+            });
     };
 
     return (
         <div className="enquiry-form-modal">
-            { toast && (
+            {toast && (
                 <div className="admin-notice-display-title">
                     <i className="admin-font adminlib-icon-yes"></i>
-                    { responseMessage }
+                    {responseMessage}
                 </div>
-            ) }
-            { loading && (
+            )}
+            {loading && (
                 <section className="loader-component">
                     <div className="three-body">
                         <div className="three-body__dot"></div>
@@ -64,24 +63,24 @@ const EnquiryForm = () => {
                         <div className="three-body__dot"></div>
                     </div>
                 </section>
-            ) }
+            )}
             <div className="modal-wrapper">
                 <div className="catalogx-modal-close-btn">
                     <i className="admin-font adminlib-cross"></i>
                 </div>
-                <div>{ enquiryFormData.content_before_form }</div>
-                { proActive ? (
+                <div>{enquiryFormData.content_before_form}</div>
+                {proActive ? (
                     <FormViewer
-                        formFields={ formData.settings_pro }
-                        onSubmit={ onSubmit }
+                        formFields={formData.settings_pro}
+                        onSubmit={onSubmit}
                     />
                 ) : (
                     <FreeForm
-                        formFields={ formData.settings_free }
-                        onSubmit={ onSubmit }
+                        formFields={formData.settings_free}
+                        onSubmit={onSubmit}
                     />
-                ) }
-                <div>{ enquiryFormData.content_after_form }</div>
+                )}
+                <div>{enquiryFormData.content_after_form}</div>
             </div>
         </div>
     );

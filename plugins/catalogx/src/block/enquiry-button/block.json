@@ -19,7 +19,7 @@
         "catalogx-enquiry-frontend-script",
         "catalogx-enquiry-form-script"
     ],
-    "editorStyle": [ "catalogx-enquiry-form-style", "catalogx-frontend-style" ],
-    "style": [ "catalogx-enquiry-form-style", "catalogx-frontend-style" ],
+    "editorStyle": ["catalogx-enquiry-form-style", "catalogx-frontend-style"],
+    "style": ["catalogx-enquiry-form-style", "catalogx-frontend-style"],
     "render": "file:./render.php"
 }

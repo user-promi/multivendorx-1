@@ -12,7 +12,7 @@ const pluginFiles = [
     "config.php",
     "composer.lock",
     "composer.json",
-    "product_stock_alert.php",
+    "Woocommerce_Catalog_Enquiry.php",
     "readme.txt",
 ];
 
