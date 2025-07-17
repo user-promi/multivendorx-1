@@ -281,7 +281,7 @@ class FrontendScripts {
 
 		$tabs_names = apply_filters(
 			'multivendorx_additional_tabs_names',
-			array( 'general' )
+			array( 'general', 'vendor-registration-form', 'seller-dashboard' )
 		);
 
         foreach ( $tabs_names as $tab_name ) {
