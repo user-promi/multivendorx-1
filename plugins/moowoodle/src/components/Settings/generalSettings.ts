@@ -54,8 +54,8 @@ export default {
                     cache: 'course_id',
                 },
                 {
-                    action: 'get_catagory',
-                    message: __('Catagory Fetch', 'moowoodle'),
+                    action: 'get_category',
+                    message: __('Category Fetch', 'moowoodle'),
                 },
                 {
                     action: 'create_user',

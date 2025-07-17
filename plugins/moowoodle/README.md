@@ -236,7 +236,7 @@ Ans: No, it's not a requirement. You have the flexibility to install both system
 
 ## Changelog ##
 
-### 3.3.0 - 2025-07-13 ###
+### 3.3.0 - 2025-07-15 ###
 * Added     - Compatibility of WordPress 6.8.1.
 * Added     - Compatibility of WooCommerce 9.9.5.
 * Added     - Revamped Settings Panel for a more streamlined and intuitive interface.

@@ -1,0 +1,24 @@
+'package: @multivendorx/zyra':
+  - packages/js/zyra/**/*
+
+'plugin: multivendorx':
+  - plugins/multivendorx/**/*
+
+'plugin: moowoodle':
+  - plugins/moowoodle/**/*
+
+'plugin: notifima':
+  - plugins/notifima/**/*
+
+'plugin: catalogx':
+  - plugins/catalogx/**/*
+
+'Documentation':
+  - docs/**/*
+
+'focus: monorepo infrastructure':
+  - .github/**/*
+  - bin/**/*
+  - tools/**/*
+  - '**/composer.json'
+  - '**/package.json'

@@ -1,6 +1,6 @@
 /* global appLocalizer */
-import Brand from '../../assets/images/Brand.png';
-import BrandSmall from '../../assets/images/Brand-small.png';
+import Brand from '../../assets/images/brand.png';
+import BrandSmall from '../../assets/images/brand-small.png';
 import { useLocation, Link } from 'react-router-dom';
 import React, { useEffect, JSX } from 'react';
 import { __ } from '@wordpress/i18n';
