@@ -13,7 +13,7 @@ defined( 'ABSPATH' ) || exit;
  * MultiVendorX Admin class
  *
  * @class       Admin class
- * @version     3.0.0
+ * @version     PRODUCT_VERSION
  * @author      MultiVendorX
  */
 class Admin {

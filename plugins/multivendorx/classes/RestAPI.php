@@ -13,7 +13,7 @@ defined( 'ABSPATH' ) || exit;
  * MultiVendorX RestAPI class
  *
  * @class       RestAPI class
- * @version     3.0.0
+ * @version     PRODUCT_VERSION
  * @author      MultiVendorX
  */
 class RestAPI {

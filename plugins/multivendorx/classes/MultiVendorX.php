@@ -117,6 +117,8 @@ final class MultiVendorX {
         $this->container['setting']         = new Setting();
         $this->container['admin']           = new Admin();
         $this->container['frontendScripts'] = new FrontendScripts();
+        $this->container['filters']         = new Deprecated\DeprecatedFilterHooks();
+        $this->container['actions']         = new Deprecated\DeprecatedActionHooks();
     }
 
     /**
@@ -283,7 +285,7 @@ final class MultiVendorX {
 }
 
     
-    // add_action('admin_init', [$this, 'redirect_to_mvx_setup'], 5);
+    // add_action('admin_init', [$this, 'redirect_to_multivendorx_setup'], 5);
 
 
     // $this->admin_setup_wizard();
@@ -307,7 +309,7 @@ final class MultiVendorX {
      */
     // private function admin_setup_wizard() {
     //     $current_page = filter_input(INPUT_GET, 'page');
-    //     if ($current_page && $current_page == 'mvx-setup') {
+    //     if ($current_page && $current_page == 'multivendorx-setup') {
     //         $this->container['SetupWizard'] = new Admin\SetupWizard();
     //     }
     // }
@@ -317,20 +319,20 @@ final class MultiVendorX {
      * Delete WooCommerce activation redirect transient.
      * @return void
      */
-    // public function redirect_to_mvx_setup() {
+    // public function redirect_to_multivendorx_setup() {
     //     if ( get_transient( '_wc_activation_redirect' ) ) {
     //         delete_transient( '_wc_activation_redirect' );
     //         return;
     //     }
-    //     if ( get_transient( '_mvx_activation_redirect' ) ) {
-    //         delete_transient( '_mvx_activation_redirect' );
-    //         if ( filter_input(INPUT_GET, 'page') === 'mvx-setup'
+    //     if ( get_transient( '_multivendorx_activation_redirect' ) ) {
+    //         delete_transient( '_multivendorx_activation_redirect' );
+    //         if ( filter_input(INPUT_GET, 'page') === 'multivendorx-setup'
     //         || filter_input(INPUT_GET, 'activate-multi')
-    //         || apply_filters( 'mvx_prevent_automatic_wizard_redirect', false )
+    //         || apply_filters( 'multivendorx_prevent_automatic_wizard_redirect', false )
     //         ) {
     //             return;
     //         }
-    //         wp_safe_redirect( admin_url( 'index.php?page=mvx-setup' ) );
+    //         wp_safe_redirect( admin_url( 'index.php?page=multivendorx-setup' ) );
     //         exit;
     //     }
     // }
