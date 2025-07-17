@@ -13,7 +13,7 @@ For create the composer file
 2. add autoloader manually
 "autoload": {
         "psr-4": {
-            "Multivendorx\\": "classes/"
+            "MultiVendorX\\": "classes/"
         }
     },
 

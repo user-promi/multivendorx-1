@@ -7,8 +7,10 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define('MVX_PLUGIN_TOKEN', 'mvx');
+define('MULTIVENDORX_PLUGIN_TOKEN', 'multivendorx');
 
-define('MVX_PLUGIN_VERSION', '4.2.26');
+define('MULTIVENDORX_PLUGIN_VERSION', '4.2.27');
 
-define( 'PLUGIN_SLUG', 'multivendorx' );
+define( 'MULTIVENDORX_PRO_SHOP_URL', 'https://multivendorx.com/pricing/' );
+
+define( 'MULTIVENDORX_PLUGIN_SLUG', 'multivendorx' );

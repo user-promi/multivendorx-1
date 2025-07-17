@@ -13,7 +13,8 @@ declare global {
         nonce: string;
         khali_dabba: boolean;
         tab_name: string;
-        settings_databases_value: any; // Use a more specific type if possible
+        settings_databases_value: any;
+        pages_list: any;
         pro_url: string;
         pro_settings_list: any;
     }
