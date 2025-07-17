@@ -460,7 +460,7 @@ class RestAPI {
             return new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'moowoodle' ), array( 'status' => 403 ) );
         }
         // Get the file parameter from the request.
-        $file      = $request->get_param( 'file' );
+        $file      = get_option('moowoodle_log_file');
         $file      = basename( $file );
         $file_path = MooWoodle()->moowoodle_logs_dir . '/' . $file;
 
