@@ -5,7 +5,7 @@ Donate link: https://dualcube.com/?utm_source=wporg&utm_medium=plugindescription
 Requires at least: 6.0.0
 Tested up to: 6.8.1
 Requires PHP: 8.0
-Stable tag: 3.3.0
+Stable tag: 3.3.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -236,7 +236,13 @@ Ans: No, it's not a requirement. You have the flexibility to install both system
 
 == Changelog ==
 
-= 3.3.0 - 2025-07-13 =
+= 3.3.1 - 2025-07-16 =
+* Added     - Compatibility of WooCommerce 10.0.2.
+* Fixed     - Fatal error on migration.
+* Fixed     - Minor text corrections.
+* Fixed     - Empty log issue.
+
+= 3.3.0 - 2025-07-15 =
 * Added     - Compatibility of WordPress 6.8.1.
 * Added     - Compatibility of WooCommerce 9.9.5.
 * Added     - Revamped Settings Panel for a more streamlined and intuitive interface.

@@ -219,8 +219,8 @@ class RestAPI {
             case 'get_course':
                 $response = TestConnection::get_course();
                 break;
-            case 'get_catagory':
-                $response = TestConnection::get_catagory();
+            case 'get_category':
+                $response = TestConnection::get_category();
                 break;
             case 'create_user':
                 $response = TestConnection::create_user();
@@ -430,7 +430,7 @@ class RestAPI {
         $action = $request->get_param( 'action' );
         switch ( $action ) {
             case 'download':
-                $this->download_log( $request );
+                return $this->download_log( $request );
                 break;
             case 'clear':
                 $wp_filesystem->delete( MooWoodle()->log_file );
@@ -460,7 +460,7 @@ class RestAPI {
             return new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'moowoodle' ), array( 'status' => 403 ) );
         }
         // Get the file parameter from the request.
-        $file      = $request->get_param( 'file' );
+        $file      = get_option('moowoodle_log_file');
         $file      = basename( $file );
         $file_path = MooWoodle()->moowoodle_logs_dir . '/' . $file;
 

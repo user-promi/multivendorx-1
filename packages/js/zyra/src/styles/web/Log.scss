@@ -77,7 +77,6 @@
   }
 
   .log-container-wrapper {
-    max-height: 22rem;
     min-height: 6.25rem;
     height: 100%;
     width: 100%;
@@ -105,7 +104,7 @@
     .wrapper-body{
       padding: 0 0 0.75rem;
       height: 18.875rem;
-      overflow: hidden;
+      overflow: scroll;
       color: #fff;
 
       &::-webkit-scrollbar-track {
