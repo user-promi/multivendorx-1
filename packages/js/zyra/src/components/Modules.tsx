@@ -37,6 +37,7 @@ interface ModuleProps {
     appLocalizer: Record< string, any >; // Allows any structure
     apiLink: string;
     proPopupContent: ProPopupContent;
+    pluginName: string;
 }
 
 const Modules: React.FC< ModuleProps > = ( {
@@ -44,6 +45,7 @@ const Modules: React.FC< ModuleProps > = ( {
     appLocalizer,
     apiLink,
     proPopupContent,
+    pluginName,
 } ) => {
     const [ modelOpen, setModelOpen ] = useState< boolean >( false );
     const [ successMsg, setSuccessMsg ] = useState< string >( '' );
@@ -72,7 +74,7 @@ const Modules: React.FC< ModuleProps > = ( {
         } else {
             removeModule?.( moduleId );
         }
-        localStorage.setItem("force_module_reload", "true");
+        localStorage.setItem(`force_${pluginName}_context_reload`, 'true');
 
         await sendApiResponse(
             appLocalizer,

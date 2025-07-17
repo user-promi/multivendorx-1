@@ -1,77 +1,45 @@
-import React, { createContext, useReducer, useContext, ReactNode } from 'react';
+import { create } from 'zustand';
+import axios from 'axios';
 
-// Define action types
-type ModuleAction =
-    | { type: 'INSERT_MODULE'; payload: string }
-    | { type: 'DELETE_MODULE'; payload: string };
-
-// Define state type
-type ModuleState = string[];
-
-// Define context type
+// Zustand store
 type ModuleContextType = {
-    modules: ModuleState;
-    insertModule: ( moduleName: string ) => void;
-    removeModule: ( moduleName: string ) => void;
+	modules: string[];
+	insertModule: (moduleName: string) => void;
+	removeModule: (moduleName: string) => void;
 };
 
-// Props type for the provider
-type ModuleProviderProps = {
-    children: ReactNode;
-    modules: ModuleState;
-};
+export const useModules = create<ModuleContextType>((set) => ({
+	modules: [],
+	insertModule: (moduleName: string) =>
+		set((state) => ({
+			modules: [...state.modules, moduleName],
+		})),
+	removeModule: (moduleName: string) =>
+		set((state) => ({
+			modules: state.modules.filter((m) => m !== moduleName),
+		})),
+}));
 
-// Create context
-const ModuleContext = createContext< ModuleContextType | undefined >(
-    undefined
-);
+export async function initializeModules(
+	appLocalizer: Record<string, any>,
+	pluginName: string,
+	pluginSlug: string
+): Promise<void> {
+	if (localStorage.getItem(`force_${pluginName}_context_reload`) === 'true') {
+		try {
+			const response = await axios.get(`${appLocalizer.apiUrl}/catalogx/v1/modules`, {
+				headers: { 'X-WP-Nonce': appLocalizer.nonce },
+			});
 
-// Reducer function
-const ModuleReducer = (
-    state: ModuleState,
-    action: ModuleAction
-): ModuleState => {
-    switch ( action.type ) {
-        case 'INSERT_MODULE':
-            return [ ...state, action.payload ];
-        case 'DELETE_MODULE':
-            return state.filter( ( module ) => module !== action.payload );
-        default:
-            return state;
-    }
-};
+			if (Array.isArray(response.data)) {
+				useModules.setState({ modules: response.data });
+			}
+		} catch (error) {
+			console.error('Failed to fetch active modules:', error);
+		}
 
-// Context provider component
-const ModuleProvider: React.FC< ModuleProviderProps > = ( {
-    children,
-    modules,
-} ) => {
-    const [ state, dispatch ] = useReducer( ModuleReducer, modules );
-
-    const insertModule = ( moduleName: string ) => {
-        dispatch( { type: 'INSERT_MODULE', payload: moduleName } );
-    };
-
-    const removeModule = ( moduleName: string ) => {
-        dispatch( { type: 'DELETE_MODULE', payload: moduleName } );
-    };
-
-    return (
-        <ModuleContext.Provider
-            value={ { modules: state, insertModule, removeModule } }
-        >
-            { children }
-        </ModuleContext.Provider>
-    );
-};
-
-// Custom hook to access the module context
-const useModules = (): ModuleContextType => {
-    const context = useContext( ModuleContext );
-    if ( ! context ) {
-        throw new Error( 'useModules must be used within a ModuleProvider' );
-    }
-    return context;
-};
-
-export { ModuleProvider, useModules };
+		if ( pluginSlug === 'pro' ) {
+			localStorage.setItem(`force_${pluginName}_context_reload`, 'false');
+		}
+	}
+}
