@@ -247,7 +247,7 @@ class Category {
 
 		// Link with parent or delete term.
 		foreach ( $terms as $term ) {
-			$category_id = get_term_meta( $term->term_id, '_category_id', true );
+			$category_id = (int)get_term_meta( $term->term_id, '_category_id', true );
 
 			if ( in_array( $category_id, $exclude_ids, true ) ) {
 				$parent_category_id = get_term_meta( $term->term_id, '_parent', true );
