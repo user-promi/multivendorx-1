@@ -1,4 +1,4 @@
-=== MooWoodle - Moodle WordPress Integration & WordPress LMS Bridge ===
+=== MooWoodle – WordPress Moodle LMS Integration || Sell Moodle Courses via WooCommerce ===
 Contributors: dualcube
 Tags: Moodle Integration, LMS Integration, WordPress LMS, e-Learning, Moodle Connector
 Donate link: https://dualcube.com/?utm_source=wporg&utm_medium=plugindescription&utm_campaign=moowoodlewporg
