@@ -1,7 +1,7 @@
 {
     "name": "moowoodle",
     "displayName": "moowoodle",
-    "version": "3.3.1",
+    "version": "3.3.2",
     "description": "=== Moowoodle ===",
     "main": "index.js",
     "engines": {

@@ -1,11 +1,11 @@
-=== MooWoodle - Moodle WordPress Integration & WordPress LMS Bridge ===
+=== MooWoodle – WordPress Moodle LMS Integration || Sell Moodle Courses via WooCommerce ===
 Contributors: dualcube
 Tags: Moodle Integration, LMS Integration, WordPress LMS, e-Learning, Moodle Connector
 Donate link: https://dualcube.com/?utm_source=wporg&utm_medium=plugindescription&utm_campaign=moowoodlewporg
 Requires at least: 6.0.0
-Tested up to: 6.8.1
+Tested up to: 6.8.2
 Requires PHP: 8.0
-Stable tag: 3.3.1
+Stable tag: 3.3.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -235,6 +235,10 @@ Ans: No, it's not a requirement. You have the flexibility to install both system
 13. Let user gift a course to another student
 
 == Changelog ==
+
+= 3.3.2 - 2025-07-18 =
+* Added     - Compatibility of WordPress 6.8.2.
+* Fixed     - Multiple emails were being sent when a user logged into WordPress.
 
 = 3.3.1 - 2025-07-16 =
 * Added     - Compatibility of WooCommerce 10.0.2.
