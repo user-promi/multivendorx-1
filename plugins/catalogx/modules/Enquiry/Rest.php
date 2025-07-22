@@ -104,7 +104,7 @@ class Rest {
 
         // Prepare data for insertion.
         $data = array(
-            'product_info'           => wp_json_encode( $product_info ),
+            'product_info'           => serialize( $product_info ),
             'user_id'                => $user->ID,
             'user_name'              => $customer_name ?? $user_name,
             'user_email'             => $customer_email ?? $user_email,
