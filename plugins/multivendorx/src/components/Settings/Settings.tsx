@@ -122,10 +122,7 @@ const faqs = [
         open: false,
     },
     {
-        question: __(
-            'Does Notifima support product variations?',
-            'notifima'
-        ),
+        question: __( 'Does Notifima support product variations?', 'notifima' ),
         answer: __(
             'Yes, product variations are fully supported and editable from the Inventory Manager. Notifima handles variable products with ease and uses an expandable feature to make managing variations clear and straightforward.',
             'notifima'
