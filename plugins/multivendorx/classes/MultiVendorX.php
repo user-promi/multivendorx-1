@@ -117,6 +117,8 @@ final class MultiVendorX {
         $this->container['setting']         = new Setting();
         $this->container['admin']           = new Admin();
         $this->container['frontendScripts'] = new FrontendScripts();
+        $this->container['shortcode']       = new Shortcode();
+        $this->container['frontend']        = new Frontend();
         $this->container['filters']         = new Deprecated\DeprecatedFilterHooks();
         $this->container['actions']         = new Deprecated\DeprecatedActionHooks();
     }

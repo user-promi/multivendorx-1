@@ -158,6 +158,9 @@ class FrontendScripts {
 	 */
     public static function register_scripts() {
         $version          = MultiVendorX()->version;
+        self::enqueue_external_scripts();
+        $index_asset      = include plugin_dir_path( __FILE__ ) . '../' . self::get_build_path_name() . 'js/index.asset.php';
+        $component_asset  = include plugin_dir_path( __FILE__ ) . '../' . self::get_build_path_name() . 'js/components.asset.php';
         $register_scripts = apply_filters(
             'multivendorx_register_scripts',
             array(
@@ -166,6 +169,16 @@ class FrontendScripts {
 				// 	'deps'        => array( 'jquery', 'wp-element', 'wp-components' ),
 				// 	'version'     => $version, 
 				// ),
+                'multivendorx-dashboard-script'      => array(
+					'src'         => MultiVendorX()->plugin_url . self::get_build_path_name() . 'js/index.js',
+					'deps'        => $index_asset['dependencies'],
+					'version'     => $version,
+				),
+				'multivendorx-dashboard-components-script' => array(
+					'src'         => MultiVendorX()->plugin_url . self::get_build_path_name() . 'js/components.js',
+					'deps'        => $component_asset['dependencies'],
+					'version'     => $version,
+				),
 			)
         );
         foreach ( $register_scripts as $name => $props ) {
