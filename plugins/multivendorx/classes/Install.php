@@ -29,7 +29,7 @@ class Install {
         } else {
             $this->do_migration();
         }
-
+        $this->plugin_create_pages();
         update_option( 'dc_product_vendor_plugin_db_version', MULTIVENDORX_PLUGIN_VERSION );
 
         do_action('multivendorx_updated');
@@ -48,6 +48,30 @@ class Install {
      * @return void
      */
     private static function create_database_table() {
+        global $wpdb;
+
+        // Get the charset collate for the tables.
+        $collate = $wpdb->get_charset_collate();
+
+        $sql_commission = "CREATE TABLE IF NOT EXISTS `" . $wpdb->prefix . "multivendorx_commission` (
+            `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+            `order_id` bigint(20) NOT NULL,
+            `vendor_id` bigint(20) NOT NULL,
+            `commission_amount` float(20, 2) NOT NULL DEFAULT 0,
+            `shipping` float(20, 2) NOT NULL DEFAULT 0,
+            `tax` float(20, 2) NOT NULL DEFAULT 0,
+            `include_coupon` tinyint(1) NOT NULL,
+            `include_shipping` tinyint(1) NOT NULL,
+            `include_tax` tinyint(1) NOT NULL,
+            `commission_total` float(20, 2) NOT NULL DEFAULT 0,
+            `commission_refunded` float(20, 2) NOT NULL DEFAULT 0,
+            `paid_status` varchar(20) NOT NULL,
+            `commission_note`  longtext NULL,
+            `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (`ID`)
+        ) $collate;";
+
+        dbDelta( $sql_commission );
     }
 
     /**
@@ -56,5 +80,45 @@ class Install {
      * @return void
      */
     private function set_default_settings() {
+    }
+
+    public function plugin_create_pages() {
+
+        $option_value = get_option( 'mvx_product_vendor_vendor_dashboard_page_id' );
+
+        if ( $option_value > 0 && get_post( $option_value ) ) {
+            return;
+        }
+
+        $page_found = get_posts(
+            array(
+				'name'        => 'dashboard',
+				'post_status' => 'publish',
+				'post_type'   => 'page',
+				'fields'      => 'ids',
+				'numberposts' => 1,
+            )
+        );
+
+        if ( $page_found ) {
+            if ( ! $option_value ) {
+                update_option( 'mvx_product_vendor_vendor_dashboard_page_id', $page_found[0] );
+            }
+            return;
+        }
+
+        $page_data = array(
+            'post_status'    => 'publish',
+            'post_type'      => 'page',
+            'post_author'    => 1,
+            'post_name'      => 'dashboard',
+            'post_title'     => __( 'Vendor Dashboard', 'multivendorx' ),
+            'post_content'   => '[multivendorx_vendor_dashboard]',
+            'comment_status' => 'closed',
+        );
+
+        $page_id = wp_insert_post( $page_data );
+
+        update_option( 'notifima_subscription_confirmation_page', $page_id );
     }
 }

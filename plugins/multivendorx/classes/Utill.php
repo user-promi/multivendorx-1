@@ -33,7 +33,7 @@ class Utill {
 
         global $wp_filesystem;
 
-        $log_file = MultiVendorX()->plugin_path . 'log/multivendorx.text';
+        $log_file = MultiVendorX()->plugin_path . 'log/multivendorx.txt';
         $message  = wp_json_encode( $data, JSON_PRETTY_PRINT ) . "\n---------------------------\n";
 
         $existing = $wp_filesystem->exists( $log_file ) ? $wp_filesystem->get_contents( $log_file ) : '';
@@ -63,7 +63,7 @@ class Utill {
         $theme_template = get_stylesheet_directory() . '/dc-woocommerce-product-vendor/' . $template_name;
 
         // Use the theme template if it exists, otherwise use the plugin template.
-        $located = file_exists( $theme_template ) ? $theme_template : MVX()->plugin_path . 'templates/' . $template_name;
+        $located = file_exists( $theme_template ) ? $theme_template : MultiVendorX()->plugin_path . 'templates/' . $template_name;
 
         // Load the template.
         load_template( $located, false, $args );
