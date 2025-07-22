@@ -10,7 +10,6 @@ const Route = () => {
             { currentTab.get( 'tab' ) === 'settings' && (
                 <Settings id={ 'settings' } />
             ) }
-
         </>
     );
 };

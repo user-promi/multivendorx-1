@@ -11,8 +11,7 @@ module.exports = {
         wcSettings: true,
         es6: true,
     },
-    rules: {
-    },
+    rules: {},
     parserOptions: {
         ecmaVersion: 8,
         ecmaFeatures: {
