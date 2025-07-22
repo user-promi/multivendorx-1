@@ -103,7 +103,7 @@ class Admin {
                         }
                         padding: 5px 0;
                     </style>
-                    <div style="margin-left: -12px;" class="upgrade-to-pro"><i class="dashicons dashicons-awards"></i>' . esc_html__( 'Upgrade to Pro', 'notifima' ) . '</div> ',
+                    <div style="margin-left: -12px;" class="upgrade-to-pro"><i class="dashicons dashicons-awards"></i>' . esc_html__( 'Upgrade to Pro', 'multivendorx' ) . '</div> ',
                     'manage_options',
                     '',
                     array( self::class, 'handle_external_redirects' )

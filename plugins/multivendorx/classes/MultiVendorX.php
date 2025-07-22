@@ -116,6 +116,7 @@ final class MultiVendorX {
         $this->container['util']            = new Utill();
         $this->container['setting']         = new Setting();
         $this->container['admin']           = new Admin();
+        $this->container['restapi']         = new RestAPI();
         $this->container['frontendScripts'] = new FrontendScripts();
         $this->container['shortcode']       = new Shortcode();
         $this->container['frontend']        = new Frontend();

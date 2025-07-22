@@ -294,11 +294,20 @@ class FrontendScripts {
 
 		$tabs_names = apply_filters(
 			'multivendorx_additional_tabs_names',
-			array( 'general', 'vendor-registration-form', 'seller-dashboard' )
+            array(
+                'general',
+                'vendor-registration-form',
+                'seller-dashboard',
+                'store',
+                'products',
+                'products-capability',
+                'commissions',
+            )
 		);
 
         foreach ( $tabs_names as $tab_name ) {
-            $settings_databases_value[ $tab_name ] = MultiVendorX()->setting->get_option( 'multivendorx_' . $tab_name . '_settings' );
+            $option_name                           = str_replace( '-', '_', 'multivendorx_' . $tab_name . '_settings' );
+            $settings_databases_value[ $tab_name ] = MultiVendorX()->setting->get_option( $option_name );
         }
 
         $pages = get_pages();

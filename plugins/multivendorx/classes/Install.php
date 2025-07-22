@@ -71,7 +71,7 @@ class Install {
             PRIMARY KEY (`ID`)
         ) $collate;";
 
-        dbDelta( $sql_commission );
+        // dbDelta( $sql_commission );
     }
 
     /**
