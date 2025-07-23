@@ -11,3 +11,4 @@ bin/install-wp-tests.sh
 dist
 .wireit
 .cache
+!Vendor
