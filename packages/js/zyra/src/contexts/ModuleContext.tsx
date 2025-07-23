@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import axios from 'axios';
+import { getApiLink } from '../utils/apiService';
 
 // Zustand store
 type ModuleContextType = {
@@ -23,11 +24,12 @@ export const useModules = create<ModuleContextType>((set) => ({
 export async function initializeModules(
 	appLocalizer: Record<string, any>,
 	pluginName: string,
-	pluginSlug: string
+	pluginSlug: string,
+	apiLink: string
 ): Promise<void> {
 	if (localStorage.getItem(`force_${pluginName}_context_reload`) === 'true') {
 		try {
-			const response = await axios.get(`${appLocalizer.apiUrl}/catalogx/v1/modules`, {
+			const response = await axios.get(getApiLink(appLocalizer, apiLink), {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			});
 
