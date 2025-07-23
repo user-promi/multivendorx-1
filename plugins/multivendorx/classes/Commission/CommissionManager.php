@@ -2,6 +2,7 @@
 
 namespace MultiVendorX\Commission;
 
+use MultiVendorX\Utill;
 use MultiVendorX\Vendor\VendorUtil as VendorUtil;
 
 defined('ABSPATH') || exit;
@@ -139,9 +140,9 @@ class CommissionManager {
             $format = [ "%d", "%d", "%d", "%d", "%d", "%f", "%f", "%f", "%f", "%s" ];
 
             if ( ! $commission_id ) {
-                $commission_id = $wpdb->insert( $wpdb->prefix . 'multivendorx_commission', $data, $format );
+                $commission_id = $wpdb->insert( $wpdb->prefix . Utill::TABLES['commission'], $data, $format );
             } else {
-                $wpdb->update( $wpdb->prefix . 'multivendorx_commission', $data, ['ID' => $commission_id], $format );
+                $wpdb->update( $wpdb->prefix . Utill::TABLES['commission'], $data, ['ID' => $commission_id], $format );
             }
 
             return $commission_id;

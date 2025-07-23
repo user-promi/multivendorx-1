@@ -53,7 +53,7 @@ class Install {
         // Get the charset collate for the tables.
         $collate = $wpdb->get_charset_collate();
 
-        $sql_commission = "CREATE TABLE IF NOT EXISTS `" . $wpdb->prefix . "multivendorx_commission` (
+        $sql_commission = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}" . Utill::TABLES['commission'] . "` (
             `ID` bigint(20) NOT NULL AUTO_INCREMENT,
             `order_id` bigint(20) NOT NULL,
             `vendor_id` bigint(20) NOT NULL,

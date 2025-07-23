@@ -25,7 +25,7 @@ class CommissionUtil {
     public static function get_commission_db( $id ) {
         global $wpdb;
         $commission = $wpdb->get_row(
-            $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}multivendorx_commission WHERE ID = %d", $id )
+            $wpdb->prepare( "SELECT * FROM `" . $wpdb->prefix . Utill::TABLES['commission'] . "` WHERE ID = %d", $id )
         );
         return $commission ?? new \stdClass();
     }
@@ -93,7 +93,7 @@ class CommissionUtil {
         }
 
         // Preaper query
-        $query = "SELECT {$fields} FROM {$wpdb->prefix}multivendorx_commission";
+        $query = "SELECT {$fields} FROM `" . $wpdb->prefix . Utill::TABLES['commission'] . "`";
 
         if ( !empty( $predicate ) ) {
             $query .= " WHERE " . implode( " AND ", $predicate );

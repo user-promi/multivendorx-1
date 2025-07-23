@@ -19,6 +19,15 @@ defined( 'ABSPATH' ) || exit;
 class Utill {
 
     /**
+     * Constent holds table name
+     *
+     * @var array
+     */
+    const TABLES = array(
+        'commission' => 'multivendorx_commission',
+    );
+
+    /**
      * Function to console and debug errors.
      *
      * @param mixed $data The data to log. Can be a string, array, or object.
