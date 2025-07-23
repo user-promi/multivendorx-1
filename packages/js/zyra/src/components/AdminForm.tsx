@@ -1052,7 +1052,12 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                             keyName={ inputField.key }
                             options={
                                 Array.isArray( inputField.options )
-                                    ? inputField.options
+                                    ? inputField.options.map( ( opt ) => ( {
+                                          ...opt,
+                                          value: String( opt.value ),
+                                          label: opt.label ?? '',
+                                          name: opt.name ?? '',
+                                      } ) )
                                     : []
                             }
                             proSetting={ isProSetting(
