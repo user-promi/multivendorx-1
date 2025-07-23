@@ -54,7 +54,7 @@ const App = () => {
         });
 
     useEffect(() => {
-        initializeModules(appLocalizer, 'catalogx', 'free');
+        initializeModules(appLocalizer, 'catalogx', 'free', 'modules');
     }, []);
 
     return (
