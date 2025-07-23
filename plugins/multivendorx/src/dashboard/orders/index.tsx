@@ -1,10 +1,6 @@
-import React from 'react';
-import { getSubtabs } from '../getSubTab';
-import SubtabWrapper from '../subtab';
-
 const Orders = () => {
-    const subtabs = getSubtabs( 'orders' );
-    return <SubtabWrapper tabKey="orders" subtabs={ subtabs } />;
+   return <div>Loading Orders...</div>;
+
 };
 
 export default Orders;

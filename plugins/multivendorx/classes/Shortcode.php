@@ -6,7 +6,7 @@ namespace MultiVendorX;
  * MultiVendorX Shortcode class
  *
  * @class 		Shortcode class
- * @version		6.0.0
+ * @version		PRODUCT_VERSION
  * @author 		MultivendorX
  */
 class Shortcode {

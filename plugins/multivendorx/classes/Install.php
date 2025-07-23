@@ -71,7 +71,12 @@ class Install {
             PRIMARY KEY (`ID`)
         ) $collate;";
 
-        // dbDelta( $sql_commission );
+        // Include upgrade functions if not loaded.
+        if ( ! function_exists( 'dbDelta' ) ) {
+            require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+        }
+        
+        dbDelta( $sql_commission );
     }
 
     /**

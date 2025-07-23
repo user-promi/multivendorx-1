@@ -1,100 +1,121 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-interface TabDefinition {
-    tab: string;
-    label: string;
-    component: React.FC;
+interface Subtab {
+  subtab: string;
+  label: string;
+  component: React.FC;
 }
 
-// Dynamically load all components from each endpoint folder
+interface TabDefinition {
+  tab: string;
+  label: string;
+  component: React.FC;
+  subtabs: Subtab[];
+}
+
+const capitalize = (str: string) =>
+  str.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+
 const getEndpoints = (): TabDefinition[] => {
-    const context = require.context(
-        './dashboard',
-        true,
-        /index\.(ts|tsx|js|jsx)$/
-    );
+  const tabs: Record<string, TabDefinition> = {};
 
-    return context
-        .keys()
-        .map( ( key ) => {
-            const match = key.match( /^\.\/([^\/]+)\/index\.(ts|tsx|js|jsx)$/ );
-            if ( ! match ) return null;
+  // Main tabs
+  const tabContext = require.context('./dashboard', true, /^\.\/[^/]+\/index\.(tsx|ts|js|jsx)$/);
+  tabContext.keys().forEach((key) => {
+    const [, tab] = key.match(/^\.\/([^/]+)\/index\.(tsx|ts|js|jsx)$/) || [];
+    if (!tab) return;
 
-            const tab = match[ 1 ];
-            const Component = context( key ).default;
+    tabs[tab] = {
+      tab,
+      label: capitalize(tab),
+      component: tabContext(key).default,
+      subtabs: [],
+    };
+  });
 
-            return {
-                tab,
-                label: tab.charAt( 0 ).toUpperCase() + tab.slice( 1 ),
-                component: Component,
-            };
-        } )
-        .filter( Boolean ) as TabDefinition[];
-};
+  // Subtabs
+  const subtabContext = require.context('./dashboard', true, /^\.\/[^/]+\/[^/]+\/index\.(tsx|ts|js|jsx)$/);
+  subtabContext.keys().forEach((key) => {
+    const [, tab, subtab] = key.match(/^\.\/([^/]+)\/([^/]+)\/index\.(tsx|ts|js|jsx)$/) || [];
+    if (!tab || !subtab || !tabs[tab]) return;
 
-const RouteRenderer: React.FC< {
-    currentTab: string;
-    endpoints: TabDefinition[];
-} > = ( { currentTab, endpoints } ) => {
-    const matched = endpoints.find( ( e ) => e.tab === currentTab );
-    const Component = matched?.component;
-    return Component ? <Component /> : <div>Invalid tab</div>;
+    tabs[tab].subtabs.push({
+      subtab,
+      label: capitalize(subtab),
+      component: subtabContext(key).default,
+    });
+  });
+
+  return Object.values(tabs);
 };
 
 const Dashboard: React.FC = () => {
-    const location = useLocation();
-    const navigate = useNavigate();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const endpoints = useMemo(getEndpoints, []);
 
-    const endpoints = useMemo( () => getEndpoints(), [] );
+  const query = new URLSearchParams(location.search);
+  const currentTab = query.get('tab') || endpoints[0]?.tab || '';
+  const currentSubtab = query.get('subtab') || '';
 
-    const getTabFromURL = () => {
-        const query = new URLSearchParams( location.search );
-        return query.get( 'tab' ) || ( endpoints[ 0 ]?.tab ?? '' );
-    };
+  const current = endpoints.find((e) => e.tab === currentTab);
+  const subtabs = current?.subtabs || [];
 
-    const [ currentTab, setCurrentTab ] = useState( getTabFromURL() );
+  const ActiveComponent =
+    subtabs.length === 0
+      ? current?.component
+      : subtabs.find((s) => s.subtab === currentSubtab)?.component || subtabs[0]?.component;
 
-    // Watch for tab changes in URL
-    useEffect( () => {
-        setCurrentTab( getTabFromURL() );
-    }, [ location.search, endpoints ] );
+  const updateQuery = (tab: string, subtab?: string) => {
+    query.set('tab', tab);
+    subtab ? query.set('subtab', subtab) : query.delete('subtab');
+    navigate(`?${query.toString()}`);
+  };
 
-    const handleTabClick = ( tab: string ) => {
-        navigate( `?tab=${ tab }` );
-    };
+  if (!current) return <div>No matching tab</div>;
 
-    if ( endpoints.length === 0 ) return <div>No endpoints found</div>;
+  return (
+    <div className="vendor-dashboard">
+      <ul className="dashboard-tabs">
+        {endpoints.map(({ tab, label, subtabs }) => (
+          <li key={tab} className={currentTab === tab ? 'current' : ''}>
+            <a
+              href={`?tab=${tab}`}
+              onClick={(e) => {
+                e.preventDefault();
+                updateQuery(tab);
+              }}
+            >
+              {label}
+            </a>
 
-    return (
-        <div className="vendor-dashboard">
-            <ul className="dashboard-tabs">
-                { endpoints.map( ( e ) => (
-                    <li
-                        key={ e.tab }
-                        className={ currentTab === e.tab ? 'current' : '' }
+            {tab === currentTab && subtabs.length > 0 && (
+              <ul className="subtabs">
+                {subtabs.map(({ subtab, label }) => (
+                  <li key={subtab} className={currentSubtab === subtab ? 'current' : ''}>
+                    <a
+                      href={`?tab=${tab}&subtab=${subtab}`}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        updateQuery(tab, subtab);
+                      }}
                     >
-                        <a
-                            href={ `?tab=${ e.tab }` }
-                            onClick={ ( eClick ) => {
-                                eClick.preventDefault();
-                                handleTabClick( e.tab );
-                            } }
-                        >
-                            { e.label }
-                        </a>
-                    </li>
-                ) ) }
-            </ul>
+                      {label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </li>
+        ))}
+      </ul>
 
-            <div className="tab-content">
-                <RouteRenderer
-                    currentTab={ currentTab }
-                    endpoints={ endpoints }
-                />
-            </div>
-        </div>
-    );
+      <div className="tab-content">
+        {ActiveComponent ? <ActiveComponent /> : <div>No component found</div>}
+      </div>
+    </div>
+  );
 };
 
 export default Dashboard;

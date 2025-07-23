@@ -68,4 +68,17 @@ class Utill {
         // Load the template.
         load_template( $located, false, $args );
     }
+
+
+    /**
+     * Utility function add aditional single quote in a string.
+     * @param   string $string
+     * @return  string
+     */
+    public static function add_single_quots( $string ) {
+        if ( is_string( $string) ) {
+            return "'$string'";
+        }
+        return $string;
+    }
 }
