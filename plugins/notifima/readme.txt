@@ -1,21 +1,6 @@
 === Notifima – WooCommerce Stock Manager, Inventory Management, Waitlist ===
 
 Contributors: wcmp
-Tags: stock manager, stock notification, waitlist, inventory management, out of stock
-Requires at least: 5.4
-Tested up to: 6.8.2
-Requires PHP: 8.0
-Stable tag: 3.0.4
-Donate link: https://multivendorx.com/donate/
-License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
-
-WooCommerce back-in-stock notifier and stock manager plugin. Manage inventory, enable waitlists, and send stock notifications automatically.
-
-== Description ==
-=== Notifima – WooCommerce Stock Manager, Inventory Management, Waitlist ===
-
-Contributors: wcmp
 Tags: stock manager, back-in-stock notifier, waitlist, inventory management, out of stock notifictaion
 Requires at least: 5.4
 Tested up to: 6.8.1
