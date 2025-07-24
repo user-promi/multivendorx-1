@@ -15,7 +15,6 @@ import BlockText from './BlockText';
 import ButtonCustomizer from './ButtonCustomiser';
 import FormCustomizer from './NotifimaFormCustomizer';
 import FreeProFormCustomizer from './FreeProFormCustomizer';
-import FromBuilder from './RegistrationForm';
 import CatalogCustomizer from './CatalogCustomizer';
 import MultiCheckboxTable from './MultiCheckboxTable';
 import MergeComponent from './MergeComponent';
@@ -124,7 +123,7 @@ interface InputField {
         | 'log'
         | 'checkbox-custom-img'
         | 'api-connect'
-		    | 'form-builder';
+		| 'form-builder'
         | 'nested';
     desc?: string;
     placeholder?: string;
