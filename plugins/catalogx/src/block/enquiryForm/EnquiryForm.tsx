@@ -1,5 +1,5 @@
 import { useState } from 'react';
-// import './EnquiryForm.scss';
+import './EnquiryForm.scss';
 import FreeForm from './FreeForm';
 import { FormViewer } from 'zyra';
 import axios from 'axios';

@@ -1,39 +1,39 @@
-@font-face {
-    font-family: 'AdminLibrary';
-    src:  url('../../style/fonts/AdminLibrary.eot?r5ke70');
-    src:  url('../../style/fonts/AdminLibrary.eot?r5ke70#iefix') format('embedded-opentype'),
-      url('../../style/fonts/AdminLibrary.ttf?r5ke70') format('truetype'),
-      url('../../style/fonts/AdminLibrary.woff?r5ke70') format('woff'),
-      url('../../style/fonts/AdminLibrary.svg?r5ke70#AdminLibrary') format('svg');
-    font-weight: normal;
-    font-style: normal;
-    font-display: block;
-  }
-  [class^="adminlib-"], [class*=" adminlib-"] {
-    /* use !important to prevent issues with browser extensions that change fonts */
-    font-family: 'AdminLibrary' !important;
-    speak: never;
-    font-style: normal;
-    font-weight: normal;
-    font-variant: normal;
-    text-transform: none;
-    line-height: 1;
-    /* Enable Ligatures ================ */
-    letter-spacing: 0;
-    -webkit-font-feature-settings: "liga";
-    -moz-font-feature-settings: "liga=1";
-    -moz-font-feature-settings: "liga";
-    -ms-font-feature-settings: "liga" 1;
-    font-feature-settings: "liga";
-    -webkit-font-variant-ligatures: discretionary-ligatures;
-    font-variant-ligatures: discretionary-ligatures;
-    /* Better Font Rendering =========== */
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-  .adminlib-cross:before {
-    content: "\e916";
-  }
+// @font-face {
+//     font-family: 'AdminLibrary';
+//     src:  url('../../style/fonts/AdminLibrary.eot?r5ke70');
+//     src:  url('../../style/fonts/AdminLibrary.eot?r5ke70#iefix') format('embedded-opentype'),
+//       url('../../style/fonts/AdminLibrary.ttf?r5ke70') format('truetype'),
+//       url('../../style/fonts/AdminLibrary.woff?r5ke70') format('woff'),
+//       url('../../style/fonts/AdminLibrary.svg?r5ke70#AdminLibrary') format('svg');
+//     font-weight: normal;
+//     font-style: normal;
+//     font-display: block;
+//   }
+//   [class^="adminlib-"], [class*=" adminlib-"] {
+//     /* use !important to prevent issues with browser extensions that change fonts */
+//     font-family: 'AdminLibrary' !important;
+//     speak: never;
+//     font-style: normal;
+//     font-weight: normal;
+//     font-variant: normal;
+//     text-transform: none;
+//     line-height: 1;
+//     /* Enable Ligatures ================ */
+//     letter-spacing: 0;
+//     -webkit-font-feature-settings: "liga";
+//     -moz-font-feature-settings: "liga=1";
+//     -moz-font-feature-settings: "liga";
+//     -ms-font-feature-settings: "liga" 1;
+//     font-feature-settings: "liga";
+//     -webkit-font-variant-ligatures: discretionary-ligatures;
+//     font-variant-ligatures: discretionary-ligatures;
+//     /* Better Font Rendering =========== */
+//     -webkit-font-smoothing: antialiased;
+//     -moz-osx-font-smoothing: grayscale;
+//   }
+//   .adminlib-cross:before {
+//     content: "\e916";
+//   }
 .catalogx-modal {
     &.popup_enable {
         margin: 0 0;

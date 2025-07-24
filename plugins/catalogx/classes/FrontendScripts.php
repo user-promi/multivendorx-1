@@ -215,12 +215,12 @@ class FrontendScripts {
 					'version' => $version,
 				),
 				'catalogx-enquiry-form-style' => array(
-					'src'     => CatalogX()->plugin_url . self::get_build_path_name() . 'js/block/enquiryForm/index.css',
+					'src'     => CatalogX()->plugin_url . self::get_build_path_name() . 'styles/block/enquiryForm/index.css',
 					'deps'    => array(),
 					'version' => $version,
 				),
 				'catalogx-quote-cart-style'   => array(
-					'src'     => CatalogX()->plugin_url . self::get_build_path_name() . 'js/block/quote-cart/index.css',
+					'src'     => CatalogX()->plugin_url . self::get_build_path_name() . 'styles/block/quote-cart/index.css',
 					'deps'    => array(),
 					'version' => $version,
 				),
@@ -276,7 +276,7 @@ class FrontendScripts {
             'admin_catalogx_register_styles',
             array(
 				'catalogx-admin-style'      => array(
-					'src'     => CatalogX()->plugin_url . self::get_build_path_name() . 'styles/index.css',
+					'src'     => CatalogX()->plugin_url . self::get_build_path_name() . 'styles/woocommerce-catalog-enquiry-frontend.min.css',
 					'deps'    => array(),
 					'version' => $version,
 				),

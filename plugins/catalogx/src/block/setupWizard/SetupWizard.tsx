@@ -3,7 +3,7 @@ import Intro from './steps/Intro';
 import Modules from './steps/Module';
 import Enquiry from './steps/Enquiry';
 import Quote from './steps/Quote';
-// import './SetupWizard.scss';
+import './SetupWizard.scss';
 import Logo from '../../assets/images/Brand.png';
 
 const SetupWizard = () => {
