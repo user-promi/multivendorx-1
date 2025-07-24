@@ -15,6 +15,7 @@ import BlockText from './BlockText';
 import ButtonCustomizer from './ButtonCustomiser';
 import FormCustomizer from './NotifimaFormCustomizer';
 import FreeProFormCustomizer from './FreeProFormCustomizer';
+import FromBuilder from './RegistrationForm';
 import CatalogCustomizer from './CatalogCustomizer';
 import MultiCheckboxTable from './MultiCheckboxTable';
 import MergeComponent from './MergeComponent';
@@ -37,6 +38,7 @@ const LazyMapsInput = lazy( () => import( './MapsInput' ) );
 import GoogleMap from './GoogleMap';
 import Popup, { PopupProps } from './Popup';
 import '../styles/web/AdminForm.scss';
+import NestedComponent from './NestedComponent';
 
 // Types
 declare const wp: any;
@@ -55,7 +57,7 @@ interface DependentCondition {
     value?: string | number | boolean;
 }
 interface MultiNumOption {
-    key?: string;
+    key: string;
     value: string | number;
     label?: string;
     name?: string;
@@ -120,7 +122,9 @@ interface InputField {
         | 'dropdown-mapping'
         | 'log'
         | 'checkbox-custom-img'
-        | 'api-connect';
+        | 'api-connect'
+        | 'nested'
+        | 'form-builder';
     desc?: string;
     placeholder?: string;
     inputLabel?: string;
@@ -182,6 +186,15 @@ interface InputField {
     Lat?: number;
     Lng?: number;
     center?: Center;
+    nestedFields?: {
+        key: string;
+        type: 'number' | 'select';
+        label: string;
+        placeholder?: string;
+        options?: { value: string; label: string }[];
+    }[];
+    addButtonLabel?: string;
+    deleteButtonLabel?: string;
 }
 
 type Center = {
@@ -1037,7 +1050,16 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                             }
                             name={ inputField.name }
                             keyName={ inputField.key }
-                            options={ Array.isArray( value ) ? value : [] }
+                            options={
+                                Array.isArray( inputField.options )
+                                    ? inputField.options.map( ( opt ) => ( {
+                                          ...opt,
+                                          value: String( opt.value ),
+                                          label: opt.label ?? '',
+                                          name: opt.name ?? '',
+                                      } ) )
+                                    : []
+                            }
                             proSetting={ isProSetting(
                                 inputField.proSetting ?? false
                             ) }
@@ -1794,6 +1816,56 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                             }
                             settingChanged={ settingChanged }
                             apiLink={ String( inputField.apiLink ) } // fetch api
+                        />
+                    );
+                    break;
+
+                case 'form-builder':
+                    input = (
+                        <FromBuilder
+                            name={ inputField.key }
+                            proSettingChange={ () =>
+                                proSettingChanged(
+                                    inputField.proSetting ?? false
+                                )
+                            }
+                            onChange={ ( value ) => {
+                                settingChanged.current = true;
+                                updateSetting( inputField.key, value );
+                            } }
+                            setting={ setting }
+                        />
+                    );
+                    break;
+                case 'nested':
+                    input = (
+                        <NestedComponent
+                            key={ inputField.key }
+                            id={ inputField.key }
+                            label={ inputField.label }
+                            fields={ inputField.nestedFields ?? [] }
+                            value={ value }
+                            addButtonLabel={ inputField.addButtonLabel }
+                            deleteButtonLabel={ inputField.deleteButtonLabel }
+                            onChange={ ( val: any ) => {
+                                if (
+                                    hasAccess(
+                                        inputField.proSetting ?? false,
+                                        String(
+                                            inputField.moduleEnabled ?? ''
+                                        ),
+                                        String(
+                                            inputField.dependentSetting ?? ''
+                                        ),
+                                        String(
+                                            inputField.dependentPlugin ?? ''
+                                        )
+                                    )
+                                ) {
+                                    updateSetting( inputField.key, val );
+                                    settingChanged.current = true;
+                                }
+                            } }
                         />
                     );
                     break;
