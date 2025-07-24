@@ -23,7 +23,7 @@ interface DisplayButtonProp {
     wraperClass?: string;
     children?: React.ReactNode;
     onClick?: ( e: React.MouseEvent< HTMLButtonElement > ) => void;
-	btnType?: 'submit' | 'reset' | 'button';
+    btnType?: 'submit' | 'reset' | 'button';
 }
 
 const DisplayButton: React.FC< DisplayButtonProp > = ( {
@@ -31,7 +31,7 @@ const DisplayButton: React.FC< DisplayButtonProp > = ( {
     wraperClass,
     children,
     onClick,
-	btnType = 'submit',
+    btnType = 'submit',
 } ) => {
     const style = {
         border: `${ customStyle?.button_border_size ?? 1 }px solid ${

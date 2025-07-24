@@ -259,13 +259,13 @@ class Installer {
             }
 
             $course_data = array(
-                'moodle_course_id' => is_array($all_meta['moodle_course_id'] ?? null) ? reset($all_meta['moodle_course_id']) : 0,
-                'shortname'        => is_array($all_meta['_course_short_name'] ?? null) ? reset($all_meta['_course_short_name']) : '',
-                'category_id'      => is_array($all_meta['_category_id'] ?? null) ? reset($all_meta['_category_id']) : 0,
-                'fullname'         => sanitize_text_field($course->post_title),
-                'product_id'       => is_array($all_meta['linked_product_id'] ?? null) ? reset($all_meta['linked_product_id']) : 0,
-                'startdate'        => is_array($all_meta['_course_startdate'] ?? null) ? reset($all_meta['_course_startdate']) : 0,
-                'enddate'          => is_array($all_meta['_course_enddate'] ?? null) ? reset($all_meta['_course_enddate']) : 0,
+                'moodle_course_id' => is_array( $all_meta['moodle_course_id'] ?? null ) ? reset( $all_meta['moodle_course_id'] ) : 0,
+                'shortname'        => is_array( $all_meta['_course_short_name'] ?? null ) ? reset( $all_meta['_course_short_name'] ) : '',
+                'category_id'      => is_array( $all_meta['_category_id'] ?? null ) ? reset( $all_meta['_category_id'] ) : 0,
+                'fullname'         => sanitize_text_field( $course->post_title ),
+                'product_id'       => is_array( $all_meta['linked_product_id'] ?? null ) ? reset( $all_meta['linked_product_id'] ) : 0,
+                'startdate'        => is_array( $all_meta['_course_startdate'] ?? null ) ? reset( $all_meta['_course_startdate'] ) : 0,
+                'enddate'          => is_array( $all_meta['_course_enddate'] ?? null ) ? reset( $all_meta['_course_enddate'] ) : 0,
             );
 
             $new_course_id = \MooWoodle\Core\Course::update_course_information( $course_data );

@@ -1,10 +1,12 @@
 <?php
 /**
-* Block class file.
-*
-* @package MooWoodle
-*/
+ * Block class file.
+ *
+ * @package MooWoodle
+ */
+
 namespace MooWoodle;
+
 use MooWoodle\FrontendScripts;
 
 defined( 'ABSPATH' ) || exit;

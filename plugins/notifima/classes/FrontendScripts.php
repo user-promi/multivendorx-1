@@ -184,7 +184,7 @@ class FrontendScripts {
             'notifima_register_styles',
             array(
 				'notifima-frontend-style' => array(
-					'src'     => Notifima()->plugin_url . 'assets/styles/' . self::get_script_name( 'frontend' ) . '.css',
+					'src'     => Notifima()->plugin_url . 'assets/styles/' . self::get_script_name( 'frontend' ) . '.scss',
 					'deps'    => array(),
 					'version' => $version,
 				),
@@ -263,7 +263,7 @@ class FrontendScripts {
 					'version' => $version,
 				),
 				'notifima-admin-style'      => array(
-					'src'     => Notifima()->plugin_url . 'assets/styles/' . self::get_script_name( 'admin' ) . '.css',
+					'src'     => Notifima()->plugin_url . 'assets/styles/' . self::get_script_name( 'admin' ) . '.scss',
 					'deps'    => array(),
 					'version' => $version,
 				),
