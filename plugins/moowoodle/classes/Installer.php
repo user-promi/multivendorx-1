@@ -173,6 +173,14 @@ class Installer {
         if ( version_compare( $previous_version, '3.3.1', '<' ) ) {
             self::migrate_courses_3_3_0();
         }
+
+        if ( version_compare( $previous_version, '3.3.3', '<' ) ) {
+            $general_settings = get_option( 'moowoodle_general_settings', array() );
+            unset( $general_settings['moodle_timeout'] );
+            unset( $general_settings['moowoodle_adv_log'] );
+
+            update_option( 'moowoodle_general_settings', $general_settings );
+        }
     }
 
     /**

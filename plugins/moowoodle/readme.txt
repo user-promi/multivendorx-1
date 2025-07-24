@@ -5,7 +5,7 @@ Donate link: https://dualcube.com/?utm_source=wporg&utm_medium=plugindescription
 Requires at least: 6.0.0
 Tested up to: 6.8.2
 Requires PHP: 8.0
-Stable tag: 3.3.2
+Stable tag: 3.3.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
