@@ -25,7 +25,7 @@ const Quote = (props: any) => {
 
         axios({
             method: 'post',
-            url: getApiLink('settings'),
+            url: getApiLink(appLocalizer, 'settings'),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
             data,
         }).then(() => {
