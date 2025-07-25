@@ -129,7 +129,6 @@ class Admin {
 			FrontendScripts::enqueue_script( 'moowoodle-components-script' );
 			FrontendScripts::enqueue_script( 'moowoodle-admin-script' );
 			FrontendScripts::enqueue_style( 'moowoodle-components-style' );
-			FrontendScripts::enqueue_style( 'moowoodle-admin-style' );
 			FrontendScripts::localize_scripts( 'moowoodle-admin-script' );
 		}
 	}
