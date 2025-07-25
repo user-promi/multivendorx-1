@@ -239,17 +239,20 @@ class FrontendScripts {
             array(
 				'moowoodle-admin-style'       => array(
 					'src'     => MooWoodle()->plugin_url . self::get_build_path_name() . 'styles/index.css',
+					'path'    => MooWoodle()->plugin_path . self::get_build_path_name() . 'styles/index.css',
 					'deps'    => array(),
 					'version' => $version,
 				),
 				'moowoodle-components-style'  => array(
 					'src'     => MooWoodle()->plugin_url . self::get_build_path_name() . 'styles/components.css',
+					'path'    => MooWoodle()->plugin_path . self::get_build_path_name() . 'styles/components.css',
 					'deps'    => array(),
 					'version' => $version,
 				),
 
 				'moowoodle-product-tab-style' => array(
 					'src'     => MooWoodle()->plugin_url . 'assets/styles/' . self::get_script_name( 'product-tab' ) . '.scss',
+					'path'    => MooWoodle()->plugin_path . 'assets/styles/' . self::get_script_name( 'product-tab' ) . '.scss',
 					'deps'    => array(),
 					'version' => $version,
 				),
@@ -257,7 +260,9 @@ class FrontendScripts {
         );
 
 		foreach ( $register_styles as $name => $props ) {
-			self::register_style( $name, $props['src'], $props['deps'], $props['version'] );
+			if ( isset($props['path']) && file_exists($props['path']) ) {
+				self::register_style( $name, $props['src'], $props['deps'], $props['version'] );
+			}
 		}
 	}
 
