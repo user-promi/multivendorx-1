@@ -32,7 +32,7 @@ class MultiVendorX_REST_Settings_Controller extends \WP_REST_Controller {
 
 
     // POST permission
-    public function update_item_permissions_check() {
+    public function update_item_permissions_check($request) {
         return current_user_can( 'manage_options' );
     }
 

@@ -122,7 +122,8 @@ final class MultiVendorX {
         $this->container['filters']         = new Deprecated\DeprecatedFilterHooks();
         $this->container['actions']         = new Deprecated\DeprecatedActionHooks();
         $this->container['commission']      = new Commission\CommissionManager();
-        $this->container['commission']      = new RestAPI\Rest();
+        $this->container['rest']            = new RestAPI\Rest();
+        $this->container['payments']        = new Payments\Payments();
     }
 
     /**

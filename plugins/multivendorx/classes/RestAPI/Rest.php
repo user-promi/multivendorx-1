@@ -4,6 +4,7 @@ namespace MultiVendorX\RestAPI;
 
 use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Orders_Controller;
 use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Settings_Controller;
+use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Dashboard_Controller;
 
 defined('ABSPATH') || exit;
 
@@ -31,6 +32,7 @@ class Rest {
         return array(
 			'orders'    => MultiVendorX_REST_Orders_Controller::class,
 			'settings'  => MultiVendorX_REST_Settings_Controller::class,
+            'dashboard' => MultiVendorX_REST_Dashboard_Controller::class
 		);
     }
 }

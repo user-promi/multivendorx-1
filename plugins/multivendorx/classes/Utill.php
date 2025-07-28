@@ -25,6 +25,9 @@ class Utill {
      */
     const TABLES = array(
         'commission' => 'multivendorx_commission',
+        'store' => 'multivendorx_store',
+        'store_users' => 'multivendorx_store_users',
+        'store_social' => 'multivendorx_store_social',
     );
 
     /**

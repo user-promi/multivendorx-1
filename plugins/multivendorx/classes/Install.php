@@ -71,12 +71,63 @@ class Install {
             PRIMARY KEY (`ID`)
         ) $collate;";
 
+        $sql_store = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}" . Utill::TABLES['store'] . "` (
+            `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+            `status` varchar(20) NOT NULL,
+            `page_title` varchar(20) NOT NULL,
+            `page_slug` varchar(20) NOT NULL,
+            `description` varchar(100) NOT NULL,
+            `address_1` varchar(100) NOT NULL,
+            `address_2` varchar(100) NOT NULL,
+            `city` varchar(20) NOT NULL,
+            `postcode` varchar(20) NOT NULL,
+            `country` varchar(50) NOT NULL,
+            `country_code` varchar(20) NOT NULL,
+            `state` varchar(50) NOT NULL,
+            `state_code` varchar(20) NOT NULL,
+            `phone` bigint(20) NOT NULL,
+            `commission` float(20, 2) NOT NULL DEFAUTL 0,
+            `location` varchar(50) NOT NULL,
+            `lat` varchar(50) NOT NULL,
+            `lng` varchar(50) NOT NULL,
+            `image` varchar(50) NOT NULL,
+            `banner` varchar(50) NOT NULL,
+            `banner_type` varchar(50) NOT NULL,
+            `video` varchar(50) NOT NULL,
+            `slider` varchar(50) NOT NULL,
+            `profile_image` varchar(50) NOT NULL,
+            PRIMARY KEY (`ID`)
+        ) $collate;";
+
+        $sql_store_users = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}" . Utill::TABLES['store_users'] . "` (
+            `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+            `store_id` bigint(20) NOT NULL,
+            `user_id` bigint(20) NOT NULL,
+            `role_id` bigint(20) NOT NULL,
+            PRIMARY KEY (`ID`)
+        ) $collate;";
+
+        $sql_store_social = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}" . Utill::TABLES['store_social'] . "` (
+            `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+            `store_id` bigint(20) NOT NULL,
+            `facebook` varchar(20) NOT NULL,
+            `twitter` varchar(20) NOT NULL,
+            `linkdin` varchar(20) NOT NULL,
+            `youtube` varchar(20) NOT NULL,
+            `pinterest` varchar(20) NOT NULL,
+            `instagram` varchar(20) NOT NULL,
+            PRIMARY KEY (`ID`)
+        ) $collate;";
+         
         // Include upgrade functions if not loaded.
         if ( ! function_exists( 'dbDelta' ) ) {
             require_once ABSPATH . 'wp-admin/includes/upgrade.php';
         }
         
         dbDelta( $sql_commission );
+        dbDelta( $sql_store );
+        dbDelta( $sql_store_users );
+        dbDelta( $sql_store_social );
     }
 
     /**

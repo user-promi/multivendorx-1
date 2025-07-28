@@ -265,11 +265,6 @@ class FrontendScripts {
 		$register_styles = apply_filters(
             'admin_multivendorx_register_styles',
             array(
-				'multivendorx-style'            => array(
-					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'styles/index.css',
-					'deps'    => array(),
-					'version' => $version,
-				),
 				'multivendorx-components-style' => array(
 					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'styles/components.css',
 					'deps'    => array(),
@@ -302,6 +297,7 @@ class FrontendScripts {
                 'products',
                 'products-capability',
                 'commissions',
+                'dashboard-menu'
             )
 		);
 

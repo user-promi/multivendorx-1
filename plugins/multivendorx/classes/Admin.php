@@ -71,6 +71,14 @@ class Admin {
                     'name'   => __( 'Settings', 'multivendorx' ),
                     'subtab' => 'general',
                 ),
+                'payments'          => array(
+                    'name'   => __( 'Payments', 'multivendorx' ),
+                    'subtab' => '',
+                ),
+                'store-management'          => array(
+                    'name'   => __( 'Store management', 'multivendorx' ),
+                    'subtab' => '',
+                ),
             );
 
             foreach ( $submenus as $slug => $submenu ) {
@@ -137,7 +145,6 @@ class Admin {
             FrontendScripts::enqueue_script( 'multivendorx-components-script' );
             FrontendScripts::enqueue_script( 'multivendorx-admin-script' );
 			FrontendScripts::enqueue_style( 'multivendorx-components-style' );
-			FrontendScripts::enqueue_style( 'multivendorx-style' );
 			FrontendScripts::localize_scripts( 'multivendorx-admin-script' );
         }
     }
