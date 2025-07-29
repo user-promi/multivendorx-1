@@ -412,6 +412,18 @@ class FrontendScripts {
             }
         }
 
+		$brands = get_terms('product_brand', [ 'hide_empty' => false ]);
+        $all_product_brand = [];
+        if ($brands) {
+            foreach ($brands as $brand) {
+                $all_product_brand[] = [
+                    'value' => $brand->term_id,
+                    'label' => $brand->name,
+                    'key'   => $brand->term_id,
+                ];
+            }
+        }
+
         // Get current user role.
         $current_user      = wp_get_current_user();
         $current_user_role = '';
@@ -449,6 +461,7 @@ class FrontendScripts {
 						'all_users'                  => $all_users,
 						'all_products'               => $all_products,
 						'all_product_cat'            => $product_cat,
+						'all_product_brand'          => $all_product_brand,
 						'all_product_tag'            => $product_tags,
 						'settings_databases_value'   => $settings_value,
 						'active_modules'             => CatalogX()->modules->get_active_modules(),

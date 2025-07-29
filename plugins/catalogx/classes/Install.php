@@ -162,6 +162,7 @@ class Install {
             `role_id` varchar(100),
             `product_id` bigint(20),
             `category_id` bigint(20),
+            `brand_id` bigint(20),
             `quentity` bigint(20) NOT NULL,
             `type` varchar(20) NOT NULL,
             `amount` bigint(20) NOT NULL,
@@ -315,6 +316,13 @@ class Install {
      */
     public function run_default_migration() {
         // Migration by specific version controll.
+        if ( version_compare( self::$previous_version, '6.0.7', '<' ) ) {
+            global $wpdb;
+            $wpdb->query(
+                "ALTER TABLE `{$wpdb->prefix}" . Utill::TABLES[ 'rule' ] . "`
+                ADD COLUMN brand_id bigint(20);"
+            );
+        }
     }
 
     /**

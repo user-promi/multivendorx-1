@@ -260,6 +260,16 @@
                 user-select: none;
             }
             
+            label.tab.active{
+                background: #d8d0e3;
+                color: #65438f;
+                border-radius: 0;
+            }
+
+            label.tab.active span{
+            color: #65438f;
+            }
+
             input[type="radio"]:checked+label {
                 font-weight: 500;
                 color: $color-active;
@@ -269,22 +279,6 @@
                 background-color: $color-active;
                 color: $color-white;
                 margin: 0;
-            }
-
-            input[id="radio-product"]:checked~.glider {
-                transform: translateX(0);
-            }
-
-            input[id="radio-category"]:checked~.glider {
-                transform: translateX(100%);
-            }
-
-            input[id="radio-user"]:checked~.glider {
-                transform: translateX(0);
-            }
-
-            input[id="radio-role"]:checked~.glider {
-                transform: translateX(100%);
             }
 
             &.product-quantity{
@@ -298,7 +292,7 @@
                 display: flex;
                 height: 1.875rem;
                 padding: 0 2rem;
-                background-color: #65438f40;
+                background-color: #65438f00;
                 z-index: 1;
                 transition: 0.25s ease-out;
             }

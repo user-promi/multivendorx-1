@@ -43,6 +43,11 @@ export default {
                     label: __('Tag', 'catalogx'),
                     options: appLocalizer.all_product_tag,
                 },
+                {
+                    key: "brand_list",
+                    label: __('Brand', 'catalogx'),
+                    options: appLocalizer.all_product_brand,
+                },
             ],
             columns: [
                 {
