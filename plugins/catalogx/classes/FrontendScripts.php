@@ -394,7 +394,7 @@ class FrontendScripts {
             }
         }
 
-        // Prepare all product tages.
+        // Prepare all product tags.
         $tags         = get_terms(
             array(
 				'taxonomy'   => 'product_tag',
@@ -412,6 +412,7 @@ class FrontendScripts {
             }
         }
 
+		// Prepare all product brands.
 		$brands = get_terms('product_brand', [ 'hide_empty' => false ]);
         $all_product_brand = [];
         if ($brands) {
@@ -435,7 +436,7 @@ class FrontendScripts {
         $settings_value = array();
         $tabs_names     = array( 'enquiry-catalog-customization', 'all-settings', 'enquiry-form-customization', 'enquiry-quote-exclusion', 'tools', 'enquiry-email-temp', 'wholesale', 'wholesale-registration', 'pages' );
         foreach ( $tabs_names as $tab_name ) {
-            $settings_value[ $tab_name ] = CatalogX()->setting->get_option( 'catalogx_' . $tab_name . '_settings' );
+			$settings_value[ $tab_name ] = CatalogX()->setting->get_option( str_replace( '-', '_', 'catalogx_' . $tab_name . '_settings' ) );
         }
 
         if ( 'administrator' === $current_user_role ) {
