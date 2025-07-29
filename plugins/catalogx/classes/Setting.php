@@ -90,7 +90,7 @@ class Setting {
                 'catalogx_enquiry_form_customization_settings',
                 'catalogx_enquiry_email_temp_settings',
 				'catalogx_wholesale_settings',
-				'catalogx_wholesale_registration_settings'
+				'catalogx_wholesale_registration_settings',
 			)
         );
 

@@ -413,15 +413,20 @@ class FrontendScripts {
         }
 
 		// Prepare all product brands.
-		$brands = get_terms('product_brand', [ 'hide_empty' => false ]);
-        $all_product_brand = [];
-        if ($brands) {
-            foreach ($brands as $brand) {
-                $all_product_brand[] = [
+		$brands            = get_terms(
+            array(
+				'taxonomy'   => 'product_brand',
+				'hide_empty' => false,
+            )
+        );
+        $all_product_brand = array();
+        if ( $brands ) {
+            foreach ( $brands as $brand ) {
+                $all_product_brand[] = array(
                     'value' => $brand->term_id,
                     'label' => $brand->name,
                     'key'   => $brand->term_id,
-                ];
+                );
             }
         }
 

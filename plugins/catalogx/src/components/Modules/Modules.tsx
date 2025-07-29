@@ -8,10 +8,10 @@ const PluginModules = () => {
 
     return (
         <Modules
-            modulesArray={modulesArray}
-            appLocalizer={appLocalizer}
+            modulesArray={ modulesArray }
+            appLocalizer={ appLocalizer }
             apiLink="modules"
-            proPopupContent={proPopupContent}
+            proPopupContent={ proPopupContent }
             pluginName="catalogx"
         />
     );

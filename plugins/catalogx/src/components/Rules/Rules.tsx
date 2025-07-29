@@ -7,7 +7,7 @@ import ShowPopup from '../Popup/Popup';
 
 const Rules = () => {
     // State variable declearation
-    const [openDialog, setOpenDialog] = useState(false);
+    const [ openDialog, setOpenDialog ] = useState( false );
 
     return (
         <>
@@ -17,29 +17,29 @@ const Rules = () => {
             >
                 <Dialog
                     className="admin-module-popup"
-                    open={openDialog}
-                    onClose={() => {
-                        setOpenDialog(false);
-                    }}
+                    open={ openDialog }
+                    onClose={ () => {
+                        setOpenDialog( false );
+                    } }
                     aria-labelledby="form-dialog-title"
                 >
                     <span
                         className="admin-font adminlib-cross"
-                        onClick={() => {
-                            setOpenDialog(false);
-                        }}
+                        onClick={ () => {
+                            setOpenDialog( false );
+                        } }
                     ></span>
-                    {!appLocalizer.khali_dabba ? (
+                    { ! appLocalizer.khali_dabba ? (
                         <ShowPopup />
                     ) : (
                         <ShowPopup moduleName="Rules" />
-                    )}
+                    ) }
                 </Dialog>
                 <div
                     className="dynamic-rule-img"
-                    onClick={() => {
-                        setOpenDialog(true);
-                    }}
+                    onClick={ () => {
+                        setOpenDialog( true );
+                    } }
                 ></div>
             </main>
         </>

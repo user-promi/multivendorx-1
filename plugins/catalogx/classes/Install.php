@@ -317,45 +317,46 @@ class Install {
     public function run_default_migration() {
         // Migration by specific version controll.
         if ( version_compare( self::$previous_version, '6.0.7', '<' ) ) {
+            // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.SchemaChange
             global $wpdb;
             $column_exists = $wpdb->get_results(
                 $wpdb->prepare(
-                    "SHOW COLUMNS FROM `{$wpdb->prefix}" . Utill::TABLES[ 'rule' ] . "` LIKE %s",
+                    "SHOW COLUMNS FROM `{$wpdb->prefix}" . Utill::TABLES['rule'] . '` LIKE %s',
                     'brand_id'
                 )
-            ); 
-            if (empty($column_exists)) {
+            );
+            if ( empty( $column_exists ) ) {
                 $wpdb->query(
-                    "ALTER TABLE `{$wpdb->prefix}" . Utill::TABLES[ 'rule' ] . "`
-                    ADD COLUMN brand_id bigint(20);"
+                    "ALTER TABLE `{$wpdb->prefix}" . Utill::TABLES['rule'] . '`
+                    ADD COLUMN brand_id bigint(20);'
                 );
             }
+            // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.SchemaChange
 
-            $previous_enquiry_catalog_customization_settings = get_option( 'catalogx_enquiry-catalog-customization_settings', [] );
+            $previous_enquiry_catalog_customization_settings = get_option( 'catalogx_enquiry-catalog-customization_settings', array() );
             update_option( 'catalogx_enquiry_catalog_customization_settings', $previous_enquiry_catalog_customization_settings );
 
-            $previous_all_settings_settings = get_option( 'catalogx_all-settings_settings', [] );
+            $previous_all_settings_settings = get_option( 'catalogx_all-settings_settings', array() );
             update_option( 'catalogx_all_settings_settings', $previous_all_settings_settings );
 
-            $previous_enquiry_quote_exclusion_settings = get_option( 'catalogx_enquiry-quote-exclusion_settings', [] );
+            $previous_enquiry_quote_exclusion_settings = get_option( 'catalogx_enquiry-quote-exclusion_settings', array() );
             update_option( 'catalogx_enquiry_quote_exclusion_settings', $previous_enquiry_quote_exclusion_settings );
 
-            $previous_enquiry_form_customization_settings = get_option( 'catalogx_enquiry-form-customization_settings', [] );
+            $previous_enquiry_form_customization_settings = get_option( 'catalogx_enquiry-form-customization_settings', array() );
             update_option( 'catalogx_enquiry_form_customization_settings', $previous_enquiry_form_customization_settings );
 
-            $previous_enquiry_email_temp_settings = get_option( 'catalogx_enquiry-email-temp_settings', [] );
+            $previous_enquiry_email_temp_settings = get_option( 'catalogx_enquiry-email-temp_settings', array() );
             update_option( 'catalogx_enquiry_email_temp_settings', $previous_enquiry_email_temp_settings );
 
-            $previous_wholesale_registration_settings = get_option( 'catalogx_wholesale-registration_settings', [] );
+            $previous_wholesale_registration_settings = get_option( 'catalogx_wholesale-registration_settings', array() );
             update_option( 'catalogx_wholesale_registration_settings', $previous_wholesale_registration_settings );
 
-
-            delete_option('catalogx_enquiry-catalog-customization_settings');
-            delete_option('catalogx_all-settings_settings');
-            delete_option('catalogx_enquiry-quote-exclusion_settings');
-            delete_option('catalogx_enquiry-form-customization_settings');
-            delete_option('catalogx_enquiry-email-temp_settings');
-            delete_option('catalogx_wholesale-registration_settings');
+            delete_option( 'catalogx_enquiry-catalog-customization_settings' );
+            delete_option( 'catalogx_all-settings_settings' );
+            delete_option( 'catalogx_enquiry-quote-exclusion_settings' );
+            delete_option( 'catalogx_enquiry-form-customization_settings' );
+            delete_option( 'catalogx_enquiry-email-temp_settings' );
+            delete_option( 'catalogx_wholesale-registration_settings' );
         }
     }
 
