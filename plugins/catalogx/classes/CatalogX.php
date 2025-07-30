@@ -104,7 +104,7 @@ final class CatalogX {
      * @return void
      */
     public function migrate_from_previous() {
-        if ( version_compare( get_option( 'catalogx_plugin_version' ), '6.0.7', '<' ) ) {
+        if ( version_compare( get_option( 'catalogx_plugin_version' ), CatalogX()->version, '<' ) ) {
             new Install();
         }
     }

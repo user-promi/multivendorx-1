@@ -45,20 +45,37 @@ class FrontendScripts {
     }
 
 	/**
-	 * Get the appropriate script name based on environment.
+	 * Get the relative asset path based on the environment.
+     *
+	 * @param string       $file_path   Relative path to the asset file.
+	 * @param string|false $module_name Optional. Module name if the asset is inside a module. Default false.
 	 *
-	 * If in development mode, returns the original name.
-	 * Otherwise, appends plugin slug and `.min` suffix.
-	 *
-	 * @param string $name The base name of the script.
-	 * @return string The full script name.
+	 * @return string
 	 */
-    public static function get_script_name( $name ) {
-        if ( CatalogX()->is_dev ) {
-			return $name;
-        }
-        return PLUGIN_SLUG . '-' . $name . '.min';
-    }
+	public static function get_assets_path_name( $file_path, $module_name = false ) {
+		if ( CatalogX()->is_dev ) {
+			if ( $module_name ) {
+				return 'modules/' . $module_name . '/assets/' . $file_path;
+			}
+			return 'assets/' . $file_path;
+		}
+		return 'assets/' . explode( '/', $file_path )[0] . '/catalogx-merged.min';
+	}
+
+	/**
+	 * Get the appropriate extension name off css file based on environment.
+	 *
+	 * If in development mode, returns .scss.
+	 * Otherwise, returns .css.
+	 *
+	 * @return string
+	 */
+	public static function get_css_ext() {
+		if ( CatalogX()->is_dev ) {
+			return '.scss';
+		}
+		return '.css';
+	}
 
 	/**
 	 * Get the build path name based on the environment.
@@ -172,7 +189,7 @@ class FrontendScripts {
             'catalogx_register_scripts',
             array(
 				'catalogx-enquiry-frontend-script'  => array(
-					'src'     => CatalogX()->plugin_url . 'modules/Enquiry/assets/js/frontend.js',
+					'src'     => CatalogX()->plugin_url . self::get_assets_path_name( 'js/frontend', 'Enquiry' ) . '.js',
 					'deps'    => array( 'jquery', 'jquery-blockui' ),
 					'version' => $version,
 				),
@@ -187,7 +204,7 @@ class FrontendScripts {
 					'version' => $version,
 				),
 				'catalogx-add-to-quote-cart-script' => array(
-					'src'     => CatalogX()->plugin_url . 'modules/Quote/js/frontend.js',
+					'src'     => CatalogX()->plugin_url . self::get_assets_path_name( 'js/frontend', 'Quote' ) . '.js',
 					'deps'    => array( 'jquery' ),
 					'version' => $version,
 				),
@@ -210,7 +227,7 @@ class FrontendScripts {
             'catalogx_register_styles',
             array(
 				'catalogx-frontend-style'     => array(
-					'src'     => CatalogX()->plugin_url . 'assets/css/frontend.css',
+					'src'     => CatalogX()->plugin_url . self::get_assets_path_name( 'styles/frontend' ) . self::get_css_ext(),
 					'deps'    => array(),
 					'version' => $version,
 				),
@@ -275,11 +292,6 @@ class FrontendScripts {
 		$register_styles = apply_filters(
             'admin_catalogx_register_styles',
             array(
-				'catalogx-admin-style'      => array(
-					'src'     => CatalogX()->plugin_url . self::get_build_path_name() . 'styles/woocommerce-catalog-enquiry-frontend.min.css',
-					'deps'    => array(),
-					'version' => $version,
-				),
 				'catalogx-components-style' => array(
 					'src'     => CatalogX()->plugin_url . self::get_build_path_name() . 'styles/components.css',
 					'deps'    => array(),

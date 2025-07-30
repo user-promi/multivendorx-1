@@ -5,59 +5,79 @@ import fs from 'fs-extra';
 import path from 'path';
 import { glob } from 'glob';
 import chalk from 'chalk';
+import sass from 'sass';
 
 /**
- * This is the list of folders where the .js and .css files are present.
+ * This is the list of folders where the .js and .scss files are present.
  * format: (path start from the root of the project './')
  * 1. 'dist' (directory)
  */
-const sourceFolders = [ "assets" ];
+const sourceFolders = [
+    "assets",
+    ...glob.sync("modules/*/assets/*")
+];
 
-let outputFolder;
 const { name } = JSON.parse( fs.readFileSync( "package.json" ) );
 
 ( async () => {
-    for ( const sourceFolder of sourceFolders ) {
-        console.log(
-            chalk.bgYellowBright.black(
-                `🧹Minification start in ${ sourceFolder }`
-            )
-        );
-        const files = glob.sync( `${ sourceFolder }/**/*.{js,css}` );
+    const jsOutputPath = `release/assets/js/${name}-merged.min.js`;
+    const cssOutputPath = `release/assets/styles/${name}-merged.min.css`;
 
-        for ( const file of files ) {
-            try {
-                console.log( chalk.bgCyanBright.black( `🧹Minify ${ file }` ) );
-                const ext = path.extname( file );
-                const content = await fs.readFile( file, "utf8" );
+    // === JS MERGE + MINIFY ===
+    console.log(chalk.bgYellowBright.black('🧹 Merging and minifying JS files'));
 
-                let minified;
-                if ( ext === ".js" ) {
-                    // min path for js
-                    outputFolder = "release/assets/js/";
-                    const result = await minifyJs( content );
-                    minified = result.code;
-                } else if ( ext === ".css" ) {
-                    // min path for css
-                    outputFolder = "release/assets/styles/";
-                    const result = new CleanCSS().minify( content );
-                    minified = result.styles;
-                }
+    const jsFiles = sourceFolders.flatMap((folder) =>
+        glob.sync(`${folder}/**/*.js`)
+    );
 
-                const relativePath = path.relative( sourceFolder, file );
-                const parsed = path.parse( relativePath );
-                const newFileName = `${ name }-${ parsed.name }.min${ parsed.ext }`;
-                const outputPath = path.join( outputFolder, newFileName );
+    let mergedJs = '';
 
-                await fs.outputFile( outputPath, minified );
-            } catch ( err ) {
-                console.log(
-                    chalk.red(
-                        `❌ Error minifying ${ file }: ${ err.message }`
-                    )
-                );
-            }
+    for ( const file of jsFiles ) {
+        try {
+            const content = await fs.readFile(file, 'utf8');
+            console.log(chalk.bgCyanBright.black(`📦 JS: Appending ${file}`));
+            mergedJs += `\n// ---- ${ path.relative( '.', file ) } ----\n` + content + '\n';
+        } catch ( error ) {
+            console.log(chalk.red(`❌ Error reading JS file ${file}: ${error.message}`));
         }
     }
-    console.log( chalk.bgGreenBright.black( "✅ Minification completed" ) );
+
+    if ( mergedJs ) {
+        try {
+            const result = await minifyJs( mergedJs );
+            await fs.outputFile(jsOutputPath, result.code);
+            console.log(chalk.bgGreenBright.black(`✅ Minified JS written to ${jsOutputPath}`));
+        } catch ( error ) {
+            console.log(chalk.red(`❌ Error during JS minification: ${error.message}`));
+        }
+    }
+
+    // === SCSS MERGE + MINIFY ===
+    console.log(chalk.bgYellowBright.black('🎨 Merging and minifying SCSS files'));
+
+    const scssFiles = sourceFolders.flatMap( ( folder ) =>
+        glob.sync(`${folder}/**/*.scss`)
+    );
+
+    let mergedScss = '';
+
+    for ( const file of scssFiles ) {
+        try {
+            const content = sass.compile(file, { style: "expanded" });
+            console.log(chalk.bgMagentaBright.black(`📦 SCSS: Appending ${file}`));
+            mergedScss += `\n/* ---- ${ path.relative( '.', file ) } ---- */\n` + content.css + '\n';
+        } catch ( error ) {
+            console.log(chalk.red(`❌ Error reading SCSS file ${file}: ${error.message}`));
+        }
+    }
+
+    if ( mergedScss ) {
+        try {
+            const result = new CleanCSS().minify(mergedScss);
+            await fs.outputFile( cssOutputPath, result.styles );
+            console.log( chalk.bgGreenBright.black( `✅ Minified CSS written to ${cssOutputPath}` ) );
+        } catch ( error ) {
+            console.log( chalk.red( `❌ Error during SCSS minification: ${error.message}` ) );
+        }
+    }
 } )();
