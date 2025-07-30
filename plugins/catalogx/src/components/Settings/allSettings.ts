@@ -2,7 +2,7 @@ import { __, sprintf } from '@wordpress/i18n';
 export default {
     id: 'all-settings',
     priority: 20,
-    name: __('Shopping Journey', 'catalogx'),
+    name: __( 'Shopping Journey', 'catalogx' ),
     desc: __(
         'Set up sales flow and catalog mode with integrated enquiry and quotation management.',
         'catalogx'
@@ -13,7 +13,7 @@ export default {
         {
             key: 'enable_cart_checkout',
             type: 'checkbox',
-            label: __('Sitewide buy mode', 'catalogx'),
+            label: __( 'Sitewide buy mode', 'catalogx' ),
             desc: sprintf(
                 /* translators: %s will be replaced with a link to CatalogX Pro */
                 __(
@@ -37,7 +37,7 @@ export default {
         {
             key: 'redirect_cart_page',
             type: 'select',
-            label: __('Cart / Checkout Redirect Page', 'catalogx'),
+            label: __( 'Cart / Checkout Redirect Page', 'catalogx' ),
             options: [
                 {
                     value: '',
@@ -67,7 +67,7 @@ export default {
         {
             key: 'separator_content',
             type: 'section',
-            label: __('Enquiry', 'catalogx'),
+            label: __( 'Enquiry', 'catalogx' ),
         },
         {
             key: 'enquiry_user_permission',
@@ -92,7 +92,7 @@ export default {
         {
             key: 'is_enable_out_of_stock',
             type: 'checkbox',
-            label: __('Enquiry for out-of-stock products only', 'catalogx'),
+            label: __( 'Enquiry for out-of-stock products only', 'catalogx' ),
             desc: __(
                 'Enquiry button is shown exclusively for products that are out of stock. For items that are in stock, the Add-to-Cart button will be displayed instead.',
                 'catalogx'
@@ -111,7 +111,7 @@ export default {
         {
             key: 'notify_me_button',
             type: 'checkbox',
-            label: __('In-Stock notify me button', 'catalogx'),
+            label: __( 'In-Stock notify me button', 'catalogx' ),
             desc: __(
                 'This option allows customers to subscribe for automatic stock notifications.',
                 'catalogx'
@@ -119,7 +119,7 @@ export default {
             options: [
                 {
                     key: 'notify_me_button',
-                    label: __('', 'catalogx'),
+                    label: __( '', 'catalogx' ),
                     value: 'notify_me_button',
                 },
             ],
@@ -132,7 +132,7 @@ export default {
         {
             key: 'is_disable_popup',
             type: 'setting-toggle',
-            label: __('Display enquiry form as', 'catalogx'),
+            label: __( 'Display enquiry form as', 'catalogx' ),
             desc: __(
                 'Select whether the form is displayed directly on the page or in a pop-up window.',
                 'catalogx'
@@ -154,7 +154,7 @@ export default {
         {
             key: 'is_page_redirect',
             type: 'checkbox',
-            label: __('Redirect after enquiry form Submission', 'catalogx'),
+            label: __( 'Redirect after enquiry form Submission', 'catalogx' ),
             desc: __(
                 'Enable this to redirect user to another page after successful enquiry submission.',
                 'catalogx'
@@ -175,7 +175,7 @@ export default {
                 set: true,
             },
             type: 'select',
-            label: __('Post enquiry submission redirect page', 'catalogx'),
+            label: __( 'Post enquiry submission redirect page', 'catalogx' ),
             desc: __(
                 'Select page where user will be redirected after successful enquiry.',
                 'catalogx'
@@ -201,7 +201,7 @@ export default {
         {
             key: 'separator_content',
             type: 'section',
-            label: __('Quotation', 'catalogx'),
+            label: __( 'Quotation', 'catalogx' ),
         },
         {
             key: 'quote_user_permission',
@@ -227,44 +227,44 @@ export default {
         {
             key: 'set_expiry_time',
             type: 'text',
-            label: __('Quotation expiry duration', 'catalogx'),
+            label: __( 'Quotation expiry duration', 'catalogx' ),
             desc: __(
                 'Set the period after which a quotation will expire and no longer be valid for purchase.',
                 'catalogx'
             ),
-            parameter: __('days', 'catalogx'),
+            parameter: __( 'days', 'catalogx' ),
             proSetting: true,
             moduleEnabled: 'quote',
         },
         {
             key: 'separator_content',
             type: 'section',
-            label: __('PDF Manager', 'catalogx'),
+            label: __( 'PDF Manager', 'catalogx' ),
         },
         {
             key: 'display_pdf',
             type: 'multi-checkbox-table',
-            label: __('Attachment', 'catalogx'),
+            label: __( 'Attachment', 'catalogx' ),
             classes: 'gridTable',
             rows: [
                 {
                     key: 'allow_download_pdf',
-                    label: __('Download as PDF', 'catalogx'),
+                    label: __( 'Download as PDF', 'catalogx' ),
                 },
                 {
                     key: 'attach_pdf_to_email',
-                    label: __('Attach with Email', 'catalogx'),
+                    label: __( 'Attach with Email', 'catalogx' ),
                 },
             ],
             columns: [
                 {
                     key: 'enquiry_pdf_permission',
-                    label: __('Enquiry', 'catalogx'),
+                    label: __( 'Enquiry', 'catalogx' ),
                     moduleEnabled: 'enquiry',
                 },
                 {
                     key: 'quote_pdf_permission',
-                    label: __('Quote', 'catalogx'),
+                    label: __( 'Quote', 'catalogx' ),
                     moduleEnabled: 'quote',
                 },
             ],

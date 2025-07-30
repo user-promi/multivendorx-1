@@ -140,7 +140,6 @@ class Admin {
         // Enque script and style.
         FrontendScripts::admin_load_scripts();
         FrontendScripts::enqueue_script( 'catalogx-admin-script' );
-        FrontendScripts::enqueue_style( 'catalogx-admin-style' );
         FrontendScripts::enqueue_script( 'catalogx-components-script' );
         FrontendScripts::enqueue_style( 'catalogx-components-style' );
         FrontendScripts::localize_scripts( 'catalogx-admin-script' );

@@ -180,7 +180,7 @@ class Frontend {
      * @return array List of freeform field settings.
      */
     public static function catalogx_free_form_settings() {
-        $form_settings = CatalogX()->setting->get_option( 'catalogx_enquiry-form-customization_settings', array() );
+        $form_settings = CatalogX()->setting->get_option( 'catalogx_enquiry_form_customization_settings', array() );
 
         if ( function_exists( 'icl_t' ) ) {
             foreach ( $form_settings['freefromsetting'] as &$free_field ) {
@@ -199,7 +199,7 @@ class Frontend {
      * @return array List of pro enquiry form field settings.
      */
     public static function catalogx_pro_form_settings() {
-        $form_settings = CatalogX()->setting->get_option( 'catalogx_enquiry-form-customization_settings', array() );
+        $form_settings = CatalogX()->setting->get_option( 'catalogx_enquiry_form_customization_settings', array() );
 
         if ( function_exists( 'icl_t' ) ) {
             foreach ( $form_settings['formsettings']['formfieldlist'] as &$field ) {

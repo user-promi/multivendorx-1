@@ -57,7 +57,7 @@ export const proPopupContent = {
     ],
 };
 
-const ShowPopup: React.FC<PopupProps> = (props) => {
+const ShowPopup: React.FC< PopupProps > = ( props ) => {
     const modulePopupContent = {
         moduleName: props.moduleName,
         message: sprintf(
@@ -73,11 +73,11 @@ const ShowPopup: React.FC<PopupProps> = (props) => {
 
     return (
         <>
-            {props.moduleName ? (
-                <ProPopup {...modulePopupContent} />
+            { props.moduleName ? (
+                <ProPopup { ...modulePopupContent } />
             ) : (
-                <ProPopup {...proPopupContent} />
-            )}
+                <ProPopup { ...proPopupContent } />
+            ) }
         </>
     );
 };

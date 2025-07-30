@@ -1,25 +1,14 @@
 <?php
 /**
  * Request Quote Send Email class file
+ * An email will be sent to customer
  *
  * @package CatalogX
  */
 
 namespace CatalogX\Emails;
 
-/**
- * Email for request quote send
- *
- * An email will be sent to customer
- *
- * @class   RequestQuoteSendEmail class
- * @version 6.0.0
- * @author MultiVendorX
- * @extends     \WC_Email
- */
-
 defined( 'ABSPATH' ) || exit;
-
 
 if ( ! class_exists( 'RequestQuoteSendEmail' ) ) {
 

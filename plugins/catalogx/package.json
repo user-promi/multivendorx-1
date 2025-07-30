@@ -1,5 +1,6 @@
 {
-    "name": "woocommerce-catalog-enquiry",
+    "name": "catalogx",
+    "displayName": "woocommerce-catalog-enquiry",
     "version": "1.0.0",
     "description": "=== CatalogX ===\r Contributors: wcmp\r Tags: catalog, woocommerce catalog, product catalog, woocommerce product enquiry, woocommerce enquiry form, woocommerce catalogue only, product catalogue, catalog for woocommerce, catalog mode, remove add to cart \r Donate link: https://multivendorx.com/donate\r Requires at least: 4.4\r Tested up to: 6.1\r Requires PHP: 5.6\r Stable tag: 4.0.9\r License: GPLv2 or later\r License URI: http://www.gnu.org/licenses/gpl-2.0.html",
     "main": "index.js",
@@ -145,6 +146,7 @@
         "react-spinners": "^0.13.8",
         "reactour": "^1.19.4",
         "router": "^2.1.0",
+        "sass": "^1.89.2",
         "sortablejs": "^1.15.3",
         "wp-textdomain": "^1.0.1",
         "ws": "^8.18.0",

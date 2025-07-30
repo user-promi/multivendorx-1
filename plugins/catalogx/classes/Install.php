@@ -63,12 +63,12 @@ class Install {
         $this->set_default_modules();
         $this->set_default_settings();
 
-        $this->run_default_migration();
-
         // this function should be deleted after 7.0.0 .
         if ( ! empty( get_option( 'mvx_catalog_general_tab_settings' ) ) ) {
             $this->migrate_catalog_enquiry_to_catalogx();
         }
+
+        $this->run_default_migration();
 
         // Update the version in database.
         update_option( self::VERSION_KEY, self::$current_version );
@@ -162,6 +162,7 @@ class Install {
             `role_id` varchar(100),
             `product_id` bigint(20),
             `category_id` bigint(20),
+            `brand_id` bigint(20),
             `quentity` bigint(20) NOT NULL,
             `type` varchar(20) NOT NULL,
             `amount` bigint(20) NOT NULL,
@@ -199,13 +200,13 @@ class Install {
             'is_enable_multiple_product_enquiry' => array( 'is_enable_multiple_product_enquiry' ),
         );
 
-        update_option( 'catalogx_all-settings_settings', $all_settings );
+        update_option( 'catalogx_all_settings_settings', $all_settings );
 
         $email_settings = array(
             'additional_alert_email' => CatalogX()->admin_email,
         );
 
-        update_option( 'catalogx_enquiry-email-temp_settings', $email_settings );
+        update_option( 'catalogx_enquiry_email_temp_settings', $email_settings );
 
         // Update pages settings.
         $page_settings = array(
@@ -270,7 +271,7 @@ class Install {
             'freefromsetting' => $free_form,
         );
 
-        update_option( 'catalogx_enquiry-form-customization_settings', $form_settings );
+        update_option( 'catalogx_enquiry_form_customization_settings', $form_settings );
 
         $wholesale_form = array(
             array(
@@ -305,7 +306,7 @@ class Install {
             ),
         );
 
-        update_option( 'catalogx_wholesale-registration_settings', $wholesale_from_settings );
+        update_option( 'catalogx_wholesale_registration_settings', $wholesale_from_settings );
     }
 
     /**
@@ -315,6 +316,48 @@ class Install {
      */
     public function run_default_migration() {
         // Migration by specific version controll.
+        if ( version_compare( self::$previous_version, '6.0.7', '<' ) ) {
+            // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.SchemaChange
+            global $wpdb;
+            $column_exists = $wpdb->get_results(
+                $wpdb->prepare(
+                    "SHOW COLUMNS FROM `{$wpdb->prefix}" . Utill::TABLES['rule'] . '` LIKE %s',
+                    'brand_id'
+                )
+            );
+            if ( empty( $column_exists ) ) {
+                $wpdb->query(
+                    "ALTER TABLE `{$wpdb->prefix}" . Utill::TABLES['rule'] . '`
+                    ADD COLUMN brand_id bigint(20);'
+                );
+            }
+            // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.SchemaChange
+
+            $previous_enquiry_catalog_customization_settings = get_option( 'catalogx_enquiry-catalog-customization_settings', array() );
+            update_option( 'catalogx_enquiry_catalog_customization_settings', $previous_enquiry_catalog_customization_settings );
+
+            $previous_all_settings_settings = get_option( 'catalogx_all-settings_settings', array() );
+            update_option( 'catalogx_all_settings_settings', $previous_all_settings_settings );
+
+            $previous_enquiry_quote_exclusion_settings = get_option( 'catalogx_enquiry-quote-exclusion_settings', array() );
+            update_option( 'catalogx_enquiry_quote_exclusion_settings', $previous_enquiry_quote_exclusion_settings );
+
+            $previous_enquiry_form_customization_settings = get_option( 'catalogx_enquiry-form-customization_settings', array() );
+            update_option( 'catalogx_enquiry_form_customization_settings', $previous_enquiry_form_customization_settings );
+
+            $previous_enquiry_email_temp_settings = get_option( 'catalogx_enquiry-email-temp_settings', array() );
+            update_option( 'catalogx_enquiry_email_temp_settings', $previous_enquiry_email_temp_settings );
+
+            $previous_wholesale_registration_settings = get_option( 'catalogx_wholesale-registration_settings', array() );
+            update_option( 'catalogx_wholesale_registration_settings', $previous_wholesale_registration_settings );
+
+            delete_option( 'catalogx_enquiry-catalog-customization_settings' );
+            delete_option( 'catalogx_all-settings_settings' );
+            delete_option( 'catalogx_enquiry-quote-exclusion_settings' );
+            delete_option( 'catalogx_enquiry-form-customization_settings' );
+            delete_option( 'catalogx_enquiry-email-temp_settings' );
+            delete_option( 'catalogx_wholesale-registration_settings' );
+        }
     }
 
     /**

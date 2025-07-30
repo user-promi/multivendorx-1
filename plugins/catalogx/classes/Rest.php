@@ -123,10 +123,10 @@ class Rest {
         $all_details       = array();
         $get_settings_data = $request->get_param( 'setting' );
         $settingsname      = $request->get_param( 'settingName' );
-        $optionname        = 'catalogx_' . $settingsname . '_settings';
+        $settingsname      = str_replace( '-', '_', 'catalogx_' . $settingsname . '_settings' );
 
         // save the settings in database.
-        CatalogX()->setting->update_option( $optionname, $get_settings_data );
+        CatalogX()->setting->update_option( $settingsname, $get_settings_data );
 
         do_action( 'catalogx_settings_after_save', $settingsname, $get_settings_data );
 
@@ -138,13 +138,13 @@ class Rest {
         if ( 'enquiry' === $action ) {
             $display_option = $request->get_param( 'displayOption' );
             $restrict_user  = $request->get_param( 'restrictUserEnquiry' );
-            CatalogX()->setting->update_setting( 'is_disable_popup', $display_option, 'catalogx_all-settings_settings' );
-            CatalogX()->setting->update_setting( 'enquiry_user_permission', $restrict_user, 'catalogx_all-settings_settings' );
+            CatalogX()->setting->update_setting( 'is_disable_popup', $display_option, 'catalogx_all_settings_settings' );
+            CatalogX()->setting->update_setting( 'enquiry_user_permission', $restrict_user, 'catalogx_all_settings_settings' );
         }
 
         if ( 'quote' === $action ) {
             $restrict_user = $request->get_param( 'restrictUserQuote' );
-            CatalogX()->setting->update_setting( 'quote_user_permission', $restrict_user, 'catalogx_all-settings_settings' );
+            CatalogX()->setting->update_setting( 'quote_user_permission', $restrict_user, 'catalogx_all_settings_settings' );
         }
 
         return rest_ensure_response( $all_details );
