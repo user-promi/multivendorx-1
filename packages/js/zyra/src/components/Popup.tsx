@@ -34,7 +34,7 @@ export interface PopupProps {
 
 const ProPopup: React.FC< PopupProps > = ( props ) => {
     return (
-        <DialogContent>
+        <DialogContent className="pro-popup-content">
             <DialogContentText>
                 <div className="popup-wrapper">
                     <div className="left-section"></div>

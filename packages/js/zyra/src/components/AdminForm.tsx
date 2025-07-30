@@ -663,7 +663,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                     input = (
                         <TextArea
                             wrapperClass="setting-from-textarea"
-                            inputClass={ inputField.class || 'form-input' }
+                            inputClass={ inputField.class || 'basic-select form-input' }
                             descClass="settings-metabox-description"
                             description={ inputField.desc }
                             key={ inputField.key }
