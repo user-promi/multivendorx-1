@@ -14,13 +14,12 @@ export default {
         {
             key: 'separator_content',
             type: 'section',
-            desc: __( 'Common Settings', 'catalogx' ),
-            hint: __( '', 'catalogx' ),
+            label: __('Common Settings', 'catalogx'),
         },
         {
             key: 'additional_alert_email',
             type: 'textarea',
-            class: 'woo-setting-wpeditor-class',
+            class: 'basic-input',
             desc: __(
                 "Set the email address to receive notifications when a user submits enquiry of a product. You can add multiple comma-separated emails.<br/> Default: The admin's email is set as the receiver. Exclude the admin's email from the list to exclude admin from receiving these notifications.",
                 'catalogx'
@@ -33,6 +32,14 @@ export default {
             type: 'radio-select',
             label: 'Store Header',
             desc: 'Select store banner style',
+            // description: 'Select store banner style',
+            // inputWrapperClass: 'image-radio',
+            // name: 'Banaer',
+            // type: 'radio-select' as 'radio-select',
+            // key: 'sample_radio_select',
+            // labelOverlayClass: 'image-radio-overlay',
+            // labelOverlayText: 'Select your Store',
+            // label: 'Store Header',
             options: [
                 {
                     key: 'template1',
