@@ -38,7 +38,7 @@ interface Products {
 const supportLink = [
     {
         title: __('Get in touch with Support', 'catalogx'),
-        icon: 'mail',
+        icon: 'adminlib-mail',
         description: __(
             'Reach out to the support team for assistance or guidance.',
             'catalogx'
@@ -47,13 +47,13 @@ const supportLink = [
     },
     {
         title: __('Explore Documentation', 'catalogx'),
-        icon: 'submission-message',
+        icon: 'adminlib-submission-message',
         description: __('Understand the plugin and its settings.', 'catalogx'),
         link: 'https://catalogx.com/docs/?utm_source=wpadmin&utm_medium=pluginsettings&utm_campaign=catalogx',
     },
     {
         title: __('Contribute Here', 'catalogx'),
-        icon: 'support',
+        icon: 'adminlib-support',
         description: __('To participate in product enhancement.', 'catalogx'),
         link: 'https://github.com/multivendorx/catalogx/issues',
     },

@@ -9,6 +9,7 @@ import { Table, TableCell } from 'zyra';
 import axios from 'axios';
 import QuoteThankYou from './QuoteThankYou';
 import './QuoteListTable.scss';
+import 'zyra/build/index.css';
 // import '../../style/fonts.scss';
 
 type QuoteRow = {
@@ -247,7 +248,7 @@ const QuoteList = () => {
                         }}
                     ></p>
                     {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */}
-                    <p
+                    <i
                         className="adminlib-cross"
                         onClick={(e) =>
                             handleRemoveCart(
@@ -256,7 +257,7 @@ const QuoteList = () => {
                                 row.original.key
                             )
                         }
-                    ></p>
+                    ></i>
                 </TableCell>
             ),
         },
@@ -267,6 +268,7 @@ const QuoteList = () => {
                     <input
                         type="number"
                         name="quantity"
+                        className="basic-input"
                         min="1"
                         value={
                             productQuantity[row.original.id]?.quantity ??
@@ -308,7 +310,7 @@ const QuoteList = () => {
                 <QuoteThankYou order_id={showThankYou} status={status} />
             ) : (
                 <>
-                    <div className="admin-enrollment-list QuoteListTable-main-wrapper">
+                    <div className="quotelist-table-main-wrapper">
                         <div className="admin-page-title">
                             <div className="add-to-quotation-button">
                                 <button onClick={handleUpdateCart}>

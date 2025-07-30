@@ -14,7 +14,7 @@ export default {
         {
             key: 'wholesale_from_settings',
             type: 'form-builder',
-            classes: 'catalog-customizer-wrapper',
+            classes: 'no-label',
             proSetting: true,
         },
     ],
