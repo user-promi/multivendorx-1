@@ -69,7 +69,7 @@ const Customizer: React.FC< CustomizerProps > = ( {
                     },
                     {
                         title: 'Settings',
-                        iconClass: 'adminlib-setting',
+                        iconClass: 'adminlib-setting-1',
                         type: 'setting',
                     },
                 ].map( ( { title, iconClass, type } ) => (
@@ -227,6 +227,7 @@ const Customizer: React.FC< CustomizerProps > = ( {
                                         />
                                         <input
                                             type="text"
+                                            className="basic-input"
                                             value={
                                                 setting.button_text_color_onhover
                                                     ? setting.button_text_color_onhover

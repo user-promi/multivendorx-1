@@ -18,6 +18,12 @@
       .settings-input-content {
         flex: 1;
       }
+
+      &.no-label{
+        .settings-form-label {
+          display: none;
+        }
+      }
     }
 
   }

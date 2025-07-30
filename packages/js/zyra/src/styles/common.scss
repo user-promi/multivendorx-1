@@ -88,6 +88,31 @@ a {
 
 // button style end
 
+.admin-badge{
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 0.7rem;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+
+  &.green{
+      background: #d9f5f0;
+      color: #06be9f;
+  }
+  &.red{
+      background: #fde8e4;
+      color: #f06b4f;
+  }
+  &.yellow{
+      background: #fff0e1;
+      color: #ff9f43;
+  }
+  &.blue{
+      background: #bfdeed6e;
+      color: #003d66de;
+  }
+}
+
 // copy btn start
 .copy-btn {
   width: 2.2rem;
@@ -225,7 +250,6 @@ a {
   border-radius: 0.25rem;
   padding: 0.313rem 0.5rem;
   background: transparent;
-  background-color: transparent;
   font-size: 0.875rem;
   line-height: 1.5;
   min-height: 2.213rem !important; // for overwrite woocommerce style
@@ -813,16 +837,6 @@ input[type="checkbox"] {
 
 
 // visibility control container
-.glider {
-  position: absolute;
-  display: flex;
-  height: 1.563rem;
-  width: 3.125rem;
-  background-color: #e7d3ff;
-  z-index: 1;
-  transition: 0.25s ease-out;
-}
-
 .tabs {
   display: flex;
   position: relative;
