@@ -66,9 +66,6 @@ const EnquiryForm = () => {
                 </section>
             ) }
             <div className="modal-wrapper">
-                <div className="catalogx-modal-close-btn">
-                    <i className="admin-font adminlib-cross"></i>
-                </div>
                 <div>{ enquiryFormData.content_before_form }</div>
                 { proActive ? (
                     <FormViewer

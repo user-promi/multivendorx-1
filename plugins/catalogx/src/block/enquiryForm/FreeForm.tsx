@@ -115,7 +115,7 @@ const FreeForm = ( props: any ) => {
     };
 
     return (
-        <div className="catalogx-enquiry-free-form">
+        <div className="form-wrapper">
             { formFields.map( ( field: any ) => {
                 if ( ! field.active ) {
                     return null;
@@ -124,7 +124,7 @@ const FreeForm = ( props: any ) => {
                 switch ( field.key ) {
                     case 'name':
                         return (
-                            <div className="catalogx-form-free-sections">
+                            <div className="section-wrapper">
                                 <label htmlFor={ field.key }>
                                     { field.label }
                                 </label>
@@ -150,7 +150,7 @@ const FreeForm = ( props: any ) => {
                         );
                     case 'email':
                         return (
-                            <div className="catalogx-form-free-sections">
+                            <div className="section-wrapper">
                                 <label htmlFor={ field.key }>
                                     { field.label }
                                 </label>
@@ -176,7 +176,7 @@ const FreeForm = ( props: any ) => {
                         );
                     case 'phone':
                         return (
-                            <div className="catalogx-form-free-sections">
+                            <div className="section-wrapper">
                                 <label htmlFor={ field.key }>
                                     { field.label }
                                 </label>
@@ -194,7 +194,7 @@ const FreeForm = ( props: any ) => {
                     case 'subject':
                     case 'comment':
                         return (
-                            <div className="catalogx-form-free-sections">
+                            <div className="section-wrapper">
                                 <label htmlFor={ field.key }>
                                     { field.label }
                                 </label>
@@ -209,7 +209,7 @@ const FreeForm = ( props: any ) => {
                         );
                     case 'fileupload':
                         return (
-                            <div className="catalogx-form-free-sections">
+                            <div className="section-wrapper">
                                 { /* eslint-disable-next-line jsx-a11y/label-has-associated-control */ }
                                 <label className="attachment-main-label">
                                     { field.label }
@@ -260,7 +260,7 @@ const FreeForm = ( props: any ) => {
                         );
                     case 'captcha':
                         return (
-                            <div className="catalogx-form-free-sections">
+                            <div className="section-wrapper">
                                 { /* eslint-disable-next-line jsx-a11y/label-has-associated-control */ }
                                 <label>{ field.label }</label>
                                 <div className="recaptcha-wrapper field-wrapper">

@@ -103,7 +103,7 @@ const Enquiry = ( props: any ) => {
                     <div className="toggle-checkbox">
                         <input
                             type="checkbox"
-                            id="enquiry_logged_out"
+                            id="enquiry-logged-out"
                             name="enquiry_logged_out"
                             checked={ restrictUserEnquiry.includes(
                                 'enquiry_logged_out'
@@ -111,7 +111,7 @@ const Enquiry = ( props: any ) => {
                             onChange={ handleRestrictUserEnquiryChange }
                         />
                         { /* eslint-disable-next-line jsx-a11y/label-has-associated-control */ }
-                        <label htmlFor="enquiry_logged_out"></label>
+                        <label htmlFor="enquiry-logged-out"></label>
                     </div>
                 </div>
             </article>

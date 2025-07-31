@@ -50,7 +50,7 @@ const Quote = ( props: any ) => {
                     <div className="toggle-checkbox">
                         <input
                             type="checkbox"
-                            id="logged_out"
+                            id="logged-out"
                             name="logged_out"
                             checked={ restrictUserQuote.includes(
                                 'logged_out'
@@ -58,7 +58,7 @@ const Quote = ( props: any ) => {
                             onChange={ handleRestrictUserQuoteChange }
                         />
                         { /* eslint-disable-next-line jsx-a11y/label-has-associated-control */ }
-                        <label htmlFor="logged_out"></label>
+                        <label htmlFor="logged-out"></label>
                     </div>
                 </div>
             </article>

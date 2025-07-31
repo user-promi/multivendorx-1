@@ -185,7 +185,7 @@ const QuoteList = () => {
     };
 
     const handleSendQuote = () => {
-        const sendBtn = document.getElementById( 'SendQuote' );
+        const sendBtn = document.getElementById( 'send-quote' );
         if ( sendBtn ) {
             sendBtn.style.display = 'none';
         }
@@ -345,9 +345,9 @@ const QuoteList = () => {
                     </div>
 
                     { data && Object.keys( data ).length > 0 && (
-                        <div className="main-form">
+                        <div className="form-wrapper">
                             { loading && <Loader /> }
-                            <p className="form-row form-row-first">
+                            <p className="section-wrapper">
                                 <label htmlFor="name">
                                     { __( 'Name:', 'catalogx' ) }
                                 </label>
@@ -355,11 +355,12 @@ const QuoteList = () => {
                                     type="text"
                                     id="name"
                                     name="name"
+                                    className="basic-input"
                                     value={ formData.name }
                                     onChange={ handleInputChange }
                                 />
                             </p>
-                            <p className="form-row form-row-last">
+                            <p className="section-wrapper">
                                 <label htmlFor="email">
                                     { __( 'Email:', 'catalogx' ) }
                                 </label>
@@ -367,11 +368,12 @@ const QuoteList = () => {
                                     type="email"
                                     id="email"
                                     name="email"
+                                    className="basic-input"
                                     value={ formData.email }
                                     onChange={ handleInputChange }
                                 />
                             </p>
-                            <p className="form-row form-row-wide">
+                            <p className="section-wrapper">
                                 <label htmlFor="phone">
                                     { __( 'Phone:', 'catalogx' ) }
                                 </label>
@@ -379,31 +381,33 @@ const QuoteList = () => {
                                     type="tel"
                                     id="phone"
                                     name="phone"
+                                    className="basic-input"
                                     value={ formData.phone }
                                     onChange={ handleInputChange }
                                 />
                             </p>
-                            <p className="form-row form-row-wide">
+                            <p className="section-wrapper">
                                 <label htmlFor="message">
                                     { __( 'Message:', 'catalogx' ) }
                                 </label>
                                 <textarea
                                     id="message"
                                     name="message"
+                                    className="basic-textarea"
                                     rows={ 4 }
                                     cols={ 50 }
                                     value={ formData.message }
                                     onChange={ handleInputChange }
                                 ></textarea>
                             </p>
-                            <p>
+                            <div className="buttons-wrapper">
                                 <button
-                                    id="SendQuote"
+                                    id="send-quote"
                                     onClick={ handleSendQuote }
                                 >
                                     { __( 'Send Quote', 'catalogx' ) }
                                 </button>
-                            </p>
+                            </div>
                             { responseContent && (
                                 <section
                                     className={ `response-message-container ${ responseStatus }` }
