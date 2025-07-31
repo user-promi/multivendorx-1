@@ -45,43 +45,6 @@ class FrontendScripts {
     }
 
 	/**
-	 * Get the relative asset path based on the environment.
-     *
-	 * @param string       $file_path   Relative path to the asset file.
-	 * @param string|false $module_name Optional. Module name if the asset is inside a module. Default false.
-	 *
-	 * @return string
-	 */
-	public static function get_assets_path_name( $file_path, $module_name = false ) {
-		if ( CatalogX()->is_dev ) {
-			if ( $module_name ) {
-				return 'modules/' . $module_name . '/assets/' . $file_path;
-			}
-			return 'assets/' . $file_path;
-		}
-		$file_path_array = explode( '/', $file_path );
-		if ( $module_name ) {
-			return 'assets/modules/' . $module_name . '/' . reset($file_path_array) . '/catalogx-' . next($file_path_array) . '.min';
-		}
-		return 'assets/' . reset($file_path_array) . '/catalogx-' . next($file_path_array) . '.min';;
-	}
-
-	/**
-	 * Get the appropriate extension name off css file based on environment.
-	 *
-	 * If in development mode, returns .scss.
-	 * Otherwise, returns .css.
-	 *
-	 * @return string
-	 */
-	public static function get_css_ext() {
-		if ( CatalogX()->is_dev ) {
-			return '.scss';
-		}
-		return '.css';
-	}
-
-	/**
 	 * Get the build path name based on the environment.
 	 *
 	 * @return string The path to the build assets.
