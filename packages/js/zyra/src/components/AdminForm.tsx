@@ -1111,7 +1111,24 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                             proSetting={ isProSetting(
                                 inputField.proSetting ?? false
                             ) }
-                            onChange={ onSelectChange }
+                            onChange={() => {
+                                if (
+                                    hasAccess(
+                                        inputField.proSetting ?? false,
+                                        String(
+                                            inputField.moduleEnabled ?? ''
+                                        ),
+                                        String(
+                                            inputField.dependentSetting ?? ''
+                                        ),
+                                        String(
+                                            inputField.dependentPlugin ?? ''
+                                        )
+                                    )
+                                ) {
+                                    onSelectChange;
+                                }
+                            }}
                         />
                     );
                     break;
@@ -1146,7 +1163,24 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                             proSetting={ isProSetting(
                                 inputField.proSetting ?? false
                             ) }
-                            onChange={ onSelectChange }
+                            onChange={() => {
+                                if (
+                                    hasAccess(
+                                        inputField.proSetting ?? false,
+                                        String(
+                                            inputField.moduleEnabled ?? ''
+                                        ),
+                                        String(
+                                            inputField.dependentSetting ?? ''
+                                        ),
+                                        String(
+                                            inputField.dependentPlugin ?? ''
+                                        )
+                                    )
+                                ) {
+                                    onSelectChange;
+                                }
+                            }}
                             onMultiSelectDeselectChange={ () =>
                                 handlMultiSelectDeselectChange(
                                     inputField.key,
