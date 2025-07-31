@@ -193,7 +193,7 @@ class FrontendScripts {
             'catalogx_register_scripts',
             array(
 				'catalogx-enquiry-frontend-script'  => array(
-					'src'     => CatalogX()->plugin_url . self::get_assets_path_name( 'js/frontend', 'Enquiry' ) . '.js',
+					'src'     => CatalogX()->plugin_url . self::get_build_path_name() . 'modules/Enquiry/js/catalogx-frontend.min.js',
 					'deps'    => array( 'jquery', 'jquery-blockui' ),
 					'version' => $version,
 				),
@@ -208,7 +208,7 @@ class FrontendScripts {
 					'version' => $version,
 				),
 				'catalogx-add-to-quote-cart-script' => array(
-					'src'     => CatalogX()->plugin_url . self::get_assets_path_name( 'js/frontend', 'Quote' ) . '.js',
+					'src'     => CatalogX()->plugin_url . self::get_build_path_name() . 'modules/Quote/js/catalogx-frontend.min.js',
 					'deps'    => array( 'jquery' ),
 					'version' => $version,
 				),
@@ -231,7 +231,7 @@ class FrontendScripts {
             'catalogx_register_styles',
             array(
 				'catalogx-frontend-style'     => array(
-					'src'     => CatalogX()->plugin_url . self::get_assets_path_name( 'styles/frontend' ) . self::get_css_ext(),
+					'src'     => CatalogX()->plugin_url . self::get_build_path_name() . 'styles/catalogx-frontend.min.css',
 					'deps'    => array(),
 					'version' => $version,
 				),

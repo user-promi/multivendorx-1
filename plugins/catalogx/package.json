@@ -74,7 +74,7 @@
             "output": []
         },
         "watch:build:project:bandle": {
-            "command": "wp-scripts start",
+            "command": "wp-scripts start && pnpm run minify",
             "files": [
                 "src/**/*.{js,jsx,ts,tsx,scss}",
                 "tsconfig.json",
