@@ -14,7 +14,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * @class       Admin class
  * @version     6.0.0
- * @author      MultivendorX
+ * @author      MultiVendorX
  */
 class Admin {
 
@@ -143,7 +143,6 @@ class Admin {
         FrontendScripts::enqueue_script( 'catalogx-components-script' );
         FrontendScripts::enqueue_style( 'catalogx-components-style' );
         FrontendScripts::localize_scripts( 'catalogx-admin-script' );
-        wp_set_script_translations( 'catalogx-script', 'catalogx' );
     }
 
     /**

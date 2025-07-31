@@ -12,7 +12,7 @@ namespace CatalogX\Catalog;
  *
  * @class       Frontend class
  * @version     6.0.0
- * @author      MultivendorX
+ * @author      MultiVendorX
  */
 class Frontend {
     /**

@@ -14,7 +14,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * @class       Utill class
  * @version     6.0.0
- * @author      MultivendorX
+ * @author      MultiVendorX
  */
 class Utill {
     /**

@@ -16,7 +16,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * @class       CatalogX class
  * @version     6.0.0
- * @author      MultivendorX
+ * @author      MultiVendorX
  */
 final class CatalogX {
 

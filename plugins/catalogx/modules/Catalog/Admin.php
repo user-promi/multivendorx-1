@@ -12,7 +12,7 @@ namespace CatalogX\Catalog;
  *
  * @class       Admin class
  * @version     6.0.5
- * @author      MultivendorX
+ * @author      MultiVendorX
  */
 class Admin {
     /**

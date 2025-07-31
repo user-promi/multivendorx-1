@@ -16,7 +16,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * @class       FrontendScripts class
  * @version     6.0.4
- * @author      MultivendorX
+ * @author      MultiVendorX
  */
 class FrontendScripts {
 
@@ -59,7 +59,11 @@ class FrontendScripts {
 			}
 			return 'assets/' . $file_path;
 		}
-		return 'assets/' . explode( '/', $file_path )[0] . '/catalogx-merged.min';
+		$file_path_array = explode( '/', $file_path );
+		if ( $module_name ) {
+			return 'assets/modules/' . $module_name . '/' . reset($file_path_array) . '/catalogx-' . next($file_path_array) . '.min';
+		}
+		return 'assets/' . reset($file_path_array) . '/catalogx-' . next($file_path_array) . '.min';;
 	}
 
 	/**

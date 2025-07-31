@@ -12,7 +12,7 @@ namespace CatalogX\Quote;
  *
  * @class       Ajax class
  * @version     6.0.0
- * @author      MultivendorX
+ * @author      MultiVendorX
  */
 class Ajax {
     /**

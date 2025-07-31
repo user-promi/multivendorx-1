@@ -15,7 +15,7 @@ defined( 'ABSPATH' ) || exit;
  * @class       SetupWizard
  * @version     6.0.0
  * @package     CatalogX
- * @author      MultivendorX
+ * @author      MultiVendorX
  */
 class SetupWizard {
 
