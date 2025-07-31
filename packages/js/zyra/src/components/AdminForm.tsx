@@ -195,6 +195,7 @@ interface InputField {
     }[];
     addButtonLabel?: string;
     deleteButtonLabel?: string;
+    image?: string;
 }
 
 type Center = {
@@ -985,12 +986,11 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                 case 'radio-select':
                     input = (
                         <RadioInput
-                            wrapperClass="form-group-radio-select"
-                            inputWrapperClass="radioselect-class"
+                            wrapperClass="radio-group"
+                            inputWrapperClass="image-radio"
                             inputClass="setting-form-input"
-                            radiSelectLabelClass="radio-select-under-label-class"
                             labelImgClass="section-img-fluid"
-                            labelOverlayClass="radioselect-overlay-text"
+                            labelOverlayClass="image-radio-overlay"
                             labelOverlayText="Select your Store"
                             idPrefix="radio-select-under"
                             descClass="settings-metabox-description"
@@ -1619,8 +1619,8 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                                 settingChanged.current = true;
                                 updateSetting( key, data );
                             } }
-                            SampleProduct="#"
-                            proUrl="#"
+                            SampleProduct={inputField.image ?? "#"}
+                            proUrl={ appLocalizer?.pro_url ?? "#" }
                         />
                     );
                     break;
