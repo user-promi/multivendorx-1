@@ -31,15 +31,7 @@ export default {
             key: 'selected_email_tpl',
             type: 'radio-select',
             label: 'Store Header',
-            desc: 'Select store banner style',
-            // description: 'Select store banner style',
-            // inputWrapperClass: 'image-radio',
-            // name: 'Banaer',
-            // type: 'radio-select' as 'radio-select',
-            // key: 'sample_radio_select',
-            // labelOverlayClass: 'image-radio-overlay',
-            // labelOverlayText: 'Select your Store',
-            // label: 'Store Header',
+            desc: 'Select store banner style',            
             options: [
                 {
                     key: 'template1',

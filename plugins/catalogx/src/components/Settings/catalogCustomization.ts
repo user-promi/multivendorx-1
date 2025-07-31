@@ -1,4 +1,5 @@
 import { __ } from '@wordpress/i18n';
+import SampleProduct from '../../assets/images/sample-product.jpg';
 
 export default {
     id: 'enquiry-catalog-customization',
@@ -16,6 +17,7 @@ export default {
             type: 'catalog-customizer',
             desc: __( 'Catalog Customizer', 'catalogx' ),
             classes: 'catalog-customizer-wrapper',
+            image: SampleProduct,
         },
     ],
 };
