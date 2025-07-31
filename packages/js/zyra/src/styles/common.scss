@@ -192,6 +192,10 @@ a {
     border: 0.063rem solid #e0e4e9;
     position: relative;
     transition: height 0.4s ease;
+    width: 100%;
+    height: 16rem;
+    overflow: hidden;
+    transition: all 0.5s ease;
 
     input {
       position: absolute;
@@ -223,6 +227,10 @@ a {
         transition: all 0.3s ease;
       }
     }
+    .admin-pro-tag{
+      top: 1.425rem;
+      right: 1rem;
+    }
 
     &.active {
       input {
@@ -231,6 +239,8 @@ a {
     }
 
     &:hover {
+      height: auto;
+
       .image-radio-overlay {
         opacity: 0.5;
       }
@@ -477,7 +487,7 @@ input[type="checkbox"] {
   }
 
   .settings-form-group-radio {
-    width: 70%;
+    width: 50%;
     position: relative;
 
     .basic-input,
@@ -488,7 +498,6 @@ input[type="checkbox"] {
   }
 
   .button-visibility {
-    width: 6%;
     display: flex;
     justify-content: center;
     align-items: center;
