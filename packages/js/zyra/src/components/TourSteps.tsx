@@ -64,9 +64,14 @@ const Tour: React.FC<TourProps> = ( { appLocalizer } ) => {
         setIsOpen( false ); // Close the tour
 
         try {
-            await axios.post( `${ appLocalizer.apiUrl }/catalogx/v1/tour`, {
-                active: false,
-            } );
+            await axios({
+                method: 'post',
+                url: `${ appLocalizer.apiUrl }/catalogx/v1/tour`,
+                headers: { 'X-WP-Nonce': appLocalizer.nonce },
+                data: {
+                    active: false
+                }
+            });
             // console.log( "Tour marked as complete." );
         } catch ( error ) {
             // eslint-disable-next-line no-console
@@ -304,9 +309,12 @@ const Tour: React.FC<TourProps> = ( { appLocalizer } ) => {
         const fetchTourState = async (): Promise< void > => {
             if ( window.location.href === appLocalizer.module_page_url ) {
                 try {
-                    const response = await axios.get< { active: string } >(
-                        `${ appLocalizer.apiUrl }/catalogx/v1/tour`
-                    );
+
+                    const response = await axios<{ active: string }>({
+                        method: 'get',
+                        url: `${ appLocalizer.apiUrl }/catalogx/v1/tour`,
+                        headers: { 'X-WP-Nonce': appLocalizer.nonce },
+                    });
 
                     if ( response.data.active !== '' ) {
                         if ( setSteps ) {
