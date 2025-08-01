@@ -17,7 +17,6 @@ const sourceFolders = [
     ...glob.sync("modules/*/assets/*")
 ];
 
-let outputFolder;
 const { name } = JSON.parse( fs.readFileSync( "package.json" ) );
 
 ( async () => {
