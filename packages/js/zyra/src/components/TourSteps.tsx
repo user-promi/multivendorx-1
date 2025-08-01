@@ -91,7 +91,7 @@ const Tour: React.FC<TourProps> = ( { appLocalizer } ) => {
                         catalog, removing the &quot;Add to Cart&quot; button and
                         optionally hiding prices.
                     </h4>
-                    <div className="tour-footer">
+                    <div className="buttons-wrapper">
                         <button
                             className="admin-btn btn-purple"
                             onClick={ () => setCurrentStep( 1 ) }
@@ -119,7 +119,7 @@ const Tour: React.FC<TourProps> = ( { appLocalizer } ) => {
                         submitted forms, viewable in the admin dashboard or via
                         email.
                     </h4>
-                    <div className="tour-footer">
+                    <div className="buttons-wrapper">
                         <button
                             className="admin-btn btn-purple"
                             onClick={ () => {
@@ -161,7 +161,7 @@ const Tour: React.FC<TourProps> = ( { appLocalizer } ) => {
                         customers need to fill out when submitting product
                         inquiries.
                     </h4>
-                    <div className="tour-footer">
+                    <div className="buttons-wrapper">
                         <button
                             className="admin-btn btn-purple"
                             onClick={ () =>
@@ -195,7 +195,7 @@ const Tour: React.FC<TourProps> = ( { appLocalizer } ) => {
                         quotes and provide tailored pricing for customers to
                         proceed with purchases.
                     </h4>
-                    <div className="tour-footer">
+                    <div className="buttons-wrapper">
                         <button
                             className="admin-btn btn-purple"
                             onClick={ () => {
@@ -240,7 +240,7 @@ const Tour: React.FC<TourProps> = ( { appLocalizer } ) => {
                         Set up your quotation settings by defining whether to
                         limit quote requests to logged-in users only.
                     </h4>
-                    <div className="tour-footer">
+                    <div className="buttons-wrapper">
                         <button
                             className="admin-btn btn-purple"
                             onClick={ () =>
@@ -289,7 +289,7 @@ const Tour: React.FC<TourProps> = ( { appLocalizer } ) => {
                             With the Enquiry tab selected, drag and drop to
                             position the Enquiry button and customize its look.
                         </h4>
-                        <div className="tour-footer">
+                        <div className="buttons-wrapper">
                             <button
                                 className="admin-btn btn-purple"
                                 onClick={ () => finishTour() }

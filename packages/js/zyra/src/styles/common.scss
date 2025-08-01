@@ -953,6 +953,10 @@ input[type="checkbox"] {
 
 .settings-input-content {
   position: relative;
+
+  input:focus{
+    box-shadow: none;
+  }
 }
 
 .select-deselect-trigger {
@@ -1032,3 +1036,10 @@ input[type="checkbox"] {
   }
 }
 
+// footer button style start
+.buttons-wrapper{
+  display: flex;
+  justify-content: end;
+  gap: 0.625rem;
+}
+// footer button style end
