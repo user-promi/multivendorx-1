@@ -29,7 +29,6 @@
             align-items: center;
             justify-content: flex-start;
             gap: 0.5rem;
-            flex-wrap: wrap;
 
             .filter-wrapper {
                 background: #f4f4f4;
@@ -40,7 +39,6 @@
                 align-items: flex-start;
                 justify-content: flex-start;
                 gap: 0.5rem;
-                max-width: 21.875rem;
                 width: 100%;
 
                 article {
