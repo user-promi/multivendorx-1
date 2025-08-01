@@ -127,7 +127,7 @@ class QuoteCart {
         if ( empty( $cart_session ) && ! $can_be_empty ) {
             $cart_session = $this->get_quote_cart_session();
         }
-        // Set quote_cart  session data.
+        // Set quote_cart session data.
         $this->session->set( 'quote_cart', $cart_session );
     }
 
@@ -149,7 +149,7 @@ class QuoteCart {
         $set = true;
 
         if ( ! headers_sent() ) {
-            if ( count( $this->quote_cart_content ) > 0 ) {
+            if ( sizeof( $this->quote_cart_content ) > 0 ) {
                 $this->set_cart_cookies( true );
                 $set = true;
             } elseif ( isset( $_COOKIE['quote_items_in_cart'] ) ) {
@@ -170,7 +170,7 @@ class QuoteCart {
     private function set_cart_cookies( $set = true ) {
         if ( $set ) {
             wc_setcookie( 'quote_items_in_cart', 1 );
-            wc_setcookie( 'quote_hash', md5( wp_json_encode( $this->quote_cart_content ) ) );
+            wc_setcookie( 'quote_hash', md5( json_encode( $this->quote_cart_content ) ) );
         } elseif ( isset( $_COOKIE['quote_items_in_cart'] ) ) {
             wc_setcookie( 'quote_items_in_cart', 0, time() - HOUR_IN_SECONDS );
             wc_setcookie( 'quote_hash', '', time() - HOUR_IN_SECONDS );
@@ -192,8 +192,7 @@ class QuoteCart {
         }
 
         $product_id   = absint( $add_to_quote );
-        $variation_id = filter_input( INPUT_GET, 'variation_id', FILTER_SANITIZE_NUMBER_INT );
-        $variation_id = $variation_id ? $variation_id : '';
+        $variation_id = filter_input( INPUT_GET, 'variation_id', FILTER_SANITIZE_NUMBER_INT ) ?: '';
         $quantity     = filter_input( INPUT_GET, 'quantity', FILTER_SANITIZE_NUMBER_INT );
         $quantity     = empty( $quantity ) ? 1 : wc_stock_amount( intval( $quantity ) );
 
@@ -265,10 +264,10 @@ class QuoteCart {
             $return = 'exists';
         }
 
-        if ( 'exists' !== $return ) {
+        if ( 'exists' != $return ) {
             $this->set_session( $this->quote_cart_content );
             $return = 'true';
-            $this->set_cart_cookies( count( $this->quote_cart_content ) > 0 );
+            $this->set_cart_cookies( sizeof( $this->quote_cart_content ) > 0 );
         }
         return $return;
     }

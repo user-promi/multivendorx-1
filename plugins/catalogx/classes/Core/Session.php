@@ -67,7 +67,7 @@ class Session extends \WC_Session {
 
         $this->_cookie = 'catalogx_session_' . COOKIEHASH;
 
-        if ( $cookie === $this->get_session_cookie() ) {
+        if ( $cookie = $this->get_session_cookie() ) {
             $this->_customer_id        = $cookie[0];
             $this->_session_expiration = $cookie[1];
             $this->_session_expiring   = $cookie[2];
@@ -167,10 +167,7 @@ class Session extends \WC_Session {
             return false;
         }
 
-        $raw_cookie       = isset( $_COOKIE[ $this->_cookie ] ) ? sanitize_text_field( wp_unslash( $_COOKIE[ $this->_cookie ] ) ) : '';
-        $sanitized_cookie = sanitize_text_field( $raw_cookie );
-
-        list( $customer_id, $session_expiration, $session_expiring, $cookie_hash ) = explode( '||', $sanitized_cookie );
+        list( $customer_id, $session_expiration, $session_expiring, $cookie_hash ) = explode( '||', $_COOKIE[ $this->_cookie ] );
 
         // Validate hash.
         $to_hash = $customer_id . '|' . $session_expiration;
@@ -269,7 +266,7 @@ class Session extends \WC_Session {
      * @param mixed  $default_value The default value to return if no session is found.
      * @return string|array
      */
-    public function get_session( $customer_id, $default_value = false ) {
+    public function get_session( $customer_id, $default = false ) {
         global $wpdb;
 
         if ( defined( 'WP_SETUP_CONFIG' ) ) {

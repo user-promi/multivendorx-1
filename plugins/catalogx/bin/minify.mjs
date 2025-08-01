@@ -50,7 +50,6 @@ const { name } = JSON.parse( fs.readFileSync( "package.json" ) );
                 const parsed = path.parse( relativePath );
 
                 let outputPath;
-                console.log("Checking relative path : ", relativePath);
 				if (relativePath.startsWith('assets/js')) {
 					outputPath = `release/assets/js/${name}-${parsed.name}.min${ext}`;
 				} else if (relativePath.startsWith('assets/styles')) {
