@@ -14,7 +14,7 @@ export default {
         {
             key: 'separator_content',
             type: 'section',
-            label: __('Common Settings', 'catalogx'),
+            label: __( 'Common Settings', 'catalogx' ),
         },
         {
             key: 'additional_alert_email',
@@ -31,7 +31,7 @@ export default {
             key: 'selected_email_tpl',
             type: 'radio-select',
             label: 'Store Header',
-            desc: 'Select store banner style',            
+            desc: 'Select store banner style',
             options: [
                 {
                     key: 'template1',

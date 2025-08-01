@@ -263,7 +263,7 @@ class Session extends \WC_Session {
      * Returns the session.
      *
      * @param string $customer_id The unique identifier for the customer.
-     * @param mixed  $default_value The default value to return if no session is found.
+     * @param mixed  $default The default value to return if no session is found.
      * @return string|array
      */
     public function get_session( $customer_id, $default = false ) {

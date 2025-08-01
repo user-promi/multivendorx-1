@@ -14,11 +14,38 @@ export const proPopupContent = {
         'catalogx'
     ),
     messages: [
-        { icon: 'popup-icon-smart-course-sync', text: __('Speed up sales with personalized quotes', 'catalogx') },
-        { icon: 'popup-icon-classroom-enrollment', text: __('Enable multiple product enquiries at once to boost customer engagement', 'catalogx') },
-        { icon: 'popup-icon-gift-course', text: __('Advanced enquiry messaging with file uploads, tagging, etc', 'catalogx') },
-        { icon: 'popup-icon-sign', text: __('Increase revenue with tailored pricing for different user roles', 'catalogx') },
-        { icon: 'popup-icon-course-sync', text: __('Drive higher sales with customized pricing for product categories', 'catalogx') },
+        {
+            icon: 'popup-icon-smart-course-sync',
+            text: __( 'Speed up sales with personalized quotes', 'catalogx' ),
+        },
+        {
+            icon: 'popup-icon-classroom-enrollment',
+            text: __(
+                'Enable multiple product enquiries at once to boost customer engagement',
+                'catalogx'
+            ),
+        },
+        {
+            icon: 'popup-icon-gift-course',
+            text: __(
+                'Advanced enquiry messaging with file uploads, tagging, etc',
+                'catalogx'
+            ),
+        },
+        {
+            icon: 'popup-icon-sign',
+            text: __(
+                'Increase revenue with tailored pricing for different user roles',
+                'catalogx'
+            ),
+        },
+        {
+            icon: 'popup-icon-course-sync',
+            text: __(
+                'Drive higher sales with customized pricing for product categories',
+                'catalogx'
+            ),
+        },
     ],
 };
 
