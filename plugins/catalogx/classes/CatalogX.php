@@ -59,6 +59,7 @@ final class CatalogX {
         $this->container['admin_email']            = get_option( 'admin_email' );
         $this->container['render_enquiry_btn_via'] = '';
         $this->container['render_quote_btn_via']   = '';
+        $this->container['is_dev']                 = defined( 'WP_ENV' ) && WP_ENV === 'development';
 
         register_activation_hook( $file, array( $this, 'activate' ) );
         register_deactivation_hook( $file, array( $this, 'deactivate' ) );
