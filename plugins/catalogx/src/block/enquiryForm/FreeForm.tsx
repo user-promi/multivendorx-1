@@ -128,11 +128,12 @@ const FreeForm = ( props: any ) => {
                                 <label htmlFor={ field.key }>
                                     { field.label }
                                 </label>
-                                <div className="field-wrapper">
+                                <div className="items-wrapper">
                                     <input
                                         type="text"
                                         id={ field.key }
                                         name={ field.key }
+                                        className="basic-input"
                                         value={
                                             enquiryFormData.default_placeholder
                                                 .name || inputs[ field.key ]
@@ -154,11 +155,12 @@ const FreeForm = ( props: any ) => {
                                 <label htmlFor={ field.key }>
                                     { field.label }
                                 </label>
-                                <div className="field-wrapper">
+                                <div className="items-wrapper">
                                     <input
                                         type="email"
                                         id={ field.key }
                                         name={ field.key }
+                                        className="basic-input"
                                         value={
                                             enquiryFormData.default_placeholder
                                                 .email || inputs[ field.key ]
@@ -183,6 +185,7 @@ const FreeForm = ( props: any ) => {
                                 <input
                                     type="number"
                                     id={ field.key }
+                                    className="basic-input"
                                     name={ field.key }
                                     value={ inputs[ field.key ] }
                                     onChange={ handleChange }
@@ -201,6 +204,7 @@ const FreeForm = ( props: any ) => {
                                 <textarea
                                     name={ field.key }
                                     id={ field.key }
+                                    className="textarea-basic"
                                     value={ inputs[ field.key ] }
                                     onChange={ handleChange }
                                     required
@@ -214,7 +218,7 @@ const FreeForm = ( props: any ) => {
                                 <label className="attachment-main-label">
                                     { field.label }
                                 </label>
-                                <div className="attachment-section field-wrapper">
+                                <div className="attachment-section items-wrapper">
                                     { /* eslint-disable-next-line jsx-a11y/label-has-associated-control */ }
                                     <label
                                         htmlFor="dropzone-file"
@@ -263,7 +267,7 @@ const FreeForm = ( props: any ) => {
                             <div className="section-wrapper">
                                 { /* eslint-disable-next-line jsx-a11y/label-has-associated-control */ }
                                 <label>{ field.label }</label>
-                                <div className="recaptcha-wrapper field-wrapper">
+                                <div className="recaptcha-wrapper items-wrapper">
                                     <Recaptcha
                                         captchaValid={ (
                                             validStatus: boolean
@@ -277,7 +281,7 @@ const FreeForm = ( props: any ) => {
                 }
             } ) }
 
-            <section className="popup-footer-section">
+            <section className="buttons-wrapper">
                 <button
                     onClick={ ( e ) => {
                         const captcha = formFields?.find(
