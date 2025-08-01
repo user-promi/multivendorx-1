@@ -95,3 +95,21 @@
         width: 5rem !important; // overwrite woocommerce style
     }
 }
+
+// table style start
+.table-wrapper{
+    input[type="number"]{
+        width: 5rem;
+    }
+    .pagination-number-wrapper{
+        select{
+            background: none !important;
+        }
+    }
+}
+// table style end
+
+// quotelist start
+.quotelist-table-main-wrapper{
+    margin-bottom: 1.5rem;
+}
