@@ -34,7 +34,7 @@ class Frontend {
      */
     public function frontend_scripts() {
         FrontendScripts::load_scripts();
-        if ( is_product() || is_shop() ) {
+        if ( is_product() || is_shop() || is_account_page() ) {
             FrontendScripts::enqueue_style( 'catalogx-frontend-style' );
         }
     }
