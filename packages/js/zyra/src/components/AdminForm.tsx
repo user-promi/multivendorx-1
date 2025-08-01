@@ -1933,6 +1933,11 @@ const AdminForm: React.FC< AdminFormProps > = ( {
 
     const handleModelClose = () => {
         setModelOpen( false );
+        setModulePopupData( {
+            moduleName: '',
+            settings: '',
+            plugin: '',
+        } )
     };
 
     return (
