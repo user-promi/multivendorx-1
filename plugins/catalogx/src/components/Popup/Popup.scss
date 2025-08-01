@@ -50,7 +50,7 @@
     text-align: right;
     cursor: pointer;
     font-size: 1.2rem;
-    color: #396199;
+    color: #5c2ede;
     position: absolute;
     top: 1rem;
     right: 1rem;
@@ -58,19 +58,19 @@
 
 .popup-wrapper {
   .right-section h4{
-    color: #396199;
+    color: #5c2ede;
     }
     .left-section {
         background-image: url(../../assets/images/popup-image.png);
     }
-    .footer-button .admin-btn{
-        background: #041d40;
+    .buttons-wrapper .admin-btn{
+        background: #5c2ede;
     }
     .more-text{
-      color: #062B60;
+      color: #5c2ede;
     }
     .feature-item i{
-      color: #041d40;
+      color: #5c2ede;
     }
 }
 
