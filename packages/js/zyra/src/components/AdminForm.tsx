@@ -360,6 +360,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
             settings: '',
             plugin: '',
         };
+
         if ( proFeaturesEnabled && ! appLocalizer?.khali_dabba ) {
             setModelOpen( true );
             return false;

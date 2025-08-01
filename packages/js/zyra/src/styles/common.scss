@@ -86,30 +86,19 @@ a {
   background-color: #e5e5e5;
 }
 
-// button style end
 
-.admin-badge{
+.admin-badge {
   font-size: 13px;
   font-weight: 500;
   line-height: 0.7rem;
   padding: 0.5rem;
-  border-radius: 0.25rem;
+  border-radius: $border-radius-small;
 
-  &.green{
-      background: #d9f5f0;
-      color: #06be9f;
-  }
-  &.red{
-      background: #fde8e4;
-      color: #f06b4f;
-  }
-  &.yellow{
-      background: #fff0e1;
-      color: #ff9f43;
-  }
-  &.blue{
-      background: #bfdeed6e;
-      color: #003d66de;
+  @each $name, $style in $button-color-palette {
+    &.#{$name} {
+      background: map-get($style, background);
+      color: map-get($style, color);
+    }
   }
 }
 
@@ -1041,5 +1030,6 @@ input[type="checkbox"] {
   display: flex;
   justify-content: end;
   gap: 0.625rem;
+  padding-top: 0.5rem;
 }
 // footer button style end
