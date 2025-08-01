@@ -5,30 +5,6 @@
     background-size: contain;
     height: 100vh;
 }
-
-.view-wholesale-wrapper{
-    .popup-navigation{
-        display: flex;
-        justify-content: space-between;
-
-        p{
-            font-size: 1.6rem;
-            font-weight: 700;
-        }
-    }
-    .popup-content-wrapper{
-        display: flex;
-        gap: 0.5rem;
-        margin-top: 1rem;
-        justify-content: end;
-    }
-    .popup-close-icon i{
-        cursor: pointer;
-        position: absolute;
-        top: 0.625rem;
-        right: 0.625rem;
-    }
-}
 .error-modal{
     margin-bottom: 0.5rem;
     .modal-wrapper{
