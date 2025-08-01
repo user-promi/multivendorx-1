@@ -346,6 +346,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
             settings: '',
             plugin: '',
         };
+
         if ( proFeaturesEnabled && ! appLocalizer?.khali_dabba ) {
             setModelOpen( true );
             return false;
@@ -1111,7 +1112,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                             proSetting={ isProSetting(
                                 inputField.proSetting ?? false
                             ) }
-                            onChange={() => {
+                            onChange={(value, actionMeta) => {
                                 if (
                                     hasAccess(
                                         inputField.proSetting ?? false,
@@ -1126,7 +1127,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                                         )
                                     )
                                 ) {
-                                    onSelectChange;
+                                    onSelectChange(value, actionMeta);
                                 }
                             }}
                         />
@@ -1163,7 +1164,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                             proSetting={ isProSetting(
                                 inputField.proSetting ?? false
                             ) }
-                            onChange={() => {
+                            onChange={(value, actionMeta) => {
                                 if (
                                     hasAccess(
                                         inputField.proSetting ?? false,
@@ -1178,7 +1179,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                                         )
                                     )
                                 ) {
-                                    onSelectChange;
+                                    onSelectChange(value, actionMeta);
                                 }
                             }}
                             onMultiSelectDeselectChange={ () =>
