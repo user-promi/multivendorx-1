@@ -21,7 +21,7 @@ export default function QuotesList() {
                     aria-labelledby="form-dialog-title"
                 >
                     <span
-                        className="admin-font adminlib-cross stock-manager-popup-cross"
+                        className="admin-font adminlib-cross"
                         onClick={ () => {
                             setOpenDialog( false );
                         } }
