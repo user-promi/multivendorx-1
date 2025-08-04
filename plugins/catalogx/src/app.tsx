@@ -7,6 +7,7 @@ import QuoteRequests from './components/QuoteRequests/quoteRequests';
 import EnquiryMessages from './components/EnquiryMessages/enquiryMessages';
 import WholesaleUser from './components/WholesaleUser/wholesaleUser';
 import Rules from './components/Rules/Rules';
+import gif from './assets/images/product-page-builder.gif';
 import { TourProvider } from '@reactour/tour';
 import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock';
 import { Tour, initializeModules } from 'zyra';
@@ -78,7 +79,7 @@ const App = () => {
                 showNavigation={ false }
                 showCloseButton={ false }
             >
-                <Tour appLocalizer={ ( window as any ).appLocalizer } />
+                <Tour appLocalizer={ ( window as any ).appLocalizer } gif={gif} />
             </TourProvider>
             <Route />
         </>
