@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import './Rules.scss';
 import Dialog from '@mui/material/Dialog';
 import ShowPopup from '../Popup/Popup';
-// import "../AdminLibrary/CustomTable/table.scss";
 
 const Rules = () => {
     // State variable declearation

@@ -8,9 +8,7 @@ import {
 import { Table, TableCell } from 'zyra';
 import axios from 'axios';
 import QuoteThankYou from './QuoteThankYou';
-import './QuoteListTable.scss';
 import 'zyra/build/index.css';
-// import '../../style/fonts.scss';
 
 type QuoteRow = {
     id: string | number;

@@ -156,7 +156,7 @@ class FrontendScripts {
             'catalogx_register_scripts',
             array(
 				'catalogx-enquiry-frontend-script'  => array(
-					'src'     => CatalogX()->plugin_url . self::get_build_path_name() . 'modules/Enquiry/js/catalogx-frontend.min.js',
+					'src'     => CatalogX()->plugin_url . self::get_build_path_name() . 'modules/Enquiry/js/' . PLUGIN_SLUG . '-frontend.min.js',
 					'deps'    => array( 'jquery', 'jquery-blockui' ),
 					'version' => $version,
 				),
@@ -171,7 +171,7 @@ class FrontendScripts {
 					'version' => $version,
 				),
 				'catalogx-add-to-quote-cart-script' => array(
-					'src'     => CatalogX()->plugin_url . self::get_build_path_name() . 'modules/Quote/js/catalogx-frontend.min.js',
+					'src'     => CatalogX()->plugin_url . self::get_build_path_name() . 'modules/Quote/js/' . PLUGIN_SLUG . '-frontend.min.js',
 					'deps'    => array( 'jquery' ),
 					'version' => $version,
 				),
@@ -194,17 +194,12 @@ class FrontendScripts {
             'catalogx_register_styles',
             array(
 				'catalogx-frontend-style'     => array(
-					'src'     => CatalogX()->plugin_url . self::get_build_path_name() . 'styles/catalogx-frontend.min.css',
+					'src'     => CatalogX()->plugin_url . self::get_build_path_name() . 'styles/' . PLUGIN_SLUG . '-frontend.min.css',
 					'deps'    => array(),
 					'version' => $version,
 				),
 				'catalogx-enquiry-form-style' => array(
 					'src'     => CatalogX()->plugin_url . self::get_build_path_name() . 'styles/block/enquiryForm/index.css',
-					'deps'    => array(),
-					'version' => $version,
-				),
-				'catalogx-quote-cart-style'   => array(
-					'src'     => CatalogX()->plugin_url . self::get_build_path_name() . 'styles/block/quote-cart/index.css',
 					'deps'    => array(),
 					'version' => $version,
 				),

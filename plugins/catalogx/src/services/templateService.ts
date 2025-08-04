@@ -3,11 +3,6 @@
 // Predefined contexts
 const contexts: Record< string, __WebpackModuleApi.RequireContext > = {
     settings: require.context( '../components/Settings', true, /\.ts$/ ),
-    // synchronizations: require.context(
-    //     "../components/Synchronization",
-    //     true,
-    //     /\.ts$/
-    // ),
 };
 
 type SettingNode = {

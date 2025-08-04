@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import Dialog from '@mui/material/Dialog';
 import ShowPopup from '../Popup/Popup';
 import './wholesaleUser.scss';
-// import '../AdminLibrary/CustomTable/table.scss';
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 
