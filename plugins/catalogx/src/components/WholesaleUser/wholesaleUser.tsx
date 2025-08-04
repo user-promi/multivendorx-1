@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import Dialog from '@mui/material/Dialog';
 import ShowPopup from '../Popup/Popup';
 import './wholesaleUser.scss';
-import 'react-date-range/dist/styles.css'; // main style file
-import 'react-date-range/dist/theme/default.css'; // theme css file
 
 const WholesaleUser = () => {
     const [ openDialog, setOpenDialog ] = useState( false );
