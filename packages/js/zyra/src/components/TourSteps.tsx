@@ -15,9 +15,10 @@ interface TourStep {
 
 interface TourProps {
     appLocalizer: Record<string, any>;
+    gif: any;
 }
 
-const Tour: React.FC<TourProps> = ( { appLocalizer } ) => {
+const Tour: React.FC<TourProps> = ( { appLocalizer, gif } ) => {
     const { setIsOpen, setSteps, setCurrentStep } = useTour();
     const [ isNavigating, setIsNavigating ] = useState< boolean >( false );
 
@@ -280,7 +281,7 @@ const Tour: React.FC<TourProps> = ( { appLocalizer } ) => {
                     <div className="tour-box">
                         <h3>Arrange Enquiry Button</h3>
                         <img
-                            // src={gif}
+                            src={gif}
                             alt="Guide"
                             width="160"
                             // onLoad={handleImageLoad} // Handle image load event
