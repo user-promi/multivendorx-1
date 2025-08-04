@@ -9,6 +9,7 @@ const pluginFiles = [
     "languages/",
     "log/",
     "templates/",
+    "modules/",
     "config.php",
     "composer.lock",
     "composer.json",

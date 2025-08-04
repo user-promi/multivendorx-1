@@ -79,7 +79,10 @@ const App = () => {
                 showNavigation={ false }
                 showCloseButton={ false }
             >
-                <Tour appLocalizer={ ( window as any ).appLocalizer } gif={gif} />
+                <Tour
+                    appLocalizer={ ( window as any ).appLocalizer }
+                    gif={ gif }
+                />
             </TourProvider>
             <Route />
         </>

@@ -176,7 +176,20 @@ module.exports = {
             injectPolyfill: true,
         } ),
         new CopyWebpackPlugin( {
-            patterns: [ ...staticPatterns, ...dynamicPatterns ],
+            patterns: [
+                ...staticPatterns,
+                ...dynamicPatterns,
+                {
+                    from: path.resolve(
+                        __dirname,
+                        'assets/images/email/templates'
+                    ),
+                    to: path.resolve(
+                        __dirname,
+                        'release/assets/images/email/templates'
+                    ),
+                },
+            ],
         } ),
     ],
 
