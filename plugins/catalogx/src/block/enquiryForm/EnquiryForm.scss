@@ -1,5 +1,13 @@
+.single-product-page-action-btn-catalogx{
+    position: relative;
+}
 .catalogx-modal {
-    &.popup_enable {
+    width: 100%;
+    margin-top: 0.5rem;
+    position: absolute;
+    top: 100%;
+
+    &.popup-enable {
         margin: 0 0;
 
         .enquiry-form-modal {
@@ -18,7 +26,6 @@
 
             .modal-wrapper {
                 width: 34.375rem;
-                min-height: 18.75rem;
                 max-height: 40.625rem;
                 overflow-y: scroll;
                 height: auto;
