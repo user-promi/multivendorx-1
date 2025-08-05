@@ -15,7 +15,6 @@ import BlockText from './BlockText';
 import ButtonCustomizer from './ButtonCustomiser';
 import FormCustomizer from './NotifimaFormCustomizer';
 import FreeProFormCustomizer from './FreeProFormCustomizer';
-import FromBuilder from './RegistrationForm';
 import CatalogCustomizer from './CatalogCustomizer';
 import MultiCheckboxTable from './MultiCheckboxTable';
 import MergeComponent from './MergeComponent';
@@ -34,6 +33,7 @@ import MultiCheckBox from './MultiCheckbox';
 import WpEditor from './WpEditor';
 import Log from './Log';
 import InputMailchimpList from './InputMailchimpList';
+import FromBuilder from './RegistrationForm';
 const LazyMapsInput = lazy( () => import( './MapsInput' ) );
 import GoogleMap from './GoogleMap';
 import Popup, { PopupProps } from './Popup';
@@ -123,8 +123,8 @@ interface InputField {
         | 'log'
         | 'checkbox-custom-img'
         | 'api-connect'
-        | 'nested'
-        | 'form-builder';
+		| 'form-builder'
+        | 'nested';
     desc?: string;
     placeholder?: string;
     inputLabel?: string;
@@ -195,6 +195,7 @@ interface InputField {
     }[];
     addButtonLabel?: string;
     deleteButtonLabel?: string;
+    image?: string;
 }
 
 type Center = {
@@ -286,6 +287,20 @@ const AdminForm: React.FC< AdminFormProps > = ( {
         }
     }, [ setting, appLocalizer, submitUrl, id ] );
 
+    useEffect( () => {
+        if ( modelOpen === false ) {
+            const timeout = setTimeout( () => {
+                setModulePopupData( {
+                    moduleName: '',
+                    settings: '',
+                    plugin: '',
+                } );
+            }, 100 );
+    
+            return () => clearTimeout(timeout);
+        }
+    }, [ modelOpen ] );
+
     const isProSetting = ( proDependent: boolean ): boolean => {
         return proDependent && ! appLocalizer?.khali_dabba;
     };
@@ -345,6 +360,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
             settings: '',
             plugin: '',
         };
+
         if ( proFeaturesEnabled && ! appLocalizer?.khali_dabba ) {
             setModelOpen( true );
             return false;
@@ -663,7 +679,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                     input = (
                         <TextArea
                             wrapperClass="setting-from-textarea"
-                            inputClass={ inputField.class || 'form-input' }
+                            inputClass={ inputField.class || 'basic-select form-input' }
                             descClass="settings-metabox-description"
                             description={ inputField.desc }
                             key={ inputField.key }
@@ -985,12 +1001,11 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                 case 'radio-select':
                     input = (
                         <RadioInput
-                            wrapperClass="form-group-radio-select"
-                            inputWrapperClass="radioselect-class"
+                            wrapperClass="radio-group"
+                            inputWrapperClass="image-radio"
                             inputClass="setting-form-input"
-                            radiSelectLabelClass="radio-select-under-label-class"
                             labelImgClass="section-img-fluid"
-                            labelOverlayClass="radioselect-overlay-text"
+                            labelOverlayClass="image-radio-overlay"
                             labelOverlayText="Select your Store"
                             idPrefix="radio-select-under"
                             descClass="settings-metabox-description"
@@ -1004,7 +1019,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                             }
                             name={ inputField.name }
                             keyName={ inputField.key }
-                            options={ Array.isArray( value ) ? value : [] }
+                            options={ Array.isArray( inputField.options ) ? inputField.options : [] }
                             proSetting={ isProSetting(
                                 inputField.proSetting ?? false
                             ) }
@@ -1111,7 +1126,24 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                             proSetting={ isProSetting(
                                 inputField.proSetting ?? false
                             ) }
-                            onChange={ onSelectChange }
+                            onChange={(value, actionMeta) => {
+                                if (
+                                    hasAccess(
+                                        inputField.proSetting ?? false,
+                                        String(
+                                            inputField.moduleEnabled ?? ''
+                                        ),
+                                        String(
+                                            inputField.dependentSetting ?? ''
+                                        ),
+                                        String(
+                                            inputField.dependentPlugin ?? ''
+                                        )
+                                    )
+                                ) {
+                                    onSelectChange(value, actionMeta);
+                                }
+                            }}
                         />
                     );
                     break;
@@ -1146,7 +1178,24 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                             proSetting={ isProSetting(
                                 inputField.proSetting ?? false
                             ) }
-                            onChange={ onSelectChange }
+                            onChange={(value, actionMeta) => {
+                                if (
+                                    hasAccess(
+                                        inputField.proSetting ?? false,
+                                        String(
+                                            inputField.moduleEnabled ?? ''
+                                        ),
+                                        String(
+                                            inputField.dependentSetting ?? ''
+                                        ),
+                                        String(
+                                            inputField.dependentPlugin ?? ''
+                                        )
+                                    )
+                                ) {
+                                    onSelectChange(value, actionMeta);
+                                }
+                            }}
                             onMultiSelectDeselectChange={ () =>
                                 handlMultiSelectDeselectChange(
                                     inputField.key,
@@ -1619,8 +1668,8 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                                 settingChanged.current = true;
                                 updateSetting( key, data );
                             } }
-                            SampleProduct="#"
-                            proUrl="#"
+                            SampleProduct={inputField.image ?? "#"}
+                            proUrl={ appLocalizer?.pro_url ?? "#" }
                         />
                     );
                     break;
@@ -1819,7 +1868,6 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                         />
                     );
                     break;
-
                 case 'form-builder':
                     input = (
                         <FromBuilder

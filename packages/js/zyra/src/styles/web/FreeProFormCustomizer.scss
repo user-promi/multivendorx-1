@@ -1,4 +1,4 @@
- .fields-header{
+.fields-header{
   display: flex;
 
   .name{
@@ -13,5 +13,6 @@
 .button-visibility{
   i{
     font-size: 1.25rem;
+    cursor: pointer;
   }
 }

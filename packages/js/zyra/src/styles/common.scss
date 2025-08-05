@@ -86,7 +86,21 @@ a {
   background-color: #e5e5e5;
 }
 
-// button style end
+
+.admin-badge {
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 0.7rem;
+  padding: 0.5rem;
+  border-radius: $border-radius-small;
+
+  @each $name, $style in $button-color-palette {
+    &.#{$name} {
+      background: map-get($style, background);
+      color: map-get($style, color);
+    }
+  }
+}
 
 // copy btn start
 .copy-btn {
@@ -167,6 +181,10 @@ a {
     border: 0.063rem solid #e0e4e9;
     position: relative;
     transition: height 0.4s ease;
+    width: 100%;
+    height: 16rem;
+    overflow: hidden;
+    transition: all 0.5s ease;
 
     input {
       position: absolute;
@@ -198,6 +216,10 @@ a {
         transition: all 0.3s ease;
       }
     }
+    .admin-pro-tag{
+      top: 1.425rem;
+      right: 1rem;
+    }
 
     &.active {
       input {
@@ -206,6 +228,8 @@ a {
     }
 
     &:hover {
+      height: auto;
+
       .image-radio-overlay {
         opacity: 0.5;
       }
@@ -225,7 +249,6 @@ a {
   border-radius: 0.25rem;
   padding: 0.313rem 0.5rem;
   background: transparent;
-  background-color: transparent;
   font-size: 0.875rem;
   line-height: 1.5;
   min-height: 2.213rem !important; // for overwrite woocommerce style
@@ -453,7 +476,7 @@ input[type="checkbox"] {
   }
 
   .settings-form-group-radio {
-    width: 70%;
+    width: 50%;
     position: relative;
 
     .basic-input,
@@ -464,7 +487,6 @@ input[type="checkbox"] {
   }
 
   .button-visibility {
-    width: 6%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -813,16 +835,6 @@ input[type="checkbox"] {
 
 
 // visibility control container
-.glider {
-  position: absolute;
-  display: flex;
-  height: 1.563rem;
-  width: 3.125rem;
-  background-color: #e7d3ff;
-  z-index: 1;
-  transition: 0.25s ease-out;
-}
-
 .tabs {
   display: flex;
   position: relative;
@@ -930,6 +942,10 @@ input[type="checkbox"] {
 
 .settings-input-content {
   position: relative;
+
+  input:focus{
+    box-shadow: none;
+  }
 }
 
 .select-deselect-trigger {
@@ -1009,3 +1025,11 @@ input[type="checkbox"] {
   }
 }
 
+// footer button style start
+.buttons-wrapper{
+  display: flex;
+  justify-content: end;
+  gap: 0.625rem;
+  padding-top: 0.5rem;
+}
+// footer button style end

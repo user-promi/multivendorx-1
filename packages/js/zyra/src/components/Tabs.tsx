@@ -66,7 +66,7 @@ const Tabs: React.FC< TabsProps > = ( {
                 </div>
                 <div>
                     <p className="menu-name">{ menuCol ? null : tab.name }</p>
-                    <p className="menu-desc">{ menuCol ? null : tab.desc }</p>
+                    {/* <p className="menu-desc">{ menuCol ? null : tab.desc }</p> */}
                 </div>
             </a>
         ) : (
@@ -87,7 +87,7 @@ const Tabs: React.FC< TabsProps > = ( {
                 </div>
                 <div>
                     <p className="menu-name">{ menuCol ? null : tab.name }</p>
-                    <p className="menu-desc">{ menuCol ? null : tab.desc }</p>
+                    {/* <p className="menu-desc">{ menuCol ? null : tab.desc }</p> */}
                 </div>
             </Link>
         );
