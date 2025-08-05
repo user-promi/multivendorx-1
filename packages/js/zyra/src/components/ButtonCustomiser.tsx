@@ -69,7 +69,7 @@ const Customizer: React.FC< CustomizerProps > = ( {
                     },
                     {
                         title: 'Settings',
-                        iconClass: 'adminlib-setting-1',
+                        iconClass: 'adminlib-setting',
                         type: 'setting',
                     },
                 ].map( ( { title, iconClass, type } ) => (
