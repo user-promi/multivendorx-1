@@ -119,7 +119,7 @@ export default {
         },
         {
             key: 'wholesale_discount',
-            type: 'mergeComponent',
+            type: 'merge-component',
             label: __( 'Discount rule', 'catalogx' ),
             desc: __(
                 '<b>Bulk Discount Configuration: </b> Set discount type (percentage/fixed), discount amount, and minimum quantity for wholesellers',
