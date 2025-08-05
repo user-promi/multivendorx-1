@@ -55,7 +55,7 @@ class Util {
             $userlist_exclusion_settings
         );
 
-        $exclude_user_ids = array_map('intval', $exclude_user_ids);
+        $exclude_user_ids = array_map( 'intval', $exclude_user_ids );
 
         // Check current user's id is in exclude user id.
         if ( in_array( $current_user->ID, $exclude_user_ids, true ) ) {
