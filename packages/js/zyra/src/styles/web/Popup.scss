@@ -66,10 +66,22 @@
       }
     }
   }
+  .module-popup-content{
+    .popup-wrapper{
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
+
+      h2{
+        text-align: center;
+        font-size: 1.8rem;
+      }
+    }
+  }
+  .MuiPaper-root:has(.module-popup-content) {
+    max-width: 22vw;
+  }
   // common popup styles
   .admin-popup-content{
     padding: 1.5rem;;
   }
-
-
-
