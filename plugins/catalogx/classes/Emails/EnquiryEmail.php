@@ -218,11 +218,14 @@ class EnquiryEmail extends \WC_Email {
      */
     public function get_content_html() {
         ob_start();
-        if ( Utill::is_khali_dabba() && 'emails/enquiry-email.php' !== $this->template_html ) {
-            CatalogX_Pro()->utill->get_template( $this->template_html, $this->get_template_args() );
-        } else {
-            CatalogX()->util->get_template( $this->template_html, $this->get_template_args() );
-        }
+
+        $template_html = $this->template_html;
+        $template_args = $this->get_template_args();
+
+        $template_loader = apply_filters( 'catalogx_set_enquiry_email_template', array( CatalogX()->util, 'get_template' ), $template_html, true );
+
+        call_user_func( $template_loader, $template_html, $template_args );
+
         return ob_get_clean();
     }
 
@@ -231,11 +234,14 @@ class EnquiryEmail extends \WC_Email {
      */
     public function get_content_plain() {
         ob_start();
-        if ( Utill::is_khali_dabba() && ! empty( CatalogX()->setting->get_setting( 'selected_email_tpl' ) ) ) {
-            CatalogX_Pro()->utill->get_template( $this->template_plain, $this->get_template_args() );
-        } else {
-            CatalogX()->util->get_template( $this->template_plain, $this->get_template_args() );
-        }
+
+        $template_plain = $this->template_plain;
+        $template_args  = $this->get_template_args();
+
+        $template_loader = apply_filters( 'catalogx_set_enquiry_email_template', array( CatalogX()->util, 'get_template' ), $template_plain, false );
+
+        call_user_func( $template_loader, $template_plain, $template_args );
+
         return ob_get_clean();
     }
 

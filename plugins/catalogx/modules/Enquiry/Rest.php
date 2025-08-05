@@ -71,12 +71,7 @@ class Rest {
         unset( $post_params['quantity'], $post_params['productId'] );
 
         // Gather product information.
-        $product_info = array();
-        if ( \CatalogX\Utill::is_khali_dabba() ) {
-            foreach ( (array) CatalogX_Pro()->cart->get_cart_data() as $data ) {
-                $product_info[ $data['product_id'] ] = $data['quantity'] ?? 1;
-            }
-        }
+        $product_info = apply_filters( 'catalogx_set_enquiry_product_info', array() );
         if ( empty( $product_info ) ) {
             $product_info[ $product_id ] = $quantity;
         }
@@ -155,9 +150,7 @@ class Rest {
 
             $msg = __( 'Enquiry sent successfully', 'catalogx' );
 
-            if ( \CatalogX\Utill::is_khali_dabba() ) {
-                CatalogX_Pro()->cart->unset_session();
-            }
+            do_action( 'catalogx_clear_enquiry_cart' );
 
             return rest_ensure_response(
                 array(

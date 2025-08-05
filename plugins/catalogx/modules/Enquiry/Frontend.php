@@ -74,7 +74,7 @@ class Frontend {
             return;
         }
 
-        if ( CatalogX()->setting->get_setting( 'is_enable_multiple_product_enquiry' ) && Utill::is_khali_dabba() ) {
+        if ( apply_filters( 'catalogx_is_allowed_multiple_product_enquiry', false ) ) {
             return;
         }
 
@@ -266,7 +266,7 @@ class Frontend {
             }
         }
 
-        if ( CatalogX()->setting->get_setting( 'is_enable_multiple_product_enquiry' ) && Utill::is_khali_dabba() ) {
+        if ( apply_filters( 'catalogx_is_allowed_multiple_product_enquiry', false ) ) {
             return;
         }
 
