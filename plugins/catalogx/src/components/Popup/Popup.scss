@@ -26,32 +26,56 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.popup-icon-popup-star:before {
+.popup-icon-discounts:before {
   content: "\e900";
 }
 
-.popup-icon-dynamic-pricing:before {
+.popup-icon-dashboard:before {
   content: "\e901";
 }
 
-.popup-icon-different-users:before {
+.popup-icon-emails:before {
   content: "\e902";
 }
 
-.popup-icon-add-file-uploads:before {
+.popup-icon-out-of-stock:before {
   content: "\e903";
 }
 
-.popup-icon-exclusive-forms:before {
+.popup-icon-shortcode:before {
   content: "\e904";
 }
 
-.popup-icon-personalized-pricing:before {
+.popup-icon-wholesale-order:before {
   content: "\e905";
 }
 
-.popup-icon-multiple-products:before {
+.popup-icon-popup-star:before {
   content: "\e906";
+}
+
+.popup-icon-dynamic-pricing:before {
+  content: "\e907";
+}
+
+.popup-icon-different-users:before {
+  content: "\e908";
+}
+
+.popup-icon-add-file-uploads:before {
+  content: "\e909";
+}
+
+.popup-icon-exclusive-forms:before {
+  content: "\e90a";
+}
+
+.popup-icon-personalized-pricing:before {
+  content: "\e90b";
+}
+
+.popup-icon-multiple-products:before {
+  content: "\e90c";
 }
 
 .MuiDialog-container .adminlib-cross {

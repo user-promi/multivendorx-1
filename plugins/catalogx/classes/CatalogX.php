@@ -234,7 +234,7 @@ final class CatalogX {
             '<a href="' . admin_url( 'admin.php?page=catalogx#&tab=settings&subtab=general' ) . '">' . __( 'Settings', 'catalogx' ) . '</a>',
         );
         $links        = array_merge( $plugin_links, $links );
-        if ( apply_filters( 'catalogx_free_active', true ) ) {
+        if ( ! Utill::is_khali_dabba() ) {
             $links[] = '<a href="' . esc_url( CATALOGX_PRO_SHOP_URL ) . '" class="catalogx-pro-plugin" target="_blank" style="font-weight: 700;background: linear-gradient(110deg, rgb(63, 20, 115) 0%, 25%, rgb(175 59 116) 50%, 75%, rgb(219 75 84) 100%);-webkit-background-clip: text;-webkit-text-fill-color: transparent;">' . __( 'Upgrade to Pro', 'catalogx' ) . '</a>';
         }
         return $links;
@@ -256,7 +256,7 @@ final class CatalogX {
                 'support' => '<a href="https://catalogx.com/support/?utm_source=wpadmin&utm_medium=pluginsettings&utm_campaign=catalogx" target="_blank">' . __( 'Support', 'catalogx' ) . '</a>',
             );
 
-            if ( apply_filters( 'catalogx_free_active', true ) ) {
+            if ( ! Utill::is_khali_dabba() ) {
                 $row_meta['pro'] = '<a href="' . esc_url( CATALOGX_PRO_SHOP_URL ) . '" class="catalogx-pro-plugin" target="_blank" style="font-weight: 700;background: linear-gradient(110deg, rgb(63, 20, 115) 0%, 25%, rgb(175 59 116) 50%, 75%, rgb(219 75 84) 100%);-webkit-background-clip: text;-webkit-text-fill-color: transparent;" title="' . esc_attr( __( 'Upgrade to Pro', 'catalogx' ) ) . '">' . __( 'Upgrade to Pro', 'catalogx' ) . '</a>';
             }
 

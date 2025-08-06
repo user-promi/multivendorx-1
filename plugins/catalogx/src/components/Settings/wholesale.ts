@@ -5,7 +5,7 @@ export default {
     priority: 60,
     name: __( 'Wholesale', 'catalogx' ),
     desc: __( 'Wholesale sign up and registration management.', 'catalogx' ),
-    icon: 'adminlib-warehousing-icon',
+    icon: 'adminlib-wholesale',
     submitUrl: 'settings',
     modal: [
         {

@@ -16,40 +16,68 @@ export const proPopupContent = {
     messages: [
         {
             icon: 'popup-icon-personalized-pricing',
-            text: __( 'Send Custom Quotes', 'catalogx' ),
+            text: __( 'Send custom quotes', 'catalogx' ),
         },
         {
-            icon: 'popup-icon-exclusive-forms',
+            icon: 'popup-icon-multiple-products exclusive-forms',
             text: __(
-                'Wholesale Order Forms',
-                'catalogx'
-            ),
-        },
-        {
-            icon: 'popup-icon-multiple-products',
-            text: __(
-                'Enquiry Cart',
+                'Multi-product enquiry cart',
                 'catalogx'
             ),
         },
         {
             icon: 'popup-icon-add-file-uploads',
             text: __(
-                'Advanced Enquiry Forms',
+                'File uploads & custom enquiry fields',
                 'catalogx'
             ),
         },
         {
             icon: 'popup-icon-different-users',
             text: __(
-                'Role-Based Pricing',
+                'Role-based pricing',
                 'catalogx'
             ),
         },
         {
-            icon: 'popup-icon-dynamic-pricing',
+            icon: 'popup-icon-discounts',
             text: __(
-                'Category-Based Discounts',
+                'Category-based discounts',
+                'catalogx'
+            ),
+        },
+        {
+            icon: 'popup-icon-wholesale-order',
+            text: __(
+                'Wholesale order forms',
+                'catalogx'
+            ),
+        },
+        {
+            icon: 'popup-icon-out-of-stock',
+            text: __(
+                'Enquiry for hidden/out-of-stock products',
+                'catalogx'
+            ),
+        },
+        {
+            icon: 'popup-icon-shortcode',
+            text: __(
+                'Enquiry button via shortcode',
+                'catalogx'
+            ),
+        },
+        {
+            icon: 'popup-icon-emails',
+            text: __(
+                'Auto-send branded enquiry emails',
+                'catalogx'
+            ),
+        },
+        {
+            icon: 'popup-icon-dashboard',
+            text: __(
+                'Track all enquiries in one dashboard',
                 'catalogx'
             ),
         },
@@ -60,7 +88,7 @@ const ShowPopup: React.FC< PopupProps > = ( props ) => {
     const modulePopupContent = {
         moduleName: props.moduleName,
         message: sprintf(
-            'To activate please enable the %s module first',
+            'This feature is currently unavailable. To activate it, please enable the %s ',
             props.moduleName
         ),
         moduleButton: 'Enable Now',

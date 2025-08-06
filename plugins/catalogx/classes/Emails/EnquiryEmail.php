@@ -56,54 +56,45 @@ class EnquiryEmail extends \WC_Email {
     public $cust_email;
 
     /**
+     * Email arguments.
+     *
+     * @var string
+     */
+    public $args;
+
+    /**
      * Constructor
      */
     public function __construct() {
         $this->id          = 'catalogx_enquiry_sent';
         $this->title       = __( 'Enquiry sent', 'catalogx' );
         $this->description = __( 'Admin will get an email when a customer enquires about a product.', 'catalogx' );
-
-        $this->initialize_templates();
-
+        // Default values
+        $defaults = array(
+            'email_setting'   => '',
+            'template_map'    => array(
+                'template1' => 'emails/default-enquiry-template.php',
+                'template2' => 'emails/enquiry-template1.php',
+                'template3' => 'emails/enquiry-template2.php',
+                'template4' => 'emails/enquiry-template3.php',
+                'template5' => 'emails/enquiry-template4.php',
+                'template6' => 'emails/enquiry-template5.php',
+                'template7' => 'emails/enquiry-template6.php',
+            ),
+            'base_path'       => CatalogX()->plugin_path . 'templates/',
+            'plain_template'  => 'emails/plain/enquiry-email.php',
+            'default_html'    => 'emails/enquiry-email.php',
+            'template_loader' => CatalogX()->util,
+        );
+        $this->args = apply_filters( 'catalogx_enquiry_email_template', $defaults );
+        // Set the appropriate template paths.
+        $this->template_loader = $this->args['template_loader'];
+        $this->template_html  = $this->args['template_map'][ $this->args['email_setting'] ] ?? $this->args['default_html'];
+        $this->template_plain = $this->args['plain_template'];
+        $this->template_base  = $this->args['base_path'];
         // Call parent constructor.
         parent::__construct();
     }
-
-    /**
-     * Initialize the email templates based on selected settings.
-     *
-     * Sets the HTML and plain templates based on whether Pro version is active
-     * and which template is selected.
-     *
-     * @return void
-     */
-    protected function initialize_templates() {
-        // Determine the base template path based on Pro status and email setting.
-        $is_khali_dabba = Utill::is_khali_dabba();
-        $email_setting  = $is_khali_dabba ? CatalogX()->setting->get_setting( 'selected_email_tpl' ) : '';
-
-        // Use Pro template path if Pro is active and email setting is not empty, otherwise fallback to default path.
-        $base_template_path = ( $is_khali_dabba && ! empty( $email_setting ) )
-            ? CatalogX_Pro()->plugin_path . 'templates/'
-            : CatalogX()->plugin_path . 'templates/';
-
-        // Define available email templates.
-        $template_map = array(
-            'template1' => 'emails/default-enquiry-template.php',
-            'template2' => 'emails/enquiry-template1.php',
-            'template3' => 'emails/enquiry-template2.php',
-            'template4' => 'emails/enquiry-template3.php',
-            'template5' => 'emails/enquiry-template4.php',
-            'template6' => 'emails/enquiry-template5.php',
-            'template7' => 'emails/enquiry-template6.php',
-        );
-
-        // Set the appropriate template paths.
-        $this->template_html  = $template_map[ $email_setting ] ?? 'emails/enquiry-email.php';
-        $this->template_plain = $is_khali_dabba ? 'emails/plain/enquiry-email-plain.php' : 'emails/plain/enquiry-email.php';
-        $this->template_base  = $base_template_path;
-    }
-
 
     /**
      * Trigger the email.
@@ -144,7 +135,7 @@ class EnquiryEmail extends \WC_Email {
      */
     protected function add_vendor_emails() {
         if ( ! Utill::is_active_plugin( 'multivendorx' ) ) {
-			return;
+            return;
         }
 
         foreach ( $this->product_id as $product_id => $quantity ) {
@@ -156,31 +147,10 @@ class EnquiryEmail extends \WC_Email {
 
                 if ( strpos( $this->recipient, $vendor_email ) !== false ) {
                     $email_setting       = get_user_meta( $vendor->id, 'vendor_enquiry_settings', true )['selected_email_tpl'] ?? '';
-                    $this->template_html = $this->get_vendor_template( $email_setting );
+                    $this->template_html = $this->args['template_map'][ $email_setting ] ?? $this->args['default_html'];
                 }
             }
         }
-    }
-
-    /**
-     * Get the appropriate template for the vendor.
-     *
-     * @param string $email_setting Selected email template key.
-     *
-     * @return string Path to the email template.
-     */
-    protected function get_vendor_template( $email_setting ) {
-        $template_map = array(
-            'template1' => 'emails/default-enquiry-template.php',
-            'template2' => 'emails/enquiry-template1.php',
-            'template3' => 'emails/enquiry-template2.php',
-            'template4' => 'emails/enquiry-template3.php',
-            'template5' => 'emails/enquiry-template4.php',
-            'template6' => 'emails/enquiry-template5.php',
-            'template7' => 'emails/enquiry-template6.php',
-        );
-
-        return $template_map[ $email_setting ] ?? 'emails/enquiry-email.php';
     }
 
     /**
@@ -218,14 +188,7 @@ class EnquiryEmail extends \WC_Email {
      */
     public function get_content_html() {
         ob_start();
-
-        $template_html = $this->template_html;
-        $template_args = $this->get_template_args();
-
-        $template_loader = apply_filters( 'catalogx_set_enquiry_email_template', array( CatalogX()->util, 'get_template' ), $template_html, true );
-
-        call_user_func( $template_loader, $template_html, $template_args );
-
+        $this->template_loader->get_template( $this->template_html, $this->get_template_args() );
         return ob_get_clean();
     }
 
@@ -234,14 +197,7 @@ class EnquiryEmail extends \WC_Email {
      */
     public function get_content_plain() {
         ob_start();
-
-        $template_plain = $this->template_plain;
-        $template_args  = $this->get_template_args();
-
-        $template_loader = apply_filters( 'catalogx_set_enquiry_email_template', array( CatalogX()->util, 'get_template' ), $template_plain, false );
-
-        call_user_func( $template_loader, $template_plain, $template_args );
-
+        $this->template_loader->get_template( $this->template_plain, $this->get_template_args() );
         return ob_get_clean();
     }
 

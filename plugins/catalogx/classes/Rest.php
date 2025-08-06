@@ -171,7 +171,7 @@ class Rest {
                 CatalogX()->modules->activate_modules( array( $module_id ) );
                 break;
 
-            default:
+            case 'deactivate':
                 CatalogX()->modules->deactivate_modules( array( $module_id ) );
                 break;
         }
