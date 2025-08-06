@@ -15,34 +15,41 @@ export const proPopupContent = {
     ),
     messages: [
         {
-            icon: 'popup-icon-smart-course-sync',
-            text: __( 'Speed up sales with personalized quotes', 'catalogx' ),
+            icon: 'popup-icon-personalized-pricing',
+            text: __( 'Send Custom Quotes', 'catalogx' ),
         },
         {
-            icon: 'popup-icon-classroom-enrollment',
+            icon: 'popup-icon-exclusive-forms',
             text: __(
-                'Enable multiple product enquiries at once to boost customer engagement',
+                'Wholesale Order Forms',
                 'catalogx'
             ),
         },
         {
-            icon: 'popup-icon-gift-course',
+            icon: 'popup-icon-multiple-products',
             text: __(
-                'Advanced enquiry messaging with file uploads, tagging, etc',
+                'Enquiry Cart',
                 'catalogx'
             ),
         },
         {
-            icon: 'popup-icon-sign',
+            icon: 'popup-icon-add-file-uploads',
             text: __(
-                'Increase revenue with tailored pricing for different user roles',
+                'Advanced Enquiry Forms',
                 'catalogx'
             ),
         },
         {
-            icon: 'popup-icon-course-sync',
+            icon: 'popup-icon-different-users',
             text: __(
-                'Drive higher sales with customized pricing for product categories',
+                'Role-Based Pricing',
+                'catalogx'
+            ),
+        },
+        {
+            icon: 'popup-icon-dynamic-pricing',
+            text: __(
+                'Category-Based Discounts',
                 'catalogx'
             ),
         },

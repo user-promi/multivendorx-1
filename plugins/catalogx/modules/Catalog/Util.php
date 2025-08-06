@@ -50,12 +50,10 @@ class Util {
         // Get excluded user ids.
         $exclude_user_ids = array_map(
             function ( $userid ) {
-                return $userid['key'];
+                return (int)$userid['key'];
             },
             $userlist_exclusion_settings
         );
-
-        $exclude_user_ids = array_map( 'intval', $exclude_user_ids );
 
         // Check current user's id is in exclude user id.
         if ( in_array( $current_user->ID, $exclude_user_ids, true ) ) {
@@ -118,7 +116,7 @@ class Util {
             array_map(
 				function ( $tag ) use ( $product_id ) {
 					$tag_term_list = wp_get_post_terms( $product_id, 'product_tag', array( 'fields' => 'ids' ) );
-					return ( ! empty( $tag_term_list ) && ( $tag_term_list[0] === $tag['key'] ) ) ? $product_id : null;
+					return ( !empty( $tag_term_list ) && $tag_term_list[0] ) == $tag[ 'key' ] ? $product_id : null;
 				},
                 $tag_exclusion_settings
             )

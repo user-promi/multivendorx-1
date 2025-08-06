@@ -182,10 +182,6 @@ class Frontend {
     public static function catalogx_free_form_settings() {
         $form_settings = CatalogX()->setting->get_option( 'catalogx_enquiry_form_customization_settings', array() );
 
-        if ( empty( $form_settings['freefromsetting'] ) || ! is_array( $form_settings['freefromsetting'] ) ) {
-            return array();
-        }
-
         if ( function_exists( 'icl_t' ) ) {
             foreach ( $form_settings['freefromsetting'] as &$free_field ) {
                 if ( isset( $free_field['label'] ) ) {
@@ -204,14 +200,6 @@ class Frontend {
      */
     public static function catalogx_pro_form_settings() {
         $form_settings = CatalogX()->setting->get_option( 'catalogx_enquiry_form_customization_settings', array() );
-
-        if (
-            ! isset( $form_settings['formsettings'] ) ||
-            ! isset( $form_settings['formsettings']['formfieldlist'] ) ||
-            ! is_array( $form_settings['formsettings']['formfieldlist'] )
-        ) {
-            return array();
-        }
 
         if ( function_exists( 'icl_t' ) ) {
             foreach ( $form_settings['formsettings']['formfieldlist'] as &$field ) {
