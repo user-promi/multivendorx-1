@@ -5,7 +5,7 @@ import { FormViewer } from 'zyra';
 import axios from 'axios';
 
 const EnquiryForm = () => {
-    const [ loading, setLoading ] = useState( false );
+    const [ loading, setLoading ] = useState(false);
     const [ toast, setToast ] = useState( false );
     const [ responseMessage, setResponseMessage ] = useState( '' );
     const formData = enquiryFormData;
@@ -50,6 +50,15 @@ const EnquiryForm = () => {
 
     return (
         <div className="enquiry-form-modal">
+            {loading &&
+                <section className='loader-wrapper'>
+                    <div className="loader-item">
+                        <div className="three-body-dot"></div>
+                        <div className="three-body-dot"></div>
+                        <div className="three-body-dot"></div>
+                    </div>
+                </section>
+            }
             <div className="modal-wrapper">
                 <div>{ enquiryFormData.content_before_form }</div>
                 { proActive ? (
@@ -65,10 +74,10 @@ const EnquiryForm = () => {
                 ) }
                 <div>{ enquiryFormData.content_after_form }</div>
                 { toast && (
-                <div className="admin-notice-display-title">
-                    <i className="admin-font adminlib-icon-yes"></i>
-                    { responseMessage }
-                </div>
+                    <div className="admin-notice-display-title">
+                        <i className="admin-font adminlib-icon-yes"></i>
+                        { responseMessage }
+                    </div>
                 ) }
             </div>
         </div>

@@ -70,7 +70,7 @@ class EnquiryEmail extends \WC_Email {
         $this->title       = __( 'Enquiry sent', 'catalogx' );
         $this->description = __( 'Admin will get an email when a customer enquires about a product.', 'catalogx' );
         // Default values
-        $defaults = array(
+        $defaults   = array(
             'email_setting'   => '',
             'template_map'    => array(
                 'template1' => 'emails/default-enquiry-template.php',
@@ -89,9 +89,9 @@ class EnquiryEmail extends \WC_Email {
         $this->args = apply_filters( 'catalogx_enquiry_email_template', $defaults );
         // Set the appropriate template paths.
         $this->template_loader = $this->args['template_loader'];
-        $this->template_html  = $this->args['template_map'][ $this->args['email_setting'] ] ?? $this->args['default_html'];
-        $this->template_plain = $this->args['plain_template'];
-        $this->template_base  = $this->args['base_path'];
+        $this->template_html   = $this->args['template_map'][ $this->args['email_setting'] ] ?? $this->args['default_html'];
+        $this->template_plain  = $this->args['plain_template'];
+        $this->template_base   = $this->args['base_path'];
         // Call parent constructor.
         parent::__construct();
     }

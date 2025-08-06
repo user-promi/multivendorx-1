@@ -334,32 +334,32 @@ class Install {
             // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.SchemaChange
 
             $previous_enquiry_catalog_customization_settings = get_option( 'catalogx_enquiry-catalog-customization_settings', array() );
-            if (!empty($previous_enquiry_catalog_customization_settings)) {
+            if ( ! empty( $previous_enquiry_catalog_customization_settings ) ) {
                 update_option( 'catalogx_enquiry_catalog_customization_settings', $previous_enquiry_catalog_customization_settings );
                 delete_option( 'catalogx_enquiry-catalog-customization_settings' );
             }
             $previous_all_settings_settings = get_option( 'catalogx_all-settings_settings', array() );
-            if (!empty($previous_all_settings_settings)) {
+            if ( ! empty( $previous_all_settings_settings ) ) {
                 update_option( 'catalogx_all_settings_settings', $previous_all_settings_settings );
                 delete_option( 'catalogx_all-settings_settings' );
             }
             $previous_enquiry_quote_exclusion_settings = get_option( 'catalogx_enquiry-quote-exclusion_settings', array() );
-            if (!empty($previous_enquiry_quote_exclusion_settings)) {
+            if ( ! empty( $previous_enquiry_quote_exclusion_settings ) ) {
                 update_option( 'catalogx_enquiry_quote_exclusion_settings', $previous_enquiry_quote_exclusion_settings );
                 delete_option( 'catalogx_enquiry-quote-exclusion_settings' );
             }
             $previous_enquiry_form_customization_settings = get_option( 'catalogx_enquiry-form-customization_settings', array() );
-            if (!empty($previous_enquiry_form_customization_settings)) {
+            if ( ! empty( $previous_enquiry_form_customization_settings ) ) {
                 update_option( 'catalogx_enquiry_form_customization_settings', $previous_enquiry_form_customization_settings );
                 delete_option( 'catalogx_enquiry-form-customization_settings' );
             }
             $previous_enquiry_email_temp_settings = get_option( 'catalogx_enquiry-email-temp_settings', array() );
-            if (!empty($previous_enquiry_email_temp_settings)) {
+            if ( ! empty( $previous_enquiry_email_temp_settings ) ) {
                 update_option( 'catalogx_enquiry_email_temp_settings', $previous_enquiry_email_temp_settings );
                 delete_option( 'catalogx_enquiry-email-temp_settings' );
             }
             $previous_wholesale_registration_settings = get_option( 'catalogx_wholesale-registration_settings', array() );
-            if (!empty($previous_wholesale_registration_settings)) {
+            if ( ! empty( $previous_wholesale_registration_settings ) ) {
                 update_option( 'catalogx_wholesale_registration_settings', $previous_wholesale_registration_settings );
                 delete_option( 'catalogx_wholesale-registration_settings' );
             }

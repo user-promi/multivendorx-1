@@ -20,66 +20,39 @@ export const proPopupContent = {
         },
         {
             icon: 'popup-icon-multiple-products exclusive-forms',
-            text: __(
-                'Multi-product enquiry cart',
-                'catalogx'
-            ),
+            text: __( 'Multi-product enquiry cart', 'catalogx' ),
         },
         {
             icon: 'popup-icon-add-file-uploads',
-            text: __(
-                'File uploads & custom enquiry fields',
-                'catalogx'
-            ),
+            text: __( 'File uploads & custom enquiry fields', 'catalogx' ),
         },
         {
             icon: 'popup-icon-different-users',
-            text: __(
-                'Role-based pricing',
-                'catalogx'
-            ),
+            text: __( 'Role-based pricing', 'catalogx' ),
         },
         {
             icon: 'popup-icon-discounts',
-            text: __(
-                'Category-based discounts',
-                'catalogx'
-            ),
+            text: __( 'Category-based discounts', 'catalogx' ),
         },
         {
             icon: 'popup-icon-wholesale-order',
-            text: __(
-                'Wholesale order forms',
-                'catalogx'
-            ),
+            text: __( 'Wholesale order forms', 'catalogx' ),
         },
         {
             icon: 'popup-icon-out-of-stock',
-            text: __(
-                'Enquiry for hidden/out-of-stock products',
-                'catalogx'
-            ),
+            text: __( 'Enquiry for hidden/out-of-stock products', 'catalogx' ),
         },
         {
             icon: 'popup-icon-shortcode',
-            text: __(
-                'Enquiry button via shortcode',
-                'catalogx'
-            ),
+            text: __( 'Enquiry button via shortcode', 'catalogx' ),
         },
         {
             icon: 'popup-icon-emails',
-            text: __(
-                'Auto-send branded enquiry emails',
-                'catalogx'
-            ),
+            text: __( 'Auto-send branded enquiry emails', 'catalogx' ),
         },
         {
             icon: 'popup-icon-dashboard',
-            text: __(
-                'Track all enquiries in one dashboard',
-                'catalogx'
-            ),
+            text: __( 'Track all enquiries in one dashboard', 'catalogx' ),
         },
     ],
 };

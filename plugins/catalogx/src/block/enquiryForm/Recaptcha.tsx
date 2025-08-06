@@ -52,10 +52,7 @@ const Recaptcha = ( props: any ) => {
             ) }
             { isCaptchaValid && ! userInput && (
                 <p style={ { color: 'red' } }>
-                    { __(
-                        'Recaptcha is required.',
-                        'catalogx'
-                    ) }
+                    { __( 'Recaptcha is required.', 'catalogx' ) }
                 </p>
             ) }
         </>
