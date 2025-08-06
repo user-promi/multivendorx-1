@@ -32,6 +32,7 @@ const Recaptcha = ( props: any ) => {
             <input
                 type="text"
                 id="securityCode"
+                className="basic-input"
                 name="securityCode"
                 onChange={ captchCheck }
                 value={ userInput }
@@ -45,6 +46,14 @@ const Recaptcha = ( props: any ) => {
                 <p style={ { color: 'red' } }>
                     { __(
                         'Invalid security code, please try again.',
+                        'catalogx'
+                    ) }
+                </p>
+            ) }
+            { isCaptchaValid && ! userInput && (
+                <p style={ { color: 'red' } }>
+                    { __(
+                        'Recaptcha is required.',
                         'catalogx'
                     ) }
                 </p>

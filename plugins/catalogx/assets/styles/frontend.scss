@@ -21,8 +21,8 @@
 
     .basic-input,
     .basic-select,
-    .basic-textarea {
-        width: 100%;
+    .textarea-basic {
+        width: 96%;
         border: 0.063rem solid #e0e4e9 !important; // for overwrite woocommerce style
         border-radius: 0.25rem;
         padding: 0.313rem 0.5rem;
@@ -68,6 +68,13 @@
 
             &.multiselect-container{
                 font-size: 0.95rem;
+            }
+
+            &.recaptcha-wrapper p{
+                margin: 0;
+                font-size: 1rem;
+                padding-top: 0.5rem;
+                font-weight: 500;
             }
         }
         .button-visibility {
