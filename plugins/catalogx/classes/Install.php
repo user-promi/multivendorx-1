@@ -44,34 +44,29 @@ class Install {
     public static $previous_version = '';
 
     /**
-     * Current plugin version.
-     *
-     * @var string
-     */
-    public static $current_version = '';
-
-    /**
      * Install class constructor functions
      */
     public function __construct() {
 
         // Get the previous version and current version.
         self::$previous_version = get_option( self::VERSION_KEY, '' );
-        self::$current_version  = CatalogX()->version;
-
-        $this->create_database_tables();
-        $this->set_default_modules();
-        $this->set_default_settings();
-
         // this function should be deleted after 7.0.0 .
         if ( ! empty( get_option( 'mvx_catalog_general_tab_settings' ) ) ) {
+            $this->create_database_tables();
+            $this->set_default_modules();
+            $this->set_default_settings();
             $this->migrate_catalog_enquiry_to_catalogx();
+            update_option( self::VERSION_KEY, '6.0.0' );
         }
-
-        $this->run_default_migration();
-
+        if ( ! ( get_option( self::VERSION_KEY, false ) ) ) {
+            $this->create_database_tables();
+            $this->set_default_modules();
+            $this->set_default_settings();
+        } else {
+            $this->run_default_migration();
+        }
         // Update the version in database.
-        update_option( self::VERSION_KEY, self::$current_version );
+        update_option( self::VERSION_KEY, CatalogX()->version );
     }
 
     /**
