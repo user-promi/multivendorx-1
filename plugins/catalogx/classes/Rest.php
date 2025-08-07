@@ -162,8 +162,8 @@ class Rest {
 
         // Setup wizard module.
         $modules = $request->get_param( 'modules' );
-        foreach ( $modules as $module_id ) {
-            CatalogX()->modules->activate_modules( array( $module_id ) );
+        foreach ( $modules as $module ) {
+            CatalogX()->modules->activate_modules( array( $module ) );
         }
         // Handle the actions.
         switch ( $action ) {
@@ -171,7 +171,7 @@ class Rest {
                 CatalogX()->modules->activate_modules( array( $module_id ) );
                 break;
 
-            case 'deactivate':
+            default:
                 CatalogX()->modules->deactivate_modules( array( $module_id ) );
                 break;
         }
