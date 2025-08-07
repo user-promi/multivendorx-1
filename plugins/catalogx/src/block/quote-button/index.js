@@ -31,16 +31,16 @@ const EditBlock = ( { attributes, setAttributes } ) => {
     // Fetch the rendered form from the REST API
     useEffect( () => {
         if ( productId ) {
-            axios
-                .get(
-                    `${ quoteButton.apiUrl }/${ quoteButton.restUrl }/buttons?product_id=${ productId }&button_type=quote`
-                )
-                .then( ( response ) => {
-                    setContentHtml(
-                        response.data.html ||
-                            __( 'Failed to load.', 'catalogx' )
-                    );
-                } );
+            axios( {
+                method: 'get',
+                url: `${ quoteButton.apiUrl }/${ quoteButton.restUrl }/buttons?product_id=${ productId }&button_type=quote`,
+                headers: { 'X-WP-Nonce': quoteButton.nonce },
+            } ).then( ( response ) => {
+                setContentHtml(
+                    response.data.html ||
+                        __( 'Failed to load.', 'catalogx' )
+                );
+            } );
         } else {
             setContentHtml( __( 'No product selected.', 'catalogx' ) );
         }

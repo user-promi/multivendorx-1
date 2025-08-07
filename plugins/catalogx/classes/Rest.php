@@ -105,6 +105,9 @@ class Rest {
     /**
      * Set tour status
      *
+     * active boolean required
+     * catalogx tour active or not
+     *
      * @param \WP_REST_Request $request The REST request object.
      * @return \WP_Error|\WP_REST_Response
      */
@@ -115,6 +118,11 @@ class Rest {
 
     /**
      * Save global settings
+     *
+     * setting array required
+     * all the settings of a particular id
+     * settingName string required
+     * Give the setting id 
      *
      * @param \WP_REST_Request $request The REST request object.
      * @return \WP_Error|\WP_REST_Response
@@ -152,6 +160,11 @@ class Rest {
 
     /**
      * Manage module setting. Active or Deactive modules.
+     *
+     * id string required
+     * Give the module id
+     * action string required
+     * Give the action that is activate or deactivate
      *
      * @param \WP_REST_Request $request The REST request object.
      * @return void

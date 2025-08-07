@@ -74,7 +74,7 @@ class Frontend {
             return;
         }
 
-        if ( apply_filters( 'catalogx_is_allowed_multiple_product_enquiry', false ) ) {
+        if ( apply_filters( 'catalogx_enable_multiple_product_enquiry', false ) ) {
             return;
         }
 
@@ -230,6 +230,13 @@ class Frontend {
         global $product;
         if ( empty( trim( CatalogX()->render_enquiry_btn_via ) ) ) {
             CatalogX()->render_enquiry_btn_via = 'shortcode';
+            FrontendScripts::load_scripts();
+            FrontendScripts::enqueue_script( 'catalogx-enquiry-frontend-script' );
+            FrontendScripts::enqueue_script( 'catalogx-enquiry-form-script' );
+            FrontendScripts::localize_scripts( 'catalogx-enquiry-frontend-script' );
+            FrontendScripts::localize_scripts( 'catalogx-enquiry-form-script' );
+            FrontendScripts::enqueue_style( 'catalogx-enquiry-form-style' );
+            FrontendScripts::enqueue_style( 'catalogx-frontend-style' );
             ob_start();
             $product_id = isset( $attr['product_id'] ) ? (int) $attr['product_id'] : $product->get_id();
             $this->add_enquiry_button( $product_id );
@@ -254,7 +261,7 @@ class Frontend {
             }
         }
 
-        if ( apply_filters( 'catalogx_is_allowed_multiple_product_enquiry', false ) ) {
+        if ( apply_filters( 'catalogx_enable_multiple_product_enquiry', false ) ) {
             return;
         }
 

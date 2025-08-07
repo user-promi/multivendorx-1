@@ -155,7 +155,7 @@ class Utill {
         if ( function_exists( 'icl_t' ) ) {
             return icl_t( $context, $name, $default_value );
         } else {
-            return $default_value;
+            return __( $default_value, $context );
         }
     }
 

@@ -512,7 +512,7 @@ class FrontendScripts {
 					'data'        => array(
 						'apiUrl'  => untrailingslashit( get_rest_url() ),
 						'restUrl' => CatalogX()->rest_namespace,
-						'nonce'   => wp_create_nonce( 'catalog-security-nonce' ),
+						'nonce'   => wp_create_nonce( 'wp_rest' ),
 					),
 				),
 				'catalogx-quote-button-editor-script'   => array(
@@ -520,7 +520,7 @@ class FrontendScripts {
 					'data'        => array(
 						'apiUrl'  => untrailingslashit( get_rest_url() ),
 						'restUrl' => CatalogX()->rest_namespace,
-						'nonce'   => wp_create_nonce( 'catalog-security-nonce' ),
+						'nonce'   => wp_create_nonce( 'wp_rest' ),
 					),
 				),
 				'catalogx-quote-cart-editor-script'     => array(
@@ -540,7 +540,7 @@ class FrontendScripts {
 					'data'        => array(
 						'apiUrl'  => untrailingslashit( get_rest_url() ),
 						'restUrl' => CatalogX()->rest_namespace,
-						'nonce'   => wp_create_nonce( 'catalog-security-nonce' ),
+						'nonce'   => wp_create_nonce( 'wp_rest' ),
 					),
 				),
 				'catalogx-quote-cart-script'            => array(
@@ -560,7 +560,7 @@ class FrontendScripts {
 					'data'        => array(
 						'apiUrl'  => untrailingslashit( get_rest_url() ),
 						'restUrl' => CatalogX()->rest_namespace,
-						'nonce'   => wp_create_nonce( 'catalog-security-nonce' ),
+						'nonce'   => wp_create_nonce( 'wp_rest' ),
 					),
 				),
             )
