@@ -161,8 +161,9 @@ class Frontend {
         FrontendScripts::localize_scripts( 'catalogx-enquiry-frontend-script' );
         FrontendScripts::localize_scripts( 'catalogx-enquiry-form-script' );
 
-        if ( is_product() ) {
+        if ( is_product() || CatalogX()->render_enquiry_btn_via = 'shortcode' ) {
             FrontendScripts::enqueue_style( 'catalogx-enquiry-form-style' );
+            FrontendScripts::enqueue_style( 'catalogx-frontend-style' );
             FrontendScripts::enqueue_script( 'catalogx-enquiry-frontend-script' );
             FrontendScripts::enqueue_script( 'catalogx-enquiry-form-script' );
 
@@ -230,13 +231,6 @@ class Frontend {
         global $product;
         if ( empty( trim( CatalogX()->render_enquiry_btn_via ) ) ) {
             CatalogX()->render_enquiry_btn_via = 'shortcode';
-            FrontendScripts::load_scripts();
-            FrontendScripts::enqueue_script( 'catalogx-enquiry-frontend-script' );
-            FrontendScripts::enqueue_script( 'catalogx-enquiry-form-script' );
-            FrontendScripts::localize_scripts( 'catalogx-enquiry-frontend-script' );
-            FrontendScripts::localize_scripts( 'catalogx-enquiry-form-script' );
-            FrontendScripts::enqueue_style( 'catalogx-enquiry-form-style' );
-            FrontendScripts::enqueue_style( 'catalogx-frontend-style' );
             ob_start();
             $product_id = isset( $attr['product_id'] ) ? (int) $attr['product_id'] : $product->get_id();
             $this->add_enquiry_button( $product_id );
