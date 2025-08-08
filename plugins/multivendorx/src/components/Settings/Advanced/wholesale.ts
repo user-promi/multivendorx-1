@@ -2,8 +2,8 @@ import { __ } from '@wordpress/i18n';
 
 export default {
     id: 'wholesale',
-    priority: 19,
-    name: __( 'Wholesale', 'mvx-pro' ),
+    priority: 2,
+    name: __( 'Wholesale Visibility', 'mvx-pro' ),
     desc: __( 'Wholesale', 'mvx-pro' ),
     icon: 'adminlib-wholesale',
     submitUrl: 'settings',
@@ -34,8 +34,6 @@ export default {
                     value: 'wholesale_customer',
                 },
             ],
-            moduleEnabled: 'wholesale',
-            proSetting: true,
         },
         {
             key: 'display_price_in_shop_archive',
@@ -49,12 +47,10 @@ export default {
                 },
             ],
             look: 'toggle',
-            moduleEnabled: 'wholesale',
-            proSetting: true,
         },
         {
             key: 'need_approval_for_wholesale_customer',
-            type: 'settingToggle',
+            type: 'setting-toggle',
             label: __( 'Need approval for customer', 'mvx-pro' ),
             desc: __(
                 'Customer need admin approval for becoming a wholesale customer.',
@@ -72,8 +68,6 @@ export default {
                     value: 'no',
                 },
             ],
-            moduleEnabled: 'wholesale',
-            proSetting: true,
         },
     ],
 };

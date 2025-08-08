@@ -297,7 +297,8 @@ class FrontendScripts {
                 'products',
                 'products-capability',
                 'commissions',
-                'dashboard-menu'
+                'product-report-abuse',
+                'role-manager'
             )
 		);
 

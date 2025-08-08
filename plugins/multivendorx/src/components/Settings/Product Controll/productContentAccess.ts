@@ -1,145 +1,71 @@
 import { __ } from '@wordpress/i18n';
 
 export default {
-    id: 'products-capability',
-    priority: 6,
-    name: __( 'Product permissions', 'multivendorx' ),
+    id: 'product-content -access',
+    priority: 1,
+    name: __( 'Product & Content Access', 'multivendorx' ),
     desc: __(
-        'Manage what sellers are allowed to do with their products in your marketplace.',
+        'Select the types of products sellers are allowed to add.',
         'multivendorx'
     ),
-    icon: 'adminlib-wholesale',
+    icon: 'adminlib-warehousing-icon',
     submitUrl: 'settings',
     modal: [
         {
-            key: 'separator_content',
-            type: 'section',
-            desc: __( 'Product Permission Options', 'multivendorx' ),
-            hint: __(
-                'Control how sellers can submit and manage their products',
-                'multivendorx'
-            ),
-        },
-        {
-            key: 'is_submit_product',
+            key: 'product_types',
             type: 'checkbox',
-            label: __( 'Submit Products for Approval', 'multivendorx' ),
+            label: __( 'Product Types', 'multivendorx' ),
+            class: 'mvx-toggle-checkbox',
             desc: __(
-                'Enable this option to allow sellers to add new products, which will need admin approval before going live.',
+                'Select the types of products you want to allow in your marketplace. <li>Simple: Standard product with no variations. <li>Variable: Product with variations (like size or color). <li>External: Links to another site. <li>Rental: Rental-based product.',
                 'multivendorx'
             ),
             options: [
                 {
-                    key: 'is_submit_product',
-                    value: 'is_submit_product',
+                    key: 'simple',
+                    label: __( 'Simple', 'multivendorx' ),
+                    value: 'simple',
+                },
+                {
+                    key: 'variable',
+                    label: __( 'Variable', 'multivendorx' ),
+                    value: 'variable',
+                },
+                {
+                    key: 'external',
+                    label: __( 'External', 'multivendorx' ),
+                    value: 'external',
+                },
+                {
+                    key: 'rental',
+                    label: __( 'Rental', 'multivendorx' ),
+                    value: 'rental',
                 },
             ],
-            look: 'toggle',
+            selectDeselect: true,
         },
         {
-            key: 'is_published_product',
+            key: 'type_options',
             type: 'checkbox',
-            label: __( 'Publish Products', 'multivendorx' ),
+            label: __( 'Type options', 'multivendorx' ),
+            class: 'mvx-toggle-checkbox',
             desc: __(
-                'Allow sellers to directly publish their products on the marketplace without waiting for admin approval.',
+                'Select the types of products you want to enable in your marketplace: <li>Virtual Products: Choose this option for products that don’t have a physical form (e.g., services, memberships). <li>Downloadable Products: Use this option for products that customers can download (e.g., software, eBooks).',
                 'multivendorx'
             ),
             options: [
                 {
-                    key: 'is_published_product',
-                    value: 'is_published_product',
+                    key: 'virtual',
+                    label: __( 'Virtual', 'multivendorx' ),
+                    value: 'virtual',
                 },
-            ],
-            look: 'toggle',
-        },
-        {
-            key: 'is_edit_delete_published_product',
-            type: 'checkbox',
-            label: __( 'Edit Published Products', 'multivendorx' ),
-            desc: __(
-                'Give sellers the ability to edit or delete products that have already been published on the marketplace.',
-                'multivendorx'
-            ),
-            options: [
                 {
-                    key: 'is_edit_delete_published_product',
-                    value: 'is_edit_delete_published_product',
+                    key: 'downloadable',
+                    label: __( 'Downloadable', 'multivendorx' ),
+                    value: 'downloadable',
                 },
             ],
-            look: 'toggle',
-        },
-        {
-            key: 'publish_and_submit_products',
-            type: 'checkbox',
-            label: __( 'Publish & Submit Edited Products', 'multivendorx' ),
-            desc: __(
-                'Sellers can make changes to their products and either submit them for revision or publish them directly, depending on their permissions.',
-                'multivendorx'
-            ),
-            options: [
-                {
-                    key: 'publish_and_submit_products',
-                    value: 'publish_and_submit_products',
-                },
-            ],
-            look: 'toggle',
-        },
-        {
-            key: 'separator_content',
-            type: 'section',
-            desc: __( 'Coupon Management', 'multivendorx' ),
-            hint: __(
-                'Give sellers control over their discount coupons.',
-                'multivendorx'
-            ),
-        },
-        {
-            key: 'is_submit_coupon',
-            type: 'checkbox',
-            label: __( 'Create Coupons', 'multivendorx' ),
-            desc: __(
-                'Enable sellers to create their own discount coupons for their products.',
-                'multivendorx'
-            ),
-            options: [
-                {
-                    key: 'is_submit_coupon',
-                    value: 'is_submit_coupon',
-                },
-            ],
-            look: 'toggle',
-        },
-        {
-            key: 'is_published_coupon',
-            type: 'checkbox',
-            label: __( 'Publish Coupons', 'multivendorx' ),
-            desc: __(
-                'Allow sellers to publish their coupons directly on the marketplace.',
-                'multivendorx'
-            ),
-            options: [
-                {
-                    key: 'is_published_coupon',
-                    value: 'is_published_coupon',
-                },
-            ],
-            look: 'toggle',
-        },
-        {
-            key: 'is_edit_delete_published_coupon',
-            type: 'checkbox',
-            label: __( 'Edit Coupons', 'multivendorx' ),
-            desc: __(
-                'Grant sellers the ability to edit, reuse, or delete any coupons they have already published.',
-                'multivendorx'
-            ),
-            options: [
-                {
-                    key: 'is_edit_delete_published_coupon',
-                    value: 'is_edit_delete_published_coupon',
-                },
-            ],
-            look: 'toggle',
+            selectDeselect: true,
         },
         {
             key: 'separator_content',
@@ -151,25 +77,26 @@ export default {
             ),
         },
         {
-            key: 'is_upload_files',
+            key: 'media_management_options',
             type: 'checkbox',
-            label: __( 'Upload Media Files', 'multivendorx' ),
+            label: __( 'Media Management Options', 'multivendorx' ),
             desc: __(
-                'Let sellers upload media files such as images, videos, eBooks, and music to enhance their product listings.',
+                'Select the permissions you want to grant sellers for media file uploads.',
                 'multivendorx'
             ),
             options: [
                 {
                     key: 'is_upload_files',
+                    label: __( 'Upload Media Files', 'multivendorx' ),
                     value: 'is_upload_files',
                 },
             ],
-            look: 'toggle',
+            selectDeselect: true,
         },
         {
             key: 'separator_content',
             type: 'section',
-            desc: __( 'SKU Generation', 'catalogx' ),
+            desc: __( 'SKU Generation', 'multivendorx' ),
             hint: __(
                 'Control how SKUs are handled for products.',
                 'multivendorx'
@@ -300,5 +227,58 @@ export default {
                 },
             ],
         },
+        {
+            key: 'products_fields',
+            type: 'checkbox',
+            label: __( 'Product fields ', 'multivendorx' ),
+            desc: __(
+                'Select the types of products you want to enable in your marketplace: <li>General: Basic product details such as name, description, and price.<li>Inventory: Manage stock levels, SKU, and stock status for products.<li>Linked Products: Link related products, upsells, and cross-sells to increase sales.<li>Attributes: Add custom attributes like size, color, or material to products.<li>Advanced Settings: Configure additional options like purchase notes and order visibility.<li>Policies: Set store policies, including return and refund rules.<li>Product Tags: Help categorize products using tags for easier searching and filtering.<li>GTIN (Global Trade Item Number): Enter the product’s unique identifier for tracking and categorization purposes.',
+                'multivendorx'
+            ),
+            class: 'mvx-toggle-checkbox',
+            options: [
+                {
+                    key: 'general',
+                    label: __( 'General', 'multivendorx' ),
+                    value: 'general',
+                },
+                {
+                    key: 'inventory',
+                    label: __( 'Inventory', 'multivendorx' ),
+                    value: 'inventory',
+                },
+                {
+                    key: 'linked_product',
+                    label: __( 'Linked Product', 'multivendorx' ),
+                    value: 'linked_product',
+                },
+                {
+                    key: 'attribute',
+                    label: __( 'Attribute', 'multivendorx' ),
+                    value: 'attribute',
+                },
+                {
+                    key: 'advanced',
+                    label: __( 'Advance', 'multivendorx' ),
+                    value: 'advanced',
+                },
+                {
+                    key: 'policies',
+                    label: __( 'Policies', 'multivendorx' ),
+                    value: 'policies',
+                },
+                {
+                    key: 'product_tag',
+                    label: __( 'Product Tag', 'multivendorx' ),
+                    value: 'product_tag',
+                },
+                {
+                    key: 'GTIN',
+                    label: __( 'GTIN', 'multivendorx' ),
+                    value: 'GTIN',
+                },
+            ],
+            selectDeselect: true,
+        }, 
     ],
 };

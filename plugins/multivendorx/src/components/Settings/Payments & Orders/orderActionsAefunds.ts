@@ -1,13 +1,52 @@
 import { __ } from '@wordpress/i18n';
 
 export default {
-    id: 'refund-management',
-    priority: 12,
-    name: __( 'Refunds', 'multivendorx' ),
-    desc: __( 'Set conditions for refund requests.', 'multivendorx' ),
-    icon: 'adminlib-form-section',
+    id: 'order-actions-refunds',
+    priority: 3,
+    name: __( 'Order Actions & Refunds', 'multivendorx' ),
+    desc: __(
+        'Control what actions vendors can take regarding their orders and how order details are displayed.',
+        'multivendorx'
+    ),
+    icon: 'adminlib-order',
     submitUrl: 'settings',
     modal: [
+        {
+            key: 'disallow_vendor_order_status',
+            label: __( 'Order status control', 'multivendorx' ),
+            type: 'checkbox',
+            desc: __(
+                'Decide whether vendors have the ability to change the status of their orders.',
+                'multivendorx'
+            ),
+            options: [
+                {
+                    key: 'disallow_vendor_order_status',
+                    value: 'disallow_vendor_order_status',
+                },
+            ],
+            look: 'toggle',
+        },
+        {
+            key: 'display_suborder_in_mail',
+            label: __( 'Display suborder in mail', 'multivendorx' ),
+            type: 'checkbox',
+            desc: __(
+                'Choose whether to include suborder numbers in order confirmation emails.',
+                'multivendorx'
+            ),
+            options: [
+                {
+                    key: 'display_suborder_in_mail',
+                    value: 'display_suborder_in_mail',
+                },
+            ],
+            look: 'toggle',
+        },
+        {
+            key: 'section',
+            type: 'section',
+        },
         {
             key: 'customer_refund_status',
             type: 'checkbox',
@@ -39,7 +78,7 @@ export default {
                     value: 'completed',
                 },
             ],
-            select_deselect: true,
+            selectDeselect: true,
             moduleEnabled: 'marketplace-refund',
         },
         {

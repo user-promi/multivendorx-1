@@ -1,45 +1,16 @@
 import { __ } from '@wordpress/i18n';
 
 export default {
-    id: 'store',
-    priority: 4,
-    name: __( 'Store', 'multivendorx' ),
+    id: 'store-location',
+    priority: 5,
+    name: __( ' Store Location', 'multivendorx' ),
     desc: __(
-        'Customize and manage the appearance and functionality of vendor shops within your marketplace.',
+        'Configure visibility of store address & map.',
         'multivendorx'
     ),
     icon: 'adminlib-storefront',
     submitUrl: 'settings',
     modal: [
-        {
-            key: 'mvx_vendor_shop_template',
-            type: 'radio-select',
-            label: __( 'Store header', 'multivendorx' ),
-            desc: __(
-                'Select a banner style for your vendors’ store headers. This allows you to choose how vendor stores will visually appear on the platform.',
-                'multivendorx'
-            ),
-            options: [
-                {
-                    key: 'template1',
-                    label: __( 'Outer Space', 'multivendorx' ),
-                    value: 'template1',
-                    color: appLocalizer.template1,
-                },
-                {
-                    key: 'template2',
-                    label: __( 'Green Lagoon', 'multivendorx' ),
-                    value: 'template2',
-                    color: appLocalizer.template2,
-                },
-                {
-                    key: 'template3',
-                    label: __( 'Old West', 'multivendorx' ),
-                    value: 'template3',
-                    color: appLocalizer.template3,
-                },
-            ],
-        },
         {
             key: 'enable_store_map_for_vendor',
             type: 'checkbox',
@@ -108,36 +79,52 @@ export default {
             },
         },
         {
-            key: 'show_related_products',
-            type: 'select',
-            label: __( 'Related Product', 'multivendorx' ),
+            key: 'store_address_input',
+            type: 'textarea',
+            label: __( 'Store Address Input', 'multivendorx' ),
+            
+            desc: __( 'Enter the full store address. This information may be displayed on the vendor’s store page and used for shipping or location purposes.', 'multivendorx' ),
+            placeholder: __( '123 Main Street, City, State, ZIP Code', 'multivendorx' ),
+        },
+        {
+            key: 'radius_search_unit',
+            type: 'setting-toggle',
+            label: __( 'Radius Search - Unit', 'multivendorx' ),
             desc: __(
-                'Let customers view other products related to the product they are viewing..',
+                'Select the unit of measurement for distance-based search filters on the store or product locator.',
                 'multivendorx'
             ),
             options: [
                 {
-                    key: 'all_related',
-                    label: __(
-                        'Related Products from Entire Store',
-                        'multivendorx'
-                    ),
-                    value: __( 'all_related', 'multivendorx' ),
+                    key: 'kilometers',
+                    label: __( 'Kilometers', 'multivendorx' ),
+                    value: 'kilometers',
                 },
                 {
-                    key: 'vendors_related',
-                    label: __(
-                        'Related Products from Seller Store',
-                        'multivendorx'
-                    ),
-                    value: __( 'vendors_related', 'multivendorx' ),
-                },
-                {
-                    key: 'disable',
-                    label: __( 'Disable', 'multivendorx' ),
-                    value: __( 'disable', 'multivendorx' ),
+                    key: 'miles',
+                    label: __( 'Miles', 'multivendorx' ),
+                    value: 'miles',
                 },
             ],
         },
+        {
+            key: 'radius_search_min_distance',
+            type: 'number',
+            label: __( 'Radius Search - Minimum Distance', 'multivendorx' ),
+            desc: __( 'Set the minimum allowable distance (in selected unit) for radius-based search filters.', 'multivendorx' ),
+        },
+        {
+            key: 'radius_search_max_distance',
+            type: 'number',
+            label: __( 'Radius Search - Maximum Distance', 'multivendorx' ),
+            desc: __( 'Set the maximum allowable distance (in selected unit) for radius-based search filters.', 'multivendorx' ),
+        },
+        {
+            key: 'map_zoom_level',
+            type: 'number',
+            label: __( 'Map Zoom Level', 'multivendorx' ),
+            desc: __( 'Define the default zoom level of the map shown on the store or vendor page. Higher values zoom in closer.', 'multivendorx' ),
+        }
+                        
     ],
 };

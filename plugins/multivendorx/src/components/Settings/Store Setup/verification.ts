@@ -2,8 +2,8 @@ import { __ } from '@wordpress/i18n';
 
 export default {
     id: 'identity-verification',
-    priority: 16,
-    name: __( 'Verification', 'mvx-pro' ),
+    priority: 8,
+    name: __( 'Access & Verification Basics', 'mvx-pro' ),
     desc: __(
         'Enable various forms of identity verification for vendors and ensure a trusted marketplace.',
         'mvx-pro'
@@ -11,6 +11,53 @@ export default {
     icon: 'adminlib-clock2',
     submitUrl: 'settings',
     modal: [
+        {
+            key: 'section',
+            type: 'section',
+            hint: __(
+                'Email Verification',
+                'multivendorx'
+            ),
+        },
+        {
+            key: 'enable_email_verification',
+            label: __('Enable Email Verification', 'multivendorx'),
+            desc: __('Enable this to require users to verify their email address after registration.', 'multivendorx'),
+            type: 'checkbox',
+            options: [
+                {
+                    key: 'enable_email_verification',
+                    value: 'enable_email_verification',
+                },
+            ],
+            look: 'toggle',
+        },
+
+        // Registration Notice - Textarea
+        {
+            key: 'registration_notice',
+            label: __('Registration Notice', 'multivendorx'),
+            desc: __('This message will be displayed on the registration page.', 'multivendorx'),
+            type: 'textarea',
+            class: 'mvx-setting-textarea',
+        },
+
+        // Login Notice - Textarea
+        {
+            key: 'login_notice',
+            label: __('Login Notice', 'multivendorx'),
+            desc: __('This message will be shown on the login page.', 'multivendorx'),
+            type: 'textarea',
+            class: 'mvx-setting-textarea',
+        },
+        {
+            key: 'section',
+            type: 'section',
+            hint: __(
+                'Social Verification',
+                'multivendorx'
+            ),
+        },
         {
             key: 'badge_img',
             type: 'file',
@@ -21,45 +68,26 @@ export default {
                 'Upload (32px height) size badge that will appear next to verified vendors for credibility.',
                 'mvx-pro'
             ),
-            proSetting: true,
-            moduleEnabled: 'identity-verification',
         },
         {
-            key: 'address_verification',
-            label: __( 'Address Verification', 'mvx-pro' ),
+            key: 'vendor_verification',
             type: 'checkbox',
-            desc: __(
-                'Enable vendors to verify their physical address to enhance trust in the marketplace.',
-                'mvx-pro'
-            ),
+            label: __( 'Vendor Verification', 'mvx-pro' ),
+            desc: __( 'Choose the types of verification you want to enable for vendors.', 'mvx-pro' ),
             options: [
                 {
                     key: 'address_verification',
+                    label: __( 'Address Verification', 'mvx-pro' ),
                     value: 'address_verification',
                 },
-            ],
-            look: 'toggle',
-            proSetting: true,
-            moduleEnabled: 'identity-verification',
-        },
-        {
-            key: 'id_verification',
-            label: __( 'Identity Verification', 'mvx-pro' ),
-            type: 'checkbox',
-            desc: __(
-                'Require vendors to verify their identity to increase marketplace security and legitimacy.',
-                'mvx-pro'
-            ),
-            options: [
                 {
                     key: 'id_verification',
+                    label: __( 'Identity Verification', 'mvx-pro' ),
                     value: 'id_verification',
                 },
             ],
-            look: 'toggle',
-            proSetting: true,
-            moduleEnabled: 'identity-verification',
-        },
+            selectDeselect: true,
+        },        
         {
             key: 'separator_content',
             type: 'section',
@@ -71,59 +99,30 @@ export default {
             blocktext: __( 'Verification-only access', 'mvx-pro' ),
         },
         {
-            key: 'endpoint_control',
-            label: __( 'Restrict access to other pages', 'mvx-pro' ),
+            key: 'unverified_vendor_access',
             type: 'checkbox',
-            desc: __(
-                'Allow unverified vendors to access only the verification page. Once they complete the verification process, they can access the rest of the dashboard.',
-                'mvx-pro'
-            ),
+            label: __( 'Access Restrictions for Unverified Vendors', 'mvx-pro' ),
+            desc: __( 'Select the restrictions you want to apply to vendors who have not yet completed their verification process.', 'mvx-pro' ),
             options: [
                 {
                     key: 'endpoint_control',
+                    label: __( 'Restrict access to other pages', 'mvx-pro' ),
                     value: 'endpoint_control',
                 },
-            ],
-            look: 'toggle',
-            proSetting: true,
-            moduleEnabled: 'identity-verification',
-        },
-        {
-            key: 'redirect_verification_page',
-            label: __( 'Redirect to verification page', 'mvx-pro' ),
-            type: 'checkbox',
-            desc: __(
-                'Automatically redirect unverified vendors to the verification page.',
-                'mvx-pro'
-            ),
-            options: [
                 {
                     key: 'redirect_verification_page',
+                    label: __( 'Redirect to verification page', 'mvx-pro' ),
                     value: 'redirect_verification_page',
                 },
-            ],
-            look: 'toggle',
-            proSetting: true,
-            moduleEnabled: 'identity-verification',
-        },
-        {
-            key: 'disable_add_product_endpoint',
-            label: __( 'Disable add product', 'mvx-pro' ),
-            type: 'checkbox',
-            desc: __(
-                'Block vendors from adding products or accessing certain sections until verified.  ',
-                'mvx-pro'
-            ),
-            options: [
                 {
                     key: 'disable_add_product_endpoint',
+                    label: __( 'Disable add product', 'mvx-pro' ),
                     value: 'disable_add_product_endpoint',
                 },
             ],
-            look: 'toggle',
-            proSetting: true,
-            moduleEnabled: 'identity-verification',
+            selectDeselect: true,
         },
+        
         {
             key: 'separator_content',
             type: 'section',
@@ -146,27 +145,26 @@ export default {
                 },
             ],
             look: 'toggle',
-            proSetting: true,
-            moduleEnabled: 'identity-verification',
         },
         {
             key: 'google_redirect_url',
             type: 'text',
             label: __( 'Redirect URI', 'mvx-pro' ),
-            desc: __(
-                'User redirect URL after successfully authenticated.',
-                'mvx-pro'
-            ),
-            proSetting: true,
-            moduleEnabled: 'identity-verification',
+            desc: __( 'User redirect URL after successfully authenticated.', 'mvx-pro' ),
+            dependent: {
+                key: 'google_enable',
+                set: true,
+            },
         },
         {
             key: 'google_client_id',
             type: 'text',
             label: __( 'Client ID', 'mvx-pro' ),
             desc: __( '', 'mvx-pro' ),
-            proSetting: true,
-            moduleEnabled: 'identity-verification',
+            dependent: {
+                key: 'google_enable',
+                set: true,
+            },
         },
         {
             key: 'google_client_secret',
@@ -181,9 +179,11 @@ export default {
                     'mvx-pro'
                 ) }`
             ),
-            proSetting: true,
-            moduleEnabled: 'identity-verification',
-        },
+            dependent: {
+                key: 'google_enable',
+                set: true,
+            },
+        },        
         {
             key: 'separator_content',
             type: 'section',
@@ -206,27 +206,26 @@ export default {
                 },
             ],
             look: 'toggle',
-            proSetting: true,
-            moduleEnabled: 'identity-verification',
         },
         {
             key: 'facebook_redirect_url',
             type: 'text',
             label: __( 'Redirect URI', 'mvx-pro' ),
-            desc: __(
-                'User redirect URL after successfully authenticated.',
-                'mvx-pro'
-            ),
-            proSetting: true,
-            moduleEnabled: 'identity-verification',
+            desc: __( 'User redirect URL after successfully authenticated.', 'mvx-pro' ),
+            dependent: {
+                key: 'facebook_enable',
+                set: true,
+            },
         },
         {
             key: 'facebook_client_id',
             type: 'text',
             label: __( 'App ID', 'mvx-pro' ),
             desc: __( '', 'mvx-pro' ),
-            proSetting: true,
-            moduleEnabled: 'identity-verification',
+            dependent: {
+                key: 'facebook_enable',
+                set: true,
+            },
         },
         {
             key: 'facebook_client_secret',
@@ -241,9 +240,12 @@ export default {
                     'mvx-pro'
                 ) }`
             ),
-            proSetting: true,
-            moduleEnabled: 'identity-verification',
+            dependent: {
+                key: 'facebook_enable',
+                set: true,
+            },
         },
+        
         {
             key: 'separator_content',
             type: 'section',
@@ -266,27 +268,26 @@ export default {
                 },
             ],
             look: 'toggle',
-            proSetting: true,
-            moduleEnabled: 'identity-verification',
         },
         {
             key: 'twitter_redirect_url',
             type: 'text',
             label: __( 'Redirect URI', 'mvx-pro' ),
-            desc: __(
-                'User redirect URL after successfully authenticated.',
-                'mvx-pro'
-            ),
-            proSetting: true,
-            moduleEnabled: 'identity-verification',
+            desc: __( 'User redirect URL after successfully authenticated.', 'mvx-pro' ),
+            dependent: {
+                key: 'twitter_enable',
+                set: true,
+            },
         },
         {
             key: 'twitter_client_id',
             type: 'text',
             label: __( 'Consumer Key', 'mvx-pro' ),
             desc: __( '', 'mvx-pro' ),
-            proSetting: true,
-            moduleEnabled: 'identity-verification',
+            dependent: {
+                key: 'twitter_enable',
+                set: true,
+            },
         },
         {
             key: 'twitter_client_secret',
@@ -301,9 +302,14 @@ export default {
                     'mvx-pro'
                 ) }`
             ),
+            dependent: {
+                key: 'twitter_enable',
+                set: true,
+            },
             proSetting: true,
             moduleEnabled: 'identity-verification',
         },
+        
         {
             key: 'separator_content',
             type: 'section',
@@ -333,10 +339,11 @@ export default {
             key: 'linkedin_redirect_url',
             type: 'text',
             label: __( 'Redirect URI', 'mvx-pro' ),
-            desc: __(
-                'User redirect URL after successfully authenticated.',
-                'mvx-pro'
-            ),
+            desc: __( 'User redirect URL after successfully authenticated.', 'mvx-pro' ),
+            dependent: {
+                key: 'linkedin_enable',
+                set: true,
+            },
             proSetting: true,
             moduleEnabled: 'identity-verification',
         },
@@ -345,6 +352,10 @@ export default {
             type: 'text',
             label: __( 'Client ID', 'mvx-pro' ),
             desc: __( '', 'mvx-pro' ),
+            dependent: {
+                key: 'linkedin_enable',
+                set: true,
+            },
             proSetting: true,
             moduleEnabled: 'identity-verification',
         },
@@ -361,8 +372,13 @@ export default {
                     'mvx-pro'
                 ) }`
             ),
+            dependent: {
+                key: 'linkedin_enable',
+                set: true,
+            },
             proSetting: true,
             moduleEnabled: 'identity-verification',
         },
+        
     ],
 };
