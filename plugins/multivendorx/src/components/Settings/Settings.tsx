@@ -233,7 +233,7 @@ const Settings: React.FC< SettingsProps > = () => {
                 appLocalizer={ appLocalizer }
                 brandImg={ Brand }
                 smallbrandImg={ BrandSmall }
-                supprot={ supportLink }
+                support={ supportLink }
                 Link={ Link }
             />
         </SettingProvider>

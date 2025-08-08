@@ -6,7 +6,7 @@ namespace MultiVendorX;
  * MultiVendorX Main Class
  *
  * @version		2.2.0
- * @package		MultivendorX
+ * @package		MultiVendorX
  * @author 		MultiVendorX
  */
 defined( 'ABSPATH' ) || exit;
@@ -81,6 +81,7 @@ final class MultiVendorX {
     public function deactivate() {
         delete_option( 'multivendorx_installed' );
         delete_option('dc_product_vendor_plugin_page_install');
+        flush_rewrite_rules();
     }
 
     /**
@@ -124,6 +125,10 @@ final class MultiVendorX {
         $this->container['commission']      = new Commission\CommissionManager();
         $this->container['rest']            = new RestAPI\Rest();
         $this->container['payments']        = new Payments\Payments();
+        $this->container['rewrites']        = new Store\Rewrites();
+        $this->container['storeutil']        = new Store\StoreUtil();
+        flush_rewrite_rules();
+
     }
 
     /**

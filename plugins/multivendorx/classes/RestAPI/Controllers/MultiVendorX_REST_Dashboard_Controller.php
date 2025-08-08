@@ -38,41 +38,75 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
         return rest_ensure_response($endpoints);
     }
 
-   public function all_endpoints() {
-        $endpoints = MultiVendorX()->setting->get_setting( 'menu_manager' );
+    public function all_endpoints() {
+        // Default endpoints
         $all_endpoints = array(
             'dashboard' => array(
-                'name'  => 'Dashboard',
-                'slug'  => 'dashboard',
-                'submenu' => array() // No submenu
+                'name'    => 'Dashboard',
+                'slug'    => 'dashboard',
+                'submenu' => array()
             ),
             'products' => array(
-                'name'  => 'Products',
-                'slug'  => 'products',
+                'name'    => 'Products',
+                'slug'    => 'products',
                 'submenu' => array(
                     array(
+                        'key'  => 'all-products',
                         'name' => 'All Products',
                         'slug' => 'all-products',
                     ),
                     array(
+                        'key'  => 'add-product',
                         'name' => 'Add Product',
                         'slug' => 'add-product',
                     )
                 )
             ),
             'orders' => array(
-                'name' => 'Orders',
-                'slug' => 'orders',
+                'name'    => 'Orders',
+                'slug'    => 'orders',
                 'submenu' => array(
                     array(
+                        'key'  => 'all-orders',
                         'name' => 'All Orders',
                         'slug' => 'all-orders',
                     )
                 )
             ),
+            'coupons' => array(
+                'name'    => 'Coupons',
+                'slug'    => 'coupons',
+                'submenu' => array(
+                    array(
+                        'key'  => 'all-coupons',
+                        'name' => 'All Coupons',
+                        'slug' => 'all-coupons',
+                    ),
+                    array(
+                        'key'  => 'add-coupons',
+                        'name' => 'Add Coupons',
+                        'slug' => 'add-coupons',
+                    )
+                )
+            ),
         );
 
-        return !empty($endpoints) ? $endpoints : $all_endpoints;
+        $saved_endpoints = MultiVendorX()->setting->get_setting('menu_manager');
+
+        if (!empty($saved_endpoints) && is_array($saved_endpoints)) {
+            $visible_endpoints = array();
+            foreach ($saved_endpoints as $key => $endpoint) {
+                if (isset($endpoint['visible']) && $endpoint['visible']) {
+                    $visible_endpoints[$key] = array_merge(
+                        $all_endpoints[$key] ?? [],
+                        $endpoint
+                    );
+                }
+            }
+            return $visible_endpoints;
+        }
+
+        return $all_endpoints;
     }
 
 }

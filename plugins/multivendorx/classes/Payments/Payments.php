@@ -8,7 +8,7 @@ defined('ABSPATH') || exit;
  * MultiVendorX Main Payment class
  *
  * @version		PRODUCT_VERSION
- * @package		MultivendorX
+ * @package		MultiVendorX
  * @author 		MultiVendorX
  */
 class Payments {
