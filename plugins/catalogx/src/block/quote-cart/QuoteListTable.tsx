@@ -391,7 +391,7 @@ const QuoteList = () => {
                                 <textarea
                                     id="message"
                                     name="message"
-                                    className="basic-textarea"
+                                    className="textarea-input"
                                     rows={ 4 }
                                     cols={ 50 }
                                     value={ formData.message }
