@@ -28,7 +28,7 @@ export default {
             label: __( 'Reason for Abuse Report', 'multivendorx' ),
             placeholder: __( 'Enter a reason and click +', 'multivendorx' ),
             desc: __(
-                'Add one or more predefined reasons that vendors can select when reporting abuse.',
+                'Add one or more predefined reasons that stores can select when reporting abuse.',
                 'multivendorx'
             ),
             name: 'abuse_report_reasons',

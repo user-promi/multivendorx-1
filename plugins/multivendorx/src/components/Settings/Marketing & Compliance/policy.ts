@@ -12,7 +12,7 @@ export default {
             key: 'store-policy',
             type: 'textarea',
             desc: __(
-                'Site will reflect admin created policy. However vendors can edit and override store policies.',
+                'Site will reflect admin created policy. However stores can edit and override store policies.',
                 'multivendorx'
             ),
             label: __( 'Store Policy', 'multivendorx' ),
@@ -22,7 +22,7 @@ export default {
             key: 'shipping_policy',
             type: 'textarea',
             desc: __(
-                'Site will reflect admin created policy. However vendors can edit and override store policies.',
+                'Site will reflect admin created policy. However stores can edit and override store policies.',
                 'multivendorx'
             ),
             label: __( 'Shipping Policy', 'multivendorx' ),
@@ -32,7 +32,7 @@ export default {
             key: 'refund_policy',
             type: 'textarea',
             desc: __(
-                'Site will reflect admin created policy. However vendors can edit and override store policies.',
+                'Site will reflect admin created policy. However stores can edit and override store policies.',
                 'multivendorx'
             ),
             label: __( 'Refund Policy', 'multivendorx' ),
@@ -42,7 +42,7 @@ export default {
             key: 'cancellation_policy',
             type: 'textarea',
             desc: __(
-                'Site will reflect admin created policy. However vendors can edit and override store policies.',
+                'Site will reflect admin created policy. However stores can edit and override store policies.',
                 'multivendorx'
             ),
             label: __(

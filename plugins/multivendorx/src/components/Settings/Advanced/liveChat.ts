@@ -146,9 +146,9 @@ export default {
                     value: 'add_to_cart_button',
                 },
                 {
-                    key: 'vendor_info',
-                    label: __( 'Vendor Details Tab', 'mvx-pro' ),
-                    value: 'vendor_info',
+                    key: 'store_info',
+                    label: __( 'Store Details Tab', 'mvx-pro' ),
+                    value: 'store_info',
                 },
                 {
                     key: 'none',

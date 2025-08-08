@@ -9,7 +9,7 @@ export default {
     submitUrl: 'settings',
     modal: [
         {
-            key: 'vendor_rating_page',
+            key: 'store_rating_page',
             type: 'blocktext',
             label: __( 'no_label', 'multivendorx' ),
             blocktext: __(
@@ -20,7 +20,7 @@ export default {
         {
             key: 'is_sellerreview',
             type: 'checkbox',
-            label: __( 'Vendor Review', 'multivendorx' ),
+            label: __( 'Store Review', 'multivendorx' ),
             desc: __(
                 'Any customer can rate and review a vendor.',
                 'multivendorx'

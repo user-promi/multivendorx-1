@@ -164,8 +164,8 @@ export default {
             key: 'commission_by_product_price',
             type: 'nested',
             label: 'Commission By Product Price',
-            addButtonLabel: '+',
-            deleteButtonLabel: '×',
+            addButtonLabel: 'Add New',
+            deleteButtonLabel: 'Remove',
             nestedFields: [
                 {
                     key: 'product_cost',
@@ -215,8 +215,8 @@ export default {
             key: 'commission_by_purchase_quantity',
             type: 'nested',
             label: 'Commission By Purchase Quantity',
-            addButtonLabel: '+',
-            deleteButtonLabel: '×',
+            addButtonLabel: 'Add New',
+            deleteButtonLabel: 'Remove',
             nestedFields: [
                 {
                     key: 'purchase_quantity',
@@ -294,7 +294,7 @@ export default {
             key: 'give_tax',
             label: __( 'Tax', 'multivendorx' ),
             desc: __(
-                'Let vendor collect & manage tax amount',
+                'Let store collect & manage tax amount',
                 'multivendorx'
             ),
             type: 'checkbox',
@@ -369,6 +369,83 @@ export default {
                 },
             ],
             look: 'toggle',
+        },
+        {
+            key: 'payment_gateway_charge',
+            label: __( 'Payment Gateway Charge', 'multivendorx' ),
+            desc: __(
+                'Include any additional fees charged by the payment gateway during online transactions.',
+                'multivendorx'
+            ),
+            type: 'checkbox',
+            options: [
+                {
+                    key: 'payment_gateway_charge',
+                    label: __( '', 'multivendorx' ),
+                    value: 'payment_gateway_charge',
+                },
+            ],
+            look: 'toggle',
+        },
+        {
+            key: 'gateway_charges_cost_carrier',
+            type: 'select',
+            label: __( 'Gateway charges responsibility', 'multivendorx' ),
+            desc: __(
+                'Decide who will bear the payment gateway charges (e.g., admin or vendor) when making automated payment',
+                'multivendorx'
+            ),
+            options: [
+                {
+                    key: 'store',
+                    label: __( 'Store', 'multivendorx' ),
+                    value: __( 'store', 'multivendorx' ),
+                },
+                {
+                    key: 'admin',
+                    label: __( 'Site owner', 'multivendorx' ),
+                    value: __( 'admin', 'multivendorx' ),
+                },
+                {
+                    key: 'separate',
+                    label: __( 'Separately', 'multivendorx' ),
+                    value: __( 'separate', 'multivendorx' ),
+                },
+            ],
+            dependent: {
+                key: 'payment_gateway_charge',
+                set: true,
+            },
+        },
+        {
+            key: 'payment_gateway_charge_type',
+            type: 'select',
+            label: __( 'Gateway charge structure', 'multivendorx' ),
+            desc: __(
+                'Choose how payment gateway fees will be calculated.',
+                'multivendorx'
+            ),
+            options: [
+                {
+                    key: 'percent',
+                    label: __( 'Percentage', 'multivendorx' ),
+                    value: 'percent',
+                },
+                {
+                    key: 'fixed',
+                    label: __( 'Fixed amount', 'multivendorx' ),
+                    value: 'fixed',
+                },
+                {
+                    key: 'fixed_with_percentage',
+                    label: __( '%age + Fixed', 'multivendorx' ),
+                    value: 'fixed_with_percentage',
+                },
+            ],
+            dependent: {
+                key: 'payment_gateway_charge',
+                set: true,
+            },
         },    
     ],
 };

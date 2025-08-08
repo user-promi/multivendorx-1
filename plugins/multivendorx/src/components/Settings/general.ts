@@ -39,23 +39,23 @@ export default {
             options: appLocalizer.pages_list,
         },
         {
-            key: 'vendor_dashboard_page',
+            key: 'store_dashboard_page',
             type: 'select',
-            label: __( 'Vendor dashboard page', 'multivendorx' ),
+            label: __( 'store dashboard page', 'multivendorx' ),
             desc: __(
-                'Select the page on which you have inserted <code>[mvx_vendor]</code> shortcode. This will be the main dashboard page for your vendors to manage their store.',
+                'Select the page on which you have inserted <code>[mvx_store]</code> shortcode. This will be the main dashboard page for your vendors to manage their store.',
                 'multivendorx'
             ),
             options: appLocalizer.pages_list,
         },
         {
-            key: 'vendor_url',
+            key: 'store_url',
             type: 'text',
             desc: __(
                 'Define the custom slug for the vendor store URL. For example, in the URL: https://yourdomain.com/store/[this-text]/[vendor-name], "[this-text]" will be replaced by the slug you set here.',
                 'multivendorx'
             ),
-            label: __('Vendor Store URL', 'multivendorx'),
+            label: __('Store Store URL', 'multivendorx'),
         },
         {
             key: 'mvx_tinymce_api_section',
@@ -83,15 +83,15 @@ export default {
                 },
                 {
                     key: '',
-                    label: '[vendor_registration]',
+                    label: '[store_registration]',
                     desc: __(
-                        'Creates a page where the vendor registration form is available',
+                        'Creates a page where the store registration form is available',
                         'multivendorx'
                     ),
                 },
                 {
                     key: '',
-                    label: '[vendor_coupons]',
+                    label: '[store_coupons]',
                     desc: __(
                         'Lets you view  a brief summary of the coupons created by the seller and number of times it has been used by the customers',
                         'multivendorx'

@@ -4,12 +4,12 @@ export default {
     id: 'seo',
     priority: 1,
     name: __( 'SEO Support', 'mvx-pro' ),
-    desc: __( 'Manage and Process vendor seo', 'mvx-pro' ),
+    desc: __( 'Manage and Process store seo', 'mvx-pro' ),
     icon: 'adminlib-support',
     submitUrl: 'settings',
     modal: [       
         {
-            key: 'vendor_seo_options',
+            key: 'store_seo_options',
             type: 'setting-toggle',
             label: __( 'SEO Mode', 'mvx-pro' ),
             options: [
