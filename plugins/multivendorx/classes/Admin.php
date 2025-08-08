@@ -116,6 +116,10 @@ class Admin {
                     'name'   => __( 'Help and Support', 'multivendorx' ),
                     'subtab' => '',
                 ),
+                'store-management'          => array(
+                    'name'   => __( 'Store management', 'multivendorx' ),
+                    'subtab' => '',
+                ),
             );
             
             foreach ( $submenus as $slug => $submenu ) {
