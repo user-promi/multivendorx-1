@@ -77,20 +77,20 @@ export default {
             ),
             options: [
                 {
-                    key: 'mvx_commission_fixed_per_transaction',
-                    label: __( 'Fixed', 'multivendorx' ),
-                    type: 'number',
-                    desc: __( 'Fixed amount per transaction', 'multivendorx' ),
-                },
-                {
                     key: 'mvx_commission_percentage_per_transaction',
-                    label: __( 'Percentage', 'multivendorx' ),
+                    label: __( '%', 'multivendorx' ),
                     type: 'number',
                     desc: __(
                         'Percentage of product price per transaction',
                         'multivendorx'
                     ),
                 },
+                {
+                    key: 'mvx_commission_fixed_per_transaction',
+                    label: __( '$', 'multivendorx' ),
+                    type: 'number',
+                    desc: __( 'Fixed amount per transaction', 'multivendorx' ),
+                },                
             ],
             dependent: {
                 key: 'commission_type',
@@ -108,19 +108,19 @@ export default {
             ),
             options: [
                 {
-                    key: 'mvx_commission_fixed_per_unit',
-                    label: __( 'Fixed', 'multivendorx' ),
-                    type: 'number',
-                    desc: __( 'Fixed amount per unit', 'multivendorx' ),
-                },
-                {
                     key: 'mvx_commission_percentage_per_unit',
-                    label: __( 'Percentage', 'multivendorx' ),
+                    label: __( '%', 'multivendorx' ),
                     type: 'number',
                     desc: __(
                         'Percentage of product price per unit',
                         'multivendorx'
                     ),
+                },
+                {
+                    key: 'mvx_commission_fixed_per_unit',
+                    label: __( '$', 'multivendorx' ),
+                    type: 'number',
+                    desc: __( 'Fixed amount per unit', 'multivendorx' ),
                 },
             ],
             dependent: {
@@ -139,19 +139,19 @@ export default {
             ),
             options: [
                 {
-                    key: 'mvx_commission_fixed_per_unit',
-                    label: __( 'Fixed', 'multivendorx' ),
-                    type: 'number',
-                    desc: __( 'Fixed amount per unit', 'multivendorx' ),
-                },
-                {
                     key: 'mvx_commission_percentage_per_unit',
-                    label: __( 'Percentage', 'multivendorx' ),
+                    label: __( '%', 'multivendorx' ),
                     type: 'number',
                     desc: __(
                         'Percentage of product price per unit',
                         'multivendorx'
                     ),
+                },
+                {
+                    key: 'mvx_commission_fixed_per_unit',
+                    label: __( '$', 'multivendorx' ),
+                    type: 'number',
+                    desc: __( 'Fixed amount per unit', 'multivendorx' ),
                 },
             ],
             dependent: {
