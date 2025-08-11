@@ -37,8 +37,7 @@ const EditBlock = ( { attributes, setAttributes } ) => {
                 headers: { 'X-WP-Nonce': quoteButton.nonce },
             } ).then( ( response ) => {
                 setContentHtml(
-                    response.data.html ||
-                        __( 'Failed to load.', 'catalogx' )
+                    response.data.html || __( 'Failed to load.', 'catalogx' )
                 );
             } );
         } else {

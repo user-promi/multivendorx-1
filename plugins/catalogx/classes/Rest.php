@@ -122,7 +122,7 @@ class Rest {
      * setting array required
      * all the settings of a particular id
      * settingName string required
-     * Give the setting id 
+     * Give the setting id
      *
      * @param \WP_REST_Request $request The REST request object.
      * @return \WP_Error|\WP_REST_Response

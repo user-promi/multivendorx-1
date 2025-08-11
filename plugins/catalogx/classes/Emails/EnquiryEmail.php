@@ -69,7 +69,7 @@ class EnquiryEmail extends \WC_Email {
         $this->id          = 'catalogx_enquiry_sent';
         $this->title       = __( 'Enquiry sent', 'catalogx' );
         $this->description = __( 'Admin will get an email when a customer enquires about a product.', 'catalogx' );
-        // Default values
+        // Default values.
         $defaults   = array(
             'email_setting'   => '',
             'template_map'    => array(
