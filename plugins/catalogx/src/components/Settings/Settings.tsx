@@ -86,25 +86,44 @@ const products: Products[] = [
 
 const faqs = [
     {
-        question:
+        question: __(
             'How do I resolve a timeout error when WordPress connects with Moodle?',
-        answer: 'When encountering a timeout error during WordPress-Moodle communication, adjust timeout settings in your server configuration to accommodate longer communication durations.',
+            'catalogx'
+        ),
+        answer: __(
+            'When encountering a timeout error during WordPress-Moodle communication, adjust timeout settings in your server configuration to accommodate longer communication durations.',
+            'catalogx'
+        ),
         open: true,
     },
     {
-        question:
+        question: __(
             'How can I troubleshoot connection errors during Test connection?',
+            'catalogx'
+        ),
         answer: 'Navigate to the "Log" menu, where you can use the "Log" feature to troubleshoot connectivity issues between your store and Moodle. This tool helps identify necessary changes for resolution.',
         open: false,
     },
     {
-        question: "Why aren't my customers receiving enrollment emails?",
-        answer: 'Install a plugin like Email Log to check if New Enrollment emails are logged. If logged, your email functionality is working fine; if not, contact your email server administrator for assistance.',
+        question: __(
+            "Why aren't my customers receiving enrollment emails?",
+            'catalogx'
+        ),
+        answer: __(
+            'Install a plugin like Email Log to check if New Enrollment emails are logged. If logged, your email functionality is working fine; if not, contact your email server administrator for assistance.',
+            'catalogx'
+        ),
         open: false,
     },
     {
-        question: 'Can I set course expiration dates using MooWoodle?',
-        answer: 'Course-related functionalities, including setting expiration dates, are managed within Moodle itself; MooWoodle does not control these aspects.',
+        question: __(
+            'Can I set course expiration dates using MooWoodle?',
+            'catalogx'
+        ),
+        answer: __(
+            'Course-related functionalities, including setting expiration dates, are managed within Moodle itself; MooWoodle does not control these aspects.',
+            'catalogx'
+        ),
         open: false,
     },
 ];

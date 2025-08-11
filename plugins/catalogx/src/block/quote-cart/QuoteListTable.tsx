@@ -304,10 +304,6 @@ const QuoteList = () => {
         },
     ];
 
-    if ( ! window.quoteCart ) {
-        return <div>Something went wrong. Please refresh.</div>;
-    }
-
     return (
         <>
             { showThankYou || status ? (

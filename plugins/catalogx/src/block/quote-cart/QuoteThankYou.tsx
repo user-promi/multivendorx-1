@@ -68,7 +68,7 @@ const QuoteThankYou = ( props: QuoteThankYouProps ) => {
         return (
             <div>
                 <p>
-                    Thank you for your quote request{ ' ' }
+                    { __( 'Thank you for your quote request', 'catalogx' ) }{ ' ' }
                     <strong>
                         { quoteCart.khali_dabba ? (
                             <a href={ quoteCart.quote_my_account_url }>

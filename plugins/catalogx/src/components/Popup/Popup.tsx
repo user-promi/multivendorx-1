@@ -61,10 +61,14 @@ const ShowPopup: React.FC< PopupProps > = ( props ) => {
     const modulePopupContent = {
         moduleName: props.moduleName,
         message: sprintf(
-            'This feature is currently unavailable. To activate it, please enable the %s ',
+            /* translators: %s: Module name */
+            __(
+                'This feature is currently unavailable. To activate it, please enable the %s',
+                'catalogx'
+            ),
             props.moduleName
         ),
-        moduleButton: 'Enable Now',
+        moduleButton: __( 'Enable Now', 'catalogx' ),
         modulePageUrl:
             typeof appLocalizer !== 'undefined'
                 ? appLocalizer.module_page_url

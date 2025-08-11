@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import Recaptcha from './Recaptcha';
 
 const FreeForm = ( props: any ) => {
@@ -34,7 +34,14 @@ const FreeForm = ( props: any ) => {
                 setFileName( file.name );
                 if ( file.size > maxFileSize ) {
                     setErrorMessage(
-                        `File size exceeds ${ filesizeLimitField.label } MB. Please upload a smaller file.`
+                        sprintf(
+                            /* translators: %s: file size in MB */
+                            __(
+                                'File size exceeds %s MB. Please upload a smaller file.',
+                                'catalogx'
+                            ),
+                            filesizeLimitField.label
+                        )
                     );
                     return;
                 }

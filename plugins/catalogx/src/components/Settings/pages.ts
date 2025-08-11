@@ -59,32 +59,50 @@ export default {
                 {
                     key: '',
                     label: '[catalogx_enquiry_cart]',
-                    desc: 'Display all products in the enquiry cart and send a single inquiry email for all items in the cart.',
+                    desc: __(
+                        'Display all products in the enquiry cart and send a single inquiry email for all items in the cart.',
+                        'catalogx'
+                    ),
                 },
                 {
                     key: '',
                     label: '[catalogx_request_quote]',
-                    desc: 'Displays a list of products for which users have requested quotes, making it easy to review all requests.',
+                    desc: __(
+                        'Displays a list of products for which users have requested quotes, making it easy to review all requests.',
+                        'catalogx'
+                    ),
                 },
                 {
                     key: '',
                     label: '[catalogx_wholesale_products]',
-                    desc: 'Creates a page listing all wholesale products, enabling wholesalers to easily purchase multiple items in one transaction.',
+                    desc: __(
+                        'Creates a page listing all wholesale products, enabling wholesalers to easily purchase multiple items in one transaction.',
+                        'catalogx'
+                    ),
                 },
                 {
                     key: '',
                     label: '[catalogx_enquiry_cart_button]',
-                    desc: 'Displays the "Add to Enquiry Cart" button.',
+                    desc: __(
+                        'Displays the "Add to Enquiry Cart" button.',
+                        'catalogx'
+                    ),
                 },
                 {
                     key: '',
                     label: '[catalogx_enquiry_button]',
-                    desc: 'Displays the "Send an Enquiry" button',
+                    desc: __(
+                        'Displays the "Send an Enquiry" button',
+                        'catalogx'
+                    ),
                 },
                 {
                     key: '',
                     label: '[catalogx_quote_button]',
-                    desc: 'Displays the "Add to Quote" button.',
+                    desc: __(
+                        'Displays the "Add to Quote" button.',
+                        'catalogx'
+                    ),
                 },
             ],
         },
