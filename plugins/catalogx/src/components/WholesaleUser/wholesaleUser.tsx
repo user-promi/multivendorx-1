@@ -26,7 +26,7 @@ const WholesaleUser = () => {
                     { ! appLocalizer.khali_dabba ? (
                         <ShowPopup />
                     ) : (
-                        <ShowPopup moduleName="Wholesale" />
+                        <ShowPopup moduleName="wholesale" />
                     ) }
                 </Dialog>
                 <div
