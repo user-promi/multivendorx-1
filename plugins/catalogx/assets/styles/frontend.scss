@@ -22,7 +22,7 @@
     .basic-input,
     .basic-select,
     .textarea-basic {
-        width: 96%;
+        width: 100%;
         border: 0.063rem solid #e0e4e9 !important; // for overwrite woocommerce style
         border-radius: 0.25rem;
         padding: 0.313rem 0.5rem;
@@ -106,11 +106,19 @@
 // table style start
 .table-wrapper{
     input[type="number"]{
-        width: 5rem;
+        width: 3.5rem;
     }
     .pagination-number-wrapper{
         select{
             background: none !important;
+        }
+    }
+    .pagination-arrow{
+        align-items: center;
+    }
+    .action-section{
+        .regular-amount{
+            text-decoration: line-through;
         }
     }
 }
