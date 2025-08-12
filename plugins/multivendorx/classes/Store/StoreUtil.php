@@ -99,8 +99,13 @@ class StoreUtil {
         return $store ?: false;
     }
 
-    public function get_store() {
-        
+    public static function get_store() {
+        global $wpdb;
+
+        $table = "{$wpdb->prefix}" . Utill::TABLES['store'];
+        $store = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$table}" ), ARRAY_A );
+
+        return $store ?: [];
     }
 
     public function get_store_meta() {

@@ -2,6 +2,7 @@
 
 namespace MultiVendorX\RestAPI\Controllers;
 use MultiVendorX\Store\StoreUtil;
+use MultiVendorX\Utill;
 
 defined('ABSPATH') || exit;
 
@@ -74,7 +75,45 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
 
     // GET 
     public function get_items( $request ) {
-        
+        $nonce = $request->get_header( 'X-WP-Nonce' );
+        if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
+            return new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'notifima' ), array( 'status' => 403 ) );
+        }
+
+        $limit          = max( intval( $request->get_param( 'row' ) ), 10 );
+        $page           = max( intval( $request->get_param( 'page' ) ), 1 );
+        $offset         = ( $page - 1 ) * $limit;
+        $count  = $request->get_param( 'count' );
+
+        $stores = StoreUtil::get_store();
+    
+        if ( $count ) {
+            global $wpdb;
+            $table_name = "{$wpdb->prefix}" . Utill::TABLES['store'];
+
+            // Get total count
+            $total_count = $wpdb->get_var( "SELECT COUNT(*) FROM $table_name" );
+            return rest_ensure_response( (int) $total_count );
+        }
+
+        $formatted_stores = array();
+        foreach ( $stores as $store ) {
+            $store_id       = (int) $store['ID'];
+            $store_name     = $store['name'];
+            $store_slug     = $store['slug'];
+            $status         = $store['status'];
+            $formatted_stores[] = apply_filters(
+                'multivendorx_stores',
+                array(
+					'id'                => $store_id,
+					'store_name'        => $store_name,
+					'store_slug'        => $store_slug,
+					'status'      => $status,
+				)
+            );
+        }
+
+        return rest_ensure_response( $formatted_stores );
     }
 
     public function create_item( $request ) {

@@ -1,5 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import AddStore from './AddStore';
+import StoreTable from './StoreTable';
 import ViewStore from './ViewStore';
 import EditStore from './Edit/EditStore';
 
@@ -32,7 +33,7 @@ const Store = () => {
           >
             View Store
           </Link>
-          <div>Loading Store...</div>
+          <StoreTable/>
         </>
       )}
     </>
