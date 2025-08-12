@@ -1,6 +1,6 @@
 const wpTextdomain = require( 'wp-textdomain' );
 
-const paths = [ 'classes/**/*.php', 'templates/**/*.php' ];
+const paths = [ 'classes/**/*.php', 'templates/**/*.php', 'modules/**/*.php' ];
 
 paths.forEach( ( path ) => {
     wpTextdomain( path, {

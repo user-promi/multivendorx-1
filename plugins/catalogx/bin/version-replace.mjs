@@ -7,6 +7,7 @@ const { replaceInFile } = await import('replace-in-file');
 const pluginFiles = [
     "classes/**/*",
     "assets/**/*",
+    'modules/**/*',
     "src/**/*",
     "templates/**/*",
     "config.php",

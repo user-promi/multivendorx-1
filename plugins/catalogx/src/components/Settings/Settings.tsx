@@ -84,50 +84,6 @@ const products: Products[] = [
     },
 ];
 
-const faqs = [
-    {
-        question: __(
-            'How do I resolve a timeout error when WordPress connects with Moodle?',
-            'catalogx'
-        ),
-        answer: __(
-            'When encountering a timeout error during WordPress-Moodle communication, adjust timeout settings in your server configuration to accommodate longer communication durations.',
-            'catalogx'
-        ),
-        open: true,
-    },
-    {
-        question: __(
-            'How can I troubleshoot connection errors during Test connection?',
-            'catalogx'
-        ),
-        answer: 'Navigate to the "Log" menu, where you can use the "Log" feature to troubleshoot connectivity issues between your store and Moodle. This tool helps identify necessary changes for resolution.',
-        open: false,
-    },
-    {
-        question: __(
-            "Why aren't my customers receiving enrollment emails?",
-            'catalogx'
-        ),
-        answer: __(
-            'Install a plugin like Email Log to check if New Enrollment emails are logged. If logged, your email functionality is working fine; if not, contact your email server administrator for assistance.',
-            'catalogx'
-        ),
-        open: false,
-    },
-    {
-        question: __(
-            'Can I set course expiration dates using MooWoodle?',
-            'catalogx'
-        ),
-        answer: __(
-            'Course-related functionalities, including setting expiration dates, are managed within Moodle itself; MooWoodle does not control these aspects.',
-            'catalogx'
-        ),
-        open: false,
-    },
-];
-
 const Settings: React.FC< SettingsProps > = () => {
     const settingsArray: SettingItem[] = getAvailableSettings(
         getTemplateData(),
@@ -177,18 +133,6 @@ const Settings: React.FC< SettingsProps > = () => {
                 appLocalizer.settings_databases_value[ settingName ] = setting;
             }
         }, [ setting, settingName, currentTab ] );
-
-        // Special component
-        if ( currentTab === 'faq' ) {
-            return (
-                <Support
-                    title="Thank you for using CatalogX"
-                    subTitle="We want to help you enjoy a wonderful experience with all of our products."
-                    // url="https://www.youtube.com/embed/cgfeZH5z2dM?si=3zjG13RDOSiX2m1b"
-                    faqData={ faqs }
-                />
-            );
-        }
 
         return (
             <>
