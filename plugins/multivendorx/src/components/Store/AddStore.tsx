@@ -48,7 +48,7 @@ const AddStore = () => {
     .then((response) => {
         if(response.data.success) {
           console.log('Store Create successfully')
-          navigate(`?page=multivendorx#&tab=store-management&edit/${response.data.id}`);
+          navigate(`?page=multivendorx#&tab=stores&edit/${response.data.id}`);
         }
     })
   };
@@ -56,7 +56,7 @@ const AddStore = () => {
   return (
     <>
         <Link
-            to="?page=multivendorx#&tab=store-management"
+            to="?page=multivendorx#&tab=stores"
             className="button"
             >
             Back

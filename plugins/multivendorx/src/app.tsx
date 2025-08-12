@@ -3,6 +3,8 @@ import { useLocation } from 'react-router-dom';
 import Settings from './components/Settings/Settings';
 
 import Modules from './components/Modules/Modules';
+
+import Store from './components/Store/Store';
 import { useEffect } from 'react';
 import { initializeModules } from 'zyra';
 
@@ -19,6 +21,9 @@ const Route = () => {
             ) }
 
             {currentTab.get('tab') === 'modules' && <Modules />}
+            { currentTab.get( 'tab' ) === 'stores' && (
+                <Store />
+            ) }
         </>
     );
 };

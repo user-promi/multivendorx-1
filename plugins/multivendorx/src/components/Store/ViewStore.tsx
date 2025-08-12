@@ -4,7 +4,7 @@ const ViewStore = () => {
   return (
     <>
     <Link
-        to="?page=multivendorx#&tab=store-management"
+        to="?page=multivendorx#&tab=stores"
         className="button"
         >
         Back

@@ -14,7 +14,7 @@ const EditStore = () => {
     const hashParams = new URLSearchParams(hash);
     const currentTab = hashParams.get('section') || 'store';
 
-    const prepareUrl = (tabId: string) => `?page=multivendorx#&tab=store-management&edit/${editId}/&section=${tabId}`;
+    const prepareUrl = (tabId: string) => `?page=multivendorx#&tab=stores&edit/${editId}/&section=${tabId}`;
 
     const tabData = [
         {
@@ -62,7 +62,7 @@ const EditStore = () => {
     return (
         <>
         <Link
-            to="?page=multivendorx#&tab=store-management&view"
+            to="?page=multivendorx#&tab=stores&view"
             className="button"
         >
             Back

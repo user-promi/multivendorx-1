@@ -7,7 +7,7 @@ const Store = () => {
   const location = useLocation();
   const hash = location.hash;
 
-  const isTabActive = hash.includes('tab=store-management');
+  const isTabActive = hash.includes('tab=stores');
   const isAddStore = hash.includes('create');
   const isViewStore = hash.includes('view');
   const iseditStore = hash.includes('edit');
@@ -21,13 +21,13 @@ const Store = () => {
       {!isAddStore && !isViewStore && !iseditStore && (
         <>
           <Link
-            to="?page=multivendorx#&tab=store-management&create"
+            to="?page=multivendorx#&tab=stores&create"
             className="button"
           >
             Add Store
           </Link>
           <Link
-            to="?page=multivendorx#&tab=store-management&view"
+            to="?page=multivendorx#&tab=stores&view"
             className="button"
           >
             View Store
