@@ -151,40 +151,48 @@ export default {
             nestedFields: [
                 {
                     key: 'product_cost',
-                    type: 'number',
-                    label: 'Product Cost',
-                    placeholder: 'Enter cost',
+                    type: 'select',
+                    label: 'If product',
+                    options: [
+                        { value: 'up_to', label: 'Price' },
+                        { value: 'more_than', label: 'Quantity' },
+                    ],
                 },
                 {
                     key: 'rule',
                     type: 'select',
-                    label: 'Rule',
                     options: [
                         { value: 'up_to', label: 'Up To' },
                         { value: 'more_than', label: 'More than' },
+                        { value: 'more', label: 'More than' },
                     ],
                 },
                 {
                     key: 'commission_type',
-                    type: 'select',
-                    label: 'Commission Type',
-                    options: [
-                        { value: 'percent', label: 'Percent' },
-                        { value: 'fixed', label: 'Fixed' },
-                        { value: 'percent_fixed', label: 'Percent + Fixed' },
-                    ],
+                    type: 'number',
+                    label: 'To ',
                 },
                 {
                     key: 'commission_percent',
-                    type: 'number',
-                    label: 'Commission Percent (%)',
-                    placeholder: 'Enter percent',
-                },
-                {
-                    key: 'commission_fixed',
-                    type: 'number',
-                    label: 'Commission Fixed ($)',
-                    placeholder: 'Enter fixed amount',
+                    type: 'multi-number',
+                    label: 'apply commission',
+                    options: [
+                        {
+                            key: 'mvx_commission_percentage_per_unit',
+                            label: __( '%', 'multivendorx' ),
+                            type: 'number',
+                            desc: __(
+                                'Percentage of product price per unit',
+                                'multivendorx'
+                            ),
+                        },
+                        {
+                            key: 'mvx_commission_fixed_per_unit',
+                            label: __( '$', 'multivendorx' ),
+                            type: 'number',
+                            desc: __( 'Fixed amount per unit', 'multivendorx' ),
+                        },
+                    ],
                 },
                 {
                     key: 'mvx_commission_rules_per_unit',

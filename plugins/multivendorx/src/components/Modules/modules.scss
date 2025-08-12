@@ -97,6 +97,9 @@ $border-radius-button: 8rem;
       border-radius: $border-radius-large;
       background: #fff;
       padding: 1.2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
 
       .module-header {
         display: flex;
@@ -117,8 +120,9 @@ $border-radius-button: 8rem;
             color: $theme-color;
           }
         }
-        .pro-tag{
-          i{
+
+        .pro-tag {
+          i {
             color: $theme-color;
             font-size: 1.313rem;
           }
@@ -134,7 +138,8 @@ $border-radius-button: 8rem;
           color: #000;
           margin-bottom: 0.625rem;
         }
-        .requires{
+
+        .requires {
           font-size: 1rem;
           margin: 0.5rem 0;
           font-weight: 500;
@@ -146,13 +151,15 @@ $border-radius-button: 8rem;
         display: flex;
         padding-top: 1rem;
         align-items: center;
+        margin-top: 0.5rem;
+        border-top: $border-light-small;
 
         .buttons {
           display: flex;
           gap: 0.5rem;
 
-          i{
-            font-size: 1.5rem;
+          i {
+            font-size: 1.125rem;
             color: #5007aa;
           }
         }
