@@ -14,7 +14,7 @@ export default {
         {
             key: 'product_types',
             type: 'checkbox',
-            label: __( 'Product Type Management', 'multivendorx' ),
+            label: __( 'Allowed Product Types', 'multivendorx' ),
             class: 'mvx-toggle-checkbox',
             desc: __(
                 'Select the types of products you want to allow in your marketplace. <li>Simple: Standard product with no variations. <li>Variable: Product with variations (like size or color). <li>External: Links to another site. <li>Rental: Rental-based product.',
@@ -47,7 +47,7 @@ export default {
         {
             key: 'type_options',
             type: 'checkbox',
-            label: __( 'Type options', 'multivendorx' ),
+            label: __( 'Additional Type options', 'multivendorx' ),
             class: 'mvx-toggle-checkbox',
             desc: __(
                 'Select the types of products you want to enable in your marketplace: <li>Virtual Products: Choose this option for products that don’t have a physical form (e.g., services, memberships). <li>Downloadable Products: Use this option for products that customers can download (e.g., software, eBooks).',
@@ -157,7 +157,7 @@ export default {
         },
         {
             key: 'sku_generator_simple',
-            type: 'select',
+            type: 'setting-toggle',
             label: __(
                 'SKU Management for Products',
                 'multivendorx'
@@ -167,11 +167,6 @@ export default {
                 'multivendorx'
             ),
             options: [
-                {
-                    key: 'choose_options',
-                    label: __( 'Choose options', 'multivendorx' ),
-                    value: 'choose_options',
-                },
                 {
                     key: 'never',
                     label: __( 'Never (let me set them)', 'multivendorx' ),
@@ -231,9 +226,9 @@ export default {
         // },
         {
             key: 'sku_generator_attribute_spaces',
-            type: 'select',
+            type: 'setting-toggle',
             label: __(
-                'Replace Spaces in Attribute Names for SKUs',
+                'SKU Formating Options',
                 'multivendorx'
             ),
             desc: __(
@@ -242,14 +237,9 @@ export default {
             ),
             options: [
                 {
-                    key: 'choose_options',
-                    label: __( 'Choose options', 'multivendorx' ),
-                    value: 'choose_options',
-                },
-                {
                     key: 'no',
                     label: __(
-                        'Do not replace spaces in attribute names.',
+                        'Replace Spaces in Attribute',
                         'multivendorx'
                     ),
                     value: 'no',
@@ -257,7 +247,7 @@ export default {
                 {
                     key: 'underscore',
                     label: __(
-                        'Replace spaces with underscores',
+                        'Keep Original Spacing',
                         'multivendorx'
                     ),
                     value: 'underscore',
@@ -265,19 +255,90 @@ export default {
                 {
                     key: 'dash',
                     label: __(
-                        'Replace spaces with dashes / hyphens',
+                        'Custom SKU Format Rules',
                         'multivendorx'
                     ),
                     value: 'dash',
                 },
+            ],
+        },
+        {
+            key: 'separator_content',
+            type: 'section',
+            desc: __( 'Help vendors select accurate product categories through guided category selection:', 'multivendorx' ),
+            hint: __(
+                'Category Pyramid Guide (CPG)',
+                'multivendorx'
+            ),
+        },
+        {
+            key: 'sku_generator_attribute_spaces',
+            type: 'setting-toggle',
+            label: __(
+                'Category Selection Method',
+                'multivendorx'
+            ),
+            desc: __(
+                'Choose whether to replace spaces in attribute names when generating SKUs:',
+                'multivendorx'
+            ),
+            options: [
                 {
-                    key: 'none',
+                    key: 'no',
                     label: __(
-                        'Remove spaces from attribute names',
+                        'Guided Sequential Selection',
                         'multivendorx'
                     ),
-                    value: 'none',
+                    value: 'no',
                 },
+                {
+                    key: 'underscore',
+                    label: __(
+                        'Free Multi-Selection',
+                        'multivendorx'
+                    ),
+                    value: 'underscore',
+                },
+            ],
+        },
+        {
+            key: 'separator_content',
+            type: 'section',
+            desc: __( 'Control whether related product suggestions are shown from the same store, the entire marketplace, or not at all.', 'multivendorx' ),
+            hint: __(
+                'Related Products Source',
+                'multivendorx'
+            ),
+        },
+        {
+            key: 'sku_generator_attribute_spaces',
+            type: 'setting-toggle',
+            label: __(
+                'Recommendation Source',
+                'multivendorx'
+            ),
+            desc: __(
+                'Choose whether to replace spaces in attribute names when generating SKUs:',
+                'multivendorx'
+            ),
+            options: [
+                {
+                    key: 'no',
+                    label: __(
+                        'Same Store',
+                        'multivendorx'
+                    ),
+                    value: 'no',
+                },
+                {
+                    key: 'underscore',
+                    label: __(
+                        'All Store',
+                        'multivendorx'
+                    ),
+                    value: 'underscore',
+                },
+
             ],
         },
     ],

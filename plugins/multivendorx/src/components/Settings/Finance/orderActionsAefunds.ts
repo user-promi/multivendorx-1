@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 export default {
     id: 'order-actions-refunds',
     priority: 4,
-    name: __( 'Order Actions & Refunds', 'multivendorx' ),
+    name: __( 'Refunds', 'multivendorx' ),
     desc: __(
         'Manage refund eligibility, order handling, and return processes',
         'multivendorx'
@@ -11,44 +11,6 @@ export default {
     icon: 'adminlib-order',
     submitUrl: 'settings',
     modal: [
-        {
-            key: 'disallow_store_order_status',
-            label: __( 'Order status control', 'multivendorx' ),
-            type: 'checkbox',
-            desc: __(
-                'Decide whether stores have the ability to change the status of their orders.',
-                'multivendorx'
-            ),
-            options: [
-                {
-                    key: 'disallow_store_order_status',
-                    value: 'disallow_store_order_status',
-                },
-            ],
-            look: 'toggle',
-        },
-        {
-            key: 'display_suborder_in_mail',
-            label: __( 'Display suborder in mail', 'multivendorx' ),
-            type: 'checkbox',
-            desc: __(
-                'Choose whether to include suborder numbers in order confirmation emails.',
-                'multivendorx'
-            ),
-            options: [
-                {
-                    key: 'display_suborder_in_mail',
-                    value: 'display_suborder_in_mail',
-                },
-            ],
-            look: 'toggle',
-        },
-        {
-            key: 'separator_content',
-            type: 'section',
-            hint:__('Payout Timing & Eligibility','multivendorx'),
-            desc:__('Define when earnings become available for payout based on order status','multivendorx')
-        },
         {
             key: 'customer_refund_status',
             type: 'checkbox',
@@ -95,14 +57,15 @@ export default {
             moduleEnabled: 'marketplace-refund',
         },
         {
-            key: 'refund_order_msg',
-            type: 'textarea',
+            key: 'abuse_report_reasons',
+            type: 'multi-string',
+            label: __( 'Reason for Refund', 'multivendorx' ),
+            placeholder: __( 'Enter a reason and click +', 'multivendorx' ),
             desc: __(
-                'Add reasons for a refund. Use || to separate each reason. Options will appear as a radio button to customers.',
+                'Add one or more predefined reasons that stores can select when reporting abuse.',
                 'multivendorx'
             ),
-            label: __( 'Reasons For Refund', 'multivendorx' ),
-            moduleEnabled: 'marketplace-refund',
-        },
+            name: 'abuse_report_reasons',
+        }
     ],
 };

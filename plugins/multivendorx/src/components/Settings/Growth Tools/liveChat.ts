@@ -8,7 +8,34 @@ export default {
     icon: 'adminlib-wholesale',
     submitUrl: 'settings',
     modal: [
-        
+        {
+            key: 'product_page_chat',
+            type: 'setting-toggle',
+            label: __( 'Chat Button Position', 'multivendorx' ),
+            desc: __(
+                'Choose your preferred place to display chat button.',
+                'multivendorx'
+            ),
+            options: [
+                {
+                    key: 'add_to_cart_button',
+                    label: __( 'Add to Cart Button', 'multivendorx' ),
+                    value: 'add_to_cart_button',
+                },
+                {
+                    key: 'store_info',
+                    label: __( 'Store Details Tab', 'multivendorx' ),
+                    value: 'store_info',
+                },
+                {
+                    key: 'none',
+                    label: __( 'Hide', 'multivendorx' ),
+                    value: 'none',
+                },
+            ],
+            moduleEnabled: 'live-chat',
+            proSetting: true,
+        },
         {
             key: 'chat_provider',
             type: 'setting-toggle',
@@ -36,8 +63,20 @@ export default {
             ],
         },
         {
+            key: 'messenger_color',
+            type: 'color',
+            label: __( 'Messenger Color', 'multivendorx' ),
+            dependent: {
+                key: 'chat_provider',
+                set: true,
+                value: 'facebook',
+            },
+            moduleEnabled: 'live-chat',
+            proSetting: true,
+        },
+        {
             key: 'whatsapp_opening_pattern',
-            type: 'select',
+            type: 'setting-toggle',
             label: __( 'Opening Pattern', 'multivendorx' ),
             options: [
                 {
@@ -51,6 +90,11 @@ export default {
                     value: 'app',
                 },
             ],
+            dependent: {
+                key: 'chat_provider',
+                set: true,
+                value: 'whatsapp',
+            },
             moduleEnabled: 'live-chat',
             proSetting: true,
         },
@@ -62,6 +106,11 @@ export default {
                 'multivendorx'
             ),
             label: __( 'Pre-filled Message', 'multivendorx' ),
+            dependent: {
+                key: 'chat_provider',
+                set: true,
+                value: 'whatsapp',
+            },
             moduleEnabled: 'live-chat',
             proSetting: true,
         },
@@ -71,6 +120,11 @@ export default {
             label: __( 'App ID', 'multivendorx' ),
             desc: __( 'Enter app generated app id here.', 'multivendorx' ),
             moduleEnabled: 'live-chat',
+            dependent: {
+                key: 'chat_provider',
+                set: true,
+                value: 'talkjs',
+            },
             proSetting: true,
         },
         {
@@ -86,43 +140,14 @@ export default {
                     'multivendorx'
                 ) }`
             ),
+            dependent: {
+                key: 'chat_provider',
+                set: true,
+                value: 'talkjs',
+            },
             moduleEnabled: 'live-chat',
             proSetting: true,
         },
-        {
-            key: 'messenger_color',
-            type: 'color',
-            label: __( 'Messenger Color', 'multivendorx' ),
-            moduleEnabled: 'live-chat',
-            proSetting: true,
-        },
-        {
-            key: 'product_page_chat',
-            type: 'select',
-            label: __( 'Chat Button on Product Page', 'multivendorx' ),
-            desc: __(
-                'Choose your preferred place to display chat button.',
-                'multivendorx'
-            ),
-            options: [
-                {
-                    key: 'add_to_cart_button',
-                    label: __( 'Add to Cart Button', 'multivendorx' ),
-                    value: 'add_to_cart_button',
-                },
-                {
-                    key: 'store_info',
-                    label: __( 'Store Details Tab', 'multivendorx' ),
-                    value: 'store_info',
-                },
-                {
-                    key: 'none',
-                    label: __( 'Hide', 'multivendorx' ),
-                    value: 'none',
-                },
-            ],
-            moduleEnabled: 'live-chat',
-            proSetting: true,
-        },
+
     ],
 };

@@ -4,7 +4,7 @@ export default {
     id: 'policy',
     priority: 1,
     name: __( 'Add Policies', 'mvx-pro' ),
-    desc: __( 'Add policies that are applicable to your site.', 'mvx-pro' ),
+    desc: __( 'Define and publish the rules and guidelines that apply to your marketplace.', 'mvx-pro' ),
     icon: 'adminlib-support',
     submitUrl: 'settings',
     modal: [

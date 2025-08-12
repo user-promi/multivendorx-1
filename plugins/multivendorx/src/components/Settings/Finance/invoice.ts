@@ -17,35 +17,25 @@ export default {
                 'multivendorx'
             ),
         },
-        // {
-        //     key: 'commission_by_product_price',
-        //     classes: 'vertical',
-        //     type: 'nested',
-        //     label: 'Invoice Generation Settings ',
-        //     addButtonLabel: 'Add New',
-        //     deleteButtonLabel: 'Remove',
-        //     nestedFields: [
-        //         {
-        //             key: 'invoice_number_format',
-        //             type: 'number',
-        //             label: 'Invoice Number Format',
-        //             placeholder: 'Invoice Number Format',
-        //         },
-        //         {
-        //             key: 'starting_invoice_number',
-        //             type: 'number',
-        //             label: 'Starting Invoice Number',
-        //             placeholder: 'Starting Invoice Number',
-        //         },
-
-        //     ],
-        // },
-
+        {
+            key: 'mvx_tinymce_api_section',
+            type: 'number',
+            classes: 'vertical width-50',
+            label: __( 'Invoice Number Format', 'multivendorx' ),            
+            placeholder: 'Invoice Number Format',
+        },
+        {
+            key: 'mvx_tinymce_api_section',
+            type: 'number',
+            classes: 'vertical width-50',
+            label: __( 'Starting Invoice Number', 'multivendorx' ),            
+            placeholder: 'Starting Invoice Number',
+        },
         {
             key: 'commission_type',
             type: 'setting-toggle',
             label: __( 'Invoice PDF Page Size', 'multivendorx' ),
-            classes: 'vertical',
+            classes: 'vertical width-50',
             desc: __(
                 'Choose the type of commission structure that best fits your marketplace model.',
                 'multivendorx'
@@ -72,7 +62,7 @@ export default {
             key: 'commission_type',
             type: 'setting-toggle',
             label: __( 'PDF Layout Orientation', 'multivendorx' ),
-            classes: 'vertical',
+            classes: 'vertical width-50',
             desc: __(
                 'Choose the type of commission structure that best fits your marketplace model.',
                 'multivendorx'
@@ -126,26 +116,27 @@ export default {
             selectDeselect: true,
         },
         {
-            key: 'commission_by_product_price',
-            classes: 'vertical',
-            type: 'nested',
-            label: 'Legal & Tax Information',
-            addButtonLabel: 'Add New',
-            deleteButtonLabel: 'Remove',
-            nestedFields: [
-                {
-                    key: 'invoice_number_format',
-                    type: 'number',
-                    label: 'GST Number',
-                    placeholder: 'Enter GST registration number',
-                },
-                {
-                    key: 'starting_invoice_number',
-                    type: 'number',
-                    label: 'TAX ID Number',
-                    placeholder: 'Enter tax identification number',
-                },
-            ],
+            key: 'separator_content',
+            type: 'section',
+            desc: __( 'Configure when and how invoices are automatically generated in your marketplace', 'multivendorx' ),
+            hint: __(
+                'Legal & Tax Information',
+                'multivendorx'
+            ),
+        },
+        {
+            key: 'mvx_tinymce_api_section',
+            type: 'number',
+            classes: 'vertical width-50',
+            label: __( 'GST Number', 'multivendorx' ),            
+            placeholder: 'Enter GST registration number',
+        },
+        {
+            key: 'mvx_tinymce_api_section',
+            type: 'number',
+            classes: 'vertical width-50',
+            label: __( 'TAX ID Number', 'multivendorx' ),            
+            placeholder: 'Enter tax identification number',
         },
         {
             key: 'separator_content',
@@ -166,15 +157,6 @@ export default {
             width: 75,
             proSetting: true,
             moduleEnabled: 'invoice',
-        },
-        {
-            key: 'separator_content',
-            type: 'section',
-            desc: __( 'Customize invoice appearance with your brand and essential information', 'multivendorx' ),
-            hint: __(
-                ' Branding & Information',
-                'multivendorx'
-            ),
         },
     ],
 };

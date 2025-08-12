@@ -31,19 +31,9 @@ export default {
                     value: 'per_unit',
                 },
                 {
-                    key: 'per_store',
-                    label: __( 'Per Store', 'multivendorx' ),
-                    value: 'per_store',
-                },
-                {
-                    key: 'commission_by_product_price',
-                    label: __( 'By Product Price', 'multivendorx' ),
+                    key: 'rule_based',
+                    label: __( 'Rule Based', 'multivendorx' ),
                     value: 'commission_by_product_price',
-                },
-                {
-                    key: 'commission_by_purchase_quantity',
-                    label: __( 'By Purchase Quantity', 'multivendorx' ),
-                    value: 'commission_by_purchase_quantity',
                 },
             ],
         },
@@ -66,12 +56,14 @@ export default {
                         'Percentage of product price per transaction',
                         'multivendorx'
                     ),
+                    labelAfterInput:true
                 },
                 {
                     key: 'mvx_commission_fixed_per_transaction',
                     label: __( '$', 'multivendorx' ),
                     type: 'number',
                     desc: __( 'Fixed amount per transaction', 'multivendorx' ),
+                    labelAfterInput:false
                 },                
             ],
             dependent: {
@@ -93,16 +85,11 @@ export default {
                     key: 'mvx_commission_percentage_per_unit',
                     label: __( '%', 'multivendorx' ),
                     type: 'number',
-                    desc: __(
-                        'Percentage of product price per unit',
-                        'multivendorx'
-                    ),
                 },
                 {
                     key: 'mvx_commission_fixed_per_unit',
                     label: __( '$', 'multivendorx' ),
                     type: 'number',
-                    desc: __( 'Fixed amount per unit', 'multivendorx' ),
                 },
             ],
             dependent: {
@@ -112,40 +99,9 @@ export default {
             },
         },
         {
-            key: 'mvx_commission_rules_per_unit',
-            type: 'multi-number',
-            label: __( 'Commission Value', 'multivendorx' ),
-            desc: __(
-                'This is the default commission amount that will be applicable for all transactions.',
-                'multivendorx'
-            ),
-            options: [
-                {
-                    key: 'mvx_commission_percentage_per_unit',
-                    label: __( '%', 'multivendorx' ),
-                    type: 'number',
-                    desc: __(
-                        'Percentage of product price per unit',
-                        'multivendorx'
-                    ),
-                },
-                {
-                    key: 'mvx_commission_fixed_per_unit',
-                    label: __( '$', 'multivendorx' ),
-                    type: 'number',
-                    desc: __( 'Fixed amount per unit', 'multivendorx' ),
-                },
-            ],
-            dependent: {
-                key: 'commission_type',
-                set: true,
-                value: 'per_store',
-            },
-        },
-        {
-            key: 'commission_by_product_price',
+            key: 'rule',
             type: 'nested',
-            label: 'Commission By Product Price',
+            label: 'Rule',
             addButtonLabel: 'Add New',
             deleteButtonLabel: 'Remove',
             nestedFields: [
@@ -161,6 +117,7 @@ export default {
                 {
                     key: 'rule',
                     type: 'select',
+                    label: 'is',
                     options: [
                         { value: 'up_to', label: 'Up To' },
                         { value: 'more_than', label: 'More than' },
@@ -169,8 +126,14 @@ export default {
                 },
                 {
                     key: 'commission_type',
-                    type: 'number',
-                    label: 'To ',
+                    type: 'multi-number',
+                    options: [
+                        {
+                            key: 'mvx_commission_fixed_per_unit',
+                            label: __( '$', 'multivendorx' ),
+                            type: 'number',
+                        },
+                    ],
                 },
                 {
                     key: 'commission_percent',
@@ -178,112 +141,36 @@ export default {
                     label: 'apply commission',
                     options: [
                         {
-                            key: 'mvx_commission_percentage_per_unit',
-                            label: __( '%', 'multivendorx' ),
-                            type: 'number',
-                            desc: __(
-                                'Percentage of product price per unit',
-                                'multivendorx'
-                            ),
-                        },
-                        {
                             key: 'mvx_commission_fixed_per_unit',
-                            label: __( '$', 'multivendorx' ),
+                            label: __( 'Fixed $', 'multivendorx' ),
                             type: 'number',
-                            desc: __( 'Fixed amount per unit', 'multivendorx' ),
+                            labelAfterInput:false
+
                         },
                     ],
                 },
                 {
-                    key: 'mvx_commission_rules_per_unit',
+                    key: 'commission_percent',
                     type: 'multi-number',
-                    label: __( 'Commission Value', 'multivendorx' ),
-                    desc: __(
-                        'This is the default commission amount that will be applicable for all transactions.',
-                        'multivendorx'
-                    ),
-                    labelAfterInput:true,
+                    label: '+',
                     options: [
                         {
-                            key: 'mvx_commission_percentage_per_unit',
+                            key: 'mvx_commission_fixed_per_unit',
                             label: __( '%', 'multivendorx' ),
                             type: 'number',
-                            desc: __(
-                                'Percentage of product price per unit',
-                                'multivendorx'
-                            ),
-                        },
-                        {
-                            key: 'mvx_commission_fixed_per_unit',
-                            label: __( '$', 'multivendorx' ),
-                            type: 'number',
-                            desc: __( 'Fixed amount per unit', 'multivendorx' ),
+                            labelAfterInput:true
+
                         },
                     ],
-                    dependent: {
-                        key: 'commission_type',
-                        set: true,
-                        value: 'per_store',
-                    },
                 },
+               
             ],
             dependent: {
                 key: 'commission_type',
                 set: true,
                 value: 'commission_by_product_price',
             },
-        },
-        {
-            key: 'commission_by_purchase_quantity',
-            type: 'nested',
-            label: 'Commission By Purchase Quantity',
-            addButtonLabel: 'Add New',
-            deleteButtonLabel: 'Remove',
-            nestedFields: [
-                {
-                    key: 'purchase_quantity',
-                    type: 'number',
-                    label: 'Purchase Quantity',
-                    placeholder: 'Enter quantity',
-                },
-                {
-                    key: 'quantity_rule',
-                    type: 'select',
-                    label: 'Rule',
-                    options: [
-                        { value: 'up_to', label: 'Up To' },
-                        { value: 'more_than', label: 'More than' },
-                    ],
-                },
-                {
-                    key: 'quantity_commission_type',
-                    type: 'select',
-                    label: 'Commission Type',
-                    options: [
-                        { value: 'percent', label: 'Percent' },
-                        { value: 'fixed', label: 'Fixed' },
-                        { value: 'percent_fixed', label: 'Percent + Fixed' },
-                    ],
-                },
-                {
-                    key: 'quantity_commission_percent',
-                    type: 'number',
-                    label: 'Commission Percent (%)',
-                    placeholder: 'Enter percent',
-                },
-                {
-                    key: 'quantity_commission_fixed',
-                    type: 'number',
-                    label: 'Commission Fixed ($)',
-                    placeholder: 'Enter fixed amount',
-                },
-            ],
-            dependent: {
-                key: 'commission_type',
-                set: true,
-                value: 'commission_by_purchase_quantity',
-            },
-        },          
+        },        
         {
             key: 'separator_content',
             type: 'section',

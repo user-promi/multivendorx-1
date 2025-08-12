@@ -3,9 +3,9 @@ import { __ } from '@wordpress/i18n';
 export default {
     id: 'general',
     priority: 1,
-    name: __( ' General', 'multivendorx' ),
+    name: __( 'General', 'multivendorx' ),
     desc: __(
-        'Configure visibility of store address & map.',
+        'Manage core store settings, including approval workflow, backend access, mapping options, and location-based search.',
         'multivendorx'
     ),
     icon: 'adminlib-storefront',
@@ -14,7 +14,7 @@ export default {
         {
             key: 'approve_store',
             type: 'setting-toggle',
-            label: __('Approval Workflow', 'multivendorx'),
+            label: __('Store Approval Workflow', 'multivendorx'),
             desc: __(
                 'Decide how you want to approve new stores for your marketplace: <li>Choose whether to vet stores manually or let them start selling immediately.',
                 'multivendorx'
@@ -35,7 +35,7 @@ export default {
         {
             key: 'store_backend_access',
             type: 'checkbox',
-            label: __("Backend Dashboard Access", 'multivendorx'),
+            label: __("Store Backend Dashboard Access", 'multivendorx'),
             desc: __('Give stores full WordPress backend access to manage their business from one integrated dashboard.', 'multivendorx'),
             options: [
                 {
@@ -50,7 +50,7 @@ export default {
             key: 'section',
             type: 'section',
             hint: __(
-                'Store Customization',
+                'Geo Location',
                 'multivendorx'
             ),
         },  

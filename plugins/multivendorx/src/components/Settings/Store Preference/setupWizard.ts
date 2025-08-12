@@ -14,9 +14,9 @@ export default {
         {
             key: 'disable_setup_wizard',
             type: 'setting-toggle',
-            label: __( 'Guided Setup Experience', 'multivendorx' ),
+            label: __( 'Onboarding Flow', 'multivendorx' ),
             desc: __(
-                'Control whether new stores get step-by-step guidance or go directly to their dashboard',
+                'Control whether new stores get step-by-step guidance or go directly to their dashboard<br>When guided setup is disabled, stores bypass the walkthrough and access their full dashboard immediately.',
                 'multivendorx'
             ),
             options: [
@@ -27,7 +27,7 @@ export default {
                 },
                 {
                     key: 'skip_to_dashboard',
-                    label:'Enable Guided Setup',
+                    label:'Skip to Dashboard',
                     value: 'skip_to_dashboard',
                 },
             ],
@@ -42,7 +42,7 @@ export default {
                 {
                     key: 'store_profile_setup',
                     label: __( 'Store Profile Setup (store name, description, logo)', 'multivendorx' ),
-                    desc: "Store Profile Setup (store name, description, logo)",
+                    desc: __( 'Store Profile Setup (store name, description, logo)', 'multivendorx' ),
                     value: 'store_profile_setup',
                 },
                 {
