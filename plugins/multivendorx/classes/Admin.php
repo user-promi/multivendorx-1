@@ -68,7 +68,7 @@ class Admin {
 
             // Array contain multivendorx submenu.
             $submenus = array(
-                'Dashboard' => array(
+                'dashboard' => array(
                     'name'   => __( 'Dashboard', 'multivendorx' ),
                     'subtab' => '',
                 ),
@@ -76,24 +76,8 @@ class Admin {
                     'name'   => __( 'Work Board', 'multivendorx' ),
                     'subtab' => '',
                 ),
-                'modules' => array(
-                    'name'   => __( 'Modules', 'multivendorx' ),
-                    'subtab' => '',
-                ),
-                'marketplace' => array(
-                    'name'   => __( 'Marketplace Settings', 'multivendorx' ),
-                    'subtab' => 'general',
-                ),
                 'stores' => array(
                     'name'   => __( 'Stores', 'multivendorx' ),
-                    'subtab' => '',
-                ),
-                'payments' => array(
-                    'name'   => __( 'Payments', 'multivendorx' ),
-                    'subtab' => '',
-                ),
-                'payments' => array(
-                    'name'   => __( 'Payments', 'multivendorx' ),
                     'subtab' => '',
                 ),
                 'Commissions' => array(
@@ -104,20 +88,25 @@ class Admin {
                     'name'   => __( 'Analytics', 'multivendorx' ),
                     'subtab' => '',
                 ),
-                'status-and-tools' => array(
-                    'name'   => __( 'Status and Tools', 'multivendorx' ),
-                    'subtab' => '',
-                ),
                 'memberships' => array(
                     'name'   => __( 'Memberships', 'multivendorx' ),
                     'subtab' => 'message',
                 ),
-                'help-and-support' => array(
-                    'name'   => __( 'Help and Support', 'multivendorx' ),
+                'settings' => array(
+                    'name'   => __( 'Settings', 'multivendorx' ),
+                    'subtab' => 'marketplace-settings',
+                ),
+                'modules' => array(
+                    'name'   => __( 'Modules', 'multivendorx' ),
                     'subtab' => '',
                 ),
-                'store-management'          => array(
-                    'name'   => __( 'Store management', 'multivendorx' ),
+                'status-and-tools' => array(
+                    'name'   => __( 'Status and Tools', 'multivendorx' ),
+                    'subtab' => '',
+                ),
+
+                'help-and-support' => array(
+                    'name'   => __( 'Help and Support', 'multivendorx' ),
                     'subtab' => '',
                 ),
             );

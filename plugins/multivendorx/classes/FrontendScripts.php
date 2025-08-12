@@ -300,7 +300,8 @@ class FrontendScripts {
                 'products-capability',
                 'commissions',
                 'product-report-abuse',
-                'role-manager'
+                'role-manager',
+                'identity-verification'
             )
 		);
 
