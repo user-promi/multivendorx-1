@@ -7,8 +7,6 @@ import Modules from './components/Modules/Modules';
 import { useEffect } from 'react';
 import { initializeModules } from 'zyra';
 
-
- './components/Stores/Stores';
 localStorage.setItem('force_multivendorx_context_reload', 'true');
 
 const Route = () => {

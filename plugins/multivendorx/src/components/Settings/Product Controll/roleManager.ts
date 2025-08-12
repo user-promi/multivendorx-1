@@ -109,54 +109,37 @@ export default {
         {
             key: 'role_access_table',
             type: 'multi-checkbox-table',
-            label: __('Role Access Control', 'mvx-pro'),
-            desc: __('Define which permissions each role should have.', 'mvx-pro'),
-            moduleEnabled: 'role_manager',
+            label: __('Role Access Control', 'multivendorx'),
+            desc: __('Define which permissions each role should have.', 'multivendorx'),
+            // moduleEnabled: 'role_manager',
 
             columns: [
-                { key: 'storeOwner', label: __('Store Owner', 'mvx-pro') },
-                { key: 'storeManager', label: __('Store Manager', 'mvx-pro') },
-                { key: 'productManager', label: __('Product Manager', 'mvx-pro') },
-                { key: 'customerSupport', label: __('Customer Support', 'mvx-pro') },
-                { key: 'orderAssistant', label: __('Order Assistant', 'mvx-pro') },
+                { key: 'store_owner', label: __('Store Owner', 'multivendorx') },
+                { key: 'store_manager', label: __('Store Manager', 'multivendorx') },
+                { key: 'product_manager', label: __('Product Manager', 'multivendorx') },
+                { key: 'customer_support', label: __('Customer Support', 'multivendorx') },
+                { key: 'order_assistant', label: __('Order Assistant', 'multivendorx') },
             ],
+            rows: appLocalizer.capabilities
 
-            rows: [
-                { key: 'manageUsers', label: __('Manage Users', 'mvx-pro') },
-                { key: 'manageProducts', label: __('Manage Products', 'mvx-pro') },
-                {
-                    key: 'orders',
-                    label: __('View/Process Orders', 'mvx-pro'),
-                    options: [
-                        { value: 'Full', label: __('Full', 'mvx-pro') },
-                        { value: 'Limited', label: __('Limited', 'mvx-pro') },
-                        { value: 'View Only', label: __('View Only', 'mvx-pro') },
-                        { value: 'Views Only Basic Access', label: __('Views Only Basic Access', 'mvx-pro') },
-                        { value: 'No', label: __('No', 'mvx-pro') },
-                    ],
-                },
-                {
-                    key: 'finances',
-                    label: __('Access Finances', 'mvx-pro'),
-                    options: [
-                        { value: 'Full', label: __('Full', 'mvx-pro') },
-                        { value: 'Limited', label: __('Limited', 'mvx-pro') },
-                        { value: 'Refunds Only', label: __('Refunds Only', 'mvx-pro') },
-                        { value: 'No', label: __('No', 'mvx-pro') },
-                    ],
-                },
-                {
-                    key: 'analytics',
-                    label: __('Analytics', 'mvx-pro'),
-                    options: [
-                        { value: 'Full', label: __('Full', 'mvx-pro') },
-                        { value: 'Some', label: __('Some', 'mvx-pro') },
-                        { value: 'Product Only', label: __('Product Only', 'mvx-pro') },
-                        { value: 'No', label: __('No', 'mvx-pro') },
-                    ],
-                },
-                { key: 'messages', label: __('Customer Messages', 'mvx-pro') },
-            ],
+            // rows: [
+            //     { key: 'manage_users', label: __('Manage Users', 'multivendorx') },
+            //     { key: 'manage_products', label: __('Manage Products', 'multivendorx') },
+            //     { key: 'read_products', label: __('Read Products', 'multivendorx') },
+            //     { key: 'edit_products', label: __('Edit Products', 'multivendorx') },
+            //     { key: 'delete_products', label: __('Delete Products', 'multivendorx') },
+            //     { key: 'publish_products', label: __('Publish Products', 'multivendorx') },
+            //     { key: 'upload_files', label: __('Upload Files', 'multivendorx') },
+                
+            //     { key: 'read_shop_orders', label: __('Read Shop Orders', 'multivendorx') },
+            //     { key: 'edit_shop_orders', label: __('Edit Shop Orders', 'multivendorx') },
+            //     { key: 'delete_shop_orders', label: __('Delete Shop Orders', 'multivendorx') },
+                
+            //     { key: 'read_shop_coupons', label: __('Read Shop Coupons', 'multivendorx') },
+            //     { key: 'edit_shop_coupons', label: __('Edit Shop Coupons', 'multivendorx') },
+            //     { key: 'delete_shop_coupons', label: __('Delete Shop Coupons', 'multivendorx') },
+                
+            // ],
         },                     
     ],
 };

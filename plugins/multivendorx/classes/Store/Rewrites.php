@@ -111,7 +111,7 @@ class Rewrites {
         $page     = get_query_var( 'dashboard_page' );
 
         if ( ! empty( $page ) ) {
-            return MultiVendorX()->util->get_template( 'vendor-dashboard.php', [] );
+            return MultiVendorX()->util->get_template( 'dashboard.php', [] );
         }
 
         return $template;

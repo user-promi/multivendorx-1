@@ -120,6 +120,7 @@ final class MultiVendorX {
         $this->container['frontendScripts'] = new FrontendScripts();
         $this->container['shortcode']       = new Shortcode();
         $this->container['frontend']        = new Frontend();
+        $this->container['roles']           = new Roles();
         $this->container['filters']         = new Deprecated\DeprecatedFilterHooks();
         $this->container['actions']         = new Deprecated\DeprecatedActionHooks();
         $this->container['commission']      = new Commission\CommissionManager();

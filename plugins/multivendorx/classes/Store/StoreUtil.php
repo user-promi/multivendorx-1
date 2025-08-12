@@ -108,7 +108,7 @@ class StoreUtil {
     }
 
 
-    public function get_store_tabs( $store_id ) {
+    public static function get_store_tabs( $store_id ) {
         $tabs = [
             'products'      => [
                 'title' => __( 'Products', 'multivendorx' ),
@@ -146,4 +146,71 @@ class StoreUtil {
     public function get_store_review_url($store_id) {
         return $this->get_store_url( $store_id, 'reviews' );
     }
+
+
+    public static function get_store_capability() {
+        $capabilities = [
+            'products' => [
+                [
+                    'key' => 'manage_users',
+                    'label' => 'Manage Users',
+                ],
+                [
+                    'key' => 'manage_products',
+                    'label' => 'Manage Products',
+                ],
+                [
+                    'key' => 'read_products',
+                    'label' => 'Read Products',
+                ],
+                [
+                    'key' => 'edit_products',
+                    'label' => 'Edit Products',
+                ],
+                [
+                    'key' => 'delete_products',
+                    'label' => 'Delete Products',
+                ],
+                [
+                    'key' => 'publish_products',
+                    'label' => 'Publish Products',
+                ],
+                [
+                    'key' => 'upload_files',
+                    'label' => 'Upload Files',
+                ],
+            ],
+            'orders' => [
+                [
+                    'key' => 'read_shop_orders',
+                    'label' => 'Read Orders',
+                ],
+                [
+                    'key' => 'edit_shop_orders',
+                    'label' => 'Edit Orders',
+                ],
+                [
+                    'key' => 'delete_shop_orders',
+                    'label' => 'Delete Orders',
+                ],
+            ],
+            'coupons' => [
+                [
+                    'key' => 'read_shop_coupons',
+                    'label' => 'Read Coupons',
+                ],
+                [
+                    'key' => 'edit_shop_coupons',
+                    'label' => 'Edit Coupons',
+                ],
+                [
+                    'key' => 'delete_shop_coupons',
+                    'label' => 'Delete Coupons',
+                ],
+            ]
+        ];
+        
+        return $capabilities;
+    }
+
 }

@@ -19,6 +19,7 @@ declare global {
         pro_url: string;
         pro_settings_list: any;
         country_list: any;
+        capabilities: any;
     }
 
     declare module '*.png';

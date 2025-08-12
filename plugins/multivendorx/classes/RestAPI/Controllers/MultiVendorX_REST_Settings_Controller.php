@@ -75,6 +75,37 @@ class MultiVendorX_REST_Settings_Controller extends \WP_REST_Controller {
 
         $all_details['error'] = __( 'Settings Saved', 'multivendorx' );
 
+        if ($settingsname == 'role_manager') {
+            $roles_caps = MultiVendorX()->setting->get_option('multivendorx_role_manager_settings');
+            // Make sure WP_Roles is ready
+            if ( ! function_exists( 'wp_roles' ) ) {
+                require_once ABSPATH . 'wp-includes/pluggable.php';
+            }
+
+            $wp_roles = wp_roles();
+
+            foreach ( $roles_caps as $role_key => $caps ) {
+
+                $role = $wp_roles->get_role( $role_key );
+                if ( $role ) {
+                    // First remove all capabilities for a clean reset
+                    foreach ( $role->capabilities as $existing_cap => $grant ) {
+                        $role->remove_cap( $existing_cap );
+                    }
+
+                    // Add the new capabilities
+                    foreach ( $caps as $cap ) {
+                        $role->add_cap( $cap );
+                    }
+
+                }
+            }
+
+            // Force refresh global $wp_roles for current request
+            global $wp_roles;
+            $wp_roles->for_site();
+            flush_rewrite_rules();
+        }
         return $all_details;
     }
 

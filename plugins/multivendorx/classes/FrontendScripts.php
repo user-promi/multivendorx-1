@@ -7,6 +7,8 @@
 
 namespace MultiVendorX;
 
+use MultiVendorX\Store\StoreUtil;
+
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -362,6 +364,7 @@ class FrontendScripts {
                         'open_uploader'            => 'Upload Image',
                         'country_list'             => $country_list,
                         'default_logo'             => MultiVendorX()->plugin_url.'assets/images/WP-stdavatar.png',
+                        'capabilities'             => StoreUtil::get_store_capability(),
 					),
                 )
 			)
