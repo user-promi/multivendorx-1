@@ -3,9 +3,9 @@ import { __ } from '@wordpress/i18n';
 export default {
     id: 'setup-wizard',
     priority: 3,
-    name: 'Setup Wizard',
+    name: 'Onboarding',
     desc: __(
-        'Customise personalised store registration form for marketplace.',
+        'Control whether new stores get step-by-step guidance or go directly to their dashboar',
         'multivendorx'
     ),
     icon: 'adminlib-form-section',
@@ -14,20 +14,19 @@ export default {
         {
             key: 'disable_setup_wizard',
             type: 'setting-toggle',
-            label: __( 'Onboarding Flow', 'multivendorx' ),
-            desc: __(
-                'Control whether new stores get step-by-step guidance or go directly to their dashboard<br>When guided setup is disabled, stores bypass the walkthrough and access their full dashboard immediately.',
+            label: __( 'Guided Setup Experience', 'multivendorx' ),
+            desc: __('When guided setup is disabled, stores bypass the setup wizard and access their dashboard immediately.',
                 'multivendorx'
             ),
             options: [
                 {
                     key: 'enable_guided_setup',
-                    label:'Enable Guided Setup',
+                    label:'Enabled',
                     value: 'enable_guided_setup',
                 },
                 {
                     key: 'skip_to_dashboard',
-                    label:'Skip to Dashboard',
+                    label:'Disabled',
                     value: 'skip_to_dashboard',
                 },
             ],

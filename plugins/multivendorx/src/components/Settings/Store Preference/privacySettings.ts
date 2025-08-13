@@ -32,7 +32,7 @@ export default {
                 },
                 {
                     key: 'show_order_breakdown_by_store',
-                    label: __( 'Show order breakdown by store', 'multivendorx' ),
+                    label: __( 'Order breakdown by store', 'multivendorx' ),
                     desc: __( 'Display which items come from which store and their corresponding sub order number, in email confirmations', 'multivendorx' ),
                     value: 'show_store_address',
                 },                
@@ -48,13 +48,13 @@ export default {
             options: [
                 {
                     key: 'group_items_by_store_in_cart',
-                    label: __( 'Group items by store in the shopping cart', 'multivendorx' ),
+                    label: __( 'Group items by store in cart', 'multivendorx' ),
                     desc: __( 'Organize cart contents by individual stores for clarity', 'multivendorx' ),
                     value: 'show_store_owner_info',
                 },
                 {
                     key: 'display_store_support_details',
-                    label: __( 'Display Store Support details', 'multivendorx' ),
+                    label: __( 'Store Support details', 'multivendorx' ),
                     desc: __( 'Include store contact information for customer support during checkout, also in mail', 'multivendorx' ),
                     value: 'show_store_address',
                 },
@@ -85,17 +85,17 @@ export default {
                 },
                 {
                     key: 'show_store_description',
-                    label: __( 'Phone', 'multivendorx' ),
+                    label: __( 'Phone number', 'multivendorx' ),
                     value: 'show_store_description',
                 },
                 {
                     key: 'show_store_description',
-                    label: __( 'Email', 'multivendorx' ),
+                    label: __( 'Email address', 'multivendorx' ),
                     value: 'show_store_description',
                 },
                 {
                     key: 'show_store_description',
-                    label: __( 'Information', 'multivendorx' ),
+                    label: __( 'Store description', 'multivendorx' ),
                     value: 'show_store_description',
                 },
                 {
