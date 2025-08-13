@@ -3,6 +3,7 @@
 // Predefined contexts
 const contexts: Record<string, __WebpackModuleApi.RequireContext> = {
     settings: require.context('../components/Settings', true, /\.ts$/),
+    memberships: require.context('../components/Memberships', true, /\.ts$/),
 };
 
 type SettingNode = {
@@ -97,7 +98,7 @@ const importAll = (
 };
 
 const getTemplateData = (
-    type: 'settings'
+    type: 'settings' | 'memberships'
 ): SettingNode[] => {
     const ctx = contexts[type];
 

@@ -77,7 +77,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
     public function get_items( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
-            return new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'notifima' ), array( 'status' => 403 ) );
+            return new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
         }
 
         $limit          = max( intval( $request->get_param( 'row' ) ), 10 );

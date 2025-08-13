@@ -8,14 +8,6 @@ export default {
         'Controls how stores are onboarded and what access they get.',
         'multivendorx'
     ),
-    video: {
-        icon: 'adminlib-general-tab', // optional icon class
-        link: 'https://example.com/video/general-settings',
-    },
-    docs: {
-        icon: 'adminlib-general-tab', // optional icon class
-        link: 'https://example.com/docs/general-settings',
-    },
     icon: 'adminlib-general-tab',
     submitUrl: 'settings',
     modal: [     
