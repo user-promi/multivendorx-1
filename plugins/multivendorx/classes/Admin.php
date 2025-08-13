@@ -90,7 +90,7 @@ class Admin {
                 ),
                 'memberships' => array(
                     'name'   => __( 'Memberships', 'multivendorx' ),
-                    'subtab' => 'message',
+                    'subtab' => 'message-mail',
                 ),
                 'settings' => array(
                     'name'   => __( 'Settings', 'multivendorx' ),

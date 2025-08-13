@@ -7,57 +7,64 @@ import Modules from './components/Modules/Modules';
 import Store from './components/Store/Store';
 import { useEffect } from 'react';
 import { initializeModules } from 'zyra';
+import AdminDashboard from './components/AdminDashboard/AdminDashboard';
+import Membership from './components/Memberships/Membership';
 
 
- './components/Stores/Stores';
+'./components/Stores/Stores';
 localStorage.setItem('force_multivendorx_context_reload', 'true');
 
 const Route = () => {
-    const currentTab = new URLSearchParams( useLocation().hash );
+    const currentTab = new URLSearchParams(useLocation().hash);
     return (
         <>
-            { currentTab.get( 'tab' ) === 'settings' && (
-                <Settings id={ 'settings' } />
-            ) }
-
+            {currentTab.get('tab') === 'settings' && (
+                <Settings id={'settings'} />
+            )}
+            {currentTab.get('tab') === 'memberships' && (
+                <Membership id='memberships'/>
+            )}
             {currentTab.get('tab') === 'modules' && <Modules />}
-            { currentTab.get( 'tab' ) === 'stores' && (
+            {currentTab.get('tab') === 'stores' && (
                 <Store />
-            ) }
+            )}
+            {currentTab.get('tab') === 'dashboard' && (
+                <AdminDashboard />
+            )}
         </>
     );
 };
 
 const App = () => {
-    const currentTabParams = new URLSearchParams( useLocation().hash );
+    const currentTabParams = new URLSearchParams(useLocation().hash);
     document
-        .querySelectorAll( '#toplevel_page_multivendorx>ul>li>a' )
-        .forEach( ( menuItem ) => {
+        .querySelectorAll('#toplevel_page_multivendorx>ul>li>a')
+        .forEach((menuItem) => {
             const menuItemUrl = new URL(
-                ( menuItem as HTMLAnchorElement ).href
+                (menuItem as HTMLAnchorElement).href
             );
             const menuItemHashParams = new URLSearchParams(
-                menuItemUrl.hash.substring( 1 )
+                menuItemUrl.hash.substring(1)
             );
 
-            if ( menuItem.parentNode ) {
-                ( menuItem.parentNode as HTMLElement ).classList.remove(
+            if (menuItem.parentNode) {
+                (menuItem.parentNode as HTMLElement).classList.remove(
                     'current'
                 );
             }
             if (
-                menuItemHashParams.get( 'tab' ) ===
-                currentTabParams.get( 'tab' )
+                menuItemHashParams.get('tab') ===
+                currentTabParams.get('tab')
             ) {
-                ( menuItem.parentNode as HTMLElement ).classList.add(
+                (menuItem.parentNode as HTMLElement).classList.add(
                     'current'
                 );
             }
-        } );
+        });
 
-        useEffect(() => {
-            initializeModules(appLocalizer, 'multivendorx', 'free','modules');
-        }, []);
+    useEffect(() => {
+        initializeModules(appLocalizer, 'multivendorx', 'free', 'modules');
+    }, []);
 
     return (
         <>

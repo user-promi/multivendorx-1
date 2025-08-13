@@ -30,7 +30,7 @@ export default {
         },
         {
             key: 'singleproductmultistore_show_order',
-            type: 'select',
+            type: 'setting-toggle',
             label: __( 'Display Shop Page Product', 'multivendorx' ),
             desc: __(
                 'Select the criteria on which the SPMV product is going to be based on.',
@@ -62,7 +62,7 @@ export default {
         },
         {
             key: 'moreoffers_display_position',
-            type: 'select',
+            type: 'setting-toggle',
             label: __( 'More Offers Display Position', 'multivendorx' ),
             desc: __(
                 'Select where you want the "More Offers" section to appear on the Single Product Page.',
