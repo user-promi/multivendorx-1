@@ -1,6 +1,15 @@
 @use '../../global.scss' as *;
 
-.top-header {
+.top-header{
+  padding: 0.5rem;
+  text-align: center;
+  background: $theme-background-color;
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: $text-color;
+}
+
+.admin-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -20,9 +29,8 @@
     gap: 0.875rem;
     align-items: center;
     .admin-icon{
-      font-size: 1.313rem;
+      font-size: 1.125rem;
       padding: 0.4rem;
-      background: $theme-background-color;
       border-radius: 50%;
       color: $theme-color;
       cursor: pointer;
@@ -30,6 +38,12 @@
 
     .search-field {
       position: relative;
+      display: flex;
+
+      input,
+      select{
+        margin: 0;
+      }
 
       .adminlib-search {
         position: absolute;
@@ -37,12 +51,18 @@
         z-index: 9;
         font-size: 1.313rem;
         top: 20%;
+        border-right: 0;
       }
 
       input {
         width: 20rem;
         padding-left: 2rem;
         position: relative;
+      }
+    }
+    .icon-wrapper{
+      .icon-dropdown{
+        opacity: 0;
       }
     }
   }
@@ -227,8 +247,7 @@
     }
   }
 
-  a,
-  .menu-coll-btn {
+  .menu-item {
     position: relative;
     // width: 100%;
     // padding: 1rem 0.63rem 1.125rem 1.25rem;
@@ -247,6 +266,12 @@
     font-weight: 500;
     cursor: pointer;
 
+    &.pro-btn{
+      color: $theme-color;
+      font-weight: 600;
+      gap: 0.31rem;
+      font-size: 1rem;
+    }
     .menu-name {
       font-size: 0.938rem;
       line-height: 1.5;

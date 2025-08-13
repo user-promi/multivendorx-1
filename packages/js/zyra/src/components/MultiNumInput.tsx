@@ -69,7 +69,7 @@ const MultiNumInput: React.FC<MultiNumInputProps> = ({
                             : labelAfterInput;
                             console.log("jhds", option)
                     const labelJSX = (
-                        <div className={inputLabelClass || ''}>
+                        <div className={inputLabelClass || 'left-input'}>
                             {option.label}
                         </div>
                     );
