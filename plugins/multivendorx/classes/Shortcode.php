@@ -7,7 +7,7 @@ namespace MultiVendorX;
  *
  * @class 		Shortcode class
  * @version		PRODUCT_VERSION
- * @author 		MultivendorX
+ * @author 		MultiVendorX
  */
 class Shortcode {
     /**
@@ -27,10 +27,24 @@ class Shortcode {
     public function display_vendor_dashboard() {
         $this->frontend_scripts();
         ob_start();
-        ?>
-        <div id="multivendorx-vendor-dashboard">
-        </div>
-        <?php
+
+        // <div id="multivendorx-vendor-dashboard">
+        // </div> 
+
+        $user = wp_get_current_user();
+         if (!is_user_logged_in()) {
+            if (( 'no' === get_option('woocommerce_registration_generate_password') && !is_user_logged_in())) {
+                wp_enqueue_script('wc-password-strength-meter');
+            }
+            echo '<div class="mvx-dashboard woocommerce">';
+            wc_get_template('myaccount/form-login.php');
+            echo '</div>';
+        } else if ( in_array( 'store_owner', $user->roles, true ) ) {
+            MultiVendorX()->util->get_template( 'dashboard.php', [] );
+        } else {
+            
+        }
+
         return ob_get_clean();
     }
     
