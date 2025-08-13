@@ -181,7 +181,7 @@ export default {
             key: 'give_shipping',
             label: __( 'Shipping', 'multivendorx' ),
             desc: __(
-                'Add shipping fees to the commission calculation base amount. <li>Include in Commission: Add shipping charges to the commission calculation base amount <li>VExclude from Commission: Calculate commission only on product price, excluding shipping costs',
+                'Add shipping fees to the commission calculation base amount. <li>If Enabled: Add shipping charges to the commission calculation base amount <li>If Excluded: Calculate commission only on product price, excluding shipping costs',
                 'multivendorx'
             ),
             type: 'checkbox',
@@ -225,7 +225,30 @@ export default {
             hint:__('Coupon & Discount Handling','multivendorx'),
             desc:__('Define how discounts and coupons affect commission calculations','multivendorx')
         },
-        {
+        
+{
+            key: 'commission_calculation_on_tax',
+            type: 'setting-toggle',
+            label: __( 'Coupon Cost Assignment', 'multivendorx' ),
+            desc: __(
+                'Configure how taxes are treated in commission calculations:<li>No Tax Inclusion: Calculate commission on pre-tax amount only.<li>100% Tax Inclusion: Include full tax amount in commission base.<li>Commission-Based Tax: Calculate commission on total order value including taxes, not just product price',
+                'multivendorx'
+            ),
+            options: [
+                {
+                    key: 'per_transaction',
+                    label: __( 'Stores Pay Own Discounts', 'multivendorx' ),
+                    value: 'per_transaction',
+                },
+                {
+                    key: 'per_unit',
+                    label: __( 'Platform Pays All Discounts', 'multivendorx' ),
+                    value: 'per_unit',
+                },
+                ],
+        },
+
+{
             key: 'commission_include_coupon',
             label: __( 'Who will bear the Coupon Cost', 'multivendorx' ),
             type: 'checkbox',
