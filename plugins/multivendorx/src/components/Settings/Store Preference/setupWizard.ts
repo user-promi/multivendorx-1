@@ -42,7 +42,6 @@ export default {
                 {
                     key: 'store_profile_setup',
                     label: __( 'Store Profile Setup (store name, description, logo)', 'multivendorx' ),
-                    desc: __( 'Store Profile Setup (store name, description, logo)', 'multivendorx' ),
                     value: 'store_profile_setup',
                 },
                 {

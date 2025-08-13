@@ -279,7 +279,7 @@ export default {
                 'multivendorx'
             ),
             desc: __(
-                'Choose whether to replace spaces in attribute names when generating SKUs:',
+                'When guided setup is disabled, stores bypass the walkthrough and access their full dashboard immediately.<li>Guided Sequential Selection: Vendors must first choose primary category, then select from available subcategories.<li>Free Multi-Selection: Vendors can select any number of categories and subcategories without restrictions.',
                 'multivendorx'
             ),
             options: [
@@ -304,7 +304,7 @@ export default {
         {
             key: 'separator_content',
             type: 'section',
-            desc: __( 'Control whether related product suggestions are shown from the same store, the entire marketplace, or not at all.', 'multivendorx' ),
+            desc: __( '<li>Same Store : Show related products only from the current store.<li>All Stores – Show related products from across the marketplace.', 'multivendorx' ),
             hint: __(
                 'Related Products Source',
                 'multivendorx'

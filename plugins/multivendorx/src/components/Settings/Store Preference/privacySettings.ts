@@ -14,23 +14,26 @@ export default {
         {
             key: 'store_page_details',
             type: 'checkbox',
-            label: __( 'Store Info on Products', 'multivendorx' ),
-            desc: __( 'Control which store information is visible on product pages.', 'multivendorx' ),
+            label: __( 'Store Details on Products', 'multivendorx' ),
+            desc: __( 'Decide which store details appear alongside products in the marketplace, such as store name, logo, and order breakdown.', 'multivendorx' ),
             class: 'mvx-toggle-checkbox',
             options: [
                 {
                     key: 'show_store_name_on_products',
-                    label: __( 'Show store name on products', 'multivendorx' ),
+                    label: __( 'Store name', 'multivendorx' ),
+					desc: __( 'Display store name on product listings and detail pages', 'multivendorx' ),
                     value: 'show_store_owner_info',
                 },
                 {
                     key: 'show_store_logo_next_to_products',
-                    label: __( 'Show store logo next to products', 'multivendorx' ),
+                    label: __( 'Store logo', 'multivendorx' ),
+					desc: __( 'Include store branding alongside product information', 'multivendorx' ),
                     value: 'show_store_description',
                 },
                 {
                     key: 'show_order_breakdown_by_store',
                     label: __( 'Show order breakdown by store', 'multivendorx' ),
+                    desc: __( 'Display which items come from which store and their corresponding sub order number, in email confirmations', 'multivendorx' ),
                     value: 'show_store_address',
                 },                
             ],
@@ -46,11 +49,13 @@ export default {
                 {
                     key: 'group_items_by_store_in_cart',
                     label: __( 'Group items by store in the shopping cart', 'multivendorx' ),
+                    desc: __( 'Organize cart contents by individual stores for clarity', 'multivendorx' ),
                     value: 'show_store_owner_info',
                 },
                 {
                     key: 'display_store_support_details',
                     label: __( 'Display Store Support details', 'multivendorx' ),
+                    desc: __( 'Include store contact information for customer support during checkout, also in mail', 'multivendorx' ),
                     value: 'show_store_address',
                 },
                 
@@ -138,7 +143,7 @@ export default {
         {
             key: 'separator_store_policy_override',
             type: 'section',
-            desc: __( 'Profile Deactivation Request', 'multivendorx' ),
+            desc: __( 'Allow store owners to temporarily disable their profile, hiding it and its products from the marketplace.', 'multivendorx' ),
             hint: __(
                 'Allow stores to set or override the default store policies.',
                 'multivendorx'

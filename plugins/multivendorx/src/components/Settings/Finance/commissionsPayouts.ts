@@ -181,7 +181,7 @@ export default {
             key: 'give_shipping',
             label: __( 'Shipping', 'multivendorx' ),
             desc: __(
-                'Add shipping fees to the commission calculation base amount',
+                'Add shipping fees to the commission calculation base amount. <li>Include in Commission: Add shipping charges to the commission calculation base amount <li>VExclude from Commission: Calculate commission only on product price, excluding shipping costs',
                 'multivendorx'
             ),
             type: 'checkbox',
@@ -198,7 +198,7 @@ export default {
             type: 'setting-toggle',
             label: __( 'Tax', 'multivendorx' ),
             desc: __(
-                'Calculate commission based on the total including taxes, not just the product price.',
+                'Configure how taxes are treated in commission calculations:<li>No Tax Inclusion: Calculate commission on pre-tax amount only.<li>100% Tax Inclusion: Include full tax amount in commission base.<li>Commission-Based Tax: Calculate commission on total order value including taxes, not just product price',
                 'multivendorx'
             ),
             options: [
