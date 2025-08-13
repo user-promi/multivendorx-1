@@ -7,7 +7,8 @@ import Modules from './components/Modules/Modules';
 import Store from './components/Store/Store';
 import { useEffect } from 'react';
 import { initializeModules } from 'zyra';
-import AdminDashboard from './components/adminDashboard/AdminDashboard';
+import AdminDashboard from './components/AdminDashboard/AdminDashboard';
+import Membership from './components/Memberships/Membership';
 
 
 './components/Stores/Stores';
@@ -20,12 +21,15 @@ const Route = () => {
             {currentTab.get('tab') === 'settings' && (
                 <Settings id={'settings'} />
             )}
+            {currentTab.get('tab') === 'memberships' && (
+                <Membership id='memberships'/>
+            )}
             {currentTab.get('tab') === 'modules' && <Modules />}
             {currentTab.get('tab') === 'stores' && (
                 <Store />
             )}
             {currentTab.get('tab') === 'dashboard' && (
-                <AdminDashboard/>
+                <AdminDashboard />
             )}
         </>
     );
