@@ -169,10 +169,10 @@ const Tabs: React.FC<TabsProps> = ({
     const renderBreadcrumb = useCallback(() => breadcrumbPath.map((crumb, index) => (
         <span key={index}>
             {index > 0 && ' / '}
-            <Link to={crumb.type === 'file' ? prepareUrl(crumb.id) : '#'} onClick={(e) => { 
+            <Link to={crumb.type === 'file' ? prepareUrl(crumb.id) : '#'} onClick={(e) => {
                 e.preventDefault();
                 // goToBreadcrumb(index);
-             }}>
+            }}>
                 {crumb.name}
             </Link>
         </span>
@@ -216,7 +216,7 @@ const Tabs: React.FC<TabsProps> = ({
             const folderUrl = firstFile ? prepareUrl(firstFile.id) : '#';
             const isCurrentFolderOpen = menuStack.length > 1 && menuStack[menuStack.length - 1] === folderContent;
             const isActiveFolder = isCurrentFolderOpen || checkIfFolderHasActiveTab(folderContent);
-        
+
             return (
                 <Link
                     key={`folder-${folderName}-${index}`}
@@ -233,7 +233,7 @@ const Tabs: React.FC<TabsProps> = ({
                 </Link>
             );
         }
-        
+
         return null;
     }, [activeTab, menuCol, navigateToTab, prepareUrl, Link, menuStack, checkIfFolderHasActiveTab, openSubmenu]);
 
@@ -272,6 +272,9 @@ const Tabs: React.FC<TabsProps> = ({
     return (
         <>
             <div className="top-header">
+                <div>Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus, eos?</div>
+            </div>
+            <div className="admin-header">
                 <div className="left-section">
                     <img className="brand-logo" src={menuCol ? smallbrandImg : brandImg} alt="Logo" />
                 </div>
@@ -279,10 +282,33 @@ const Tabs: React.FC<TabsProps> = ({
                     <div className="search-field">
                         <i className="adminlib-search"></i>
                         <input type="text" className="basic-input" placeholder="Search Here" />
+                        <select className="basic-select">
+                            <option value="catagory">Catagory</option>
+                            <option value="documents">Documents</option>
+                        </select>
                     </div>
-                    <i className="admin-icon adminlib-storefront"></i>
-                    <i className="admin-icon adminlib-storefront"></i>
-                    <a href="#" className="admin-btn btn-purple">Buy Now</a>
+
+                    {/* start notification */}
+                    <div className="icon-wrapper" title="Notifications">
+                        <i className="admin-icon adminlib-storefront">
+                            {/* <span className="badge">3</span> */}
+                        </i>
+
+                        {/* <div className="icon-dropdown">
+                            <p className="dropdown-header">Notifications</p>
+                            <ul>
+                                <li>New order placed</li>
+                                <li>Stock running low</li>
+                                <li>Message from vendor</li>
+                            </ul>
+                        </div> */}
+                    </div>
+                    {/* end notification */}
+                    <i className="admin-icon adminlib-plus-circle-o" title="Chat maneger"
+                    ></i>
+                    <i
+                        className="admin-icon adminlib-user-circle" title="Category by store"
+                    ></i>
                 </div>
             </div>
             <div className="admin-breadcrumbs">
@@ -292,7 +318,10 @@ const Tabs: React.FC<TabsProps> = ({
                 </div>
                 <p className="breadcrumbs-menu">{renderBreadcrumb()}</p>
                 <div id="top-level-tab-lists" className="current-tab-lists">
-                    <div className="current-tab-lists-container">{renderMenuItems(tabData)}</div>
+                    <div className="current-tab-lists-container">
+                        {renderMenuItems(tabData)}
+                        <a href="#" className="menu-item pro-btn">Go Premium<i className="adminlib-arrow-right"></i></a>
+                    </div>
                 </div>
             </div>
             <div className="general-wrapper">

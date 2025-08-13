@@ -1,4 +1,6 @@
 import { __ } from '@wordpress/i18n';
+import wordpressLogo from '@/assets/images/wordpress.png';
+import moodleLogo from '@/assets/images/moodle.png';
 
 export default {
     id: 'general',
@@ -82,20 +84,24 @@ export default {
         },
         {
             key: 'choose_map_api',
-            type: 'setting-toggle',
+            type: 'checkbox-custom-img',
             defaulValue: 'google_map_set',
             label: __( 'Map Provider', 'multivendorx' ),
+            wrapperClass: 'img-checkbox-wrapper',
+            inputWrapperClass: 'img-checkbox',
             desc: __( 'Select the map service that will power location features and maps across the site. Different providers may require an API key.', 'multivendorx' ),
-            options: [
+            syncDirections: [
                 {
                     key: 'google_map_set',
                     label: __( 'Google map', 'multivendorx' ),
                     value: __( 'google_map_set', 'multivendorx' ),
+                    img1: wordpressLogo,
                 },
                 {
                     key: 'mapbox_api_set',
                     label: __( 'Mapbox map', 'multivendorx' ),
                     value: __( 'mapbox_api_set', 'multivendorx' ),
+                    img1: moodleLogo,
                 },
             ],
         },

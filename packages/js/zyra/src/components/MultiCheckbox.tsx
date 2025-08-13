@@ -76,7 +76,7 @@ const MultiCheckBox: React.FC<MultiCheckBoxProps> = (props) => {
                             type="checkbox"
                             checked={allSelected}
                             onChange={(e) => props.onMultiSelectDeselectChange?.(e)}
-                            className={ !allSelected && selectedCount > 0 ? 'sdhgf':'v'}
+                            className={ !allSelected && selectedCount > 0 ? 'minus-icon':''}
                         />
                         <span className="">{selectedCount} items</span>
                     </div>
@@ -138,8 +138,6 @@ const MultiCheckBox: React.FC<MultiCheckBoxProps> = (props) => {
                                         key={`${option.key}-img-wrp`}
                                     >
                                         <img src={option.img1} alt="" />
-                                        <i className="admin-font adminlib-arrow-right"></i>
-                                        <img src={option.img2} alt="" />
                                     </div>
                                     <p className="custom-img-label">
                                         {option.label}

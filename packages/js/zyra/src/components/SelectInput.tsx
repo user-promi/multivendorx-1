@@ -84,13 +84,6 @@ const SelectInput: React.FC< SelectInputProps > = ( {
                 onChange={ ( newValue, actionMeta ) => {
                     onChange?.( newValue, actionMeta );
                 } }
-                // styles={{
-                //     multiValueLabel: (base) => ({
-                //       ...base,
-                //       backgroundColor: '#5007aa',
-                //       color: 'white',
-                //     }),
-                //   }}
                 
                 closeMenuOnSelect={false}
                 isMulti={ type === 'multi-select' } 
