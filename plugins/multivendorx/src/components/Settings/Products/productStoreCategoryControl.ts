@@ -1,21 +1,13 @@
 import { __ } from '@wordpress/i18n';
 
 export default {
-    id: 'product -store-category -control',
+    id: 'product-store-category-control',
     priority: 2,
     name: __( 'Store Category Control', 'multivendorx' ),
     desc: __(
         'Controls how stores are onboarded and what access they get.',
         'multivendorx'
     ),
-    video: {
-        icon: 'adminlib-general-tab', // optional icon class
-        link: 'https://example.com/video/general-settings',
-    },
-    docs: {
-        icon: 'adminlib-general-tab', // optional icon class
-        link: 'https://example.com/docs/general-settings',
-    },
     icon: 'adminlib-general-tab',
     submitUrl: 'settings',
     modal: [
