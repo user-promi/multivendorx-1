@@ -5,7 +5,7 @@ export default {
         { type: 'separator', id: 'marketplace_types', label: 'Marketplace Types' },
         {
             id: 'simple',
-            name: __('Downloadable & Virtual', 'multivendorx'),
+            name: __('Simple (Downloadable & Virtual)', 'multivendorx'),
             desc: "Covers the vast majority of any tangible products you may sell or ship i.e books",
             icon: 'adminlib-dynamic-pricing',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/simple-product',
@@ -26,7 +26,7 @@ export default {
         {
             id: 'external',
             name: __('External', 'multivendorx'),
-            desc: "Grants vendor the option to list and describe on admin website but sold elsewhere",
+            desc: "List and describe products on your marketplace but sell them elsewhere.",
             icon: 'adminlib-dynamic-pricing',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/external-product/',
             //settings_link: appLocalizer.site_url,
@@ -36,7 +36,7 @@ export default {
         {
             id: 'grouped',
             name: __('Grouped', 'multivendorx'),
-            desc: "A cluster of simple related products that can be purchased individually",
+            desc: "A collection of simple, related products that can be purchased individually.",
             icon: 'adminlib-dynamic-pricing',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/grouped-product',
             //settings_link: appLocalizer.site_url,
@@ -46,7 +46,7 @@ export default {
         {
             id: 'booking',
             name: __('Booking', 'multivendorx'),
-            desc: "Allow customers to book appointments, make reservations or rent equipment etc",
+            desc: "Allow customers to reserve appointments, equipment, or services.",
             icon: 'adminlib-dynamic-pricing',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/booking-product',
             //settings_link: appLocalizer.site_url,
@@ -56,7 +56,7 @@ export default {
         {
             id: 'appointment',
             name: __('Appointments', 'multivendorx'),
-            desc: "Allow customers to book appointments",
+            desc: "Dedicated appointment booking functionality.",
             icon: 'adminlib-dynamic-pricing',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/appointment-product/',
             //settings_link: appLocalizer.site_url,
@@ -66,7 +66,7 @@ export default {
         {
             id: 'subscription',
             name: __('Subscription', 'multivendorx'),
-            desc: "Let customers subscribe to your products or services and pay weekly, monthly or yearly",
+            desc: "Offer recurring payment options (weekly, monthly, or yearly).",
             icon: 'adminlib-dynamic-pricing',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/subscription-product',
             //settings_link: appLocalizer.site_url,
@@ -76,7 +76,7 @@ export default {
         {
             id: 'accommodation',
             name: __('Accommodation', 'multivendorx'),
-            desc: "Grant your guests the ability to quickly book overnight stays in a few clicks",
+            desc: "Enable customers to book overnight stays in just a few clicks.",
             icon: 'adminlib-dynamic-pricing',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/accommodation-product',
             //settings_link: appLocalizer.site_url,
@@ -86,7 +86,7 @@ export default {
         {
             id: 'bundle',
             name: __('Bundle', 'multivendorx'),
-            desc: "Offer personalized product bundles, bulk discount packages, and assembled products.",
+            desc: "Offer product bundles, bulk discounts, or assembled kits.",
             icon: 'adminlib-dynamic-pricing',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/bundle-product',
             //settings_link: appLocalizer.site_url,
@@ -96,7 +96,7 @@ export default {
         {
             id: 'auction',
             name: __('Auction', 'multivendorx'),
-            desc: "Implement an auction system similar to eBay on your store",
+            desc: "Enable an auction-style selling system similar to eBay.",
             icon: 'adminlib-dynamic-pricing',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/auction-product',
             //settings_link: appLocalizer.site_url,
@@ -106,7 +106,7 @@ export default {
         {
             id: 'rental-pro',
             name: __('Rental Pro', 'multivendorx'),
-            desc: "Perfect for those desiring to offer rental, booking, or real state agencies or services.",
+            desc: "Offer rental or real estate booking services.",
             icon: 'adminlib-dynamic-pricing',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/rental-product',
             //settings_link: appLocalizer.site_url,
@@ -116,7 +116,7 @@ export default {
         {
             id: 'gift-card',
             name: __('Gift Cards', 'multivendorx'),
-            desc: "Activate this module to offer gift cards, boosting your store's earnings and attracting fresh clientele.",
+            desc: "Sell gift cards to boost sales and attract new customers.",
             icon: 'adminlib-dynamic-pricing',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/gift-card/',
             //settings_link: appLocalizer.site_url,
