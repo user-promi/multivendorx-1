@@ -1,5 +1,9 @@
 @use '../../global.scss' as *;
 
+.admin-table-wrapper{
+  padding: 1.5rem;
+}
+
 .filter-wrapper {
     display: flex;
     gap: 1rem;

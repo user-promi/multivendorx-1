@@ -13,6 +13,7 @@ interface Option {
     key?: string;
     value: string;
     label?: string;
+    img?: string;
     proSetting?: boolean;
 }
 
@@ -65,15 +66,18 @@ const ToggleSetting: React.FC< ToggleSettingProps > = ( {
                                 readOnly // Prevents React warning for controlled components
                             />
                             <label htmlFor={ option.key }>
+                                {option.img && (
+                                    <img src={option.img} />
+                                )}
                                 { option.label }
                             </label>
                             { option.proSetting && ! khali_dabba && (
-                                <span className="admin-pro-tag">pro</span>
+                                <span className="admin-pro-tag">Pro</span>
                             ) }
                         </div>
                     ) ) }
                 </div>
-                { proSetting && <span className="admin-pro-tag">pro</span> }
+                { proSetting && <span className="admin-pro-tag">Pro</span> }
             </div>
             { description && (
                 <p

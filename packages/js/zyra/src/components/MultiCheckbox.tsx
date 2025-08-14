@@ -161,7 +161,7 @@ const MultiCheckBox: React.FC<MultiCheckBoxProps> = (props) => {
                                 ></p>
                             )}
                         {option.proSetting && !props.khali_dabba && (
-                            <span className="admin-pro-tag">pro</span>
+                            <span className="admin-pro-tag">Pro</span>
                         )}
                         {option.hints && (
                             <span
@@ -171,7 +171,7 @@ const MultiCheckBox: React.FC<MultiCheckBoxProps> = (props) => {
                                 }}
                             ></span>
                         )}
-                        {props.proSetting && <span className="admin-pro-tag">pro</span>}
+                        {props.proSetting && <span className="admin-pro-tag">Pro</span>}
                     </div>
                 );
             })}

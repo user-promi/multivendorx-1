@@ -196,8 +196,7 @@ div:has(.exclusion-modal) {
 
     .toggle-setting-wrapper {
         display: flex;
-        margin-bottom: 1rem;
-
+        
         div {
             list-style-type: none;
             margin: 0;
@@ -218,6 +217,14 @@ div:has(.exclusion-modal) {
                 cursor: pointer;
                 transition: all 0.3s ease;
                 border-right: none;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 0.5rem;
+
+                img{
+                    width: 3rem;
+                }
             }
             input:checked+label {
                 color: $theme-color;

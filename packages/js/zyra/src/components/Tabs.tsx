@@ -9,6 +9,8 @@ import { useState, useEffect, ReactNode, useCallback } from 'react';
  */
 import AdminFooter, { SupportLink } from './AdminFooter';
 import '../styles/web/Tabs.scss';
+import AdminForm from './AdminForm';
+import AdminHeader from './AdminHeader';
 
 // Types
 type TabContent = {
@@ -39,6 +41,7 @@ type TabsProps = {
     smallbrandImg: string;
     supprot: SupportLink[];
     Link: React.ElementType<LinkProps>;
+    settingName?:string
 };
 
 type BreadcrumbItem = { name: string; id: string; type: string; };
@@ -46,13 +49,13 @@ type PathResult = { path: BreadcrumbItem[]; stack: TabData[][]; };
 
 const Tabs: React.FC<TabsProps> = ({
     tabData, currentTab, getForm, prepareUrl, HeaderSection, BannerSection,
-    horizontally, appLocalizer, brandImg, smallbrandImg, supprot, Link,
+    horizontally, appLocalizer, brandImg, smallbrandImg, supprot, Link,settingName
 }) => {
     const [menuCol, setMenuCol] = useState(false);
     const [activeTab, setActiveTab] = useState<string>(currentTab);
     const [menuStack, setMenuStack] = useState<TabData[][]>([tabData]);
     const [breadcrumbPath, setBreadcrumbPath] = useState<BreadcrumbItem[]>([
-        { name: 'All Settings', id: 'all-settings', type: 'root' },
+        { name: settingName ?? '', id: 'all-settings', type: 'root' },
     ]);
 
     const findFirstFile = useCallback((items: TabData[]): TabContent | null => {
@@ -95,7 +98,7 @@ const Tabs: React.FC<TabsProps> = ({
     const updateBreadcrumbAndStack = useCallback((result: PathResult | null, isTopLevel = false) => {
         if (result) {
             setMenuStack(isTopLevel ? [tabData] : result.stack);
-            setBreadcrumbPath([{ name: 'All Settings', id: 'all-settings', type: 'root' }, ...result.path]);
+            setBreadcrumbPath([{ name: settingName ?? '', id: 'all-settings', type: 'root' }, ...result.path]);
         }
     }, [tabData]);
 
@@ -120,7 +123,7 @@ const Tabs: React.FC<TabsProps> = ({
 
     const resetToRoot = useCallback(() => {
         setMenuStack([tabData]);
-        setBreadcrumbPath([{ name: 'All Settings', id: 'all-settings', type: 'root' }]);
+        setBreadcrumbPath([{ name: settingName ?? '', id: 'all-settings', type: 'root' }]);
         const firstFile = findFirstFile(tabData);
         if (firstFile) {
             updateActiveTab(firstFile.id);
@@ -149,19 +152,14 @@ const Tabs: React.FC<TabsProps> = ({
             const folderItems = findFolderInData(tabData, crumb.id);
             if (folderItems) {
                 setMenuStack((prev) => [...prev.slice(0, index), folderItems]);
-                const firstFile = findFirstFile(folderItems);
-                if (firstFile) {
-                    updateActiveTab(firstFile.id);
-                    const result = buildPathToTab(tabData, firstFile.id);
-                    updateBreadcrumbAndStack(result);
-                }
+                const firstFile = findFirstFile(folderItems);<>hello</>
             }
         } else {
             updateActiveTab(crumb.id);
             const result = buildPathToTab(tabData, crumb.id);
             if (result) {
                 setMenuStack(result.stack);
-                setBreadcrumbPath([{ name: 'All Settings', id: 'all-settings', type: 'root' }, ...result.path]);
+                setBreadcrumbPath([{ name: settingName ?? '', id: 'all-settings', type: 'root' }, ...result.path]);
             }
         }
     }, [breadcrumbPath, resetToRoot, findFolderInData, tabData, findFirstFile, updateActiveTab, buildPathToTab, updateBreadcrumbAndStack]);
@@ -283,46 +281,6 @@ const Tabs: React.FC<TabsProps> = ({
 
     return (
         <>
-            <div className="top-header">
-                <div>Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus, eos?</div>
-            </div>
-            <div className="admin-header">
-                <div className="left-section">
-                    <img className="brand-logo" src={menuCol ? smallbrandImg : brandImg} alt="Logo" />
-                </div>
-                <div className="right-section">
-                    <div className="search-field">
-                        <i className="adminlib-search"></i>
-                        <input type="text" className="basic-input" placeholder="Search Here" />
-                        <select className="basic-select">
-                            <option value="catagory">Catagory</option>
-                            <option value="documents">Documents</option>
-                        </select>
-                    </div>
-
-                    {/* start notification */}
-                    <div className="icon-wrapper" title="Notifications">
-                        <i className="admin-icon adminlib-storefront">
-                            {/* <span className="badge">3</span> */}
-                        </i>
-
-                        {/* <div className="icon-dropdown">
-                            <p className="dropdown-header">Notifications</p>
-                            <ul>
-                                <li>New order placed</li>
-                                <li>Stock running low</li>
-                                <li>Message from vendor</li>
-                            </ul>
-                        </div> */}
-                    </div>
-                    {/* end notification */}
-                    <i className="admin-icon adminlib-plus-circle-o" title="Chat maneger"
-                    ></i>
-                    <i
-                        className="admin-icon adminlib-user-circle" title="Category by store"
-                    ></i>
-                </div>
-            </div>
             <div className="admin-breadcrumbs">
                 <div className="breadcrumbs-title">
                     {activeTabIcon && <i className={activeTabIcon}></i>}

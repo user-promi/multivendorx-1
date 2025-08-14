@@ -124,7 +124,7 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
                           <label htmlFor={`${field.key}-${rowIndex}-${opt.value}`}>
                             {opt.label}
                           </label>
-                          {opt.proSetting && <span className="admin-pro-tag">pro</span>}
+                          {opt.proSetting && <span className="admin-pro-tag">Pro</span>}
                         </div>
                       ))}
                     </div>
