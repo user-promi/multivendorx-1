@@ -383,7 +383,7 @@ const MultiCheckboxTable: React.FC< MultiCheckboxTableProps > = ( {
 } ) => {
     return (
         <>
-            { proSetting && <span className="admin-pro-tag">pro</span> }
+            { proSetting && <span className="admin-pro-tag">Pro</span> }
             <table className="grid-table">
                 <thead>
                     <tr>

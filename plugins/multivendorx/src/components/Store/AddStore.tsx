@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
-import {BasicInput, TextArea, FileInput, getApiLink} from 'zyra';
+import { BasicInput, TextArea, FileInput, getApiLink } from 'zyra';
 import Default from '../../assets/images/default.png';
 import BannerDefault from '../../assets/images/banner-placeholder.jpg';
+import "./Store.scss";
 
 const AddStore = () => {
   const navigate = useNavigate();
@@ -38,87 +39,109 @@ const AddStore = () => {
 
   const handleSubmit = () => {
     axios({
-        method: 'POST',
-        url: getApiLink(appLocalizer, 'store'),
-        headers: { 'X-WP-Nonce': appLocalizer.nonce },
-        data: {
-            formData: formData
-        },
+      method: 'POST',
+      url: getApiLink(appLocalizer, 'store'),
+      headers: { 'X-WP-Nonce': appLocalizer.nonce },
+      data: {
+        formData: formData
+      },
     })
-    .then((response) => {
-        if(response.data.success) {
+      .then((response) => {
+        if (response.data.success) {
           console.log('Store Create successfully')
           navigate(`?page=multivendorx#&tab=stores&edit/${response.data.id}`);
         }
-    })
+      })
   };
 
   return (
     <>
-        <Link
+      <div className="general-wrapper">
+        <div className="middle-child-container">
+          <h3>Add New Store</h3>
+          <Link
             to="?page=multivendorx#&tab=stores"
-            className="button"
-            >
+            className="admin-btn btn-purple"
+          >
             Back
-        </Link>
-        <div>
-            <h3>Add New Store</h3>
-            <label>Name</label>
-            <BasicInput
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
+          </Link>
 
-            />
-            <label>Slug</label>
-            <BasicInput
-                type="text"
-                name="slug"
-                value={formData.slug}
-                onChange={handleChange}
+          <div className="add-store">
 
-            />
-            <label>Description</label>
-            <TextArea
-                name="description"
-                value={formData.description}
-                onChange={handleChange}
-            />
-            <br/>
-            <label>Profile Image</label>
-            <FileInput
-                value={formData.image}
-                inputClass="form-input"
-                name="image"
-                type="hidden"
-                onButtonClick={() => runUploader('image')}
-                imageWidth={75}
-                imageHeight={75}
-                openUploader="Upload Image"
-                imageSrc={imagePreviews.image}
-                buttonClass="admin-btn btn-purple"
-            />
-            <br/>
-            <label>Store Banner Image</label>
-            <FileInput
-                value={formData.banner}
-                inputClass="form-input"
-                name="banner"
-                type="hidden"
-                onButtonClick={() => runUploader('banner')}
-                imageWidth={100}
-                imageHeight={100}
-                openUploader="Upload Image"
-                imageSrc={imagePreviews.banner}
-                buttonClass="admin-btn btn-purple"
-            />
-            <br/>
-            <button 
-              className="button"
+            <div className="form-group-wrapper">
+              <div className="form-group">
+                <label>Name</label>
+                <BasicInput
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+
+                />
+              </div>
+              <div className="form-group">
+                <label>Slug</label>
+                <BasicInput
+                  type="text"
+                  name="slug"
+                  value={formData.slug}
+                  onChange={handleChange}
+
+                />
+              </div>
+            </div>
+
+            <div className="form-group-wrapper">
+
+              <div className="form-group full-width">
+                <label>Description</label>
+                <TextArea
+                  name="description"
+                  value={formData.description}
+                  onChange={handleChange}
+                />
+              </div>
+            </div>
+
+            <div className="form-group-wrapper">
+              <div className="form-group">
+                <label>Profile Image</label>
+                <FileInput
+                  value={formData.image}
+                  inputClass="form-input"
+                  name="image"
+                  type="hidden"
+                  onButtonClick={() => runUploader('image')}
+                  imageWidth={75}
+                  imageHeight={75}
+                  openUploader="Upload Image"
+                  imageSrc={imagePreviews.image}
+                  buttonClass="admin-btn btn-purple"
+                />
+              </div>
+              <div className="form-group">
+                <label>Store Banner Image</label>
+                <FileInput
+                  value={formData.banner}
+                  inputClass="form-input"
+                  name="banner"
+                  type="hidden"
+                  onButtonClick={() => runUploader('banner')}
+                  imageWidth={100}
+                  imageHeight={100}
+                  openUploader="Upload Image"
+                  imageSrc={imagePreviews.banner}
+                  buttonClass="admin-btn btn-purple"
+                />
+              </div>
+            </div>
+            <button
+              className="admin-btn btn-purple"
               onClick={handleSubmit}
             >Submit</button>
+          </div> {/* end add store */}
         </div>
+      </div>
     </>
   );
 };

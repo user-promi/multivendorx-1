@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import DragListView from 'react-drag-listview';
+import "../styles/web/EndpointEditor.scss";
 // import { FaPen } from 'react-icons/fa';
 import { getApiLink } from '../utils/apiService';
 
@@ -89,74 +90,83 @@ const EndpointManager: React.FC<EndpointEditorProps> = ({
     };
 
     return (
-      <div key={key}>
+      <div key={key} className="menu-item">
         {editKey === key ? (
-          <div>
+          <div className="edit-menu">
             {/* Name input */}
-            <input
-              value={editName}
-              onChange={(e) => {
-                const newName = e.target.value;
-                setEditName(newName);
-                const updated = endpoints.map(([k, item]) =>
-                  k === editKey
-                    ? [k, { ...item, name: newName, slug: editSlug, visible: item.visible }]
-                    : [k, item]
-                ) as [string, Endpoint][];
-                autoSave(updated);
-              }}
-              placeholder="Name"
-            />
-
-            {key !== 'dashboard' && (
+            <div className="name-wrapper">
+              <i className="adminlib-move"></i>
               <input
-                value={editSlug}
+                value={editName}
                 onChange={(e) => {
-                  const newSlug = e.target.value;
-                  setEditSlug(newSlug);
+                  const newName = e.target.value;
+                  setEditName(newName);
                   const updated = endpoints.map(([k, item]) =>
                     k === editKey
-                      ? [k, { ...item, name: editName, slug: newSlug, visible: item.visible }]
+                      ? [k, { ...item, name: newName, slug: editSlug, visible: item.visible }]
                       : [k, item]
                   ) as [string, Endpoint][];
                   autoSave(updated);
                 }}
-                placeholder="Slug"
+                placeholder="Enter menu name"
+                className="basic-input"
               />
-            )}
+
+              {key !== 'dashboard' && (
+                <input
+                  value={editSlug}
+                  onChange={(e) => {
+                    const newSlug = e.target.value;
+                    setEditSlug(newSlug);
+                    const updated = endpoints.map(([k, item]) =>
+                      k === editKey
+                        ? [k, { ...item, name: editName, slug: newSlug, visible: item.visible }]
+                        : [k, item]
+                    ) as [string, Endpoint][];
+                    autoSave(updated);
+                  }}
+                  placeholder="Slug"
+                  className="basic-input"
+                />
+              )}
+            </div>
           </div>
         ) : (
           <div
             style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '10px',
               opacity: endpoint.visible === false ? 0.5 : 1,
             }}
+            className="main-menu"
           >
-            <div>
-              <strong>{endpoint.name}</strong>
-              {key !== 'dashboard' && <> (<code>{endpoint.slug}</code>)</>}
+            <div className="name-wrapper">
+              <i className="adminlib-move"></i>
+              <div className="name">{endpoint.name}
+                {key !== 'dashboard' && <> <code>{endpoint.slug}</code></>}
+              </div>
             </div>
 
-            {/* Show/Hide toggle */}
-            <label>
-              <input
-                type="checkbox"
-                checked={endpoint.visible !== false}
-                onChange={(e) => {
-                  const updated = endpoints.map(([k, item]) =>
-                    k === key ? [k, { ...item, visible: e.target.checked }] : [k, item]
-                  ) as [string, Endpoint][];
-                  autoSave(updated);
-                }}
-              />
-              Show
-            </label>
+            <div className="edit-icon">
+              {endpoint.visible !== false && (
+                <i
+                  onClick={() => startEdit(key, endpoint)}
+                  className="adminlib-create"
+                ></i>
+              )}
 
-            <button onClick={() => startEdit(key, endpoint)}>
-              {/* <FaPen className="text-gray-500" /> */}
-            </button>
+
+              {/* Show/Hide toggle */}
+              <div>
+                <i
+                  className={`adminlib-eye${endpoint.visible === false ? '-blocked' : ''}`}
+                  onClick={() => {
+                    const updated = endpoints.map(([k, item]) =>
+                      k === key ? [k, { ...item, visible: item.visible === false ? true : false }] : [k, item]
+                    ) as [string, Endpoint][];
+                    autoSave(updated);
+                  }}
+                ></i>
+              </div>
+            </div>
           </div>
         )}
 
@@ -169,8 +179,10 @@ const EndpointManager: React.FC<EndpointEditorProps> = ({
           >
             <ul>
               {endpoint.submenu.map((sub, i) => (
-                <li key={i} className="submenu-row cursor-move">
-                  <span className="submenu-handle">☰</span> {sub.name}
+                <li key={i} className="submenu-row cursor-move" style={{
+                  opacity: endpoint.visible === false ? 0.5 : 1,
+                }}>
+                  <i className="adminlib-move submenu-handle"></i> {sub.name}
                 </li>
               ))}
             </ul>
@@ -181,20 +193,20 @@ const EndpointManager: React.FC<EndpointEditorProps> = ({
   };
 
   return (
-    <div>
-      <h2>Endpoints</h2>
+    <div className="endpoints-wrapper">
+      {/* <h2>Endpoints</h2> */}
       <DragListView
         nodeSelector=".drag-row"
         handleSelector=".drag-handle"
         onDragEnd={onDragEnd}
       >
-        <div>
+        <div className="">
           {endpoints.map(([key, endpoint], index) => (
-            <div key={key} className="drag-row cursor-move">
+            <div key={key} className="endpoint drag-row cursor-move">
               {key === 'dashboard' ? (
                 <div>{renderRow([key, endpoint], index)}</div>
               ) : (
-                <div className="drag-handle">{renderRow([key, endpoint], index)}</div>
+                <div className="drag-handle menu-wrapper">{renderRow([key, endpoint], index)}</div>
               )}
             </div>
           ))}

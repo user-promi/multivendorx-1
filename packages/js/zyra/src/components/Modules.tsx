@@ -183,22 +183,6 @@ const Modules: React.FC<ModuleProps> = ({
                 <h2>Modules</h2>
             </div> */}
 
-            <div className="top-header">
-                <div className="left-section">
-                    <img
-                        className="brand-logo"
-                        src={brandImg}
-                        alt="Logo"
-                    />
-                </div>
-                <div className="right-section">
-                    <div className="search-field">
-                        <i className="adminlib-search"></i>
-                        <input type="text" className="basic-input" placeholder="Search Here" />
-                    </div>
-                </div>
-            </div>
-
             <div className="category-filter">
                 {/* <div className="module-status-filter">
                     <button

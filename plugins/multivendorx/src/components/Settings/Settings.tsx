@@ -232,6 +232,7 @@ const Settings: React.FC< SettingsProps > = () => {
                 brandImg={ Brand }
                 supprot={ supportLink }
                 Link={ Link }
+                settingName={'Settings'}
             />
         </SettingProvider>
     );
