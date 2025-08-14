@@ -175,6 +175,7 @@ const Tabs: React.FC<TabsProps> = ({
             </Link>
         </span>
     )), [breadcrumbPath, prepareUrl, goToBreadcrumb, Link]);
+
     const getActiveTabIcon = useCallback((data: TabData[]): string | undefined => {
         for (const item of data) {
             if (item.type === 'file') {
@@ -188,6 +189,7 @@ const Tabs: React.FC<TabsProps> = ({
         }
         return undefined;
     }, [activeTab]);
+
     const checkIfFolderHasActiveTab = useCallback((items: TabData[]): boolean => {
         for (const item of items) {
             if (item.type === 'file' && (item.content as TabContent).id === activeTab) return true;
@@ -267,6 +269,16 @@ const Tabs: React.FC<TabsProps> = ({
     const parentTabName = breadcrumbPath.length > 1 ? breadcrumbPath[breadcrumbPath.length - 2]?.name : '';
     const activeTabIcon = getActiveTabIcon(tabData);
 
+    const [noticeHTML, setNoticeHTML] = useState<string>("");
+
+    useEffect(() => {
+        const noticeElement = document.querySelector('#screen-meta + .wrap .notice, #wpbody-content .notice');
+        if (noticeElement) {
+            setNoticeHTML(noticeElement.outerHTML);
+            noticeElement.remove();
+        }
+    }, []);
+
     return (
         <>
             <div className="admin-breadcrumbs">
@@ -282,6 +294,12 @@ const Tabs: React.FC<TabsProps> = ({
                     </div>
                 </div>
             </div>
+            {noticeHTML && (
+                <div
+                    className="wp-admin-notice"
+                    dangerouslySetInnerHTML={{ __html: noticeHTML }}
+                />
+            )}
             <div className="general-wrapper">
                 {HeaderSection && <HeaderSection />}
                 {BannerSection && <BannerSection />}

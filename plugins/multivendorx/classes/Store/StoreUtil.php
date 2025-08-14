@@ -156,61 +156,37 @@ class StoreUtil {
     public static function get_store_capability() {
         $capabilities = [
             'products' => [
+                'label' => 'Manage Products',
+                'desc'  => 'Set how vendors handle their product listings',
+                'capability' =>
                 [
-                    'key' => 'manage_users',
-                    'label' => 'Manage Users',
-                ],
-                [
-                    'key' => 'manage_products',
-                    'label' => 'Manage Products',
-                ],
-                [
-                    'key' => 'read_products',
-                    'label' => 'Read Products',
-                ],
-                [
-                    'key' => 'edit_products',
-                    'label' => 'Edit Products',
-                ],
-                [
-                    'key' => 'delete_products',
-                    'label' => 'Delete Products',
-                ],
-                [
-                    'key' => 'publish_products',
-                    'label' => 'Publish Products',
-                ],
-                [
-                    'key' => 'upload_files',
-                    'label' => 'Upload Files',
+                    'manage_users' => 'Manage Users',
+                    'manage_products' => 'Manage Products',
+                    'read_products' => 'Read Products',
+                    'edit_products' => 'Edit Products',
+                    'delete_products' => 'Delete Products',
+                    'publish_products' => 'Publish Products',
+                    'upload_files' => 'Upload Files',
                 ],
             ],
             'orders' => [
+                'label' => 'Manage Orders',
+                'desc'  => 'Set how vendors handle their order listings',
+                'capability' =>
                 [
-                    'key' => 'read_shop_orders',
-                    'label' => 'Read Orders',
-                ],
-                [
-                    'key' => 'edit_shop_orders',
-                    'label' => 'Edit Orders',
-                ],
-                [
-                    'key' => 'delete_shop_orders',
-                    'label' => 'Delete Orders',
+                    'read_shop_orders' => 'Read Orders',
+                    'edit_shop_orders' => 'Edit Orders',
+                    'delete_shop_orders' => 'Delete Orders',
                 ],
             ],
             'coupons' => [
+                'label' => 'Manage Coupons',
+                'desc'  => 'Set how vendors handle their coupons listings',
+                'capability' =>
                 [
-                    'key' => 'read_shop_coupons',
-                    'label' => 'Read Coupons',
-                ],
-                [
-                    'key' => 'edit_shop_coupons',
-                    'label' => 'Edit Coupons',
-                ],
-                [
-                    'key' => 'delete_shop_coupons',
-                    'label' => 'Delete Coupons',
+                    'read_shop_coupons' => 'Read Coupons',
+                    'edit_shop_coupons' => 'Edit Coupons',
+                    'delete_shop_coupons' => 'Delete Coupons',
                 ],
             ]
         ];

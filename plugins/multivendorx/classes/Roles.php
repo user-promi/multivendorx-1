@@ -31,11 +31,20 @@ class Roles {
                 'Store owner',
                 array(
                     'read' => true,
-                    'manage_products' => true,
-                    'manage_users' => true,
-                    'upload_files' => true,
                 )
             );
         }
+    }
+
+
+    public static function get_all_custom_roles() {
+        $custom_roles = [
+            'store_owner'       =>  __('Store Owner', 'multivendorx'),
+            'store_manager'     =>  __('Store Manager', 'multivendorx'),
+            'product_manager'   =>  __('Product Manager', 'multivendorx'),
+            'customer_support'  =>  __('Customer Support', 'multivendorx'),
+            'order_assistant'   =>  __('Order Assistant', 'multivendorx'),
+        ];
+        return $custom_roles;
     }
 }

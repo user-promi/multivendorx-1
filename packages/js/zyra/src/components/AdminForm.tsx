@@ -254,6 +254,7 @@ interface AdminFormProps {
     setting: any;
     updateSetting: any;
     modules: any;
+    storeTabSetting?: any;
     appLocalizer: Record<string, any>; // Allows any structure
     Popup: typeof Popup;
     modulePopupFields?: PopupProps;
@@ -265,6 +266,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
     modules,
     appLocalizer,
     settings,
+    storeTabSetting,
     Popup,
     modulePopupFields,
 }) => {
@@ -1667,6 +1669,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             columns={inputField.columns ?? []} // columns array
                             description={String(inputField.desc)}
                             setting={setting}
+                            storeTabSetting={storeTabSetting}
                             proSetting={isProSetting(
                                 inputField.proSetting ?? false
                             )}

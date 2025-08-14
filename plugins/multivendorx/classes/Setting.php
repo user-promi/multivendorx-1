@@ -108,7 +108,8 @@ class Setting {
                 'multivendorx_policy_settings',
                 'multivendorx_payment_masspay_settings',
                 'multivendorx_product_report_abuse_settings',
-                'multivendorx_role_manager_settings',
+                'multivendorx_store_capability_settings',
+                'multivendorx_user_capability_settings',
 			)
         );
 
