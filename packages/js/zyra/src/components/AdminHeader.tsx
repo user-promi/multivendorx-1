@@ -36,7 +36,6 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
             <i className="adminlib-search"></i>
             <input
               type="text"
-              className="basic-input"
               placeholder="Search Here"
             />
             <select>

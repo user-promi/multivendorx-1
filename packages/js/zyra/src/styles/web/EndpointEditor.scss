@@ -4,29 +4,33 @@
 
     .endpoint {
         .menu-item {
+            padding: 0.5rem;
+
             .main-menu,
             .edit-menu {
                 display: flex;
                 justify-content: space-between;
-                background-color: $theme-background-color;
                 border: $border-theme-small;
                 padding: 0.8rem 1rem;
                 margin-bottom: 0.5rem;
                 cursor: move;
 
-                .name-wrapper{
+                .name-wrapper {
                     display: flex;
                     align-items: center;
                     gap: 1rem;
-                    i{
+
+                    i {
                         color: $theme-color;
                         font-size: 1.313rem;
                     }
-                    .name{
+
+                    .name {
                         font-size: 0.9rem;
                         font-weight: 500;
                     }
                 }
+
                 .edit-icon {
                     display: flex;
                     gap: 0.5rem;
@@ -43,26 +47,36 @@
                     }
                 }
 
-                &:hover{
-                    .edit-icon{
+                &:hover {
+                    background: $theme-background-color;
+
+                    .edit-icon {
                         opacity: 1;
                     }
                 }
-                input{
+
+                input {
                     width: fit-content;
                     background: #fff;
                 }
             }
-
+            &:has(.main-menu:hover),
+                &:has(.edit-menu:hover) {
+                    background: #e8e8e8;
+                }
             ul {
                 margin: 0;
+
                 li {
-                    background-color: $theme-background-color;
                     padding: 0.8rem 1rem;
                     margin-left: 2rem;
                     margin-bottom: 0.5rem;
                     border: $border-theme-small;
                     cursor: move;
+
+                    &:hover {
+                        background: $theme-background-color;
+                    }
                 }
             }
         }
