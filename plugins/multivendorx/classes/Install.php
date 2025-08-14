@@ -171,8 +171,8 @@ class Install {
             'post_type'      => 'page',
             'post_author'    => 1,
             'post_name'      => 'dashboard',
-            'post_title'     => __( 'Vendor Dashboard', 'multivendorx' ),
-            'post_content'   => '[multivendorx_vendor_dashboard]',
+            'post_title'     => __( 'Store Dashboard', 'multivendorx' ),
+            'post_content'   => '[multivendorx_store_dashboard]',
             'comment_status' => 'closed',
         );
 

@@ -20,6 +20,7 @@ declare global {
         pro_settings_list: any;
         country_list: any;
         capabilities: any;
+        custom_roles: any;
     }
 
     declare module '*.png';

@@ -300,7 +300,8 @@ class FrontendScripts {
                 'products-capability',
                 'commissions',
                 'product-report-abuse',
-                'role-manager',
+                'user-capability',
+                'store-capability',
                 'identity-verification'
             )
 		);
@@ -323,7 +324,7 @@ class FrontendScripts {
                 }
             }
 
-            $shortcode = '[multivendorx_vendor_dashboard]';
+            $shortcode = '[multivendorx_store_dashboard]';
             $matched_pages = array_filter( $pages, function ( $page ) use ( $shortcode ) {
                 return strpos( $page->post_content, $shortcode ) !== false;
             });
@@ -366,6 +367,7 @@ class FrontendScripts {
                         'country_list'             => $country_list,
                         'default_logo'             => MultiVendorX()->plugin_url.'assets/images/WP-stdavatar.png',
                         'capabilities'             => StoreUtil::get_store_capability(),
+                        'custom_roles'             => Roles::get_all_custom_roles(),
 					),
                 )
 			)
