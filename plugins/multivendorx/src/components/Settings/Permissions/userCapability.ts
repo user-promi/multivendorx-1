@@ -1,5 +1,12 @@
 import { __ } from '@wordpress/i18n';
 
+const columns = Object.entries(appLocalizer.custom_roles).map(([key, value]) => {
+    return {
+        key: key,
+        label: value,
+    };
+});
+
 export default {
     id: 'user-capability',
     priority: 2,
@@ -12,7 +19,7 @@ export default {
             key: 'role_access_table',
             type: 'multi-checkbox-table',
             // moduleEnabled: 'role_manager',
-            columns: appLocalizer.custom_roles,
+            columns: columns,
             rows: appLocalizer.capabilities,
         },                     
     ],

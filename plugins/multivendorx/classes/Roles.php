@@ -39,26 +39,11 @@ class Roles {
 
     public static function get_all_custom_roles() {
         $custom_roles = [
-            [
-                'key'   => 'store_owner', 
-                'label' =>  __('Store Owner', 'multivendorx')
-            ],
-            [
-                'key'   => 'store_manager', 
-                'label' =>  __('Store Manager', 'multivendorx')
-            ],
-            [
-                'key'   => 'product_manager', 
-                'label' =>  __('Product Manager', 'multivendorx')
-            ],
-            [
-                'key'   => 'customer_support', 
-                'label' =>  __('Customer Support', 'multivendorx')
-            ],
-            [
-                'key'   => 'order_assistant', 
-                'label' =>  __('Order Assistant', 'multivendorx')
-            ],
+            'store_owner'       =>  __('Store Owner', 'multivendorx'),
+            'store_manager'     =>  __('Store Manager', 'multivendorx'),
+            'product_manager'   =>  __('Product Manager', 'multivendorx'),
+            'customer_support'  =>  __('Customer Support', 'multivendorx'),
+            'order_assistant'   =>  __('Order Assistant', 'multivendorx'),
         ];
         return $custom_roles;
     }
