@@ -11,6 +11,7 @@ import AdminFooter, { SupportLink } from './AdminFooter';
 import '../styles/web/Tabs.scss';
 import AdminForm from './AdminForm';
 import AdminHeader from './AdminHeader';
+import AdminBreadcrumbs from './AdminBreadcrumbs';
 
 // Types
 type TabContent = {
@@ -41,7 +42,7 @@ type TabsProps = {
     smallbrandImg: string;
     supprot: SupportLink[];
     Link: React.ElementType<LinkProps>;
-    settingName?:string
+    settingName?: string
 };
 
 type BreadcrumbItem = { name: string; id: string; type: string; };
@@ -49,7 +50,7 @@ type PathResult = { path: BreadcrumbItem[]; stack: TabData[][]; };
 
 const Tabs: React.FC<TabsProps> = ({
     tabData, currentTab, getForm, prepareUrl, HeaderSection, BannerSection,
-    horizontally, appLocalizer, brandImg, smallbrandImg, supprot, Link,settingName
+    horizontally, appLocalizer, brandImg, smallbrandImg, supprot, Link, settingName
 }) => {
     const [menuCol, setMenuCol] = useState(false);
     const [activeTab, setActiveTab] = useState<string>(currentTab);
@@ -152,7 +153,7 @@ const Tabs: React.FC<TabsProps> = ({
             const folderItems = findFolderInData(tabData, crumb.id);
             if (folderItems) {
                 setMenuStack((prev) => [...prev.slice(0, index), folderItems]);
-                const firstFile = findFirstFile(folderItems);<>hello</>
+                const firstFile = findFirstFile(folderItems); <>hello</>
             }
         } else {
             updateActiveTab(crumb.id);
@@ -281,19 +282,19 @@ const Tabs: React.FC<TabsProps> = ({
 
     return (
         <>
-            <div className="admin-breadcrumbs">
-                <div className="breadcrumbs-title">
-                    {activeTabIcon && <i className={activeTabIcon}></i>}
-                    {parentTabName}
-                </div>
-                <p className="breadcrumbs-menu">{renderBreadcrumb()}</p>
-                <div id="top-level-tab-lists" className="current-tab-lists">
-                    <div className="current-tab-lists-container">
-                        {renderMenuItems(tabData)}
-                        <a href="#" className="menu-item pro-btn">Go Premium<i className="adminlib-arrow-right"></i></a>
-                    </div>
-                </div>
-            </div>
+            <AdminBreadcrumbs
+                activeTabIcon={activeTabIcon}
+                parentTabName={parentTabName}
+                renderBreadcrumb={renderBreadcrumb}
+                renderMenuItems={renderMenuItems}
+                tabData={tabData}
+                buttons={[
+                    { label: "Add New", onClick: () => alert("Add New clicked"), iconClass: "fa fa-plus" },
+                    { label: "Settings", onClick: () => alert("Settings clicked"), iconClass: "fa fa-cog" },
+                    <button key="custom" style={{ background: "red" }}>Custom JSX</button>
+                ]}
+            />
+
             {noticeHTML && (
                 <div
                     className="wp-admin-notice"

@@ -79,6 +79,7 @@ export default {
             label: __( 'Available shortcodes', 'multivendorx' ),
             desc: __( '', 'multivendorx' ),
             optionLabel: [ 'Shortcodes', 'Description' ],
+            icon: 'adminlib-general-tab',
             options: [
                 {
                     key: '',

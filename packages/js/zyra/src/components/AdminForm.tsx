@@ -143,6 +143,7 @@ interface InputField {
     rangeUnit?: string;
     min?: number;
     max?: number;
+    icon?:string;
     proSetting?: boolean;
     moduleEnabled?: boolean;
     parameter?: string;
@@ -1753,6 +1754,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             descClass="settings-metabox-description"
                             description={inputField.desc}
                             key={inputField.key}
+                            icon={inputField.icon}
                             options={
                                 Array.isArray(inputField.options)
                                     ? inputField.options
