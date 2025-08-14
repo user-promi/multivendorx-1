@@ -51,7 +51,7 @@ const ShortCodeTable: React.FC< ShortCodeTableProps > = ( props ) => {
                     ) : (
                         <tr>
                             <td colSpan={ 2 }>No Options Available</td>
-                        </tr> // Fallback if no options exist
+                        </tr>
                     ) }
                 </tbody>
             </table>

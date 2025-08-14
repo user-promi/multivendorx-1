@@ -12,7 +12,7 @@ interface MultiNumOption {
     type?: string;
     labelAfterInput?: boolean;
     desc?: string; // optional description per option
-    options?: { value: string; label: string,labelAfterInput:boolean }[]; // for radio options
+    options?: { value: string; label: string, labelAfterInput: boolean }[]; // for radio options
 }
 
 interface MultiNumInputProps {
@@ -62,14 +62,12 @@ const MultiNumInput: React.FC<MultiNumInputProps> = ({
                     const selectedValue =
                         value.find((val) => val.key === option.key)?.value ?? '';
 
-                    // ✅ Check option.labelAfterInput first, fallback to global prop
                     const isLabelAfterInput =
                         typeof option.labelAfterInput === 'boolean'
                             ? option.labelAfterInput
                             : labelAfterInput;
-                            console.log("jhds", option)
                     const labelJSX = (
-                        <div className={inputLabelClass || 'left-input'}>
+                        <div className="input-unit">
                             {option.label}
                         </div>
                     );
@@ -125,14 +123,18 @@ const MultiNumInput: React.FC<MultiNumInputProps> = ({
                         );
 
                     return (
-                        <div key={option.key} className={inputWrapperClass}>
+                        <div
+                            key={option.key}
+                            className={`${inputWrapperClass} ${isLabelAfterInput ? 'suffix' : 'prefix'}`}
+                        >
+
                             <div className={innerInputWrapperClass}>
                                 {!isLabelAfterInput && labelJSX}
                                 {inputJSX}
                                 {isLabelAfterInput && labelJSX}
 
                                 {proSetting && (
-                                    <span className="admin-pro-tag">pro</span>
+                                    <span className="admin-pro-tag">Pro</span>
                                 )}
                             </div>
 

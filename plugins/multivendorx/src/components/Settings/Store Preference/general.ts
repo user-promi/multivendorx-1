@@ -84,24 +84,22 @@ export default {
         },
         {
             key: 'choose_map_api',
-            type: 'checkbox-custom-img',
+            type: 'setting-toggle',
             defaulValue: 'google_map_set',
             label: __( 'Map Provider', 'multivendorx' ),
-            wrapperClass: 'img-checkbox-wrapper',
-            inputWrapperClass: 'img-checkbox',
             desc: __( 'Select the map service that will power location features and maps across the site. Different providers may require an API key.', 'multivendorx' ),
-            syncDirections: [
+            options: [
                 {
                     key: 'google_map_set',
                     label: __( 'Google map', 'multivendorx' ),
                     value: __( 'google_map_set', 'multivendorx' ),
-                    img1: wordpressLogo,
+                    img: wordpressLogo,
                 },
                 {
                     key: 'mapbox_api_set',
                     label: __( 'Mapbox map', 'multivendorx' ),
                     value: __( 'mapbox_api_set', 'multivendorx' ),
-                    img1: moodleLogo,
+                    img: moodleLogo,
                 },
             ],
         },
@@ -151,11 +149,13 @@ export default {
                     key: 'radius_search_min_distance',
                     label: __( 'min', 'multivendorx' ),
                     type: 'number',
+                    labelAfterInput:true
                 },
                 {
                     key: 'radius_search_max_distance',
                     label: __( 'max', 'multivendorx' ),
                     type: 'number',
+                    labelAfterInput:false
                 },
                 {
                     key: 'radius_search_unit',

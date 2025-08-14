@@ -138,11 +138,11 @@ export default {
                 {
                     key: 'commission_percent',
                     type: 'multi-number',
-                    label: 'apply commission',
+                    label: 'apply commission Fixed',
                     options: [
                         {
                             key: 'mvx_commission_fixed_per_unit',
-                            label: __( 'Fixed $', 'multivendorx' ),
+                            label: __( '$', 'multivendorx' ),
                             type: 'number',
                             labelAfterInput:false
 

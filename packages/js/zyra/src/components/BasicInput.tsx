@@ -204,7 +204,7 @@ const BasicInput = forwardRef< HTMLInputElement, BasicInputProps >(
                             </>
                         ) ) }
 
-                    { proSetting && <span className="admin-pro-tag">pro</span> }
+                    { proSetting && <span className="admin-pro-tag">Pro</span> }
 
                     { type === 'range' && (
                         <output className={ descClass }>
