@@ -197,7 +197,7 @@ interface InputField {
     classes?: string;
     Lat?: number;
     Lng?: number;
-    labelAfterInput?:boolean,
+    labelAfterInput?: boolean,
     single?: boolean;
     center?: Center;
     nestedFields?: {
@@ -254,6 +254,7 @@ interface AdminFormProps {
     setting: any;
     updateSetting: any;
     modules: any;
+    storeTabSetting?: any;
     appLocalizer: Record<string, any>; // Allows any structure
     Popup: typeof Popup;
     modulePopupFields?: PopupProps;
@@ -265,6 +266,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
     modules,
     appLocalizer,
     settings,
+    storeTabSetting,
     Popup,
     modulePopupFields,
 }) => {
@@ -1307,7 +1309,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                         <MultiCheckBox
                             khali_dabba={appLocalizer?.khali_dabba ?? false}
                             wrapperClass={
-                                inputField.look === 'toggle' ? '' : inputField.selectDeselect === true ? 'checkbox-list-side-by-side' : 'simple-checkbox'
+                                inputField.look === 'toggle' ? 'toggle-btn' : inputField.selectDeselect === true ? 'checkbox-list-side-by-side' : 'simple-checkbox'
                             }
                             descClass="settings-metabox-description"
                             description={inputField.desc}
@@ -1667,6 +1669,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             columns={inputField.columns ?? []} // columns array
                             description={String(inputField.desc)}
                             setting={setting}
+                            storeTabSetting={storeTabSetting}
                             proSetting={isProSetting(
                                 inputField.proSetting ?? false
                             )}
@@ -1905,9 +1908,9 @@ const AdminForm: React.FC<AdminFormProps> = ({
                         />
                     );
                     break;
-                    case 'verification-methods':
-                        input = (
-                          <VerificationMethods
+                case 'verification-methods':
+                    input = (
+                        <VerificationMethods
                             key={inputField.key}
                             label={inputField.label}
                             nestedFields={inputField.nestedFields ?? []}
@@ -1915,12 +1918,12 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             deleteButtonLabel={inputField.deleteButtonLabel}
                             value={value}
                             onChange={(val) => {
-                              updateSetting(inputField.key, val);
-                              settingChanged.current = true;
+                                updateSetting(inputField.key, val);
+                                settingChanged.current = true;
                             }}
-                          />
-                        );
-                        break;
+                        />
+                    );
+                    break;
                     break;
 
                 case 'endpoint-editor':
@@ -2036,14 +2039,23 @@ const AdminForm: React.FC<AdminFormProps> = ({
                     }
                 </Dialog>
                 {successMsg && (
-                    <div className="admin-notice-wrapper">
-                        <i className="admin-font adminlib-icon-yes"></i>
-                        <div className="notice">
-                            <div className="title">Great!</div>
-                            <div className="desc">{successMsg}</div>
+                    <>
+                        <div className="admin-notice-wrapper">
+                            <i className="admin-font adminlib-icon-yes"></i>
+                            <div className="notice-details">
+                                <div className="title">Great!</div>
+                                <div className="desc">{successMsg}</div>
+                            </div>
                         </div>
-                    </div>
-                )} 
+                        <div className="admin-notice-wrapper notice-error">
+                            <i className="admin-font adminlib-info"></i>
+                            <div className="notice-details">
+                                <div className="title">oops!</div>
+                                <div className="desc">{successMsg}</div>
+                            </div>
+                        </div>
+                    </>
+                )}
                 <form className="dynamic-form">{renderForm()}</form>
             </div>
         </>
