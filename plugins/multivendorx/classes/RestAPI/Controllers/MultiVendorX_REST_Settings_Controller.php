@@ -75,37 +75,36 @@ class MultiVendorX_REST_Settings_Controller extends \WP_REST_Controller {
 
         $all_details['error'] = __( 'Settings Saved', 'multivendorx' );
 
-        if ($settingsname == 'role_manager') {
-            $roles_caps = MultiVendorX()->setting->get_option('multivendorx_role_manager_settings');
-            // Make sure WP_Roles is ready
-            if ( ! function_exists( 'wp_roles' ) ) {
-                require_once ABSPATH . 'wp-includes/pluggable.php';
+        if ($settingsname == 'store_capability') {
+            $store_cap = MultiVendorX()->setting->get_option('multivendorx_store_capability_settings');
+            $user_cap = MultiVendorX()->setting->get_option('multivendorx_user_capability_settings');
+        
+            $store_owner_caps = array();
+            foreach ($store_cap as $caps) {
+                $store_owner_caps = array_merge($store_owner_caps, $caps);
             }
 
-            $wp_roles = wp_roles();
+            $store_owner_caps = array_unique($store_owner_caps);
 
-            foreach ( $roles_caps as $role_key => $caps ) {
+            // Create store_owner entry
+            $result = [
+                'store_owner' => $store_owner_caps
+            ];
 
-                $role = $wp_roles->get_role( $role_key );
-                if ( $role ) {
-                    // First remove all capabilities for a clean reset
-                    foreach ( $role->capabilities as $existing_cap => $grant ) {
-                        $role->remove_cap( $existing_cap );
-                    }
-
-                    // Add the new capabilities
-                    foreach ( $caps as $cap ) {
-                        $role->add_cap( $cap );
-                    }
-
+            foreach ($user_cap as $role => $caps) {
+                if ($role !== 'store_owner') {
+                    $user_cap[$role] = array_values(array_intersect($caps, $store_owner_caps));
                 }
             }
 
-            // Force refresh global $wp_roles for current request
-            global $wp_roles;
-            $wp_roles->for_site();
-            flush_rewrite_rules();
+            MultiVendorX()->setting->update_option( 'multivendorx_user_capability_settings', array_merge($user_cap, $result) );
         }
+
+        // Force refresh global $wp_roles for current request
+        global $wp_roles;
+        $wp_roles->for_site();
+        flush_rewrite_rules();
+
         return $all_details;
     }
 
