@@ -19,6 +19,8 @@ interface Module {
     desc: string;
     icon: string;
     doc_link: string;
+    video_link: string;
+    req_plugin?:string[],
     settings_link: string;
     pro_module?: boolean;
     parent_category?: string; // Optional to support no separators
@@ -97,6 +99,7 @@ const Modules: React.FC<ModuleProps> = ({
             return (selectedCategory === 'All' || item.id === selectedCategory) && hasModulesInCategory;
         }
         const module = item as Module;
+
         // If no parent_category, include only if 'All' is selected
         if (!module.parent_category && selectedCategory !== 'All') return false;
         // Apply category filter
@@ -183,6 +186,22 @@ const Modules: React.FC<ModuleProps> = ({
                 <h2>Modules</h2>
             </div> */}
 
+            <div className="top-header">
+                <div className="left-section">
+                    <img
+                        className="brand-logo"
+                        src={brandImg}
+                        alt="Logo"
+                    />
+                </div>
+                <div className="right-section">
+                    <div className="search-field">
+                        <i className="adminlib-search"></i>
+                        <input type="text" className="basic-input" placeholder="Search Here" />
+                    </div>
+                </div>
+            </div>
+
             <div className="category-filter">
                 {/* <div className="module-status-filter">
                     <button
@@ -232,16 +251,12 @@ const Modules: React.FC<ModuleProps> = ({
 
             <div className="module-option-row">
                 {filteredModules.map((item, index) => {
-                    // if ('type' in item && item.type === 'separator') {
-                    //     return (
-                    //         <div key={`separator-${item.id}`} className="module-separator">
-                    //             <h3 className="separator-title">{item.label}</h3>
-                    //         </div>
-                    //     );
-                    // }
+                    if ('type' in item && item.type === 'separator') {
+                        return null;
+                    }
 
                     const module = item as Module;
-
+                    const requiredPlugins = module.req_plugin || (module as any).req_pluging || [];
                     return (
                         <div className="module-list-item" key={module.id}>
                             {module.pro_module && !appLocalizer.khali_dabba && (
@@ -278,16 +293,18 @@ const Modules: React.FC<ModuleProps> = ({
                                         className="meta-description"
                                         dangerouslySetInnerHTML={{ __html: module.desc }}
                                     ></p>
-                                    <div className="requires">Requires:</div>
-                                    <p
-                                        className="meta-description"
-                                    >WooCommerce Appointment</p>
+        {requiredPlugins.length > 0 && (
+            <div className="requires">
+                <div className="requires-title">Requires:</div>
+                <p className="meta-description">{requiredPlugins.join(', ')}</p>
+            </div>
+        )}
                                 </div>
                             </div>
                             <div className="module-footer">
                                 <div className="buttons">
-                                    <a href="#"><i className="adminlib-book"></i></a>
-                                    <a href="#"><i className="adminlib-button-appearance"></i></a>
+                                    <a href={module.doc_link}><i className="adminlib-book"></i></a>
+                                    <a href={module.video_link}><i className="adminlib-button-appearance"></i></a>
                                 </div>
                                 <div
                                     className="toggle-checkbox"
