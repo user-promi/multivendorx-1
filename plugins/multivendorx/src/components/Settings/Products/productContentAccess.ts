@@ -262,53 +262,12 @@ export default {
                 },
             ],
         },
+
         {
             key: 'separator_content',
             type: 'section',
-            desc: __( 'Help vendors select accurate product categories through guided category selection:', 'multivendorx' ),
-            hint: __(
-                'Category Pyramid Guide (CPG)',
-                'multivendorx'
-            ),
-        },
-        {
-            key: 'sku_generator_attribute_spaces',
-            type: 'setting-toggle',
-            label: __(
-                'Category Selection Method',
-                'multivendorx'
-            ),
-            desc: __(
-                'When guided setup is disabled, stores bypass the walkthrough and access their full dashboard immediately.<li>Guided Sequential Selection: Vendors must first choose primary category, then select from available subcategories.<li>Free Multi-Selection: Vendors can select any number of categories and subcategories without restrictions.',
-                'multivendorx'
-            ),
-            options: [
-                {
-                    key: 'no',
-                    label: __(
-                        'Guided Sequential Selection',
-                        'multivendorx'
-                    ),
-                    value: 'no',
-                },
-                {
-                    key: 'underscore',
-                    label: __(
-                        'Free Multi-Selection',
-                        'multivendorx'
-                    ),
-                    value: 'underscore',
-                },
-            ],
-        },
-        {
-            key: 'separator_content',
-            type: 'section',
-            desc: __( '<li>Same Store : Show related products only from the current store.<li>All Stores – Show related products from across the marketplace.', 'multivendorx' ),
-            hint: __(
-                'Related Products Source',
-                'multivendorx'
-            ),
+            desc: __( '', 'multivendorx' ),
+            hint: __('Related Products Source','multivendorx'),
         },
         {
             key: 'sku_generator_attribute_spaces',
@@ -318,7 +277,7 @@ export default {
                 'multivendorx'
             ),
             desc: __(
-                'Choose whether to replace spaces in attribute names when generating SKUs:',
+                '<li>Same Store : Show related products only from the current store.<li>All Stores – Show related products from across the marketplace.Choose whether to replace spaces in attribute names when generating SKUs:',
                 'multivendorx'
             ),
             options: [
