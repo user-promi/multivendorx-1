@@ -355,10 +355,14 @@ interface Row {
     options?: { value: string | number; label: string }[];
 }
 
-interface Capability {
-  key: string;
+interface CapabilityGroup {
   label: string;
+  desc: string;
+  capability: Record<string, string>;
 }
+
+type Rows = Record<string, CapabilityGroup>;
+
 
 interface MultiCheckboxTableProps {
     rows: Row[];
@@ -368,15 +372,16 @@ interface MultiCheckboxTableProps {
     setting: Record< string, any >;
     proSetting?: boolean;
     modules: string[];
+    storeTabSetting: Record<string, string[]>;
     moduleChange: ( module: string ) => void;
 }
 
-type Rows = Record<string, Capability[]>;
 const MultiCheckboxTable: React.FC< MultiCheckboxTableProps > = ( {
     rows,
     columns,
     onChange,
     setting,
+    storeTabSetting,
     proSetting,
     modules,
     moduleChange,
@@ -460,64 +465,60 @@ const MultiCheckboxTable: React.FC< MultiCheckboxTableProps > = ( {
                             </tr>
                         ))
                     ) : (
-                        Object.entries(rows as Rows).map(([role, capabilities]) => (
-                            <React.Fragment key={role}>
-                                <h1>{role}</h1>
-                                {capabilities.map((cap) => (
-                                    <tr key={cap.key}>
-                                        <td>{cap.label}</td>
+                        Object.entries(rows as Rows).map(([groupKey, group]) => (
+                            <React.Fragment key={groupKey}>
+                                <h1>{group.label}</h1>
+                                {Object.entries(group.capability).map(([capKey, capLabel]) => (
+                                    <tr key={capKey}>
+                                        <td>{capLabel}</td>
                                         {columns.map((column) => {
-                                            const key = `${column.key}_${cap.key}`;
-                                            const value = setting[key] || [];
 
-                                            return (
-                                                <td
-                                                    id="grid-table-cell"
-                                                    className="grid-table-cell-class"
-                                                    key={`${column.key}_${cap.key}`}
-                                                >
-                                                    <input
-                                                        placeholder="select"
-                                                        type="checkbox"
-                                                        checked={
-                                                            Array.isArray(setting[column.key]) &&
-                                                            setting[column.key].includes(cap.key)
-                                                        }
-                                                        onChange={(e) => {
-                                                            if (
-                                                                column.moduleEnabled &&
-                                                                !modules.includes(
-                                                                    column.moduleEnabled
-                                                                )
-                                                            ) {
-                                                                moduleChange(column.moduleEnabled);
-                                                                return;
-                                                            }
-
-                                                            const selectedKeys = Array.isArray(
-                                                                setting[column.key]
-                                                            )
-                                                                ? setting[column.key]
-                                                                : [];
-
-                                                            const updatedSelection = e.target.checked
-                                                                ? [...selectedKeys, cap.key] // Add
-                                                                : selectedKeys.filter(
-                                                                    (keyVal: any) =>
-                                                                        keyVal !== cap.key
-                                                                ); // Remove
-
-                                                            onChange(column.key, updatedSelection);
-                                                        }}
-                                                    />
-                                                </td>
+                                        const hasExists = Object.values(storeTabSetting).some(
+                                            (arr) => arr?.includes(capKey)
                                             );
+
+                                        return (
+                                            <td
+                                            id="grid-table-cell"
+                                            className="grid-table-cell-class"
+                                            key={`${column.key}_${capKey}`}
+                                            >
+                                            <input
+                                                placeholder="select"
+                                                type="checkbox"
+                                                checked={
+                                                Array.isArray(setting[column.key]) &&
+                                                setting[column.key].includes(capKey)
+                                                }
+                                                disabled={!hasExists}
+                                                onChange={(e) => {
+                                                if (
+                                                    column.moduleEnabled &&
+                                                    !modules.includes(column.moduleEnabled)
+                                                ) {
+                                                    moduleChange(column.moduleEnabled);
+                                                    return;
+                                                }
+
+                                                const selectedKeys = Array.isArray(setting[column.key])
+                                                    ? setting[column.key]
+                                                    : [];
+
+                                                const updatedSelection = e.target.checked
+                                                    ? [...selectedKeys, capKey]
+                                                    : selectedKeys.filter((keyVal: any) => keyVal !== capKey);
+
+                                                onChange(column.key, updatedSelection);
+                                                }}
+                                            />
+                                            </td>
+                                        );
                                         })}
                                     </tr>
                                 ))}
                             </React.Fragment>
-                        ))
-                    )}
+                            ))
+                        )}
                 </tbody>
             </table>
         </>
