@@ -741,7 +741,7 @@ input[type="checkbox"]:checked::before {
 
 // section divider start
 .divider-section {
-  padding: 2rem 0 1.5rem 0;
+  padding: 1.5rem 0;
   border-bottom: $border-light-small;
   width: 100%;
 
@@ -1002,7 +1002,7 @@ input[type="checkbox"]:checked::before {
   label {
     cursor: pointer;
     width: 2.785rem;
-    height: 1.4rem;
+    height: 1.2rem;
     background: $theme-background-color;
     display: block;
     border-radius: $border-radius-button;

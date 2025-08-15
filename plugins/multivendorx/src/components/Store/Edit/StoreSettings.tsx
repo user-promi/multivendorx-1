@@ -98,40 +98,109 @@ const StoreSettings = ({ id }: { id: string }) => {
 				<div className="card-wrapper width-65">
 					<div className="card-content">
 						<div className="card-title">
-							Product information
+							Store information
 						</div>
 
 						<div className="form-group-wrapper">
 							<div className="form-group">
-								<label htmlFor="product-name">Product Name</label>
-								<input type="text" id="product-name" className="basic-input" placeholder="Enter product name" />
+								<label htmlFor="product-name">Name</label>
+								<BasicInput name="name" wrapperClass="setting-form-input" descClass="settings-metabox-description" value={formData.name} onChange={handleChange} />
+							</div>
+						</div>
+
+						<div className="form-group-wrapper">
+							<div className="form-group">
+								<label htmlFor="product-name">Slug</label>
+								<BasicInput name="name" wrapperClass="setting-form-input" descClass="settings-metabox-description" value={formData.name} onChange={handleChange} />
 							</div>
 						</div>
 					</div>
 
 					<div className="card-content">
 						<div className="card-title">
-							Product information
+							Description
 						</div>
 
 						<div className="form-group-wrapper">
 							<div className="form-group">
-								<label htmlFor="product-name">Product Name</label>
-								<input type="text" id="product-name" className="basic-input" placeholder="Enter product name" />
+								<TextArea name="description" wrapperClass="setting-from-textarea"
+									inputClass="textarea-input"
+									descClass="settings-metabox-description" value={formData.description} onChange={handleChange} />
 							</div>
 						</div>
 					</div>
 
-
 					<div className="card-content">
 						<div className="card-title">
-							Product information
+							Basic information
 						</div>
 
 						<div className="form-group-wrapper">
 							<div className="form-group">
-								<label htmlFor="product-name">Product Name</label>
-								<input type="text" id="product-name" className="basic-input" placeholder="Enter product name" />
+								<label htmlFor="product-name">Phone</label>
+								<BasicInput name="phone" value={formData.phone} wrapperClass="setting-form-input" descClass="settings-metabox-description" onChange={handleChange} />
+							</div>
+						</div>
+
+						<div className="form-group-wrapper">
+							<div className="form-group">
+								<label htmlFor="product-name">Address</label>
+								<BasicInput name="phone" value={formData.phone} wrapperClass="setting-form-input" descClass="settings-metabox-description" onChange={handleChange} />
+							</div>
+							<div className="form-group">
+								<label htmlFor="product-name"></label>
+								<BasicInput name="phone" value={formData.phone} wrapperClass="setting-form-input" descClass="settings-metabox-description" onChange={handleChange} />
+							</div>
+						</div>
+						<div className="form-group-wrapper">
+							<div className="form-group">
+								<label htmlFor="product-name">Country</label>
+								<SelectInput
+									name="country"
+									value={formData.country}
+									options={appLocalizer.country_list || []}
+									type="single-select"
+									onChange={(newValue) => {
+										if (!newValue || Array.isArray(newValue)) return;
+										const updated = { ...formData, country: newValue.value, state: '' }; // reset state
+										setFormData(updated);
+										autoSave(updated);
+										fetchStatesByCountry(newValue.value);
+									}}
+								/>
+							</div>
+						</div>
+						<div className="form-group-wrapper">
+							<div className="form-group">
+								<label htmlFor="product-name">Country</label>
+								<SelectInput
+									name="country"
+									value={formData.country}
+									options={appLocalizer.country_list || []}
+									type="single-select"
+									onChange={(newValue) => {
+										if (!newValue || Array.isArray(newValue)) return;
+										const updated = { ...formData, country: newValue.value, state: '' }; // reset state
+										setFormData(updated);
+										autoSave(updated);
+										fetchStatesByCountry(newValue.value);
+									}}
+								/>
+							</div>
+							<div className="form-group">
+								<label htmlFor="product-name">State</label>
+								<SelectInput
+									name="state"
+									value={formData.state}
+									options={stateOptions}
+									type="single-select"
+									onChange={(newValue) => {
+										if (!newValue || Array.isArray(newValue)) return;
+										const updated = { ...formData, state: newValue.value };
+										setFormData(updated);
+										autoSave(updated);
+									}}
+								/>
 							</div>
 						</div>
 					</div>
@@ -140,134 +209,47 @@ const StoreSettings = ({ id }: { id: string }) => {
 				<div className="card-wrapper width-35">
 					<div className="card-content">
 						<div className="card-title">
-							Product information
+
 						</div>
 
 						<div className="form-group-wrapper">
 							<div className="form-group">
-								<label htmlFor="product-name">Product Name</label>
-								<input type="text" id="product-name" className="basic-input" placeholder="Enter product name" />
+								<label htmlFor="product-name">Profile Image</label>
+								<FileInput
+									value={formData.image}
+									inputClass="form-input"
+									name="image"
+									type="hidden"
+									onButtonClick={() => runUploader('image')}
+									imageWidth={75}
+									imageHeight={75}
+									openUploader="Upload Image"
+									imageSrc={imagePreviews.image}
+									buttonClass="admin-btn btn-purple"
+									descClass="settings-metabox-description"
+								/>
 							</div>
 						</div>
-					</div>
-				</div>
-			</div>
 
-			<div className="dynamic-fields-wrapper">
-				<div className="dynamic-form">
+						<div className="form-group-wrapper">
+							<div className="form-group">
+								<label htmlFor="product-name">Store Banner Image</label>
+								<FileInput
+									value={formData.image}
+									inputClass="form-input"
+									name="image"
+									type="hidden"
+									onButtonClick={() => runUploader('image')}
+									imageWidth={75}
+									imageHeight={75}
+									openUploader="Upload Image"
+									imageSrc={imagePreviews.image}
+									buttonClass="admin-btn btn-purple"
+									descClass="settings-metabox-description"
+								/>
+							</div>
+						</div>
 
-					<div className="form-group vertical width-50">
-						<label className="title">Name</label>
-						<div className="settings-input-content">
-							<BasicInput name="name" wrapperClass="setting-form-input" descClass="settings-metabox-description" value={formData.name} onChange={handleChange} />
-						</div>
-					</div>
-
-					<div className="form-group vertical width-50">
-						<label className="title">Slug</label>
-						<div className="settings-input-content">
-							<BasicInput name="slug" value={formData.slug} wrapperClass="setting-form-input" descClass="settings-metabox-description" onChange={handleChange} />
-						</div>
-					</div>
-					<div className="form-group vertical width-50">
-						<label className="title">Profile Image</label>
-						<div className="settings-input-content">
-							<FileInput
-								value={formData.image}
-								inputClass="form-input"
-								name="image"
-								type="hidden"
-								onButtonClick={() => runUploader('image')}
-								imageWidth={75}
-								imageHeight={75}
-								openUploader="Upload Image"
-								imageSrc={imagePreviews.image}
-								buttonClass="admin-btn btn-purple"
-								descClass="settings-metabox-description"
-							/>
-						</div>
-					</div>
-
-					<div className="form-group vertical width-50">
-						<label className="title">Store Banner Image</label>
-						<div className="settings-input-content">
-							<FileInput
-								value={formData.banner}
-								inputClass="form-input"
-								name="banner"
-								type="hidden"
-								onButtonClick={() => runUploader('banner')}
-								imageWidth={100}
-								imageHeight={100}
-								openUploader="Upload Image"
-								imageSrc={imagePreviews.banner}
-								buttonClass="admin-btn btn-purple"
-								descClass="settings-metabox-description"
-							/>
-						</div>
-					</div>
-
-					<div className="form-group vertical width-50">
-						<label className="title">Description</label>
-						<div className="settings-input-content">
-							<TextArea name="description" wrapperClass="setting-from-textarea"
-								inputClass="textarea-input"
-								descClass="settings-metabox-description" value={formData.description} onChange={handleChange} />
-						</div>
-					</div>
-
-					<div className="form-group vertical width-50">
-						<label className="title">Phone</label>
-						<div className="settings-input-content">
-							<BasicInput name="phone" value={formData.phone} wrapperClass="setting-form-input" descClass="settings-metabox-description" onChange={handleChange} />
-						</div>
-					</div>
-					<div className="form-group vertical width-50">
-						<label className="title">Address</label>
-						<div className="settings-input-content">
-							<BasicInput name="address_1" value={formData.address_1} wrapperClass="setting-form-input" descClass="settings-metabox-description" onChange={handleChange} />
-							<BasicInput name="address_2" value={formData.address_2} wrapperClass="setting-form-input" descClass="settings-metabox-description" onChange={handleChange} />
-						</div>
-					</div>
-					<div className="form-group vertical width-50">
-						<label className="title">Country</label>
-						<SelectInput
-							name="country"
-							value={formData.country}
-							options={appLocalizer.country_list || []}
-							type="single-select"
-							onChange={(newValue) => {
-								if (!newValue || Array.isArray(newValue)) return;
-								const updated = { ...formData, country: newValue.value, state: '' }; // reset state
-								setFormData(updated);
-								autoSave(updated);
-								fetchStatesByCountry(newValue.value);
-							}}
-						/>
-					</div>
-					<div className="form-group vertical width-50">
-						<label className="title">State</label>
-						<SelectInput
-							name="state"
-							value={formData.state}
-							options={stateOptions}
-							type="single-select"
-							onChange={(newValue) => {
-								if (!newValue || Array.isArray(newValue)) return;
-								const updated = { ...formData, state: newValue.value };
-								setFormData(updated);
-								autoSave(updated);
-							}}
-						/>
-					</div>
-					<label className="title">City</label>
-					<div className="settings-input-content">
-						<BasicInput name="city" value={formData.city} wrapperClass="setting-form-input" descClass="settings-metabox-description" onChange={handleChange} />
-					</div>
-
-					<label className="title">ZIP</label>
-					<div className="settings-input-content">
-						<BasicInput name="postcode" value={formData.postcode} wrapperClass="setting-form-input" descClass="settings-metabox-description" onChange={handleChange} />
 					</div>
 				</div>
 			</div>
