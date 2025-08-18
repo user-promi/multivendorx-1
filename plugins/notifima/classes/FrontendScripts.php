@@ -326,7 +326,7 @@ class FrontendScripts {
 					'data'        => array(
 						'apiUrl'  => untrailingslashit( get_rest_url() ),
 						'restUrl' => Notifima()->rest_namespace,
-						'nonce'   => wp_create_nonce( 'notifima-security-nonce' ),
+						'nonce'   => wp_create_nonce( 'wp_rest' ),
 					),
 				),
 				'notifima-stock-notification-block-editor-script' => array(
@@ -334,7 +334,7 @@ class FrontendScripts {
 					'data'        => array(
 						'apiUrl'  => untrailingslashit( get_rest_url() ),
 						'restUrl' => Notifima()->rest_namespace,
-						'nonce'   => wp_create_nonce( 'notifima-security-nonce' ),
+						'nonce'   => wp_create_nonce( 'wp_rest' ),
 					),
 				),
 			)
