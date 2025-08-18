@@ -37,19 +37,6 @@ class FrontendScripts {
     }
 
 	/**
-	 * Get the script file name based on environment.
-	 *
-	 * @param string $name The base name of the script file (without `.js` or `.min.js`).
-	 * @return string Script name to use for enqueueing.
-	 */
-	public static function get_script_name( $name ) {
-        if ( MooWoodle()->is_dev ) {
-			return $name;
-        }
-        return PLUGIN_SLUG . '-' . $name . '.min';
-    }
-
-	/**
 	 * Get the build path for assets based on environment.
 	 *
 	 * @return string Relative path to the build directory.
@@ -215,7 +202,7 @@ class FrontendScripts {
 					'version' => $version,
 				),
 				'moowoodle-product-tab-script' => array(
-					'src'     => MooWoodle()->plugin_url . 'assets/js/' . self::get_script_name( 'product-tab' ) . '.js',
+					'src'     => MooWoodle()->plugin_url . self::get_build_path_name() . 'js/' . PLUGIN_SLUG . '-product-tab.min.js',
 					'deps'    => array( 'jquery', 'jquery-blockui', 'wp-element', 'wp-i18n', 'react-jsx-runtime' ),
 					'version' => $version,
 				),
@@ -244,7 +231,7 @@ class FrontendScripts {
 				),
 
 				'moowoodle-product-tab-style' => array(
-					'src'     => MooWoodle()->plugin_url . 'assets/styles/' . self::get_script_name( 'product-tab' ) . '.scss',
+					'src'     => MooWoodle()->plugin_url . self::get_build_path_name() . 'styles/' . PLUGIN_SLUG . '-product-tab.min.css',
 					'deps'    => array(),
 					'version' => $version,
 				),
