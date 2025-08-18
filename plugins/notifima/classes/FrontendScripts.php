@@ -49,7 +49,7 @@ class FrontendScripts {
         if ( Notifima()->is_dev ) {
 			return $name;
         }
-        return PLUGIN_SLUG . '-' . $name . '.min';
+        return NOTIFIMA_PLUGIN_SLUG . '-' . $name . '.min';
     }
 
     /**

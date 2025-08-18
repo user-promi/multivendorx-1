@@ -11,4 +11,4 @@ define( 'NOTIFIMA_PRO_SHOP_URL', 'https://notifima.com/pricing/?utm_source=wpadm
 
 define( 'NOTIFIMA_PLUGIN_VERSION', '3.0.4' );
 
-define( 'PLUGIN_SLUG', 'notifima' );
+define( 'NOTIFIMA_PLUGIN_SLUG', 'notifima' );
