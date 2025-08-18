@@ -138,11 +138,11 @@ export default {
                 {
                     key: 'commission_percent',
                     type: 'multi-number',
-                    label: 'apply commission',
+                    label: 'apply commission Fixed',
                     options: [
                         {
                             key: 'mvx_commission_fixed_per_unit',
-                            label: __( 'Fixed $', 'multivendorx' ),
+                            label: __( '$', 'multivendorx' ),
                             type: 'number',
                             labelAfterInput:false
 
@@ -181,7 +181,7 @@ export default {
             key: 'give_shipping',
             label: __( 'Shipping', 'multivendorx' ),
             desc: __(
-                'Add shipping fees to the commission calculation base amount. <li>If Enabled: Add shipping charges to the commission calculation base amount <li>If Excluded: Calculate commission only on product price, excluding shipping costs',
+                'Add shipping fees to the commission calculation base amount. <li>Include in Commission: Add shipping charges to the commission calculation base amount <li>VExclude from Commission: Calculate commission only on product price, excluding shipping costs',
                 'multivendorx'
             ),
             type: 'checkbox',
@@ -219,66 +219,6 @@ export default {
                 },
             ],
         },
-        {
-            key: 'separator_content',
-            type: 'section',
-            hint:__('Coupon & Discount Handling','multivendorx'),
-            desc:__('Define how discounts and coupons affect commission calculations','multivendorx')
-        },
-        
-{
-            key: 'commission_calculation_on_tax',
-            type: 'setting-toggle',
-            label: __( 'Coupon Cost Assignment', 'multivendorx' ),
-            desc: __(
-                'Configure how taxes are treated in commission calculations:<li>No Tax Inclusion: Calculate commission on pre-tax amount only.<li>100% Tax Inclusion: Include full tax amount in commission base.<li>Commission-Based Tax: Calculate commission on total order value including taxes, not just product price',
-                'multivendorx'
-            ),
-            options: [
-                {
-                    key: 'per_transaction',
-                    label: __( 'Stores Pay Own Discounts', 'multivendorx' ),
-                    value: 'per_transaction',
-                },
-                {
-                    key: 'per_unit',
-                    label: __( 'Platform Pays All Discounts', 'multivendorx' ),
-                    value: 'per_unit',
-                },
-                ],
-        },
-
-{
-            key: 'commission_include_coupon',
-            label: __( 'Who will bear the Coupon Cost', 'multivendorx' ),
-            type: 'checkbox',
-            desc: __(
-                'Tap to let the stores bear the coupon discount charges of the coupons created by them',
-                'multivendorx'
-            ),
-            options: [
-                {
-                    key: 'commission_include_coupon',
-                    value: 'commission_include_coupon',
-                },
-            ],
-            look: 'toggle',
-        },
-        {
-            key: 'admin_coupon_excluded',
-            label: __( 'Exclude Admin-Created Coupons from Store Commission', 'multivendorx' ),
-            desc: __(
-                'When admin creates marketplace-wide coupons, don`t reduce store commissions',
-                'multivendorx'
-            ),
-            type: 'checkbox',
-            options: [
-                {
-                    key: 'admin_coupon_excluded',
-                    value: 'admin_coupon_excluded',
-                },
-            ],
-            look: 'toggle',
-        },
+       
     ],
 };

@@ -98,7 +98,7 @@ export const MultiStringInput: React.FC<MultiStringInputProps> = ({
                 </ul>
             )}
 
-            {proSetting && <span className="admin-pro-tag">pro</span>}
+            {proSetting && <span className="admin-pro-tag">Pro</span>}
 
             {description && (
                 <p

@@ -9,6 +9,9 @@ import { useState, useEffect, ReactNode, useCallback } from 'react';
  */
 import AdminFooter, { SupportLink } from './AdminFooter';
 import '../styles/web/Tabs.scss';
+import AdminForm from './AdminForm';
+import AdminHeader from './AdminHeader';
+import AdminBreadcrumbs from './AdminBreadcrumbs';
 
 // Types
 type TabContent = {
@@ -39,6 +42,7 @@ type TabsProps = {
     smallbrandImg: string;
     supprot: SupportLink[];
     Link: React.ElementType<LinkProps>;
+    settingName?: string
 };
 
 type BreadcrumbItem = { name: string; id: string; type: string; };
@@ -46,13 +50,13 @@ type PathResult = { path: BreadcrumbItem[]; stack: TabData[][]; };
 
 const Tabs: React.FC<TabsProps> = ({
     tabData, currentTab, getForm, prepareUrl, HeaderSection, BannerSection,
-    horizontally, appLocalizer, brandImg, smallbrandImg, supprot, Link,
+    horizontally, appLocalizer, brandImg, smallbrandImg, supprot, Link, settingName
 }) => {
     const [menuCol, setMenuCol] = useState(false);
     const [activeTab, setActiveTab] = useState<string>(currentTab);
     const [menuStack, setMenuStack] = useState<TabData[][]>([tabData]);
     const [breadcrumbPath, setBreadcrumbPath] = useState<BreadcrumbItem[]>([
-        { name: 'All Settings', id: 'all-settings', type: 'root' },
+        { name: settingName ?? '', id: 'all-settings', type: 'root' },
     ]);
 
     const findFirstFile = useCallback((items: TabData[]): TabContent | null => {
@@ -95,7 +99,7 @@ const Tabs: React.FC<TabsProps> = ({
     const updateBreadcrumbAndStack = useCallback((result: PathResult | null, isTopLevel = false) => {
         if (result) {
             setMenuStack(isTopLevel ? [tabData] : result.stack);
-            setBreadcrumbPath([{ name: 'All Settings', id: 'all-settings', type: 'root' }, ...result.path]);
+            setBreadcrumbPath([{ name: settingName ?? '', id: 'all-settings', type: 'root' }, ...result.path]);
         }
     }, [tabData]);
 
@@ -120,7 +124,7 @@ const Tabs: React.FC<TabsProps> = ({
 
     const resetToRoot = useCallback(() => {
         setMenuStack([tabData]);
-        setBreadcrumbPath([{ name: 'All Settings', id: 'all-settings', type: 'root' }]);
+        setBreadcrumbPath([{ name: settingName ?? '', id: 'all-settings', type: 'root' }]);
         const firstFile = findFirstFile(tabData);
         if (firstFile) {
             updateActiveTab(firstFile.id);
@@ -149,19 +153,14 @@ const Tabs: React.FC<TabsProps> = ({
             const folderItems = findFolderInData(tabData, crumb.id);
             if (folderItems) {
                 setMenuStack((prev) => [...prev.slice(0, index), folderItems]);
-                const firstFile = findFirstFile(folderItems);
-                if (firstFile) {
-                    updateActiveTab(firstFile.id);
-                    const result = buildPathToTab(tabData, firstFile.id);
-                    updateBreadcrumbAndStack(result);
-                }
+                const firstFile = findFirstFile(folderItems); <>hello</>
             }
         } else {
             updateActiveTab(crumb.id);
             const result = buildPathToTab(tabData, crumb.id);
             if (result) {
                 setMenuStack(result.stack);
-                setBreadcrumbPath([{ name: 'All Settings', id: 'all-settings', type: 'root' }, ...result.path]);
+                setBreadcrumbPath([{ name: settingName ?? '', id: 'all-settings', type: 'root' }, ...result.path]);
             }
         }
     }, [breadcrumbPath, resetToRoot, findFolderInData, tabData, findFirstFile, updateActiveTab, buildPathToTab, updateBreadcrumbAndStack]);
@@ -169,14 +168,15 @@ const Tabs: React.FC<TabsProps> = ({
     const renderBreadcrumb = useCallback(() => breadcrumbPath.map((crumb, index) => (
         <span key={index}>
             {index > 0 && ' / '}
-            <Link to={crumb.type === 'file' ? prepareUrl(crumb.id) : '#'} onClick={(e) => { 
+            <Link to={crumb.type === 'file' ? prepareUrl(crumb.id) : '#'} onClick={(e) => {
                 e.preventDefault();
                 // goToBreadcrumb(index);
-             }}>
+            }}>
                 {crumb.name}
             </Link>
         </span>
     )), [breadcrumbPath, prepareUrl, goToBreadcrumb, Link]);
+
     const getActiveTabIcon = useCallback((data: TabData[]): string | undefined => {
         for (const item of data) {
             if (item.type === 'file') {
@@ -190,6 +190,7 @@ const Tabs: React.FC<TabsProps> = ({
         }
         return undefined;
     }, [activeTab]);
+
     const checkIfFolderHasActiveTab = useCallback((items: TabData[]): boolean => {
         for (const item of items) {
             if (item.type === 'file' && (item.content as TabContent).id === activeTab) return true;
@@ -216,7 +217,7 @@ const Tabs: React.FC<TabsProps> = ({
             const folderUrl = firstFile ? prepareUrl(firstFile.id) : '#';
             const isCurrentFolderOpen = menuStack.length > 1 && menuStack[menuStack.length - 1] === folderContent;
             const isActiveFolder = isCurrentFolderOpen || checkIfFolderHasActiveTab(folderContent);
-        
+
             return (
                 <Link
                     key={`folder-${folderName}-${index}`}
@@ -233,7 +234,7 @@ const Tabs: React.FC<TabsProps> = ({
                 </Link>
             );
         }
-        
+
         return null;
     }, [activeTab, menuCol, navigateToTab, prepareUrl, Link, menuStack, checkIfFolderHasActiveTab, openSubmenu]);
 
@@ -269,32 +270,37 @@ const Tabs: React.FC<TabsProps> = ({
     const parentTabName = breadcrumbPath.length > 1 ? breadcrumbPath[breadcrumbPath.length - 2]?.name : '';
     const activeTabIcon = getActiveTabIcon(tabData);
 
+    const [noticeHTML, setNoticeHTML] = useState<string>("");
+
+    useEffect(() => {
+        const noticeElement = document.querySelector('#screen-meta + .wrap .notice, #wpbody-content .notice');
+        if (noticeElement) {
+            setNoticeHTML(noticeElement.outerHTML);
+            noticeElement.remove();
+        }
+    }, []);
+
     return (
         <>
-            <div className="top-header">
-                <div className="left-section">
-                    <img className="brand-logo" src={menuCol ? smallbrandImg : brandImg} alt="Logo" />
-                </div>
-                <div className="right-section">
-                    <div className="search-field">
-                        <i className="adminlib-search"></i>
-                        <input type="text" className="basic-input" placeholder="Search Here" />
-                    </div>
-                    <i className="admin-icon adminlib-storefront"></i>
-                    <i className="admin-icon adminlib-storefront"></i>
-                    <a href="#" className="admin-btn btn-purple">Buy Now</a>
-                </div>
-            </div>
-            <div className="admin-breadcrumbs">
-                <div className="breadcrumbs-title">
-                    {activeTabIcon && <i className={activeTabIcon}></i>}
-                    {parentTabName}
-                </div>
-                <p className="breadcrumbs-menu">{renderBreadcrumb()}</p>
-                <div id="top-level-tab-lists" className="current-tab-lists">
-                    <div className="current-tab-lists-container">{renderMenuItems(tabData)}</div>
-                </div>
-            </div>
+            <AdminBreadcrumbs
+                activeTabIcon={activeTabIcon}
+                parentTabName={parentTabName}
+                renderBreadcrumb={renderBreadcrumb}
+                renderMenuItems={renderMenuItems}
+                tabData={tabData}
+                buttons={[
+                    { label: "Add New", onClick: () => alert("Add New clicked"), iconClass: "fa fa-plus" },
+                    { label: "Settings", onClick: () => alert("Settings clicked"), iconClass: "fa fa-cog" },
+                    <button key="custom" style={{ background: "red" }}>Custom JSX</button>
+                ]}
+            />
+
+            {noticeHTML && (
+                <div
+                    className="wp-admin-notice"
+                    dangerouslySetInnerHTML={{ __html: noticeHTML }}
+                />
+            )}
             <div className="general-wrapper">
                 {HeaderSection && <HeaderSection />}
                 {BannerSection && <BannerSection />}

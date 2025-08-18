@@ -6,9 +6,10 @@ import Modules from './components/Modules/Modules';
 
 import Store from './components/Store/Store';
 import { useEffect } from 'react';
-import { initializeModules } from 'zyra';
+import { AdminHeader, initializeModules } from 'zyra';
 import AdminDashboard from './components/AdminDashboard/AdminDashboard';
 import Membership from './components/Memberships/Membership';
+import Brand from './assets/images/mvx-brand-logo.png';
 
 
 './components/Stores/Stores';
@@ -68,6 +69,7 @@ const App = () => {
 
     return (
         <>
+            <AdminHeader brandImg={Brand} />
             <Route />
         </>
     );

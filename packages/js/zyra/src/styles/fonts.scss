@@ -10,7 +10,7 @@
 }
 
 [class^="adminlib-"], [class*=" adminlib-"],
-input,label {
+input {
   /* use !important to prevent issues with browser extensions that change fonts */
   font-family: adminlibrary , sans-serif !important;
   font-style: normal;

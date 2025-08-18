@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { BasicInput, TextArea, FileInput,SelectInput, getApiLink } from 'zyra';
+import { BasicInput, TextArea, FileInput, SelectInput, getApiLink } from 'zyra';
 
 const StoreSettings = ({ id }: { id: string }) => {
 	const [formData, setFormData] = useState<{ [key: string]: string }>({});
@@ -17,14 +17,14 @@ const StoreSettings = ({ id }: { id: string }) => {
 			url: getApiLink(appLocalizer, `store/${id}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 		})
-		.then((res) => {
-		const data = res.data || {};
-		setFormData((prev) => ({ ...prev, ...data }));
-		setImagePreviews({
-			image: data.image || '',
-			banner: data.banner || '',
-		});
-		})
+			.then((res) => {
+				const data = res.data || {};
+				setFormData((prev) => ({ ...prev, ...data }));
+				setImagePreviews({
+					image: data.image || '',
+					banner: data.banner || '',
+				});
+			})
 	}, [id]);
 
 	useEffect(() => {
@@ -55,7 +55,7 @@ const StoreSettings = ({ id }: { id: string }) => {
 		const { name, value } = e.target;
 		const updated = { ...formData, [name]: value };
 		setFormData(updated);
-		autoSave(updated); 
+		autoSave(updated);
 	};
 
 	const runUploader = (key: string) => {
@@ -77,105 +77,184 @@ const StoreSettings = ({ id }: { id: string }) => {
 		frame.open();
 	};
 
-    const autoSave = (updatedData: { [key: string]: string }) => {
-        axios({
-        method: 'PUT',
-        url: getApiLink(appLocalizer, `store/${id}`),
-        headers: { 'X-WP-Nonce': appLocalizer.nonce },
-        data: updatedData,
-        }).then((res) => {
-            if (res.data.success) {
-              setSuccessMsg('Store saved successfully!');
-            }
-        })
-    };
+	const autoSave = (updatedData: { [key: string]: string }) => {
+		axios({
+			method: 'PUT',
+			url: getApiLink(appLocalizer, `store/${id}`),
+			headers: { 'X-WP-Nonce': appLocalizer.nonce },
+			data: updatedData,
+		}).then((res) => {
+			if (res.data.success) {
+				setSuccessMsg('Store saved successfully!');
+			}
+		})
+	};
 
 	return (
-    <>
-		{successMsg && <div className="text-green-600">{successMsg}</div>}
+		<>
+			{successMsg && <div className="text-green-600">{successMsg}</div>}
 
-		<label>Name</label>
-		<BasicInput name="name" value={formData.name} onChange={handleChange} />
+			<div className="container-wrapper">
+				<div className="card-wrapper width-65">
+					<div className="card-content">
+						<div className="card-title">
+							Store information
+						</div>
 
-		<label>Slug</label>
-		<BasicInput name="slug" value={formData.slug} onChange={handleChange} />
+						<div className="form-group-wrapper">
+							<div className="form-group">
+								<label htmlFor="product-name">Name</label>
+								<BasicInput name="name" wrapperClass="setting-form-input" descClass="settings-metabox-description" value={formData.name} onChange={handleChange} />
+							</div>
+						</div>
 
-		<label>Profile Image</label>
-		<FileInput
-			value={formData.image}
-			inputClass="form-input"
-			name="image"
-			type="hidden"
-			onButtonClick={() => runUploader('image')}
-			imageWidth={75}
-			imageHeight={75}
-			openUploader="Upload Image"
-			imageSrc={imagePreviews.image}
-			buttonClass="admin-btn btn-purple"
-		/>
+						<div className="form-group-wrapper">
+							<div className="form-group">
+								<label htmlFor="product-name">Slug</label>
+								<BasicInput name="name" wrapperClass="setting-form-input" descClass="settings-metabox-description" value={formData.name} onChange={handleChange} />
+							</div>
+						</div>
+					</div>
 
-		<label>Store Banner Image</label>
-		<FileInput
-			value={formData.banner}
-			inputClass="form-input"
-			name="banner"
-			type="hidden"
-			onButtonClick={() => runUploader('banner')}
-			imageWidth={100}
-			imageHeight={100}
-			openUploader="Upload Image"
-			imageSrc={imagePreviews.banner}
-			buttonClass="admin-btn btn-purple"
-		/>
+					<div className="card-content">
+						<div className="card-title">
+							Description
+						</div>
 
-		<label>Description</label>
-		<TextArea name="description" value={formData.description} onChange={handleChange} /><br/>
+						<div className="form-group-wrapper">
+							<div className="form-group">
+								<TextArea name="description" wrapperClass="setting-from-textarea"
+									inputClass="textarea-input"
+									descClass="settings-metabox-description" value={formData.description} onChange={handleChange} />
+							</div>
+						</div>
+					</div>
 
-		<label>Phone</label>
-		<BasicInput name="phone" value={formData.phone} onChange={handleChange} />
+					<div className="card-content">
+						<div className="card-title">
+							Basic information
+						</div>
 
-		<label>Address</label>
-		<BasicInput name="address_1" value={formData.address_1} onChange={handleChange} />
-		<BasicInput name="address_2" value={formData.address_2} onChange={handleChange} />
+						<div className="form-group-wrapper">
+							<div className="form-group">
+								<label htmlFor="product-name">Phone</label>
+								<BasicInput name="phone" value={formData.phone} wrapperClass="setting-form-input" descClass="settings-metabox-description" onChange={handleChange} />
+							</div>
+						</div>
 
+						<div className="form-group-wrapper">
+							<div className="form-group">
+								<label htmlFor="product-name">Address</label>
+								<BasicInput name="phone" value={formData.phone} wrapperClass="setting-form-input" descClass="settings-metabox-description" onChange={handleChange} />
+							</div>
+							<div className="form-group">
+								<label htmlFor="product-name"></label>
+								<BasicInput name="phone" value={formData.phone} wrapperClass="setting-form-input" descClass="settings-metabox-description" onChange={handleChange} />
+							</div>
+						</div>
+						<div className="form-group-wrapper">
+							<div className="form-group">
+								<label htmlFor="product-name">Country</label>
+								<SelectInput
+									name="country"
+									value={formData.country}
+									options={appLocalizer.country_list || []}
+									type="single-select"
+									onChange={(newValue) => {
+										if (!newValue || Array.isArray(newValue)) return;
+										const updated = { ...formData, country: newValue.value, state: '' }; // reset state
+										setFormData(updated);
+										autoSave(updated);
+										fetchStatesByCountry(newValue.value);
+									}}
+								/>
+							</div>
+						</div>
+						<div className="form-group-wrapper">
+							<div className="form-group">
+								<label htmlFor="product-name">Country</label>
+								<SelectInput
+									name="country"
+									value={formData.country}
+									options={appLocalizer.country_list || []}
+									type="single-select"
+									onChange={(newValue) => {
+										if (!newValue || Array.isArray(newValue)) return;
+										const updated = { ...formData, country: newValue.value, state: '' }; // reset state
+										setFormData(updated);
+										autoSave(updated);
+										fetchStatesByCountry(newValue.value);
+									}}
+								/>
+							</div>
+							<div className="form-group">
+								<label htmlFor="product-name">State</label>
+								<SelectInput
+									name="state"
+									value={formData.state}
+									options={stateOptions}
+									type="single-select"
+									onChange={(newValue) => {
+										if (!newValue || Array.isArray(newValue)) return;
+										const updated = { ...formData, state: newValue.value };
+										setFormData(updated);
+										autoSave(updated);
+									}}
+								/>
+							</div>
+						</div>
+					</div>
+				</div>
 
-		<label>Country</label>
-		<SelectInput
-			name="country"
-			value={formData.country}
-			options={appLocalizer.country_list || []}
-			type="single-select"
-			onChange={(newValue) => {
-				if (!newValue || Array.isArray(newValue)) return;
-				const updated = { ...formData, country: newValue.value, state: '' }; // reset state
-				setFormData(updated);
-				autoSave(updated);
-				fetchStatesByCountry(newValue.value);				
-			}}
-		/>
+				<div className="card-wrapper width-35">
+					<div className="card-content">
+						<div className="card-title">
 
-		<label>State</label>
-		<SelectInput
-			name="state"
-			value={formData.state}
-			options={stateOptions}
-			type="single-select"
-			onChange={(newValue) => {
-				if (!newValue || Array.isArray(newValue)) return;
-				const updated = { ...formData, state: newValue.value };
-				setFormData(updated);
-				autoSave(updated);
-			}}
-		/>
+						</div>
 
-		<label>City</label>
-		<BasicInput name="city" value={formData.city} onChange={handleChange} />
+						<div className="form-group-wrapper">
+							<div className="form-group">
+								<label htmlFor="product-name">Profile Image</label>
+								<FileInput
+									value={formData.image}
+									inputClass="form-input"
+									name="image"
+									type="hidden"
+									onButtonClick={() => runUploader('image')}
+									imageWidth={75}
+									imageHeight={75}
+									openUploader="Upload Image"
+									imageSrc={imagePreviews.image}
+									buttonClass="admin-btn btn-purple"
+									descClass="settings-metabox-description"
+								/>
+							</div>
+						</div>
 
-		<label>ZIP</label>
-		<BasicInput name="postcode" value={formData.postcode} onChange={handleChange} />
+						<div className="form-group-wrapper">
+							<div className="form-group">
+								<label htmlFor="product-name">Store Banner Image</label>
+								<FileInput
+									value={formData.image}
+									inputClass="form-input"
+									name="image"
+									type="hidden"
+									onButtonClick={() => runUploader('image')}
+									imageWidth={75}
+									imageHeight={75}
+									openUploader="Upload Image"
+									imageSrc={imagePreviews.image}
+									buttonClass="admin-btn btn-purple"
+									descClass="settings-metabox-description"
+								/>
+							</div>
+						</div>
 
-    </>
-  );
+					</div>
+				</div>
+			</div>
+		</>
+	);
 };
 
 export default StoreSettings;

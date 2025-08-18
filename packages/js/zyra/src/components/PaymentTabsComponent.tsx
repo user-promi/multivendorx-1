@@ -67,21 +67,27 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
                 <div key={method.icon} className="payment-method-card">
                     {/* Header */}
                     <div
-                        className="payment-method-header"
+                        className="payment-method"
                         onClick={() =>
                             setActiveTab(activeTab === method.icon ? null : method.icon)
                         }
                         style={{ cursor: 'pointer' }}
                     >
-                        <div className="payment-method-icon">{method.icon}</div>
-                        <div className="payment-method-info">
-                            <div className="title">
-                                <span>{method.label}</span>
-                                <div className={method.connected ? 'admin-badge green' : 'admin-badge red'}>
-                                    {method.connected ? 'Connected' : 'Not Connected'}
+                        <div className="details">
+                            <div className="payment-method-icon">{method.icon}</div>
+                            <div className="payment-method-info">
+                                <div className="title">
+                                    <span>{method.label}</span>
+                                    <div className={method.connected ? 'admin-badge green' : 'admin-badge red'}>
+                                        {method.connected ? 'Connected' : 'Not Connected'}
+                                    </div>
                                 </div>
+                                <div className="method-desc">{method.desc}</div>
                             </div>
-                            <div className="method-desc">{method.desc}</div>
+                        </div>
+
+                        <div className="payment-method-arrow">
+                            <i className="adminlib-pagination-right-arrow"></i>
                         </div>
                     </div>
 
@@ -142,6 +148,7 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
                                             type={field.type}
                                             placeholder={field.placeholder}
                                             value={value[method.icon]?.[field.key] || ''}
+                                            className="basic-input"
                                             onChange={(e) =>
                                                 handleInputChange(method.icon, field.key, e.target.value)
                                             }

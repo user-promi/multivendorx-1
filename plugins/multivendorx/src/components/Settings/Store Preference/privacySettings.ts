@@ -109,17 +109,17 @@ export default {
         {
             key: 'separator_store_policy_override',
             type: 'section',
-            desc: __( 'Store Policy Override', 'multivendorx' ),
+            desc: __( 'Allow stores to set or override the default store policies', 'multivendorx' ),
             hint: __(
-                'Allow stores to set or override the default store policies.',
+                'Policies.',
                 'multivendorx'
             ),
         },
         {
             key: 'store_policy_override',
             type: 'checkbox',
-            label: __( 'Policies', 'multivendorx' ),
-            desc: __( 'Allow stores to override default marketplace policies.', 'multivendorx' ),
+            label: __( 'Allow store-specific policies', 'multivendorx' ),
+            desc: __( 'Select which marketplace policies vendors can replace with their own, such as store rules, shipping terms, or refund and return policies.', 'multivendorx' ),
             class: 'mvx-toggle-checkbox',
             options: [
                 {
@@ -143,16 +143,16 @@ export default {
         {
             key: 'separator_store_policy_override',
             type: 'section',
-            desc: __( 'Allow store owners to temporarily disable their profile, hiding it and its products from the marketplace.', 'multivendorx' ),
+            desc: __( 'Allow store owners to temporarily disable their profile hiding it and its products from the marketplace.', 'multivendorx' ),
             hint: __(
-                'Allow stores to set or override the default store policies.',
+                'Store Profile Controls',
                 'multivendorx'
             ),
         },
         {
             key: 'enable_profile_deactivation_request',
             type: 'checkbox',
-            label: __( 'Enable Profile Deativation', 'multivendorx' ),
+            label: __('Profile deactivation requests', 'multivendorx' ),
             options: [
                 {
                     key: 'enable_profile_deactivation_request',

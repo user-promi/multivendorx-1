@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 export default {
     id: 'setup-wizard',
     priority: 3,
-    name: 'Onboarding',
+    name: 'Geo Location',
     desc: __(
         'Control whether new stores get step-by-step guidance or go directly to their dashboar',
         'multivendorx'
@@ -12,80 +12,119 @@ export default {
     submitUrl: 'settings',
     modal: [
         {
-            key: 'disable_setup_wizard',
+            key: 'radius_search_unit',
             type: 'setting-toggle',
-            label: __( 'Guided Setup Experience', 'multivendorx' ),
-            desc: __('When guided setup is disabled, stores bypass the setup wizard and access their dashboard immediately.',
-                'multivendorx'
-            ),
-            options: [
-                {
-                    key: 'enable_guided_setup',
-                    label:'Enabled',
-                    value: 'enable_guided_setup',
-                },
-                {
-                    key: 'skip_to_dashboard',
-                    label:'Disabled',
-                    value: 'skip_to_dashboard',
-                },
-            ],
-        },
-        {
-            key: 'onboarding_steps_configuration',
-            type: 'checkbox',
-            label: __( 'Onboarding Steps Configuration', 'multivendorx' ),
-            desc: __( 'Choose which steps vendors must complete before they can start selling:', 'multivendorx' ),
-            class: 'mvx-toggle-checkbox',
-            options: [
-                {
-                    key: 'store_profile_setup',
-                    label: __( 'Store Profile Setup (store name, description, logo)', 'multivendorx' ),
-                    value: 'store_profile_setup',
-                },
-                {
-                    key: 'payment_information',
-                    label: __( 'Payment Information (payout details, tax info)', 'multivendorx' ),
-                    value: 'payment_information',
-                },
-                {
-                    key: 'shipping_configuration',
-                    label: __( 'Shipping Configuration (zones, rates, policies)', 'multivendorx' ),
-                    value: 'shipping_configuration',
-                },
-                {
-                    key: 'first_product_upload',
-                    label: __( 'First Product Upload (require at least one product)', 'multivendorx' ),
-                    value: 'first_product_upload',
-                },
-                {
-                    key: 'identity_verification',
-                    label: __( 'Identity Verification (documents, address confirmation)', 'multivendorx' ),
-                    value: 'identity_verification',
-                },
-                {
-                    key: 'store_policies',
-                    label: __( 'Store Policies (refund, shipping, terms)', 'multivendorx' ),
-                    value: 'store_policies',
-                },
-            ],
-            selectDeselect: true,
-        },                
-        {
-            key: 'setup_wizard_introduction',
-            type: 'textarea',
-            label: __(
-                'Getting Started Message',
-                'multivendorx'
-            ),
-            placeholder: __(
-                'Welcome to [Marketplace Name]! Let’s set up your store in just a few minutes...',
-                'multivendorx'
-            ),            
+            label: __( 'Show map', 'multivendorx' ),
             desc: __(
-                'This message appears at the beginning of the setup process to set expectations and encourage completion.',
+                'Select the unit of measurement for distance-based search filters on the store or product locator.',
                 'multivendorx'
             ),
+            options: [
+                {
+                    key: 'both',
+                    label: __( 'Both', 'multivendorx' ),
+                    value: 'both',
+                },
+                {
+                    key: 'store_lisiting',
+                    label: __( 'Store Lisiting', 'multivendorx' ),
+                    value: 'store_lisiting',
+                },
+                {
+                    key: 'shop_page',
+                    label: __( 'Shop Page', 'multivendorx' ),
+                    value: 'shop_page',
+                },
+            ],
         },
+        {
+            key: 'choose_map_api',
+            type: 'setting-toggle',
+            defaulValue: 'google_map_set',
+            label: __( 'Map Provider', 'multivendorx' ),
+            desc: __( 'Select the map service that will power location features and maps across the site. Different providers may require an API key.', 'multivendorx' ),
+            options: [
+                {
+                    key: 'google_map_set',
+                    label: __( 'Google map', 'multivendorx' ),
+                    value: __( 'google_map_set', 'multivendorx' ),
+                },
+                {
+                    key: 'mapbox_api_set',
+                    label: __( 'Mapbox map', 'multivendorx' ),
+                    value: __( 'mapbox_api_set', 'multivendorx' ),
+                },
+            ],
+        },
+        {
+            key: 'google_api_key',
+            type: 'text',
+            label: __( 'Google Map API key', 'multivendorx' ),
+            desc: __(
+                '<a href="https://developers.google.com/maps/documentation/javascript/get-api-key#get-an-api-key" target="_blank">Click here to generate key</a>',
+                'multivendorx'
+            ),
+            dependent: {
+                key: 'choose_map_api',
+                set: true,
+                value: 'google_map_set',
+            },
+        },
+        {
+            key: 'mapbox_api_key',
+            type: 'text',
+            label: __( 'Mapbox access token', 'multivendorx' ),
+            desc: __(
+                '<a href="https://docs.mapbox.com/help/getting-started/access-tokens/" target="_blank">Click here to generate access token</a>',
+                'multivendorx'
+            ),
+            dependent: {
+                key: 'choose_map_api',
+                set: true,
+                value: 'mapbox_api_set',
+            },
+        },
+        // {
+        //     key: 'store_address_input',
+        //     type: 'textarea',
+        //     label: __( 'Store Address Input', 'multivendorx' ),
+            
+        //     desc: __( 'Enter the full store address. This information may be displayed on the store page and used for shipping or location purposes.', 'multivendorx' ),
+        //     placeholder: __( '123 Main Street, City, State, ZIP Code', 'multivendorx' ),
+        // },
+        {
+            key: 'radius_search_distance',
+            type: 'multi-number',
+            label: __( 'Location Search', 'multivendorx' ),
+            desc: __( 'Help customers find nearby stores with location-based search.', 'multivendorx' ),
+            options: [
+                {
+                    key: 'radius_search_min_distance',
+                    label: __( 'min', 'multivendorx' ),
+                    type: 'number',
+                },
+                {
+                    key: 'radius_search_max_distance',
+                    label: __( 'max', 'multivendorx' ),
+                    type: 'number',
+                },
+                {
+                    key: 'radius_search_unit',
+                    type: 'radio',
+                    options: [
+                        {
+                            key: 'kilometers',
+                            label: __( 'Kilometers', 'multivendorx' ),
+                            value: 'kilometers',
+                        },
+                        {
+                            key: 'miles',
+                            label: __( 'Miles', 'multivendorx' ),
+                            value: 'miles',
+                        },
+                    ],
+                },                
+            ],
+        },    
     ],
 };

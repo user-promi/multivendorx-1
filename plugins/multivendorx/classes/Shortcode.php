@@ -14,7 +14,7 @@ class Shortcode {
      * Shortcode class construct function
      */
     public function __construct() {
-        add_shortcode( 'multivendorx_vendor_dashboard', [ $this, 'display_vendor_dashboard' ] );
+        add_shortcode( 'multivendorx_store_dashboard', [ $this, 'display_store_dashboard' ] );
     }
 
     public function frontend_scripts() {
@@ -24,7 +24,7 @@ class Shortcode {
             FrontendScripts::enqueue_script( 'multivendorx-dashboard-script' );
     }
 
-    public function display_vendor_dashboard() {
+    public function display_store_dashboard() {
         $this->frontend_scripts();
         ob_start();
 

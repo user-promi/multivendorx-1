@@ -10,6 +10,7 @@ export default {
             icon: 'adminlib-dynamic-pricing',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/simple-product',
             //settings_link: appLocalizer.site_url,
+            req_pluging:['woocomerce','wordpress'],
             pro_module: false,
             parent_category: 'marketplace_types'
         },
