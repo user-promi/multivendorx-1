@@ -45,7 +45,7 @@ const AdminDashboard = () => {
             <div className="title">Welcome back, Admin!</div>
             <div className="des">Here's what's happening with your marketplace today</div>
           </div>
-          <button className="admin-btn btn-purple"><i className="adminlib-plus-circle-o"></i>Add Product</button>
+          {/* <button className="admin-btn btn-purple"><i className="adminlib-plus-circle-o"></i>Add Product</button> */}
         </div>
 
         {/* cards */}
@@ -125,7 +125,7 @@ const AdminDashboard = () => {
 
         {/* chart */}
         <div className="row">
-          <div className="column">
+          <div className="column w-65">
             <h3>Revenue Trend (Last 7 Months)</h3>
             <ResponsiveContainer width="100%" height={300}>
               <LineChart data={data}>
@@ -137,9 +137,69 @@ const AdminDashboard = () => {
               </LineChart>
             </ResponsiveContainer>
           </div>
+          <div className="column w-35">
+            <h3>Quick Actions</h3>
+            <div className="action-btn-wrapper">
+              <button className="admin-btn btn-purple">Add Vendor</button>
+              <button className="admin-btn btn-purple">Approve Products</button>
+              <button className="admin-btn btn-purple">Process Payouts</button>
+              <button className="admin-btn btn-purple">Send Notifications</button>
+              <button className="admin-btn btn-purple">Generate Reports</button>
+              <button className="admin-btn btn-purple">Manage Settings</button>
+            </div>
+
+          </div>
+        </div>
+
+        <div className="row">
+          
 
           <div className="column">
-            {/* <div className="chart-wrapper">
+            <h3>Recent Activity</h3>
+
+            <div className="activity-wrapper">
+              <div className="activity">
+                <span className="icon">
+                  <i className="adminlib-cart"></i>
+                </span>
+                <div className="details">
+                  New product "Wireless Gaming Headset" added by TechWorld
+                  <span>2 minutes ago</span>
+                </div>
+              </div>
+              <div className="activity">
+                <span className="icon">
+                  <i className="adminlib-star"></i>
+                </span>
+                <div className="details">
+                  5-star review received for "Smartphone Case" by MobileGear
+                  <span>2 minutes ago</span>
+                </div>
+              </div>
+              <div className="activity">
+                <span className="icon">
+                  <i className="adminlib-global-community"></i>
+                </span>
+                <div className="details">
+
+                  New vendor "Fashion Forward" completed registration
+                  <span>2 minutes ago</span>
+                </div>
+              </div>
+              <div className="activity">
+                <span className="icon">
+                  <i className="adminlib-cart"></i>
+                </span>
+                <div className="details">
+                Commission payment of $2,847 processed for ElectroHub
+                  <span>2 minutes ago</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div className="column ">
+            <div className="chart-wrapper">
               <h3>System Overview</h3>
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={overviewData}>
@@ -150,9 +210,9 @@ const AdminDashboard = () => {
                   <Bar dataKey="value" fill="#5007aa" barSize={40} />
                 </BarChart>
               </ResponsiveContainer>
-            </div> */}
+            </div>
 
-            <div className="chart-box">
+            {/* <div className="chart-box">
               <h3>System Overview</h3>
               <ResponsiveContainer width="100%" height={250}>
                 <PieChart>
@@ -172,7 +232,7 @@ const AdminDashboard = () => {
                   <Legend />
                 </PieChart>
               </ResponsiveContainer>
-            </div>
+            </div> */}
           </div>
         </div>
 

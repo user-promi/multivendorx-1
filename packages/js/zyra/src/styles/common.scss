@@ -1042,7 +1042,7 @@ input[type="checkbox"]:checked::before {
     &::after {
       content: "";
       position: absolute;
-      top: 50%;
+      top: 51%;
       transform: translateY(-50%);
       left: 0.313rem;
       width: 0.75rem;
@@ -1226,6 +1226,9 @@ input[type="checkbox"]:checked::before {
            box-shadow: none;
          }
         }
+      }
+      .setting-form-input:has(.toggle-setting-wrapper){
+        border: none;
       }
     }
   }
