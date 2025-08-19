@@ -100,13 +100,16 @@ class Admin {
                     'name'   => __( 'Modules', 'multivendorx' ),
                     'subtab' => '',
                 ),
-                'status-and-tools' => array(
+                'status-tools' => array(
                     'name'   => __( 'Status and Tools', 'multivendorx' ),
-                    'subtab' => '',
+                    'subtab' => 'database-tools',
                 ),
-
                 'help-and-support' => array(
                     'name'   => __( 'Help and Support', 'multivendorx' ),
+                    'subtab' => '',
+                ),
+                'setup' => array(
+                    'name'   => __( 'Setup', 'multivendorx' ),
                     'subtab' => '',
                 ),
             );
