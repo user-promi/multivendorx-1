@@ -12,42 +12,9 @@ export default {
     submitUrl: 'settings',
     modal: [
         {
-            key: 'product_types',
-            type: 'checkbox',
-            label: __( 'Allowed Product Types', 'multivendorx' ),
-            class: 'mvx-toggle-checkbox',
-            desc: __(
-                'Select the types of products you want to allow in your marketplace. <li>Simple: Standard product with no variations. <li>Variable: Product with variations (like size or color). <li>External: Links to another site. <li>Rental: Rental-based product.',
-                'multivendorx'
-            ),
-            options: [
-                {
-                    key: 'simple',
-                    label: __( 'Simple', 'multivendorx' ),
-                    value: 'simple',
-                },
-                {
-                    key: 'variable',
-                    label: __( 'Variable', 'multivendorx' ),
-                    value: 'variable',
-                },
-                {
-                    key: 'external',
-                    label: __( 'External', 'multivendorx' ),
-                    value: 'external',
-                },
-                {
-                    key: 'rental',
-                    label: __( 'Rental', 'multivendorx' ),
-                    value: 'rental',
-                },
-            ],
-            selectDeselect: true,
-        },
-        {
             key: 'type_options',
             type: 'checkbox',
-            label: __( 'Additional Type options', 'multivendorx' ),
+            label: __( 'Allowed Product Type', 'multivendorx' ),
             class: 'mvx-toggle-checkbox',
             desc: __(
                 'Select the types of products you want to enable in your marketplace: <li>Virtual Products: Choose this option for products that don’t have a physical form (e.g., services, memberships). <li>Downloadable Products: Use this option for products that customers can download (e.g., software, eBooks).',

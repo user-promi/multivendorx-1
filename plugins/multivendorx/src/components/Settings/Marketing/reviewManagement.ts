@@ -65,6 +65,21 @@ export default {
             ],
             look: 'toggle',
         },
-        // Nested
+        {
+            key: 'ratings_parameters',
+            type: 'multi-string',
+            label: __( 'Ratings Parameters', 'multivendorx' ),
+            placeholder: __( 'Enter a parameter and click +', 'multivendorx' ),
+            desc: __(
+                'Specify parameters for which you want to have ratings, e.g., Packaging, Delivery, Behaviour, Policy, etc.',
+                'multivendorx'
+            ),
+            name: 'ratings_parameters',
+            dependent: {
+                key: 'product_review_sync',
+                set: true,
+            },
+        }
+        
     ],
 };
