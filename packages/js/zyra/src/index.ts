@@ -55,6 +55,7 @@ export { default as ToggleSetting } from './components/ToggleSetting';
 export { default as Tour } from './components/TourSteps';
 export { default as WpEditor } from './components/WpEditor';
 export { default as AdminHeader } from './components/AdminHeader';
+export { default as AdminBreadcrumbs } from './components/AdminBreadcrumbs';
 
 export {
     useModules,
