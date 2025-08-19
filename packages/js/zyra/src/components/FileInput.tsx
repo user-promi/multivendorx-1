@@ -25,6 +25,7 @@ interface FileInputProps {
     description?: string;
     onRemove?: () => void;
     onReplace?: () => void;
+    size?:string;
 }
 
 const FileInput: React.FC<FileInputProps> = (props) => {
@@ -78,6 +79,7 @@ const FileInput: React.FC<FileInputProps> = (props) => {
     return (
         <>
             <div
+                
                 className={`file-uploader ${props.wrapperClass || ''}`}
                 style={{ backgroundImage: localImage ? `url(${localImage})` : undefined }}
             >

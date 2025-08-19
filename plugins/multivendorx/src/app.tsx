@@ -10,6 +10,8 @@ import { AdminHeader, initializeModules } from 'zyra';
 import AdminDashboard from './components/AdminDashboard/AdminDashboard';
 import Membership from './components/Memberships/Membership';
 import Brand from './assets/images/mvx-brand-logo.png';
+import StatusAndTools from './components/StatusAndTools/StatusAndTools';
+import SetupWizard from './blocks/setupWizard/SetupWizard';
 
 
 './components/Stores/Stores';
@@ -23,7 +25,10 @@ const Route = () => {
                 <Settings id={'settings'} />
             )}
             {currentTab.get('tab') === 'memberships' && (
-                <Membership id='memberships'/>
+                <Membership id='memberships' />
+            )}
+            {currentTab.get('tab') === 'status-tools' && (
+                <StatusAndTools id='status-tools' />
             )}
             {currentTab.get('tab') === 'modules' && <Modules />}
             {currentTab.get('tab') === 'stores' && (
@@ -31,6 +36,9 @@ const Route = () => {
             )}
             {currentTab.get('tab') === 'dashboard' && (
                 <AdminDashboard />
+            )}
+            {currentTab.get('tab') === 'setup' && (
+                <SetupWizard />
             )}
         </>
     );

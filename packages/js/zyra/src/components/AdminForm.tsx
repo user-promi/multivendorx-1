@@ -44,6 +44,7 @@ import ColorSettingInput from './ColorSettingInput';
 import EndpointEditor from './EndpointEditor';
 import PaymentTabsComponent from './PaymentTabsComponent';
 import VerificationMethods from './VerificationMethods';
+import SystemInfoAccordion from './SystemInfoAccordion';
 
 // Types
 declare const wp: any;
@@ -128,6 +129,7 @@ interface InputField {
     | 'do-action-btn'
     | 'dropdown-mapping'
     | 'log'
+    | 'system-info'
     | 'checkbox-custom-img'
     | 'api-connect'
     | 'nested'
@@ -143,7 +145,8 @@ interface InputField {
     rangeUnit?: string;
     min?: number;
     max?: number;
-    icon?:string;
+    icon?: string;
+    size?:string;
     proSetting?: boolean;
     moduleEnabled?: boolean;
     parameter?: string;
@@ -152,10 +155,13 @@ interface InputField {
     rowNumber?: number;
     colNumber?: number;
     value?: string;
+    copyButtonLabel?:string;
+    copiedLabel?:string;
     width?: number;
     height?: number;
     multiple?: boolean;
     range?: boolean;
+    className?: string;
     selectDeselect?: boolean;
     look?: string;
     inputWrapperClass?: string;
@@ -794,6 +800,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             proSetting={isProSetting(
                                 inputField.proSetting ?? false
                             )}
+                            size={inputField.size}
                             onChange={(e) => {
                                 if (
                                     hasAccess(
@@ -946,6 +953,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                                     inputClass="btn default-btn"
                                     descClass="settings-metabox-description"
                                     description={inputField.desc}
+                                    name={inputField.name}
                                     type={inputField.type}
                                     placeholder={inputField.placeholder}
                                     proSetting={isProSetting(
@@ -1132,7 +1140,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             descClass="settings-metabox-description"
                             name={inputField.key}
                             description={inputField.desc}
-                            inputClass={inputField.key}
+                            inputClass={inputField.className}
                             options={
                                 Array.isArray(inputField.options)
                                     ? inputField.options.map((opt) => ({
@@ -1838,6 +1846,17 @@ const AdminForm: React.FC<AdminFormProps> = ({
                         />
                     ); // log file name
                     break;
+                case 'system-info':
+                    input = (
+                        <SystemInfoAccordion
+                        appLocalizer={appLocalizer}
+                        apiLink={String(inputField.apiLink)}
+                        copyButtonLabel={inputField.copyButtonLabel}
+                        copiedLabel={inputField.copiedLabel}
+                    />
+                    );
+                    break;
+
                 // For mailchimp list
                 case 'api-connect':
                     input = (

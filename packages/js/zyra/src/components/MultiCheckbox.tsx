@@ -13,7 +13,7 @@ interface Option {
     name?: string;
     proSetting?: boolean;
     hints?: string;
-    desc?:string;
+    desc?: string;
 }
 
 interface MultiCheckBoxProps {
@@ -23,7 +23,7 @@ interface MultiCheckBoxProps {
     selectDeselectValue?: string;
     onMultiSelectDeselectChange?: (
         e: ChangeEvent<HTMLInputElement> | MouseEvent<HTMLButtonElement | HTMLInputElement>
-    ) => void;    
+    ) => void;
     options: Option[];
     value?: string[];
     inputWrapperClass?: string;
@@ -67,6 +67,28 @@ const MultiCheckBox: React.FC<MultiCheckBoxProps> = (props) => {
         }
     };
 
+    const handleDescClick = (option: Option) => {
+        const checked = props.value?.includes(option.value) ?? false;
+        
+        if (props.type === 'checkbox-custom-img') {
+            handleCheckboxChange(option.value, !checked);
+        } else if (option.proSetting && !props.khali_dabba) {
+            props.proChanged?.();
+        } else {
+            // Create a synthetic event for consistency
+            const syntheticEvent = {
+                target: {
+                    type: props.type?.split('-')[0] || 'checkbox',
+                    name: option.name || 'basic-input',
+                    value: option.value,
+                    checked: !checked
+                }
+            } as ChangeEvent<HTMLInputElement>;
+            
+            props.onChange?.(syntheticEvent);
+        }
+    };
+
     return (
         <div className={props.wrapperClass}>
             {props.selectDeselect && (
@@ -76,7 +98,7 @@ const MultiCheckBox: React.FC<MultiCheckBoxProps> = (props) => {
                             type="checkbox"
                             checked={allSelected}
                             onChange={(e) => props.onMultiSelectDeselectChange?.(e)}
-                            className={ !allSelected && selectedCount > 0 ? 'minus-icon':''}
+                            className={!allSelected && selectedCount > 0 ? 'minus-icon' : ''}
                         />
                         <span className="">{selectedCount} items</span>
                     </div>
@@ -97,6 +119,8 @@ const MultiCheckBox: React.FC<MultiCheckBoxProps> = (props) => {
                                 dangerouslySetInnerHTML={{
                                     __html: option.label ?? '',
                                 }}
+                                onClick={() => handleDescClick(option)}
+                                style={{ cursor: 'pointer' }}
                             ></p>
                         )}
                         <div
@@ -147,7 +171,7 @@ const MultiCheckBox: React.FC<MultiCheckBoxProps> = (props) => {
                                 // eslint-disable-next-line jsx-a11y/label-has-associated-control
                                 <label
                                     htmlFor={`${props.idPrefix}-${option.key}`}
-                                >{option.label }</label>
+                                >{option.label}</label>
                             )}
                         </div>
 
@@ -158,6 +182,8 @@ const MultiCheckBox: React.FC<MultiCheckBoxProps> = (props) => {
                                     dangerouslySetInnerHTML={{
                                         __html: option.desc ?? '',
                                     }}
+                                    onClick={() => handleDescClick(option)}
+                                    style={{ cursor: 'pointer' }}
                                 ></p>
                             )}
                         {option.proSetting && !props.khali_dabba && (
