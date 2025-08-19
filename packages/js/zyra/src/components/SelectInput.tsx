@@ -51,6 +51,40 @@ const SelectInput: React.FC< SelectInputProps > = ( {
     description,
     descClass,
 } ) => {
+    const customStyles = {
+        control: (provided: any, state: any) => ({
+            ...provided,
+            borderColor: state.isFocused ? 'blue' : 'gray',
+            boxShadow: state.isFocused ? '0 0 0 1px blue' : 'none',
+            '&:hover': { borderColor: 'blue' },
+            minHeight: '40px',
+        }),
+        option: (provided: any, state: any) => ({
+            ...provided,
+            backgroundColor: state.isSelected
+                ? '#007bff'
+                : state.isFocused
+                ? '#e6f0ff'
+                : 'white',
+            color: state.isSelected ? 'white' : 'black',
+            cursor: 'pointer',
+            padding: 10,
+        }),
+        menu: (provided: any) => ({
+            ...provided,
+            borderRadius: 4,
+            marginTop: 0,
+        }),
+        multiValue: (provided: any) => ({
+            ...provided,
+            backgroundColor: '#007bff33',
+        }),
+        multiValueLabel: (provided: any) => ({
+            ...provided,
+            color: '#007bff',
+        }),
+    };
+    
     // Convert options to react-select format
     const optionsData: SelectOptions[] = options.map( ( option, index ) => ( {
         value: option.value,
@@ -84,7 +118,7 @@ const SelectInput: React.FC< SelectInputProps > = ( {
                 onChange={ ( newValue, actionMeta ) => {
                     onChange?.( newValue, actionMeta );
                 } }
-                
+                styles={customStyles}
                 closeMenuOnSelect={false}
                 isMulti={ type === 'multi-select' } 
             />
