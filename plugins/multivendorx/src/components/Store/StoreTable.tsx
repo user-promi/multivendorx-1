@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
-import { Table, getApiLink, TableCell } from 'zyra';
+import { Table, getApiLink, TableCell, AdminBreadcrumbs } from 'zyra';
 import {
     ColumnDef,
     RowSelectionState,
@@ -19,7 +19,7 @@ type StoreRow = {
 const StoreTable: React.FC = () => {
 
     const [data, setData] = useState<StoreRow[] | null>(null);
-    
+
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
     const [totalRows, setTotalRows] = useState<number>(0);
     const [pagination, setPagination] = useState<PaginationState>({
@@ -27,7 +27,7 @@ const StoreTable: React.FC = () => {
         pageSize: 10,
     });
     const [pageCount, setPageCount] = useState(0);
-    
+
     // Fetch total rows on mount
     useEffect(() => {
         axios({
@@ -135,9 +135,10 @@ const StoreTable: React.FC = () => {
 
     return (
         <>
-            <div className="admin-page-title">
-                <p>{__('Stores', 'notifima')}</p>
-            </div>
+            <AdminBreadcrumbs
+                activeTabIcon="icon"
+                parentTabName="Stores"
+            />
             <div className="admin-table-wrapper">
                 <Table
                     data={data}

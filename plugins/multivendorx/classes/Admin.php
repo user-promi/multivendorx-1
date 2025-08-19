@@ -108,10 +108,10 @@ class Admin {
                     'name'   => __( 'Help and Support', 'multivendorx' ),
                     'subtab' => '',
                 ),
-                'setup' => array(
-                    'name'   => __( 'Setup', 'multivendorx' ),
-                    'subtab' => '',
-                ),
+                // 'setup' => array(
+                //     'name'   => __( 'Setup', 'multivendorx' ),
+                //     'subtab' => '',
+                // ),
             );
             
             foreach ( $submenus as $slug => $submenu ) {
