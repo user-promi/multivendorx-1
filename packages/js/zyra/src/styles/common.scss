@@ -892,7 +892,7 @@ input[type="checkbox"]:checked::before {
   flex-direction: column;
   width: 100%;
   border: 0.125rem dashed #b4b6b9;
-  padding: 1.5rem 0;
+  padding: 1rem 0;
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
@@ -909,11 +909,11 @@ input[type="checkbox"]:checked::before {
 
   .title {
     font-size: 1.313rem;
-    margin-bottom: 0.8rem;
+    margin-bottom: 0.4rem;
   }
 
   button {
-    margin-top: 0.8rem;
+    margin-top: 0.4rem;
   }
 
   .overlay {
@@ -936,6 +936,25 @@ input[type="checkbox"]:checked::before {
 
   &:hover .overlay {
     opacity: 1;
+  }
+
+  &.medium{
+    width: 50%;
+  }
+  &.small{
+    width: 20%;
+    i{
+      font-size: 1.8rem;
+    }
+    .title{
+      font-size: 0.9rem;
+    }
+    span{
+      font-size: 0.75rem;
+    }
+    button{
+      margin: 0;
+    }
   }
 }
 

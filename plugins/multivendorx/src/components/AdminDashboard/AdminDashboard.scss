@@ -1,7 +1,8 @@
 @use '../config.scss' as *;
 
 .admin-dashboard {
-    padding: 2rem;
+    padding: 0 2rem 2rem;
+
 
     .row {
         display: flex;
@@ -18,7 +19,21 @@
     }
 
     .header {
-        padding-bottom: 1.625rem;
+        padding: 1rem;
+        background: #fff;
+        margin-bottom: 0.625rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .title-wrapper {
+            .title {
+                font-size: 1.5rem;
+                margin-bottom: 0.5rem;
+                font-weight: 500;
+                color: $text-color;
+            }
+        }
     }
 
     .cards {
@@ -29,6 +44,7 @@
 
             div {
                 font-size: 1rem;
+                font-weight: 500;
             }
 
             span {
@@ -46,11 +62,13 @@
                 display: flex;
                 flex-direction: column;
                 gap: 1.5rem;
+
                 span {
                     font-size: 1.7rem;
                     font-weight: 600;
                 }
-                a{
+
+                a {
                     text-decoration: underline;
                     color: $text-color;
                 }
@@ -66,15 +84,15 @@
         }
     }
 }
+
 .chart-wrapper {
     margin-top: 2rem;
     padding: 1.5rem;
     background: #fff;
-  
+
     h3 {
-      margin-bottom: 1rem;
-      font-size: 1.25rem;
-      font-weight: 600;
+        margin-bottom: 1rem;
+        font-size: 1.25rem;
+        font-weight: 600;
     }
-  }
-  
+}

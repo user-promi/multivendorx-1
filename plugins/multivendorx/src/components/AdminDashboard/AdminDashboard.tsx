@@ -41,10 +41,11 @@ const AdminDashboard = () => {
 
         {/* header */}
         <div className="header">
-          <div className="title">
-            <h2>Welcome back, Admin!</h2>
-            <div>Here's what's happening with your marketplace today</div>
+          <div className="title-wrapper">
+            <div className="title">Welcome back, Admin!</div>
+            <div className="des">Here's what's happening with your marketplace today</div>
           </div>
+          <button className="admin-btn btn-purple"><i className="adminlib-plus-circle-o"></i>Add Product</button>
         </div>
 
         {/* cards */}
