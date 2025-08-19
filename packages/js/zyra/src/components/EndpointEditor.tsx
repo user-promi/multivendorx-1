@@ -139,7 +139,10 @@ const EndpointManager: React.FC<EndpointEditorProps> = ({
             className="main-menu"
           >
             <div className="name-wrapper">
+            {key !== 'dashboard' && (
               <i className="adminlib-move"></i>
+            )}   
+              <i className="adminlib-add-product"></i>           
               <div className="name">{endpoint.name}
                 {key !== 'dashboard' && <> <code>{endpoint.slug}</code></>}
               </div>

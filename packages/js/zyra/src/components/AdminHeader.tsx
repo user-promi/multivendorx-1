@@ -26,8 +26,8 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
           />
 
           <div className="version-tag">
-            <span className="admin-badge blue">5.10.15</span>
-            <span className="admin-badge green"><i className="adminlib-pro-tag"></i>4.2.6</span>
+            <span className="admin-badge blue"><i className="adminlib-pro-tag"></i> 5.10.15</span>
+            <span className="admin-badge red"><i className="adminlib-pro-tab"></i>4.2.6</span>
           </div>
         </div>
 
@@ -39,7 +39,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
               placeholder="Search Here"
             />
             <select>
-              <option value="catagory">Catagory</option>
+              <option value="catagory">Category</option>
               <option value="documents">Documents</option>
             </select>
           </div>
@@ -63,7 +63,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
 
           <i
             className="admin-icon adminlib-plus-circle-o"
-            title="Chat maneger"
+            title="Chat manager"
           ></i>
           <i
             className="admin-icon adminlib-user-circle"

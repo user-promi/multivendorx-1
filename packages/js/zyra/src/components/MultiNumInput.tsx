@@ -112,7 +112,7 @@ const MultiNumInput: React.FC<MultiNumInputProps> = ({
                         ) : (
                             <input
                                 id={`${idPrefix}-${option.key}`}
-                                className={`${inputClass} basic-input`}
+                                className={`${inputClass}`}
                                 type={option.type || 'text'}
                                 name={option.name}
                                 value={selectedValue}
@@ -141,7 +141,7 @@ const MultiNumInput: React.FC<MultiNumInputProps> = ({
                             {/* Per-option description */}
                             {option.desc && (
                                 <p
-                                    className={descClass}
+                                    className={`${descClass} settings-metabox-description`}
                                     dangerouslySetInnerHTML={{
                                         __html: option.desc,
                                     }}
@@ -155,7 +155,7 @@ const MultiNumInput: React.FC<MultiNumInputProps> = ({
             {/* Component-level description */}
             {description && (
                 <p
-                    className={descClass}
+                    className={`${descClass} settings-metabox-description`}
                     dangerouslySetInnerHTML={{ __html: description }}
                 ></p>
             )}

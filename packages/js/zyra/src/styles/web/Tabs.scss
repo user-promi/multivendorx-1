@@ -37,6 +37,12 @@
     .version-tag{
       display: flex;
       gap: 0.5rem;
+
+      .admin-badge{
+        i{
+          padding-right: 0.5rem;
+        }
+      }
     }
   }
 
