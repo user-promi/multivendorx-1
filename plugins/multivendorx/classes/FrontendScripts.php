@@ -302,7 +302,8 @@ class FrontendScripts {
                 'product-report-abuse',
                 'user-capability',
                 'store-capability',
-                'identity-verification'
+                'identity-verification',
+                'commission-rule'
             )
 		);
 

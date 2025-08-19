@@ -110,6 +110,7 @@ class Setting {
                 'multivendorx_product_report_abuse_settings',
                 'multivendorx_store_capability_settings',
                 'multivendorx_user_capability_settings',
+                'multivendorx_commission_rule_settings',
 			)
         );
 

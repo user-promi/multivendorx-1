@@ -1,19 +1,26 @@
 import { Link } from 'react-router-dom';
 import "./ViewStore.scss"
+import { AdminBreadcrumbs } from 'zyra';
 
 const ViewStore = () => {
   return (
     <>
-    <Link
-        to="?page=multivendorx#&tab=stores"
-        className="button"
-        >
-        Back
-    </Link>
-    <div className="store-view-wrapper">
-      <div className="header">
-        <div className="profile-section">
-            <span className="avater"><img src="https://randomuser.me/api/portraits/men/75.jpg"/></span>
+      <AdminBreadcrumbs
+        activeTabIcon="icon"
+        parentTabName="View Store"
+        buttons={[
+          {
+            label: 'Back',
+            onClick: () => window.location.assign('?page=multivendorx#&tab=stores'),
+            className: 'button' // same class as your original Link
+          }
+        ]}
+      />
+
+      <div className="store-view-wrapper">
+        <div className="header">
+          <div className="profile-section">
+            <span className="avater"><img src="https://randomuser.me/api/portraits/men/75.jpg" /></span>
             <div className="name">Avi Roy</div>
             <div className="details">
               <i className="adminlib-wholesale"></i>
@@ -23,15 +30,15 @@ const ViewStore = () => {
               <i className="adminlib-form-phone"></i>
               + 9874563210
             </div>
-        </div>
+          </div>
 
-        <div className="store-image">
+          <div className="store-image">
             <img src="https://res.cloudinary.com/walden-global-services/image/upload/v1544584558/dandelion/29.jpg" alt="" />
+          </div>
+
         </div>
 
       </div>
-
-    </div>
     </>
   );
 };
