@@ -185,9 +185,11 @@ class Admin {
 			FrontendScripts::localize_scripts( 'multivendorx-admin-script' );
         }
 
-        FrontendScripts::admin_load_scripts();
-		FrontendScripts::enqueue_script( 'multivendorx-product-tab-script' );
-		FrontendScripts::localize_scripts( 'multivendorx-product-tab-script' );
+        if ( get_current_screen()->id === 'product' ) {
+            FrontendScripts::admin_load_scripts();
+            FrontendScripts::enqueue_script( 'multivendorx-product-tab-script' );
+            FrontendScripts::localize_scripts( 'multivendorx-product-tab-script' );
+        }
     }
 
     /**
