@@ -296,10 +296,10 @@ class Admin {
         if ( $linked_store_id ) {
             update_post_meta( $post_id, 'store_id', $linked_store_id );
 
-            // wp_update_post( array(
-            //     'ID'          => $post_id,
-            //     'post_author' => $linked_store_id,
-            // ) );
+            wp_update_post( array(
+                'ID'          => $post_id,
+                'post_author' => $linked_store_id,
+            ) );
         }
     }
 

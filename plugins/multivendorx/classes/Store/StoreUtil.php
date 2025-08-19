@@ -210,4 +210,27 @@ class StoreUtil {
         return $capabilities;
     }
 
+    public static function get_products_vendor( $product_id ) {
+        $vendor_data = false;
+        if ( $product_id > 0 ) {
+            $vendor = get_post_meta( $product_id, 'store_id', true );
+            $vendor_obj = self::get_store_by_id( $vendor );
+
+            if ( $vendor_obj ) {
+                $vendor_data = $vendor_obj;
+            }
+
+            if ( ! $vendor_data ) {
+                $product_obj = get_post( $product_id );
+                if ( is_object( $product_obj ) ) {
+                    $author_id = $product_obj->post_author;
+                    if ( $author_id ) {
+                        $vendor_data = self::get_store_by_id( $author_id );
+                    }
+                }
+            }
+        }
+        return $vendor_data;
+    }
+
 }
