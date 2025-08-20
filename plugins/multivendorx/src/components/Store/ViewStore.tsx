@@ -43,6 +43,7 @@ const ViewStore = () => {
           <div className="column profile-section">
             <span className="avater"><img src="https://99designs-blog.imgix.net/blog/wp-content/uploads/2022/06/Starbucks_Corporation_Logo_2011.svg-e1657703028844.png?auto=format&q=60&fit=max&w=930" /></span>
             <div className="name">Lorem ipsum</div>
+            <div className="des">Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim, facere delectus reprehenderit facilis dolore, ipsum esse fugiat praesentium, perspiciatis impedit laboriosam ex? Deserunt, qui ipsam.</div>
             <div className="details">
               <i className="adminlib-wholesale"></i>
               Lorem ipsum dolor sit amet.
@@ -50,6 +51,17 @@ const ViewStore = () => {
             <div className="details">
               <i className="adminlib-form-phone"></i>
               + 9874563210
+            </div>
+            <div className="details">
+              <i className="adminlib-mail"></i>
+              store@gmail.com
+            </div>
+            <div className="review">
+              <i className="adminlib-star"></i>
+              <i className="adminlib-star"></i>
+              <i className="adminlib-star"></i>
+              <i className="adminlib-star"></i>
+              <i className="adminlib-star"></i>
             </div>
             <div className="buttons">
               <a className="admin-btn btn-purple"><i className="adminlib-mail"></i> Send Mail</a>
