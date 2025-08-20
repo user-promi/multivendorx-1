@@ -1,11 +1,8 @@
 .store-view-wrapper {
     padding: 2rem;
 
-    .header {
-        display: flex;
-        align-items: start;
-        gap: 1rem;
-
+    .store-header {
+        padding-top: 1rem;
         .profile-section {
             width: 20%;
             background: #fff;
@@ -24,13 +21,33 @@
                 font-weight: 600;
                 margin: 1rem 0;
             }
-            .details{
+
+            .details {
                 font-size: 1rem;
                 margin-bottom: 0.5rem;
 
-                i{
+                i {
                     margin-right: 0.5rem;
                 }
+            }
+            .buttons{
+                display: flex;
+                justify-content: center;
+                padding-top: 1rem;
+            }
+        }
+
+        .store-image {
+            width: 80%;
+            height: 25rem;
+            overflow: hidden;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+
+            img {
+                width: 100%;
+                height: auto;
             }
         }
     }

@@ -137,19 +137,19 @@ const StoreSettings = ({ id }: { id: string }) => {
 
 						<div className="form-group-wrapper">
 							<div className="form-group">
-								<label htmlFor="product-name">Phone</label>
-								<BasicInput name="phone" value={formData.phone} wrapperClass="setting-form-input" descClass="settings-metabox-description" onChange={handleChange} />
+								<label htmlFor="phone">Phone</label>
+								<BasicInput name="phone"  wrapperClass="setting-form-input" descClass="settings-metabox-description" onChange={handleChange} />
 							</div>
 						</div>
 
 						<div className="form-group-wrapper">
 							<div className="form-group">
-								<label htmlFor="product-name">Address</label>
-								<BasicInput name="phone" value={formData.phone} wrapperClass="setting-form-input" descClass="settings-metabox-description" onChange={handleChange} />
+								<label htmlFor="address">Address</label>
+								<BasicInput name="address"  wrapperClass="setting-form-input" descClass="settings-metabox-description" onChange={handleChange} />
 							</div>
 							<div className="form-group">
-								<label htmlFor="product-name"></label>
-								<BasicInput name="phone" value={formData.phone} wrapperClass="setting-form-input" descClass="settings-metabox-description" onChange={handleChange} />
+								<label htmlFor="address2"></label>
+								<BasicInput name="address2"  wrapperClass="setting-form-input" descClass="settings-metabox-description" onChange={handleChange} />
 							</div>
 						</div>
 						<div className="form-group-wrapper">

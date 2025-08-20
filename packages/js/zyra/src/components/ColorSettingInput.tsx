@@ -75,26 +75,14 @@ const ColorSettingInput: React.FC<ColorSettingProps> = (props) => {
                     <button
                         type="button"
                         onClick={() => setMode('predefined')}
-                        style={{
-                            padding: '8px 14px',
-                            border: mode === 'predefined' ? '2px solid #007cba' : '1px solid #ccc',
-                            background: mode === 'predefined' ? '#f0faff' : '#fff',
-                            borderRadius: '6px',
-                            cursor: 'pointer',
-                        }}
+                        className="admin-btn btn-purple"
                     >
                         Pre-defined Palette
                     </button>
                     <button
                         type="button"
                         onClick={() => setMode('custom')}
-                        style={{
-                            padding: '8px 14px',
-                            border: mode === 'custom' ? '2px solid #007cba' : '1px solid #ccc',
-                            background: mode === 'custom' ? '#f0faff' : '#fff',
-                            borderRadius: '6px',
-                            cursor: 'pointer',
-                        }}
+                        className="admin-btn btn-purple"
                     >
                         Custom Palette
                     </button>
