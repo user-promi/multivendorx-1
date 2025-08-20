@@ -174,14 +174,14 @@ export default {
         {
             key: 'separator_content',
             type: 'section',
-            hint:__('What`s Included in Store Commission ','multivendorx'),
+            hint:__('What's Included Along With Store Commission ','multivendorx'),
             desc:__('Choose which order components are factored into commission calculations','multivendorx')
         },
         {
             key: 'give_shipping',
-            label: __( 'Shipping', 'multivendorx' ),
+            label: __( 'Shipping Amount', 'multivendorx' ),
             desc: __(
-                'Add shipping fees to the commission calculation base amount. <li>Include in Commission: Add shipping charges to the commission calculation base amount <li>VExclude from Commission: Calculate commission only on product price, excluding shipping costs',
+                'Add shipping fees to the commission calculation base amount. <li>Include in Commission: Add shipping charges to the commission calculation base amount <li>Exclude from Commission: Calculate commission only on product price, excluding shipping costs',
                 'multivendorx'
             ),
             type: 'checkbox',
@@ -196,7 +196,7 @@ export default {
         {
             key: 'commission_calculation_on_tax',
             type: 'setting-toggle',
-            label: __( 'Tax', 'multivendorx' ),
+            label: __( 'Tax Amount', 'multivendorx' ),
             desc: __(
                 'Configure how taxes are treated in commission calculations:<li>No Tax Inclusion: Calculate commission on pre-tax amount only.<li>100% Tax Inclusion: Include full tax amount in commission base.<li>Commission-Based Tax: Calculate commission on total order value including taxes, not just product price',
                 'multivendorx'
@@ -209,7 +209,7 @@ export default {
                 },
                 {
                     key: 'per_unit',
-                    label: __( '100% tax', 'multivendorx' ),
+                    label: __( 'Full Tax', 'multivendorx' ),
                     value: 'per_unit',
                 },
                 {
