@@ -54,19 +54,19 @@ const SelectInput: React.FC< SelectInputProps > = ( {
     const customStyles = {
         control: (provided: any, state: any) => ({
             ...provided,
-            borderColor: state.isFocused ? 'blue' : 'gray',
-            boxShadow: state.isFocused ? '0 0 0 1px blue' : 'none',
-            '&:hover': { borderColor: 'blue' },
-            minHeight: '40px',
+            borderColor: state.isFocused ? '#5007aa' : '#e0e4e9',
+            boxShadow: state.isFocused ? '0 0 0 3px #5007aa1c' : 'none',
+            '&:hover': { borderColor: '#5007aa' },
+            maxHeight: '2.188rem',
         }),
         option: (provided: any, state: any) => ({
             ...provided,
             backgroundColor: state.isSelected
-                ? '#007bff'
+                ? '##ece2f9f1'
                 : state.isFocused
-                ? '#e6f0ff'
+                ? '#ece2f9f1'
                 : 'white',
-            color: state.isSelected ? 'white' : 'black',
+            color: state.isSelected ? 'black' : 'black',
             cursor: 'pointer',
             padding: 10,
         }),

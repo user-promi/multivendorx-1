@@ -15,8 +15,7 @@ export default {
             key: 'mvx_new_dashboard_site_logo',
             type: 'file',
             label: __( 'Branding Logo', 'multivendorx' ),
-            width: 75,
-            height: 75,
+            size: 'small',
             desc: __( 'Upload brand image as logo', 'multivendorx' ),
         },      
         {

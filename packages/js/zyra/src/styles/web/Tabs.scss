@@ -37,6 +37,12 @@
     .version-tag{
       display: flex;
       gap: 0.5rem;
+
+      .admin-badge{
+        i{
+          padding-right: 0.5rem;
+        }
+      }
     }
   }
 
@@ -230,7 +236,7 @@
   color: #121116;
   line-height: 1.5;
   background-color: #fff;
-  padding: 2rem;
+  padding: 0 2rem 2rem;
 
   &.show-menu {
     .current-tab-lists {
@@ -261,6 +267,9 @@
     }
   }
 
+}
+.middle-child-container:has(.current-tab-lists){
+  padding-top: 2rem;
 }
 
 .current-tab-lists-container {

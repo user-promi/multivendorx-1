@@ -183,14 +183,5 @@ export default {
                 },
             ],
         },
-        {
-            key: 'section',
-            type: 'section',
-            hint: __(
-                'Blocks and widgets',
-                'multivendorx'
-            ),
-        },
-
     ],
 };

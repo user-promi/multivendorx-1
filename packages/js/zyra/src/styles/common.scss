@@ -128,6 +128,12 @@ a {
   }
 }
 
+.text-green{
+  color: #00bd9d;
+}
+.text-red{
+  color: #f06548;
+}
 // copy btn start
 .copy-btn {
   width: 2.2rem;
@@ -428,6 +434,7 @@ input[type="checkbox"]:checked::before {
     width: 47%;
     transition: all 0.4s ease;
     flex-wrap: wrap;
+    cursor: pointer;
 
     &:hover {
       background: #ece2f969;
@@ -476,7 +483,7 @@ input[type="checkbox"]:checked::before {
 
 // metabox description start
 .settings-metabox-note {
-  width: 50%;
+  width: 67%;
   background: $theme-background-color;
   padding: 0.5rem 0.8rem;
   display: flex;
@@ -514,6 +521,10 @@ input[type="checkbox"]:checked::before {
   ul {
     list-style-type: none;
     margin: 0;
+  }
+  li{
+    list-style-type: number;
+    margin-left: 0.85rem;
   }
 }
 
@@ -881,7 +892,7 @@ input[type="checkbox"]:checked::before {
   flex-direction: column;
   width: 100%;
   border: 0.125rem dashed #b4b6b9;
-  padding: 1.5rem 0;
+  padding: 1rem 0;
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
@@ -898,11 +909,11 @@ input[type="checkbox"]:checked::before {
 
   .title {
     font-size: 1.313rem;
-    margin-bottom: 0.8rem;
+    margin-bottom: 0.4rem;
   }
 
   button {
-    margin-top: 0.8rem;
+    margin-top: 0.4rem;
   }
 
   .overlay {
@@ -925,6 +936,25 @@ input[type="checkbox"]:checked::before {
 
   &:hover .overlay {
     opacity: 1;
+  }
+
+  &.medium{
+    width: 50%;
+  }
+  &.small{
+    width: 20%;
+    i{
+      font-size: 1.8rem;
+    }
+    .title{
+      font-size: 0.9rem;
+    }
+    span{
+      font-size: 0.75rem;
+    }
+    button{
+      margin: 0;
+    }
   }
 }
 
@@ -1012,10 +1042,10 @@ input[type="checkbox"]:checked::before {
     &::after {
       content: "";
       position: absolute;
-      top: 50%;
+      top: 51%;
       transform: translateY(-50%);
       left: 0.313rem;
-      width: 0.8rem;
+      width: 0.75rem;
       height: 0.8rem;
       border-radius: 90rem;
       transition: 0.3s;
@@ -1170,7 +1200,7 @@ input[type="checkbox"]:checked::before {
   //   box-shadow: none;
   // }
 
-  // commission style start
+  // multi input style start
   .settings-basic-child-wrap {
     display: flex;
     gap: 2rem;
@@ -1179,37 +1209,30 @@ input[type="checkbox"]:checked::before {
       width: 15rem;
 
       .setting-form-input {
-        padding: 0.313rem;
         align-items: center;
-        gap: 0.5rem;
         position: relative;
+        border: $border-light-small;
+        border-radius: $border-radius-small;
+        padding: 0 0.5rem;
 
         .input-unit{
-          position: absolute;
-          font-size: 1.2rem;
-          font-weight: 600;
+          font-size: 1rem;
+        }
+        input{
+         width: 100%;
+         border: none;
+
+         &:focus {
+           box-shadow: none;
+         }
         }
       }
-      &.suffix{
-        input{
-          padding-right: 2.5rem;
-        }
-        .input-unit{
-          right: 0.65rem;
-        }
-      }
-      &.prefix{
-        input{
-          padding-left: 2.5rem;
-        }
-        .input-unit{
-          left: 0.65rem;
-        }
+      .setting-form-input:has(.toggle-setting-wrapper){
+        border: none;
       }
     }
   }
-
-  // commission style end
+  // multi input style end
 }
 
 .select-deselect-trigger {

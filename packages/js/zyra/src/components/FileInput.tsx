@@ -80,7 +80,7 @@ const FileInput: React.FC<FileInputProps> = (props) => {
         <>
             <div
                 
-                className={`file-uploader ${props.wrapperClass || ''}`}
+                className={`file-uploader ${props.wrapperClass || ''}  ${props.size || ''}`}
                 style={{ backgroundImage: localImage ? `url(${localImage})` : undefined }}
             >
                 <i className="adminlib-cloud-upload"></i>

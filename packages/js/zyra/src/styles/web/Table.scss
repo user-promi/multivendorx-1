@@ -66,7 +66,9 @@
         height: 2.625rem;
         align-items: center;
       }
-
+      .header-row:first-child {
+          padding-right: 0;
+      }
       .header-col {
         text-align: left;
         padding: 0 0.85rem;
@@ -126,7 +128,7 @@
             background: #f8f9fc;
             box-shadow: 0 2px 15px -4px #854fff66;
         }
-
+        
         .admin-column {
           padding: 0.75rem 0.85rem;
           font-size: 0.9rem;
@@ -152,13 +154,10 @@
           }
         }
 
-        .admin-column:nth-of-type(1) {
-          max-width: 2rem;
-          padding-right: 0;
-        }
-
         .admin-column:first-child {
           padding-top: 0.875rem;
+          max-width: 2rem;
+          padding-right: 0;
         }
 
         .admin-column:last-child {

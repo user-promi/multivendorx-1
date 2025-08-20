@@ -47,16 +47,10 @@ const ShortCodeTable: React.FC<ShortCodeTableProps> = (props) => {
                     {options && options.length > 0 ? (
                         options.map((option, index) => (
                             <tr key={index}>
-                                <td>
+                                <td onClick={() => handleCopy(option.label!)}>
                                     <code>{option.label}</code>
                                     {icon && option.label && (
-                                        <span
-                                            onClick={() => handleCopy(option.label!)}
-                                            style={{ cursor: 'pointer', marginLeft: '5px' }}
-                                            title="Copy"
-                                        >
-                                            <i className={icon}></i>
-                                        </span>
+                                        <i className="adminlib-vendor-form-copy"></i>
                                     )}
                                 </td>
                                 <td>{option.desc}</td>
