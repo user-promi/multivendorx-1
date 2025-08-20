@@ -42,7 +42,7 @@ export default {
         {
             key: 'store_page_details',
             type: 'checkbox',
-            label: __( 'Cart & Checkout', 'multivendorx' ),
+            label: __( 'Store Info in Cart & Checkout', 'multivendorx' ),
             desc: __( 'Control which store information is visible during shopping and checkout.', 'multivendorx' ),
             class: 'mvx-toggle-checkbox',
             options: [
@@ -65,7 +65,7 @@ export default {
         {
             key: 'separator_store_page_details',
             type: 'section',
-            desc: __( 'Store Page Details', 'multivendorx' ),
+            desc: __( 'What Customers See on Store Page', 'multivendorx' ),
             hint: __(
                 'Control which store information is visible on the store’s store page.',
                 'multivendorx'
