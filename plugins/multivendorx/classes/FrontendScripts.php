@@ -250,6 +250,11 @@ class FrontendScripts {
 					'deps'        => $component_asset['dependencies'],
 					'version'     => $version,
 				),
+                'multivendorx-product-tab-script' => array(
+					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'js/' . MULTIVENDORX_PLUGIN_SLUG . '-product-tab.min.js',
+					'deps'    => array( 'jquery', 'jquery-blockui', 'wp-element', 'wp-i18n', 'react-jsx-runtime' ),
+					'version' => $version,
+				),
             )
         );
 		foreach ( $register_scripts as $name => $props ) {
@@ -368,9 +373,16 @@ class FrontendScripts {
                         'country_list'             => $country_list,
                         'default_logo'             => MultiVendorX()->plugin_url.'assets/images/WP-stdavatar.png',
                         'capabilities'             => StoreUtil::get_store_capability(),
-                        'custom_roles'             => Roles::get_all_custom_roles(),
+                        'custom_roles'             => Roles::multivendorx_get_roles(),
 					),
-                )
+                ),
+                'multivendorx-product-tab-script' => array(
+					'object_name' => 'multivendorx',
+					'data'        => array(
+						'ajaxurl'     => admin_url( 'admin-ajax.php' ),
+						'select_text' => __( 'Select an item...', 'multivendorx' ),
+					),
+				),
 			)
         );
 

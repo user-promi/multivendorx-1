@@ -6,6 +6,7 @@
  */
 
 namespace MultiVendorX;
+use MultiVendorX\Store\StoreUtil;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -31,6 +32,12 @@ class Admin {
         add_filter( 'allowed_redirect_hosts', array( $this, 'allow_multivendorx_redirect_host' ) );
         // For loco translation.
         add_action( 'load_script_textdomain_relative_path', array( $this, 'textdomain_relative_path' ), 10, 2 );
+
+        // Add Store menu in woocommerce product page.
+		add_filter( 'woocommerce_product_data_tabs', array( $this, 'add_store_tab_in_product' ) );
+        add_action( 'woocommerce_product_data_panels', array( $this, 'add_additional_product_data_panels' ) );
+        add_action( 'woocommerce_process_product_meta', array( $this, 'save_store_in_product' ) );
+        add_action( 'wp_ajax_search_stores', array( $this, 'multivendorx_get_stores' ));
     }
 
     /**
@@ -180,6 +187,12 @@ class Admin {
 			FrontendScripts::enqueue_style( 'multivendorx-components-style' );
 			FrontendScripts::localize_scripts( 'multivendorx-admin-script' );
         }
+
+        if ( get_current_screen()->id === 'product' ) {
+            FrontendScripts::admin_load_scripts();
+            FrontendScripts::enqueue_script( 'multivendorx-product-tab-script' );
+            FrontendScripts::localize_scripts( 'multivendorx-product-tab-script' );
+        }
     }
 
     /**
@@ -201,7 +214,7 @@ class Admin {
             }
 
             if ( strpos( $url, 'block' ) === false ) {
-                $path = 'build/index.js';
+                $path = 'assets/js/components.js';
             }
         }
 
@@ -232,5 +245,81 @@ class Admin {
         }
 
         return $hosts;
+    }
+
+    /**
+	 * Creates custom tab for product types.
+     *
+	 * @param array $product_data_tabs all product tabs in admin.
+	 * @return array
+	 */
+	public function add_store_tab_in_product( $product_data_tabs ) {
+		$product_data_tabs['store'] = array(
+			'label'  => __( 'Store', 'multivendorx' ),
+			'target' => 'multivendorx-store-link-tab',
+		);
+		return $product_data_tabs;
+	}
+
+    /**
+     * Add meta box panel.
+     *
+     * @return void
+     */
+	public function add_additional_product_data_panels() {
+		global $post;
+
+        $linked_store = get_post_meta( $post->ID, 'store_id', true );
+
+        ?>
+        <div id="multivendorx-store-link-tab" class="panel woocommerce_options_panel hidden">
+            <p class="form-field">
+                <label for="linked_store"><?php _e( 'Assign Store', 'multivendorx' ); ?></label>
+                <select class="wc-store-search"
+                    style="width: 50%;"
+                    id="linked_store"
+                    name="linked_store"
+                    data-placeholder="<?php esc_attr_e( 'Search for a store…', 'multivendorx' ); ?>"
+                    data-action="search_stores">
+
+                    <?php
+                    if ( $linked_store ) {
+                        $store = StoreUtil::get_store_by_id( $linked_store );
+                        if ( $store ) {
+                            echo '<option value="' . esc_attr( $store['ID'] ) . '" selected="selected">' . esc_html( $store['name'] ) . '</option>';
+                        }
+                    }
+                    ?>
+                </select>
+            </p>
+        </div>
+        <?php
+    }
+
+    public function save_store_in_product($post_id) {
+        $linked_store_id = absint( filter_input( INPUT_POST, 'linked_store' ) );
+        if ( $linked_store_id ) {
+            update_post_meta( $post_id, 'store_id', $linked_store_id );
+
+            wp_update_post( array(
+                'ID'          => $post_id,
+                'post_author' => $linked_store_id,
+            ) );
+        }
+    }
+
+    public function multivendorx_get_stores() {
+        $term   = sanitize_text_field( filter_input( INPUT_GET, 'term', FILTER_SANITIZE_FULL_SPECIAL_CHARS ) ?? '' );
+        $stores = StoreUtil::get_store_by_name($term);
+
+        $results = array();
+        foreach ( $stores as $store ) {
+            $results[] = array(
+                'id'   => $store['ID'],
+                'text' => $store['name'],
+            );
+        }
+
+        wp_send_json( $results );
     }
 }

@@ -49,7 +49,7 @@ class Hooks {
     public function create_commission_refunds( $order_id, $refund_id ) {
         $vendor_order = new VendorOrder();
         if( $vendor_order->is_vendor_order() ) {
-            $commission_id = MVX()->commission->calculate_commission_refunds( $vendor_order, $refund_id );
+            $commission_id = MultiVendorX()->commission->calculate_commission_refunds( $vendor_order, $refund_id );
             /**
              * Action hook after commission refund save.
              * @since 3.4.0

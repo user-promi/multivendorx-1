@@ -30,7 +30,7 @@ class CommissionManager {
         global $wpdb;
 
         if ( $order ) {
-            $vendor_id = $order->get_meta('_vendor_id');
+            $vendor_id = $order->get_meta('store_id');
             $vendor = VendorUtil::get_vendor( $vendor_id );
 
             $commission_type = MultiVendorX()->setting->get_setting( 'commission_type' );
