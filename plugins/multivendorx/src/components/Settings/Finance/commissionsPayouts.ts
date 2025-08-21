@@ -174,7 +174,7 @@ export default {
         {
             key: 'separator_content',
             type: 'section',
-            hint:__('What's Included Along With Store Commission ','multivendorx'),
+            hint:__("What's Included Along With Store Commission",'multivendorx'),
             desc:__('Choose which order components are factored into commission calculations','multivendorx')
         },
         {
