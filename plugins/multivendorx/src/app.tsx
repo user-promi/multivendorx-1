@@ -1,20 +1,15 @@
 import { useLocation } from 'react-router-dom';
-
-import Settings from './components/Settings/Settings';
-
-import Modules from './components/Modules/Modules';
-
-import Store from './components/Store/Store';
 import { useEffect } from 'react';
 import { AdminHeader, initializeModules } from 'zyra';
+import Settings from './components/Settings/Settings';
+import Modules from './components/Modules/Modules';
+import Store from './components/Store/Store';
 import AdminDashboard from './components/AdminDashboard/AdminDashboard';
 import Membership from './components/Memberships/Membership';
 import Brand from './assets/images/mvx-brand-logo.png';
 import StatusAndTools from './components/StatusAndTools/StatusAndTools';
 import SetupWizard from './blocks/setupWizard/SetupWizard';
 
-
-'./components/Stores/Stores';
 localStorage.setItem('force_multivendorx_context_reload', 'true');
 
 const Route = () => {

@@ -1,8 +1,8 @@
 @use '../config.scss' as *;
 
-.admin-dashboard,
-.store-view-wrapper {
+.admin-dashboard {
     padding: 0 2rem 2rem;
+
 
     .row {
         display: flex;
@@ -127,13 +127,13 @@
                 font-size: 1rem;
                 flex-direction: column;
 
-                span {
+                span{
                     font-size: 0.8rem;
                     color: $text-color
                 }
             }
 
-            &:hover {
+            &:hover{
                 background: #f4f2f2;
             }
         }

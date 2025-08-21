@@ -38,6 +38,11 @@ const AddStore = () => {
   };
 
   const handleSubmit = () => {
+    if (!formData || Object.keys(formData).length === 0) {
+      return;
+    }
+
+
     axios({
       method: 'POST',
       url: getApiLink(appLocalizer, 'store'),
@@ -57,7 +62,7 @@ const AddStore = () => {
   return (
     <>
       <AdminBreadcrumbs
-        activeTabIcon="adminlib-"
+        activeTabIcon="icon"
         parentTabName="Add New Store"
         buttons={[
           {

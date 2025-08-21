@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
-import { Table, getApiLink, TableCell, AdminBreadcrumbs } from 'zyra';
+import { Table, getApiLink, TableCell } from 'zyra';
 import {
     ColumnDef,
     RowSelectionState,
@@ -41,7 +41,7 @@ const StoreTable: React.FC = () => {
                 setPageCount(Math.ceil(response.data / pagination.pageSize));
             })
             .catch(() => {
-                setError(__('Failed to load total rows', 'notifima'));
+                setError(__('Failed to load total rows', 'multivendorx'));
             });
     }, []);
 
@@ -71,7 +71,7 @@ const StoreTable: React.FC = () => {
                 setData(response.data || []);
             })
             .catch(() => {
-                setError(__('Failed to load stores', 'notifima'));
+                setError(__('Failed to load stores', 'multivendorx'));
                 setData([]);
             });
     }
@@ -108,7 +108,7 @@ const StoreTable: React.FC = () => {
             ),
         },
         {
-            header: __('Store', 'notifima'),
+            header: __('Store', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell title={row.original.store_name || ''}>
                     {row.original.store_name || '-'}
@@ -116,7 +116,7 @@ const StoreTable: React.FC = () => {
             ),
         },
         {
-            header: __('Slug', 'notifima'),
+            header: __('Slug', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell title={row.original.store_slug || ''}>
                     {row.original.store_slug || '-'}
@@ -124,10 +124,37 @@ const StoreTable: React.FC = () => {
             ),
         },
         {
-            header: __('Status', 'notifima'),
+            header: __('Status', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell title={row.original.status || ''}>
                     {row.original.status || '-'}
+                </TableCell>
+            ),
+        },
+        {
+            header: __('Action', 'multivendorx'),
+            cell: ({ row }) => (
+                <TableCell title="Action">
+                    <div className="action-section">
+                        <ul>
+                            <li
+                                onClick={() =>
+                                    (window.location.href = `?page=multivendorx#&tab=stores&view&id=${row.original.id}`)
+                                }
+                            >
+                                <i className="adminlib-eye"></i>
+                                { __( 'View Store', 'multivendorx' ) }
+                            </li>
+                            <li
+                                onClick={() =>
+                                    (window.location.href = `?page=multivendorx#&tab=stores&edit/${row.original.id}`)
+                                }
+                            >
+                                <i className="adminlib-create"></i>
+                                { __( 'Edit Store', 'multivendorx' ) }
+                            </li>
+                        </ul>
+                    </div>
                 </TableCell>
             ),
         }
@@ -135,10 +162,6 @@ const StoreTable: React.FC = () => {
 
     return (
         <>
-            <AdminBreadcrumbs
-                activeTabIcon="icon"
-                parentTabName="Stores"
-            />
             <div className="admin-table-wrapper">
                 <Table
                     data={data}

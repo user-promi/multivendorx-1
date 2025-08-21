@@ -122,12 +122,12 @@ if ($current_page && empty($current_sub)) {
                                             }
                                         }
                                     }
-                                    $div_id = 'dashboard-' . $submenu['key'];
+                                    $div_id = $submenu['key'];
                                     break;
                                 }
                             }
                         } else {
-                            $div_id = 'dashboard-' . $key;
+                            $div_id = $key;
                         }
                         break;
                     }
@@ -135,7 +135,12 @@ if ($current_page && empty($current_sub)) {
 
                 if ($div_id) {
                     if ($allowed) {
-                        echo '<div id="' . esc_attr($div_id) . '">' . esc_html($div_id) . '</div>';
+                        $template_file = plugin_dir_path(__FILE__) . $div_id . '.php';
+                        if (file_exists( $template_file )) {
+                            MultiVendorX()->util->get_template( 'add-product.php' );
+                        } else {
+                            echo '<div id="' . esc_attr($div_id) . '">' . esc_html($div_id) . '</div>';
+                        }
                     } else {
                         echo '<div>You do not have permission to access this section.</div>';
                     }

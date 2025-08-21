@@ -12,16 +12,16 @@ const EditStore = () => {
     const editId = editParts ? editParts[1] : null;
 
     const hashParams = new URLSearchParams(hash);
-    const currentTab = hashParams.get('section') || 'store';
+    const currentTab = hashParams.get('subtab') || 'store';
 
-    const prepareUrl = (tabId: string) => `?page=multivendorx#&tab=stores&edit/${editId}/&section=${tabId}`;
+    const prepareUrl = (tabId: string) => `?page=multivendorx#&tab=stores&edit/${editId}/&subtab=${tabId}`;
 
     const tabData = [
         {
             type: 'file',
             content: {
                 id: 'store',
-                name: 'Store',
+                name: 'Basic Info',
                 desc: 'Store Info',
                 icon: 'adminlib-credit-card',
             },
@@ -61,12 +61,12 @@ const EditStore = () => {
 
     return (
         <>
-            <Link
-                to="?page=multivendorx#&tab=stores&view"
+            {/* <Link
+                to="?page=multivendorx#&tab=stores"
                 className="button"
             >
                 Back
-            </Link>
+            </Link> */}
 
             <Tabs
                 tabData={tabData}
@@ -77,6 +77,7 @@ const EditStore = () => {
                 brandImg={Brand}
                 smallbrandImg={BrandSmall}
                 Link={Link}
+                settingName={'Store'}
             />
         </>
     );

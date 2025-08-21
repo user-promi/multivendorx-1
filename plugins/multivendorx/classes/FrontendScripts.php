@@ -42,19 +42,6 @@ class FrontendScripts {
     }
 
     /**
-	 * Get the script file name based on environment.
-	 *
-	 * @param string $name The base name of the script file (without `.js` or `.min.js`).
-	 * @return string Script name to use for enqueueing.
-	 */
-    public static function get_script_name( $name ) {
-        if ( MultiVendorX()->is_dev ) {
-			return $name;
-        }
-        return MULTIVENDORX_PLUGIN_SLUG . '-' . $name . '.min';
-    }
-
-    /**
 	 * Get the build path for assets based on environment.
 	 *
 	 * @return string Relative path to the build directory.
@@ -198,8 +185,8 @@ class FrontendScripts {
         $register_styles = apply_filters(
             'multivendorx_register_styles',
             array(
-				'multivendorx-frontend-style' => array(
-					'src'     => MultiVendorX()->plugin_url . 'assets/styles/' . self::get_script_name( 'frontend' ) . '.scss',
+				'multivendorx-dashboard-style' => array(
+					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'styles/index.css',
 					'deps'    => array(),
 					'version' => $version,
 				),

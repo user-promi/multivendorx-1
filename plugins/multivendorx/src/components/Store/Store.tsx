@@ -3,6 +3,7 @@ import AddStore from './AddStore';
 import StoreTable from './StoreTable';
 import ViewStore from './ViewStore';
 import EditStore from './Edit/EditStore';
+import {AdminBreadcrumbs} from 'zyra';
 
 const Store = () => {
   const location = useLocation();
@@ -21,18 +22,29 @@ const Store = () => {
       
       {!isAddStore && !isViewStore && !iseditStore && (
         <>
-          <Link
+            <AdminBreadcrumbs
+                activeTabIcon="icon"
+                parentTabName="Stores"
+                buttons={[
+                    {
+                      label: 'Add Store',
+                      onClick: () => window.location.assign('?page=multivendorx#&tab=stores&create'),
+                      className: 'admin-btn btn-purple'
+                    }
+                ]}
+            />
+          {/* <Link
             to="?page=multivendorx#&tab=stores&create"
             className="button"
           >
             Add Store
-          </Link>
-          <Link
+          </Link> */}
+          {/* <Link
             to="?page=multivendorx#&tab=stores&view"
             className="button"
           >
             View Store
-          </Link>
+          </Link> */}
           <StoreTable/>
         </>
       )}
