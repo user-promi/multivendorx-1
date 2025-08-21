@@ -92,8 +92,17 @@ const StoreSettings = ({ id }: { id: string }) => {
 
 	return (
 		<>
-			{successMsg && <div className="text-green-600">{successMsg}</div>}
-
+			{successMsg && (
+				<>
+					<div className="admin-notice-wrapper">
+						<i className="admin-font adminlib-icon-yes"></i>
+						<div className="notice-details">
+							<div className="title">Great!</div>
+							<div className="desc">{successMsg}</div>
+						</div>
+					</div>
+				</>
+			)}
 			<div className="container-wrapper">
 				<div className="card-wrapper width-65">
 					<div className="card-content">
@@ -111,7 +120,7 @@ const StoreSettings = ({ id }: { id: string }) => {
 						<div className="form-group-wrapper">
 							<div className="form-group">
 								<label htmlFor="product-name">Slug</label>
-								<BasicInput name="name" wrapperClass="setting-form-input" descClass="settings-metabox-description" value={formData.name} onChange={handleChange} />
+								<BasicInput name="slug" wrapperClass="setting-form-input" descClass="settings-metabox-description" value={formData.slug} onChange={handleChange} />
 							</div>
 						</div>
 					</div>
@@ -137,37 +146,19 @@ const StoreSettings = ({ id }: { id: string }) => {
 
 						<div className="form-group-wrapper">
 							<div className="form-group">
-								<label htmlFor="phone">Phone</label>
-								<BasicInput name="phone"  wrapperClass="setting-form-input" descClass="settings-metabox-description" onChange={handleChange} />
+								<label htmlFor="product-name">Phone</label>
+								<BasicInput name="phone" value={formData.phone} wrapperClass="setting-form-input" descClass="settings-metabox-description" onChange={handleChange} />
 							</div>
 						</div>
 
 						<div className="form-group-wrapper">
 							<div className="form-group">
-								<label htmlFor="address">Address</label>
-								<BasicInput name="address"  wrapperClass="setting-form-input" descClass="settings-metabox-description" onChange={handleChange} />
+								<label htmlFor="product-name">Address</label>
+								<BasicInput name="address_1" value={formData.address_1} wrapperClass="setting-form-input" descClass="settings-metabox-description" onChange={handleChange} />
 							</div>
 							<div className="form-group">
-								<label htmlFor="address2"></label>
-								<BasicInput name="address2"  wrapperClass="setting-form-input" descClass="settings-metabox-description" onChange={handleChange} />
-							</div>
-						</div>
-						<div className="form-group-wrapper">
-							<div className="form-group">
-								<label htmlFor="product-name">Country</label>
-								<SelectInput
-									name="country"
-									value={formData.country}
-									options={appLocalizer.country_list || []}
-									type="single-select"
-									onChange={(newValue) => {
-										if (!newValue || Array.isArray(newValue)) return;
-										const updated = { ...formData, country: newValue.value, state: '' }; // reset state
-										setFormData(updated);
-										autoSave(updated);
-										fetchStatesByCountry(newValue.value);
-									}}
-								/>
+								<label htmlFor="product-name"></label>
+								<BasicInput name="address_2" value={formData.address_2} wrapperClass="setting-form-input" descClass="settings-metabox-description" onChange={handleChange} />
 							</div>
 						</div>
 						<div className="form-group-wrapper">
@@ -235,15 +226,15 @@ const StoreSettings = ({ id }: { id: string }) => {
 							<div className="form-group">
 								<label htmlFor="product-name">Store Banner Image</label>
 								<FileInput
-									value={formData.image}
+									value={formData.banner}
 									inputClass="form-input"
-									name="image"
+									name="banner"
 									type="hidden"
-									onButtonClick={() => runUploader('image')}
+									onButtonClick={() => runUploader('banner')}
 									imageWidth={75}
 									imageHeight={75}
 									openUploader="Upload Image"
-									imageSrc={imagePreviews.image}
+									imageSrc={imagePreviews.banner}
 									buttonClass="admin-btn btn-purple"
 									descClass="settings-metabox-description"
 								/>
