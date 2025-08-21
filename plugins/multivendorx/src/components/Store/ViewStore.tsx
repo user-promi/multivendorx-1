@@ -11,7 +11,7 @@ import {
   ResponsiveContainer,
   PieChart, Pie, Cell, Legend
 } from 'recharts';
-import "./ViewStore.scss"
+import "./ViewStore.scss";
 import "../AdminDashboard/AdminDashboard.scss";
 import BannerImg from '../../assets/images/banner-placeholder.jpg';
 import { AdminBreadcrumbs } from 'zyra';
