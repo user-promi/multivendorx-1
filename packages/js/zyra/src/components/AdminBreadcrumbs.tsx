@@ -25,30 +25,34 @@ const AdminBreadcrumbs: React.FC<AdminBreadcrumbsProps> = ({
     buttons = []
 }) => {
     return (
-        <div className="admin-breadcrumbs">
-            <div className="breadcrumbs-title">
-                {activeTabIcon && <i className={activeTabIcon}></i>}
-                {parentTabName}
+        <div className="title-section">
+            <div className="title-wrapper">
+                <div className="title">
+                    {activeTabIcon && <i className={activeTabIcon}></i>}
+                    {parentTabName}
+                </div>
 
-                {buttons.length > 0 &&
-                    buttons.map((btn, index) => {
-                        if (React.isValidElement(btn)) return <React.Fragment key={index}>{btn}</React.Fragment>;
+                <div className="buttons">
+                    {buttons.length > 0 &&
+                        buttons.map((btn, index) => {
+                            if (React.isValidElement(btn)) return <React.Fragment key={index}>{btn}</React.Fragment>;
 
-                        const { label, onClick, iconClass, className } = btn as ButtonConfig;
-                        return (
-                            <button
-                                key={index}
-                                className={`breadcrumb-btn ${className || ''}`}
-                                onClick={onClick}
-                            >
-                                {iconClass && <i className={iconClass}></i>}
-                                {label}
-                            </button>
-                        );
-                    })}
+                            const { label, onClick, iconClass, className } = btn as ButtonConfig;
+                            return (
+                                <button
+                                    key={index}
+                                    className={`breadcrumb-btn ${className || ''}`}
+                                    onClick={onClick}
+                                >
+                                    {iconClass && <i className={iconClass}></i>}
+                                    {label}
+                                </button>
+                            );
+                        })}
+                </div>
             </div>
 
-            {renderBreadcrumb && <p className="breadcrumbs-menu">{renderBreadcrumb()}</p>}
+            {renderBreadcrumb && <div className="breadcrumbs-menu">{renderBreadcrumb()}</div>}
 
             {renderMenuItems && tabData.length > 0 && (
                 <div id="top-level-tab-lists" className="current-tab-lists">

@@ -198,11 +198,11 @@ class FrontendScripts {
         $register_styles = apply_filters(
             'multivendorx_register_styles',
             array(
-				// 'multivendorx-frontend-style' => array(
-				// 	'src'     => MultiVendorX()->plugin_url . 'assets/styles/' . self::get_script_name( 'frontend' ) . '.css',
-				// 	'deps'    => array(),
-				// 	'version' => $version,
-				// ),
+				'multivendorx-frontend-style' => array(
+					'src'     => MultiVendorX()->plugin_url . 'assets/styles/' . self::get_script_name( 'frontend' ) . '.scss',
+					'deps'    => array(),
+					'version' => $version,
+				),
 			)
         );
         foreach ( $register_styles as $name => $props ) {

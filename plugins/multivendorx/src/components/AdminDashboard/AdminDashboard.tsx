@@ -12,6 +12,7 @@ import {
   PieChart, Pie, Cell, Legend
 } from 'recharts';
 import "./AdminDashboard.scss";
+import "../Dashboard.scss"
 
 const AdminDashboard = () => {
   const location = useLocation();

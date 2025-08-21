@@ -15,13 +15,15 @@ class Shortcode {
      */
     public function __construct() {
         add_shortcode( 'multivendorx_store_dashboard', [ $this, 'display_store_dashboard' ] );
+        add_action( 'wp_enqueue_scripts', [ $this, 'frontend_scripts' ] );
     }
 
     public function frontend_scripts() {
             wp_enqueue_script( 'wp-element' );
             FrontendScripts::load_scripts();
-            FrontendScripts::enqueue_script( 'multivendorx-dashboard-components-script' );
-            FrontendScripts::enqueue_script( 'multivendorx-dashboard-script' );
+            // FrontendScripts::enqueue_script( 'multivendorx-dashboard-components-script' );
+            // FrontendScripts::enqueue_script( 'multivendorx-dashboard-script' );
+            FrontendScripts::enqueue_style( 'multivendorx-frontend-style' );
     }
 
     public function display_store_dashboard() {

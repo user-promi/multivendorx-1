@@ -950,7 +950,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             <div className="settings-input-content">
                                 <BasicInput
                                     wrapperClass="settings-basic-input-class"
-                                    inputClass="btn default-btn"
+                                    inputClass="admin-btn btn-purple"
                                     descClass="settings-metabox-description"
                                     description={inputField.desc}
                                     name={inputField.name}
