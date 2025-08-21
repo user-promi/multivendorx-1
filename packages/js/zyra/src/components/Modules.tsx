@@ -158,109 +158,146 @@ const Modules: React.FC<ModuleProps> = ({
     };
 
     return (
-        <div className="module-container">
-            <Dialog
-                className="admin-module-popup"
-                open={modelOpen}
-                onClose={() => setModelOpen(false)}
-            >
-                <button
-                    className="admin-font adminlib-cross"
-                    onClick={() => setModelOpen(false)}
-                    aria-label="Close dialog"
-                ></button>
-                <Popoup
-                    proUrl={proPopupContent.proUrl}
-                    title={proPopupContent.title}
-                    messages={proPopupContent.messages}
-                />
-            </Dialog>
-
-            {successMsg && (
-                <div className="admin-notice-display-title">
-                    <i className="admin-font adminlib-icon-yes"></i>
-                    {successMsg}
-                </div>
-            )}
-
-            {/* <div className="tab-name">
-                <h2>Modules</h2>
-            </div> */}
-
+        <>
             <AdminBreadcrumbs
                 activeTabIcon="icon"
                 parentTabName="Modules"
             />
 
-            <div className="category-filter">
-                {/* <div className="module-status-filter">
+            <div className="module-container">
+                <Dialog
+                    className="admin-module-popup"
+                    open={modelOpen}
+                    onClose={() => setModelOpen(false)}
+                >
                     <button
-                        className={`filter-button ${selectedFilter === 'Total' ? 'active' : ''}`}
-                        onClick={() => setSelectedFilter('Total')}
-                    >
-                        Total Modules ({totalModules})
-                    </button>
-                    <button
-                        className={`filter-button ${selectedFilter === 'Active' ? 'active' : ''}`}
-                        onClick={() => setSelectedFilter('Active')}
-                    >
-                        Active Modules ({activeModules})
-                    </button>
-                    <button
-                        className={`filter-button ${selectedFilter === 'Inactive' ? 'active' : ''}`}
-                        onClick={() => setSelectedFilter('Inactive')}
-                    >
-                        Inactive Modules ({inactiveModules})
-                    </button>
-                </div> */}
-                {/* <div className="module-search">
-                    <label htmlFor="module-search">Search Modules: </label>
-                    <input
-                        id="module-search"
-                        type="text"
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        placeholder="Search by module name..."
+                        className="admin-font adminlib-cross"
+                        onClick={() => setModelOpen(false)}
+                        aria-label="Close dialog"
+                    ></button>
+                    <Popoup
+                        proUrl={proPopupContent.proUrl}
+                        title={proPopupContent.title}
+                        messages={proPopupContent.messages}
                     />
-                </div> */}
-                {modulesArray.category && categories.length > 1 && (
-                    <>
-                        {categories.map((category) => (
-                            <span
-                                key={category.id}
-                                id={category.id}
-                                className={`category-item ${selectedCategory === category.id ? 'active' : ''}`}
-                                onClick={() => setSelectedCategory(category.id)}
-                            >
-                                {category.label}
-                            </span>
-                        ))}
-                    </>
+                </Dialog>
+
+                {successMsg && (
+                    <div className="admin-notice-display-title">
+                        <i className="admin-font adminlib-icon-yes"></i>
+                        {successMsg}
+                    </div>
                 )}
-            </div>
 
-            <div className="module-option-row">
-                {filteredModules.map((item, index) => {
-                    if ('type' in item && item.type === 'separator') {
-                        return null;
-                    }
+                {/* <div className="tab-name">
+                    <h2>Modules</h2>
+                </div> */}
 
-                    const module = item as Module;
-                    const requiredPlugins = module.req_plugin || (module as any).req_pluging || [];
-                    return (
-                        <div className="module-list-item" key={module.id}>
-                            {module.pro_module && !appLocalizer.khali_dabba && (
-                                <span className="admin-pro-tag">Pro</span>
-                            )}
-                            <div className="module-body">
-                                <div className="module-header">
-                                    <div className="icon">
-                                        <i className={`font ${module.icon}`}></i>
+                <div className="category-filter">
+                    {/* <div className="module-status-filter">
+                        <button
+                            className={`filter-button ${selectedFilter === 'Total' ? 'active' : ''}`}
+                            onClick={() => setSelectedFilter('Total')}
+                        >
+                            Total Modules ({totalModules})
+                        </button>
+                        <button
+                            className={`filter-button ${selectedFilter === 'Active' ? 'active' : ''}`}
+                            onClick={() => setSelectedFilter('Active')}
+                        >
+                            Active Modules ({activeModules})
+                        </button>
+                        <button
+                            className={`filter-button ${selectedFilter === 'Inactive' ? 'active' : ''}`}
+                            onClick={() => setSelectedFilter('Inactive')}
+                        >
+                            Inactive Modules ({inactiveModules})
+                        </button>
+                    </div> */}
+                    {/* <div className="module-search">
+                        <label htmlFor="module-search">Search Modules: </label>
+                        <input
+                            id="module-search"
+                            type="text"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            placeholder="Search by module name..."
+                        />
+                    </div> */}
+                    {modulesArray.category && categories.length > 1 && (
+                        <>
+                            {categories.map((category) => (
+                                <span
+                                    key={category.id}
+                                    id={category.id}
+                                    className={`category-item ${selectedCategory === category.id ? 'active' : ''}`}
+                                    onClick={() => setSelectedCategory(category.id)}
+                                >
+                                    {category.label}
+                                </span>
+                            ))}
+                        </>
+                    )}
+                </div>
+
+                <div className="module-option-row">
+                    {filteredModules.map((item, index) => {
+                        if ('type' in item && item.type === 'separator') {
+                            return null;
+                        }
+
+                        const module = item as Module;
+                        const requiredPlugins = module.req_plugin || (module as any).req_pluging || [];
+                        return (
+                            <div className="module-list-item" key={module.id}>
+                                {module.pro_module && !appLocalizer.khali_dabba && (
+                                    <span className="admin-pro-tag">Pro</span>
+                                )}
+                                <div className="module-body">
+                                    <div className="module-header">
+                                        <div className="icon">
+                                            <i className={`font ${module.icon}`}></i>
+                                        </div>
+                                        <div className="pro-tag">
+                                            <i className="adminlib-pro-tab"></i>
+                                        </div>
+                                        {/* <div
+                                            className="toggle-checkbox"
+                                            data-tour={`${module.id}-showcase-tour`}
+                                        >
+                                            <input
+                                                type="checkbox"
+                                                className="woo-toggle-checkbox"
+                                                id={`toggle-switch-${module.id}`}
+                                                checked={modules.includes(module.id)}
+                                                onChange={(e) => handleOnChange(e, module.id)}
+                                            />
+                                            <label
+                                                htmlFor={`toggle-switch-${module.id}`}
+                                                className="toggle-switch-is_hide_cart_checkout"
+                                            ></label>
+                                        </div> */}
                                     </div>
-                                    <div className="pro-tag">
-                                        <i className="adminlib-pro-tab"></i>
+                                    <div className="module-details">
+                                        <div className="meta-name">{module.name}</div>
+                                        <p
+                                            className="meta-description"
+                                            dangerouslySetInnerHTML={{ __html: module.desc }}
+                                        ></p>
+                                        {requiredPlugins.length > 0 && (
+                                            <div className="requires">
+                                                <div className="requires-title">Requires:</div>
+                                                <p className="meta-description">{requiredPlugins.join(', ')}</p>
+                                            </div>
+                                        )}
                                     </div>
-                                    {/* <div
+                                </div>
+                                <div className="module-footer">
+                                    <div className="buttons">
+                                        <a href={module.doc_link}><i className="adminlib-book"></i></a>
+                                        <a href={module.video_link}><i className="adminlib-button-appearance"></i></a>
+                                    </div>
+                                    <div
                                         className="toggle-checkbox"
                                         data-tour={`${module.id}-showcase-tour`}
                                     >
@@ -275,49 +312,14 @@ const Modules: React.FC<ModuleProps> = ({
                                             htmlFor={`toggle-switch-${module.id}`}
                                             className="toggle-switch-is_hide_cart_checkout"
                                         ></label>
-                                    </div> */}
-                                </div>
-                                <div className="module-details">
-                                    <div className="meta-name">{module.name}</div>
-                                    <p
-                                        className="meta-description"
-                                        dangerouslySetInnerHTML={{ __html: module.desc }}
-                                    ></p>
-        {requiredPlugins.length > 0 && (
-            <div className="requires">
-                <div className="requires-title">Requires:</div>
-                <p className="meta-description">{requiredPlugins.join(', ')}</p>
-            </div>
-        )}
+                                    </div>
                                 </div>
                             </div>
-                            <div className="module-footer">
-                                <div className="buttons">
-                                    <a href={module.doc_link}><i className="adminlib-book"></i></a>
-                                    <a href={module.video_link}><i className="adminlib-button-appearance"></i></a>
-                                </div>
-                                <div
-                                    className="toggle-checkbox"
-                                    data-tour={`${module.id}-showcase-tour`}
-                                >
-                                    <input
-                                        type="checkbox"
-                                        className="woo-toggle-checkbox"
-                                        id={`toggle-switch-${module.id}`}
-                                        checked={modules.includes(module.id)}
-                                        onChange={(e) => handleOnChange(e, module.id)}
-                                    />
-                                    <label
-                                        htmlFor={`toggle-switch-${module.id}`}
-                                        className="toggle-switch-is_hide_cart_checkout"
-                                    ></label>
-                                </div>
-                            </div>
-                        </div>
-                    );
-                })}
+                        );
+                    })}
+                </div>
             </div>
-        </div>
+        </>
     );
 };
 
