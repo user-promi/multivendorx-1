@@ -11,6 +11,7 @@ import Popoup from './Popup';
 import { getApiLink, sendApiResponse } from '../utils/apiService';
 import '../styles/web/Modules.scss';
 import { useModules } from '../contexts/ModuleContext';
+import AdminBreadcrumbs from './AdminBreadcrumbs';
 
 // Types
 interface Module {
@@ -186,21 +187,10 @@ const Modules: React.FC<ModuleProps> = ({
                 <h2>Modules</h2>
             </div> */}
 
-            <div className="top-header">
-                <div className="left-section">
-                    <img
-                        className="brand-logo"
-                        src={brandImg}
-                        alt="Logo"
-                    />
-                </div>
-                <div className="right-section">
-                    <div className="search-field">
-                        <i className="adminlib-search"></i>
-                        <input type="text" className="basic-input" placeholder="Search Here" />
-                    </div>
-                </div>
-            </div>
+            <AdminBreadcrumbs
+                activeTabIcon="icon"
+                parentTabName="Modules"
+            />
 
             <div className="category-filter">
                 {/* <div className="module-status-filter">
