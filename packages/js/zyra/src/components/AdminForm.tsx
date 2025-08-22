@@ -241,7 +241,7 @@ interface InputField {
         sidebarActiveText?: string;
         sidebarActiveBg?: string;
     };
-    modal?: { icon: string; label: string; connected: boolean; desc: string; formFields: { key: string; type: 'text' | 'password' | 'number' | 'checkbox'; label: string; placeholder?: string }[] }[];
+    modal?: { icon: string; id: string; label: string; connected: boolean; desc: string; formFields: { key: string; type: 'text' | 'password' | 'number' | 'checkbox'; label: string; placeholder?: string }[] }[];
 
 }
 
