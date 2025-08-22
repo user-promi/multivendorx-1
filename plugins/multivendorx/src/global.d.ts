@@ -21,6 +21,7 @@ declare global {
         country_list: any;
         capabilities: any;
         custom_roles: any;
+        all_payments: any;
     }
 
     declare module '*.png';
