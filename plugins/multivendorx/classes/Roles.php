@@ -37,7 +37,7 @@ class Roles {
     }
 
 
-    public static function get_all_custom_roles() {
+    public static function multivendorx_get_roles() {
         $custom_roles = [
             'store_owner'       =>  __('Store Owner', 'multivendorx'),
             'store_manager'     =>  __('Store Manager', 'multivendorx'),

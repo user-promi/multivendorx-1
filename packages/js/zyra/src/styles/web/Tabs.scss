@@ -37,6 +37,12 @@
     .version-tag{
       display: flex;
       gap: 0.5rem;
+
+      .admin-badge{
+        i{
+          padding-right: 0.5rem;
+        }
+      }
     }
   }
 
@@ -96,7 +102,7 @@
   }
 }
 
-.admin-breadcrumbs {
+.title-section {
   margin: 0 2rem;
   padding: 1.5rem;
   background: #fff;
@@ -105,11 +111,13 @@
     padding: 0.5rem 0;
   }
 
-  .breadcrumbs-title {
+  .title-wrapper {
     font-size: 1.4rem;
     font-weight: 500;
-    margin-bottom: 0.875rem;
+    margin-bottom: 0;
     color: $text-color;
+    display: flex;
+    justify-content: space-between;
 
     i {
       margin-right: 0.5rem;
@@ -119,6 +127,8 @@
   }
 
   .breadcrumbs-menu {
+    padding-top: 0.938rem;
+
     a {
       color: $theme-color;
       font-weight: 500;
@@ -230,7 +240,7 @@
   color: #121116;
   line-height: 1.5;
   background-color: #fff;
-  padding: 2rem;
+  padding: 0 2rem 2rem;
 
   &.show-menu {
     .current-tab-lists {
@@ -261,6 +271,9 @@
     }
   }
 
+}
+.middle-child-container:has(.current-tab-lists){
+  padding-top: 2rem;
 }
 
 .current-tab-lists-container {
@@ -442,7 +455,7 @@
 
 
 
-.breadcrumbs-title {
+.title-wrapper {
   font-size: 1.125rem;
   font-weight: 500;
   margin-bottom: 0.425rem;

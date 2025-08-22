@@ -16,6 +16,7 @@
         "build:project:translation:domains": "wireit",
         "watch:build": "pnpm --if-present run \"/^watch:build:project:.*$/\"",
         "watch:build:project:bundle": "wireit",
+        "watch:build:project:minify": "wireit",
         "lint": "pnpm --if-present \"/^lint:lang:.*$/\"",
         "lint:fix": "pnpm --if-present \"/^lint:fix:.*$/\"",
         "lint:lang:js": "eslint . --ext .js,.jsx,.ts,.tsx",
@@ -84,6 +85,12 @@
                 "webpack.config.js"
             ],
             "service": true
+        },
+        "watch:build:project:minify": {
+            "command": "pnpm run minify",
+            "files": [
+                "src/**/*.{js,jsx,ts,tsx,scss}"
+            ]
         }
     },
     "dependencies": {
@@ -103,6 +110,7 @@
         "react-date-range": "^2.0.1",
         "react-dom": "^19.1.0",
         "react-router-dom": "^7.6.0",
+        "recharts": "^3.1.2",
         "ts-loader": "9.5.x",
         "typescript": "5.8.x",
         "wp-textdomain": "^1.0.1",

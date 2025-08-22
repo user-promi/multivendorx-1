@@ -88,7 +88,6 @@ class StoreUtil {
         return array_merge( $store, $meta );
     }
 
-
     public static function get_store_by_slug( $slug ) {
         global $wpdb;
         if ( empty( $slug ) ) return false;
@@ -97,6 +96,23 @@ class StoreUtil {
         $store = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$table} WHERE slug = %s", $slug ), ARRAY_A );
 
         return $store ?: false;
+    }
+
+    public static function get_store_by_name( $name ) {
+        global $wpdb;
+        if ( empty( $name ) ) return false;
+
+        $table = "{$wpdb->prefix}" . Utill::TABLES['store'];
+        $like = '%' . $wpdb->esc_like( $name ) . '%';
+        $store = $wpdb->get_results(
+            $wpdb->prepare(
+                "SELECT * FROM {$table} WHERE name LIKE %s",
+                $like
+            ),
+            ARRAY_A
+        );
+
+        return $store ?: [];
     }
 
     public static function get_store() {
@@ -192,6 +208,29 @@ class StoreUtil {
         ];
         
         return $capabilities;
+    }
+
+    public static function get_products_vendor( $product_id ) {
+        $vendor_data = false;
+        if ( $product_id > 0 ) {
+            $vendor = get_post_meta( $product_id, 'store_id', true );
+            $vendor_obj = self::get_store_by_id( $vendor );
+
+            if ( $vendor_obj ) {
+                $vendor_data = $vendor_obj;
+            }
+
+            if ( ! $vendor_data ) {
+                $product_obj = get_post( $product_id );
+                if ( is_object( $product_obj ) ) {
+                    $author_id = $product_obj->post_author;
+                    if ( $author_id ) {
+                        $vendor_data = self::get_store_by_id( $author_id );
+                    }
+                }
+            }
+        }
+        return $vendor_data;
     }
 
 }

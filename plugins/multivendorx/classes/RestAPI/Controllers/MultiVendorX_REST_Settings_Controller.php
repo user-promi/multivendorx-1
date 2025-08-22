@@ -98,12 +98,22 @@ class MultiVendorX_REST_Settings_Controller extends \WP_REST_Controller {
             }
 
             MultiVendorX()->setting->update_option( 'multivendorx_user_capability_settings', array_merge($user_cap, $result) );
-        }
+            
+            $role = get_role( 'store_owner' );
 
-        // Force refresh global $wp_roles for current request
-        global $wp_roles;
-        $wp_roles->for_site();
-        flush_rewrite_rules();
+            if ( $role ) {
+                // Remove all existing caps
+                foreach ( $role->capabilities as $cap => $grant ) {
+                    $role->remove_cap( $cap );
+                }
+
+                // Add fresh caps
+                foreach ( $store_owner_caps as $cap ) {
+                    $role->add_cap( $cap, true );
+                }
+            }
+        
+        }
 
         return $all_details;
     }

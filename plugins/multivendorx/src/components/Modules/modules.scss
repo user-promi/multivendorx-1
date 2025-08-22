@@ -91,7 +91,7 @@ $border-radius-button: 8rem;
     }
 
     .module-list-item {
-      flex: 0 0 20rem; // 3-column layout
+      flex: 0 0 19rem; // 3-column layout
       box-sizing: border-box;
       border: $border-light-small;
       border-radius: $border-radius-large;
@@ -144,6 +144,8 @@ $border-radius-button: 8rem;
           margin: 0.5rem 0;
           font-weight: 500;
           color: #000;
+          display: flex;
+          gap: 0.5rem;
         }
       }
 

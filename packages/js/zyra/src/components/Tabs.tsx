@@ -288,11 +288,11 @@ const Tabs: React.FC<TabsProps> = ({
                 renderBreadcrumb={renderBreadcrumb}
                 renderMenuItems={renderMenuItems}
                 tabData={tabData}
-                buttons={[
-                    { label: "Add New", onClick: () => alert("Add New clicked"), iconClass: "fa fa-plus" },
-                    { label: "Settings", onClick: () => alert("Settings clicked"), iconClass: "fa fa-cog" },
-                    <button key="custom" style={{ background: "red" }}>Custom JSX</button>
-                ]}
+                // buttons={[
+                //     { label: "Add New", onClick: () => alert("Add New clicked"), iconClass: "fa fa-plus" },
+                //     { label: "Settings", onClick: () => alert("Settings clicked"), iconClass: "fa fa-cog" },
+                //     <button key="custom" style={{ background: "red" }}>Custom JSX</button>
+                // ]}
             />
 
             {noticeHTML && (

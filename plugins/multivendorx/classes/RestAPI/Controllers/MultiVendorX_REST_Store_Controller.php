@@ -146,7 +146,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
         $id   = $request->get_param('id');
         $data = $request->get_json_params();
 
-        $updated = StoreUtil::update_store($id, [
+        $store_updated = StoreUtil::update_store($id, [
             'name'          => $data['name'] ?? '',
             'slug'          => $data['slug'] ?? '',
             'description'   => $data['description'] ?? '',
@@ -166,7 +166,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             'postcode'      => $data['postcode'] ?? '',
         ]);
 
-        if ($updated) {
+        if ($store_updated || $updated) {
             return rest_ensure_response(['success' => true, 'id' => $id]);
         }
     }
