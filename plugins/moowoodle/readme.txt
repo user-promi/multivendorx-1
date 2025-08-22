@@ -52,6 +52,9 @@ Take your eLearning platform to the next level with MooWoodle. Below are some of
 * 🧑‍🏫 Cohort Products – Automatically enroll users into Moodle LMS cohorts.
 * 🧩 Group by Variations – Let variation selection control Moodle group enrollment.
 * 🔄 Custom User Sync – Sync Moodle WordPress users with real-time updates.
+* 🌍 WPML Support – Deliver multilingual courses with global reach
+* 🔔 WooCommerce Subscription Support – Sell recurring course access
+* 📦 WooCommerce Bundle Support – Package multiple courses together
 
 ## ✌️ MooWoodle is the smart choice for:
 * 🎓 Educators and institutions already using Moodle who want to leverage WordPress to reach a broader audience.
