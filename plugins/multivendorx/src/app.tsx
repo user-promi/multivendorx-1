@@ -5,10 +5,11 @@ import Settings from './components/Settings/Settings';
 import Modules from './components/Modules/Modules';
 import Store from './components/Store/Store';
 import AdminDashboard from './components/AdminDashboard/AdminDashboard';
-import Membership from './components/Memberships/Membership';
 import Brand from './assets/images/mvx-brand-logo.png';
 import StatusAndTools from './components/StatusAndTools/StatusAndTools';
 import SetupWizard from './blocks/setupWizard/SetupWizard';
+import WorkBoard from './components/WorkBoard/workboard';
+import Memberships from './components/Membership/Membership';
 
 localStorage.setItem('force_multivendorx_context_reload', 'true');
 
@@ -20,7 +21,7 @@ const Route = () => {
                 <Settings id={'settings'} />
             )}
             {currentTab.get('tab') === 'memberships' && (
-                <Membership id='memberships' />
+                <Memberships/>
             )}
             {currentTab.get('tab') === 'status-tools' && (
                 <StatusAndTools id='status-tools' />
@@ -28,6 +29,9 @@ const Route = () => {
             {currentTab.get('tab') === 'modules' && <Modules />}
             {currentTab.get('tab') === 'stores' && (
                 <Store />
+            )}
+            {currentTab.get('tab') === 'work-board' && (
+                <WorkBoard />
             )}
             {currentTab.get('tab') === 'dashboard' && (
                 <AdminDashboard />

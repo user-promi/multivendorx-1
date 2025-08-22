@@ -27,7 +27,7 @@ class Payments {
     public function init_classes() {
         $this->providers = array(
 			'stripe'    => new MultiVendorX_Stripe_Payment(),
-			'paypal'    => new MultiVendorX_PayPal_Payment(),
+			// 'paypal'    => new MultiVendorX_PayPal_Payment(),
 		);
     }
 

@@ -81,7 +81,7 @@ class Admin {
                 ),
                 'work-board' => array(
                     'name'   => __( 'Work Board', 'multivendorx' ),
-                    'subtab' => '',
+                    'subtab' => 'activity-reminder',
                 ),
                 'stores' => array(
                     'name'   => __( 'Stores', 'multivendorx' ),
@@ -97,7 +97,7 @@ class Admin {
                 ),
                 'memberships' => array(
                     'name'   => __( 'Memberships', 'multivendorx' ),
-                    'subtab' => 'message-mail',
+                    'subtab' => 'payment-membership-message',
                 ),
                 'settings' => array(
                     'name'   => __( 'Settings', 'multivendorx' ),

@@ -11,6 +11,24 @@ import {
   ResponsiveContainer,
   PieChart, Pie, Cell, Legend
 } from 'recharts';
+
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import L from "leaflet";
+
+const salesByLocations = [
+  { name: "USA", coordinates: [40, -100], sales: 12000 },
+  { name: "India", coordinates: [22, 78], sales: 8500 },
+  { name: "UK", coordinates: [54, -2], sales: 6700 },
+  { name: "Germany", coordinates: [51, 10], sales: 5400 },
+  { name: "Australia", coordinates: [-25, 133], sales: 4300 },
+];
+
+// Custom marker icon (optional)
+const salesIcon = new L.DivIcon({
+  className: "custom-marker",
+  html: `<div style="background:#5007aa;color:#fff;border-radius:50%;padding:6px 10px;font-size:12px;">$</div>`,
+});
+
 import "./AdminDashboard.scss";
 import "../Dashboard.scss"
 
@@ -139,22 +157,96 @@ const AdminDashboard = () => {
             </ResponsiveContainer>
           </div>
           <div className="column w-35">
-            <h3>Quick Actions</h3>
-            <div className="action-btn-wrapper">
-              <button className="admin-btn btn-purple">Add Vendor</button>
-              <button className="admin-btn btn-purple">Approve Products</button>
-              <button className="admin-btn btn-purple">Process Payouts</button>
-              <button className="admin-btn btn-purple">Send Notifications</button>
-              <button className="admin-btn btn-purple">Generate Reports</button>
-              <button className="admin-btn btn-purple">Manage Settings</button>
-            </div>
-
+            <h3>Sales by Locations</h3>
+            <MapContainer
+              center={[20, 0]}
+              zoom={2}
+              style={{ height: "300px", width: "100%" }}
+            >
+              <TileLayer
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+              />
+              {salesByLocations.map(({ name, coordinates, sales }) => (
+                <Marker
+                  key={name}
+                  position={coordinates as [number, number]}
+                  icon={salesIcon}
+                >
+                  <Popup>
+                    <strong>{name}</strong>
+                    <br />
+                    Sales: ${sales}
+                  </Popup>
+                </Marker>
+              ))}
+            </MapContainer>
           </div>
         </div>
 
         <div className="row">
-          
+          <div className="column">
+            <h3>Best Selling Products</h3>
 
+            <div className="activity-wrapper">
+              <div className="activity">
+                <span className="icon">
+                  <i className="adminlib-cart"></i>
+                </span>
+                <div className="details">
+                  New product "Wireless Gaming Headset" added by TechWorld
+                  <span>2 minutes ago</span>
+                </div>
+              </div>
+              <div className="activity">
+                <span className="icon">
+                  <i className="adminlib-star"></i>
+                </span>
+                <div className="details">
+                  5-star review received for "Smartphone Case" by MobileGear
+                  <span>2 minutes ago</span>
+                </div>
+              </div>
+              <div className="activity">
+                <span className="icon">
+                  <i className="adminlib-global-community"></i>
+                </span>
+                <div className="details">
+
+                  New vendor "Fashion Forward" completed registration
+                  <span>2 minutes ago</span>
+                </div>
+              </div>
+              <div className="activity">
+                <span className="icon">
+                  <i className="adminlib-cart"></i>
+                </span>
+                <div className="details">
+                  Commission payment of $2,847 processed for ElectroHub
+                  <span>2 minutes ago</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div className="column ">
+            <div className="chart-wrapper">
+              <h3>System Overview</h3>
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart data={overviewData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <Tooltip />
+                  <Bar dataKey="value" fill="#5007aa" barSize={40} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+        </div>
+
+
+        <div className="row">
           <div className="column">
             <h3>Recent Activity</h3>
 
@@ -192,7 +284,7 @@ const AdminDashboard = () => {
                   <i className="adminlib-cart"></i>
                 </span>
                 <div className="details">
-                Commission payment of $2,847 processed for ElectroHub
+                  Commission payment of $2,847 processed for ElectroHub
                   <span>2 minutes ago</span>
                 </div>
               </div>
@@ -212,28 +304,6 @@ const AdminDashboard = () => {
                 </BarChart>
               </ResponsiveContainer>
             </div>
-
-            {/* <div className="chart-box">
-              <h3>System Overview</h3>
-              <ResponsiveContainer width="100%" height={250}>
-                <PieChart>
-                  <Pie
-                    data={overviewData}
-                    cx="50%"
-                    cy="50%"
-                    outerRadius={80}
-                    dataKey="value"
-                    label
-                  >
-                    {overviewData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                  <Legend />
-                </PieChart>
-              </ResponsiveContainer>
-            </div> */}
           </div>
         </div>
 

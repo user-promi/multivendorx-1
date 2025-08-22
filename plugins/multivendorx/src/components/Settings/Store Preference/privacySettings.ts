@@ -14,8 +14,8 @@ export default {
         {
             key: 'store_page_details',
             type: 'checkbox',
-            label: __( 'Store Details on Products', 'multivendorx' ),
-            desc: __( 'Decide which store details appear alongside products in the marketplace, such as store name, logo, and order breakdown.', 'multivendorx' ),
+            label: __( 'Store Info on Products', 'multivendorx' ),
+            desc: __( 'Controls what store information (name, logo, address) is displayed on product listings and detail pages.', 'multivendorx' ),
             class: 'mvx-toggle-checkbox',
             options: [
                 {
@@ -42,8 +42,8 @@ export default {
         {
             key: 'store_page_details',
             type: 'checkbox',
-            label: __( 'Store Info in Cart & Checkout', 'multivendorx' ),
-            desc: __( 'Control which store information is visible during shopping and checkout.', 'multivendorx' ),
+            label: __( 'Store-Wise Order Display', 'multivendorx' ),
+            desc: __( 'Controls whether customers see orders grouped by vendor in cart, checkout, and confirmation emails.', 'multivendorx' ),
             class: 'mvx-toggle-checkbox',
             options: [
                 {
@@ -63,19 +63,10 @@ export default {
             selectDeselect: true,
         },
         {
-            key: 'separator_store_page_details',
-            type: 'section',
-            desc: __( 'What Customers See on Store Page', 'multivendorx' ),
-            hint: __(
-                'Control which store information is visible on the store’s store page.',
-                'multivendorx'
-            ),
-        },
-        {
             key: 'store_page_details',
             type: 'checkbox',
-            label: __( 'Store page deatils', 'multivendorx' ),
-            desc: __( 'Manage store information visibility on the store page.', 'multivendorx' ),
+            label: __( 'Vendor Contact Display', 'multivendorx' ),
+            desc: __( 'Controls whether vendors contact and support details are visible to customers during checkout and in emails.', 'multivendorx' ),
             class: 'mvx-toggle-checkbox',
             options: [
                 {
@@ -107,19 +98,10 @@ export default {
             selectDeselect: true,
         },
         {
-            key: 'separator_store_policy_override',
-            type: 'section',
-            desc: __( 'Allow stores to set or override the default store policies', 'multivendorx' ),
-            hint: __(
-                'Policies.',
-                'multivendorx'
-            ),
-        },
-        {
             key: 'store_policy_override',
             type: 'checkbox',
-            label: __( 'Allow store-specific policies', 'multivendorx' ),
-            desc: __( 'Select which marketplace policies vendors can replace with their own, such as store rules, shipping terms, or refund and return policies.', 'multivendorx' ),
+            label: __( 'Vendor Policy Override', 'multivendorx' ),
+            desc: __( 'Allows vendors to set their own store policies instead of using the default admin policies.', 'multivendorx' ),
             class: 'mvx-toggle-checkbox',
             options: [
                 {
