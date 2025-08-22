@@ -233,8 +233,9 @@ This project might have bugs and may be lacking certain features. If you'd like 
 
 == Changelog ==
 
-= 3.3.4 - 2025-08-05 =
-* Added     - WPML Support for emails.
+= 3.3.4 - 2025-08-22 =
+* Added     - Compatibility of WooCommerce 10.1.1.
+* Fixed     - Translation issue with Loco Translate.
 
 = 3.3.3 - 2025-07-25 =
 * Added     - Compatibility of WooCommerce 10.0.4.
