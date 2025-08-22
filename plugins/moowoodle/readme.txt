@@ -13,7 +13,7 @@ Moodle LMS integration with WordPress to sell Moodle courses through WooCommerce
 
 == Description ==
 
-### MooWoodle - Most Recommended WordPress Moodle Integration Bridge to sell Moodle courses online.###
+### MooWoodle - Most Recommended WordPress Moodle LMS Integration Bridge to sell Moodle courses online.###
 
 MooWoodle is the most recommended Moodle LMS integration plugin for WordPress. It allows you to sell Moodle courses from your WordPress site using WooCommerce and manage everything from course listings to student enrollments with ease.
 
