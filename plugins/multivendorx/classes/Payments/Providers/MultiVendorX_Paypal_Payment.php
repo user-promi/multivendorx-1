@@ -4,36 +4,36 @@ namespace MultiVendorX\Payments\Providers;
 
 defined('ABSPATH') || exit;
 
-class MultiVendorX_Stripe_Payment {
+class MultiVendorX_PayPal_Payment {
     public function get_id() {
-        return 'stripe';
+        return 'paypal';
     }
 
     public function get_settings() {
         return [
-            'icon'      => 'ST',
+            'icon'      => 'PP',
             'id'        => $this->get_id(),
-            'label'     => 'Stripe Connect',
-            'connected' => true,
-            'desc'      => 'Full marketplace solution with instant payouts, comprehensive dispute handling, and global coverage. Best for established marketplaces.',
+            'label'     => 'PayPal',
+            'connected' => false,
+            'desc'      => 'Secure global payments with PayPal integration.',
             'formFields' => [
                 [
-                    'key'   => 'payment_mode',
+                    'key'   => 'environment',
                     'type'  => 'setting-toggle',
-                    'label' => __('Payment Mode', 'multivendorx'),
+                    'label' => __('Environment', 'multivendorx'),
                     'options' => [
-                        ['key' => 'test', 'label' => __('Test', 'multivendorx'), 'value' => 'test'],
+                        ['key' => 'sandbox', 'label' => __('Sandbox', 'multivendorx'), 'value' => 'sandbox'],
                         ['key' => 'live', 'label' => __('Live', 'multivendorx'), 'value' => 'live'],
                     ]
                 ],
                 [
-                    'key'         => 'api_key',
+                    'key'         => 'client_id',
                     'type'        => 'text',
-                    'label'       => 'API Key',
-                    'placeholder' => 'Enter API Key',
+                    'label'       => 'Client ID',
+                    'placeholder' => 'Enter Client ID',
                 ],
                 [
-                    'key'         => 'secret_key',
+                    'key'         => 'secret',
                     'type'        => 'password',
                     'label'       => 'Secret Key',
                     'placeholder' => 'Enter Secret Key',

@@ -295,7 +295,8 @@ class FrontendScripts {
                 'user-capability',
                 'store-capability',
                 'identity-verification',
-                'commission-rule'
+                'commission-rule',
+                'payment-integration'
             )
 		);
 
@@ -361,6 +362,7 @@ class FrontendScripts {
                         'default_logo'             => MultiVendorX()->plugin_url.'assets/images/WP-stdavatar.png',
                         'capabilities'             => StoreUtil::get_store_capability(),
                         'custom_roles'             => Roles::multivendorx_get_roles(),
+                        'all_payments'             => MultiVendorX()->payments->all_payment_providers(),
 					),
                 ),
                 'multivendorx-product-tab-script' => array(
