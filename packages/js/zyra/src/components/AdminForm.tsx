@@ -207,6 +207,7 @@ interface InputField {
     labelAfterInput?: boolean,
     single?: boolean;
     center?: Center;
+    buttonEnable?:boolean
     nestedFields?: {
         key: string;
         type: 'number' | 'select';
@@ -1980,6 +1981,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             apilink={String(inputField.apiLink)}
                             appLocalizer={appLocalizer}
                             methods={inputField.modal ?? []}
+                            buttonEnable={inputField.buttonEnable}
                             value={value || {}}
                             onChange={(data) => {
                                 settingChanged.current = true;
@@ -1988,10 +1990,6 @@ const AdminForm: React.FC<AdminFormProps> = ({
                         />
                     );
                     break;
-
-
-
-
             }
 
             return inputField.type === 'section' ||

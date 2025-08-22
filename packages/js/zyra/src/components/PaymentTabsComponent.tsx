@@ -28,6 +28,7 @@ interface PaymentMethod {
     connected: boolean;
     desc: string;
     formFields: PaymentFormField[];
+    toggleType?: 'icon' | 'checkbox';
 }
 
 interface PaymentTabsComponentProps {
@@ -39,6 +40,7 @@ interface PaymentTabsComponentProps {
     methods: PaymentMethod[];
     value: Record<string, any>;
     onChange: (data: Record<string, any>) => void;
+    buttonEnable?:boolean
 }
 
 const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
@@ -49,7 +51,8 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
     appLocalizer,
     methods,
     value,
-    onChange
+    onChange,
+    buttonEnable=false
 }) => {
     const [activeTab, setActiveTab] = useState<string | null>(null);
     const [enabledMethod, setEnabledMethod] = useState<string | null>(null);
@@ -87,7 +90,7 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
                             </div>
                         </div>
 
-                        {!value?.[method.id]?.enable ? (
+                        {buttonEnable && !value?.[method.id]?.enable ? (
                             <button
                                 type="button"
                                 onClick={(e) => {
@@ -112,7 +115,6 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
                                 <i className="adminlib-pagination-right-arrow"></i>
                             </div>
                         )}
-
 
                     {/* {enabledMethod === method.id && (
                         <div
