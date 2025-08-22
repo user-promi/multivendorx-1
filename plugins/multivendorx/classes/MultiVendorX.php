@@ -123,11 +123,11 @@ final class MultiVendorX {
         $this->container['roles']           = new Roles();
         $this->container['filters']         = new Deprecated\DeprecatedFilterHooks();
         $this->container['actions']         = new Deprecated\DeprecatedActionHooks();
-        $this->container['commission']      = new Commission\CommissionManager();
+        // $this->container['commission']      = new Commission\CommissionManager();
+        $this->container['order']           = new Order\OrderManager();
         $this->container['rest']            = new RestAPI\Rest();
         $this->container['payments']        = new Payments\Payments();
-        $this->container['rewrites']        = new Store\Rewrites();
-        $this->container['storeutil']        = new Store\StoreUtil();
+        $this->container['store']           = new Store\Store();
         flush_rewrite_rules();
 
     }

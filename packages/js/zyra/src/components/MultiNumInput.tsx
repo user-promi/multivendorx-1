@@ -19,7 +19,7 @@ interface MultiNumInputProps {
     parentWrapperClass?: string;
     childWrapperClass?: string;
     options: MultiNumOption[];
-    value?: { key: string; value: string | number }[];
+    value?: { key: string; value: string | number }[] | Record<string, { key: string; value: string | number }>;
     inputWrapperClass?: string;
     innerInputWrapperClass?: string;
     inputLabelClass?: string;
@@ -55,17 +55,25 @@ const MultiNumInput: React.FC<MultiNumInputProps> = ({
     labelAfterInput = false,
     onChange,
 }) => {
+    // Normalize value to always be an array
+    const valueArray: { key: string; value: string | number }[] = Array.isArray(value)
+        ? value
+        : typeof value === 'object' && value !== null
+        ? Object.values(value)
+        : [];
+
     return (
         <div className={parentWrapperClass}>
             <div className={childWrapperClass}>
                 {options.map((option, index) => {
                     const selectedValue =
-                        value.find((val) => val.key === option.key)?.value ?? '';
+                        valueArray.find((val) => val.key === option.key)?.value ?? '';
 
                     const isLabelAfterInput =
                         typeof option.labelAfterInput === 'boolean'
                             ? option.labelAfterInput
                             : labelAfterInput;
+
                     const labelJSX = (
                         <div className="input-unit">
                             {option.label}
@@ -112,7 +120,7 @@ const MultiNumInput: React.FC<MultiNumInputProps> = ({
                         ) : (
                             <input
                                 id={`${idPrefix}-${option.key}`}
-                                className={`${inputClass} basic-input`}
+                                className={`${inputClass}`}
                                 type={option.type || 'text'}
                                 name={option.name}
                                 value={selectedValue}
@@ -127,7 +135,6 @@ const MultiNumInput: React.FC<MultiNumInputProps> = ({
                             key={option.key}
                             className={`${inputWrapperClass} ${isLabelAfterInput ? 'suffix' : 'prefix'}`}
                         >
-
                             <div className={innerInputWrapperClass}>
                                 {!isLabelAfterInput && labelJSX}
                                 {inputJSX}
@@ -141,7 +148,7 @@ const MultiNumInput: React.FC<MultiNumInputProps> = ({
                             {/* Per-option description */}
                             {option.desc && (
                                 <p
-                                    className={descClass}
+                                    className={`${descClass} settings-metabox-description`}
                                     dangerouslySetInnerHTML={{
                                         __html: option.desc,
                                     }}
@@ -155,7 +162,7 @@ const MultiNumInput: React.FC<MultiNumInputProps> = ({
             {/* Component-level description */}
             {description && (
                 <p
-                    className={descClass}
+                    className={`${descClass} settings-metabox-description`}
                     dangerouslySetInnerHTML={{ __html: description }}
                 ></p>
             )}

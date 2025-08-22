@@ -1,7 +1,7 @@
 import { render } from '@wordpress/element';
 import { BrowserRouter, HashRouter } from 'react-router-dom';
 import App from './app';
-import Dashboard from './dashboard';
+import replaceDashboardDivs from './storeDashboard';
 import 'zyra/build/index.css';
 
 // Render the App component into the DOM
@@ -24,14 +24,7 @@ if ( adminWrapper ) {
 }
 
 // 2. Try to mount vendor dashboard if element is found
-const vendorWrapper = document.getElementById(
-    'multivendorx-vendor-dashboard'
-);
-if ( vendorWrapper ) {
-    render(
-        <HashRouter>
-            <Dashboard />
-        </HashRouter>,
-        vendorWrapper
-    );
-}
+const vendorWrapper = document.querySelector('.dashboard-content')
+if (vendorWrapper) {
+    replaceDashboardDivs(vendorWrapper as HTMLElement);
+  }

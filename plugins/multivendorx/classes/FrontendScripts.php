@@ -42,19 +42,6 @@ class FrontendScripts {
     }
 
     /**
-	 * Get the script file name based on environment.
-	 *
-	 * @param string $name The base name of the script file (without `.js` or `.min.js`).
-	 * @return string Script name to use for enqueueing.
-	 */
-    public static function get_script_name( $name ) {
-        if ( MultiVendorX()->is_dev ) {
-			return $name;
-        }
-        return MULTIVENDORX_PLUGIN_SLUG . '-' . $name . '.min';
-    }
-
-    /**
 	 * Get the build path for assets based on environment.
 	 *
 	 * @return string Relative path to the build directory.
@@ -198,11 +185,11 @@ class FrontendScripts {
         $register_styles = apply_filters(
             'multivendorx_register_styles',
             array(
-				// 'multivendorx-frontend-style' => array(
-				// 	'src'     => MultiVendorX()->plugin_url . 'assets/styles/' . self::get_script_name( 'frontend' ) . '.css',
-				// 	'deps'    => array(),
-				// 	'version' => $version,
-				// ),
+				'multivendorx-dashboard-style' => array(
+					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'styles/index.css',
+					'deps'    => array(),
+					'version' => $version,
+				),
 			)
         );
         foreach ( $register_styles as $name => $props ) {
@@ -249,6 +236,11 @@ class FrontendScripts {
 					'src'         => MultiVendorX()->plugin_url . self::get_build_path_name() . 'js/components.js',
 					'deps'        => $component_asset['dependencies'],
 					'version'     => $version,
+				),
+                'multivendorx-product-tab-script' => array(
+					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'js/' . MULTIVENDORX_PLUGIN_SLUG . '-product-tab.min.js',
+					'deps'    => array( 'jquery', 'jquery-blockui', 'wp-element', 'wp-i18n', 'react-jsx-runtime' ),
+					'version' => $version,
 				),
             )
         );
@@ -302,7 +294,9 @@ class FrontendScripts {
                 'product-report-abuse',
                 'user-capability',
                 'store-capability',
-                'identity-verification'
+                'identity-verification',
+                'commission-rule',
+                'payment-integration'
             )
 		);
 
@@ -367,9 +361,17 @@ class FrontendScripts {
                         'country_list'             => $country_list,
                         'default_logo'             => MultiVendorX()->plugin_url.'assets/images/WP-stdavatar.png',
                         'capabilities'             => StoreUtil::get_store_capability(),
-                        'custom_roles'             => Roles::get_all_custom_roles(),
+                        'custom_roles'             => Roles::multivendorx_get_roles(),
+                        'all_payments'             => MultiVendorX()->payments->all_payment_providers(),
 					),
-                )
+                ),
+                'multivendorx-product-tab-script' => array(
+					'object_name' => 'multivendorx',
+					'data'        => array(
+						'ajaxurl'     => admin_url( 'admin-ajax.php' ),
+						'select_text' => __( 'Select an item...', 'multivendorx' ),
+					),
+				),
 			)
         );
 

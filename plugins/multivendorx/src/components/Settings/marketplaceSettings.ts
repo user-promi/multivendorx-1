@@ -18,7 +18,18 @@ export default {
     },
     icon: 'adminlib-general-tab',
     submitUrl: 'settings',
-    modal: [     
+    modal: [    
+        // {
+        //     key: 'store_url',
+        //     type: 'range',
+        //     desc: __(
+        //         'Define the custom slug for the store URL. For example, in the URL: https://yourdomain.com/store/[this-text]/[store-name], "[this-text]" will be replaced by the slug you set here.',
+        //         'multivendorx'
+        //     ),
+        //     min:0,
+        //     max:100,
+        //     label: __( 'Store URL', 'multivendorx' ),
+        // }, 
         {
             key: 'store_registration_page',
             type: 'select',
@@ -27,6 +38,7 @@ export default {
                 'Select the page where you have inserted the <code>[store_registration]</code> shortcode. This page will be used to onboard new stores.',
                 'multivendorx'
             ),
+            className:"select-class",
             options: appLocalizer.pages_list,
         },
         {
@@ -171,14 +183,5 @@ export default {
                 },
             ],
         },
-        {
-            key: 'section',
-            type: 'section',
-            hint: __(
-                'Blocks and widgets',
-                'multivendorx'
-            ),
-        },
-
     ],
 };

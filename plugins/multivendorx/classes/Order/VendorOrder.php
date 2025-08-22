@@ -31,7 +31,7 @@ class VendorOrder {
             $this->order = wc_get_order( $this->id );
         }
 
-        $this->vendor_id = $this->order ? absint( $this->order->get_meta( '_vendor_id', true) ) : 0;
+        $this->vendor_id = $this->order ? absint( $this->order->get_meta( 'store_id', true) ) : 0;
     }
 
     /**

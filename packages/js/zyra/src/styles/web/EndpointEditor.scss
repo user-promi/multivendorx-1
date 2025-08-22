@@ -12,19 +12,16 @@
                 justify-content: space-between;
                 border: $border-theme-small;
                 padding: 0.8rem 1rem;
-                margin-bottom: 0.5rem;
                 cursor: move;
 
                 .name-wrapper {
                     display: flex;
                     align-items: center;
-                    gap: 1rem;
+                    gap: 0.5rem;
 
                     i {
-                        color: $theme-color;
-                        font-size: 1.313rem;
+                        font-size: 1.125rem;
                     }
-
                     .name {
                         font-size: 0.9rem;
                         font-weight: 500;
@@ -60,6 +57,13 @@
                     background: #fff;
                 }
             }
+
+            .adminlib-move{
+                margin-right: 0.5rem;
+                color: $theme-color;
+                font-size: 1.313rem;
+            }
+
             &:has(.main-menu:hover),
                 &:has(.edit-menu:hover) {
                     background: #e8e8e8;
@@ -69,8 +73,7 @@
 
                 li {
                     padding: 0.8rem 1rem;
-                    margin-left: 2rem;
-                    margin-bottom: 0.5rem;
+                    margin: 0.5rem 0 0 2rem;
                     border: $border-theme-small;
                     cursor: move;
 

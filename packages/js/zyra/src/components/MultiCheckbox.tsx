@@ -1,7 +1,4 @@
-/**
- * External dependencies
- */
-import React, { ChangeEvent, MouseEvent, useEffect, useRef } from 'react';
+import React, { ChangeEvent, MouseEvent } from 'react';
 
 // Types
 interface Option {
@@ -13,7 +10,7 @@ interface Option {
     name?: string;
     proSetting?: boolean;
     hints?: string;
-    desc?:string;
+    desc?: string;
 }
 
 interface MultiCheckBoxProps {
@@ -23,7 +20,7 @@ interface MultiCheckBoxProps {
     selectDeselectValue?: string;
     onMultiSelectDeselectChange?: (
         e: ChangeEvent<HTMLInputElement> | MouseEvent<HTMLButtonElement | HTMLInputElement>
-    ) => void;    
+    ) => void;
     options: Option[];
     value?: string[];
     inputWrapperClass?: string;
@@ -45,18 +42,12 @@ interface MultiCheckBoxProps {
 }
 
 const MultiCheckBox: React.FC<MultiCheckBoxProps> = (props) => {
-
     const allSelected = props.value?.length === props.options.length;
     const selectedCount = props.value?.length ?? 0;
 
-    const handleCheckboxChange = (
-        directionValue: string,
-        isChecked: boolean
-    ) => {
+    const handleCheckboxChange = (directionValue: string, isChecked: boolean) => {
         let updatedValue = [...(props.value as string[])];
-        updatedValue = updatedValue.filter(
-            (element) => element !== directionValue
-        );
+        updatedValue = updatedValue.filter((element) => element !== directionValue);
 
         if (isChecked) {
             updatedValue.push(directionValue);
@@ -76,7 +67,7 @@ const MultiCheckBox: React.FC<MultiCheckBoxProps> = (props) => {
                             type="checkbox"
                             checked={allSelected}
                             onChange={(e) => props.onMultiSelectDeselectChange?.(e)}
-                            className={ !allSelected && selectedCount > 0 ? 'minus-icon':''}
+                            className={!allSelected && selectedCount > 0 ? 'minus-icon' : ''}
                         />
                         <span className="">{selectedCount} items</span>
                     </div>
@@ -90,6 +81,22 @@ const MultiCheckBox: React.FC<MultiCheckBoxProps> = (props) => {
                     <div
                         key={option.key}
                         className={props.inputWrapperClass}
+                        onClick={(e) => {
+                            // Prevent triggering when clicking input or label
+                            const tag = (e.target as HTMLElement).tagName;
+                            if (tag === 'INPUT' || tag === 'LABEL') return;
+
+                            if (props.type === 'checkbox-custom-img') {
+                                handleCheckboxChange(option.value, !checked);
+                            } else if (option.proSetting && !props.khali_dabba) {
+                                props.proChanged?.();
+                            } else {
+                                const syntheticEvent = {
+                                    target: { value: option.value, checked: !checked },
+                                } as unknown as ChangeEvent<HTMLInputElement>;
+                                props.onChange?.(syntheticEvent);
+                            }
+                        }}
                     >
                         {props.rightContent && (
                             <p
@@ -106,31 +113,20 @@ const MultiCheckBox: React.FC<MultiCheckBoxProps> = (props) => {
                             <input
                                 className={props.inputClass}
                                 id={`${props.idPrefix}-${option.key}`}
-                                type={
-                                    props.type?.split('-')[0] || 'checkbox'
-                                }
+                                type={props.type?.split('-')[0] || 'checkbox'}
                                 name={option.name || 'basic-input'}
                                 value={option.value}
                                 checked={checked}
                                 onChange={(e) => {
-                                    if (
-                                        props.type === 'checkbox-custom-img'
-                                    ) {
-                                        handleCheckboxChange(
-                                            option.value,
-                                            e.target.checked
-                                        );
-                                    } else if (
-                                        option.proSetting &&
-                                        !props.khali_dabba
-                                    ) {
+                                    if (props.type === 'checkbox-custom-img') {
+                                        handleCheckboxChange(option.value, e.target.checked);
+                                    } else if (option.proSetting && !props.khali_dabba) {
                                         props.proChanged?.();
                                     } else {
                                         props.onChange?.(e);
                                     }
                                 }}
                             />
-                            { /* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
                             {props.type === 'checkbox-custom-img' ? (
                                 <>
                                     <div
@@ -139,42 +135,35 @@ const MultiCheckBox: React.FC<MultiCheckBoxProps> = (props) => {
                                     >
                                         <img src={option.img1} alt="" />
                                     </div>
-                                    <p className="custom-img-label">
-                                        {option.label}
-                                    </p>
+                                    <p className="custom-img-label">{option.label}</p>
                                 </>
                             ) : (
-                                // eslint-disable-next-line jsx-a11y/label-has-associated-control
-                                <label
-                                    htmlFor={`${props.idPrefix}-${option.key}`}
-                                >{option.label }</label>
+                                <label htmlFor={`${props.idPrefix}-${option.key}`}>
+                                    {option.label}
+                                </label>
                             )}
                         </div>
 
-                        {!props.rightContent &&
-                            props.type !== 'checkbox-custom-img' && (
-                                <p
-                                    className={props.rightContentClass}
-                                    dangerouslySetInnerHTML={{
-                                        __html: option.desc ?? '',
-                                    }}
-                                ></p>
-                            )}
+                        {!props.rightContent && props.type !== 'checkbox-custom-img' && (
+                            <p
+                                className={props.rightContentClass}
+                                dangerouslySetInnerHTML={{ __html: option.desc ?? '' }}
+                            ></p>
+                        )}
                         {option.proSetting && !props.khali_dabba && (
                             <span className="admin-pro-tag">Pro</span>
                         )}
                         {option.hints && (
                             <span
                                 className={props.hintOuterClass}
-                                dangerouslySetInnerHTML={{
-                                    __html: option.hints,
-                                }}
+                                dangerouslySetInnerHTML={{ __html: option.hints }}
                             ></span>
                         )}
                         {props.proSetting && <span className="admin-pro-tag">Pro</span>}
                     </div>
                 );
             })}
+
             {props.description && (
                 <p
                     className={props.descClass}

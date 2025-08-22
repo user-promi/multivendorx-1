@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
-import { BasicInput, TextArea, FileInput, getApiLink } from 'zyra';
+import { BasicInput, TextArea, FileInput, getApiLink, AdminBreadcrumbs } from 'zyra';
 import Default from '../../assets/images/default.png';
 import BannerDefault from '../../assets/images/banner-placeholder.jpg';
 import "./Store.scss";
@@ -38,6 +38,11 @@ const AddStore = () => {
   };
 
   const handleSubmit = () => {
+    if (!formData || Object.keys(formData).length === 0) {
+      return;
+    }
+
+
     axios({
       method: 'POST',
       url: getApiLink(appLocalizer, 'store'),
@@ -56,13 +61,18 @@ const AddStore = () => {
 
   return (
     <>
-      <h3>Add New Store</h3>
-      <Link
-        to="?page=multivendorx#&tab=stores"
-        className="admin-btn btn-purple"
-      >
-        Back
-      </Link>
+      <AdminBreadcrumbs
+        activeTabIcon="icon"
+        parentTabName="Add New Store"
+        buttons={[
+          {
+            label: 'Back',
+            onClick: () => window.location.assign('?page=multivendorx#&tab=stores'),
+            className: 'admin-btn btn-purple'
+          }
+        ]}
+      />
+
 
 
       <div className="container-wrapper">
