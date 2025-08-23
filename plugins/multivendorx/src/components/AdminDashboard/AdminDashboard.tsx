@@ -68,6 +68,37 @@ const AdminDashboard = () => {
     { text: "Set up product capabilities", active: true },
     { text: "Set up allowed product types", active: true },
   ];
+  const resources = [
+    {
+      title: "Documentation",
+      desc: "Step-by-step guides to set up and manage your marketplace.",
+      iconClass: "icon-book",
+      linkText: "Explore Docs",
+      href: "#",
+    },
+    {
+      title: "Expert Consultation",
+      desc: "Get tailored advice from our marketplace specialists.",
+      iconClass: "icon-dart",
+      linkText: "Book Consultation",
+      href: "#",
+    },
+    {
+      title: "Developer Community",
+      desc: "Connect with our team and fellow builders on Discord.",
+      iconClass: "icon-speech",
+      linkText: "Join Discord",
+      href: "#",
+    },
+    {
+      title: "Facebook Group",
+      desc: "Share experiences and tips with other marketplace owners.",
+      iconClass: "icon-users",
+      linkText: "Join Group",
+      href: "#",
+    },
+  ];
+
   const quickLinks = [
     { text: "Add Vendor", iconClass: "icon-add", href: "#" },
     { text: "Commission", iconClass: "icon-commission", href: "#" },
@@ -298,49 +329,35 @@ const AdminDashboard = () => {
           </div>
 
           <div className="column chart-wrapper">
-            <div className="row chart-row">
-              {/* Left column - 60% */}
-              <div className="column left-column">
-                <div className="row upper-row">
-                  {/* Upper-left: Documentation Forum */}
-                  <div className="column upper-left">
-                    <h3>Documentation Forum</h3>
-                    <p>
-                      Learn more about marketplace features and settings by accessing
-                      our documentation forum.
-                    </p>
-                    <a href="#" className="clickable-link">
-                      <i className="icon-docs"></i> Visit Documentation Forum
-                    </a>
-                  </div>
-
-                  {/* Upper-right: Support Forum */}
-                  <div className="column upper-right">
-                    <h3>Support Forum</h3>
-                    <p>
-                      Lost somewhere or have a query to make? Join us on our support
-                      forum and flag your issue.
-                    </p>
-                    <a href="#" className="clickable-link">
-                      <i className="icon-support"></i> Join Support Forum
-                    </a>
-                  </div>
-                </div>
+      <div className="row chart-row">
+        {/* Left column - 60% */}
+        <div className="column left-column">
+          <div className="row upper-row">
+            {resources.map((res, index) => (
+              <div className="column upper-left" key={index}>
+                <h3>{res.title}</h3>
+                <p>{res.desc}</p>
+                <a href={res.href} className="clickable-link">
+                  <i className={res.iconClass}></i> {res.linkText}
+                </a>
               </div>
-
-              {/* Right column - 40%: Quick Links */}
-              <div className="column right-column">
-                <h3>Quick Link</h3>
-                <div className="quick-links-wrapper">
-                  {quickLinks.map((link, index) => (
-                    <a href={link.href} className="quick-link" key={index}>
-                      <i className={link.iconClass}></i> {link.text}
-                    </a>
-                  ))}
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
+        </div>
+
+        {/* Right column - 40%: Quick Links */}
+        <div className="column right-column">
+          <h3>Quick Link</h3>
+          <div className="quick-links-wrapper">
+            {quickLinks.map((link, index) => (
+              <a href={link.href} className="quick-link" key={index}>
+                <i className={link.iconClass}></i> {link.text}
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
         </div>
 
       </div>
