@@ -12,6 +12,34 @@ export default {
     submitUrl: 'settings',
     modal: [
         {
+            key: 'payment_icons',
+            type: 'setting-toggle',
+            label: __( 'Payment Icons', 'multivendorx' ),
+            desc: __(
+                'Select the icon representing your preferred payment methods.',
+                'multivendorx'
+            ),
+            icon: true, // render <i> tags instead of labels
+            options: [
+                {
+                    key: 'paypal',
+                    value: 'adminlib-dynamic-pricing', // replaced value
+                },
+                {
+                    key: 'stripe',
+                    value: 'adminlib-dynamic-pricing', // replaced value
+                },
+                {
+                    key: 'visa',
+                    value: 'adminlib-dynamic-pricing', // replaced value
+                },
+                {
+                    key: 'mastercard',
+                    value: 'adminlib-dynamic-pricing', // replaced value
+                },
+            ],
+        },                
+        {
             key: 'commission_type',
             type: 'setting-toggle',
             label: __( 'Commission Type', 'multivendorx' ),
