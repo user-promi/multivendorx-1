@@ -60,6 +60,7 @@ export default {
             type: 'payment-tabs',
             modal: [
                 {
+                    id:'id-verification',
                     icon: 'ID',
                     label: 'Identity Verification',
                     connected: false,
@@ -80,6 +81,7 @@ export default {
                     ],
                 },
                 {
+                    id:'email-verification',
                     icon: 'EM',
                     label: 'Email Verification',
                     connected: true,
@@ -102,6 +104,7 @@ export default {
                     ],
                 },
                 {
+                    id:'social-verification',
                     icon: 'So',
                     label: 'Social Verification',
                     connected: true,

@@ -18,6 +18,8 @@ export default {
         {
             key: 'payment_methods',
             type: 'payment-tabs',
+            buttonEnable:true,
+            toggleType:'icon',
             modal: methods
         }
         

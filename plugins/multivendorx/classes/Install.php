@@ -23,6 +23,8 @@ class Install {
      */
     public function __construct() {
 
+        $this->set_default_settings();
+
         // if ( ! get_option( 'dc_product_vendor_plugin_db_version', false ) ) {
         //     $this->create_database_table();
         //     $this->set_default_settings();
@@ -139,6 +141,26 @@ class Install {
      * @return void
      */
     private function set_default_settings() {
+                // 1. Get the existing option from DB
+        $settings = get_option('multivendorx_identity_verification_settings', []);
+
+        // 2. Modify only what you need
+        $settings['payment_methods']['ID']['verification_methods'] = [
+            [
+                'label'    => 'National Id',
+                'required' => true,
+                'active'   => true,
+            ],
+            [
+                'label'    => 'Voter Id',
+                'required' => true,
+                'active'   => false,
+            ],
+        ];
+
+        // 3. Save back to DB
+        update_option('multivendorx_identity_verification_settings', $settings);
+
     }
 
     public function plugin_create_pages() {

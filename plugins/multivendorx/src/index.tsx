@@ -3,6 +3,7 @@ import { BrowserRouter, HashRouter } from 'react-router-dom';
 import App from './app';
 import replaceDashboardDivs from './storeDashboard';
 import 'zyra/build/index.css';
+import "leaflet/dist/leaflet.css";
 
 // Render the App component into the DOM
 // render(

@@ -11,8 +11,28 @@ import {
   ResponsiveContainer,
   PieChart, Pie, Cell, Legend
 } from 'recharts';
+
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import L from "leaflet";
+
+const salesByLocations = [
+  { name: "USA", coordinates: [40, -100], sales: 12000 },
+  { name: "India", coordinates: [22, 78], sales: 8500 },
+  { name: "UK", coordinates: [54, -2], sales: 6700 },
+  { name: "Germany", coordinates: [51, 10], sales: 5400 },
+  { name: "Australia", coordinates: [-25, 133], sales: 4300 },
+];
+
+// Custom marker icon (optional)
+const salesIcon = new L.DivIcon({
+  className: "custom-marker",
+  html: `<div style="background:#5007aa;color:#fff;border-radius:50%;padding:6px 10px;font-size:12px;">$</div>`,
+});
+
 import "./AdminDashboard.scss";
 import "../Dashboard.scss"
+import BestSellingProducts from './BestSellingProducts';
+import TopSellers from './TopSellers';
 
 const AdminDashboard = () => {
   const location = useLocation();
@@ -36,6 +56,24 @@ const AdminDashboard = () => {
     { name: 'Pending Payouts', value: 9 },
   ];
   const COLORS = ['#4CAF50', '#FF9800', '#F44336', '#2196F3'];
+  const items = [
+    { text: "Set up seller Registration Form Fields", active: true },
+    { text: "Set up payments", active: true },
+    { text: "Set up taxes", active: false },
+    { text: "Set up shipping", active: true },
+    { text: "Set up commissions", active: false },
+    { text: "Set up product capabilities", active: true },
+    { text: "Set up allowed product types", active: true },
+    { text: "Set up commissions", active: false },
+    { text: "Set up product capabilities", active: true },
+    { text: "Set up allowed product types", active: true },
+  ];
+  const quickLinks = [
+    { text: "Add Vendor", iconClass: "icon-add", href: "#" },
+    { text: "Commission", iconClass: "icon-commission", href: "#" },
+    { text: "Add Product", iconClass: "icon-product", href: "#" },
+    { text: "Payment", iconClass: "icon-payment", href: "#" },
+  ];
   return (
     <>
       <div className="admin-dashboard">
@@ -139,22 +177,49 @@ const AdminDashboard = () => {
             </ResponsiveContainer>
           </div>
           <div className="column w-35">
-            <h3>Quick Actions</h3>
-            <div className="action-btn-wrapper">
-              <button className="admin-btn btn-purple">Add Vendor</button>
-              <button className="admin-btn btn-purple">Approve Products</button>
-              <button className="admin-btn btn-purple">Process Payouts</button>
-              <button className="admin-btn btn-purple">Send Notifications</button>
-              <button className="admin-btn btn-purple">Generate Reports</button>
-              <button className="admin-btn btn-purple">Manage Settings</button>
-            </div>
-
+            <h3>Sales by Locations</h3>
+            <MapContainer
+              center={[20, 0]}
+              zoom={2}
+              style={{ height: "300px", width: "100%" }}
+            >
+              <TileLayer
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+              />
+              {salesByLocations.map(({ name, coordinates, sales }) => (
+                <Marker
+                  key={name}
+                  position={coordinates as [number, number]}
+                  icon={salesIcon}
+                >
+                  <Popup>
+                    <strong>{name}</strong>
+                    <br />
+                    Sales: ${sales}
+                  </Popup>
+                </Marker>
+              ))}
+            </MapContainer>
           </div>
         </div>
 
+        {/* table */}
         <div className="row">
-          
+          <div className="column">
+            <h3>Best Selling Products</h3>
+            <BestSellingProducts />
+          </div>
+          <div className="column ">
+            <div className="chart-wrapper">
+              <h3>Top Sellers</h3>
+              <TopSellers />
+            </div>
+          </div>
+        </div>
 
+        {/* recent activity */}
+        <div className="row">
           <div className="column">
             <h3>Recent Activity</h3>
 
@@ -192,7 +257,7 @@ const AdminDashboard = () => {
                   <i className="adminlib-cart"></i>
                 </span>
                 <div className="details">
-                Commission payment of $2,847 processed for ElectroHub
+                  Commission payment of $2,847 processed for ElectroHub
                   <span>2 minutes ago</span>
                 </div>
               </div>
@@ -212,28 +277,69 @@ const AdminDashboard = () => {
                 </BarChart>
               </ResponsiveContainer>
             </div>
+          </div>
+        </div>
 
-            {/* <div className="chart-box">
-              <h3>System Overview</h3>
-              <ResponsiveContainer width="100%" height={250}>
-                <PieChart>
-                  <Pie
-                    data={overviewData}
-                    cx="50%"
-                    cy="50%"
-                    outerRadius={80}
-                    dataKey="value"
-                    label
-                  >
-                    {overviewData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                  <Legend />
-                </PieChart>
-              </ResponsiveContainer>
-            </div> */}
+        {/* last */}
+        <div className="row">
+          <div className="column">
+            <h3>This is what you get</h3>
+
+            <div className="activity-wrapper">
+              {items.map((item, index) => (
+                <div className="activity" key={index}>
+                  <div className="details">{item.text}</div>
+                  <span className="icon">
+                    <i className={item.active ? "active-icon" : "inactive-icon"}></i>
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="column chart-wrapper">
+            <div className="row chart-row">
+              {/* Left column - 60% */}
+              <div className="column left-column">
+                <div className="row upper-row">
+                  {/* Upper-left: Documentation Forum */}
+                  <div className="column upper-left">
+                    <h3>Documentation Forum</h3>
+                    <p>
+                      Learn more about marketplace features and settings by accessing
+                      our documentation forum.
+                    </p>
+                    <a href="#" className="clickable-link">
+                      <i className="icon-docs"></i> Visit Documentation Forum
+                    </a>
+                  </div>
+
+                  {/* Upper-right: Support Forum */}
+                  <div className="column upper-right">
+                    <h3>Support Forum</h3>
+                    <p>
+                      Lost somewhere or have a query to make? Join us on our support
+                      forum and flag your issue.
+                    </p>
+                    <a href="#" className="clickable-link">
+                      <i className="icon-support"></i> Join Support Forum
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right column - 40%: Quick Links */}
+              <div className="column right-column">
+                <h3>Quick Link</h3>
+                <div className="quick-links-wrapper">
+                  {quickLinks.map((link, index) => (
+                    <a href={link.href} className="quick-link" key={index}>
+                      <i className={link.iconClass}></i> {link.text}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
