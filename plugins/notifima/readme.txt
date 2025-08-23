@@ -5,7 +5,7 @@ Tags: stock manager, back in stock notifier, waitlist, inventory management, out
 Requires at least: 6.4
 Tested up to: 6.8.2
 Requires PHP: 8.0
-Stable tag: 3.0.4
+Stable tag: 3.0.5
 Donate link: https://multivendorx.com/donate/
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -168,6 +168,11 @@ Manual installation method requires downloading the [Notifima] (https://wordpres
 6. Inventory manager
 
 == Changelog ==
+
+= 3.0.5 - 2025-08-22 =
+* Added     - Compatibility of WooCommerce 10.1.1.
+* Added     - Support for email translation with WPML.
+* Fixed     - Translation issue with Loco Translate.
 
 = 3.0.4 - 2025-07-23 =
 * Added     - Compatibility of WordPress 6.8.2.
