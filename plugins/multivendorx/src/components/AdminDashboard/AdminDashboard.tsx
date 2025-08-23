@@ -31,6 +31,8 @@ const salesIcon = new L.DivIcon({
 
 import "./AdminDashboard.scss";
 import "../Dashboard.scss"
+import BestSellingProducts from './BestSellingProducts';
+import TopSellers from './TopSellers';
 
 const AdminDashboard = () => {
   const location = useLocation();
@@ -54,6 +56,24 @@ const AdminDashboard = () => {
     { name: 'Pending Payouts', value: 9 },
   ];
   const COLORS = ['#4CAF50', '#FF9800', '#F44336', '#2196F3'];
+  const items = [
+    { text: "Set up seller Registration Form Fields", active: true },
+    { text: "Set up payments", active: true },
+    { text: "Set up taxes", active: false },
+    { text: "Set up shipping", active: true },
+    { text: "Set up commissions", active: false },
+    { text: "Set up product capabilities", active: true },
+    { text: "Set up allowed product types", active: true },
+    { text: "Set up commissions", active: false },
+    { text: "Set up product capabilities", active: true },
+    { text: "Set up allowed product types", active: true },
+  ];
+  const quickLinks = [
+    { text: "Add Vendor", iconClass: "icon-add", href: "#" },
+    { text: "Commission", iconClass: "icon-commission", href: "#" },
+    { text: "Add Product", iconClass: "icon-product", href: "#" },
+    { text: "Payment", iconClass: "icon-payment", href: "#" },
+  ];
   return (
     <>
       <div className="admin-dashboard">
@@ -184,9 +204,24 @@ const AdminDashboard = () => {
           </div>
         </div>
 
+        {/* table */}
         <div className="row">
           <div className="column">
             <h3>Best Selling Products</h3>
+            <BestSellingProducts />
+          </div>
+          <div className="column ">
+            <div className="chart-wrapper">
+              <h3>Top Sellers</h3>
+              <TopSellers />
+            </div>
+          </div>
+        </div>
+
+        {/* recent activity */}
+        <div className="row">
+          <div className="column">
+            <h3>Recent Activity</h3>
 
             <div className="activity-wrapper">
               <div className="activity">
@@ -245,64 +280,65 @@ const AdminDashboard = () => {
           </div>
         </div>
 
-
+        {/* last */}
         <div className="row">
           <div className="column">
-            <h3>Recent Activity</h3>
+            <h3>This is what you get</h3>
 
             <div className="activity-wrapper">
-              <div className="activity">
-                <span className="icon">
-                  <i className="adminlib-cart"></i>
-                </span>
-                <div className="details">
-                  New product "Wireless Gaming Headset" added by TechWorld
-                  <span>2 minutes ago</span>
+              {items.map((item, index) => (
+                <div className="activity" key={index}>
+                  <div className="details">{item.text}</div>
+                  <span className="icon">
+                    <i className={item.active ? "active-icon" : "inactive-icon"}></i>
+                  </span>
                 </div>
-              </div>
-              <div className="activity">
-                <span className="icon">
-                  <i className="adminlib-star"></i>
-                </span>
-                <div className="details">
-                  5-star review received for "Smartphone Case" by MobileGear
-                  <span>2 minutes ago</span>
-                </div>
-              </div>
-              <div className="activity">
-                <span className="icon">
-                  <i className="adminlib-global-community"></i>
-                </span>
-                <div className="details">
-
-                  New vendor "Fashion Forward" completed registration
-                  <span>2 minutes ago</span>
-                </div>
-              </div>
-              <div className="activity">
-                <span className="icon">
-                  <i className="adminlib-cart"></i>
-                </span>
-                <div className="details">
-                  Commission payment of $2,847 processed for ElectroHub
-                  <span>2 minutes ago</span>
-                </div>
-              </div>
+              ))}
             </div>
-
           </div>
-          <div className="column ">
-            <div className="chart-wrapper">
-              <h3>System Overview</h3>
-              <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={overviewData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <YAxis />
-                  <Tooltip />
-                  <Bar dataKey="value" fill="#5007aa" barSize={40} />
-                </BarChart>
-              </ResponsiveContainer>
+
+          <div className="column chart-wrapper">
+            <div className="row chart-row">
+              {/* Left column - 60% */}
+              <div className="column left-column">
+                <div className="row upper-row">
+                  {/* Upper-left: Documentation Forum */}
+                  <div className="column upper-left">
+                    <h3>Documentation Forum</h3>
+                    <p>
+                      Learn more about marketplace features and settings by accessing
+                      our documentation forum.
+                    </p>
+                    <a href="#" className="clickable-link">
+                      <i className="icon-docs"></i> Visit Documentation Forum
+                    </a>
+                  </div>
+
+                  {/* Upper-right: Support Forum */}
+                  <div className="column upper-right">
+                    <h3>Support Forum</h3>
+                    <p>
+                      Lost somewhere or have a query to make? Join us on our support
+                      forum and flag your issue.
+                    </p>
+                    <a href="#" className="clickable-link">
+                      <i className="icon-support"></i> Join Support Forum
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right column - 40%: Quick Links */}
+              <div className="column right-column">
+                <h3>Quick Link</h3>
+                <div className="quick-links-wrapper">
+                  {quickLinks.map((link, index) => (
+                    <a href={link.href} className="quick-link" key={index}>
+                      <i className={link.iconClass}></i> {link.text}
+                    </a>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </div>
