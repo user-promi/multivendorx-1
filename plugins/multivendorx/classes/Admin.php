@@ -38,6 +38,14 @@ class Admin {
         add_action( 'woocommerce_product_data_panels', array( $this, 'add_additional_product_data_panels' ) );
         add_action( 'woocommerce_process_product_meta', array( $this, 'save_store_in_product' ) );
         add_action( 'wp_ajax_search_stores', array( $this, 'multivendorx_get_stores' ));
+        // For Variation
+        add_action('woocommerce_product_after_variable_attributes', array($this, 'add_variation_settings'), 10, 3);
+        add_action( 'woocommerce_save_product_variation', array($this, 'save_commission_field_variations'), 10, 2 );
+        // For Category
+        add_action('product_cat_add_form_fields', array($this, 'add_product_cat_commission_fields'));
+        add_action('product_cat_edit_form_fields', array($this, 'edit_product_cat_commission_fields'), 10);
+        add_action('created_term', array($this, 'save_product_cat_commission_fields'), 10, 3);
+        add_action('edit_term', array($this, 'save_product_cat_commission_fields'), 10, 3);
     }
 
     /**
@@ -270,6 +278,8 @@ class Admin {
 		global $post;
 
         $linked_store = get_post_meta( $post->ID, 'store_id', true );
+        $product_fixed_commission = get_post_meta( $post->ID, 'product_fixed_commission', true );
+        $product_percentage_commission = get_post_meta( $post->ID, 'product_percentage_commission', true );
 
         ?>
         <div id="multivendorx-store-link-tab" class="panel woocommerce_options_panel hidden">
@@ -292,12 +302,45 @@ class Admin {
                     ?>
                 </select>
             </p>
+            <p> 
+                <?php
+                woocommerce_wp_text_input(
+					array(
+						'id'          => 'product_fixed_commission',
+						'label'       => __( 'Commission Fixed', 'multivendorx' ),
+						'placeholder' => wc_format_localized_price( 0 ),
+						'description' => __( 'Fixed commission.', 'multivendorx' ),
+						// 'data_type'   => 'percent' === $coupon->get_discount_type( 'edit' ) ? 'decimal' : 'price',
+						'desc_tip'    => true,
+						'value'       => $product_fixed_commission ?? '',
+					)
+				);
+                ?>
+            </p>
+            <p> 
+                <?php
+                woocommerce_wp_text_input(
+					array(
+						'id'          => 'product_percentage_commission',
+						'label'       => __( 'Commission Percentage', 'multivendorx' ),
+						'placeholder' => wc_format_localized_price( 0 ),
+						'description' => __( 'Percentage commission.', 'multivendorx' ),
+						// 'data_type'   => 'percent' === $coupon->get_discount_type( 'edit' ) ? 'decimal' : 'price',
+						'desc_tip'    => true,
+						'value'       => $product_percentage_commission ?? '',
+					)
+				);
+                ?>
+            </p>
         </div>
         <?php
     }
 
     public function save_store_in_product($post_id) {
         $linked_store_id = absint( filter_input( INPUT_POST, 'linked_store' ) );
+        $fixed_commission_per_product = absint( filter_input( INPUT_POST, 'product_fixed_commission' ) );
+        $percentage_commission_per_product = absint( filter_input( INPUT_POST, 'product_percentage_commission' ) );
+        
         if ( $linked_store_id ) {
             update_post_meta( $post_id, 'store_id', $linked_store_id );
 
@@ -305,6 +348,104 @@ class Admin {
                 'ID'          => $post_id,
                 'post_author' => $linked_store_id,
             ) );
+        }
+
+        if ( $fixed_commission_per_product ) {
+            update_post_meta( $post_id, 'product_fixed_commission', $fixed_commission_per_product );
+        }
+
+        if ( $percentage_commission_per_product ) {
+            update_post_meta( $post_id, 'product_percentage_commission', $percentage_commission_per_product );
+        }
+    }
+
+    public function add_variation_settings($loop, $variation_data, $variation) {
+        $commission_percentage = $commission_fixed = '';
+        $commission_percentage = get_post_meta($variation->ID, 'variable_product_percentage_commission', true);
+        $commission_fixed = get_post_meta($variation->ID, 'variable_product_fixed_commission', true);
+
+        woocommerce_wp_text_input( array(
+            'id'            => 'variable_product_fixed_commission[' . $variation->ID . ']',
+            'label'         => __( 'Commission Fixed', 'multivendorx' ),
+            'desc_tip'      => true,
+            'description'   => __( 'Fixed Commission.', 'multivendorx' ),
+            'value'         => $commission_fixed ?? '',
+        ) );
+
+        woocommerce_wp_text_input( array(
+            'id'            => 'variable_product_percentage_commission[' . $variation->ID . ']',
+            'label'         => __( 'Commission Percentage', 'multivendorx' ),
+            'desc_tip'      => true,
+            'description'   => __( 'Percentage Commission.', 'multivendorx' ),
+            'value'         => $commission_percentage ?? '',
+        ) );
+    }
+
+    public function save_commission_field_variations( $variation_id, $i ) {
+        $fixed_commissions       = filter_input( INPUT_POST, 'variable_product_fixed_commission', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
+        $percentage_commissions  = filter_input( INPUT_POST, 'variable_product_percentage_commission', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
+
+        if ( isset( $fixed_commissions[ $variation_id ] ) ) {
+            $fixed_commission = wc_format_decimal( $fixed_commissions[ $variation_id ] );
+            update_post_meta( $variation_id, 'variable_product_fixed_commission', $fixed_commission );
+        }
+
+        if ( isset( $percentage_commissions[ $variation_id ] ) ) {
+            $percentage_commission = wc_format_decimal( $percentage_commissions[ $variation_id ] );
+            update_post_meta( $variation_id, 'variable_product_percentage_commission', $percentage_commission );
+        }
+    }
+
+    /**
+     * Add commission field in create new category page
+     */
+    public function add_product_cat_commission_fields() {
+        ?>
+            <div class="form-field term-display-type-wrap">
+                <label for="category_percentage_commission"><?php _e('Commission Percentage', 'multivendorx'); ?></label>
+                <input type="number" class="short" name="category_percentage_commission" id="category_percentage_commission" value="" placeholder="">
+            </div>
+            <div class="form-field term-display-type-wrap">
+                <label for="category_fixed_commission"><?php _e('Commission Fixed', 'multivendorx'); ?></label>
+                <input type="number" class="short" name="category_fixed_commission" id="category_fixed_commission" value="" placeholder="">
+            </div>
+        <?php
+    }
+
+    /**
+     * Add commission field in edit category page
+     * @param Object $term
+     */
+    public function edit_product_cat_commission_fields($term) {
+        $commision = get_term_meta($term->term_id, 'commision', true);
+        $commission_percentage = get_term_meta($term->term_id, 'category_percentage_commission', true);
+        $commision_fixed = get_term_meta($term->term_id, 'category_fixed_commission', true);
+        ?>
+        <tr class="form-field">
+            <th scope="row" valign="top"><label for="category_percentage_commission"><?php _e('Commission Percentage', 'multivendorx'); ?></label></th>
+            <td><input type="number" class="short" style="" name="category_percentage_commission" id="category_percentage_commission" value="<?php echo $commission_percentage; ?>" placeholder=""></td>
+        </tr>
+    
+        <tr class="form-field">
+            <th scope="row" valign="top"><label for="category_fixed_commission"><?php _e('Commission Fixed per transaction', 'multivendorx'); ?></label></th>
+            <td><input type="number" class="short" style="" name="category_fixed_commission" id="category_fixed_commission" value="<?php echo $commision_fixed; ?>" placeholder=""></td>
+        </tr>
+       
+        <?php
+    }
+
+    /**
+     * Save commission settings for product category
+     * @param int $term_id
+     * @param int $tt_id
+     * @param string $taxonomy
+     */
+    public function save_product_cat_commission_fields($term_id, $tt_id = '', $taxonomy = '') {
+        if ( 'product_cat' === $taxonomy ) {
+            $percentage = filter_input( INPUT_POST, 'category_percentage_commission', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION );
+            $fixed      = filter_input( INPUT_POST, 'category_fixed_commission', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION );
+            update_term_meta( $term_id, 'category_percentage_commission', (float) $percentage );        
+            update_term_meta( $term_id, 'category_fixed_commission', (float) $fixed );
         }
     }
 
