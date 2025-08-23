@@ -146,6 +146,7 @@ interface InputField {
     min?: number;
     max?: number;
     icon?: string;
+    iconEnable?:boolean;
     size?:string;
     proSetting?: boolean;
     moduleEnabled?: boolean;
@@ -516,26 +517,19 @@ const AdminForm: React.FC<AdminFormProps> = ({
     const handleMultiNumberChange = (
         e: React.ChangeEvent<HTMLInputElement>,
         key?: string,
-        optionKey?: string,
-        index?: number
+        optionKey?: string
     ) => {
-        if (!key || !optionKey || index === undefined) {
-            return;
-        }
-
+        if (!key || !optionKey) return;
+    
         settingChanged.current = true;
-
-        const multipleOptions: Record<
-            number,
-            { key: string; value: string }
-        > = setting[key] || {};
-
-        multipleOptions[index] = {
-            key: optionKey,
-            value: e.target.value,
-        };
-
-        updateSetting(key, multipleOptions);
+    
+        // Copy existing settings or initialize
+        const currentValues: Record<string, string | number> = setting[key] || {};
+    
+        // Save in flattened key-value format
+        currentValues[optionKey] = e.target.value;
+    
+        updateSetting(key, currentValues);
     };
 
     const handlMultiSelectDeselectChange = (
@@ -1445,33 +1439,24 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             descClass="settings-metabox-description"
                             description={inputField.desc}
                             key={inputField.key}
+                            iconEnable={inputField.iconEnable}
                             options={
                                 Array.isArray(inputField.options)
                                     ? inputField.options.map((opt) => ({
                                         ...opt,
-                                        value: String(opt.value),
+                                        value: String(opt.value), // this can be an icon class
                                     }))
                                     : []
                             }
-                            value={String(
-                                value ?? inputField.defaultValue ?? ''
-                            )}
-                            proSetting={isProSetting(
-                                inputField.proSetting ?? false
-                            )}
+                            value={String(value ?? inputField.defaultValue ?? '')}
+                            proSetting={isProSetting(inputField.proSetting ?? false)}
                             onChange={(data) => {
                                 if (
                                     hasAccess(
                                         inputField.proSetting ?? false,
-                                        String(
-                                            inputField.moduleEnabled ?? ''
-                                        ),
-                                        String(
-                                            inputField.dependentSetting ?? ''
-                                        ),
-                                        String(
-                                            inputField.dependentPlugin ?? ''
-                                        )
+                                        String(inputField.moduleEnabled ?? ''),
+                                        String(inputField.dependentSetting ?? ''),
+                                        String(inputField.dependentPlugin ?? '')
                                     )
                                 ) {
                                     settingChanged.current = true;
@@ -1481,7 +1466,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             proChanged={() => setModelOpen(true)}
                         />
                     );
-                    break;
+                    break;                
                 // Check in MVX
                 case 'wpeditor':
                     input = (
