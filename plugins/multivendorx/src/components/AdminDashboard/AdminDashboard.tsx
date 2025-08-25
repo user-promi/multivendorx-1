@@ -335,6 +335,7 @@ const AdminDashboard = () => {
           <div className="cards-wrapper">
             {resources.map((res, index) => (
               <div className="cards" key={index}>
+                <i className="adminlib-cart"></i>
                 <h3>{res.title}</h3>
                 <p>{res.desc}</p>
                 <a href={res.href} target="blank">
@@ -345,7 +346,9 @@ const AdminDashboard = () => {
           </div>
 
         {/* Right column - 40%: Quick Links */}
-        <div className="right-column">
+
+        <div className="quick-link">
+
           <h3>Quick Link</h3>
           <div className="quick-links-wrapper">
             {quickLinks.map((link, index) => (
