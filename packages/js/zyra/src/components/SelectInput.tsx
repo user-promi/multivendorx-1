@@ -55,7 +55,7 @@ const SelectInput: React.FC< SelectInputProps > = ( {
         control: (provided: any, state: any) => ({
             ...provided,
             borderColor: state.isFocused ? '#5007aa' : '#e0e4e9',
-            boxShadow: state.isFocused ? '0 0 0 3px #5007aa1c' : '0 0 0 3px #5007aa1c',
+            boxShadow: state.isFocused ? '0 0 0 3px #5007aa1c' : '',
             // '&:hover': { borderColor: '#5007aa' },
             maxHeight: '2.188rem',
         }),

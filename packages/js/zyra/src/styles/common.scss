@@ -55,7 +55,6 @@ a {
     margin: 0 1rem;
   }
 }
-
 // button style start
 .admin-btn {
   outline: none;
@@ -525,6 +524,11 @@ input[type="checkbox"]:checked::before {
   li{
     list-style-type: number;
     margin-left: 0.85rem;
+  }
+  code{
+    padding: 0.063rem 0.5rem 0.125rem;
+    font-size: 0.688rem;
+    line-height: 0.5rem;
   }
 }
 
