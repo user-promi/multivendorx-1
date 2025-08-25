@@ -70,7 +70,7 @@ export default {
                 {
                     key: 'product_cost',
                     type: 'select',
-                    label: 'If product',
+                    label: 'When product',
                     options: [
                         { value: 'price', label: 'Price' },
                         { value: 'quantity', label: 'Quantity' },
@@ -86,20 +86,15 @@ export default {
                     ],
                 },
                 {
-                    key: 'product_price',
+                    key: 'commission_type',
                     type: 'multi-number',
                     options: [
                         {
-                            key: 'product_price',
+                            key: 'mvx_commission_fixed_per_unit',
                             label: __( '$', 'multivendorx' ),
                             type: 'number',
                         },
                     ],
-                    dependent: {
-                        key: 'product_cost',
-                        set: true,
-                        value: 'price',
-                    },
                 },
  
             ],

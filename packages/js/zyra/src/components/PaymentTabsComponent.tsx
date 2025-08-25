@@ -113,7 +113,7 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
                                     );
                                 }}
                             >   
-                                <i className={activeTab === method.icon ? "adminlib-arrow-down" : "adminlib-pagination-right-arrow"}></i>
+                                <i className={activeTab === method.icon ? "adminlib-pagination-right-arrow" : "adminlib-pagination-right-arrow"}></i>
                             </div>
                         )}
                     </div>

@@ -96,7 +96,7 @@ const VerificationMethods: React.FC<VerificationMethodsProps> = ({
           <li key={idx} className="row-item">
             <div className="name">
               {editingIndex === idx ? (
-                <div className="inline-form">
+                <div className="edit-row">
                   {nestedFields.map(({ key, type, label, placeholder }) => {
                     if (type === 'checkbox') {
                       return (
@@ -111,7 +111,7 @@ const VerificationMethods: React.FC<VerificationMethodsProps> = ({
                       );
                     }
                     return (
-                      <div key={key}>
+                      <div className="edit-form">
                         <label>{label}</label>
                         <input
                           type="text"
@@ -122,8 +122,10 @@ const VerificationMethods: React.FC<VerificationMethodsProps> = ({
                       </div>
                     );
                   })}
-                  <button type="button" onClick={() => saveRow(idx)}>Save</button>
-                  <button type="button" onClick={cancelEdit}>Cancel</button>
+                  <div className="button-wrapper">
+                    <button type="button" onClick={() => saveRow(idx)}><i className="adminlib-check"></i></button>
+                    <button type="button" onClick={cancelEdit}><i className="adminlib-close"></i></button>
+                  </div>
                 </div>
               ) : (
                 <>
@@ -142,12 +144,10 @@ const VerificationMethods: React.FC<VerificationMethodsProps> = ({
                   <button type="button" onClick={() => deleteRow(idx)} aria-label="Delete">
                     <i className="adminlib-delete"></i>
                   </button>
-                  <label
-                    style={{ cursor: "pointer" }}
-                    onClick={() => toggleActive(idx)}
+                  <button type="button" onClick={() => toggleActive(idx)}
                   >
                     <i className={row.active ? "adminlib-eye" : "adminlib-eye-blocked"}></i>
-                  </label>
+                  </button>
                 </>
               )}
             </div>

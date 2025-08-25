@@ -6,12 +6,18 @@
         display: flex;
         flex-wrap: wrap;
         justify-content: start;
-        align-items: center;
+        align-items: start;
         padding: 1rem;
         margin-bottom: 1.5rem;
         gap: 1rem;
 
-
+        .form-wrapper{
+            display: flex;
+            gap: 1rem;
+        }
+        .form-wrapper:first-child{
+            width: 100%;
+        }
         label {
             font-size: 1.125rem;
         }

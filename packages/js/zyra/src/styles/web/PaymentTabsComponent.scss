@@ -86,7 +86,19 @@
                                     font-size: 1.063rem;
                                     line-height: 1rem;
                                 }
+                                .edit-row{
+                                    display: flex;
+                                    align-items: center;
+                                    gap: 1rem;
 
+                                    button{
+                                        border: none;
+                                        background: transparent;
+                                    }
+                                    .edit-form{
+                                        
+                                    }
+                                }
                                 .admin-badge {
                                     font-size: 0.7rem;
                                     padding: 0.313rem 0.5rem;
