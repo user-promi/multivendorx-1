@@ -93,6 +93,7 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
                         {buttonEnable && !value?.[method.id]?.enable ? (
                             <button
                                 type="button"
+                                className="admin-btn btn-purple"
                                 onClick={(e) => {
                                     e.stopPropagation();
                                     setEnabledMethod(method.id);
@@ -111,7 +112,7 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
                                         activeTab === method.icon ? null : method.icon
                                     );
                                 }}
-                            >
+                            >   
                                 <i className="adminlib-pagination-right-arrow"></i>
                             </div>
                         )}
