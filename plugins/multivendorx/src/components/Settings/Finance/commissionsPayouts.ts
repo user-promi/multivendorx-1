@@ -12,34 +12,6 @@ export default {
     submitUrl: 'settings',
     modal: [
         {
-            key: 'payment_icons',
-            type: 'setting-toggle',
-            label: __( 'Payment Icons', 'multivendorx' ),
-            desc: __(
-                'Select the icon representing your preferred payment methods.',
-                'multivendorx'
-            ),
-            icon: true, // render <i> tags instead of labels
-            options: [
-                {
-                    key: 'paypal',
-                    value: 'adminlib-dynamic-pricing', // replaced value
-                },
-                {
-                    key: 'stripe',
-                    value: 'adminlib-dynamic-pricing', // replaced value
-                },
-                {
-                    key: 'visa',
-                    value: 'adminlib-dynamic-pricing', // replaced value
-                },
-                {
-                    key: 'mastercard',
-                    value: 'adminlib-dynamic-pricing', // replaced value
-                },
-            ],
-        },                
-        {
             key: 'commission_type',
             type: 'setting-toggle',
             label: __( 'Commission Type', 'multivendorx' ),
@@ -61,14 +33,14 @@ export default {
                 {
                     key: 'rule_based',
                     label: __( 'Rule Based', 'multivendorx' ),
-                    value: 'commission_by_product_price',
+                    value: 'rule_based',
                 },
             ],
         },
         
         // Nested Input fields added later
         {
-            key: 'mvx_commission_rules_per_transaction',
+            key: 'commission_per_transaction',
             type: 'multi-number',
             label: __( 'Commission Value', 'multivendorx' ),
             desc: __(
@@ -77,7 +49,7 @@ export default {
             ),
             options: [
                 {
-                    key: 'mvx_commission_percentage_per_transaction',
+                    key: 'commission_percentage',
                     label: __( '%', 'multivendorx' ),
                     type: 'number',
                     desc: __(
@@ -87,7 +59,7 @@ export default {
                     labelAfterInput:true
                 },
                 {
-                    key: 'mvx_commission_fixed_per_transaction',
+                    key: 'commission_fixed',
                     label: __( '$', 'multivendorx' ),
                     type: 'number',
                     desc: __( 'Fixed amount per transaction', 'multivendorx' ),
@@ -101,7 +73,7 @@ export default {
             },
         },
         {
-            key: 'mvx_commission_rules_per_unit',
+            key: 'commission_per_unit',
             type: 'multi-number',
             label: __( 'Commission Value', 'multivendorx' ),
             desc: __(
@@ -110,12 +82,12 @@ export default {
             ),
             options: [
                 {
-                    key: 'mvx_commission_percentage_per_unit',
+                    key: 'commission_percentage',
                     label: __( '%', 'multivendorx' ),
                     type: 'number',
                 },
                 {
-                    key: 'mvx_commission_fixed_per_unit',
+                    key: 'commission_fixed',
                     label: __( '$', 'multivendorx' ),
                     type: 'number',
                 },
@@ -127,7 +99,7 @@ export default {
             },
         },
         {
-            key: 'rule',
+            key: 'commission_per_rule',
             type: 'nested',
             label: 'Rule',
             addButtonLabel: 'Add New',
@@ -138,8 +110,8 @@ export default {
                     type: 'select',
                     label: 'If product',
                     options: [
-                        { value: 'up_to', label: 'Price' },
-                        { value: 'more_than', label: 'Quantity' },
+                        { value: 'price', label: 'Price' },
+                        { value: 'quantity', label: 'Quantity' },
                     ],
                 },
                 {
@@ -148,28 +120,28 @@ export default {
                     label: 'is',
                     options: [
                         { value: 'up_to', label: 'Up To' },
+                        { value: 'less_than', label: 'Less than' },
                         { value: 'more_than', label: 'More than' },
-                        { value: 'more', label: 'More than' },
                     ],
                 },
                 {
-                    key: 'commission_type',
+                    key: 'product_price',
                     type: 'multi-number',
                     options: [
                         {
-                            key: 'mvx_commission_fixed_per_unit',
+                            key: 'product_price',
                             label: __( '$', 'multivendorx' ),
                             type: 'number',
                         },
                     ],
                 },
                 {
-                    key: 'commission_percent',
+                    key: 'commission_fixed',
                     type: 'multi-number',
                     label: 'apply commission Fixed',
                     options: [
                         {
-                            key: 'mvx_commission_fixed_per_unit',
+                            key: 'commission_fixed',
                             label: __( '$', 'multivendorx' ),
                             type: 'number',
                             labelAfterInput:false
@@ -183,7 +155,7 @@ export default {
                     label: '+',
                     options: [
                         {
-                            key: 'mvx_commission_fixed_per_unit',
+                            key: 'commission_percent',
                             label: __( '%', 'multivendorx' ),
                             type: 'number',
                             labelAfterInput:true
@@ -196,7 +168,7 @@ export default {
             dependent: {
                 key: 'commission_type',
                 set: true,
-                value: 'commission_by_product_price',
+                value: 'rule_based',
             },
         },        
         {
