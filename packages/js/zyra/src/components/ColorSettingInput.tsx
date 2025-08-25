@@ -1,4 +1,5 @@
 import React, { ChangeEvent, useState, useEffect } from 'react';
+import "../styles/web/ColorSettingInput.scss";
 
 interface PaletteOption {
     key?: string;
@@ -69,7 +70,7 @@ const ColorSettingInput: React.FC<ColorSettingProps> = (props) => {
 
     return (
         <>
-            <div className={props.wrapperClass} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <div className={props.wrapperClass} >
                 {/* Toggle Mode */}
                 <div style={{ display: 'flex', gap: '12px' }}>
                     <button
@@ -175,9 +176,10 @@ const ColorSettingInput: React.FC<ColorSettingProps> = (props) => {
                             gap: '12px'
                         }}
                     >
-                        <div>Menu 1</div>
-                        <div>Menu 2</div>
-                        <div>Menu 3</div>
+                        <div>Dashboard</div>
+                        <div>Products</div>
+                        <div>orders</div>
+                        <div>Coupons</div>
                     </div>
 
                     {/* Content Area */}

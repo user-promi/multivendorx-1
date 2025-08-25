@@ -244,4 +244,7 @@ div:has(.exclusion-modal) {
             border-bottom-left-radius: 0.313rem;
         }
     }
+    div:has(input:checked) + div label{
+        border-left: none;
+    }
 }
