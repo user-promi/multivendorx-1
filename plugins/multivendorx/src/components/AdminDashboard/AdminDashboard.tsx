@@ -313,50 +313,48 @@ const AdminDashboard = () => {
 
         {/* last */}
         <div className="row">
-          <div className="column">
+          <div className="column w-35">
             <h3>This is what you get</h3>
 
             <div className="activity-wrapper">
               {items.map((item, index) => (
                 <div className="activity" key={index}>
-                  <div className="details">{item.text}</div>
                   <span className="icon">
-                    <i className={item.active ? "active-icon" : "inactive-icon"}></i>
+                    <i className={item.active ? "adminlib-check" : "adminlib-close"}></i>
                   </span>
+                  <div className="details">
+                    {item.text}
+                  </div>
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="column chart-wrapper">
-      <div className="row chart-row">
+          <div className="column w-65">
         {/* Left column - 60% */}
-        <div className="column left-column">
-          <div className="row upper-row">
+          <div className="cards-wrapper">
             {resources.map((res, index) => (
-              <div className="column upper-left" key={index}>
+              <div className="cards" key={index}>
                 <h3>{res.title}</h3>
                 <p>{res.desc}</p>
-                <a href={res.href} className="clickable-link">
+                <a href={res.href} target="blank">
                   <i className={res.iconClass}></i> {res.linkText}
                 </a>
               </div>
             ))}
           </div>
-        </div>
 
         {/* Right column - 40%: Quick Links */}
         <div className="column right-column">
           <h3>Quick Link</h3>
           <div className="quick-links-wrapper">
             {quickLinks.map((link, index) => (
-              <a href={link.href} className="quick-link" key={index}>
+              <a href={link.href} className="admin-btn btn-purple" key={index}>
                 <i className={link.iconClass}></i> {link.text}
               </a>
             ))}
           </div>
         </div>
-      </div>
     </div>
         </div>
 
