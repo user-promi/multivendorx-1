@@ -129,7 +129,8 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
               if (field.type === 'select') {
                 if (rowIndex === 0) return null;
                 return (
-                  <div key={field.key}>
+                  <div className="form-wrapper" key={field.key}>
+                    <>
                     <label>{field.label}</label>
                     <div className="toggle-setting-container">
                       <div className="toggle-setting-wrapper">
@@ -158,13 +159,14 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
                         ))}
                       </div>
                     </div>
-                  </div>
+                    </>
+                   </div>
                 );
               }
 
               if (field.type === 'multi-number') {
                 return (
-                  <div key={field.key}>
+                  <div className="form-wrapper" key={field.key}>
                     <label>{field.label}</label>
                     <MultiNumInput
                       parentWrapperClass="settings-basic-input-class"
@@ -183,7 +185,7 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
               }
 
               return (
-                <div key={field.key}>
+                <div className="form-wrapper" key={field.key}>
                   <label>{field.label}</label>
                   <input
                     type="number"
