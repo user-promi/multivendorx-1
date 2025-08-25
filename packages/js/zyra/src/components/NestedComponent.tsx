@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import "../styles/web/NestedComponent.scss"
 import MultiNumInput from './MultiNumInput'; // adjust path accordingly
 interface NestedFieldOption {
+  key?: string;
   value: string;
   label: string;
   proSetting?: boolean;
@@ -56,19 +57,16 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
     rowIndex: number
   ) => {
     const updated = [...rows];
-    const parentValue = updated[rowIndex][parentKey] || [];
     const newVal = e.target.value;
-    // Update or add key in the nested array of key/value pairs
-    const existingIndex = parentValue.findIndex((v: any) => v.key === optionKey);
-    if (existingIndex > -1) {
-      parentValue[existingIndex].value = newVal;
-    } else {
-      parentValue.push({ key: optionKey, value: newVal });
-    }
-    updated[rowIndex][parentKey] = parentValue;
+
+    // Instead of nesting, store directly in the row
+    updated[rowIndex][optionKey] = newVal;
+
     setRows(updated);
     onChange(updated);
   };
+
+
   const addRow = () => {
     if (!single) {
       const updated = [...rows, {}];
@@ -144,9 +142,15 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
                     inputLabelClass="setting-form-basic-input"
                     idPrefix="setting-integer-input"
                     options={field.options || []}
-                    value={row[field.key] || []}
-                    onChange={(e, k, optKey) => handleMultiNumChange(e, field.key, optKey || '', rowIndex)}
+                    value={(field.options || []).map(opt => ({
+                      key: opt.key || field.key,
+                      value: row[opt.key || field.key] || ''
+                    }))}
+                    onChange={(e, k, optKey) =>
+                      handleMultiNumChange(e, field.key, optKey || '', rowIndex)
+                    }
                   />
+
                 </>
               );
             }
