@@ -167,18 +167,14 @@ const VerificationMethods: React.FC<VerificationMethodsProps> = ({
                 onChange={() => toggleActive(idx)}
                 aria-label="Delete"
               >
-                <i className="adminlib-eye"></i>
               </button>
+              <label
+                style={{ cursor: "pointer" }}
+                onClick={() => toggleActive(idx)}
+              >
+                <i className={row.active ? "adminlib-eye" : "adminlib-eye-blocked"}></i>
+              </label>
 
-              {/* Active checkbox at last */}
-              {/* <label>
-                <input
-                  type="checkbox"
-                  checked={!!row.active}
-                  onChange={() => toggleActive(idx)}
-                />{' '}
-                Active
-              </label> */}
             </div>
           </li>
         ))}

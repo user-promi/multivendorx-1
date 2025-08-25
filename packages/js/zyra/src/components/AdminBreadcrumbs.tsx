@@ -13,7 +13,8 @@ interface AdminBreadcrumbsProps {
     renderBreadcrumb?: () => React.ReactNode;
     renderMenuItems?: (items: any[]) => React.ReactNode;
     tabData?: any[];
-    buttons?: (ButtonConfig | React.ReactNode)[]; // <-- Accept config objects or JSX
+    buttons?: (ButtonConfig | React.ReactNode)[];
+    goPremium?: boolean
 }
 
 const AdminBreadcrumbs: React.FC<AdminBreadcrumbsProps> = ({
@@ -22,7 +23,8 @@ const AdminBreadcrumbs: React.FC<AdminBreadcrumbsProps> = ({
     renderBreadcrumb,
     renderMenuItems,
     tabData = [],
-    buttons = []
+    buttons = [],
+    goPremium = false
 }) => {
     return (
         <div className="title-section">
@@ -58,9 +60,9 @@ const AdminBreadcrumbs: React.FC<AdminBreadcrumbsProps> = ({
                 <div id="top-level-tab-lists" className="current-tab-lists">
                     <div className="current-tab-lists-container">
                         {renderMenuItems(tabData)}
-                        <a href="#" className="menu-item pro-btn">
+                        {goPremium && (<a href="#" className="menu-item pro-btn">
                             Go Premium<i className="adminlib-arrow-right"></i>
-                        </a>
+                        </a>)}
                     </div>
                 </div>
             )}
