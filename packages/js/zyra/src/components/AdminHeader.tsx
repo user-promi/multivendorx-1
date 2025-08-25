@@ -54,13 +54,14 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
               value={query}
               onChange={(e) => onSearchChange(e.target.value)}
             />
-            {/* <select
+            <select
               value={selectValue}
               onChange={(e) => onSelectChange(e.target.value)}
             >
-              <option value="documents">Modules</option>
-              <option value="catagory">Category</option>
-            </select> */}
+              <option value="all">All</option>
+              <option value="modules">Modules</option>
+              <option value="settings">Settings</option>
+            </select>
 
             {/* dropdown render */}
             {results.length > 0 && (
