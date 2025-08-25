@@ -4,33 +4,34 @@ import WithdrawalRequests from './withdrawalRequests';
 import RefundRequest from './refundRequest';
 import AbuseReports from './abuseReports';
 import StoreReviews from './storeReviews ';
+import './workboard.scss';
 
 const WorkBoard = () => {
     const workboardStats = [
         {
-          id: 'reviews',
-          label: 'Pending Reviews',
-          count: 12,
+            id: 'reviews',
+            label: 'Pending Reviews',
+            count: 12,
         },
         {
-          id: 'support',
-          label: 'Open Support Tickets',
-          count: 5,
+            id: 'support',
+            label: 'Open Support Tickets',
+            count: 5,
         },
         {
-          id: 'withdrawals',
-          label: 'Withdrawal Requests',
-          count: 8,
+            id: 'withdrawals',
+            label: 'Withdrawal Requests',
+            count: 8,
         },
         {
-          id: 'refunds',
-          label: 'Refund Requests',
-          count: 3,
+            id: 'refunds',
+            label: 'Refund Requests',
+            count: 3,
         },
         {
-          id: 'abuse',
-          label: 'Abuse Reports',
-          count: 2,
+            id: 'abuse',
+            label: 'Abuse Reports',
+            count: 2,
         },
     ];
 
@@ -40,7 +41,7 @@ const WorkBoard = () => {
         { id: 'remaining', label: 'Remaining Balance', value: '₹12,850.00' },
         { id: 'transactions', label: 'Total Transactions', value: '156' },
     ];
-      
+
     return (
         <>
             <AdminBreadcrumbs
@@ -49,62 +50,58 @@ const WorkBoard = () => {
             />
 
             {/* Workboard Stats */}
-            <div>
-                {workboardStats.map(stat => (
-                    <div key={stat.id}>
-                        <span>{stat.count}</span>
-                        <span>{stat.label}</span>
-                    </div>
-                ))}
-            </div>
+            <div className="work-board">
+                <div className="row store-card">
+                    {workboardStats.map(stat => (
+                        <div className="column" key={stat.id}>
+                            <div className="cards">
+                                <span className="value">{stat.count}</span>
+                                <span className="name">{stat.label}</span>
+                            </div>
+                        </div>
+                    ))}
+                </div>
 
-            {/* Sections */}
-            <div>
-                <div>
-                    <i className="icon-store-reviews"></i>
+                {/* Sections */}
+                <div className="title-wrapper">
+                    <i className="adminlib-storefront"></i>
                     <h2>Store Reviews</h2>
                 </div>
                 <StoreReviews />
-            </div>
 
-            <div>
-                <div>
-                    <i className="icon-store-support"></i>
+                <div className="title-wrapper">
+                    <i className="adminlib-support"></i>
                     <h2>Store Support</h2>
                 </div>
                 <StoreSupport />
-            </div>
 
-            <div>
-                <div>
-                    <i className="icon-withdrawal-requests"></i>
+                <div className="title-wrapper">
+                    <i className="adminlib-credit-card"></i>
                     <h2>Withdrawal Requests</h2>
                 </div>
 
                 {/* Extra stats specific to Withdrawal Requests */}
-                <div>
+                <div className="row ">
                     {withdrawalExtraStats.map(stat => (
-                        <div key={stat.id}>
-                            <span>{stat.value}</span>
-                            <span>{stat.label}</span>
+                        <div className="column" key={stat.id}>
+                            <div className="cards">
+                                <span className="value">{stat.value}</span>
+                                <span className="name">{stat.label}</span>
+                            </div>
                         </div>
                     ))}
                 </div>
 
                 <WithdrawalRequests />
-            </div>
 
-            <div>
-                <div>
-                    <i className="icon-refund-requests"></i>
+                <div className="title-wrapper">
+                    <i className="adminlib-captcha-automatic-code"></i>
                     <h2>Refund Requests</h2>
                 </div>
                 <RefundRequest />
-            </div>
 
-            <div>
-                <div>
-                    <i className="icon-abuse-reports"></i>
+                <div className="title-wrapper">
+                    <i className="adminlib-folder-open"></i>
                     <h2>Abuse Reports</h2>
                 </div>
                 <AbuseReports />
