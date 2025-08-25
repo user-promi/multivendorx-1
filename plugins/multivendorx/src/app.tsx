@@ -30,7 +30,7 @@ const Route = () => {
       )}
       {currentTab.get("tab") === "status-tools" && (
         <div id="status-tools">
-          <StatusAndTools id="status-tools"/>
+          <StatusAndTools id="status-tools" />
         </div>
       )}
       {currentTab.get("tab") === "modules" && (
@@ -80,7 +80,8 @@ const App = () => {
       return;
     }
 
-    const sections: { tab: string; el: Element | null }[] = [
+    // --- Define all sections ---
+    let sections: { tab: string; el: Element | null }[] = [
       { tab: "settings", el: document.getElementById("settings") },
       { tab: "modules", el: document.getElementById("modules") },
       { tab: "status-tools", el: document.getElementById("status-tools") },
@@ -90,7 +91,12 @@ const App = () => {
       { tab: "setup", el: document.getElementById("setup") },
       { tab: "memberships", el: document.getElementById("memberships") },
     ];
-    
+
+    // --- ADD THIS FILTER ---
+    if (selectValue !== "all") {
+      sections = sections.filter((s) => s.tab === selectValue);
+    }
+
     const found: { text: string; element: Element; tab: string }[] = [];
 
     sections.forEach(({ tab, el }) => {
@@ -105,12 +111,11 @@ const App = () => {
           found.push({
             text: node.nodeValue.trim(),
             element: node.parentElement!,
-            tab,  // use tab instead of id
+            tab,
           });
         }
       }
     });
-    
 
     setResults(found);
   };
@@ -132,10 +137,8 @@ const App = () => {
 
   const handleSelectChange = (val: string) => {
     setSelectValue(val);
-  
-    window.location.hash = `tab=${val}`;
   };
-  
+
   // --- INIT MODULES ---
   useEffect(() => {
     initializeModules(appLocalizer, "multivendorx", "free", "modules");

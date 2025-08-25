@@ -134,6 +134,26 @@ export default {
                             type: 'number',
                         },
                     ],
+                    dependent: {
+                        key: 'product_cost',
+                        set: true,
+                        value: 'price',
+                    },
+                },
+                {
+                    key: 'product_qty',
+                    type: 'multi-number',
+                    options: [
+                        {
+                            key: 'product_price',
+                            type: 'number',
+                        },
+                    ],
+                    dependent: {
+                        key: 'product_cost',
+                        set: true,
+                        value: 'quantity',
+                    },
                 },
                 {
                     key: 'commission_fixed',
@@ -145,7 +165,6 @@ export default {
                             label: __( '$', 'multivendorx' ),
                             type: 'number',
                             labelAfterInput:false
-
                         },
                     ],
                 },
@@ -159,7 +178,6 @@ export default {
                             label: __( '%', 'multivendorx' ),
                             type: 'number',
                             labelAfterInput:true
-
                         },
                     ],
                 },
