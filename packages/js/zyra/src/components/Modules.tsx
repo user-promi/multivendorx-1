@@ -21,7 +21,7 @@ interface Module {
     icon: string;
     doc_link: string;
     video_link: string;
-    req_plugin?:string[],
+    req_plugin?: string[],
     settings_link: string;
     pro_module?: boolean;
     parent_category?: string; // Optional to support no separators
@@ -250,16 +250,15 @@ const Modules: React.FC<ModuleProps> = ({
                         const requiredPlugins = module.req_plugin || (module as any).req_pluging || [];
                         return (
                             <div className="module-list-item" key={module.id}>
-                                {module.pro_module && !appLocalizer.khali_dabba && (
-                                    <span className="admin-pro-tag">Pro</span>
-                                )}
                                 <div className="module-body">
                                     <div className="module-header">
                                         <div className="icon">
                                             <i className={`font ${module.icon}`}></i>
                                         </div>
                                         <div className="pro-tag">
-                                            <i className="adminlib-pro-tab"></i>
+                                            {module.pro_module && !appLocalizer.khali_dabba && (
+                                                <i className="adminlib-pro-tab"></i>
+                                            )}
                                         </div>
                                         {/* <div
                                             className="toggle-checkbox"

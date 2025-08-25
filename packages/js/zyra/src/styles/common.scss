@@ -655,13 +655,14 @@ input[type="checkbox"]:checked::before {
   }
 
   .settings-form-group-radio {
-    width: 50%;
+    width: 100%;
     position: relative;
 
     .basic-input,
     .basic-select {
       background: #d6b5ff21;
       border-color: #d6b5ff;
+      width: 100%;
     }
   }
 

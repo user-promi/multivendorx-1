@@ -51,7 +51,15 @@ const WithdrawalRequests: React.FC = () => {
         requestData(rowsPerPage, currentPage);
         setPageCount(Math.ceil(totalRows / rowsPerPage));
     }, [pagination]);
-
+    const [ showDropdown, setShowDropdown ] = useState( false );
+    
+        const toggleDropdown = ( id: any ) => {
+            if ( showDropdown === id ) {
+                setShowDropdown( false );
+                return;
+            }
+            setShowDropdown( id );
+        };
     // Fetch data from backend.
     function requestData(
         rowsPerPage = 10,
@@ -136,6 +144,19 @@ const WithdrawalRequests: React.FC = () => {
             cell: ({ row }) => (
                 <TableCell title="Action">
                     <div className="action-section">
+                        <div className="action-icons">
+                            <i
+                                className="adminlib-more-vertical"
+                                onClick={() =>
+                                    toggleDropdown(row.original.order_id)
+                                }
+                            ></i>
+                            <div
+                                className={`action-dropdown ${showDropdown === row.original.order_id
+                                        ? 'show'
+                                        : ''
+                                    }`}
+                            >
                         <ul>
                             <li
                                 onClick={() =>
@@ -154,6 +175,8 @@ const WithdrawalRequests: React.FC = () => {
                                 { __( 'Edit Store', 'multivendorx' ) }
                             </li>
                         </ul>
+                        </div>
+                        </div>
                     </div>
                 </TableCell>
             ),

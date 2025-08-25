@@ -51,7 +51,15 @@ const StoreTable: React.FC = () => {
         requestData(rowsPerPage, currentPage);
         setPageCount(Math.ceil(totalRows / rowsPerPage));
     }, [pagination]);
+    const [ showDropdown, setShowDropdown ] = useState( false );
 
+    const toggleDropdown = ( id: any ) => {
+        if ( showDropdown === id ) {
+            setShowDropdown( false );
+            return;
+        }
+        setShowDropdown( id );
+    };
     // Fetch data from backend.
     function requestData(
         rowsPerPage = 10,
@@ -136,24 +144,39 @@ const StoreTable: React.FC = () => {
             cell: ({ row }) => (
                 <TableCell title="Action">
                     <div className="action-section">
-                        <ul>
-                            <li
+                        <div className="action-icons">
+                            <i
+                                className="adminlib-more-vertical"
                                 onClick={() =>
-                                    (window.location.href = `?page=multivendorx#&tab=stores&view&id=${row.original.id}`)
+                                    toggleDropdown(row.original.order_id)
                                 }
+                            ></i>
+                            <div
+                                className={`action-dropdown ${showDropdown === row.original.order_id
+                                    ? 'show'
+                                    : ''
+                                    }`}
                             >
-                                <i className="adminlib-eye"></i>
-                                { __( 'View Store', 'multivendorx' ) }
-                            </li>
-                            <li
-                                onClick={() =>
-                                    (window.location.href = `?page=multivendorx#&tab=stores&edit/${row.original.id}`)
-                                }
-                            >
-                                <i className="adminlib-create"></i>
-                                { __( 'Edit Store', 'multivendorx' ) }
-                            </li>
-                        </ul>
+                                <ul>
+                                    <li
+                                        onClick={() =>
+                                            (window.location.href = `?page=multivendorx#&tab=stores&view&id=${row.original.id}`)
+                                        }
+                                    >
+                                        <i className="adminlib-eye"></i>
+                                        {__('View Store', 'multivendorx')}
+                                    </li>
+                                    <li
+                                        onClick={() =>
+                                            (window.location.href = `?page=multivendorx#&tab=stores&edit/${row.original.id}`)
+                                        }
+                                    >
+                                        <i className="adminlib-create"></i>
+                                        {__('Edit Store', 'multivendorx')}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                 </TableCell>
             ),
