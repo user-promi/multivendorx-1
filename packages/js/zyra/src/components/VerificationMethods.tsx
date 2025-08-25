@@ -42,6 +42,7 @@ const VerificationMethods: React.FC<VerificationMethodsProps> = ({
   };
 
   const startAdd = () => {
+    setRows((prev) => [...prev, {}]);
     setEditingIndex(rows.length);
     setForm({});
   };
@@ -55,24 +56,19 @@ const VerificationMethods: React.FC<VerificationMethodsProps> = ({
     setForm({});
   };
 
-  const saveRow = () => {
+  const saveRow = (index: number) => {
     if (!form.label || !form.label.trim()) {
       alert('Label is required');
       return;
     }
-    let newRows = [...rows];
-    if (editingIndex !== null && editingIndex < rows.length) {
-      newRows[editingIndex] = form;
-    } else {
-      newRows.push(form);
-    }
+    const newRows = [...rows];
+    newRows[index] = form;
     setRows(newRows);
     onChange(newRows);
     setEditingIndex(null);
     setForm({});
   };
 
-  // Removed alert confirmation here
   const deleteRow = (index: number) => {
     const newRows = rows.filter((_, i) => i !== index);
     setRows(newRows);
@@ -91,94 +87,69 @@ const VerificationMethods: React.FC<VerificationMethodsProps> = ({
     <div className="fileds-wrapper">
       {label && <h4>{label}</h4>}
 
-      {editingIndex === null && (
-        <button type="button" className="admin-btn btn-purple" onClick={startAdd}>
-          {addButtonLabel}
-        </button>
-      )}
-
-      {editingIndex !== null && (
-        <div>
-          {nestedFields.map(({ key, type, label, placeholder }) => {
-            if (type === 'checkbox') {
-              return (
-                <label key={key}>
-                  <input
-                    type="checkbox"
-                    checked={!!form[key]}
-                    onChange={(e) => handleFieldChange(key, e.target.checked)}
-                  />
-                  {label}
-                </label>
-              );
-            }
-            // default text input
-            return (
-              <div key={key}>
-                <label>{label}</label>
-                <input
-                  type="text"
-                  placeholder={placeholder}
-                  value={form[key] || ''}
-                  onChange={(e) => handleFieldChange(key, e.target.value)}
-                />
-              </div>
-            );
-          })}
-          <button type="button" onClick={saveRow}>
-            {editingIndex < rows.length ? 'Update' : 'Save'}
-          </button>
-          <button type="button" onClick={cancelEdit}>
-            Cancel
-          </button>
-        </div>
-      )}
+      <button type="button" className="admin-btn btn-purple" onClick={startAdd}>
+        {addButtonLabel}
+      </button>
 
       <ul>
         {rows.map((row, idx) => (
-          <li
-            key={idx}
-          >
+          <li key={idx} className="row-item">
             <div className="name">
-              <div>{row.label}</div>{' '}
-              {row.required && <span className="admin-badge red">(Required)</span>}
+              {editingIndex === idx ? (
+                <div className="inline-form">
+                  {nestedFields.map(({ key, type, label, placeholder }) => {
+                    if (type === 'checkbox') {
+                      return (
+                        <label key={key}>
+                          <input
+                            type="checkbox"
+                            checked={!!form[key]}
+                            onChange={(e) => handleFieldChange(key, e.target.checked)}
+                          />
+                          {label}
+                        </label>
+                      );
+                    }
+                    return (
+                      <div key={key}>
+                        <label>{label}</label>
+                        <input
+                          type="text"
+                          placeholder={placeholder}
+                          value={form[key] || ''}
+                          onChange={(e) => handleFieldChange(key, e.target.value)}
+                        />
+                      </div>
+                    );
+                  })}
+                  <button type="button" onClick={() => saveRow(idx)}>Save</button>
+                  <button type="button" onClick={cancelEdit}>Cancel</button>
+                </div>
+              ) : (
+                <>
+                  <div>{row.label}</div>
+                  {row.required && <span className="admin-badge red">(Required)</span>}
+                </>
+              )}
             </div>
 
-            {/* Edit icon */}
             <div className="icon-wrapper">
-              <button
-                type="button"
-                onClick={() => startEdit(idx)}
-                aria-label="Edit"
-              >
-                <i className="adminlib-create"></i>
-              </button>
-
-              {/* Delete icon */}
-              <button
-                type="button"
-                onClick={() => deleteRow(idx)}
-                aria-label="Delete"
-              >
-                <i className="adminlib-delete"></i>
-              </button>
-              <button
-                type="button"
-                onChange={() => toggleActive(idx)}
-                aria-label="Delete"
-              >
-                <i className="adminlib-eye"></i>
-              </button>
-
-              {/* Active checkbox at last */}
-              {/* <label>
-                <input
-                  type="checkbox"
-                  checked={!!row.active}
-                  onChange={() => toggleActive(idx)}
-                />{' '}
-                Active
-              </label> */}
+              {editingIndex !== idx && (
+                <>
+                  <button type="button" onClick={() => startEdit(idx)} aria-label="Edit">
+                    <i className="adminlib-create"></i>
+                  </button>
+                  <button type="button" onClick={() => deleteRow(idx)} aria-label="Delete">
+                    <i className="adminlib-delete"></i>
+                  </button>
+                  <label
+                    style={{ cursor: "pointer" }}
+                    onClick={() => toggleActive(idx)}
+                  >
+                    <i className={row.active ? "adminlib-eye" : "adminlib-eye-blocked"}></i>
+                  </label>
+                </>
+              )}
             </div>
           </li>
         ))}

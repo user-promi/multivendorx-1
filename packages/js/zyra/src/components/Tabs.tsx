@@ -288,6 +288,7 @@ const Tabs: React.FC<TabsProps> = ({
                 renderBreadcrumb={renderBreadcrumb}
                 renderMenuItems={renderMenuItems}
                 tabData={tabData}
+                goPremium={true}
             />
 
             {noticeHTML && (

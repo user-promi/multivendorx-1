@@ -346,7 +346,9 @@ const AdminDashboard = () => {
           </div>
 
         {/* Right column - 40%: Quick Links */}
+
         <div className="quick-link">
+
           <h3>Quick Link</h3>
           <div className="quick-links-wrapper">
             {quickLinks.map((link, index) => (

@@ -113,23 +113,9 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
                                     );
                                 }}
                             >   
-                                <i className="adminlib-pagination-right-arrow"></i>
+                                <i className={activeTab === method.icon ? "adminlib-arrow-down" : "adminlib-pagination-right-arrow"}></i>
                             </div>
                         )}
-
-                    {/* {enabledMethod === method.id && (
-                        <div
-                            className="payment-method-arrow"
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                setActiveTab(
-                                    activeTab === method.icon ? null : method.icon
-                                );
-                            }}
-                        >
-                            <i className="adminlib-pagination-right-arrow"></i>
-                        </div>
-                    )} */}
                     </div>
 
 
