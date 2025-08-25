@@ -88,11 +88,11 @@ const VerificationMethods: React.FC<VerificationMethodsProps> = ({
   };
 
   return (
-    <div>
+    <div className="fileds-wrapper">
       {label && <h4>{label}</h4>}
 
       {editingIndex === null && (
-        <button type="button" onClick={startAdd}>
+        <button type="button" className="admin-btn btn-purple" onClick={startAdd}>
           {addButtonLabel}
         </button>
       )}
@@ -138,40 +138,48 @@ const VerificationMethods: React.FC<VerificationMethodsProps> = ({
         {rows.map((row, idx) => (
           <li
             key={idx}
-            style={{ display: 'flex', alignItems: 'center', gap: '10px' }}
           >
-            <strong>{row.label}</strong>{' '}
-            {row.required && <span>(Required)</span>}
+            <div className="name">
+              <div>{row.label}</div>{' '}
+              {row.required && <span className="admin-badge red">(Required)</span>}
+            </div>
 
             {/* Edit icon */}
-            <button
-              type="button"
-              onClick={() => startEdit(idx)}
-              aria-label="Edit"
-              style={{ background: 'none', border: 'none', cursor: 'pointer' }}
-            >
-              ✏️
-            </button>
+            <div className="icon-wrapper">
+              <button
+                type="button"
+                onClick={() => startEdit(idx)}
+                aria-label="Edit"
+              >
+                <i className="adminlib-create"></i>
+              </button>
 
-            {/* Delete icon */}
-            <button
-              type="button"
-              onClick={() => deleteRow(idx)}
-              aria-label="Delete"
-              style={{ background: 'none', border: 'none', cursor: 'pointer' }}
-            >
-              🗑️
-            </button>
-
-            {/* Active checkbox at last */}
-            <label style={{ marginLeft: 'auto' }}>
-              <input
-                type="checkbox"
-                checked={!!row.active}
+              {/* Delete icon */}
+              <button
+                type="button"
+                onClick={() => deleteRow(idx)}
+                aria-label="Delete"
+              >
+                <i className="adminlib-delete"></i>
+              </button>
+              <button
+                type="button"
                 onChange={() => toggleActive(idx)}
-              />{' '}
-              Active
-            </label>
+                aria-label="Delete"
+              >
+                <i className="adminlib-eye"></i>
+              </button>
+
+              {/* Active checkbox at last */}
+              {/* <label>
+                <input
+                  type="checkbox"
+                  checked={!!row.active}
+                  onChange={() => toggleActive(idx)}
+                />{' '}
+                Active
+              </label> */}
+            </div>
           </li>
         ))}
       </ul>
