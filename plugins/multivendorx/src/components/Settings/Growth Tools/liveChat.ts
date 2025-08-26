@@ -3,33 +3,30 @@ import { __ } from '@wordpress/i18n';
 export default {
     id: 'live-chat',
     priority: 3,
-    name: __( 'Live Chat', 'multivendorx' ),
-    desc: __( 'Live Chat', 'multivendorx' ),
+    name: __('Live chat', 'multivendorx'),
+    desc: __('Set up and manage live chat options for customer interaction.', 'multivendorx'),
     icon: 'adminlib-wholesale',
     submitUrl: 'settings',
     modal: [
         {
             key: 'product_page_chat',
             type: 'setting-toggle',
-            label: __( 'Chat Button Position', 'multivendorx' ),
-            desc: __(
-                'Choose your preferred place to display chat button.',
-                'multivendorx'
-            ),
+            label: __('Chat button position', 'multivendorx'),
+            desc: __('Choose where the chat button will appear on product pages.', 'multivendorx'),
             options: [
                 {
                     key: 'add_to_cart_button',
-                    label: __( 'Add to Cart Button', 'multivendorx' ),
+                    label: __('Next to Add to Cart button', 'multivendorx'),
                     value: 'add_to_cart_button',
                 },
                 {
                     key: 'store_info',
-                    label: __( 'Store Details Tab', 'multivendorx' ),
+                    label: __('Inside Store details tab', 'multivendorx'),
                     value: 'store_info',
                 },
                 {
                     key: 'none',
-                    label: __( 'Hide', 'multivendorx' ),
+                    label: __('Do not display', 'multivendorx'),
                     value: 'none',
                 },
             ],
@@ -39,25 +36,22 @@ export default {
         {
             key: 'chat_provider',
             type: 'setting-toggle',
-            label: __( 'Chat Platform Integration', 'multivendorx' ),
-            desc: __(
-                'Select your preferred chat provider for handling customer inquiries',
-                'multivendorx'
-            ),
+            label: __('Chat platform integration', 'multivendorx'),
+            desc: __('Select the chat provider you want to connect with your store.', 'multivendorx'),
             options: [
                 {
                     key: 'facebook',
-                    label: __( 'Facebook Messenger', 'multivendorx' ),
+                    label: __('Facebook Messenger', 'multivendorx'),
                     value: 'facebook',
                 },
                 {
                     key: 'talkjs',
-                    label: __( 'Talkjs', 'multivendorx' ),
+                    label: __('TalkJS', 'multivendorx'),
                     value: 'talkjs',
                 },
                 {
                     key: 'whatsapp',
-                    label: __( 'Whatsapp', 'multivendorx' ),
+                    label: __('WhatsApp', 'multivendorx'),
                     value: 'whatsapp',
                 },
             ],
@@ -65,7 +59,8 @@ export default {
         {
             key: 'messenger_color',
             type: 'color',
-            label: __( 'Messenger Color', 'multivendorx' ),
+            label: __('Messenger theme color', 'multivendorx'),
+            desc: __('Pick a theme color for your Facebook Messenger chat window.', 'multivendorx'),
             dependent: {
                 key: 'chat_provider',
                 set: true,
@@ -77,16 +72,17 @@ export default {
         {
             key: 'whatsapp_opening_pattern',
             type: 'setting-toggle',
-            label: __( 'Opening Pattern', 'multivendorx' ),
+            label: __('WhatsApp opening pattern', 'multivendorx'),
+            desc: __('Choose whether WhatsApp chats open in browser or app.', 'multivendorx'),
             options: [
                 {
                     key: 'browser',
-                    label: __( 'Browser', 'multivendorx' ),
+                    label: __('Open in browser', 'multivendorx'),
                     value: 'browser',
                 },
                 {
                     key: 'app',
-                    label: __( 'App', 'multivendorx' ),
+                    label: __('Open in WhatsApp app', 'multivendorx'),
                     value: 'app',
                 },
             ],
@@ -101,11 +97,8 @@ export default {
         {
             key: 'whatsapp_pre_filled',
             type: 'textarea',
-            desc: __(
-                'Text that appears in the WhatsApp Chat window. Add variables {store_name}, {store_url} to replace with store name, store url.',
-                'multivendorx'
-            ),
-            label: __( 'Pre-filled Message', 'multivendorx' ),
+            label: __('Pre-filled WhatsApp message', 'multivendorx'),
+            desc: __('Define default text for the WhatsApp chat window. You can use variables {store_name} and {store_url}.', 'multivendorx'),
             dependent: {
                 key: 'chat_provider',
                 set: true,
@@ -117,28 +110,23 @@ export default {
         {
             key: 'app_id',
             type: 'text',
-            label: __( 'App ID', 'multivendorx' ),
-            desc: __( 'Enter app generated app id here.', 'multivendorx' ),
-            moduleEnabled: 'live-chat',
+            label: __('TalkJS App ID', 'multivendorx'),
+            desc: __('Enter the App ID provided in your TalkJS dashboard.', 'multivendorx'),
             dependent: {
                 key: 'chat_provider',
                 set: true,
                 value: 'talkjs',
             },
+            moduleEnabled: 'live-chat',
             proSetting: true,
         },
         {
             key: 'app_secret',
             type: 'text',
-            label: __( 'App Secret', 'multivendorx' ),
+            label: __('TalkJS App Secret', 'multivendorx'),
             desc: __(
-                `<br>** <a target="_blank" href="https://talkjs.com/dashboard">${ __(
-                    'Click here',
-                    'multivendorx'
-                ) }</a>${ __(
-                    ' to get your above App ID and App Secret',
-                    'multivendorx'
-                ) }`
+                'Enter the App Secret from your TalkJS dashboard. You can retrieve both the App ID and Secret from your TalkJS account settings.',
+                'multivendorx'
             ),
             dependent: {
                 key: 'chat_provider',
@@ -148,6 +136,5 @@ export default {
             moduleEnabled: 'live-chat',
             proSetting: true,
         },
-
     ],
 };
