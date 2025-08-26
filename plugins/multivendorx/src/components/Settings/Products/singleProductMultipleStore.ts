@@ -5,7 +5,7 @@ export default {
     priority: 2,
     name: __( 'Single Product Multiple Store', 'multivendorx' ),
     desc: __(
-        'Controls how stores are onboarded and what access they get.',
+        'Manage how multiple vendors can list and sell the same product in your marketplace.',
         'multivendorx'
     ),
     icon: 'adminlib-general-tab',
@@ -16,7 +16,7 @@ export default {
             type: 'checkbox',
             label: __( 'Allow store to copy products', 'multivendorx' ),
             desc: __(
-                'Let stores search for products sold on your site and sell them from their store.',
+                'Enable this to let vendors search for existing products in your marketplace and add them to their own store catalog.',
                 'multivendorx'
             ),
             options: [
@@ -33,7 +33,7 @@ export default {
             type: 'select',
             label: __( 'Display shop page product', 'multivendorx' ),
             desc: __(
-                'Select the criteria on which the SPMV product is going to be based on.',
+                'Choose which version of SPMV product will be shown as the main listing on the shop page (e.g., top-rated store, min / max priced product).',
                 'multivendorx'
             ),
             options: [
@@ -44,7 +44,7 @@ export default {
                 },
                 {
                     key: 'max-price',
-                    label: __( 'max Price', 'multivendorx' ),
+                    label: __( 'Max Price', 'multivendorx' ),
                     value: __( 'max-price', 'multivendorx' ),
                 },
                 {
@@ -65,7 +65,7 @@ export default {
             type: 'select',
             label: __( 'More offers display position', 'multivendorx' ),
             desc: __(
-                'Select where you want the "More Offers" section to appear on the Single Product Page.',
+                'Select where the “More Offers” section will appear on the single product page, showing buyers other vendors selling the same item.',
                 'multivendorx'
             ),
             options: [
