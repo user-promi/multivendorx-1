@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 export default {
     id: 'store-appearance',
     priority: 5,
-    name: __( 'Appearance', 'multivendorx' ),
+    name: __('Appearance', 'multivendorx'),
     desc: __(
         "Control how stores look and feel on your marketplace",
         'multivendorx'
@@ -14,10 +14,10 @@ export default {
         {
             key: 'mvx_new_dashboard_site_logo',
             type: 'file',
-            label: __( 'Branding logo', 'multivendorx' ),
+            label: __('Branding logo', 'multivendorx'),
             size: 'small',
-            desc: __( 'Upload brand image as logo', 'multivendorx' ),
-        },      
+            desc: __('Upload brand image as logo', 'multivendorx'),
+        },
         {
             key: 'section',
             type: 'section',
@@ -35,23 +35,56 @@ export default {
             predefinedOptions: [
                 {
                     key: 'purple_pulse',
-                    label: 'Purple pulse',
+                    label: 'Purple Pulse',
                     value: 'purple_pulse',
-                    color: ['#3c1f5d', '#5a2d82', '#7b3eb8', '#9e64d9'],
+                    colors: {
+                        buttonText: '#ffffff',
+                        buttonBg: '#3c1f5d',
+                        buttonBorder: '#5a2d82',
+                        buttonHoverText: '#ffffff',
+                        buttonHoverBg: '#7b3eb8',
+                        buttonHoverBorder: '#9e64d9',
+                        sidebarText: '#ffffff',
+                        sidebarBg: '#3c1f5d',
+                        sidebarActiveText: '#ffffff',
+                        sidebarActiveBg: '#5a2d82',
+                    },
                 },
                 {
                     key: 'majestic_orange',
-                    label: 'Majestic orange',
+                    label: 'Majestic Orange',
                     value: 'majestic_orange',
-                    color: ['#ff9f1a', '#ff6f00', '#ff8533', '#e65100'],
+                    colors: {
+                        buttonText: '#ffffff',
+                        buttonBg: '#ff9f1a',
+                        buttonBorder: '#ff6f00',
+                        buttonHoverText: '#ffffff',
+                        buttonHoverBg: '#ff8533',
+                        buttonHoverBorder: '#e65100',
+                        sidebarText: '#ffffff',
+                        sidebarBg: '#ff9f1a',
+                        sidebarActiveText: '#ffffff',
+                        sidebarActiveBg: '#ff6f00',
+                    },
                 },
                 {
                     key: 'ocean',
                     label: 'Ocean',
                     value: 'ocean',
-                    color: ['#102a43', '#243b53', '#2c5282', '#2b6cb0'],
+                    colors: {
+                        buttonText: '#ffffff',
+                        buttonBg: '#102a43',
+                        buttonBorder: '#243b53',
+                        buttonHoverText: '#ffffff',
+                        buttonHoverBg: '#2c5282',
+                        buttonHoverBorder: '#2b6cb0',
+                        sidebarText: '#ffffff',
+                        sidebarBg: '#102a43',
+                        sidebarActiveText: '#ffffff',
+                        sidebarActiveBg: '#243b53',
+                    },
                 },
             ],
-        }, 
+        }
     ],
 };

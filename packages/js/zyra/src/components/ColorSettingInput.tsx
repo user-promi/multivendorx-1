@@ -1,13 +1,6 @@
 import React, { ChangeEvent, useState, useEffect } from 'react';
 import "../styles/web/ColorSettingInput.scss";
 
-interface PaletteOption {
-    key?: string;
-    value?: string;
-    label?: string;
-    color?: string[];
-}
-
 interface CustomColors {
     buttonText: string;
     buttonBg: string;
@@ -21,23 +14,33 @@ interface CustomColors {
     sidebarActiveBg: string;
 }
 
+interface PaletteOption {
+    key?: string;
+    value?: string;
+    label?: string;
+    colors?: Partial<CustomColors>;
+}
+
 interface ColorSettingProps {
     wrapperClass?: string;
     inputClass?: string;
     descClass?: string;
     description?: string;
     predefinedOptions: PaletteOption[];
-    value?: string;
-    customValue?: Partial<CustomColors>;
+    value?: { selectedPalette: string; colors: Partial<CustomColors> }; // object from DB
     onChange?: (e: { target: { name: string; value: any } }) => void;
     idPrefix?: string;
     showPreview?: boolean;
 }
 
 const ColorSettingInput: React.FC<ColorSettingProps> = (props) => {
-    const [mode, setMode] = useState<'predefined' | 'custom'>('predefined');
-    const [selectedColors, setSelectedColors] = useState<string[]>([]);
-    const [selectedPalette, setSelectedPalette] = useState(props.value || '');
+    // Initialize selectedPalette from DB value or default to first option
+    const initialPalette = props.value?.selectedPalette || (props.predefinedOptions[0]?.value ?? '');
+    const initialColors = props.value?.colors || {};
+
+    const [mode, setMode] = useState<'predefined' | 'custom'>(initialPalette === 'custom' ? 'custom' : 'predefined');
+    const [selectedPalette, setSelectedPalette] = useState(initialPalette);
+    const [selectedColors, setSelectedColors] = useState<Partial<CustomColors>>(initialColors);
     const [customColors, setCustomColors] = useState<CustomColors>({
         buttonText: '#ffffff',
         buttonBg: '#007cba',
@@ -49,30 +52,58 @@ const ColorSettingInput: React.FC<ColorSettingProps> = (props) => {
         sidebarBg: '#202528',
         sidebarActiveText: '#ffffff',
         sidebarActiveBg: '#3f85b9',
-        ...props.customValue,
+        ...initialColors,
     });
 
     useEffect(() => {
-        const selected = props.predefinedOptions.find(opt => opt.value === selectedPalette);
-        setSelectedColors(selected?.color || []);
+        if (selectedPalette !== 'custom') {
+            const selectedOption = props.predefinedOptions.find(opt => opt.value === selectedPalette);
+            setSelectedColors(selectedOption?.colors || {});
+        }
     }, [selectedPalette, props.predefinedOptions]);
 
     const handlePaletteChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setSelectedPalette(e.target.value);
-        props.onChange?.({ target: { name: 'vendor_color_settings', value: e.target.value } });
+        const value = e.target.value;
+        setSelectedPalette(value);
+
+        const option = props.predefinedOptions.find(opt => opt.value === value);
+        const colors = option?.colors || {};
+
+        setSelectedColors(colors);
+
+        props.onChange?.({
+            target: {
+                name: 'vendor_color_settings',
+                value: {
+                    selectedPalette: value,
+                    colors,
+                }
+            }
+        });
     };
 
     const handleCustomChange = (field: keyof CustomColors, value: string) => {
         const updated = { ...customColors, [field]: value };
         setCustomColors(updated);
-        props.onChange?.({ target: { name: 'customColors', value: updated } });
+        setSelectedColors(updated);
+        setSelectedPalette('custom');
+
+        props.onChange?.({
+            target: {
+                name: 'vendor_color_settings',
+                value: {
+                    selectedPalette: 'custom',
+                    colors: updated,
+                }
+            }
+        });
     };
 
     return (
         <>
-            <div className={props.wrapperClass} >
+            <div className={props.wrapperClass}>
                 {/* Toggle Mode */}
-                <div style={{ display: 'flex', gap: '12px' }}>
+                <div style={{ display: 'flex', gap: '12px', marginBottom: '12px' }}>
                     <button
                         type="button"
                         onClick={() => setMode('predefined')}
@@ -93,7 +124,7 @@ const ColorSettingInput: React.FC<ColorSettingProps> = (props) => {
                 {mode === 'predefined' && props.predefinedOptions.map(option => {
                     const checked = selectedPalette === option.value;
                     return (
-                        <div key={option.key} style={{ display: 'flex', alignItems: 'center' }}>
+                        <div key={option.key} style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
                             <input
                                 className={props.inputClass}
                                 id={`${props.idPrefix}-${option.key}`}
@@ -120,13 +151,11 @@ const ColorSettingInput: React.FC<ColorSettingProps> = (props) => {
                                 }}
                             >
                                 <span style={{ fontSize: '14px', fontWeight: 500 }}>{option.label}</span>
-                                {Array.isArray(option.color) && (
-                                    <div style={{ display: 'flex', width: '70px', height: '18px', border: '1px solid #ddd', borderRadius: '4px', overflow: 'hidden' }}>
-                                        {option.color.map((c, i) => (
-                                            <div key={i} style={{ flex: 1, backgroundColor: c }}></div>
-                                        ))}
-                                    </div>
-                                )}
+                                <div style={{ display: 'flex', width: '70px', height: '18px', border: '1px solid #ddd', borderRadius: '4px', overflow: 'hidden' }}>
+                                    {option.colors && Object.values(option.colors).map((c, i) => (
+                                        <div key={i} style={{ flex: 1, backgroundColor: c }}></div>
+                                    ))}
+                                </div>
                             </label>
                         </div>
                     );
@@ -158,8 +187,8 @@ const ColorSettingInput: React.FC<ColorSettingProps> = (props) => {
                     {/* Sidebar */}
                     <div
                         style={{
-                            backgroundColor: mode === 'custom' ? customColors.sidebarBg : selectedColors[0],
-                            color: mode === 'custom' ? customColors.sidebarText : '#fff',
+                            backgroundColor: selectedColors.sidebarBg,
+                            color: selectedColors.sidebarText,
                             width: '110px',
                             padding: '12px',
                             display: 'flex',
@@ -178,9 +207,9 @@ const ColorSettingInput: React.FC<ColorSettingProps> = (props) => {
                         <h4 style={{ marginBottom: '10px' }}>Dashboard</h4>
                         <button
                             style={{
-                                backgroundColor: mode === 'custom' ? customColors.buttonBg : selectedColors[3],
-                                color: mode === 'custom' ? customColors.buttonText : '#fff',
-                                border: `1px solid ${mode === 'custom' ? customColors.buttonBorder : selectedColors[2]}`,
+                                backgroundColor: selectedColors.buttonBg,
+                                color: selectedColors.buttonText,
+                                border: `1px solid ${selectedColors.buttonBorder}`,
                                 padding: '8px 14px',
                                 borderRadius: '4px',
                                 cursor: 'pointer'

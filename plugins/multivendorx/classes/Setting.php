@@ -112,6 +112,7 @@ class Setting {
                 'multivendorx_user_capability_settings',
                 'multivendorx_commission_rule_settings',
                 'multivendorx_payment_integration_settings',
+                'multivendorx_store_appearance_settings',
 			)
         );
 

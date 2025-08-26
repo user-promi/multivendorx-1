@@ -202,6 +202,7 @@ const Tabs: React.FC<TabsProps> = ({
     const renderMenuItem = useCallback((item: TabData, index: number) => {
         if (item.type === 'file') {
             const tab = item.content as TabContent;
+            if (!tab.id || !tab.name) return null;
             return (
                 <div key={tab.id} className={`menu-item ${activeTab === tab.id ? 'active-current-tab' : ''}`} onClick={() => navigateToTab(tab.id)}>
                     <Link to={prepareUrl(tab.id)}>
@@ -213,6 +214,7 @@ const Tabs: React.FC<TabsProps> = ({
         if (item.type === 'folder') {
             const folderName = item.name ?? '';
             const folderContent = item.content as TabData[];
+            if (!folderContent || folderContent.length === 0) return null;
             const firstFile = findFirstFile(folderContent);
             const folderUrl = firstFile ? prepareUrl(firstFile.id) : '#';
             const isCurrentFolderOpen = menuStack.length > 1 && menuStack[menuStack.length - 1] === folderContent;

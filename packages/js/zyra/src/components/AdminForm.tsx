@@ -1115,12 +1115,8 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             descClass="settings-metabox-description"
                             description={inputField.desc}
                             showPreview={inputField.showPreview ?? false}
-                            predefinedOptions={inputField.predefinedOptions ?? []} value={typeof value === 'number' ? value.toString() : value}
-                            customValue={
-                                typeof value === 'object' && value?.customColors
-                                    ? value.customColors
-                                    : {}
-                            }
+                            predefinedOptions={inputField.predefinedOptions ?? []}
+                            value={value}
                             idPrefix="color-setting"
                             onChange={(e) => handleChange(e, inputField.key)}
                         />
