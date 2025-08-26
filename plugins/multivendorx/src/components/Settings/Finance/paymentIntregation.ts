@@ -1,4 +1,5 @@
 import { __ } from '@wordpress/i18n';
+import payPal from '../../../assets/images/paypal.png';
 
 const methods = Object.entries(appLocalizer.all_payments).map(([key, value]) => {
     return value;
@@ -12,8 +13,9 @@ export default {
         "Choose which payment integrations to enable for store payouts",
         'multivendorx'
     ),
-    icon: 'adminlib-dynamic-pricing',
+    icon: payPal,
     submitUrl: 'settings',
+    wrapperClass: 'form-wrapper',
     modal: [
         {
             key: 'payment_methods',

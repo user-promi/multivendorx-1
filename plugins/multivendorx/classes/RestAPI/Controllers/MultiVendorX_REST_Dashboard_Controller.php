@@ -43,6 +43,7 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
         $all_endpoints = array(
             'dashboard' => array(
                 'name'    => 'Dashboard',
+                'icon'    => 'adminlib-cart',
                 'slug'    => 'dashboard',
                 'submenu' => array(),
                 'capability' => ['manage_users']
@@ -50,6 +51,7 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
             'products' => array(
                 'name'    => 'Products',
                 'slug'    => 'products',
+                'icon'    => 'adminlib-cart',
                 'submenu' => array(
                     array(
                         'key'  => 'all-products',
