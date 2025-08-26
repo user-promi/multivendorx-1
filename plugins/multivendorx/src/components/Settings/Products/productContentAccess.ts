@@ -3,9 +3,9 @@ import { __ } from '@wordpress/i18n';
 export default {
     id: 'product-content-access',
     priority: 1,
-    name: __( 'Listing & Content Access', 'multivendorx' ),
+    name: __( 'Store product permissions', 'multivendorx' ),
     desc: __(
-        'Select the types of products stores are allowed to add.',
+        'Decide which product types, fields, and features stores can access when creating or managing products in their store.',
         'multivendorx'
     ),
     icon: 'adminlib-warehousing-icon',
@@ -17,7 +17,7 @@ export default {
             label: __( 'Allowed Product Type', 'multivendorx' ),
             class: 'mvx-toggle-checkbox',
             desc: __(
-                'Select the types of products you want to enable in your marketplace: <li>Virtual Products: Choose this option for products that don’t have a physical form (e.g., services, memberships). <li>Downloadable Products: Use this option for products that customers can download (e.g., software, eBooks).',
+                'Select the types of products you want to enable in your marketplace: <li><b>Virtual Products </b>: Choose this option for products that don’t have a physical form (e.g., services, memberships). <li><b>Downloadable Products</b>: Use this option for products that customers can download (e.g., software, eBooks).',
                 'multivendorx'
             ),
             options: [
