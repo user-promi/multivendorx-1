@@ -14,7 +14,7 @@ export default {
         {
             key: 'is_singleproductmultistore',
             type: 'checkbox',
-            label: __( 'Allow Store to Copy Products', 'multivendorx' ),
+            label: __( 'Allow store to copy products', 'multivendorx' ),
             desc: __(
                 'Let stores search for products sold on your site and sell them from their store.',
                 'multivendorx'
@@ -31,7 +31,7 @@ export default {
         {
             key: 'singleproductmultistore_show_order',
             type: 'select',
-            label: __( 'Display Shop Page Product', 'multivendorx' ),
+            label: __( 'Display shop page product', 'multivendorx' ),
             desc: __(
                 'Select the criteria on which the SPMV product is going to be based on.',
                 'multivendorx'
@@ -39,12 +39,12 @@ export default {
             options: [
                 {
                     key: 'min-price',
-                    label: __( 'Min Price', 'multivendorx' ),
+                    label: __( 'Min price', 'multivendorx' ),
                     value: __( 'min-price', 'multivendorx' ),
                 },
                 {
                     key: 'max-price',
-                    label: __( 'Max Price', 'multivendorx' ),
+                    label: __( 'max Price', 'multivendorx' ),
                     value: __( 'max-price', 'multivendorx' ),
                 },
                 {
@@ -63,7 +63,7 @@ export default {
         {
             key: 'moreoffers_display_position',
             type: 'select',
-            label: __( 'More Offers Display Position', 'multivendorx' ),
+            label: __( 'More offers display position', 'multivendorx' ),
             desc: __(
                 'Select where you want the "More Offers" section to appear on the Single Product Page.',
                 'multivendorx'
@@ -76,17 +76,17 @@ export default {
                 },
                 {
                     key: 'above-tabs',
-                    label: __( 'Above Single Page Product Tabs', 'multivendorx' ),
+                    label: __( 'Above single page product tabs', 'multivendorx' ),
                     value: 'above-tabs',
                 },
                 {
                     key: 'inside-tabs',
-                    label: __( 'Display Inside Single Page Product Tabs', 'multivendorx' ),
+                    label: __( 'Display inside single page product tabs', 'multivendorx' ),
                     value: 'inside-tabs',
                 },
                 {
                     key: 'after-tabs',
-                    label: __( 'After Single Page Product Tabs', 'multivendorx' ),
+                    label: __( 'After single page product tabs', 'multivendorx' ),
                     value: 'after-tabs',
                 },
             ],
