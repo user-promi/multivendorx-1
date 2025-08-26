@@ -14,26 +14,26 @@ export default {
         {
             key: 'store_page_details',
             type: 'checkbox',
-            label: __( 'Store Info on Products', 'multivendorx' ),
-            desc: __( 'Controls what store information (name, logo, address) is displayed on product listings and detail pages.', 'multivendorx' ),
+            label: __( 'Store info on products', 'multivendorx' ),
+            desc: __( 'Control what store information (name, logo, address) is displayed on product listings and detail pages.', 'multivendorx' ),
             class: 'mvx-toggle-checkbox',
             options: [
                 {
                     key: 'show_store_name_on_products',
                     label: __( 'Store name', 'multivendorx' ),
-					desc: __( 'Display store name on product listings and detail pages', 'multivendorx' ),
+                    desc: __( 'Display store name on product listings and detail pages', 'multivendorx' ),
                     value: 'show_store_owner_info',
                 },
                 {
                     key: 'show_store_logo_next_to_products',
                     label: __( 'Store logo', 'multivendorx' ),
-					desc: __( 'Include store branding alongside product information', 'multivendorx' ),
+                    desc: __( 'Include store branding alongside product information', 'multivendorx' ),
                     value: 'show_store_description',
                 },
                 {
                     key: 'show_order_breakdown_by_store',
                     label: __( 'Order breakdown by store', 'multivendorx' ),
-                    desc: __( 'Display which items come from which store and their corresponding sub order number, in email confirmations', 'multivendorx' ),
+                    desc: __( 'Display which items come from which store and their corresponding sub order number in email confirmations', 'multivendorx' ),
                     value: 'show_store_address',
                 },                
             ],
@@ -42,8 +42,8 @@ export default {
         {
             key: 'store_page_details',
             type: 'checkbox',
-            label: __( 'Store-Wise Order Display', 'multivendorx' ),
-            desc: __( 'Controls whether customers see orders grouped by vendor in cart, checkout, and confirmation emails.', 'multivendorx' ),
+            label: __( 'Store-wise order display', 'multivendorx' ),
+            desc: __( 'Control whether customers see orders grouped by vendor in cart, checkout, and confirmation emails.', 'multivendorx' ),
             class: 'mvx-toggle-checkbox',
             options: [
                 {
@@ -52,21 +52,14 @@ export default {
                     desc: __( 'Organize cart contents by individual stores for clarity', 'multivendorx' ),
                     value: 'show_store_owner_info',
                 },
-                {
-                    key: 'display_store_support_details',
-                    label: __( 'Store Support details', 'multivendorx' ),
-                    desc: __( 'Include store contact information for customer support during checkout, also in mail', 'multivendorx' ),
-                    value: 'show_store_address',
-                },
-                
-            ],
+                ],
             selectDeselect: true,
         },
         {
             key: 'store_page_details',
             type: 'checkbox',
-            label: __( 'Vendor Contact Display', 'multivendorx' ),
-            desc: __( 'Controls whether vendors contact and support details are visible to customers during checkout and in emails.', 'multivendorx' ),
+            label: __( 'Vendor contact display', 'multivendorx' ),
+            desc: __( 'Control whether vendor contact and support details are visible to customers during checkout and in emails.', 'multivendorx' ),
             class: 'mvx-toggle-checkbox',
             options: [
                 {
@@ -91,7 +84,7 @@ export default {
                 },
                 {
                     key: 'show_store_ratings',
-                    label: __( 'Store Ratings', 'multivendorx' ),
+                    label: __( 'Store ratings', 'multivendorx' ),
                     value: 'show_store_ratings',
                 },
             ],
@@ -100,8 +93,8 @@ export default {
         {
             key: 'store_policy_override',
             type: 'checkbox',
-            label: __( 'Vendor Policy Override', 'multivendorx' ),
-            desc: __( 'Allows vendors to set their own store policies instead of using the default admin policies.', 'multivendorx' ),
+            label: __( 'Vendor policy override', 'multivendorx' ),
+            desc: __( 'Allow vendors to set their own store policies instead of using the default admin policies.', 'multivendorx' ),
             class: 'mvx-toggle-checkbox',
             options: [
                 {
@@ -116,7 +109,7 @@ export default {
                 },
                 {
                     key: 'enable_per_store_refund_policy',
-                    label: __( 'Refund and Return', 'multivendorx' ),
+                    label: __( 'Refund and return', 'multivendorx' ),
                     value: 'enable_per_store_refund_policy',
                 },
             ],
@@ -125,16 +118,16 @@ export default {
         {
             key: 'separator_store_policy_override',
             type: 'section',
-            desc: __( 'Allow store owners to temporarily disable their profile hiding it and its products from the marketplace.', 'multivendorx' ),
+            desc: __( 'Allow store owners to temporarily disable their profile, hiding it and its products from the marketplace.', 'multivendorx' ),
             hint: __(
-                'Store Profile Controls',
+                'Store profile controls',
                 'multivendorx'
             ),
         },
         {
             key: 'enable_profile_deactivation_request',
             type: 'checkbox',
-            label: __('Profile deactivation requests', 'multivendorx' ),
+            label: __( 'Profile deactivation requests', 'multivendorx' ),
             options: [
                 {
                     key: 'enable_profile_deactivation_request',
