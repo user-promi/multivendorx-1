@@ -1,11 +1,11 @@
 import { __ } from '@wordpress/i18n';
 
 export default {
-    id: 'setup-wizard',
+    id: 'geo-location',
     priority: 3,
     name: 'Geo Location',
     desc: __(
-        'Control whether new stores get step-by-step guidance or go directly to their dashboar',
+        'Help customers easily find nearby vendors and products with location-based search. Configure map providers to control how location search works across your marketplace.',
         'multivendorx'
     ),
     icon: 'adminlib-form-section',
@@ -27,12 +27,12 @@ export default {
                 },
                 {
                     key: 'store_lisiting',
-                    label: __( 'Store Lisiting', 'multivendorx' ),
+                    label: __( 'Store lisiting', 'multivendorx' ),
                     value: 'store_lisiting',
                 },
                 {
                     key: 'shop_page',
-                    label: __( 'Shop Page', 'multivendorx' ),
+                    label: __( 'Shop page', 'multivendorx' ),
                     value: 'shop_page',
                 },
             ],
@@ -41,7 +41,7 @@ export default {
             key: 'choose_map_api',
             type: 'setting-toggle',
             defaulValue: 'google_map_set',
-            label: __( 'Map Provider', 'multivendorx' ),
+            label: __( 'Map provider', 'multivendorx' ),
             desc: __( 'Select the map service that will power location features and maps across the site. Different providers may require an API key.', 'multivendorx' ),
             options: [
                 {
@@ -59,7 +59,7 @@ export default {
         {
             key: 'google_api_key',
             type: 'text',
-            label: __( 'Google Map API key', 'multivendorx' ),
+            label: __( 'Google map API key', 'multivendorx' ),
             desc: __(
                 '<a href="https://developers.google.com/maps/documentation/javascript/get-api-key#get-an-api-key" target="_blank">Click here to generate key</a>',
                 'multivendorx'
@@ -84,28 +84,20 @@ export default {
                 value: 'mapbox_api_set',
             },
         },
-        // {
-        //     key: 'store_address_input',
-        //     type: 'textarea',
-        //     label: __( 'Store Address Input', 'multivendorx' ),
-            
-        //     desc: __( 'Enter the full store address. This information may be displayed on the store page and used for shipping or location purposes.', 'multivendorx' ),
-        //     placeholder: __( '123 Main Street, City, State, ZIP Code', 'multivendorx' ),
-        // },
         {
             key: 'radius_search_distance',
             type: 'multi-number',
-            label: __( 'Location Search', 'multivendorx' ),
+            label: __( 'Location search', 'multivendorx' ),
             desc: __( 'Help customers find nearby stores with location-based search.', 'multivendorx' ),
             options: [
                 {
                     key: 'radius_search_min_distance',
-                    label: __( 'min', 'multivendorx' ),
+                    label: __( 'Min', 'multivendorx' ),
                     type: 'number',
                 },
                 {
                     key: 'radius_search_max_distance',
-                    label: __( 'max', 'multivendorx' ),
+                    label: __( 'Max', 'multivendorx' ),
                     type: 'number',
                 },
                 {
