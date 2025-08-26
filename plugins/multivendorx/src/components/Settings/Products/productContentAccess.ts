@@ -14,10 +14,10 @@ export default {
         {
             key: 'type_options',
             type: 'checkbox',
-            label: __( 'Allowed Product Type', 'multivendorx' ),
+            label: __( 'Allowed product type', 'multivendorx' ),
             class: 'mvx-toggle-checkbox',
             desc: __(
-                'Select the types of products you want to enable in your marketplace: <li><b>Virtual Products </b>: Choose this option for products that don’t have a physical form (e.g., services, memberships). <li><b>Downloadable Products</b>: Use this option for products that customers can download (e.g., software, eBooks).',
+                'Select the types of products you want to enable in your marketplace: <li><b>Virtual products </b>: Choose this option for products that don’t have a physical form (e.g., services, memberships). <li><b>Downloadable products</b>: Use this option for products that customers can download (e.g., software, eBooks).',
                 'multivendorx'
             ),
             options: [
@@ -37,9 +37,9 @@ export default {
         {
             key: 'products_fields',
             type: 'checkbox',
-            label: __( 'Required Product Information Fields ', 'multivendorx' ),
+            label: __( 'Required product information fields', 'multivendorx' ),
             desc: __(
-                'Select the types of products you want to enable in your marketplace: <li>General: Basic product details such as name, description, and price.<li>Inventory: Manage stock levels, SKU, and stock status for products.<li>Linked Products: Link related products, upsells, and cross-sells to increase sales.<li>Attributes: Add custom attributes like size, color, or material to products.<li>Advanced Settings: Configure additional options like purchase notes and order visibility.<li>Policies: Set store policies, including return and refund rules.<li>Product Tags: Help categorize products using tags for easier searching and filtering.<li>GTIN (Global Trade Item Number): Enter the product’s unique identifier for tracking and categorization purposes.',
+                'Select the types of products you want to enable in your marketplace: <li><b>General</b>: Basic product details such as name, description, and price.<li><b>Inventory</b>: Manage stock levels, SKU, and stock status for products.<li>Linked products: Link related products, upsells, and cross-sells to increase sales.<li>Attributes: Add custom attributes like size, color, or material to products.<li><b>Advanced settings</b>: Configure additional options like purchase notes and order visibility.<li><b>Policies</b>: Set store policies, including return and refund rules.<li><b>Product tags</b>: Help categorize products using tags for easier searching and filtering.<li><b>GTIN (global trade item number)</b>: Enter the product’s unique identifier for tracking and categorization purposes.',
                 'multivendorx'
             ),
             class: 'mvx-toggle-checkbox',
@@ -56,7 +56,7 @@ export default {
                 },
                 {
                     key: 'linked_product',
-                    label: __( 'Linked Product', 'multivendorx' ),
+                    label: __( 'Linked product', 'multivendorx' ),
                     value: 'linked_product',
                 },
                 {
@@ -66,7 +66,7 @@ export default {
                 },
                 {
                     key: 'advanced',
-                    label: __( 'Advance', 'multivendorx' ),
+                    label: __( 'Advanced', 'multivendorx' ),
                     value: 'advanced',
                 },
                 {
@@ -76,7 +76,7 @@ export default {
                 },
                 {
                     key: 'product_tag',
-                    label: __( 'Product Tag', 'multivendorx' ),
+                    label: __( 'Product tag', 'multivendorx' ),
                     value: 'product_tag',
                 },
                 {
@@ -86,37 +86,11 @@ export default {
                 },
             ],
             selectDeselect: true,
-        }, 
-        // {
-        //     key: 'separator_content',
-        //     type: 'section',
-        //     desc: __( 'Media Management', 'multivendorx' ),
-        //     hint: __(
-        //         'Manage the media files stores can upload.',
-        //         'multivendorx'
-        //     ),
-        // },
-        // {
-        //     key: 'media_management_options',
-        //     type: 'checkbox',
-        //     label: __( 'Media Management Options', 'multivendorx' ),
-        //     desc: __(
-        //         'Select the permissions you want to grant stores for media file uploads.',
-        //         'multivendorx'
-        //     ),
-        //     options: [
-        //         {
-        //             key: 'is_upload_files',
-        //             label: __( 'Upload Media Files', 'multivendorx' ),
-        //             value: 'is_upload_files',
-        //         },
-        //     ],
-        //     selectDeselect: true,
-        // },
+        },
         {
             key: 'separator_content',
             type: 'section',
-            desc: __( 'SKU Generation', 'multivendorx' ),
+            desc: __( 'SKU generation', 'multivendorx' ),
             hint: __(
                 'Control how SKUs are handled for products.',
                 'multivendorx'
@@ -126,7 +100,7 @@ export default {
             key: 'sku_generator_simple',
             type: 'setting-toggle',
             label: __(
-                'SKU Management for Products',
+                'SKU management for products',
                 'multivendorx'
             ),
             desc: __(
@@ -149,53 +123,16 @@ export default {
                 },
                 {
                     key: 'ids',
-                    label: __( 'Using the product ID)', 'multivendorx' ),
+                    label: __( 'Using the product ID', 'multivendorx' ),
                     value: 'ids',
                 },
             ],
         },
-        // {
-        //     key: 'sku_generator_variation',
-        //     type: 'select',
-        //     label: __(
-        //         'SKU Management for Product Variations',
-        //         'multivendorx'
-        //     ),
-        //     desc: __(
-        //         'Define how SKUs for product variations will be generated:',
-        //         'multivendorx'
-        //     ),
-        //     options: [
-        //         {
-        //             key: 'choose_options',
-        //             label: __( 'Choose options', 'multivendorx' ),
-        //             value: 'choose_options',
-        //         },
-        //         {
-        //             key: 'never',
-        //             label: __( 'Never (let me set them)', 'multivendorx' ),
-        //             value: 'never',
-        //         },
-        //         {
-        //             key: 'slugs',
-        //             label: __(
-        //                 'Using the product slug (name)',
-        //                 'multivendorx'
-        //             ),
-        //             value: 'slugs',
-        //         },
-        //         {
-        //             key: 'ids',
-        //             label: __( 'Using the product ID)', 'multivendorx' ),
-        //             value: 'ids',
-        //         },
-        //     ],
-        // },
         {
             key: 'sku_generator_attribute_spaces',
             type: 'setting-toggle',
             label: __(
-                'SKU Formating Options',
+                'SKU formatting options',
                 'multivendorx'
             ),
             desc: __(
@@ -206,7 +143,7 @@ export default {
                 {
                     key: 'no',
                     label: __(
-                        'Replace Spaces in Attribute',
+                        'Replace spaces in attribute',
                         'multivendorx'
                     ),
                     value: 'no',
@@ -214,7 +151,7 @@ export default {
                 {
                     key: 'underscore',
                     label: __(
-                        'Keep Original Spacing',
+                        'Keep original spacing',
                         'multivendorx'
                     ),
                     value: 'underscore',
@@ -222,7 +159,7 @@ export default {
                 {
                     key: 'dash',
                     label: __(
-                        'Custom SKU Format Rules',
+                        'Custom SKU format rules',
                         'multivendorx'
                     ),
                     value: 'dash',
@@ -234,24 +171,24 @@ export default {
             key: 'separator_content',
             type: 'section',
             desc: __( '', 'multivendorx' ),
-            hint: __('Related Products Source','multivendorx'),
+            hint: __('Related products source','multivendorx'),
         },
         {
             key: 'sku_generator_attribute_spaces',
             type: 'setting-toggle',
             label: __(
-                'Recommendation Source',
+                'Recommendation source',
                 'multivendorx'
             ),
             desc: __(
-                '<li>Same Store : Show related products only from the current store.<li>All Stores – Show related products from across the marketplace.Choose whether to replace spaces in attribute names when generating SKUs:',
+                '<li>Same store: Show related products only from the current store.<li>All stores: Show related products from across the marketplace. Choose whether to replace spaces in attribute names when generating SKUs:',
                 'multivendorx'
             ),
             options: [
                 {
                     key: 'no',
                     label: __(
-                        'Same Store',
+                        'Same store',
                         'multivendorx'
                     ),
                     value: 'no',
@@ -259,7 +196,7 @@ export default {
                 {
                     key: 'underscore',
                     label: __(
-                        'All Store',
+                        'All stores',
                         'multivendorx'
                     ),
                     value: 'underscore',
