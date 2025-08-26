@@ -3,74 +3,73 @@ import { __ } from '@wordpress/i18n';
 export default {
     id: 'wholesale',
     priority: 2,
-    name: __( 'Wholesale Tradding', 'mvx-pro' ),
-    desc: __( 'Wholesale', 'mvx-pro' ),
+    name: __('Wholesale trading', 'mvx-pro'),
+    desc: __('Configure rules for wholesale buyers and pricing.', 'mvx-pro'),
     icon: 'adminlib-wholesale',
     submitUrl: 'settings',
     modal: [
         {
-            key: 'need_approval_for_wholesale_customer',
+            key: 'wholesale_buyer_verification',
             type: 'setting-toggle',
-            label: __( 'Wholesale Buyer Verification', 'mvx-pro' ),
+            label: __('Wholesale buyer verification', 'multivendorx'),
             desc: __(
-                'Manage access to bulk pricing tiers based on customer status.',
-                'mvx-pro'
+                'Decide how wholesale buyers are approved before they can access bulk pricing.',
+                'multivendorx'
             ),
             options: [
                 {
                     key: 'automatic',
-                    label: __( 'Automatic', 'mvx-pro' ),
+                    label: __('Automatic approval', 'multivendorx'),
                     value: 'automatic',
                 },
                 {
-                    key: 'mannual',
-                    label: __( 'Mannual', 'mvx-pro' ),
-                    value: 'mannula',
+                    key: 'manual',
+                    label: __('Manual approval', 'multivendorx'),
+                    value: 'manual',
                 },
             ],
         },
         {
-            key: 'need_approval_for_wholesale_customer',
+            key: 'wholesale_price_access',
             type: 'setting-toggle',
-            label: __( 'Wholesale Price Access', 'mvx-pro' ),
+            label: __('Wholesale price access', 'multivendorx'),
             desc: __(
-                'Help wholesale buyers quickly identify bulk discounts in store catalogs.',
-                'mvx-pro'
+                'Choose which users can see wholesale pricing in store catalogs.',
+                'multivendorx'
             ),
             options: [
                 {
-                    key: 'yes',
-                    label: __( 'Registered Users', 'mvx-pro' ),
-                    value: 'yes',
+                    key: 'registered',
+                    label: __('All registered users', 'multivendorx'),
+                    value: 'registered',
                 },
                 {
-                    key: 'no',
-                    label: __( 'Wholesale Buyers', 'mvx-pro' ),
-                    value: 'no',
+                    key: 'wholesale_only',
+                    label: __('Approved wholesale buyers only', 'multivendorx'),
+                    value: 'wholesale_only',
                 },
             ],
         },
         {
-            key: 'need_approval_for_wholesale_customer',
+            key: 'wholesale_price_display',
             type: 'setting-toggle',
-            label: __( 'Wholesale price display', 'mvx-pro' ),
+            label: __('Wholesale price display', 'multivendorx'),
             desc: __(
-                'Ensure only legitimate wholesale customers get access to special pricing.',
-                'mvx-pro'
+                'Control whether wholesale prices are shown alongside retail prices or separately.',
+                'multivendorx'
             ),
             options: [
                 {
-                    key: 'yes',
-                    label: __( 'Display along retail prices', 'mvx-pro' ),
-                    value: 'yes',
+                    key: 'with_retail',
+                    label: __('Show with retail prices', 'multivendorx'),
+                    value: 'with_retail',
                 },
                 {
-                    key: 'no',
-                    label: __( 'Wholesale only price', 'mvx-pro' ),
-                    value: 'no',
+                    key: 'wholesale_only',
+                    label: __('Show wholesale price only', 'multivendorx'),
+                    value: 'wholesale_only',
                 },
             ],
         },
-
     ],
 };

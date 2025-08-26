@@ -3,14 +3,14 @@ import { __ } from '@wordpress/i18n';
 export default {
     id: 'store-coupon',
     priority: 3,
-    name: __('Coupon & Discount', 'mvx-pro'),
+    name: __('Coupon and discount', 'mvx-pro'),
     desc: __('Manage how discounts and coupons affect commission calculations', 'mvx-pro'),
     icon: 'adminlib-clock2',
     submitUrl: 'settings',
     modal: [        
         {
             key: 'commission_include_coupon',
-            label: __( 'Who will bear the Coupon Cost', 'multivendorx' ),
+            label: __( 'Who will bear the coupon cost', 'multivendorx' ),
             type: 'checkbox',
             desc: __(
                 'Tap to let the stores bear the coupon discount charges of the coupons created by them',
@@ -26,9 +26,9 @@ export default {
         },
         {
             key: 'admin_coupon_excluded',
-            label: __( 'Exclude Admin-Created Coupons from Store Commission', 'multivendorx' ),
+            label: __( 'Exclude admin created coupons from store commission', 'multivendorx' ),
             desc: __(
-                'When admin creates marketplace-wide coupons, don`t reduce store commissions',
+                'When admin creates marketplace-wide coupons, do not reduce store commissions',
                 'multivendorx'
             ),
             type: 'checkbox',

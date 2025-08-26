@@ -66,20 +66,24 @@ if ($current_page && empty($current_sub)) {
         <div class="dashboard-tabs-wrapper">
             <div class="logo-wrapper">
                 <img src="https://multivendorx.com/wp-content/uploads/2025/06/multivendorx-logo-180x40.png" alt="">
+                <i class='adminlib-menu'></i>
             </div>
 
             <ul class="dashboard-tabs">
                 <?php foreach ($all_endpoints as $section): ?>
-                    <li class="<?php echo ($current_page === $section['slug'] && empty($current_sub)) ? 'active' : ''; ?>">
+                    <li class="tab-name <?php echo ($current_page === $section['slug'] && empty($current_sub)) ? 'active' : ''; ?>">
                         <?php if (!empty($section['submenu'])): ?>
                             <a href="#" class="tab" onclick="return false;">
+                                <i class="<?php echo esc_html($section['iocn']); ?>"></i>
                                 <?php echo esc_html($section['name']); ?>
                             </a>
                         <?php else: ?>
                             <a class="tab" href="<?php echo esc_url(get_endpoint_url($section['slug'])); ?>">
+                                <i class="<?php echo esc_html($section['icon']); ?>"></i>
                                 <?php echo esc_html($section['name']); ?>
                             </a>
                         <?php endif; ?>
+                        <i class="admin-arrow adminlib-pagination-right-arrow"></i>
                     </li>
 
                     <?php if (!empty($section['submenu'])): ?>

@@ -29,6 +29,7 @@ interface PaymentMethod {
     desc: string;
     formFields: PaymentFormField[];
     toggleType?: 'icon' | 'checkbox';
+    wrapperClass?: string
 }
 
 interface PaymentTabsComponentProps {
@@ -40,7 +41,7 @@ interface PaymentTabsComponentProps {
     methods: PaymentMethod[];
     value: Record<string, any>;
     onChange: (data: Record<string, any>) => void;
-    buttonEnable?:boolean
+    buttonEnable?: boolean
 }
 
 const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
@@ -52,7 +53,7 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
     methods,
     value,
     onChange,
-    buttonEnable=false
+    buttonEnable = false
 }) => {
     const [activeTab, setActiveTab] = useState<string | null>(null);
     const [enabledMethod, setEnabledMethod] = useState<string | null>(null);
@@ -71,20 +72,20 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
     return (
         <div className="payment-tabs-component">
             {methods.map((method) => (
-                <div key={method.icon} className="payment-method-card">
+                <div key={method.icon} className={`${method.wrapperClass ? method.wrapperClass : ""} payment-method-card`}>
+
                     {/* Header */}
                     <div
                         className="payment-method"
                         style={{ cursor: 'pointer' }}
                     >
                         <div className="details">
-                            <div className="payment-method-icon">{method.icon}</div>
+                            <div className="payment-method-icon"><img src={method.icon} /></div>
                             <div className="payment-method-info">
-                                <div className="title">
-                                    <span>{method.label}</span>
-                                    {/* <div className={method.connected ? 'admin-badge green' : 'admin-badge red'}>
-                                        {method.connected ? 'Connected' : 'Not Connected'}
-                                    </div> */}
+                                <div className="title-wrapper">
+                                    <span className="title">{method.label}</span>
+                                    <span className="admin-badge green">Enable</span>
+                                    <span className="admin-badge red">Disable</span>
                                 </div>
                                 <div className="method-desc">{method.desc}</div>
                             </div>
@@ -112,7 +113,7 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
                                         activeTab === method.icon ? null : method.icon
                                     );
                                 }}
-                            >   
+                            >
                                 <i className={activeTab === method.icon ? "adminlib-pagination-right-arrow" : "adminlib-pagination-right-arrow"}></i>
                             </div>
                         )}
@@ -126,79 +127,81 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
                                 <div key={field.key} className="form-group">
                                     <label>{field.label}</label>
 
-                                    {field.type === 'verification-methods' ? (
-                                        <VerificationMethods
-                                            value={value[method.icon]?.[field.key] || []}
-                                            nestedFields={field.nestedFields || []}
-                                            addButtonLabel={field.addButtonLabel}
-                                            deleteButtonLabel={field.deleteButtonLabel}
-                                            onChange={(val) =>
-                                                handleInputChange(method.icon, field.key, val)
-                                            }
-                                        />
-                                    ) : field.type === 'payment-tabs' && Array.isArray(field.modal) ? (
-                                        <PaymentTabsComponent
-                                            name={field.key}
-                                            methods={field.modal || []}
-                                            value={value[method.id]?.[field.key] || {}}
-                                            onChange={(val) =>
-                                                handleInputChange(method.id, field.key, val)
-                                            }
-                                        />
-                                    ) : field.type === 'setting-toggle' ? (
-                                        <ToggleSetting
-                                            key={field.key}
-                                            description={field.desc}
-                                            options={
-                                                Array.isArray(field.options)
-                                                    ? field.options.map((opt) => ({
-                                                        ...opt,
-                                                        value: String(opt.value),
-                                                    }))
-                                                    : []
-                                            }
-                                            value={value[method.id]?.[field.key] || ''}
-                                            onChange={(val) => {
-                                                handleInputChange(method.id, field.key, val)
-                                            }}
-                                        />
-                                    ) : field.type === 'checkbox' ? (
-                                        <input
-                                            type="checkbox"
-                                            checked={!value[method.id]?.[field.key]}
-                                            onChange={(e) =>
-                                                handleInputChange(method.id, field.key, e.target.checked)
-                                            }
-                                        />
-                                    ) : field.type === 'textarea' ? (
-                                        <TextArea
-                                            wrapperClass="setting-from-textarea"
-                                            inputClass={`${field.class || ''} textarea-input`}
-                                            descClass="settings-metabox-description"
-                                            description={field.desc || ''}
-                                            key={field.key}
-                                            id={field.key}
-                                            name={field.key}
-                                            placeholder={field.placeholder}
-                                            rowNumber={field.rowNumber}
-                                            colNumber={field.colNumber}
-                                            value={value[method.id]?.[field.key] || ''}
-                                            proSetting={false}
-                                            onChange={(e) =>
-                                                handleInputChange(method.id, field.key, e.target.value)
-                                            }
-                                        />
-                                    ) : (
-                                        <input
-                                            type={field.type}
-                                            placeholder={field.placeholder}
-                                            value={value[method.id]?.[field.key] || ''}
-                                            className="basic-input"
-                                            onChange={(e) =>
-                                                handleInputChange(method.id, field.key, e.target.value)
-                                            }
-                                        />
-                                    )}
+                                    <div className="input-content">                                        
+                                        {field.type === 'verification-methods' ? (
+                                            <VerificationMethods
+                                                value={value[method.icon]?.[field.key] || []}
+                                                nestedFields={field.nestedFields || []}
+                                                addButtonLabel={field.addButtonLabel}
+                                                deleteButtonLabel={field.deleteButtonLabel}
+                                                onChange={(val) =>
+                                                    handleInputChange(method.icon, field.key, val)
+                                                }
+                                            />
+                                        ) : field.type === 'payment-tabs' && Array.isArray(field.modal) ? (
+                                            <PaymentTabsComponent
+                                                name={field.key}
+                                                methods={field.modal || []}
+                                                value={value[method.id]?.[field.key] || {}}
+                                                onChange={(val) =>
+                                                    handleInputChange(method.id, field.key, val)
+                                                }
+                                            />
+                                        ) : field.type === 'setting-toggle' ? (
+                                            <ToggleSetting
+                                                key={field.key}
+                                                description={field.desc}
+                                                options={
+                                                    Array.isArray(field.options)
+                                                        ? field.options.map((opt) => ({
+                                                            ...opt,
+                                                            value: String(opt.value),
+                                                        }))
+                                                        : []
+                                                }
+                                                value={value[method.id]?.[field.key] || ''}
+                                                onChange={(val) => {
+                                                    handleInputChange(method.id, field.key, val)
+                                                }}
+                                            />
+                                        ) : field.type === 'checkbox' ? (
+                                            <input
+                                                type="checkbox"
+                                                checked={!value[method.id]?.[field.key]}
+                                                onChange={(e) =>
+                                                    handleInputChange(method.id, field.key, e.target.checked)
+                                                }
+                                            />
+                                        ) : field.type === 'textarea' ? (
+                                            <TextArea
+                                                wrapperClass="setting-from-textarea"
+                                                inputClass={`${field.class || ''} textarea-input`}
+                                                descClass="settings-metabox-description"
+                                                description={field.desc || ''}
+                                                key={field.key}
+                                                id={field.key}
+                                                name={field.key}
+                                                placeholder={field.placeholder}
+                                                rowNumber={field.rowNumber}
+                                                colNumber={field.colNumber}
+                                                value={value[method.id]?.[field.key] || ''}
+                                                proSetting={false}
+                                                onChange={(e) =>
+                                                    handleInputChange(method.id, field.key, e.target.value)
+                                                }
+                                            />
+                                        ) : (
+                                            <input
+                                                type={field.type}
+                                                placeholder={field.placeholder}
+                                                value={value[method.id]?.[field.key] || ''}
+                                                className="basic-input"
+                                                onChange={(e) =>
+                                                    handleInputChange(method.id, field.key, e.target.value)
+                                                }
+                                            />
+                                        )}
+                                    </div>
                                 </div>
                             ))}
                         </div>
