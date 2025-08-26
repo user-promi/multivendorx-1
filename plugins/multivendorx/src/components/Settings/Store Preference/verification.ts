@@ -1,4 +1,10 @@
 import { __ } from '@wordpress/i18n';
+import payPal from '../../../assets/images/paypal.png';
+import email from '../../../assets/images/email.png';
+import social from '../../../assets/images/social.png';
+import google from '../../../assets/images/google.png';
+
+
 
 export default {
     id: 'identity-verification',
@@ -61,10 +67,11 @@ export default {
             modal: [
                 {
                     id:'id-verification',
-                    icon: 'ID',
+                    icon: payPal,
                     label: 'Identity Verification',
                     connected: false,
                     desc: 'Verify user identity using government-issued documents or facial recognition. Ensures authenticity of users.',
+                    wrapperClass: 'add-method',
                     formFields: [
                         {
                             key: 'verification_methods',
@@ -82,7 +89,7 @@ export default {
                 },
                 {
                     id:'email-verification',
-                    icon: 'EM',
+                    icon: email,
                     label: 'Email Verification',
                     connected: true,
                     desc: 'Verify user email addresses to prevent fake registrations and enhance security.',
@@ -105,17 +112,18 @@ export default {
                 },
                 {
                     id:'social-verification',
-                    icon: 'So',
+                    icon: social,
                     label: 'Social Verification',
                     connected: true,
                     desc: 'Verify user email addresses to prevent fake registrations and enhance security.',
+                    wrapperClass: 'social-verification',
                     formFields: [
                         {
                             key: 'payment_methods',
                             type: 'payment-tabs',
                             modal: [
                                 {
-                                    icon: 'GO',
+                                    icon: google,
                                     label: 'Google Connect',
                                     connected: false,
                                     desc: 'Connect and authenticate users via Google accounts.',
@@ -127,7 +135,7 @@ export default {
                                     ],
                                 },
                                 {
-                                    icon: 'TW',
+                                    icon: google,
                                     label: 'Twitter Connect',
                                     connected: false,
                                     desc: 'Connect and authenticate users via Twitter accounts.',
@@ -139,7 +147,7 @@ export default {
                                     ],
                                 },
                                 {
-                                    icon: 'FB',
+                                    icon: google,
                                     label: 'Facebook Connect',
                                     connected: false,
                                     desc: 'Connect and authenticate users via Facebook accounts.',
@@ -150,7 +158,7 @@ export default {
                                     ],
                                 },
                                 {
-                                    icon: 'LI',
+                                    icon: google,
                                     label: 'LinkedIn Connect',
                                     connected: false,
                                     desc: 'Connect and authenticate users via LinkedIn accounts.',

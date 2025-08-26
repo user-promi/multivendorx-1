@@ -91,7 +91,7 @@ const VerificationMethods: React.FC<VerificationMethodsProps> = ({
         {addButtonLabel}
       </button>
 
-      <ul>
+      <ul className="fileds">
         {rows.map((row, idx) => (
           <li key={idx} className="row-item">
             <div className="name">
@@ -124,7 +124,6 @@ const VerificationMethods: React.FC<VerificationMethodsProps> = ({
                   })}
                   <div className="button-wrapper">
                     <button type="button" onClick={() => saveRow(idx)}><i className="adminlib-check"></i></button>
-                    <button type="button" onClick={cancelEdit}><i className="adminlib-close"></i></button>
                   </div>
                 </div>
               ) : (
@@ -134,8 +133,24 @@ const VerificationMethods: React.FC<VerificationMethodsProps> = ({
                 </>
               )}
             </div>
-
-            <div className="icon-wrapper">
+            <div className="action-section">
+              <div className="action-icons">
+                <i className="adminlib-more-vertical"></i>
+                <div className="action-dropdown show">
+                  <ul>
+                    {editingIndex !== idx && (
+                      <>
+                        <li onClick={() => startEdit(idx)}><i className="adminlib-create"></i>Edit</li>
+                        <li onClick={() => deleteRow(idx)}><i className="adminlib-delete"></i>Required</li>
+                        <li onClick={() => toggleActive(idx)}><i className={row.active ? "adminlib-eye" : "adminlib-eye-blocked"}></i>{row.active ? "Active" : "Inactive"}</li>
+                        <li onClick={() => deleteRow(idx)}><i className="adminlib-delete"></i>Delete</li>
+                      </>
+                    )}
+                  </ul>
+                </div>
+              </div>
+            </div>
+            {/* <div className="icon-wrapper">
               {editingIndex !== idx && (
                 <>
                   <button type="button" onClick={() => startEdit(idx)} aria-label="Edit">
@@ -150,7 +165,7 @@ const VerificationMethods: React.FC<VerificationMethodsProps> = ({
                   </button>
                 </>
               )}
-            </div>
+            </div> */}
           </li>
         ))}
       </ul>

@@ -154,16 +154,7 @@ const ColorSettingInput: React.FC<ColorSettingProps> = (props) => {
 
             {/* Live Preview */}
             {props.showPreview && (
-                <div style={{
-                    marginTop: '20px',
-                    display: 'flex',
-                    border: '1px solid #ccc',
-                    borderRadius: '8px',
-                    width: '500px',
-                    height: '260px',
-                    overflow: 'hidden',
-                    boxShadow: '0 4px 10px rgba(0,0,0,0.1)'
-                }}>
+                <div className="preview-wrapper">
                     {/* Sidebar */}
                     <div
                         style={{
@@ -178,7 +169,7 @@ const ColorSettingInput: React.FC<ColorSettingProps> = (props) => {
                     >
                         <div>Dashboard</div>
                         <div>Products</div>
-                        <div>orders</div>
+                        <div>Orders</div>
                         <div>Coupons</div>
                     </div>
 

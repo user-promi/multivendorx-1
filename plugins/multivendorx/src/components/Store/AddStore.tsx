@@ -66,7 +66,7 @@ const AddStore = () => {
         parentTabName="Add New Store"
         buttons={[
           {
-            label: 'Back',
+            label: 'View All Store',
             onClick: () => window.location.assign('?page=multivendorx#&tab=stores'),
             className: 'admin-btn btn-purple'
           }
