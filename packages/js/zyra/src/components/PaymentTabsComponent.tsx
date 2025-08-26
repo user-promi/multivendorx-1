@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 
 import "../styles/web/PaymentTabsComponent.scss";
-import VerificationMethods from './VerificationMethods'; // adjust the path as needed
-import TextArea from './TextArea'; // import your TextArea component
+import VerificationMethods from './VerificationMethods';
+import TextArea from './TextArea';
 import ToggleSetting from './ToggleSetting';
 
 interface PaymentFormField {
@@ -10,7 +10,7 @@ interface PaymentFormField {
     type: 'text' | 'password' | 'number' | 'checkbox' | 'verification-methods' | 'textarea' | 'payment-tabs' | 'setting-toggle';
     label: string;
     placeholder?: string;
-    nestedFields?: any[]; // for verification-methods
+    nestedFields?: any[];
     addButtonLabel?: string;
     deleteButtonLabel?: string;
     class?: string;
@@ -18,7 +18,7 @@ interface PaymentFormField {
     rowNumber?: number;
     colNumber?: number;
     options?: any;
-    modal?: PaymentMethod[]; // for payment-tabs
+    modal?: PaymentMethod[];
 }
 
 interface PaymentMethod {
@@ -45,18 +45,11 @@ interface PaymentTabsComponentProps {
 }
 
 const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
-    name,
-    proSetting,
-    proSettingChanged,
-    apilink,
-    appLocalizer,
     methods,
     value,
     onChange,
-    buttonEnable = false
 }) => {
     const [activeTab, setActiveTab] = useState<string | null>(null);
-    const [enabledMethod, setEnabledMethod] = useState<string | null>(null);
 
     const handleInputChange = (methodKey: string, fieldKey: string, fieldValue: any) => {
         const updated = {
@@ -69,145 +62,151 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
         onChange(updated);
     };
 
+    const toggleEnable = (methodId: string, enable: boolean) => {
+        handleInputChange(methodId, 'enable', enable);
+        if (!enable) setActiveTab(null); // close tab if disabling
+    };
+
     return (
         <div className="payment-tabs-component">
-            {methods.map((method) => (
-                <div key={method.icon} className={`${method.wrapperClass ? method.wrapperClass : ""} payment-method-card`}>
+            {methods.map((method) => {
+                const isEnabled = !!value?.[method.id]?.enable;
 
-                    {/* Header */}
-                    <div
-                        className="payment-method"
-                        style={{ cursor: 'pointer' }}
-                    >
-                        <div className="details">
-                            <div className="payment-method-icon"><img src={method.icon} /></div>
-                            <div className="payment-method-info">
-                                <div className="title-wrapper">
-                                    <span className="title">{method.label}</span>
-                                    <span className="admin-badge green">Enable</span>
-                                    <span className="admin-badge red">Disable</span>
+                return (
+                    <div key={method.id} className={`${method.wrapperClass || ""} payment-method-card`}>
+
+                        {/* Header */}
+                        <div className="payment-method" style={{ cursor: 'pointer' }}>
+                            <div className="details">
+                                <div className="payment-method-icon"><img src={method.icon} /></div>
+                                <div className="payment-method-info">
+                                    <div className="title-wrapper">
+                                        <span className="title">{method.label}</span>
+
+                                        {/* Enable / Disable */}
+                                        {!isEnabled ? (
+                                            <button
+                                                type="button"
+                                                className="admin-badge green"
+                                                onClick={() => toggleEnable(method.id, true)}
+                                            >
+                                                Enable
+                                            </button>
+                                        ) : (
+                                            <button
+                                                type="button"
+                                                className="admin-badge red"
+                                                onClick={() => toggleEnable(method.id, false)}
+                                            >
+                                                Disable
+                                            </button>
+                                        )}
+                                    </div>
+                                    <div className="method-desc">{method.desc}</div>
                                 </div>
-                                <div className="method-desc">{method.desc}</div>
                             </div>
+
+                            {/* Arrow only shows when enabled */}
+                            {isEnabled && (
+                                <div
+                                    className="payment-method-arrow"
+                                    onClick={() =>
+                                        setActiveTab(activeTab === method.icon ? null : method.icon)
+                                    }
+                                >
+                                    <i className="adminlib-pagination-right-arrow"></i>
+                                </div>
+                            )}
                         </div>
 
-                        {buttonEnable && !value?.[method.id]?.enable ? (
-                            <button
-                                type="button"
-                                className="admin-btn btn-purple"
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    setEnabledMethod(method.id);
-                                    setActiveTab(null);
-                                    handleInputChange(method.id, 'enable', true);
-                                }}
-                            >
-                                Enable
-                            </button>
-                        ) : (
-                            <div
-                                className="payment-method-arrow"
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    setActiveTab(
-                                        activeTab === method.icon ? null : method.icon
-                                    );
-                                }}
-                            >
-                                <i className={activeTab === method.icon ? "adminlib-pagination-right-arrow" : "adminlib-pagination-right-arrow"}></i>
+                        {/* Form */}
+                        {isEnabled && activeTab === method.icon && (
+                            <div className="payment-method-form">
+                                {method.formFields.map((field) => (
+                                    <div key={field.key} className="form-group">
+                                        <label>{field.label}</label>
+                                        <div className="input-content">
+                                            {field.type === 'verification-methods' ? (
+                                                <VerificationMethods
+                                                    value={value[method.id]?.[field.key] || []}
+                                                    nestedFields={field.nestedFields || []}
+                                                    addButtonLabel={field.addButtonLabel}
+                                                    deleteButtonLabel={field.deleteButtonLabel}
+                                                    onChange={(val) =>
+                                                        handleInputChange(method.id, field.key, val)
+                                                    }
+                                                />
+                                            ) : field.type === 'payment-tabs' && Array.isArray(field.modal) ? (
+                                                <PaymentTabsComponent
+                                                    name={field.key}
+                                                    methods={field.modal || []}
+                                                    value={value[method.id]?.[field.key] || {}}
+                                                    onChange={(val) =>
+                                                        handleInputChange(method.id, field.key, val)
+                                                    }
+                                                />
+                                            ) : field.type === 'setting-toggle' ? (
+                                                <ToggleSetting
+                                                    key={field.key}
+                                                    description={field.desc}
+                                                    options={
+                                                        Array.isArray(field.options)
+                                                            ? field.options.map((opt) => ({
+                                                                ...opt,
+                                                                value: String(opt.value),
+                                                            }))
+                                                            : []
+                                                    }
+                                                    value={value[method.id]?.[field.key] || ''}
+                                                    onChange={(val) => {
+                                                        handleInputChange(method.id, field.key, val)
+                                                    }}
+                                                />
+                                            ) : field.type === 'checkbox' ? (
+                                                <input
+                                                    type="checkbox"
+                                                    checked={!!value[method.id]?.[field.key]}
+                                                    onChange={(e) =>
+                                                        handleInputChange(method.id, field.key, e.target.checked)
+                                                    }
+                                                />
+                                            ) : field.type === 'textarea' ? (
+                                                <TextArea
+                                                    wrapperClass="setting-from-textarea"
+                                                    inputClass={`${field.class || ''} textarea-input`}
+                                                    descClass="settings-metabox-description"
+                                                    description={field.desc || ''}
+                                                    key={field.key}
+                                                    id={field.key}
+                                                    name={field.key}
+                                                    placeholder={field.placeholder}
+                                                    rowNumber={field.rowNumber}
+                                                    colNumber={field.colNumber}
+                                                    value={value[method.id]?.[field.key] || ''}
+                                                    proSetting={false}
+                                                    onChange={(e) =>
+                                                        handleInputChange(method.id, field.key, e.target.value)
+                                                    }
+                                                />
+                                            ) : (
+                                                <input
+                                                    type={field.type}
+                                                    placeholder={field.placeholder}
+                                                    value={value[method.id]?.[field.key] || ''}
+                                                    className="basic-input"
+                                                    onChange={(e) =>
+                                                        handleInputChange(method.id, field.key, e.target.value)
+                                                    }
+                                                />
+                                            )}
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
                         )}
                     </div>
-
-
-                    {/* Form */}
-                    {activeTab === method.icon && (
-                        <div className="payment-method-form">
-                            {method.formFields.map((field) => (
-                                <div key={field.key} className="form-group">
-                                    <label>{field.label}</label>
-
-                                    <div className="input-content">                                        
-                                        {field.type === 'verification-methods' ? (
-                                            <VerificationMethods
-                                                value={value[method.icon]?.[field.key] || []}
-                                                nestedFields={field.nestedFields || []}
-                                                addButtonLabel={field.addButtonLabel}
-                                                deleteButtonLabel={field.deleteButtonLabel}
-                                                onChange={(val) =>
-                                                    handleInputChange(method.icon, field.key, val)
-                                                }
-                                            />
-                                        ) : field.type === 'payment-tabs' && Array.isArray(field.modal) ? (
-                                            <PaymentTabsComponent
-                                                name={field.key}
-                                                methods={field.modal || []}
-                                                value={value[method.id]?.[field.key] || {}}
-                                                onChange={(val) =>
-                                                    handleInputChange(method.id, field.key, val)
-                                                }
-                                            />
-                                        ) : field.type === 'setting-toggle' ? (
-                                            <ToggleSetting
-                                                key={field.key}
-                                                description={field.desc}
-                                                options={
-                                                    Array.isArray(field.options)
-                                                        ? field.options.map((opt) => ({
-                                                            ...opt,
-                                                            value: String(opt.value),
-                                                        }))
-                                                        : []
-                                                }
-                                                value={value[method.id]?.[field.key] || ''}
-                                                onChange={(val) => {
-                                                    handleInputChange(method.id, field.key, val)
-                                                }}
-                                            />
-                                        ) : field.type === 'checkbox' ? (
-                                            <input
-                                                type="checkbox"
-                                                checked={!value[method.id]?.[field.key]}
-                                                onChange={(e) =>
-                                                    handleInputChange(method.id, field.key, e.target.checked)
-                                                }
-                                            />
-                                        ) : field.type === 'textarea' ? (
-                                            <TextArea
-                                                wrapperClass="setting-from-textarea"
-                                                inputClass={`${field.class || ''} textarea-input`}
-                                                descClass="settings-metabox-description"
-                                                description={field.desc || ''}
-                                                key={field.key}
-                                                id={field.key}
-                                                name={field.key}
-                                                placeholder={field.placeholder}
-                                                rowNumber={field.rowNumber}
-                                                colNumber={field.colNumber}
-                                                value={value[method.id]?.[field.key] || ''}
-                                                proSetting={false}
-                                                onChange={(e) =>
-                                                    handleInputChange(method.id, field.key, e.target.value)
-                                                }
-                                            />
-                                        ) : (
-                                            <input
-                                                type={field.type}
-                                                placeholder={field.placeholder}
-                                                value={value[method.id]?.[field.key] || ''}
-                                                className="basic-input"
-                                                onChange={(e) =>
-                                                    handleInputChange(method.id, field.key, e.target.value)
-                                                }
-                                            />
-                                        )}
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    )}
-                </div>
-            ))}
+                );
+            })}
         </div>
     );
 };

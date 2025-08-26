@@ -27,6 +27,7 @@ const VerificationMethods: React.FC<VerificationMethodsProps> = ({
   const [rows, setRows] = useState<Array<Record<string, any>>>([]);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [form, setForm] = useState<Record<string, any>>({});
+  const [openDropdownIndex, setOpenDropdownIndex] = useState<number | null>(null);
 
   useEffect(() => {
     setRows(value.length ? value : []);
@@ -62,7 +63,7 @@ const VerificationMethods: React.FC<VerificationMethodsProps> = ({
       return;
     }
     const newRows = [...rows];
-    newRows[index] = form;
+    newRows[index] = { ...newRows[index], label: form.label };
     setRows(newRows);
     onChange(newRows);
     setEditingIndex(null);
@@ -74,11 +75,19 @@ const VerificationMethods: React.FC<VerificationMethodsProps> = ({
     setRows(newRows);
     onChange(newRows);
     if (editingIndex === index) cancelEdit();
+    if (openDropdownIndex === index) setOpenDropdownIndex(null);
   };
 
   const toggleActive = (index: number) => {
     const newRows = [...rows];
     newRows[index] = { ...newRows[index], active: !newRows[index].active };
+    setRows(newRows);
+    onChange(newRows);
+  };
+
+  const toggleRequired = (index: number) => {
+    const newRows = [...rows];
+    newRows[index] = { ...newRows[index], required: !newRows[index].required };
     setRows(newRows);
     onChange(newRows);
   };
@@ -97,75 +106,68 @@ const VerificationMethods: React.FC<VerificationMethodsProps> = ({
             <div className="name">
               {editingIndex === idx ? (
                 <div className="edit-row">
-                  {nestedFields.map(({ key, type, label, placeholder }) => {
-                    if (type === 'checkbox') {
-                      return (
-                        <label key={key}>
-                          <input
-                            type="checkbox"
-                            checked={!!form[key]}
-                            onChange={(e) => handleFieldChange(key, e.target.checked)}
-                          />
-                          {label}
-                        </label>
-                      );
-                    }
-                    return (
-                      <div className="edit-form">
-                        <label>{label}</label>
-                        <input
-                          type="text"
-                          placeholder={placeholder}
-                          value={form[key] || ''}
-                          onChange={(e) => handleFieldChange(key, e.target.value)}
-                        />
-                      </div>
-                    );
-                  })}
+                  <div className="edit-form">
+                    <label>Label</label>
+                    <input
+                      type="text"
+                      placeholder="Enter label"
+                      value={form.label || ''}
+                      onChange={(e) => handleFieldChange('label', e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault(); // prevent page reload
+                          saveRow(idx);       // save on Enter
+                        }
+                      }}
+                    />
+                  </div>
                   <div className="button-wrapper">
-                    <button type="button" onClick={() => saveRow(idx)}><i className="adminlib-check"></i></button>
+                    <button type="button" onClick={() => saveRow(idx)}>
+                      <i className="adminlib-check"></i>
+                    </button>
                   </div>
                 </div>
               ) : (
                 <>
                   <div>{row.label}</div>
-                  {row.required && <span className="admin-badge red">(Required)</span>}
                 </>
               )}
             </div>
+
             <div className="action-section">
               <div className="action-icons">
-                <i className="adminlib-more-vertical"></i>
-                <div className="action-dropdown show">
+                {/* toggle dropdown */}
+                <i
+                  className="adminlib-more-vertical"
+                  onClick={() =>
+                    setOpenDropdownIndex(openDropdownIndex === idx ? null : idx)
+                  }
+                ></i>
+
+                <div className={`action-dropdown ${openDropdownIndex === idx ? 'show' : ''}`}>
                   <ul>
                     {editingIndex !== idx && (
                       <>
-                        <li onClick={() => startEdit(idx)}><i className="adminlib-create"></i>Edit</li>
-                        <li onClick={() => deleteRow(idx)}><i className="adminlib-delete"></i>Required</li>
-                        <li onClick={() => toggleActive(idx)}><i className={row.active ? "adminlib-eye" : "adminlib-eye-blocked"}></i>{row.active ? "Active" : "Inactive"}</li>
-                        <li onClick={() => deleteRow(idx)}><i className="adminlib-delete"></i>Delete</li>
+                        <li onClick={() => startEdit(idx)}>
+                          <i className="adminlib-create"></i>Edit
+                        </li>
+                        <li onClick={() => toggleRequired(idx)}>
+                          <i className="adminlib-delete"></i>
+                          {row.required ? 'Not Required' : 'Required'}
+                        </li>
+                        <li onClick={() => toggleActive(idx)}>
+                          <i className={row.active ? "adminlib-eye" : "adminlib-eye-blocked"}></i>
+                          {row.active ? "Active" : "Inactive"}
+                        </li>
+                        <li onClick={() => deleteRow(idx)}>
+                          <i className="adminlib-delete"></i>Delete
+                        </li>
                       </>
                     )}
                   </ul>
                 </div>
               </div>
             </div>
-            {/* <div className="icon-wrapper">
-              {editingIndex !== idx && (
-                <>
-                  <button type="button" onClick={() => startEdit(idx)} aria-label="Edit">
-                    <i className="adminlib-create"></i>
-                  </button>
-                  <button type="button" onClick={() => deleteRow(idx)} aria-label="Delete">
-                    <i className="adminlib-delete"></i>
-                  </button>
-                  <button type="button" onClick={() => toggleActive(idx)}
-                  >
-                    <i className={row.active ? "adminlib-eye" : "adminlib-eye-blocked"}></i>
-                  </button>
-                </>
-              )}
-            </div> */}
           </li>
         ))}
       </ul>

@@ -123,6 +123,7 @@ export default {
                             type: 'payment-tabs',
                             modal: [
                                 {
+                                    id:'google-connect',
                                     icon: google,
                                     label: 'Google Connect',
                                     connected: false,
@@ -135,6 +136,7 @@ export default {
                                     ],
                                 },
                                 {
+                                    id:'twitter-connect',
                                     icon: google,
                                     label: 'Twitter Connect',
                                     connected: false,
@@ -147,6 +149,7 @@ export default {
                                     ],
                                 },
                                 {
+                                    id:'facebook-connect',
                                     icon: google,
                                     label: 'Facebook Connect',
                                     connected: false,
@@ -158,6 +161,7 @@ export default {
                                     ],
                                 },
                                 {
+                                    id:'linkedin-connect',
                                     icon: google,
                                     label: 'LinkedIn Connect',
                                     connected: false,
