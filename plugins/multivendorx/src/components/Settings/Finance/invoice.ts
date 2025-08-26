@@ -11,7 +11,7 @@ export default {
         {
             key: 'separator_content',
             type: 'section',
-            desc: __( 'Set up when and how invoices are automatically generated in your marketplace', 'multivendorx' ),
+            desc: __( 'Set up when and how invoices are generated in your marketplace', 'multivendorx' ),
             hint: __( 'Invoice generation settings', 'multivendorx' ),
         },
         {
@@ -57,7 +57,7 @@ export default {
             type: 'setting-toggle',
             label: __( 'PDF layout orientation', 'multivendorx' ),
             classes: 'vertical width-50',
-            desc: __( 'Choose whether the invoice PDF is in portrait or landscape mode', 'multivendorx' ),
+            desc: __( 'Choose whether invoices are generated in portrait or landscape mode', 'multivendorx' ),
             options: [
                 {
                     key: 'portrait',
@@ -77,11 +77,11 @@ export default {
             classes: 'vertical',
             label: __( 'Automatic email delivery', 'multivendorx' ),
             class: 'mvx-toggle-checkbox',
-            desc: __( 'Decide how invoices are automatically sent to customers and stores', 'multivendorx' ),
+            desc: __( 'Choose how invoices are automatically sent to customers and stores', 'multivendorx' ),
             options: [
                 {
                     key: 'virtual',
-                    label: __( 'Auto-attach invoices to order emails', 'multivendorx' ),
+                    label: __( 'Attach invoices to order emails', 'multivendorx' ),
                     value: 'virtual',
                 },
                 {
@@ -91,7 +91,7 @@ export default {
                 },
                 {
                     key: 'Notify Stores of Invoice Generation',
-                    label: __( 'Notify stores of invoice generation', 'multivendorx' ),
+                    label: __( 'Notify stores when invoices are generated', 'multivendorx' ),
                     value: 'downloadable',
                 },
                 {
@@ -105,7 +105,7 @@ export default {
         {
             key: 'separator_content',
             type: 'section',
-            desc: __( 'Add legal details and tax registration numbers to invoices', 'multivendorx' ),
+            desc: __( 'Add legal details and tax information to invoices', 'multivendorx' ),
             hint: __( 'Legal and tax information', 'multivendorx' ),
         },
         {
@@ -120,12 +120,12 @@ export default {
             type: 'number',
             classes: 'vertical width-50',
             label: __( 'Tax ID number', 'multivendorx' ),            
-            placeholder: 'Enter tax identification number',
+            placeholder: 'Enter tax ID number',
         },
         {
             key: 'separator_content',
             type: 'section',
-            desc: __( 'Customize invoice appearance with your brand and key business details', 'multivendorx' ),
+            desc: __( 'Customize invoice design with your branding and business details', 'multivendorx' ),
             hint: __( 'Branding and information', 'multivendorx' ),
         },
         {
@@ -133,7 +133,7 @@ export default {
             classes: 'vertical',
             type: 'file',
             label: __('Company logo', 'mvx-pro'),
-            desc: __('Upload your brand logo for invoices', 'mvx-pro'),
+            desc: __('Upload your company logo for invoices', 'mvx-pro'),
             height: 75,
             width: 75,
             proSetting: true,
