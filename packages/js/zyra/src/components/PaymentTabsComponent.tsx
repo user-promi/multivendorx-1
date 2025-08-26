@@ -85,21 +85,19 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
 
                                         {/* Enable / Disable */}
                                         {!isEnabled ? (
-                                            <button
-                                                type="button"
+                                            <span
                                                 className="admin-badge green"
                                                 onClick={() => toggleEnable(method.id, true)}
                                             >
                                                 Enable
-                                            </button>
+                                            </span>
                                         ) : (
-                                            <button
-                                                type="button"
+                                            <span
                                                 className="admin-badge red"
                                                 onClick={() => toggleEnable(method.id, false)}
                                             >
                                                 Disable
-                                            </button>
+                                            </span>
                                         )}
                                     </div>
                                     <div className="method-desc">{method.desc}</div>

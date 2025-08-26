@@ -57,12 +57,14 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
                         'key'  => 'all-products',
                         'name' => 'All Products',
                         'slug' => 'all-products',
+                        'icon'    => 'adminlib-cart',
                         'capability' => ['read_products', 'edit_products', 'delete_products']
                     ),
                     array(
                         'key'  => 'add-product',
                         'name' => 'Add Product',
                         'slug' => 'add-product',
+                        'icon'    => 'adminlib-cart',
                         'capability' => ['read_products', 'edit_products', 'upload_files']
                     )
                     ),
@@ -71,6 +73,7 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
             'orders' => array(
                 'name'    => 'Orders',
                 'slug'    => 'orders',
+                'icon'    => 'adminlib-cart',
                 'submenu' => array(
                     array(
                         'key'  => 'all-orders',

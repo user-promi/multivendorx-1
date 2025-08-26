@@ -30,7 +30,7 @@ const salesIcon = new L.DivIcon({
 });
 
 import "./AdminDashboard.scss";
-import "../Dashboard.scss"
+import "../../dashboard/dashboardCommon.scss";
 import BestSellingProducts from './BestSellingProducts';
 import TopSellers from './TopSellers';
 
@@ -72,28 +72,28 @@ const AdminDashboard = () => {
     {
       title: "Documentation",
       desc: "Step-by-step guides to set up and manage your marketplace.",
-      iconClass: "icon-book",
+      iconClass: "adminlib-book",
       linkText: "Explore Docs",
       href: "#",
     },
     {
       title: "Expert Consultation",
       desc: "Get tailored advice from our marketplace specialists.",
-      iconClass: "icon-dart",
+      iconClass: "adminlib-preview",
       linkText: "Book Consultation",
       href: "#",
     },
     {
       title: "Developer Community",
       desc: "Connect with our team and fellow builders on Discord.",
-      iconClass: "icon-speech",
+      iconClass: "adminlib-global-community",
       linkText: "Join Discord",
       href: "#",
     },
     {
       title: "Facebook Group",
       desc: "Share experiences and tips with other marketplace owners.",
-      iconClass: "icon-users",
+      iconClass: "adminlib-user-circle",
       linkText: "Join Group",
       href: "#",
     },
@@ -335,11 +335,11 @@ const AdminDashboard = () => {
           <div className="cards-wrapper">
             {resources.map((res, index) => (
               <div className="cards" key={index}>
-                <i className="adminlib-cart"></i>
+                <i className={res.iconClass}></i>
                 <h3>{res.title}</h3>
                 <p>{res.desc}</p>
                 <a href={res.href} target="blank">
-                  <i className={res.iconClass}></i> {res.linkText}
+                  {res.linkText}
                 </a>
               </div>
             ))}

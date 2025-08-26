@@ -242,7 +242,7 @@ if ($current_page && empty($current_sub)) {
                             MultiVendorX()->util->get_template('add-product.php');
                         } else {
                             ?>
-                            <div class="content-wrapper" id="<?php echo esc_attr($div_id) ?>"><?php echo esc_attr($div_id) ?></div><?php
+                            <div class="dashboard1 content-wrapper" id="<?php echo esc_attr($div_id) ?>"><?php echo esc_attr($div_id) ?></div><?php
                         }
                     } else {
                         echo '<div>You do not have permission to access this section.</div>';
