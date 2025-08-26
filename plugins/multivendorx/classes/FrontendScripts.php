@@ -296,7 +296,8 @@ class FrontendScripts {
                 'store-capability',
                 'identity-verification',
                 'commission-rule',
-                'payment-integration'
+                'payment-integration',
+                'store-appearance'
             )
 		);
 
