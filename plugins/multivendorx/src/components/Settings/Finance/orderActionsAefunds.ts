@@ -5,7 +5,7 @@ export default {
     priority: 4,
     name: __( 'Refunds', 'multivendorx' ),
     desc: __(
-        'Manage refund eligibility, order handling, and return processes',
+        'Control refund rules, eligibility stages, and valid claim periods',
         'multivendorx'
     ),
     icon: 'adminlib-order',
@@ -14,10 +14,10 @@ export default {
         {
             key: 'customer_refund_status',
             type: 'checkbox',
-            label: __( 'Available Status for Refund', 'multivendorx' ),
+            label: __( 'Eligible order status for refund', 'multivendorx' ),
             class: 'mvx-toggle-checkbox',
             desc: __(
-                'Customers would be able to avail a refund only if their order is at the following stage/s',
+                'Customers can only request a refund when their order is in the selected status',
                 'multivendorx'
             ),
             options: [
@@ -48,9 +48,9 @@ export default {
         {
             key: 'refund_days',
             type: 'number',
-            label: __( 'Refund Claim Period (In Days)', 'multivendorx' ),
+            label: __( 'Refund claim period (days)', 'multivendorx' ),
             desc: __(
-                'The duration till which the refund request is available/valid',
+                'Set the number of days within which a customer can request a refund',
                 'multivendorx'
             ),
             max: 365,
@@ -59,10 +59,10 @@ export default {
         {
             key: 'abuse_report_reasons',
             type: 'multi-string',
-            label: __( 'Reason for Refund', 'multivendorx' ),
+            label: __( 'Predefined refund reasons', 'multivendorx' ),
             placeholder: __( 'Enter a reason and click +', 'multivendorx' ),
             desc: __(
-                'Add one or more predefined reasons that stores can select when reporting abuse.',
+                'Add one or more reasons that stores can select when handling refund requests',
                 'multivendorx'
             ),
             name: 'abuse_report_reasons',

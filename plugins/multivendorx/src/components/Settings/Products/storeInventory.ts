@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 export default {
     id: 'store-inventory',
     priority: 4,
-    name: __('Store Inventory', 'multivendorx'),
+    name: __('Store inventory', 'multivendorx'),
     desc: __(
         'Manage inventory alerts and stock monitoring settings for vendors in your marketplace',
         'multivendorx'
@@ -14,7 +14,7 @@ export default {
         {
             key: 'low_stock_alert',
             type: 'checkbox',
-            label: __('Low Stock Alerts', 'multivendorx'),
+            label: __('Low stock alerts', 'multivendorx'),
             desc: __(
                 'Notify vendors when inventory is running low.',
                 'multivendorx'
@@ -30,7 +30,7 @@ export default {
         {
             key: 'low_stock_alert_threshold',
             type: 'number',
-            label: __('Low Stock Alert Threshold', 'multivendorx'),
+            label: __('Low stock alert threshold', 'multivendorx'),
             desc: __(
                 'Set the inventory level that triggers low stock alerts for vendors',
                 'multivendorx'
@@ -44,7 +44,7 @@ export default {
         {
             key: 'out_of_stock_alert',
             type: 'checkbox',
-            label: __('Out Of Stock Alerts', 'multivendorx'),
+            label: __('Out of stock alerts', 'multivendorx'),
             desc: __(
                 'Notify vendors when products are unavailable.',
                 'multivendorx'
@@ -60,7 +60,7 @@ export default {
         {
             key: 'out_of_stock_alert_threshold',
             type: 'number',
-            label: __('Out of Stock Alert Threshold', 'multivendorx'),
+            label: __('Out of stock alert threshold', 'multivendorx'),
             desc: __(
                 'Set the inventory level that triggers out of stock alerts for vendors',
                 'multivendorx'
@@ -70,7 +70,5 @@ export default {
                 value: 'out_of_stock_alert',
             },
         },
-
-
     ],
 };

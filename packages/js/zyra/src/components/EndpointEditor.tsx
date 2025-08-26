@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import DragListView from 'react-drag-listview';
 import "../styles/web/EndpointEditor.scss";
-// import { FaPen } from 'react-icons/fa';
 import { getApiLink } from '../utils/apiService';
 
 interface Submenu {
@@ -14,7 +13,7 @@ interface Endpoint {
   name: string;
   slug: string;
   submenu: Submenu[];
-  visible?: boolean; // new for show/hide
+  visible?: boolean; // show/hide
 }
 
 interface EndpointEditorProps {
@@ -38,6 +37,26 @@ const EndpointManager: React.FC<EndpointEditorProps> = ({
   const [editKey, setEditKey] = useState<string | null>(null);
   const [editSlug, setEditSlug] = useState<string>('');
   const [editName, setEditName] = useState<string>('');
+  const editRef = useRef<HTMLDivElement>(null);
+
+  // Close edit on outside click
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (editRef.current && !editRef.current.contains(event.target as Node)) {
+        setEditKey(null);
+      }
+    };
+
+    if (editKey) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [editKey]);
 
   // Load data
   useEffect(() => {
@@ -49,7 +68,7 @@ const EndpointManager: React.FC<EndpointEditorProps> = ({
       const typedData = res.data as Record<string, Endpoint>;
       const data = Object.entries(typedData).map(([k, v]) => [
         k,
-        { ...v, visible: v.visible !== false }, // default to true if not set
+        { ...v, visible: v.visible !== false }, // default true
       ]) as [string, Endpoint][];
       setEndpoints(data);
     });
@@ -92,8 +111,7 @@ const EndpointManager: React.FC<EndpointEditorProps> = ({
     return (
       <div key={key} className="menu-item">
         {editKey === key ? (
-          <div className="edit-menu">
-            {/* Name input */}
+          <div className="edit-menu" ref={editRef}>
             <div className="name-wrapper">
               <i className="adminlib-move"></i>
               <input
@@ -111,7 +129,6 @@ const EndpointManager: React.FC<EndpointEditorProps> = ({
                 placeholder="Enter menu name"
                 className="basic-input"
               />
-
               {key !== 'dashboard' && (
                 <input
                   value={editSlug}
@@ -133,17 +150,14 @@ const EndpointManager: React.FC<EndpointEditorProps> = ({
           </div>
         ) : (
           <div
-            style={{
-              opacity: endpoint.visible === false ? 0.5 : 1,
-            }}
+            style={{ opacity: endpoint.visible === false ? 0.5 : 1 }}
             className="main-menu"
           >
             <div className="name-wrapper">
-            {key !== 'dashboard' && (
-              <i className="adminlib-move"></i>
-            )}   
-              <i className="adminlib-add-product"></i>           
-              <div className="name">{endpoint.name}
+              {key !== 'dashboard' && <i className="adminlib-move"></i>}
+              <i className="adminlib-add-product"></i>
+              <div className="name">
+                {endpoint.name}
                 {key !== 'dashboard' && <> <code>{endpoint.slug}</code></>}
               </div>
             </div>
@@ -155,9 +169,6 @@ const EndpointManager: React.FC<EndpointEditorProps> = ({
                   className="adminlib-create"
                 ></i>
               )}
-
-
-              {/* Show/Hide toggle */}
               <div>
                 <i
                   className={`adminlib-eye${endpoint.visible === false ? '-blocked' : ''}`}
@@ -177,17 +188,55 @@ const EndpointManager: React.FC<EndpointEditorProps> = ({
         {endpoint.submenu?.length > 0 && (
           <DragListView
             nodeSelector=".submenu-row"
-            handleSelector=".submenu-handle"
+            handleSelector="" // whole row draggable
             onDragEnd={onSubmenuDragEnd}
           >
             <ul>
-              {endpoint.submenu.map((sub, i) => (
-                <li key={i} className="submenu-row cursor-move" style={{
-                  opacity: endpoint.visible === false ? 0.5 : 1,
-                }}>
-                  <i className="adminlib-move submenu-handle"></i> {sub.name}
-                </li>
-              ))}
+              {endpoint.submenu.map((sub, i) => {
+                const subKey = `${key}-sub-${i}`;
+                return (
+                  <li
+                    key={i}
+                    className="submenu-row cursor-move"
+                    style={{ opacity: endpoint.visible === false ? 0.5 : 1 }}
+                  >
+                    {editKey === subKey ? (
+                      <span ref={editRef}>
+                        <input
+                          value={editName}
+                          onChange={(e) => {
+                            const newName = e.target.value;
+                            setEditName(newName);
+                            const updated = endpoints.map(([k, item]) => {
+                              if (k === key) {
+                                const submenuUpdated = [...item.submenu];
+                                submenuUpdated[i] = { ...submenuUpdated[i], name: newName };
+                                return [k, { ...item, submenu: submenuUpdated }];
+                              }
+                              return [k, item];
+                            }) as [string, Endpoint][];
+                            autoSave(updated);
+                          }}
+                          placeholder="Submenu name"
+                          className="basic-input"
+                        />
+                      </span>
+                    ) : (
+                      <span>
+                        {sub.name}
+                        <i
+                          className="adminlib-create"
+                          onClick={() => {
+                            setEditKey(subKey);
+                            setEditName(sub.name);
+                            setEditSlug(sub.slug);
+                          }}
+                        ></i>
+                      </span>
+                    )}
+                  </li>
+                );
+              })}
             </ul>
           </DragListView>
         )}
@@ -197,19 +246,20 @@ const EndpointManager: React.FC<EndpointEditorProps> = ({
 
   return (
     <div className="endpoints-wrapper">
-      {/* <h2>Endpoints</h2> */}
       <DragListView
         nodeSelector=".drag-row"
         handleSelector=".drag-handle"
         onDragEnd={onDragEnd}
       >
-        <div className="">
+        <div>
           {endpoints.map(([key, endpoint], index) => (
             <div key={key} className="endpoint drag-row cursor-move">
               {key === 'dashboard' ? (
                 <div>{renderRow([key, endpoint], index)}</div>
               ) : (
-                <div className="drag-handle menu-wrapper">{renderRow([key, endpoint], index)}</div>
+                <div className="drag-handle menu-wrapper">
+                  {renderRow([key, endpoint], index)}
+                </div>
               )}
             </div>
           ))}

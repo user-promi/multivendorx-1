@@ -9,18 +9,18 @@ const capabilityOptions = Object.entries(appLocalizer.capabilities).map(([key, g
         options: Object.entries(group.capability).map(([capKey, capLabel]) => ({
             key: capKey,
             label: capLabel,
-            value: capKey
+            value: capKey,
         })),
-        selectDeselect: true
+        selectDeselect: true,
     };
 });
 
 export default {
     id: 'store-capability',
     priority: 1,
-    name: __('Store Capability', 'multivendorx'),
-    desc: __('Manage access permissions for different store roles.', 'multivendorx'),
+    name: __('Store capabilities', 'multivendorx'),
+    desc: __('Control which features and actions are available to each store role.', 'multivendorx'),
     icon: 'adminlib-wholesale',
     submitUrl: 'settings',
-    modal: capabilityOptions
+    modal: capabilityOptions,
 };

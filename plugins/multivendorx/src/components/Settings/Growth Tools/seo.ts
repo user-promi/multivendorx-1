@@ -3,15 +3,15 @@ import { __ } from '@wordpress/i18n';
 export default {
     id: 'seo',
     priority: 1,
-    name: __( 'SEO Support', 'mvx-pro' ),
-    desc: __( 'Manage and Process store seo', 'mvx-pro' ),
+    name: __( 'SEO support', 'mvx-pro' ),
+    desc: __( 'Manage and process store seo', 'mvx-pro' ),
     icon: 'adminlib-support',
     submitUrl: 'settings',
     modal: [       
         {
             key: 'store_seo_options',
             type: 'setting-toggle',
-            label: __( 'SEO Mode', 'mvx-pro' ),
+            label: __( 'SEO mode', 'mvx-pro' ),
             options: [
                 {
                     key: 'yoast',

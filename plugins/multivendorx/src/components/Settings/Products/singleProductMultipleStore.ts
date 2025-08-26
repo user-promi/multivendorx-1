@@ -5,7 +5,7 @@ export default {
     priority: 2,
     name: __( 'Single Product Multiple Store', 'multivendorx' ),
     desc: __(
-        'Controls how stores are onboarded and what access they get.',
+        'Manage how multiple vendors can list and sell the same product in your marketplace.',
         'multivendorx'
     ),
     icon: 'adminlib-general-tab',
@@ -14,9 +14,9 @@ export default {
         {
             key: 'is_singleproductmultistore',
             type: 'checkbox',
-            label: __( 'Allow Store to Copy Products', 'multivendorx' ),
+            label: __( 'Allow store to copy products', 'multivendorx' ),
             desc: __(
-                'Let stores search for products sold on your site and sell them from their store.',
+                'Enable this to let vendors search for existing products in your marketplace and add them to their own store catalog.',
                 'multivendorx'
             ),
             options: [
@@ -31,15 +31,15 @@ export default {
         {
             key: 'singleproductmultistore_show_order',
             type: 'select',
-            label: __( 'Display Shop Page Product', 'multivendorx' ),
+            label: __( 'Display shop page product', 'multivendorx' ),
             desc: __(
-                'Select the criteria on which the SPMV product is going to be based on.',
+                'Choose which version of SPMV product will be shown as the main listing on the shop page (e.g., top-rated store, min / max priced product).',
                 'multivendorx'
             ),
             options: [
                 {
                     key: 'min-price',
-                    label: __( 'Min Price', 'multivendorx' ),
+                    label: __( 'Min price', 'multivendorx' ),
                     value: __( 'min-price', 'multivendorx' ),
                 },
                 {
@@ -63,9 +63,9 @@ export default {
         {
             key: 'moreoffers_display_position',
             type: 'select',
-            label: __( 'More Offers Display Position', 'multivendorx' ),
+            label: __( 'More offers display position', 'multivendorx' ),
             desc: __(
-                'Select where you want the "More Offers" section to appear on the Single Product Page.',
+                'Select where the “More Offers” section will appear on the single product page, showing buyers other vendors selling the same item.',
                 'multivendorx'
             ),
             options: [
@@ -76,17 +76,17 @@ export default {
                 },
                 {
                     key: 'above-tabs',
-                    label: __( 'Above Single Page Product Tabs', 'multivendorx' ),
+                    label: __( 'Above single page product tabs', 'multivendorx' ),
                     value: 'above-tabs',
                 },
                 {
                     key: 'inside-tabs',
-                    label: __( 'Display Inside Single Page Product Tabs', 'multivendorx' ),
+                    label: __( 'Display inside single page product tabs', 'multivendorx' ),
                     value: 'inside-tabs',
                 },
                 {
                     key: 'after-tabs',
-                    label: __( 'After Single Page Product Tabs', 'multivendorx' ),
+                    label: __( 'After single page product tabs', 'multivendorx' ),
                     value: 'after-tabs',
                 },
             ],

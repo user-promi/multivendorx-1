@@ -64,7 +64,7 @@ export default {
             key: 'section',
             type: 'section',
             hint: __(
-                'Enable content styling tools for vendors (bold, headings, lists)',
+                'Enable content styling tools for vendors',
                 'multivendorx'
             ),
         },

@@ -4,42 +4,36 @@ export default {
     id: 'store-invoice',
     priority: 5,
     name: __('Invoice', 'mvx-pro'),
-    desc: __('Select the PDF outupt mode.', 'mvx-pro'),
+    desc: __('Select the PDF output mode', 'mvx-pro'),
     icon: 'adminlib-clock2',
     submitUrl: 'settings',
     modal: [
         {
             key: 'separator_content',
             type: 'section',
-            desc: __( 'Configure when and how invoices are automatically generated in your marketplace', 'multivendorx' ),
-            hint: __(
-                'Invoice Generation Settings',
-                'multivendorx'
-            ),
+            desc: __( 'Set up when and how invoices are generated in your marketplace', 'multivendorx' ),
+            hint: __( 'Invoice generation settings', 'multivendorx' ),
         },
         {
             key: 'mvx_tinymce_api_section',
             type: 'number',
             classes: 'vertical width-50',
-            label: __( 'Invoice Number Format', 'multivendorx' ),            
-            placeholder: 'Invoice Number Format',
+            label: __( 'Invoice number format', 'multivendorx' ),            
+            placeholder: 'Invoice number format',
         },
         {
             key: 'mvx_tinymce_api_section',
             type: 'number',
             classes: 'vertical width-50',
-            label: __( 'Starting Invoice Number', 'multivendorx' ),            
-            placeholder: 'Starting Invoice Number',
+            label: __( 'Starting invoice number', 'multivendorx' ),            
+            placeholder: 'Starting invoice number',
         },
         {
             key: 'commission_type',
             type: 'setting-toggle',
-            label: __( 'Invoice PDF Page Size', 'multivendorx' ),
+            label: __( 'Invoice PDF page size', 'multivendorx' ),
             classes: 'vertical width-50',
-            desc: __(
-                'Choose the type of commission structure that best fits your marketplace model.',
-                'multivendorx'
-            ),
+            desc: __( 'Choose the page size for generated invoice PDFs', 'multivendorx' ),
             options: [
                 {
                     key: 'per_transaction',
@@ -61,12 +55,9 @@ export default {
         {
             key: 'commission_type',
             type: 'setting-toggle',
-            label: __( 'PDF Layout Orientation', 'multivendorx' ),
+            label: __( 'PDF layout orientation', 'multivendorx' ),
             classes: 'vertical width-50',
-            desc: __(
-                'Choose the type of commission structure that best fits your marketplace model.',
-                'multivendorx'
-            ),
+            desc: __( 'Choose whether invoices are generated in portrait or landscape mode', 'multivendorx' ),
             options: [
                 {
                     key: 'portrait',
@@ -80,36 +71,32 @@ export default {
                 },
             ],
         },
-        
         {
             key: 'type_options',
             type: 'checkbox',
             classes: 'vertical',
-            label: __( ' Automatic Email Delivery ', 'multivendorx' ),
+            label: __( 'Automatic email delivery', 'multivendorx' ),
             class: 'mvx-toggle-checkbox',
-            desc: __(
-                'Configure when and how invoices are automatically sent to customers and stores',
-                'multivendorx'
-            ),
+            desc: __( 'Choose how invoices are automatically sent to customers and stores', 'multivendorx' ),
             options: [
                 {
                     key: 'virtual',
-                    label: __( 'Auto-attach Invoices to Order Emails', 'multivendorx' ),
+                    label: __( 'Attach invoices to order emails', 'multivendorx' ),
                     value: 'virtual',
                 },
                 {
                     key: 'Send Separate Invoice Email',
-                    label: __( 'Send Separate Invoice Email', 'multivendorx' ),
+                    label: __( 'Send separate invoice email', 'multivendorx' ),
                     value: 'downloadable',
                 },
                 {
                     key: 'Notify Stores of Invoice Generation',
-                    label: __( 'Notify Stores of Invoice Generation', 'multivendorx' ),
+                    label: __( 'Notify stores when invoices are generated', 'multivendorx' ),
                     value: 'downloadable',
                 },
                 {
                     key: 'Generate Packing Slips',
-                    label: __( 'Generate Packing Slips', 'multivendorx' ),
+                    label: __( 'Generate packing slips', 'multivendorx' ),
                     value: 'downloadable',
                 },
             ],
@@ -118,41 +105,35 @@ export default {
         {
             key: 'separator_content',
             type: 'section',
-            desc: __( 'Configure when and how invoices are automatically generated in your marketplace', 'multivendorx' ),
-            hint: __(
-                'Legal & Tax Information',
-                'multivendorx'
-            ),
+            desc: __( 'Add legal details and tax information to invoices', 'multivendorx' ),
+            hint: __( 'Legal and tax information', 'multivendorx' ),
         },
         {
             key: 'mvx_tinymce_api_section',
             type: 'number',
             classes: 'vertical width-50',
-            label: __( 'GST Number', 'multivendorx' ),            
+            label: __( 'GST number', 'multivendorx' ),            
             placeholder: 'Enter GST registration number',
         },
         {
             key: 'mvx_tinymce_api_section',
             type: 'number',
             classes: 'vertical width-50',
-            label: __( 'TAX ID Number', 'multivendorx' ),            
-            placeholder: 'Enter tax identification number',
+            label: __( 'Tax ID number', 'multivendorx' ),            
+            placeholder: 'Enter tax ID number',
         },
         {
             key: 'separator_content',
             type: 'section',
-            desc: __( 'Customize invoice appearance with your brand and essential information', 'multivendorx' ),
-            hint: __(
-                ' Branding & Information',
-                'multivendorx'
-            ),
+            desc: __( 'Customize invoice design with your branding and business details', 'multivendorx' ),
+            hint: __( 'Branding and information', 'multivendorx' ),
         },
         {
             key: 'company_logo',
             classes: 'vertical',
             type: 'file',
-            label: __('Company Logo', 'mvx-pro'),
-            desc: __('Upload brand image as logo', 'mvx-pro'),
+            label: __('Company logo', 'mvx-pro'),
+            desc: __('Upload your company logo for invoices', 'mvx-pro'),
             height: 75,
             width: 75,
             proSetting: true,
