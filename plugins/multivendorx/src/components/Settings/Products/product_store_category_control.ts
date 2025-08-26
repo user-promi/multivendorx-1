@@ -5,7 +5,7 @@ export default {
     priority: 3,
     name: __( 'Category Pyramid Guide (CPG)', 'multivendorx' ),
     desc: __(
-        'Help vendors select accurate product categories through guided category selection:','multivendorx'
+        'Choose whether stores follow a step-by-step guided process through the category hierarchy or freely select multiple categories & subcategories without restrictions.','multivendorx'
     ),
     video: {
         icon: 'adminlib-general-tab', // optional icon class
@@ -23,17 +23,17 @@ export default {
             key: 'sku_generator_attribute_spaces',
             type: 'setting-toggle',
             label: __(
-                'Category Selection Method',
+                'Category selection method',
                 'multivendorx'
             ),
-            desc: __('<ul><li><b>Guided Sequential Selection</b>: Vendors must first choose primary category, then select from available subcategories.</li><li><b>Free Multi-Selection</b>ss: Vendors can select any number of categories and subcategories without restrictions.</li></ul>',
+            desc: __('<ul><li><b>Guided sequential selection</b>: Vendors must first choose primary category, then select from available subcategories.</li><li><b>Free multi-selection</b>ss: Vendors can select any number of categories and subcategories without restrictions.</li></ul>',
                 'multivendorx'
             ),
             options: [
                 {
                     key: 'no',
                     label: __(
-                        'Guided Sequential Selection',
+                        'Guided sequential selection',
                         'multivendorx'
                     ),
                     value: 'no',
@@ -41,7 +41,7 @@ export default {
                 {
                     key: 'underscore',
                     label: __(
-                        'Free Multi-Selection',
+                        'Free multi-selection',
                         'multivendorx'
                     ),
                     value: 'underscore',
