@@ -23,6 +23,7 @@ class Shortcode {
         FrontendScripts::load_scripts();
         FrontendScripts::enqueue_script( 'multivendorx-dashboard-components-script' );
         FrontendScripts::enqueue_script( 'multivendorx-dashboard-script' );
+        FrontendScripts::localize_scripts( 'multivendorx-dashboard-components-script' );
         FrontendScripts::enqueue_style( 'multivendorx-dashboard-style' );
     }
 

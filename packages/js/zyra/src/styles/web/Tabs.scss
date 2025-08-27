@@ -108,7 +108,17 @@
   background: #fff;
 
   .current-tab-lists {
-    padding: 0.5rem 0;
+    padding-top: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 0.063rem solid #e0e4e9;
+
+    .pro-btn {
+      color: $theme-color;
+      font-weight: 600;
+      gap: 0.31rem;
+      font-size: 1rem;
+    }
   }
 
   .title-wrapper {
@@ -279,18 +289,7 @@
 .current-tab-lists-container {
   position: relative;
   display: flex;
-  border-bottom: 0.063rem solid #e0e4e9;
   gap: 1.5rem;
-
-  .menu-coll-btn {
-    font-size: 0.8125rem;
-    font-weight: 500;
-    border-radius: 0;
-
-    i {
-      font-size: 1.25rem;
-    }
-  }
 
   .menu-item {
     position: relative;
@@ -310,13 +309,6 @@
     border-bottom: 0.126rem solid transparent;
     font-weight: 500;
     cursor: pointer;
-
-    &.pro-btn {
-      color: $theme-color;
-      font-weight: 600;
-      gap: 0.31rem;
-      font-size: 1rem;
-    }
 
     .menu-name {
       font-size: 0.938rem;

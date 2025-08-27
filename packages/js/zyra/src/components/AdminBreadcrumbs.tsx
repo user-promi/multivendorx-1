@@ -60,10 +60,10 @@ const AdminBreadcrumbs: React.FC<AdminBreadcrumbsProps> = ({
                 <div id="top-level-tab-lists" className="current-tab-lists">
                     <div className="current-tab-lists-container">
                         {renderMenuItems(tabData)}
-                        {goPremium && (<a href="#" className="menu-item pro-btn">
-                            Go Premium<i className="adminlib-arrow-right"></i>
-                        </a>)}
                     </div>
+                    {goPremium && (<a href="#" className="menu-item pro-btn">
+                            <i className="adminlib-pro-tab"></i> Go Pro<i className="adminlib-arrow-right"></i>
+                    </a>)}
                 </div>
             )}
         </div>

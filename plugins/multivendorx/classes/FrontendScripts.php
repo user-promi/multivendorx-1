@@ -373,6 +373,12 @@ class FrontendScripts {
 						'select_text' => __( 'Select an item...', 'multivendorx' ),
 					),
 				),
+                'multivendorx-dashboard-components-script' => array(
+                    'object_name' => 'color',
+                    'data'        => array(
+                        'color'            => MultiVendorX()->setting->get_setting( 'store_color_settings' ),
+                    ),
+                ),
 			)
         );
 
