@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 export default {
     id: 'commission-rule',
     priority: 1,
-    name: __('Commissions', 'multivendorx'),
+    name: __('Store commissions', 'multivendorx'),
     desc: __(
         "Tailor your marketplace's commission plan to fit your revenue-sharing preferences.",
         'multivendorx'
