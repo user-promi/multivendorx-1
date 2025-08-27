@@ -213,7 +213,7 @@ class StoreUtil {
     public static function get_products_vendor( $product_id ) {
         $vendor_data = false;
         if ( $product_id > 0 ) {
-            $vendor = get_post_meta( $product_id, 'store_id', true );
+            $vendor = get_post_meta( $product_id, 'multivendorx_store_id', true );
             $vendor_obj = self::get_store_by_id( $vendor );
 
             if ( $vendor_obj ) {

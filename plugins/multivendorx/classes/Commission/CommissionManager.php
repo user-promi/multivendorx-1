@@ -41,7 +41,7 @@ class CommissionManager {
         global $wpdb;
 
         if ( $order ) {
-            $vendor_id = $order->get_meta('store_id');
+            $vendor_id = $order->get_meta('multivendorx_store_id');
             $vendor = StoreUtil::get_store_by_id( $vendor_id );
 
             $commission_type = MultiVendorX()->setting->get_setting( 'commission_type' );
@@ -65,7 +65,7 @@ class CommissionManager {
                         'commission_fixed' => (float) ( $commission_values['commission_fixed'] ?? 0 )
                     ];
                     
-                    wc_update_order_item_meta( $item_id, 'store_item_commission', $item_commission );
+                    wc_update_order_item_meta( $item_id, 'multivendorx_store_item_commission', $item_commission );
                     $commission_amount += floatval($item_commission);
                     $commission_rates[$item_id] = $commission_rate;
                 }
@@ -123,7 +123,7 @@ class CommissionManager {
             }
             
             // Action hook to adjust items commission rates before save.
-            $order->update_meta_data('order_items_commission_rates', apply_filters('mvx_vendor_order_items_commission_rates', $commission_rates, $order));
+            $order->update_meta_data('multivendorx_order_items_commission_rates', apply_filters('mvx_vendor_order_items_commission_rates', $commission_rates, $order));
             
             // $order->save(); // Avoid using save() if it will save letter in same flow.
 
@@ -280,16 +280,16 @@ class CommissionManager {
         if ( $product && $vendor ) {
 
             // Variable Product 
-            $data['commission_val'] = $product->get_meta('variable_product_percentage_commission', true);
-            $data['commission_fixed'] = $product->get_meta('variable_product_fixed_commission', true);
+            $data['commission_val'] = $product->get_meta('multivendorx_variable_product_percentage_commission', true);
+            $data['commission_fixed'] = $product->get_meta('multivendorx_variable_product_fixed_commission', true);
 
             if ( ! empty( $data['commission_val'] ) || ! empty( $data['commission_fixed'] ) ) {
                 return $data;
             }
 
             // Simple Product
-            $data['commission_val'] = $product->get_meta('product_percentage_commission', true);
-            $data['commission_fixed'] = $product->get_meta('product_fixed_commission', true);
+            $data['commission_val'] = $product->get_meta('multivendorx_product_percentage_commission', true);
+            $data['commission_fixed'] = $product->get_meta('multivendorx_product_fixed_commission', true);
 
             if ( ! empty( $data['commission_val'] ) || ! empty( $data['commission_fixed'] ) ) {
                 return $data;
@@ -344,8 +344,8 @@ class CommissionManager {
         foreach ( $terms as $term ) {
             // calculate current term's commission.
             $total_commission_amount = 0;
-            $commission_percentage = (float) get_term_meta( $term->term_id, 'category_percentage_commission', true );
-            $commission_fixed = (float) get_term_meta( $term->term_id, 'category_fixed_commission', true );
+            $commission_percentage = (float) get_term_meta( $term->term_id, 'multivendorx_category_percentage_commission', true );
+            $commission_fixed = (float) get_term_meta( $term->term_id, 'multivendorx_category_fixed_commission', true );
             $total_commission_amount = $commission_percentage + $commission_fixed;
 
             // compare current term's commission with previously store term's commission.
@@ -357,8 +357,8 @@ class CommissionManager {
 
         // Store commission value of maximum commission category.
         $category_wise_commission = new \stdClass();
-        $category_wise_commission->commission_percentage = (float) ( get_term_meta( $max_commission_term->term_id, 'category_percentage_commission', true ) ?? 0 );
-        $category_wise_commission->commission_fixed = (float) ( get_term_meta( $max_commission_term->term_id, 'category_fixed_commission', true ) ?? 0 );
+        $category_wise_commission->commission_percentage = (float) ( get_term_meta( $max_commission_term->term_id, 'multivendorx_category_percentage_commission', true ) ?? 0 );
+        $category_wise_commission->commission_fixed = (float) ( get_term_meta( $max_commission_term->term_id, 'multivendorx_category_fixed_commission', true ) ?? 0 );
 
         // Filter hook to adjust category wise commission after calculation.
         return apply_filters( 'mvx_category_wise_commission', $category_wise_commission, $product );
@@ -378,7 +378,7 @@ class CommissionManager {
         $commission_amount = get_post_meta( $commission_id, '_commission_amount', true);
         $included_coupon = get_post_meta( $commission_id, '_commission_include_coupon', true) ? true : false;
         $included_tax = get_post_meta( $commission_id, '_commission_total_include_tax', true) ? true : false;
-        $items_commission_rates = $vendor_order->get_meta( 'order_items_commission_rates', true);
+        $items_commission_rates = $vendor_order->get_meta( 'multivendorx_order_items_commission_rates', true);
         
         $refunded_total = $refunds = $global_refunds = $commission_refunded_items = array();
 
