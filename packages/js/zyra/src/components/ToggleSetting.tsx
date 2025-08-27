@@ -78,7 +78,7 @@ const ToggleSetting: React.FC<ToggleSettingProps> = ({
                             </label>
                             {option.proSetting && !khali_dabba && (
                                 <span className="admin-pro-tag">Pro</span>
-                            )}z
+                            )}
                         </div>
                     ))}
                 </div>
