@@ -91,6 +91,7 @@ class Install {
             `store_id` bigint(20) NOT NULL,
             `user_id` bigint(20) NOT NULL,
             `role_id` bigint(20) NOT NULL,
+            `primary_owner` TEXT DEFAULT NULL,
             PRIMARY KEY (`ID`)
         ) $collate;";
 

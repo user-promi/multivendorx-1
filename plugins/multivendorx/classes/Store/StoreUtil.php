@@ -54,7 +54,6 @@ class StoreUtil {
 
         $table = "{$wpdb->prefix}" . Utill::TABLES['store_meta'];
         $result = $wpdb->update( $table, $args, [ 'store_id' => $id ] );
-        file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":orders: : " . var_export($result, true) . "\n", FILE_APPEND);
 
         return $result;
     }
@@ -214,7 +213,7 @@ class StoreUtil {
     public static function get_products_vendor( $product_id ) {
         $vendor_data = false;
         if ( $product_id > 0 ) {
-            $vendor = get_post_meta( $product_id, 'store_id', true );
+            $vendor = get_post_meta( $product_id, 'multivendorx_store_id', true );
             $vendor_obj = self::get_store_by_id( $vendor );
 
             if ( $vendor_obj ) {
