@@ -3,9 +3,9 @@ import { __ } from '@wordpress/i18n';
 export default {
     id: 'commission-rule',
     priority: 1,
-    name: __('Store commissions', 'multivendorx'),
+    name: __('Store Commissions', 'multivendorx'),
     desc: __(
-        "Tailor your marketplace's commission plan to fit your revenue-sharing preferences.",
+        "Tailor your marketplace's commission plan to decide how much revenue stores earn from each sale.",
         'multivendorx'
     ),
     icon: 'adminlib-dynamic-pricing',
@@ -16,18 +16,18 @@ export default {
             type: 'setting-toggle',
             label: __('Commission Type', 'multivendorx'),
             desc: __(
-                'Choose the type of commission structure that best fits your marketplace model.',
+                'Choose how commission is applied:<ul><li>Store order based Commission is calculated on the total order amount for each store separately. Example: If a customer buys from three stores, commission is applied three times – once for each store order.</li><li> Per item based Commission is calculated on every single item sold, regardless of which store it belongs to. Example: If an order has five items, commission is applied five times – once for each item.</li></ul>',
                 'multivendorx'
             ),
             options: [
                 {
                     key: 'store_order',
-                    label: __('Store Order', 'multivendorx'),
+                    label: __('Store Order Based', 'multivendorx'),
                     value: 'store_order',
                 },
                 {
                     key: 'per_item',
-                    label: __('Per Item', 'multivendorx'),
+                    label: __('Per Item Based', 'multivendorx'),
                     value: 'per_item',
                 },
             ],
@@ -123,14 +123,14 @@ export default {
                             key: 'commission_percentage',
                             label: __('%', 'multivendorx'),
                             type: 'number',
-                            desc: __('Percentage of product price per transaction', 'multivendorx'),
+                            desc: __('Percentage of product price of store order price', 'multivendorx'),
                             labelAfterInput: true,
                         },
                         {
                             key: 'commission_fixed',
                             label: __('$', 'multivendorx'),
                             type: 'number',
-                            desc: __('Fixed amount per transaction', 'multivendorx'),
+                            desc: __('Fixed amount of store order price', 'multivendorx'),
                             labelAfterInput: false,
                         },
                     ],
@@ -156,7 +156,7 @@ export default {
                     label: __( '%', 'multivendorx' ),
                     type: 'number',
                     desc: __(
-                        'Percentage of product price per transaction',
+                        'Percentage on per product price',
                         'multivendorx'
                     ),
                     labelAfterInput:true
@@ -165,7 +165,7 @@ export default {
                     key: 'commission_fixed',
                     label: __( '$', 'multivendorx' ),
                     type: 'number',
-                    desc: __( 'Fixed amount per transaction', 'multivendorx' ),
+                    desc: __( 'Fixed amount on per product', 'multivendorx' ),
                     labelAfterInput:false
                 },                
             ],
