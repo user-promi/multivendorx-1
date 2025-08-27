@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 export default {
     id: 'product-content-access',
     priority: 1,
-    name: __( 'Store product permissions', 'multivendorx' ),
+    name: __( 'Store Product Permissions', 'multivendorx' ),
     desc: __(
         'Decide which product types, fields, and features stores can access when creating or managing products in their store.',
         'multivendorx'

@@ -54,7 +54,6 @@ class StoreUtil {
 
         $table = "{$wpdb->prefix}" . Utill::TABLES['store_meta'];
         $result = $wpdb->update( $table, $args, [ 'store_id' => $id ] );
-        file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":orders: : " . var_export($result, true) . "\n", FILE_APPEND);
 
         return $result;
     }

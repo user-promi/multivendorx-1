@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 export default {
     id: 'advertising',
     priority: 1,
-    name: __( 'Product advertising', 'mvx-pro' ),
+    name: __( 'Product Advertising', 'mvx-pro' ),
     desc: __(
         'Control how stores can advertise products in your marketplace.',
         'mvx-pro'

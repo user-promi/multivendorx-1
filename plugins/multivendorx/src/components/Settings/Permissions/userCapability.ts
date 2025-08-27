@@ -10,7 +10,7 @@ const columns = Object.entries(appLocalizer.custom_roles).map(([key, value]) => 
 export default {
     id: 'user-capability',
     priority: 2,
-    name: __('User capabilities', 'multivendorx'),
+    name: __('User Capabilities', 'multivendorx'),
     desc: __('Define what each store role can access and manage within the marketplace.', 'multivendorx'),
     icon: 'adminlib-wholesale',
     submitUrl: 'settings',

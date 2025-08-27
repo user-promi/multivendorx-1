@@ -35,35 +35,10 @@ export default {
         {
             key: 'commission_per_store_order',
             type: 'nested',
-            label: 'Rule',
+            label: 'Commission Value',
             addButtonLabel: 'Add New',
             deleteButtonLabel: 'Remove',
             nestedFields: [
-                {
-                    key: 'commission_per_store_order',
-                    type: 'multi-number',
-                    label: __('Commission Value', 'multivendorx'),
-                    desc: __(
-                        'This is the default commission amount that will be applicable for all transactions.',
-                        'multivendorx'
-                    ),
-                    options: [
-                        {
-                            key: 'commission_percentage',
-                            label: __('%', 'multivendorx'),
-                            type: 'number',
-                            desc: __('Percentage of product price per transaction', 'multivendorx'),
-                            labelAfterInput: true,
-                        },
-                        {
-                            key: 'commission_fixed',
-                            label: __('$', 'multivendorx'),
-                            type: 'number',
-                            desc: __('Fixed amount per transaction', 'multivendorx'),
-                            labelAfterInput: false,
-                        },
-                    ],
-                },
                 {
                     key: 'rule_type',
                     type: 'select',
@@ -134,6 +109,31 @@ export default {
                         set: true,
                         value: 'order_value',
                     },
+                },
+                {
+                    key: 'commission_per_store_order',
+                    type: 'multi-number',
+                    // label: __('Commission Value', 'multivendorx'),
+                    desc: __(
+                        'This is the default commission amount that will be applicable for all transactions.',
+                        'multivendorx'
+                    ),
+                    options: [
+                        {
+                            key: 'commission_percentage',
+                            label: __('%', 'multivendorx'),
+                            type: 'number',
+                            desc: __('Percentage of product price per transaction', 'multivendorx'),
+                            labelAfterInput: true,
+                        },
+                        {
+                            key: 'commission_fixed',
+                            label: __('$', 'multivendorx'),
+                            type: 'number',
+                            desc: __('Fixed amount per transaction', 'multivendorx'),
+                            labelAfterInput: false,
+                        },
+                    ],
                 },
             ],
             dependent: {

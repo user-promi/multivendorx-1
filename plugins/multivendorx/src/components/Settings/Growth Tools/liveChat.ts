@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 export default {
     id: 'live-chat',
     priority: 3,
-    name: __('Live chat', 'multivendorx'),
+    name: __('Live Chat', 'multivendorx'),
     desc: __('Set up and manage live chat options for customer interaction.', 'multivendorx'),
     icon: 'adminlib-wholesale',
     submitUrl: 'settings',
