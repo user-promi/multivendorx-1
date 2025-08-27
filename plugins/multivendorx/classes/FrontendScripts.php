@@ -374,11 +374,11 @@ class FrontendScripts {
 					),
 				),
                 'multivendorx-dashboard-components-script' => array(
-					'object_name' => 'color',
-					'data'        => array(
-						'color'            => MultiVendorX()->setting->get_setting( 'store_color_settings' ),
-					),
-				),
+                    'object_name' => 'color',
+                    'data'        => array(
+                        'color'            => MultiVendorX()->setting->get_setting( 'store_color_settings' ),
+                    ),
+                ),
 			)
         );
 

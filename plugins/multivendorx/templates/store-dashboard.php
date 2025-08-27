@@ -69,7 +69,8 @@ if ($current_page && empty($current_sub)) {
 
             <ul class="dashboard-tabs">
                 <?php foreach ($all_endpoints as $section): ?>
-                    <li class="tab-name <?php echo ($current_page === $section['slug'] && empty($current_sub)) ? 'active' : ''; ?>">
+                    <li
+                        class="tab-name <?php echo ($current_page === $section['slug'] && empty($current_sub)) ? 'active' : ''; ?>">
                         <?php if (!empty($section['submenu'])): ?>
                             <a href="#" class="tab" onclick="return false;">
                                 <i class="<?php echo esc_html($section['iocn']); ?>"></i>
@@ -104,7 +105,6 @@ if ($current_page && empty($current_sub)) {
 
             <div class="top-navbar">
                 <div class="navbar-leftside">
-                    <input type="text" class="basic-input">
                 </div>
                 <div class="navbar-rightside">
                     <ul class="navbar-right">
@@ -160,7 +160,7 @@ if ($current_page && empty($current_sub)) {
 
                                         <li>
                                             <a href="#">
-                                                <i class="dashicons dashicons-wordpress-alt"></i>
+                                                <i class="adminlib-user-network-icon"></i>
                                                 WordPress backend
                                             </a>
                                         </li>
@@ -173,6 +173,45 @@ if ($current_page && empty($current_sub)) {
                                         </li>
                                     </ul>
                                 </div>
+                                <div class="store-wrapper">
+                                        <h3>Switch accounts</h3>
+                                        <ul>
+                                            <li>
+                                                <a href="#">
+                                                    <i class="adminlib-person"></i>
+                                                    View Profile
+                                                </a>
+                                            </li>
+
+                                            <li>
+                                                <a href="#">
+                                                    <i class="adminlib-user-network-icon"></i>
+                                                    Account Setting
+                                                </a>
+                                            </li>
+
+                                            <li>
+                                                <a href="#">
+                                                    <i class="adminlib-user-network-icon"></i>
+                                                    WordPress backend
+                                                </a>
+                                            </li>
+
+                                            <li>
+                                                <a href="#">
+                                                    <i class="adminlib-user-network-icon"></i>
+                                                    WordPress backend
+                                                </a>
+                                            </li>
+
+                                            <li>
+                                                <a href="#">
+                                                    <i class="adminlib-user-network-icon"></i>
+                                                    WordPress backend
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
 
                                 <div class="dropdown-footer">
                                     <ul>
@@ -240,7 +279,8 @@ if ($current_page && empty($current_sub)) {
                             MultiVendorX()->util->get_template('add-product.php');
                         } else {
                             ?>
-                            <div class="dashboard1 content-wrapper" id="<?php echo esc_attr($div_id) ?>"><?php echo esc_attr($div_id) ?></div><?php
+                            <div class="dashboard1 content-wrapper" id="<?php echo esc_attr($div_id) ?>"><?php echo esc_attr($div_id) ?>
+                            </div><?php
                         }
                     } else {
                         echo '<div>You do not have permission to access this section.</div>';

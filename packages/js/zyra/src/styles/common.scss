@@ -373,7 +373,6 @@ input[type="radio"] {
 
 input[type="checkbox"]:checked::before {
   background-color: $theme-color;
-  border-radius: .25rem;
   color: #fff;
   content: "\e809";
   width: 1rem !important;
@@ -381,7 +380,9 @@ input[type="checkbox"]:checked::before {
   margin: 0 !important;
   line-height: 1rem;
 }
-
+input[type="checkbox"]:focus{
+  box-shadow: none;
+}
 .checkbox-list-side-by-side {
   display: flex;
   flex-wrap: wrap;
@@ -393,7 +394,7 @@ input[type="checkbox"]:checked::before {
     padding-bottom: 0.625rem;
     margin-bottom: 0.625rem;
     border-bottom: $border-light-small;
-    padding: 0.5rem;
+    padding-bottom: 0.5rem;
     margin-bottom: 0.5rem;
     width: 100%;
 
@@ -428,6 +429,7 @@ input[type="checkbox"]:checked::before {
     gap: 0;
     margin: 0;
     padding: 0.5rem;
+    padding-left: 0;
     width: 100%;
     padding: 0.5rem;
     width: 47%;
@@ -523,7 +525,6 @@ input[type="checkbox"]:checked::before {
   }
   li{
     list-style-type: number;
-    margin-left: 0.85rem;
   }
   code{
     padding: 0.063rem 0.5rem 0.125rem;

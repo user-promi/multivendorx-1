@@ -23,8 +23,8 @@ declare global {
         custom_roles: any;
         all_payments: any;
     }
-    interface Color {
-        color:any
+    interface Color{
+        color: any;
     }
     declare module '*.png';
     declare module '*.jpg';

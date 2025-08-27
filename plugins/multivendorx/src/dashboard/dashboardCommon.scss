@@ -1,13 +1,24 @@
 @use '../components/config.scss' as *;
 
+:root {
+    --themeCoolor: red;
+}
+
 .basic-input,
 .basic-select,
 .rmdp-input,
 .textarea-input {
     min-height: 1.5rem !important;
-    /*overwrite common style*/
 }
+.btn-purple{
+    color: var(--buttonText) !important;
+    background: var(--buttonBg) !important;
 
+    &:hover{
+        color: var(--buttonHoverText) !important;
+        background: var(--buttonHoverBg) !important;
+    }
+}
 .dashboard-tabs-wrapper {
     width: 18.125rem;
     overflow: hidden;
@@ -39,7 +50,7 @@
 
     .dashboard-tabs {
         padding: 0;
-        margin: 0;
+        margin: 1rem 0;
 
         li {
             padding: 0 0.75rem;
@@ -77,8 +88,8 @@
             &.active,
             &:hover {
                 a.tab {
-                    color: #854fff;
-                    background-color: #ebeef2;
+                    color: var(--themeColor);
+                    background-color: color-mix(in srgb, var(--themeColor) 8%, transparent);
                 }
             }
         }
@@ -97,7 +108,6 @@
                 text-transform: none;
                 line-height: 1.25rem;
                 color: #526484;
-                padding-left: 3rem;
             }
         }
     }
@@ -105,12 +115,11 @@
 
 .tab-wrapper {
     padding-left: 18.125rem;
-    width: calc(100% - 18.125rem);
     min-height: 100vh;
     background-color: #f5f6fa;
 
     .top-navbar {
-        width: calc(100% - 22rem);
+        width: calc(100% - 18rem);
         background: #fff;
         display: flex;
         justify-content: space-between;
@@ -131,6 +140,7 @@
                 gap: 1.8rem;
                 align-items: center;
                 list-style-type: none;
+                margin: 0;
 
                 li {
                     position: relative;
@@ -155,7 +165,7 @@
                     position: relative;
 
                     .avatar-wrapper {
-                        background: #854fff;
+                        background: var(--themeColor);
                         border-radius: 50%;
                         width: 2rem;
                         height: 2rem;
@@ -178,7 +188,7 @@
                         box-shadow: 0 3px 12px 1px #3a227226;
                         max-width: 17.5rem;
                         min-width: 17.5rem;
-                        border-top: 3px solid #854fff;
+                        border-top: 3px solid var(--themeColor);
                         right: 0;
                         background: #fff;
                         border-radius: 0.313rem;
@@ -241,16 +251,30 @@
 
                             ul {
                                 padding: 0.75rem 0;
+                                margin: 0;
+                            }
+                        }
+                        .store-wrapper {
+                            border-top: 0.063rem solid #e5e9f2;
+                            padding: 0.5rem 1.75rem;
+
+                            h3{
+                                font-size: 1rem;
+                            }
+                            ul{
+                                height: 7.5rem;
+                                overflow-y: scroll;
                             }
                         }
 
                         .dropdown-footer {
                             padding: 0.5rem 1.75rem;
-                            border: 1px solid #e5e9f2;
+                            border: 0.063rem solid #e5e9f2;
                         }
 
                         ul {
                             list-style: none;
+                            margin: 0;
 
                             li a {
                                 display: flex;
@@ -268,7 +292,7 @@
                                 }
 
                                 &:hover {
-                                    color: #854fff;
+                                    color: var(--themeColor);
                                 }
                             }
                         }
@@ -280,7 +304,6 @@
                         }
                     }
                 }
-
                 // user dropdown end
             }
         }
@@ -432,8 +455,8 @@
             .icon {
                 padding: 0.625rem;
                 font-size: 1.8rem;
-                color: #5007aa;
-                background: #5007aa26;
+                color: var(--themeColor);
+                background-color: color-mix(in srgb, var(--themeColor) 8%, transparent);
                 border-radius: 0.313rem;
             }
         }
@@ -456,12 +479,12 @@
             a {
                 font-size: 0.9rem;
                 font-weight: 500;
-                color: $theme-color;
+                color: var(--themeColor);
             }
 
             i {
                 font-size: 2.2rem;
-                color: $theme-color;
+                color: var(--themeColor);
             }
 
             h3 {
@@ -485,7 +508,7 @@
 
             .icon {
                 font-size: 1.125rem;
-                background: $theme-background-color;
+                background: color-mix(in srgb, var(--themeColor) 15%, transparent);
                 padding: 0.5rem;
                 border-radius: 50%;
                 display: flex;
@@ -495,7 +518,7 @@
                 align-items: center;
 
                 i {
-                    color: $theme-color;
+                    color: var(--themeColor);
                 }
             }
 
@@ -519,7 +542,7 @@
             }
 
             &:hover {
-                background: #f4f2f2;
+                background: color-mix(in srgb, var(--themeColor) 3%, transparent);
             }
 
             &.product {

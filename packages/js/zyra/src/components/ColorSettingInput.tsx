@@ -2,16 +2,14 @@ import React, { ChangeEvent, useState, useEffect } from 'react';
 import "../styles/web/ColorSettingInput.scss";
 
 interface CustomColors {
+    themeColor: string;
+    heading: string,
+    bodyText: string,
     buttonText: string;
     buttonBg: string;
-    buttonBorder: string;
     buttonHoverText: string;
     buttonHoverBg: string;
-    buttonHoverBorder: string;
-    sidebarText: string;
-    sidebarBg: string;
-    sidebarActiveText: string;
-    sidebarActiveBg: string;
+    // buttonHoverBorder: string;
 }
 
 interface PaletteOption {
@@ -42,16 +40,13 @@ const ColorSettingInput: React.FC<ColorSettingProps> = (props) => {
     const [selectedPalette, setSelectedPalette] = useState(initialPalette);
     const [selectedColors, setSelectedColors] = useState<Partial<CustomColors>>(initialColors);
     const [customColors, setCustomColors] = useState<CustomColors>({
+        themeColor: '#5007aa',
+        heading: '#000',
+        bodyText: 'red',
         buttonText: '#ffffff',
         buttonBg: '#007cba',
-        buttonBorder: '#005f8d',
         buttonHoverText: '#ffffff',
         buttonHoverBg: '#005f8d',
-        buttonHoverBorder: '#00486a',
-        sidebarText: '#ffffff',
-        sidebarBg: '#202528',
-        sidebarActiveText: '#ffffff',
-        sidebarActiveBg: '#3f85b9',
         ...initialColors,
     });
 
@@ -139,12 +134,12 @@ const ColorSettingInput: React.FC<ColorSettingProps> = (props) => {
                                     <label
                                         htmlFor={`${props.idPrefix}-${option.key}`}
                                     >
-                                        <span >{option.label}</span>
                                         <div className="color">
                                             {option.colors && Object.values(option.colors).map((c, i) => (
-                                                <div key={i} style={{ flex: 1, backgroundColor: c }}></div>
+                                                <div key={i} style={{ backgroundColor: c }}></div>
                                             ))}
                                         </div>
+                                        <span >{option.label}</span>
                                     </label>
                                 </div>
                             );
@@ -153,18 +148,19 @@ const ColorSettingInput: React.FC<ColorSettingProps> = (props) => {
                     <div className="custom">
                         {/* Custom Palette */}
                         {mode === 'custom' && (
-                            <div className="palette" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                            <div className="palette">
                                 {Object.entries(customColors).map(([key, val]) => (
-                                    <div key={key} style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                                        <label style={{ fontSize: '13px', fontWeight: 500 }}>
-                                            {key.replace(/([A-Z])/g, ' $1').replace(/^./, s => s.toUpperCase())}
-                                        </label>
+                                    <div className="color-wrapper" key={key}>                                        
                                         <input
                                             type="color"
                                             value={val}
                                             onChange={(e) => handleCustomChange(key as keyof CustomColors, e.target.value)}
-                                            style={{ width: '100%', height: '36px', cursor: 'pointer' }}
+                                            // style={{ width: '100%', height: '36px', cursor: 'pointer' }}
                                         />
+                                        <label >
+                                            <div>{key.replace(/([A-Z])/g, ' $1').replace(/^./, s => s.toUpperCase())}</div>
+                                            <span>{val}</span>
+                                        </label>
                                     </div>
                                 ))}
                             </div>
@@ -177,31 +173,109 @@ const ColorSettingInput: React.FC<ColorSettingProps> = (props) => {
             {props.showPreview && (
                 <div className="preview-wrapper">
                     {/* Sidebar */}
-                    <div
-                        style={{
-                            backgroundColor: selectedColors.sidebarBg,
-                            color: selectedColors.sidebarText,
-                            width: '110px',
-                            padding: '12px',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            gap: '12px'
-                        }}
-                    >
-                        <div>Dashboard</div>
-                        <div>Products</div>
-                        <div>Orders</div>
-                        <div>Coupons</div>
+                    <div className="tabs-wrapper">
+                        <div className="logo-wrapper">
+                            <img src="https://multivendorx.com/wp-content/uploads/2025/06/multivendorx-logo-180x40.png" alt="" />
+                            <i className="adminlib-menu"></i>
+                        </div>
+                        <ul className="dashboard-tabs">
+                            <li className="tab-name active">
+                                <a className="tab" style={{color: selectedColors.themeColor}}>
+                                    <i className="adminlib-cart"></i>
+                                    Dashboard
+                                </a>
+                            </li>
+
+                            <li className="tab-name ">
+                                <a className="tab" >
+                                    <i className="adminlib-cart"></i>
+                                    Products
+                                </a>
+                                <i className="admin-arrow adminlib-pagination-right-arrow"></i>
+                            </li>
+
+                            <ul className="subtabs">
+                                <li >
+                                    <a >All Products</a>
+                                </li>
+                                <li>
+                                    <a >Add Product</a>
+                                </li>
+                            </ul>
+                            <li className="tab-name ">
+                                <a href="#" className="tab" >
+                                    <i className="adminlib-cart"></i>
+                                    Orders                            </a>
+                                <i className="admin-arrow adminlib-pagination-right-arrow"></i>
+                            </li>
+
+                            <ul className="subtabs">
+                                <li className="">
+                                    <a href="#">
+                                        All Orders</a>
+                                </li>
+                            </ul>
+                            <li className="tab-name ">
+                                <a className="tab" >
+                                    <i className=""></i>
+                                    Coupons
+                                </a>
+                                <i className="admin-arrow adminlib-pagination-right-arrow"></i>
+                            </li>
+
+                            <ul className="subtabs">
+                                <li className="">
+                                    <a >All Coupons</a>
+                                </li>
+                                <li className="">
+                                    <a >Add Coupons</a>
+                                </li>
+                            </ul>
+                        </ul>
                     </div>
 
                     {/* Content Area */}
-                    <div style={{ flex: 1, padding: '20px', backgroundColor: '#f9f9f9' }}>
+                    <div className="tab-wrapper">
+                        <div className="top-navbar">
+                            <div className="navbar-leftside">
+                            </div>
+                            <div className="navbar-rightside">
+                                <ul className="navbar-right">
+                                    <li>
+                                        <div className="adminlib-icon adminlib-vendor-form-add"></div>
+                                    </li>
+                                    <li>
+                                        <div className="adminlib-icon adminlib-alarm"></div>
+                                    </li>
+                                    <li>
+                                        <div className="adminlib-icon adminlib-crop-free"></div>
+                                    </li>
+                                    <li>
+                                        <div className="adminlib-icon adminlib-contact-form"></div>
+                                    </li>
+
+
+                                    <li className="dropdown login-user">
+                                        <a href="" className="dropdown-toggle">
+                                            <div className="avatar-wrapper" style={{backgroundColor: selectedColors.themeColor}}>
+                                                <i className="adminlib-person"></i>
+                                            </div>
+                                        </a>
+                                    </li>
+
+                                </ul>
+                            </div>
+
+                        </div>
+                        
+                    </div>
+                    {/* <div style={{ flex: 1, padding: '20px', backgroundColor: '#f9f9f9' }}>
                         <h4 style={{ marginBottom: '10px' }}>Dashboard</h4>
                         <button
                             style={{
                                 backgroundColor: selectedColors.buttonBg,
                                 color: selectedColors.buttonText,
-                                border: `1px solid ${selectedColors.buttonBorder}`,
+                                // border: `1px solid ${selectedColors.buttonBorder}`,
                                 padding: '8px 14px',
                                 borderRadius: '4px',
                                 cursor: 'pointer'
@@ -209,7 +283,7 @@ const ColorSettingInput: React.FC<ColorSettingProps> = (props) => {
                         >
                             Button
                         </button>
-                    </div>
+                    </div> */}
                 </div>
             )}
 
