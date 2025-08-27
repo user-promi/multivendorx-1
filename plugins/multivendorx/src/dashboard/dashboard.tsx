@@ -28,6 +28,7 @@ const salesIcon = new L.DivIcon({
 });
 
 const Dashboard = () => {
+  console.log("col",color.color.colors)
   return (
     <>
       <div className="row">

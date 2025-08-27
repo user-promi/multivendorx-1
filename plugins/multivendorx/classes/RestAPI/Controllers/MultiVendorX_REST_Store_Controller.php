@@ -152,7 +152,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             'description'   => $data['description'] ?? '',
             'who_created'   => 'admin' ?? '',
         ]);
-
+        // file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":orders: : " . var_export($data, true) . "\n", FILE_APPEND);
         $updated = StoreUtil::update_store_meta($id, [
             'image'         => $data['image'] ?? '',
             'banner'        => $data['banner'] ?? '',
@@ -164,6 +164,11 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             'state'         => $data['state'] ?? '',
             'country'       => $data['country'] ?? '',
             'postcode'      => $data['postcode'] ?? '',
+            'facebook'      => $data['facebook']  ?? '',
+            'twitter'       => $data['twitter']   ?? '',
+            'linkedin'      => $data['linkedin']  ?? '',
+            'youtube'       => $data['youtube']   ?? '',
+            'instagram'     => $data['instagram'] ?? '',
         ]);
 
         if ($store_updated || $updated) {
