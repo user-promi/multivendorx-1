@@ -140,7 +140,7 @@ const VerificationMethods: React.FC<VerificationMethodsProps> = ({
 
       <ul className="fileds">
         {rows.map((row, idx) => (
-          <li key={idx} className="row-item">
+          <li key={idx} className="row-item"  style={{ opacity: row.active ? 0.3 : 1 }}>
             <div className="name">
               {editingIndex === idx ? (
                 <div className="edit-row" ref={formRef}>
@@ -168,8 +168,7 @@ const VerificationMethods: React.FC<VerificationMethodsProps> = ({
               ) : (
                 <>
                   <div>{row.label}</div>
-                  {row.active ? "Active" : "Inactive"}
-                  {row.required ? 'Not Required' : 'Required'}
+                 <span className={row.required ? "" : "admin-badge red"}>{row.required ? '' : 'Required'}</span>
                 </>
               )}
             </div>
@@ -192,11 +191,11 @@ const VerificationMethods: React.FC<VerificationMethodsProps> = ({
                         </li>
                         <li onClick={() => toggleRequired(idx)}>
                           <i className="adminlib-delete"></i>
-                          {row.required ? 'Not Required' : 'Required'}
+                          {row.required ? 'Required' : 'Not Required'}
                         </li>
                         <li onClick={() => toggleActive(idx)}>
                           <i className={row.active ? "adminlib-eye" : "adminlib-eye-blocked"}></i>
-                          {row.active ? "Active" : "Inactive"}
+                          {row.active ? "Inactive" : "Active"}
                         </li>
                         <li onClick={() => deleteRow(idx)}>
                           <i className="adminlib-delete"></i>Delete
