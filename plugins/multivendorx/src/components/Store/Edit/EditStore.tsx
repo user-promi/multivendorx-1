@@ -4,6 +4,7 @@ import Brand from '../../../assets/images/brand-logo.png';
 import BrandSmall from '../../../assets/images/brand-icon.png';
 import StoreSettings from './StoreSettings';
 import SocialSettings from './SocialSettings';
+
 import PaymentSettings from './PaymentSettings';
 
 const EditStore = () => {
@@ -55,7 +56,7 @@ const EditStore = () => {
             case 'social':
                 return <SocialSettings id={editId}/>
             case 'payment':
-                return <PaymentSettings id={editId}/>
+                return <PaymentSettings id={editId}/>;
             default:
                 return <div></div>;
         }

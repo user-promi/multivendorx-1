@@ -60,7 +60,7 @@ class Install {
         $sql_commission = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}" . Utill::TABLES['commission'] . "` (
             `ID` bigint(20) NOT NULL AUTO_INCREMENT,
             `order_id` bigint(20) NOT NULL,
-            `vendor_id` bigint(20) NOT NULL,
+            `store_id` bigint(20) NOT NULL,
             `commission_amount` float(20, 2) NOT NULL DEFAULT 0,
             `shipping` float(20, 2) NOT NULL DEFAULT 0,
             `tax` float(20, 2) NOT NULL DEFAULT 0,
@@ -106,7 +106,8 @@ class Install {
             `state` varchar(100) DEFAULT NULL,
             `state_code` varchar(20) DEFAULT NULL, 
             `phone` bigint(20) DEFAULT 0,
-            `commission` float(20, 2) NOT NULL DEFAULT 0,
+            `commission_fixed` float(20, 2) NOT NULL DEFAULT 0,
+            `commission_percentage` float(20, 2) NOT NULL DEFAULT 0,
             `location` varchar(255) DEFAULT NULL,
             `lat` varchar(100) DEFAULT NULL,
             `lng` varchar(100) DEFAULT NULL,

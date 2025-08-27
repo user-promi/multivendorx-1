@@ -139,7 +139,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
     public function get_item( $request ) {
         $id = $request->get_param('id');
         $store = StoreUtil::get_store_by_id($id);
-        return new \WP_REST_Response($store, 200);
+        return rest_ensure_response($store);
     }
 
     public function update_item($request) {
@@ -152,23 +152,20 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             'description'   => $data['description'] ?? '',
             'who_created'   => 'admin' ?? '',
         ]);
-        // file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":orders: : " . var_export($data, true) . "\n", FILE_APPEND);
+
         $updated = StoreUtil::update_store_meta($id, [
-            'image'         => $data['image'] ?? '',
-            'banner'        => $data['banner'] ?? '',
-            'banner_type'   => 'image',
-            'address_1'     => $data['address_1'] ?? '',
-            'address_2'     => $data['address_2'] ?? '',
-            'phone'         => $data['phone'] ?? '',
-            'city'          => $data['city'] ?? '',
-            'state'         => $data['state'] ?? '',
-            'country'       => $data['country'] ?? '',
-            'postcode'      => $data['postcode'] ?? '',
-            'facebook'      => $data['facebook']  ?? '',
-            'twitter'       => $data['twitter']   ?? '',
-            'linkedin'      => $data['linkedin']  ?? '',
-            'youtube'       => $data['youtube']   ?? '',
-            'instagram'     => $data['instagram'] ?? '',
+            'image'             => $data['image'] ?? '',
+            'banner'            => $data['banner'] ?? '',
+            'banner_type'       => 'image',
+            'address_1'         => $data['address_1'] ?? '',
+            'address_2'         => $data['address_2'] ?? '',
+            'phone'             => $data['phone'] ?? '',
+            'city'              => $data['city'] ?? '',
+            'state'             => $data['state'] ?? '',
+            'country'           => $data['country'] ?? '',
+            'postcode'          => $data['postcode'] ?? '',
+            'commission_fixed'  => $data['commission_fixed'] ?? '',
+            'commission_percentage' => $data['commission_percentage'] ?? '',
         ]);
 
         if ($store_updated || $updated) {
