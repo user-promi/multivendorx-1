@@ -120,65 +120,57 @@ const ColorSettingInput: React.FC<ColorSettingProps> = (props) => {
                     </button>
                 </div>
 
-                {/* Predefined Palettes */}
-                {mode === 'predefined' && props.predefinedOptions.map(option => {
-                    const checked = selectedPalette === option.value;
-                    return (
-                        <div key={option.key} style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
-                            <input
-                                className={props.inputClass}
-                                id={`${props.idPrefix}-${option.key}`}
-                                type="radio"
-                                name="vendor_color_scheme_picker"
-                                checked={checked}
-                                value={option.value}
-                                onChange={handlePaletteChange}
-                                style={{ display: 'none' }}
-                            />
-                            <label
-                                htmlFor={`${props.idPrefix}-${option.key}`}
-                                style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'space-between',
-                                    border: checked ? '2px solid #007cba' : '1px solid #ccc',
-                                    borderRadius: '6px',
-                                    padding: '10px 12px',
-                                    cursor: 'pointer',
-                                    backgroundColor: checked ? '#f0faff' : '#fff',
-                                    width: '240px',
-                                    transition: 'all 0.2s ease',
-                                }}
-                            >
-                                <span style={{ fontSize: '14px', fontWeight: 500 }}>{option.label}</span>
-                                <div style={{ display: 'flex', width: '70px', height: '18px', border: '1px solid #ddd', borderRadius: '4px', overflow: 'hidden' }}>
-                                    {option.colors && Object.values(option.colors).map((c, i) => (
-                                        <div key={i} style={{ flex: 1, backgroundColor: c }}></div>
-                                    ))}
+                <div className="color-palette-wrapper">
+                    <div className="predefined">
+                        {/* Predefined Palettes */}
+                        {mode === 'predefined' && props.predefinedOptions.map(option => {
+                            const checked = selectedPalette === option.value;
+                            return (
+                                <div key={option.key} className="palette">
+                                    <input
+                                        className={props.inputClass}
+                                        id={`${props.idPrefix}-${option.key}`}
+                                        type="radio"
+                                        name="vendor_color_scheme_picker"
+                                        checked={checked}
+                                        value={option.value}
+                                        onChange={handlePaletteChange}
+                                    />
+                                    <label
+                                        htmlFor={`${props.idPrefix}-${option.key}`}
+                                    >
+                                        <span >{option.label}</span>
+                                        <div className="color">
+                                            {option.colors && Object.values(option.colors).map((c, i) => (
+                                                <div key={i} style={{ flex: 1, backgroundColor: c }}></div>
+                                            ))}
+                                        </div>
+                                    </label>
                                 </div>
-                            </label>
-                        </div>
-                    );
-                })}
-
-                {/* Custom Palette */}
-                {mode === 'custom' && (
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-                        {Object.entries(customColors).map(([key, val]) => (
-                            <div key={key} style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                                <label style={{ fontSize: '13px', fontWeight: 500 }}>
-                                    {key.replace(/([A-Z])/g, ' $1').replace(/^./, s => s.toUpperCase())}
-                                </label>
-                                <input
-                                    type="color"
-                                    value={val}
-                                    onChange={(e) => handleCustomChange(key as keyof CustomColors, e.target.value)}
-                                    style={{ width: '100%', height: '36px', cursor: 'pointer' }}
-                                />
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
-                )}
+                    <div className="custom">
+                        {/* Custom Palette */}
+                        {mode === 'custom' && (
+                            <div className="palette" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                                {Object.entries(customColors).map(([key, val]) => (
+                                    <div key={key} style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                                        <label style={{ fontSize: '13px', fontWeight: 500 }}>
+                                            {key.replace(/([A-Z])/g, ' $1').replace(/^./, s => s.toUpperCase())}
+                                        </label>
+                                        <input
+                                            type="color"
+                                            value={val}
+                                            onChange={(e) => handleCustomChange(key as keyof CustomColors, e.target.value)}
+                                            style={{ width: '100%', height: '36px', cursor: 'pointer' }}
+                                        />
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                </div>
             </div>
 
             {/* Live Preview */}
