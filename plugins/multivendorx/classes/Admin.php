@@ -95,7 +95,7 @@ class Admin {
                     'name'   => __( 'Stores', 'multivendorx' ),
                     'subtab' => '',
                 ),
-                'Commissions' => array(
+                'commissions' => array(
                     'name'   => __( 'Commissions', 'multivendorx' ),
                     'subtab' => '',
                 ),
@@ -277,9 +277,9 @@ class Admin {
 	public function add_additional_product_data_panels() {
 		global $post;
 
-        $linked_store = get_post_meta( $post->ID, 'store_id', true );
-        $product_fixed_commission = get_post_meta( $post->ID, 'product_fixed_commission', true );
-        $product_percentage_commission = get_post_meta( $post->ID, 'product_percentage_commission', true );
+        $linked_store = get_post_meta( $post->ID, 'multivendorx_store_id', true );
+        $product_fixed_commission = get_post_meta( $post->ID, 'multivendorx_product_fixed_commission', true );
+        $product_percentage_commission = get_post_meta( $post->ID, 'multivendorx_product_percentage_commission', true );
 
         ?>
         <div id="multivendorx-store-link-tab" class="panel woocommerce_options_panel hidden">
@@ -342,7 +342,7 @@ class Admin {
         $percentage_commission_per_product = absint( filter_input( INPUT_POST, 'product_percentage_commission' ) );
         
         if ( $linked_store_id ) {
-            update_post_meta( $post_id, 'store_id', $linked_store_id );
+            update_post_meta( $post_id, 'multivendorx_store_id', $linked_store_id );
 
             wp_update_post( array(
                 'ID'          => $post_id,
@@ -351,18 +351,18 @@ class Admin {
         }
 
         if ( $fixed_commission_per_product ) {
-            update_post_meta( $post_id, 'product_fixed_commission', $fixed_commission_per_product );
+            update_post_meta( $post_id, 'multivendorx_product_fixed_commission', $fixed_commission_per_product );
         }
 
         if ( $percentage_commission_per_product ) {
-            update_post_meta( $post_id, 'product_percentage_commission', $percentage_commission_per_product );
+            update_post_meta( $post_id, 'multivendorx_product_percentage_commission', $percentage_commission_per_product );
         }
     }
 
     public function add_variation_settings($loop, $variation_data, $variation) {
         $commission_percentage = $commission_fixed = '';
-        $commission_percentage = get_post_meta($variation->ID, 'variable_product_percentage_commission', true);
-        $commission_fixed = get_post_meta($variation->ID, 'variable_product_fixed_commission', true);
+        $commission_percentage = get_post_meta($variation->ID, 'multivendorx_variable_product_percentage_commission', true);
+        $commission_fixed = get_post_meta($variation->ID, 'multivendorx_variable_product_fixed_commission', true);
 
         woocommerce_wp_text_input( array(
             'id'            => 'variable_product_fixed_commission[' . $variation->ID . ']',
@@ -387,12 +387,12 @@ class Admin {
 
         if ( isset( $fixed_commissions[ $variation_id ] ) ) {
             $fixed_commission = wc_format_decimal( $fixed_commissions[ $variation_id ] );
-            update_post_meta( $variation_id, 'variable_product_fixed_commission', $fixed_commission );
+            update_post_meta( $variation_id, 'multivendorx_variable_product_fixed_commission', $fixed_commission );
         }
 
         if ( isset( $percentage_commissions[ $variation_id ] ) ) {
             $percentage_commission = wc_format_decimal( $percentage_commissions[ $variation_id ] );
-            update_post_meta( $variation_id, 'variable_product_percentage_commission', $percentage_commission );
+            update_post_meta( $variation_id, 'multivendorx_variable_product_percentage_commission', $percentage_commission );
         }
     }
 
@@ -417,9 +417,8 @@ class Admin {
      * @param Object $term
      */
     public function edit_product_cat_commission_fields($term) {
-        $commision = get_term_meta($term->term_id, 'commision', true);
-        $commission_percentage = get_term_meta($term->term_id, 'category_percentage_commission', true);
-        $commision_fixed = get_term_meta($term->term_id, 'category_fixed_commission', true);
+        $commission_percentage = get_term_meta($term->term_id, 'multivendorx_category_percentage_commission', true);
+        $commision_fixed = get_term_meta($term->term_id, 'multivendorx_category_fixed_commission', true);
         ?>
         <tr class="form-field">
             <th scope="row" valign="top"><label for="category_percentage_commission"><?php _e('Commission Percentage', 'multivendorx'); ?></label></th>
@@ -444,8 +443,8 @@ class Admin {
         if ( 'product_cat' === $taxonomy ) {
             $percentage = filter_input( INPUT_POST, 'category_percentage_commission', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION );
             $fixed      = filter_input( INPUT_POST, 'category_fixed_commission', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION );
-            update_term_meta( $term_id, 'category_percentage_commission', (float) $percentage );        
-            update_term_meta( $term_id, 'category_fixed_commission', (float) $fixed );
+            update_term_meta( $term_id, 'multivendorx_category_percentage_commission', (float) $percentage );        
+            update_term_meta( $term_id, 'multivendorx_category_fixed_commission', (float) $fixed );
         }
     }
 

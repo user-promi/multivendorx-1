@@ -1,8 +1,6 @@
 <?php
-use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Dashboard_Controller;
 
-$dashboard_controller = new MultiVendorX_REST_Dashboard_Controller();
-$all_endpoints = $dashboard_controller->all_endpoints();
+$all_endpoints = MultiVendorX()->rest->dashboard->all_endpoints();
 $current_user = wp_get_current_user();
 $role = reset($current_user->roles);
 $capability_settings = MultiVendorX()->setting->get_setting($role);

@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 export default {
     id: 'commission-rule',
     priority: 1,
-    name: __( 'Commissions', 'multivendorx' ),
+    name: __('Store commissions', 'multivendorx'),
     desc: __(
         "Tailor your marketplace's commission plan to fit your revenue-sharing preferences.",
         'multivendorx'
@@ -14,7 +14,7 @@ export default {
         {
             key: 'commission_type',
             type: 'setting-toggle',
-            label: __( 'Commission Type', 'multivendorx' ),
+            label: __('Commission Type', 'multivendorx'),
             desc: __(
                 'Choose the type of commission structure that best fits your marketplace model.',
                 'multivendorx'
@@ -22,12 +22,12 @@ export default {
             options: [
                 {
                     key: 'store_order',
-                    label: __( 'Store Order', 'multivendorx' ),
+                    label: __('Store Order', 'multivendorx'),
                     value: 'store_order',
                 },
                 {
                     key: 'per_item',
-                    label: __( 'Per Item', 'multivendorx' ),
+                    label: __('Per Item', 'multivendorx'),
                     value: 'per_item',
                 },
             ],
@@ -35,14 +35,85 @@ export default {
         {
             key: 'commission_per_store_order',
             type: 'nested',
-            label: 'Rule',
+            label: 'Commission Value',
             addButtonLabel: 'Add New',
             deleteButtonLabel: 'Remove',
             nestedFields: [
                 {
-                    key: 'commission_per_transaction',
+                    key: 'rule_type',
+                    type: 'select',
+                    label: 'If',
+                    options: [
+                        { value: 'price', label: 'Product Price' },
+                        { value: 'quantity', label: 'Product Quantity' },
+                        { value: 'order_value', label: 'Order Value' },
+                    ],
+                    skipFirstRow: true,
+                },
+                {
+                    key: 'rule',
+                    type: 'select',
+                    label: 'is',
+                    options: [
+                        { value: 'less_than', label: 'Up To' },
+                        { value: 'more_than', label: 'More than' },
+                    ],
+                    skipFirstRow: true,
+                },
+                {
+                    key: 'product_price',
+                    type: 'number',
+                    options: [
+                        {
+                            key: 'product_price',
+                            label: __( '$', 'multivendorx' ),
+                            type: 'number',
+                        },
+                    ],
+                    skipFirstRow: true,
+                    dependent: {
+                        key: 'rule_type',
+                        set: true,
+                        value: 'price',
+                    },
+                },
+                {
+                    key: 'product_qty',
+                    type: 'number',
+                    options: [
+                        {
+                            key: 'product_qty',
+                            type: 'number',
+                        },
+                    ],
+                    skipFirstRow: true,
+                    dependent: {
+                        key: 'rule_type',
+                        set: true,
+                        value: 'quantity',
+                    },
+                },
+                {
+                    key: 'order_value',
+                    type: 'number',
+                    options: [
+                        {
+                            key: 'order_value',
+                            label: __( '$', 'multivendorx' ),
+                            type: 'number',
+                        },
+                    ],
+                    skipFirstRow: true,
+                    dependent: {
+                        key: 'rule_type',
+                        set: true,
+                        value: 'order_value',
+                    },
+                },
+                {
+                    key: 'commission_per_store_order',
                     type: 'multi-number',
-                    label: __( 'Commission Value', 'multivendorx' ),
+                    // label: __('Commission Value', 'multivendorx'),
                     desc: __(
                         'This is the default commission amount that will be applicable for all transactions.',
                         'multivendorx'
@@ -50,53 +121,20 @@ export default {
                     options: [
                         {
                             key: 'commission_percentage',
-                            label: __( '%', 'multivendorx' ),
+                            label: __('%', 'multivendorx'),
                             type: 'number',
-                            desc: __(
-                                'Percentage of product price per transaction',
-                                'multivendorx'
-                            ),
-                            labelAfterInput:true
+                            desc: __('Percentage of product price per transaction', 'multivendorx'),
+                            labelAfterInput: true,
                         },
                         {
                             key: 'commission_fixed',
-                            label: __( '$', 'multivendorx' ),
+                            label: __('$', 'multivendorx'),
                             type: 'number',
-                            desc: __( 'Fixed amount per transaction', 'multivendorx' ),
-                            labelAfterInput:false
-                        },                
-                    ],
-                },
-                {
-                    key: 'product_cost',
-                    type: 'select',
-                    label: 'When product',
-                    options: [
-                        { value: 'price', label: 'Price' },
-                        { value: 'quantity', label: 'Quantity' },
-                    ],
-                },
-                {
-                    key: 'rule',
-                    type: 'select',
-                    label: 'is',
-                    options: [
-                        { value: 'up_to', label: 'Up To' },
-                        { value: 'more_than', label: 'More than' },
-                    ],
-                },
-                {
-                    key: 'commission_type',
-                    type: 'multi-number',
-                    options: [
-                        {
-                            key: 'mvx_commission_fixed_per_unit',
-                            label: __( '$', 'multivendorx' ),
-                            type: 'number',
+                            desc: __('Fixed amount per transaction', 'multivendorx'),
+                            labelAfterInput: false,
                         },
                     ],
                 },
- 
             ],
             dependent: {
                 key: 'commission_type',
@@ -105,66 +143,31 @@ export default {
             },
         },
         {
-            key: 'commission_per_per_item',
-            type: 'nested',
-            label: 'Rule',
-            addButtonLabel: 'Add New',
-            deleteButtonLabel: 'Remove',
-            nestedFields: [
+            key: 'commission_per_item',
+            type: 'multi-number',
+            label: __( 'Commission Value', 'multivendorx' ),
+            desc: __(
+                'This is the default commission amount that will be applicable for all transactions.',
+                'multivendorx'
+            ),
+            options: [
                 {
-                    key: 'commission_per_transaction',
-                    type: 'multi-number',
-                    label: __( 'Commission Value', 'multivendorx' ),
+                    key: 'commission_percentage',
+                    label: __( '%', 'multivendorx' ),
+                    type: 'number',
                     desc: __(
-                        'This is the default commission amount that will be applicable for all transactions.',
+                        'Percentage of product price per transaction',
                         'multivendorx'
                     ),
-                    options: [
-                        {
-                            key: 'commission_percentage',
-                            label: __( '%', 'multivendorx' ),
-                            type: 'number',
-                            desc: __(
-                                'Percentage of product price per transaction',
-                                'multivendorx'
-                            ),
-                            labelAfterInput:true
-                        },
-                        {
-                            key: 'commission_fixed',
-                            label: __( '$', 'multivendorx' ),
-                            type: 'number',
-                            desc: __( 'Fixed amount per transaction', 'multivendorx' ),
-                            labelAfterInput:false
-                        },                
-                    ],
+                    labelAfterInput:true
                 },
                 {
-                    key: 'rule',
-                    type: 'select',
-                    label: 'When Order Value is',
-                    options: [
-                        { value: 'up_to', label: 'Up To' },
-                        { value: 'more_than', label: 'More than' },
-                    ],
-                },
-                {
-                    key: 'product_price',
-                    type: 'multi-number',
-                    options: [
-                        {
-                            key: 'product_price',
-                            label: __( '$', 'multivendorx' ),
-                            type: 'number',
-                        },
-                    ],
-                    dependent: {
-                        key: 'product_cost',
-                        set: true,
-                        value: 'price',
-                    },
-                },
- 
+                    key: 'commission_fixed',
+                    label: __( '$', 'multivendorx' ),
+                    type: 'number',
+                    desc: __( 'Fixed amount per transaction', 'multivendorx' ),
+                    labelAfterInput:false
+                },                
             ],
             dependent: {
                 key: 'commission_type',
@@ -172,15 +175,16 @@ export default {
                 value: 'per_item',
             },
         },
+
         {
             key: 'separator_content',
             type: 'section',
-            hint:__("What's Included Along With Store Commission",'multivendorx'),
-            desc:__('Choose which order components are factored into commission calculations','multivendorx')
+            hint: __("What's Included Along With Store Commission", 'multivendorx'),
+            desc: __('Choose which order components are factored into commission calculations', 'multivendorx')
         },
         {
             key: 'give_shipping',
-            label: __( 'Shipping Amount', 'multivendorx' ),
+            label: __('Shipping Amount', 'multivendorx'),
             desc: __(
                 'Add shipping fees to the commission calculation base amount. <li>Include in Commission: Add shipping charges to the commission calculation base amount <li>Exclude from Commission: Calculate commission only on product price, excluding shipping costs',
                 'multivendorx'
@@ -197,7 +201,7 @@ export default {
         {
             key: 'commission_calculation_on_tax',
             type: 'setting-toggle',
-            label: __( 'Tax Amount', 'multivendorx' ),
+            label: __('Tax Amount', 'multivendorx'),
             desc: __(
                 'Configure how taxes are treated in commission calculations:<li>No Tax Inclusion: Calculate commission on pre-tax amount only.<li>100% Tax Inclusion: Include full tax amount in commission base.<li>Commission-Based Tax: Calculate commission on total order value including taxes, not just product price',
                 'multivendorx'
@@ -205,21 +209,21 @@ export default {
             options: [
                 {
                     key: 'per_transaction',
-                    label: __( 'No Tax', 'multivendorx' ),
+                    label: __('No Tax', 'multivendorx'),
                     value: 'per_transaction',
                 },
                 {
                     key: 'per_unit',
-                    label: __( 'Full Tax', 'multivendorx' ),
+                    label: __('Full Tax', 'multivendorx'),
                     value: 'per_unit',
                 },
                 {
                     key: 'per_store',
-                    label: __( 'Commision based tax', 'multivendorx' ),
+                    label: __('Commision based tax', 'multivendorx'),
                     value: 'per_store',
                 },
             ],
         },
-       
+
     ],
 };

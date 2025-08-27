@@ -140,7 +140,7 @@ class OrderManager {
 
             // save other details for suborder.
             $order->set_created_via('mvx_vendor_order');
-            $order->update_meta_data('store_id', $store_id);
+            $order->update_meta_data('multivendorx_store_id', $store_id);
             $order->set_parent_id($parent_order->get_id());
             $order->calculate_totals();
 
@@ -236,7 +236,7 @@ class OrderManager {
                 }
 
                 $item->set_backorder_meta();
-                $item->add_meta_data('_vendor_order_item_id', $item->get_product_id());
+                $item->add_meta_data('store_order_item_id', $item->get_product_id());
 
                 // Copy all metadata from order's item to new created item.
                 $metadata = $order_item->get_meta_data();
@@ -267,7 +267,7 @@ class OrderManager {
         $shipping_items = $parent_order->get_items('shipping');
                 
         foreach ( $shipping_items as $item_id => $item ) {
-            $shipping_vendor_id = $item->get_meta('store_id', true);
+            $shipping_vendor_id = $item->get_meta('multivendorx_store_id', true);
             if ( $shipping_vendor_id == $store_id ) {
                 $shipping = new \WC_Order_Item_Shipping();
                 $shipping->set_props(
@@ -284,7 +284,7 @@ class OrderManager {
                     $shipping->add_meta_data($key, $value, true);
                 }
 
-                $shipping->add_meta_data('store_id', $store_id, true);
+                $shipping->add_meta_data('multivendorx_store_id', $store_id, true);
                 $item->add_meta_data('_vendor_order_shipping_item_id', $item_id );
 
                 // Action hook to adjust item before save.

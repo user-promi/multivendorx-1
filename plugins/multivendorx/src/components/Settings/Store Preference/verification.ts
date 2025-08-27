@@ -32,7 +32,7 @@ export default {
         {
             key: 'unverified_store_access',
             type: 'checkbox',
-            label: __('Unverified Restrictions', 'mvx-pro'),
+            label: __('Unverified restrictions', 'mvx-pro'),
             desc: __('Select the restrictions you want to apply to stores who have not yet completed their verification process.', 'mvx-pro'),
             options: [
                 {
@@ -47,7 +47,7 @@ export default {
                 },
                 {
                     key: 'disable_add_product_endpoint',
-                    label: __('Prevent Product Upload', 'mvx-pro'),
+                    label: __('Prevent product upload', 'mvx-pro'),
                     value: 'disable_add_product_endpoint',
                 },
             ],

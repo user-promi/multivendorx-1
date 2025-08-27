@@ -26,7 +26,6 @@ declare global {
     interface Color{
         color: any;
     }
-
     declare module '*.png';
     declare module '*.jpg';
     declare module '*.jpeg';

@@ -14,8 +14,8 @@ import "leaflet/dist/leaflet.css";
 // );
 
 // 1. Try to mount admin panel if element is found
-const adminWrapper = document.getElementById( 'admin-main-wrapper' );
-if ( adminWrapper ) {
+const adminWrapper = document.getElementById('admin-main-wrapper');
+if (adminWrapper) {
     render(
         <BrowserRouter>
             <App />
@@ -23,9 +23,8 @@ if ( adminWrapper ) {
         adminWrapper
     );
 }
-
 // 2. Try to mount vendor dashboard if element is found
 const vendorWrapper = document.querySelector('.dashboard-content')
 if (vendorWrapper) {
     replaceDashboardDivs(vendorWrapper as HTMLElement);
-  }
+}

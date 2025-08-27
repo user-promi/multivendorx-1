@@ -19,7 +19,7 @@ const modules = require.context("./dashboard", false, /\.tsx$/);
 //   document.documentElement.style.setProperty(`--${key}`, value);
 // });
 
-export default function replaceDashboardDivs(container: HTMLElement) {
+export default function replaceDashboardDivs(container: HTMLElement) {  
   const children = container.querySelectorAll<HTMLDivElement>("div[id]");
 
   children.forEach((div) => {

@@ -14,7 +14,7 @@ export default {
         {
             key: 'store_dashboard_page',
             type: 'select',
-            label: __( 'Store Dashboard page', 'multivendorx' ),
+            label: __( 'Store dashboard page', 'multivendorx' ),
             desc: __(
                 'Select the page on which you have inserted <code>[store_registration]</code> shortcode.This is the page where new stores can sign up.',
                 'multivendorx'

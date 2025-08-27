@@ -3,6 +3,10 @@ import { Tabs } from 'zyra';
 import Brand from '../../../assets/images/brand-logo.png';
 import BrandSmall from '../../../assets/images/brand-icon.png';
 import StoreSettings from './StoreSettings';
+import SocialSettings from './SocialSettings';
+
+import PaymentSettings from './PaymentSettings';
+import StoreQueue from './StoreQueue';
 
 const EditStore = () => {
     const location = useLocation();
@@ -23,6 +27,15 @@ const EditStore = () => {
                 id: 'store',
                 name: 'Basic Info',
                 desc: 'Store Info',
+                icon: 'adminlib-credit-card',
+            },
+        },
+        {
+            type: 'file',
+            content: {
+                id: 'users',
+                name: 'Store Queue',
+                desc: 'Store Users',
                 icon: 'adminlib-credit-card',
             },
         },
@@ -50,10 +63,12 @@ const EditStore = () => {
         switch (tabId) {
             case 'store':
                 return <StoreSettings id={editId} />;
+            case 'users':
+                return <StoreQueue id={editId} />;
             case 'social':
-                return <h1>Social Links</h1>;
+                return <SocialSettings id={editId}/>
             case 'payment':
-                return <h1>Payment Options</h1>;
+                return <PaymentSettings id={editId}/>;
             default:
                 return <div></div>;
         }

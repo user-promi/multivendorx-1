@@ -10,6 +10,7 @@ import StatusAndTools from "./components/StatusAndTools/StatusAndTools";
 import SetupWizard from "./blocks/setupWizard/SetupWizard";
 import WorkBoard from "./components/WorkBoard/workboard";
 import Memberships from "./components/Membership/Membership";
+import Commission from "./components/Commission/Commission";
 
 localStorage.setItem("force_multivendorx_context_reload", "true");
 
@@ -51,6 +52,11 @@ const Route = () => {
       {currentTab.get("tab") === "dashboard" && (
         <div id="dashboard">
           <AdminDashboard />
+        </div>
+      )}
+      {currentTab.get("tab") === "commissions" && (
+        <div id="commissions">
+          <Commission/>
         </div>
       )}
       {currentTab.get("tab") === "setup" && (
