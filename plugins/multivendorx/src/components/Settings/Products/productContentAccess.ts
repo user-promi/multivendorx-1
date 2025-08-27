@@ -38,10 +38,6 @@ export default {
             key: 'products_fields',
             type: 'checkbox',
             label: __( 'Required product information fields', 'multivendorx' ),
-            desc: __(
-                'Select the types of products you want to enable in your marketplace: <li><b>General</b>: Basic product details such as name, description, and price.<li><b>Inventory</b>: Manage stock levels, SKU, and stock status for products.<li>Linked products: Link related products, upsells, and cross-sells to increase sales.<li>Attributes: Add custom attributes like size, color, or material to products.<li><b>Advanced settings</b>: Configure additional options like purchase notes and order visibility.<li><b>Policies</b>: Set store policies, including return and refund rules.<li><b>Product tags</b>: Help categorize products using tags for easier searching and filtering.<li><b>GTIN (global trade item number)</b>: Enter the product’s unique identifier for tracking and categorization purposes.',
-                'multivendorx'
-            ),
             class: 'mvx-toggle-checkbox',
             options: [
                 {
