@@ -22,6 +22,7 @@ class Shortcode {
         wp_enqueue_script( 'wp-element' );
         FrontendScripts::load_scripts();
         FrontendScripts::enqueue_script( 'multivendorx-dashboard-components-script' );
+        FrontendScripts::localize_scripts( 'multivendorx-dashboard-components-script' );
         FrontendScripts::enqueue_script( 'multivendorx-dashboard-script' );
         FrontendScripts::enqueue_style( 'multivendorx-dashboard-style' );
     }

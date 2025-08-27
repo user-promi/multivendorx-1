@@ -3,7 +3,7 @@ import { render } from "@wordpress/element";
 // Load all files from dashboard folder
 const modules = require.context("./dashboard", false, /\.tsx$/);
 
-export default function replaceDashboardDivs(container: HTMLElement) {
+export default function replaceDashboardDivs(container: HTMLElement) {  
   const children = container.querySelectorAll<HTMLDivElement>("div[id]");
 
   children.forEach((div) => {

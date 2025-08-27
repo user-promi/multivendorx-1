@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 interface VerificationField {
   key: string;
@@ -28,6 +28,9 @@ const VerificationMethods: React.FC<VerificationMethodsProps> = ({
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [form, setForm] = useState<Record<string, any>>({});
   const [openDropdownIndex, setOpenDropdownIndex] = useState<number | null>(null);
+  const [validationMsg, setValidationMsg] = useState<string>("");
+
+  const formRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     setRows(value.length ? value : []);
@@ -38,37 +41,65 @@ const VerificationMethods: React.FC<VerificationMethodsProps> = ({
     else setForm(rows[editingIndex] || {});
   }, [editingIndex, rows]);
 
+  // 🔹 Outside click handler to close edit form
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (editingIndex !== null && formRef.current && !formRef.current.contains(e.target as Node)) {
+        cancelEdit();
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [editingIndex]);
+
   const handleFieldChange = (key: string, val: any) => {
     setForm((prev) => ({ ...prev, [key]: val }));
+    setValidationMsg("");
   };
 
   const startAdd = () => {
+    if (rows.length > 0 && !rows[rows.length - 1].label?.trim()) {
+      setValidationMsg("⚠️ Please fill the label for the last row before adding a new one");
+      return;
+    }
+
     setRows((prev) => [...prev, {}]);
     setEditingIndex(rows.length);
     setForm({});
-  };
-
-  const startEdit = (index: number) => {
-    setEditingIndex(index);
-  };
-
-  const cancelEdit = () => {
-    setEditingIndex(null);
-    setForm({});
+    setValidationMsg("");
   };
 
   const saveRow = (index: number) => {
     if (!form.label || !form.label.trim()) {
-      alert('Label is required');
+      setValidationMsg("⚠️ Label is required");
       return;
     }
+
     const newRows = [...rows];
     newRows[index] = { ...newRows[index], label: form.label };
     setRows(newRows);
     onChange(newRows);
     setEditingIndex(null);
     setForm({});
+    setValidationMsg("");
   };
+
+  const cancelEdit = () => {
+    if (editingIndex !== null) {
+      // if it's a new row and has no label, remove it instead of saving
+      if (!rows[editingIndex]?.label?.trim()) {
+        const newRows = rows.filter((_, i) => i !== editingIndex);
+        setRows(newRows);
+        onChange(newRows);
+      }
+    }
+    setEditingIndex(null);
+    setForm({});
+    setValidationMsg("");
+  };
+  
 
   const deleteRow = (index: number) => {
     const newRows = rows.filter((_, i) => i !== index);
@@ -76,6 +107,7 @@ const VerificationMethods: React.FC<VerificationMethodsProps> = ({
     onChange(newRows);
     if (editingIndex === index) cancelEdit();
     if (openDropdownIndex === index) setOpenDropdownIndex(null);
+    setValidationMsg("");
   };
 
   const toggleActive = (index: number) => {
@@ -100,12 +132,18 @@ const VerificationMethods: React.FC<VerificationMethodsProps> = ({
         {addButtonLabel}
       </button>
 
+      {validationMsg && (
+        <p className="validation-msg" style={{ color: "red", marginTop: "8px" }}>
+          {validationMsg}
+        </p>
+      )}
+
       <ul className="fileds">
         {rows.map((row, idx) => (
           <li key={idx} className="row-item">
             <div className="name">
               {editingIndex === idx ? (
-                <div className="edit-row">
+                <div className="edit-row" ref={formRef}>
                   <div className="edit-form">
                     <label>Label</label>
                     <input
@@ -115,8 +153,8 @@ const VerificationMethods: React.FC<VerificationMethodsProps> = ({
                       onChange={(e) => handleFieldChange('label', e.target.value)}
                       onKeyDown={(e) => {
                         if (e.key === 'Enter') {
-                          e.preventDefault(); // prevent page reload
-                          saveRow(idx);       // save on Enter
+                          e.preventDefault();
+                          saveRow(idx);
                         }
                       }}
                     />
@@ -130,13 +168,14 @@ const VerificationMethods: React.FC<VerificationMethodsProps> = ({
               ) : (
                 <>
                   <div>{row.label}</div>
+                  {row.active ? "Active" : "Inactive"}
+                  {row.required ? 'Not Required' : 'Required'}
                 </>
               )}
             </div>
 
             <div className="action-section">
               <div className="action-icons">
-                {/* toggle dropdown */}
                 <i
                   className="adminlib-more-vertical"
                   onClick={() =>
@@ -148,7 +187,7 @@ const VerificationMethods: React.FC<VerificationMethodsProps> = ({
                   <ul>
                     {editingIndex !== idx && (
                       <>
-                        <li onClick={() => startEdit(idx)}>
+                        <li onClick={() => setEditingIndex(idx)}>
                           <i className="adminlib-create"></i>Edit
                         </li>
                         <li onClick={() => toggleRequired(idx)}>

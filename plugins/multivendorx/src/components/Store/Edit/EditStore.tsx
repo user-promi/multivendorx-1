@@ -3,6 +3,8 @@ import { Tabs } from 'zyra';
 import Brand from '../../../assets/images/brand-logo.png';
 import BrandSmall from '../../../assets/images/brand-icon.png';
 import StoreSettings from './StoreSettings';
+import SocialSettings from './SocialSettings';
+
 import PaymentSettings from './PaymentSettings';
 
 const EditStore = () => {
@@ -52,7 +54,7 @@ const EditStore = () => {
             case 'store':
                 return <StoreSettings id={editId} />;
             case 'social':
-                return <h1>Social Links</h1>;
+                return <SocialSettings id={editId}/>
             case 'payment':
                 return <PaymentSettings id={editId}/>;
             default:

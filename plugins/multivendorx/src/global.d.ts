@@ -23,10 +23,13 @@ declare global {
         custom_roles: any;
         all_payments: any;
     }
-
+    interface Color {
+        color:any
+    }
     declare module '*.png';
     declare module '*.jpg';
     declare module '*.jpeg';
 
     var appLocalizer: AppLocalizer;
+    var color: Color;
 }
