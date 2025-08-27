@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 export default {
     id: 'review-management',
     priority: 2,
-    name: __( 'Reviews and ratings', 'multivendorx' ),
+    name: __( 'Reviews and Ratings', 'multivendorx' ),
     desc: __( 'Manage product and store review settings.', 'multivendorx' ),
     icon: 'adminlib-settings',
     submitUrl: 'settings',

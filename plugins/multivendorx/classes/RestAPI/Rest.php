@@ -6,6 +6,7 @@ use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Orders_Controller;
 use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Settings_Controller;
 use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Dashboard_Controller;
 use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Store_Controller;
+use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Commission_Controller;
 
 defined('ABSPATH') || exit;
 
@@ -33,6 +34,7 @@ class Rest {
             'settings'  => new MultiVendorX_REST_Settings_Controller(),
             'dashboard' => new MultiVendorX_REST_Dashboard_Controller(),
             'store'     => new MultiVendorX_REST_Store_Controller(),
+            'commission'=> new MultiVendorX_REST_Commission_Controller(),
         );
     }
 

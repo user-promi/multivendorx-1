@@ -148,11 +148,11 @@ const StoreTable: React.FC = () => {
                             <i
                                 className="adminlib-more-vertical"
                                 onClick={() =>
-                                    toggleDropdown(row.original.order_id)
+                                    toggleDropdown(row.original.id)
                                 }
                             ></i>
                             <div
-                                className={`action-dropdown ${showDropdown === row.original.order_id
+                                className={`action-dropdown ${showDropdown === row.original.id
                                     ? 'show'
                                     : ''
                                     }`}

@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 export default {
     id: 'product-report-abuse',
     priority: 2,
-    name: __('Product report abuse', 'mvx-pro'),
+    name: __('Product Report Abuse', 'mvx-pro'),
     desc: __('Set rules and options for product abuse reporting.', 'mvx-pro'),
     icon: 'adminlib-wholesale',
     submitUrl: 'settings',

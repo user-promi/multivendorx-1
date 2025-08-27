@@ -95,7 +95,7 @@ class Admin {
                     'name'   => __( 'Stores', 'multivendorx' ),
                     'subtab' => '',
                 ),
-                'Commissions' => array(
+                'commissions' => array(
                     'name'   => __( 'Commissions', 'multivendorx' ),
                     'subtab' => '',
                 ),

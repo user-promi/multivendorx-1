@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 export default {
     id: 'min-max',
     priority: 3,
-    name: __( 'Min and max quantities', 'multivendorx' ),
+    name: __( 'Min and Max Quantities', 'multivendorx' ),
     desc: __( 'Set purchase limits to control inventory and bulk ordering.', 'multivendorx' ),
     icon: 'adminlib-form-section',
     submitUrl: 'settings',
