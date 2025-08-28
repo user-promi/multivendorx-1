@@ -28,7 +28,6 @@ import BasicInput from './BasicInput';
 import TextArea from './TextArea';
 import FileInput from './FileInput';
 import CalendarInput from './CalendarInput';
-import MultiNumInput from './MultiNumInput';
 import RadioInput from './RadioInput';
 import MultiCheckBox from './MultiCheckbox';
 import WpEditor from './WpEditor';
@@ -39,12 +38,12 @@ import GoogleMap from './GoogleMap';
 import Popup, { PopupProps } from './Popup';
 import '../styles/web/AdminForm.scss';
 import NestedComponent from './NestedComponent';
-import MultiStringInput from './MultiInputString';
 import ColorSettingInput from './ColorSettingInput';
 import EndpointEditor from './EndpointEditor';
 import PaymentTabsComponent from './PaymentTabsComponent';
 import VerificationMethods from './VerificationMethods';
 import SystemInfoAccordion from './SystemInfoAccordion';
+import MultiInput from './MultiInput';
 
 // Types
 declare const wp: any;
@@ -146,8 +145,8 @@ interface InputField {
     min?: number;
     max?: number;
     icon?: string;
-    iconEnable?:boolean;
-    size?:string;
+    iconEnable?: boolean;
+    size?: string;
     proSetting?: boolean;
     moduleEnabled?: boolean;
     parameter?: string;
@@ -156,8 +155,8 @@ interface InputField {
     rowNumber?: number;
     colNumber?: number;
     value?: string;
-    copyButtonLabel?:string;
-    copiedLabel?:string;
+    copyButtonLabel?: string;
+    copiedLabel?: string;
     width?: number;
     height?: number;
     multiple?: boolean;
@@ -208,7 +207,7 @@ interface InputField {
     labelAfterInput?: boolean,
     single?: boolean;
     center?: Center;
-    buttonEnable?:boolean
+    buttonEnable?: boolean
     nestedFields?: {
         key: string;
         type: 'number' | 'select';
@@ -520,15 +519,15 @@ const AdminForm: React.FC<AdminFormProps> = ({
         optionKey?: string
     ) => {
         if (!key || !optionKey) return;
-    
+
         settingChanged.current = true;
-    
+
         // Copy existing settings or initialize
         const currentValues: Record<string, string | number> = setting[key] || {};
-    
+
         // Save in flattened key-value format
         currentValues[optionKey] = e.target.value;
-    
+
         updateSetting(key, currentValues);
     };
 
@@ -960,10 +959,10 @@ const AdminForm: React.FC<AdminFormProps> = ({
                         </div>
                     );
                     break;
-                // Check in MVX
                 case 'multi-number':
                     input = (
-                        <MultiNumInput
+                        <MultiInput
+                            inputType="multi-number"
                             parentWrapperClass="settings-basic-input-class"
                             childWrapperClass="settings-basic-child-wrap"
                             inputWrapperClass="settings-basic-input-child-class"
@@ -986,9 +985,11 @@ const AdminForm: React.FC<AdminFormProps> = ({
                         />
                     );
                     break;
+
                 case 'multi-string':
                     input = (
-                        <MultiStringInput
+                        <MultiInput
+                            inputType="multi-string"
                             wrapperClass="setting-form-multi-input"
                             inputClass="basic-input"
                             buttonClass="admin-btn btn-purple"
@@ -1001,7 +1002,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             proSetting={isProSetting(inputField.proSetting ?? false)}
                             description={inputField.desc}
                             descClass="settings-metabox-description"
-                            onChange={(e) => {
+                            onStringChange={(e) => {
                                 if (
                                     hasAccess(
                                         inputField.proSetting ?? false,
@@ -1462,7 +1463,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             proChanged={() => setModelOpen(true)}
                         />
                     );
-                    break;                
+                    break;
                 // Check in MVX
                 case 'wpeditor':
                     input = (
@@ -1831,11 +1832,11 @@ const AdminForm: React.FC<AdminFormProps> = ({
                 case 'system-info':
                     input = (
                         <SystemInfoAccordion
-                        appLocalizer={appLocalizer}
-                        apiLink={String(inputField.apiLink)}
-                        copyButtonLabel={inputField.copyButtonLabel}
-                        copiedLabel={inputField.copiedLabel}
-                    />
+                            appLocalizer={appLocalizer}
+                            apiLink={String(inputField.apiLink)}
+                            copyButtonLabel={inputField.copyButtonLabel}
+                            copiedLabel={inputField.copiedLabel}
+                        />
                     );
                     break;
 

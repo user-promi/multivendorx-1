@@ -337,7 +337,6 @@ const Tabs: React.FC<TabsProps> = ({
                         {getForm(activeTab)}
                     </div>
                 </div>
-                {/* <AdminFooter supportLink={supprot} /> */}
             </div>
         </>
     );
