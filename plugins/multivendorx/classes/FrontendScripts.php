@@ -380,6 +380,7 @@ class FrontendScripts {
                         'capabilities'             => StoreUtil::get_store_capability(),
                         'custom_roles'             => Roles::multivendorx_get_roles(),
                         'all_payments'             => MultiVendorX()->payments->all_payment_providers(),
+                        'freeVersion'              => MultivendorX()->version,
 					),
                 ),
                 'multivendorx-product-tab-script' => array(

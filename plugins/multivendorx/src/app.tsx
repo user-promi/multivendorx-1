@@ -177,6 +177,7 @@ const App = () => {
         onResultClick={handleResultClick}
         onSelectChange={handleSelectChange}
         selectValue={selectValue}
+        free={appLocalizer.freeVersion}
       />
       <Route />
     </>

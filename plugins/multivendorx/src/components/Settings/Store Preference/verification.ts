@@ -28,6 +28,7 @@ export default {
                 'Upload (32px height) size badge that will appear next to verified stores for credibility.',
                 'mvx-pro'
             ),
+            proSetting:true
         },
         {
             key: 'unverified_store_access',
@@ -51,6 +52,7 @@ export default {
                     value: 'disable_add_product_endpoint',
                 },
             ],
+            proSetting:true,
             selectDeselect: true,
         },
         {
@@ -177,7 +179,8 @@ export default {
                         }
                     ],
                 },
-            ]
+            ],
+            proSetting:true
         },
     ],
 };
