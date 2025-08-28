@@ -71,26 +71,34 @@
         display: flex;
         justify-content: space-between;
 
-        .icon {
-          padding: 0.5rem;
-          width: 2.5rem;
-          height: 2.5rem;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          background: #522c8112;
-          border-radius: 0.4rem;
+        .icon-wrapper {
+          position: relative;
 
-          i {
-            font-size: 1.5rem;
-            color: $theme-color;
+          .icon {
+            padding: 0.5rem;
+            width: 2.5rem;
+            height: 2.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #522c8112;
+            border-radius: 0.4rem;
+
+            i {
+              font-size: 1.5rem;
+              color: $theme-color;
+            }
           }
-        }
 
-        .pro-tag {
-          i {
-            color: $accent-color;
-            font-size: 1.313rem;
+          .pro-tag {
+            position: absolute;
+            top: -0.5rem;
+            right: -0.5rem;
+
+            i {
+              color: $accent-color;
+              font-size: 1.313rem;
+            }
           }
         }
       }
