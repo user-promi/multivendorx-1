@@ -10,6 +10,8 @@ type AdminHeaderProps = {
   onResultClick: (res: SearchResult) => void;
   onSelectChange: (value: string) => void;
   selectValue: string;
+  free?: string;
+  pro?:string;
 };
 
 const AdminHeader: React.FC<AdminHeaderProps> = ({
@@ -20,6 +22,8 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
   onResultClick,
   onSelectChange,
   selectValue,
+  free,
+  pro='4.1.23',
 }) => {
   return (
     <>
@@ -37,10 +41,10 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
 
           <div className="version-tag">
             <span className="admin-badge blue">
-              <b>Free:</b> 5.10.15
+              <b>Free:</b> {free}
             </span>
             <span className="admin-badge red">
-              <b>Pro:</b> 4.2.6
+              <b>Pro:</b> {pro}
             </span>
           </div>
         </div>
