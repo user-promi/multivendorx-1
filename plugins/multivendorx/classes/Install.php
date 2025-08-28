@@ -119,7 +119,7 @@ class Install {
             `slider` varchar(255) DEFAULT NULL,
             `facebook` varchar(20),
             `twitter` varchar(20),
-            `linkdin` varchar(20),
+            `linkedin` varchar(20),
             `youtube` varchar(20),
             `pinterest` varchar(20),
             `instagram` varchar(20),

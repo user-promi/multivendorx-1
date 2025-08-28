@@ -167,6 +167,10 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             'commission_fixed'  => $data['commission_fixed'] ?? '',
             'commission_percentage' => $data['commission_percentage'] ?? '',
             'facebook'          => $data['facebook'] ?? '',
+            'twitter'           => $data['twitter'] ?? '',
+            'linkedin'          => $data['linkedIn'] ?? '',
+            'youtube'           => $data['youtube'] ?? '',
+            'instagram'         => $data['instagram'] ?? '',
         ]);
 
         if ($store_updated || $updated) {
