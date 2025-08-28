@@ -262,7 +262,8 @@ const Tabs: React.FC<TabsProps> = ({
                 const tab = content as TabContent;
                 return tab.id === activeTab && tab.id !== 'support' ? (
                     <div className="divider-section" key={tab.id}>
-                        <div className="title">{tab.name}</div><div className="desc">{tab.desc}</div>
+                        <div className="title">{tab.name}</div>
+                        <div className="desc">{tab.desc}</div>
                     </div>
                 ) : [];
             }
@@ -283,7 +284,16 @@ const Tabs: React.FC<TabsProps> = ({
     }, [currentTab, tabData, buildPathToTab, updateBreadcrumbAndStack, findFirstFile]);
 
     const currentMenuItems = menuStack[menuStack.length - 1];
-    const parentTabName = breadcrumbPath.length > 1 ? breadcrumbPath[breadcrumbPath.length - 2]?.name : '';
+
+    const parentTabName = (() => {
+        const lastCrumb = breadcrumbPath[breadcrumbPath.length - 1];
+        if (lastCrumb?.type === 'file') {
+            return lastCrumb.name;
+        }
+        // otherwise keep the previous breadcrumb name
+        return breadcrumbPath.length > 1 ? breadcrumbPath[breadcrumbPath.length - 2]?.name : '';
+    })();
+
     const activeTabIcon = getActiveTabIcon(tabData);
 
     const [noticeHTML, setNoticeHTML] = useState<string>("");
