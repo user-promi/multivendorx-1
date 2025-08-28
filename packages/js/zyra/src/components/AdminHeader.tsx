@@ -41,7 +41,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
 
           <div className="version-tag">
             <span className="admin-badge blue">
-              <b>Free:</b> 5.10.15
+              Core: 5.10.15
             </span>
             <span className="admin-badge red">
               <i className="adminlib-pro-tag"></i> 4.2.6
