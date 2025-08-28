@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/web/NestedComponent.scss";
 import MultiInput from "./MultiInput";
 
@@ -48,42 +48,34 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
   }, [value, single]);
 
   // Normalize output
-  const formatData = useCallback(
-    (data: Record<string, any>[]) =>
-      data.map((row) =>
-        Object.fromEntries(
-          Object.entries(row).map(([key, val]) => {
-            const field = fields.find((f) => f.key === key);
-            if (field?.type === "multi-number") {
-              return [
-                key,
-                (val || []).map((item: any) => ({ key: item.key, value: item.value })),
-              ];
-            }
-            return [key, val];
-          })
-        )
-      ),
-    [fields]
-  );
+  function formatData(data: Record<string, any>[]) {
+    return data.map((row) =>
+      Object.fromEntries(
+        Object.entries(row).map(([key, val]) => {
+          const field = fields.find((f) => f.key === key);
+          if (field?.type === "multi-number") {
+            return [
+              key,
+              (val || []).map((item: any) => ({ key: item.key, value: item.value })),
+            ];
+          }
+          return [key, val];
+        })
+      )
+    );
+  }
 
-  const updateAndSave = useCallback(
-    (updated: Record<string, any>[]) => {
-      setRows(updated);
-      onChange(formatData(updated));
-    },
-    [onChange, formatData]
-  );
+  function updateAndSave(updated: Record<string, any>[]) {
+    setRows(updated);
+    onChange(formatData(updated));
+  }
 
   // Generic field change handler
-  const handleChange = useCallback(
-    (rowIndex: number, key: string, value: any) => {
-      updateAndSave(rows.map((row, i) => (i === rowIndex ? { ...row, [key]: value } : row)));
-    },
-    [rows, updateAndSave]
-  );
+  function handleChange(rowIndex: number, key: string, value: any) {
+    updateAndSave(rows.map((row, i) => (i === rowIndex ? { ...row, [key]: value } : row)));
+  }
 
-  const addRow = useCallback(() => {
+  function addRow() {
     if (single) return;
     const lastRow = rows.at(-1) || {};
 
@@ -99,7 +91,10 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
       }
       if (f.dependent) {
         const depVal = lastRow[f.dependent.key];
-        if ((f.dependent.set && depVal === f.dependent.value) || (!f.dependent.set && depVal !== f.dependent.value)) {
+        if (
+          (f.dependent.set && depVal === f.dependent.value) ||
+          (!f.dependent.set && depVal !== f.dependent.value)
+        ) {
           const val = lastRow[f.key];
           return val !== undefined && val !== "";
         }
@@ -112,17 +107,14 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
     if (!isComplete && rows.length > 1) return;
 
     updateAndSave([...rows, {}]);
-  }, [rows, fields, updateAndSave, single]);
+  }
 
-  const removeRow = useCallback(
-    (index: number) => {
-      if (!single) updateAndSave(rows.filter((_, i) => i !== index));
-    },
-    [rows, single, updateAndSave]
-  );
+  function removeRow(index: number) {
+    if (!single) updateAndSave(rows.filter((_, i) => i !== index));
+  }
 
   // Render field based on type
-  const renderField = (field: NestedField, row: Record<string, any>, rowIndex: number) => {
+  function renderField(field: NestedField, row: Record<string, any>, rowIndex: number) {
     if (rowIndex === 0 && field.skipFirstRow) return null;
     if (rowIndex > 0 && field.firstRowOnly) return null;
 
@@ -130,7 +122,10 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
 
     if (field.dependent) {
       const depVal = row[field.dependent.key];
-      if ((field.dependent.set && depVal !== field.dependent.value) || (!field.dependent.set && depVal === field.dependent.value)) {
+      if (
+        (field.dependent.set && depVal !== field.dependent.value) ||
+        (!field.dependent.set && depVal === field.dependent.value)
+      ) {
         return null;
       }
     }
@@ -143,7 +138,12 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
             <div className="toggle-setting-container">
               <div className="toggle-setting-wrapper">
                 {field.options?.map((opt) => (
-                  <div key={opt.value} role="button" tabIndex={0} onClick={() => handleChange(rowIndex, field.key, opt.value)}>
+                  <div
+                    key={opt.value}
+                    role="button"
+                    tabIndex={0}
+                    onClick={() => handleChange(rowIndex, field.key, opt.value)}
+                  >
                     <input
                       type="radio"
                       id={`${field.key}-${rowIndex}-${opt.value}`}
@@ -179,7 +179,9 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
                 key: opt.key || field.key,
                 value: row[opt.key || field.key] || "",
               }))}
-              onChange={(e, _, optKey) => handleChange(rowIndex, optKey || field.key, e.target.value)}
+              onChange={(e, _, optKey) =>
+                handleChange(rowIndex, optKey || field.key, e.target.value)
+              }
             />
           </div>
         );
@@ -201,7 +203,7 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
       default:
         return null;
     }
-  };
+  }
 
   return (
     <div className="nested-wrapper" id={id}>
@@ -214,7 +216,11 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
                 + {addButtonLabel}
               </button>
               {rows.length > 1 && (
-                <button type="button" className="admin-btn btn-red" onClick={() => removeRow(rowIndex)}>
+                <button
+                  type="button"
+                  className="admin-btn btn-red"
+                  onClick={() => removeRow(rowIndex)}
+                >
                   {deleteButtonLabel}
                 </button>
               )}
