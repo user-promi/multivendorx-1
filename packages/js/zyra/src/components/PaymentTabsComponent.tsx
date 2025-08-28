@@ -82,44 +82,58 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
                                 <div className="payment-method-info">
                                     <div className="title-wrapper">
                                         <span className="title">{method.label}</span>
+                                    </div>
+                                    <div className="method-desc">{method.desc}</div>
+                                </div>
+                            </div>
 
-                                        {/* Enable / Disable */}
-                                        {!isEnabled ? (
-                                            <span
-                                                className="admin-badge green"
-                                                onClick={() => toggleEnable(method.id, true)}
-                                            >
-                                                Enable
-                                            </span>
-                                        ) : (
+                            {/* Enable / Disable */}
+                            <div className="right-section">
+                                {/* Arrow only shows when enabled */}
+                                {isEnabled && (
+                                    <div
+                                        className="payment-method-arrow"
+                                        onClick={() =>
+                                            setActiveTab(activeTab === method.icon ? null : method.icon)
+                                        }
+                                    >
+                                        {/* {activeTab ? (<i className="adminlib-keyboard-arrow-down"></i>) : (<i className="adminlib-pagination-right-arrow"></i>)} */}
+                                        {activeTab ? (<span className="admin-btn btn-light-blue"> Manage</span>) : (<span className="admin-btn btn-light-blue"> Manage</span>)}
+                                    </div>
+                                )}
+                                {!isEnabled ? (
+                                    <span
+                                        className="admin-btn btn-purple"
+                                        onClick={() => toggleEnable(method.id, true)}
+                                    >
+                                        Enable
+                                    </span>
+                                ) : (
+                                    <span>
+                                    </span>
+                                )}
+                            </div>
+                        </div>
+
+                        {/* Form */}
+                        {isEnabled && activeTab === method.icon && (
+                            <div className="payment-method-form">
+                                <div className="form-group">
+                                    <label>Enable {method.label}</label>
+                                    <div className="input-content">
+                                        {isEnabled ? (
                                             <span
                                                 className="admin-badge red"
                                                 onClick={() => toggleEnable(method.id, false)}
                                             >
                                                 Disable
                                             </span>
+                                        ) : (
+                                            <span>
+                                            </span>
                                         )}
                                     </div>
-                                    <div className="method-desc">{method.desc}</div>
                                 </div>
-                            </div>
-
-                            {/* Arrow only shows when enabled */}
-                            {isEnabled && (
-                                <div
-                                    className="payment-method-arrow"
-                                    onClick={() =>
-                                        setActiveTab(activeTab === method.icon ? null : method.icon)
-                                    }
-                                >
-                                    <i className="adminlib-pagination-right-arrow"></i>
-                                </div>
-                            )}
-                        </div>
-
-                        {/* Form */}
-                        {isEnabled && activeTab === method.icon && (
-                            <div className="payment-method-form">
                                 {method.formFields.map((field) => (
                                     <div key={field.key} className="form-group">
                                         <label>{field.label}</label>

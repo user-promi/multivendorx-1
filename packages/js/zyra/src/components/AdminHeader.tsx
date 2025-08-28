@@ -24,10 +24,14 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
   return (
     <>
       <div className="top-header">
-        <div>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit.
-          Necessitatibus, eos?
-        </div>
+        <ul className="carousel-list">
+          <li className="carousel-item active">
+            Lorem ipsum dolor            
+          </li>
+          <li className="carousel-item ">
+            Lorem ipsum dolo2         
+          </li>
+        </ul>
         <i className="adminlib-close"></i>
       </div>
 
