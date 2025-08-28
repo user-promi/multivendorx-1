@@ -78,7 +78,6 @@ const SocialSettings = ({ id }: { id: string }) => {
 	};
 
 	const autoSave = (updatedData: { [key: string]: string }) => {
-		console.log(updatedData)
 
 		axios({
 			method: 'PUT',
@@ -86,7 +85,6 @@ const SocialSettings = ({ id }: { id: string }) => {
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: updatedData,
 		}).then((res) => {
-			console.log(res)
 			if (res.data.success) {
 				setSuccessMsg('Store saved successfully!');
 			}

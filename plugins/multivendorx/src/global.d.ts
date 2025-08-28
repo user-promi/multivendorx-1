@@ -22,6 +22,7 @@ declare global {
         capabilities: any;
         custom_roles: any;
         all_payments: any;
+        freeVersion : any;
     }
     interface Color{
         color: any;
