@@ -5,10 +5,7 @@ final-release
 languages
 release
 vendor
-.circleci/
-.phpunit.result.cache
 docker-compose.yml
-bin/install-wp-tests.sh
 dist
 .wireit
 .cache
