@@ -1,6 +1,6 @@
 {
     "name": "multivendorx/catalogx",
-    "description": "Boost sales with real-time stock alerts! Notify customers instantly when products are back in stock. Simplify data management by exporting and importing stock data with ease.",
+    "description": "CatalogX converts your WooCommerce store into a product catalog, letting you hide prices and remove the ‘Add to Cart’ button with ease.",
     "type": "wordpress-plugin",
     "homepage": "https://catalogx.com",
     "license": "GPL-2.0-or-later",
