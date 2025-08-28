@@ -298,6 +298,7 @@ const Tabs: React.FC<TabsProps> = ({
 
     return (
         <>
+            {BannerSection && <BannerSection />}
             <AdminBreadcrumbs
                 activeTabIcon={activeTabIcon}
                 parentTabName={parentTabName}
@@ -315,7 +316,6 @@ const Tabs: React.FC<TabsProps> = ({
             )}
             <div className="general-wrapper">
                 {HeaderSection && <HeaderSection />}
-                {BannerSection && <BannerSection />}
                 <div className={`${menuCol ? 'show-menu' : ''} middle-child-container`}>
                     {menuStack.length > 1 && (
                         <div id="current-tab-lists" className="current-tab-lists">

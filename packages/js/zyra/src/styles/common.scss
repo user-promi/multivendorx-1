@@ -28,8 +28,8 @@ a {
   }
 }
 
-.form-select-field-wrapper input {
-  box-shadow: none;
+.form-select-field-wrapper input:focus {
+  box-shadow: none !important; /* for overwrite react components*/
   outline: none;
 }
 
