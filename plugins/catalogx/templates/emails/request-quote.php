@@ -63,16 +63,31 @@ $customer_data = $args['customer_data'];
                 </tr>
                 <?php
 			}
+            if ( ! $args['products'] ) {
+                ?>
+                <tr>
+                    <td class="product_name" style="border:none;">
+                    <a href="#"><?php echo esc_html( 'Dummy Title' ); ?></a>
+                    </td>
+                    <td class="product_quantity" style="border:none;">
+					<?php echo absint( 1 ); ?>
+                    </td>
+                    <td class="product_quantity" style="border:none;">
+					<?php echo wp_kses_post( wc_price( 100 ) ); ?>
+                    </td>
+                </tr>
+                <?php
+            }
 			?>
             </tbody>
         </table>
         <br>
     </div>
     <div class="details">
-        <p><strong><?php esc_html_e( 'Customer Name:', 'catalogx' ); ?></strong> <?php echo esc_html( $customer_data['name'] ); ?></p>
+        <p><strong><?php esc_html_e( 'Customer Name:', 'catalogx' ); ?></strong> <?php echo esc_html( $customer_data['name'] ?? 'John Doe' ); ?></p>
         <p><strong><?php esc_html_e( 'Email:', 'catalogx' ); ?></strong> 
-        <a href="mailto:<?php echo esc_attr( $customer_data['email'] ); ?>">
-            <?php echo esc_html( $customer_data['email'] ); ?>
+        <a href="mailto:<?php echo esc_attr( $customer_data['email'] ?? 'example@gmail.com' ); ?>">
+            <?php echo esc_html( $customer_data['email'] ?? 'example@gmail.com' ); ?>
         </a></p>
         <?php if ( ! empty( $customer_data['details'] ) ) { ?>
             <p><strong><?php esc_html_e( 'Additional Details:', 'catalogx' ); ?></strong><br>

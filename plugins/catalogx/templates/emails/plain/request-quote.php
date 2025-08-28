@@ -24,9 +24,18 @@ foreach ( $args['products'] as $item ) {
     echo sprintf( esc_html__( 'Price: %s', 'catalogx' ), esc_html( $_product->get_regular_price() ) ) . "\n\n";
 }
 
+if ( ! $args['products'] ) {
+    /* translators: %s: Show the product name. */
+    echo sprintf( esc_html__( 'Product: %s', 'catalogx' ), esc_html( 'Dummy Product' ) ) . "\n";
+    /* translators: %s: Show the quantity of the product. */
+    echo sprintf( esc_html__( 'Qty: %s', 'catalogx' ), absint( 1 ) ) . "\n";
+    /* translators: %s: Show the price of the product. */
+    echo sprintf( esc_html__( 'Price: %s', 'catalogx' ), esc_html( 100 ) ) . "\n\n";
+}
+
 echo "\n" . esc_html__( 'Customer Details:', 'catalogx' ) . "\n";
-echo esc_html__( 'Customer Name:', 'catalogx' ) . ' ' . esc_html( $customer_data['name'] ) . "\n";
-echo esc_html__( 'Email:', 'catalogx' ) . ' ' . esc_html( $customer_data['email'] ) . "\n\n";
+echo esc_html__( 'Customer Name:', 'catalogx' ) . ' ' . esc_html( $customer_data['name'] ?? 'John Doe' ) . "\n";
+echo esc_html__( 'Email:', 'catalogx' ) . ' ' . esc_html( $customer_data['email'] ?? 'example@gmail.com' ) . "\n\n";
 
 if ( ! empty( $customer_data['details'] ) ) {
     echo esc_html__( 'Additional Details:', 'catalogx' ) . "\n";

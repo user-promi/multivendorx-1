@@ -76,7 +76,7 @@ $enquiry_data = $args['enquiry_data'];
                             }
                             ?>
                             <tr>
-                            <td scope="col"><?php echo esc_html( $product_obj ? $product_obj->get_name() : "Dummy Product" ); ?>
+                            <td scope="col"><?php echo esc_html( $product_obj ? $product_obj->get_name() : 'Dummy Product' ); ?>
                             <?php
 							if ( $product_obj && $product_obj->get_type() === 'variation' ) {
 								if ( isset( $enquiry_data['variations'] ) && count( $enquiry_data['variations'] ) > 0 ) {
@@ -93,7 +93,7 @@ $enquiry_data = $args['enquiry_data'];
 							}
 							?>
                             </td>
-                            <td scope="col"><a href="<?php echo esc_url( $product_obj ? $product_obj->get_permalink() : "#" ); ?>" target="_blank"><?php echo esc_html( $product_obj ? $product_obj->get_title() : 'Dummy title' ); ?></a></td>
+                            <td scope="col"><a href="<?php echo esc_url( $product_obj ? $product_obj->get_permalink() : '#' ); ?>" target="_blank"><?php echo esc_html( $product_obj ? $product_obj->get_title() : 'Dummy title' ); ?></a></td>
                             <?php if ( $product_obj && $product_obj->get_sku() ) { ?>
                             <td scope="col"><?php echo esc_html( $product_obj->get_sku() ); ?></td>
                             <?php } else { ?>
