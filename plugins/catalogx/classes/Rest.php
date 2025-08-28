@@ -175,8 +175,8 @@ class Rest {
 
         // Setup wizard module.
         $modules = $request->get_param( 'modules' );
-        foreach ( $modules as $module ) {
-            CatalogX()->modules->activate_modules( array( $module ) );
+        if ( is_array( $modules ) ) {
+            CatalogX()->modules->activate_modules( $modules );
         }
         // Handle the actions.
         switch ( $action ) {
