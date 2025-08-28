@@ -71,12 +71,14 @@ $enquiry_data = $args['enquiry_data'];
 								<?php
                             }
                         } else {
-                            $product_obj = wc_get_product( key( $args['product_id'] ) );
+                            if ( $args['product_id'] ) {
+                                $product_obj = wc_get_product( key( $args['product_id'] ) );
+                            }
                             ?>
                             <tr>
-                            <td scope="col"><?php echo esc_html( $product_obj->get_name() ); ?>
+                            <td scope="col"><?php echo esc_html( $product_obj ? $product_obj->get_name() : "Dummy Product" ); ?>
                             <?php
-							if ( $product_obj->get_type() === 'variation' ) {
+							if ( $product_obj && $product_obj->get_type() === 'variation' ) {
 								if ( isset( $enquiry_data['variations'] ) && count( $enquiry_data['variations'] ) > 0 ) {
 									foreach ( $enquiry_data['variations'] as $label => $value ) {
 										$label = str_replace( 'attribute_pa_', '', $label );
@@ -91,8 +93,8 @@ $enquiry_data = $args['enquiry_data'];
 							}
 							?>
                             </td>
-                            <td scope="col"><a href="<?php echo esc_url( $product_obj->get_permalink() ); ?>" target="_blank"><?php echo esc_html( $product_obj->get_title() ); ?></a></td>
-                            <?php if ( $product_obj->get_sku() ) { ?>
+                            <td scope="col"><a href="<?php echo esc_url( $product_obj ? $product_obj->get_permalink() : "#" ); ?>" target="_blank"><?php echo esc_html( $product_obj ? $product_obj->get_title() : 'Dummy title' ); ?></a></td>
+                            <?php if ( $product_obj && $product_obj->get_sku() ) { ?>
                             <td scope="col"><?php echo esc_html( $product_obj->get_sku() ); ?></td>
                             <?php } else { ?>
                                 <td scope="col"><?php echo '-'; ?></td>
@@ -107,11 +109,11 @@ $enquiry_data = $args['enquiry_data'];
             <h3 style="font-size: 20px; color:#557da1; margin-top: 1rem;"  ><?php esc_html_e( 'Customer Details', 'catalogx' ); ?></h3>
             <p>
                 <strong><?php esc_html_e( 'Name', 'catalogx' ); ?> : </strong>
-                <?php echo esc_html( $enquiry_data['user_name'] ); ?>
+                <?php echo esc_html( $enquiry_data['user_name'] ?? 'John Doe' ); ?>
             </p>
             <p>
                 <strong><?php esc_html_e( 'Email', 'catalogx' ); ?> : </strong>
-                <a target="_blank" href="mailto:<?php echo esc_html( $enquiry_data['user_email'] ); ?>"><?php echo esc_html( $enquiry_data['user_email'] ); ?></a>
+                <a target="_blank" href="mailto:<?php echo esc_html( $enquiry_data['user_email'] ?? 'example@gmail.com' ); ?>"><?php echo esc_html( $enquiry_data['user_email'] ?? 'example@gmail.com' ); ?></a>
             </p>
             <?php
             foreach ( $enquiry_data['user_enquiry_fields'] as $field ) {
