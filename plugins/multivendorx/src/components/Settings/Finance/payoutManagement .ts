@@ -66,34 +66,44 @@ export default {
         {
             key: 'commission_by_product_price',
             type: 'nested',
-            label: 'Withdrawal Rules',
             single:true,
+            label: 'Withdrawal Rules',
             nestedFields: [
                 {
                     key: 'commission_threshold_time',
-                    type: 'number',
-                    label: __( 'Lock Period', 'multivendorx' ),
-                    desc: __(
-                        'Days after order completion before earnings are eligible for payout',
-                        'multivendorx'
-                    ),
-                    placeholder: __( 'in days', 'multivendorx' ),
+                    type: 'multi-number',
+                    label: __('Lock Period', 'multivendorx'),
+                    options: [
+                        {
+                            key: 'commission_percentage',
+                            label: __('days', 'multivendorx'),
+                            type: 'number',
+                            labelAfterInput: true,
+                        },
+                    ],
                 },
                 {
-                    key: 'no_of_orders',
-                    type: 'number',
-                    label: __( 'Free Withdrawal', 'multivendorx' ),
-                    desc: __( 'Number of fee-free withdrawals per month.', 'multivendorx' ),
+                    key: 'commission_threshold_time',
+                    type: 'multi-number',
+                    label: __('Free Withdrawal', 'multivendorx'),
+                    options: [
+                        {
+                            key: 'commission_percentage',
+                            type: 'number',
+                        },
+                    ],
                 },
                 {
-                    key: 'withdraw_fee',
-                    type: 'number',
-                    label: __( 'Processing Fee', 'multivendorx' ),
-                    desc: __(
-                        'Fixed fee per withdrawal (after free limit)',
-                        'multivendorx'
-                    ),
-                },  
+                    key: 'commission_threshold_time',
+                    type: 'multi-number',
+                    label: __('Processing Fee', 'multivendorx'),
+                    options: [
+                        {
+                            key: 'commission_percentage',
+                            type: 'number',
+                        },
+                    ],
+                },                
             ],
         },
         {
