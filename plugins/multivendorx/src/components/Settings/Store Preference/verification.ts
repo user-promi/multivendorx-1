@@ -79,7 +79,7 @@ export default {
                             key: 'verification_methods',
                             type: 'verification-methods', // custom type
                             label: 'Verification Methods',
-                            addButtonLabel: 'Add Verification Method',
+                            addButtonLabel: 'Add New Method',
                             deleteButtonLabel: 'Remove',
                             nestedFields: [
                                 { key: 'label', type: 'text', label: 'Label', placeholder: 'Enter label' },

@@ -62,7 +62,7 @@ const AdminBreadcrumbs: React.FC<AdminBreadcrumbsProps> = ({
                         {renderMenuItems(tabData)}
                     </div>
                     {goPremium && (<a href="#" className="menu-item pro-btn">
-                            <i className="adminlib-pro-tab"></i> Go Pro<i className="adminlib-arrow-right"></i>
+                            <i className="adminlib-pro-tab"></i> Upgrade<i className="adminlib-arrow-right"></i>
                     </a>)}
                 </div>
             )}
