@@ -60,7 +60,7 @@ class EnrollmentEmail extends \WC_Email {
 			return;
 		}
 
-		$this->send(
+        $this->send(
 			$this->get_recipient(),
 			$this->get_subject(),
 			$this->get_content(),

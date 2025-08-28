@@ -54,6 +54,18 @@ export { default as TimePicker } from './components/TimePicker';
 export { default as ToggleSetting } from './components/ToggleSetting';
 export { default as Tour } from './components/TourSteps';
 export { default as WpEditor } from './components/WpEditor';
+export { default as AdminHeader } from './components/AdminHeader';
+export { default as AdminBreadcrumbs } from './components/AdminBreadcrumbs';
+
+export {
+    useModules,
+    initializeModules
+} from './contexts/ModuleContext';
+export {
+    SettingProvider,
+    useSetting
+} from './contexts/SettingContext';
+export type { SettingContextType } from './contexts/SettingContext';
 
 export {
     getApiResponse,
