@@ -28,7 +28,7 @@ a {
   }
 }
 
-#react-select-2-input {
+.form-select-field-wrapper input {
   box-shadow: none;
   outline: none;
 }
@@ -379,6 +379,7 @@ input[type="checkbox"]:checked::before {
   height: 1rem !important;
   margin: 0 !important;
   line-height: 1rem;
+  border-radius: 0.25rem;
 }
 input[type="checkbox"]:focus{
   box-shadow: none;
@@ -431,7 +432,6 @@ input[type="checkbox"]:focus{
     padding: 0.5rem;
     padding-left: 0;
     width: 100%;
-    padding: 0.5rem;
     width: 47%;
     transition: all 0.4s ease;
     flex-wrap: wrap;
@@ -525,6 +525,7 @@ input[type="checkbox"]:focus{
   }
   li{
     list-style-type: number;
+    margin-left: 0.875rem;
   }
   code{
     padding: 0.063rem 0.5rem 0.125rem;
@@ -1016,7 +1017,7 @@ input[type="checkbox"]:focus{
 // toggle btn start
 .toggle-checkbox-header {
   min-width: fit-content;
-  display: inline-flex;
+  // display: inline-flex;
   gap: 0.313rem;
   margin-right: 0.945rem;
   position: relative;
