@@ -123,14 +123,12 @@ export default {
                             key: 'commission_percentage',
                             label: __('%', 'multivendorx'),
                             type: 'number',
-                            desc: __('Percentage of product price of store order price', 'multivendorx'),
                             labelAfterInput: true,
                         },
                         {
                             key: 'commission_fixed',
                             label: __('$', 'multivendorx'),
                             type: 'number',
-                            desc: __('Fixed amount of store order price', 'multivendorx'),
                             labelAfterInput: false,
                         },
                     ],
@@ -155,17 +153,12 @@ export default {
                     key: 'commission_percentage',
                     label: __( '%', 'multivendorx' ),
                     type: 'number',
-                    desc: __(
-                        'Percentage on per product price',
-                        'multivendorx'
-                    ),
                     labelAfterInput:true
                 },
                 {
                     key: 'commission_fixed',
                     label: __( '$', 'multivendorx' ),
                     type: 'number',
-                    desc: __( 'Fixed amount on per product', 'multivendorx' ),
                     labelAfterInput:false
                 },                
             ],
