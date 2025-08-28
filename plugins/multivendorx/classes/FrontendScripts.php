@@ -297,7 +297,8 @@ class FrontendScripts {
                 'identity-verification',
                 'commission-rule',
                 'payment-integration',
-                'store-appearance'
+                'store-appearance',
+                'product-report-abuse'
             )
 		);
 
