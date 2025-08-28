@@ -11,7 +11,6 @@ import {
     getAvailableSettings,
     getSettingById,
     SettingContent,
-    Support,
     AdminForm,
     Banner,
     Tabs,
