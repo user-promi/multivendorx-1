@@ -123,14 +123,12 @@ export default {
                             key: 'commission_percentage',
                             label: __('%', 'multivendorx'),
                             type: 'number',
-                            desc: __('Percentage of product price of store order price', 'multivendorx'),
                             labelAfterInput: true,
                         },
                         {
                             key: 'commission_fixed',
                             label: __('$', 'multivendorx'),
                             type: 'number',
-                            desc: __('Fixed amount of store order price', 'multivendorx'),
                             labelAfterInput: false,
                         },
                     ],
@@ -155,17 +153,12 @@ export default {
                     key: 'commission_percentage',
                     label: __( '%', 'multivendorx' ),
                     type: 'number',
-                    desc: __(
-                        'Percentage on per product price',
-                        'multivendorx'
-                    ),
                     labelAfterInput:true
                 },
                 {
                     key: 'commission_fixed',
                     label: __( '$', 'multivendorx' ),
                     type: 'number',
-                    desc: __( 'Fixed amount on per product', 'multivendorx' ),
                     labelAfterInput:false
                 },                
             ],
@@ -185,10 +178,9 @@ export default {
         {
             key: 'give_shipping',
             label: __('Shipping Amount', 'multivendorx'),
+			settingDescription: __( 'This option determines whether shipping charges are included when calculating commission.', 'multivendorx' ),
             desc: __(
-                'Add shipping fees to the commission calculation base amount. <li>Include in Commission: Add shipping charges to the commission calculation base amount <li>Exclude from Commission: Calculate commission only on product price, excluding shipping costs',
-                'multivendorx'
-            ),
+                'If enabled, vendor’s net earning will include both commission and shipping fees.','multivendorx'),
             type: 'checkbox',
             options: [
                 {

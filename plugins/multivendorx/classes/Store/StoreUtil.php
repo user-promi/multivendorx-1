@@ -54,7 +54,7 @@ class StoreUtil {
 
         $table = "{$wpdb->prefix}" . Utill::TABLES['store_meta'];
         $result = $wpdb->update( $table, $args, [ 'store_id' => $id ] );
-
+        
         return $result;
     }
 
