@@ -5,23 +5,13 @@ export default {
     priority: 4,
     name: __( 'Menu Manager', 'multivendorx' ),
     desc: __(
-        'Control public visibility of store and store info',
+        'Decide which menus vendors see in their dashboard and arrange their order.',
         'multivendorx'
     ),
     icon: 'adminlib-storefront',
     submitUrl: 'settings',
     modal: [
-        {
-            key: 'store_dashboard_page',
-            type: 'select',
-            label: __( 'Store dashboard page', 'multivendorx' ),
-            desc: __(
-                'Select the page on which you have inserted <code>[store_registration]</code> shortcode.This is the page where new stores can sign up.',
-                'multivendorx'
-            ),
-            options: appLocalizer.vendor_dashboard_pages,
-        },
-        {
+       {
             key: 'menu_manager',
             label: __( 'Menu manager', 'multivendorx' ),
             type: 'endpoint-editor',

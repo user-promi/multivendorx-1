@@ -5,7 +5,7 @@ export default {
     priority: 1,
     name: __( 'Product Advertising', 'mvx-pro' ),
     desc: __(
-        'Control how stores can advertise products in your marketplace.',
+        'Let vendors promote their top products or unique offerings in site-wide placements.',
         'mvx-pro'
     ),
     icon: 'adminlib-clock2',
@@ -70,7 +70,6 @@ export default {
             key: 'store_advertisement_advanced_settings',
             type: 'checkbox',
             label: __( 'Advanced advertising settings', 'multivendorx' ),
-            desc: __( 'Control advanced advertising options for stores.', 'multivendorx' ),
             class: 'mvx-toggle-checkbox',
             options: [
                 {
