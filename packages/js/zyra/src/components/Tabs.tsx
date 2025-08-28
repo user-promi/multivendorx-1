@@ -125,14 +125,18 @@ const Tabs: React.FC<TabsProps> = ({
     const resetToRoot = useCallback(() => {
         setMenuStack([tabData]);
         setBreadcrumbPath([{ name: settingName ?? '', id: 'all-settings', type: 'root' }]);
+
         const firstFile = findFirstFile(tabData);
         if (firstFile) {
+            // ✅ Select first file just like initial load
             updateActiveTab(firstFile.id);
+            const result = buildPathToTab(tabData, firstFile.id);
+            updateBreadcrumbAndStack(result, true);
         } else {
             setActiveTab('');
             window.history.pushState(null, '', prepareUrl(''));
         }
-    }, [tabData, findFirstFile, updateActiveTab, prepareUrl]);
+    }, [tabData, findFirstFile, updateActiveTab, buildPathToTab, updateBreadcrumbAndStack, prepareUrl, settingName]);
 
     const findFolderInData = useCallback((items: TabData[], name: string): TabData[] | null => {
         for (const item of items) {
@@ -148,12 +152,22 @@ const Tabs: React.FC<TabsProps> = ({
     const goToBreadcrumb = useCallback((index: number) => {
         const crumb = breadcrumbPath[index];
         if (!crumb) return;
-        if (crumb.type === 'root') { resetToRoot(); return; }
+
+        if (crumb.type === 'root') {
+            resetToRoot();
+            return;
+        }
+
         if (crumb.type === 'folder') {
             const folderItems = findFolderInData(tabData, crumb.id);
             if (folderItems) {
                 setMenuStack((prev) => [...prev.slice(0, index), folderItems]);
-                const firstFile = findFirstFile(folderItems); <>hello</>
+                const firstFile = findFirstFile(folderItems);
+                if (firstFile) {
+                    updateActiveTab(firstFile.id);
+                    const result = buildPathToTab(tabData, firstFile.id);
+                    updateBreadcrumbAndStack(result);
+                }
             }
         } else {
             updateActiveTab(crumb.id);
@@ -163,14 +177,14 @@ const Tabs: React.FC<TabsProps> = ({
                 setBreadcrumbPath([{ name: settingName ?? '', id: 'all-settings', type: 'root' }, ...result.path]);
             }
         }
-    }, [breadcrumbPath, resetToRoot, findFolderInData, tabData, findFirstFile, updateActiveTab, buildPathToTab, updateBreadcrumbAndStack]);
+    }, [breadcrumbPath, resetToRoot, findFolderInData, tabData, findFirstFile, updateActiveTab, buildPathToTab, updateBreadcrumbAndStack, settingName]);
 
     const renderBreadcrumb = useCallback(() => breadcrumbPath.map((crumb, index) => (
         <span key={index}>
             {index > 0 && ' / '}
             <Link to={crumb.type === 'file' ? prepareUrl(crumb.id) : '#'} onClick={(e) => {
                 e.preventDefault();
-                // goToBreadcrumb(index);
+                goToBreadcrumb(index);
             }}>
                 {crumb.name}
             </Link>
