@@ -178,10 +178,9 @@ export default {
         {
             key: 'give_shipping',
             label: __('Shipping Amount', 'multivendorx'),
+			settingDescription: __( 'This option determines whether shipping charges are included when calculating commission.', 'multivendorx' ),
             desc: __(
-                'Add shipping fees to the commission calculation base amount. <li>Include in Commission: Add shipping charges to the commission calculation base amount <li>Exclude from Commission: Calculate commission only on product price, excluding shipping costs',
-                'multivendorx'
-            ),
+                'If enabled, vendor’s net earning will include both commission and shipping fees.','multivendorx'),
             type: 'checkbox',
             options: [
                 {
