@@ -291,7 +291,7 @@ class FrontendScripts {
                 'products',
                 'products-capability',
                 'commissions',
-                'product-report-abuse',
+                'marketplace-settings',
                 'user-capability',
                 'store-capability',
                 'identity-verification',
@@ -323,7 +323,7 @@ class FrontendScripts {
             $matched_pages = array_filter( $pages, function ( $page ) use ( $shortcode ) {
                 return strpos( $page->post_content, $shortcode ) !== false;
             });
-
+            $vendor_dashboard_pages = [];
             foreach ( $matched_pages as $page ) {
                 $vendor_dashboard_pages[] = array(
                     'value'=> $page->post_name,
@@ -340,6 +340,20 @@ class FrontendScripts {
             $country_list[] = array(
                 'label' => $countries_value,
                 'value' => $countries_key
+            );
+        }
+
+        $store_owners = get_users([
+            'role'    => 'store_owner',
+            'orderby' => 'ID',
+            'order'   => 'ASC',
+        ]);
+
+        $owners_list = [];
+        foreach ( $store_owners as $owner ) {
+            $owners_list[] = array(
+                'label' => $owner->display_name,
+                'value' => $owner->ID
             );
         }
 
@@ -360,6 +374,7 @@ class FrontendScripts {
 						'pro_url'                  => esc_url( MULTIVENDORX_PRO_SHOP_URL ),
                         'open_uploader'            => 'Upload Image',
                         'country_list'             => $country_list,
+                        'store_owners'             => $owners_list,
                         'default_logo'             => MultiVendorX()->plugin_url.'assets/images/WP-stdavatar.png',
                         'capabilities'             => StoreUtil::get_store_capability(),
                         'custom_roles'             => Roles::multivendorx_get_roles(),
