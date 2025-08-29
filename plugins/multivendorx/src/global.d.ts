@@ -23,6 +23,7 @@ declare global {
         custom_roles: any;
         all_payments: any;
         freeVersion : any;
+        marketplace_site:any;
     }
     interface Color{
         color: any;

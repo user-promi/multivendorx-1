@@ -51,11 +51,6 @@ declare const wp: any;
 const PENALTY = 10;
 const COOLDOWN = 1;
 
-interface CountryState {
-    label: string;
-    value: string;
-}
-
 interface DependentCondition {
     key: string;
     set?: boolean;
@@ -95,8 +90,6 @@ interface InputField {
     | 'map'
     | 'google-map'
     | 'checkbox'
-    | 'country'
-    | 'state'
     | 'radio-color'
     | 'color-setting'
     | 'radio-select'
@@ -286,7 +279,6 @@ const AdminForm: React.FC<AdminFormProps> = ({
     const counterId = useRef<NodeJS.Timeout | number>(0);
     const [successMsg, setSuccessMsg] = useState<string>('');
     const [modelOpen, setModelOpen] = useState<boolean>(false);
-    const [countryState, setCountryState] = useState<CountryState[]>([]);
     const [modulePopupData, setModulePopupData] = useState<PopupProps>({
         moduleName: '',
         settings: '',
@@ -439,8 +431,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
             | 'calender'
             | 'select'
             | 'multi-select'
-            | 'wpeditor'
-            | 'country' = 'simple',
+            | 'wpeditor' = 'simple',
         arrayValue: any[] = []
     ) => {
         settingChanged.current = true;
@@ -483,21 +474,6 @@ const AdminForm: React.FC<AdminFormProps> = ({
                 fromType === 'wpeditor'
             ) {
                 updateSetting(key, event);
-            } else if (fromType === 'country') {
-                updateSetting(key, arrayValue[event.index]);
-
-                const countryData: Record<string, string> = JSON.parse(
-                    appLocalizer.countries.replace(/&quot;/g, '"')
-                )[event.value];
-
-                const countryListArray = Object.keys(countryData).map(
-                    (keyCountry) => ({
-                        label: keyCountry,
-                        value: countryData[keyCountry],
-                    })
-                );
-
-                setCountryState(countryListArray);
             }
         } else {
             let prevData: string[] = setting[key] || [];
@@ -720,7 +696,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             placeholder={inputField.placeholder}
                             rowNumber={inputField.rowNumber} // for row number value
                             colNumber={inputField.colNumber} // for column number value
-                            value={value}
+                            value={ value || inputField.value }
                             proSetting={isProSetting(
                                 inputField.proSetting ?? false
                             )}
@@ -896,14 +872,12 @@ const AdminForm: React.FC<AdminFormProps> = ({
                                             'select',
                                             'multi-select',
                                             'wpeditor',
-                                            'country',
                                         ].includes(inputField.type ?? '')
                                             ? (inputField.type as
                                                 | 'calender'
                                                 | 'select'
                                                 | 'multi-select'
-                                                | 'wpeditor'
-                                                | 'country')
+                                                | 'wpeditor')
                                             : 'simple' // Default for unsupported types
                                     );
                                 }
@@ -1205,100 +1179,6 @@ const AdminForm: React.FC<AdminFormProps> = ({
                                     'multi-select'
                                 )
                             }
-                        />
-                    );
-                    break;
-                // Check in MVX
-                case 'country':
-                    input = (
-                        <SelectInput
-                            name={inputField.name}
-                            wrapperClass="country-choice-class"
-                            descClass="settings-metabox-description"
-                            description={inputField.desc}
-                            inputClass={inputField.key}
-                            options={Array.isArray(value) ? value : []}
-                            value={
-                                typeof value === 'number'
-                                    ? value.toString()
-                                    : value
-                            }
-                            proSetting={isProSetting(
-                                inputField.proSetting ?? false
-                            )}
-                            onChange={(selectedOption) => {
-                                if (
-                                    hasAccess(
-                                        inputField.proSetting ?? false,
-                                        String(
-                                            inputField.moduleEnabled ?? ''
-                                        ),
-                                        String(
-                                            inputField.dependentSetting ?? ''
-                                        ),
-                                        String(
-                                            inputField.dependentPlugin ?? ''
-                                        )
-                                    )
-                                ) {
-                                    handleChange(
-                                        selectedOption,
-                                        inputField.key,
-                                        'single',
-                                        'country',
-                                        Array.isArray(selectedOption)
-                                            ? selectedOption
-                                            : [selectedOption]
-                                    );
-                                }
-                            }}
-                        />
-                    );
-                    break;
-                // Check in MVX
-                case 'state':
-                    input = (
-                        <SelectInput
-                            name={inputField.name}
-                            wrapperClass="state-choice-class"
-                            descClass="settings-metabox-description"
-                            description={inputField.desc}
-                            inputClass={inputField.key}
-                            options={countryState}
-                            value={
-                                typeof value === 'number'
-                                    ? value.toString()
-                                    : value
-                            }
-                            proSetting={isProSetting(
-                                inputField.proSetting ?? false
-                            )}
-                            onChange={(selectedOption) => {
-                                if (
-                                    hasAccess(
-                                        inputField.proSetting ?? false,
-                                        String(
-                                            inputField.moduleEnabled ?? ''
-                                        ),
-                                        String(
-                                            inputField.dependentSetting ?? ''
-                                        ),
-                                        String(
-                                            inputField.dependentPlugin ?? ''
-                                        )
-                                    )
-                                ) {
-                                    handleChange(
-                                        selectedOption,
-                                        inputField.key,
-                                        'single',
-                                        'select',
-                                        Array.isArray(selectedOption)
-                                            ? selectedOption
-                                            : [selectedOption]
-                                    );
-                                }
-                            }}
                         />
                     );
                     break;

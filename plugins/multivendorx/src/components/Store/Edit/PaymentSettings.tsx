@@ -78,33 +78,6 @@ const PaymentSettings = ({ id }: { id: string }) => {
 				<div className="card-wrapper width-65">
 					<div className="card-content">
 						<div className="card-title">Payment information</div>
-						{/* Name */}
-						<div className="form-group-wrapper">
-							<div className="form-group">
-								<label htmlFor="name">Name</label>
-								<BasicInput
-									name="name"
-									wrapperClass="setting-form-input"
-									descClass="settings-metabox-description"
-									value={formData.name}
-									onChange={handleChange}
-								/>
-							</div>
-						</div>
-
-						{/* Slug */}
-						<div className="form-group-wrapper">
-							<div className="form-group">
-								<label htmlFor="slug">Slug</label>
-								<BasicInput
-									name="slug"
-									wrapperClass="setting-form-input"
-									descClass="settings-metabox-description"
-									value={formData.slug}
-									onChange={handleChange}
-								/>
-							</div>
-						</div>
 
 						{/* Payment Method Toggle */}
 						<div className="form-group-wrapper">
@@ -115,7 +88,6 @@ const PaymentSettings = ({ id }: { id: string }) => {
 									descClass="settings-metabox-description"
 									description="Choose your preferred payment method."
 									options={[
-										{ key: 'payment_mode', value: 'payment_mode', label: 'Payment Mode' },
 										{ key: 'paypal_masspay', value: 'paypal_masspay', label: 'PayPal MassPay' },
 										{ key: 'paypal_payout', value: 'paypal_payout', label: 'PayPal Payout' },
 										{ key: 'stripe_connect', value: 'stripe_connect', label: 'Stripe Connect' },
@@ -126,6 +98,7 @@ const PaymentSettings = ({ id }: { id: string }) => {
 								/>
 							</div>
 						</div>
+
 						{/* Commission Amount */}
 						<div className="form-group-wrapper">
 							<div className="form-group">
@@ -134,136 +107,145 @@ const PaymentSettings = ({ id }: { id: string }) => {
 									name="commission_amount"
 									type="number"
 									wrapperClass="setting-form-input"
-									placeholder=""
 									descClass="settings-metabox-description"
 									description='To set vendor commission as 0 pass "0" in the Commission Amount filed'
-									value={formData.commission_amount || 20}
+									value={formData.commission_amount}
 									onChange={handleChange}
 								/>
 							</div>
 						</div>
+
 						{/* Paypal Email */}
-						<div className="form-group-wrapper">
-							<div className="form-group">
-								<label htmlFor="paypal_email">Paypal Email</label>
-								<BasicInput
-									name="paypal_email"
-									wrapperClass="setting-form-input"
-									placeholder="0.00"
-									descClass="settings-metabox-description"
-									value={formData.paypal_email}
-									onChange={handleChange}
-								/>
-							</div>
-						</div>
-						{/* Bank Name */}
-						<div className="form-group-wrapper">
-							<div className="form-group">
-								<label htmlFor="paypal_email">Bank Name</label>
-								<BasicInput
-									name="paypal_email"
-									wrapperClass="setting-form-input"
-									placeholder="0.00"
-									descClass="settings-metabox-description"
-									value={formData.paypal_email}
-									onChange={handleChange}
-								/>
-							</div>
-						</div>
-						{/* ABA Routing Number */}
-						<div className="form-group-wrapper">
-							<div className="form-group">
-								<label htmlFor="aba_routing_number">ABA Routing Number</label>
-								<BasicInput
-									name="aba_routing_number"
-									type="number"
-									wrapperClass="setting-form-input"
-									placeholder="0.00"
-									descClass="settings-metabox-description"
-									value={formData.aba_routing_number}
-									onChange={handleChange}
-								/>
-							</div>
-						</div>
-						{/* Destination Currency */}
-						<div className="form-group-wrapper">
-							<div className="form-group">
-								<label htmlFor="destination_currency">Destination Currency</label>
-								<BasicInput
-									name="destination_currency"
-									type="text"
-									wrapperClass="setting-form-input"
-									placeholder="Enter destination currency"
-									descClass="settings-metabox-description"
-									value={formData.destination_currency || ""}
-									onChange={handleChange}
-								/>
-							</div>
-						</div>
+						{(formData.payment_method === 'paypal_masspay' || formData.payment_method === 'paypal_payout') &&
+							(
+								<div className="form-group-wrapper">
+									<div className="form-group">
+										<label htmlFor="paypal_email">Paypal Email</label>
+										<BasicInput
+											name="paypal_email"
+											wrapperClass="setting-form-input"
+											placeholder="0.00"
+											descClass="settings-metabox-description"
+											value={formData.paypal_email}
+											onChange={handleChange}
+										/>
+									</div>
+								</div>
+							)
+						}
+						{formData.payment_method === 'direct_bank' &&
+							<>
+								{/* Bank Name */}
+								<div className="form-group-wrapper">
+									<div className="form-group">
+										<label htmlFor="paypal_email">Bank Name</label>
+										<BasicInput
+											name="paypal_email"
+											wrapperClass="setting-form-input"
+											placeholder="0.00"
+											descClass="settings-metabox-description"
+											value={formData.paypal_email}
+											onChange={handleChange}
+										/>
+									</div>
+								</div>
+								{/* ABA Routing Number */}
+								<div className="form-group-wrapper">
+									<div className="form-group">
+										<label htmlFor="aba_routing_number">ABA Routing Number</label>
+										<BasicInput
+											name="aba_routing_number"
+											type="number"
+											wrapperClass="setting-form-input"
+											placeholder="0.00"
+											descClass="settings-metabox-description"
+											value={formData.aba_routing_number}
+											onChange={handleChange}
+										/>
+									</div>
+								</div>
+								{/* Destination Currency */}
+								<div className="form-group-wrapper">
+									<div className="form-group">
+										<label htmlFor="destination_currency">Destination Currency</label>
+										<BasicInput
+											name="destination_currency"
+											type="text"
+											wrapperClass="setting-form-input"
+											placeholder="Enter destination currency"
+											descClass="settings-metabox-description"
+											value={formData.destination_currency || ""}
+											onChange={handleChange}
+										/>
+									</div>
+								</div>
 
-						{/* Bank Address */}
-						<div className="form-group-wrapper">
-							<div className="form-group">
-								<label htmlFor="bank_address">Bank Address</label>
-								<BasicInput
-									name="bank_address"
-									type="text"
-									wrapperClass="setting-form-input"
-									placeholder="Enter bank address"
-									descClass="settings-metabox-description"
-									value={formData.bank_address || ""}
-									onChange={handleChange}
-								/>
-							</div>
-						</div>
+								{/* Bank Address */}
+								<div className="form-group-wrapper">
+									<div className="form-group">
+										<label htmlFor="bank_address">Bank Address</label>
+										<BasicInput
+											name="bank_address"
+											type="text"
+											wrapperClass="setting-form-input"
+											placeholder="Enter bank address"
+											descClass="settings-metabox-description"
+											value={formData.bank_address || ""}
+											onChange={handleChange}
+										/>
+									</div>
+								</div>
 
-						{/* IBAN */}
-						<div className="form-group-wrapper">
-							<div className="form-group">
-								<label htmlFor="iban">IBAN</label>
-								<BasicInput
-									name="iban"
-									type="text"
-									wrapperClass="setting-form-input"
-									placeholder="Enter IBAN"
-									descClass="settings-metabox-description"
-									value={formData.iban || ""}
-									onChange={handleChange}
-								/>
-							</div>
-						</div>
+								{/* IBAN */}
+								<div className="form-group-wrapper">
+									<div className="form-group">
+										<label htmlFor="iban">IBAN</label>
+										<BasicInput
+											name="iban"
+											type="text"
+											wrapperClass="setting-form-input"
+											placeholder="Enter IBAN"
+											descClass="settings-metabox-description"
+											value={formData.iban || ""}
+											onChange={handleChange}
+										/>
+									</div>
+								</div>
 
-						{/* Account Holder Name */}
-						<div className="form-group-wrapper">
-							<div className="form-group">
-								<label htmlFor="account_holder_name">Account Holder Name</label>
-								<BasicInput
-									name="account_holder_name"
-									type="text"
-									wrapperClass="setting-form-input"
-									placeholder="Enter account holder name"
-									descClass="settings-metabox-description"
-									value={formData.account_holder_name || ""}
-									onChange={handleChange}
-								/>
-							</div>
-						</div>
+								{/* Account Holder Name */}
+								<div className="form-group-wrapper">
+									<div className="form-group">
+										<label htmlFor="account_holder_name">Account Holder Name</label>
+										<BasicInput
+											name="account_holder_name"
+											type="text"
+											wrapperClass="setting-form-input"
+											placeholder="Enter account holder name"
+											descClass="settings-metabox-description"
+											value={formData.account_holder_name || ""}
+											onChange={handleChange}
+										/>
+									</div>
+								</div>
 
-						{/* Account Number */}
-						<div className="form-group-wrapper">
-							<div className="form-group">
-								<label htmlFor="account_number">Account Number</label>
-								<BasicInput
-									name="account_number"
-									type="text"
-									wrapperClass="setting-form-input"
-									placeholder="Enter account number"
-									descClass="settings-metabox-description"
-									value={formData.account_number || ""}
-									onChange={handleChange}
-								/>
-							</div>
-						</div>
+								{/* Account Number */}
+								<div className="form-group-wrapper">
+									<div className="form-group">
+										<label htmlFor="account_number">Account Number</label>
+										<BasicInput
+											name="account_number"
+											type="text"
+											wrapperClass="setting-form-input"
+											placeholder="Enter account number"
+											descClass="settings-metabox-description"
+											value={formData.account_number || ""}
+											onChange={handleChange}
+										/>
+									</div>
+								</div>
+
+							</>
+						}
 
 					</div>
 				</div>

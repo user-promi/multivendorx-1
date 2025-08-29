@@ -48,7 +48,7 @@ export default {
                 },
             ],
             look: 'toggle',
-            proSetting:true
+            //proSetting:true
         },        
         {
             key: 'cost',
@@ -66,7 +66,7 @@ export default {
                 key: 'store_can_purchase_advertisement',
                 set: true,
             },
-            proSetting:true
+            //proSetting:true
         },
         {
             key: 'store_advertisement_advanced_settings',
@@ -104,6 +104,8 @@ export default {
                 },
             ],
             selectDeselect: true,
+            //proSetting:true
+
         },
         
     ],
