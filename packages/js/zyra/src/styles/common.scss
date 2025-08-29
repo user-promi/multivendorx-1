@@ -391,14 +391,18 @@ input[type="checkbox"]:checked::before,
 input.minus-icon::before {
   background-color: $theme-color;
   color: #fff;
-  content: "\e809";
   width: 1rem !important;
   height: 1rem !important;
   margin: -0.063rem .3rem 0 0 !important;
   line-height: 1rem;
   border-radius: 0.25rem;
 }
-
+input[type="checkbox"]:checked::before{
+   content: "\e809";
+}
+input.minus-icon::before {
+  content: "\e8f7";
+}
 input[type="checkbox"]:focus {
   box-shadow: none;
 }
