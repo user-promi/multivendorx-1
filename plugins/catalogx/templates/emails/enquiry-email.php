@@ -71,9 +71,7 @@ $enquiry_data = $args['enquiry_data'];
 								<?php
                             }
                         } else {
-                            if ( $args['product_id'] ) {
-                                $product_obj = wc_get_product( key( $args['product_id'] ) );
-                            }
+                            $product_obj = wc_get_product( key( $args['product_id'] ?? [] ) );
                             ?>
                             <tr>
                             <td scope="col"><?php echo esc_html( $product_obj ? $product_obj->get_name() : 'Dummy Product' ); ?>
