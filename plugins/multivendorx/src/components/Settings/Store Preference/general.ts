@@ -108,10 +108,10 @@ export default {
             key: 'setup_wizard_introduction',
             type: 'textarea',
             label: __( 'Getting started message', 'multivendorx' ),
-            placeholder: __(
-                'Welcome aboard, [Store Name]! We’ll guide you through the essential steps to launch your store on [Marketplace Name].',
+            value: __(
+                `Welcome aboard, [Store Name]!\nWe’ll guide you through the essential steps to launch your store on [${appLocalizer.marketplace_site}].`,
                 'multivendorx'
-            ),            
+              ),                          
             desc: __(
                 'This message appears at the beginning of the setup process to set expectations and encourage completion.',
                 'multivendorx'

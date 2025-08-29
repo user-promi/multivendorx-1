@@ -381,6 +381,7 @@ class FrontendScripts {
                         'custom_roles'             => Roles::multivendorx_get_roles(),
                         'all_payments'             => MultiVendorX()->payments->all_payment_providers(),
                         'freeVersion'              => MultivendorX()->version,
+                        'marketplace_site'         => get_bloginfo(),
 					),
                 ),
                 'multivendorx-product-tab-script' => array(

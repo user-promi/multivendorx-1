@@ -24,7 +24,7 @@ export default {
                     value: 'rank_math',
                 },
             ],
-            proSetting:true
+            //proSetting:true
         },
     ],
 };
