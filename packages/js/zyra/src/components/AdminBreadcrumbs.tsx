@@ -15,6 +15,7 @@ interface AdminBreadcrumbsProps {
     tabData?: any[];
     buttons?: (ButtonConfig | React.ReactNode)[];
     goPremium?: boolean
+    goPremiumLink?:string
 }
 
 const AdminBreadcrumbs: React.FC<AdminBreadcrumbsProps> = ({
@@ -24,7 +25,8 @@ const AdminBreadcrumbs: React.FC<AdminBreadcrumbsProps> = ({
     renderMenuItems,
     tabData = [],
     buttons = [],
-    goPremium = false
+    goPremium = false,
+    goPremiumLink
 }) => {
     return (
         <div className="title-section">
@@ -61,7 +63,7 @@ const AdminBreadcrumbs: React.FC<AdminBreadcrumbsProps> = ({
                     <div className="current-tab-lists-container">
                         {renderMenuItems(tabData)}
                     </div>
-                    {goPremium && (<a href="#" className="menu-item pro-btn">
+                    {goPremium && (<a href={goPremiumLink} className="menu-item pro-btn">
                             <i className="adminlib-pro-tag"></i> Upgrade<i className="adminlib-arrow-right"></i>
                     </a>)}
                 </div>
