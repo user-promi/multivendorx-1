@@ -29,7 +29,8 @@ a {
 }
 
 .form-select-field-wrapper input:focus {
-  box-shadow: none !important; /* for overwrite react components*/
+  box-shadow: none !important;
+  /* for overwrite react components*/
   outline: none;
 }
 
@@ -51,10 +52,11 @@ a {
     margin: 0;
   }
 
-  .wp-admin-notice{
+  .wp-admin-notice {
     margin: 0 1rem;
   }
 }
+
 // button style start
 .admin-btn {
   outline: none;
@@ -127,12 +129,14 @@ a {
   }
 }
 
-.text-green{
+.text-green {
   color: #00bd9d;
 }
-.text-red{
+
+.text-red {
   color: #f06548;
 }
+
 // copy btn start
 .copy-btn {
   width: 2.2rem;
@@ -292,12 +296,20 @@ a {
     box-shadow: 0 0 0 3px #5007aa1c !important;
     border-color: $theme-color !important; // for overwrite wordpress style
   }
-
+  &.small{
+    width: 25%;
+  }
 }
 
 .setting-form-input {
   position: relative;
   display: flex;
+  gap: 0.5rem;
+  align-items: center;
+
+  div{
+    font-size: 0.9rem;
+  }
 
   .parameter {
     position: absolute;
@@ -371,22 +383,30 @@ input[type="radio"] {
 //   box-shadow: none;
 // }
 
-input[type="checkbox"]:checked{
+input[type="checkbox"]:checked {
   border: none;
 }
-input[type="checkbox"]:checked::before {
+
+input[type="checkbox"]:checked::before,
+input.minus-icon::before {
   background-color: $theme-color;
   color: #fff;
-  content: "\e809";
   width: 1rem !important;
   height: 1rem !important;
   margin: -0.063rem .3rem 0 0 !important;
   line-height: 1rem;
   border-radius: 0.25rem;
 }
-input[type="checkbox"]:focus{
+input[type="checkbox"]:checked::before{
+   content: "\e809";
+}
+input.minus-icon::before {
+  content: "\e8f7";
+}
+input[type="checkbox"]:focus {
   box-shadow: none;
 }
+
 .checkbox-list-side-by-side {
   display: flex;
   flex-wrap: wrap;
@@ -410,10 +430,6 @@ input[type="checkbox"]:focus{
 
       input:checked::before {
         content: "\e809";
-      }
-
-      input.minus-icon:checked::before {
-        content: "-";
       }
     }
 
@@ -520,11 +536,13 @@ input[type="checkbox"]:focus{
     list-style-type: none;
     margin: 0;
   }
-  li{
+
+  li {
     list-style-type: number;
     margin-left: 0.875rem;
   }
-  code{
+
+  code {
     padding: 0.063rem 0.5rem 0.125rem;
     font-size: 0.688rem;
     line-height: 0.5rem;
@@ -908,7 +926,7 @@ input[type="checkbox"]:focus{
   background-position: center;
   min-height: 8.5rem;
 
-  i {
+  .upload-icon {
     font-size: 3.313rem;
     color: $theme-color;
   }
@@ -949,21 +967,26 @@ input[type="checkbox"]:focus{
     opacity: 1;
   }
 
-  &.medium{
+  &.medium {
     width: 50%;
   }
-  &.small{
+
+  &.small {
     width: 20%;
-    i{
+
+    i {
       font-size: 1.8rem;
     }
-    .title{
+
+    .title {
       font-size: 0.9rem;
     }
-    span{
+
+    span {
       font-size: 0.75rem;
     }
-    button{
+
+    button {
       margin: 0;
     }
   }
@@ -1001,6 +1024,7 @@ input[type="checkbox"]:focus{
     }
   }
 }
+
 // file input end
 
 // merge components start
@@ -1010,6 +1034,7 @@ input[type="checkbox"]:focus{
   gap: 0.5rem;
   position: relative;
 }
+
 // merge components end
 
 // toggle btn start
@@ -1217,6 +1242,15 @@ input[type="checkbox"]:focus{
     .settings-basic-input-child-class {
       width: 8rem;
 
+      &.prefix .input-unit {
+        border-right: 0.063rem solid #11141891;
+        padding-right: 0.5rem;
+      }
+      &.suffix .input-unit {
+        border-left: 0.063rem solid #11141891;
+        padding-left: 0.5rem;
+      }
+
       .setting-form-input {
         align-items: center;
         position: relative;
@@ -1225,23 +1259,28 @@ input[type="checkbox"]:focus{
         padding: 0 0.5rem;
         background: #fff;
 
-        .input-unit{
+        .input-unit {
           font-size: 1rem;
         }
-        input{
-         width: 100%;
-         border: none !important; /*overwrite common style*/
 
-         &:focus {
-           box-shadow: none !important; /*overwrite common style*/
-         }
+        input {
+          width: 100%;
+          border: none !important;
+          /*overwrite common style*/
+
+          &:focus {
+            box-shadow: none !important;
+            /*overwrite common style*/
+          }
         }
       }
-      .setting-form-input:has(.toggle-setting-wrapper){
+
+      .setting-form-input:has(.toggle-setting-wrapper) {
         border: none;
       }
     }
   }
+
   // multi input style end
 }
 
