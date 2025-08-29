@@ -113,7 +113,7 @@ const EndpointManager: React.FC<EndpointEditorProps> = ({
         {editKey === key ? (
           <div className="edit-menu" ref={editRef}>
             <div className="name-wrapper">
-              <i className="adminlib-move"></i>
+              <i className="adminlib-drag"></i>
               <input
                 value={editName}
                 onChange={(e) => {
@@ -154,7 +154,7 @@ const EndpointManager: React.FC<EndpointEditorProps> = ({
             className="main-menu"
           >
             <div className="name-wrapper">
-              {key !== 'dashboard' && <i className="adminlib-move"></i>}
+              {key !== 'dashboard' && <i className="adminlib-drag"></i>}
               <i className="adminlib-add-product"></i>
               <div className="name">
                 {endpoint.name}

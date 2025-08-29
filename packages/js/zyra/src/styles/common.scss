@@ -371,6 +371,9 @@ input[type="radio"] {
 //   box-shadow: none;
 // }
 
+input[type="checkbox"]:checked{
+  border: none;
+}
 input[type="checkbox"]:checked::before {
   background-color: $theme-color;
   color: #fff;
@@ -430,8 +433,6 @@ input[type="checkbox"]:focus{
     gap: 0;
     margin: 0;
     padding: 0.5rem;
-    padding-left: 0;
-    width: 100%;
     width: 47%;
     transition: all 0.4s ease;
     flex-wrap: wrap;
