@@ -37,7 +37,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
             </span>
             <span className="admin-badge red">
 
-              <i className="adminlib-pro-tag"></i> 4.2.6
+              <i className="adminlib-pro-tag"></i> Pro: 4.2.6
             </span>
           </div>
         </div>

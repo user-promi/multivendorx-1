@@ -187,7 +187,7 @@ const EndpointManager: React.FC<EndpointEditorProps> = ({
         {/* Submenu drag list */}
         {endpoint.submenu?.length > 0 && (
           <DragListView
-            nodeSelector=".submenu-row"
+            nodeSelector=".sub-menu"
             handleSelector="" // whole row draggable
             onDragEnd={onSubmenuDragEnd}
           >
@@ -197,7 +197,7 @@ const EndpointManager: React.FC<EndpointEditorProps> = ({
                 return (
                   <li
                     key={i}
-                    className="submenu-row cursor-move"
+                    className="sub-menu cursor-move"
                     style={{ opacity: endpoint.visible === false ? 0.5 : 1 }}
                   >
                     {editKey === subKey ? (
@@ -222,7 +222,8 @@ const EndpointManager: React.FC<EndpointEditorProps> = ({
                         />
                       </span>
                     ) : (
-                      <span>
+                      <>
+                        <i className="adminlib-drag"></i>
                         {sub.name}
                         <i
                           className="adminlib-create"
@@ -232,7 +233,7 @@ const EndpointManager: React.FC<EndpointEditorProps> = ({
                             setEditSlug(sub.slug);
                           }}
                         ></i>
-                      </span>
+                      </>
                     )}
                   </li>
                 );
