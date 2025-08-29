@@ -147,7 +147,7 @@ const MultiCheckBox: React.FC<MultiCheckBoxProps> = (props) => {
                             )}
                         </div>
 
-                        {!props.rightContent && props.type !== 'checkbox-custom-img' && (
+                        {option.desc && !props.rightContent && props.type !== 'checkbox-custom-img' && (
                             <p
                                 className={props.rightContentClass}
                                 dangerouslySetInnerHTML={{ __html: option.desc ?? '' }}

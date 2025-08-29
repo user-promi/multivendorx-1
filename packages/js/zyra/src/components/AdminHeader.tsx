@@ -11,7 +11,7 @@ type AdminHeaderProps = {
   onSelectChange: (value: string) => void;
   selectValue: string;
   free?: string;
-  pro?:string;
+  pro?: string;
 };
 
 const AdminHeader: React.FC<AdminHeaderProps> = ({
@@ -23,7 +23,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
   onSelectChange,
   selectValue,
   free,
-  pro='4.1.23',
+  pro = '4.1.23',
 }) => {
   return (
     <>
@@ -107,19 +107,44 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
           </div>
 
           {/* start notification */}
-          <div className="icon-wrapper" title="Notifications">
-            <i className="admin-icon adminlib-notification"></i>
+          <div className="icon-wrapper" >
+            <i className="admin-icon adminlib-notification" title="Notifications"></i>
           </div>
           {/* end notification */}
 
-          <i
-            className="admin-icon adminlib-plus-circle-o"
-            title="Chat manager"
-          ></i>
-          <i
-            className="admin-icon adminlib-user-circle"
-            title="Category by store"
-          ></i>
+          <div className="icon-wrapper">
+            <i
+              className="admin-icon adminlib-plus-circle-o"
+              title="Admin support"
+            ></i>
+          </div>
+
+          <div className="icon-wrapper">
+            <i
+              className="admin-icon adminlib-user-circle"
+              title="Admin support"
+            ></i>
+            <div className="dropdown-menu">
+              <div className="dropdown-body">
+                <ul>
+                  <li>
+                    <a href="#">
+                      <i className="adminlib-person"></i>
+                      Manage Plan
+                    </a>
+                  </li>
+
+                  <li>
+                    <a href="#">
+                      <i className="adminlib-user-network-icon"></i>
+                      Contact Support
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
     </>
