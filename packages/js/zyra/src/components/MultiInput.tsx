@@ -156,7 +156,7 @@ const MultiInput: React.FC<MultiInputProps> = (props) => {
                                     {!isLabelAfterInput && labelJSX}
                                     {inputJSX}
                                     {isLabelAfterInput && labelJSX}
-                                    {proSetting && <span className="admin-pro-tag">Pro</span>}
+                                    {proSetting && <span className="admin-pro-tag"><i className="adminlib-pro-tag"></i>Pro</span>}
                                 </div>
                                 {option.desc && (
                                     <p
@@ -238,7 +238,7 @@ const MultiInput: React.FC<MultiInputProps> = (props) => {
                 </ul>
             )}
 
-            {proSetting && <span className="admin-pro-tag">Pro</span>}
+            {proSetting && <span className="admin-pro-tag"><i className="adminlib-pro-tag"></i>Pro</span>}
             {description && (
                 <p
                     className={`${descClass} settings-metabox-description`}
