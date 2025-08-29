@@ -147,6 +147,8 @@ interface InputField {
     icon?: string;
     iconEnable?: boolean;
     size?: string;
+    before?: string;
+    after?: string;
     proSetting?: boolean;
     moduleEnabled?: boolean;
     parameter?: string;
@@ -674,6 +676,9 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             min={inputField.min ?? 0} // for range min value
                             max={inputField.max ?? 50} // for range max value
                             value={value}
+                            size={inputField.size}
+                            before={inputField.before}
+                            after={inputField.after}
                             proSetting={isProSetting(
                                 inputField.proSetting ?? false
                             )}

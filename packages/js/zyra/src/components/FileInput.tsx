@@ -85,7 +85,7 @@ const FileInput: React.FC<FileInputProps> = (props) => {
             >
                 {!localImage && (
                 <>
-                    <i className="adminlib-cloud-upload"></i>
+                    <i className="upload-icon adminlib-cloud-upload"></i>
                     <input
                         ref={inputRef}
                         className={props.inputClass}

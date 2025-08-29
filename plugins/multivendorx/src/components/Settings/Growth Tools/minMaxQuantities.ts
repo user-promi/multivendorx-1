@@ -9,6 +9,18 @@ export default {
     submitUrl: 'settings',
     modal: [
         {
+            key: 'mapbox_api_key',
+            type: 'text',
+            label: __( 'Mapbox access token', 'multivendorx' ),
+            desc: __(
+                '<a href="https://docs.mapbox.com/help/getting-started/access-tokens/" target="_blank">Click here to generate access token</a>',
+                'multivendorx'
+            ),
+            size:"8rem",
+            before: "https://multivendorxs.mystagingwebsite.com/",
+            after: "https://multivendorxs.mystagingwebsite.com/",
+        },
+        {
             key: 'mvx_commission_rules_per_unit',
             type: 'multi-number',
             label: __( 'Global quantity rules', 'multivendorx' ),
