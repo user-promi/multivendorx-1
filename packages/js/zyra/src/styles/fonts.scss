@@ -10,7 +10,7 @@
   font-display: block;
 }
 
-[class^="adminlib-"], [class*=" adminlib-"] {
+[class^="adminlib-"], [class*=" adminlib-"], input::before {
   /* use !important to prevent issues with browser extensions that change fonts */
   font-family: 'adminlibrary' !important;
   speak: never;
@@ -25,33 +25,14 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.adminlib-pro-tag:before {
+  content: "\e902";
+}
 .adminlib-drag:before {
   content: "\e900";
 }
 .adminlib-notification:before {
   content: "\e901";
-}
-.adminlib-pro-tag:before {
-  content: "\e902";
-}
-.adminlib-star-pro-tag .path1:before {
-  content: "\e903";
-  color: rgb(0, 0, 0);
-}
-.adminlib-star-pro-tag .path2:before {
-  content: "\e904";
-  margin-left: -1em;
-  color: rgb(0, 0, 0);
-}
-.adminlib-star-pro-tag .path3:before {
-  content: "\e905";
-  margin-left: -1em;
-  color: rgb(255, 255, 255);
-}
-.adminlib-star-pro-tag .path4:before {
-  content: "\e906";
-  margin-left: -1em;
-  color: rgb(0, 0, 0);
 }
 .adminlib-cart:before {
   content: "\8907";

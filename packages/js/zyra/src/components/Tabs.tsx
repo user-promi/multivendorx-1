@@ -284,7 +284,6 @@ const Tabs: React.FC<TabsProps> = ({
       {noticeHTML && <div className="wp-admin-notice" dangerouslySetInnerHTML={{ __html: noticeHTML }} />}
       <div className="general-wrapper">
         {HeaderSection && <HeaderSection />}
-        {BannerSection && <BannerSection />}
         <div className="middle-child-container">
           {menuStack.length > 1 && (
             <div id="current-tab-lists" className="current-tab-lists">

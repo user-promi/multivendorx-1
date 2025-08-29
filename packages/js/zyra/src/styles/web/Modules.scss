@@ -71,34 +71,26 @@
         display: flex;
         justify-content: space-between;
 
-        .icon-wrapper {
-          position: relative;
+        .icon {
+          padding: 0.5rem;
+          width: 2.5rem;
+          height: 2.5rem;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background: #522c8112;
+          border-radius: 0.4rem;
 
-          .icon {
-            padding: 0.5rem;
-            width: 2.5rem;
-            height: 2.5rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: #522c8112;
-            border-radius: 0.4rem;
-
-            i {
-              font-size: 1.5rem;
-              color: $theme-color;
-            }
+          i {
+            font-size: 1.5rem;
+            color: $theme-color;
           }
+        }
 
-          .pro-tag {
-            position: absolute;
-            top: -0.5rem;
-            right: -0.5rem;
-
-            i {
-              color: $accent-color;
-              font-size: 1.313rem;
-            }
+        .pro-tag {
+          i {
+            color: $accent-color;
+            font-size: 1.313rem;
           }
         }
       }
@@ -107,19 +99,20 @@
         padding-top: 1rem;
 
         .meta-name {
-          font-size: 1.375rem;
+          font-size: 1.25rem;
           line-height: 1.375rem;
           color: #000;
           margin-bottom: 0.625rem;
         }
 
         .requires {
-          font-size: 1rem;
+          font-size: 0.85rem;
           margin: 0.5rem 0;
-          font-weight: 500;
-          color: #000;
           display: flex;
           gap: 0.5rem;
+          div{
+            color: #000;
+          }
         }
       }
 

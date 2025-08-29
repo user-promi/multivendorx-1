@@ -160,7 +160,7 @@ const Modules: React.FC<ModuleProps> = ({
     return (
         <>
             <AdminBreadcrumbs
-                activeTabIcon="icon"
+                activeTabIcon="adminlib-cart"
                 parentTabName="Modules"
             />
 
@@ -252,17 +252,15 @@ const Modules: React.FC<ModuleProps> = ({
                             <div className="module-list-item" key={module.id}>
                                 <div className="module-body">
                                     <div className="module-header">
-                                        <div className="icon-wrapper">
-                                            <div className="icon">
-                                                <i className={`font ${module.icon}`}></i>
-                                            </div>
-                                            <div className="pro-tag">
-                                                {module.pro_module && !appLocalizer.khali_dabba && (
-                                                    <i className="adminlib-pro-tag"></i>
-                                                )}
-                                            </div>
+                                        <div className="icon">
+                                            <i className={`font ${module.icon}`}></i>
                                         </div>
-                                        <div
+                                        <div className="pro-tag">
+                                            {module.pro_module && !appLocalizer.khali_dabba && (
+                                                <i className="adminlib-pro-tag"></i>
+                                            )}
+                                        </div>
+                                        {/* <div
                                             className="toggle-checkbox"
                                             data-tour={`${module.id}-showcase-tour`}
                                         >
@@ -277,7 +275,7 @@ const Modules: React.FC<ModuleProps> = ({
                                                 htmlFor={`toggle-switch-${module.id}`}
                                                 className="toggle-switch-is_hide_cart_checkout"
                                             ></label>
-                                        </div>
+                                        </div> */}
                                     </div>
                                     <div className="module-details">
                                         <div className="meta-name">{module.name}</div>
@@ -297,6 +295,22 @@ const Modules: React.FC<ModuleProps> = ({
                                     <div className="buttons">
                                         <a href={module.doc_link}><i className="adminlib-book"></i></a>
                                         <a href={module.video_link}><i className="adminlib-button-appearance"></i></a>
+                                    </div>
+                                    <div
+                                        className="toggle-checkbox"
+                                        data-tour={`${module.id}-showcase-tour`}
+                                    >
+                                        <input
+                                            type="checkbox"
+                                            className="woo-toggle-checkbox"
+                                            id={`toggle-switch-${module.id}`}
+                                            checked={modules.includes(module.id)}
+                                            onChange={(e) => handleOnChange(e, module.id)}
+                                        />
+                                        <label
+                                            htmlFor={`toggle-switch-${module.id}`}
+                                            className="toggle-switch-is_hide_cart_checkout"
+                                        ></label>
                                     </div>
                                 </div>
                             </div>
