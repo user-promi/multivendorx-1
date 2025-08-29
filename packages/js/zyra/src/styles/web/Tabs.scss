@@ -38,12 +38,6 @@
     .version-tag {
       display: flex;
       gap: 0.5rem;
-
-      .admin-badge {
-        i {
-          font-size: 1rem;
-        }
-      }
     }
   }
 
@@ -60,7 +54,10 @@
       color: $theme-color;
       cursor: pointer;
     }
-
+    .adminlib-notification{
+      font-size: 1.313rem;
+      padding: 0.313rem;
+    }
     .search-field {
       position: relative;
       display: flex;

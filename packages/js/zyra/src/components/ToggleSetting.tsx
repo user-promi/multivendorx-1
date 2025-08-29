@@ -73,18 +73,21 @@ const ToggleSetting: React.FC<ToggleSettingProps> = ({
                                 {iconEnable ? (
                                     <i className={option.value}></i> // render icon if icon=true
                                 ) : option.img ? (
+                                    <>
                                     <img src={option.img} />
+                                    {option.label}
+                                    </>
                                 ) : (
                                     option.label
                                 )}
                             </label>
                             {option.proSetting && !khali_dabba && (
-                                <span className="admin-pro-tag">Pro</span>
+                                <span className="admin-pro-tag"><i className="adminlib-pro-tag"></i>Pro</span>
                             )}
                         </div>
                     ))}
                 </div>
-                {proSetting && <span className="admin-pro-tag">Pro</span>}
+                {proSetting && <span className="admin-pro-tag"><i className="adminlib-pro-tag"></i>Pro</span>}
             </div>
             {description && (
                 <p

@@ -380,7 +380,7 @@ const Course: React.FC = () => {
                 <div className="table-action-column">
                     {__('Action', 'moowoodle')}
                     {!appLocalizer.khali_dabba && (
-                        <span className="admin-pro-tag">pro</span>
+                        <span className="admin-pro-tag"><div className="adminlib-pro-tag"></div>Pro</span>
                     )}
                 </div>
             ),
@@ -456,7 +456,7 @@ const Course: React.FC = () => {
                         </option>
                     </select>
                     {!appLocalizer.khali_dabba && (
-                        <span className="admin-pro-tag">pro</span>
+                        <span className="admin-pro-tag"><div className="adminlib-pro-tag"></div>Pro</span>
                     )}
                     <button
                         name="bulk-action-apply"
