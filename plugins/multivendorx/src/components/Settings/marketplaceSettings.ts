@@ -19,17 +19,6 @@ export default {
     icon: 'adminlib-general-tab',
     submitUrl: 'settings',
     modal: [    
-        // {
-        //     key: 'store_url',
-        //     type: 'range',
-        //     desc: __(
-        //         'Define the custom slug for the store URL. For example, in the URL: https://yourdomain.com/store/[this-text]/[store-name], "[this-text]" will be replaced by the slug you set here.',
-        //         'multivendorx'
-        //     ),
-        //     min:0,
-        //     max:100,
-        //     label: __( 'Store URL', 'multivendorx' ),
-        // }, 
         {
             key: 'store_registration_page',
             type: 'select',
@@ -53,21 +42,12 @@ export default {
         },
         {
             key: 'store_url',
-            type: 'text',
+            type: 'url',
             desc: __(
                 'Define the custom slug for the store URL. For example, in the URL: https://yourdomain.com/store/[this-text]/[store-name], "[this-text]" will be replaced by the slug you set here.',
                 'multivendorx'
             ),
             label: __( 'Store URL', 'multivendorx' ),
-        },
-        {
-            key: 'mapbox_api_key',
-            type: 'text',
-            label: __( 'Mapbox access token', 'multivendorx' ),
-            desc: __(
-                '<a href="https://docs.mapbox.com/help/getting-started/access-tokens/" target="_blank">Click here to generate access token</a>',
-                'multivendorx'
-            ),
             size:"8rem",
             before: "https://multivendorxs.mystagingwebsite.com/",
             after: "/home",
