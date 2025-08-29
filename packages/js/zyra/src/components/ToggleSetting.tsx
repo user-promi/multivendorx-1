@@ -28,6 +28,7 @@ interface ToggleSettingProps {
     proSetting?: boolean;
     khali_dabba?: boolean;
     iconEnable?: boolean; // <-- new prop to render icons
+    key?: string;
 }
 
 const ToggleSetting: React.FC<ToggleSettingProps> = ({
@@ -35,6 +36,7 @@ const ToggleSetting: React.FC<ToggleSettingProps> = ({
     options,
     descClass = '',
     value,
+    key,
     onChange,
     proChanged,
     proSetting = false,
@@ -62,7 +64,7 @@ const ToggleSetting: React.FC<ToggleSettingProps> = ({
                                 className="toggle-setting-form-input"
                                 type="radio"
                                 id={option.key}
-                                name="approve_vendor"
+                                name={key}
                                 value={option.value}
                                 checked={value === option.value}
                                 readOnly // Prevents React warning for controlled components

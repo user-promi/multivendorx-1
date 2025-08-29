@@ -27,18 +27,6 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
 }) => {
   return (
     <>
-      <div className="top-header">
-        <ul className="carousel-list">
-          <li className="carousel-item active">
-            Lorem ipsum dolor            
-          </li>
-          <li className="carousel-item ">
-            Lorem ipsum dolo2         
-          </li>
-        </ul>
-        <i className="adminlib-close"></i>
-      </div>
-
       <div className="admin-header">
         <div className="left-section">
           <img className="brand-logo" src={brandImg} alt="Logo" />
