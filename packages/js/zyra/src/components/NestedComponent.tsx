@@ -154,7 +154,7 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
                       className="toggle-setting-form-input"
                     />
                     <label htmlFor={`${field.key}-${rowIndex}-${opt.value}`}>{opt.label}</label>
-                    {opt.proSetting && <span className="admin-pro-tag">Pro</span>}
+                    {opt.proSetting && <span className="admin-pro-tag"><i className="adminlib-pro-tag"></i>Pro</span>}
                   </div>
                 ))}
               </div>
