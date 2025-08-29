@@ -146,6 +146,7 @@ const MultiInput: React.FC<MultiInputProps> = (props) => {
                                     type={option.type || 'text'}
                                     name={option.name}
                                     value={selectedValue}
+                                    min={option.type === "number" ? 0 : undefined}
                                     onChange={(e) => option.key && onChange?.(e, keyName, option.key, index)}
                                 />
                             );

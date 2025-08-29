@@ -18,6 +18,7 @@ interface NestedField {
   dependent?: { key: string; set: boolean; value: string };
   firstRowOnly?: boolean;
   skipFirstRow?: boolean;
+  skipLabel?: boolean;
 }
 
 interface NestedComponentProps {
@@ -134,7 +135,7 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
       case "select":
         return (
           <div className="form-wrapper" key={field.key}>
-            {field.label && <label>{field.label}</label>}
+            {!(rowIndex === 0 && field.skipLabel) && field.label && <label>{field.label}</label>}
             <div className="toggle-setting-container">
               <div className="toggle-setting-wrapper">
                 {field.options?.map((opt) => (
@@ -165,7 +166,7 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
       case "multi-number":
         return (
           <div className="form-wrapper" key={field.key}>
-            {field.label && <label>{field.label}</label>}
+            {!(rowIndex === 0 && field.skipLabel) && field.label && <label>{field.label}</label>}
             <MultiInput
               inputType="multi-number"
               parentWrapperClass="settings-basic-input-class"
@@ -189,7 +190,7 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
       case "number":
         return (
           <div className="form-wrapper" key={field.key}>
-            {field.label && <label>{field.label}</label>}
+            {!(rowIndex === 0 && field.skipLabel) && field.label && <label>{field.label}</label>}
             <input
               type="number"
               value={value}
@@ -210,7 +211,7 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
       {rows.map((row, rowIndex) => (
         <div key={`nested-row-${rowIndex}`} className="nested-row">
           {fields.map((field) => renderField(field, row, rowIndex))}
-          {!single && (
+          {!single && rowIndex === rows.length - 1 && (
             <div className="buttons-wrapper">
               <button type="button" className="admin-btn btn-green" onClick={addRow}>
                 + {addButtonLabel}
@@ -226,6 +227,7 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
               )}
             </div>
           )}
+
         </div>
       ))}
     </div>
