@@ -157,8 +157,7 @@ class EnquiryEmail extends \WC_Email {
      * Get email subject.
      */
     public function get_default_subject() {
-        $subject = empty( $this->product_id ) ? __( 'Product Enquiry for Dummy Product by Guest', 'catalogx' ) : __( 'Product Enquiry for {PRODUCT_NAME} by {USER_NAME}', 'catalogx' );
-        return empty( $this->product_id ) ? $subject : apply_filters( 'catalogx_enquiry_admin_email_subject', $subject, $this->object );
+        return empty( $this->product_id ) ? __( 'Product Enquiry for Dummy Product by Guest', 'catalogx' ) : apply_filters( 'catalogx_enquiry_admin_email_subject', __( 'Product Enquiry for {PRODUCT_NAME} by {USER_NAME}', 'catalogx' ), $this->object );
     }
 
     /**
