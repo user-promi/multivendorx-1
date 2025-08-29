@@ -42,7 +42,7 @@ export default {
             type: 'setting-toggle',
             label: __( 'Guided setup wizard', 'multivendorx' ),
             desc: __(
-                'Help vendors set up their store quickly with a guided, step-by-step process after registration.<ul><li>Enabled — Vendors see a setup wizard with clear instructions for each step.</li><li>Disabled — Vendors configure their store manually at their own pace.</li></ul>',
+                'Help vendors set up their store quickly with a guided, step-by-step process after registration.<ul><li>Enabled — Stores skip the wizard and set up their store manually whenever they choose.</li></ul>',
                 'multivendorx'
             ),
             options: [
