@@ -22,7 +22,7 @@ $customer_data = $args['customer_data'];
             <h2 style="font-family: Arial; line-height: 43px; text-align: center; color: #fff; font-size: 46px; font-weight: 700; margin: 0;padding: 0 0 0px 0;">
                 <?php
                     // translators: %s is the admin's name.
-                    printf( esc_html__( 'Dear %s', 'catalogx' ), esc_html( $args['admin'] ) );
+                    printf( esc_html__( 'Dear %s', 'catalogx' ), esc_html( $args['admin'] ?? 'Admin' ) );
                 ?>
             </h2>
             <p style=" color:#fff; margin-bottom:0; text-align: center; font-size:16px; "><?php esc_html_e( 'You have received a new quote request from a customer for the following product:', 'catalogx' ); ?></p>
@@ -47,23 +47,25 @@ $customer_data = $args['customer_data'];
 
             <tbody>
             <?php
-			foreach ( $args['products'] as $item ) {
-				$_product = wc_get_product( $item['product_id'] );
-                ?>
-                <tr>
-                    <td class="product_name" style="border:none;">
-                    <a href="<?php echo esc_url( $_product->get_permalink() ); ?>"><?php echo esc_html( $_product->get_title() ); ?></a>
-                    </td>
-                    <td class="product_quantity" style="border:none;">
-					<?php echo esc_html( $item['quantity'] ); ?>
-                    </td>
-                    <td class="product_quantity" style="border:none;">
-					<?php echo wp_kses_post( wc_price( $_product->get_regular_price() ) ); ?>
-                    </td>
-                </tr>
-                <?php
-			}
-            if ( ! $args['products'] ) {
+            if ( ! empty( $args['products'] ) ) {
+                foreach ( $args['products'] as $item ) {
+                    $_product = wc_get_product( $item['product_id'] );
+                    ?>
+                    <tr>
+                        <td class="product_name" style="border:none;">
+                        <a href="<?php echo esc_url( $_product->get_permalink() ); ?>"><?php echo esc_html( $_product->get_title() ); ?></a>
+                        </td>
+                        <td class="product_quantity" style="border:none;">
+                        <?php echo esc_html( $item['quantity'] ); ?>
+                        </td>
+                        <td class="product_quantity" style="border:none;">
+                        <?php echo wp_kses_post( wc_price( $_product->get_regular_price() ) ); ?>
+                        </td>
+                    </tr>
+                    <?php
+                }
+            }
+            else {
                 ?>
                 <tr>
                     <td class="product_name" style="border:none;">
