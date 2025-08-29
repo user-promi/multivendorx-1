@@ -218,7 +218,7 @@ class CommissionManager {
                 $line_total = $order->get_item_subtotal( $item, false, false ) * $item['qty'];
             }
         } else {
-            $line_total = $order->get_item_subtotal( $item, false, false ) * $item['qty'];
+            $line_total = $order->get_item_total( $item, false, false ) * $item['qty'];
         }
 
         // Filter the item total before calculating item commission.
