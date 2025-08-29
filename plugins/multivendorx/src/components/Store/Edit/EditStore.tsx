@@ -6,6 +6,7 @@ import StoreSettings from './StoreSettings';
 
 import PaymentSettings from './PaymentSettings';
 import StoreQueue from './StoreCrew';
+import VendorSettings from './VendorSettings';
 
 const EditStore = () => {
     const location = useLocation();
@@ -47,6 +48,15 @@ const EditStore = () => {
                 icon: 'adminlib-credit-card',
             },
         },
+        {
+            type: 'file',
+            content: {
+                id: 'vendor-policy',
+                name: 'Vendor Policy',
+                desc: 'Vendor Policy',
+                icon: 'adminlib-credit-card',
+            },
+        },
     ];
 
     const getForm = (tabId: string) => {
@@ -56,7 +66,9 @@ const EditStore = () => {
             case 'users':
                 return <StoreQueue id={editId} />;
             case 'payment':
-                return <PaymentSettings id={editId}/>;
+                return <PaymentSettings id={editId} />;
+            case 'vendor-policy':
+                return <VendorSettings id={editId} />;
             default:
                 return <div></div>;
         }

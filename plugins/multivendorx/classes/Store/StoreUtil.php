@@ -209,7 +209,7 @@ class StoreUtil {
                     'edit_shop_coupons' => 'Edit Coupons',
                     'delete_shop_coupons' => 'Delete Coupons',
                 ],
-            ]
+            ],
             'analytics' => [
                 'label' => 'Analytics & Report',
                 'desc'  => 'Set how vendors handle their coupons listings',
@@ -219,7 +219,7 @@ class StoreUtil {
                     'edit_shop_report' => 'Edit Sales Data',
                     'export_shop_report' => 'Export Data',
                 ],
-            ]
+            ],
             'inventory' => [
                 'label' => 'Inventory Management',
                 'desc'  => 'Set how vendors handle their coupons listings',
@@ -229,7 +229,7 @@ class StoreUtil {
                     'edit_shop_report' => 'Track Stock',
                     'export_shop_report' => 'Set Stock Alerts',
                 ],
-            ]
+            ],
             'commission' => [
                 'label' => 'Commission & Earning',
                 'desc'  => 'Set how vendors handle their coupons listings',
