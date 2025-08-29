@@ -30,7 +30,7 @@ if ( $product_obj && $product_obj->get_type() === 'variation' ) {
 			$label = str_replace( 'attribute_', '', $label );
 			echo "\n" . esc_html( ucfirst( $label ) ) . ': ' . esc_html( ucfirst( $value ) );
 		}
-	} elseif ( $product_obj && $product_obj->get_attributes() ) {
+	} elseif ( $product_obj->get_attributes() ) {
 		foreach ( $product_obj->get_attributes() as $label => $value ) {
 			echo "\n" . esc_html( ucfirst( wc_attribute_label( $label ) ) ) . ': ' . esc_html( ucfirst( $value ) );
 		}
