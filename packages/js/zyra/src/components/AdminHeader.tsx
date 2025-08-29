@@ -108,7 +108,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
 
           {/* start notification */}
           <div className="icon-wrapper" title="Notifications">
-            <i className="admin-icon adminlib-storefront"></i>
+            <i className="admin-icon adminlib-notification"></i>
           </div>
           {/* end notification */}
 

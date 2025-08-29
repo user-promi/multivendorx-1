@@ -10,7 +10,7 @@
   font-display: block;
 }
 
-[class^="adminlib-"], [class*=" adminlib-"], input {
+[class^="adminlib-"], [class*=" adminlib-"], input::before {
   /* use !important to prevent issues with browser extensions that change fonts */
   font-family: 'adminlibrary' !important;
   speak: never;

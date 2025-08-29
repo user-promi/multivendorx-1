@@ -140,6 +140,9 @@ const MultiCheckBox: React.FC<MultiCheckBoxProps> = (props) => {
                             ) : (
                                 <label htmlFor={`${props.idPrefix}-${option.key}`}>
                                     {option.label}
+                                    {option.proSetting && !props.khali_dabba && (
+                                        <span className="admin-pro-tag"><i className="adminlib-pro-tag"></i>Pro</span>
+                                    )}
                                 </label>
                             )}
                         </div>
@@ -149,9 +152,6 @@ const MultiCheckBox: React.FC<MultiCheckBoxProps> = (props) => {
                                 className={props.rightContentClass}
                                 dangerouslySetInnerHTML={{ __html: option.desc ?? '' }}
                             ></p>
-                        )}
-                        {option.proSetting && !props.khali_dabba && (
-                            <span className="admin-pro-tag">Pro</span>
                         )}
                         {option.hints && (
                             <span
