@@ -19,7 +19,7 @@ echo sprintf( esc_html__( 'Please find the product enquiry, details are given be
 
 echo "\n****************************************************\n\n";
 
-$product_obj = wc_get_product( key( $args['product_id'] ?? [] ) );
+$product_obj = wc_get_product( key( $args['product_id'] ?? array() ) );
 
 echo "\n Product Name : " . esc_html( $product_obj ? $product_obj->get_name() : 'Dummy Product' );
 

@@ -24,8 +24,7 @@ if ( ! empty( $args['products'] ) ) {
         /* translators: %s: Show the price of the product. */
         echo sprintf( esc_html__( 'Price: %s', 'catalogx' ), esc_html( $_product->get_regular_price() ) ) . "\n\n";
     }
-}
-else {
+} else {
     /* translators: %s: Show the product name. */
     echo sprintf( esc_html__( 'Product: %s', 'catalogx' ), esc_html( 'Dummy Product' ) ) . "\n";
     /* translators: %s: Show the quantity of the product. */

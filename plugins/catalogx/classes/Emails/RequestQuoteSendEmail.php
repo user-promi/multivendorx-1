@@ -107,7 +107,8 @@ if ( ! class_exists( 'RequestQuoteSendEmail' ) ) {
 		 * @return string
 		 */
 		public function get_default_subject() {
-			return apply_filters( 'catalogx_request_send_email_subject', __( 'New Quote Request from {customer_name}', 'catalogx' ), $this->object );
+			$subject = empty( $this->replace ) ? __( 'New Quote Request from Guest', 'catalogx' ) : __( 'New Quote Request from {customer_name}', 'catalogx' );
+			return apply_filters( 'catalogx_request_send_email_subject', $subject, $this->object );
 		}
 
 		/**

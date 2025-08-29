@@ -64,8 +64,7 @@ $customer_data = $args['customer_data'];
                     </tr>
                     <?php
                 }
-            }
-            else {
+            } else {
                 ?>
                 <tr>
                     <td class="product_name" style="border:none;">
