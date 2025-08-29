@@ -44,7 +44,9 @@ class StoreUtil {
 
         $table = "{$wpdb->prefix}" . Utill::TABLES['store'];
         $result = $wpdb->update( $table, $args, [ 'ID' => $id ] );
-
+        if($result == false ){
+            file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":orders: : " . var_export($wpdb->last_error, true) . "\n", FILE_APPEND);
+        }
         return $result;
     }
 
@@ -207,7 +209,7 @@ class StoreUtil {
                     'edit_shop_coupons' => 'Edit Coupons',
                     'delete_shop_coupons' => 'Delete Coupons',
                 ],
-            ]
+            ],
             'analytics' => [
                 'label' => 'Analytics & Report',
                 'desc'  => 'Set how vendors handle their coupons listings',
@@ -217,7 +219,7 @@ class StoreUtil {
                     'edit_shop_report' => 'Edit Sales Data',
                     'export_shop_report' => 'Export Data',
                 ],
-            ]
+            ],
             'inventory' => [
                 'label' => 'Inventory Management',
                 'desc'  => 'Set how vendors handle their coupons listings',
@@ -227,7 +229,7 @@ class StoreUtil {
                     'edit_shop_report' => 'Track Stock',
                     'export_shop_report' => 'Set Stock Alerts',
                 ],
-            ]
+            ],
             'commission' => [
                 'label' => 'Commission & Earning',
                 'desc'  => 'Set how vendors handle their coupons listings',

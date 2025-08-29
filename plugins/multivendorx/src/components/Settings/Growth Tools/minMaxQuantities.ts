@@ -36,7 +36,7 @@ export default {
                     ),
                 },
             ],
-            proSetting:true
+            //proSetting:true
         },
     ],
 };

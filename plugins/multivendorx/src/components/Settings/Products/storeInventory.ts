@@ -26,7 +26,7 @@ export default {
                 },
             ],
             look: 'toggle',
-            proSetting:true
+            // //proSetting:true
         },
         {
             key: 'low_stock_alert_threshold',
@@ -40,7 +40,7 @@ export default {
                 key: 'low_stock_alert',
                 value: 'low_stock_alert',
             },
-            proSetting:true
+            // //proSetting:true
         },
         {
             key: 'out_of_stock_alert',
@@ -57,7 +57,7 @@ export default {
                 },
             ],
             look: 'toggle',
-            proSetting:true
+            // //proSetting:true
         },
         {
             key: 'out_of_stock_alert_threshold',
@@ -71,7 +71,7 @@ export default {
                 key: 'out_of_stock_alert',
                 value: 'out_of_stock_alert',
             },
-            proSetting:true
+            // //proSetting:true
         },
     ],
 };

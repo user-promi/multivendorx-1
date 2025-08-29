@@ -119,7 +119,7 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
                         'name' => 'Advanced Report',
                         'slug' => 'advance report',
                         'capability' => ['read_shop_coupons', 'edit_shop_coupons']
-                    )
+                    ),
                     array(
                         'key'  => 'banking overview',
                         'name' => 'Banking Overview',
@@ -144,7 +144,7 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
                         'name' => 'History',
                         'slug' => 'history',
                         'capability' => ['read_shop_coupons', 'edit_shop_coupons']
-                    )
+                    ),
                     array(
                         'key'  => 'refund',
                         'name' => 'Refund',
