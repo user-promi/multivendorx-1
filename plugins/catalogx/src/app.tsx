@@ -45,38 +45,38 @@ const Route = () => {
 };
 const products: Products[] = [
     {
-        title: __( 'Double Opt-In', 'notifima' ),
+        title: __( 'Double Opt-In', 'catalogx' ),
         description: __(
             'Experience the power of Double Opt-In for our Stock Alert Form - Guaranteed precision in every notification!',
-            'notifima'
+            'catalogx'
         ),
     },
     {
-        title: __( 'Your Subscription Hub', 'notifima' ),
+        title: __( 'Your Subscription Hub', 'catalogx' ),
         description: __(
             'Subscription Dashboard - Easily monitor and download lists of out-of-stock subscribers for seamless management.',
-            'notifima'
+            'catalogx'
         ),
     },
     {
-        title: __( 'Mailchimp Bridge', 'notifima' ),
+        title: __( 'Mailchimp Bridge', 'catalogx' ),
         description: __(
             'Seamlessly link WooCommerce out-of-stock subscriptions with Mailchimp for effective marketing.',
-            'notifima'
+            'catalogx'
         ),
     },
     {
-        title: __( 'Unsubscribe Notifications', 'notifima' ),
+        title: __( 'Unsubscribe Notifications', 'catalogx' ),
         description: __(
             'User-Initiated Unsubscribe from In-Stock Notifications.',
-            'notifima'
+            'catalogx'
         ),
     },
     {
-        title: __( 'Ban Spam Emails', 'notifima' ),
+        title: __( 'Ban Spam Emails', 'catalogx' ),
         description: __(
             'Email and Domain Blacklist for Spam Prevention.',
-            'notifima'
+            'catalogx'
         ),
     },
 ];
@@ -107,61 +107,14 @@ const App = () => {
             }
         } );
 
-    const handleResultClick = ( res: { element: Element; tab: string } ) => {
-        // switch tab by updating URL hash
-        window.location.hash = `&tab=${ res.tab }`;
-
-        // wait for new tab to mount
-        setTimeout( () => {
-            res.element.scrollIntoView( {
-                behavior: 'smooth',
-                block: 'center',
-            } );
-            res.element.classList.add( 'highlight-search' );
-            setTimeout(
-                () => res.element.classList.remove( 'highlight-search' ),
-                2000
-            );
-        }, 400 ); // slight delay so DOM is ready
-
-        setResults( [] );
-        setQuery( '' );
-    };
-
     const handleSelectChange = ( val: string ) => {
         setSelectValue( val );
     };
 
     // --- INIT MODULES ---
     useEffect( () => {
-        initializeModules( appLocalizer, 'multivendorx', 'free', 'modules' );
+        initializeModules( appLocalizer, 'catalogx', 'free', 'modules' );
     }, [] );
-
-    // --- TAB HIGHLIGHT LOGIC ---
-    document
-        .querySelectorAll( '#toplevel_page_multivendorx>ul>li>a' )
-        .forEach( ( menuItem ) => {
-            const menuItemUrl = new URL(
-                ( menuItem as HTMLAnchorElement ).href
-            );
-            const menuItemHashParams = new URLSearchParams(
-                menuItemUrl.hash.substring( 1 )
-            );
-
-            if ( menuItem.parentNode ) {
-                ( menuItem.parentNode as HTMLElement ).classList.remove(
-                    'current'
-                );
-            }
-            if (
-                menuItemHashParams.get( 'tab' ) ===
-                currentTabParams.get( 'tab' )
-            ) {
-                ( menuItem.parentNode as HTMLElement ).classList.add(
-                    'current'
-                );
-            }
-        } );
 
     return (
         <>
@@ -178,11 +131,7 @@ const App = () => {
             />
             <AdminHeader
                 brandImg={ Brand }
-                query={ query }
-                results={ results }
-                onResultClick={ handleResultClick }
                 onSelectChange={ handleSelectChange }
-                selectValue={ selectValue }
                 // free={appLocalizer.freeVersion}
             />
             <TourProvider
