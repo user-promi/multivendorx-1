@@ -15,8 +15,9 @@ export default {
             key: 'commission_type',
             type: 'setting-toggle',
             label: __('Commission type', 'multivendorx'),
+			settingDescription: __( "Choose how commissions should be calculated for your marketplace.", 'multivendorx' ),
             desc: __(
-                'Choose how commission is applied:<ul><li>Store order based commission is calculated on the total order amount for each store separately. Example: If a customer buys from three stores, commission is applied three times – once for each store order.</li><li>Per item based commission is calculated on every single item sold, regardless of which store it belongs to. Example: If an order has five items, commission is applied five times – once for each item.</li></ul>',
+                '<ul><li>Store order based commission is calculated on the total order amount for each store separately. Example: If a customer buys from three stores, commission is applied three times – once for each store order.</li><li>Per item based commission is calculated on every single item sold, regardless of which store it belongs to. Example: If an order has five items, commission is applied five times – once for each item.</li></ul>',
                 'multivendorx'
             ),
             options: [
@@ -195,10 +196,10 @@ export default {
             key: 'commission_calculation_on_tax',
             type: 'setting-toggle',
             label: __('Tax amount', 'multivendorx'),
-            desc: __(
-                'Configure how taxes are treated in commission calculations:<li>No Tax Inclusion: Calculate commission on pre-tax amount only.<li>100% Tax Inclusion: Include full tax amount in commission base.<li>Commission-Based Tax: Calculate commission on total order value including taxes, not just product price',
-                'multivendorx'
-            ),
+            settingDescription: __(
+                'Configure how taxes are treated in commission calculations.'multivendorx'),
+			desc: __( '<li>No Tax Inclusion: Calculate commission on pre-tax amount only.<li>100% Tax Inclusion: Include full tax amount in commission base.<li>Commission-Based Tax: Calculate commission on total order value including taxes, not just product price',
+                ','multivendorx'),
             options: [
                 {
                     key: 'per_transaction',
