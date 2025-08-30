@@ -15,7 +15,7 @@ export default {
             key: 'store_page_details',
             type: 'checkbox',
             label: __( 'Store info on products', 'multivendorx' ),
-            desc: __( 'Control what store information (name, logo, address) is displayed on product listings and detail pages.', 'multivendorx' ),
+            settingDescription: __( 'Control what store information is displayed on product listings and detail pages.', 'multivendorx' ),
             class: 'mvx-toggle-checkbox',
             options: [
                 {
@@ -39,11 +39,51 @@ export default {
             ],
             selectDeselect: true,
         },
+		{
+            key: 'store_page_details',
+            type: 'checkbox',
+            label: __( 'Store contact informations', 'multivendorx' ),
+            settingDescription: __( 'Control which store contact details are visible to customers.', 'multivendorx' ),
+            class: 'mvx-toggle-checkbox',
+            options: [
+                {
+                    key: 'show_store_owner_info',
+                    label: __( 'Address', 'multivendorx' ),
+					desc: __( 'Display store's physical address to customers', 'multivendorx' ),
+                    value: 'show_store_owner_info',
+                },
+                {
+                    key: 'show_store_description',
+                    label: __( 'Phone number', 'multivendorx' ),
+					desc: __( 'Display store's contact phone number', 'multivendorx' ),
+                    value: 'show_store_description',
+                },
+                {
+                    key: 'show_store_description',
+                    label: __( 'Email address', 'multivendorx' ),
+					desc: __( 'Display store's email address for customer contact', 'multivendorx' ),
+                    value: 'show_store_description',
+                },
+                {
+                    key: 'show_store_description',
+                    label: __( 'Store description', 'multivendorx' ),
+					desc: __( 'Display store description ', 'multivendorx' ),
+                    value: 'show_store_description',
+                },
+                {
+                    key: 'show_store_ratings',
+                    label: __( 'Store ratings', 'multivendorx' ),
+					desc: __( 'Display customer ratings and reviews for this store', 'multivendorx' ),
+                    value: 'show_store_ratings',
+                },
+            ],
+            selectDeselect: true,
+        },
         {
             key: 'store_page_details',
             type: 'checkbox',
             label: __( 'Store-wise order display', 'multivendorx' ),
-            desc: __( 'Control whether customers see orders grouped by vendor in cart, checkout, and confirmation emails.', 'multivendorx' ),
+            settingDescription: __( 'Control whether customers see orders grouped by vendor in cart, checkout, and confirmation emails.', 'multivendorx' ),
             class: 'mvx-toggle-checkbox',
             options: [
                 {
@@ -55,46 +95,12 @@ export default {
                 ],
             selectDeselect: true,
         },
-        {
-            key: 'store_page_details',
-            type: 'checkbox',
-            label: __( 'Vendor contact display', 'multivendorx' ),
-            desc: __( 'Control whether vendor contact and support details are visible to customers during checkout and in emails.', 'multivendorx' ),
-            class: 'mvx-toggle-checkbox',
-            options: [
-                {
-                    key: 'show_store_owner_info',
-                    label: __( 'Address', 'multivendorx' ),
-                    value: 'show_store_owner_info',
-                },
-                {
-                    key: 'show_store_description',
-                    label: __( 'Phone number', 'multivendorx' ),
-                    value: 'show_store_description',
-                },
-                {
-                    key: 'show_store_description',
-                    label: __( 'Email address', 'multivendorx' ),
-                    value: 'show_store_description',
-                },
-                {
-                    key: 'show_store_description',
-                    label: __( 'Store description', 'multivendorx' ),
-                    value: 'show_store_description',
-                },
-                {
-                    key: 'show_store_ratings',
-                    label: __( 'Store ratings', 'multivendorx' ),
-                    value: 'show_store_ratings',
-                },
-            ],
-            selectDeselect: true,
-        },
+        
         {
             key: 'store_policy_override',
             type: 'checkbox',
-            label: __( 'Vendor policy override', 'multivendorx' ),
-            desc: __( 'Allow vendors to set their own store policies instead of using the default admin policies.', 'multivendorx' ),
+            label: __( 'Store policy override', 'multivendorx' ),
+            settingDescription: __( 'Allow vendors to set their own store policies instead of using the default admin policies.', 'multivendorx' ),
             class: 'mvx-toggle-checkbox',
             options: [
                 {
