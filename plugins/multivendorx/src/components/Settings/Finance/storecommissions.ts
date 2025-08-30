@@ -181,4 +181,42 @@ export default {
             label: __('Shipping amount', 'multivendorx'),
             settingDescription: __('This option determines whether shipping charges are included when calculating commission.', 'multivendorx'),
             desc: __(
-                'If enabled, vendor net earning will i
+                  'If enabled, vendor’s net earning will include both commission and shipping fees.','multivendorx'),
+            type: 'checkbox',
+            options: [
+                {
+                    key: 'give_shipping',
+                    value: 'give_shipping',
+                },
+            ],
+            look: 'toggle',
+        },
+        {
+            key: 'commission_calculation_on_tax',
+            type: 'setting-toggle',
+            label: __('Tax amount', 'multivendorx'),
+            desc: __(
+                'Configure how taxes are treated in commission calculations:<li>No Tax Inclusion: Calculate commission on pre-tax amount only.<li>100% Tax Inclusion: Include full tax amount in commission base.<li>Commission-Based Tax: Calculate commission on total order value including taxes, not just product price',
+                'multivendorx'
+            ),
+            options: [
+                {
+                    key: 'per_transaction',
+                    label: __('No tax', 'multivendorx'),
+                    value: 'per_transaction',
+                },
+                {
+                    key: 'per_unit',
+                    label: __('Full tax', 'multivendorx'),
+                    value: 'per_unit',
+                },
+                {
+                    key: 'per_store',
+                    label: __('Commision based tax', 'multivendorx'),
+                    value: 'per_store',
+                },
+            ],
+        },
+
+    ],
+};
