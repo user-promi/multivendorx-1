@@ -183,9 +183,23 @@ const Modules: React.FC<ModuleProps> = ({
                 </Dialog>
 
                 {successMsg && (
-                    <div className="admin-notice-display-title">
+                    // <div className="admin-notice-wrapper">
+                    //     <i className="admin-font adminlib-icon-yes"></i>
+                    //     {successMsg}
+                    // </div>
+                    // <div className="admin-notice-wrapper notice-error">
+                    //     <i className="admin-font adminlib-info"></i>
+                    //     <div className="notice-details">
+                    //         <div className="title">oops!</div>
+                    //         <div className="desc">{successMsg}</div>
+                    //     </div>
+                    // </div>
+                    <div className="admin-notice-wrapper">
                         <i className="admin-font adminlib-icon-yes"></i>
-                        {successMsg}
+                        <div className="notice-details">
+                            <div className="title">Great!</div>
+                            <div className="desc">{successMsg}</div>
+                        </div>
                     </div>
                 )}
 
