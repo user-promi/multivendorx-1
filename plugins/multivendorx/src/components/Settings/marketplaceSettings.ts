@@ -51,7 +51,7 @@ export default {
             label: __( 'Store URL', 'multivendorx' ),
             size:"8rem",
             before: appLocalizer.site_url + '/',
-            after: "/custom_store_name",
+            after: "/sample-store-slug/",
         },
         {
             key: 'section',

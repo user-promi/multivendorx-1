@@ -1,7 +1,7 @@
 import { __ } from '@wordpress/i18n';
 
 export default {
-    id: 'store_commissions',
+    id: 'store-commissions',
     priority: 1,
     name: __('Store commissions', 'multivendorx'),
     desc: __(
@@ -38,6 +38,10 @@ export default {
             label: 'Commission value',
             addButtonLabel: 'Add new',
             deleteButtonLabel: 'Remove',
+            desc: __(
+                'This is the default commission amount that will be applicable for all transactions.',
+                'multivendorx'
+            ),
             nestedFields: [
                 {
                     key: 'rule_type',
@@ -115,23 +119,22 @@ export default {
                     type: 'multi-number',
                     label: __('Store commission will be', 'multivendorx'),
                     skipLabel: true,
-                    desc: __(
-                        'This is the default commission amount that will be applicable for all transactions.',
-                        'multivendorx'
-                    ),
                     options: [
-                        {
-                            key: 'commission_percentage',
-                            label: __('%', 'multivendorx'),
-                            type: 'number',
-                            labelAfterInput: true,
-                        },
                         {
                             key: 'commission_fixed',
                             label: __('$', 'multivendorx'),
                             type: 'number',
                             labelAfterInput: false,
+                            desc: __( 'Fixed amount per transaction', 'multivendorx' ),
                         },
+                        {
+                            key: 'commission_percentage',
+                            label: __('%', 'multivendorx'),
+                            type: 'number',
+                            labelAfterInput: true,
+                            desc: __('Percentage of product price per transaction','multivendorx'),
+                        },
+ 
                     ],
                 },
             ],
@@ -151,17 +154,19 @@ export default {
             ),
             options: [
                 {
-                    key: 'commission_percentage',
-                    label: __('%', 'multivendorx'),
-                    type: 'number',
-                    labelAfterInput: true
-                },
-                {
                     key: 'commission_fixed',
                     label: __('$', 'multivendorx'),
                     type: 'number',
-                    labelAfterInput: false
-                },                
+                    labelAfterInput: false,
+                    desc: __( 'Fixed amount per transaction', 'multivendorx' ),
+                },   
+                {
+                    key: 'commission_percentage',
+                    label: __('%', 'multivendorx'),
+                    type: 'number',
+                    labelAfterInput: true,
+                    desc: __('Percentage of product price per transaction','multivendorx'),
+                }             
             ],
             dependent: {
                 key: 'commission_type',
