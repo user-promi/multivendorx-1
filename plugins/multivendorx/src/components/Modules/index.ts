@@ -474,7 +474,6 @@ export default {
             //settings_link: admin_url('admin.php?page=mvx#&submenu=settings&name=settings-vendor-membership'),
             pro_module: true,
 			category: 'marketplace_membership'
-'
         },
         {
             id: 'announcement',
