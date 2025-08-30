@@ -64,6 +64,7 @@ export default {
                 {
                     key: 'product_price',
                     type: 'number',
+                    label: '+',
                     options: [
                         {
                             key: 'product_price',
@@ -122,16 +123,23 @@ export default {
                     ),
                     options: [
                         {
-                            key: 'commission_percentage',
-                            label: __('%', 'multivendorx'),
-                            type: 'number',
-                            labelAfterInput: true,
-                        },
-                        {
                             key: 'commission_fixed',
                             label: __('$', 'multivendorx'),
                             type: 'number',
                             labelAfterInput: false,
+                        },
+                    ],
+                },
+                {
+                    key: 'store_order',
+                    type: 'multi-number',
+                    label: __('+', 'multivendorx'),
+                    options: [
+                        {
+                            key: 'commission_percentage',
+                            label: __('%', 'multivendorx'),
+                            type: 'number',
+                            labelAfterInput: true,
                         },
                     ],
                 },
