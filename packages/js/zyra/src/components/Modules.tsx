@@ -160,8 +160,8 @@ const Modules: React.FC<ModuleProps> = ({
     return (
         <>
             <AdminBreadcrumbs
-                activeTabIcon="adminlib-cart"
-                parentTabName="Modules"
+                activeTabIcon="adminlib-module"
+                tabTitle="Modules"
             />
 
             <div className="module-container">
@@ -278,7 +278,9 @@ const Modules: React.FC<ModuleProps> = ({
                                         </div> */}
                                     </div>
                                     <div className="module-details">
-                                        <div className="meta-name">{module.name} <span className="admin-badge blue">{module.category}</span> </div>
+                                        {module.category && (
+                                            <div className="meta-name">{module.name} <span className="admin-badge blue">{module.category}</span> </div>
+                                        )}
                                         <p
                                             className="meta-description"
                                             dangerouslySetInnerHTML={{ __html: module.desc }}
