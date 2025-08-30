@@ -196,8 +196,10 @@ export default {
             key: 'commission_calculation_on_tax',
             type: 'setting-toggle',
             label: __('Tax amount', 'multivendorx'),
-            settingDescription: __('Configure how taxes are treated in commission calculations.', 'multivendorx'),
-            desc: __('<li>No Tax Inclusion: Calculate commission on pre-tax amount only.<li>100% Tax Inclusion: Include full tax amount in commission base.<li>Commission-Based Tax: Calculate commission on total order value including taxes, not just product price.','multivendorx'),
+            settingDescription: __(
+                'Configure how taxes are treated in commission calculations.'multivendorx'),
+			desc: __( '<li>No Tax Inclusion: Calculate commission on pre-tax amount only.<li>100% Tax Inclusion: Include full tax amount in commission base.<li>Commission-Based Tax: Calculate commission on total order value including taxes, not just product price',
+                ','multivendorx'),
             options: [
                 {
                     key: 'per_transaction',
