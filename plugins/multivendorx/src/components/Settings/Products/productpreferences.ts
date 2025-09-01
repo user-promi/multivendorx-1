@@ -38,7 +38,7 @@ export default {
         {
             key: 'products_fields',
             type: 'checkbox',
-            label: __( 'Product information fields', 'multivendorx' ),
+            label: __( 'Edit product page blocks', 'multivendorx' ),
 			settingDescription: __( 'Control which product data fields are available to stores when creating or editing products.', 'multivendorx' ),
             class: 'mvx-toggle-checkbox',
             options: [
