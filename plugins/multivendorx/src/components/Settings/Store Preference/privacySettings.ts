@@ -5,7 +5,7 @@ export default {
     priority: 6,
     name: __( 'Privacy', 'multivendorx' ),
     desc: __(
-        'Control public visibility of store and store info',
+        'Control what customers see about your stores',
         'multivendorx'
     ),
     icon: 'adminlib-storefront',
@@ -14,28 +14,36 @@ export default {
         {
             key: 'store_page_details',
             type: 'checkbox',
-            label: __( 'Store info on products', 'multivendorx' ),
+            label: __( 'Store branding', 'multivendorx' ),
             settingDescription: __( 'Control what store information is displayed on product listings and detail pages.', 'multivendorx' ),
             class: 'mvx-toggle-checkbox',
             options: [
                 {
                     key: 'show_store_name_on_products',
-                    label: __( 'Store name', 'multivendorx' ),
-                    desc: __( 'Display store name on product listings and detail pages', 'multivendorx' ),
+                    label: __( 'Name', 'multivendorx' ),
+                    desc: __( 'Display store name on product listings, archive page and chekout/cart pages.', 'multivendorx' ),
                     value: 'show_store_owner_info',
                 },
                 {
                     key: 'show_store_logo_next_to_products',
-                    label: __( 'Store logo', 'multivendorx' ),
-                    desc: __( 'Include store branding alongside product information', 'multivendorx' ),
+                    label: __( 'Logo', 'multivendorx' ),
+                    desc: __( 'Store logo will be displayed alongside product information', 'multivendorx' ),
+                    value: 'show_store_description',
+                },
+				
+				{
+                    key: 'show_store_description',
+                    label: __( 'Store description', 'multivendorx' ),
+					desc: __( 'Store description is displayed on store and product pages. ', 'multivendorx' ),
                     value: 'show_store_description',
                 },
                 {
-                    key: 'show_order_breakdown_by_store',
-                    label: __( 'Order breakdown by store', 'multivendorx' ),
-                    desc: __( 'Display which items come from which store and their corresponding sub order number in email confirmations', 'multivendorx' ),
-                    value: 'show_store_address',
-                },                
+                    key: 'show_store_ratings',
+                    label: __( 'Store ratings', 'multivendorx' ),
+					desc: __( 'Display customer ratings and reviews in the store page and below the product page', 'multivendorx' ),
+                    value: 'show_store_ratings',
+                },
+                                
             ],
             selectDeselect: true,
         },
@@ -49,34 +57,22 @@ export default {
                 {
                     key: 'show_store_owner_info',
                     label: __( 'Address', 'multivendorx' ),
-					desc: __( "Display store's physical address to customers", 'multivendorx' ),
+					desc: __( 'Display stores physical address to customers', 'multivendorx' ),
                     value: 'show_store_owner_info',
                 },
                 {
                     key: 'show_store_description',
                     label: __( 'Phone number', 'multivendorx' ),
-
-					desc: __( "Display store's contact phone number", 'multivendorx' ),
+					desc: __( 'Display stores contact phone number', 'multivendorx' ),
                     value: 'show_store_description',
                 },
                 {
                     key: 'show_store_description',
                     label: __( 'Email address', 'multivendorx' ),
-					desc: __( "Display store's email address for customer contact", 'multivendorx' ),
+					desc: __( 'Display stores email address for customer contact', 'multivendorx' ),
                     value: 'show_store_description',
                 },
-                {
-                    key: 'show_store_description',
-                    label: __( 'Store description', 'multivendorx' ),
-					desc: __( 'Display store description ', 'multivendorx' ),
-                    value: 'show_store_description',
-                },
-                {
-                    key: 'show_store_ratings',
-                    label: __( 'Store ratings', 'multivendorx' ),
-					desc: __( 'Display customer ratings and reviews for this store', 'multivendorx' ),
-                    value: 'show_store_ratings',
-                },
+                
             ],
             selectDeselect: true,
         },
@@ -96,11 +92,12 @@ export default {
                 ],
             selectDeselect: true,
         },
+        
         {
             key: 'store_policy_override',
             type: 'checkbox',
             label: __( 'Store policy override', 'multivendorx' ),
-            settingDescription: __( 'Allow vendors to set their own store policies instead of using the default admin policies.', 'multivendorx' ),
+            settingDescription: __( 'Allow stores to set their own policies instead of using the default admin policies.', 'multivendorx' ),
             class: 'mvx-toggle-checkbox',
             options: [
                 {
@@ -133,7 +130,8 @@ export default {
         {
             key: 'enable_profile_deactivation_request',
             type: 'checkbox',
-            label: __( 'Profile deactivation requests', 'multivendorx' ),
+            label: __( 'Store profile deactivation requests', 'multivendorx' ),
+			desc: __( 'Allow store owners to submit requests for temporary store hiding. <br><b>Note</b>: When a store is deactivated, both the store page and all its products become invisible to customers until the store is reactivated by an administrator. If a store is permanently deleted by admin, the admin can decide whether to allocate all the products to another store or take ownership of them.', 'multivendorx' ),
             options: [
                 {
                     key: 'enable_profile_deactivation_request',
