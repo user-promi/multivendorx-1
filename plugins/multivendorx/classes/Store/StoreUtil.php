@@ -15,7 +15,6 @@ defined('ABSPATH') || exit;
 
 class StoreUtil {
 
-
     public static function get_store() {
         global $wpdb;
 
