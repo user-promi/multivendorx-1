@@ -12,10 +12,8 @@ export default {
             key: 'wholesale_buyer_verification',
             type: 'setting-toggle',
             label: __('Wholesale buyer verification', 'multivendorx'),
-            desc: __(
-                'Decide how wholesale buyers are approved before they can access bulk pricing.',
-                'multivendorx'
-            ),
+            settingDescription: __('Decide how wholesale buyers are approved before they can access bulk pricing.','multivendorx'),
+			desc: __('<ul><li>Automatic:Any user registering as a wholesale buyer is instantly approved without admin review.</li><li>Manual-Admin must review and approve each wholesale buyer request before access is granted.</li></ul>', 'mvx-pro'),
             options: [
                 {
                     key: 'automatic',
@@ -34,11 +32,9 @@ export default {
             key: 'wholesale_price_access',
             type: 'setting-toggle',
             label: __('Wholesale price access', 'multivendorx'),
-            desc: __(
-                'Choose which users can see wholesale pricing in store catalogs.',
-                'multivendorx'
-            ),
-            options: [
+            settingDescription: __('Choose which users can see wholesale pricing in store catalogs.','multivendorx'),
+			desc: __('<ul><li>Automatic:Any user registering as a wholesale buyer is instantly approved without admin review.</li><li>Manual-Admin must review and approve each wholesale buyer request before access is granted.</li></ul>', 'mvx-pro'),
+          options: [
                 {
                     key: 'registered',
                     label: __('All registered users', 'multivendorx'),
@@ -56,7 +52,7 @@ export default {
             key: 'wholesale_price_display',
             type: 'setting-toggle',
             label: __('Wholesale price display', 'multivendorx'),
-            desc: __(
+            settingDescription: __(
                 'Control whether wholesale prices are shown alongside retail prices or separately.',
                 'multivendorx'
             ),
