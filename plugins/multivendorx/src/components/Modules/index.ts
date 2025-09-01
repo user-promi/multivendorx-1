@@ -10,7 +10,7 @@ export default {
             icon: 'adminlib-dynamic-pricing',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/simple-product',
             //settings_link: appLocalizer.site_url,
-            req_pluging:['woocomerce','wordpress'],
+            req_pluging: ['woocomerce', 'wordpress'],
             pro_module: false,
             category: 'product_type'
         },
@@ -153,7 +153,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/import-export',
             //settings_link: appLocalizer.site_url,
             pro_module: true,
-			category: 'store_management'
+            category: 'store_management'
         },
         {
             id: 'store-inventory',
@@ -163,7 +163,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/store-inventory',
             //settings_link: admin_url('admin.php?page=mvx#&submenu=settings&name=settings-store-inventory'),
             pro_module: true,
-			category: 'inventory_control'
+            category: 'inventory_control'
         },
         {
             id: 'min-max',
@@ -173,7 +173,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/non-knowledgebase/min-max-quantities/',
             //settings_link: admin_url('admin.php?page=mvx#&submenu=settings&name=settings-min-max'),
             pro_module: false,
-			category: 'inventory_control'
+            category: 'inventory_control'
         },
         {
             id: 'bank-payment',
@@ -183,7 +183,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/direct-bank-transfer/',
             //settings_link: appLocalizer.site_url,
             pro_module: false,
-			category: 'payment_management'
+            category: 'payment_management'
         },
         {
             id: 'paypal-masspay',
@@ -193,7 +193,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/paypal-masspay/',
             //settings_link: appLocalizer.site_url,
             pro_module: false,
-			category: 'payment_management'
+            category: 'payment_management'
         },
         {
             id: 'paypal-payout',
@@ -203,7 +203,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/paypal-payout',
             //settings_link: admin_url('admin.php?page=mvx#&submenu=payment&name=payment-payout'),
             pro_module: false,
-			category: 'payment_management'
+            category: 'payment_management'
         },
         {
             id: 'paypal-marketplace',
@@ -213,7 +213,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/paypal-marketplace-real-time-split/',
             //settings_link: admin_url('admin.php?page=wc-settings&tab=checkout&section=mvx_paypal_marketplace'),
             pro_module: true,
-			category: 'payment_management'
+            category: 'payment_management'
         },
         {
             id: 'stripe-connect',
@@ -223,7 +223,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/stripe-connect',
             //settings_link: admin_url('admin.php?page=mvx#&submenu=payment&name=payment-stripe-connect'),
             pro_module: false,
-			category: 'payment_management'
+            category: 'payment_management'
         },
         {
             id: 'stripe-marketplace',
@@ -233,7 +233,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/stripe-marketplace',
             //settings_link: admin_url('admin.php?page=mvx#&submenu=payment&name=payment-stripe-connect'),
             pro_module: true,
-			category: 'payment_management'
+            category: 'payment_management'
         },
         {
             id: 'mangopay',
@@ -243,7 +243,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/mangopay',
             //settings_link: admin_url('admin.php?page=mvx-setting-admin'),
             pro_module: true,
-			category: 'payment_management'
+            category: 'payment_management'
         },
         {
             id: 'razorpay',
@@ -253,7 +253,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/payment/',
             //settings_link: admin_url('admin.php?page=mvx-setting-admin'),
             pro_module: false,
-			category: 'payment_management'
+            category: 'payment_management'
         },
         {
             id: 'zone-shipping',
@@ -263,7 +263,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/shipping-by-zone/',
             //settings_link: admin_url('admin.php?page=wc-settings&tab=shipping'),
             pro_module: false,
-			category: 'shipping_management'
+            category: 'shipping_management'
         },
         {
             id: 'distance-shipping',
@@ -273,7 +273,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/distance-shipping',
             //settings_link: admin_url('admin.php?page=wc-settings&tab=shipping&section=mvx_product_shipping_by_distance'),
             pro_module: false,
-			category: 'shipping_management'
+            category: 'shipping_management'
         },
         {
             id: 'country-shipping',
@@ -283,7 +283,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/country-shipping',
             //settings_link: admin_url('admin.php?page=wc-settings&tab=shipping&section=mvx_product_shipping_by_country'),
             pro_module: false,
-			category: 'shipping_management'
+            category: 'shipping_management'
         },
         {
             id: 'weight-shipping',
@@ -293,7 +293,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/weight-shipping',
             //settings_link: admin_url('admin.php?page=wc-settings&tab=shipping'),
             pro_module: false,
-			category: 'shipping_management'
+            category: 'shipping_management'
         },
         {
             id: 'per-product-shipping',
@@ -303,7 +303,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/per-product-shipping',
             //settings_link: admin_url('admin.php?page=wc-settings&tab=shipping'),
             pro_module: true,
-			category: 'shipping_management'
+            category: 'shipping_management'
         },
         {
             id: 'invoice',
@@ -313,7 +313,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/invoice-packing-slip',
             //settings_link: admin_url('admin.php?page=mvx#&submenu=settings&name=settings-vendor-invoice'),
             pro_module: true,
-			category: 'customer_experience'
+            category: 'customer_experience'
         },
         {
             id: 'marketplace-refund',
@@ -323,7 +323,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/marketplace-refund',
             //settings_link: admin_url('admin.php?page=mvx#&submenu=settings&name=refund-management'),
             pro_module: false,
-			category: 'customer_experience'
+            category: 'customer_experience'
         },
         {
             id: 'store-location',
@@ -333,7 +333,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/store-location',
             //settings_link: admin_url('admin.php?page=mvx#&submenu=settings&name=store'),
             pro_module: false,
-			category: 'store_management'
+            category: 'store_management'
         },
         {
             id: 'store-policy',
@@ -343,7 +343,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/store-policy',
             //settings_link: admin_url('admin.php?page=mvx#&submenu=settings&name=policy'),
             pro_module: false,
-			category: 'store_management'
+            category: 'store_management'
         },
         {
             id: 'follow-store',
@@ -353,7 +353,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/follow-store',
             //settings_link: appLocalizer.site_url,
             pro_module: false,
-			category: 'store_management'
+            category: 'store_management'
         },
         {
             id: 'store-review',
@@ -363,7 +363,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/store-review',
             //settings_link: admin_url('admin.php?page=mvx#&submenu=settings&name=review-management'),
             pro_module: false,
-			category: 'store_management'
+            category: 'store_management'
         },
         {
             id: 'business-hours',
@@ -373,7 +373,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/business-hours/',
             //settings_link: appLocalizer.site_url,
             pro_module: true,
-			category: 'store_management'
+            category: 'store_management'
         },
         {
             id: 'mvx-blocks',
@@ -383,7 +383,7 @@ export default {
             doc_link: '',
             //settings_link: appLocalizer.site_url,
             pro_module: false,
-			category: 'integration'
+            category: 'integration'
         },
         {
             id: 'advertisement',
@@ -393,7 +393,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/advertise-product/',
             //settings_link: admin_url('admin.php?page=mvx#&submenu=settings&name=settings-advertising'),
             pro_module: true,
-			category: 'marketing_tools'
+            category: 'marketing_tools'
         },
         {
             id: 'vacation',
@@ -403,7 +403,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/vacation',
             //settings_link: appLocalizer.site_url,
             pro_module: true,
-			category: 'store_management'
+            category: 'store_management'
         },
         {
             id: 'staff-manager',
@@ -413,7 +413,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/staff-manager',
             //settings_link: appLocalizer.site_url,
             pro_module: true,
-			category: 'store_management'
+            category: 'store_management'
         },
         {
             id: 'wholesale',
@@ -423,7 +423,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/wholesale',
             //settings_link: admin_url('admin.php?page=mvx#&submenu=settings&name=settings-wholesale'),
             pro_module: true,
-			category: 'marketing_tools'
+            category: 'marketing_tools'
         },
         {
             id: 'live-chat',
@@ -433,7 +433,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/live-chat',
             //settings_link: admin_url('admin.php?page=mvx#&submenu=settings&name=settings-live-chat'),
             pro_module: true,
-			category: 'customer_experience'
+            category: 'customer_experience'
         },
         {
             id: 'store-support',
@@ -443,7 +443,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/store-support/',
             //settings_link: admin_url('admin.php?page=mvx#&submenu=settings&name=settings-store-support'),
             pro_module: true,
-			category: 'customer_experience'
+            category: 'customer_experience'
         },
         {
             id: 'store-analytics',
@@ -453,7 +453,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/store-analytics',
             //settings_link: admin_url('admin.php?page=mvx-setting-admin'),
             pro_module: true,
-			category: 'analytics_tools'
+            category: 'analytics_tools'
         },
         {
             id: 'store-seo',
@@ -463,7 +463,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/store-seo',
             //settings_link: admin_url('admin.php?page=mvx#&submenu=settings&name=settings-seo'),
             pro_module: true,
-			category: 'analytics_tools'
+            category: 'analytics_tools'
         },
         {
             id: 'marketplace-membership',
@@ -473,7 +473,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/marketplace-memberhsip',
             //settings_link: admin_url('admin.php?page=mvx#&submenu=settings&name=settings-vendor-membership'),
             pro_module: true,
-			category: 'marketplace_membership'
+            category: 'marketplace_membership'
         },
         {
             id: 'announcement',
@@ -483,7 +483,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/announcement/',
             //settings_link: admin_url('admin.php?page=mvx#&submenu=work-board&name=announcement'),
             pro_module: false,
-			category: 'notification'
+            category: 'notification'
         },
         {
             id: 'report-abuse',
@@ -493,7 +493,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/report-abuse',
             //settings_link: admin_url('admin.php?page=mvx#&submenu=work-board&name=report-abuse'),
             pro_module: false,
-			category: 'notification'
+            category: 'notification'
         },
         {
             id: 'knowladgebase',
@@ -503,7 +503,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/knowledgebase/',
             //settings_link: admin_url('admin.php?page=mvx#&submenu=work-board&name=knowladgebase'),
             pro_module: false,
-			category: 'notification'
+            category: 'notification'
         },
         {
             id: 'elementor',
@@ -513,7 +513,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/mvx-elementor',
             //settings_link: appLocalizer.site_url,
             pro_module: false,
-			category: 'integration'
+            category: 'integration'
         },
         {
             id: 'buddypress',
@@ -523,7 +523,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/mvx-buddypress',
             //settings_link: admin_url('admin.php?page=mvx#&submenu=settings&name=social'),
             pro_module: false,
-			category: 'integration'
+            category: 'integration'
         },
         {
             id: 'wpml',
@@ -533,7 +533,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/mvx-wpml',
             //settings_link: appLocalizer.site_url,
             pro_module: false,
-			category: 'integration'
+            category: 'integration'
         },
         {
             id: 'advance-custom-field',
@@ -543,7 +543,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/mvx-acf',
             //settings_link: appLocalizer.site_url,
             pro_module: true,
-			category: 'integration'
+            category: 'integration'
         },
         {
             id: 'geo-my-wp',
@@ -553,7 +553,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/geo-my-wp',
             //settings_link: appLocalizer.site_url,
             pro_module: true,
-			category: 'integration'
+            category: 'integration'
         },
         {
             id: 'wp-affiliate',
@@ -563,7 +563,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/affiliate-product/',
             //settings_link: appLocalizer.site_url,
             pro_module: true,
-			category: 'integration'
+            category: 'integration'
         },
         {
             id: 'product-addon',
@@ -573,7 +573,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/mvx-product-addon',
             //settings_link: appLocalizer.site_url,
             pro_module: true,
-			category: 'integration'
+            category: 'integration'
         },
         {
             id: 'shipstation-module',
@@ -583,9 +583,9 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/shipstation/',
             //settings_link: appLocalizer.site_url,
             pro_module: true,
-			category: 'integration'
-        }
-		{
+            category: 'integration'
+        },
+        {
             id: 'geo-location',
             name: __('Geo Location', 'multivendorx'),
             desc: "Geo Location",
@@ -593,8 +593,8 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/shipstation/',
             //settings_link: appLocalizer.site_url,
             pro_module: true,
-			category: 'integration'
-        }
+            category: 'integration'
+        },
         {
             id: 'question-answer',
             name: __('Question & Answer', 'multivendorx'),
@@ -603,9 +603,9 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/shipstation/',
             //settings_link: appLocalizer.site_url,
             pro_module: true,
-			category: 'engagement'
-        }
-       {
+            category: 'engagement'
+        },
+        {
             id: 'enquiry',
             name: __('Enquiry', 'multivendorx'),
             desc: "Customers can send private product inquiries.",
@@ -613,7 +613,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/shipstation/',
             //settings_link: appLocalizer.site_url,
             pro_module: true,
-			category: 'engagement'
+            category: 'engagement'
         }
     ]
 }

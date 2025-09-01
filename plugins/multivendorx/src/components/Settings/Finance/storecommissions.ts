@@ -122,16 +122,21 @@ export default {
                     ),
                     options: [
                         {
-                            key: 'commission_percentage',
-                            label: __('%', 'multivendorx'),
-                            type: 'number',
-                            labelAfterInput: true,
-                        },
-                        {
                             key: 'commission_fixed',
                             label: __('$', 'multivendorx'),
                             type: 'number',
                             labelAfterInput: false,
+                            desc: __( 'Fixed amount per transaction', 'multivendorx' ),
+                        },
+                        {
+                            key: 'commission_percentage',
+                            label: __('%', 'multivendorx'),
+                            type: 'number',
+                            labelAfterInput: true,
+                            desc: __(
+                                'Percentage of product price per transaction',
+                                'multivendorx'
+                            ),
                         },
                     ],
                 },
@@ -152,16 +157,21 @@ export default {
             ),
             options: [
                 {
-                    key: 'commission_percentage',
-                    label: __('%', 'multivendorx'),
-                    type: 'number',
-                    labelAfterInput: true
-                },
-                {
                     key: 'commission_fixed',
                     label: __('$', 'multivendorx'),
                     type: 'number',
-                    labelAfterInput: false
+                    labelAfterInput: false,
+                    desc: __( 'Fixed amount per transaction', 'multivendorx' ),
+                },
+                {
+                    key: 'commission_percentage',
+                    label: __('%', 'multivendorx'),
+                    type: 'number',
+                    labelAfterInput: true,
+                    desc: __(
+                        'Percentage of product price per transaction',
+                        'multivendorx'
+                    ),
                 },                
             ],
             dependent: {
@@ -196,10 +206,8 @@ export default {
             key: 'commission_calculation_on_tax',
             type: 'setting-toggle',
             label: __('Tax amount', 'multivendorx'),
-            settingDescription: __(
-                'Configure how taxes are treated in commission calculations.'multivendorx'),
-			desc: __( '<li>No Tax Inclusion: Calculate commission on pre-tax amount only.<li>100% Tax Inclusion: Include full tax amount in commission base.<li>Commission-Based Tax: Calculate commission on total order value including taxes, not just product price',
-                ','multivendorx'),
+            settingDescription: __('Configure how taxes are treated in commission calculations.','multivendorx'),
+			desc: __( '<li>No Tax Inclusion: Calculate commission on pre-tax amount only.<li>100% Tax Inclusion: Include full tax amount in commission base.<li>Commission-Based Tax: Calculate commission on total order value including taxes, not just product price','multivendorx'),
             options: [
                 {
                     key: 'per_transaction',
