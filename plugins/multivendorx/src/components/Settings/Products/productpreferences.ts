@@ -15,7 +15,7 @@ export default {
             key: 'type_options',
             type: 'checkbox',
             label: __( 'Allowed product type', 'multivendorx' ),
-			settingDescription: __( 'Select the product fields vendors can configure when adding or managing their products.', 'multivendorx' ),
+			settingDescription: __( 'Select the product fields stores can configure when adding or managing their products.', 'multivendorx' ),
             class: 'mvx-toggle-checkbox',
             desc: __(
                 '<li><b>Virtual products </b>: Choose this option for products that don’t have a physical form (e.g., services, memberships). <li><b>Downloadable products</b>: Use this option for products that customers can download (e.g., software, eBooks).',
