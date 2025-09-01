@@ -42,13 +42,12 @@ export default {
         },
         {
             key: 'store_url',
-            type: 'url',
+            type: 'text',
+            label: __( 'Store URL', 'multivendorx' ),
             desc: __(
                 'Define the custom slug for the store URL. For example, in the URL: https://yourdomain.com/store/[this-text]/[store-name], "[this-text]" will be replaced by the slug you set here.',
                 'multivendorx'
             ),
-            value:'store',
-            label: __( 'Store URL', 'multivendorx' ),
             size:"8rem",
             before: appLocalizer.site_url + '/',
             after: "/sample-store-slug/",

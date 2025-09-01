@@ -389,6 +389,7 @@ const Tabs: React.FC<TabsProps> = ({
   }, [currentTab, tabData]);
 
   const currentMenu = menuStack[menuStack.length - 1];
+
   const findTabName = (items: TabData[], activeTabId: string): string | undefined => {
     for (const item of items) {
       if (isFile(item) && item.content.id === activeTabId) {
@@ -404,13 +405,15 @@ const Tabs: React.FC<TabsProps> = ({
   
   const parentTab = findTabName(tabData, activeTab) || '';
 
+
+
   const tabIcon = getCurrentTabIcon();
 
   return (
     <>
       <AdminBreadcrumbs
         activeTabIcon={tabIcon}
-        parentTabName={parentTab}
+        tabTitle={tabTitle}
         renderBreadcrumb={renderBreadcrumbLinks}
         renderMenuItems={renderAllMenuItems}
         tabData={tabData}

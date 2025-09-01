@@ -55,6 +55,7 @@ export default {
                 {
                     key: 'show_store_description',
                     label: __( 'Phone number', 'multivendorx' ),
+
 					desc: __( "Display store's contact phone number", 'multivendorx' ),
                     value: 'show_store_description',
                 },
