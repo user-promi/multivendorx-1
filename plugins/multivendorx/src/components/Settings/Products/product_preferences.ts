@@ -45,7 +45,7 @@ export default {
                 {
                     key: 'general',
                     label: __( 'General', 'multivendorx' ),
-					desc: __( 'Enables name, description, and price.', 'multivendorx' ),
+					desc: __( 'Displays name, description, and price.', 'multivendorx' ),
                     value: 'general',
                 },
                 {
