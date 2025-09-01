@@ -1,6 +1,7 @@
 import { __ } from '@wordpress/i18n';
 export default {
     category: true,
+    tab:"modules",
     modules: [
         { type: 'separator', id: 'marketplace_types', label: 'Marketplace Types' },
         {
