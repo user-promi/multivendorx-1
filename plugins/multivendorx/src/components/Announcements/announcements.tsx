@@ -191,7 +191,6 @@ const Announcements: React.FC = () => {
                 tabTitle="Announcements"
                 buttons={[
                     <div
-                        key="add-rule"
                         className="admin-btn btn-purple"
                         onClick={() => setAddAnnouncements(true)}
                     >
@@ -255,7 +254,7 @@ const Announcements: React.FC = () => {
                                 </div>
                             </div>
                         <div className="popup-footer">
-                            <a href="" onClick={() => setAddAnnouncements(false)} className="admin-btn btn-red">Cancel</a>
+                            <div onClick={() => setAddAnnouncements(false)} className="admin-btn btn-red">Cancel</div>
                             <a href="" className="admin-btn btn-purple">Submit</a>
                         </div>
                     </div>

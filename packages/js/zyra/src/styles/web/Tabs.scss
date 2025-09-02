@@ -401,7 +401,7 @@
   color: #121116;
   line-height: 1.5;
   background-color: #fff;
-  padding: 0 2rem 2rem;
+  padding: 0 0 2rem;
 
   &.show-menu {
     .current-tab-lists {
@@ -431,7 +431,9 @@
       }
     }
   }
-
+  .container-wrapper{
+    padding: 0;
+  }
 }
 
 .middle-child-container:has(.current-tab-lists) {
