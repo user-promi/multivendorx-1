@@ -93,7 +93,10 @@ const MultiNumInput: React.FC<MultiNumInputProps> = ({
                             ? option.labelAfterInput
                             : labelAfterInput;
 
-                    const labelJSX = <div className="input-unit">{option.label}</div>;
+                    const labelJSX = option.label ? (
+                    <div className="input-unit">{option.label}</div>
+                    ) : null;
+
 
                     const inputJSX =
                         option.type === 'radio' && Array.isArray(option.options) ? (

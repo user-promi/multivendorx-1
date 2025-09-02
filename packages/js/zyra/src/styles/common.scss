@@ -1257,7 +1257,7 @@ input[type="checkbox"]:focus {
     gap: 1rem;
 
     .settings-basic-input-child-class {
-      width: 8rem;
+      width: 9rem;
 
       &.prefix .input-unit {
         border-right: 0.063rem solid #11141891;
@@ -1282,12 +1282,11 @@ input[type="checkbox"]:focus {
 
         input {
           width: 100%;
-          border: none !important;
-          /*overwrite common style*/
+          border: none !important; /*overwrite common style*/
+          padding: 0;
 
           &:focus {
-            box-shadow: none !important;
-            /*overwrite common style*/
+            box-shadow: none !important; /*overwrite common style*/
           }
         }
       }

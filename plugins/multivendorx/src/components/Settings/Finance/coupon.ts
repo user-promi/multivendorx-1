@@ -12,7 +12,7 @@ export default {
             key: 'commission_include_coupon',
             label: __( 'Who will bear the coupon cost', 'multivendorx' ),
             type: 'setting-toggle',
-            desc: __(<ul><li>'Stores - commission is calculated after the coupon is applied.Example: Product $100 – 20% coupon = $80 → Store earns 80% of $80 = $64'</li><li>Admin - Commission is calculated on the original price, admin covers the discount.Example: Product $100 – 20% coupon = $80 → Store earns 80% of $100 = $80</li></ul>,'multivendorx'),
+            desc: __('<ul><li>Stores - commission is calculated after the coupon is applied.Example: Product $100 – 20% coupon = $80 → Store earns 80% of $80 = $64</li><li>Admin - Commission is calculated on the original price, admin covers the discount.Example: Product $100 – 20% coupon = $80 → Store earns 80% of $100 = $80</li></ul>','multivendorx'),
             options: [
                 {
                     key: 'store_coupon',

@@ -13,7 +13,7 @@ export default {
         "Choose which payment integrations to enable for store payouts",
         'multivendorx'
     ),
-    icon: payPal,
+    icon: 'adminlib-rules',
     submitUrl: 'settings',
     wrapperClass: 'form-wrapper',
     modal: [

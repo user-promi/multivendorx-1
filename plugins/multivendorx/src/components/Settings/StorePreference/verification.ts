@@ -136,8 +136,7 @@ export default {
                                     formFields: [
                                         { key: 'client_id', type: 'text', label: 'Google Client ID', placeholder: 'Enter Google Client ID' },
                                         { key: 'client_secret', type: 'password', label: 'Google Client Secret', placeholder: 'Enter Google Client Secret' },
-                                        { key: 'redirect_uri', type: 'text', label: 'Redirect URI', placeholder: 'Enter Redirect URI' },
-                                        { key: 'enable', type: 'checkbox', label: 'Enable Google Connect' }
+                                        { key: 'redirect_uri', type: 'text', label: 'Redirect URI', placeholder: 'Enter Redirect URI' }
                                     ],
                                 },
                                 {
@@ -150,7 +149,6 @@ export default {
                                         { key: 'api_key', type: 'text', label: 'Twitter API Key', placeholder: 'Enter Twitter API Key' },
                                         { key: 'api_secret_key', type: 'password', label: 'Twitter API Secret Key', placeholder: 'Enter Twitter API Secret Key' },
                                         { key: 'bearer_token', type: 'text', label: 'Bearer Token', placeholder: 'Enter Bearer Token' },
-                                        { key: 'enable', type: 'checkbox', label: 'Enable Twitter Connect' }
                                     ],
                                 },
                                 {
@@ -162,7 +160,6 @@ export default {
                                     formFields: [
                                         { key: 'app_id', type: 'text', label: 'Facebook App ID', placeholder: 'Enter Facebook App ID' },
                                         { key: 'app_secret', type: 'password', label: 'Facebook App Secret', placeholder: 'Enter Facebook App Secret' },
-                                        { key: 'enable', type: 'checkbox', label: 'Enable Facebook Connect' }
                                     ],
                                 },
                                 {
@@ -175,7 +172,6 @@ export default {
                                         { key: 'client_id', type: 'text', label: 'LinkedIn Client ID', placeholder: 'Enter LinkedIn Client ID' },
                                         { key: 'client_secret', type: 'password', label: 'LinkedIn Client Secret', placeholder: 'Enter LinkedIn Client Secret' },
                                         { key: 'redirect_uri', type: 'text', label: 'Redirect URI', placeholder: 'Enter Redirect URI' },
-                                        { key: 'enable', type: 'checkbox', label: 'Enable LinkedIn Connect' }
                                     ],
                                 }
                             ]

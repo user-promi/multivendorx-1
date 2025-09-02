@@ -1,36 +1,139 @@
 @use '../config.scss' as *;
 
-.work-board{
-.row{
-    padding: 2rem 2rem 0;
+.work-board {
+    .row {
+        padding: 2rem 2rem 0;
+    }
+
+    .store-card {
+        padding-bottom: 1rem;
+    }
+
+    .cards {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+
+        .value {
+            font-size: 1.8rem;
+            line-height: 2.2rem;
+            font-weight: 600;
+        }
+
+        .name {
+            font-size: 1.1rem;
+        }
+    }
+
+    .title-wrapper {
+        padding: 1rem 2rem 0;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 0.625rem;
+
+        i {
+            font-size: 1.5rem;
+            color: $theme-color;
+        }
+    }
 }
-.store-card{
-    padding-bottom: 1rem;
-}
-.cards {
+
+// action start
+.action-card-wrapper {
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
     gap: 1rem;
 
-    .value {
-        font-size: 1.8rem;
-        line-height: 2.2rem;
-        font-weight: 600;
-    }
-    .name{
-        font-size: 1.1rem;
-    }
-}
-.title-wrapper{
-    padding: 1rem 2rem 0;
-    margin: 0;
-    display: flex;
-    align-items: center;
-    gap: 0.625rem;
+    .action {
+        width: 40%;
+        padding: 1rem;
+        border-radius: 0.313rem;
 
-    i{
-        font-size: 1.5rem;
-        color: $theme-color;
+        .title {
+            justify-content: space-between;
+            display: flex;
+            font-size: 2.5rem;
+            line-height: 2.5rem;
+            color: #000;
+            margin-bottom: 1.313rem;
+
+            i {
+                font-size: 1.5rem;
+            }
+        }
+
+        .description {
+            font-size: 1.125rem;
+            color: #000;
+            font-weight: 500;
+        }
+    }
+
+    .action:nth-child(1) {
+        background: #5007aa14;
+
+        i {
+            color: $theme-color;
+        }
+    }
+
+    .action:nth-child(2) {
+        background: #bfdeed;
+
+        i {
+            color: #003d66;
+        }
+    }
+
+    .action:nth-child(3) {
+        background: #d9f5f0;
+
+        i {
+            color: #06be9f;
+        }
+    }
+
+    .action:nth-child(4) {
+        background: #5007aa14;
+
+        i {
+            color: $theme-color;
+        }
     }
 }
+
+// action style end
+
+// tab system start
+.action-tab-wrapper {
+    .tab-titles {
+        display: flex;
+        gap: 1.125rem;
+
+        .title {
+            padding-bottom: 0.625rem;
+            cursor: pointer;
+
+            h2 {
+                color: #121116;
+                font-size: .938rem;
+                line-height: 1.5;
+                font-weight: 500;
+            }
+
+            &.active{
+                border-bottom: .126rem solid #5007aa;
+
+                h2{
+                    color: $theme-color;
+                }
+            }
+        }
+    }
+    .admin-table-wrapper{
+        margin: 0;
+    }
 }
+
+// tab system end

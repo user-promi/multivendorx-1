@@ -401,8 +401,10 @@
   color: #121116;
   line-height: 1.5;
   background-color: #fff;
-  padding: 0 0 2rem;
 
+  .current-tab-lists{
+    padding: 0 2rem;
+  }
   &.show-menu {
     .current-tab-lists {
       max-width: 4.125rem;
