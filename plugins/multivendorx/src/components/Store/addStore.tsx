@@ -5,7 +5,7 @@ import { __ } from '@wordpress/i18n';
 import { BasicInput, TextArea, FileInput, getApiLink, AdminBreadcrumbs } from 'zyra';
 import Default from '../../assets/images/default.png';
 import BannerDefault from '../../assets/images/banner-placeholder.jpg';
-import "./Store.scss";
+import "./store.scss";
 
 const AddStore = () => {
   const navigate = useNavigate();

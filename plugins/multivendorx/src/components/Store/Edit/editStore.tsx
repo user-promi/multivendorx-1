@@ -2,12 +2,12 @@ import { Link, useLocation } from 'react-router-dom';
 import { Tabs } from 'zyra';
 import Brand from '../../../assets/images/brand-logo.png';
 import BrandSmall from '../../../assets/images/brand-icon.png';
-import StoreSettings from './StoreSettings';
+import StoreSettings from './storeSettings';
 
-import PaymentSettings from './PaymentSettings';
-import StoreQueue from './StoreCrew';
-import PolicySettings from './PolicySettings';
-import ShippingSettings from './ShippingSettings';
+import PaymentSettings from './paymentSettings';
+import StoreQueue from './storeCrew';
+import PolicySettings from './policySettings';
+import ShippingSettings from './shippingSettings';
 
 const EditStore = () => {
     const location = useLocation();
