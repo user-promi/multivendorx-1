@@ -69,6 +69,11 @@ const AddStore = () => {
             label: 'View All Store',
             onClick: () => window.location.assign('?page=multivendorx#&tab=stores'),
             className: 'admin-btn btn-purple'
+          },
+          {
+            label: 'Submit',
+            onClick: () => handleSubmit(),
+            className: 'admin-btn btn-purple'
           }
         ]}
       />
@@ -126,11 +131,11 @@ const AddStore = () => {
               </div>
             </div>
           </div>
-
+{/* 
           <button
             className="admin-btn btn-purple"
             onClick={handleSubmit}
-          >Submit</button>
+          >Submit</button> */}
         </div>
 
         <div className="card-wrapper width-35">

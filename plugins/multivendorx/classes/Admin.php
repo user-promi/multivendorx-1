@@ -155,12 +155,13 @@ class Admin {
                 }
 
                 $menu_name = $submenu['name'];
-                if ( isset( $submenu['count'] ) && $submenu['count'] > 0 ) {
-                    $menu_name = "<span class='update-plugins count-" . intval( $submenu['count'] ) . "' style='margin-right:5px;'>" .
-                                    "<span class='plugin-count'>" . intval( $submenu['count'] ) . "</span>" .
-                                 "</span> " . $menu_name;
-                }
 
+                if ( isset( $submenu['count'] ) && $submenu['count'] > 0 ) {
+                    $menu_name = $menu_name . " <span class='update-plugins count-" . intval( $submenu['count'] ) . "' style='margin-left:5px;'>
+                                    <span class='plugin-count'>" . intval( $submenu['count'] ) . "</span>
+                                 </span>";
+                }
+                
                 add_submenu_page(
                     'multivendorx',
                     $submenu['name'],
@@ -169,6 +170,7 @@ class Admin {
                     'multivendorx#&tab=' . $slug . $subtab,
                     '__return_null'
                 );
+                
 
             }
 
