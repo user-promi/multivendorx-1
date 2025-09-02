@@ -30,24 +30,37 @@
         }
 
         .title-wrapper {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
             padding: 1.313rem;
             border-bottom: $border-light-small;
+            position: relative;
 
             .title {
                 font-size: 1.313rem;
                 color: #000;
+
+                i{
+                    color: $theme-color;
+                    font-size: 1.625rem;
+                    margin-right: 0.5rem;
+                }
+            }
+            p{
+                font-size: 0.85rem;
+                margin: 0;
+                padding-top: 0.125rem;
+                font-weight: 400;
             }
 
             .icon {
+                position: absolute;
                 background: #fde8e4;
                 padding: 0.125rem;
                 font-size: 0.95rem;
                 color: #f06b4f;
                 border-radius: 50%;
                 cursor: pointer;
+                top: 40%;
+                right: 1.313rem;
             }
         }
 

@@ -206,8 +206,10 @@ const Announcements: React.FC = () => {
                     <div className={`content-wrapper ${addAnnouncements ? "open" : ""}`}>
                         <div className="title-wrapper">
                                 <div className="title">
+                                    <i className="adminlib-cart"></i>
                                     Add Announcements
                                 </div>
+                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
                                 <i onClick={() => setAddAnnouncements(false)} className="icon adminlib-close"></i>
                             </div>
                             
