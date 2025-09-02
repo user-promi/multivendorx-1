@@ -2,13 +2,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
-import { Table, getApiLink, TableCell, AdminBreadcrumbs } from 'zyra';
+import { Table, getApiLink, TableCell, AdminBreadcrumbs, BasicInput, TextArea } from 'zyra';
 import {
     ColumnDef,
     RowSelectionState,
     PaginationState,
 } from '@tanstack/react-table';
-
+import "./announcements.scss";
 type StoreRow = {
     id?: number;
     store_name?: string;
@@ -19,6 +19,7 @@ type StoreRow = {
 const Announcements: React.FC = () => {
 
     const [data, setData] = useState<StoreRow[] | null>(null);
+    const [addAnnouncements, setAddAnnouncements] = useState(false);
 
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
     const [totalRows, setTotalRows] = useState<number>(0);
@@ -188,7 +189,77 @@ const Announcements: React.FC = () => {
             <AdminBreadcrumbs
                 activeTabIcon="adminlib-cart"
                 tabTitle="Announcements"
+                buttons={[
+                    <div
+                        className="admin-btn btn-purple"
+                        onClick={() => setAddAnnouncements(true)}
+                    >
+                        <i className="adminlib-plus-circle-o"></i>
+                        Add New
+                    </div>
+                ]}
             />
+
+            {addAnnouncements && (
+                <div className="right-popup">
+                    <div className={`content-wrapper ${addAnnouncements ? "open" : ""}`}>
+                        <div className="title-wrapper">
+                                <div className="title">
+                                    <i className="adminlib-cart"></i>
+                                    Add Announcements
+                                </div>
+                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                                <i onClick={() => setAddAnnouncements(false)} className="icon adminlib-close"></i>
+                            </div>
+                            
+                            <div className="content">
+                                <div className="form-group-wrapper">
+                                    <div className="form-group">
+                                        <label htmlFor="product-name">Title</label>
+                                        <BasicInput
+                                            type="text"
+                                            name="name"
+                                            // value={formData.name}
+                                            // onChange={handleChange}
+
+                                        />
+                                    </div>
+                                    <div className="form-group">
+                                        <label htmlFor="product-name">Enter Url</label>
+                                        <BasicInput
+                                            type="text"
+                                            name="name"
+                                            // value={formData.name}
+                                            // onChange={handleChange}
+                                        />
+                                    </div>
+                                    <div className="form-group">
+                                        <label htmlFor="product-name">Enter Content</label>
+                                        <TextArea
+                                        name="description"
+                                        inputClass="textarea-input"
+                                        // value={formData.description}
+                                        // onChange={handleChange}
+                                        />
+                                    </div>
+                                    <div className="form-group">
+                                        <label htmlFor="product-name">Vendors</label>
+                                        <TextArea
+                                        name="description"
+                                        inputClass="textarea-input"
+                                        // value={formData.description}
+                                        // onChange={handleChange}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        <div className="popup-footer">
+                            <div onClick={() => setAddAnnouncements(false)} className="admin-btn btn-red">Cancel</div>
+                            <a href="" className="admin-btn btn-purple">Submit</a>
+                        </div>
+                    </div>
+                </div>
+            )}
             <div className="admin-table-wrapper">
                 <Table
                     data={data}
