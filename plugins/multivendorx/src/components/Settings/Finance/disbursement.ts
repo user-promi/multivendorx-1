@@ -96,7 +96,34 @@ export default {
                 },
             ],
         },
-       
+       {
+            key: 'commission_threshold_time',
+            label: __('Lock period', 'multivendorx'),
+            desc: __(
+                  'If enabled, vendor’s net earning will include both commission and shipping fees.','multivendorx'),
+            type: 'checkbox',
+            options: [
+                {
+                    key: 'commission_percentage',
+                    value: 'give_shipping',
+                },
+            ],
+            look: 'toggle',
+        },
+		{
+            key: 'payout_threshold_time',
+            label: __('Minimum payout threshold', 'multivendorx'),
+            desc: __(
+                  'If enabled, vendor’s net earning will include both commission and shipping fees.','multivendorx'),
+            type: 'checkbox',
+            options: [
+                {
+                    key: 'commission_percentage',
+                    value: 'give_shipping',
+                },
+            ],
+            look: 'toggle',
+        },
         {
             key: 'separator_content',
             type: 'section',
@@ -109,32 +136,7 @@ export default {
             single: true,
             label: 'Withdrawal rules',
             nestedFields: [
-               {
-                    key: 'commission_threshold_time',
-                    type: 'multi-number',
-                    label: __('Lock period', 'multivendorx'),
-                    options: [
-                        {
-                            key: 'commission_percentage',
-                            label: __('Days', 'multivendorx'),
-                            type: 'number',
-                            labelAfterInput: true,
-                        },
-                    ],
-                },
-				{
-                    key: 'payout_threshold_time',
-                    type: 'multi-number',
-                    label: __('Minimum payout threshold', 'multivendorx'),
-                    options: [
-                        {
-                            key: 'commission_percentage',
-                            label: __('Days', 'multivendorx'),
-                            type: 'number',
-                            labelAfterInput: true,
-                        },
-                    ],
-                },
+              
                 {
                     key: 'commission_threshold_time',
                     type: 'multi-number',
