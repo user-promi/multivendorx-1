@@ -4,10 +4,7 @@ export default {
     id: 'privacy-settings',
     priority: 6,
     name: __( 'Privacy', 'multivendorx' ),
-    desc: __(
-        'Manage what customers can see about your stores.',
-        'multivendorx'
-    ),
+    desc: __('Manage what customers can see about your stores.','multivendorx'),
     icon: 'adminlib-storefront',
     submitUrl: 'settings',
     modal: [ 
@@ -57,16 +54,19 @@ export default {
                 {
                     key: 'show_store_owner_info',
                     label: __( 'Business address', 'multivendorx' ),
+					desc: __('Make the store’s physical location available.','multivendorx'),
                     value: 'show_store_owner_info',
                 },
                 {
                     key: 'show_store_description',
                     label: __( 'Phone number', 'multivendorx' ),
+					desc: __('Provide a direct contact number.','multivendorx'),
                     value: 'show_store_description',
                 },
                 {
                     key: 'show_store_description',
                     label: __( 'Email address', 'multivendorx' ),
+					desc: __('Offer an email for customer queries.','multivendorx'),
                     value: 'show_store_description',
                 },
                 
@@ -94,7 +94,7 @@ export default {
             key: 'store_policy_override',
             type: 'checkbox',
             label: __( 'Store policy override', 'multivendorx' ),
-            settingDescription: __( 'Allow stores to set their own policies instead of using the default admin policies.', 'multivendorx' ),
+            settingDescription: __( 'Give stores the option to create their own policies instead of using marketplace defaults.', 'multivendorx' ),
             class: 'mvx-toggle-checkbox',
             options: [
                 {
@@ -118,7 +118,7 @@ export default {
         {
             key: 'separator_store_policy_override',
             type: 'section',
-            desc: __( 'Allow store owners to temporarily disable their profile, hiding it and its products from the marketplace.', 'multivendorx' ),
+            desc: __( 'Store owners can temporarily disable their profile, hiding it and its products from the marketplace.', 'multivendorx' ),
             hint: __(
                 'Store profile controls',
                 'multivendorx'
@@ -128,7 +128,7 @@ export default {
             key: 'enable_profile_deactivation_request',
             type: 'checkbox',
             label: __( 'Store profile deactivation requests', 'multivendorx' ),
-			desc: __( 'Allow store owners to submit requests for temporary store hiding. <br><b>Note</b>: When a store is deactivated, both the store page and all its products become invisible to customers until the store is reactivated by an administrator. If a store is permanently deleted by admin, the admin can decide whether to allocate all the products to another store or take ownership of them.', 'multivendorx' ),
+			desc: __( 'Store owners will submit requests for temporary store hiding. <br><b>Note</b>: When a store is deactivated, both the store page and all its products become invisible to customers until the store is reactivated by an administrator. If a store is permanently deleted by admin, the admin can decide whether to allocate all the products to another store or take ownership of them.', 'multivendorx' ),
             options: [
                 {
                     key: 'enable_profile_deactivation_request',
