@@ -5,7 +5,7 @@ export default {
     priority: 6,
     name: __( 'Privacy', 'multivendorx' ),
     desc: __(
-        'Control what customers see about your stores',
+        'Manage what customers can see about your stores.',
         'multivendorx'
     ),
     icon: 'adminlib-storefront',
@@ -15,32 +15,32 @@ export default {
             key: 'store_page_details',
             type: 'checkbox',
             label: __( 'Store branding', 'multivendorx' ),
-            settingDescription: __( 'Control what store information is displayed on product listings and detail pages.', 'multivendorx' ),
+            settingDescription: __( 'Decide which details appear with products and on store pages.', 'multivendorx' ),
             class: 'mvx-toggle-checkbox',
             options: [
                 {
                     key: 'show_store_name_on_products',
                     label: __( 'Name', 'multivendorx' ),
-                    desc: __( 'Display store name on product listings, archive page and chekout/cart pages.', 'multivendorx' ),
+                    desc: __( 'Include the store name on product listings, archive, checkout, and cart pages.', 'multivendorx' ),
                     value: 'show_store_owner_info',
                 },
                 {
                     key: 'show_store_logo_next_to_products',
                     label: __( 'Logo', 'multivendorx' ),
-                    desc: __( 'Store logo will be displayed alongside product information', 'multivendorx' ),
+                    desc: __( 'Place the store logo alongside product details.', 'multivendorx' ),
                     value: 'show_store_description',
                 },
 				
 				{
                     key: 'show_store_description',
                     label: __( 'Store description', 'multivendorx' ),
-					desc: __( 'Store description is displayed on store and product pages. ', 'multivendorx' ),
+					desc: __( 'Present a short store bio on product and store pages.', 'multivendorx' ),
                     value: 'show_store_description',
                 },
                 {
                     key: 'show_store_ratings',
                     label: __( 'Store ratings', 'multivendorx' ),
-					desc: __( 'Display customer ratings and reviews in the store page and below the product page', 'multivendorx' ),
+					desc: __( 'Highlight customer feedback on store and product pages.', 'multivendorx' ),
                     value: 'show_store_ratings',
                 },
                                 
@@ -51,7 +51,7 @@ export default {
             key: 'store_page_details',
             type: 'checkbox',
             label: __( 'Store contact informations', 'multivendorx' ),
-            settingDescription: __( 'Control which store contact details are visible to customers.', 'multivendorx' ),
+            settingDescription: __( 'Choose the contact details visible to customers.', 'multivendorx' ),
             class: 'mvx-toggle-checkbox',
             options: [
                 {
