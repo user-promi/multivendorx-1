@@ -246,6 +246,25 @@ const PaymentSettings = ({ id }: { id: string }) => {
 
 					</div>
 				</div>
+				
+				<div className="card-wrapper width-35">
+					<div className="card-content">
+						<div className="card-title">
+							Commission
+						</div>
+
+						<div className="form-group">
+							<label htmlFor="product-name">Fixed</label>
+							<BasicInput name="commission_fixed" wrapperClass="setting-form-input" descClass="settings-metabox-description" value={formData.commission_fixed} onChange={handleChange} />
+						</div>
+
+						<div className="form-group">
+							<label htmlFor="product-name">Percentage</label>
+							<BasicInput name="commission_percentage" wrapperClass="setting-form-input" descClass="settings-metabox-description" value={formData.commission_percentage} onChange={handleChange} />
+						</div>
+
+					</div>
+				</div>
 			</div>
 		</>
 	);
