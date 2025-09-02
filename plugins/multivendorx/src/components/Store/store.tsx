@@ -1,8 +1,8 @@
 import { Link, useLocation } from 'react-router-dom';
-import AddStore from './AddStore';
-import StoreTable from './StoreTable';
-import ViewStore from './ViewStore';
-import EditStore from './Edit/EditStore';
+import AddStore from './addStore';
+import StoreTable from './storeTable';
+import ViewStore from './viewStore';
+import EditStore from './Edit/editStore';
 import {AdminBreadcrumbs} from 'zyra';
 
 const Store = () => {
