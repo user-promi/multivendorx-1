@@ -4,6 +4,7 @@ export default {
     tab:"modules",
     modules: [
         { type: 'separator', id: 'marketplace_types', label: 'Marketplace Types' },
+
         {
             id: 'simple',
             name: __('Simple (Downloadable & Virtual)', 'multivendorx'),
@@ -156,6 +157,7 @@ export default {
             pro_module: true,
             category: 'store_management'
         },
+        { type: 'separator', id: 'inventory_control', label: 'Inventory Control' },
         {
             id: 'store-inventory',
             name: __('Store Inventory', 'multivendorx'),
@@ -176,6 +178,7 @@ export default {
             pro_module: false,
             category: 'inventory_control'
         },
+        { type: 'separator', id: 'payment_management', label: 'Payment Management' },
         {
             id: 'bank-payment',
             name: __('Bank Transfer', 'multivendorx'),
@@ -256,6 +259,7 @@ export default {
             pro_module: false,
             category: 'payment_management'
         },
+        { type: 'separator', id: 'shipping_management', label: 'Shipping Management' },
         {
             id: 'zone-shipping',
             name: __('Zone-Wise Shipping', 'multivendorx'),
@@ -306,6 +310,7 @@ export default {
             pro_module: true,
             category: 'shipping_management'
         },
+        { type: 'separator', id: 'customer_experience', label: 'Customer Experience' },
         {
             id: 'invoice',
             name: __('Invoice & Packing slip', 'multivendorx'),
@@ -325,7 +330,7 @@ export default {
             //settings_link: admin_url('admin.php?page=mvx#&submenu=settings&name=refund-management'),
             pro_module: false,
             category: 'customer_experience'
-        },
+        },        
         {
             id: 'store-location',
             name: __('Store Location', 'multivendorx'),
@@ -376,6 +381,7 @@ export default {
             pro_module: true,
             category: 'store_management'
         },
+        { type: 'separator', id: 'integration', label: 'Integration' },
         {
             id: 'mvx-blocks',
             name: __('Gutenberg Blocks', 'multivendorx'),
@@ -386,6 +392,7 @@ export default {
             pro_module: false,
             category: 'integration'
         },
+        { type: 'separator', id: 'marketing_tools', label: 'Marketing Tools' },
         {
             id: 'advertisement',
             name: __('Advertise Product', 'multivendorx'),

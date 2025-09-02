@@ -57,7 +57,37 @@ export default {
                 },
             ],
         },
+       {
+            key: 'commission_threshold_time',
+            label: __('Lock period', 'multivendorx'),
+            desc: __(
+                  'If enabled, vendor’s net earning will include both commission and shipping fees.','multivendorx'),
+            type: 'multi-number',
+            options: [
+                {
+                    key: 'commission_percentage',
+                    label: __('Day', 'multivendorx'),
+                    type: 'number',
+                    labelAfterInput: true,
+                },
+            ],
+        },
 		{
+            key: 'payout_threshold_time',
+            label: __('Minimum payout threshold', 'multivendorx'),
+            desc: __(
+                  'If enabled, vendor’s net earning will include both commission and shipping fees.','multivendorx'),
+            type: 'multi-number',
+            options: [
+                {
+                    key: 'commission_percentage',
+                    label: __('$', 'multivendorx'),
+                    type: 'number',
+                    labelAfterInput: false,
+                },
+            ],
+        },
+        {
             key: 'payment_schedule',
             type: 'setting-toggle',
             label: __('Scheduler', 'multivendorx'),
@@ -95,34 +125,6 @@ export default {
                     value: 'hourly',
                 },
             ],
-        },
-       {
-            key: 'commission_threshold_time',
-            label: __('Lock period', 'multivendorx'),
-            desc: __(
-                  'If enabled, vendor’s net earning will include both commission and shipping fees.','multivendorx'),
-            type: 'checkbox',
-            options: [
-                {
-                    key: 'commission_percentage',
-                    value: 'give_shipping',
-                },
-            ],
-            look: 'toggle',
-        },
-		{
-            key: 'payout_threshold_time',
-            label: __('Minimum payout threshold', 'multivendorx'),
-            desc: __(
-                  'If enabled, vendor’s net earning will include both commission and shipping fees.','multivendorx'),
-            type: 'checkbox',
-            options: [
-                {
-                    key: 'commission_percentage',
-                    value: 'give_shipping',
-                },
-            ],
-            look: 'toggle',
         },
         {
             key: 'separator_content',

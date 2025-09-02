@@ -8,7 +8,7 @@ export default {
         "Tailor your marketplace commission plan to decide how much revenue stores earn from each sale.",
         'multivendorx'
     ),
-    icon: 'adminlib-dynamic-pricing',
+    icon: 'adminlib-rules',
     submitUrl: 'settings',
     modal: [
         {
@@ -129,17 +129,8 @@ export default {
                             type: 'number',
                             labelAfterInput: false,
                             desc: __( 'Fixed amount per transaction', 'multivendorx' ),
-                        },
-                        {
-                            key: 'commission_percentage',
-                            label: __('%', 'multivendorx'),
-                            type: 'number',
-                            labelAfterInput: true,
-                            desc: __(
-                                'Percentage of product price per transaction',
-                                'multivendorx'
-                            ),
-                        },
+                            before: 'ababbb'
+                        }
                     ],
                 },
                 {
@@ -152,6 +143,10 @@ export default {
                             label: __('%', 'multivendorx'),
                             type: 'number',
                             labelAfterInput: true,
+                            desc: __(
+                                'Percentage of product price per transaction',
+                                'multivendorx'
+                            ),
                         },
                     ],
                 },

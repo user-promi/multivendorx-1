@@ -5,7 +5,7 @@ export default {
     priority: 2,
     name: __( 'Reviews and Ratings', 'multivendorx' ),
     desc: __( 'Manage product and store review settings.', 'multivendorx' ),
-    icon: 'adminlib-settings',
+    icon: 'adminlib-setting',
     submitUrl: 'settings',
     modal: [
         {
