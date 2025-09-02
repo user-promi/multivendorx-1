@@ -8,10 +8,59 @@ export default {
     icon: 'adminlib-dynamic-pricing',
     submitUrl: 'settings',
     modal: [
-        {
+          {
+            key: 'order_status',
+            type: 'checkbox',
+            label: __('Eligible order statuses', 'multivendorx'),
+            class: 'mvx-toggle-checkbox',
+
+            options: [
+                {
+                    key: 'completed',
+                    label: __('Completed', 'multivendorx'),
+                    value: 'completed',
+                },
+                {
+                    key: ' delivered ',
+                    label: __('Delivered', 'multivendorx'),
+                    value: ' delivered ',
+                },
+                {
+                    key: 'shipped',
+                    label: __('Shipped', 'multivendorx'),
+                    value: 'shipped',
+                },
+                {
+                    key: ' processing ',
+                    label: __('Processing', 'multivendorx'),
+                    value: ' processing ',
+                },
+            ],
+            selectDeselect: true,
+        },
+		{
+            key: 'payment_method',
+            type: 'setting-toggle',
+            label: __('Payout Method', 'multivendorx'),
+			settingDescription: __("Select the frequency at which store commissions are automatically transferred from the admin account via PayPal Payouts, PayPal MassPay, or Stripe.",'multivendorx'),
+             desc: __("<ul><li>Manual – Payments are not scheduled automatically. The admin can pay vendors manually or vendors can request withdrawals.</li><li>Automatic (Hourly, Daily, Weekly, Fortnightly, Monthly) – Earnings are transferred automatically from the admin account to vendor accounts at the selected interval.</li></ul>",'multivendorx'),
+            options: [
+                {
+                    key: 'instantly',
+                    label: __('Instantly', 'multivendorx'),
+                    value: 'instantly',
+                },
+                {
+                    key: 'waitting',
+                    label: __('Waitting', 'multivendorx'),
+                    value: 'waitting',
+                },
+            ],
+        },
+		{
             key: 'payment_schedule',
             type: 'setting-toggle',
-            label: __('Payout frequency', 'multivendorx'),
+            label: __('Scheduler', 'multivendorx'),
 			settingDescription: __("Select the frequency at which store commissions are automatically transferred from the admin account via PayPal Payouts, PayPal MassPay, or Stripe.",'multivendorx'),
              desc: __("<ul><li>Manual – Payments are not scheduled automatically. The admin can pay vendors manually or vendors can request withdrawals.</li><li>Automatic (Hourly, Daily, Weekly, Fortnightly, Monthly) – Earnings are transferred automatically from the admin account to vendor accounts at the selected interval.</li></ul>",'multivendorx'),
             options: [
@@ -47,21 +96,7 @@ export default {
                 },
             ],
         },
-        {
-            key: 'commission_threshold',
-            type: 'multi-number',
-            label: __('Minimum payout threshold', 'multivendorx'),
-            settingDescription: __('Stores can only request a manual payout once their pending commission reaches this minimum amount.Example: If the threshold is set to $100, a store can request payout only after its total commission reaches $100.',
-                'multivendorx'
-            ),
-            options: [
-                {
-                    key: 'commission_percentage',
-                    type: 'number',
-                    labelAfterInput: true,
-                },
-            ],
-        },
+       
         {
             key: 'separator_content',
             type: 'section',
@@ -74,10 +109,23 @@ export default {
             single: true,
             label: 'Withdrawal rules',
             nestedFields: [
-                {
+               {
                     key: 'commission_threshold_time',
                     type: 'multi-number',
                     label: __('Lock period', 'multivendorx'),
+                    options: [
+                        {
+                            key: 'commission_percentage',
+                            label: __('Days', 'multivendorx'),
+                            type: 'number',
+                            labelAfterInput: true,
+                        },
+                    ],
+                },
+				{
+                    key: 'payout_threshold_time',
+                    type: 'multi-number',
+                    label: __('Minimum payout threshold', 'multivendorx'),
                     options: [
                         {
                             key: 'commission_percentage',
@@ -111,35 +159,6 @@ export default {
                 },
             ],
         },
-        {
-            key: 'order_status',
-            type: 'checkbox',
-            label: __('Eligible order statuses', 'multivendorx'),
-            class: 'mvx-toggle-checkbox',
-
-            options: [
-                {
-                    key: 'completed',
-                    label: __('Completed', 'multivendorx'),
-                    value: 'completed',
-                },
-                {
-                    key: ' delivered ',
-                    label: __('Delivered', 'multivendorx'),
-                    value: ' delivered ',
-                },
-                {
-                    key: 'shipped',
-                    label: __('Shipped', 'multivendorx'),
-                    value: 'shipped',
-                },
-                {
-                    key: ' processing ',
-                    label: __('Processing', 'multivendorx'),
-                    value: ' processing ',
-                },
-            ],
-            selectDeselect: true,
-        },
+      
     ],
 };
