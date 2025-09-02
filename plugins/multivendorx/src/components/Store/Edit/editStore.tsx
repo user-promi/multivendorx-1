@@ -8,6 +8,7 @@ import PaymentSettings from './paymentSettings';
 import StoreQueue from './storeCrew';
 import PolicySettings from './policySettings';
 import ShippingSettings from './shippingSettings';
+import StoreRegistration from './storeRegistrationForm';
 
 const EditStore = () => {
     const location = useLocation();
@@ -67,6 +68,15 @@ const EditStore = () => {
                 icon: 'adminlib-credit-card',
             },
         },
+        {
+            type: 'file',
+            content: {
+                id: 'store-application',
+                name: 'Vendor Application',
+                desc: 'Vendor Application',
+                icon: 'adminlib-credit-card',
+            },
+        },
     ];
 
     const getForm = (tabId: string) => {
@@ -81,6 +91,8 @@ const EditStore = () => {
                 return <ShippingSettings id={editId} />;
             case 'store-policy':
                 return <PolicySettings id={editId} />;
+            case 'store-application':
+                return <StoreRegistration id={editId} />;
             default:
                 return <div></div>;
         }
