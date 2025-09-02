@@ -11,15 +11,18 @@ export default {
         {
             key: 'commission_include_coupon',
             label: __( 'Who will bear the coupon cost', 'multivendorx' ),
-            type: 'checkbox',
-            desc: __(
-                'Tap to let the stores bear the coupon discount charges of the coupons created by them',
-                'multivendorx'
-            ),
+            type: 'setting-toggle',
+            desc: __(<ul><li>'Stores - commission is calculated after the coupon is applied.Example: Product $100 – 20% coupon = $80 → Store earns 80% of $80 = $64'</li><li>Admin - Commission is calculated on the original price, admin covers the discount.Example: Product $100 – 20% coupon = $80 → Store earns 80% of $100 = $80</li></ul>,'multivendorx'),
             options: [
                 {
-                    key: 'commission_include_coupon',
+                    key: 'store_coupon',
+					label: __('Stores', 'multivendorx'),
                     value: 'commission_include_coupon',
+                },
+				{
+                    key: 'admin_coupon',
+                    label: __('Admin', 'multivendorx'),
+                    value: 'mannual',
                 },
             ],
             look: 'toggle',
