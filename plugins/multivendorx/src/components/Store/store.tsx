@@ -29,13 +29,11 @@ const Store = () => {
                 activeTabIcon="adminlib-cart"
                 tabTitle="Stores"
                 buttons={[
-                    <div
-                        className="admin-btn btn-purple"
-                        onClick={() => setaddStore(true)}
-                    >
-                        <i className="adminlib-plus-circle-o"></i>
-                        Add Store
-                    </div>
+                    {
+                      label: 'Add Store',
+                      onClick: () => window.location.assign('?page=multivendorx#&tab=stores&create'),
+                      className: 'admin-btn btn-purple'
+                    }
                 ]}
             />
             {addStore && (
