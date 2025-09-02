@@ -615,6 +615,24 @@ export default {
             //settings_link: appLocalizer.site_url,
             pro_module: true,
             category: 'engagement'
-        }
-    ]
+        },
+		{
+    id: 'facilitator',
+    name: __('Facilitator', 'multivendorx'),
+    desc: "Share commission on a sale between the store and another designated user. Each participant receives their assigned portion automatically.",
+    icon: 'adminlib-dynamic-pricing',
+    doc_link: 'https://multivendorx.com/docs/knowledgebase/facilitator',
+    pro_module: true,
+    category: 'payment_management'
+},
+{
+    id: 'privacy',
+    name: __('Privacy', 'multivendorx'),
+    desc: "Hide sensitive store information from customers, including contact details, location, or other specified data.",
+    icon: 'adminlib-dynamic-pricing',
+    doc_link: 'https://multivendorx.com/docs/knowledgebase/privacy',
+    pro_module: true,
+    category: 'store_management'
+}
+]
 }
