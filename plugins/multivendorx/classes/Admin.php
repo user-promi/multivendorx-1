@@ -7,6 +7,7 @@
 
 namespace MultiVendorX;
 use MultiVendorX\Store\Store;
+use MultiVendorX\Commission\CommissionUtil;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -81,6 +82,7 @@ class Admin {
                 "
             > Pro </span>' : '';
 
+            $commission_count = CommissionUtil::get_commissions(['paid_status' => 'unpaid'], true, true);
             // Array contain multivendorx submenu.
             $submenus = array(
                 'dashboard' => array(
@@ -102,7 +104,7 @@ class Admin {
                 'commissions' => array(
                     'name'   => __( 'Commissions', 'multivendorx' ),
                     'subtab' => '',
-                    'count'  => 2,
+                    'count'  => $commission_count,
                 ),
                 'analytics' => array(
                     'name'   => __( 'Analytics', 'multivendorx' ),
