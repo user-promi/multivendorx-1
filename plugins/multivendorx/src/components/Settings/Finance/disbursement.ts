@@ -12,6 +12,7 @@ export default {
             key: 'order_status',
             type: 'checkbox',
             label: __('Eligible order statuses', 'multivendorx'),
+			settingDescription: __("Choose which order statuses qualify for commission payouts.",'multivendorx'),
             class: 'mvx-toggle-checkbox',
 
             options: [
@@ -42,8 +43,8 @@ export default {
             key: 'payment_method',
             type: 'setting-toggle',
             label: __('Payout Method', 'multivendorx'),
-			settingDescription: __("Select the frequency at which store commissions are automatically transferred from the admin account via PayPal Payouts, PayPal MassPay, or Stripe.",'multivendorx'),
-             desc: __("<ul><li>Manual – Payments are not scheduled automatically. The admin can pay vendors manually or vendors can request withdrawals.</li><li>Automatic (Hourly, Daily, Weekly, Fortnightly, Monthly) – Earnings are transferred automatically from the admin account to vendor accounts at the selected interval.</li></ul>",'multivendorx'),
+			settingDescription: __("Select how commissions are released from the admin account",'multivendorx'),
+             desc: __("<ul><li>Instant – Earnings are transferred immediately once an order becomes eligible.</li><li>Waiting – Hold payouts until conditions set by the admin are met.</li></ul>",'multivendorx'),
             options: [
                 {
                     key: 'instantly',
@@ -61,7 +62,7 @@ export default {
             key: 'commission_threshold_time',
             label: __('Lock period', 'multivendorx'),
             desc: __(
-                  'If enabled, vendor’s net earning will include both commission and shipping fees.','multivendorx'),
+                  'Set a waiting period before commissions become eligible for payout. Helps account for refunds, cancellations, or disputes.','multivendorx'),
             type: 'multi-number',
             options: [
                 {
@@ -76,7 +77,7 @@ export default {
             key: 'payout_threshold_time',
             label: __('Minimum payout threshold', 'multivendorx'),
             desc: __(
-                  'If enabled, vendor’s net earning will include both commission and shipping fees.','multivendorx'),
+                  'Define the minimum amount a store must accumulate before payouts are processed.','multivendorx'),
             type: 'multi-number',
             options: [
                 {
@@ -90,9 +91,9 @@ export default {
         {
             key: 'payment_schedule',
             type: 'setting-toggle',
-            label: __('Scheduler', 'multivendorx'),
-			settingDescription: __("Select the frequency at which store commissions are automatically transferred from the admin account via PayPal Payouts, PayPal MassPay, or Stripe.",'multivendorx'),
-             desc: __("<ul><li>Manual – Payments are not scheduled automatically. The admin can pay vendors manually or vendors can request withdrawals.</li><li>Automatic (Hourly, Daily, Weekly, Fortnightly, Monthly) – Earnings are transferred automatically from the admin account to vendor accounts at the selected interval.</li></ul>",'multivendorx'),
+            label: __('Payout frequency', 'multivendorx'),
+			settingDescription: __("Decide how often store commissions are released:",'multivendorx'),
+             desc: __("<ul><li>If Manual is selected, stores handle withdrawals themselves from their dashboard.</li><li>Otherwise, commissions are automatically disbursed to stores based on the chosen schedule.</li></ul>",'multivendorx'),
             options: [
                 {
                     key: 'mannual',
@@ -127,41 +128,47 @@ export default {
             ],
         },
         {
-            key: 'separator_content',
-            type: 'section',
-            hint: __('Payout timing and eligibility', 'multivendorx'),
-            desc: __('Define when earnings become available for payout based on order status', 'multivendorx')
-        },
-        {
-            key: 'commission_by_product_price',
-            type: 'nested',
-            single: true,
-            label: 'Withdrawal rules',
-            nestedFields: [
-              
+            key: 'commission_threshold_time',
+            label: __('Free withdrawal', 'multivendorx'),
+            desc: __('','multivendorx'),
+            type: 'multi-number',
+            options: [
                 {
-                    key: 'commission_threshold_time',
-                    type: 'multi-number',
-                    label: __('Free withdrawal', 'multivendorx'),
-                    options: [
-                        {
-                            key: 'commission_percentage',
-                            type: 'number',
-                        },
-                    ],
-                },
-                {
-                    key: 'commission_threshold_time',
-                    type: 'multi-number',
-                    label: __('Processing fee', 'multivendorx'),
-                    options: [
-                        {
-                            key: 'commission_percentage',
-                            type: 'number',
-                        },
-                    ],
+                    key: 'commission_percentage',
+                    label: __('$', 'multivendorx'),
+                    type: 'number',
+                    labelAfterInput: false,
                 },
             ],
+        },
+		{
+            key: 'commission_threshold_time',
+            label: __('Free withdrawal', 'multivendorx'),
+            desc: __('','multivendorx'),
+            type: 'multi-number',
+            options: [
+                {
+                    key: 'commission_percentage',
+                    type: 'number',
+                    labelAfterInput: false,
+                },
+            ],
+        },
+		{
+         key: 'commission_threshold_time',
+        type: 'multi-number',
+        label: __('Processing fee', 'multivendorx'),
+		desc: __('','multivendorx'),
+        options: [
+        {
+        key: 'commission_percentage',
+		label: __('$', 'multivendorx'),
+        type: 'number',
+		labelAfterInput: false,
+        },
+        ],
+        },
+      ],
         },
       
     ],
