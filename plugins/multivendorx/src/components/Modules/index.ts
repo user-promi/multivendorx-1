@@ -4,53 +4,11 @@ export default {
     tab:"modules",
     modules: [
         { type: 'separator', id: 'marketplace_types', label: 'Marketplace Types' },
-
-        {
-            id: 'simple',
-            name: __('Simple (Downloadable & Virtual)', 'multivendorx'),
-            desc: "Covers basic products such as physical goods (books, clothing) or digital items (PDFs, music, software).",
-            icon: 'adminlib-rules',
-            doc_link: 'https://multivendorx.com/docs/knowledgebase/simple-product',
-            //settings_link: appLocalizer.site_url,
-            req_pluging: ['woocomerce', 'wordpress'],
-            pro_module: false,
-            category: 'product_type'
-        },
-        {
-            id: 'variable',
-            name: __('Variable', 'multivendorx'),
-            desc: "A product with variations, like different SKU, price, stock option, etc.",
-            icon: 'adminlib-rules',
-            doc_link: 'https://multivendorx.com/docs/knowledgebase/variable-product',
-            //settings_link: appLocalizer.site_url,
-            pro_module: true,
-            category: 'product_type'
-        },
-        {
-            id: 'external',
-            name: __('External', 'multivendorx'),
-            desc: "List and describe products on your marketplace but sell them elsewhere.",
-            icon: 'adminlib-rules',
-            doc_link: 'https://multivendorx.com/docs/knowledgebase/external-product/',
-            //settings_link: appLocalizer.site_url,
-            pro_module: true,
-            category: 'product_type'
-        },
-        {
-            id: 'grouped',
-            name: __('Grouped', 'multivendorx'),
-            desc: "A collection of simple, related products that can be purchased individually.",
-            icon: 'adminlib-rules',
-            doc_link: 'https://multivendorx.com/docs/knowledgebase/grouped-product',
-            //settings_link: appLocalizer.site_url,
-            pro_module: true,
-            category: 'product_type'
-        },
         {
             id: 'booking',
             name: __('Booking', 'multivendorx'),
             desc: "Allow customers to reserve appointments, equipment, or services.",
-            icon: 'adminlib-rules',
+            icon: 'adminlib-rules', 
             doc_link: 'https://multivendorx.com/docs/knowledgebase/booking-product',
             //settings_link: appLocalizer.site_url,
             pro_module: true,
@@ -116,6 +74,49 @@ export default {
             pro_module: true,
             category: 'marketplace_types'
         },
+        { type: 'separator', id: 'product_type', label: 'Product Types' },
+
+        {
+            id: 'simple',
+            name: __('Simple (Downloadable & Virtual)', 'multivendorx'),
+            desc: "Covers basic products such as physical goods (books, clothing) or digital items (PDFs, music, software).",
+            icon: 'adminlib-rules',
+            doc_link: 'https://multivendorx.com/docs/knowledgebase/simple-product',
+            //settings_link: appLocalizer.site_url,
+            req_pluging: ['woocomerce', 'wordpress'],
+            pro_module: false,
+            category: 'product_type'
+        },
+        {
+            id: 'variable',
+            name: __('Variable', 'multivendorx'),
+            desc: "A product with variations, like different SKU, price, stock option, etc.",
+            icon: 'adminlib-rules',
+            doc_link: 'https://multivendorx.com/docs/knowledgebase/variable-product',
+            //settings_link: appLocalizer.site_url,
+            pro_module: true,
+            category: 'product_type'
+        },
+        {
+            id: 'external',
+            name: __('External', 'multivendorx'),
+            desc: "List and describe products on your marketplace but sell them elsewhere.",
+            icon: 'adminlib-rules',
+            doc_link: 'https://multivendorx.com/docs/knowledgebase/external-product/',
+            //settings_link: appLocalizer.site_url,
+            pro_module: true,
+            category: 'product_type'
+        },
+        {
+            id: 'grouped',
+            name: __('Grouped', 'multivendorx'),
+            desc: "A collection of simple, related products that can be purchased individually.",
+            icon: 'adminlib-rules',
+            doc_link: 'https://multivendorx.com/docs/knowledgebase/grouped-product',
+            //settings_link: appLocalizer.site_url,
+            pro_module: true,
+            category: 'product_type'
+        },
         {
             id: 'gift-card',
             name: __('Gift Cards', 'multivendorx'),
@@ -126,7 +127,7 @@ export default {
             pro_module: true,
             category: 'product_type'
         },
-        { type: 'separator', id: 'seller_management', label: 'Seller Management' },
+        { type: 'separator', id: 'store_management', label: 'Store Management' },
         {
             id: 'identity-verification',
             name: __('Seller Identity Verification', 'multivendorx'),
@@ -157,6 +158,75 @@ export default {
             pro_module: true,
             category: 'store_management'
         },
+        {
+            id: 'store-policy',
+            name: __('Store Policy', 'multivendorx'),
+            desc: "Each store publishes its own return, refund, and shipping policies.",
+            icon: 'adminlib-rules',
+            doc_link: 'https://multivendorx.com/docs/knowledgebase/store-policy',
+            //settings_link: admin_url('admin.php?page=mvx#&submenu=settings&name=policy'),
+            pro_module: false,
+            category: 'store_management'
+        },
+        {
+            id: 'follow-store',
+            name: __('Follow Store', 'multivendorx'),
+            desc: "Customers follow stores to receive updates, offers, and product alerts.",
+            icon: 'adminlib-rules',
+            doc_link: 'https://multivendorx.com/docs/knowledgebase/follow-store',
+            //settings_link: appLocalizer.site_url,
+            pro_module: false,
+            category: 'store_management'
+        },
+        {
+            id: 'store-review',
+            name: __('Store Review', 'multivendorx'),
+            desc: "Customers leave ratings and written reviews on store pages.",
+            icon: 'adminlib-rules',
+            doc_link: 'https://multivendorx.com/docs/knowledgebase/store-review',
+            //settings_link: admin_url('admin.php?page=mvx#&submenu=settings&name=review-management'),
+            pro_module: false,
+            category: 'store_management'
+        },
+        {
+            id: 'business-hours',
+            name: __('Business Hours', 'multivendorx'),
+            desc: "Shows store opening and closing times for customers.",
+            icon: 'adminlib-rules',
+            doc_link: 'https://multivendorx.com/docs/knowledgebase/business-hours/',
+            //settings_link: appLocalizer.site_url,
+            pro_module: true,
+            category: 'store_management'
+        },
+        {
+            id: 'vacation',
+            name: __('Vacation', 'multivendorx'),
+            desc: "Temporarily disables sales when a store is closed, with a message shown to customers.",
+            icon: 'adminlib-rules',
+            doc_link: 'https://multivendorx.com/docs/knowledgebase/vacation',
+            //settings_link: appLocalizer.site_url,
+            pro_module: true,
+            category: 'store_management'
+        },
+        {
+            id: 'staff-manager',
+            name: __('Staff Manager', 'multivendorx'),
+            desc: "Store owners add staff accounts with role-based access to manage orders, products, or support.",
+            icon: 'adminlib-rules',
+            doc_link: 'https://multivendorx.com/docs/knowledgebase/staff-manager',
+            //settings_link: appLocalizer.site_url,
+            pro_module: true,
+            category: 'store_management'
+        },
+        {
+            id: 'privacy',
+            name: __('Privacy', 'multivendorx'),
+            desc: "Hide sensitive store information from customers, including contact details, location, or other specified data.",
+            icon: 'adminlib-dynamic-pricing',
+            doc_link: 'https://multivendorx.com/docs/knowledgebase/privacy',
+            pro_module: true,
+            category: 'store_management'
+        }       
         { type: 'separator', id: 'inventory_control', label: 'Inventory Control' },
         {
             id: 'store-inventory',
@@ -259,6 +329,15 @@ export default {
             pro_module: false,
             category: 'payment_management'
         },
+        {
+            id: 'facilitator',
+            name: __('Facilitator', 'multivendorx'),
+            desc: "Share commission on a sale between the store and another designated user. Each participant receives their assigned portion automatically.",
+            icon: 'adminlib-dynamic-pricing',
+            doc_link: 'https://multivendorx.com/docs/knowledgebase/facilitator',
+            pro_module: true,
+            category: 'payment_management'
+        },      
         { type: 'separator', id: 'shipping_management', label: 'Shipping Management' },
         {
             id: 'zone-shipping',
@@ -322,118 +401,6 @@ export default {
             category: 'customer_experience'
         },
         {
-            id: 'marketplace-refund',
-            name: __('Marketplace Refund', 'multivendorx'),
-            desc: "Customers submit refund requests, and stores review and process them directly.",
-            icon: 'adminlib-rules',
-            doc_link: 'https://multivendorx.com/docs/knowledgebase/marketplace-refund',
-            //settings_link: admin_url('admin.php?page=mvx#&submenu=settings&name=refund-management'),
-            pro_module: false,
-            category: 'customer_experience'
-        },        
-        {
-            id: 'store-location',
-            name: __('Store Location', 'multivendorx'),
-            desc: "Displays a store’s physical address and location map on its profile page.",
-            icon: 'adminlib-rules',
-            doc_link: 'https://multivendorx.com/docs/knowledgebase/store-location',
-            //settings_link: admin_url('admin.php?page=mvx#&submenu=settings&name=store'),
-            pro_module: false,
-            category: 'store_management'
-        },
-        {
-            id: 'store-policy',
-            name: __('Store Policy', 'multivendorx'),
-            desc: "Each store publishes its own return, refund, and shipping policies.",
-            icon: 'adminlib-rules',
-            doc_link: 'https://multivendorx.com/docs/knowledgebase/store-policy',
-            //settings_link: admin_url('admin.php?page=mvx#&submenu=settings&name=policy'),
-            pro_module: false,
-            category: 'store_management'
-        },
-        {
-            id: 'follow-store',
-            name: __('Follow Store', 'multivendorx'),
-            desc: "Customers follow stores to receive updates, offers, and product alerts.",
-            icon: 'adminlib-rules',
-            doc_link: 'https://multivendorx.com/docs/knowledgebase/follow-store',
-            //settings_link: appLocalizer.site_url,
-            pro_module: false,
-            category: 'store_management'
-        },
-        {
-            id: 'store-review',
-            name: __('Store Review', 'multivendorx'),
-            desc: "Customers leave ratings and written reviews on store pages.",
-            icon: 'adminlib-rules',
-            doc_link: 'https://multivendorx.com/docs/knowledgebase/store-review',
-            //settings_link: admin_url('admin.php?page=mvx#&submenu=settings&name=review-management'),
-            pro_module: false,
-            category: 'store_management'
-        },
-        {
-            id: 'business-hours',
-            name: __('Business Hours', 'multivendorx'),
-            desc: "Shows store opening and closing times for customers.",
-            icon: 'adminlib-rules',
-            doc_link: 'https://multivendorx.com/docs/knowledgebase/business-hours/',
-            //settings_link: appLocalizer.site_url,
-            pro_module: true,
-            category: 'store_management'
-        },
-        { type: 'separator', id: 'integration', label: 'Integration' },
-        {
-            id: 'mvx-blocks',
-            name: __('Gutenberg Blocks', 'multivendorx'),
-            desc: "Marketplace widgets made available as blocks inside the Gutenberg editor.",
-            icon: 'adminlib-rules',
-            doc_link: '',
-            //settings_link: appLocalizer.site_url,
-            pro_module: false,
-            category: 'integration'
-        },
-        { type: 'separator', id: 'marketing_tools', label: 'Marketing Tools' },
-        {
-            id: 'advertisement',
-            name: __('Advertise Product', 'multivendorx'),
-            desc: "Paid promotion for products within the marketplace, boosting visibility.",
-            icon: 'adminlib-rules',
-            doc_link: 'https://multivendorx.com/docs/knowledgebase/advertise-product/',
-            //settings_link: admin_url('admin.php?page=mvx#&submenu=settings&name=settings-advertising'),
-            pro_module: true,
-            category: 'marketing_tools'
-        },
-        {
-            id: 'vacation',
-            name: __('Vacation', 'multivendorx'),
-            desc: "Temporarily disables sales when a store is closed, with a message shown to customers.",
-            icon: 'adminlib-rules',
-            doc_link: 'https://multivendorx.com/docs/knowledgebase/vacation',
-            //settings_link: appLocalizer.site_url,
-            pro_module: true,
-            category: 'store_management'
-        },
-        {
-            id: 'staff-manager',
-            name: __('Staff Manager', 'multivendorx'),
-            desc: "Store owners add staff accounts with role-based access to manage orders, products, or support.",
-            icon: 'adminlib-rules',
-            doc_link: 'https://multivendorx.com/docs/knowledgebase/staff-manager',
-            //settings_link: appLocalizer.site_url,
-            pro_module: true,
-            category: 'store_management'
-        },
-        {
-            id: 'wholesale',
-            name: __('Wholesale', 'multivendorx'),
-            desc: "Stores set wholesale prices and bulk purchase rules for selected customer groups.",
-            icon: 'adminlib-rules',
-            doc_link: 'https://multivendorx.com/docs/knowledgebase/wholesale',
-            //settings_link: admin_url('admin.php?page=mvx#&submenu=settings&name=settings-wholesale'),
-            pro_module: true,
-            category: 'marketing_tools'
-        },
-        {
             id: 'live-chat',
             name: __('Live Chat', 'multivendorx'),
             desc: "Customers send real-time messages to stores about products or orders.",
@@ -452,6 +419,57 @@ export default {
             //settings_link: admin_url('admin.php?page=mvx#&submenu=settings&name=settings-store-support'),
             pro_module: true,
             category: 'customer_experience'
+        },
+        {
+            id: 'question-answer',
+            name: __('Question & Answer', 'multivendorx'),
+            desc: "Customers can publicly ask product questions.",
+            icon: 'adminlib-rules',
+            doc_link: 'https://multivendorx.com/docs/knowledgebase/shipstation/',
+            //settings_link: appLocalizer.site_url,
+            pro_module: true,
+            category: 'customer_experience'
+        },
+        {
+            id: 'enquiry',
+            name: __('Enquiry', 'multivendorx'),
+            desc: "Customers can send private product inquiries.",
+            icon: 'adminlib-rules',
+            doc_link: 'https://multivendorx.com/docs/knowledgebase/shipstation/',
+            //settings_link: appLocalizer.site_url,
+            pro_module: true,
+            category: 'customer_experience'
+        },
+        {
+            id: 'marketplace-refund',
+            name: __('Marketplace Refund', 'multivendorx'),
+            desc: "Customers submit refund requests, and stores review and process them directly.",
+            icon: 'adminlib-rules',
+            doc_link: 'https://multivendorx.com/docs/knowledgebase/marketplace-refund',
+            //settings_link: admin_url('admin.php?page=mvx#&submenu=settings&name=refund-management'),
+            pro_module: false,
+            category: 'customer_experience'
+        },
+        { type: 'separator', id: 'marketing_tools', label: 'Marketing Tools' },
+        {
+            id: 'advertisement',
+            name: __('Advertise Product', 'multivendorx'),
+            desc: "Paid promotion for products within the marketplace, boosting visibility.",
+            icon: 'adminlib-rules',
+            doc_link: 'https://multivendorx.com/docs/knowledgebase/advertise-product/',
+            //settings_link: admin_url('admin.php?page=mvx#&submenu=settings&name=settings-advertising'),
+            pro_module: true,
+            category: 'marketing_tools'
+        },
+        {
+            id: 'wholesale',
+            name: __('Wholesale', 'multivendorx'),
+            desc: "Stores set wholesale prices and bulk purchase rules for selected customer groups.",
+            icon: 'adminlib-rules',
+            doc_link: 'https://multivendorx.com/docs/knowledgebase/wholesale',
+            //settings_link: admin_url('admin.php?page=mvx#&submenu=settings&name=settings-wholesale'),
+            pro_module: true,
+            category: 'marketing_tools'
         },
         {
             id: 'store-analytics',
@@ -473,6 +491,7 @@ export default {
             pro_module: true,
             category: 'analytics_tools'
         },
+        { type: 'separator', id: 'marketplace_membership', label: 'Marketplace Membership' },
         {
             id: 'marketplace-membership',
             name: __('Marketplace Membership', 'multivendorx'),
@@ -483,6 +502,7 @@ export default {
             pro_module: true,
             category: 'marketplace_membership'
         },
+        { type: 'separator', id: 'notification', label: 'Notification' },
         {
             id: 'announcement',
             name: __('Announcement', 'multivendorx'),
@@ -513,6 +533,7 @@ export default {
             pro_module: false,
             category: 'notification'
         },
+        { type: 'separator', id: 'integration', label: 'Integration' },
         {
             id: 'elementor',
             name: __('Elementor', 'multivendorx'),
@@ -604,42 +625,15 @@ export default {
             category: 'integration'
         },
         {
-            id: 'question-answer',
-            name: __('Question & Answer', 'multivendorx'),
-            desc: "Customers can publicly ask product questions.",
+            id: 'mvx-blocks',
+            name: __('Gutenberg Blocks', 'multivendorx'),
+            desc: "Marketplace widgets made available as blocks inside the Gutenberg editor.",
             icon: 'adminlib-rules',
-            doc_link: 'https://multivendorx.com/docs/knowledgebase/shipstation/',
+            doc_link: '',
             //settings_link: appLocalizer.site_url,
-            pro_module: true,
-            category: 'engagement'
+            pro_module: false,
+            category: 'integration'
         },
-        {
-            id: 'enquiry',
-            name: __('Enquiry', 'multivendorx'),
-            desc: "Customers can send private product inquiries.",
-            icon: 'adminlib-rules',
-            doc_link: 'https://multivendorx.com/docs/knowledgebase/shipstation/',
-            //settings_link: appLocalizer.site_url,
-            pro_module: true,
-            category: 'engagement'
-        },
-		{
-    id: 'facilitator',
-    name: __('Facilitator', 'multivendorx'),
-    desc: "Share commission on a sale between the store and another designated user. Each participant receives their assigned portion automatically.",
-    icon: 'adminlib-dynamic-pricing',
-    doc_link: 'https://multivendorx.com/docs/knowledgebase/facilitator',
-    pro_module: true,
-    category: 'payment_management'
-},
-{
-    id: 'privacy',
-    name: __('Privacy', 'multivendorx'),
-    desc: "Hide sensitive store information from customers, including contact details, location, or other specified data.",
-    icon: 'adminlib-dynamic-pricing',
-    doc_link: 'https://multivendorx.com/docs/knowledgebase/privacy',
-    pro_module: true,
-    category: 'store_management'
-}
+		 
 ]
 }
