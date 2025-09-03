@@ -44,6 +44,7 @@ interface BasicInputProps {
     size?: string;
     before?: string;
     after?: string;
+    preParameter?:string;
 }
 
 const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
@@ -76,6 +77,7 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
             rangeUnit,
             disabled = false,
             readOnly = false,
+            preParameter
         },
         ref
     ) => {
@@ -143,32 +145,38 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
                         </DisplayButton>
                     ) : (
                         <>
-                        {before && (
-                            <div>{before}</div>
-                         )}
-                        <input
-                            ref={ref}
-                            className={['basic-input', inputClass].join(' ')}
-                            id={id}
-                            type={type}
-                            name={name}
-                            style={{ width: size || '' }}
-                            placeholder={placeholder}
-                            {...(type !== 'file' && onChange ? { value } : {})}
-                            {...((type === 'number' || type === 'range') ? { min, max } : {})}
-                            onChange={onChange}
-                            onClick={onClick}
-                            onMouseOver={onMouseOver}
-                            onMouseOut={onMouseOut}
-                            onFocus={onFocus}
-                            onBlur={onBlur}
-                            disabled={disabled}
-                            readOnly={readOnly}
-                        />
-                        {after && (
-                            <div>{after}</div>
-                         )}
-                        </>                        
+                            {before && (
+                                <span
+                                    className="before"
+                                    dangerouslySetInnerHTML={{ __html: before }}
+                                />
+                            )}
+                            {preParameter && (
+                                <span
+                                    className="before"
+                                    dangerouslySetInnerHTML={{ __html: preParameter }}
+                                />
+                            )}
+                            <input
+                                ref={ref}
+                                className={['basic-input', inputClass].join(' ')}
+                                id={id}
+                                type={type}
+                                name={name}
+                                style={{ width: size || '' }}
+                                placeholder={placeholder}
+                                {...(type !== 'file' && onChange ? { value } : {})}
+                                {...((type === 'number' || type === 'range') ? { min, max } : {})}
+                                onChange={onChange}
+                                onClick={onClick}
+                                onMouseOver={onMouseOver}
+                                onMouseOut={onMouseOut}
+                                onFocus={onFocus}
+                                onBlur={onBlur}
+                                disabled={disabled}
+                                readOnly={readOnly}
+                            />
+                        </>
                     )}
 
                     {parameter && (
@@ -177,7 +185,12 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
                             dangerouslySetInnerHTML={{ __html: parameter }}
                         />
                     )}
-
+                    {after && (
+                        <span
+                            className="after"
+                            dangerouslySetInnerHTML={{ __html: after }}
+                        />
+                    )}
                     {generate &&
                         (value === '' ? (
                             <DisplayButton

@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
+import { DateRangePicker, RangeKeyDict, Range } from 'react-date-range';
 import { Table, getApiLink, TableCell, AdminBreadcrumbs } from 'zyra';
 import {
     ColumnDef,
@@ -10,7 +11,16 @@ import {
 } from '@tanstack/react-table';
 import { useLocation } from 'react-router-dom';
 import EditCommission from './editCommission';
-
+export interface RealtimeFilter {
+    name: string;
+    render: (updateFilter: (key: string, value: any) => void, filterValue: any) => ReactNode;
+}
+// Type declarations
+type CommissionStatus = {
+    key: string;
+    name: string;
+    count: number;
+};
 type CommissionRow = {
     id?: number;
     orderId?: number;
@@ -28,6 +38,12 @@ type CommissionRow = {
     createTime?: string; // ISO datetime string
 };
 
+type FilterData = {
+    searchAction?: string;
+    searchField?: string;
+
+    typeCount?: any;
+};
 
 const Commission: React.FC = () => {
     const location = useLocation();
@@ -38,15 +54,31 @@ const Commission: React.FC = () => {
     // const isViewStore = hash.includes('view');
     const iseditCommission = hash.includes('edit');
 
+    const dateRef = useRef< HTMLDivElement | null >( null );
+    const [ openModal, setOpenModal ] = useState( false );
+    const [ modalDetails, setModalDetails ] = useState< string >( '' );
     const [error, setError] = useState<String>();
     const [data, setData] = useState<CommissionRow[] | null>(null);
-
+    const bulkSelectRef = useRef<HTMLSelectElement>(null);
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
     const [totalRows, setTotalRows] = useState<number>(0);
+    const [ openDatePicker, setOpenDatePicker ] = useState( false );
     const [pagination, setPagination] = useState<PaginationState>({
         pageIndex: 0,
         pageSize: 10,
     });
+    const [ selectedRange, setSelectedRange ] = useState( [
+        {
+            startDate: new Date( new Date().getTime() - 30 * 24 * 60 * 60 * 1000 ),
+            endDate: new Date(),
+            key: 'selection',
+        },
+    ] );
+    const handleDateOpen = () => {
+        setOpenDatePicker( ! openDatePicker );
+    };
+
+    const [commissionStatus, setCommissionStatus] = useState<CommissionStatus[] | null>(null);
     const [pageCount, setPageCount] = useState(0);
 
     // Fetch total rows on mount
@@ -71,8 +103,43 @@ const Commission: React.FC = () => {
         const rowsPerPage = pagination.pageSize;
         requestData(rowsPerPage, currentPage);
         setPageCount(Math.ceil(totalRows / rowsPerPage));
+
     }, [pagination]);
     const [showDropdown, setShowDropdown] = useState(false);
+    const handleBulkAction = () => {
+        if ( appLocalizer.khali_dabba ) {
+            if ( ! Object.keys( rowSelection ).length ) {
+                setModalDetails( 'Select rows.' );
+                setOpenModal( true );
+                return;
+            }
+            if ( ! bulkSelectRef.current?.value ) {
+                setModalDetails( 'Please select a action.' );
+                setOpenModal( true );
+                return;
+            }
+            setData( null );
+            // axios( {
+            //     method: 'POST',
+            //     url: getApiLink( appLocalizer, `cohorts` ),
+            //     headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            //     data: {
+            //         selected_action: bulkSelectRef.current.value,
+            //         cohort_ids: Object.keys( rowSelection ).map( ( index ) => {
+            //             const row = data?.[ parseInt( index ) ];
+            //             return {
+            //                 cohort_id: row?.id,
+            //             };
+            //         } ),
+            //     },
+            // } ).then( () => {
+            //     setModalDetails( '' );
+            //     setOpenModal( false );
+            //     requestData();
+            //     setRowSelection( {} );
+            // } );
+        }
+    };
 
     const toggleDropdown = (id: any) => {
         if (showDropdown === id) {
@@ -85,6 +152,7 @@ const Commission: React.FC = () => {
     function requestData(
         rowsPerPage = 10,
         currentPage = 1,
+        typeCount = '',
     ) {
         setData(null);
         axios({
@@ -94,10 +162,39 @@ const Commission: React.FC = () => {
             params: {
                 page: currentPage,
                 row: rowsPerPage,
+                status: typeCount === 'all' ? '' : typeCount,
             },
         })
             .then((response) => {
                 setData(response.data || []);
+                setCommissionStatus([
+                    {
+                        key: 'all',
+                        name: 'All',
+                        count: response.data.all || 0,
+                    },
+                    {
+                        key: 'paid',
+                        name: 'Paid',
+                        count: response.data.paid || 0,
+                    },
+                    {
+                        key: 'unpaid',
+                        name: 'Unpaid',
+                        count: response.data.unpaid || 0,
+                    },
+                    {
+                        key: 'refund',
+                        name: 'Refund',
+                        count: response.data.refund || 0,
+                    },
+                    {
+                        key: 'trash',
+                        name: 'Trash',
+                        count: response.data.trash || 0,
+                    },
+                ]);
+
             })
             .catch(() => {
                 setError(__('Failed to load stores', 'multivendorx'));
@@ -109,11 +206,13 @@ const Commission: React.FC = () => {
     const requestApiForData = (
         rowsPerPage: number,
         currentPage: number,
+        filterData: FilterData
     ) => {
         setData(null);
         requestData(
             rowsPerPage,
             currentPage,
+            filterData?.typeCount,
         );
     };
 
@@ -293,6 +392,116 @@ const Commission: React.FC = () => {
         }
     ];
 
+    const realtimeFilter: RealtimeFilter[] = [
+        {
+            name: 'commissionStatus',
+            render: (updateFilter: (key: string, value: string) => void, filterValue: string | undefined) => (
+                <div className="admin-header-search-section course-field">
+                    <select
+                        name="commissionStatus"
+                        onChange={(e) => updateFilter(e.target.name, e.target.value)}
+                        value={filterValue || ''}
+                        className="basic-select"
+                    >
+                        <option value="">Commission Status</option>
+                        {/* { Object.entries( courses ).map( ( [ courseId, courseName ] ) => (
+                            <option key={ courseId } value={ courseId }>
+                                { courseName }
+                            </option>
+                        ) ) } */}
+                    </select>
+                </div>
+            ),
+        },
+        {
+            name: 'vendor',
+            render: (updateFilter: (key: string, value: string) => void, filterValue: string | undefined) => (
+                <div className="admin-header-search-section group-field">
+                    <select
+                        name="vendor"
+                        onChange={(e) => updateFilter(e.target.name, e.target.value)}
+                        value={filterValue || ''}
+                        className="basic-select"
+                    >
+                        <option value="">All Vendors</option>
+                        {/* { Object.entries( groups ).map( ( [ groupId, groupName ] ) => (
+                            <option key={ groupId } value={ groupId }>
+                                { ' ' }
+                                { groupName }{ ' ' }
+                            </option>
+                        ) ) } */}
+                    </select>
+                </div>
+            ),
+        },
+        {
+            name: 'bulk-action',
+            render: () => (
+                <div className="course-bulk-action bulk-action">
+                    <select name="action" className="basic-select" ref={bulkSelectRef}>
+                        <option value="">{__('Bulk actions')}</option>
+                        <option value="mark_paid">{__('Mark Paid')}</option>
+                        <option value="delete">{__('Delete')}</option>
+                        <option value="restore">{__('Restore')}</option>
+                    </select>
+                    <button name="bulk-action-apply" className="admin-btn btn-purple" onClick={handleBulkAction}>
+                        {__('Apply')}
+                    </button>
+                </div>
+            ),
+        },
+        {
+            name: 'date',
+            render: (updateFilter) => (
+                <div ref={dateRef}>
+                    <div className="admin-header-search-section">
+                        <input
+                            value={`${selectedRange[0].startDate.toLocaleDateString()} - ${selectedRange[0].endDate.toLocaleDateString()}`}
+                            onClick={() => handleDateOpen()}
+                            className="basic-input"
+                            type="text"
+                            placeholder={'DD/MM/YYYY'}
+                        />
+                    </div>
+                    {openDatePicker && (
+                        <div className="date-picker-section-wrapper" id="date-picker-wrapper">
+                            <DateRangePicker
+                                ranges={selectedRange}
+                                months={1}
+                                direction="vertical"
+                                scroll={{ enabled: true }}
+                                maxDate={new Date()}
+                                onChange={(ranges: RangeKeyDict) => {
+                                    const selection: Range = ranges.selection;
+
+                                    if (selection?.endDate instanceof Date) {
+                                        // Set end of day to endDate
+                                        selection.endDate.setHours(23, 59, 59, 999);
+                                    }
+
+                                    // Update local range state
+                                    setSelectedRange([
+                                        {
+                                            startDate: selection.startDate || new Date(),
+                                            endDate: selection.endDate || new Date(),
+                                            key: selection.key || 'selection',
+                                        },
+                                    ]);
+
+                                    // Update external filters (could be used by table or search logic)
+                                    updateFilter('date', {
+                                        start_date: selection.startDate,
+                                        end_date: selection.endDate,
+                                    });
+                                }}
+                            />
+                        </div>
+                    )}
+                </div>
+            ),
+        },
+    ];
+
     return (
         <>
             <AdminBreadcrumbs
@@ -308,12 +517,13 @@ const Commission: React.FC = () => {
                         rowSelection={rowSelection}
                         onRowSelectionChange={setRowSelection}
                         defaultRowsPerPage={10}
+                        realtimeFilter={realtimeFilter}
                         pageCount={pageCount}
                         pagination={pagination}
                         onPaginationChange={setPagination}
                         handlePagination={requestApiForData}
                         perPageOption={[10, 25, 50]}
-                        typeCounts={[]}
+                        typeCounts={commissionStatus as CommissionStatus}
                     />
                 </div>
             )}

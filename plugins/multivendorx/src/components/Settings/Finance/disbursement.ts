@@ -4,15 +4,17 @@ export default {
     id: 'disbursement',
     priority: 2,
     name: __('Disbursement', 'multivendorx'),
-    desc: __("Tailor your marketplace commission plan to fit your revenue sharing preferences.",'multivendorx'),
+    desc: __("Tailor your marketplace commission plan to fit your revenue sharing preferences.", 'multivendorx'),
     icon: 'adminlib-dynamic-pricing',
     submitUrl: 'settings',
     modal: [
-          {
+        {
             key: 'order_status',
             type: 'checkbox',
+
             label: __('Eligible Order Statuses for Commission Payout', 'multivendorx'),
-			settingDescription: __("Choose which order statuses qualify for commission payouts.",'multivendorx'),
+			      settingDescription: __("Choose which order statuses qualify for commission payouts.",'multivendorx'),
+
             class: 'mvx-toggle-checkbox',
 
             options: [
@@ -39,12 +41,14 @@ export default {
             ],
             selectDeselect: true,
         },
-		{
+        {
             key: 'payment_method',
             type: 'setting-toggle',
+
             label: __('Commission Settlement', 'multivendorx'),
-			settingDescription: __("Select how commissions are released from the admin account.",'multivendorx'),
+		       	settingDescription: __("Select how commissions are released from the admin account.",'multivendorx'),
              desc: __("<ul><li>Instant Payout – Commissions are released immediately.</li><li>Scheduled / Delayed Payout – Commissions are released after a waiting period.</li></ul>",'multivendorx'),
+
             options: [
                 {
                     key: 'instantly',
@@ -58,33 +62,33 @@ export default {
                 },
             ],
         },
-       {
+        {
             key: 'commission_threshold_time',
             label: __('Lock period', 'multivendorx'),
             desc: __(
-                  'Set a waiting period before commissions become eligible for payout. Helps account for refunds, cancellations, or disputes.','multivendorx'),
-            type: 'multi-number',
+                'Set a waiting period before commissions become eligible for payout. Helps account for refunds, cancellations, or disputes.', 'multivendorx'),
+            type: 'number',
+            parameter: __('Day', 'multivendorx'),
+            size:'8rem',
             options: [
                 {
                     key: 'commission_percentage',
-                    label: __('Day', 'multivendorx'),
-                    type: 'number',
-                    labelAfterInput: true,
+                    value: 'commission_percentage',
                 },
             ],
         },
-		{
+        {
             key: 'payout_threshold_time',
             label: __('Minimum payout threshold', 'multivendorx'),
             desc: __(
-                  'Define the minimum amount a store must accumulate before payouts are processed.','multivendorx'),
-            type: 'multi-number',
+                'Define the minimum amount a store must accumulate before payouts are processed.', 'multivendorx'),
+            type: 'number',
+            preParameter: __('$', 'multivendorx'),
+            size:'8rem',
             options: [
                 {
                     key: 'commission_percentage',
-                    label: __('$', 'multivendorx'),
-                    type: 'number',
-                    labelAfterInput: false,
+                    value: 'commission_percentage',
                 },
             ],
         },
@@ -92,8 +96,8 @@ export default {
             key: 'payment_schedule',
             type: 'setting-toggle',
             label: __('Payout frequency', 'multivendorx'),
-			settingDescription: __("Decide how often store commissions are released:",'multivendorx'),
-             desc: __("<ul><li>If Manual is selected, stores handle withdrawals themselves from their dashboard.</li><li>Otherwise, commissions are automatically disbursed to stores based on the chosen schedule.</li></ul>",'multivendorx'),
+            settingDescription: __("Decide how often store commissions are released:", 'multivendorx'),
+            desc: __("<ul><li>If Manual is selected, stores handle withdrawals themselves from their dashboard.</li><li>Otherwise, commissions are automatically disbursed to stores based on the chosen schedule.</li></ul>", 'multivendorx'),
             options: [
                 {
                     key: 'mannual',
@@ -127,32 +131,50 @@ export default {
                 },
             ],
         },
-       {
+
+        {
             key: 'commission_threshold_time',
             label: __('Free withdrawal', 'multivendorx'),
-            desc: __('','multivendorx'),
-            type: 'multi-number',
+            desc: __('', 'multivendorx'),
+            type: 'number',
+            preParameter: __('$', 'multivendorx'),
+            size:'8rem',
             options: [
                 {
                     key: 'commission_percentage',
-                    type: 'number',
-                    labelAfterInput: false,
+                    value: 'commission_percentage',
                 },
             ],
         },
-		{
+        {
+
             key: 'commission_threshold_time',
-            type: 'multi-number',
-            label: __('Processing fee', 'multivendorx'),
-            desc: __('','multivendorx'),
+            label: __('Free withdrawal', 'multivendorx'),
+            desc: __('', 'multivendorx'),
+            type: 'number',
+            preParameter: __('$', 'multivendorx'),
+            size:'8rem',
             options: [
                 {
-                key: 'commission_percentage',
-                label: __('$', 'multivendorx'),
-                type: 'number',
-                labelAfterInput: false,
+                    key: 'commission_percentage',
+                    value: 'commission_percentage',
                 },
             ],
-        },     
+        },
+        {
+            key: 'commission_threshold_time',
+            type: 'number',
+            label: __('Processing fee', 'multivendorx'),
+            preParameter: __('$', 'multivendorx'),
+            size:'8rem',
+            desc: __('', 'multivendorx'),
+            options: [
+                {
+                    key: 'commission_percentage',
+                    value: 'commission_percentage',
+                },
+            ],
+        },
+
     ],
-};
+}

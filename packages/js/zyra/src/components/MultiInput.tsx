@@ -5,32 +5,6 @@ import React, { useState, ChangeEvent, FocusEvent } from 'react';
 import "../styles/web/MultiInputString.scss";
 
 // Types
-interface MultiNumOption {
-    key?: string;
-    value: string | number;
-    label?: string;
-    name?: string;
-    type?: string;
-    labelAfterInput?: boolean;
-    desc?: string;
-    options?: { value: string; label: string; labelAfterInput: boolean }[];
-}
-
-interface MultiNumberProps {
-    inputType: 'multi-number';
-    parentWrapperClass?: string;
-    childWrapperClass?: string;
-    options: MultiNumOption[];
-    value?: { key: string; value: string | number }[] | Record<string, { key: string; value: string | number }> | Record<string, string | number>;
-    inputWrapperClass?: string;
-    innerInputWrapperClass?: string;
-    inputLabelClass?: string;
-    inputClass?: string;
-    labelAfterInput?: boolean;
-    optionLabel?:string;
-    onChange?: (e: ChangeEvent<HTMLInputElement>, keyName?: string, optionKey?: string, index?: number) => void;
-}
-
 interface MultiStringProps {
     inputType: 'multi-string';
     values?: string[];
@@ -52,153 +26,31 @@ interface CommonProps {
     proSetting?: boolean;
     description?: string;
     descClass?: string;
-    idPrefix?: string;
-    keyName?: string;
 }
 
-type MultiInputProps = (MultiNumberProps | MultiStringProps) & CommonProps;
+type MultiInputProps = MultiStringProps & CommonProps;
 
 const MultiInput: React.FC<MultiInputProps> = (props) => {
-    const { inputType, proSetting, description, descClass } = props;
+    const { 
+        values = [], 
+        placeholder, 
+        wrapperClass, 
+        inputClass, 
+        buttonClass, 
+        listClass, 
+        itemClass, 
+        deleteBtnClass, 
+        onStringChange, 
+        onFocus, 
+        onBlur, 
+        id, 
+        name, 
+        proSetting, 
+        description, 
+        descClass 
+    } = props;
+
     const [inputValue, setInputValue] = useState("");
-
-    // Normalize multi-number value
-    const normalizeValue = (value: any): Record<string, string | number> => {
-        if (Array.isArray(value)) {
-            return value.reduce<Record<string, string | number>>((acc, cur) => {
-                if (cur.key) acc[cur.key] = cur.value;
-                return acc;
-            }, {});
-        }
-        if (typeof value === 'object' && value !== null) {
-            if (Object.values(value).every(v => typeof v !== 'object' || v === null)) {
-                return value as Record<string, string | number>;
-            }
-            return Object.values(value).reduce<Record<string, string | number>>((acc, cur: any) => {
-                if (cur?.key) acc[cur.key] = cur.value;
-                return acc;
-            }, {});
-        }
-        return {};
-    };
-
-    const renderRadioOptions = (option: MultiNumOption, selectedValue: string | number, idPrefix: string, keyName?: string, onChange?: Function, index?: number) => (
-        <div className="toggle-setting-wrapper">
-            <div></div>
-            {option.options?.map((opt) => (
-                <div
-                    role="button"
-                    tabIndex={0}
-                    key={opt.value}
-                    onClick={() => {
-                        if (option.key) {
-                            const fakeEvent = { target: { value: opt.value } } as ChangeEvent<HTMLInputElement>;
-                            onChange?.(fakeEvent, keyName, option.key, index);
-                        }
-                    }}
-                >
-                    <input
-                        className="toggle-setting-form-input"
-                        type="radio"
-                        id={`${idPrefix}-${option.key}-${opt.value}`}
-                        name={`${idPrefix}-${option.key}`}
-                        value={opt.value}
-                        checked={selectedValue === opt.value}
-                        readOnly
-                    />
-                    <label htmlFor={`${idPrefix}-${option.key}-${opt.value}`}>
-                        {opt.label}
-                    </label>
-                </div>
-            ))}
-        </div>
-    );
-
-    if (inputType === 'multi-number') {
-        const {
-            parentWrapperClass,
-            childWrapperClass,
-            options,
-            value = {},
-            inputWrapperClass,
-            innerInputWrapperClass,
-            inputClass,
-            labelAfterInput = false,
-            onChange,
-            idPrefix = 'multi-input',
-            keyName
-        } = props as MultiNumberProps & CommonProps;
-
-        const valueObject = normalizeValue(value);
-
-        return (
-            <div className={parentWrapperClass}>
-                <div className={childWrapperClass}>
-                    {options.map((option, index) => {
-                        const selectedValue = option.key ? valueObject[option.key] ?? '' : '';
-                        const isLabelAfterInput = option.labelAfterInput ?? labelAfterInput;
-                        const labelJSX = option.label ? (
-                            <div className="input-unit">{option.label}</div>
-                        ) : null;
-
-
-                        const inputJSX = option.type === 'radio' && option.options 
-                            ? renderRadioOptions(option, selectedValue, idPrefix, keyName, onChange, index)
-                            : (
-                                <input
-                                    id={`${idPrefix}-${option.key}`}
-                                    className={inputClass || 'basic-input'}
-                                    type={option.type || 'text'}
-                                    name={option.name}
-                                    value={selectedValue}
-                                    min={option.type === "number" ? 0 : undefined}
-                                    onChange={(e) => option.key && onChange?.(e, keyName, option.key, index)}
-                                />
-                            );
-
-                        return (
-                            <div key={option.key || index} className={`${inputWrapperClass} ${isLabelAfterInput ? 'suffix' : 'prefix'}`}>
-                                <div className={innerInputWrapperClass}>
-                                    {!isLabelAfterInput && labelJSX}
-                                    {inputJSX}
-                                    {isLabelAfterInput && labelJSX}
-                                    {proSetting && <span className="admin-pro-tag"><i className="adminlib-pro-tag"></i>Pro</span>}
-                                </div>
-                                {option.desc && (
-                                    <p
-                                        className={`${descClass} settings-metabox-description`}
-                                        dangerouslySetInnerHTML={{ __html: option.desc }}
-                                    />
-                                )}
-                            </div>
-                        );
-                    })}
-                </div>
-                {description && (
-                    <p
-                        className={`${descClass} settings-metabox-description`}
-                        dangerouslySetInnerHTML={{ __html: description }}
-                    />
-                )}
-            </div>
-        );
-    }
-
-    // Multi-string rendering
-    const {
-        values = [],
-        placeholder,
-        wrapperClass,
-        inputClass,
-        buttonClass,
-        listClass,
-        itemClass,
-        onStringChange,
-        onFocus,
-        onBlur,
-        id,
-        name
-    } = props as MultiStringProps & CommonProps;
 
     const handleAdd = () => {
         if (inputValue.trim()) {
@@ -216,47 +68,39 @@ const MultiInput: React.FC<MultiInputProps> = (props) => {
     return (
         <div className={wrapperClass}>
             <div className="multi-input-row">
-                {Array.isArray(values) && values.length > 0 && (
-                    <ul className={listClass || "multi-string-list"}>
-                        <li>
-                            <div>Lorem ipsum dolor sit amet.</div>
-                            <span className="admin-btn btn-red"><i className="adminlib-cross"></i>Remove</span>
-                        </li>
-                        <li>
-                            <div>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut fuga impedit quia cumque veniam voluptatibus?</div>
-                            <span className="admin-btn btn-red"><i className="adminlib-cross"></i>Remove</span>
-                        </li>
-                        <li>
-                            <div>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Consequatur, delectus.</div>
-                            <span className="admin-btn btn-red"><i className="adminlib-cross"></i>Remove</span>
-                        </li>
-                        {values.map((val, index) => (
-                            <li key={index} className={itemClass}>
-                                <div>{val}</div>
-                                <span>
-                                <span className="admin-btn btn-red" onClick={() => handleDelete(val)}><i className="adminlib-cross"></i>Remove</span>
-                                </span>
-                            </li>
-                        ))}
-                        <li>
-                            <input
-                                type="text"
-                                id={id}
-                                name={name}
-                                value={inputValue}
-                                placeholder={placeholder}
-                                className={inputClass}
-                                onChange={(e) => setInputValue(e.target.value)}
-                                onFocus={onFocus}
-                                onBlur={onBlur}
-                            />
-                            <span className="admin-btn btn-purple" onClick={handleAdd}>
-                                <i className="adminlib-vendor-form-add"></i>
-                                Add
+                <ul className={listClass || "multi-string-list"}>
+                    {Array.isArray(values) && values.map((val, index) => (
+                        <li key={index} className={itemClass}>
+                            <div>{val}</div>
+                            <span 
+                                className={deleteBtnClass || "admin-btn btn-red"} 
+                                onClick={() => handleDelete(val)}
+                            >
+                                <i className="adminlib-cross"></i>Remove
                             </span>
                         </li>
-                    </ul>
-                )}
+                    ))}
+                    <li>
+                        <input
+                            type="text"
+                            id={id}
+                            name={name}
+                            value={inputValue}
+                            placeholder={placeholder}
+                            className={inputClass}
+                            onChange={(e) => setInputValue(e.target.value)}
+                            onFocus={onFocus}
+                            onBlur={onBlur}
+                        />
+                        <span 
+                            className={buttonClass || "admin-btn btn-purple"} 
+                            onClick={handleAdd}
+                        >
+                            <i className="adminlib-vendor-form-add"></i>
+                            Add
+                        </span>
+                    </li>
+                </ul>
             </div>
 
             {proSetting && <span className="admin-pro-tag"><i className="adminlib-pro-tag"></i>Pro</span>}

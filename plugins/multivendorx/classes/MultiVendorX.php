@@ -129,6 +129,7 @@ final class MultiVendorX {
         $this->container['payments']        = new Payments\Payments();
         $this->container['store']           = new Store\Store();
         $this->container['modules']         = new Modules();
+        $this->container['status']          = new Status();
 
         // Load all active modules.
         $this->container['modules']->load_active_modules();
