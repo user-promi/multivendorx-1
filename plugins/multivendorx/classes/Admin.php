@@ -47,6 +47,7 @@ class Admin {
         add_action('product_cat_edit_form_fields', array($this, 'edit_product_cat_commission_fields'), 10);
         add_action('created_term', array($this, 'save_product_cat_commission_fields'), 10, 3);
         add_action('edit_term', array($this, 'save_product_cat_commission_fields'), 10, 3);
+        add_action( 'init', array( $this, 'register_multivendorx_custom_post_types' ), 5 );
     }
 
     /**
@@ -126,8 +127,8 @@ class Admin {
                     'name'   => __( 'Status & Tools', 'multivendorx' ),
                     'subtab' => 'database-tools',
                 ),
-                'announcements' => array(
-                    'name'   => __( 'Announcements', 'multivendorx' ),
+                'announcement' => array(
+                    'name'   => __( 'Announcement', 'multivendorx' ),
                     'subtab' => '',
                 ),
                 'knowledgebase' => array(
@@ -491,4 +492,33 @@ class Admin {
 
         wp_send_json( $results );
     }
+    public function register_multivendorx_custom_post_types() {
+        // Announcements
+        register_post_type( 'multivendorx_an', array(
+            'labels' => array(
+                'name'          => __( 'Announcements', 'multivendorx' ),
+                'singular_name' => __( 'Announcement', 'multivendorx' ),
+            ),
+            'public'       => true,
+            'show_ui'      => true,
+            'show_in_menu' => true,
+            'show_in_rest' => true, // Enable REST API
+            'supports'     => array( 'title', 'editor' ),
+        ));
+    
+        // Knowledge Base (KB)
+        register_post_type( 'multivendorx_kb', array(
+            'labels' => array(
+                'name'          => __( 'Knowledge Base', 'multivendorx' ),
+                'singular_name' => __( 'Knowledge Article', 'multivendorx' ),
+            ),
+            'public'       => true,
+            'show_ui'      => true,
+            'show_in_menu' => true,
+            'show_in_rest' => true, // Enable REST API
+            'supports'     => array( 'title', 'editor' ),
+        ));
+    }
+    
+    
 }

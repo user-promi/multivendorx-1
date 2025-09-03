@@ -63,13 +63,13 @@ export default {
             label: __('Lock period', 'multivendorx'),
             desc: __(
                 'Set a waiting period before commissions become eligible for payout. Helps account for refunds, cancellations, or disputes.', 'multivendorx'),
-            type: 'multi-number',
+            type: 'number',
+            parameter: __('Day', 'multivendorx'),
+            size:'8rem',
             options: [
                 {
                     key: 'commission_percentage',
-                    label: __('Day', 'multivendorx'),
-                    type: 'number',
-                    labelAfterInput: true,
+                    value: 'commission_percentage',
                 },
             ],
         },
@@ -78,13 +78,13 @@ export default {
             label: __('Minimum payout threshold', 'multivendorx'),
             desc: __(
                 'Define the minimum amount a store must accumulate before payouts are processed.', 'multivendorx'),
-            type: 'multi-number',
+            type: 'number',
+            preParameter: __('$', 'multivendorx'),
+            size:'8rem',
             options: [
                 {
                     key: 'commission_percentage',
-                    label: __('$', 'multivendorx'),
-                    type: 'number',
-                    labelAfterInput: false,
+                    value: 'commission_percentage',
                 },
             ],
         },
@@ -131,13 +131,13 @@ export default {
             key: 'commission_threshold_time',
             label: __('Free withdrawal', 'multivendorx'),
             desc: __('', 'multivendorx'),
-            type: 'multi-number',
+            type: 'number',
+            preParameter: __('$', 'multivendorx'),
+            size:'8rem',
             options: [
                 {
                     key: 'commission_percentage',
-                    label: __('$', 'multivendorx'),
-                    type: 'number',
-                    labelAfterInput: false,
+                    value: 'commission_percentage',
                 },
             ],
         },
@@ -145,27 +145,27 @@ export default {
             key: 'commission_threshold_time',
             label: __('Free withdrawal', 'multivendorx'),
             desc: __('', 'multivendorx'),
-            type: 'multi-number',
+            type: 'number',
+            preParameter: __('$', 'multivendorx'),
+            size:'8rem',
             options: [
                 {
                     key: 'commission_percentage',
-                    type: 'number',
-                    labelAfterInput: false,
+                    value: 'commission_percentage',
                 },
             ],
         },
-
         {
             key: 'commission_threshold_time',
-            type: 'multi-number',
+            type: 'number',
             label: __('Processing fee', 'multivendorx'),
+            preParameter: __('$', 'multivendorx'),
+            size:'8rem',
             desc: __('', 'multivendorx'),
             options: [
                 {
                     key: 'commission_percentage',
-                    label: __('$', 'multivendorx'),
-                    type: 'number',
-                    labelAfterInput: false,
+                    value: 'commission_percentage',
                 },
             ],
         },
