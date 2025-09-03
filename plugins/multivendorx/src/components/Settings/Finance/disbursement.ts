@@ -9,7 +9,7 @@ export default {
     submitUrl: 'settings',
     modal: [
         {
-            key: 'order_status',
+            key: 'disbursement_order_status',
             type: 'checkbox',
 
             label: __('Eligible Order Statuses for Commission Payout', 'multivendorx'),
@@ -42,9 +42,8 @@ export default {
             selectDeselect: true,
         },
         {
-            key: 'payment_method',
+            key: 'disbursement_method',
             type: 'setting-toggle',
-
             label: __('Commission Settlement', 'multivendorx'),
 		       	settingDescription: __("Select how commissions are released from the admin account.",'multivendorx'),
              desc: __("<ul><li>Instant Payout – Commissions are released immediately.</li><li>Scheduled / Delayed Payout – Commissions are released after a waiting period.</li></ul>",'multivendorx'),
@@ -53,7 +52,7 @@ export default {
                 {
                     key: 'instantly',
                     label: __('Instant Payout', 'multivendorx'),
-                    value: '    ',
+                    value: 'instantly',
                 },
                 {
                     key: 'waitting',
@@ -76,6 +75,11 @@ export default {
                     value: 'commission_percentage',
                 },
             ],
+            dependent: {
+                key: 'disbursement_method',
+                set: true,
+                value: 'waitting',
+            },
         },
         {
             key: 'payout_threshold_time',
@@ -91,6 +95,11 @@ export default {
                     value: 'commission_percentage',
                 },
             ],
+            dependent: {
+                key: 'disbursement_method',
+                set: true,
+                value: 'waitting',
+            },
         },
         {
             key: 'payment_schedule',
@@ -130,6 +139,11 @@ export default {
                     value: 'hourly',
                 },
             ],
+            dependent: {
+                key: 'disbursement_method',
+                set: true,
+                value: 'waitting',
+            },
         },
 
         {
@@ -145,6 +159,11 @@ export default {
                     value: 'commission_percentage',
                 },
             ],
+            dependent: {
+                key: 'disbursement_method',
+                set: true,
+                value: 'waitting',
+            },
         },
         {
 
@@ -160,6 +179,11 @@ export default {
                     value: 'commission_percentage',
                 },
             ],
+            dependent: {
+                key: 'disbursement_method',
+                set: true,
+                value: 'waitting',
+            },
         },
         {
             key: 'commission_threshold_time',
@@ -174,6 +198,11 @@ export default {
                     value: 'commission_percentage',
                 },
             ],
+            dependent: {
+                key: 'disbursement_method',
+                set: true,
+                value: 'waitting',
+            },
         },
 
     ],
