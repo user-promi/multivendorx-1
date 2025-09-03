@@ -1,7 +1,6 @@
 <?php
 
 namespace MultiVendorX\Payments;
-use MultiVendorX\Payments\Providers\MultiVendorX_Stripe_Payment;
 use MultiVendorX\Payments\Providers\MultiVendorX_PayPal_Payment;
 
 defined('ABSPATH') || exit;
@@ -16,19 +15,14 @@ defined('ABSPATH') || exit;
 class Payments {
     private $providers = array();
     public function __construct() {
-        $this->init_classes();
+        // $this->providers = apply_filters('multivendorx_payment_providers', $this->providers);
 
-        $this->providers = apply_filters('multivendorx_payment_providers', $this->providers);
+        add_action('init', [$this, 'load_all_providers']);
+
     }
 
-    /**
-     * Initialize all REST API controller classes.
-     */
-    public function init_classes() {
-        $this->providers = array(
-			'stripe'    => new MultiVendorX_Stripe_Payment(),
-			'paypal'    => new MultiVendorX_PayPal_Payment(),
-		);
+    public function load_all_providers() {
+        $this->providers = apply_filters('multivendorx_payment_providers', $this->providers);
     }
 
     /**
@@ -37,8 +31,9 @@ class Payments {
     public function all_payment_providers() {
         $providers = [];
 
-        foreach ($this->providers as $id => $provider) {
-            $providers[$id] = $provider->get_settings();
+        foreach ($this->providers as $provider) {
+            $provider = new $provider();
+            $providers[$provider->get_id()] = $provider->get_settings();
         }
 
         return $providers;
@@ -51,4 +46,20 @@ class Payments {
 
         return new \WP_Error( sprintf( 'Call to unknown class %s.', $class ) );
     }
+
+
+    public function get_all_store_payment_settings() {
+        $store_settings = [];
+
+        foreach ($this->providers as $provider) {
+                $provider = new $provider();
+                $settings = $provider->get_store_payment_settings();
+                $store_settings[$provider->get_id()] = $settings;
+                
+        }
+
+        return $store_settings;
+    }
+
+
 }

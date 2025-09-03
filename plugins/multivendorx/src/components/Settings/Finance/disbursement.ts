@@ -154,6 +154,7 @@ export default {
                 },
             ],
         },
+
         {
             key: 'commission_threshold_time',
             type: 'multi-number',
@@ -168,5 +169,6 @@ export default {
                 },
             ],
         },
+
     ],
 }

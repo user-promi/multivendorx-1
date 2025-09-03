@@ -91,6 +91,11 @@ class Modules {
 						'module_file'  => MultiVendorX()->plugin_path . 'modules/StorePolicy/Module.php',
 						'module_class' => 'MultiVendorX\StorePolicy\Module',
 					),
+                    'stripe-connect' => array(
+						'id'           => 'stripe-connect',
+						'module_file'  => MultiVendorX()->plugin_path . 'modules/StripeConnect/Module.php',
+						'module_class' => 'MultiVendorX\StripeConnect\Module',
+					),
 				)
             );
         }
