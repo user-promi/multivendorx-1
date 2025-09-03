@@ -89,12 +89,12 @@ class Admin {
                     'name'   => __( 'Dashboard', 'multivendorx' ),
                     'subtab' => '',
                 ),
-                'notifications' => array(
-                    'name'   => __( 'Notifications', 'multivendorx' ),
+                'actions-items' => array(
+                    'name'   => __( 'Actions Items', 'multivendorx' ),
                     'subtab' => '',
                 ),
-                'customer-services' => array(
-                    'name'   => __( 'Customer Services', 'multivendorx' ),
+                'customer-support' => array(
+                    'name'   => __( 'Customer Support', 'multivendorx' ),
                     'subtab' => '',
                 ),
                 'stores' => array(
@@ -123,7 +123,7 @@ class Admin {
                     'subtab' => '',
                 ),
                 'status-tools' => array(
-                    'name'   => __( 'Status and Tools', 'multivendorx' ),
+                    'name'   => __( 'Status & Tools', 'multivendorx' ),
                     'subtab' => 'database-tools',
                 ),
                 'announcements' => array(
@@ -138,8 +138,8 @@ class Admin {
                     'name'   => __( 'Blogs', 'multivendorx' ),
                     'subtab' => '',
                 ),
-                'help-and-support' => array(
-                    'name'   => __( 'Help and Support', 'multivendorx' ),
+                'help-support' => array(
+                    'name'   => __( 'Help & Support', 'multivendorx' ),
                     'subtab' => '',
                 ),
                 // 'setup' => array(
