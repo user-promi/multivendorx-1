@@ -107,28 +107,26 @@ const ColorSettingInput: React.FC<ColorSettingProps> = (props) => {
 
     return (
         <>
-       
     
-                <div className={props.wrapperClass}>
-                    {/* Toggle Mode */}
-                    <div style={{ display: 'flex', gap: '12px', marginBottom: '12px' }}>
-                        <button
-                            type="button"
-                            onClick={() => setMode('predefined')}
-                            className="admin-btn btn-purple"
-                        >
-                            Pre-defined Palette
-                        </button>
-                        <button
-                            type="button"
-                            onClick={() => setMode('custom')}
-                            className="admin-btn btn-purple"
-                        >
-                            Custom Palette
-                        </button>
-                    </div>
-                </div>
-            
+        <div className={props.wrapperClass}>
+            {/* Toggle Mode */}
+            <div style={{ display: 'flex', gap: '12px', marginBottom: '12px' }}>
+                <button
+                    type="button"
+                    onClick={() => setMode('predefined')}
+                    className="admin-btn btn-purple"
+                >
+                    Pre-defined Palette
+                </button>
+                <button
+                    type="button"
+                    onClick={() => setMode('custom')}
+                    className="admin-btn btn-purple"
+                >
+                    Custom Palette
+                </button>
+            </div>
+        </div>
         
         <div className="color-setting">
             <div className="color-palette-wrapper">
