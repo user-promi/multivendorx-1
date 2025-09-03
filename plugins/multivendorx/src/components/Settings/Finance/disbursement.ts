@@ -155,21 +155,18 @@ export default {
             ],
         },
 		{
-         key: 'commission_threshold_time',
-        type: 'multi-number',
-        label: __('Processing fee', 'multivendorx'),
-		desc: __('','multivendorx'),
-        options: [
-        {
-        key: 'commission_percentage',
-		label: __('$', 'multivendorx'),
-        type: 'number',
-		labelAfterInput: false,
-        },
-        ],
-        },
-      ],
-        },
-      
+            key: 'commission_threshold_time',
+            type: 'multi-number',
+            label: __('Processing fee', 'multivendorx'),
+            desc: __('','multivendorx'),
+            options: [
+                {
+                key: 'commission_percentage',
+                label: __('$', 'multivendorx'),
+                type: 'number',
+                labelAfterInput: false,
+                },
+            ],
+        },     
     ],
 };

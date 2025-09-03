@@ -41,4 +41,19 @@ class MultiVendorX_PayPal_Payment {
             ]
         ];
     }
+
+    public function get_store_payment_settings() {
+        return [
+            'id'    => $this->get_id(),
+            'label' => __('PayPal Payouts', 'multivendorx'),
+            'fields' => [
+                [
+                    'name'        => 'paypal_email',
+                    'type'        => 'email',
+                    'label'       => __('PayPal Email', 'multivendorx'),
+                    'placeholder' => __('Enter your PayPal email address', 'multivendorx'),
+                ]
+            ]
+        ];
+    }
 }

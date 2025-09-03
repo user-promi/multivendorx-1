@@ -22,6 +22,7 @@ declare global {
         capabilities: any;
         custom_roles: any;
         all_payments: any;
+        all_store_settings: any;
         freeVersion : any;
         marketplace_site:any;
         site_url:any;

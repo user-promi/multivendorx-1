@@ -387,6 +387,7 @@ class FrontendScripts {
                         'capabilities'             => StoreUtil::get_store_capability(),
                         'custom_roles'             => Roles::multivendorx_get_roles(),
                         'all_payments'             => MultiVendorX()->payments->all_payment_providers(),
+                        'all_store_settings'       => MultiVendorX()->payments->get_all_store_payment_settings(),
                         'freeVersion'              => MultiVendorX()->version,
                         'marketplace_site'         => get_bloginfo(),
                         'site_url'                 => site_url(),
