@@ -260,7 +260,7 @@ const Commission: React.FC = () => {
             ),
         },
         {
-            header: __('Commission Amount', 'multivendorx'),
+            header: __('Amount', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell title={row.original.commissionAmount || ''}>
                     {row.original.commissionAmount ?? '-'}
@@ -327,12 +327,12 @@ const Commission: React.FC = () => {
             header: __('Paid Status', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell title={row.original.paidStatus || ''}>
-                    {row.original.paidStatus ?? '-'}
+                    <span className="admin-badge red">{row.original.paidStatus ?? '-'}</span>
                 </TableCell>
             ),
         },
         {
-            header: __('Commission Note', 'multivendorx'),
+            header: __('Note', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell title={row.original.commissionNote || ''}>
                     {row.original.commissionNote ?? '-'}

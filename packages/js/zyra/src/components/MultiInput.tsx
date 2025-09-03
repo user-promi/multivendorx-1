@@ -137,7 +137,10 @@ const MultiInput: React.FC<MultiInputProps> = (props) => {
                     {options.map((option, index) => {
                         const selectedValue = option.key ? valueObject[option.key] ?? '' : '';
                         const isLabelAfterInput = option.labelAfterInput ?? labelAfterInput;
-                        const labelJSX = <div className="input-unit">{option.label}</div>;
+                        const labelJSX = option.label ? (
+                            <div className="input-unit">{option.label}</div>
+                        ) : null;
+
 
                         const inputJSX = option.type === 'radio' && option.options 
                             ? renderRadioOptions(option, selectedValue, idPrefix, keyName, onChange, index)
@@ -213,33 +216,48 @@ const MultiInput: React.FC<MultiInputProps> = (props) => {
     return (
         <div className={wrapperClass}>
             <div className="multi-input-row">
-                <input
-                    type="text"
-                    id={id}
-                    name={name}
-                    value={inputValue}
-                    placeholder={placeholder}
-                    className={inputClass}
-                    onChange={(e) => setInputValue(e.target.value)}
-                    onFocus={onFocus}
-                    onBlur={onBlur}
-                />
-                <button type="button" className={buttonClass || "add-button"} onClick={handleAdd}>
-                    <i className="adminlib-vendor-form-add"></i>
-                    Add
-                </button>
-            </div>
-
-            {Array.isArray(values) && values.length > 0 && (
-                <ul className={listClass || "multi-string-list"}>
-                    {values.map((val, index) => (
-                        <li key={index} className={itemClass}>
-                            {val}
-                            <i className="adminlib-cross" onClick={() => handleDelete(val)}></i>
+                {Array.isArray(values) && values.length > 0 && (
+                    <ul className={listClass || "multi-string-list"}>
+                        <li>
+                            <div>Lorem ipsum dolor sit amet.</div>
+                            <span className="admin-btn btn-red"><i className="adminlib-cross"></i>Remove</span>
                         </li>
-                    ))}
-                </ul>
-            )}
+                        <li>
+                            <div>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut fuga impedit quia cumque veniam voluptatibus?</div>
+                            <span className="admin-btn btn-red"><i className="adminlib-cross"></i>Remove</span>
+                        </li>
+                        <li>
+                            <div>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Consequatur, delectus.</div>
+                            <span className="admin-btn btn-red"><i className="adminlib-cross"></i>Remove</span>
+                        </li>
+                        {values.map((val, index) => (
+                            <li key={index} className={itemClass}>
+                                <div>{val}</div>
+                                <span>
+                                <span className="admin-btn btn-red" onClick={() => handleDelete(val)}><i className="adminlib-cross"></i>Remove</span>
+                                </span>
+                            </li>
+                        ))}
+                        <li>
+                            <input
+                                type="text"
+                                id={id}
+                                name={name}
+                                value={inputValue}
+                                placeholder={placeholder}
+                                className={inputClass}
+                                onChange={(e) => setInputValue(e.target.value)}
+                                onFocus={onFocus}
+                                onBlur={onBlur}
+                            />
+                            <span className="admin-btn btn-purple" onClick={handleAdd}>
+                                <i className="adminlib-vendor-form-add"></i>
+                                Add
+                            </span>
+                        </li>
+                    </ul>
+                )}
+            </div>
 
             {proSetting && <span className="admin-pro-tag"><i className="adminlib-pro-tag"></i>Pro</span>}
             {description && (

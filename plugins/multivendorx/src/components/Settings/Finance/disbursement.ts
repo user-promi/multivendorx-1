@@ -8,12 +8,92 @@ export default {
     icon: 'adminlib-dynamic-pricing',
     submitUrl: 'settings',
     modal: [
+          {
+            key: 'order_status',
+            type: 'checkbox',
+            label: __('Eligible order statuses', 'multivendorx'),
+			settingDescription: __("Choose which order statuses qualify for commission payouts.",'multivendorx'),
+            class: 'mvx-toggle-checkbox',
+
+            options: [
+                {
+                    key: 'completed',
+                    label: __('Completed', 'multivendorx'),
+                    value: 'completed',
+                },
+                {
+                    key: ' delivered ',
+                    label: __('Delivered', 'multivendorx'),
+                    value: ' delivered ',
+                },
+                {
+                    key: 'shipped',
+                    label: __('Shipped', 'multivendorx'),
+                    value: 'shipped',
+                },
+                {
+                    key: ' processing ',
+                    label: __('Processing', 'multivendorx'),
+                    value: ' processing ',
+                },
+            ],
+            selectDeselect: true,
+        },
+		{
+            key: 'payment_method',
+            type: 'setting-toggle',
+            label: __('Payout Method', 'multivendorx'),
+			settingDescription: __("Select how commissions are released from the admin account",'multivendorx'),
+             desc: __("<ul><li>Instant – Earnings are transferred immediately once an order becomes eligible.</li><li>Waiting – Hold payouts until conditions set by the admin are met.</li></ul>",'multivendorx'),
+            options: [
+                {
+                    key: 'instantly',
+                    label: __('Instantly', 'multivendorx'),
+                    value: 'instantly',
+                },
+                {
+                    key: 'waitting',
+                    label: __('Waitting', 'multivendorx'),
+                    value: 'waitting',
+                },
+            ],
+        },
+       {
+            key: 'commission_threshold_time',
+            label: __('Lock period', 'multivendorx'),
+            desc: __(
+                  'Set a waiting period before commissions become eligible for payout. Helps account for refunds, cancellations, or disputes.','multivendorx'),
+            type: 'multi-number',
+            options: [
+                {
+                    key: 'commission_percentage',
+                    label: __('Day', 'multivendorx'),
+                    type: 'number',
+                    labelAfterInput: true,
+                },
+            ],
+        },
+		{
+            key: 'payout_threshold_time',
+            label: __('Minimum payout threshold', 'multivendorx'),
+            desc: __(
+                  'Define the minimum amount a store must accumulate before payouts are processed.','multivendorx'),
+            type: 'multi-number',
+            options: [
+                {
+                    key: 'commission_percentage',
+                    label: __('$', 'multivendorx'),
+                    type: 'number',
+                    labelAfterInput: false,
+                },
+            ],
+        },
         {
             key: 'payment_schedule',
             type: 'setting-toggle',
             label: __('Payout frequency', 'multivendorx'),
-			settingDescription: __("Select the frequency at which store commissions are automatically transferred from the admin account via PayPal Payouts, PayPal MassPay, or Stripe.",'multivendorx'),
-             desc: __("<ul><li>Manual – Payments are not scheduled automatically. The admin can pay vendors manually or vendors can request withdrawals.</li><li>Automatic (Hourly, Daily, Weekly, Fortnightly, Monthly) – Earnings are transferred automatically from the admin account to vendor accounts at the selected interval.</li></ul>",'multivendorx'),
+			settingDescription: __("Decide how often store commissions are released:",'multivendorx'),
+             desc: __("<ul><li>If Manual is selected, stores handle withdrawals themselves from their dashboard.</li><li>Otherwise, commissions are automatically disbursed to stores based on the chosen schedule.</li></ul>",'multivendorx'),
             options: [
                 {
                     key: 'mannual',
@@ -48,98 +128,48 @@ export default {
             ],
         },
         {
-            key: 'commission_threshold',
+            key: 'commission_threshold_time',
+            label: __('Free withdrawal', 'multivendorx'),
+            desc: __('','multivendorx'),
             type: 'multi-number',
-            label: __('Minimum payout threshold', 'multivendorx'),
-            settingDescription: __('Stores can only request a manual payout once their pending commission reaches this minimum amount.Example: If the threshold is set to $100, a store can request payout only after its total commission reaches $100.',
-                'multivendorx'
-            ),
+            options: [
+                {
+                    key: 'commission_percentage',
+                    label: __('$', 'multivendorx'),
+                    type: 'number',
+                    labelAfterInput: false,
+                },
+            ],
+        },
+		{
+            key: 'commission_threshold_time',
+            label: __('Free withdrawal', 'multivendorx'),
+            desc: __('','multivendorx'),
+            type: 'multi-number',
             options: [
                 {
                     key: 'commission_percentage',
                     type: 'number',
-                    labelAfterInput: true,
+                    labelAfterInput: false,
                 },
             ],
         },
+		{
+         key: 'commission_threshold_time',
+        type: 'multi-number',
+        label: __('Processing fee', 'multivendorx'),
+		desc: __('','multivendorx'),
+        options: [
         {
-            key: 'separator_content',
-            type: 'section',
-            hint: __('Payout timing and eligibility', 'multivendorx'),
-            desc: __('Define when earnings become available for payout based on order status', 'multivendorx')
+        key: 'commission_percentage',
+		label: __('$', 'multivendorx'),
+        type: 'number',
+		labelAfterInput: false,
         },
-        {
-            key: 'commission_by_product_price',
-            type: 'nested',
-            single: true,
-            label: 'Withdrawal rules',
-            nestedFields: [
-                {
-                    key: 'commission_threshold_time',
-                    type: 'multi-number',
-                    label: __('Lock period', 'multivendorx'),
-                    options: [
-                        {
-                            key: 'commission_percentage',
-                            label: __('Days', 'multivendorx'),
-                            type: 'number',
-                            labelAfterInput: true,
-                        },
-                    ],
-                },
-                {
-                    key: 'commission_threshold_time',
-                    type: 'multi-number',
-                    label: __('Free withdrawal', 'multivendorx'),
-                    options: [
-                        {
-                            key: 'commission_percentage',
-                            type: 'number',
-                        },
-                    ],
-                },
-                {
-                    key: 'commission_threshold_time',
-                    type: 'multi-number',
-                    label: __('Processing fee', 'multivendorx'),
-                    options: [
-                        {
-                            key: 'commission_percentage',
-                            type: 'number',
-                        },
-                    ],
-                },
-            ],
+        ],
         },
-        {
-            key: 'order_status',
-            type: 'checkbox',
-            label: __('Eligible order statuses', 'multivendorx'),
-            class: 'mvx-toggle-checkbox',
-
-            options: [
-                {
-                    key: 'completed',
-                    label: __('Completed', 'multivendorx'),
-                    value: 'completed',
-                },
-                {
-                    key: ' delivered ',
-                    label: __('Delivered', 'multivendorx'),
-                    value: ' delivered ',
-                },
-                {
-                    key: 'shipped',
-                    label: __('Shipped', 'multivendorx'),
-                    value: 'shipped',
-                },
-                {
-                    key: ' processing ',
-                    label: __('Processing', 'multivendorx'),
-                    value: ' processing ',
-                },
-            ],
-            selectDeselect: true,
+      ],
         },
+      
     ],
 };

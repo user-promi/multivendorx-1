@@ -83,9 +83,9 @@
         width: 100%;
       }
 
-      .header-col:nth-of-type(2) {
-        min-width: 14rem;
-      }
+      // .header-col:nth-of-type(2) {
+      //   min-width: 14rem;
+      // }
 
       .header-col:first-child {
         max-width: 2rem;
@@ -163,7 +163,7 @@
         }
 
         .admin-column:nth-of-type(2) {
-          min-width: 14rem;
+          // min-width: 14rem;
 
           .product-image {
             display: flex;
@@ -340,10 +340,11 @@
   cursor: pointer;
 
   i{
-    padding: 0.5rem;
+    padding: 0.5rem 0.313rem;
     border-radius: 50%;
     background: transparent;
     transition: all 0.5s ease;
+
 
     &:hover{
       background: #ebebeb;

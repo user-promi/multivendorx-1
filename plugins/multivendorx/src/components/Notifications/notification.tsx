@@ -4,8 +4,18 @@ import Products from './products';
 import Vendors from './vendors';
 import Coupons from './coupon';
 import Transactions from './transaction';
+import { useState } from 'react';
 
 const Notification = () => {
+
+    const [activeTab, setActiveTab] = useState("products");
+
+    const tabs = [
+        { id: "products", label: "Products", content: <Products /> },
+        { id: "vendors", label: "Vendors", content: <Vendors /> },
+        { id: "coupons", label: "Coupons", content: <Coupons /> },
+        { id: "transactions", label: "Transaction", content: <Transactions /> },
+    ];
     const workboardStats = [
         {
             id: 'reviews',
@@ -36,6 +46,7 @@ const Notification = () => {
         { id: 'transactions', label: 'Total Transactions', value: '156' },
     ];
 
+
     return (
         <>
             <AdminBreadcrumbs
@@ -45,53 +56,83 @@ const Notification = () => {
 
             {/* Workboard Stats */}
             <div className="work-board">
-                <div className="row store-card">
-                    {workboardStats.map(stat => (
-                        <div className="column" key={stat.id}>
-                            <div className="cards">
-                                <span className="value">{stat.count}</span>
-                                <span className="name">{stat.label}</span>
+                <div className="row">
+                    <div className="column w-45">
+                        <h3>Account Overview</h3>
+                        <div className="action-card-wrapper">
+                            <div className="action">
+                                <div className="title">
+                                    3
+                                    <i className="adminlib-cart"></i>
+                                </div>
+                                <div className="description">
+                                    Pending Products
+                                </div>
+                            </div>
+                            <div className="action">
+                                <div className="title">
+                                    52
+                                    <i className="adminlib-tools"></i>
+                                </div>
+                                <div className="description">
+                                    Pending Vendors
+                                </div>
+                            </div>
+                            <div className="action">
+                                <div className="title">
+                                    99
+                                    <i className="adminlib-catalog"></i>
+                                </div>
+                                <div className="description">
+                                    Pending Coupons
+                                </div>
+                            </div>
+                            <div className="action">
+                                <div className="title">
+                                    3
+                                    <i className="adminlib-module"></i>
+                                </div>
+                                <div className="description">
+                                    Pending Transaction
+                                </div>
                             </div>
                         </div>
-                    ))}
+                    </div>
+                    <div className="column">
+
+                    </div>
                 </div>
 
-                {/* Sections */}
-                <div className="title-wrapper">
-                    <i className="adminlib-storefront"></i>
-                    <h2>Products</h2>
-                </div>
-                <Products />
+                <div className="row">
+                    <div className="column">
+                        <div className="action-tab-wrapper">
+                            {/* Tab Titles */}
+                            <div className="tab-titles">
+                                {tabs.map((tab) => (
+                                    <div
+                                        key={tab.id}
+                                        className={`title ${activeTab === tab.id ? "active" : ""}`}
+                                        onClick={() => setActiveTab(tab.id)}
+                                    >
+                                        <h2>{tab.label}</h2>
+                                    </div>
+                                ))}
+                            </div>
 
-                <div className="title-wrapper">
-                    <i className="adminlib-support"></i>
-                    <h2>Vendors</h2>
-                </div>
-                <Vendors />
-
-                <div className="title-wrapper">
-                    <i className="adminlib-credit-card"></i>
-                    <h2>Coupons</h2>
-                </div>
-                <Coupons/>
-                <div className="title-wrapper">
-                    <i className="adminlib-credit-card"></i>
-                    <h2>Transaction</h2>
-                </div>
-                <Transactions/>
-                {/* Extra stats specific to Withdrawal Requests */}
-                <div className="row ">
-                    {withdrawalExtraStats.map(stat => (
-                        <div className="column" key={stat.id}>
-                            <div className="cards">
-                                <span className="value">{stat.value}</span>
-                                <span className="name">{stat.label}</span>
+                            {/* Tab Content */}
+                            <div className="tab-content">
+                                {tabs.map(
+                                    (tab) =>
+                                        activeTab === tab.id && (
+                                            <div key={tab.id} className="tab-panel">
+                                                {tab.content}
+                                            </div>
+                                        )
+                                )}
                             </div>
                         </div>
-                    ))}
+                    </div>
                 </div>
-
-                <WithdrawalRequests />
 
             </div>
         </>
