@@ -131,11 +131,11 @@ const AddStore = () => {
               </div>
             </div>
           </div>
-{/* 
+
           <button
             className="admin-btn btn-purple"
             onClick={handleSubmit}
-          >Submit</button> */}
+          >Submit</button>
         </div>
 
         <div className="card-wrapper width-35">
@@ -183,7 +183,7 @@ const AddStore = () => {
       </div>
 
 
-      {/* <div className="add-store">
+      <div className="add-store">
 
         <div className="form-group-wrapper">
           <div className="form-group">
@@ -252,8 +252,7 @@ const AddStore = () => {
             />
           </div>
         </div>
-        
-      </div> end add store */}
+      </div>
     </>
   );
 };

@@ -37,11 +37,6 @@ export default {
                     value: __( 'top-rated-store', 'multivendorx' ),
                 },
             ],
-            dependent: {
-                key: 'is_singleproductmultistore',
-                set: true,
-            },
-            moduleEnabled: 'spmv',
         },
         {
             key: 'moreoffers_display_position',
@@ -73,12 +68,6 @@ export default {
                     value: 'after-tabs',
                 },
             ],
-            dependent: {
-                key: 'is_singleproductmultistore',
-                set: true,
-            },
-            proSetting: false,
-            moduleEnabled: 'spmv',
         },
     ],
 };

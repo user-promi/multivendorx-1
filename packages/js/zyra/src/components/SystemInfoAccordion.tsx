@@ -30,40 +30,14 @@ interface InfoSection {
 
 type ApiResponse = Record<string, InfoSection>;
 
-// Dummy fallback (dynamic tests)
-const fallbackData: ApiResponse = {
-    multivendorx: {
-        label: "MultivendorX",
-        description: "Marketplace plugin details",
-        fields: {
-            version: { label: "Version", value: "4.1.0" },
-            status: { label: "Status", value: "Active" },
-        },
-    },
-    dropsin: {
-        label: "Dropsin",
-        description: "Dropshipping integration",
-        fields: {
-            version: { label: "Version", value: "2.5.3" },
-            status: { label: "Status", value: "Inactive" },
-        },
-    },
-    active_theme: {
-        label: "Active Theme",
-        description: "Current WordPress theme details",
-        fields: {
-            name: { label: "Theme", value: "Astra" },
-            version: { label: "Version", value: "3.8.0" },
-        },
-    },
-};
-
 const SystemInfoAccordion: React.FC<SystemInfoAccordionProps> = ({
     apiLink,
     appLocalizer,
     copyButtonLabel = "Copy System Info", // dynamic label
     copiedLabel = "Copied!", // dynamic label
 }) => {
+    console.log(appLocalizer)
+    console.log(apiLink)
     const [data, setData] = useState<ApiResponse | null>(null);
     const [openKeys, setOpenKeys] = useState<string[]>([]);
     const [loading, setLoading] = useState(true);
@@ -77,11 +51,10 @@ const SystemInfoAccordion: React.FC<SystemInfoAccordionProps> = ({
             headers: { "X-WP-Nonce": appLocalizer.nonce },
         })
             .then((response) => {
-                setData(response.data || fallbackData);
+                setData(response.data);
             })
             .catch((err) => {
-                setData(fallbackData);
-                console.error("Error fetching system info:", err);
+                
             })
             .finally(() => setLoading(false));
     }, [apiLink, appLocalizer]);
