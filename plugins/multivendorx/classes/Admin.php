@@ -134,10 +134,10 @@ class Admin {
                     'name'   => __( 'Knowledgebase', 'multivendorx' ),
                     'subtab' => '',
                 ),
-                'blogs' => array(
-                    'name'   => __( 'Blogs', 'multivendorx' ),
-                    'subtab' => '',
-                ),
+                // 'blogs' => array(
+                //     'name'   => __( 'Blogs', 'multivendorx' ),
+                //     'subtab' => '',
+                // ),
                 'help-support' => array(
                     'name'   => __( 'Help & Support', 'multivendorx' ),
                     'subtab' => '',

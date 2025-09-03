@@ -15,6 +15,19 @@ defined('ABSPATH') || exit;
 class Status {
 
     public static function get_system_info() {
+
+        require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+    
+        // Core debug data.
+        if ( ! class_exists( 'WP_Debug_Data' ) ) {
+            require_once ABSPATH . 'wp-admin/includes/class-wp-debug-data.php';
+        }
+    
+        // Ensure core update functions are available
+        if ( ! function_exists( 'get_core_updates' ) ) {
+            require_once ABSPATH . 'wp-admin/includes/update.php';
+        }
+    
         $active_modules = MultiVendorX()->modules->get_active_modules() ?? [];
         
         $mvx = [
@@ -30,11 +43,37 @@ class Status {
                 ],
                 'active_modules' => [
                     'label' => esc_html__( 'Active modules', 'multivendorx' ),
-                    'value' => !empty($active_modules) ? implode(", ", $active_modules) : __('None', 'multivendorx'),
+                    'value' => ! empty( $active_modules ) ? implode(", ", $active_modules) : __('None', 'multivendorx'),
                 ]
             ],
         ];
-        
-        return apply_filters( 'mvx_system_info_response', ['mvx' => $mvx] );
+    
+        $core_data = \WP_Debug_Data::debug_data();
+    
+        // Keep only relevant data.
+        $core_data = array_intersect_key(
+            $core_data,
+            array_flip(
+                [
+                    'wp-core',
+                    'wp-dropins',
+                    'wp-active-theme',
+                    'wp-parent-theme',
+                    'wp-mu-plugins',
+                    'wp-plugins-active',
+                    'wp-plugins-inactive',
+                    'wp-server',
+                    'wp-database',
+                    'wp-constants',
+                    'wp-filesystem',
+                ]
+            )
+        );
+    
+        // Prepend MVX data
+        $core_data = [ 'mvx' => $mvx ] + $core_data;
+    
+        return apply_filters( 'mvx_system_info_response', $core_data );
     }
+    
 }
