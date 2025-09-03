@@ -110,6 +110,7 @@ const ColorSettingInput: React.FC<ColorSettingProps> = (props) => {
     
         <div className={props.wrapperClass}>
             {/* Toggle Mode */}
+            {!selectedImage && (
             <div style={{ display: 'flex', gap: '12px', marginBottom: '12px' }}>
                 <button
                     type="button"
@@ -126,6 +127,7 @@ const ColorSettingInput: React.FC<ColorSettingProps> = (props) => {
                     Custom Palette
                 </button>
             </div>
+            )}
         </div>
         
         <div className="color-setting">

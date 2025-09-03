@@ -272,3 +272,44 @@
         }
     }
 }
+
+.image-list{
+    width: 25%;
+    .image-thumbnail{
+        display: flex;
+        gap: 0.313rem;
+        padding: 0.5rem;
+        margin-bottom: 0.625rem;
+        border: $border-light-small;
+        cursor: pointer;
+        border-radius: $border-light-small;
+
+        p{
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        img{
+            width: 3rem;
+        }
+
+        &.active{
+            border-color: $theme-color;
+            background: $theme-background-color;
+
+            p{
+                color: $theme-color;
+            }
+        }
+    }
+}
+
+.image-preview{
+    max-height: 50rem;
+    width: 75%;
+
+    img{
+        height: 100%;
+        width: auto;
+    }
+}

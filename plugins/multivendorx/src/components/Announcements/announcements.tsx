@@ -184,7 +184,7 @@ const Announcements: React.FC = () => {
         }
     ];
 
-     const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(false);
 
     return (
         <>
@@ -203,76 +203,61 @@ const Announcements: React.FC = () => {
             />
 
             {addAnnouncements && (
-                <CommonPopup open={addAnnouncements} onClose={() => setAddAnnouncements(false)} title="Parent One Popup">
-                    <div>
-                    <h2>Hello from Parent One 🎉</h2>
-                    <p>This is static info passed from Parent One.</p>
-                    
-                    </div>
-                </CommonPopup>
-            )}
-
-
-            {/* {addAnnouncements && (
-                <div className="right-popup">
-                    <div className={`content-wrapper ${addAnnouncements ? "open" : ""}`}>
-                        <div className="title-wrapper">
-                                <div className="title">
-                                    <i className="adminlib-cart"></i>
-                                    Add Announcements
-                                </div>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-                                <i onClick={() => setAddAnnouncements(false)} className="icon adminlib-close"></i>
+                <CommonPopup
+                    open={addAnnouncements}
+                    onClose={() => setAddAnnouncements(false)}
+                    width={400}
+                    header={
+                        <>
+                            <div className="title">
+                                <i className="adminlib-cart"></i>
+                                Add Announcements
                             </div>
-                            
-                            <div className="content">
-                                <div className="form-group-wrapper">
-                                    <div className="form-group">
-                                        <label htmlFor="product-name">Title</label>
-                                        <BasicInput
-                                            type="text"
-                                            name="name"
-                                            // value={formData.name}
-                                            // onChange={handleChange}
-
-                                        />
-                                    </div>
-                                    <div className="form-group">
-                                        <label htmlFor="product-name">Enter Url</label>
-                                        <BasicInput
-                                            type="text"
-                                            name="name"
-                                            // value={formData.name}
-                                            // onChange={handleChange}
-                                        />
-                                    </div>
-                                    <div className="form-group">
-                                        <label htmlFor="product-name">Enter Content</label>
-                                        <TextArea
-                                        name="description"
-                                        inputClass="textarea-input"
-                                        // value={formData.description}
-                                        // onChange={handleChange}
-                                        />
-                                    </div>
-                                    <div className="form-group">
-                                        <label htmlFor="product-name">Vendors</label>
-                                        <TextArea
-                                        name="description"
-                                        inputClass="textarea-input"
-                                        // value={formData.description}
-                                        // onChange={handleChange}
-                                        />
-                                    </div>
-                                </div>
-                            </div>
+                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                            <i
+                                onClick={() => setAddAnnouncements(false)}
+                                className="icon adminlib-close"
+                            ></i>
+                        </>
+                    }
+                    footer={
                         <div className="popup-footer">
-                            <div onClick={() => setAddAnnouncements(false)} className="admin-btn btn-red">Cancel</div>
-                            <a href="" className="admin-btn btn-purple">Submit</a>
+                            <div
+                                onClick={() => setAddAnnouncements(false)}
+                                className="admin-btn btn-red"
+                            >
+                                Cancel
+                            </div>
+                            <a href="" className="admin-btn btn-purple">
+                                Submit
+                            </a>
+                        </div>
+                    }
+                >
+                <div className="content">
+                    <div className="form-group-wrapper">
+                        <div className="form-group">
+                            <label htmlFor="product-name">Title</label>
+                            <BasicInput type="text" name="name" />
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="product-name">Enter Url</label>
+                            <BasicInput type="text" name="name" />
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="product-name">Enter Content</label>
+                            <TextArea name="description" inputClass="textarea-input" />
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="product-name">Vendors</label>
+                            <TextArea name="description" inputClass="textarea-input" />
                         </div>
                     </div>
                 </div>
-            )} */}
+                </CommonPopup>
+
+            )}
+
             <div className="admin-table-wrapper">
                 <Table
                     data={data}
