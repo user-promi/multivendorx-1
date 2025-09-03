@@ -8,7 +8,7 @@ export default {
             id: 'booking',
             name: __('Booking', 'multivendorx'),
             desc: "Allow customers to reserve appointments, equipment, or services.",
-            icon: 'adminlib-rules',
+            icon: 'adminlib-rules', 
             doc_link: 'https://multivendorx.com/docs/knowledgebase/booking-product',
             //settings_link: appLocalizer.site_url,
             pro_module: true,
@@ -340,14 +340,14 @@ export default {
             category: 'payment_management'
         },
         {
-           id: 'facilitator',
-           name: __('Facilitator', 'multivendorx'),
-           desc: "Share commission on a sale between the store and another designated user. Each participant receives their assigned portion automatically.",
-           icon: 'adminlib-dynamic-pricing',
-           doc_link: 'https://multivendorx.com/docs/knowledgebase/facilitator',
-           pro_module: true,
-           category: 'payment_management'
-        }, 
+            id: 'facilitator',
+            name: __('Facilitator', 'multivendorx'),
+            desc: "Share commission on a sale between the store and another designated user. Each participant receives their assigned portion automatically.",
+            icon: 'adminlib-dynamic-pricing',
+            doc_link: 'https://multivendorx.com/docs/knowledgebase/facilitator',
+            pro_module: true,
+            category: 'payment_management'
+        },      
         { type: 'separator', id: 'shipping_management', label: 'Shipping Management' },
         {
             id: 'zone-shipping',
@@ -411,6 +411,46 @@ export default {
             category: 'customer_experience'
         },
         {
+            id: 'live-chat',
+            name: __('Live Chat', 'multivendorx'),
+            desc: "Customers send real-time messages to stores about products or orders.",
+            icon: 'adminlib-rules',
+            doc_link: 'https://multivendorx.com/docs/knowledgebase/live-chat',
+            //settings_link: admin_url('admin.php?page=mvx#&submenu=settings&name=settings-live-chat'),
+            pro_module: true,
+            category: 'customer_experience'
+        },
+        {
+            id: 'store-support',
+            name: __('Store Support', 'multivendorx'),
+            desc: "Built-in ticketing system for customers to raise and track support requests.",
+            icon: 'adminlib-rules',
+            doc_link: 'https://multivendorx.com/docs/knowledgebase/store-support/',
+            //settings_link: admin_url('admin.php?page=mvx#&submenu=settings&name=settings-store-support'),
+            pro_module: true,
+            category: 'customer_experience'
+        },
+        {
+            id: 'question-answer',
+            name: __('Question & Answer', 'multivendorx'),
+            desc: "Customers can publicly ask product questions.",
+            icon: 'adminlib-rules',
+            doc_link: 'https://multivendorx.com/docs/knowledgebase/shipstation/',
+            //settings_link: appLocalizer.site_url,
+            pro_module: true,
+            category: 'customer_experience'
+        },
+        {
+            id: 'enquiry',
+            name: __('Enquiry', 'multivendorx'),
+            desc: "Customers can send private product inquiries.",
+            icon: 'adminlib-rules',
+            doc_link: 'https://multivendorx.com/docs/knowledgebase/shipstation/',
+            //settings_link: appLocalizer.site_url,
+            pro_module: true,
+            category: 'customer_experience'
+        },
+        {
             id: 'marketplace-refund',
             name: __('Marketplace Refund', 'multivendorx'),
             desc: "Customers submit refund requests, and stores review and process them directly.",
@@ -441,28 +481,6 @@ export default {
             pro_module: true,
             category: 'marketing_tools'
         },
-        { type: 'separator', id: 'customer_experience', label: 'Customer Experiences' },
-        {
-            id: 'live-chat',
-            name: __('Live Chat', 'multivendorx'),
-            desc: "Customers send real-time messages to stores about products or orders.",
-            icon: 'adminlib-rules',
-            doc_link: 'https://multivendorx.com/docs/knowledgebase/live-chat',
-            //settings_link: admin_url('admin.php?page=mvx#&submenu=settings&name=settings-live-chat'),
-            pro_module: true,
-            category: 'customer_experience'
-        },
-        {
-            id: 'store-support',
-            name: __('Store Support', 'multivendorx'),
-            desc: "Built-in ticketing system for customers to raise and track support requests.",
-            icon: 'adminlib-rules',
-            doc_link: 'https://multivendorx.com/docs/knowledgebase/store-support/',
-            //settings_link: admin_url('admin.php?page=mvx#&submenu=settings&name=settings-store-support'),
-            pro_module: true,
-            category: 'customer_experience'
-        },
-        { type: 'separator', id: 'analytics_tools', label: 'Customer Analytics Tools' },
         {
             id: 'store-analytics',
             name: __('Store Analytics', 'multivendorx'),
@@ -616,26 +634,16 @@ export default {
             pro_module: true,
             category: 'integration'
         },
-        { type: 'separator', id: 'engagement', label: 'Engagement' },
         {
-            id: 'question-answer',
-            name: __('Question & Answer', 'multivendorx'),
-            desc: "Customers can publicly ask product questions.",
+            id: 'mvx-blocks',
+            name: __('Gutenberg Blocks', 'multivendorx'),
+            desc: "Marketplace widgets made available as blocks inside the Gutenberg editor.",
             icon: 'adminlib-rules',
-            doc_link: 'https://multivendorx.com/docs/knowledgebase/shipstation/',
+            doc_link: '',
             //settings_link: appLocalizer.site_url,
-            pro_module: true,
-            category: 'engagement'
+            pro_module: false,
+            category: 'integration'
         },
-        {
-            id: 'enquiry',
-            name: __('Enquiry', 'multivendorx'),
-            desc: "Customers can send private product inquiries.",
-            icon: 'adminlib-rules',
-            doc_link: 'https://multivendorx.com/docs/knowledgebase/shipstation/',
-            //settings_link: appLocalizer.site_url,
-            pro_module: true,
-            category: 'engagement'
-        },	      
+		 
 ]
 }
