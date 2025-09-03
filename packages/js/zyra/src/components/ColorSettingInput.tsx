@@ -59,6 +59,8 @@ const ColorSettingInput: React.FC<ColorSettingProps> = (props) => {
         ...initialColors,
     });
 
+    const [selectedImage, setSelectedImage] = useState<string | null>(props.images?.[0]?.img || null);
+
     useEffect(() => {
         if (selectedPalette !== 'custom') {
             const selectedOption = props.predefinedOptions.find(opt => opt.value === selectedPalette);
@@ -102,7 +104,6 @@ const ColorSettingInput: React.FC<ColorSettingProps> = (props) => {
             }
         });
     };
-    const [selectedImage, setSelectedImage] = useState<string | null>(props.images?.[0]?.img || null);
 
     return (
         <>
