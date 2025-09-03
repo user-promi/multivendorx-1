@@ -94,7 +94,6 @@ interface InputField {
     | 'color-setting'
     | 'radio-select'
     | 'radio'
-    | 'multi-number'
     | 'button'
     | 'password'
     | 'calender'
@@ -162,6 +161,7 @@ interface InputField {
     inputWrapperClass?: string;
     wrapperClass?: string;
     tour?: string;
+    preParameter?:string;
     rightContent?: boolean;
     dependentPlugin?: boolean;
     dependentSetting?: string;
@@ -678,6 +678,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                                     handleChange(e, inputField.key);
                                 }
                             }}
+                            preParameter={inputField.preParameter}
                             parameter={inputField.parameter} // for showing text beside the text box
                             generate={inputField.generate}
                         />
@@ -936,32 +937,6 @@ const AdminForm: React.FC<AdminFormProps> = ({
                                 />
                             </div>
                         </div>
-                    );
-                    break;
-                case 'multi-number':
-                    input = (
-                        <MultiInput
-                            inputType="multi-number"
-                            parentWrapperClass="settings-basic-input-class"
-                            childWrapperClass="settings-basic-child-wrap"
-                            inputWrapperClass="settings-basic-input-child-class"
-                            innerInputWrapperClass="setting-form-input"
-                            inputLabelClass="setting-form-basic-input"
-                            idPrefix="setting-integer-input"
-                            keyName={inputField.key}
-                            description={inputField.desc}
-                            inputClass={inputField.class}
-                            value={setting[inputField.key]}
-                            options={
-                                Array.isArray(inputField.options)
-                                    ? inputField.options
-                                    : []
-                            }
-                            onChange={handleMultiNumberChange}
-                            proSetting={isProSetting(
-                                inputField.proSetting ?? false
-                            )}
-                        />
                     );
                     break;
 
@@ -1770,6 +1745,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             key={inputField.key}
                             id={inputField.key}
                             label={inputField.label}
+                            description={inputField.desc}
                             fields={inputField.nestedFields ?? []}
                             value={value}
                             addButtonLabel={inputField.addButtonLabel}
