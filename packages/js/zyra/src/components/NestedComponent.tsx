@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../styles/web/NestedComponent.scss";
-import MultiInput from "./MultiInput";
+import ToggleSetting from "./ToggleSetting";
+import BasicInput from "./BasicInput";
 
 interface NestedFieldOption {
   key?: string;
@@ -11,7 +12,7 @@ interface NestedFieldOption {
 
 interface NestedField {
   key: string;
-  type: "number" | "select" | "multi-number";
+  type: "number" | "select" | "text" | "url";
   label?: string;
   placeholder?: string;
   options?: NestedFieldOption[];
@@ -19,6 +20,14 @@ interface NestedField {
   firstRowOnly?: boolean;
   skipFirstRow?: boolean;
   skipLabel?: boolean;
+  parameter?: string;
+  preParameter?: string;
+  before?: string;
+  after?: string;
+  desc?: string;
+  size?: string;
+  min?: number;
+  
 }
 
 interface NestedComponentProps {
@@ -30,6 +39,7 @@ interface NestedComponentProps {
   deleteButtonLabel?: string;
   onChange: (value: Record<string, any>[]) => void;
   single?: boolean;
+  description?: string;
 }
 
 const NestedComponent: React.FC<NestedComponentProps> = ({
@@ -40,6 +50,7 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
   addButtonLabel = "Add",
   deleteButtonLabel = "Delete",
   single = false,
+  description
 }) => {
   const [rows, setRows] = useState<Record<string, any>[]>([]);
 
@@ -48,65 +59,43 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
     setRows(single ? (value.length ? [value[0]] : [{}]) : value.length ? value : [{}]);
   }, [value, single]);
 
-  // Normalize output
-  function formatData(data: Record<string, any>[]) {
-    return data.map((row) =>
-      Object.fromEntries(
-        Object.entries(row).map(([key, val]) => {
-          const field = fields.find((f) => f.key === key);
-          if (field?.type === "multi-number") {
-            return [
-              key,
-              (val || []).map((item: any) => ({ key: item.key, value: item.value })),
-            ];
-          }
-          return [key, val];
-        })
-      )
-    );
-  }
-
   function updateAndSave(updated: Record<string, any>[]) {
     setRows(updated);
-    onChange(formatData(updated));
+    onChange(updated);
   }
 
-  // Generic field change handler
   function handleChange(rowIndex: number, key: string, value: any) {
     updateAndSave(rows.map((row, i) => (i === rowIndex ? { ...row, [key]: value } : row)));
   }
 
-  function addRow() {
-    if (single) return;
+  function isLastRowComplete() {
+    if (rows.length === 0) return true;
     const lastRow = rows.at(-1) || {};
 
-    // Validation: ensure last row is filled
-    const isComplete = fields.every((f) => {
+    return fields.every((f) => {
       if (f.skipFirstRow && rows.length === 1) return true;
+      if (f.firstRowOnly && rows.length > 1) return true;
 
-      if (f.type === "multi-number") {
-        return f.options?.every((opt) => {
-          const val = lastRow[opt.key || ""];
-          return val !== undefined && val !== "";
-        });
-      }
+      const val = lastRow[f.key];
+
+      // dependency check
       if (f.dependent) {
         const depVal = lastRow[f.dependent.key];
         if (
-          (f.dependent.set && depVal === f.dependent.value) ||
-          (!f.dependent.set && depVal !== f.dependent.value)
+          (f.dependent.set && depVal !== f.dependent.value) ||
+          (!f.dependent.set && depVal === f.dependent.value)
         ) {
-          const val = lastRow[f.key];
-          return val !== undefined && val !== "";
+          return true; // not required in this case
         }
-        return true;
       }
-      const val = lastRow[f.key];
+
       return val !== undefined && val !== "";
     });
+  }
 
-    if (!isComplete && rows.length > 1) return;
-
+  function addRow() {
+    if (single) return;
+    if (!isLastRowComplete()) return;
     updateAndSave([...rows, {}]);
   }
 
@@ -114,12 +103,11 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
     if (!single) updateAndSave(rows.filter((_, i) => i !== index));
   }
 
-  // Render field based on type
   function renderField(field: NestedField, row: Record<string, any>, rowIndex: number) {
     if (rowIndex === 0 && field.skipFirstRow) return null;
     if (rowIndex > 0 && field.firstRowOnly) return null;
 
-    const value = row[field.key] ?? "";
+    const val = row[field.key] ?? "";
 
     if (field.dependent) {
       const depVal = row[field.dependent.key];
@@ -132,71 +120,40 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
     }
 
     switch (field.type) {
-      case "select":
+      case "select": // 🔹 ToggleSetting
         return (
-          <div className="form-wrapper" key={field.key}>
+          <div className="settings-input-content" key={field.key}>
             {!(rowIndex === 0 && field.skipLabel) && field.label && <label>{field.label}</label>}
-            <div className="toggle-setting-container">
-              <div className="toggle-setting-wrapper">
-                {field.options?.map((opt) => (
-                  <div
-                    key={opt.value}
-                    role="button"
-                    tabIndex={0}
-                    onClick={() => handleChange(rowIndex, field.key, opt.value)}
-                  >
-                    <input
-                      type="radio"
-                      id={`${field.key}-${rowIndex}-${opt.value}`}
-                      name={`${field.key}-${rowIndex}`}
-                      value={opt.value}
-                      checked={value === opt.value}
-                      readOnly
-                      className="toggle-setting-form-input"
-                    />
-                    <label htmlFor={`${field.key}-${rowIndex}-${opt.value}`}>{opt.label}</label>
-                    {opt.proSetting && <span className="admin-pro-tag"><i className="adminlib-pro-tag"></i>Pro</span>}
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        );
-
-      case "multi-number":
-        return (
-          <div className="form-wrapper" key={field.key}>
-            {!(rowIndex === 0 && field.skipLabel) && field.label && <label>{field.label}</label>}
-            <MultiInput
-              inputType="multi-number"
-              parentWrapperClass="settings-basic-input-class"
-              childWrapperClass="settings-basic-child-wrap"
-              inputWrapperClass="settings-basic-input-child-class"
-              innerInputWrapperClass="setting-form-input"
-              inputLabelClass="setting-form-basic-input"
-              idPrefix="setting-integer-input"
+            <ToggleSetting
+              key={field.key}
               options={field.options || []}
-              value={(field.options || []).map((opt) => ({
-                key: opt.key || field.key,
-                value: row[opt.key || field.key] || "",
-              }))}
-              onChange={(e, _, optKey) =>
-                handleChange(rowIndex, optKey || field.key, e.target.value)
-              }
+              value={val}
+              onChange={(newVal) => handleChange(rowIndex, field.key, newVal)}
             />
           </div>
         );
 
       case "number":
+      case "text":
+      case "url": // 🔹 BasicInput
         return (
-          <div className="form-wrapper" key={field.key}>
+          <div className="settings-input-content" key={field.key}>
             {!(rowIndex === 0 && field.skipLabel) && field.label && <label>{field.label}</label>}
-            <input
-              type="number"
-              value={value}
-              placeholder={field.placeholder || ""}
+            <BasicInput
+              type={field.type}
+              id={`${field.key}-${rowIndex}`}
+              name={field.key}
+              value={val}
+              preParameter={field.preParameter}
+              parameter={field.parameter}
+              before={field.before}
+              after={field.after}
+              min={field.min ?? 0}
+              description={field.desc}
+              size={field.size}
+              placeholder={field.placeholder}
               onChange={(e) => handleChange(rowIndex, field.key, e.target.value)}
-              className="basic-input"
+              wrapperClass="setting-form-input"
             />
           </div>
         );
@@ -209,11 +166,16 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
   return (
     <div className="nested-wrapper" id={id}>
       {rows.map((row, rowIndex) => (
-        <div key={`nested-row-${rowIndex}`} className="nested-row">
+        <div key={`nested-row-${rowIndex}`} className={`nested-row ${single ? "nested-row-single" : ""}`}>
           {fields.map((field) => renderField(field, row, rowIndex))}
           {!single && rowIndex === rows.length - 1 && (
             <div className="buttons-wrapper">
-              <button type="button" className="admin-btn btn-green" onClick={addRow}>
+              <button
+                type="button"
+                className="admin-btn btn-green"
+                onClick={addRow}
+                disabled={!isLastRowComplete()}
+              >
                 + {addButtonLabel}
               </button>
               {rows.length > 1 && (
@@ -227,9 +189,14 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
               )}
             </div>
           )}
-
         </div>
       ))}
+      {description && (
+        <p
+          className={`settings-metabox-description`}
+          dangerouslySetInnerHTML={{ __html: description }}
+        />
+      )}
     </div>
   );
 };

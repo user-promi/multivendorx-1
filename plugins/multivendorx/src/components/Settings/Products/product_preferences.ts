@@ -142,14 +142,14 @@ export default {
                 'multivendorx'
             ),
             settingDescription: __(
-                'Choose whether to replace spaces in attribute names when generating SKUs:',
+                'Choose how spaces in attribute names should be handled when generating SKUs.',
                 'multivendorx'
             ),
             options: [
                 {
                     key: 'no',
                     label: __(
-                        'Replace spaces in attribute',
+                        'Do not replace (keep spaces)',
                         'multivendorx'
                     ),
                     value: 'no',
@@ -157,7 +157,7 @@ export default {
                 {
                     key: 'underscore',
                     label: __(
-                        'Keep original spacing',
+                        'Replace spaces with underscore',
                         'multivendorx'
                     ),
                     value: 'underscore',
@@ -165,14 +165,13 @@ export default {
                 {
                     key: 'dash',
                     label: __(
-                        'Custom SKU format rules',
+                        'Replace spaces with dash',
                         'multivendorx'
                     ),
                     value: 'dash',
                 },
             ],
         },
-
         {
             key: 'separator_content',
             type: 'section',
@@ -180,36 +179,39 @@ export default {
             hint: __('Related products source','multivendorx'),
         },
         {
-            key: 'sku_generator_attribute_spaces',
+            key: 'recommendation_source',
             type: 'setting-toggle',
             label: __(
                 'Recommendation source',
                 'multivendorx'
             ),
-            settingDescription: __( 'Choose whether related products are shown from the same vendor only or from the entire marketplace.', 'multivendorx' ),
-           desc: __(
-                '<li>Same store: Show related products only from the current store.<li>All stores: Show related products from across the marketplace. Choose whether to replace spaces in attribute names when generating SKUs:',
+            settingDescription: __(
+                'Choose whether related products are shown from the same vendor only or from the entire marketplace.',
+                'multivendorx'
+            ),
+            desc: __(
+                '<li>Same store: Show related products only from the current store.</li><li>All stores: Show related products from across the marketplace.</li>',
                 'multivendorx'
             ),
             options: [
                 {
-                    key: 'no',
+                    key: 'same_store',
                     label: __(
                         'Same store',
                         'multivendorx'
                     ),
-                    value: 'no',
+                    value: 'same_store',
                 },
                 {
-                    key: 'underscore',
+                    key: 'all_stores',
                     label: __(
                         'All stores',
                         'multivendorx'
                     ),
-                    value: 'underscore',
+                    value: 'all_stores',
                 },
-
             ],
-        },
+        }
+        
     ],
 };

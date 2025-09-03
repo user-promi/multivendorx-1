@@ -75,7 +75,6 @@ export default {
             category: 'marketplace_types'
         },
         { type: 'separator', id: 'product_type', label: 'Product Types' },
-
         {
             id: 'simple',
             name: __('Simple (Downloadable & Virtual)', 'multivendorx'),
@@ -226,7 +225,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/privacy',
             pro_module: true,
             category: 'store_management'
-        },       
+        }       
         { type: 'separator', id: 'inventory_control', label: 'Inventory Control' },
         {
             id: 'store-inventory',
