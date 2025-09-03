@@ -225,6 +225,12 @@ interface InputField {
         color?: string[];
         name?: string;
     }[];
+    images?: {
+        key?: string;
+        label?: string;
+        value?: string;
+        image?: string[];
+    }[];
     customDefaults?: {
         buttonText?: string;
         buttonBg?: string;
@@ -1096,6 +1102,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             description={inputField.desc}
                             showPreview={inputField.showPreview ?? false}
                             predefinedOptions={inputField.predefinedOptions ?? []}
+                            images={inputField.images ?? []}
                             value={value}
                             idPrefix="color-setting"
                             onChange={(e) => handleChange(e, inputField.key)}
