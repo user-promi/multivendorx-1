@@ -11,8 +11,10 @@ export default {
         {
             key: 'order_status',
             type: 'checkbox',
-            label: __('Eligible order statuses', 'multivendorx'),
-            settingDescription: __("Choose which order statuses qualify for commission payouts.", 'multivendorx'),
+
+            label: __('Eligible Order Statuses for Commission Payout', 'multivendorx'),
+			      settingDescription: __("Choose which order statuses qualify for commission payouts.",'multivendorx'),
+
             class: 'mvx-toggle-checkbox',
 
             options: [
@@ -42,18 +44,20 @@ export default {
         {
             key: 'payment_method',
             type: 'setting-toggle',
-            label: __('Payout Method', 'multivendorx'),
-            settingDescription: __("Select how commissions are released from the admin account", 'multivendorx'),
-            desc: __("<ul><li>Instant – Earnings are transferred immediately once an order becomes eligible.</li><li>Waiting – Hold payouts until conditions set by the admin are met.</li></ul>", 'multivendorx'),
+
+            label: __('Commission Settlement', 'multivendorx'),
+		       	settingDescription: __("Select how commissions are released from the admin account.",'multivendorx'),
+             desc: __("<ul><li>Instant Payout – Commissions are released immediately.</li><li>Scheduled / Delayed Payout – Commissions are released after a waiting period.</li></ul>",'multivendorx'),
+
             options: [
                 {
                     key: 'instantly',
-                    label: __('Instantly', 'multivendorx'),
-                    value: 'instantly',
+                    label: __('Instant Payout', 'multivendorx'),
+                    value: '    ',
                 },
                 {
                     key: 'waitting',
-                    label: __('Waitting', 'multivendorx'),
+                    label: __('Scheduled / Delayed Payout', 'multivendorx'),
                     value: 'waitting',
                 },
             ],
@@ -127,6 +131,7 @@ export default {
                 },
             ],
         },
+
         {
             key: 'commission_threshold_time',
             label: __('Free withdrawal', 'multivendorx'),
@@ -142,6 +147,7 @@ export default {
             ],
         },
         {
+
             key: 'commission_threshold_time',
             label: __('Free withdrawal', 'multivendorx'),
             desc: __('', 'multivendorx'),

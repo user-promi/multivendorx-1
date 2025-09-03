@@ -2,14 +2,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
-import {
-    Table,
-    getApiLink,
-    TableCell,
-    AdminBreadcrumbs,
-    BasicInput,
-    TextArea
-} from 'zyra';
+
+import { Table, getApiLink, TableCell, AdminBreadcrumbs, BasicInput, TextArea, CommonPopup } from 'zyra';
+
 import {
     ColumnDef,
     RowSelectionState,
@@ -345,6 +340,8 @@ const Announcements: React.FC = () => {
         },
     ];
 
+     const [open, setOpen] = useState(false);
+
     return (
         <>
             <AdminBreadcrumbs
@@ -362,6 +359,17 @@ const Announcements: React.FC = () => {
             />
 
             {addAnnouncements && (
+                <CommonPopup open={addAnnouncements} onClose={() => setAddAnnouncements(false)} title="Parent One Popup">
+                    <div>
+                    <h2>Hello from Parent One 🎉</h2>
+                    <p>This is static info passed from Parent One.</p>
+                    
+                    </div>
+                </CommonPopup>
+            )}
+
+
+            {/* {addAnnouncements && (
                 <div className="right-popup">
                     <div
                         className={`content-wrapper ${addAnnouncements ? 'open' : ''
@@ -446,8 +454,8 @@ const Announcements: React.FC = () => {
                         </div>
                     </div>
                 </div>
-            )}
 
+            )} */}
             <div className="admin-table-wrapper">
                 <Table
                     data={data}
