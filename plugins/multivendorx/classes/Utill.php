@@ -28,6 +28,7 @@ class Utill {
         'store'         => 'multivendorx_store',
         'store_users'   => 'multivendorx_store_users',
         'store_meta'    => 'multivendorx_store_meta',
+        'transaction'   => 'multivendorx_transaction_ledger',
     );
 
     /**
