@@ -36,9 +36,8 @@
 .MuiDialog-container{
 .content {
     padding: 1rem 2rem;
-
     max-height: 70vh;
-    overflow-y: scroll;
+    overflow-y: auto;
 
     .form-group-wrapper {
         display: flex;
@@ -94,11 +93,24 @@
 }
 
 .popup-footer {
-    width: 100%;
     padding: 0.813rem;
     display: flex;
     justify-content: end;
     gap: 0.5rem;
     border-top: $border-light-small;
 }
+}
+
+.system-info{
+    .system-item{
+        margin-bottom: 0.5rem;
+        .name{
+            background: #f9f4f4b8;
+            padding: 0.625rem 1rem;
+
+            span{
+                font-size: 1.125rem;
+            }
+        }
+    }
 }
