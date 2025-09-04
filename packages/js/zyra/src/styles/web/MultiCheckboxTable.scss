@@ -36,6 +36,7 @@
 
     tbody {
         width: 100%;
+        border: $border-light-small;
 
         h1 {
             font-size: 1.25rem;
@@ -48,8 +49,6 @@
             align-content: stretch;
             padding: 0.75rem 0;
             background: #fff;
-            margin: 0.5rem 0;
-            border: $border-light-small;
 
             td {
                 display: flex;

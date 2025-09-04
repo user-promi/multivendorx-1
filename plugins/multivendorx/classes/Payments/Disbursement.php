@@ -17,15 +17,15 @@ class Disbursement {
     public function custom_cron_schedules( $schedules ) {
         $schedules['weekly'] = [
             'interval' => WEEK_IN_SECONDS,
-            'display'  => __( 'Once Weekly' ),
+            'display'  => __( 'Once Weekly', 'multivendorx' ),
         ];
         $schedules['fortnightly'] = [
             'interval' => 2 * WEEK_IN_SECONDS,
-            'display'  => __( 'Once Every Two Weeks' ),
+            'display'  => __( 'Once Every Two Weeks', 'multivendorx' ),
         ];
         $schedules['monthly'] = [
             'interval' => MONTH_IN_SECONDS,
-            'display'  => __( 'Once Monthly' ),
+            'display'  => __( 'Once Monthly', 'multivendorx' ),
         ];
         return $schedules;
     }

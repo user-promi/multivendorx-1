@@ -301,7 +301,7 @@ export default {
                 {
                     key: 'weekly_payout_time', // time of day
                     type: 'time', // links to TimeSelect component
-                    label: __('Time of Day', 'multivendorx'),
+                    before: __('Time of Day', 'multivendorx'),
                     description: __('Select the time of day for weekly payouts.', 'multivendorx'),
                     defaultValue: '09:00',
                 },

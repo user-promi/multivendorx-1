@@ -19,17 +19,20 @@ export default {
                 'Set the number of advertising slots available to stores. This limits how many products they can promote at the same time.',
                 'mvx-pro'
             ),
+            size: '9rem',
             moduleEnabled: 'advertisement',
             proSetting: true,
         },
         {
             key: 'expire_after_days',
             type: 'number',
-            label: __( 'Advertising duration (days)', 'mvx-pro' ),
+            label: __( 'Advertising duration', 'mvx-pro' ),
             desc: __(
                 'Set how long a product will stay advertised. Stores can choose the duration up to this limit.',
                 'mvx-pro'
             ),
+            parameter: __('Days', 'multivendorx'),
+            size: '8rem',
             moduleEnabled: 'advertisement',
             proSetting: true,
         },

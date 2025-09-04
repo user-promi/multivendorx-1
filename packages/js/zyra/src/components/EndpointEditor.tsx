@@ -114,7 +114,9 @@ const EndpointManager: React.FC<EndpointEditorProps> = ({
           <div className="edit-menu" ref={editRef}>
             <div className="name-wrapper">
               <i className="adminlib-drag"></i>
+              <label htmlFor={`menu-name-${key}`} className="input-label">Menu name: </label>
               <input
+                id={`menu-name-${key}`}
                 value={editName}
                 onChange={(e) => {
                   const newName = e.target.value;
@@ -130,7 +132,10 @@ const EndpointManager: React.FC<EndpointEditorProps> = ({
                 className="basic-input"
               />
               {key !== 'dashboard' && (
+                <>
+                <label htmlFor={`slug-${key}`} className="input-label">Slug: </label>
                 <input
+                  id={`slug-${key}`}
                   value={editSlug}
                   onChange={(e) => {
                     const newSlug = e.target.value;
@@ -145,6 +150,7 @@ const EndpointManager: React.FC<EndpointEditorProps> = ({
                   placeholder="Slug"
                   className="basic-input"
                 />
+                </>
               )}
             </div>
           </div>
@@ -201,8 +207,11 @@ const EndpointManager: React.FC<EndpointEditorProps> = ({
                     style={{ opacity: endpoint.visible === false ? 0.5 : 1 }}
                   >
                     {editKey === subKey ? (
+                      <>
+                      <label htmlFor={`submenu-name-${key}-${i}`} className="input-label">Submenu Name: </label>
                       <span ref={editRef}>
                         <input
+                          id={`submenu-name-${key}-${i}`}
                           value={editName}
                           onChange={(e) => {
                             const newName = e.target.value;
@@ -221,6 +230,7 @@ const EndpointManager: React.FC<EndpointEditorProps> = ({
                           className="basic-input"
                         />
                       </span>
+                      </>
                     ) : (
                       <>
                         <i className="adminlib-drag"></i>

@@ -100,11 +100,13 @@
                             background: #f3f2f2cf;
                             display: flex;
                             justify-content: space-between;
+                            align-items: center;
                             gap: 0.5rem;
 
                             .name {
                                 display: flex;
                                 gap: 0.5rem;
+                                align-items: start;
 
                                 div {
                                     font-size: 1.063rem;
@@ -121,7 +123,11 @@
                                         background: transparent;
                                     }
 
-                                    .edit-form {}
+                                    .edit-form {
+                                        display: flex;
+                                        align-items: center;
+                                        gap: 0.5rem;
+                                    }
                                 }
 
                                 .admin-badge {
@@ -158,14 +164,15 @@
                 }
             }
 
-            &.social-verification{
+            &.social-verification {
                 padding-top: 0.5rem;
-                .payment-method{
+
+                .payment-method {
                     background: transparent;
                     border: $border-light-small;
                     padding: 0.625rem;
 
-                    .payment-method-icon{
+                    .payment-method-icon {
                         width: 2rem;
                         height: 2rem;
                     }
