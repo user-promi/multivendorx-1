@@ -53,14 +53,7 @@ const Commission: React.FC = () => {
     // const isAddStore = hash.includes('create');
     // const isViewStore = hash.includes('view');
     const iseditCommission = hash.includes('edit');
-    const [noticeHTML, setNoticeHTML] = useState('');
-    useEffect(() => {
-        const notice = document.querySelector('#screen-meta + .wrap .notice, #wpbody-content .notice');
-        if (notice) {
-            setNoticeHTML(notice.outerHTML);
-            notice.remove();
-        }
-    }, []);
+
     const dateRef = useRef<HTMLDivElement | null>(null);
     const [openModal, setOpenModal] = useState(false);
     const [modalDetails, setModalDetails] = useState<string>('');
@@ -515,7 +508,6 @@ const Commission: React.FC = () => {
                 activeTabIcon="adminlib-cart"
                 tabTitle="Commissions"
             />
-            {noticeHTML && <div className="wp-admin-notice" dangerouslySetInnerHTML={{ __html: noticeHTML }} />}
 
             {isTabActive && iseditCommission && <EditCommission />}
             {!iseditCommission && (

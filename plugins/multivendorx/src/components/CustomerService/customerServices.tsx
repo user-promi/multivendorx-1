@@ -7,14 +7,7 @@ import './customerServices.scss';
 import { useEffect, useState } from 'react';
 
 const CustomerServices = () => {
-    const [noticeHTML, setNoticeHTML] = useState('');
-    useEffect(() => {
-        const notice = document.querySelector('#screen-meta + .wrap .notice, #wpbody-content .notice');
-        if (notice) {
-            setNoticeHTML(notice.outerHTML);
-            notice.remove();
-        }
-    }, []);
+
     const CustomerServicesStats = [
         {
             id: 'reviews',
@@ -49,7 +42,6 @@ const CustomerServices = () => {
                 activeTabIcon="adminlib-cart"
                 tabTitle="Customer Service"
             />
-            {noticeHTML && <div className="wp-admin-notice" dangerouslySetInnerHTML={{ __html: noticeHTML }} />}
 
             {/* CustomerServices Stats */}
             <div className="work-board">
