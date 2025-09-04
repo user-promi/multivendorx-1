@@ -34,9 +34,9 @@ export default {
                     value: 'shipped',
                 },
                 {
-                    key: ' processing ',
+                    key: 'processing',
                     label: __('Processing', 'multivendorx'),
-                    value: ' processing ',
+                    value: 'processing',
                 },
             ],
             selectDeselect: true,
@@ -55,14 +55,14 @@ export default {
                     value: 'instantly',
                 },
                 {
-                    key: 'waitting',
+                    key: 'waiting',
                     label: __('Scheduled / Delayed Payout', 'multivendorx'),
-                    value: 'waitting',
+                    value: 'waiting',
                 },
             ],
         },
         {
-            key: 'commission_threshold_time',
+            key: 'commission_lock_period',
             label: __('Lock period', 'multivendorx'),
             desc: __(
                 'Set a waiting period before commissions become eligible for payout. Helps account for refunds, cancellations, or disputes.', 'multivendorx'),
@@ -78,11 +78,11 @@ export default {
             dependent: {
                 key: 'disbursement_method',
                 set: true,
-                value: 'waitting',
+                value: 'waiting',
             },
         },
         {
-            key: 'payout_threshold_time',
+            key: 'payout_threshold_amount',
             label: __('Minimum payout threshold', 'multivendorx'),
             desc: __(
                 'Define the minimum amount a store must accumulate before payouts are processed.', 'multivendorx'),
@@ -98,7 +98,7 @@ export default {
             dependent: {
                 key: 'disbursement_method',
                 set: true,
-                value: 'waitting',
+                value: 'waiting',
             },
         },
         {
@@ -142,27 +142,7 @@ export default {
             dependent: {
                 key: 'disbursement_method',
                 set: true,
-                value: 'waitting',
-            },
-        },
-
-        {
-            key: 'commission_threshold_time',
-            label: __('Free withdrawal', 'multivendorx'),
-            desc: __('', 'multivendorx'),
-            type: 'number',
-            preParameter: __('$', 'multivendorx'),
-            size:'8rem',
-            options: [
-                {
-                    key: 'commission_percentage',
-                    value: 'commission_percentage',
-                },
-            ],
-            dependent: {
-                key: 'disbursement_method',
-                set: true,
-                value: 'waitting',
+                value: 'waiting',
             },
         },
         {
@@ -182,7 +162,7 @@ export default {
             dependent: {
                 key: 'disbursement_method',
                 set: true,
-                value: 'waitting',
+                value: 'waiting',
             },
         },
         {
@@ -201,7 +181,7 @@ export default {
             dependent: {
                 key: 'disbursement_method',
                 set: true,
-                value: 'waitting',
+                value: 'waiting',
             },
         },
 
