@@ -17,8 +17,8 @@ export default {
             classes: "system-info-section",
             apiLink: "status",
             appLocalizer,
-            copyButtonLabel: "Copy System Info to Clipboard",
-            copiedLabel: "Copied!", 
+            copyButtonLabel: "Copy All",
+            copiedLabel: "Copied!",
         },         
         
     ],
