@@ -142,7 +142,6 @@ const Announcements: React.FC = () => {
             });
 
             if (response.data.success) {
-                console.log(editId ? 'Announcement updated' : 'Announcement created');
                 setAddAnnouncements(false);
                 setFormData({ title: '', url: '', content: '', stores: '' });
                 setEditId(null);
