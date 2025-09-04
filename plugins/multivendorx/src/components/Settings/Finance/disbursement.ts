@@ -95,6 +95,11 @@ export default {
             desc: __("<ul><li>If Manual is selected, stores handle withdrawals themselves from their dashboard.</li><li>Otherwise, commissions are automatically disbursed to stores based on the chosen schedule.</li></ul>", 'multivendorx'),
             options: [
                 {
+                    key: 'mannual',
+                    label: __('Mannual', 'multivendorx'),
+                    value: 'Mannual',
+                },
+                {
                     key: 'hourly',
                     label: __('Hourly', 'multivendorx'),
                     value: 'hourly',
@@ -123,37 +128,37 @@ export default {
             ],
         },
         //hour
-        {
-            key: 'disbursement_hourly',
-            type: 'nested',
-            label: __('Hourly Disbursement', 'multivendorx'), // updated label
-            single: true,
-            desc: __(
-                'Hourly disbursement: This is the default commission amount that will be applicable for all transactions every hour.',
-                'multivendorx'
-            ),
-            nestedFields: [
-                {
-                    key: 'payouts_every_hour',
-                    label: __('Hourly', 'multivendorx'),
-                    desc: __('Payouts every hour', 'multivendorx'),
-                    type: 'number',
-                    size: '8rem',
-                    options: [
-                        {
-                            key: 'payouts_every_hour',
-                            value: 'payouts_every_hour',
-                        },
-                    ],
-                    parameter: __('hour', 'multivendorx'),
-                },
-            ],
-            dependent: {
-                key: 'payment_schedule',
-                set: true,
-                value: 'hourly',
-            },
-        },
+        // {
+        //     key: 'disbursement_hourly',
+        //     type: 'nested',
+        //     label: __('Hourly Disbursement', 'multivendorx'), // updated label
+        //     single: true,
+        //     desc: __(
+        //         'Hourly disbursement: This is the default commission amount that will be applicable for all transactions every hour.',
+        //         'multivendorx'
+        //     ),
+        //     nestedFields: [
+        //         {
+        //             key: 'payouts_every_hour',
+        //             label: __('Hourly', 'multivendorx'),
+        //             desc: __('Payouts every hour', 'multivendorx'),
+        //             type: 'number',
+        //             size: '8rem',
+        //             options: [
+        //                 {
+        //                     key: 'payouts_every_hour',
+        //                     value: 'payouts_every_hour',
+        //                 },
+        //             ],
+        //             parameter: __('hour', 'multivendorx'),
+        //         },
+        //     ],
+        //     dependent: {
+        //         key: 'payment_schedule',
+        //         set: true,
+        //         value: 'hourly',
+        //     },
+        // },
         //fort
         {
             key: 'disbursement_fortnightly', // updated key

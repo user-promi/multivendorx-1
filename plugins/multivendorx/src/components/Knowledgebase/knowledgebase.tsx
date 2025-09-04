@@ -46,7 +46,7 @@ export const KnowledgeBase: React.FC = () => {
     // Open edit modal
     const handleEdit = async (id: number) => {
         try {
-            const response = await axios.get(getApiLink(appLocalizer, `knowledgebase/${id}`), {
+            const response = await axios.get(getApiLink(appLocalizer, `knowledge/${id}`), {
                 headers: { 'X-WP-Nonce': appLocalizer.nonce },
             });
             if (response.data) {
@@ -67,8 +67,8 @@ export const KnowledgeBase: React.FC = () => {
     const handleSubmit = async (status: 'publish' | 'pending') => {
         try {
             const endpoint = editId
-                ? getApiLink(appLocalizer, `knowledgebase/${editId}`)
-                : getApiLink(appLocalizer, 'knowledgebase');
+                ? getApiLink(appLocalizer, `knowledge/${editId}`)
+                : getApiLink(appLocalizer, 'knowledge');
 
             const method = editId ? 'PUT' : 'POST';
 
@@ -99,7 +99,7 @@ export const KnowledgeBase: React.FC = () => {
         setData(null);
         axios({
             method: 'GET',
-            url: getApiLink(appLocalizer, 'knowledgebase'),
+            url: getApiLink(appLocalizer, 'knowledge'),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
             params: { page: currentPage, row: rowsPerPage },
         })
