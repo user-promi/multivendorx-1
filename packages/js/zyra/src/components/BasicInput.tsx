@@ -129,8 +129,8 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
         return (
             <>
                 <div
-                    className={`${wrapperClass || ''} ${generate ? 'generate' : ''
-                        }`}
+                    className={`${wrapperClass || ''} ${generate ? 'generate' : ''} ${preParameter || parameter ? 'inner-input' : ''}
+`}
                 >
                     {inputLabel && (
                         <label htmlFor={id}>{inputLabel}</label>
@@ -151,9 +151,10 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
                                     dangerouslySetInnerHTML={{ __html: before }}
                                 />
                             )}
+                            <div className="input-wrapper">
                             {preParameter && (
                                 <span
-                                    className="before"
+                                    className="pre"
                                     dangerouslySetInnerHTML={{ __html: preParameter }}
                                 />
                             )}
@@ -176,20 +177,20 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
                                 disabled={disabled}
                                 readOnly={readOnly}
                             />
+                            {parameter && (
+                                <span
+                                    className="parameter"
+                                    dangerouslySetInnerHTML={{ __html: parameter }}
+                                />
+                            )}
+                            </div>
+                            {after && (
+                                <span
+                                    className="after"
+                                    dangerouslySetInnerHTML={{ __html: after }}
+                                />
+                            )}
                         </>
-                    )}
-
-                    {parameter && (
-                        <span
-                            className="parameter"
-                            dangerouslySetInnerHTML={{ __html: parameter }}
-                        />
-                    )}
-                    {after && (
-                        <span
-                            className="after"
-                            dangerouslySetInnerHTML={{ __html: after }}
-                        />
                     )}
                     {generate &&
                         (value === '' ? (

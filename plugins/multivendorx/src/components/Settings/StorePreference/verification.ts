@@ -3,6 +3,10 @@ import payPal from '../../../assets/images/paypal.png';
 import email from '../../../assets/images/email.png';
 import social from '../../../assets/images/social.png';
 import google from '../../../assets/images/google.png';
+import facebook from '../../../assets/images/facebook.png';
+import LinkedIn from '../../../assets/images/LinkedIn.png';
+import twitter from '../../../assets/images/twitter.png';
+
 
 
 
@@ -141,7 +145,7 @@ export default {
                                 },
                                 {
                                     id:'twitter-connect',
-                                    icon: google,
+                                    icon: twitter,
                                     label: 'Twitter Connect',
                                     connected: false,
                                     desc: 'Connect and authenticate users via Twitter accounts.',
@@ -153,7 +157,7 @@ export default {
                                 },
                                 {
                                     id:'facebook-connect',
-                                    icon: google,
+                                    icon: facebook,
                                     label: 'Facebook Connect',
                                     connected: false,
                                     desc: 'Connect and authenticate users via Facebook accounts.',
@@ -164,7 +168,7 @@ export default {
                                 },
                                 {
                                     id:'linkedin-connect',
-                                    icon: google,
+                                    icon: LinkedIn,
                                     label: 'LinkedIn Connect',
                                     connected: false,
                                     desc: 'Connect and authenticate users via LinkedIn accounts.',

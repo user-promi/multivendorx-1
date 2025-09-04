@@ -141,6 +141,7 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
             {!(rowIndex === 0 && field.skipLabel) && field.label && <label>{field.label}</label>}
             <BasicInput
               type={field.type}
+              descClass="settings-metabox-description"
               id={`${field.key}-${rowIndex}`}
               name={field.key}
               value={val}
@@ -166,7 +167,7 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
   return (
     <div className="nested-wrapper" id={id}>
       {rows.map((row, rowIndex) => (
-        <div key={`nested-row-${rowIndex}`} className={`nested-row ${single ? "nested-row-single" : ""}`}>
+        <div key={`nested-row-${rowIndex}`} className={`nested-row ${single ? "" : "multiple"}`}>
           {fields.map((field) => renderField(field, row, rowIndex))}
           {!single && rowIndex === rows.length - 1 && (
             <div className="buttons-wrapper">

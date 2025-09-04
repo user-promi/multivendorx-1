@@ -2,26 +2,31 @@
 
 .nested-wrapper {
     .nested-row {
-        background: #ece2f92e;
         display: flex;
         flex-wrap: wrap;
         justify-content: start;
         align-items: start;
-        padding: 1rem;
-        margin-bottom: 1.5rem;
         gap: 1rem;
 
+        &.multiple{
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            background: #ece2f92e;
+        }
         .form-wrapper{
             display: flex;
             gap: 0.5rem;
         }
         label {
             font-size: 0.95rem;
-            padding-top: 0.425rem;
+            display: inline-block;
+            padding-right: 0.5rem;
         }
-
-        .toggle-setting-wrapper {
-            margin-bottom: 0;
+        .toggle-setting-container{
+            display: inline-block;
+            .toggle-setting-wrapper {
+                margin-bottom: 0;
+            }
         }
         .basic-input{
             width: fit-content;
@@ -35,8 +40,11 @@
                 width: 100%;
             }
         }
+        .settings-input-content{
+            width: fit-content;
+        }
     }
-    .nested-row:first-child{
+    .nested-row.multiple:first-child{
         background: transparent;
         border: $border-light-small;
     }
