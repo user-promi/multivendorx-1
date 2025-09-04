@@ -9,7 +9,7 @@ use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Store_Controller;
 use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Commission_Controller;
 use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Status_Controller;
 use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Announcement_Controller;
-
+use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Knowledge_Controller;
 
 defined('ABSPATH') || exit;
 
@@ -40,6 +40,7 @@ class Rest {
             'commission'=> new MultiVendorX_REST_Commission_Controller(),
             'status'    => new MultiVendorX_REST_Status_Controller(),
             'announcement' => new MultiVendorX_REST_Announcement_Controller(),
+            'knowledge' => new MultiVendorX_REST_Knowledge_Controller(),
         );
     }
 

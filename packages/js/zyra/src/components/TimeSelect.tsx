@@ -40,10 +40,10 @@ const TimeSelect: React.FC<TimeSelectProps> = ({
 
     return (
         <>
-            <div className="time-select-container">
+            <div className="setting-form-input">
                 <input
                     type="time"
-                    className="time-select-input"
+                    className="basic-input"
                     value={value}
                     onChange={handleChange}
                     name={key}

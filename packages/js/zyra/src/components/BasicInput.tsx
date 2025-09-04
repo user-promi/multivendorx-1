@@ -21,6 +21,7 @@ interface BasicInputProps {
     | 'email'
     | 'file'
     | 'range'
+    | 'time'
     | 'url';
     name?: string;
     value?: string | number;

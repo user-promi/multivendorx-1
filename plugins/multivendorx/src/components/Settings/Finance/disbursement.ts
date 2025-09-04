@@ -4,7 +4,7 @@ export default {
     priority: 2,
     name: __('Disbursement', 'multivendorx'),
     desc: __("Tailor your marketplace commission plan to fit your revenue sharing preferences.", 'multivendorx'),
-    icon: 'adminlib-dynamic-pricing',
+    icon: 'adminlib-cart',
     submitUrl: 'settings',
     modal: [
         {
@@ -88,6 +88,11 @@ export default {
             desc: __("<ul><li>If Manual is selected, stores handle withdrawals themselves from their dashboard.</li><li>Otherwise, commissions are automatically disbursed to stores based on the chosen schedule.</li></ul>", 'multivendorx'),
             options: [
                 {
+                    key: 'mannual',
+                    label: __('Mannual', 'multivendorx'),
+                    value: 'Mannual',
+                },
+                {
                     key: 'hourly',
                     label: __('Hourly', 'multivendorx'),
                     value: 'hourly',
@@ -116,37 +121,38 @@ export default {
             ],
         },
         //hour
-        {
-            key: 'disbursement_hourly',
-            type: 'nested',
-            label: __('Hourly Disbursement', 'multivendorx'), // updated label
-            single: true,
-            desc: __(
-                'Hourly disbursement: This is the default commission amount that will be applicable for all transactions every hour.',
-                'multivendorx'
-            ),
-            nestedFields: [
-                {
-                    key: 'payouts_every_hour',
-                    label: __('Hourly', 'multivendorx'),
-                    desc: __('Payouts every hour', 'multivendorx'),
-                    type: 'number',
-                    size: '8rem',
-                    options: [
-                        {
-                            key: 'payouts_every_hour',
-                            value: 'payouts_every_hour',
-                        },
-                    ],
-                    parameter: __('hour', 'multivendorx'),
-                },
-            ],
-            dependent: {
-                key: 'payment_schedules',
-                set: true,
-                value: 'hourly',
-            },
-        },
+        // {
+        //     key: 'disbursement_hourly',
+        //     type: 'nested',
+        //     label: __('Hourly Disbursement', 'multivendorx'), // updated label
+        //     single: true,
+        //     desc: __(
+        //         'Hourly disbursement: This is the default commission amount that will be applicable for all transactions every hour.',
+        //         'multivendorx'
+        //     ),
+        //     nestedFields: [
+        //         {
+        //             key: 'payouts_every_hour',
+        //             label: __('Hourly', 'multivendorx'),
+        //             desc: __('Payouts every hour', 'multivendorx'),
+        //             type: 'number',
+        //             size: '8rem',
+        //             options: [
+        //                 {
+        //                     key: 'payouts_every_hour',
+        //                     value: 'payouts_every_hour',
+        //                 },
+        //             ],
+        //             parameter: __('hour', 'multivendorx'),
+        //         },
+        //     ],
+        //     dependent: {
+        //         key: 'payment_schedule',
+        //         set: true,
+        //         value: 'hourly',
+        //     },
+        // },
+
         //fort
         {
             key: 'disbursement_fortnightly', // updated key
@@ -249,7 +255,7 @@ export default {
         //daily
         {
             key: 'daily_payout_time', // unique key for daily payout time
-            type: 'setting-time', // links to TimeSelect component
+            type: 'time', // links to TimeSelect component
             label: __('Daily Payout Time', 'multivendorx'),
             description: __('Once per day<br/>Run payouts at:', 'multivendorx'),
             defaultValue: '09:00', // optional: default payout time
@@ -258,6 +264,7 @@ export default {
                 set: true,
                 value: 'daily',
             },
+            size: '6rem',
             proSetting: false, // set true if this is a Pro feature
         },
         {
