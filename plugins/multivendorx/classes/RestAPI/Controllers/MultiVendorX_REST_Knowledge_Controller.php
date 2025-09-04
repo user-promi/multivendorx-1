@@ -135,59 +135,41 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
         return rest_ensure_response( $formatted_items );
     }
     
-    
-    
     public function create_item( $request ) {
         $data = $request->get_json_params();
     
         // Unwrap formData if present
         $formData = isset($data['formData']) ? $data['formData'] : $data;
+
+        // Sanitize inputs
+        $title   = isset($formData['title']) ? sanitize_text_field($formData['title']) : '';
+        $content = isset($formData['content']) ? sanitize_textarea_field($formData['content']) : '';
+        $status  = isset($formData['status']) && $formData['status'] === 'publish' ? 'publish' : 'pending';
     
-        // $title   = isset($formData['title']) ? sanitize_text_field($formData['title']) : '';
-        // $url     = isset($formData['url']) ? esc_url_raw($formData['url']) : '';
-        // $content = isset($formData['content']) ? sanitize_textarea_field($formData['content']) : '';
-        // $stores  = isset($formData['stores']) ? $formData['stores'] : [];
+        // Insert post
+        $post_id = wp_insert_post([
+            'post_title'   => $title,
+            'post_content' => $content,
+            'post_type'    => 'multivendorx_kb',
+            'post_status'  => $status,
+        ], true);
     
-        // if ( is_string( $stores ) ) {
-        //     $stores = array_filter( array_map( 'trim', explode( ',', $stores ) ) );
-        // } elseif ( ! is_array( $stores ) ) {
-        //     $stores = [];
-        // }
+        if ( is_wp_error( $post_id ) ) {
+            return rest_ensure_response([
+                'success' => false,
+                'message' => $post_id->get_error_message(),
+            ]);
+        }
     
-        // // Insert post
-        // $post_id = wp_insert_post([
-        //     'post_title'   => $title,
-        //     'post_content' => $content,
-        //     'post_type'    => 'multivendorx_an',
-        //     'post_status'  => 'publish',
-        // ], true);
-    
-        // if ( is_wp_error( $post_id ) ) {
-        //     return rest_ensure_response([
-        //         'success' => false,
-        //         'message' => $post_id->get_error_message(),
-        //     ]);
-        // }
-    
-        // // Save stores if provided
-        // if ( ! empty($stores) ) {
-        //     update_post_meta( $post_id, '_mvx_announcement_stores', $stores );
-        // }
-    
-        // // Optionally save URL as post meta
-        // if ( ! empty($url) ) {
-        //     update_post_meta( $post_id, '_mvx_announcement_url', $url );
-        // }
-    
-        // return rest_ensure_response([
-        //     'success' => true,
-        //     'id'      => $post_id,
-        //     'title'   => $title,
-        //     'url'     => $url,
-        //     'content' => $content,
-        //     'stores'  => $stores, // always array now
-        // ]);
+        return rest_ensure_response([
+            'success' => true,
+            'id'      => $post_id,
+            'title'   => $title,
+            'content' => $content,
+            'status'  => $status,
+        ]);
     }
+    
     
     public function update_item( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
