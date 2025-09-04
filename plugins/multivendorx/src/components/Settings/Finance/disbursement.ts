@@ -95,6 +95,11 @@ export default {
             desc: __("<ul><li>If Manual is selected, stores handle withdrawals themselves from their dashboard.</li><li>Otherwise, commissions are automatically disbursed to stores based on the chosen schedule.</li></ul>", 'multivendorx'),
             options: [
                 {
+                    key: 'mannual',
+                    label: __('Mannual', 'multivendorx'),
+                    value: 'Mannual',
+                },
+                {
                     key: 'hourly',
                     label: __('Hourly', 'multivendorx'),
                     value: 'hourly',
