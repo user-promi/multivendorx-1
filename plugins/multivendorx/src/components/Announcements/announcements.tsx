@@ -340,7 +340,7 @@ const Announcements: React.FC = () => {
         },
     ];
 
-     const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(false);
 
     return (
         <>
@@ -371,90 +371,63 @@ const Announcements: React.FC = () => {
 
             {/* {addAnnouncements && (
                 <div className="right-popup">
-                    <div
-                        className={`content-wrapper ${addAnnouncements ? 'open' : ''
-                            }`}
-                    >
+                    <div className={`content-wrapper ${addAnnouncements ? "open" : ""}`}>
                         <div className="title-wrapper">
-                            <div className="title">
-                                <i className="adminlib-cart"></i>
-                                Add Announcements
+                                <div className="title">
+                                    <i className="adminlib-cart"></i>
+                                    Add Announcements
+                                </div>
+                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                                <i onClick={() => setAddAnnouncements(false)} className="icon adminlib-close"></i>
                             </div>
-                            <p>
-                                Lorem ipsum dolor sit amet consectetur
-                                adipisicing elit.
-                            </p>
-                            <i
-                                onClick={() => setAddAnnouncements(false)}
-                                className="icon adminlib-close"
-                            ></i>
-                        </div>
+                            
+                            <div className="content">
+                                <div className="form-group-wrapper">
+                                    <div className="form-group">
+                                        <label htmlFor="product-name">Title</label>
+                                        <BasicInput
+                                            type="text"
+                                            name="name"
+                                            // value={formData.name}
+                                            // onChange={handleChange}
 
-                        <div className="content">
-                            <div className="form-group-wrapper">
-                                <div className="form-group">
-                                    <label htmlFor="announcement-title">
-                                        Title
-                                    </label>
-                                    <BasicInput
-                                        type="text"
-                                        name="title"
-                                        value={formData.title}
-                                        onChange={handleChange}
-                                    />
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="announcement-url">
-                                        Enter Url
-                                    </label>
-                                    <BasicInput
-                                        type="text"
-                                        name="url"
-                                        value={formData.url}
-                                        onChange={handleChange}
-                                    />
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="announcement-content">
-                                        Enter Content
-                                    </label>
-                                    <TextArea
-                                        name="content"
+                                        />
+                                    </div>
+                                    <div className="form-group">
+                                        <label htmlFor="product-name">Enter Url</label>
+                                        <BasicInput
+                                            type="text"
+                                            name="name"
+                                            // value={formData.name}
+                                            // onChange={handleChange}
+                                        />
+                                    </div>
+                                    <div className="form-group">
+                                        <label htmlFor="product-name">Enter Content</label>
+                                        <TextArea
+                                        name="description"
                                         inputClass="textarea-input"
-                                        value={formData.content}
-                                        onChange={handleChange}
-                                    />
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="announcement-vendors">
-                                        Vendors
-                                    </label>
-                                    <TextArea
-                                        name="vendors"
+                                        // value={formData.description}
+                                        // onChange={handleChange}
+                                        />
+                                    </div>
+                                    <div className="form-group">
+                                        <label htmlFor="product-name">Vendors</label>
+                                        <TextArea
+                                        name="description"
                                         inputClass="textarea-input"
-                                        value={formData.vendors}
-                                        onChange={handleChange}
-                                    />
+                                        // value={formData.description}
+                                        // onChange={handleChange}
+                                        />
+                                    </div>
                                 </div>
                             </div>
-                        </div>
                         <div className="popup-footer">
-                            <div
-                                onClick={() => setAddAnnouncements(false)}
-                                className="admin-btn btn-red"
-                            >
-                                Cancel
-                            </div>
-                            <button
-                                onClick={handleSubmit}
-                                className="admin-btn btn-purple"
-                            >
-                                Submit
-                            </button>
+                            <div onClick={() => setAddAnnouncements(false)} className="admin-btn btn-red">Cancel</div>
+                            <a href="" className="admin-btn btn-purple">Submit</a>
                         </div>
                     </div>
                 </div>
-
             )} */}
             <div className="admin-table-wrapper">
                 <Table

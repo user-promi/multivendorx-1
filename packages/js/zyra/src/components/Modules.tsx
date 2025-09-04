@@ -70,6 +70,14 @@ const Modules: React.FC<ModuleProps> = ({
 
     const { modules, insertModule, removeModule } = useModules();
 
+    const formatCategory = (category: string | undefined): string => {
+        if (!category) return '';
+        return category
+            .split('_')
+            .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(' ');
+    };
+
     // Get unique categories from separators, if any
     const categories = [
         { id: 'All', label: 'All' },
@@ -294,7 +302,7 @@ const Modules: React.FC<ModuleProps> = ({
                                     <div className="module-details">
                                         
                                             <div className="meta-name">{module.name}
-                                                {module.category && ( <span className="admin-badge blue">{module.category}</span>  )}
+                                                {module.category && ( <span className="admin-badge blue">{formatCategory(module.category)}</span>  )}
                                             </div>
                                        
                                         <p

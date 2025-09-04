@@ -8,7 +8,7 @@ export default {
         'Decide which product types, fields, and features stores can access when creating or managing products in their store.',
         'multivendorx'
     ),
-    icon: 'adminlib-warehousing-icon',
+    icon: 'adminlib-cart',
     submitUrl: 'settings',
     modal: [
         {

@@ -1,4 +1,9 @@
 import { __ } from '@wordpress/i18n';
+import image1 from "../../../assets/images/popup-image.png";
+import image2 from "../../../assets/images/popup-image.png";
+import image3 from "../../../assets/images/popup-image.png";
+
+
 
 export default {
     id: 'store-appearance',
@@ -62,6 +67,32 @@ export default {
                         buttonBg: '#f33e65ff',
                         buttonHoverBg: '#c2294aff',
                     },
+                },
+            ],
+        },
+        {
+            key: 'image_settings',
+            type: 'color-setting',
+            label: 'Image Render',
+            desc: 'Set the color theme for store dashboards - the admin interface stores use to manage their business',
+            images: [
+                {
+                    key: 'template1',
+                    label: 'Outer Space',
+                    img: image1,
+                    value: 'template1',
+                },
+                {
+                    key: 'template2',
+                    label: 'Green Lagoon',
+                    img: image1,
+                    value: 'template2',
+                },
+                {
+                    key: 'template3',
+                    label: 'Old West',
+                    img: image1,
+                    value: 'template3',
                 },
             ],
         }

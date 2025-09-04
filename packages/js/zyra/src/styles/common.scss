@@ -793,14 +793,18 @@ input[type="checkbox"]:focus {
 // form Elements end
 
 // section divider start
-.divider-section {
-  padding: 1.5rem 2rem;
+.divider-section{
+  padding: 1.5rem 0;
   border-bottom: $border-light-small;
   width: 100%;
 
   .title {
     font-size: 1.15rem;
+    width: auto;
   }
+}
+.divider-section:first-child {
+  padding: 1.5rem 2rem;
 }
 
 // section divider end
