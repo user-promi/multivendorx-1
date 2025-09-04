@@ -69,7 +69,14 @@ const Modules: React.FC<ModuleProps> = ({
     const [searchQuery, setSearchQuery] = useState<string>('');
 
     const { modules, insertModule, removeModule } = useModules();
-
+    const [noticeHTML, setNoticeHTML] = useState('');
+    useEffect(() => {
+        const notice = document.querySelector('#screen-meta + .wrap .notice, #wpbody-content .notice');
+        if (notice) {
+            setNoticeHTML(notice.outerHTML);
+            notice.remove();
+        }
+    }, []);
     const formatCategory = (category: string | undefined): string => {
         if (!category) return '';
         return category
@@ -171,6 +178,7 @@ const Modules: React.FC<ModuleProps> = ({
                 activeTabIcon="adminlib-module"
                 tabTitle="Modules"
             />
+            {noticeHTML && <div className="wp-admin-notice" dangerouslySetInnerHTML={{ __html: noticeHTML }} />}
 
             <div className="module-container">
                 <Dialog
