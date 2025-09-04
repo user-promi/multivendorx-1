@@ -105,15 +105,21 @@ export default {
                     value: 'mannual',
                 },
                 {
-                    key: 'weekly',
-                    label: __('Weekly', 'multivendorx'),
-                    value: 'weekly',
+                    key: 'hourly',
+                    label: __('Hourly', 'multivendorx'),
+                    value: 'hourly',
                 },
                 {
                     key: 'daily',
                     label: __('Daily', 'multivendorx'),
                     value: 'daily',
                 },
+                {
+                    key: 'weekly',
+                    label: __('Weekly', 'multivendorx'),
+                    value: 'weekly',
+                },
+                
                 {
                     key: 'monthly',
                     label: __('Monthly', 'multivendorx'),
@@ -123,58 +129,89 @@ export default {
                     key: 'fortnightly',
                     label: __('Fortnightly', 'multivendorx'),
                     value: 'fortnightly',
-                },
-                {
-                    key: 'hourly',
-                    label: __('Hourly', 'multivendorx'),
-                    value: 'hourly',
-                },
-            ],
-        },
-
-        {
-            key: 'commission_threshold_time',
-            label: __('Free withdrawal', 'multivendorx'),
-            desc: __('', 'multivendorx'),
-            type: 'number',
-            preParameter: __('$', 'multivendorx'),
-            size:'8rem',
-            options: [
-                {
-                    key: 'commission_percentage',
-                    value: 'commission_percentage',
-                },
+                },                
             ],
         },
         {
-
-            key: 'commission_threshold_time',
-            label: __('Free withdrawal', 'multivendorx'),
-            desc: __('', 'multivendorx'),
+            key: 'store_url',
             type: 'number',
-            preParameter: __('$', 'multivendorx'),
-            size:'8rem',
-            options: [
-                {
-                    key: 'commission_percentage',
-                    value: 'commission_percentage',
-                },
-            ],
+            label: __( 'Store URL', 'multivendorx' ),
+            size:"4rem",
+            before: 'Run payouts at the',
+            after: "minute of every hour",
+            dependent: {
+                key: 'payment_schedule',
+                set: true,
+                value: 'hourly',
+            },
         },
         {
-            key: 'commission_threshold_time',
+            key: 'store_url',
             type: 'number',
-            label: __('Processing fee', 'multivendorx'),
-            preParameter: __('$', 'multivendorx'),
-            size:'8rem',
-            desc: __('', 'multivendorx'),
-            options: [
-                {
-                    key: 'commission_percentage',
-                    value: 'commission_percentage',
-                },
-            ],
+            label: __( 'Store URL', 'multivendorx' ),
+            size:"4rem",
+            before: 'Run payouts at',
+            after: "every day",
+            dependent: {
+                key: 'payment_schedule',
+                set: true,
+                value: 'daily',
+            },
         },
+        {
+            key: 'store_url',
+            type: 'number',
+            label: __( 'Store URL', 'multivendorx' ),
+            size:"4rem",
+            before: 'Run payouts at',
+            after: "every day",
+            dependent: {
+                key: 'payment_schedule',
+                set: true,
+                value: 'daily',
+            },
+        },
+        {
+            key: 'store_url',
+            type: 'number',
+            label: __( 'Store URL', 'multivendorx' ),
+            size:"4rem",
+            before: 'Run payouts at',
+            after: "every day",
+            dependent: {
+                key: 'payment_schedule',
+                set: true,
+                value: 'weekly',
+            },
+        },
+        // {
+        //     key: 'commission_threshold_time',
+        //     label: __('Free withdrawal', 'multivendorx'),
+        //     desc: __('', 'multivendorx'),
+        //     type: 'number',
+        //     preParameter: __('$', 'multivendorx'),
+        //     size:'8rem',
+        //     options: [
+        //         {
+        //             key: 'commission_percentage',
+        //             value: 'commission_percentage',
+        //         },
+        //     ],
+        // },
+        // {
+        //     key: 'commission_threshold_time',
+        //     type: 'number',
+        //     label: __('Processing fee', 'multivendorx'),
+        //     preParameter: __('$', 'multivendorx'),
+        //     size:'8rem',
+        //     desc: __('', 'multivendorx'),
+        //     options: [
+        //         {
+        //             key: 'commission_percentage',
+        //             value: 'commission_percentage',
+        //         },
+        //     ],
+        // },
 
     ],
 }

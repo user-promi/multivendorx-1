@@ -225,7 +225,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/privacy',
             pro_module: true,
             category: 'store_management'
-        }       
+        },
         { type: 'separator', id: 'inventory_control', label: 'Inventory Control' },
         {
             id: 'store-inventory',

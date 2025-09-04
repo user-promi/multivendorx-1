@@ -41,25 +41,6 @@ export default {
             deleteButtonLabel: 'Remove',
             nestedFields: [
                 {
-                    key: 'commission_fixed',
-                    type: 'number',
-                    desc: __('Fixed amount per transaction', 'multivendorx'),
-                    preParameter: __('$', 'multivendorx'),
-                    size: "8rem",
-                    before: 'Fixed',
-                    after: "+",
-                },
-                {
-                    key: 'commission_percentage',
-                    type: 'number',
-                    desc: __(
-                        'Percentage of product price per transaction',
-                        'multivendorx'
-                    ),
-                    parameter: __('%', 'multivendorx'),
-                    size: "8rem",
-                },
-                {
                     key: 'rule_type',
                     type: 'select',
                     label: 'If',
@@ -121,12 +102,32 @@ export default {
                             value: 'order_value',
                         },
                     ],
+                    after: "then",
                     // skipFirstRow: true,
                     dependent: {
                         key: 'rule_type',
                         set: true,
                         value: 'order_value',
                     },
+                },
+                {
+                    key: 'commission_fixed',
+                    type: 'text',
+                    desc: __('Fixed amount per transaction', 'multivendorx'),
+                    preParameter: __('$', 'multivendorx'),
+                    // size: "8rem",
+                    before: 'Fixed',
+                    after: "+",
+                },
+                {
+                    key: 'commission_percentage',
+                    type: 'number',
+                    desc: __(
+                        'Percentage of product price per transaction',
+                        'multivendorx'
+                    ),
+                    parameter: __('%', 'multivendorx'),
+                    // size: "8rem",
                 },
 
             ],
