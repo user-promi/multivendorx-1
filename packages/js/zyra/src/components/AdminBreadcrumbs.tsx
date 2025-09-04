@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 interface ButtonConfig {
     label?: string;
@@ -15,7 +15,7 @@ interface AdminBreadcrumbsProps {
     tabData?: any[];
     buttons?: any[];
     goPremium?: boolean
-    goPremiumLink?:string
+    goPremiumLink?: string
 }
 
 const AdminBreadcrumbs: React.FC<AdminBreadcrumbsProps> = ({
@@ -28,47 +28,76 @@ const AdminBreadcrumbs: React.FC<AdminBreadcrumbsProps> = ({
     goPremium = false,
     goPremiumLink
 }) => {
+    const [noticeHTML, setNoticeHTML] = useState('');
+
+    useEffect(() => {
+        // Function to check for notice
+        const captureNotice = () => {
+            const notice = document.querySelector(
+                '#screen-meta + .wrap .notice, #wpbody-content .notice'
+            );
+            if (notice) {
+                setNoticeHTML(notice.outerHTML); // save notice HTML
+                notice.remove(); // remove from DOM
+            }
+        };
+
+        // Run immediately once
+        captureNotice();
+
+        // Run every 2 seconds (2000ms)
+        const intervalId = setInterval(captureNotice, 2000);
+
+        // Cleanup on unmount
+        return () => clearInterval(intervalId);
+    }, []);
+
     return (
-        <div className="title-section">
-            <div className="title-wrapper">
-                <div className="title">
-                    {activeTabIcon && <i className={activeTabIcon}></i>}
-                    {tabTitle}
-                </div>
-
-                <div className="buttons">
-                    {buttons.length > 0 &&
-                        buttons.map((btn, index) => {
-                            if (React.isValidElement(btn)) return <React.Fragment key={index}>{btn}</React.Fragment>;
-
-                            const { label, onClick, iconClass, className } = btn as ButtonConfig;
-                            return (
-                                <button
-                                    key={index}
-                                    className={`breadcrumb-btn ${className || ''}`}
-                                    onClick={onClick}
-                                >
-                                    {iconClass && <i className={iconClass}></i>}
-                                    {label}
-                                </button>
-                            );
-                        })}
-                </div>
-            </div>
-            {!renderBreadcrumb && <div className="description">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Laboriosam corporis deleniti ipsum commodi. Porro, tempore.</div>}
-            {renderBreadcrumb && <div className="breadcrumbs-menu">{renderBreadcrumb()}</div>}
-
-            {renderMenuItems && tabData.length > 0 && (
-                <div id="top-level-tab-lists" className="current-tab-lists">
-                    <div className="current-tab-lists-container">
-                        {renderMenuItems(tabData)}
+        <>
+            <div className="title-section">
+                <div className="title-wrapper">
+                    <div className="title">
+                        {activeTabIcon && <i className={activeTabIcon}></i>}
+                        {tabTitle}
                     </div>
-                    {goPremium && (<a href={goPremiumLink} className="menu-item pro-btn">
-                            <i className="adminlib-pro-tag"></i> Upgrade<i className="adminlib-arrow-right"></i>
-                    </a>)}
+
+                    <div className="buttons">
+                        {buttons.length > 0 &&
+                            buttons.map((btn, index) => {
+                                if (React.isValidElement(btn)) return <React.Fragment key={index}>{btn}</React.Fragment>;
+
+                                const { label, onClick, iconClass, className } = btn as ButtonConfig;
+                                return (
+                                    <button
+                                        key={index}
+                                        className={`breadcrumb-btn ${className || ''}`}
+                                        onClick={onClick}
+                                    >
+                                        {iconClass && <i className={iconClass}></i>}
+                                        {label}
+                                    </button>
+                                );
+                            })}
+                    </div>
                 </div>
-            )}
-        </div>
+                {!renderBreadcrumb && <div className="description">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Laboriosam corporis deleniti ipsum commodi. Porro, tempore.</div>}
+                {renderBreadcrumb && <div className="breadcrumbs-menu">{renderBreadcrumb()}</div>}
+
+                {renderMenuItems && tabData.length > 0 && (
+                    <div id="top-level-tab-lists" className="current-tab-lists">
+                        <div className="current-tab-lists-container">
+                            {renderMenuItems(tabData)}
+                        </div>
+                        {goPremium && (<a href={goPremiumLink} className="menu-item pro-btn">
+                            <i className="adminlib-pro-tag"></i> Upgrade<i className="adminlib-arrow-right"></i>
+                        </a>)}
+                    </div>
+                )}
+            </div>
+            {noticeHTML && <div className="wp-admin-notice" dangerouslySetInnerHTML={{ __html: noticeHTML }} />}
+
+        </>
+
     );
 };
 

@@ -165,7 +165,6 @@ const Tabs: React.FC<TabsProps> = ({
   const [breadcrumbs, setBreadcrumbs] = useState<BreadcrumbItem[]>([
     { name: settingName, id: 'root', type: 'root' },
   ]);
-  const [noticeHTML, setNoticeHTML] = useState('');
 
   // Build breadcrumb path for a tab
   const createBreadcrumbPath = (targetId: string): BreadcrumbItem[] => {
@@ -370,11 +369,6 @@ const Tabs: React.FC<TabsProps> = ({
 
   // Setup initial state
   useEffect(() => {
-    const notice = document.querySelector('#screen-meta + .wrap .notice, #wpbody-content .notice');
-    if (notice) {
-      setNoticeHTML(notice.outerHTML);
-      notice.remove();
-    }
 
     if (currentTab) {
       // Update state without navigation for initial load
@@ -419,7 +413,6 @@ const Tabs: React.FC<TabsProps> = ({
         tabData={tabData}
         goPremium={true}
       />
-      {noticeHTML && <div className="wp-admin-notice" dangerouslySetInnerHTML={{ __html: noticeHTML }} />}
       <div className="general-wrapper">
         {HeaderSection && <HeaderSection />}
         <div className="middle-child-container">
