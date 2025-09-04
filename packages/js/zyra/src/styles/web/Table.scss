@@ -1,7 +1,7 @@
 @use '../../global.scss' as *;
 
-.add-to-quotation-button{
-    margin-left: auto;
+.add-to-quotation-button {
+  margin-left: auto;
 }
 
 .filter-wrapper {
@@ -27,11 +27,13 @@
     }
   }
 }
-.admin-table-wrapper{
+
+.admin-table-wrapper {
   padding: 2rem;
   margin: 2rem;
   background: #fff;
 }
+
 // admin table filter style
 .admin-table-wrapper-filter {
   display: flex;
@@ -71,6 +73,7 @@
         border-top: $border-light-small;
         border-bottom: $border-light-small;
       }
+
       .header-col {
         text-align: left;
         padding: 0 0.85rem;
@@ -92,6 +95,7 @@
         padding-top: 0.4rem;
         padding-right: 0;
       }
+
       .header-col:last-child {
         flex-grow: 0;
         min-width: 5rem;
@@ -125,7 +129,7 @@
         display: flex;
         width: 100%;
         border-bottom: $border-light-small;
-        
+
         .admin-column {
           padding: 0.313rem 0.85rem;
           font-size: 0.9rem;
@@ -185,9 +189,11 @@
           /*for overwrite common style*/
         }
       }
-      .admin-row:has(input[type="checkbox"]:checked){
+
+      .admin-row:has(input[type="checkbox"]:checked) {
         background: $theme-background-color;
       }
+
       .dropdown-select {
         div:nth-child(3) {
           background: transparent;
@@ -245,7 +251,7 @@
     gap: 0.5rem;
 
     span i,
-    .number-btn{
+    .number-btn {
       background: #e9e9e9;
       display: flex;
       justify-content: center;
@@ -256,29 +262,35 @@
       border: none;
       cursor: pointer;
     }
+
     .number-btn.active,
     .number-btn.active:hover,
-    span i:hover{
+    span i:hover {
       background: $theme-background-color;
       color: $theme-color;
     }
+
     .admin-font {
       cursor: pointer;
       font-size: 1.313rem;
     }
-    .pagination{
+
+    .pagination {
       display: flex;
       gap: 0.5rem;
     }
   }
-  .pagination-button-disabled i{
+
+  .pagination-button-disabled i {
     background: #e9e9e99c;
     color: #0000004a;
-    &:hover{
+
+    &:hover {
       background: #e9e9e99c;
       color: #0000004a;
     }
   }
+
   .pagination-number-wrapper {
     display: flex;
     gap: 0.5rem;
@@ -332,6 +344,7 @@
     background-color: #e7e7e7;
   }
 }
+
 .action-icons {
   display: flex;
   gap: 0.313rem;
@@ -339,14 +352,19 @@
   position: relative;
   cursor: pointer;
 
-  i{
+  i {
     padding: 0.5rem 0.313rem;
     border-radius: 50%;
     background: transparent;
     transition: all 0.5s ease;
+    width: 1.4rem;
+    height: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
 
-    &:hover{
+    &:hover {
       background: #ebebeb;
     }
   }
@@ -381,15 +399,18 @@
         // }
       }
     }
-    &.show{
+
+    &.show {
       display: block;
       transform: translate(0px, 20px);
     }
   }
+
   .adminlib-update-data {
     font-size: 1rem;
   }
 }
+
 .line {
   float: left;
   width: 100%;
@@ -403,9 +424,11 @@
   background-size: 37.5rem;
   animation: shine-lines 2s infinite ease-out;
 }
+
 .action-section {
   display: flex;
   flex-direction: column;
+
   .action-btn {
     display: flex;
     gap: 0.5rem;
