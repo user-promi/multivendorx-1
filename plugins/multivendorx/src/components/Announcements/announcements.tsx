@@ -392,7 +392,7 @@ const Announcements: React.FC = () => {
                     footer={
                         <>
                             <div
-                                onClick={() => setAddAnnouncements(false)}
+                                 onClick={handleCloseForm}
                                 className="admin-btn btn-red"
                             >
                                 Cancel

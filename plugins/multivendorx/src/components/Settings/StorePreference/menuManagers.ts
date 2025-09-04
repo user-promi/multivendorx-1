@@ -5,7 +5,7 @@ export default {
     priority: 4,
     name: __( 'Menu Manager', 'multivendorx' ),
     desc: __(
-        'Decide which menus vendors see in their dashboard and arrange their order.',
+        'Decide which menus stores see in their dashboard and arrange their order.',
         'multivendorx'
     ),
     icon: 'adminlib-storefront',
