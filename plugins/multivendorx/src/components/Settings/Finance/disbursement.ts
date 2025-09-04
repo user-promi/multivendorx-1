@@ -9,7 +9,7 @@ export default {
     submitUrl: 'settings',
     modal: [
         {
-            key: 'order_status',
+            key: 'disbursement_order_status',
             type: 'checkbox',
 
             label: __('Eligible Order Statuses for Commission Payout', 'multivendorx'),
@@ -42,9 +42,8 @@ export default {
             selectDeselect: true,
         },
         {
-            key: 'payment_method',
+            key: 'disbursement_method',
             type: 'setting-toggle',
-
             label: __('Commission Settlement', 'multivendorx'),
 		       	settingDescription: __("Select how commissions are released from the admin account.",'multivendorx'),
              desc: __("<ul><li>Instant Payout – Commissions are released immediately.</li><li>Scheduled / Delayed Payout – Commissions are released after a waiting period.</li></ul>",'multivendorx'),
@@ -53,7 +52,7 @@ export default {
                 {
                     key: 'instantly',
                     label: __('Instant Payout', 'multivendorx'),
-                    value: '    ',
+                    value: 'instantly',
                 },
                 {
                     key: 'waitting',
@@ -76,6 +75,11 @@ export default {
                     value: 'commission_percentage',
                 },
             ],
+            dependent: {
+                key: 'disbursement_method',
+                set: true,
+                value: 'waitting',
+            },
         },
         {
             key: 'payout_threshold_time',
@@ -91,6 +95,11 @@ export default {
                     value: 'commission_percentage',
                 },
             ],
+            dependent: {
+                key: 'disbursement_method',
+                set: true,
+                value: 'waitting',
+            },
         },
         {
             key: 'payment_schedule',
@@ -131,6 +140,11 @@ export default {
                     value: 'fortnightly',
                 },                
             ],
+            dependent: {
+                key: 'disbursement_method',
+                set: true,
+                value: 'waitting',
+            },
         },
         {
             key: 'store_url',
@@ -161,57 +175,29 @@ export default {
         {
             key: 'store_url',
             type: 'number',
-            label: __( 'Store URL', 'multivendorx' ),
-            size:"4rem",
-            before: 'Run payouts at',
-            after: "every day",
-            dependent: {
-                key: 'payment_schedule',
-                set: true,
-                value: 'daily',
-            },
+            preParameter: __('$', 'multivendorx'),
+            size:'8rem',
+            options: [
+                {
+                    key: 'commission_percentage',
+                    value: 'commission_percentage',
+                },
+            ],
         },
         {
             key: 'store_url',
             type: 'number',
-            label: __( 'Store URL', 'multivendorx' ),
-            size:"4rem",
-            before: 'Run payouts at',
-            after: "every day",
-            dependent: {
-                key: 'payment_schedule',
-                set: true,
-                value: 'weekly',
-            },
+            label: __('Processing fee', 'multivendorx'),
+            preParameter: __('$', 'multivendorx'),
+            size:'8rem',
+            desc: __('', 'multivendorx'),
+            options: [
+                {
+                    key: 'commission_percentage',
+                    value: 'commission_percentage',
+                },
+            ],
         },
-        // {
-        //     key: 'commission_threshold_time',
-        //     label: __('Free withdrawal', 'multivendorx'),
-        //     desc: __('', 'multivendorx'),
-        //     type: 'number',
-        //     preParameter: __('$', 'multivendorx'),
-        //     size:'8rem',
-        //     options: [
-        //         {
-        //             key: 'commission_percentage',
-        //             value: 'commission_percentage',
-        //         },
-        //     ],
-        // },
-        // {
-        //     key: 'commission_threshold_time',
-        //     type: 'number',
-        //     label: __('Processing fee', 'multivendorx'),
-        //     preParameter: __('$', 'multivendorx'),
-        //     size:'8rem',
-        //     desc: __('', 'multivendorx'),
-        //     options: [
-        //         {
-        //             key: 'commission_percentage',
-        //             value: 'commission_percentage',
-        //         },
-        //     ],
-        // },
 
     ],
 }
