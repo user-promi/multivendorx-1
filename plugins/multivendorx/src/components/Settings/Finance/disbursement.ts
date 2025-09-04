@@ -8,7 +8,7 @@ export default {
     submitUrl: 'settings',
     modal: [
         {
-            key: 'order_status',
+            key: 'disbursement_order_status',
             type: 'checkbox',
             label: __('Eligible Order Statuses for Commission Payout', 'multivendorx'),
             settingDescription: __("Choose which order statuses qualify for commission payouts.", 'multivendorx'),
@@ -20,9 +20,9 @@ export default {
                     value: 'completed',
                 },
                 {
-                    key: ' delivered ',
+                    key: 'delivered',
                     label: __('Delivered', 'multivendorx'),
-                    value: ' delivered ',
+                    value: 'delivered',
                 },
                 {
                     key: 'shipped',
@@ -30,15 +30,15 @@ export default {
                     value: 'shipped',
                 },
                 {
-                    key: ' processing ',
+                    key: 'processing',
                     label: __('Processing', 'multivendorx'),
-                    value: ' processing ',
+                    value: 'processing',
                 },
             ],
             selectDeselect: true,
         },
         {
-            key: 'payment_method',
+            key: 'disbursement_method',
             type: 'setting-toggle',
             label: __('Commission Settlement', 'multivendorx'),
             settingDescription: __("Select how commissions are released from the admin account.", 'multivendorx'),
@@ -47,33 +47,26 @@ export default {
                 {
                     key: 'instantly',
                     label: __('Instant Payout', 'multivendorx'),
-                    value: '    ',
+                    value: 'instantly',
                 },
                 {
-                    key: 'waitting',
+                    key: 'waiting',
                     label: __('Scheduled / Delayed Payout', 'multivendorx'),
-                    value: 'waitting',
+                    value: 'waiting',
                 },
             ],
         },
         {
-            key: 'commission_threshold_time',
+            key: 'commission_lock_period',
             label: __('Lock period', 'multivendorx'),
-            
             settingDescription: __('Keep payouts on hold for a safety buffer. Helps cover refunds, cancellations, or disputes.', 'multivendorx'),
             type: 'number',
             size: '8rem',
-            options: [
-                {
-                    key: 'commission_percentage',
-                    value: 'commission_percentage',
-                },
-            ],
             before:__('Wait', 'multivendorx'),
             after:__('days before commissions become eligible for payout', 'multivendorx'),
         },
         {
-            key: 'payout_threshold_time',
+            key: 'payout_threshold_amount',
             label: __('Minimum payout threshold', 'multivendorx'),
             desc: __(
                 'Define the minimum amount a store must accumulate before payouts are processed.', 'multivendorx'),
@@ -88,7 +81,7 @@ export default {
             ],
         },
         {
-            key: 'payment_schedule',
+            key: 'payment_schedules',
             type: 'setting-toggle',
             label: __('Payout frequency', 'multivendorx'),
             settingDescription: __("Decide how often store commissions are released:", 'multivendorx'),
@@ -149,7 +142,7 @@ export default {
                 },
             ],
             dependent: {
-                key: 'payment_schedule',
+                key: 'payment_schedules',
                 set: true,
                 value: 'hourly',
             },
@@ -206,7 +199,7 @@ export default {
                 },
             ],
             dependent: {
-                key: 'payment_schedule', // parent dependent key
+                key: 'payment_schedules', // parent dependent key
                 set: true,
                 value: 'fortnightly', // updated value
             },
@@ -248,7 +241,7 @@ export default {
                 },
             ],
             dependent: {
-                key: 'payment_schedule', // show only if monthly
+                key: 'payment_schedules', // show only if monthly
                 set: true,
                 value: 'monthly',
             },
@@ -261,7 +254,7 @@ export default {
             description: __('Once per day<br/>Run payouts at:', 'multivendorx'),
             defaultValue: '09:00', // optional: default payout time
             dependent: {
-                key: 'payment_schedule', // only show if payment schedule is daily
+                key: 'payment_schedules', // only show if payment schedule is daily
                 set: true,
                 value: 'daily',
             },
@@ -301,7 +294,7 @@ export default {
                 },
             ],
             dependent: {
-                key: 'payment_schedule', // show only if weekly
+                key: 'payment_schedules', // show only if weekly
                 set: true,
                 value: 'weekly',
             },

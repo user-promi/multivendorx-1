@@ -31,79 +31,131 @@ class Disbursement {
     }
 
     public function register_cron_based_on_settings() {
+        $schedule_type = MultiVendorX()->setting->get_setting('payment_schedules');
 
-        $settings = MultiVendorX()->setting->get_setting( 'payment_schedules' );
-        if ( empty( $settings ) || empty( $settings['type'] ) ) {
+        if (empty($schedule_type)) {
             return;
         }
 
-        switch ( $settings['type'] ) {
+        $settings = $this->normalize_settings($schedule_type);
+
+        switch ($schedule_type) {
             case 'hourly':
-                $this->register_cron( 'hourly', $settings );
+                $this->register_cron('hourly', $settings);
                 break;
 
             case 'daily':
-                $this->register_cron( 'daily', $settings );
+                $this->register_cron('daily', $settings);
                 break;
 
             case 'weekly':
-                $this->register_cron( 'weekly', $settings );
+                $this->register_cron('weekly', $settings);
                 break;
 
             case 'fortnightly':
-                $this->register_cron( 'fortnightly', $settings );
+                $this->register_cron('fortnightly', $settings);
                 break;
 
             case 'monthly':
-                $this->register_cron( 'monthly', $settings );
+                $this->register_cron('monthly', $settings);
                 break;
 
             case 'manual':
             default:
-                deregister_cron();
+                $this->deregister_cron();
                 break;
         }
     }
 
-    // function get_first_run( $schedule, $settings ) {
-    //     $hour   = isset( $settings['time'] ) ? (int) date( 'H', strtotime( $settings['time'] ) ) : 9;
-    //     $minute = isset( $settings['time'] ) ? (int) date( 'i', strtotime( $settings['time'] ) ) : 0;
+    /**
+     * Normalize settings structure from DB into a standard format
+     */
+    public function normalize_settings($type) {
+        switch ($type) {
+            case 'hourly':
+                $raw = reset(MultiVendorX()->setting->get_setting('disbursement_hourly')) ?? [];
+                return [
+                    'interval' => isset($raw['payouts_every_hour']) ? (int) $raw['payouts_every_hour'] : 1,
+                ];
 
-    //     switch ( $schedule ) {
-    //         case 'daily':
-    //             $ts = strtotime( "today {$hour}:{$minute}" );
-    //             if ( $ts <= time() ) {
-    //                 $ts = strtotime( "tomorrow {$hour}:{$minute}" );
-    //             }
-    //             return $ts;
+            case 'daily':
+                $time = MultiVendorX()->setting->get_setting('daily_payout_time');
+                return [
+                    'time' => $time ?: '09:00',
+                ];
 
-    //         case 'weekly':
-    //             $day = $settings['weekday'] ?? 'monday';
-    //             $ts  = strtotime( "next {$day} {$hour}:{$minute}" );
-    //             return $ts;
+            case 'weekly':
+                $raw = reset(MultiVendorX()->setting->get_setting('disbursement_weekly')) ?? [];
+                return [
+                    'weekday' => $raw['weekly_payout_day']['value'] ?? 'monday',
+                    'time'    => $raw['weekly_payout_time'] ?? '09:00',
+                ];
 
-    //         case 'fortnightly':
-    //             $nth  = $settings['nth'] ?? '1st';  // e.g. 1st, 2nd
-    //             $day  = $settings['weekday'] ?? 'monday';
-    //             $ts   = strtotime( "{$nth} {$day} of this month {$hour}:{$minute}" );
-    //             if ( $ts <= time() ) {
-    //                 $ts = strtotime( "{$nth} {$day} of next month {$hour}:{$minute}" );
-    //             }
-    //             return $ts;
+            case 'fortnightly':
+                $raw = reset(MultiVendorX()->setting->get_setting('disbursement_fortnightly')) ?? [];
+                return [
+                    'nth'     => $raw['payout_frequency'] ?? 'first',
+                    'weekday' => $raw['payout_day']['value'] ?? 'monday',
+                    'time'    => $raw['store_opening_time'] ?? '09:00',
+                ];
 
-    //         case 'monthly':
-    //             $date = ! empty( $settings['day_of_month'] ) ? (int) $settings['day_of_month'] : 1;
-    //             $ts   = strtotime( date( "Y-m-{$date} {$hour}:{$minute}:00" ) );
-    //             if ( $ts <= time() ) {
-    //                 $ts = strtotime( "+1 month", $ts );
-    //             }
-    //             return $ts;
+            case 'monthly':
+                $raw = reset(MultiVendorX()->setting->get_setting('disbursement_monthly')) ?? [];
+                return [
+                    'day_of_month' => isset($raw['payouts_every_month']) ? (int) $raw['payouts_every_month'] : 1,
+                    'time'         => $raw['monthly_payout_time'] ?? '09:00',
+                ];
 
-    //         default: // hourly or fallback
-    //             return time() + MINUTE_IN_SECONDS;
-    //     }
-    // }
+            default:
+                return [];
+        }
+    }
 
+
+    public function get_first_run($schedule, $settings) {
+        $hour   = isset($settings['time']) ? (int) date('H', strtotime($settings['time'])) : 9;
+        $minute = isset($settings['time']) ? (int) date('i', strtotime($settings['time'])) : 0;
+
+        switch ($schedule) {
+            case 'daily':
+                $ts = strtotime("today {$hour}:{$minute}");
+                if ($ts <= time()) {
+                    $ts = strtotime("tomorrow {$hour}:{$minute}");
+                }
+                return $ts;
+
+            case 'weekly':
+                $day = $settings['weekday'] ?? 'monday';
+                $ts  = strtotime("next {$day} {$hour}:{$minute}");
+                return $ts;
+
+            case 'fortnightly':
+                $nth = $settings['nth'] ?? 'first'; // e.g. first, second
+                $day = $settings['weekday'] ?? 'monday';
+                $ts  = strtotime("{$nth} {$day} of this month {$hour}:{$minute}");
+                if ($ts <= time()) {
+                    $ts = strtotime("{$nth} {$day} of next month {$hour}:{$minute}");
+                }
+                return $ts;
+
+            case 'monthly':
+                $date = !empty($settings['day_of_month']) ? (int) $settings['day_of_month'] : 1;
+                $ts   = strtotime(date("Y-m-{$date} {$hour}:{$minute}:00"));
+                if ($ts <= time()) {
+                    $ts = strtotime("+1 month", $ts);
+                }
+                return $ts;
+
+            case 'hourly':
+                $interval = !empty($settings['interval']) ? (int) $settings['interval'] : 1; // every X hours
+                $now      = time();
+                $next     = strtotime('+' . $interval . ' hour', $now);
+                return $next;
+
+            default:
+                return time() + MINUTE_IN_SECONDS;
+        }
+    }
 
     public function register_cron( $schedule, $settings ) {
         $hook = 'multivendorx_payout_cron';
