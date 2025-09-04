@@ -82,18 +82,20 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
         $count  = $request->get_param( 'count' );
     
         // Default type
-        $type = $request->get_param( 'type' ) ?: 'multivendorx_an';
+        $type = $request->get_param( 'type' ) ?: 'multivendorx_kb';
     
         // If only count requested
         if ( $count ) {
             $total = wp_count_posts( $type );
-            return rest_ensure_response( (int) $total->publish );
+            // Include both publish and pending
+            $total_count = ( (int) $total->publish ) + ( (int) $total->pending );
+            return rest_ensure_response( $total_count );
         }
-    
+
         $query = new \WP_Query( array(
             'post_type'      => $type,
-            'post_status'    => 'publish',
             'posts_per_page' => $limit,
+            'post_status'    => array( 'publish', 'pending' ),
             'offset'         => $offset,
             'orderby'        => 'date',
             'order'          => 'DESC',
@@ -102,31 +104,14 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
         $formatted_items = array();
     
         foreach ( $query->posts as $post ) {
-            $id      = (int) $post->ID;
-            $title   = $post->post_title;
-            $content = apply_filters( 'the_content', $post->post_content );
-            $url     = get_post_meta( $id, '_mvx_announcement_url', true );
-            $stores  = get_post_meta( $id, '_mvx_announcement_stores', true ); // saved as array
-    
-            $store_names = array();
-    
-            if ( ! empty( $stores ) && is_array( $stores ) ) {
-                foreach ( $stores as $store_id ) {
-                    $store_obj = MultivendorX()->store->get_store_by_id( $store_id );
-                    if ( $store_obj && ! empty( $store_obj->data['name'] ) ) {
-                        $store_names[] = $store_obj->data['name'];
-                    }
-                }
-            }
-    
+
             $formatted_items[] = apply_filters(
                 'multivendorx_' . $type,
                 array(
-                    'id'      => $id,
-                    'title'   => $title,
-                    'content' => $content,
-                    'url'     => $url,
-                    'stores'  => $store_names, // ✅ only names
+                    'id'      => (int) $post->ID,
+                    'title'   => $post->post_title,
+                    'content' => $post->post_content,
+                    'status'  => $post->post_status,
                     'date'    => get_the_date( 'c', $post ),
                 )
             );
@@ -185,38 +170,31 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
         if ( ! $id ) {
             return new \WP_Error(
                 'invalid_id',
-                __( 'Invalid announcement ID', 'multivendorx' ),
+                __( 'Invalid KB ID', 'multivendorx' ),
                 array( 'status' => 400 )
             );
         }
     
         $post = get_post( $id );
-        if ( ! $post || $post->post_type !== 'multivendorx_an' ) {
+        if ( ! $post || $post->post_type !== 'multivendorx_kb' ) {
             return new \WP_Error(
                 'not_found',
-                __( 'Announcement not found', 'multivendorx' ),
+                __( 'Knowledge Base article not found', 'multivendorx' ),
                 array( 'status' => 404 )
             );
         }
     
-        $data = $request->get_json_params();
+        $data    = $request->get_json_params();
         $title   = isset( $data['title'] ) ? sanitize_text_field( $data['title'] ) : $post->post_title;
         $content = isset( $data['content'] ) ? sanitize_textarea_field( $data['content'] ) : $post->post_content;
-        $url     = isset( $data['url'] ) ? esc_url_raw( $data['url'] ) : get_post_meta( $id, '_mvx_announcement_url', true );
-        $stores  = isset( $data['stores'] ) ? $data['stores'] : get_post_meta( $id, '_mvx_announcement_stores', true );
-    
-        // Convert CSV to array if needed
-        if ( is_string( $stores ) ) {
-            $stores = array_filter( array_map( 'trim', explode( ',', $stores ) ) );
-        } elseif ( ! is_array( $stores ) ) {
-            $stores = [];
-        }
+        $status  = isset( $data['status'] ) && $data['status'] === 'publish' ? 'publish' : 'pending';
     
         // Update the post
         $updated_post_id = wp_update_post([
             'ID'           => $id,
             'post_title'   => $title,
             'post_content' => $content,
+            'post_status'  => $status,
         ], true);
     
         if ( is_wp_error( $updated_post_id ) ) {
@@ -226,33 +204,15 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
             ]);
         }
     
-        // Update URL meta
-        update_post_meta( $id, '_mvx_announcement_url', $url );
-    
-        // Update stores meta
-        update_post_meta( $id, '_mvx_announcement_stores', $stores );
-    
-        // Prepare response
-        $store_data = [];
-        foreach ( $stores as $store_id ) {
-            $store_obj = MultivendorX()->store->get_store_by_id( $store_id );
-            if ( $store_obj && ! empty( $store_obj->data['name'] ) ) {
-                $store_data[] = [
-                    'id'   => $store_id,
-                    'name' => $store_obj->data['name'],
-                ];
-            }
-        }
-    
         return rest_ensure_response([
             'success' => true,
             'id'      => $id,
             'title'   => $title,
             'content' => $content,
-            'url'     => $url,
-            'stores'  => $store_data,
+            'status'  => $status,
         ]);
     }
+    
     
 
     public function get_item( $request ) {
@@ -270,48 +230,30 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
         if ( ! $id ) {
             return new \WP_Error(
                 'invalid_id',
-                __( 'Invalid announcement ID', 'multivendorx' ),
+                __( 'Invalid KB ID', 'multivendorx' ),
                 array( 'status' => 400 )
             );
         }
     
         $post = get_post( $id );
-        if ( ! $post || $post->post_type !== 'multivendorx_an' ) {
+        if ( ! $post || $post->post_type !== 'multivendorx_kb' ) {
             return new \WP_Error(
                 'not_found',
-                __( 'Announcement not found', 'multivendorx' ),
+                __( 'Knowledge Base article not found', 'multivendorx' ),
                 array( 'status' => 404 )
             );
         }
     
-        $title   = $post->post_title;
-        $content = $post->post_content;
-        $url     = get_post_meta( $id, '_mvx_announcement_url', true );
-        $stores  = get_post_meta( $id, '_mvx_announcement_stores', true );
-    
-        $store_data = array();
-        if ( ! empty( $stores ) && is_array( $stores ) ) {
-            foreach ( $stores as $store_id ) {
-                $store_obj = MultivendorX()->store->get_store_by_id( $store_id );
-                if ( $store_obj && ! empty( $store_obj->data['name'] ) ) {
-                    $store_data[] = array(
-                        'id'   => $store_id,
-                        'name' => $store_obj->data['name'],
-                    );
-                }
-            }
-        }
-
         $response = array(
             'id'      => $id,
-            'title'   => $title,
-            'content' => $content,
-            'url'     => $url,
-            'stores'  => $store_data,
+            'title'   => $post->post_title,
+            'content' => $post->post_content,
+            'status'  => $post->post_status,
             'date'    => get_post_time( 'Y-m-d H:i:s', true, $post ),
         );
-
+    
         return rest_ensure_response( $response );
     }
+    
     
 }

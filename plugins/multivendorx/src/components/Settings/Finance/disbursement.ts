@@ -229,7 +229,7 @@ export default {
             nestedFields: [
                 {
                     key: 'payouts_every_month', // day of month
-                    label: __('Monthly Payout', 'multivendorx'),
+                    before: __('Monthly Payout', 'multivendorx'),
                     desc: __(
                         'Date of the month: (defaults to last day if shorter month)',
                         'multivendorx'
@@ -247,7 +247,7 @@ export default {
                 {
                     key: 'monthly_payout_time', // time of day
                     type: 'time', // links to TimeSelect component
-                    label: __('Monthly Payout Time', 'multivendorx'),
+                    before: __('Monthly Payout Time', 'multivendorx'),
                     description: __('Select the time of day your monthly payout should occur.', 'multivendorx'),
                     defaultValue: '09:00',
                 },
@@ -301,7 +301,7 @@ export default {
                 {
                     key: 'weekly_payout_time', // time of day
                     type: 'time', // links to TimeSelect component
-                    label: __('Time of Day', 'multivendorx'),
+                    before: __('Time of Day', 'multivendorx'),
                     description: __('Select the time of day for weekly payouts.', 'multivendorx'),
                     defaultValue: '09:00',
                 },
