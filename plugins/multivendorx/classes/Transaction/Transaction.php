@@ -29,31 +29,50 @@ class Transaction {
     public function create_transaction($commission_id, $vendor_order, $main_order) {
         global $wpdb;
 
-        $commission = CommissionUtil::get_commission_db($commission_id);
+        $disbursement_status = MultiVendorX()->setting->get_setting( 'disbursement_order_status', [] );
+        if( in_array($vendor_order->get_status(), $disbursement_status)){
+            $disbursement_method = MultiVendorX()->setting->get_setting( 'disbursement_method' );
+            $lock_period         = (int) MultiVendorX()->setting->get_setting( 'commission_lock_period', 0 );
+            
+            $status = 'Pending';
+            $time   = current_time( 'timestamp' );
 
-         $data = [
-            'store_id'         => $commission->store_id,
-            'order_id'         => $commission->order_id,
-            'commission_id'    => $commission_id,
-            'entry_type'       => 'Cr',
-            'transaction_type' => 'Commission',
-            'amount'           => $commission->commission_total,
-            // 'currency'          => $vendor_id,
-            'narration'        => "Commission received for order " . $vendor_order->get_id(),
-            'status'           => 'Processed',
-            'created_at'       => current_time(),
-        ];
+            if ($disbursement_method == 'instantly') {
+                $status = 'Processed';
+            } elseif ($disbursement_method == 'waiting' ) {
+                if($lock_period == 0) {
+                    $status = 'Processed';
+                } elseif ($lock_period > 0) {
+                    $status = 'Pending';
+                    $time   = date( 'Y-m-d H:i:s', current_time( 'timestamp' ) + ( $lock_period * DAY_IN_SECONDS ) );;
+                }
+            }
+            $commission = CommissionUtil::get_commission_db($commission_id);
 
-        $format = [ "%d", "%d", "%d", "%s", "%s", "%f", "%s", "%s", "%s", "%s" ];
+            $data = [
+                'store_id'         => (int) $commission->store_id,
+                'order_id'         => (int) $commission->order_id,
+                'commission_id'    => (int) $commission_id,
+                'entry_type'       => 'Cr',
+                'transaction_type' => 'Commission',
+                'amount'           => (float) $commission->commission_total,
+                // 'currency'          => $vendor_id,
+                'narration'        => "Commission received for order " . $vendor_order->get_id(),
+                'status'           => $status,
+                'available_at'     => $time
+            ];
 
-        $wpdb->insert(
-            $wpdb->prefix . Utill::TABLES['transaction'],
-            $data,
-            $format
-        );
+            $format = [ "%d", "%d", "%d", "%s", "%s", "%f", "%s", "%s", "%s", "%d" ];
 
-        $transaction_id = $wpdb->insert_id;
-        return $transaction_id;
+            $wpdb->insert(
+                $wpdb->prefix . Utill::TABLES['transaction'],
+                $data,
+                $format
+            );
+
+            $transaction_id = $wpdb->insert_id;
+            return $transaction_id;
+        }
     }
 
     public function __get( $class ) { // phpcs:ignore Universal.NamingConventions.NoReservedKeywordParameterNames.classFound
@@ -64,4 +83,11 @@ class Transaction {
         return new \WP_Error( sprintf( 'Call to unknown class %s.', $class ) );
     }
 
+    public static function get_transaction_db( $commission_id ) {
+        global $wpdb;
+        $transaction = $wpdb->get_row(
+            $wpdb->prepare( "SELECT * FROM `" . $wpdb->prefix . Utill::TABLES['transaction'] . "` WHERE commission_id = %d", $commission_id )
+        );
+        return $transaction ?? new \stdClass();
+    }
 }

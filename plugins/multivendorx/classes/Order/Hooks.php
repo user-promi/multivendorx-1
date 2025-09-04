@@ -21,7 +21,7 @@ class Hooks {
         add_action('woocommerce_analytics_update_order_stats', [$this, 'remove_suborder_analytics'], 10, 1);
 
         // Create store order after valid checkout processed.
-        // add_action('woocommerce_checkout_order_processed', [$this, 'create_vendor_order'] );
+        add_action('woocommerce_checkout_order_processed', [$this, 'create_vendor_order'] );
         add_action('woocommerce_store_api_checkout_order_processed', [$this, 'create_vendor_order'] );
 
         // Create store order from backend.
