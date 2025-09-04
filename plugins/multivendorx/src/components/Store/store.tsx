@@ -4,7 +4,7 @@ import StoreTable from './storeTable';
 import ViewStore from './viewStore';
 import EditStore from './Edit/editStore';
 import { AdminBreadcrumbs, BasicInput, FileInput, getApiLink, TextArea } from 'zyra';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 
 const Store = () => {
@@ -18,7 +18,15 @@ const Store = () => {
   const isAddStore = hash.includes('create');
   const isViewStore = hash.includes('view');
   const iseditStore = hash.includes('edit');
+  const [noticeHTML, setNoticeHTML] = useState('');
 
+  useEffect(() => {
+    const notice = document.querySelector('#screen-meta + .wrap .notice, #wpbody-content .notice');
+    if (notice) {
+      setNoticeHTML(notice.outerHTML);
+      notice.remove();
+    }
+  }, []);
   // handle change
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -69,6 +77,8 @@ const Store = () => {
               </div>,
             ]}
           />
+          {noticeHTML && <div className="wp-admin-notice" dangerouslySetInnerHTML={{ __html: noticeHTML }} />}
+
           {addStore && (
             <div className="right-popup">
               <div className={`content-wrapper ${addStore ? 'open' : ''}`}>

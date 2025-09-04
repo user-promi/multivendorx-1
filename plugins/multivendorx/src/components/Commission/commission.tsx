@@ -53,29 +53,36 @@ const Commission: React.FC = () => {
     // const isAddStore = hash.includes('create');
     // const isViewStore = hash.includes('view');
     const iseditCommission = hash.includes('edit');
-
-    const dateRef = useRef< HTMLDivElement | null >( null );
-    const [ openModal, setOpenModal ] = useState( false );
-    const [ modalDetails, setModalDetails ] = useState< string >( '' );
+    const [noticeHTML, setNoticeHTML] = useState('');
+    useEffect(() => {
+        const notice = document.querySelector('#screen-meta + .wrap .notice, #wpbody-content .notice');
+        if (notice) {
+            setNoticeHTML(notice.outerHTML);
+            notice.remove();
+        }
+    }, []);
+    const dateRef = useRef<HTMLDivElement | null>(null);
+    const [openModal, setOpenModal] = useState(false);
+    const [modalDetails, setModalDetails] = useState<string>('');
     const [error, setError] = useState<String>();
     const [data, setData] = useState<CommissionRow[] | null>(null);
     const bulkSelectRef = useRef<HTMLSelectElement>(null);
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
     const [totalRows, setTotalRows] = useState<number>(0);
-    const [ openDatePicker, setOpenDatePicker ] = useState( false );
+    const [openDatePicker, setOpenDatePicker] = useState(false);
     const [pagination, setPagination] = useState<PaginationState>({
         pageIndex: 0,
         pageSize: 10,
     });
-    const [ selectedRange, setSelectedRange ] = useState( [
+    const [selectedRange, setSelectedRange] = useState([
         {
-            startDate: new Date( new Date().getTime() - 30 * 24 * 60 * 60 * 1000 ),
+            startDate: new Date(new Date().getTime() - 30 * 24 * 60 * 60 * 1000),
             endDate: new Date(),
             key: 'selection',
         },
-    ] );
+    ]);
     const handleDateOpen = () => {
-        setOpenDatePicker( ! openDatePicker );
+        setOpenDatePicker(!openDatePicker);
     };
 
     const [commissionStatus, setCommissionStatus] = useState<CommissionStatus[] | null>(null);
@@ -107,18 +114,18 @@ const Commission: React.FC = () => {
     }, [pagination]);
     const [showDropdown, setShowDropdown] = useState(false);
     const handleBulkAction = () => {
-        if ( appLocalizer.khali_dabba ) {
-            if ( ! Object.keys( rowSelection ).length ) {
-                setModalDetails( 'Select rows.' );
-                setOpenModal( true );
+        if (appLocalizer.khali_dabba) {
+            if (!Object.keys(rowSelection).length) {
+                setModalDetails('Select rows.');
+                setOpenModal(true);
                 return;
             }
-            if ( ! bulkSelectRef.current?.value ) {
-                setModalDetails( 'Please select a action.' );
-                setOpenModal( true );
+            if (!bulkSelectRef.current?.value) {
+                setModalDetails('Please select a action.');
+                setOpenModal(true);
                 return;
             }
-            setData( null );
+            setData(null);
             // axios( {
             //     method: 'POST',
             //     url: getApiLink( appLocalizer, `cohorts` ),
@@ -508,6 +515,8 @@ const Commission: React.FC = () => {
                 activeTabIcon="adminlib-cart"
                 tabTitle="Commissions"
             />
+            {noticeHTML && <div className="wp-admin-notice" dangerouslySetInnerHTML={{ __html: noticeHTML }} />}
+
             {isTabActive && iseditCommission && <EditCommission />}
             {!iseditCommission && (
                 <div className="admin-table-wrapper">

@@ -4,11 +4,20 @@ import Products from './products';
 import Vendors from './vendors';
 import Coupons from './coupon';
 import Transactions from './transaction';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const Notification = () => {
 
+    
     const [activeTab, setActiveTab] = useState("products");
+    const [noticeHTML, setNoticeHTML] = useState('');
+    useEffect(() => {
+        const notice = document.querySelector('#screen-meta + .wrap .notice, #wpbody-content .notice');
+        if (notice) {
+            setNoticeHTML(notice.outerHTML);
+            notice.remove();
+        }
+    }, []);
 
     const tabs = [
         { id: "products", label: "Products", content: <Products /> },
@@ -53,6 +62,7 @@ const Notification = () => {
                 activeTabIcon="adminlib-cart"
                 tabTitle="Notification Dashboard"
             />
+            {noticeHTML && <div className="wp-admin-notice" dangerouslySetInnerHTML={{ __html: noticeHTML }} />}
 
             {/* Workboard Stats */}
             <div className="work-board">
