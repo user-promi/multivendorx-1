@@ -44,6 +44,7 @@ import PaymentTabsComponent from './PaymentTabsComponent';
 import VerificationMethods from './VerificationMethods';
 import SystemInfoAccordion from './SystemInfoAccordion';
 import MultiInput from './MultiInput';
+import TimeSelect from './TimeSelect';
 
 // Types
 declare const wp: any;
@@ -128,6 +129,7 @@ interface InputField {
     | 'multi-string'
     | 'verification-methods'
     | 'form-builder'
+    | 'setting-time'
     | 'endpoint-editor';
     settingDescription?: string
     desc?: string;
@@ -161,7 +163,7 @@ interface InputField {
     inputWrapperClass?: string;
     wrapperClass?: string;
     tour?: string;
-    preParameter?:string;
+    preParameter?: string;
     rightContent?: boolean;
     dependentPlugin?: boolean;
     dependentSetting?: string;
@@ -1331,6 +1333,35 @@ const AdminForm: React.FC<AdminFormProps> = ({
                         />
                     );
                     break;
+                case 'setting-time':
+                    input = (
+                        <TimeSelect
+                            khali_dabba={appLocalizer?.khali_dabba ?? false}
+                            wrapperClass={`setting-form-input`}
+                            descClass="settings-metabox-description"
+                            description={inputField.desc}
+                            key={inputField.key}
+                            value={String(value ?? inputField.defaultValue ?? '')}
+                            proSetting={isProSetting(inputField.proSetting ?? false)}
+                            onChange={(data) => {
+                                if (
+                                    hasAccess(
+                                        inputField.proSetting ?? false,
+                                        String(inputField.moduleEnabled ?? ''),
+                                        String(inputField.dependentSetting ?? ''),
+                                        String(inputField.dependentPlugin ?? '')
+                                    )
+                                ) {
+                                    settingChanged.current = true;
+                                    updateSetting(inputField.key, data);
+                                }
+                            }}
+                            proChanged={() => setModelOpen(true)}
+                        />
+                    );
+                    break;
+
+
                 // Check in MVX
                 case 'wpeditor':
                     input = (
