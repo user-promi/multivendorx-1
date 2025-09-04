@@ -49,7 +49,7 @@ const Route = () => {
       {currentTab.get('tab') === 'modules' && <Modules />}
       {currentTab.get('tab') === 'stores' && <Store />}
       {currentTab.get('tab') === 'commissions' && <Commission />}
-      {currentTab.get('tab') === 'customer-services' && <CustomerServices />}
+      {currentTab.get('tab') === 'customer-support' && <CustomerServices />}
       {currentTab.get('tab') === 'actions-items' && <Notification />}
       {currentTab.get('tab') === 'dashboard' && <AdminDashboard />}
       {currentTab.get('tab') === 'announcement' && <Announcements />}

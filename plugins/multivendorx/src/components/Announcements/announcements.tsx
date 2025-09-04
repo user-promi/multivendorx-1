@@ -47,7 +47,14 @@ const Announcements: React.FC = () => {
     });
     const dateRef = useRef<HTMLDivElement | null>(null);
     const [openDatePicker, setOpenDatePicker] = useState(false);
-
+    const [noticeHTML, setNoticeHTML] = useState('');
+    useEffect(() => {
+        const notice = document.querySelector('#screen-meta + .wrap .notice, #wpbody-content .notice');
+        if (notice) {
+            setNoticeHTML(notice.outerHTML);
+            notice.remove();
+        }
+    }, []);
     const [pageCount, setPageCount] = useState(0);
     const [showDropdown, setShowDropdown] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -363,6 +370,7 @@ const Announcements: React.FC = () => {
                     </div>,
                 ]}
             />
+            {noticeHTML && <div className="wp-admin-notice" dangerouslySetInnerHTML={{ __html: noticeHTML }} />}
 
             {addAnnouncements && (
                 <CommonPopup
