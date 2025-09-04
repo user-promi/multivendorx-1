@@ -315,6 +315,7 @@ a {
   display: flex;
   gap: 0.5rem;
   align-items: center;
+  color: $text-color;
 
   span {
     font-size: 0.95rem;
@@ -349,15 +350,6 @@ a {
       }
     }
   }
-
-  // .parameter {
-  //   position: absolute;
-  //   top: .41rem;
-  //   right: 0.313rem;
-  //   border-left: $border-light-small;
-  //   padding: 0 0.75rem;
-  //   font-size: 0.813rem;
-  // }
 
   &.generate {
     .basic-input {

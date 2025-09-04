@@ -22,12 +22,15 @@
             display: inline-block;
             padding-right: 0.5rem;
         }
-        .toggle-setting-container{
+        .toggle-setting-container,
+        .form-select-field-wrapper,
+        .setting-form-input {
             display: inline-block;
+        }
             .toggle-setting-wrapper {
                 margin-bottom: 0;
             }
-        }
+        
         .basic-input{
             width: fit-content;
         }
