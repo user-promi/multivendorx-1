@@ -59,10 +59,9 @@ export default {
         {
             key: 'commission_threshold_time',
             label: __('Lock period', 'multivendorx'),
-            desc: __(
-                'Set a waiting period before commissions become eligible for payout. Helps account for refunds, cancellations, or disputes.', 'multivendorx'),
+            
+            settingDescription: __('Keep payouts on hold for a safety buffer. Helps cover refunds, cancellations, or disputes.', 'multivendorx'),
             type: 'number',
-            parameter: __('Day', 'multivendorx'),
             size: '8rem',
             options: [
                 {
@@ -70,6 +69,8 @@ export default {
                     value: 'commission_percentage',
                 },
             ],
+            before:__('Wait', 'multivendorx'),
+            after:__('days before commissions become eligible for payout', 'multivendorx'),
         },
         {
             key: 'payout_threshold_time',
@@ -94,14 +95,9 @@ export default {
             desc: __("<ul><li>If Manual is selected, stores handle withdrawals themselves from their dashboard.</li><li>Otherwise, commissions are automatically disbursed to stores based on the chosen schedule.</li></ul>", 'multivendorx'),
             options: [
                 {
-                    key: 'mannual',
-                    label: __('Mannual', 'multivendorx'),
-                    value: 'mannual',
-                },
-                {
-                    key: 'weekly',
-                    label: __('Weekly', 'multivendorx'),
-                    value: 'weekly',
+                    key: 'hourly',
+                    label: __('Hourly', 'multivendorx'),
+                    value: 'hourly',
                 },
                 {
                     key: 'daily',
@@ -109,9 +105,9 @@ export default {
                     value: 'daily',
                 },
                 {
-                    key: 'monthly',
-                    label: __('Monthly', 'multivendorx'),
-                    value: 'monthly',
+                    key: 'weekly',
+                    label: __('Weekly', 'multivendorx'),
+                    value: 'weekly',
                 },
                 {
                     key: 'fortnightly',
@@ -119,10 +115,11 @@ export default {
                     value: 'fortnightly',
                 },
                 {
-                    key: 'hourly',
-                    label: __('Hourly', 'multivendorx'),
-                    value: 'hourly',
+                    key: 'monthly',
+                    label: __('Monthly', 'multivendorx'),
+                    value: 'monthly',
                 },
+
             ],
         },
         //hour
@@ -202,8 +199,8 @@ export default {
                     ],
                 },
                 {
-                    key: 'store_opening_time', 
-                    type: 'time', 
+                    key: 'store_opening_time',
+                    type: 'time',
                     // label: __('Store Opening Time', 'multivendorx'),
                     // description: __('Select the time your store opens.', 'multivendorx'),
                 },
@@ -309,255 +306,44 @@ export default {
                 value: 'weekly',
             },
         },
+        {
+            key: 'withdrawals_fees',
+            type: 'nested',
+            label: __('Free Withdrawals and Fees', 'multivendorx'),
+            single: true,
+            settingDescription: __(
+                'Control how many times stores can withdraw without fees.',
+                'multivendorx'
+            ),
+            nestedFields: [
+                {
+                    key: 'free_withdrawals', // updated key
+                    type: 'number',
+                    size: '5rem',
+                    options: [
+                        {
+                            key: 'free_withdrawals',
+                            value: 'free_withdrawals',
+                        },
+                    ],
+                    before: __('Stores get', 'multivendorx'),
+                    after: __('free withdrawals. After that, each withdrawal costs', 'multivendorx'),
+                },
+                {
+                    key: 'withdrawal_fee', // updated key
+                    type: 'number',
+                    size: '5rem',
+                    options: [
+                        {
+                            key: 'withdrawal_fee',
+                            value: 'withdrawal_fee',
+                        },
+                    ],
+                    preParameter: __('$', 'multivendorx'),
+                    parameter: __('%', 'multivendorx'),
+                },
+            ],
+        },
         
-
-
-
-
-
-
-
-
-
-        // {
-        //     key: 'payouts_every_hour',
-        //     label: __('Payouts every hour', 'multivendorx'),
-        //     desc: __('', 'multivendorx'),
-        //     type: 'number',
-        //     size: '8rem',
-        //     options: [
-        //         {
-        //             key: 'payouts_every_hour',
-        //             value: 'payouts_every_hour',
-        //         },
-        //     ],
-        //     parameter: __('hour', 'multivendorx'),
-        //     dependent: {
-        //         key: 'payment_schedule',
-        //         set: true,
-        //         value: 'hourly',
-        //     },
-        // },
-
-
-
-        // {
-        //     key: 'payout_frequency', // changed from 'payment_schedule'
-        //     type: 'setting-toggle',
-        //     label: __('Payout frequency', 'multivendorx'),
-        //     options: [
-        //         {
-        //             key: 'first',
-        //             label: __('1st', 'multivendorx'),
-        //             value: 'first',
-        //         },
-        //         {
-        //             key: 'second',
-        //             label: __('2nd', 'multivendorx'),
-        //             value: 'second',
-        //         },
-        //     ],
-        //     dependent: {
-        //         key: 'payment_schedule', // also change here if dependent relies on the key
-        //         set: true,
-        //         value: 'fortnightly',
-        //     },
-        // },
-        // {
-        //     key: 'payout_day',
-        //     type: 'setting-toggle',
-        //     label: __('Payout Day', 'multivendorx'),
-        //     settingDescription: __("Select the day of the week to release store commissions:", 'multivendorx'),
-        //     desc: __("<ul><li>Choose the specific day when store commissions should be disbursed.</li></ul>", 'multivendorx'),
-        //     options: [
-        //         {
-        //             key: 'monday',
-        //             label: __('Monday', 'multivendorx'),
-        //             value: 'monday',
-        //         },
-        //         {
-        //             key: 'tuesday',
-        //             label: __('Tuesday', 'multivendorx'),
-        //             value: 'tuesday',
-        //         },
-        //         {
-        //             key: 'wednesday',
-        //             label: __('Wednesday', 'multivendorx'),
-        //             value: 'wednesday',
-        //         },
-        //         {
-        //             key: 'thursday',
-        //             label: __('Thursday', 'multivendorx'),
-        //             value: 'thursday',
-        //         },
-        //         {
-        //             key: 'friday',
-        //             label: __('Friday', 'multivendorx'),
-        //             value: 'friday',
-        //         },
-        //         {
-        //             key: 'saturday',
-        //             label: __('Saturday', 'multivendorx'),
-        //             value: 'saturday',
-        //         },
-        //         {
-        //             key: 'sunday',
-        //             label: __('Sunday', 'multivendorx'),
-        //             value: 'sunday',
-        //         },
-        //     ],
-        //     dependent: {
-        //         key: 'payment_schedule', // also change here if dependent relies on the key
-        //         set: true,
-        //         value: 'fortnightly',
-        //     },
-        // },
-        // {
-        //     key: 'store_opening_time', // unique key for the time setting
-        //     type: 'setting-time', // links to TimeSelect component
-        //     label: __('Store Opening Time', 'multivendorx'),
-        //     description: __('Select the time your store opens.', 'multivendorx'),
-        //     defaultValue: '09:00', // optional: set default time
-        //     dependent: {
-        //         key: 'payment_schedule', // optional: only show if this setting has a specific value
-        //         set: true,
-        //         value: 'fortnightly',
-        //     },
-        //     proSetting: false, // set true if this is a Pro feature
-        // },
-
-
-
-
-        // {
-        //     key: 'payouts_every_month',
-        //     label: __('Monthly Payout', 'multivendorx'), // main label
-        //     desc: __(
-        //         'Once per month<br/>Date of the month: (defaults to last day if shorter month)<br/>Time of day:',
-        //         'multivendorx'
-        //     ),
-        //     type: 'number', // for day of month, e.g., 1-31
-        //     size: '8rem',
-        //     options: [
-        //         {
-        //             key: 'payouts_every_month',
-        //             value: 'payouts_every_month',
-        //         },
-        //     ],
-        //     parameter: __('day', 'multivendorx'), // unit for input
-        //     dependent: {
-        //         key: 'payment_schedule',
-        //         set: true,
-        //         value: 'monthly',
-        //     },
-        // },
-        // {
-        //     key: 'monthly_payout_time', // unique key for the monthly payout time
-        //     type: 'setting-time', // links to TimeSelect component
-        //     label: __('Monthly Payout Time', 'multivendorx'),
-        //     description: __('Select the time of day your monthly payout should occur.', 'multivendorx'),
-        //     defaultValue: '09:00', // optional: default payout time
-        //     dependent: {
-        //         key: 'payment_schedule', // only show if payment schedule is monthly
-        //         set: true,
-        //         value: 'monthly',
-        //     },
-        //     proSetting: false, // set true if this is a Pro feature
-        // },
-
-
-        // {
-        //     key: 'daily_payout_time', // unique key for daily payout time
-        //     type: 'setting-time', // links to TimeSelect component
-        //     label: __('Daily Payout Time', 'multivendorx'),
-        //     description: __('Once per day<br/>Run payouts at:', 'multivendorx'),
-        //     defaultValue: '09:00', // optional: default payout time
-        //     dependent: {
-        //         key: 'payment_schedule', // only show if payment schedule is daily
-        //         set: true,
-        //         value: 'daily',
-        //     },
-        //     proSetting: false, // set true if this is a Pro feature
-        // },
-        // Weekly payout day toggle
-        // {
-        //     key: 'weekly_payout_day',
-        //     type: 'setting-toggle', // toggle for day selection
-        //     label: __('Day of the Week', 'multivendorx'),
-        //     description: __('Once per week<br/>Select the day of the week for payouts:', 'multivendorx'),
-        //     options: [
-        //         { key: 'sunday', label: __('Sunday', 'multivendorx'), value: 'sunday' },
-        //         { key: 'monday', label: __('Monday', 'multivendorx'), value: 'monday' },
-        //         { key: 'tuesday', label: __('Tuesday', 'multivendorx'), value: 'tuesday' },
-        //         { key: 'wednesday', label: __('Wednesday', 'multivendorx'), value: 'wednesday' },
-        //         { key: 'thursday', label: __('Thursday', 'multivendorx'), value: 'thursday' },
-        //         { key: 'friday', label: __('Friday', 'multivendorx'), value: 'friday' },
-        //         { key: 'saturday', label: __('Saturday', 'multivendorx'), value: 'saturday' },
-        //     ],
-        //     dependent: {
-        //         key: 'payment_schedule',
-        //         set: true,
-        //         value: 'weekly',
-        //     },
-        //     proSetting: false,
-        // },
-
-        // // Weekly payout time
-        // {
-        //     key: 'weekly_payout_time',
-        //     type: 'setting-time',
-        //     label: __('Time of Day', 'multivendorx'),
-        //     description: __('Select the time of day for weekly payouts.', 'multivendorx'),
-        //     defaultValue: '09:00',
-        //     dependent: {
-        //         key: 'payment_schedule',
-        //         set: true,
-        //         value: 'weekly',
-        //     },
-        //     proSetting: false,
-        // },
-
-        {
-            key: 'commission_threshold_time1',
-            label: __('Free withdrawal', 'multivendorx'),
-            desc: __('', 'multivendorx'),
-            type: 'number',
-            preParameter: __('$', 'multivendorx'),
-            size: '8rem',
-            options: [
-                {
-                    key: 'commission_percentage1',
-                    value: 'commission_percentage1',
-                },
-            ],
-        },
-        {
-            key: 'commission_threshold_time2',
-            label: __('Free withdrawal', 'multivendorx'),
-            desc: __('', 'multivendorx'),
-            type: 'number',
-            preParameter: __('$', 'multivendorx'),
-            size: '8rem',
-            options: [
-                {
-                    key: 'commission_percentage2',
-                    value: 'commission_percentage2',
-                },
-            ],
-        },
-        {
-            key: 'commission_threshold_time3',
-            type: 'number',
-            label: __('Processing fee', 'multivendorx'),
-            preParameter: __('$', 'multivendorx'),
-            size: '8rem',
-            desc: __('', 'multivendorx'),
-            options: [
-                {
-                    key: 'commission_percentage3',
-                    value: 'commission_percentage3',
-                },
-            ],
-        },
     ],
 }
