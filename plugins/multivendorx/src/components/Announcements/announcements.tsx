@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 
-import { Table, getApiLink, TableCell, AdminBreadcrumbs, BasicInput, TextArea, CommonPopup } from 'zyra';
+import { Table, getApiLink, TableCell, AdminBreadcrumbs, BasicInput, TextArea, CommonPopup, SelectInput } from 'zyra';
 
 import {
     ColumnDef,
@@ -16,19 +16,26 @@ type StoreRow = {
     id?: number;
     store_name?: string;
     store_slug?: string;
-    status?: string;
+    status?: 'publish' | 'pending' | string;
+};
+type AnnouncementStatus = {
+    key: string;
+    name: string;
+    count: number;
 };
 
 type AnnouncementForm = {
     title: string;
     url: string;
     content: string;
-    vendors: string;
+    stores: string; // ✅ renamed vendors → stores
 };
+
 export interface RealtimeFilter {
     name: string;
     render: (updateFilter: (key: string, value: any) => void, filterValue: any) => ReactNode;
 }
+
 const Announcements: React.FC = () => {
     const [data, setData] = useState<StoreRow[] | null>(null);
     const [addAnnouncements, setAddAnnouncements] = useState(false);
@@ -39,7 +46,7 @@ const Announcements: React.FC = () => {
         pageSize: 10,
     });
     const dateRef = useRef<HTMLDivElement | null>(null);
-    const [ openDatePicker, setOpenDatePicker ] = useState( false );
+    const [openDatePicker, setOpenDatePicker] = useState(false);
 
     const [pageCount, setPageCount] = useState(0);
     const [showDropdown, setShowDropdown] = useState(false);
@@ -47,20 +54,23 @@ const Announcements: React.FC = () => {
     const bulkSelectRef = useRef<HTMLSelectElement>(null);
     const [openModal, setOpenModal] = useState(false);
     const [modalDetails, setModalDetails] = useState<string>('');
-    const [ selectedRange, setSelectedRange ] = useState( [
+    const [selectedRange, setSelectedRange] = useState([
         {
-            startDate: new Date( new Date().getTime() - 30 * 24 * 60 * 60 * 1000 ),
+            startDate: new Date(new Date().getTime() - 30 * 24 * 60 * 60 * 1000),
             endDate: new Date(),
             key: 'selection',
         },
-    ] );
+    ]);
+
     // Form state
     const [formData, setFormData] = useState<AnnouncementForm>({
         title: '',
         url: '',
         content: '',
-        vendors: '',
+        stores: '',
     });
+    const [announcementStatus, setAnnouncementStatus] = useState<AnnouncementStatus[] | null>(null);
+    const [storeOptions, setStoreOptions] = useState<{ value: string; label: string }[]>([]);
 
     // Handle form input change
     const handleChange = (
@@ -83,29 +93,9 @@ const Announcements: React.FC = () => {
                 return;
             }
             setData(null);
-            // axios( {
-            //     method: 'POST',
-            //     url: getApiLink( appLocalizer, `cohorts` ),
-            //     headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            //     data: {
-            //         selected_action: bulkSelectRef.current.value,
-            //         cohort_ids: Object.keys( rowSelection ).map( ( index ) => {
-            //             const row = data?.[ parseInt( index ) ];
-            //             return {
-            //                 cohort_id: row?.id,
-            //             };
-            //         } ),
-            //     },
-            // } ).then( () => {
-            //     setModalDetails( '' );
-            //     setOpenModal( false );
-            //     requestData();
-            //     setRowSelection( {} );
-            // } );
         }
     };
 
-    // Handle form submit
     const handleSubmit = async () => {
         try {
             await axios({
@@ -120,8 +110,8 @@ const Announcements: React.FC = () => {
             })
 
             setAddAnnouncements(false);
-            setFormData({ title: '', url: '', content: '', vendors: '' });
-            requestData(pagination.pageSize, pagination.pageIndex + 1); // refresh table
+            setFormData({ title: '', url: '', content: '', stores: '' });
+            requestData(pagination.pageSize, pagination.pageIndex + 1);
         } catch (err) {
             setError(__('Failed to add announcement', 'multivendorx'));
         }
@@ -130,6 +120,25 @@ const Announcements: React.FC = () => {
 
     // Fetch total rows on mount
     useEffect(() => {
+        axios({
+            method: 'GET',
+            url: getApiLink(appLocalizer, 'store'),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+        })
+            .then((response) => {
+                if (response.data && Array.isArray(response.data)) {
+                    const options = response.data.map((store: any) => ({
+                        value: store.id.toString(),
+                        label: store.store_name,
+                    }));
+                    setStoreOptions(options);
+                }
+
+            })
+            .catch(() => {
+                setError(__('Failed to load stores', 'multivendorx'));
+            });
+
         axios({
             method: 'GET',
             url: getApiLink(appLocalizer, 'announcement'),
@@ -144,9 +153,11 @@ const Announcements: React.FC = () => {
                 setError(__('Failed to load total rows', 'multivendorx'));
             });
     }, []);
+
     const handleDateOpen = () => {
-        setOpenDatePicker( ! openDatePicker );
+        setOpenDatePicker(!openDatePicker);
     };
+
     useEffect(() => {
         const currentPage = pagination.pageIndex + 1;
         const rowsPerPage = pagination.pageSize;
@@ -163,7 +174,7 @@ const Announcements: React.FC = () => {
     };
 
     // Fetch data from backend
-    function requestData(rowsPerPage = 10, currentPage = 1) {
+    function requestData(rowsPerPage = 10, currentPage = 1, typeCount = '') {
         setData(null);
         axios({
             method: 'GET',
@@ -172,20 +183,26 @@ const Announcements: React.FC = () => {
             params: {
                 page: currentPage,
                 row: rowsPerPage,
+                status: typeCount === 'all' ? '' : typeCount,
             },
         })
             .then((response) => {
                 setData(response.data || []);
+                setAnnouncementStatus([
+                    { key: 'all', name: 'All', count: response.data.all || 0 },
+                    { key: 'publish', name: 'Published', count: response.data.publish || 0 },
+                    { key: 'pending', name: 'Pending', count: response.data.pending || 0 },
+                ]);
             })
             .catch(() => {
-                setError(__('Failed to load stores', 'multivendorx'));
+                setError(__('Failed to load announcements', 'multivendorx'));
                 setData([]);
             });
     }
 
-    const requestApiForData = (rowsPerPage: number, currentPage: number) => {
+    const requestApiForData = (rowsPerPage: number, currentPage: number, filterData?: any) => {
         setData(null);
-        requestData(rowsPerPage, currentPage);
+        requestData(rowsPerPage, currentPage, filterData?.typeCount || '');
     };
 
     // Columns
@@ -224,14 +241,13 @@ const Announcements: React.FC = () => {
             ),
         },
         {
-            header: __('Vendors', 'multivendorx'),
+            header: __('Stores', 'multivendorx'), // ✅ vendors → stores
             cell: ({ row }) => (
-                <TableCell title={Array.isArray(row.original.vendors) ? row.original.vendors.join(', ') : row.original.vendors || ''}>
-                    {Array.isArray(row.original.vendors) ? row.original.vendors.join(', ') : row.original.vendors || '-'}
+                <TableCell title={Array.isArray(row.original.stores) ? row.original.stores.join(', ') : row.original.stores || ''}>
+                    {Array.isArray(row.original.stores) ? row.original.stores.join(', ') : row.original.stores || '-'}
                 </TableCell>
             ),
         },
-
         {
             header: __('Action', 'multivendorx'),
             cell: ({ row }) => (
@@ -272,6 +288,7 @@ const Announcements: React.FC = () => {
             ),
         },
     ];
+
     const realtimeFilter: RealtimeFilter[] = [
         {
             name: 'bulk-action',
@@ -280,61 +297,11 @@ const Announcements: React.FC = () => {
                     <select name="action" className="basic-select" ref={bulkSelectRef}>
                         <option value="">{__('Bulk actions')}</option>
                         <option value="publish">{__('Publish', 'multivendorx')}</option>
-                        <option value="delete">{__('Delete', 'multivendorx')}</option>
+                        <option value="pending">{__('Pending', 'multivendorx')}</option>
                     </select>
                     <button name="bulk-action-apply" className="admin-btn btn-purple" onClick={handleBulkAction}>
                         {__('Apply')}
                     </button>
-                </div>
-            ),
-        },
-        {
-            name: 'date',
-            render: (updateFilter) => (
-                <div ref={dateRef}>
-                    <div className="admin-header-search-section">
-                        <input
-                            value={`${selectedRange[0].startDate.toLocaleDateString()} - ${selectedRange[0].endDate.toLocaleDateString()}`}
-                            onClick={() => handleDateOpen()}
-                            className="basic-input"
-                            type="text"
-                            placeholder={'DD/MM/YYYY'}
-                        />
-                    </div>
-                    {openDatePicker && (
-                        <div className="date-picker-section-wrapper" id="date-picker-wrapper">
-                            <DateRangePicker
-                                ranges={selectedRange}
-                                months={1}
-                                direction="vertical"
-                                scroll={{ enabled: true }}
-                                maxDate={new Date()}
-                                onChange={(ranges: RangeKeyDict) => {
-                                    const selection: Range = ranges.selection;
-
-                                    if (selection?.endDate instanceof Date) {
-                                        // Set end of day to endDate
-                                        selection.endDate.setHours(23, 59, 59, 999);
-                                    }
-
-                                    // Update local range state
-                                    setSelectedRange([
-                                        {
-                                            startDate: selection.startDate || new Date(),
-                                            endDate: selection.endDate || new Date(),
-                                            key: selection.key || 'selection',
-                                        },
-                                    ]);
-
-                                    // Update external filters (could be used by table or search logic)
-                                    updateFilter('date', {
-                                        start_date: selection.startDate,
-                                        end_date: selection.endDate,
-                                    });
-                                }}
-                            />
-                        </div>
-                    )}
                 </div>
             ),
         },
@@ -359,76 +326,98 @@ const Announcements: React.FC = () => {
             />
 
             {addAnnouncements && (
-                <CommonPopup open={addAnnouncements} onClose={() => setAddAnnouncements(false)} title="Parent One Popup">
-                    <div>
-                    <h2>Hello from Parent One 🎉</h2>
-                    <p>This is static info passed from Parent One.</p>
-                    
-                    </div>
-                </CommonPopup>
-            )}
-
-
-            {/* {addAnnouncements && (
-                <div className="right-popup">
-                    <div className={`content-wrapper ${addAnnouncements ? "open" : ""}`}>
-                        <div className="title-wrapper">
+                <CommonPopup
+                    open={addAnnouncements}
+                    onClose={() => setAddAnnouncements(false)}
+                    title="Add Announcement"
+                    header={'Lorem ipsum dolor sit amet consectetur adipisicing elit.'}
+                >
+                    <div className="right-popup">
+                        <div className={`content-wrapper ${addAnnouncements ? "open" : ""}`}>
+                            <div className="title-wrapper">
                                 <div className="title">
                                     <i className="adminlib-cart"></i>
                                     Add Announcements
                                 </div>
                                 <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-                                <i onClick={() => setAddAnnouncements(false)} className="icon adminlib-close"></i>
+                                <i
+                                    onClick={() => setAddAnnouncements(false)}
+                                    className="icon adminlib-close"
+                                ></i>
                             </div>
-                            
+
                             <div className="content">
                                 <div className="form-group-wrapper">
                                     <div className="form-group">
-                                        <label htmlFor="product-name">Title</label>
+                                        <label htmlFor="title">Title</label>
                                         <BasicInput
                                             type="text"
-                                            name="name"
-                                            // value={formData.name}
-                                            // onChange={handleChange}
+                                            name="title"
+                                            value={formData.title}
+                                            onChange={handleChange}
+                                        />
+                                    </div>
+                                    <div className="form-group">
+                                        <label htmlFor="url">Enter Url</label>
+                                        <BasicInput
+                                            type="text"
+                                            name="url"
+                                            value={formData.url}
+                                            onChange={handleChange}
+                                        />
+                                    </div>
+                                    <div className="form-group">
+                                        <label htmlFor="content">Enter Content</label>
+                                        <TextArea
+                                            name="content"
+                                            inputClass="textarea-input"
+                                            value={formData.content}
+                                            onChange={handleChange}
+                                        />
+                                    </div>
 
-                                        />
-                                    </div>
                                     <div className="form-group">
-                                        <label htmlFor="product-name">Enter Url</label>
-                                        <BasicInput
-                                            type="text"
-                                            name="name"
-                                            // value={formData.name}
-                                            // onChange={handleChange}
-                                        />
-                                    </div>
-                                    <div className="form-group">
-                                        <label htmlFor="product-name">Enter Content</label>
-                                        <TextArea
-                                        name="description"
-                                        inputClass="textarea-input"
-                                        // value={formData.description}
-                                        // onChange={handleChange}
-                                        />
-                                    </div>
-                                    <div className="form-group">
-                                        <label htmlFor="product-name">Vendors</label>
-                                        <TextArea
-                                        name="description"
-                                        inputClass="textarea-input"
-                                        // value={formData.description}
-                                        // onChange={handleChange}
+                                        <label htmlFor="stores">Stores</label> {/* ✅ vendors → stores */}
+                                        <SelectInput
+                                            name="stores"
+                                            type="multi-select"
+                                            options={storeOptions}
+                                            value={formData.stores ? formData.stores.split(',') : []} // ✅ CSV → array
+                                            onChange={(newValue: any) => {
+                                                const selectedValues = Array.isArray(newValue)
+                                                    ? newValue.map((opt) => opt.value)
+                                                    : [];
+                                                setFormData((prev) => ({
+                                                    ...prev,
+                                                    stores: selectedValues.join(','), // ✅ store as CSV
+                                                }));
+                                            }}
                                         />
                                     </div>
                                 </div>
                             </div>
-                        <div className="popup-footer">
-                            <div onClick={() => setAddAnnouncements(false)} className="admin-btn btn-red">Cancel</div>
-                            <a href="" className="admin-btn btn-purple">Submit</a>
+
+                            {error && <p className="error-text">{error}</p>}
+
+                            <div className="popup-footer">
+                                <div
+                                    onClick={() => setAddAnnouncements(false)}
+                                    className="admin-btn btn-red"
+                                >
+                                    Cancel
+                                </div>
+                                <div
+                                    onClick={handleSubmit}
+                                    className="admin-btn btn-purple"
+                                >
+                                    Submit
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            )} */}
+                </CommonPopup>
+            )}
+
             <div className="admin-table-wrapper">
                 <Table
                     data={data}
@@ -442,7 +431,7 @@ const Announcements: React.FC = () => {
                     onPaginationChange={setPagination}
                     handlePagination={requestApiForData}
                     perPageOption={[10, 25, 50]}
-                    typeCounts={[]}
+                    typeCounts={announcementStatus as AnnouncementStatus[]}
                 />
             </div>
         </>

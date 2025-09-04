@@ -69,7 +69,11 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
     public function get_items( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
-            return new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
+            return new \WP_Error(
+                'invalid_nonce',
+                __( 'Invalid nonce', 'multivendorx' ),
+                array( 'status' => 403 )
+            );
         }
     
         $limit  = max( intval( $request->get_param( 'row' ) ), 10 );
@@ -102,7 +106,18 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
             $title   = $post->post_title;
             $content = apply_filters( 'the_content', $post->post_content );
             $url     = get_post_meta( $id, '_mvx_announcement_url', true );
-            $vendors = get_post_meta( $id, '_mvx_vendor_notices_vendors', true );
+            $stores  = get_post_meta( $id, '_mvx_announcement_stores', true ); // saved as array
+    
+            $store_names = array();
+    
+            if ( ! empty( $stores ) && is_array( $stores ) ) {
+                foreach ( $stores as $store_id ) {
+                    $store_obj = MultivendorX()->store->get_store_by_id( $store_id );
+                    if ( $store_obj && ! empty( $store_obj->data['name'] ) ) {
+                        $store_names[] = $store_obj->data['name'];
+                    }
+                }
+            }
     
             $formatted_items[] = apply_filters(
                 'multivendorx_' . $type,
@@ -111,7 +126,7 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
                     'title'   => $title,
                     'content' => $content,
                     'url'     => $url,
-                    'vendors' => $vendors,
+                    'stores'  => $store_names, // ✅ only names
                     'date'    => get_the_date( 'c', $post ),
                 )
             );
@@ -120,27 +135,43 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
         return rest_ensure_response( $formatted_items );
     }
     
+    
+    
     public function create_item( $request ) {
         $data = $request->get_json_params();
+    
         // Unwrap formData if present
         $formData = isset($data['formData']) ? $data['formData'] : $data;
     
         $title   = isset($formData['title']) ? sanitize_text_field($formData['title']) : '';
         $url     = isset($formData['url']) ? esc_url_raw($formData['url']) : '';
         $content = isset($formData['content']) ? sanitize_textarea_field($formData['content']) : '';
-        $vendors = isset($formData['vendors']) ? (array) $formData['vendors'] : [];
+        $stores  = isset($formData['stores']) ? $formData['stores'] : [];
+    
+        if ( is_string( $stores ) ) {
+            $stores = array_filter( array_map( 'trim', explode( ',', $stores ) ) );
+        } elseif ( ! is_array( $stores ) ) {
+            $stores = [];
+        }
     
         // Insert post
         $post_id = wp_insert_post([
             'post_title'   => $title,
             'post_content' => $content,
-            'post_type'    => 'multivendorx_an', // ✅ corrected post type
+            'post_type'    => 'multivendorx_an',
             'post_status'  => 'publish',
         ], true);
     
-        // Save vendors if provided
-        if ( ! empty($vendors) ) {
-            update_post_meta( $post_id, '_mvx_vendor_notices_vendors', $vendors );
+        if ( is_wp_error( $post_id ) ) {
+            return rest_ensure_response([
+                'success' => false,
+                'message' => $post_id->get_error_message(),
+            ]);
+        }
+    
+        // Save stores if provided
+        if ( ! empty($stores) ) {
+            update_post_meta( $post_id, '_mvx_announcement_stores', $stores );
         }
     
         // Optionally save URL as post meta
@@ -154,13 +185,16 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
             'title'   => $title,
             'url'     => $url,
             'content' => $content,
-            'vendors' => $vendors,
+            'stores'  => $stores, // always array now
         ]);
     }
     
-    
-
     public function update_item( $request ) {
        
+    }
+    public function get_item( $request ) {
+        $id = absint( $request->get_param( 'id' ) );
+
+        return rest_ensure_response( $response );
     }
 }
