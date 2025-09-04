@@ -4,6 +4,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
+import "../styles/web/SystemInfoAccordion.scss";
+
 /**
  * Internal dependencies
  */
@@ -91,7 +93,7 @@ const SystemInfoAccordion: React.FC<SystemInfoAccordionProps> = ({
     if (!data) return null;
 
     return (
-        <div className="system-info-container">
+        <div className="system-info">
             {/* Copy Button */}
             <div className="copy-info-bar">
                 <button type="button" onClick={copyToClipboard} className="copy-btn">
@@ -101,18 +103,17 @@ const SystemInfoAccordion: React.FC<SystemInfoAccordionProps> = ({
             </div>
 
             {Object.entries(data).map(([key, section]) => (
-                <div key={key} className="accordion-item">
-                    <button
-                        type="button"
+                <div key={key} className="system-item">
+                    <div
                         onClick={() => toggleSection(key)}
-                        className="accordion-header"
+                        className="name"
                     >
                         <span>{section.label}</span>
-                        <span>{openKeys.includes(key) ? "▲" : "▼"}</span>
-                    </button>
+                        <i className={openKeys.includes(key) ? "adminlib-pagination-right-arrow" : "adminlib-keyboard-arrow-down"}></i>
+                    </div>
 
                     {openKeys.includes(key) && (
-                        <div className="accordion-body">
+                        <div className="content">
                             {section.description && (
                                 <p className="accordion-desc">{section.description}</p>
                             )}

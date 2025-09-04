@@ -73,6 +73,13 @@ const Announcements: React.FC = () => {
     const [announcementStatus, setAnnouncementStatus] = useState<AnnouncementStatus[] | null>(null);
     const [storeOptions, setStoreOptions] = useState<{ value: string; label: string }[]>([]);
 
+    const handleCloseForm = () => {
+        setAddAnnouncements(false);
+        setFormData({ title: '', url: '', content: '', stores: '' }); // reset form
+        setEditId(null); // reset edit mode
+        setError(null); // clear any error
+    };
+
     // Handle form input change
     const handleChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -367,93 +374,91 @@ const Announcements: React.FC = () => {
             {addAnnouncements && (
                 <CommonPopup
                     open={addAnnouncements}
-                    onClose={() => setAddAnnouncements(false)}
-                    title="Add Announcement"
-                    header={'Lorem ipsum dolor sit amet consectetur adipisicing elit.'}
+                    onClose={handleCloseForm}
+                    width="500px"
+                    header={
+                        <>
+                            <div className="title">
+                                <i className="adminlib-cart"></i>
+                                {editId ? __('Edit Announcement', 'multivendorx') : __('Add Announcement', 'multivendorx')}
+                            </div>
+                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                            <i
+                                onClick={handleCloseForm}
+                                className="icon adminlib-close"
+                            ></i>
+                        </>
+                    }
+                    footer={
+                        <>
+                            <div
+                                onClick={() => setAddAnnouncements(false)}
+                                className="admin-btn btn-red"
+                            >
+                                Cancel
+                            </div>
+                            <div
+                                onClick={handleSubmit}
+                                className="admin-btn btn-purple"
+                            >
+                                Submit
+                            </div>
+                        </>
+                    }
                 >
-                    <div className="right-popup">
-                        <div className={`content-wrapper ${addAnnouncements ? "open" : ""}`}>
-                            <div className="title-wrapper">
-                                <div className="title">
-                                    <i className="adminlib-cart"></i>
-                                    Add Announcements
-                                </div>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-                                <i
-                                    onClick={() => setAddAnnouncements(false)}
-                                    className="icon adminlib-close"
-                                ></i>
+
+                    <div className="content">
+                        <div className="form-group-wrapper">
+                            <div className="form-group">
+                                <label htmlFor="title">Title</label>
+                                <BasicInput
+                                    type="text"
+                                    name="title"
+                                    value={formData.title}
+                                    onChange={handleChange}
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="url">Enter Url</label>
+                                <BasicInput
+                                    type="text"
+                                    name="url"
+                                    value={formData.url}
+                                    onChange={handleChange}
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="content">Enter Content</label>
+                                <TextArea
+                                    name="content"
+                                    inputClass="textarea-input"
+                                    value={formData.content}
+                                    onChange={handleChange}
+                                />
                             </div>
 
-                            <div className="content">
-                                <div className="form-group-wrapper">
-                                    <div className="form-group">
-                                        <label htmlFor="title">Title</label>
-                                        <BasicInput
-                                            type="text"
-                                            name="title"
-                                            value={formData.title}
-                                            onChange={handleChange}
-                                        />
-                                    </div>
-                                    <div className="form-group">
-                                        <label htmlFor="url">Enter Url</label>
-                                        <BasicInput
-                                            type="text"
-                                            name="url"
-                                            value={formData.url}
-                                            onChange={handleChange}
-                                        />
-                                    </div>
-                                    <div className="form-group">
-                                        <label htmlFor="content">Enter Content</label>
-                                        <TextArea
-                                            name="content"
-                                            inputClass="textarea-input"
-                                            value={formData.content}
-                                            onChange={handleChange}
-                                        />
-                                    </div>
-
-                                    <div className="form-group">
-                                        <label htmlFor="stores">Stores</label> {/* ✅ vendors → stores */}
-                                        <SelectInput
-                                            name="stores"
-                                            type="multi-select"
-                                            options={storeOptions}
-                                            value={formData.stores ? formData.stores.split(',') : []} // ✅ CSV → array
-                                            onChange={(newValue: any) => {
-                                                const selectedValues = Array.isArray(newValue)
-                                                    ? newValue.map((opt) => opt.value)
-                                                    : [];
-                                                setFormData((prev) => ({
-                                                    ...prev,
-                                                    stores: selectedValues.join(','),
-                                                }));
-                                            }}
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-
-                            {error && <p className="error-text">{error}</p>}
-
-                            <div className="popup-footer">
-                                <div
-                                    onClick={() => setAddAnnouncements(false)}
-                                    className="admin-btn btn-red"
-                                >
-                                    Cancel
-                                </div>
-                                <div
-                                    onClick={handleSubmit}
-                                    className="admin-btn btn-purple"
-                                >
-                                    Submit
-                                </div>
+                            <div className="form-group">
+                                <label htmlFor="stores">Stores</label> {/* ✅ vendors → stores */}
+                                <SelectInput
+                                    name="stores"
+                                    type="multi-select"
+                                    options={storeOptions}
+                                    value={formData.stores ? formData.stores.split(',') : []} // ✅ CSV → array
+                                    onChange={(newValue: any) => {
+                                        const selectedValues = Array.isArray(newValue)
+                                            ? newValue.map((opt) => opt.value)
+                                            : [];
+                                        setFormData((prev) => ({
+                                            ...prev,
+                                            stores: selectedValues.join(','),
+                                        }));
+                                    }}
+                                />
                             </div>
                         </div>
                     </div>
+
+                    {error && <p className="error-text">{error}</p>}
                 </CommonPopup>
             )}
 
