@@ -6,6 +6,10 @@ namespace MultiVendorX\StripeConnect;
 defined('ABSPATH') || exit;
 
 class Stripe_Payment {
+    public function __construct(){
+        
+        add_action('multivendorx_process_stripe-connect_payment', array($this, 'process_payment'), 10, 2);
+    }
 
     public function get_id() {
         return 'stripe-connect';
@@ -52,7 +56,10 @@ class Stripe_Payment {
         ];
     }
 
-    public function process_payment() {
+    public function process_payment($store_id, $amount) {
         
+
+        // after success or fail payment
+        do_action('multivendorx_after_payment_complete', $store_id);
     }
 }

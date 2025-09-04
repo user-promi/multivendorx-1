@@ -40,7 +40,11 @@ class Module {
     }
 
     public function add_payment_provider($providers) {
-        $providers[] =  'MultiVendorX\\StripeConnect\\Stripe_Payment';
+        $providers[] =  [
+            'id'    => 'stripe-connect',
+            'name'  => 'Stripe Connect',
+            'class' => 'MultiVendorX\\StripeConnect\\Stripe_Payment'
+        ];
 
         return $providers;
     }

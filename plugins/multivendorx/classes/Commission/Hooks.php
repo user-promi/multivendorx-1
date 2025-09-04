@@ -36,7 +36,7 @@ class Hooks {
             $vendor_order->update_meta_data( 'multivendorx_commissions_processed', 'yes' );
             
             // Action hook after commission processed.
-            do_action( 'mvx_after_calculate_commission', $commission_id, $vendor_order, $main_order );
+            do_action( 'multivendorx_after_calculate_commission', $commission_id, $vendor_order, $main_order );
         }
     }
     

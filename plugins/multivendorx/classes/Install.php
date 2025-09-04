@@ -103,6 +103,26 @@ class Install {
             PRIMARY KEY (`ID`)
         ) $collate;";
          
+        $sql_transaction = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}" . Utill::TABLES['transaction'] . "` (
+            `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+            `store_id` bigint(20) unsigned NOT NULL,
+            `order_id` bigint(20) unsigned DEFAULT NULL,
+            `commission_id` bigint(20) unsigned DEFAULT NULL,
+            `entry_type` enum('Dr','Cr') NOT NULL,
+            `transaction_type` enum('Commission','Withdrawal','Refund','Adjustment') NOT NULL,
+            `amount` decimal(10,2) NOT NULL,
+            `currency` varchar(10) NOT NULL,
+            `narration` text NOT NULL,
+            `status` enum('Pending','Processed','Completed') DEFAULT 'Pending',
+            `available_at` datetime DEFAULT NULL,
+            `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (`id`),
+            KEY `idx_store` (`store_id`),
+            KEY `idx_order` (`order_id`),
+            KEY `idx_commission` (`commission_id`),
+            KEY `idx_type` (`transaction_type`)
+        ) $collate;";
+
         // Include upgrade functions if not loaded.
         if ( ! function_exists( 'dbDelta' ) ) {
             require_once ABSPATH . 'wp-admin/includes/upgrade.php';
@@ -112,6 +132,7 @@ class Install {
         dbDelta( $sql_store );
         dbDelta( $sql_store_users );
         dbDelta( $sql_store_meta );
+        dbDelta( $sql_transaction );
     }
 
     /**
