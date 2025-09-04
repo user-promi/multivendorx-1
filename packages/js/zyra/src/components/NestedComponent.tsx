@@ -143,6 +143,7 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
       case "number":
       case "text":
       case "url":
+      case "time": 
         return (
           <div className="settings-input-content" key={field.key}>
             {!(rowIndex === 0 && field.skipLabel) && field.label && <label>{field.label}</label>}
@@ -191,23 +192,23 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
           </div>
         );
 
-      case "time": // 🔹 NEW: TimeSelect
-        return (
-          <div className="settings-input-content" key={field.key}>
-            {!(rowIndex === 0 && field.skipLabel) && field.label && <label>{field.label}</label>}
-            <TimeSelect
-              khali_dabba={appLocalizer?.khali_dabba ?? false}
-              wrapperClass="setting-form-input"
-              descClass="settings-metabox-description"
-              description={field.desc}
-              key={field.key}
-              value={String(val ?? field.defaultValue ?? "")}
-              // proSetting={isProSetting(field.proSetting ?? false)}
-              onChange={(data) => handleChange(rowIndex, field.key, data)}
-              proChanged={() => setModelOpen(true)}
-            />
-          </div>
-        );
+      // case "time": // 🔹 NEW: TimeSelect
+      //   return (
+      //     <div className="settings-input-content" key={field.key}>
+      //       {!(rowIndex === 0 && field.skipLabel) && field.label && <label>{field.label}</label>}
+      //       <TimeSelect
+      //         khali_dabba={appLocalizer?.khali_dabba ?? false}
+      //         wrapperClass="setting-form-input"
+      //         descClass="settings-metabox-description"
+      //         description={field.desc}
+      //         key={field.key}
+      //         value={String(val ?? field.defaultValue ?? "")}
+      //         // proSetting={isProSetting(field.proSetting ?? false)}
+      //         onChange={(data) => handleChange(rowIndex, field.key, data)}
+      //         proChanged={() => setModelOpen(true)}
+      //       />
+      //     </div>
+      //   );
 
       default:
         return null;

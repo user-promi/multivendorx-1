@@ -4,7 +4,7 @@ export default {
     priority: 2,
     name: __('Disbursement', 'multivendorx'),
     desc: __("Tailor your marketplace commission plan to fit your revenue sharing preferences.", 'multivendorx'),
-    icon: 'adminlib-dynamic-pricing',
+    icon: 'adminlib-cart',
     submitUrl: 'settings',
     modal: [
         {
@@ -256,7 +256,7 @@ export default {
         //daily
         {
             key: 'daily_payout_time', // unique key for daily payout time
-            type: 'setting-time', // links to TimeSelect component
+            type: 'time', // links to TimeSelect component
             label: __('Daily Payout Time', 'multivendorx'),
             description: __('Once per day<br/>Run payouts at:', 'multivendorx'),
             defaultValue: '09:00', // optional: default payout time
@@ -265,6 +265,7 @@ export default {
                 set: true,
                 value: 'daily',
             },
+            size: '6rem',
             proSetting: false, // set true if this is a Pro feature
         },
         {

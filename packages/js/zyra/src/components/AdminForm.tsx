@@ -102,6 +102,7 @@ interface InputField {
     | 'email'
     | 'number'
     | 'range'
+    | 'time'
     | 'file'
     | 'url'
     | 'textarea'
@@ -645,6 +646,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                 case 'email':
                 case 'number':
                 case 'range':
+                case 'time':
                     input = (
                         <BasicInput
                             wrapperClass="setting-form-input"
