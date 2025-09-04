@@ -33,7 +33,7 @@ const CommonPopup = ({
   children,
   header,
   footer,
-  width = 500,
+  width,
 }: PopupProps) => {
   return (
     <Dialog
@@ -41,12 +41,11 @@ const CommonPopup = ({
       onClose={onClose}
       TransitionComponent={Transition}
       keepMounted
-      fullWidth
       PaperProps={{
         sx: {
           margin: 0,
           height: "fit-content",
-          maxWidth: 500,
+          minWidth: width,
           width: width,
           position: "fixed",
           right: '1rem',
@@ -65,8 +64,8 @@ const CommonPopup = ({
       <DialogContent>
         <div>{children}</div>
       </DialogContent>
-
-      {footer && <DialogActions>{footer}</DialogActions>}
+      
+      {footer && <DialogActions className="popup-footer">{footer}</DialogActions>}
     </Dialog>
   );
 };

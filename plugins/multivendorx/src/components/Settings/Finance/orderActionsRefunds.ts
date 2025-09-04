@@ -48,12 +48,13 @@ export default {
         {
             key: 'refund_days',
             type: 'number',
-            label: __( 'Refund claim period (days)', 'multivendorx' ),
+            label: __( 'Refund claim period', 'multivendorx' ),
             desc: __(
                 'Set the number of days within which a customer can request a refund',
                 'multivendorx'
             ),
             max: 365,
+            parameter: 'days',
             moduleEnabled: 'marketplace-refund',
         },
         {

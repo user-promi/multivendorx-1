@@ -2,7 +2,7 @@ import { __ } from '@wordpress/i18n';
 
 export default {
     id: 'database-tools',
-    priority: 1,
+    priority: 2,
     name: __( 'Database Tools', 'multivendorx' ),
     desc: __(
         'Controls how stores are onboarded and what access they get.',
@@ -41,16 +41,7 @@ export default {
                 'multivendorx'
             ),
         },
-        {
-            key: 'migrate',
-            type: 'button',
-            name: __( 'Multivendor Migrate', 'multivendorx' ),
-            label: __( 'Multivendor Migration', 'multivendorx' ),
-            desc: __(
-                'With this tool, you can transfer valuable data from your previous marketplace',
-                'multivendorx'
-            ),
-        },
+
         {
             key: 'default_pages',
             type: 'button',

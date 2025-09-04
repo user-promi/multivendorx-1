@@ -4,8 +4,10 @@ import RefundRequest from './refundRequest';
 import AbuseReports from './abuseReports';
 import StoreReviews from './storeReviews ';
 import './customerServices.scss';
+import { useEffect, useState } from 'react';
 
 const CustomerServices = () => {
+
     const CustomerServicesStats = [
         {
             id: 'reviews',

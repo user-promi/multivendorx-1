@@ -2,7 +2,7 @@ import { __ } from '@wordpress/i18n';
 
 export default {
     id: 'system-status',
-    priority: 2,
+    priority: 1,
     name: __( 'System Status', 'multivendorx' ),
     desc: __(
         'Controls how stores are onboarded and what access they get.',
@@ -17,16 +17,9 @@ export default {
             classes: "system-info-section",
             apiLink: "status",
             appLocalizer,
-            copyButtonLabel: "Copy System Info to Clipboard",
-            copiedLabel: "Copied!", 
+            copyButtonLabel: "Copy All",
+            copiedLabel: "Copied!",
         },         
-        {
-            key: 'multivendorx_adv_log',
-            type: 'log',
-            classes: 'log-section',
-            apiLink: 'logs',
-            fileName: 'error.txt',
-        },
         
     ],
 };

@@ -4,11 +4,13 @@ import Products from './products';
 import Vendors from './vendors';
 import Coupons from './coupon';
 import Transactions from './transaction';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const Notification = () => {
 
+    
     const [activeTab, setActiveTab] = useState("products");
+
 
     const tabs = [
         { id: "products", label: "Products", content: <Products /> },

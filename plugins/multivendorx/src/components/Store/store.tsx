@@ -4,7 +4,7 @@ import StoreTable from './storeTable';
 import ViewStore from './viewStore';
 import EditStore from './Edit/editStore';
 import { AdminBreadcrumbs, BasicInput, FileInput, getApiLink, TextArea } from 'zyra';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 
 const Store = () => {
@@ -69,6 +69,7 @@ const Store = () => {
               </div>,
             ]}
           />
+
           {addStore && (
             <div className="right-popup">
               <div className={`content-wrapper ${addStore ? 'open' : ''}`}>
