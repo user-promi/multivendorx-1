@@ -1,0 +1,14 @@
+@use '../../global.scss' as *;
+
+.system-info{
+    .system-item{
+        .name{
+            background: #f9f4f4b8;
+            padding: 0.625rem 1rem;
+
+            span{
+                font-size: 1.125rem;
+            }
+        }
+    }
+}

@@ -125,6 +125,9 @@ a {
   line-height: 0.7rem;
   padding: 0.5rem;
   border-radius: $border-radius-small;
+  display: flex;
+  align-items: end;
+  gap: 0.25rem;
 
   @each $name, $style in $button-color-palette {
     &.#{$name} {
