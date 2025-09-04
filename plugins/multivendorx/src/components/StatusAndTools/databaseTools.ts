@@ -41,16 +41,7 @@ export default {
                 'multivendorx'
             ),
         },
-        {
-            key: 'migrate',
-            type: 'button',
-            name: __( 'Multivendor Migrate', 'multivendorx' ),
-            label: __( 'Multivendor Migration', 'multivendorx' ),
-            desc: __(
-                'With this tool, you can transfer valuable data from your previous marketplace',
-                'multivendorx'
-            ),
-        },
+
         {
             key: 'default_pages',
             type: 'button',
