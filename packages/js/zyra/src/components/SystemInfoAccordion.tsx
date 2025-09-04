@@ -56,14 +56,14 @@ const SystemInfoAccordion: React.FC<SystemInfoAccordionProps> = ({
                 setData(response.data);
             })
             .catch((err) => {
-                
+
             })
             .finally(() => setLoading(false));
     }, [apiLink, appLocalizer]);
-
+    
     const toggleSection = (key: string) => {
         setOpenKeys((prev) =>
-            prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key]
+            prev.includes(key) ? [] : [key]
         );
     };
 
@@ -85,7 +85,7 @@ const SystemInfoAccordion: React.FC<SystemInfoAccordionProps> = ({
         const formatted = formatSystemInfo(data);
         navigator.clipboard.writeText(formatted).then(() => {
             setCopied(true);
-            setTimeout(() => setCopied(false), 2000);
+            // setTimeout(() => setCopied(false), 2000);
         });
     };
 
@@ -95,11 +95,18 @@ const SystemInfoAccordion: React.FC<SystemInfoAccordionProps> = ({
     return (
         <div className="system-info">
             {/* Copy Button */}
-            <div className="copy-info-bar">
+            {/* <div className="copy-info-bar">
                 <button type="button" onClick={copyToClipboard} className="copy-btn">
                     {copyButtonLabel}
                 </button>
                 {copied && <span className="copy-success">{copiedLabel}</span>}
+            </div> */}
+            <div className="buttons-wrapper">
+                <div className="admin-btn btn-purple" onClick={copyToClipboard}>
+                    <i className="adminlib-vendor-form-copy"></i>
+                    {!copied && <span className="copy-success">{copyButtonLabel}</span>}
+                    {copied && <span className="copy-success">{copiedLabel}</span>}
+                </div>
             </div>
 
             {Object.entries(data).map(([key, section]) => (
@@ -109,15 +116,15 @@ const SystemInfoAccordion: React.FC<SystemInfoAccordionProps> = ({
                         className="name"
                     >
                         <span>{section.label}</span>
-                        <i className={openKeys.includes(key) ? "adminlib-pagination-right-arrow" : "adminlib-keyboard-arrow-down"}></i>
+                        <i className={openKeys.includes(key) ? "adminlib-keyboard-arrow-down" : "adminlib-pagination-right-arrow "}></i>
                     </div>
 
                     {openKeys.includes(key) && (
                         <div className="content">
                             {section.description && (
-                                <p className="accordion-desc">{section.description}</p>
+                                <p className="desc">{section.description}</p>
                             )}
-                            <table className="accordion-table">
+                            <table>
                                 <tbody>
                                     {Object.entries(section.fields).map(([fieldKey, field]) => (
                                         <tr key={fieldKey}>
