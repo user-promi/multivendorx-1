@@ -61,6 +61,7 @@ const Announcements: React.FC = () => {
             key: 'selection',
         },
     ]);
+    const [editId, setEditId] = useState<number | null>(null);
 
     // Form state
     const [formData, setFormData] = useState<AnnouncementForm>({
@@ -95,27 +96,67 @@ const Announcements: React.FC = () => {
             setData(null);
         }
     };
+    const handleEdit = async (id: number) => {
+        try {
+            const response = await axios.get(
+                getApiLink(appLocalizer, `announcement/${id}`),
+                {
+                    headers: { 'X-WP-Nonce': appLocalizer.nonce },
+                }
+            );
+
+            if (response.data) {
+                setFormData({
+                    title: response.data.title || '',
+                    url: response.data.url || '',
+                    content: response.data.content || '',
+                    stores: response.data.stores
+                        ? response.data.stores.map((s: any) => s.id).join(',') // ✅ store IDs in CSV
+                        : '',
+                });
+                setEditId(id);
+                setAddAnnouncements(true);
+            }
+
+        } catch (err) {
+            setError(__('Failed to load announcement', 'multivendorx'));
+        }
+    };
 
     const handleSubmit = async () => {
         try {
-            await axios({
-                method: 'POST',
-                url: getApiLink(appLocalizer, 'announcement'),
-                headers: { 'X-WP-Nonce': appLocalizer.nonce },
-                data: { formData },
-            }).then((response) => {
-                if (response.data.success) {
-                    console.log('Store created successfully');
-                }
-            })
+            const endpoint = editId ? getApiLink(appLocalizer, `announcement/${editId}`) : getApiLink(appLocalizer, 'announcement');
+            const method = editId ? 'PUT' : 'POST';
 
-            setAddAnnouncements(false);
-            setFormData({ title: '', url: '', content: '', stores: '' });
-            requestData(pagination.pageSize, pagination.pageIndex + 1);
+            // Convert CSV to array for stores
+            const payload = {
+                ...formData,
+                stores: formData.stores ? formData.stores.split(',') : [],
+            };
+
+            const response = await axios({
+                method,
+                url: endpoint,
+                headers: { 'X-WP-Nonce': appLocalizer.nonce },
+                data: payload,
+            });
+
+            if (response.data.success) {
+                console.log(editId ? 'Announcement updated' : 'Announcement created');
+                setAddAnnouncements(false);
+                setFormData({ title: '', url: '', content: '', stores: '' });
+                setEditId(null);
+                requestData(pagination.pageSize, pagination.pageIndex + 1);
+            } else {
+                setError(__('Failed to save announcement', 'multivendorx'));
+            }
+
         } catch (err) {
-            setError(__('Failed to add announcement', 'multivendorx'));
+            setError(__('Failed to save announcement', 'multivendorx'));
         }
     };
+
+
 
 
     // Fetch total rows on mount
@@ -257,28 +298,26 @@ const Announcements: React.FC = () => {
                             <i
                                 className="adminlib-more-vertical"
                                 onClick={() =>
-                                    toggleDropdown(row.original.order_id)
+                                    toggleDropdown(row.original.id)
                                 }
                             ></i>
                             <div
-                                className={`action-dropdown ${showDropdown === row.original.order_id ? 'show' : ''}`}
+                                className={`action-dropdown ${showDropdown === row.original.id ? 'show' : ''}`}
                             >
                                 <ul>
                                     <li
                                         onClick={() =>
-                                            (window.location.href = `?page=multivendorx#&tab=stores&view&id=${row.original.id}`)
+                                            (window.location.href = `?page=multivendorx#&tab=announcements&view&id=${row.original.id}`)
                                         }
                                     >
                                         <i className="adminlib-eye"></i>
-                                        {__('View Store', 'multivendorx')}
+                                        {__('View Announcement', 'multivendorx')}
                                     </li>
                                     <li
-                                        onClick={() =>
-                                            (window.location.href = `?page=multivendorx#&tab=stores&edit/${row.original.id}`)
-                                        }
+                                        onClick={() => handleEdit(row.original.id)} // ✅ opens edit popup
                                     >
                                         <i className="adminlib-create"></i>
-                                        {__('Edit Store', 'multivendorx')}
+                                        {__('Edit Announcement', 'multivendorx')}
                                     </li>
                                 </ul>
                             </div>
@@ -286,7 +325,8 @@ const Announcements: React.FC = () => {
                     </div>
                 </TableCell>
             ),
-        },
+        }
+
     ];
 
     const realtimeFilter: RealtimeFilter[] = [
@@ -389,7 +429,7 @@ const Announcements: React.FC = () => {
                                                     : [];
                                                 setFormData((prev) => ({
                                                     ...prev,
-                                                    stores: selectedValues.join(','), // ✅ store as CSV
+                                                    stores: selectedValues.join(','),
                                                 }));
                                             }}
                                         />

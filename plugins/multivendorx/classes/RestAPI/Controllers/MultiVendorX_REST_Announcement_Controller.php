@@ -190,11 +190,146 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
     }
     
     public function update_item( $request ) {
-       
-    }
-    public function get_item( $request ) {
+        $nonce = $request->get_header( 'X-WP-Nonce' );
+        if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
+            return new \WP_Error(
+                'invalid_nonce',
+                __( 'Invalid nonce', 'multivendorx' ),
+                array( 'status' => 403 )
+            );
+        }
+    
         $id = absint( $request->get_param( 'id' ) );
+        if ( ! $id ) {
+            return new \WP_Error(
+                'invalid_id',
+                __( 'Invalid announcement ID', 'multivendorx' ),
+                array( 'status' => 400 )
+            );
+        }
+    
+        $post = get_post( $id );
+        if ( ! $post || $post->post_type !== 'multivendorx_an' ) {
+            return new \WP_Error(
+                'not_found',
+                __( 'Announcement not found', 'multivendorx' ),
+                array( 'status' => 404 )
+            );
+        }
+    
+        $data = $request->get_json_params();
+        $title   = isset( $data['title'] ) ? sanitize_text_field( $data['title'] ) : $post->post_title;
+        $content = isset( $data['content'] ) ? sanitize_textarea_field( $data['content'] ) : $post->post_content;
+        $url     = isset( $data['url'] ) ? esc_url_raw( $data['url'] ) : get_post_meta( $id, '_mvx_announcement_url', true );
+        $stores  = isset( $data['stores'] ) ? $data['stores'] : get_post_meta( $id, '_mvx_announcement_stores', true );
+    
+        // Convert CSV to array if needed
+        if ( is_string( $stores ) ) {
+            $stores = array_filter( array_map( 'trim', explode( ',', $stores ) ) );
+        } elseif ( ! is_array( $stores ) ) {
+            $stores = [];
+        }
+    
+        // Update the post
+        $updated_post_id = wp_update_post([
+            'ID'           => $id,
+            'post_title'   => $title,
+            'post_content' => $content,
+        ], true);
+    
+        if ( is_wp_error( $updated_post_id ) ) {
+            return rest_ensure_response([
+                'success' => false,
+                'message' => $updated_post_id->get_error_message(),
+            ]);
+        }
+    
+        // Update URL meta
+        update_post_meta( $id, '_mvx_announcement_url', $url );
+    
+        // Update stores meta
+        update_post_meta( $id, '_mvx_announcement_stores', $stores );
+    
+        // Prepare response
+        $store_data = [];
+        foreach ( $stores as $store_id ) {
+            $store_obj = MultivendorX()->store->get_store_by_id( $store_id );
+            if ( $store_obj && ! empty( $store_obj->data['name'] ) ) {
+                $store_data[] = [
+                    'id'   => $store_id,
+                    'name' => $store_obj->data['name'],
+                ];
+            }
+        }
+    
+        return rest_ensure_response([
+            'success' => true,
+            'id'      => $id,
+            'title'   => $title,
+            'content' => $content,
+            'url'     => $url,
+            'stores'  => $store_data,
+        ]);
+    }
+    
+
+    public function get_item( $request ) {
+
+        $nonce = $request->get_header( 'X-WP-Nonce' );
+        if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
+            return new \WP_Error(
+                'invalid_nonce',
+                __( 'Invalid nonce', 'multivendorx' ),
+                array( 'status' => 403 )
+            );
+        }
+    
+        $id = absint( $request->get_param( 'id' ) );
+        if ( ! $id ) {
+            return new \WP_Error(
+                'invalid_id',
+                __( 'Invalid announcement ID', 'multivendorx' ),
+                array( 'status' => 400 )
+            );
+        }
+    
+        $post = get_post( $id );
+        if ( ! $post || $post->post_type !== 'multivendorx_an' ) {
+            return new \WP_Error(
+                'not_found',
+                __( 'Announcement not found', 'multivendorx' ),
+                array( 'status' => 404 )
+            );
+        }
+    
+        $title   = $post->post_title;
+        $content = $post->post_content;
+        $url     = get_post_meta( $id, '_mvx_announcement_url', true );
+        $stores  = get_post_meta( $id, '_mvx_announcement_stores', true );
+    
+        $store_data = array();
+        if ( ! empty( $stores ) && is_array( $stores ) ) {
+            foreach ( $stores as $store_id ) {
+                $store_obj = MultivendorX()->store->get_store_by_id( $store_id );
+                if ( $store_obj && ! empty( $store_obj->data['name'] ) ) {
+                    $store_data[] = array(
+                        'id'   => $store_id,
+                        'name' => $store_obj->data['name'],
+                    );
+                }
+            }
+        }
+
+        $response = array(
+            'id'      => $id,
+            'title'   => $title,
+            'content' => $content,
+            'url'     => $url,
+            'stores'  => $store_data,
+            'date'    => get_post_time( 'Y-m-d H:i:s', true, $post ),
+        );
 
         return rest_ensure_response( $response );
     }
+    
 }
