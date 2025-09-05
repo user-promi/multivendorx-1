@@ -25,11 +25,13 @@ class Shortcode {
         FrontendScripts::enqueue_script( 'multivendorx-dashboard-components-script' );
         FrontendScripts::localize_scripts( 'multivendorx-dashboard-components-script' );
         FrontendScripts::enqueue_script( 'multivendorx-dashboard-script' );
-        FrontendScripts::localize_scripts( 'multivendorx-dashboard-components-script' );
         FrontendScripts::enqueue_style( 'multivendorx-dashboard-style' );
 
         FrontendScripts::enqueue_script( 'multivendorx-registration-form-script' );
         FrontendScripts::localize_scripts( 'multivendorx-registration-form-script' );
+
+        FrontendScripts::enqueue_script( 'multivendorx-store-dashboard-script' );
+        FrontendScripts::localize_scripts( 'multivendorx-store-dashboard-script' );
     }
 
     public function display_store_dashboard() {

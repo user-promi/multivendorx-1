@@ -138,7 +138,7 @@ export default {
             key: 'sku_generator_attribute_spaces',
             type: 'setting-toggle',
             label: __(
-                'SKU formatting options',
+                'SKU space handling',
                 'multivendorx'
             ),
             settingDescription: __(
@@ -149,7 +149,7 @@ export default {
                 {
                     key: 'no',
                     label: __(
-                        'Do not replace (keep spaces)',
+                        'Keep spaces',
                         'multivendorx'
                     ),
                     value: 'no',
@@ -157,7 +157,7 @@ export default {
                 {
                     key: 'underscore',
                     label: __(
-                        'Replace spaces with underscore',
+                        'Replace with underscore',
                         'multivendorx'
                     ),
                     value: 'underscore',
@@ -165,7 +165,7 @@ export default {
                 {
                     key: 'dash',
                     label: __(
-                        'Replace spaces with dash',
+                        'Replace with dash',
                         'multivendorx'
                     ),
                     value: 'dash',

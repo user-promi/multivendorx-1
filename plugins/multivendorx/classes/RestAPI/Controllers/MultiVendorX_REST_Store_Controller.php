@@ -148,6 +148,13 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
 
     public function get_item( $request ) {
         $id = absint( $request->get_param( 'id' ) );
+        $fetch_user = $request->get_param( 'fetch_user' );
+
+        if ($fetch_user) {
+            $users = StoreUtil::get_store_users($id);
+
+        }
+
 
         // Load the store
         $store = new \MultiVendorX\Store\Store( $id );
@@ -176,6 +183,22 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
 
         $store = new \MultiVendorX\Store\Store( $id );
 
+        if ( $data['user'] ) {
+            $user_id = $data['user_id'];
+            $user = get_userdata( $user_id );
+            $roles = $user->roles;
+            
+            $updated_id = StoreUtil::add_store_users( [
+                'store_id' => $data['id'],
+                'user_id' => $data['user_id'],
+                'role_id' => reset($roles),
+            ]);
+
+            return rest_ensure_response( [
+                'success' => true,
+                'id'      => $updated_id,
+            ] );
+        }
         $store->set( 'name',        $data['name'] ?? $store->get('name') );
         $store->set( 'slug',        $data['slug'] ?? $store->get('slug') );
         $store->set( 'description', $data['description'] ?? $store->get('description') );

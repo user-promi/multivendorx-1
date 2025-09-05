@@ -16,7 +16,7 @@ export default {
             type: 'setting-toggle',
             label: __( 'New store registration approval', 'multivendorx' ),
             desc: __(
-                'Decide how you want to approve new stores for your marketplace:<ul><li>Manual approval — Admin reviews and approves each store before granting dashboard access.</li><li>Automatic approval — Stores get immediate dashboard access and can start setting up right away.</li></ul>',
+                'Decide how you want to approve new stores for your marketplace:<ul><li>Manual approval — Admin reviews and approves each store before granting dashboard access.</li><li>Automatic approval — Stores get immediate dashboard access and can start upload products.</li></ul>',
                 'multivendorx'
             ),
             options: [
@@ -35,7 +35,7 @@ export default {
         {
             key: 'section',
             type: 'section',
-            hint: __( 'Setup wizard', 'multivendorx' ),
+            hint: __( 'Setup wizard for', 'multivendorx' ),
         }, 
         {
             key: 'disable_setup_wizard',

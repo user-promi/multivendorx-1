@@ -227,28 +227,6 @@ export default {
             category: 'store_management'
  
         },
-
-        { type: 'separator', id: 'inventory_control', label: 'Inventory Control' },
-        {
-            id: 'store-inventory',
-            name: __('Store Inventory', 'multivendorx'),
-            desc: "Manages stock levels, sends low-stock alerts, and maintains a waitlist for out-of-stock products.",
-            icon: 'adminlib-rules',
-            doc_link: 'https://multivendorx.com/docs/knowledgebase/store-inventory',
-            //settings_link: admin_url('admin.php?page=mvx#&submenu=settings&name=settings-store-inventory'),
-            pro_module: true,
-            category: 'inventory_control'
-        },
-        {
-            id: 'min-max',
-            name: __('Min Max Quantities', 'multivendorx'),
-            desc: "Defines the minimum or maximum number of items a customer can purchase in a single order.",
-            icon: 'adminlib-rules',
-            doc_link: 'https://multivendorx.com/docs/non-knowledgebase/min-max-quantities/',
-            //settings_link: admin_url('admin.php?page=mvx#&submenu=settings&name=settings-min-max'),
-            pro_module: false,
-            category: 'inventory_control'
-        },
         { type: 'separator', id: 'payment_management', label: 'Payment Management' },
         {
             id: 'bank-payment',
@@ -329,16 +307,7 @@ export default {
             //settings_link: admin_url('admin.php?page=mvx-setting-admin'),
             pro_module: false,
             category: 'payment_management'
-        },
-        {
-            id: 'facilitator',
-            name: __('Facilitator', 'multivendorx'),
-            desc: "Share commission on a sale between the store and another designated user. Each participant receives their assigned portion automatically.",
-            icon: 'adminlib-dynamic-pricing',
-            doc_link: 'https://multivendorx.com/docs/knowledgebase/facilitator',
-            pro_module: true,
-            category: 'payment_management'
-        },      
+        },    
         { type: 'separator', id: 'shipping_management', label: 'Shipping Management' },
         {
             id: 'zone-shipping',
@@ -451,27 +420,7 @@ export default {
             pro_module: false,
             category: 'customer_experience'
         },
-        { type: 'separator', id: 'marketing_tools', label: 'Marketing Tools' },
-        {
-            id: 'advertisement',
-            name: __('Advertise Product', 'multivendorx'),
-            desc: "Paid promotion for products within the marketplace, boosting visibility.",
-            icon: 'adminlib-rules',
-            doc_link: 'https://multivendorx.com/docs/knowledgebase/advertise-product/',
-            //settings_link: admin_url('admin.php?page=mvx#&submenu=settings&name=settings-advertising'),
-            pro_module: true,
-            category: 'marketing_tools'
-        },
-        {
-            id: 'wholesale',
-            name: __('Wholesale', 'multivendorx'),
-            desc: "Stores set wholesale prices and bulk purchase rules for selected customer groups.",
-            icon: 'adminlib-rules',
-            doc_link: 'https://multivendorx.com/docs/knowledgebase/wholesale',
-            //settings_link: admin_url('admin.php?page=mvx#&submenu=settings&name=settings-wholesale'),
-            pro_module: true,
-            category: 'marketing_tools'
-        },
+        { type: 'separator', id: 'analytics_tools', label: 'Marketing Tools' },
         {
             id: 'store-analytics',
             name: __('Store Analytics', 'multivendorx'),
@@ -492,7 +441,7 @@ export default {
             pro_module: true,
             category: 'analytics_tools'
         },
-        { type: 'separator', id: 'marketplace_membership', label: 'Marketplace Membership' },
+        { type: 'separator', id: 'marketplace_boosters', label: 'Marketplace boosters' },
         {
             id: 'marketplace-membership',
             name: __('Marketplace Membership', 'multivendorx'),
@@ -501,7 +450,56 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/marketplace-memberhsip',
             //settings_link: admin_url('admin.php?page=mvx#&submenu=settings&name=settings-vendor-membership'),
             pro_module: true,
-            category: 'marketplace_membership'
+            category: 'marketplace_boosters'
+        },        
+        {
+            id: 'facilitator',
+            name: __('Facilitator', 'multivendorx'),
+            desc: "Share commission on a sale between the store and another designated user. Each participant receives their assigned portion automatically.",
+            icon: 'adminlib-dynamic-pricing',
+            doc_link: 'https://multivendorx.com/docs/knowledgebase/facilitator',
+            pro_module: true,
+            category: 'marketplace_boosters'
+        }, 
+        {
+            id: 'advertisement',
+            name: __('Advertise Product', 'multivendorx'),
+            desc: "Paid promotion for products within the marketplace, boosting visibility.",
+            icon: 'adminlib-rules',
+            doc_link: 'https://multivendorx.com/docs/knowledgebase/advertise-product/',
+            //settings_link: admin_url('admin.php?page=mvx#&submenu=settings&name=settings-advertising'),
+            pro_module: true,
+            category: 'marketplace_boosters'
+        },
+        {
+            id: 'wholesale',
+            name: __('Wholesale', 'multivendorx'),
+            desc: "Stores set wholesale prices and bulk purchase rules for selected customer groups.",
+            icon: 'adminlib-rules',
+            doc_link: 'https://multivendorx.com/docs/knowledgebase/wholesale',
+            //settings_link: admin_url('admin.php?page=mvx#&submenu=settings&name=settings-wholesale'),
+            pro_module: true,
+            category: 'marketplace_boosters'
+        }, 
+        {
+            id: 'store-inventory',
+            name: __('Store Inventory', 'multivendorx'),
+            desc: "Manages stock levels, sends low-stock alerts, and maintains a waitlist for out-of-stock products.",
+            icon: 'adminlib-rules',
+            doc_link: 'https://multivendorx.com/docs/knowledgebase/store-inventory',
+            //settings_link: admin_url('admin.php?page=mvx#&submenu=settings&name=settings-store-inventory'),
+            pro_module: true,
+            category: 'marketplace_boosters'
+        },
+        {
+            id: 'min-max',
+            name: __('Min Max Quantities', 'multivendorx'),
+            desc: "Defines the minimum or maximum number of items a customer can purchase in a single order.",
+            icon: 'adminlib-rules',
+            doc_link: 'https://multivendorx.com/docs/non-knowledgebase/min-max-quantities/',
+            //settings_link: admin_url('admin.php?page=mvx#&submenu=settings&name=settings-min-max'),
+            pro_module: false,
+            category: 'marketplace_boosters'
         },
         { type: 'separator', id: 'notification', label: 'Notification' },
         {
