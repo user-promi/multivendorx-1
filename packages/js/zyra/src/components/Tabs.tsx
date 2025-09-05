@@ -33,6 +33,7 @@ type TabsProps = {
   settingName?: string;
   // Add navigation function prop
   onNavigate?: (url: string) => void;
+  tabTitleSection?: React.ReactNode;
 };
 
 // Helper functions outside component to avoid recreation on every render
@@ -159,6 +160,8 @@ const Tabs: React.FC<TabsProps> = ({
   Link,
   settingName = '',
   onNavigate,
+  tabTitleSection
+  
 }) => {
   const [activeTab, setActiveTab] = useState(currentTab);
   const [menuStack, setMenuStack] = useState<TabData[][]>([tabData]);
@@ -413,20 +416,8 @@ const Tabs: React.FC<TabsProps> = ({
         tabData={tabData}
         goPremium={true}
       />
-      <div className="tab-title">
-        <div className="tab-wrapper">
-          <div className="title">Edit Lorem ipsum dolor</div>
-          <div className="dsc">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum quod deleniti vel delectus dolores odio!</div>
-        </div>
 
-        <div className="status-wrapper">
-          <span>Status: </span>
-          <div className="admin-btn btn-green">
-            Active
-            <i className="adminlib-create"></i>
-          </div>
-        </div>
-      </div>
+      {tabTitleSection && <>{tabTitleSection}</>}
 
       <div className="general-wrapper">
         {HeaderSection && <HeaderSection />}

@@ -51,7 +51,7 @@ interface FormFields {
 
 interface FormViewerProps {
     formFields: FormFields;
-    onSubmit: ( data: FormData ) => void;
+    onSubmit: ( data: Record<string, any> ) => void; 
 }
 
 const Checkboxes: React.FC< {
@@ -316,7 +316,7 @@ const FormViewer: React.FC< FormViewerProps > = ( {
             }
         }
 
-        onSubmit( data );
+        onSubmit(inputs);
     };
 
     const defaultDate: string = new Date().getFullYear() + '-01-01';
