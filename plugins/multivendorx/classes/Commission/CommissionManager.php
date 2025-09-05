@@ -125,36 +125,31 @@ class CommissionManager {
             
             // $order->save(); // Avoid using save() if it will save letter in same flow.
 
+            // && !get_user_meta($vendor_id, '_vendor_give_shipping', true)
+            // && !get_user_meta($vendor_id, '_vendor_give_tax', true)
             // transfer shipping charges
-            // if (MultiVendorX()->vendor_caps->vendor_payment_settings('give_shipping') && !get_user_meta($vendor_id, '_vendor_give_shipping', true)) {
-            //     $shipping_amount = $order->get_shipping_total();
-            // }
+            if ( !empty(MultiVendorX()->setting->get_setting('give_shipping')) ) {
+                $shipping_amount = $order->get_shipping_total();
+            }
             // // transfer tax charges
-            // foreach ( $order->get_items( 'tax' ) as $key => $tax ) { 
-            //     if (MultiVendorX()->vendor_caps->vendor_payment_settings('give_tax') && MultiVendorX()->vendor_caps->vendor_payment_settings('give_shipping') && !get_user_meta($vendor_id, '_vendor_give_shipping', true) && !get_user_meta($vendor_id, '_vendor_give_tax', true)) {
-            //         $tax_amount += $tax->get_tax_total();
-            //         $shipping_tax_amount = $tax->get_shipping_tax_total();
-            //     } else if (MultiVendorX()->vendor_caps->vendor_payment_settings('give_tax') && !get_user_meta($vendor_id, '_vendor_give_tax', true)) {
-            //         $tax_amount += $tax->get_tax_total();
-            //         $shipping_tax_amount = 0;
-            //     } else {
-            //         $tax_amount = 0;
-            //         $shipping_tax_amount = 0;
-            //     }
+            foreach ( $order->get_items( 'tax' ) as $key => $tax ) { 
+                if ( MultiVendorX()->setting->get_setting('give_tax') == 'full_tax' && MultiVendorX()->setting->get_setting('give_shipping') ) {
+                    $tax_amount += $tax->get_tax_total();
+                    $shipping_tax_amount = $tax->get_shipping_tax_total();
+                } else if ( MultiVendorX()->setting->get_setting('give_tax') == 'full_tax' ) {
+                    $tax_amount += $tax->get_tax_total();
+                    $shipping_tax_amount = 0;
+                }
 
-            //     if (MultiVendorX()->vendor_caps->vendor_payment_settings('give_tax') && get_mvx_global_settings('commission_calculation_on_tax') ) {
-            //         $tax_rate_id    = $tax->get_rate_id();
-            //         $tax_percent    = \WC_Tax::get_rate_percent( $tax_rate_id );
-            //         $tax_rate       = str_replace( '%', '', $tax_percent );
-            //         if ( $tax_rate ) {
-            //             $tax_amount = ( $commission_amount * $tax_rate ) / 100;
-            //         }
-            //     }
-            // }
-
-            // $include_coupon     = 0 < $order->get_total_discount() && MultiVendorX()->setting->get_setting('commission_include_coupon');
-            // $include_shipping   = 0 < $shipping_amount && MultiVendorX()->vendor_caps->vendor_payment_settings('give_shipping') && !get_user_meta($vendor_id, '_vendor_give_shipping', true);
-            // $include_tax        = 0 < $tax_amount && MultiVendorX()->vendor_caps->vendor_payment_settings('give_tax') && !get_user_meta($vendor_id, '_vendor_give_tax', true);
+                if (MultiVendorX()->setting->get_setting('give_tax') == 'commision_based_tax' ) {
+                    $tax_rate_id    = $tax->get_rate_id();
+                    $tax_percent    = \WC_Tax::get_rate_percent( $tax_rate_id );
+                    $tax_rate       = str_replace( '%', '', $tax_percent );
+                    if ( $tax_rate ) {
+                        $tax_amount = ( $commission_amount * $tax_rate ) / 100;
+                    }
+                }
+            }
 
             $commission_total = (float) $commission_amount + (float) $shipping_amount + (float) $tax_amount + (float) $shipping_tax_amount;
             $commission_total = apply_filters( 'mvx_commission_total_amount', $commission_total, $commission_id );
@@ -163,19 +158,13 @@ class CommissionManager {
             $data = [
                 'order_id'          => $order->get_id(),
                 'store_id'         => $vendor_id,
-                // 'include_coupon'    => $include_coupon,
-                // 'include_shipping'  => $include_shipping,
-                // 'include_tax'       => $include_tax,
-                'include_coupon'    => 0,
-                'include_shipping'  => 0,
-                'include_tax'       => 0,
                 'commission_amount' => $commission_amount,
                 'shipping'          => $shipping_amount,
                 'tax'               => $tax_amount,
                 'commission_total'  => $commission_total,
                 'paid_status'       => 'unpaid'
             ];
-            $format = [ "%d", "%d", "%d", "%d", "%d", "%f", "%f", "%f", "%f", "%s" ];
+            $format = [ "%d", "%d", "%f", "%f", "%f", "%f", "%s" ];
             if ( ! $commission_id ) {
                 $wpdb->insert( $wpdb->prefix . Utill::TABLES['commission'], $data, $format );
                 $commission_id = $wpdb->insert_id;
