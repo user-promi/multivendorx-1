@@ -115,7 +115,6 @@ const AdminDashboard = () => {
             <div className="title">Welcome back, Admin!</div>
             <div className="des">Here's what's happening with your marketplace today</div>
           </div>
-          {/* <button className="admin-btn btn-purple"><i className="adminlib-plus-circle-o"></i>Add Product</button> */}
         </div>
 
         {/* cards */}
@@ -132,7 +131,7 @@ const AdminDashboard = () => {
                   <a href="#">View net revenue</a>
                 </div>
                 <span className="icon">
-                  <i className="adminlib-dynamic-pricing"></i>
+                  <i className="adminlib-rules"></i>
                 </span>
               </div>
             </div>
@@ -150,7 +149,7 @@ const AdminDashboard = () => {
                   <a href="#">View all vendor</a>
                 </div>
                 <span className="icon">
-                  <i className="adminlib-dynamic-pricing"></i>
+                  <i className="adminlib-person"></i>
                 </span>
               </div>
             </div>
@@ -168,7 +167,7 @@ const AdminDashboard = () => {
                   <a href="#">View all products</a>
                 </div>
                 <span className="icon">
-                  <i className="adminlib-dynamic-pricing"></i>
+                  <i className="adminlib-security"></i>
                 </span>
               </div>
             </div>
@@ -186,7 +185,7 @@ const AdminDashboard = () => {
                   <a href="#">View all order</a>
                 </div>
                 <span className="icon">
-                  <i className="adminlib-dynamic-pricing"></i>
+                  <i className="adminlib-calendar"></i>
                 </span>
               </div>
             </div>

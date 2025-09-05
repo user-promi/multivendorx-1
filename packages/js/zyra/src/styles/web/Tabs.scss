@@ -303,6 +303,32 @@
   }
 }
 
+.tab-title {
+  display: flex;
+  justify-content: space-between;
+  padding: 1.5rem;
+  align-items: center;
+  background: #fff;
+  margin: 2rem 2rem 0;
+
+  .title {
+    font-size: 1.125rem;
+    color: #000;
+  }
+
+  .status-wrapper {
+    display: flex;
+    justify-content: end;
+    gap: 0.5rem;
+    align-items: center;
+
+    span {
+      font-size: 1rem;
+      color: #000;
+    }
+  }
+}
+
 .general-wrapper {
   padding: 2rem;
 }
@@ -402,9 +428,10 @@
   line-height: 1.5;
   background-color: #fff;
 
-  .current-tab-lists{
+  .current-tab-lists {
     padding: 0 2rem;
   }
+
   &.show-menu {
     .current-tab-lists {
       max-width: 4.125rem;
@@ -433,7 +460,8 @@
       }
     }
   }
-  .container-wrapper{
+
+  .container-wrapper {
     padding: 0;
   }
 }

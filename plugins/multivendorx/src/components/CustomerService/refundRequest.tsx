@@ -131,33 +131,33 @@ const RefundRequest: React.FC = () => {
                 </TableCell>
             ),
         },
-        {
-            header: __('Action', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title="Action">
-                    <div className="action-section">
-                        <ul>
-                            <li
-                                onClick={() =>
-                                    (window.location.href = `?page=multivendorx#&tab=stores&view&id=${row.original.id}`)
-                                }
-                            >
-                                <i className="adminlib-eye"></i>
-                                { __( 'View Store', 'multivendorx' ) }
-                            </li>
-                            <li
-                                onClick={() =>
-                                    (window.location.href = `?page=multivendorx#&tab=stores&edit/${row.original.id}`)
-                                }
-                            >
-                                <i className="adminlib-create"></i>
-                                { __( 'Edit Store', 'multivendorx' ) }
-                            </li>
-                        </ul>
-                    </div>
-                </TableCell>
-            ),
-        }
+        // {
+        //     header: __('Action', 'multivendorx'),
+        //     cell: ({ row }) => (
+        //         <TableCell title="Action">
+        //             <div className="action-section">
+        //                 <ul>
+        //                     <li
+        //                         onClick={() =>
+        //                             (window.location.href = `?page=multivendorx#&tab=stores&view&id=${row.original.id}`)
+        //                         }
+        //                     >
+        //                         <i className="adminlib-eye"></i>
+        //                         { __( 'View Store', 'multivendorx' ) }
+        //                     </li>
+        //                     <li
+        //                         onClick={() =>
+        //                             (window.location.href = `?page=multivendorx#&tab=stores&edit/${row.original.id}`)
+        //                         }
+        //                     >
+        //                         <i className="adminlib-create"></i>
+        //                         { __( 'Edit Store', 'multivendorx' ) }
+        //                     </li>
+        //                 </ul>
+        //             </div>
+        //         </TableCell>
+        //     ),
+        // }
     ];
 
     return (

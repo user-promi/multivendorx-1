@@ -66,7 +66,7 @@ const Store = () => {
               >
                 <i className="adminlib-plus-circle-o"></i>
                 Add Store
-              </div>,
+              </div>
             ]}
           />
 

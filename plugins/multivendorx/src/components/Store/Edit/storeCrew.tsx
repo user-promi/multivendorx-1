@@ -20,79 +20,124 @@ const StoreQueue = ({ id }: { id: string }) => {
                     </div>
                 </>
             )}
-
             <div className="container-wrapper">
+                <div className="card-wrapper width-65">
+                    <div className="card-content">
+
+                        <div className="form-group-wrapper">
+                            <div className="form-group">
+                                <label htmlFor="product-name">Store Users</label>
+                                <SelectInput
+                                    name="country"
+                                    options={appLocalizer.store_owners || []}
+                                    type="single-select"
+                                    onChange={(newValue) => {
+                                        if (!newValue || Array.isArray(newValue)) return;
+                                        const updated = { ...formData, user: newValue.value, state: '' }; // reset state
+                                        setFormData(updated);
+                                        autoSave(updated);
+                                    }}
+                                />
+                            </div>
+                        </div>
+                        <div className="name-list">
+                            <ul>
+                                <li>Vendor 1  </li>
+                                <li>Vendor 2    </li>
+                                <li>Vendor 3  </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div className="card-content">
 
 
-                <label htmlFor="product-name">Store Users</label>
-                <SelectInput
-                    name="country"
-                    // value={formData.country}
-                    options={appLocalizer.store_owners || []}
-                    type="single-select"
-                    onChange={(newValue) => {
-                        if (!newValue || Array.isArray(newValue)) return;
-                        const updated = { ...formData, user: newValue.value, state: '' }; // reset state
-                        setFormData(updated);
-                        autoSave(updated);
-                    }}
-                />
+                        <div className="form-group-wrapper">
+                            <div className="form-group">
+                                <label htmlFor="product-name">Store Manager</label>
+                                <SelectInput
+                                    name="country"
+                                    // value={formData.country}
+                                    options={appLocalizer.store_owners || []}
+                                    type="single-select"
+                                    onChange={(newValue) => {
+                                        if (!newValue || Array.isArray(newValue)) return;
+                                        const updated = { ...formData, user: newValue.value, state: '' }; // reset state
+                                        setFormData(updated);
+                                        autoSave(updated);
+                                    }}
+                                />
+                            </div>
+                        </div>
+                        <div className="name-list">
+                            <ul>
+                                <li>Vendor 1  </li>
+                                <li>Vendor 2   </li>
+                                <li>Vendor 3  </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div className="card-wrapper width-65">
+                    <div className="card-content">
+                        <div className="form-group-wrapper">
+                            <div className="form-group">
+                                <label htmlFor="product-name">Store Admin</label>
+                                <SelectInput
+                                    name="country"
+                                    // value={formData.country}
+                                    options={appLocalizer.store_owners || []}
+                                    type="single-select"
+                                    onChange={(newValue) => {
+                                        if (!newValue || Array.isArray(newValue)) return;
+                                        const updated = { ...formData, user: newValue.value, state: '' }; // reset state
+                                        setFormData(updated);
+                                        autoSave(updated);
+                                    }}
+                                />
+                            </div>
+                        </div>
+                        <div className="name-list">
+                            <ul>
+                                <li>Vendor 1  </li>
+                                <li>Vendor 2    </li>
+                                <li>Vendor 3  </li>
+                            </ul>
+                        </div>
+                    </div>
 
+                    <div className="card-content">
+                        <div className="form-group-wrapper">
+                            <div className="form-group">
+                                <label htmlFor="product-name">Store Customer</label>
+                                <SelectInput
+                                    name="country"
+                                    // value={formData.country}
+                                    options={appLocalizer.store_owners || []}
+                                    type="single-select"
+                                    onChange={(newValue) => {
+                                        if (!newValue || Array.isArray(newValue)) return;
+                                        const updated = { ...formData, user: newValue.value, state: '' }; // reset state
+                                        setFormData(updated);
+                                        autoSave(updated);
+                                    }}
+                                />
+                            </div>
+                        </div>
+                        <div className="name-list">
+                            <ul>
+                                <li>Vendor 1  </li>
+                                <li>Vendor 2    </li>
+                                <li>Vendor 3  </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div className="container-wrapper">
 
 
-                <label htmlFor="product-name">Store Manager</label>
-                <SelectInput
-                    name="country"
-                    // value={formData.country}
-                    options={appLocalizer.store_owners || []}
-                    type="single-select"
-                    onChange={(newValue) => {
-                        if (!newValue || Array.isArray(newValue)) return;
-                        const updated = { ...formData, user: newValue.value, state: '' }; // reset state
-                        setFormData(updated);
-                        autoSave(updated);
-                    }}
-                />
-
-            </div>
-            <div className="container-wrapper">
 
 
-                <label htmlFor="product-name">Store Admin</label>
-                <SelectInput
-                    name="country"
-                    // value={formData.country}
-                    options={appLocalizer.store_owners || []}
-                    type="single-select"
-                    onChange={(newValue) => {
-                        if (!newValue || Array.isArray(newValue)) return;
-                        const updated = { ...formData, user: newValue.value, state: '' }; // reset state
-                        setFormData(updated);
-                        autoSave(updated);
-                    }}
-                />
-
-            </div>
-            <div className="container-wrapper">
-
-
-                <label htmlFor="product-name">Store Customer</label>
-                <SelectInput
-                    name="country"
-                    // value={formData.country}
-                    options={appLocalizer.store_owners || []}
-                    type="single-select"
-                    onChange={(newValue) => {
-                        if (!newValue || Array.isArray(newValue)) return;
-                        const updated = { ...formData, user: newValue.value, state: '' }; // reset state
-                        setFormData(updated);
-                        autoSave(updated);
-                    }}
-                />
-
-            </div>
         </>
     );
 

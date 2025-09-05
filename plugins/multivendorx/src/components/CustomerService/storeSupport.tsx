@@ -131,35 +131,94 @@ const StoreSupport: React.FC = () => {
                 </TableCell>
             ),
         },
-        {
-            header: __('Action', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title="Action">
-                    <div className="action-section">
-                        <ul>
-                            <li
-                                onClick={() =>
-                                    (window.location.href = `?page=multivendorx#&tab=stores&view&id=${row.original.id}`)
-                                }
-                            >
-                                <i className="adminlib-eye"></i>
-                                { __( 'View Store', 'multivendorx' ) }
-                            </li>
-                            <li
-                                onClick={() =>
-                                    (window.location.href = `?page=multivendorx#&tab=stores&edit/${row.original.id}`)
-                                }
-                            >
-                                <i className="adminlib-create"></i>
-                                { __( 'Edit Store', 'multivendorx' ) }
-                            </li>
-                        </ul>
-                    </div>
-                </TableCell>
-            ),
-        }
+        // {
+        //     header: __('Action', 'multivendorx'),
+        //     cell: ({ row }) => (
+        //         <TableCell title="Action">
+        //             <div className="action-section">
+        //                 <ul>
+        //                     <li
+        //                         onClick={() =>
+        //                             (window.location.href = `?page=multivendorx#&tab=stores&view&id=${row.original.id}`)
+        //                         }
+        //                     >
+        //                         <i className="adminlib-eye"></i>
+        //                         { __( 'View Store', 'multivendorx' ) }
+        //                     </li>
+        //                     <li
+        //                         onClick={() =>
+        //                             (window.location.href = `?page=multivendorx#&tab=stores&edit/${row.original.id}`)
+        //                         }
+        //                     >
+        //                         <i className="adminlib-create"></i>
+        //                         { __( 'Edit Store', 'multivendorx' ) }
+        //                     </li>
+        //                 </ul>
+        //             </div>
+        //         </TableCell>
+        //     ),
+        // }
     ];
 
+    const realtimeFilter: RealtimeFilter[] = [
+        {
+            name: 'commissionStatus',
+            render: (updateFilter: (key: string, value: string) => void, filterValue: string | undefined) => (
+                <div className="admin-header-search-section course-field">
+                    <select
+                        name="commissionStatus"
+                        onChange={(e) => updateFilter(e.target.name, e.target.value)}
+                        value={filterValue || ''}
+                        className="basic-select"
+                    >
+                        <option value="">Commission Status</option>
+                        {/* { Object.entries( courses ).map( ( [ courseId, courseName ] ) => (
+                            <option key={ courseId } value={ courseId }>
+                                { courseName }
+                            </option>
+                        ) ) } */}
+                    </select>
+                </div>
+            ),
+        },
+        {
+            name: 'vendor',
+            render: (updateFilter: (key: string, value: string) => void, filterValue: string | undefined) => (
+                <div className="admin-header-search-section group-field">
+                    <select
+                        name="vendor"
+                        onChange={(e) => updateFilter(e.target.name, e.target.value)}
+                        value={filterValue || ''}
+                        className="basic-select"
+                    >
+                        <option value="">All Vendors</option>
+                        {/* { Object.entries( groups ).map( ( [ groupId, groupName ] ) => (
+                            <option key={ groupId } value={ groupId }>
+                                { ' ' }
+                                { groupName }{ ' ' }
+                            </option>
+                        ) ) } */}
+                    </select>
+                </div>
+            ),
+        },
+        {
+            name: 'bulk-action',
+            render: () => (
+                <div className="course-bulk-action bulk-action">
+                    <select name="action" className="basic-select">
+                        <option value="">{__('Bulk actions')}</option>
+                        <option value="mark_paid">{__('Mark Paid')}</option>
+                        <option value="delete">{__('Delete')}</option>
+                        <option value="restore">{__('Restore')}</option>
+                    </select>
+                    <button name="bulk-action-apply" className="admin-btn btn-purple">
+                        {__('Apply')}
+                    </button>
+                </div>
+            ),
+        },
+    ];
     return (
         <>
             <div className="admin-table-wrapper">
@@ -175,6 +234,7 @@ const StoreSupport: React.FC = () => {
                     handlePagination={requestApiForData}
                     perPageOption={[10, 25, 50]}
                     typeCounts={[]}
+                    realtimeFilter={realtimeFilter}
                 />
             </div>
         </>
