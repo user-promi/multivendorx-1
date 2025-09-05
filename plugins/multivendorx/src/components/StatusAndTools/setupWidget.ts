@@ -12,6 +12,16 @@ export default {
     submitUrl: 'settings',
     modal: [   
 
+        {
+            key: 'setup_wizard',
+            type: 'button',
+            name: __( 'Setup Wizard', 'multivendorx' ),
+            label: __( 'Run Setup Wizard', 'multivendorx' ),
+            desc: __(
+                'Follow this wizard to configure your marketplace step by step',
+                'multivendorx'
+            ),
+        }
         
     ],
 };

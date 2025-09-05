@@ -423,7 +423,8 @@ class FrontendScripts {
                 'multivendorx-registration-form-script'          => array(
 					'object_name' => 'registrationForm',
 					'data'        => array(
-						'apiUrl'              => untrailingslashit( get_rest_url() ),
+                        'apiUrl'                   => untrailingslashit( get_rest_url() ),
+						'restUrl'                  => MultiVendorX()->rest_namespace,
 						'nonce'               => wp_create_nonce( 'wp_rest' ),
 						'settings'            => VendorUtil::get_vendor_registration_form() ?? array(),
 						'content_before_form' => apply_filters( 'multivendorx_add_content_before_form', '' ),

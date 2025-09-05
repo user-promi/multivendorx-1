@@ -351,6 +351,7 @@ const Announcements: React.FC = () => {
                         <option value="">{__('Bulk actions')}</option>
                         <option value="publish">{__('Publish', 'multivendorx')}</option>
                         <option value="pending">{__('Pending', 'multivendorx')}</option>
+                        <option value="delete">{__('Delete', 'multivendorx')}</option>
                     </select>
                     <button name="bulk-action-apply" className="admin-btn btn-purple" onClick={handleBulkAction}>
                         {__('Apply')}
@@ -366,6 +367,7 @@ const Announcements: React.FC = () => {
         <>
             <AdminBreadcrumbs
                 activeTabIcon="adminlib-cart"
+                description={'Central hub for managing marketplace announcements. Review past updates and create new ones to keep stores informed.'}
                 tabTitle="Announcements"
                 buttons={[
                     <div
@@ -389,7 +391,7 @@ const Announcements: React.FC = () => {
                                 <i className="adminlib-cart"></i>
                                 {editId ? __('Edit Announcement', 'multivendorx') : __('Add Announcement', 'multivendorx')}
                             </div>
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                            <p>Publish important news, updates, or alerts that appear directly in store dashboards, ensuring sellers never miss critical information.</p>
                             <i
                                 onClick={handleCloseForm}
                                 className="icon adminlib-close"

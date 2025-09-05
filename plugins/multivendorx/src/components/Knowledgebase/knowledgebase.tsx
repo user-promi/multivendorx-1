@@ -18,7 +18,11 @@ type KBForm = {
     content: string;
     status?: 'publish' | 'pending';
 };
-
+type AnnouncementStatus = {
+    key: string;
+    name: string;
+    count: number;
+};
 export const KnowledgeBase: React.FC = () => {
     const [submitting, setSubmitting] = useState(false);
     const [data, setData] = useState<KBRow[] | null>(null);
@@ -29,6 +33,8 @@ export const KnowledgeBase: React.FC = () => {
         pageIndex: 0,
         pageSize: 10,
     });
+    const [announcementStatus, setAnnouncementStatus] = useState<AnnouncementStatus[] | null>(null);
+
     const [editId, setEditId] = useState<number | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [showDropdown, setShowDropdown] = useState(false);
@@ -137,7 +143,14 @@ export const KnowledgeBase: React.FC = () => {
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
             params: { page: currentPage, row: rowsPerPage },
         })
-            .then(response => setData(response.data || []))
+            .then((response) => {
+                setData(response.data || []);
+                setAnnouncementStatus([
+                    { key: 'all', name: 'All', count: response.data.all || 0 },
+                    { key: 'publish', name: 'Published', count: response.data.publish || 0 },
+                    { key: 'pending', name: 'Pending', count: response.data.pending || 0 },
+                ]);
+            })
             .catch(() => setError(__('Failed to load entries', 'multivendorx')));
     };
 
@@ -231,6 +244,7 @@ export const KnowledgeBase: React.FC = () => {
                         <option value="">{__('Bulk actions')}</option>
                         <option value="publish">{__('Publish', 'multivendorx')}</option>
                         <option value="pending">{__('Pending', 'multivendorx')}</option>
+                        <option value="delete">{__('Delete', 'multivendorx')}</option>
                     </select>
                     <button name="bulk-action-apply" className="admin-btn btn-purple" onClick={handleBulkAction}>
                         {__('Apply')}
@@ -245,6 +259,7 @@ export const KnowledgeBase: React.FC = () => {
             <AdminBreadcrumbs
                 activeTabIcon="adminlib-book"
                 tabTitle="Knowledge Base"
+                description={"Build your knowledge base: add new guides or manage existing ones in one place."}
                 buttons={[
                     <div className="admin-btn btn-purple" onClick={() => setAddEntry(true)}>
                         <i className="adminlib-plus-circle-o"></i>
@@ -264,7 +279,7 @@ export const KnowledgeBase: React.FC = () => {
                                 <i className="adminlib-cart"></i>
                                 {editId ? __('Edit Knowledgebase', 'multivendorx') : __('Add Knowledgebase', 'multivendorx')}
                             </div>
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                            <p>Write and publish a new knowledge base article to help stores navigate their dashboard.</p>
                             <i
                                 onClick={handleCloseForm}
                                 className="icon adminlib-close"
@@ -330,9 +345,10 @@ export const KnowledgeBase: React.FC = () => {
                     onPaginationChange={setPagination}
                     handlePagination={requestData}
                     perPageOption={[10, 25, 50]}
-                    onRowClick={(row:any) => {
+                    onRowClick={(row: any) => {
                         handleEdit(row.id);
                     }}
+                    typeCounts={announcementStatus as AnnouncementStatus[]}
                 />
             </div>
         </>
