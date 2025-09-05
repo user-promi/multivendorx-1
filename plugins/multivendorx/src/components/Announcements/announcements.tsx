@@ -37,6 +37,7 @@ export interface RealtimeFilter {
 }
 
 const Announcements: React.FC = () => {
+    const [submitting, setSubmitting] = useState(false);
     const [data, setData] = useState<StoreRow[] | null>(null);
     const [addAnnouncements, setAddAnnouncements] = useState(false);
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
@@ -131,11 +132,15 @@ const Announcements: React.FC = () => {
     };
 
     const handleSubmit = async () => {
+        if (submitting) return; // prevent double-click
+
         try {
-            const endpoint = editId ? getApiLink(appLocalizer, `announcement/${editId}`) : getApiLink(appLocalizer, 'announcement');
+            setSubmitting(true);
+            const endpoint = editId
+                ? getApiLink(appLocalizer, `announcement/${editId}`)
+                : getApiLink(appLocalizer, 'announcement');
             const method = editId ? 'PUT' : 'POST';
 
-            // Convert CSV to array for stores
             const payload = {
                 ...formData,
                 stores: formData.stores ? formData.stores.split(',') : [],
@@ -156,11 +161,13 @@ const Announcements: React.FC = () => {
             } else {
                 setError(__('Failed to save announcement', 'multivendorx'));
             }
-
         } catch (err) {
             setError(__('Failed to save announcement', 'multivendorx'));
+        } finally {
+            setSubmitting(false);
         }
     };
+
 
 
 
@@ -392,17 +399,19 @@ const Announcements: React.FC = () => {
                     footer={
                         <>
                             <div
-                                 onClick={handleCloseForm}
+                                onClick={handleCloseForm}
                                 className="admin-btn btn-red"
                             >
                                 Cancel
                             </div>
                             <div
-                                onClick={handleSubmit}
-                                className="admin-btn btn-purple"
+                                onClick={!submitting ? handleSubmit : undefined}
+                                className={`admin-btn btn-purple ${submitting ? 'disabled' : ''}`}
+                                style={{ opacity: submitting ? 0.6 : 1, pointerEvents: submitting ? 'none' : 'auto' }}
                             >
-                                Submit
+                                {submitting ? 'Submitting...' : 'Submit'}
                             </div>
+
                         </>
                     }
                 >
@@ -476,6 +485,9 @@ const Announcements: React.FC = () => {
                     handlePagination={requestApiForData}
                     perPageOption={[10, 25, 50]}
                     typeCounts={announcementStatus as AnnouncementStatus[]}
+                    onRowClick={(row: any) => {
+                        handleEdit(row.id);
+                    }}
                 />
             </div>
         </>

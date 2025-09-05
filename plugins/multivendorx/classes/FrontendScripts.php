@@ -307,7 +307,8 @@ class FrontendScripts {
                 'payment-integration',
                 'store-appearance',
                 'product-report-abuse',
-                'store-commissions'
+                'store-commissions',
+                'store-inventory'
             )
 		);
 
