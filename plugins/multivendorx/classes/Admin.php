@@ -495,29 +495,31 @@ class Admin {
     public function register_multivendorx_custom_post_types() {
         // Announcements
         register_post_type( 'multivendorx_an', array(
-            'labels' => array(
-                'name'          => __( 'Announcements', 'multivendorx' ),
-                'singular_name' => __( 'Announcement', 'multivendorx' ),
-            ),
-            'public'       => true,
-            'show_ui'      => true,
-            'show_in_menu' => true,
-            'show_in_rest' => true, // Enable REST API
-            'supports'     => array( 'title', 'editor' ),
-        ));
+            'public'             => false,   // Not publicly queryable
+            'show_ui'            => false,   // Hide from admin UI
+            'show_in_menu'       => false,   // Do not add to admin menu
+            'show_in_nav_menus'  => false,
+            'exclude_from_search'=> true,
+            'publicly_queryable' => false,   // Prevent front-end queries
+            'show_in_rest'       => true,    // REST API access
+            'rest_base'          => 'announcements', // Optional custom REST endpoint
+            'supports'           => array( 'title', 'editor' ),
+        ) );
+        
     
         // Knowledge Base (KB)
         register_post_type( 'multivendorx_kb', array(
-            'labels' => array(
-                'name'          => __( 'Knowledge Base', 'multivendorx' ),
-                'singular_name' => __( 'Knowledge Article', 'multivendorx' ),
-            ),
-            'public'       => true,
-            'show_ui'      => true,
-            'show_in_menu' => true,
-            'show_in_rest' => true, // Enable REST API
-            'supports'     => array( 'title', 'editor' ),
-        ));
+            'public'             => false,   // Not publicly queryable
+            'show_ui'            => false,   // Hide in admin UI
+            'show_in_menu'       => false,   // Do not add to admin menu
+            'show_in_nav_menus'  => false,
+            'exclude_from_search'=> true,
+            'publicly_queryable' => false,   // Prevent frontend queries
+            'show_in_rest'       => true,    // REST API access only
+            'rest_base'          => 'kb',    // Custom REST endpoint base
+            'supports'           => array( 'title', 'editor' ),
+        ) );
+        
     }
     
     
