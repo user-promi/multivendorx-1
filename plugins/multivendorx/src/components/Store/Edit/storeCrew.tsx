@@ -70,11 +70,20 @@ const StoreQueue = ({ id }: { id: string }) => {
                                     }}
                                 />
                             </div>
+                        </div>
+                        <div className="form-group-wrapper">
                             <div className="form-group">
                                 <label htmlFor="product-name">Store Users</label>
                                 <SelectInput
                                     name="country"
-                                    options={appLocalizer.store_owners || []}
+                                    options={[
+                                        { value: 'vendor1', label: 'John’s Fashion Hub' },
+                                        { value: 'vendor2', label: 'Tech World' },
+                                        { value: 'vendor3', label: 'Green Grocery' },
+                                        { value: 'vendor4', label: 'Home Essentials' },
+                                        { value: 'vendor5', label: 'Book Paradise' },
+                                    ]}
+
                                     type="multi-select"
                                     onChange={(newValue) => {
                                         if (!newValue || Array.isArray(newValue)) return;
@@ -84,11 +93,20 @@ const StoreQueue = ({ id }: { id: string }) => {
                                     }}
                                 />
                             </div>
+                        </div>
+                        <div className="form-group-wrapper">
                             <div className="form-group">
                                 <label htmlFor="product-name">Store Users</label>
                                 <SelectInput
                                     name="country"
-                                    options={appLocalizer.store_owners || []}
+                                    options={[
+                                        { value: 'vendor1', label: 'John’s Fashion Hub' },
+                                        { value: 'vendor2', label: 'Tech World' },
+                                        { value: 'vendor3', label: 'Green Grocery' },
+                                        { value: 'vendor4', label: 'Home Essentials' },
+                                        { value: 'vendor5', label: 'Book Paradise' },
+                                    ]}
+
                                     type="multi-select"
                                     onChange={(newValue) => {
                                         if (!newValue || Array.isArray(newValue)) return;
@@ -98,11 +116,20 @@ const StoreQueue = ({ id }: { id: string }) => {
                                     }}
                                 />
                             </div>
+                        </div>
+                        <div className="form-group-wrapper">
                             <div className="form-group">
                                 <label htmlFor="product-name">Store Users</label>
                                 <SelectInput
                                     name="country"
-                                    options={appLocalizer.store_owners || []}
+                                    options={[
+                                        { value: 'vendor1', label: 'John’s Fashion Hub' },
+                                        { value: 'vendor2', label: 'Tech World' },
+                                        { value: 'vendor3', label: 'Green Grocery' },
+                                        { value: 'vendor4', label: 'Home Essentials' },
+                                        { value: 'vendor5', label: 'Book Paradise' },
+                                    ]}
+
                                     type="multi-select"
                                     onChange={(newValue) => {
                                         if (!newValue || Array.isArray(newValue)) return;

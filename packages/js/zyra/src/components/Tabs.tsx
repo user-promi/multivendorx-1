@@ -414,7 +414,10 @@ const Tabs: React.FC<TabsProps> = ({
         goPremium={true}
       />
       <div className="tab-title">
-        <div className="title">Edit Lorem ipsum dolor</div>
+        <div className="tab-wrapper">
+          <div className="title">Edit Lorem ipsum dolor</div>
+          <div className="dsc">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum quod deleniti vel delectus dolores odio!</div>
+        </div>
 
         <div className="status-wrapper">
           <span>Status: </span>

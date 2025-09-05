@@ -47,7 +47,32 @@ const Notification = () => {
         { id: 'remaining', label: 'Remaining Balance', value: '₹12,850.00' },
         { id: 'transactions', label: 'Total Transactions', value: '156' },
     ];
-
+    const tasks = [
+        {
+            id: 1,
+            title: "Fix login bug",
+            priority: "High",
+            dueDate: "2025-09-10",
+        },
+        {
+            id: 2,
+            title: "Update dashboard UI",
+            priority: "Medium",
+            dueDate: "2025-09-15",
+        },
+        {
+            id: 3,
+            title: "Write unit tests",
+            priority: "Low",
+            dueDate: "2025-09-20",
+        },
+        {
+            id: 4,
+            title: "Deploy staging server",
+            priority: "High",
+            dueDate: "2025-09-08",
+        },
+    ];
     return (
         <>
             <AdminBreadcrumbs
@@ -107,13 +132,13 @@ const Notification = () => {
 
                             {/* Task Table */}
                             <table className="task-table">
-                                <thead>
+                                {/* <thead>
                                     <tr>
                                         <th>Task Title</th>
                                         <th>Priority</th>
                                         <th>Due Date</th>
                                     </tr>
-                                </thead>
+                                </thead> */}
                                 <tbody>
                                     {tasks.map((task) => (
                                         <tr
