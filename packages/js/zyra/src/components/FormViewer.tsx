@@ -257,7 +257,6 @@ const FormViewer: React.FC< FormViewerProps > = ( {
         const error: Record< string, string > = {};
 
         formList.forEach( ( field ) => {
-            console.log("field",field)
             if ( ! field.required || field.disabled ) return;
             // Skip validation for 'name' and 'email'
             if (
@@ -308,9 +307,9 @@ const FormViewer: React.FC< FormViewerProps > = ( {
         }
 
         setErrors( {} );
-        
+
         const data = new FormData();
-        console.log("data",data);
+
         for ( const key in inputs ) {
             if ( inputs.hasOwnProperty( key ) ) {
                 data.append( key, inputs[ key ] );
