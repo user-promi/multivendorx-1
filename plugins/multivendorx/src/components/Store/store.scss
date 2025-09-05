@@ -1,3 +1,4 @@
+@use '../config.scss' as *;
 // card styles start
 .width-35 {
     width: 35%;
@@ -6,6 +7,7 @@
 .width-65 {
     width: 65%;
 }
+
 .container-wrapper {
     display: flex;
     gap: 1.2rem;
@@ -46,13 +48,37 @@
                 color: #344357;
                 margin-bottom: .5rem;
             }
-            i{
+
+            i {
                 font-size: 1.125rem;
                 color: #5007aa;
             }
         }
     }
 
+    .name-list {
+        ul {
+            display: flex;
+            gap: 0.5rem;
+
+            li {
+                padding: 0.5rem 1rem;
+                border: 0.063rem solid #e0e4e9;
+                border-radius: 0.313rem;
+                color: $theme-color;
+                background: $theme-background-color;
+
+                i {
+                    color: #f06b4f;
+                    background: #fde8e4;
+                    padding: 0.125rem;
+                    border-radius: 50%;
+                    font-size: 0.85rem;
+                    margin-left: 0.5rem;
+                }
+            }
+        }
+    }
 }
 
 // card styles start

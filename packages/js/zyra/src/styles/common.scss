@@ -309,7 +309,9 @@ a {
     width: 25%;
   }
 }
-
+.react-select input:focus{
+  box-shadow: none;
+}
 .setting-form-input {
   position: relative;
   display: flex;
@@ -1529,5 +1531,4 @@ input[type="checkbox"]:focus {
 .image-wrapper {
   margin: 2rem;
 }
-
 // pro image wrapper end

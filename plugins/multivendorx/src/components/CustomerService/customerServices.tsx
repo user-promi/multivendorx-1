@@ -9,32 +9,37 @@ import { useEffect, useState } from 'react';
 const CustomerServices = () => {
 
     const CustomerServicesStats = [
-        {
-            id: 'reviews',
-            label: 'Pending Reviews',
-            count: 12,
-        },
-        {
-            id: 'support',
-            label: 'Open Support Tickets',
-            count: 5,
-        },
-        {
-            id: 'withdrawals',
-            label: 'Withdrawal Requests',
-            count: 8,
-        },
-        {
-            id: 'refunds',
-            label: 'Refund Requests',
-            count: 3,
-        },
-        {
-            id: 'abuse',
-            label: 'Abuse Reports',
-            count: 2,
-        },
-    ];
+    {
+        id: 'reviews',
+        label: 'Pending Reviews',
+        count: 12,
+        icon: 'adminlib-star',
+    },
+    {
+        id: 'support',
+        label: 'Open Support Tickets',
+        count: 5,
+        icon: 'adminlib-support',
+    },
+    {
+        id: 'withdrawals',
+        label: 'Withdrawal Requests',
+        count: 8,
+        icon: 'adminlib-global-community', 
+    },
+    {
+        id: 'refunds',
+        label: 'Refund Requests',
+        count: 3,
+        icon: 'adminlib-catalog', 
+    },
+    {
+        id: 'abuse',
+        label: 'Abuse Reports',
+        count: 2,
+        icon: 'adminlib-calendar',
+    },
+];
 
     return (
         <>
@@ -42,44 +47,44 @@ const CustomerServices = () => {
                 activeTabIcon="adminlib-cart"
                 tabTitle="Customer Service"
             />
-
-            {/* CustomerServices Stats */}
             <div className="work-board">
-                <div className="row store-card">
-                    {CustomerServicesStats.map(stat => (
-                        <div className="column" key={stat.id}>
-                            <div className="cards">
-                                <span className="value">{stat.count}</span>
-                                <span className="name">{stat.label}</span>
+                <div className="row">
+                    <div className="action-card-wrapper">
+                        {CustomerServicesStats.map(stat => (
+                            <div className="action" key={stat.id}>
+                                <div className="title">
+                                    {stat.count}
+                                    <i className={stat.icon}></i>
+                                </div>
+                                <div className="description">
+                                    {stat.label}
+                                </div>
                             </div>
-                        </div>
-                    ))}
+                        ))}
+                    </div>
                 </div>
 
-                {/* Sections */}
-                <div className="title-wrapper">
-                    <i className="adminlib-storefront"></i>
-                    <h2>Store Reviews</h2>
+                <div className="row">
+                    <div className="column">
+                        <div className="title"><i className="adminlib-storefront"></i> Store Reviews</div>
+                        <StoreReviews />
+                    </div>
+                    <div className="column">
+                        <div className="title"><i className="adminlib-storefront"></i> Store Support</div>
+                        <StoreSupport />
+                    </div>
                 </div>
-                <StoreReviews />
 
-                <div className="title-wrapper">
-                    <i className="adminlib-support"></i>
-                    <h2>Store Support</h2>
+                <div className="row">
+                    <div className="column">
+                        <div className="title"><i className="adminlib-storefront"></i> Refund Requests</div>
+                        <RefundRequest />
+                    </div>
+                    <div className="column">
+                        <div className="title"><i className="adminlib-storefront"></i> Abuse Reports</div>
+                        <AbuseReports />
+                    </div>
                 </div>
-                <StoreSupport />
-
-                <div className="title-wrapper">
-                    <i className="adminlib-captcha-automatic-code"></i>
-                    <h2>Refund Requests</h2>
-                </div>
-                <RefundRequest />
-
-                <div className="title-wrapper">
-                    <i className="adminlib-folder-open"></i>
-                    <h2>Abuse Reports</h2>
-                </div>
-                <AbuseReports />
             </div>
         </>
     );

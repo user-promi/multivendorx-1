@@ -431,7 +431,6 @@ const Table: React.FC<TableProps> = ({
                 </div>
                 {bulkActionComp && bulkActionComp()}
             </div>
-
             {loading ? (
                 <LoadingTable />
             ) : (
@@ -614,6 +613,7 @@ const Table: React.FC<TableProps> = ({
                                                                         {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                                                     </li>
                                                                 ))}
+
                                                             </ul>
                                                         </details>
                                                     </td>
@@ -623,7 +623,32 @@ const Table: React.FC<TableProps> = ({
                                         );
                                     })}
                                 </tbody>
+                                {realtimeFilter && Object.keys(rowSelection || {}).length > 2 && (
+                                    <div className="admin-filter-wrapper">
+                                        <div className="wrap-bulk-all-date">
+                                            <span>{Object.keys(rowSelection || {}).length} row(s) selected</span>
+                                            {realtimeFilter.map((filter: RealtimeFilter) => (
+                                                <React.Fragment key={filter.name}>
+                                                    {filter.render(
+                                                        handleFilterChange,
+                                                        filterData[filter.name as keyof Record<string, any>]
+                                                    )}
+                                                </React.Fragment>
+                                            ))}
+                                            <button
+                                                className="close-btn"
+                                                onClick={() => onRowSelectionChange?.({})} // clears selection
+                                            >
+                                                ✕
+                                            </button>
+                                        </div>
+
+                                        {bulkActionComp && bulkActionComp()}
+                                    </div>
+                                )}
+
                             </table>
+
                             { /* Pagination Controls */}
                             {/* { ( data?.length as number ) > 10 && ( */}
                             <div className="table-pagination">
