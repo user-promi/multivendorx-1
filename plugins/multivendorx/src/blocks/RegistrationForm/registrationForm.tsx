@@ -11,6 +11,7 @@ const RegistrationForm = () => {
     const submitUrl = `${registrationForm.apiUrl}/catalogx/v1/enquiries`;
 
     const onSubmit = (submittedFormData: any) => {
+        console.log("hdsg",submittedFormData)
         setLoading(true);
 
         const productId =
