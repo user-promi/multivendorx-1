@@ -99,7 +99,7 @@ const findTabDescription = (items: TabData[], activeTabId: string): ReactNode =>
   for (const item of items) {
     if (isFile(item) && item.content.id === activeTabId) {
       const tab = item.content;
-      if (tab.id === 'support' || tab.id === 'store' || tab.id === 'users'|| tab.id === 'payment' || tab.id === 'vendor-shipping' || tab.id === 'store-policy' ) return null;
+      if (tab.id === 'support' || tab.id === 'store' || tab.id === 'users' || tab.id === 'payment' || tab.id === 'vendor-shipping' || tab.id === 'store-policy' || tab.id === 'store-application') return null;
 
       return (
         <div className="divider-section" key={tab.id}>
@@ -396,7 +396,7 @@ const Tabs: React.FC<TabsProps> = ({
     }
     return undefined;
   };
-  
+
   const parentTab = findTabName(tabData, activeTab) || '';
 
 
@@ -413,6 +413,18 @@ const Tabs: React.FC<TabsProps> = ({
         tabData={tabData}
         goPremium={true}
       />
+      <div className="tab-title">
+        <div className="title">Edit Lorem ipsum dolor</div>
+
+        <div className="status-wrapper">
+          <span>Status: </span>
+          <div className="admin-btn btn-green">
+            Active
+            <i className="adminlib-create"></i>
+          </div>
+        </div>
+      </div>
+
       <div className="general-wrapper">
         {HeaderSection && <HeaderSection />}
         <div className="middle-child-container">
@@ -421,6 +433,7 @@ const Tabs: React.FC<TabsProps> = ({
               <div className="current-tab-lists-container">{renderAllMenuItems(currentMenu)}</div>
             </div>
           )}
+
           <div className="tab-content">
             {getActiveTabInfo()}
             {getForm(activeTab)}

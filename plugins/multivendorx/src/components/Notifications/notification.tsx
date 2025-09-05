@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
 
 const Notification = () => {
 
-    
+
     const [activeTab, setActiveTab] = useState("products");
 
 
@@ -48,7 +48,6 @@ const Notification = () => {
         { id: 'transactions', label: 'Total Transactions', value: '156' },
     ];
 
-
     return (
         <>
             <AdminBreadcrumbs
@@ -59,8 +58,8 @@ const Notification = () => {
             {/* Workboard Stats */}
             <div className="work-board">
                 <div className="row">
-                    <div className="column w-45">
-                        <h3>Account Overview</h3>
+                    <div className="column">
+                        <div className="title"><i className="adminlib-person"></i> Account Overview</div>
                         <div className="action-card-wrapper">
                             <div className="action">
                                 <div className="title">
@@ -80,6 +79,8 @@ const Notification = () => {
                                     Pending Vendors
                                 </div>
                             </div>
+                        </div>
+                        <div className="action-card-wrapper">
                             <div className="action">
                                 <div className="title">
                                     99
@@ -101,7 +102,98 @@ const Notification = () => {
                         </div>
                     </div>
                     <div className="column">
+                        <div className="title"><i className="adminlib-book"></i> Tasks</div>
+                        <div className="task-manager">
 
+                            {/* Task Table */}
+                            <table className="task-table">
+                                <thead>
+                                    <tr>
+                                        <th>Task Title</th>
+                                        <th>Priority</th>
+                                        <th>Due Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {tasks.map((task) => (
+                                        <tr
+                                            key={task.id}
+                                            className="task-row"
+                                            onClick={() => setShowDetails(task)}
+                                        >
+                                            <td>{task.title}</td>
+                                            <td>
+                                                <span className={`priority ${task.priority.toLowerCase()}`}>
+                                                    {task.priority}
+                                                </span>
+                                            </td>
+                                            <td>{task.dueDate}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                            <div className="buttons-wrapper">
+                                <div className="admin-btn btn-purple">
+                                    <i className="adminlib-plus-circle-o"></i>
+                                    Add task
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="column">
+                        <div className="title"><i className="adminlib-notification"></i> Notification</div>
+                        <div className="notification-wrapper">
+                            <ul>
+                                <li>
+                                    <div className="icon-wrapper">
+                                        <i className="adminlib-form-paypal-email blue"></i>
+                                    </div>
+                                    <div className="details">
+                                        <div className="notification-title">Lorem ipsum dolor sit amet.</div>
+                                        <div className="des">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</div>
+                                        <span>1d ago</span>
+                                    </div>
+
+                                </li>
+                                <li>
+                                    <div className="icon-wrapper">
+                                        <i className="adminlib-mail orange"></i>
+                                    </div>
+                                    <div className="details">
+                                        <div className="notification-title">Lorem ipsum dolor sit amet.</div>
+                                        <div className="des">Lorem ipsum dolor sit amet, consectetur adipisicing elit</div>
+                                        <span>34min ago</span>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div className="icon-wrapper">
+                                        <i className="adminlib-form-paypal-email green"></i>
+                                    </div>
+                                    <div className="details">
+                                        <div className="notification-title">Lorem ipsum dolor sit amet.</div>
+                                        <div className="des">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</div>
+                                        <span>34min ago</span>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div className="icon-wrapper">
+                                        <i className="adminlib-calendar red"></i>
+                                    </div>
+                                    <div className="details">
+                                        <div className="notification-title">Lorem ipsum dolor sit amet.</div>
+                                        <div className="des">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</div>
+                                        <span>34min ago</span>
+                                    </div>
+                                </li>
+                            </ul>
+
+                            <div className="buttons-wrapper">
+                                <div className="admin-btn btn-purple">
+                                    <i className="adminlib-eye"></i>
+                                    Show all notification
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 

@@ -112,7 +112,7 @@ const SelectInput: React.FC< SelectInputProps > = ( {
             ) }
             <Select
                 name={ name }
-                className={ inputClass }
+                className={`${inputClass} react-select`}
                 value={ defaultValue }
                 options={ optionsData }
                 onChange={ ( newValue, actionMeta ) => {

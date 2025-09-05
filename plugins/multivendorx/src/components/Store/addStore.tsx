@@ -78,8 +78,6 @@ const AddStore = () => {
         ]}
       />
 
-
-
       <div className="container-wrapper">
 
         <div className="card-wrapper width-65">
@@ -181,7 +179,6 @@ const AddStore = () => {
           </div>
         </div>
       </div>
-
 
       <div className="add-store">
 

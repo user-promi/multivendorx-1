@@ -50,7 +50,7 @@ const StoreRegistration = ({ id }: { id: string }) => {
 			}
 		});
 	};
-	
+
 	const handleSubmit = (status: 'active' | 'reject') => {
 		const updatedData = { ...formData, status };
 		axios({
@@ -83,9 +83,12 @@ const StoreRegistration = ({ id }: { id: string }) => {
 			)}
 
 			<div className="container-wrapper">
-			<label htmlFor="product-name">Note</label>
 				<div className="card-wrapper width-65">
 					<div className="card-content">
+						<div className="card-title">
+							Note
+						</div>
+
 						<div className="form-group-wrapper">
 							<div className="form-group">
 								<TextArea name="note" wrapperClass="setting-from-textarea"
@@ -94,24 +97,24 @@ const StoreRegistration = ({ id }: { id: string }) => {
 									descClass="settings-metabox-description" value={formData.note} onChange={handleChange} />
 							</div>
 						</div>
+
+						<div className="buttons-wrapper" >
+							<button
+								className="admin-btn btn-green"
+								onClick={() => handleSubmit('active')}
+							>
+								Approve
+							</button>
+
+							<button
+								className="admin-btn btn-red"
+								onClick={() => handleSubmit('reject')}
+							>
+								Reject
+							</button>
+						</div>
 					</div>
 				</div>
-			</div>
-
-			<div className="buttons-wrapper" >
-				<button
-					className="admin-btn btn-green"
-					onClick={() => handleSubmit('active')}
-				>
-					Approve
-				</button>
-
-				<button
-					className="admin-btn btn-red"
-					onClick={() => handleSubmit('reject')}
-				>
-					Reject
-				</button>
 			</div>
 		</>
 	);
