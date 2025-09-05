@@ -3,7 +3,7 @@ import AddStore from './addStore';
 import StoreTable from './storeTable';
 import ViewStore from './viewStore';
 import EditStore from './Edit/editStore';
-import { AdminBreadcrumbs, BasicInput, FileInput, getApiLink, TextArea } from 'zyra';
+import { AdminBreadcrumbs, BasicInput, CommonPopup, FileInput, getApiLink, TextArea } from 'zyra';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
@@ -71,22 +71,43 @@ const Store = () => {
           />
 
           {addStore && (
-            <div className="right-popup">
-              <div className={`content-wrapper ${addStore ? 'open' : ''}`}>
-                <div className="title-wrapper">
-                  <div className="title">
-                    <i className="adminlib-cart"></i>
-                    Add Store
-                  </div>
-                  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-                  <i
-                    onClick={() => setaddStore(false)}
-                    className="icon adminlib-close"
-                  ></i>
-                </div>
+            <CommonPopup
+                    open={addStore}
+                    // onClose={}
+                    width="500px"
+                    header={
+                        <>
+                            <div className="title">
+                              <i className="adminlib-cart"></i>
+                              Add Store
+                            </div>
+                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                            <i
+                              onClick={() => setaddStore(false)}
+                              className="icon adminlib-close"
+                            ></i>
+                        </>
+                    }
+                    footer={
+                        <>
+                            <div
+                                 onClick={() => setaddStore(false)}
+                                className="admin-btn btn-red"
+                            >
+                                Cancel
+                            </div>
+                            <div
+                                onClick={handleSubmit}
+                                className="admin-btn btn-purple"
+                            >
+                                Submit
+                            </div>
+                        </>
+                    }
+                >
 
-                <div className="content">
-                  <div className="form-group-wrapper">
+                    <div className="content">
+                        <div className="form-group-wrapper">
                     <div className="form-group">
                       <label htmlFor="store-name">Store Name</label>
                       <BasicInput
@@ -136,20 +157,8 @@ const Store = () => {
                       />
                     </div>
                   </div>
-                </div>
-                <div className="popup-footer">
-                  <div
-                    onClick={() => setaddStore(false)}
-                    className="admin-btn btn-red"
-                  >
-                    Cancel
-                  </div>
-                  <div onClick={handleSubmit} className="admin-btn btn-purple">
-                    Submit
-                  </div>
-                </div>
-              </div>
-            </div>
+                    </div>
+            </CommonPopup>
           )}
           <StoreTable />
         </>

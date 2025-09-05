@@ -141,6 +141,7 @@ const VerificationMethods: React.FC<VerificationMethodsProps> = ({
                     <input
                       type="text"
                       placeholder="Enter label"
+                      className="basic-input"
                       value={form.label || ''}
                       onChange={(e) => handleFieldChange('label', e.target.value)}
                       onKeyDown={(e) => {
@@ -189,7 +190,7 @@ const VerificationMethods: React.FC<VerificationMethodsProps> = ({
                           <i className={row.active ? "adminlib-eye" : "adminlib-eye-blocked"}></i>
                           {row.active ? "Inactive" : "Active"}
                         </li>
-                        <li onClick={() => deleteRow(idx)}>
+                        <li className="delete" onClick={() => deleteRow(idx)}>
                           <i className="adminlib-delete"></i>Delete
                         </li>
                       </>

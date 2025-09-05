@@ -69,32 +69,6 @@ export default {
                     },
                 },
             ],
-        },
-        {
-            key: 'image_settings',
-            type: 'color-setting',
-            label: 'Image Render',
-            desc: 'Set the color theme for store dashboards - the admin interface stores use to manage their business',
-            images: [
-                {
-                    key: 'template1',
-                    label: 'Outer Space',
-                    img: image1,
-                    value: 'template1',
-                },
-                {
-                    key: 'template2',
-                    label: 'Green Lagoon',
-                    img: image1,
-                    value: 'template2',
-                },
-                {
-                    key: 'template3',
-                    label: 'Old West',
-                    img: image1,
-                    value: 'template3',
-                },
-            ],
         }
     ],
 };

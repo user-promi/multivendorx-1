@@ -175,6 +175,15 @@ const StoreTable: React.FC = () => {
                                         <i className="adminlib-create"></i>
                                         {__('Edit Store', 'multivendorx')}
                                     </li>
+                                    <li
+                                        onClick={() =>
+                                            (window.location.href = `?page=multivendorx#&tab=stores&edit/${row.original.id}`)
+                                        }
+                                        className="delete"
+                                    >
+                                        <i className="adminlib-vendor-form-delete"></i>
+                                        {__('Delete', 'multivendorx')}
+                                    </li>
                                 </ul>
                             </div>
                         </div>

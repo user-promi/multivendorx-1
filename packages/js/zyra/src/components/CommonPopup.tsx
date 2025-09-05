@@ -49,7 +49,7 @@ const CommonPopup = ({
           width: width,
           position: "fixed",
           right: '1rem',
-          top: '3rem',
+          top: '1rem',
           borderRadius: '0.313rem',
         },
       }}
