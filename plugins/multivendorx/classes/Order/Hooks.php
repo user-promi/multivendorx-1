@@ -167,11 +167,23 @@ class Hooks {
         // Check if order have suborder then sync
         $suborders = MultiVendorX()->order->get_suborders($order);
         if ( $suborders ) {
-            foreach ( $suborders as $suborder ) {
-                $suborder->update_status($new_status, _x('Update via parent order: ', 'Order note', 'multivendorx'));
+            // foreach ( $suborders as $suborder ) {
+            //     $suborder->update_status($new_status, _x('Update via parent order: ', 'Order note', 'multivendorx'));
+            // }
+            // $order->update_meta_data('mvx_vendor_order_status_synchronized', true);
+            // $order->save();
+            foreach ($suborders as $suborder) {
+                if ($suborder && $suborder->get_status() !== $new_status) {
+                    $suborder->update_status($new_status, _x('Update via parent order: ', 'Order note', 'multivendorx'));
+    
+                    $updated = true;
+                }
             }
-            $order->update_meta_data('mvx_vendor_order_status_synchronized', true);
-            $order->save();
+    
+            if ($updated) {
+                $order->update_meta_data('mvx_vendor_order_status_synchronized', true);
+                $order->save();
+            }
         }
 
         add_action('woocommerce_order_status_completed', 'wc_paying_customer');
