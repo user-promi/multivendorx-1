@@ -3,7 +3,7 @@ import "../styles/web/NestedComponent.scss";
 import ToggleSetting from "./ToggleSetting";
 import BasicInput from "./BasicInput";
 import SelectInput from "./SelectInput";
-import TimeSelect from "./TimeSelect";
+import MultiCheckBox from "./MultiCheckbox";
 
 interface NestedFieldOption {
   key?: string;
@@ -13,8 +13,9 @@ interface NestedFieldOption {
 }
 
 interface NestedField {
+  look?: string;
   key: string;
-  type: "number" | "select" | "text" | "url" | "dropdown" | "time";
+  type: "number" | "select" | "text" | "url" | "dropdown" | "time" | "checkbox";
   label?: string;
   placeholder?: string;
   options?: NestedFieldOption[];
@@ -29,13 +30,22 @@ interface NestedField {
   desc?: string;
   size?: string;
   min?: number;
-  defaultValue?: string; // ✅ needed for TimeSelect
-  className?: string; // ✅ needed for SelectInput
+  defaultValue?: string;
+  className?: string;
   proSetting?: boolean;
+
+  // for checkbox fields
+  selectDeselect?: boolean;
+  tour?: string;
+  rightContent?: React.ReactNode;
+  moduleEnabled?: string;
+  dependentSetting?: string;
+  dependentPlugin?: string;
 }
-declare const appLocalizer: { khali_dabba?: boolean }; // ✅ for TimeSelect
-declare function isProSetting(value: boolean): boolean; // ✅ for SelectInput & TimeSelect
-declare function setModelOpen(value: boolean): void; // ✅ for TimeSelect
+
+declare const appLocalizer: { khali_dabba?: boolean };
+declare function isProSetting(value: boolean): boolean;
+declare function setModelOpen(value: boolean): void;
 
 interface NestedComponentProps {
   id: string;
@@ -57,7 +67,7 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
   addButtonLabel = "Add",
   deleteButtonLabel = "Delete",
   single = false,
-  description
+  description,
 }) => {
   const [rows, setRows] = useState<Record<string, any>[]>([]);
 
@@ -88,11 +98,13 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
       // dependency check
       if (f.dependent) {
         const depVal = lastRow[f.dependent.key];
-        if (
-          (f.dependent.set && depVal !== f.dependent.value) ||
-          (!f.dependent.set && depVal === f.dependent.value)
-        ) {
-          return true; // not required in this case
+        const depActive = Array.isArray(depVal)
+          ? depVal.includes(f.dependent.value)
+          : depVal === f.dependent.value;
+
+        // skip validation if dependency not satisfied
+        if ((f.dependent.set && !depActive) || (!f.dependent.set && depActive)) {
+          return true;
         }
       }
 
@@ -116,12 +128,14 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
 
     const val = row[field.key] ?? "";
 
+    // dependency check (works for single & multi-row, checkboxes included)
     if (field.dependent) {
       const depVal = row[field.dependent.key];
-      if (
-        (field.dependent.set && depVal !== field.dependent.value) ||
-        (!field.dependent.set && depVal === field.dependent.value)
-      ) {
+      const depActive = Array.isArray(depVal)
+        ? depVal.includes(field.dependent.value)
+        : depVal === field.dependent.value;
+
+      if ((field.dependent.set && !depActive) || (!field.dependent.set && depActive)) {
         return null;
       }
     }
@@ -143,7 +157,7 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
       case "number":
       case "text":
       case "url":
-      case "time": 
+      case "time":
         return (
           <div className="settings-input-content" key={field.key}>
             {!(rowIndex === 0 && field.skipLabel) && field.label && <label>{field.label}</label>}
@@ -167,7 +181,7 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
           </div>
         );
 
-      case "dropdown": // 🔹 NEW: SelectInput
+      case "dropdown":
         return (
           <div className="settings-input-content" key={field.key}>
             {!(rowIndex === 0 && field.skipLabel) && field.label && <label>{field.label}</label>}
@@ -180,41 +194,97 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
               options={
                 Array.isArray(field.options)
                   ? field.options.map((opt) => ({
-                    value: String(opt.value),
-                    label: opt.label ?? String(opt.value),
-                  }))
+                      value: String(opt.value),
+                      label: opt.label ?? String(opt.value),
+                    }))
                   : []
               }
-              value={typeof val === "number" ? val.toString() : val}
-              // proSetting={isProSetting(field.proSetting ?? false)}
-              onChange={(newVal) => handleChange(rowIndex, field.key, newVal)}
+              value={typeof val === "object" ? val.value : val}
+              onChange={(newVal: any) => {
+                if (!newVal) {
+                  handleChange(rowIndex, field.key, "");
+                } else if (Array.isArray(newVal)) {
+                  handleChange(rowIndex, field.key, newVal.map((v) => v.value));
+                } else {
+                  handleChange(rowIndex, field.key, newVal.value);
+                }
+              }}
             />
           </div>
         );
 
-      // case "time": // 🔹 NEW: TimeSelect
-      //   return (
-      //     <div className="settings-input-content" key={field.key}>
-      //       {!(rowIndex === 0 && field.skipLabel) && field.label && <label>{field.label}</label>}
-      //       <TimeSelect
-      //         khali_dabba={appLocalizer?.khali_dabba ?? false}
-      //         wrapperClass="setting-form-input"
-      //         descClass="settings-metabox-description"
-      //         description={field.desc}
-      //         key={field.key}
-      //         value={String(val ?? field.defaultValue ?? "")}
-      //         // proSetting={isProSetting(field.proSetting ?? false)}
-      //         onChange={(data) => handleChange(rowIndex, field.key, data)}
-      //         proChanged={() => setModelOpen(true)}
-      //       />
-      //     </div>
-      //   );
+      case "checkbox": {
+        const look = (field.look || (field as any).lock) ?? "";
+        let normalizedValue: string[] = [];
+
+        if (Array.isArray(val)) {
+          normalizedValue = val.filter((v: string) => v && v.trim() !== "");
+        } else if (typeof val === "string" && val.trim() !== "") {
+          normalizedValue = [val];
+        } else {
+          normalizedValue = [];
+        }
+
+        return (
+          <div className="settings-input-content" key={field.key}>
+            {!(rowIndex === 0 && field.skipLabel) && field.label && <label>{field.label}</label>}
+
+            <MultiCheckBox
+              khali_dabba={appLocalizer?.khali_dabba ?? false}
+              wrapperClass={
+                look === "toggle"
+                  ? "toggle-btn"
+                  : field.selectDeselect === true
+                  ? "checkbox-list-side-by-side"
+                  : "simple-checkbox"
+              }
+              descClass="settings-metabox-description"
+              description={field.desc}
+              selectDeselectClass="admin-btn btn-purple select-deselect-trigger"
+              inputWrapperClass="toggle-checkbox-header"
+              inputInnerWrapperClass={look === "toggle" ? "toggle-checkbox" : "default-checkbox"}
+              inputClass={look}
+              tour={(field as any).tour}
+              hintOuterClass="settings-metabox-description"
+              hintInnerClass="hover-tooltip"
+              idPrefix={`${field.key}-${rowIndex}`}
+              selectDeselect={field.selectDeselect}
+              selectDeselectValue="Select / Deselect All"
+              rightContentClass="settings-metabox-description"
+              rightContent={(field as any).rightContent}
+              options={
+                Array.isArray(field.options)
+                  ? field.options.map((opt) => ({ ...opt, value: String(opt.value) }))
+                  : []
+              }
+              value={normalizedValue}
+              onChange={(e) => {
+                if (Array.isArray(e)) {
+                  handleChange(rowIndex, field.key, e.length > 0 ? e : []);
+                } else if ("target" in e) {
+                  const target = e.target as HTMLInputElement;
+                  handleChange(rowIndex, field.key, target.checked ? [target.value] : []);
+                }
+              }}
+              onMultiSelectDeselectChange={() =>
+                handleChange(
+                  rowIndex,
+                  field.key,
+                  Array.isArray(field.options)
+                    ? field.options.map((opt) => String(opt.value))
+                    : []
+                )
+              }
+              proChanged={() => setModelOpen(true)}
+            />
+          </div>
+        );
+      }
 
       default:
         return null;
     }
   }
-
 
   return (
     <div className="nested-wrapper" id={id}>
