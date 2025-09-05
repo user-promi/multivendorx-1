@@ -2,7 +2,7 @@ import { __ } from '@wordpress/i18n';
 
 export default {
     id: 'database-tools',
-    priority: 2,
+    priority: 3,
     name: __( 'Database Tools', 'multivendorx' ),
     desc: __(
         'Controls how stores are onboarded and what access they get.',

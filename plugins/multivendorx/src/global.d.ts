@@ -21,6 +21,7 @@ declare global {
         country_list: any;
         capabilities: any;
         custom_roles: any;
+        store_owners: any;
         all_payments: any;
         all_store_settings: any;
         freeVersion : any;

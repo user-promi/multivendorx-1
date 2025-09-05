@@ -31,7 +31,7 @@ export default {
         {
             key: 'wholesale_price_access',
             type: 'setting-toggle',
-            label: __('Wholesale price access', 'multivendorx'),
+            label: __('Who can see wholesale prices', 'multivendorx'),
             settingDescription: __('Choose which users can see wholesale pricing in store catalogs.','multivendorx'),
 	      	desc: __('<ul><li>All registered users – Every logged-in customer can see wholesale prices, regardless of approval status.</li><li>Approved wholesale buyers only – Only users approved as wholesale buyers can see wholesale prices.</li></ul>', 'mvx-pro'),
             options: [
@@ -53,16 +53,16 @@ export default {
             type: 'setting-toggle',
             label: __('Wholesale price display', 'multivendorx'),
             settingDescription: __('Control whether wholesale prices are shown alongside retail prices or separately.','multivendorx'),
-			desc: __('<ul><li>Show with retail prices – Display both retail and wholesale prices side by side, so buyers can compare.</li><li>Show wholesale price only – Replace retail pricing with wholesale pricing for eligible buyers.</li></ul>', 'mvx-pro'),
+			desc: __('<ul><li>Along with retail prices – Display both retail and wholesale prices side by side, so buyers can compare.</li><li>Wholesale price only – Replace retail pricing with wholesale pricing for eligible buyers.</li></ul>', 'mvx-pro'),
            options: [
                 {
                     key: 'with_retail',
-                    label: __('Show with retail prices', 'multivendorx'),
+                    label: __('Along with retail prices', 'multivendorx'),
                     value: 'with_retail',
                 },
                 {
                     key: 'wholesale_only',
-                    label: __('Show wholesale price only', 'multivendorx'),
+                    label: __('Wholesale price only', 'multivendorx'),
                     value: 'wholesale_only',
                 },
             ],

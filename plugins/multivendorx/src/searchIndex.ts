@@ -7,7 +7,9 @@ export type SearchItem = {
   name: string;
   desc?: string;
   link: string;
+  icon?: string;
 };
+
 
 function buildIndexFromContext(context: __WebpackModuleApi.RequireContext) {
   return context
@@ -26,6 +28,7 @@ function buildIndexFromContext(context: __WebpackModuleApi.RequireContext) {
             name: mod.name,
             desc: mod.desc,
             link: `#&tab=${baseTab}`,
+            icon: mod.icon || '',
           }));
       }
 

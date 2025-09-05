@@ -14,7 +14,7 @@ export default {
         {
             key: 'total_available_slot',
             type: 'number',
-            label: __( 'Available advertising slots', 'mvx-pro' ),
+            label: __( 'Number products promoted per store', 'mvx-pro' ),
             desc: __(
                 'Set the number of advertising slots available to stores. This limits how many products they can promote at the same time.',
                 'mvx-pro'
@@ -26,7 +26,7 @@ export default {
         {
             key: 'expire_after_days',
             type: 'number',
-            label: __( 'Advertising duration', 'mvx-pro' ),
+            label: __( 'Max promotion duration', 'mvx-pro' ),
             desc: __(
                 'Set how long a product will stay advertised. Stores can choose the duration up to this limit.',
                 'mvx-pro'

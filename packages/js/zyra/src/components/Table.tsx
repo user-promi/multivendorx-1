@@ -126,7 +126,10 @@ export const TableCell: React.FC<TableCellProps> = ({
         case 'expander':
             content = (
                 <div
-                    onClick={() => rowId && onToggleRow?.(rowId)}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        rowId && onToggleRow?.(rowId);
+                    }}
                     className={`table-data-container ${header.dependent ? '' : 'disable'} ${header.class || ''}`}
                 >
                     <button
@@ -143,7 +146,7 @@ export const TableCell: React.FC<TableCellProps> = ({
 
         case 'checkbox':
             content = (
-                <div className="toggle-checkbox-header">
+                <div className="toggle-checkbox-header" onClick={(e) => e.stopPropagation()}>
                     <div className="toggle-checkbox">
                         <input
                             type="checkbox"
@@ -180,6 +183,7 @@ export const TableCell: React.FC<TableCellProps> = ({
                 <select
                     className={`${header.class} dropdown-select ${fieldValue}`}
                     value={fieldValue as string}
+                    onClick={(e) => e.stopPropagation()}
                     onChange={(e) => {
                         if (onChange) {
                             onChange(e.target as unknown as React.ChangeEvent<HTMLInputElement>);
@@ -248,6 +252,7 @@ interface TableProps {
     successMsg?: string;
     expandElement?: Record<string, boolean>;
     expandedRows?: Record<string, boolean>;
+    onRowClick?: (rowData: Record<string, any>) => void;
 }
 
 const Table: React.FC<TableProps> = ({
@@ -268,6 +273,7 @@ const Table: React.FC<TableProps> = ({
     successMsg,
     expandElement,
     expandedRows,
+    onRowClick,
 }) => {
     const [loading, setLoading] = useState<boolean>(false);
     const [filterData, setFilterData] = useState<Record<string, any>>(
@@ -378,6 +384,7 @@ const Table: React.FC<TableProps> = ({
         getSortedRowModel: getSortedRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
+
     });
     const typeCountActive = filterData.typeCount || 'all';
     return (
@@ -405,11 +412,10 @@ const Table: React.FC<TableProps> = ({
                     ))}
                 </div>
             )}
-            {realtimeFilter && (
-                <div className="filter-wrapper">
-                    <div className="wrap-bulk-all-date">
-
-                        {realtimeFilter.map((filter: RealtimeFilter) => (
+            <div className="filter-wrapper">
+                <div className="wrap-bulk-all-date">
+                    {realtimeFilter &&
+                        realtimeFilter.map((filter: RealtimeFilter) => (
                             <React.Fragment key={filter.name}>
                                 {filter.render(
                                     handleFilterChange,
@@ -422,11 +428,9 @@ const Table: React.FC<TableProps> = ({
                                 )}
                             </React.Fragment>
                         ))}
-                    </div>
-                    {bulkActionComp && bulkActionComp()}
                 </div>
-            )}
-
+                {bulkActionComp && bulkActionComp()}
+            </div>
             {loading ? (
                 <LoadingTable />
             ) : (
@@ -496,38 +500,106 @@ const Table: React.FC<TableProps> = ({
                                             return null;
 
                                         return (
+                                            // <tr
+                                            //     key={productId}
+                                            //     className={`admin-row ${isVariation ? 'variation-row' : ''
+                                            //         } ${product.type === 'Variable' ? 'variable' : 'simple'
+                                            //         } ${expandElement?.[productId] ? 'active' : ''
+                                            //         }`}
+                                            //     onClick={() => onRowClick?.(row.original)}
+                                            //     style={{ cursor: onRowClick ? 'pointer' : 'default' }}
+                                            // >
+
+                                            //     {row
+                                            //         .getVisibleCells()
+                                            //         .filter((cell) =>
+                                            //             visibleColumns.find(
+                                            //                 (col) =>
+                                            //                     col.id ===
+                                            //                     cell.column
+                                            //                         .id ||
+                                            //                     col.header ===
+                                            //                     cell.column
+                                            //                         .id
+                                            //             )
+                                            //         )
+                                            //         .map((cell) => (
+                                            //             <td
+                                            //                 key={cell.id}
+                                            //                 className="admin-column"
+                                            //             >
+                                            //                 {flexRender(
+                                            //                     cell.column
+                                            //                         .columnDef
+                                            //                         .cell,
+                                            //                     cell.getContext()
+                                            //                 )}
+                                            //             </td>
+                                            //         ))}
+
+                                            //     {isSmallScreen && (
+                                            //         <td className="responsive-cell">
+                                            //             <details>
+                                            //                 <summary></summary>
+                                            //                 <ul className="text-sm">
+                                            //                     {getHiddenColumns(
+                                            //                         row
+                                            //                     ).map(
+                                            //                         (
+                                            //                             cell: any
+                                            //                         ) => (
+                                            //                             <li
+                                            //                                 key={
+                                            //                                     cell.id
+                                            //                                 }
+                                            //                             >
+                                            //                                 {flexRender(
+                                            //                                     cell
+                                            //                                         .column
+                                            //                                         .columnDef
+                                            //                                         .cell,
+                                            //                                     cell.getContext()
+                                            //                                 )}
+                                            //                             </li>
+                                            //                         )
+                                            //                     )}
+                                            //                 </ul>
+                                            //             </details>
+                                            //         </td>
+                                            //     )}
+                                            // </tr>
                                             <tr
                                                 key={productId}
-                                                className={`admin-row ${isVariation ? 'variation-row' : ''
-                                                    } ${product.type === 'Variable' ? 'variable' : 'simple'
-                                                    } ${expandElement?.[productId] ? 'active' : ''
-                                                    }`}
+                                                className={`admin-row ${isVariation ? 'variation-row' : ''} ${product.type === 'Variable' ? 'variable' : 'simple'} ${expandElement?.[productId] ? 'active' : ''}`}
+                                                onClick={() => onRowClick?.(row.original)}
+                                                style={{ cursor: onRowClick ? 'pointer' : 'default' }}
                                             >
-
-                                                {row
-                                                    .getVisibleCells()
+                                                {row.getVisibleCells()
                                                     .filter((cell) =>
                                                         visibleColumns.find(
                                                             (col) =>
-                                                                col.id ===
-                                                                cell.column
-                                                                    .id ||
-                                                                col.header ===
-                                                                cell.column
-                                                                    .id
+                                                                col.id === cell.column.id ||
+                                                                col.header === cell.column.id
                                                         )
                                                     )
                                                     .map((cell) => (
                                                         <td
                                                             key={cell.id}
                                                             className="admin-column"
+                                                            onClick={(e) => {
+                                                                const target = e.target as HTMLElement;
+                                                                // Prevent row click if clicking on an interactive element
+                                                                if (
+                                                                    ['BUTTON', 'INPUT', 'SELECT', 'LABEL', 'TEXTAREA'].includes(
+                                                                        target.tagName
+                                                                    )
+                                                                ) {
+                                                                    e.stopPropagation();
+                                                                    return;
+                                                                }
+                                                            }}
                                                         >
-                                                            {flexRender(
-                                                                cell.column
-                                                                    .columnDef
-                                                                    .cell,
-                                                                cell.getContext()
-                                                            )}
+                                                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                                         </td>
                                                     ))}
 
@@ -536,32 +608,18 @@ const Table: React.FC<TableProps> = ({
                                                         <details>
                                                             <summary></summary>
                                                             <ul className="text-sm">
-                                                                {getHiddenColumns(
-                                                                    row
-                                                                ).map(
-                                                                    (
-                                                                        cell: any
-                                                                    ) => (
-                                                                        <li
-                                                                            key={
-                                                                                cell.id
-                                                                            }
-                                                                        >
-                                                                            {flexRender(
-                                                                                cell
-                                                                                    .column
-                                                                                    .columnDef
-                                                                                    .cell,
-                                                                                cell.getContext()
-                                                                            )}
-                                                                        </li>
-                                                                    )
-                                                                )}
+                                                                {getHiddenColumns(row).map((cell: any) => (
+                                                                    <li key={cell.id}>
+                                                                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                                                    </li>
+                                                                ))}
+
                                                             </ul>
                                                         </details>
                                                     </td>
                                                 )}
                                             </tr>
+
                                         );
                                     })}
                                 </tbody>
