@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState, useRef, useEffect } from "react";
 
 // Accepts searchIndex-style items directly
 type SearchItem = {
+  icon?: any;
   name?: string;
   desc?: string;
   link: string;
@@ -10,7 +11,7 @@ type SearchItem = {
 type AdminHeaderProps = {
   brandImg: string;
   query: string;
-  results?: SearchItem[];
+  results?: any[];
   onSearchChange: (value: string) => void;
   onResultClick: (res: SearchItem) => void;
   onSelectChange: (value: string) => void;
@@ -30,6 +31,28 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
   free,
   pro = "4.1.23",
 }) => {
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+
+  // Close dropdown on click outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
+        setDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  // Open dropdown automatically when there are results
+  useEffect(() => {
+    setDropdownOpen(results.length > 0);
+  }, [results]);
+
   return (
     <>
       <div className="admin-header">
@@ -42,13 +65,12 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
             </span>
             <span className="admin-badge red">
               <i className="adminlib-pro-tag"></i> Pro: {pro}
-
             </span>
           </div>
         </div>
 
         <div className="right-section">
-          <div className="search-field" style={{ position: "relative" }}>
+          <div className="search-field" style={{ position: "relative" }} ref={wrapperRef}>
             <i className="adminlib-search"></i>
             <input
               type="text"
@@ -66,7 +88,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
             </select>
 
             {/* dropdown render */}
-            {results.length > 0 && (
+            {dropdownOpen && results.length > 0 && (
               <ul
                 className="search-dropdown"
                 style={{
@@ -93,13 +115,19 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
                   return (
                     <li
                       key={i}
-                      onClick={() => onResultClick(r)}
+                      onClick={() => {
+                        onResultClick(r);
+                        setDropdownOpen(false); // close dropdown on click
+                      }}
                       style={{
                         padding: "8px 12px",
                         cursor: "pointer",
                         fontSize: "14px",
                         color: "#333",
                         borderBottom: "1px solid #f0f0f0",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "8px",
                       }}
                       onMouseEnter={(e) =>
                         (e.currentTarget.style.background = "#f5f7fa")
@@ -108,24 +136,26 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
                         (e.currentTarget.style.background = "transparent")
                       }
                     >
-                      <div style={{ fontWeight: 500 }}>
-                        {name.length > 60 ? name.substring(0, 60) + "..." : name}
-                      </div>
-                      {desc && (
-                        <div
-                          style={{
-                            fontSize: "12px",
-                            color: "#666",
-                            marginTop: "2px",
-                          }}
-                        >
-                          {desc.length > 80 ? desc.substring(0, 80) + "..." : desc}
+                      {r.icon && <i className={r.icon}></i>}
+                      <div>
+                        <div style={{ fontWeight: 500 }}>
+                          {name.length > 60 ? name.substring(0, 60) + "..." : name}
                         </div>
-                      )}
+                        {desc && (
+                          <div
+                            style={{
+                              fontSize: "12px",
+                              color: "#666",
+                              marginTop: "2px",
+                            }}
+                          >
+                            {desc.length > 80 ? desc.substring(0, 80) + "..." : desc}
+                          </div>
+                        )}
+                      </div>
                     </li>
                   );
                 })}
-
               </ul>
             )}
           </div>

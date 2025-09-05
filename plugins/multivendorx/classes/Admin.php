@@ -125,7 +125,7 @@ class Admin {
                 ),
                 'status-tools' => array(
                     'name'   => __( 'Status & Tools', 'multivendorx' ),
-                    'subtab' => 'database-tools',
+                    'subtab' => 'version-control',
                 ),
                 'announcement' => array(
                     'name'   => __( 'Announcement', 'multivendorx' ),

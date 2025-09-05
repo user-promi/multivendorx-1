@@ -330,6 +330,9 @@ export const KnowledgeBase: React.FC = () => {
                     onPaginationChange={setPagination}
                     handlePagination={requestData}
                     perPageOption={[10, 25, 50]}
+                    onRowClick={(row:any) => {
+                        handleEdit(row.id);
+                    }}
                 />
             </div>
         </>
