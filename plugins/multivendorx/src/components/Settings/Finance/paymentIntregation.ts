@@ -8,11 +8,8 @@ const methods = Object.entries(appLocalizer?.all_payments).map(([key, value]) =>
 export default {
     id: 'payment-integration',
     priority: 3,
-    name: __( 'Disbursement Method', 'multivendorx' ),
-    desc: __(
-        "Choose which payment integrations to enable for store payouts",
-        'multivendorx'
-    ),
+    name: __( 'Marketplace payouts', 'multivendorx' ),
+    desc: __("Choose which payment integrations to enable for store payouts",'multivendorx'),
     icon: 'adminlib-rules',
     submitUrl: 'settings',
     wrapperClass: 'form-wrapper',
