@@ -20,6 +20,7 @@ type KBForm = {
 };
 
 export const KnowledgeBase: React.FC = () => {
+    const [submitting, setSubmitting] = useState(false);
     const [data, setData] = useState<KBRow[] | null>(null);
     const [addEntry, setAddEntry] = useState(false);
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
@@ -30,19 +31,47 @@ export const KnowledgeBase: React.FC = () => {
     });
     const [editId, setEditId] = useState<number | null>(null);
     const [error, setError] = useState<string | null>(null);
-
+    const [showDropdown, setShowDropdown] = useState(false);
     const [formData, setFormData] = useState<KBForm>({
         title: '',
         content: '',
         status: 'pending',
     });
-
+    const bulkSelectRef = useRef<HTMLSelectElement>(null);
+    const [modalDetails, setModalDetails] = useState<string>('');
+    const handleCloseForm = () => {
+        setAddEntry(false);
+        setFormData({ title: '', url: '', content: '', stores: '' }); // reset form
+        setEditId(null); // reset edit mode
+        setError(null); // clear any error
+    };
     // Handle input changes
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
     };
-
+    const handleBulkAction = () => {
+        if (appLocalizer.khali_dabba) {
+            if (!Object.keys(rowSelection).length) {
+                setModalDetails('Select rows.');
+                setOpenModal(true);
+                return;
+            }
+            if (!bulkSelectRef.current?.value) {
+                setModalDetails('Please select a action.');
+                setOpenModal(true);
+                return;
+            }
+            setData(null);
+        }
+    };
+    const toggleDropdown = (id: any) => {
+        if (showDropdown === id) {
+            setShowDropdown(false);
+            return;
+        }
+        setShowDropdown(id);
+    };
     // Open edit modal
     const handleEdit = async (id: number) => {
         try {
@@ -65,13 +94,15 @@ export const KnowledgeBase: React.FC = () => {
 
     // Submit form
     const handleSubmit = async (status: 'publish' | 'pending') => {
+        if (submitting) return; // prevent multiple clicks
+        setSubmitting(true);
+
         try {
             const endpoint = editId
                 ? getApiLink(appLocalizer, `knowledge/${editId}`)
                 : getApiLink(appLocalizer, 'knowledge');
 
             const method = editId ? 'PUT' : 'POST';
-
             const payload = { ...formData, status };
 
             const response = await axios({
@@ -91,8 +122,11 @@ export const KnowledgeBase: React.FC = () => {
             }
         } catch {
             setError(__('Failed to save entry', 'multivendorx'));
+        } finally {
+            setSubmitting(false); // re-enable buttons
         }
     };
+
 
     // Fetch data
     const requestData = (rowsPerPage = 10, currentPage = 1) => {
@@ -113,27 +147,95 @@ export const KnowledgeBase: React.FC = () => {
     }, [pagination]);
 
     // Columns
-    const columns: ColumnDef<KBRow>[] = [
+    // Columns
+    const columns: ColumnDef<StoreRow>[] = [
         {
-            header: __('Title', 'multivendorx'),
-            cell: ({ row }) => <TableCell title={row.original.title || ''}>{row.original.title || '-'}</TableCell>,
+            id: 'select',
+            header: ({ table }) => (
+                <input
+                    type="checkbox"
+                    checked={table.getIsAllRowsSelected()}
+                    onChange={table.getToggleAllRowsSelectedHandler()}
+                />
+            ),
+            cell: ({ row }) => (
+                <input
+                    type="checkbox"
+                    checked={row.getIsSelected()}
+                    onChange={row.getToggleSelectedHandler()}
+                />
+            ),
         },
         {
-            header: __('Content', 'multivendorx'),
-            cell: ({ row }) => <TableCell title={row.original.content || ''}>{row.original.content || '-'}</TableCell>,
+            header: __('Title', 'multivendorx'),
+            cell: ({ row }) => (
+                <TableCell title={row.original.title || ''}>
+                    {row.original.title || '-'}
+                </TableCell>
+            ),
         },
         {
             header: __('Status', 'multivendorx'),
-            cell: ({ row }) => <TableCell title={row.original.status || ''}>{row.original.status || '-'}</TableCell>,
+            cell: ({ row }) => (
+                <TableCell title={row.original.status || ''}>
+                    {row.original.status || '-'}
+                </TableCell>
+            ),
         },
         {
             header: __('Action', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell title="Action">
                     <div className="action-section">
-                        <i className="adminlib-create" onClick={() => handleEdit(row.original.id!)}></i>
+                        <div className="action-icons">
+                            <i
+                                className="adminlib-more-vertical"
+                                onClick={() =>
+                                    toggleDropdown(row.original.id)
+                                }
+                            ></i>
+                            <div
+                                className={`action-dropdown ${showDropdown === row.original.id ? 'show' : ''}`}
+                            >
+                                <ul>
+                                    <li
+                                        onClick={() =>
+                                            (window.location.href = `?page=multivendorx#&tab=announcements&view&id=${row.original.id}`)
+                                        }
+                                    >
+                                        <i className="adminlib-eye"></i>
+                                        {__('View knowledgebase', 'multivendorx')}
+                                    </li>
+                                    <li
+                                        onClick={() => handleEdit(row.original.id)}
+                                    >
+                                        <i className="adminlib-create"></i>
+                                        {__('Edit knowledgebase', 'multivendorx')}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                 </TableCell>
+            ),
+        }
+
+    ];
+
+    const realtimeFilter: RealtimeFilter[] = [
+        {
+            name: 'bulk-action',
+            render: () => (
+                <div className="course-bulk-action bulk-action">
+                    <select name="action" className="basic-select" ref={bulkSelectRef}>
+                        <option value="">{__('Bulk actions')}</option>
+                        <option value="publish">{__('Publish', 'multivendorx')}</option>
+                        <option value="pending">{__('Pending', 'multivendorx')}</option>
+                    </select>
+                    <button name="bulk-action-apply" className="admin-btn btn-purple" onClick={handleBulkAction}>
+                        {__('Apply')}
+                    </button>
+                </div>
             ),
         },
     ];
@@ -152,37 +254,64 @@ export const KnowledgeBase: React.FC = () => {
             />
 
             {addEntry && (
-                <CommonPopup open={addEntry} onClose={() => setAddEntry(false)} title="Add Knowledge Base Entry">
-                    <div className="right-popup">
-                        <div className={`content-wrapper ${addEntry ? 'open' : ''}`}>
-                            <div className="form-group-wrapper">
-                                <div className="form-group">
-                                    <label htmlFor="title">Title</label>
-                                    <BasicInput type="text" name="title" value={formData.title} onChange={handleChange} />
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="content">Content</label>
-                                    <TextArea
-                                        name="content"
-                                        inputClass="textarea-input"
-                                        value={formData.content}
-                                        onChange={handleChange}
-                                    />
-                                </div>
+                <CommonPopup
+                    open={addEntry}
+                    onClose={handleCloseForm}
+                    width="500px"
+                    header={
+                        <>
+                            <div className="title">
+                                <i className="adminlib-cart"></i>
+                                {editId ? __('Edit Knowledgebase', 'multivendorx') : __('Add Knowledgebase', 'multivendorx')}
                             </div>
-
-                            {error && <p className="error-text">{error}</p>}
-
-                            <div className="popup-footer">
-                                <div className="admin-btn btn-red" onClick={() => setAddEntry(false)}>
-                                    Cancel
-                                </div>
-                                <div className="admin-btn btn-purple" onClick={() => handleSubmit('publish')}>
-                                    Publish
-                                </div>
-                                <div className="admin-btn btn-yellow" onClick={() => handleSubmit('pending')}>
-                                    Pending
-                                </div>
+                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                            <i
+                                onClick={handleCloseForm}
+                                className="icon adminlib-close"
+                            ></i>
+                        </>
+                    }
+                    footer={
+                        <>
+                            <div
+                                onClick={handleCloseForm}
+                                className="admin-btn btn-red"
+                            >
+                                Cancel
+                            </div>
+                            <button
+                                type="button"
+                                onClick={() => handleSubmit('publish')}
+                                className="admin-btn btn-purple"
+                                disabled={submitting}
+                            >
+                                {submitting ? 'Saving...' : 'Publish'}
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => handleSubmit('pending')}
+                                className="admin-btn btn-yellow"
+                                disabled={submitting}
+                            >
+                                {submitting ? 'Saving...' : 'Pending'}
+                            </button>
+                        </>
+                    }
+                >
+                    <div className="content">
+                        <div className="form-group-wrapper">
+                            <div className="form-group">
+                                <label htmlFor="title">Title</label>
+                                <BasicInput type="text" name="title" value={formData.title} onChange={handleChange} />
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="content">Content</label>
+                                <TextArea
+                                    name="content"
+                                    inputClass="textarea-input"
+                                    value={formData.content}
+                                    onChange={handleChange}
+                                />
                             </div>
                         </div>
                     </div>
@@ -197,6 +326,7 @@ export const KnowledgeBase: React.FC = () => {
                     onRowSelectionChange={setRowSelection}
                     defaultRowsPerPage={10}
                     pagination={pagination}
+                    realtimeFilter={realtimeFilter}
                     onPaginationChange={setPagination}
                     handlePagination={requestData}
                     perPageOption={[10, 25, 50]}
