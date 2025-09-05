@@ -152,7 +152,7 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
                                     dangerouslySetInnerHTML={{ __html: before }}
                                 />
                             )}
-                            <div className="input-wrapper">
+                            <div className="input-wrapper" style={{ width: size || '100%' }}>
                             {preParameter && (
                                 <span
                                     className="pre"
@@ -165,7 +165,6 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
                                 id={id}
                                 type={type}
                                 name={name}
-                                style={{ width: size || '' }}
                                 placeholder={placeholder}
                                 {...(type !== 'file' && onChange ? { value } : {})}
                                 {...((type === 'number' || type === 'range') ? { min, max } : {})}

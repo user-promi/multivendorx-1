@@ -31,7 +31,8 @@ const ShortCodeTable: React.FC<ShortCodeTableProps> = (props) => {
 
     return (
         <>
-            <table className="shortcode-table">
+        <div className="shortcode-table">
+            <table >
                 <thead>
                     <tr>
                         {optionLabel && optionLabel.length > 0 ? (
@@ -69,6 +70,7 @@ const ShortCodeTable: React.FC<ShortCodeTableProps> = (props) => {
                     dangerouslySetInnerHTML={{ __html: description }}
                 />
             )}
+        </div>
         </>
     );
 };

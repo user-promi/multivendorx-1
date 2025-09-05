@@ -815,7 +815,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                 case 'color':
                     input = (
                         <BasicInput
-                            wrapperClass="settings-color-picker-parent-class"
+                            wrapperClass="settings-color-picker"
                             inputClass="setting-color-picker"
                             descClass="settings-metabox-description"
                             description={inputField.desc}

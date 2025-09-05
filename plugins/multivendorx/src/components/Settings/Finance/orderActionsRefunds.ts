@@ -53,6 +53,7 @@ export default {
                 'Set the number of days within which a customer can request a refund',
                 'multivendorx'
             ),
+            size: '8rem',
             max: 365,
             parameter: 'days',
             moduleEnabled: 'marketplace-refund',

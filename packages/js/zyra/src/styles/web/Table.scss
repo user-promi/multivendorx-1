@@ -352,7 +352,7 @@
   position: relative;
   cursor: pointer;
 
-  i {
+  i:first-child {
     padding: 0.5rem 0.313rem;
     border-radius: 50%;
     background: transparent;
@@ -377,6 +377,7 @@
     background: #fff;
     display: none;
     z-index: 2;
+    border-radius: 0.313rem;
 
     ul {
       width: 9rem;
@@ -394,9 +395,15 @@
         cursor: pointer;
         transition: all 0.3s linear;
 
-        // &:hover {
-        //   background: #ece2f98f;
-        // }
+        i{
+          font-size: 1rem;
+        }
+
+        &.delete{
+          color: #f06b4f;
+          margin: 0;
+          border-top: $border-light-small;
+        }
       }
     }
 

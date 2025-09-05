@@ -115,7 +115,7 @@ export default {
                     type: 'text',
                     desc: __('Fixed amount per transaction', 'multivendorx'),
                     preParameter: __('$', 'multivendorx'),
-                    // size: "8rem",
+                    size: "8rem",
                     before: 'Fixed',
                     after: "+",
                 },
@@ -126,8 +126,8 @@ export default {
                         'Percentage of product price per transaction',
                         'multivendorx'
                     ),
+                    size: '8rem',
                     parameter: __('%', 'multivendorx'),
-                    // size: "8rem",
                 },
 
             ],
