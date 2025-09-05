@@ -14,8 +14,9 @@ interface AdminBreadcrumbsProps {
     renderMenuItems?: (items: any[]) => React.ReactNode;
     tabData?: any[];
     buttons?: any[];
-    goPremium?: boolean
-    goPremiumLink?: string
+    goPremium?: boolean;
+    goPremiumLink?: string;
+    description?:string;
 }
 
 const AdminBreadcrumbs: React.FC<AdminBreadcrumbsProps> = ({
@@ -26,7 +27,8 @@ const AdminBreadcrumbs: React.FC<AdminBreadcrumbsProps> = ({
     tabData = [],
     buttons = [],
     goPremium = false,
-    goPremiumLink
+    goPremiumLink,
+    description
 }) => {
     const [noticeHTML, setNoticeHTML] = useState('');
 
@@ -80,7 +82,7 @@ const AdminBreadcrumbs: React.FC<AdminBreadcrumbsProps> = ({
                             })}
                     </div>
                 </div>
-                {!renderBreadcrumb && <div className="description">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Laboriosam corporis deleniti ipsum commodi. Porro, tempore.</div>}
+                {description && <div className="description">{description}</div>}
                 {renderBreadcrumb && <div className="breadcrumbs-menu">{renderBreadcrumb()}</div>}
 
                 {renderMenuItems && tabData.length > 0 && (

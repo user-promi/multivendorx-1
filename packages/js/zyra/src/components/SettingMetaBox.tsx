@@ -18,6 +18,7 @@ interface FormField {
     filesize?: number;
     required?: boolean;
     disabled?: boolean;
+    readonly?: boolean;
 }
 
 interface InputType {
@@ -62,6 +63,7 @@ interface InputFieldProps {
     value: any;
     onChange: ( value: string | React.ChangeEvent< HTMLInputElement > ) => void;
     className?: string;
+    readonly?: boolean;
 }
 
 const FormFieldSelect: React.FC< FormFieldSelectProps > = ( {
@@ -106,12 +108,14 @@ const InputField: React.FC< InputFieldProps > = ( {
     value,
     onChange,
     className,
+    readonly = false,
 } ) => (
     <FieldWrapper label={ label } className={ className }>
         <input
             type={ type }
             value={ value || '' }
             onChange={ ( e ) => onChange( e.target.value ) }
+            readOnly={readonly}
         />
     </FieldWrapper>
 );
@@ -291,6 +295,7 @@ const SettingMetaBox: React.FC< SettingMetaBoxProps > = ( {
                                             ? formField?.name
                                             : option?.label
                                     }
+                                    readonly={metaType === 'setting-meta' && formField?.readonly}
                                     onChange={ ( value ) => {
                                         if ( metaType === 'setting-meta' ) {
                                             onChange( 'name', value as string );

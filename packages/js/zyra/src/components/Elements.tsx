@@ -13,13 +13,14 @@ interface Option {
 interface ElementsProps {
     selectOptions: Option[];
     onClick: ( value: string ) => void;
+    label?:string;
 }
 
-const Elements: React.FC< ElementsProps > = ( { selectOptions, onClick } ) => {
+const Elements: React.FC< ElementsProps > = ( { selectOptions, onClick,label } ) => {
     return (
         <aside className="elements-section">
             <div className="section-meta">
-                <h2>Form fields</h2>
+                {label && <h2>{label}</h2>}
             </div>
             <main className="section-container">
                 { selectOptions.map( ( option ) => (
