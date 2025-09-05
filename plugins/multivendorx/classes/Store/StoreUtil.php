@@ -15,6 +15,43 @@ defined('ABSPATH') || exit;
 
 class StoreUtil {
 
+    public static function add_store_users($args) {
+        global $wpdb;
+        $table = "{$wpdb->prefix}" . Utill::TABLES['store_users'];
+
+        $data = [
+            'store_id'    => $args['store_id'] ?? 0,
+            'user_id'     => $args['user_id'] ?? 0,
+            'role_id'     => $args['role_id'] ?? '',
+        ];
+
+        $formats = [ '%d', '%d', '%s' ];
+
+        // if ( $this->id > 0 ) {
+        //     $wpdb->update( $table, $data, [ 'ID' => $this->id ], $formats, [ '%d' ] );
+        // } else {
+            $wpdb->insert( $table, $data, $formats );
+            return $wpdb->insert_id;
+        // }
+    }
+
+    public static function get_store_users($store_id) {
+        global $wpdb;
+        $table = "{$wpdb->prefix}" . Utill::TABLES['store_users'];
+
+        $users = $wpdb->get_results( $wpdb->prepare( "SELECT user_id FROM $table WHERE store_id = %d", $store_id), ARRAY_A );
+        return $users;
+      
+    }
+
+    public static function get_stores_from_user_id($user_id) {
+        global $wpdb;
+        $table = "{$wpdb->prefix}" . Utill::TABLES['store_users'];
+
+        $users = $wpdb->get_col( $wpdb->prepare("SELECT store_id FROM $table WHERE user_id = %d", $user_id) );
+        return $users;
+    }
+
     public static function get_store() {
         global $wpdb;
 
