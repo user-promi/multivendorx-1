@@ -20,6 +20,7 @@ type KBForm = {
 };
 
 export const KnowledgeBase: React.FC = () => {
+    const [submitting, setSubmitting] = useState(false);
     const [data, setData] = useState<KBRow[] | null>(null);
     const [addEntry, setAddEntry] = useState(false);
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
@@ -93,13 +94,15 @@ export const KnowledgeBase: React.FC = () => {
 
     // Submit form
     const handleSubmit = async (status: 'publish' | 'pending') => {
+        if (submitting) return; // prevent multiple clicks
+        setSubmitting(true);
+
         try {
             const endpoint = editId
                 ? getApiLink(appLocalizer, `knowledge/${editId}`)
                 : getApiLink(appLocalizer, 'knowledge');
 
             const method = editId ? 'PUT' : 'POST';
-
             const payload = { ...formData, status };
 
             const response = await axios({
@@ -119,8 +122,11 @@ export const KnowledgeBase: React.FC = () => {
             }
         } catch {
             setError(__('Failed to save entry', 'multivendorx'));
+        } finally {
+            setSubmitting(false); // re-enable buttons
         }
     };
+
 
     // Fetch data
     const requestData = (rowsPerPage = 10, currentPage = 1) => {
@@ -277,15 +283,17 @@ export const KnowledgeBase: React.FC = () => {
                                 type="button"
                                 onClick={() => handleSubmit('publish')}
                                 className="admin-btn btn-purple"
+                                disabled={submitting}
                             >
-                                Publish
+                                {submitting ? 'Saving...' : 'Publish'}
                             </button>
                             <button
                                 type="button"
                                 onClick={() => handleSubmit('pending')}
                                 className="admin-btn btn-yellow"
+                                disabled={submitting}
                             >
-                                Pending
+                                {submitting ? 'Saving...' : 'Pending'}
                             </button>
                         </>
                     }
