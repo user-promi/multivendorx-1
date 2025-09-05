@@ -96,6 +96,11 @@ class Modules {
 						'module_file'  => MultiVendorX()->plugin_path . 'modules/StripeConnect/Module.php',
 						'module_class' => 'MultiVendorX\StripeConnect\Module',
 					),
+                    'paypal-payout' => array(
+						'id'           => 'paypal-payout',
+						'module_file'  => MultiVendorX()->plugin_path . 'modules/PaypalPayout/Module.php',
+						'module_class' => 'MultiVendorX\PaypalPayout\Module',
+					),
 				)
             );
         }
