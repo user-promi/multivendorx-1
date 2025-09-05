@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import './storeRegistration.scss';
-import { FormViewer } from 'zyra';
+import { FormViewer, getApiLink } from 'zyra';
 import axios from 'axios';
 
 const RegistrationForm = () => {
@@ -10,41 +10,50 @@ const RegistrationForm = () => {
     const formData = registrationForm;
     const submitUrl = `${registrationForm.apiUrl}/catalogx/v1/enquiries`;
 
-    const onSubmit = (submittedFormData: any) => {
-        console.log("hdsg",submittedFormData)
+    const onSubmit = (submittedFormData: Record<string, any>) => {
         setLoading(true);
-
-        const productId =
-            document.querySelector<HTMLInputElement>(
-                '#product-id-for-enquiry'
-            )?.value ?? '';
-        const quantity =
-            document.querySelector<HTMLInputElement>('.quantity .qty')
-                ?.value ?? '1';
-
-        submittedFormData.append('productId', productId);
-        submittedFormData.append('quantity', quantity);
-
-        axios
-            .post(submitUrl, submittedFormData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    'X-WP-Nonce': registrationForm.nonce,
-                },
-            })
-            .then((response) => {
-                setResponseMessage(response.data.msg);
-                setLoading(false);
-                setToast(true);
-                if (response.data.redirect_link !== '') {
-                    window.location.href = response.data.redirect_link;
-                }
-                setTimeout(() => {
-                    setToast(false);
-                    window.location.reload();
-                }, 3000);
-            });
+    
+        // Map form field keys to backend expected keys
+        const mappedData: Record<string, any> = {};
+    
+        // Core fields
+        if (submittedFormData['name']) mappedData['name'] = submittedFormData['name'];
+        if (submittedFormData['decription'] || submittedFormData['description'])
+            mappedData['description'] = submittedFormData['decription'] || submittedFormData['description'];
+    
+        // Optional: slug, who_created (if coming from form)
+        if (submittedFormData['slug']) mappedData['slug'] = submittedFormData['slug'];
+        if (submittedFormData['who_created']) mappedData['who_created'] = submittedFormData['who_created'];
+    
+        // Default status to 'pending'
+        mappedData['status'] = 'pending';
+    
+        // Other fields as meta
+        Object.keys(submittedFormData).forEach((key) => {
+            if (!['name', 'description', 'slug', 'who_created', 'status'].includes(key)) {
+                mappedData[key] = submittedFormData[key];
+            }
+        });
+        console.log(formData)
+        // Send to API
+        axios({
+            method: 'POST',
+            url: getApiLink(registrationForm, 'stores'),
+            headers: { 'X-WP-Nonce': registrationForm.nonce },
+            data: {
+                formData: mappedData,
+            },
+        })
+        .then((response) => {
+            console.log('Store created:', response.data);
+            setLoading(false);
+        })
+        .catch((error) => {
+            console.error('Error creating store:', error);
+            setLoading(false);
+        });
     };
+    
 
     return (
         <div className="enquiry-form-modal">

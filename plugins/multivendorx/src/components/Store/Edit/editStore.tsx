@@ -107,13 +107,25 @@ const EditStore = () => {
                 Back
             </Link> */}
 
-            
+
             <Tabs
                 tabData={tabData}
                 currentTab={currentTab}
                 getForm={getForm}
                 prepareUrl={prepareUrl}
                 appLocalizer={appLocalizer}
+                tabTitleSection={
+                    <div className="tab-title">
+                        <div className="tab-wrapper">
+                            <div className="title">Custom Title</div>
+                            <div className="dsc">Custom description goes here.</div>
+                        </div>
+                        <div className="status-wrapper">
+                            <span>Status: </span>
+                            <div className="admin-btn btn-red">Inactive <i className="adminlib-creat"></i></div>
+                        </div>
+                    </div>
+                }
                 brandImg={Brand}
                 smallbrandImg={BrandSmall}
                 Link={Link}
