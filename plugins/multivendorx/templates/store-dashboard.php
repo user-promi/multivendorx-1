@@ -1,9 +1,19 @@
 <?php
 
+use MultiVendorX\Store\StoreUtil;
+use MultiVendorX\Store\Store;
+
 $all_endpoints = MultiVendorX()->rest->dashboard->all_endpoints();
 $current_user = wp_get_current_user();
 $role = reset($current_user->roles);
 $capability_settings = MultiVendorX()->setting->get_setting($role);
+
+$store_ids = StoreUtil::get_stores_from_user_id($current_user->ID);
+$active_store = get_user_meta($current_user->ID, 'multivendorx_active_store', true);
+
+if (empty($active_store)) {
+    update_user_meta($current_user->ID, 'multivendorx_active_store', reset($store_ids));
+}
 
 if (get_option('permalink_structure')) {
     $current_page = get_query_var('dashboard_page');
@@ -174,42 +184,25 @@ if ($current_page && empty($current_sub)) {
                                     </ul>
                                 </div>
                                 <div class="store-wrapper">
-                                        <h3>Switch accounts</h3>
+                                        <h3>Switch stores</h3>
                                         <ul>
-                                            <li>
-                                                <a href="#">
-                                                    <i class="adminlib-person"></i>
-                                                    View Profile
-                                                </a>
-                                            </li>
-
-                                            <li>
-                                                <a href="#">
-                                                    <i class="adminlib-user-network-icon"></i>
-                                                    Account Setting
-                                                </a>
-                                            </li>
-
-                                            <li>
-                                                <a href="#">
-                                                    <i class="adminlib-user-network-icon"></i>
-                                                    WordPress backend
-                                                </a>
-                                            </li>
-
-                                            <li>
-                                                <a href="#">
-                                                    <i class="adminlib-user-network-icon"></i>
-                                                    WordPress backend
-                                                </a>
-                                            </li>
-
-                                            <li>
-                                                <a href="#">
-                                                    <i class="adminlib-user-network-icon"></i>
-                                                    WordPress backend
-                                                </a>
-                                            </li>
+                                            <?php
+                                            foreach( $store_ids as $id) {
+                                                if ($id == $active_store) continue; // skip active one
+                                                $store = Store::get_store_by_id( $id );
+                                                ?>
+                                                <li>
+                                                    <a href="javascript:void(0);" 
+                                                    class="switch-store" 
+                                                    data-store-id="<?php echo esc_attr($id); ?>">
+                                                        <i class="adminlib-user-network-icon"></i>
+                                                        <?php echo esc_html($store->get('name')); ?>
+                                                    </a>
+                                                </li>
+                                                
+                                            <?php
+                                            }
+                                            ?>
                                         </ul>
                                     </div>
 

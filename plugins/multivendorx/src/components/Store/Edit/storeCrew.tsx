@@ -6,6 +6,37 @@ const StoreQueue = ({ id }: { id: string }) => {
     const [formData, setFormData] = useState<{ [key: string]: string }>({});
     const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
+    useEffect(() => {
+		if (!id) return;
+
+		axios({
+			method: 'GET',
+			url: getApiLink(appLocalizer, `store/${id}`),
+            params: { fetch_user: true },
+			headers: { 'X-WP-Nonce': appLocalizer.nonce },
+		})
+			.then((res) => {
+				const data = res.data || {};
+				setFormData((prev) => ({ ...prev, ...data }));
+			})
+	}, [id]);
+
+    const autoSave = (updatedData: { [key: string]: string }) => {
+        axios({
+            method: 'PUT',
+            url: getApiLink(appLocalizer, `store/${id}`),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            data: {
+            ...updatedData,
+                user: 'true'
+            },
+        }).then((res) => {
+            if (res.data.success) {
+                setSuccessMsg('Store saved successfully!');
+            }
+        })
+    };
+
     return (
         <>
 
@@ -24,15 +55,16 @@ const StoreQueue = ({ id }: { id: string }) => {
             <div className="container-wrapper">
 
 
-                <label htmlFor="product-name">Store Users</label>
+                <label htmlFor="product-name">Store Owner</label>
                 <SelectInput
                     name="country"
                     // value={formData.country}
                     options={appLocalizer.store_owners || []}
                     type="single-select"
                     onChange={(newValue) => {
+                        console.log(newValue);
                         if (!newValue || Array.isArray(newValue)) return;
-                        const updated = { ...formData, user: newValue.value, state: '' }; // reset state
+                        const updated = { ...formData, user_id: newValue.value, state: '' }; // reset state
                         setFormData(updated);
                         autoSave(updated);
                     }}
