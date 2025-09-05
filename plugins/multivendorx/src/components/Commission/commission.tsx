@@ -235,32 +235,25 @@ const Commission: React.FC = () => {
                 />
             ),
         },
+
         {
-            header: __('ID', 'multivendorx'),
+            header: __('Store Name', 'multivendorx'),
             cell: ({ row }) => (
-                <TableCell title={row.original.id?.toString() || ''}>
-                    {row.original.id ?? '-'}
+                <TableCell title={row.original.storeName || ''}>
+                    {row.original.storeName ?? '-'}
                 </TableCell>
             ),
         },
         {
-            header: __('Order ID', 'multivendorx'),
+            header: __('Product Amount', 'multivendorx'),
             cell: ({ row }) => (
-                <TableCell title={row.original.orderId?.toString() || ''}>
-                    {row.original.orderId ?? '-'}
+                <TableCell title={row.original.commissionAmount || ''}>
+                    {row.original.commissionAmount ?? '-'}
                 </TableCell>
             ),
         },
         {
-            header: __('Store ID', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.storeId?.toString() || ''}>
-                    {row.original.storeId ?? '-'}
-                </TableCell>
-            ),
-        },
-        {
-            header: __('Amount', 'multivendorx'),
+            header: __('Commission Earned', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell title={row.original.commissionAmount || ''}>
                     {row.original.commissionAmount ?? '-'}
@@ -284,30 +277,6 @@ const Commission: React.FC = () => {
             ),
         },
         {
-            header: __('Include Coupon', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.includeCoupon ? 'Yes' : 'No'}>
-                    {row.original.includeCoupon ? 'Yes' : 'No'}
-                </TableCell>
-            ),
-        },
-        {
-            header: __('Include Shipping', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.includeShipping ? 'Yes' : 'No'}>
-                    {row.original.includeShipping ? 'Yes' : 'No'}
-                </TableCell>
-            ),
-        },
-        {
-            header: __('Include Tax', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.includeTax ? 'Yes' : 'No'}>
-                    {row.original.includeTax ? 'Yes' : 'No'}
-                </TableCell>
-            ),
-        },
-        {
             header: __('Commission Total', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell title={row.original.commissionTotal || ''}>
@@ -315,27 +284,12 @@ const Commission: React.FC = () => {
                 </TableCell>
             ),
         },
-        {
-            header: __('Commission Refunded', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.commissionRefunded || ''}>
-                    {row.original.commissionRefunded ?? '-'}
-                </TableCell>
-            ),
-        },
+
         {
             header: __('Paid Status', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell title={row.original.paidStatus || ''}>
                     <span className="admin-badge red">{row.original.paidStatus ?? '-'}</span>
-                </TableCell>
-            ),
-        },
-        {
-            header: __('Note', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.commissionNote || ''}>
-                    {row.original.commissionNote ?? '-'}
                 </TableCell>
             ),
         },
