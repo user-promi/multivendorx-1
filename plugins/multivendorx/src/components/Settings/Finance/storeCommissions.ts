@@ -196,7 +196,7 @@ export default {
             look: 'toggle',
         },
         {
-            key: 'commission_calculation_on_tax',
+            key: 'give_tax',
             type: 'setting-toggle',
             label: __('Tax amount', 'multivendorx'),
             settingDescription: __('Configure how taxes are treated in commission calculations.', 'multivendorx'),
@@ -204,19 +204,19 @@ export default {
 
             options: [
                 {
-                    key: 'per_transaction',
+                    key: 'no_tax',
                     label: __('No tax', 'multivendorx'),
-                    value: 'per_transaction',
+                    value: 'no_tax',
                 },
                 {
-                    key: 'per_unit',
+                    key: 'full_tax',
                     label: __('Full tax', 'multivendorx'),
-                    value: 'per_unit',
+                    value: 'full_tax',
                 },
                 {
-                    key: 'per_store',
+                    key: 'commision_based_tax',
                     label: __('Commision based tax', 'multivendorx'),
-                    value: 'per_store',
+                    value: 'commision_based_tax',
                 },
             ],
         },
