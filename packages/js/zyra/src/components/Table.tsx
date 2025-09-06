@@ -412,7 +412,7 @@ const Table: React.FC<TableProps> = ({
                     ))}
                 </div>
             )}
-            <div className="filter-wrapper">
+            {/* <div className="filter-wrapper">
                 <div className="wrap-bulk-all-date">
                     {realtimeFilter &&
                         realtimeFilter.map((filter: RealtimeFilter) => (
@@ -430,7 +430,7 @@ const Table: React.FC<TableProps> = ({
                         ))}
                 </div>
                 {bulkActionComp && bulkActionComp()}
-            </div>
+            </div> */}
 
             {loading ? (
                 <LoadingTable />
@@ -623,9 +623,33 @@ const Table: React.FC<TableProps> = ({
                                         );
                                     })}
                                 </tbody>
+                                {realtimeFilter && Object.keys(rowSelection || {}).length >= 2 && (
+                                    <div className="admin-filter-wrapper">
+                                        <div className="wrap-bulk-all-date">
+                                            <span>{Object.keys(rowSelection || {}).length} rows selected</span>
+                                            {realtimeFilter.map((filter: RealtimeFilter) => (
+                                                <React.Fragment key={filter.name}>
+                                                    {filter.render(
+                                                        handleFilterChange,
+                                                        filterData[filter.name as keyof Record<string, any>]
+                                                    )}
+                                                </React.Fragment>
+                                            ))}
+                                            <div
+                                                className="close-btn"
+                                                onClick={() => onRowSelectionChange?.({})} // clear selection
+                                            >
+                                                <i className="adminlib-close"></i>
+                                            </div>
+                                        </div>
+
+                                        {bulkActionComp && bulkActionComp()}
+                                    </div>
+                                )}
+
                             </table>
                             { /* Pagination Controls */}
-                            {/* { ( data?.length as number ) > 10 && ( */}
+                            { ( data?.length as number ) > 10 && (
                             <div className="table-pagination">
                                 { /* Page size dropdown */}
                                 <div className="pagination-number-wrapper">
@@ -725,7 +749,7 @@ const Table: React.FC<TableProps> = ({
                                     </span>
                                 </div>
                             </div>
-                            {/* ) }  */}
+                            ) } 
                         </div>
                     )}
                     {successMsg && (

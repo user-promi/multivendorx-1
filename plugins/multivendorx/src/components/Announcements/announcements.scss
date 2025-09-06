@@ -99,3 +99,38 @@
         border-top: $border-light-small;
     }
 }
+
+
+// customer table 
+.admin-column {
+    .single-column {
+        display: flex;
+        gap: 0.625rem;
+
+        .store-details {
+            .details {
+                font-size: 1.063rem;
+                padding-bottom: 0.5rem;
+            }
+
+            .sub-tag {
+                display: flex;
+                gap: 0.5rem;
+                flex-wrap: wrap;
+                color: #00000063;
+                font-size: 0.85rem;
+
+                .tag {
+                    display: flex;
+                    gap: 0.313rem;
+                    align-items: center;
+                }
+            }
+        }
+    }
+
+}
+
+.admin-row:has(input[type="checkbox"]:checked) .details {
+    color: $theme-color;
+}
