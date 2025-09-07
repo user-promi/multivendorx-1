@@ -20,19 +20,26 @@ class StoreUtil {
         $table = "{$wpdb->prefix}" . Utill::TABLES['store_users'];
 
         $data = [
-            'store_id'    => $args['store_id'] ?? 0,
-            'user_id'     => $args['user_id'] ?? 0,
-            'role_id'     => $args['role_id'] ?? '',
+            'store_id' => $args['store_id'] ?? 0,
+            'user_id'  => $args['user_id'] ?? 0,
+            'role_id'  => $args['role_id'] ?? '',
         ];
 
         $formats = [ '%d', '%d', '%s' ];
 
-        // if ( $this->id > 0 ) {
-        //     $wpdb->update( $table, $data, [ 'ID' => $this->id ], $formats, [ '%d' ] );
-        // } else {
-            $wpdb->insert( $table, $data, $formats );
-            return $wpdb->insert_id;
-        // }
+        // Check if entry already exists
+        $exists = $wpdb->get_var( $wpdb->prepare(
+            "SELECT ID FROM {$table} WHERE store_id = %d AND user_id = %d AND role_id = %s",
+            $data['store_id'], $data['user_id'], $data['role_id']
+        ) );
+
+        if ( $exists ) {
+            return $exists;
+        }
+
+        // Insert new record if not exists
+        $wpdb->insert( $table, $data, $formats );
+        return $wpdb->insert_id;
     }
 
     public static function get_store_users($store_id) {
@@ -40,7 +47,7 @@ class StoreUtil {
         $table = "{$wpdb->prefix}" . Utill::TABLES['store_users'];
 
         $users = $wpdb->get_results( $wpdb->prepare( "SELECT user_id FROM $table WHERE store_id = %d", $store_id), ARRAY_A );
-        return $users;
+        return wp_list_pluck($users, 'user_id');
       
     }
 

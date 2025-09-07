@@ -25,12 +25,10 @@ type CommissionRow = {
     id?: number;
     orderId?: number;
     storeId?: number;
+    storeName?: string;
     commissionAmount?: string;
     shipping?: string;
     tax?: string;
-    includeCoupon?: boolean;
-    includeShipping?: boolean;
-    includeTax?: boolean;
     commissionTotal?: string;
     commissionRefunded?: string;
     paidStatus?: 'paid' | 'unpaid' | string; // enum-like if you want
