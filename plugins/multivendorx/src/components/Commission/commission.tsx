@@ -293,12 +293,21 @@ const Commission: React.FC = () => {
         },
         {
             header: __('Date', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.createTime || ''}>
-                    {row.original.createTime ?? '-'}
-                </TableCell>
-            ),
+            cell: ({ row }) => {
+                const rawDate = row.original.createTime;
+                let formattedDate = '-';
+                if (rawDate) {
+                    const dateObj = new Date(rawDate);
+                    formattedDate = new Intl.DateTimeFormat('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric',
+                    }).format(dateObj);
+                }
+                return <TableCell title={formattedDate}>{formattedDate}</TableCell>;
+            },
         },
+        
 
         {
             header: __('Action', 'multivendorx'),

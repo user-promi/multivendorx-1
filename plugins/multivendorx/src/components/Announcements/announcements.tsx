@@ -273,10 +273,10 @@ const Announcements: React.FC = () => {
             ),
         },
         {
-            header: __('URL', 'multivendorx'),
+            header: __('Content', 'multivendorx'),
             cell: ({ row }) => (
-                <TableCell title={row.original.url || ''}>
-                    {row.original.url || '-'}
+                <TableCell title={row.original.content || ''}>
+                    {row.original.content || '-'}
                 </TableCell>
             ),
         },
@@ -288,6 +288,43 @@ const Announcements: React.FC = () => {
                 </TableCell>
             ),
         },
+        // {
+        //     header: __('Action', 'multivendorx'),
+        //     cell: ({ row }) => (
+        //         <TableCell title="Action">
+        //             <div className="action-section">
+        //                 <div className="action-icons">
+        //                     <i
+        //                         className="adminlib-more-vertical"
+        //                         onClick={() =>
+        //                             toggleDropdown(row.original.id)
+        //                         }
+        //                     ></i>
+        //                     <div
+        //                         className={`action-dropdown ${showDropdown === row.original.id ? 'show' : ''}`}
+        //                     >
+        //                         <ul>
+        //                             <li
+        //                                 onClick={() =>
+        //                                     (window.location.href = `?page=multivendorx#&tab=announcements&view&id=${row.original.id}`)
+        //                                 }
+        //                             >
+        //                                 <i className="adminlib-eye"></i>
+        //                                 {__('View Announcement', 'multivendorx')}
+        //                             </li>
+        //                             <li
+        //                                 onClick={() => handleEdit(row.original.id)} // ✅ opens edit popup
+        //                             >
+        //                                 <i className="adminlib-create"></i>
+        //                                 {__('Edit Announcement', 'multivendorx')}
+        //                             </li>
+        //                         </ul>
+        //                     </div>
+        //                 </div>
+        //             </div>
+        //         </TableCell>
+        //     ),
+        // }
 
     ];
 
@@ -375,15 +412,6 @@ const Announcements: React.FC = () => {
                                     type="text"
                                     name="title"
                                     value={formData.title}
-                                    onChange={handleChange}
-                                />
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="url">Enter Url</label>
-                                <BasicInput
-                                    type="text"
-                                    name="url"
-                                    value={formData.url}
                                     onChange={handleChange}
                                 />
                             </div>

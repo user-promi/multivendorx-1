@@ -33,18 +33,18 @@ const EditStore = () => {
     const currentTab = hashParams.get('subtab') || 'store';
 
     const prepareUrl = (tabId: string) => `?page=multivendorx#&tab=stores&edit/${editId}/&subtab=${tabId}`;
-	const autoSave = (updatedData: { [key: string]: string }) => {
-		axios({
-			method: 'PUT',
-			url: getApiLink(appLocalizer, `store/${editId}`),
-			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-			data: updatedData,
-		}).then((res) => {
-			if (res.data.success) {
-				setSuccessMsg('Store saved successfully!');
-			}
-		})
-	};
+    const autoSave = (updatedData: { [key: string]: string }) => {
+        axios({
+            method: 'PUT',
+            url: getApiLink(appLocalizer, `store/${editId}`),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            data: updatedData,
+        }).then((res) => {
+            if (res.data.success) {
+                setSuccessMsg('Store saved successfully!');
+            }
+        })
+    };
 
     useEffect(() => {
         if (!editId) return;
@@ -156,9 +156,18 @@ const EditStore = () => {
                 tabTitleSection={
                     <div className="tab-title">
                         <div className="tab-wrapper">
-                            <div className="title">{data.name}</div>
+                            <div className="title">{"Editing "+data.name}</div>
                             <div className="dsc">{data.description}</div>
                         </div>
+                        {editId && (
+                            <div className="admin-btn btn-purple" style={{ marginLeft: '10px' }}>
+                                <a
+                                    href={`?page=multivendorx#&tab=stores&view&id=${editId}`}
+                                >
+                                    View Store
+                                </a>
+                            </div>
+                        )}
                         <div className="status-wrapper">
                             <span>Status: </span>
                             <div className="admin-btn btn-red">
@@ -167,7 +176,7 @@ const EditStore = () => {
                                     value={data.status}
                                     options={statusOptions}
                                     type="single-select"
-                                    onChange={(newValue:any) => {
+                                    onChange={(newValue: any) => {
                                         console.log(newValue)
                                         if (!newValue || Array.isArray(newValue)) return;
 

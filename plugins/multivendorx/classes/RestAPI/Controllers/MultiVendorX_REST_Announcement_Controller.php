@@ -104,7 +104,7 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
         foreach ( $query->posts as $post ) {
             $id      = (int) $post->ID;
             $title   = $post->post_title;
-            $content = apply_filters( 'the_content', $post->post_content );
+            $content = $post->post_content;
             $url     = get_post_meta( $id, '_mvx_announcement_url', true );
             $stores  = get_post_meta( $id, '_mvx_announcement_stores', true ); // saved as array
     
@@ -144,10 +144,8 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
         $formData = isset($data['formData']) ? $data['formData'] : $data;
     
         $title   = isset($formData['title']) ? sanitize_text_field($formData['title']) : '';
-        $url     = isset($formData['url']) ? esc_url_raw($formData['url']) : '';
         $content = isset($formData['content']) ? sanitize_textarea_field($formData['content']) : '';
         $stores  = isset($formData['stores']) ? $formData['stores'] : [];
-    
         if ( is_string( $stores ) ) {
             $stores = array_filter( array_map( 'trim', explode( ',', $stores ) ) );
         } elseif ( ! is_array( $stores ) ) {
