@@ -195,43 +195,6 @@ export const KnowledgeBase: React.FC = () => {
                 </TableCell>
             ),
         },
-        {
-            header: __('Action', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title="Action">
-                    <div className="action-section">
-                        <div className="action-icons">
-                            <i
-                                className="adminlib-more-vertical"
-                                onClick={() =>
-                                    toggleDropdown(row.original.id)
-                                }
-                            ></i>
-                            <div
-                                className={`action-dropdown ${showDropdown === row.original.id ? 'show' : ''}`}
-                            >
-                                <ul>
-                                    <li
-                                        onClick={() =>
-                                            (window.location.href = `?page=multivendorx#&tab=announcements&view&id=${row.original.id}`)
-                                        }
-                                    >
-                                        <i className="adminlib-eye"></i>
-                                        {__('View knowledgebase', 'multivendorx')}
-                                    </li>
-                                    <li
-                                        onClick={() => handleEdit(row.original.id)}
-                                    >
-                                        <i className="adminlib-create"></i>
-                                        {__('Edit knowledgebase', 'multivendorx')}
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </TableCell>
-            ),
-        }
 
     ];
 
@@ -246,9 +209,9 @@ export const KnowledgeBase: React.FC = () => {
                         <option value="pending">{__('Pending', 'multivendorx')}</option>
                         <option value="delete">{__('Delete', 'multivendorx')}</option>
                     </select>
-                    <button name="bulk-action-apply" className="admin-btn btn-purple" onClick={handleBulkAction}>
+                    {/* <button name="bulk-action-apply" className="admin-btn btn-purple" onClick={handleBulkAction}>
                         {__('Apply')}
-                    </button>
+                    </button> */}
                 </div>
             ),
         },

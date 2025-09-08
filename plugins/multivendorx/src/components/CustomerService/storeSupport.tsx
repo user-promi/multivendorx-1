@@ -212,9 +212,9 @@ const StoreSupport: React.FC = () => {
                         <option value="delete">{__('Delete')}</option>
                         <option value="restore">{__('Restore')}</option>
                     </select>
-                    <button name="bulk-action-apply" className="admin-btn btn-purple">
+                    {/* <button name="bulk-action-apply" className="admin-btn btn-purple">
                         {__('Apply')}
-                    </button>
+                    </button> */}
                 </div>
             ),
         },

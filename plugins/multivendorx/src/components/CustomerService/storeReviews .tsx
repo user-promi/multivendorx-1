@@ -8,7 +8,7 @@ import {
     RowSelectionState,
     PaginationState,
 } from '@tanstack/react-table';
-
+import image from "../../assets/images/email.png";
 type StoreRow = {
     id?: number;
     store_name?: string;
@@ -111,23 +111,40 @@ const StoreReviews: React.FC = () => {
             header: __('Store', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell title={row.original.store_name || ''}>
-                    {row.original.store_name || '-'}
-                </TableCell>
-            ),
-        },
-        {
-            header: __('Slug', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.store_slug || ''}>
-                    {row.original.store_slug || '-'}
-                </TableCell>
-            ),
-        },
-        {
-            header: __('Status', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.status || ''}>
-                    {row.original.status || '-'}
+                    {/* {row.original.store_name || '-'} */}
+                    <div className="single-column">
+                        <div className="image">
+                            <img src={image} alt="" />
+                        </div>
+                        <div className="store-details">
+                            <div className="details">
+                                Welcome to <strong>Urban Trends</strong>, your one-stop shop for the latest in fashion.
+                            </div>
+
+                            <div className="sub-tag">
+                                <div className="tag">
+                                    <i className="adminlib-mail"></i>
+                                    <div className="text">Fast Shipping</div>
+                                </div>
+                                <div className="tag">
+                                    <i className="adminlib-mail"></i>
+                                    <div className="text">Great Customer Support</div>
+                                </div>
+                                <div className="tag">
+                                    <i className="adminlib-mail"></i>
+                                    <div className="text">Affordable Pricing</div>
+                                </div>
+                                <div className="tag">
+                                    <i className="adminlib-mail"></i>
+                                    <div className="text">Premium Quality</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* <strong>{row.original.store_name || '-'}</strong>
+                        <br />
+                        <small>ID: {row.original.id}</small> */}
+                    </div>
                 </TableCell>
             ),
         },

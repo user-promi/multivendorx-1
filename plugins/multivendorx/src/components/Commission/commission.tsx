@@ -25,12 +25,10 @@ type CommissionRow = {
     id?: number;
     orderId?: number;
     storeId?: number;
+    storeName?: string;
     commissionAmount?: string;
     shipping?: string;
     tax?: string;
-    includeCoupon?: boolean;
-    includeShipping?: boolean;
-    includeTax?: boolean;
     commissionTotal?: string;
     commissionRefunded?: string;
     paidStatus?: 'paid' | 'unpaid' | string; // enum-like if you want
@@ -398,9 +396,9 @@ const Commission: React.FC = () => {
                         <option value="delete">{__('Delete')}</option>
                         <option value="restore">{__('Restore')}</option>
                     </select>
-                    <button name="bulk-action-apply" className="admin-btn btn-purple" onClick={handleBulkAction}>
+                    {/* <button name="bulk-action-apply" className="admin-btn btn-purple" onClick={handleBulkAction}>
                         {__('Apply')}
-                    </button>
+                    </button> */}
                 </div>
             ),
         },
