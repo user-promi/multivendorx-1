@@ -205,7 +205,7 @@ const StoreSupport: React.FC = () => {
         {
             name: 'bulk-action',
             render: () => (
-                <div className="course-bulk-action bulk-action">
+                <div className=" bulk-action">
                     <select name="action" className="basic-select">
                         <option value="">{__('Bulk actions')}</option>
                         <option value="mark_paid">{__('Mark Paid')}</option>

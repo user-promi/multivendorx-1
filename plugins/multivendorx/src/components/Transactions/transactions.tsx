@@ -202,7 +202,7 @@ export const Transactions: React.FC = () => {
         {
             name: 'bulk-action',
             render: () => (
-                <div className="course-bulk-action bulk-action">
+                <div className="bulk-action">
                     <select name="action" className="basic-select" ref={bulkSelectRef}>
                         <option value="">{__('Bulk actions')}</option>
                         <option value="publish">{__('Publish', 'multivendorx')}</option>

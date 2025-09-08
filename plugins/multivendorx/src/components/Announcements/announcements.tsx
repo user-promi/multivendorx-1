@@ -155,9 +155,6 @@ const Announcements: React.FC = () => {
     };
 
 
-
-
-
     // Fetch total rows on mount
     useEffect(() => {
         axios({
@@ -288,51 +285,13 @@ const Announcements: React.FC = () => {
                 </TableCell>
             ),
         },
-        // {
-        //     header: __('Action', 'multivendorx'),
-        //     cell: ({ row }) => (
-        //         <TableCell title="Action">
-        //             <div className="action-section">
-        //                 <div className="action-icons">
-        //                     <i
-        //                         className="adminlib-more-vertical"
-        //                         onClick={() =>
-        //                             toggleDropdown(row.original.id)
-        //                         }
-        //                     ></i>
-        //                     <div
-        //                         className={`action-dropdown ${showDropdown === row.original.id ? 'show' : ''}`}
-        //                     >
-        //                         <ul>
-        //                             <li
-        //                                 onClick={() =>
-        //                                     (window.location.href = `?page=multivendorx#&tab=announcements&view&id=${row.original.id}`)
-        //                                 }
-        //                             >
-        //                                 <i className="adminlib-eye"></i>
-        //                                 {__('View Announcement', 'multivendorx')}
-        //                             </li>
-        //                             <li
-        //                                 onClick={() => handleEdit(row.original.id)} // ✅ opens edit popup
-        //                             >
-        //                                 <i className="adminlib-create"></i>
-        //                                 {__('Edit Announcement', 'multivendorx')}
-        //                             </li>
-        //                         </ul>
-        //                     </div>
-        //                 </div>
-        //             </div>
-        //         </TableCell>
-        //     ),
-        // }
-
     ];
 
     const realtimeFilter: RealtimeFilter[] = [
         {
             name: 'bulk-action',
             render: () => (
-                <div className="course-bulk-action bulk-action">
+                <div className=" bulk-action">
                     <select name="action" className="basic-select" ref={bulkSelectRef}>
                         <option value="">{__('Bulk actions')}</option>
                         <option value="publish">{__('Publish', 'multivendorx')}</option>
