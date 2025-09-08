@@ -1,7 +1,16 @@
 @use '../components/config.scss' as *;
 
-body:has(#store-dashboard){
+body:has(#store-dashboard) {
     background: #f8f7fa;
+    font-family: "Figtree", sans-serif;
+    font-weight: 400;
+    font-size: 0.95rem;
+    color: $text-color;
+    line-height: 0.95rem;
+}
+
+a {
+    text-decoration: none;
 }
 
 .dashboard-tabs-wrapper {
@@ -85,6 +94,7 @@ body:has(#store-dashboard){
 
         li {
             padding: 0.063rem 0;
+            padding-left: 3rem;
 
             a {
                 font-size: 0.875rem;
@@ -164,7 +174,7 @@ body:has(#store-dashboard){
                     }
 
                     .dropdown-menu {
-                        // display: none;
+                        display: none;
                         position: absolute;
                         top: 3rem;
                         overflow: hidden;
@@ -238,14 +248,16 @@ body:has(#store-dashboard){
                                 margin: 0;
                             }
                         }
+
                         .store-wrapper {
                             border-top: 0.063rem solid #e5e9f2;
                             padding: 0.5rem 1.75rem;
 
-                            h3{
+                            h3 {
                                 font-size: 1rem;
                             }
-                            ul{
+
+                            ul {
                                 height: 7.5rem;
                                 overflow-y: scroll;
                             }
@@ -288,6 +300,7 @@ body:has(#store-dashboard){
                         }
                     }
                 }
+
                 // user dropdown end
             }
         }
@@ -348,6 +361,7 @@ body:has(#store-dashboard){
             display: flex;
             gap: 1rem;
             align-items: end;
+
 
             .form-group {
                 display: flex;
@@ -530,5 +544,132 @@ body:has(#store-dashboard){
                 justify-content: space-between;
             }
         }
+    }
+}
+
+.MuiDialog-container {
+    .left {
+        width: 55%;
+    }
+
+    .right {
+        width: 40%;
+        padding-left: 0.7rem;
+        border-left: $border-light-small;
+    }
+
+    .content {
+        padding: 1rem 3rem 2rem 2rem;
+        // max-height: 70vh;
+
+        .form-group-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+
+
+            .form-group {
+                display: flex;
+                flex-direction: column;
+                gap: 0.313rem;
+                padding: 0.5rem 0;
+
+                label {
+                    font-size: 0.9rem;
+                }
+            }
+        }
+
+        .heading {
+            font-size: 1.125rem;
+            font-weight: 500;
+            padding: 0.5rem 0;
+            margin-top: 0.5rem;
+        }
+        .tab-titles {
+        display: flex;
+        gap: 1.125rem;
+        border-bottom: $border-light-medium;
+        margin: 1rem 0;
+
+        .title {
+            padding-bottom: 0.625rem;
+            cursor: pointer;
+
+            h2 {
+                color: #121116;
+                font-size: .938rem;
+                line-height: 1.5;
+                font-weight: 500;
+                margin: 0;
+            }
+
+            &.active {
+                border-bottom: .126rem solid #5007aa;
+
+                h2 {
+                    color: $theme-color;
+                }
+            }
+        }
+    }
+    }
+
+    .title-wrapper {
+        padding: 1.313rem;
+        border-bottom: $border-light-small;
+        position: relative;
+
+        .title {
+            font-size: 1.313rem;
+            color: #000;
+
+            i {
+                color: $theme-color;
+                font-size: 1.625rem;
+                margin-right: 0.5rem;
+            }
+        }
+
+        p {
+            font-size: 0.85rem;
+            margin: 0;
+            padding-top: 0.125rem;
+            font-weight: 400;
+        }
+
+        .icon {
+            position: absolute;
+            background: #fde8e4;
+            padding: 0.125rem;
+            font-size: 0.95rem;
+            color: #f06b4f;
+            border-radius: 50%;
+            cursor: pointer;
+            top: 40%;
+            right: 1.313rem;
+        }
+    }
+
+    .popup-footer {
+        padding: 0.813rem;
+        display: flex;
+        justify-content: end;
+        gap: 0.5rem;
+        border-top: $border-light-small;
+    }
+}
+
+// table style
+#store-dashboard{
+    .admin-table-wrapper{
+        margin: 0;
+    }
+    .header-wrapper{
+        background: #fff;
+        display: flex;
+        justify-content: end;
+        padding: 2rem;
+        padding-bottom: 0;
     }
 }

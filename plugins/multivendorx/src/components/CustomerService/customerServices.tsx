@@ -46,6 +46,7 @@ const CustomerServices = () => {
             <AdminBreadcrumbs
                 activeTabIcon="adminlib-cart"
                 tabTitle="Customer Service"
+                description={'lorem Central hub for managing marketplace announcements. Review past updates and create new ones to keep stores informed.'}
             />
             <div className="work-board">
                 <div className="row">
@@ -68,10 +69,6 @@ const CustomerServices = () => {
                     <div className="column">
                         <div className="title"><i className="adminlib-storefront"></i> Store Reviews</div>
                         <StoreReviews />
-                    </div>
-                    <div className="column">
-                        <div className="title"><i className="adminlib-storefront"></i> Store Support</div>
-                        <StoreSupport />
                     </div>
                 </div>
 

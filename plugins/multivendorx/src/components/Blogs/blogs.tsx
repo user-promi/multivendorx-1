@@ -188,6 +188,7 @@ const Blogs: React.FC = () => {
             <AdminBreadcrumbs
                 activeTabIcon="adminlib-cart"
                 tabTitle="Blogs"
+                description={'lorem Central hub for managing marketplace announcements. Review past updates and create new ones to keep stores informed.'}
             />
             <div className="admin-table-wrapper">
                 <Table

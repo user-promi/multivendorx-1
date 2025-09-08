@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Tabs } from 'zyra';
+import { getApiLink, SelectInput, Tabs } from 'zyra';
 import Brand from '../../../assets/images/brand-logo.png';
 import BrandSmall from '../../../assets/images/brand-icon.png';
 import StoreSettings from './storeSettings';
@@ -9,8 +9,20 @@ import StoreQueue from './storeCrew';
 import PolicySettings from './policySettings';
 import ShippingSettings from './shippingSettings';
 import StoreRegistration from './storeRegistrationForm';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+
+const statusOptions = [
+    { label: "Active", value: "active" },
+    { label: "Pending", value: "pending" },
+    { label: "Rejected", value: "rejected" },
+    { label: "Locked", value: "locked" },
+];
 
 const EditStore = () => {
+    const [data, setData] = useState({});
+    const [successMsg, setSuccessMsg] = useState<string | null>(null);
+
     const location = useLocation();
     const hash = location.hash.replace(/^#/, '');
 
@@ -21,6 +33,32 @@ const EditStore = () => {
     const currentTab = hashParams.get('subtab') || 'store';
 
     const prepareUrl = (tabId: string) => `?page=multivendorx#&tab=stores&edit/${editId}/&subtab=${tabId}`;
+    const autoSave = (updatedData: { [key: string]: string }) => {
+        axios({
+            method: 'PUT',
+            url: getApiLink(appLocalizer, `store/${editId}`),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            data: updatedData,
+        }).then((res) => {
+            if (res.data.success) {
+                setSuccessMsg('Store saved successfully!');
+            }
+        })
+    };
+
+    useEffect(() => {
+        if (!editId) return;
+
+        axios({
+            method: 'GET',
+            url: getApiLink(appLocalizer, `store/${editId}`),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+        })
+            .then((res: any) => {
+                const data = res.data || {};
+                setData(data);
+            })
+    }, [editId]);
 
     const tabData = [
         {
@@ -79,6 +117,8 @@ const EditStore = () => {
         },
     ];
 
+
+
     const getForm = (tabId: string) => {
         switch (tabId) {
             case 'store':
@@ -97,7 +137,6 @@ const EditStore = () => {
                 return <div></div>;
         }
     };
-
     return (
         <>
             {/* <Link
@@ -117,12 +156,34 @@ const EditStore = () => {
                 tabTitleSection={
                     <div className="tab-title">
                         <div className="tab-wrapper">
-                            <div className="title">Custom Title</div>
-                            <div className="dsc">Custom description goes here.</div>
+                            <div className="title">{"Editing "+data.name}</div>
+                            <div className="dsc">{data.description}</div>
                         </div>
                         <div className="status-wrapper">
                             <span>Status: </span>
-                            <div className="admin-btn btn-red">Inactive <i className="adminlib-creat"></i></div>
+                            <SelectInput
+                                name="status"
+                                value={data.status}
+                                options={statusOptions}
+                                type="single-select"
+                                onChange={(newValue: any) => {
+                                    console.log(newValue)
+                                    if (!newValue || Array.isArray(newValue)) return;
+
+                                    const updated = { ...data, status: newValue.value };
+                                    setData(updated);
+                                    autoSave(updated);
+                                }}
+                            />
+                            {editId && (
+                                <a
+                                    href={`?page=multivendorx#&tab=stores&view&id=${editId}`}
+                                    className="admin-btn btn-purple"
+                                >
+                                    <i className="adminlib-eye"></i>
+                                    View Store
+                                </a>
+                        )}
                         </div>
                     </div>
                 }

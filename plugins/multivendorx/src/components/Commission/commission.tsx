@@ -117,25 +117,6 @@ const Commission: React.FC = () => {
                 return;
             }
             setData(null);
-            // axios( {
-            //     method: 'POST',
-            //     url: getApiLink( appLocalizer, `cohorts` ),
-            //     headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            //     data: {
-            //         selected_action: bulkSelectRef.current.value,
-            //         cohort_ids: Object.keys( rowSelection ).map( ( index ) => {
-            //             const row = data?.[ parseInt( index ) ];
-            //             return {
-            //                 cohort_id: row?.id,
-            //             };
-            //         } ),
-            //     },
-            // } ).then( () => {
-            //     setModalDetails( '' );
-            //     setOpenModal( false );
-            //     requestData();
-            //     setRowSelection( {} );
-            // } );
         }
     };
 
@@ -293,13 +274,20 @@ const Commission: React.FC = () => {
         },
         {
             header: __('Date', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.createTime || ''}>
-                    {row.original.createTime ?? '-'}
-                </TableCell>
-            ),
+            cell: ({ row }) => {
+                const rawDate = row.original.createTime;
+                let formattedDate = '-';
+                if (rawDate) {
+                    const dateObj = new Date(rawDate);
+                    formattedDate = new Intl.DateTimeFormat('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric',
+                    }).format(dateObj);
+                }
+                return <TableCell title={formattedDate}>{formattedDate}</TableCell>;
+            },
         },
-
         {
             header: __('Action', 'multivendorx'),
             cell: ({ row }) => (
@@ -389,7 +377,7 @@ const Commission: React.FC = () => {
         {
             name: 'bulk-action',
             render: () => (
-                <div className="course-bulk-action bulk-action">
+                <div className=" bulk-action">
                     <select name="action" className="basic-select" ref={bulkSelectRef}>
                         <option value="">{__('Bulk actions')}</option>
                         <option value="mark_paid">{__('Mark Paid')}</option>
@@ -459,6 +447,8 @@ const Commission: React.FC = () => {
             <AdminBreadcrumbs
                 activeTabIcon="adminlib-cart"
                 tabTitle="Commissions"
+                description={'lorem Central hub for managing marketplace announcements. Review past updates and create new ones to keep stores informed.'}
+
             />
 
             {isTabActive && iseditCommission && <EditCommission />}

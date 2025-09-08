@@ -127,6 +127,12 @@ const StoreSettings = ({ id }: { id: string }) => {
 								<BasicInput name="slug" wrapperClass="setting-form-input" descClass="settings-metabox-description" value={formData.slug} onChange={handleChange} />
 							</div>
 						</div>
+						<div className="form-group-wrapper">
+							<div className="form-group">
+								<label htmlFor="product-name">Store Email</label>
+								<BasicInput type="email" name="email" wrapperClass="setting-form-input" descClass="settings-metabox-description" value={formData.email} onChange={handleChange} />
+							</div>
+						</div>
 					</div>
 
 					<div className="card-content">
@@ -199,7 +205,7 @@ const StoreSettings = ({ id }: { id: string }) => {
 							</div>
 						</div>
 					</div>
-					<div className="card-content">
+					{/* <div className="card-content">
 						<div className="card-title">
 							Status
 						</div>
@@ -207,73 +213,73 @@ const StoreSettings = ({ id }: { id: string }) => {
 							<div className="form-group">
 								<label htmlFor="product-name">Status 1</label>
 								<SelectInput
-								name="status"
-								value={formData.status}
-								options={statusOptions}
-								type="single-select"
-								onChange={(newValue) => {
-									if (!newValue || Array.isArray(newValue)) return;
+									name="status"
+									value={formData.status}
+									options={statusOptions}
+									type="single-select"
+									onChange={(newValue) => {
+										if (!newValue || Array.isArray(newValue)) return;
 
-									const updated = { ...formData, status: newValue.value };
-									setFormData(updated);
-									autoSave(updated); // if you want autosave on change
-								}}
+										const updated = { ...formData, status: newValue.value };
+										setFormData(updated);
+										autoSave(updated); // if you want autosave on change
+									}}
 								/>
 							</div>
 							<div className="form-group">
 								<label htmlFor="product-name">Status 2</label>
 								<SelectInput
-								name="status"
-								value={formData.status}
-								options={statusOptions}
-								type="single-select"
-								onChange={(newValue) => {
-									if (!newValue || Array.isArray(newValue)) return;
+									name="status"
+									value={formData.status}
+									options={statusOptions}
+									type="single-select"
+									onChange={(newValue) => {
+										if (!newValue || Array.isArray(newValue)) return;
 
-									const updated = { ...formData, status: newValue.value };
-									setFormData(updated);
-									autoSave(updated); // if you want autosave on change
-								}}
+										const updated = { ...formData, status: newValue.value };
+										setFormData(updated);
+										autoSave(updated); // if you want autosave on change
+									}}
 								/>
 
 							</div>
-						</div>	
+						</div>
 						<div className="form-group-wrapper">
 							<div className="form-group">
 								<label htmlFor="product-name">Status 3</label>
 								<SelectInput
-								name="status"
-								value={formData.status}
-								options={statusOptions}
-								type="single-select"
-								onChange={(newValue) => {
-									if (!newValue || Array.isArray(newValue)) return;
+									name="status"
+									value={formData.status}
+									options={statusOptions}
+									type="single-select"
+									onChange={(newValue) => {
+										if (!newValue || Array.isArray(newValue)) return;
 
-									const updated = { ...formData, status: newValue.value };
-									setFormData(updated);
-									autoSave(updated); // if you want autosave on change
-								}}
+										const updated = { ...formData, status: newValue.value };
+										setFormData(updated);
+										autoSave(updated); // if you want autosave on change
+									}}
 								/>
 							</div>
 							<div className="form-group">
 								<label htmlFor="product-name">Status 4</label>
 								<SelectInput
-								name="status"
-								value={formData.status}
-								options={statusOptions}
-								type="single-select"
-								onChange={(newValue) => {
-									if (!newValue || Array.isArray(newValue)) return;
+									name="status"
+									value={formData.status}
+									options={statusOptions}
+									type="single-select"
+									onChange={(newValue) => {
+										if (!newValue || Array.isArray(newValue)) return;
 
-									const updated = { ...formData, status: newValue.value };
-									setFormData(updated);
-									autoSave(updated); // if you want autosave on change
-								}}
+										const updated = { ...formData, status: newValue.value };
+										setFormData(updated);
+										autoSave(updated); // if you want autosave on change
+									}}
 								/>
 
 							</div>
-						</div>			
-					</div>
+						</div>
+					</div> */}
 					<div className="card-content">
 						<div className="card-title">Social information</div>
 						{/* Facebook */}
@@ -346,15 +352,15 @@ const StoreSettings = ({ id }: { id: string }) => {
 							</div>
 						</div>
 					</div>
-					
+
 				</div>
 
 				<div className="card-wrapper width-35">
 					<div className="card-content">
 						<div className="card-title">
-							
+
 						</div>
-							
+
 						<div className="form-group-wrapper">
 							<div className="form-group">
 								<label htmlFor="product-name">Profile Image</label>

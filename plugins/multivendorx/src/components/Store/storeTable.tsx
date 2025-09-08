@@ -124,7 +124,7 @@ const StoreTable: React.FC = () => {
             ),
         },
         {
-            header: __('Description', 'multivendorx'),
+            header: __('Slug', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell title={row.original.store_slug || ''}>
                     {row.original.store_slug || '-'}
@@ -135,8 +135,18 @@ const StoreTable: React.FC = () => {
             header: __('Status', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell title={row.original.status || ''}>
-                    {/* {row.original.status || '-'} */}
-                    <span className="admin-badge green">Active</span>
+                    {row.original.status === "active" && (
+                        <span className="admin-badge green">Active</span>
+                    )}
+                    {row.original.status === "pending" && (
+                        <span className="admin-badge yellow">Pending</span>
+                    )}
+                    {row.original.status === "rejected" && (
+                        <span className="admin-badge red">Rejected</span>
+                    )}
+                    {row.original.status === "locked" && (
+                        <span className="admin-badge blue">Locked</span>
+                    )}
                 </TableCell>
             ),
         },

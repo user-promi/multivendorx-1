@@ -87,12 +87,12 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
         // If only count requested
         if ( $count ) {
             $total = wp_count_posts( $type );
-            return rest_ensure_response( (int) $total->publish );
+            return rest_ensure_response( (int) array_sum( (array) $total ) ); // all statuses
         }
     
         $query = new \WP_Query( array(
             'post_type'      => $type,
-            'post_status'    => 'publish',
+            'post_status'    => array( 'publish', 'draft', 'pending', 'private' ), // all statuses
             'posts_per_page' => $limit,
             'offset'         => $offset,
             'orderby'        => 'date',
@@ -104,8 +104,8 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
         foreach ( $query->posts as $post ) {
             $id      = (int) $post->ID;
             $title   = $post->post_title;
-            $content = apply_filters( 'the_content', $post->post_content );
-            $url     = get_post_meta( $id, '_mvx_announcement_url', true );
+            $content = $post->post_content;
+            $status  = $post->post_status;
             $stores  = get_post_meta( $id, '_mvx_announcement_stores', true ); // saved as array
     
             $store_names = array();
@@ -125,8 +125,8 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
                     'id'      => $id,
                     'title'   => $title,
                     'content' => $content,
-                    'url'     => $url,
-                    'stores'  => $store_names, // ✅ only names
+                    'status'  => $status, // ✅ send post status
+                    'stores'  => $store_names,
                     'date'    => get_the_date( 'c', $post ),
                 )
             );
@@ -137,6 +137,7 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
     
     
     
+    
     public function create_item( $request ) {
         $data = $request->get_json_params();
     
@@ -144,10 +145,8 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
         $formData = isset($data['formData']) ? $data['formData'] : $data;
     
         $title   = isset($formData['title']) ? sanitize_text_field($formData['title']) : '';
-        $url     = isset($formData['url']) ? esc_url_raw($formData['url']) : '';
         $content = isset($formData['content']) ? sanitize_textarea_field($formData['content']) : '';
         $stores  = isset($formData['stores']) ? $formData['stores'] : [];
-    
         if ( is_string( $stores ) ) {
             $stores = array_filter( array_map( 'trim', explode( ',', $stores ) ) );
         } elseif ( ! is_array( $stores ) ) {

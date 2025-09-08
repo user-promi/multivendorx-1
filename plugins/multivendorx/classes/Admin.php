@@ -111,10 +111,6 @@ class Admin {
                     'name'   => __( 'Payouts', 'multivendorx' ),
                     'subtab' => '',
                 ),
-                'transactions-history' => array(
-                    'name'   => __( 'Transaction History', 'multivendorx' ),
-                    'subtab' => '',
-                ),
                 'analytics' => array(
                     'name'   => __( 'Analytics', 'multivendorx' ),
                     'subtab' => '',

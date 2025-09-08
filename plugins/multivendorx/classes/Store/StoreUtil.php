@@ -213,4 +213,57 @@ class StoreUtil {
         return $vendor_data;
     }
 
+    public static function get_store_registration_form( $store_id ) {
+        $store = Store::get_store_by_id( $store_id );
+    
+        // Get core fields from store object
+        $core_fields = [
+            'name'        => 'Store Name',
+            'description' => 'Store Description',
+            'slug'        => 'Store Slug',
+            'status'      => 'Store Status',
+            'who_created' => 'Who Created',
+        ];
+    
+        $core_data = [];
+        foreach ( $core_fields as $field_key => $field_label ) {
+            $core_data[$field_label] = $store->get( $field_key );
+        }
+    
+        // Get registration form data (serialized meta)
+        $store_meta = $store->get_meta( 'multivendorx-registration-data' );
+        $submitted_data = [];
+        if ( !empty($store_meta) && is_serialized($store_meta) ) {
+            $submitted_data = unserialize($store_meta);
+        }
+    
+        // Fetch form settings
+        $form_settings = MultivendorX()->setting->get_option(
+            'multivendorx_store_registration_form_settings',
+            []
+        );
+    
+        // Build map: field_name => field_label
+        $name_label_map = [];
+        if ( isset($form_settings['store_registration_from']['formfieldlist']) ) {
+            foreach ( $form_settings['store_registration_from']['formfieldlist'] as $field ) {
+                if ( !empty($field['name']) && !empty($field['label']) ) {
+                    $name_label_map[$field['name']] = $field['label'];
+                }
+            }
+        }
+    
+        // Prepare structured response
+        $response = [
+            'core_data'        => $core_data,
+            'registration_data'=> [],
+        ];
+    
+        foreach ( $submitted_data as $field_name => $field_value ) {
+            $label = $name_label_map[$field_name] ?? $field_name;
+            $response['registration_data'][$label] = $field_value;
+        }
+    
+        return $response;
+    }
 }

@@ -27,7 +27,7 @@ const RegistrationForm = () => {
     
         // Default status to 'pending'
         mappedData['status'] = 'pending';
-    
+        mappedData['who_created'] = 'site_owner';
         // Other fields as meta
         Object.keys(submittedFormData).forEach((key) => {
             if (!['name', 'description', 'slug', 'who_created', 'status'].includes(key)) {
@@ -38,8 +38,8 @@ const RegistrationForm = () => {
         // Send to API
         axios({
             method: 'POST',
-            url: getApiLink(registrationForm, 'stores'),
-            headers: { 'X-WP-Nonce': registrationForm.nonce },
+            url: getApiLink(registrationForm, 'store'),
+            headers: { 'X-WP-Nonce': registrationForm.nonce, "registrations": 'registrations'},
             data: {
                 formData: mappedData,
             },

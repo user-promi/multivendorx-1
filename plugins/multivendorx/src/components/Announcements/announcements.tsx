@@ -89,21 +89,7 @@ const Announcements: React.FC = () => {
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleBulkAction = () => {
-        if (appLocalizer.khali_dabba) {
-            if (!Object.keys(rowSelection).length) {
-                setModalDetails('Select rows.');
-                setOpenModal(true);
-                return;
-            }
-            if (!bulkSelectRef.current?.value) {
-                setModalDetails('Please select a action.');
-                setOpenModal(true);
-                return;
-            }
-            setData(null);
-        }
-    };
+
     const handleEdit = async (id: number) => {
         try {
             const response = await axios.get(
@@ -167,9 +153,6 @@ const Announcements: React.FC = () => {
             setSubmitting(false);
         }
     };
-
-
-
 
 
     // Fetch total rows on mount
@@ -287,66 +270,52 @@ const Announcements: React.FC = () => {
             ),
         },
         {
-            header: __('URL', 'multivendorx'),
+            header: __('Content', 'multivendorx'),
             cell: ({ row }) => (
-                <TableCell title={row.original.url || ''}>
-                    {row.original.url || '-'}
+                <TableCell title={row.original.content || ''}>
+                    {row.original.content || '-'}
                 </TableCell>
             ),
         },
         {
-            header: __('Stores', 'multivendorx'), // ✅ vendors → stores
+            header: __('Status', 'multivendorx'),
             cell: ({ row }) => (
-                <TableCell title={Array.isArray(row.original.stores) ? row.original.stores.join(', ') : row.original.stores || ''}>
+                <TableCell title={row.original.status || ''}>
+                    {row.original.status || '-'}
+                </TableCell>
+            ),
+        },
+        {
+            header: __('Sent To', 'multivendorx'),
+            cell: ({ row }) => (
+                <TableCell title={Array.isArray(row.original.status) ? row.original.stores.join(', ') : row.original.stores || ''}>
                     {Array.isArray(row.original.stores) ? row.original.stores.join(', ') : row.original.stores || '-'}
                 </TableCell>
             ),
         },
-        // {
-        //     header: __('Action', 'multivendorx'),
-        //     cell: ({ row }) => (
-        //         <TableCell title="Action">
-        //             <div className="action-section">
-        //                 <div className="action-icons">
-        //                     <i
-        //                         className="adminlib-more-vertical"
-        //                         onClick={() =>
-        //                             toggleDropdown(row.original.id)
-        //                         }
-        //                     ></i>
-        //                     <div
-        //                         className={`action-dropdown ${showDropdown === row.original.id ? 'show' : ''}`}
-        //                     >
-        //                         <ul>
-        //                             <li
-        //                                 onClick={() =>
-        //                                     (window.location.href = `?page=multivendorx#&tab=announcements&view&id=${row.original.id}`)
-        //                                 }
-        //                             >
-        //                                 <i className="adminlib-eye"></i>
-        //                                 {__('View Announcement', 'multivendorx')}
-        //                             </li>
-        //                             <li
-        //                                 onClick={() => handleEdit(row.original.id)} // ✅ opens edit popup
-        //                             >
-        //                                 <i className="adminlib-create"></i>
-        //                                 {__('Edit Announcement', 'multivendorx')}
-        //                             </li>
-        //                         </ul>
-        //                     </div>
-        //                 </div>
-        //             </div>
-        //         </TableCell>
-        //     ),
-        // }
-
+        {
+            header: __('Date', 'multivendorx'),
+            cell: ({ row }) => {
+                const rawDate = row.original.date;
+                let formattedDate = '-';
+                if (rawDate) {
+                    const dateObj = new Date(rawDate);
+                    formattedDate = new Intl.DateTimeFormat('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric',
+                    }).format(dateObj);
+                }
+                return <TableCell title={formattedDate}>{formattedDate}</TableCell>;
+            },
+        },
     ];
 
     const realtimeFilter: RealtimeFilter[] = [
         {
             name: 'bulk-action',
             render: () => (
-                <div className="course-bulk-action bulk-action">
+                <div className=" bulk-action">
                     <select name="action" className="basic-select" ref={bulkSelectRef}>
                         <option value="">{__('Bulk actions')}</option>
                         <option value="publish">{__('Publish', 'multivendorx')}</option>
@@ -426,15 +395,6 @@ const Announcements: React.FC = () => {
                                     type="text"
                                     name="title"
                                     value={formData.title}
-                                    onChange={handleChange}
-                                />
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="url">Enter Url</label>
-                                <BasicInput
-                                    type="text"
-                                    name="url"
-                                    value={formData.url}
                                     onChange={handleChange}
                                 />
                             </div>

@@ -123,20 +123,16 @@ const StoreReviews: React.FC = () => {
 
                             <div className="sub-tag">
                                 <div className="tag">
-                                    <i className="adminlib-mail"></i>
+                                    <i className="adminlib-form-address01"></i>
                                     <div className="text">Fast Shipping</div>
                                 </div>
                                 <div className="tag">
                                     <i className="adminlib-mail"></i>
-                                    <div className="text">Great Customer Support</div>
+                                    <div className="text">customer@gmail.com</div>
                                 </div>
                                 <div className="tag">
-                                    <i className="adminlib-mail"></i>
-                                    <div className="text">Affordable Pricing</div>
-                                </div>
-                                <div className="tag">
-                                    <i className="adminlib-mail"></i>
-                                    <div className="text">Premium Quality</div>
+                                    <i className="adminlib-form-phone"></i>
+                                    <div className="text">+91 32147998569</div>
                                 </div>
                             </div>
                         </div>
@@ -145,6 +141,22 @@ const StoreReviews: React.FC = () => {
                         <br />
                         <small>ID: {row.original.id}</small> */}
                     </div>
+                </TableCell>
+            ),
+        },
+        {
+            header: __('Store', 'multivendorx'),
+            cell: ({ row }) => (
+                <TableCell title={row.original.store_name || ''}>
+                    <div className="admin-badge green">More</div>
+                </TableCell>
+            ),
+        },
+        {
+            header: __('Action', 'multivendorx'),
+            cell: ({ row }) => (
+                <TableCell title={row.original.store_name || ''}>
+                    <div className="admin-badge green">More</div>
                 </TableCell>
             ),
         },

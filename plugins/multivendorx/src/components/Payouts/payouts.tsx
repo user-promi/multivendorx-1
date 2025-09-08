@@ -23,7 +23,7 @@ type AnnouncementStatus = {
     name: string;
     count: number;
 };
-export const KnowledgeBase: React.FC = () => {
+export const Payouts: React.FC = () => {
     const [submitting, setSubmitting] = useState(false);
     const [data, setData] = useState<KBRow[] | null>(null);
     const [addEntry, setAddEntry] = useState(false);
@@ -202,7 +202,7 @@ export const KnowledgeBase: React.FC = () => {
         {
             name: 'bulk-action',
             render: () => (
-                <div className=" bulk-action">
+                <div className="bulk-action">
                     <select name="action" className="basic-select" ref={bulkSelectRef}>
                         <option value="">{__('Bulk actions')}</option>
                         <option value="publish">{__('Publish', 'multivendorx')}</option>
@@ -221,7 +221,7 @@ export const KnowledgeBase: React.FC = () => {
         <>
             <AdminBreadcrumbs
                 activeTabIcon="adminlib-book"
-                tabTitle="Knowledge Base"
+                tabTitle="Payouts"
                 description={"Build your knowledge base: add new guides or manage existing ones in one place."}
                 buttons={[
                     <div className="admin-btn btn-purple" onClick={() => setAddEntry(true)}>
@@ -318,4 +318,4 @@ export const KnowledgeBase: React.FC = () => {
     );
 };
 
-export default KnowledgeBase;
+export default Payouts;

@@ -12,7 +12,7 @@ const StoreRegistration = ({ id }: { id: string }) => {
 		axios({
 			method: 'GET',
 			url: getApiLink(appLocalizer, `store/${id}`),
-			headers: { 'X-WP-Nonce': appLocalizer.nonce },
+			headers: { 'X-WP-Nonce': appLocalizer.nonce, "registrations": 'registrations' },
 		}).then((res) => {
 			const data = res.data || {};
 			setFormData((prev) => ({ ...prev, ...data }));
@@ -69,7 +69,6 @@ const StoreRegistration = ({ id }: { id: string }) => {
 			}
 		});
 	};
-
 	return (
 		<>
 			{successMsg && (
@@ -84,6 +83,31 @@ const StoreRegistration = ({ id }: { id: string }) => {
 
 			<div className="container-wrapper">
 				<div className="card-wrapper width-65">
+					<div className="card-content">
+						<div className="card-title">Store Details</div>
+
+						{/* Core Data */}
+						{formData.core_data &&
+							Object.entries(formData.core_data).map(([label, value]) => (
+								<div className="form-details" key={label}>
+									<label className="label">{label} :</label>
+									<div className="value">{value || "[Not Provided]"}</div>
+								</div>
+							))}
+
+						{/* Registration Data */}
+						{formData.registration_data &&
+							Object.entries(formData.registration_data).map(([label, value]) => (
+								<div className="form-details" key={label}>
+									<label className="label">{label} :</label> 
+									<div className="value">{value || "[Not Provided]"}</div>
+								</div>
+							))}
+					</div>
+				</div>
+
+
+				<div className="card-wrapper width-35">
 					<div className="card-content">
 						<div className="card-title">
 							Note

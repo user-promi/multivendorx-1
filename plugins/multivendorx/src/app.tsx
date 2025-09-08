@@ -19,6 +19,7 @@ import Announcements from './components/Announcements/announcements';
 import Knowledgebase from './components/Knowledgebase/knowledgebase';
 import Blogs from './components/Blogs/blogs';
 import Commission from './components/Commission/commission';
+import Payouts from './components/Payouts/payouts';
 
 localStorage.setItem('force_multivendorx_context_reload', 'true');
 
@@ -54,6 +55,7 @@ const Route = () => {
       {currentTab.get('tab') === 'dashboard' && <AdminDashboard />}
       {currentTab.get('tab') === 'announcement' && <Announcements />}
       {currentTab.get('tab') === 'knowledgebase' && <Knowledgebase />}
+      {currentTab.get('tab') === 'payouts' && <Payouts />}
       {currentTab.get('tab') === 'blogs' && <Blogs />}
       {currentTab.get('tab') === 'setup' && <SetupWizard />}
     </>
