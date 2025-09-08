@@ -91,6 +91,11 @@ class Modules {
 						'module_file'  => MultiVendorX()->plugin_path . 'modules/StorePolicy/Module.php',
 						'module_class' => 'MultiVendorX\StorePolicy\Module',
 					),
+                    'staff-manager' => array(
+						'id'           => 'staff-manager',
+						'module_file'  => MultiVendorX()->plugin_path . 'modules/StaffManager/Module.php',
+						'module_class' => 'MultiVendorX\StaffManager\Module',
+					),
                     'stripe-connect' => array(
 						'id'           => 'stripe-connect',
 						'module_file'  => MultiVendorX()->plugin_path . 'modules/StripeConnect/Module.php',

@@ -378,7 +378,7 @@ class FrontendScripts {
             array(
                 'multivendorx-admin-script'  => array(
                     'object_name' => 'appLocalizer',
-					'data'        => array(
+					'data'        => apply_filters('multivendorx_admin_localize_scripts', array(
 						'apiUrl'                   => untrailingslashit( get_rest_url() ),
 						'restUrl'                  => MultiVendorX()->rest_namespace,
 						'nonce'                    => wp_create_nonce( 'wp_rest' ),
@@ -399,7 +399,7 @@ class FrontendScripts {
                         'freeVersion'              => MultiVendorX()->version,
                         'marketplace_site'         => get_bloginfo(),
                         'site_url'                 => site_url(),
-					),
+					) ),
                 ),
                 'multivendorx-product-tab-script' => array(
 					'object_name' => 'multivendorx',
