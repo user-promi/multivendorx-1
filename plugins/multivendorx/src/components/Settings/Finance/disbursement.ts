@@ -123,7 +123,7 @@ export default {
         //hour
         {
             key: 'payouts_every_hour',
-            label: __('Hourly', 'multivendorx'),
+            label: __('Hourly payouts', 'multivendorx'),
             type: 'number',
             size: '8rem',
             options: [
@@ -132,8 +132,9 @@ export default {
                     value: 'payouts_every_hour',
                 },
             ],
-            before:__('Run payouts at the', 'multivendorx'),
             after:__('minute of every hour', 'multivendorx'),
+            before:__('at', 'multivendorx'),
+            parameter:__('th', 'multivendorx'),
             dependent: {
                 key: 'payment_schedules',
                 set: true,
@@ -318,16 +319,28 @@ export default {
                     after: __('free withdrawals. After that, each withdrawal costs', 'multivendorx'),
                 },
                 {
-                    key: 'withdrawal_fee', // updated key
+                    key: 'withdrawal_fee_fixed', // updated key
                     type: 'number',
                     size: '5rem',
                     options: [
                         {
-                            key: 'withdrawal_fee',
-                            value: 'withdrawal_fee',
+                            key: 'withdrawal_fee_fixed',
+                            value: 'withdrawal_fee_fixed',
                         },
                     ],
                     preParameter: __('$', 'multivendorx'),
+                },
+                {
+                    key: 'withdrawal_fee_percentage', // updated key
+                    type: 'number',
+                    size: '5rem',
+                    options: [
+                        {
+                            key: 'withdrawal_fee_percentage',
+                            value: 'withdrawal_fee_percentage',
+                        },
+                    ],
+                    before: __('+', 'multivendorx'),
                     parameter: __('%', 'multivendorx'),
                 },
             ],

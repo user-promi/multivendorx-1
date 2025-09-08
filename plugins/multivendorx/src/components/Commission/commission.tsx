@@ -288,8 +288,6 @@ const Commission: React.FC = () => {
                 return <TableCell title={formattedDate}>{formattedDate}</TableCell>;
             },
         },
-        
-
         {
             header: __('Action', 'multivendorx'),
             cell: ({ row }) => (

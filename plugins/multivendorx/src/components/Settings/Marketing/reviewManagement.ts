@@ -18,19 +18,6 @@ export default {
             ),
         },
         {
-            key: 'is_storereview',
-            type: 'checkbox',
-            label: __( 'Store reviews', 'multivendorx' ),
-            desc: __( 'Allow customers to rate and review stores.', 'multivendorx' ),
-            options: [
-                {
-                    key: 'is_storereview',
-                    value: 'is_storereview',
-                },
-            ],
-            look: 'toggle',
-        },
-        {
             key: 'is_storereview_varified',
             type: 'checkbox',
             label: __( 'Verified buyer reviews only', 'multivendorx' ),

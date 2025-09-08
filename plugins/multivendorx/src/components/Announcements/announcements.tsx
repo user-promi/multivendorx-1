@@ -278,12 +278,36 @@ const Announcements: React.FC = () => {
             ),
         },
         {
-            header: __('Stores', 'multivendorx'), // ✅ vendors → stores
+            header: __('Status', 'multivendorx'),
             cell: ({ row }) => (
-                <TableCell title={Array.isArray(row.original.stores) ? row.original.stores.join(', ') : row.original.stores || ''}>
+                <TableCell title={row.original.status || ''}>
+                    {row.original.status || '-'}
+                </TableCell>
+            ),
+        },
+        {
+            header: __('Sent To', 'multivendorx'),
+            cell: ({ row }) => (
+                <TableCell title={Array.isArray(row.original.status) ? row.original.stores.join(', ') : row.original.stores || ''}>
                     {Array.isArray(row.original.stores) ? row.original.stores.join(', ') : row.original.stores || '-'}
                 </TableCell>
             ),
+        },
+        {
+            header: __('Date', 'multivendorx'),
+            cell: ({ row }) => {
+                const rawDate = row.original.date;
+                let formattedDate = '-';
+                if (rawDate) {
+                    const dateObj = new Date(rawDate);
+                    formattedDate = new Intl.DateTimeFormat('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric',
+                    }).format(dateObj);
+                }
+                return <TableCell title={formattedDate}>{formattedDate}</TableCell>;
+            },
         },
     ];
 

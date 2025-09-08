@@ -313,7 +313,9 @@ class FrontendScripts {
                 'store-appearance',
                 'product-report-abuse',
                 'store-commissions',
-                'store-inventory'
+                'store-inventory',
+                'review-management',
+                'order-actions-refunds'
             )
 		);
 

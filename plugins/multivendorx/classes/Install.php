@@ -138,10 +138,12 @@ class Install {
      * @return void
      */
     private function set_default_settings() {
-                // 1. Get the existing option from DB
+        // 1. Get the existing option from DB
         $settings = get_option('multivendorx_identity_verification_settings', []);
-
-        // 2. Modify only what you need
+        $review_settings = get_option('multivendorx_review_management_settings', []);
+        $order_settings  = get_option('multivendorx_order_actions_refunds_settings', []);
+    
+        // 2. Set default verification methods
         $settings['payment_methods']['ID']['verification_methods'] = [
             [
                 'label'    => 'National Id',
@@ -154,11 +156,34 @@ class Install {
                 'active'   => false,
             ],
         ];
-
-        // 3. Save back to DB
+    
+        // 3. Set default review ratings parameters
+        $review_settings['ratings_parameters'] = [
+            'Shipping',
+            'Product quality',
+            'Reliability',
+        ];
+    
+        // 4. Set default product review sync
+        $review_settings['product_review_sync'] = [
+            'product_review_sync',
+        ];
+    
+        // 5. Set default abuse report reasons
+        $order_settings['abuse_report_reasons'] = [
+            'Product not received',
+            'Product not as described',
+            'Product damaged/defective',
+        ];
+    
+        // 6. Save back to DB
         update_option('multivendorx_identity_verification_settings', $settings);
-
+        update_option('multivendorx_review_management_settings', $review_settings);
+        update_option('multivendorx_order_actions_refunds_settings', $order_settings);
     }
+    
+    
+    
 
     public function plugin_create_pages() {
 

@@ -35,8 +35,8 @@ export default {
                 {
                     key: 'low_stock_alert_threshold',
                     type: 'number',
-                    before: __('Threshold', 'multivendorx'),
-                    after: __('INR', 'multivendorx'),
+                    before: __('Notify stores when inventory falls below', 'multivendorx'),
+                    after: __('units.', 'multivendorx'),
                     size: '8rem',
                     dependent: {
                         key: 'low_stock_alert',      // field it depends on
@@ -70,6 +70,9 @@ export default {
                 {
                     key: 'out_of_stock_alert_threshold',
                     type: 'number',
+                    before: __('Notify stores when inventory reaches below', 'multivendorx'),
+                    after: __('units.', 'multivendorx'),
+                    size: '8rem',
                     dependent: {
                         key: 'out_of_stock_alert',   // depends on checkbox
                         value: 'out_of_stock_alert', // show when selected
