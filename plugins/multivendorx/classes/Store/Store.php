@@ -95,17 +95,18 @@ class Store {
 
 
     public function get_meta( $key, $single = true ) {
+
         global $wpdb;
         $table = "{$wpdb->prefix}" . Utill::TABLES['store_meta'];
 
         if ( $single ) {
             return ( $wpdb->get_var( $wpdb->prepare(
-                "SELECT meta_value FROM $table WHERE ID = %d AND meta_key = %s LIMIT 1",
+                "SELECT meta_value FROM $table WHERE store_id = %d AND meta_key = %s LIMIT 1",
                 $this->id, $key
             ) ) );
         } else {
             $values = $wpdb->get_col( $wpdb->prepare(
-                "SELECT meta_value FROM $table WHERE ID = %d AND meta_key = %s",
+                "SELECT meta_value FROM $table WHERE store_id = %d AND meta_key = %s",
                 $this->id, $key
             ) );
             return $values;
