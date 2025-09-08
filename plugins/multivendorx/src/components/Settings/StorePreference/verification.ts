@@ -71,7 +71,7 @@ export default {
             ),
         },
         {
-            key: 'payment_methods',
+            key: 'all_verification_methods',
             type: 'payment-tabs',
             modal: [
                 {
@@ -128,7 +128,7 @@ export default {
                     wrapperClass: 'social-verification',
                     formFields: [
                         {
-                            key: 'payment_methods',
+                            key: 'social_verification_methods',
                             type: 'payment-tabs',
                             modal: [
                                 {

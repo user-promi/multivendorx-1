@@ -35,19 +35,22 @@ class Transaction {
             $lock_period         = (int) MultiVendorX()->setting->get_setting( 'commission_lock_period', 0 );
             
             $status = 'Pending';
-            $time   = current_time( 'timestamp' );
+            $time   = current_time('mysql');
+
+            $commission = CommissionUtil::get_commission_db($commission_id);
 
             if ($disbursement_method == 'instantly') {
-                $status = 'Processed';
+                $status = 'Completed';
+
             } elseif ($disbursement_method == 'waiting' ) {
                 if($lock_period == 0) {
-                    $status = 'Processed';
+                    $status = 'Completed';
+                    
                 } elseif ($lock_period > 0) {
                     $status = 'Pending';
                     $time   = date( 'Y-m-d H:i:s', current_time( 'timestamp' ) + ( $lock_period * DAY_IN_SECONDS ) );;
                 }
             }
-            $commission = CommissionUtil::get_commission_db($commission_id);
 
             $data = [
                 'store_id'         => (int) $commission->store_id,
@@ -56,13 +59,13 @@ class Transaction {
                 'entry_type'       => 'Cr',
                 'transaction_type' => 'Commission',
                 'amount'           => (float) $commission->commission_total,
-                // 'currency'          => $vendor_id,
+                'currency'         => get_woocommerce_currency(),
                 'narration'        => "Commission received for order " . $vendor_order->get_id(),
                 'status'           => $status,
                 'available_at'     => $time
             ];
 
-            $format = [ "%d", "%d", "%d", "%s", "%s", "%f", "%s", "%s", "%s", "%d" ];
+            $format = [ "%d", "%d", "%d", "%s", "%s", "%f", "%s", "%s", "%s", "%s" ];
 
             $wpdb->insert(
                 $wpdb->prefix . Utill::TABLES['transaction'],

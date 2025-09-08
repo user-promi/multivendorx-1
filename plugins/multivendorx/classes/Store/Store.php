@@ -95,6 +95,7 @@ class Store {
 
 
     public function get_meta( $key, $single = true ) {
+
         global $wpdb;
         $table = "{$wpdb->prefix}" . Utill::TABLES['store_meta'];
 

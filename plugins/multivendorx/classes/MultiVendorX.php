@@ -131,6 +131,7 @@ final class MultiVendorX {
         $this->container['transaction']     = new Transaction\Transaction();
         $this->container['modules']         = new Modules();
         $this->container['status']          = new Status();
+        $this->container['cron']            = new Cron();
 
         // Load all active modules.
         $this->container['modules']->load_active_modules();
