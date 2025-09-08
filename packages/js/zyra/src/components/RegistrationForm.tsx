@@ -134,6 +134,49 @@ const selectOptionsStore: SelectOption[] = [
         label: 'Store Desc',
         name: 'decription',
     },
+    {
+        icon: 'adminlib-t-letter-bold icon-form-textbox',
+        value: 'text',
+        label: 'Address 1',
+        name: 'address_1'
+    },
+    {
+        icon: 'adminlib-t-letter-bold icon-form-textbox',
+        value: 'text',
+        label: 'Address 2',
+        name: 'address_2'
+    },
+    {
+        icon: 'adminlib-t-letter-bold icon-form-textbox',
+        value: 'text',
+        label: 'Phone',
+        name: 'phone'
+    },
+    {
+        icon: 'adminlib-dropdown-checklist icon-form-dropdown',
+        value: 'dropdown',
+        label: 'Country',
+        name:'country',
+    },
+    {
+        icon: 'adminlib-dropdown-checklist icon-form-dropdown',
+        value: 'dropdown',
+        label: 'State',
+        name:'state',
+    },
+    {
+        icon: 'adminlib-t-letter-bold icon-form-textbox',
+        value: 'text',
+        label: 'City',
+        name: 'city'
+    },
+    {
+        icon: 'adminlib-t-letter-bold icon-form-textbox',
+        value: 'text',
+        label: 'Post Code',
+        name: 'post_code'
+    },
+    { icon: 'adminlib-unread icon-form-email', value: 'email', label: 'Paypal Email',name:'paypal_email' },
 
 ];
 // /**

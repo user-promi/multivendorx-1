@@ -87,12 +87,12 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
         // If only count requested
         if ( $count ) {
             $total = wp_count_posts( $type );
-            return rest_ensure_response( (int) $total->publish );
+            return rest_ensure_response( (int) array_sum( (array) $total ) ); // all statuses
         }
     
         $query = new \WP_Query( array(
             'post_type'      => $type,
-            'post_status'    => 'publish',
+            'post_status'    => array( 'publish', 'draft', 'pending', 'private' ), // all statuses
             'posts_per_page' => $limit,
             'offset'         => $offset,
             'orderby'        => 'date',
@@ -105,7 +105,7 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
             $id      = (int) $post->ID;
             $title   = $post->post_title;
             $content = $post->post_content;
-            $url     = get_post_meta( $id, '_mvx_announcement_url', true );
+            $status  = $post->post_status;
             $stores  = get_post_meta( $id, '_mvx_announcement_stores', true ); // saved as array
     
             $store_names = array();
@@ -125,8 +125,8 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
                     'id'      => $id,
                     'title'   => $title,
                     'content' => $content,
-                    'url'     => $url,
-                    'stores'  => $store_names, // ✅ only names
+                    'status'  => $status, // ✅ send post status
+                    'stores'  => $store_names,
                     'date'    => get_the_date( 'c', $post ),
                 )
             );
@@ -134,6 +134,7 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
     
         return rest_ensure_response( $formatted_items );
     }
+    
     
     
     

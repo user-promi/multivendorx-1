@@ -27,6 +27,7 @@ declare global {
         freeVersion : any;
         marketplace_site:any;
         site_url:any;
+        woocommerce_currency:any;
     }
     interface Color{
         color: any;

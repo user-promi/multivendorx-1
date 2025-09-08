@@ -114,8 +114,9 @@ class Setting {
                 'multivendorx_payment_integration_settings',
                 'multivendorx_store_appearance_settings',
                 'multivendorx_product_report_abuse_settings',
-                'multivendorx_store_commissions_settings',
-                
+                'multivendorx_store_commissions_settings', 
+                'multivendorx_order_actions_refunds_settings', 
+                             
                 
 			)
         );
