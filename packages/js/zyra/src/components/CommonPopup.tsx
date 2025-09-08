@@ -35,7 +35,7 @@ const CommonPopup = ({
   header,
   footer,
   width,
-  height = "100%"
+  height = "fit-content"
 }: PopupProps) => {
   return (
     <Dialog

@@ -70,10 +70,6 @@ const CustomerServices = () => {
                         <div className="title"><i className="adminlib-storefront"></i> Store Reviews</div>
                         <StoreReviews />
                     </div>
-                    <div className="column">
-                        <div className="title"><i className="adminlib-storefront"></i> Store Support</div>
-                        <StoreSupport />
-                    </div>
                 </div>
 
                 <div className="row">
