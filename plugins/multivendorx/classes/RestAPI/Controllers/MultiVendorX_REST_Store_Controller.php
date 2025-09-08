@@ -189,18 +189,17 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
         $store = new \MultiVendorX\Store\Store( $id );
 
         if ( $data['store_owners'] ) {
-
-            $updated_id = StoreUtil::sync_store_users([
+            StoreUtil::add_store_users([
                 'store_id' => $data['id'],
                 'store_owners' => $data['store_owners'],
                 'role_id' => 'store_owner',
             ]);
 
             return rest_ensure_response( [
-                'success' => true,
-                'id'      => $updated_id,
+                'success' => true
             ] );
         }
+        
         $store->set( 'name',        $data['name'] ?? $store->get('name') );
         $store->set( 'slug',        $data['slug'] ?? $store->get('slug') );
         $store->set( 'description', $data['description'] ?? $store->get('description') );
