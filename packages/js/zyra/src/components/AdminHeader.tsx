@@ -181,7 +181,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
                   <ul>
                     <li>
                       <a href="#">
-                        <div className="icon">
+                        <div className="icon admin-badge green">
                           <i className="adminlib-user-network-icon red"></i>
                         </div>
                         <div className="details">
@@ -193,12 +193,61 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
                     </li>
                     <li>
                       <a href="#">
-                        <div className="icon">
-                          <i className="adminlib-user-network-icon green"></i>
+                        <div className="icon admin-badge red">
+                          <i className="adminlib-user-network-icon red"></i>
                         </div>
                         <div className="details">
-                          <span>New Message</span>
-                          <span>You have new message from Natalie</span>
+                          <span className="heading">Congratulation Lettie</span>
+                          <span className="message">Won the monthly best seller gold badge</span>
+                          <span className="time">2 days ago</span>
+                        </div>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#">
+                        <div className="icon admin-badge blue">
+                          <i className="adminlib-user-network-icon red"></i>
+                        </div>
+                        <div className="details">
+                          <span className="heading">Congratulation Lettie</span>
+                          <span className="message">Won the monthly best seller gold badge</span>
+                          <span className="time">2 days ago</span>
+                        </div>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#">
+                        <div className="icon admin-badge yellow">
+                          <i className="adminlib-user-network-icon red"></i>
+                        </div>
+                        <div className="details">
+                          <span className="heading">Congratulation Lettie</span>
+                          <span className="message">Won the monthly best seller gold badge</span>
+                          <span className="time">2 days ago</span>
+                        </div>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#">
+                        <div className="icon admin-badge blue">
+                          <i className="adminlib-user-network-icon red"></i>
+                        </div>
+                        <div className="details">
+                          <span className="heading">Congratulation Lettie</span>
+                          <span className="message">Won the monthly best seller gold badge</span>
+                          <span className="time">2 days ago</span>
+                        </div>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#">
+                        <div className="icon admin-badge yellow">
+                          <i className="adminlib-user-network-icon red"></i>
+                        </div>
+                        <div className="details">
+                          <span className="heading">Congratulation Lettie</span>
+                          <span className="message">Won the monthly best seller gold badge</span>
+                          <span className="time">2 days ago</span>
                         </div>
                       </a>
                     </li>
@@ -217,11 +266,11 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
 
           <div className="icon-wrapper">
             <i
-              className="admin-icon adminlib-plus-circle-o"
+              className="admin-icon adminlib-enquiry"
               title="Admin support"
             ></i>
-          </div>
           <span className="count">10</span>
+          </div>
           <div className="icon-wrapper">
             <i
               className="admin-icon adminlib-user-circle"

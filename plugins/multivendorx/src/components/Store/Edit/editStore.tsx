@@ -159,35 +159,31 @@ const EditStore = () => {
                             <div className="title">{"Editing "+data.name}</div>
                             <div className="dsc">{data.description}</div>
                         </div>
-                        {editId && (
-                            <div className="admin-btn btn-purple" style={{ marginLeft: '10px' }}>
-                                <a
-                                    href={`?page=multivendorx#&tab=stores&view&id=${editId}`}
-                                >
-                                    View Store
-                                </a>
-                            </div>
-                        )}
                         <div className="status-wrapper">
                             <span>Status: </span>
-                            <div className="admin-btn btn-red">
-                                <SelectInput
-                                    name="status"
-                                    value={data.status}
-                                    options={statusOptions}
-                                    type="single-select"
-                                    onChange={(newValue: any) => {
-                                        console.log(newValue)
-                                        if (!newValue || Array.isArray(newValue)) return;
+                            <SelectInput
+                                name="status"
+                                value={data.status}
+                                options={statusOptions}
+                                type="single-select"
+                                onChange={(newValue: any) => {
+                                    console.log(newValue)
+                                    if (!newValue || Array.isArray(newValue)) return;
 
-                                        const updated = { ...data, status: newValue.value };
-                                        setData(updated);
-                                        autoSave(updated);
-                                    }}
-                                />
-                                <i className="adminlib-creat"></i>
-                            </div>
-
+                                    const updated = { ...data, status: newValue.value };
+                                    setData(updated);
+                                    autoSave(updated);
+                                }}
+                            />
+                            {editId && (
+                                <a
+                                    href={`?page=multivendorx#&tab=stores&view&id=${editId}`}
+                                    className="admin-btn btn-purple"
+                                >
+                                    <i className="adminlib-eye"></i>
+                                    View Store
+                                </a>
+                        )}
                         </div>
                     </div>
                 }

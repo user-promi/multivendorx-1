@@ -64,6 +64,7 @@ const AddStore = () => {
       <AdminBreadcrumbs
         activeTabIcon="adminlib-cart"
         tabTitle="Add New Store"
+        description={'lorem Central hub for managing marketplace announcements. Review past updates and create new ones to keep stores informed.'}
         buttons={[
           {
             label: 'View All Store',

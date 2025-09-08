@@ -78,6 +78,7 @@ const Notification = () => {
             <AdminBreadcrumbs
                 activeTabIcon="adminlib-cart"
                 tabTitle="Notification Dashboard"
+                description={'lorem Central hub for managing marketplace announcements. Review past updates and create new ones to keep stores informed.'}
             />
 
             {/* Workboard Stats */}

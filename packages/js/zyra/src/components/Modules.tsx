@@ -170,6 +170,8 @@ const Modules: React.FC<ModuleProps> = ({
             <AdminBreadcrumbs
                 activeTabIcon="adminlib-module"
                 tabTitle="Modules"
+                description={'lorem Central hub for managing marketplace announcements. Review past updates and create new ones to keep stores informed.'}
+                
             />
 
             <div className="module-container">
