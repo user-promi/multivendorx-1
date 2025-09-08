@@ -447,6 +447,8 @@ const Commission: React.FC = () => {
             <AdminBreadcrumbs
                 activeTabIcon="adminlib-cart"
                 tabTitle="Commissions"
+                description={'lorem Central hub for managing marketplace announcements. Review past updates and create new ones to keep stores informed.'}
+
             />
 
             {isTabActive && iseditCommission && <EditCommission />}

@@ -55,7 +55,18 @@
             }
         }
     }
+    .form-details{
+        display: flex;
+        margin-bottom: 1rem;
 
+        label{
+            font-size: 1rem;
+            width: 15%;
+        }
+        .value{
+            width: 85%;
+        }
+    }
     .name-list {
         ul {
             display: flex;

@@ -89,18 +89,18 @@ const StoreRegistration = ({ id }: { id: string }) => {
 						{/* Core Data */}
 						{formData.core_data &&
 							Object.entries(formData.core_data).map(([label, value]) => (
-								<div className="form-group" key={label}>
-									<label className="form-label">{label}</label>
-									<div className="form-value">{value || "[Not Provided]"}</div>
+								<div className="form-details" key={label}>
+									<label className="label">{label} :</label>
+									<div className="value">{value || "[Not Provided]"}</div>
 								</div>
 							))}
 
 						{/* Registration Data */}
 						{formData.registration_data &&
 							Object.entries(formData.registration_data).map(([label, value]) => (
-								<div className="form-group" key={label}>
-									<label className="form-label">{label}</label>
-									<div className="form-value">{value || "[Not Provided]"}</div>
+								<div className="form-details" key={label}>
+									<label className="label">{label} :</label> 
+									<div className="value">{value || "[Not Provided]"}</div>
 								</div>
 							))}
 					</div>

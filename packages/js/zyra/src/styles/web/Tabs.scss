@@ -90,7 +90,7 @@
       }
 
       input {
-        width: 20rem;
+        width: 16rem;
         padding-left: 2rem;
         position: relative;
         border-right: $border-light-small;
@@ -103,8 +103,8 @@
       .count {
         position: absolute;
         font-size: 0.75rem;
-        right: 0.45rem;
-        top: 0.125rem;
+        right: 0rem;
+        top: -0.313rem;
         padding: 0.125rem;
         background: red;
         border-radius: 50%;
@@ -126,6 +126,7 @@
         background: #fff;
         border-radius: 0.313rem;
         transition: all 0.3s ease;
+        z-index: 999;
 
         .dropdown-header {
           padding: 1.125rem 1.75rem;
@@ -213,10 +214,12 @@
             }
           }
         }
-        .footer{
+
+        .footer {
           padding: 0.75rem;
           border: $border-light-small;
         }
+
         &.notification {
           min-width: 25rem;
 
@@ -229,6 +232,60 @@
             align-items: center;
           }
 
+          ul {
+            margin: 0;
+            max-height: 20rem;
+            overflow: auto;
+
+            li {
+              margin: 0;
+
+              a {
+                display: flex;
+                gap: 0.813rem;
+                padding: 0.75rem;
+                align-items: start;
+                border-bottom: $border-light-small;
+
+                &:hover {
+                  background: #f3f3f3;
+                }
+
+                .icon {
+                  padding: 0.313rem;
+                  border-radius: 50%;
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+
+                  i {
+                    font-size: 1.5rem;
+                  }
+                }
+
+                .details {
+                  span {
+                    display: block;
+                  }
+
+                  .heading {
+                    font-size: 0.95rem;
+                    color: #000;
+                  }
+
+                  .message {
+                    color: #00000082;
+                    padding: 0.313rem 0;
+                  }
+
+                  .time {
+                    font-size: 0.813rem;
+                    color: #0000004a;
+                  }
+                }
+              }
+            }
+          }
         }
       }
     }
@@ -335,6 +392,9 @@
 
   .status-wrapper {
     margin-bottom: 0.313rem;
+    display: flex;
+    align-items: center;
+    gap: 0.813rem;
 
     span {
       font-size: 1rem;
@@ -358,6 +418,8 @@
   .tab-description-body {
     padding: 0 1.8rem;
   }
+
+
 
   // .tab-description-header {
   //   padding: 0 1.8rem;
