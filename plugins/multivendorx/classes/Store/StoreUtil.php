@@ -19,27 +19,35 @@ class StoreUtil {
         global $wpdb;
         $table = "{$wpdb->prefix}" . Utill::TABLES['store_users'];
 
-        $data = [
-            'store_id' => $args['store_id'] ?? 0,
-            'user_id'  => $args['user_id'] ?? 0,
-            'role_id'  => $args['role_id'] ?? '',
-        ];
+        $store_id = $args['store_id'] ?? 0;
+        $role_id  = $args['role_id'] ?? '';
+        $owners   = $args['store_owners'] ?? [];
 
-        $formats = [ '%d', '%d', '%s' ];
+        // remove old users not in list
+        $wpdb->query($wpdb->prepare(
+            "DELETE FROM {$table} WHERE store_id = %d AND role_id = %s AND user_id NOT IN (" . implode(',', array_map('intval', $owners)) . ")",
+            $store_id, $role_id
+        ));
 
-        // Check if entry already exists
-        $exists = $wpdb->get_var( $wpdb->prepare(
-            "SELECT ID FROM {$table} WHERE store_id = %d AND user_id = %d AND role_id = %s",
-            $data['store_id'], $data['user_id'], $data['role_id']
-        ) );
+        // insert new users
+        foreach ($owners as $user_id) {
+            $exists = $wpdb->get_var($wpdb->prepare(
+                "SELECT ID FROM {$table} WHERE store_id = %d AND role_id = %s AND user_id = %d",
+                $store_id, $role_id, $user_id
+            ));
 
-        if ( $exists ) {
-            return $exists;
+            if (!$exists) {
+                $wpdb->insert(
+                    $table,
+                    [
+                        'store_id' => $store_id,
+                        'user_id'  => $user_id,
+                        'role_id'  => $role_id,
+                    ],
+                    ['%d', '%d', '%s']
+                );
+            }
         }
-
-        // Insert new record if not exists
-        $wpdb->insert( $table, $data, $formats );
-        return $wpdb->insert_id;
     }
 
     public static function get_store_users($store_id) {
