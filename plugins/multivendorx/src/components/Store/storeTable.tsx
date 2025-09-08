@@ -135,8 +135,18 @@ const StoreTable: React.FC = () => {
             header: __('Status', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell title={row.original.status || ''}>
-                    
-                    <span className="admin-badge green">{row.original.status || '-'}</span>
+                    {row.original.status === "active" && (
+                        <span className="admin-badge green">Active</span>
+                    )}
+                    {row.original.status === "pending" && (
+                        <span className="admin-badge yellow">Pending</span>
+                    )}
+                    {row.original.status === "rejected" && (
+                        <span className="admin-badge red">Rejected</span>
+                    )}
+                    {row.original.status === "locked" && (
+                        <span className="admin-badge blue">Locked</span>
+                    )}
                 </TableCell>
             ),
         },

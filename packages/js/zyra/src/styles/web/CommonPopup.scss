@@ -30,6 +30,7 @@
         .title {
             font-size: 1.313rem;
             color: #000;
+            padding-bottom: 0.125rem;
 
             i {
                 color: $theme-color;
@@ -43,6 +44,7 @@
             margin: 0;
             padding-top: 0.125rem;
             font-weight: 400;
+            padding-right: 1rem;
         }
 
         .icon {
@@ -53,7 +55,7 @@
             color: #f06b4f;
             border-radius: 50%;
             cursor: pointer;
-            top: 40%;
+            top: 1.313rem;
             right: 1.313rem;
         }
     }

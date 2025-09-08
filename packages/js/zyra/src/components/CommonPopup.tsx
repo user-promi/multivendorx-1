@@ -7,7 +7,7 @@ import {
   Slide,
 } from "@mui/material";
 import { TransitionProps } from "@mui/material/transitions";
-
+import "../styles/web/CommonPopup.scss";
 // Slide transition from the right
 const Transition = forwardRef(function Transition(
   props: TransitionProps & { children: React.ReactElement },
@@ -35,7 +35,7 @@ const CommonPopup = ({
   header,
   footer,
   width,
-  height = "fit-content"
+  height = "100%"
 }: PopupProps) => {
   return (
     <Dialog
@@ -51,7 +51,7 @@ const CommonPopup = ({
           width: width,
           position: "fixed",
           right: '1rem',
-          top: '1rem',
+          bottom: '1rem',
           borderRadius: '0.313rem',
         },
       }}

@@ -77,11 +77,11 @@ const SelectInput: React.FC< SelectInputProps > = ( {
         }),
         multiValue: (provided: any) => ({
             ...provided,
-            backgroundColor: '#007bff33',
+            backgroundColor: '#ece2f9f1',
         }),
         multiValueLabel: (provided: any) => ({
             ...provided,
-            color: '#007bff',
+            color: '#5007aa',
         }),
     };
     
