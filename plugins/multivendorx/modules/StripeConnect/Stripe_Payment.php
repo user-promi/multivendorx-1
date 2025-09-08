@@ -7,7 +7,7 @@ defined('ABSPATH') || exit;
 
 class Stripe_Payment {
     public function __construct(){
-        
+        $this->hi();
         add_action('multivendorx_process_stripe-connect_payment', array($this, 'process_payment'), 10, 2);
     }
 
@@ -57,9 +57,45 @@ class Stripe_Payment {
     }
 
     public function process_payment($store_id, $amount) {
-        
+        $secret_key = '';
+        $connected_account_id = '';
+        $currency = "USD";
+        try {
+            if (!class_exists('\Stripe\Stripe')) {
+                require_once __DIR__ . '/../../vendor/autoload.php';
+            }
 
-        // after success or fail payment
-        do_action('multivendorx_after_payment_complete', $store_id);
+            \Stripe\Stripe::setApiKey($secret_key);
+
+            $transfer = \Stripe\Transfer::create([
+                'amount'      => intval($amount * 100),
+                'currency'    => $currency,
+                'destination' => $connected_account_id,
+                'description' => "Payment from Store #$store_id",
+                'transfer_group' => "STORE_$store_id"
+            ]);
+
+            do_action('multivendorx_after_payment_complete', $store_id);
+
+            return [
+                'success'  => true,
+                'message'  => 'Payment successful',
+                'response' => $transfer
+            ];
+        } catch (\Stripe\Exception\ApiErrorException $e) {
+            return [
+                'success' => false,
+                'message' => 'Stripe API Error: ' . $e->getMessage(),
+                'response' => null
+            ];
+        }
+    }
+
+    public function hi(){
+        $stripe = $this->process_payment(
+            102,                          // store_id
+            5.00,                         // amount
+        );
+        file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":stripe: : " . var_export($stripe, true) . "\n", FILE_APPEND);
     }
 }
