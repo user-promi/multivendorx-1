@@ -3,7 +3,8 @@ import axios from 'axios';
 import { BasicInput, SelectInput, getApiLink } from 'zyra';
 
 const StoreQueue = ({ id }: { id: string }) => {
-    const [formData, setFormData] = useState<{ [key: string]: string }>({});
+    const [formData, setFormData] = useState<{ [key: string]: any }>({});
+    
     const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
     useEffect(() => {
@@ -21,7 +22,7 @@ const StoreQueue = ({ id }: { id: string }) => {
             })
     }, [id]);
 
-    const autoSave = (updatedData: { [key: string]: string }) => {
+    const autoSave = (updatedData: { [key: string]: any }) => {
         axios({
             method: 'PUT',
             url: getApiLink(appLocalizer, `store/${id}`),
@@ -36,8 +37,8 @@ const StoreQueue = ({ id }: { id: string }) => {
             }
         })
     };
-
-    return (
+    
+return (
         <>
 
             {successMsg && (
@@ -57,14 +58,27 @@ const StoreQueue = ({ id }: { id: string }) => {
 
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <label htmlFor="product-name">Store Users</label>
+                                <label>Store Owners</label>
                                 <SelectInput
-                                    name="country"
+                                    name="store_owners"
                                     options={appLocalizer.store_owners || []}
                                     type="multi-select"
-                                    onChange={(newValue) => {
-                                        if (!newValue || Array.isArray(newValue)) return;
-                                        const updated = { ...formData, user: newValue.value, state: '' }; // reset state
+                                    value={(formData.store_owners || []).map((id: any) => {
+                                        const match = (appLocalizer.store_owners || []).find(
+                                            (opt: any) => String(opt.value) === String(id)
+                                        );
+                                        return match ? match.value : String(id);
+                                    })}
+                                    onChange={(selected: any) => {
+                                        const store_owners =
+                                            (selected as any[])?.map(
+                                                (option) => option.value
+                                            ) || [];
+                                        const updated = {
+                                            ...formData,
+                                            store_owners,
+                                            state: '',
+                                        };
                                         setFormData(updated);
                                         autoSave(updated);
                                     }}
