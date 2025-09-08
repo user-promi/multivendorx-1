@@ -14,7 +14,7 @@ import {
 import "./viewStore.scss";
 import "../AdminDashboard/adminDashboard.scss";
 import BannerImg from '../../assets/images/banner-placeholder.jpg';
-import { AdminBreadcrumbs, CommonPopup, getApiLink } from 'zyra';
+import { AdminBreadcrumbs, BasicInput, CommonPopup, getApiLink, SelectInput, TextArea } from 'zyra';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
@@ -33,6 +33,9 @@ type AnnouncementForm = {
 };
 const ViewStore = () => {
   const [data, setData] = useState({});
+  const [submitting, setSubmitting] = useState(false);
+  const [storeOptions, setStoreOptions] = useState<{ value: string; label: string }[]>([]);
+
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
   const [addAnnouncements, setAddAnnouncements] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -50,12 +53,53 @@ const ViewStore = () => {
 
   // Extract `id`
   const viewId = params.get('id');
-
+  // Handle form input change
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
   const handleCloseForm = () => {
     setAddAnnouncements(false);
     setFormData({ title: '', url: '', content: '', stores: '' }); // reset form
     setError(null); // clear any error
-};
+  };
+  const handleSubmit = async () => {
+    if (submitting) return; // prevent double-click
+
+    try {
+      setSubmitting(true);
+
+      const endpoint = getApiLink(appLocalizer, 'announcement'); // always POST
+      const method = 'POST';
+
+      const payload = {
+        ...formData,
+        stores: viewId ? [viewId] : [],
+      };
+
+      const response = await axios({
+        method,
+        url: endpoint,
+        headers: { 'X-WP-Nonce': appLocalizer.nonce },
+        data: payload,
+      });
+
+      if (response.data.success) {
+        setAddAnnouncements(false);
+        setFormData({ title: '', url: '', content: '', stores: '' });
+      } else {
+        setError(__('Failed to save announcement', 'multivendorx'));
+      }
+    } catch (err) {
+      setError(__('Failed to save announcement', 'multivendorx'));
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+
   useEffect(() => {
     if (!viewId) return;
 
@@ -68,6 +112,24 @@ const ViewStore = () => {
         const data = res.data || {};
         setData(data);
       })
+    axios({
+      method: 'GET',
+      url: getApiLink(appLocalizer, 'store'),
+      headers: { 'X-WP-Nonce': appLocalizer.nonce },
+    })
+      .then((response) => {
+        if (response.data && Array.isArray(response.data)) {
+          const options = response.data.map((store: any) => ({
+            value: store.id.toString(),
+            label: store.store_name,
+          }));
+          setStoreOptions(options);
+        }
+
+      })
+      .catch(() => {
+        setError(__('Failed to load stores', 'multivendorx'));
+      });
   }, [viewId]);
 
   const COLORS = ['#4CAF50', '#FF9800', '#F44336', '#2196F3'];
@@ -108,7 +170,7 @@ const ViewStore = () => {
               <i className="adminlib-star"></i>
             </div>
             <div className="buttons">
-              <a className="admin-btn btn-purple"><i className="adminlib-mail"></i> Send Mail</a>
+              <a onClick={() => setAddAnnouncements(true)} className="admin-btn btn-purple"><i className="adminlib-mail"></i> Send Mail</a>
               {addAnnouncements && (
                 <CommonPopup
                   open={addAnnouncements}
@@ -120,7 +182,7 @@ const ViewStore = () => {
                         <i className="adminlib-cart"></i>
                         {__('Add Announcement', 'multivendorx')}
                       </div>
-                      <p>{__('Publish important news, updates, or alerts that appear directly in store dashboards, ensuring sellers never miss critical information.','multivendorx')}</p>
+                      <p>{__('Publish important news, updates, or alerts that appear directly in store dashboards, ensuring sellers never miss critical information.', 'multivendorx')}</p>
                       <i
                         onClick={handleCloseForm}
                         className="icon adminlib-close"
@@ -159,15 +221,6 @@ const ViewStore = () => {
                         />
                       </div>
                       <div className="form-group">
-                        <label htmlFor="url">Enter Url</label>
-                        <BasicInput
-                          type="text"
-                          name="url"
-                          value={formData.url}
-                          onChange={handleChange}
-                        />
-                      </div>
-                      <div className="form-group">
                         <label htmlFor="content">Enter Content</label>
                         <TextArea
                           name="content"
@@ -177,24 +230,6 @@ const ViewStore = () => {
                         />
                       </div>
 
-                      <div className="form-group">
-                        <label htmlFor="stores">Stores</label> {/* ✅ vendors → stores */}
-                        <SelectInput
-                          name="stores"
-                          type="multi-select"
-                          options={storeOptions}
-                          value={formData.stores ? formData.stores.split(',') : []} // ✅ CSV → array
-                          onChange={(newValue: any) => {
-                            const selectedValues = Array.isArray(newValue)
-                              ? newValue.map((opt) => opt.value)
-                              : [];
-                            setFormData((prev) => ({
-                              ...prev,
-                              stores: selectedValues.join(','),
-                            }));
-                          }}
-                        />
-                      </div>
                     </div>
                   </div>
 
@@ -217,13 +252,13 @@ const ViewStore = () => {
           <div className="column">
             <div className="cards">
               <div className="title-wrapper">
-                <div>ORDERS PROCESSED</div>
+                <div>Lifetime Earnings</div>
                 <span className="text-green">+16.24%</span>
               </div>
               <div className="card-body">
                 <div className="value">
                   <span>47,892</span>
-                  <a href="#">View net revenue</a>
+                  <a href="#">View Full Earnings</a>
                 </div>
                 <span className="icon">
                   <i className="adminlib-dynamic-pricing"></i>
@@ -235,13 +270,13 @@ const ViewStore = () => {
           <div className="column">
             <div className="cards">
               <div className="title-wrapper">
-                <div>GROSS SALES</div>
+                <div>Settled Payments</div>
                 <span className="text-green">+16.24%</span>
               </div>
               <div className="card-body">
                 <div className="value">
                   <span>$184</span>
-                  <a href="#">View all vendor</a>
+                  <a href="?page=multivendorx#&tab=payouts">Check Paid History</a>
                 </div>
                 <span className="icon">
                   <i className="adminlib-dynamic-pricing"></i>
@@ -253,13 +288,13 @@ const ViewStore = () => {
           <div className="column">
             <div className="cards">
               <div className="title-wrapper">
-                <div>TOTAL EARNINGS</div>
+                <div>Awaiting Payout</div>
                 <span className="text-red">-8.54%</span>
               </div>
               <div className="card-body">
                 <div className="value">
                   <span>$7,892</span>
-                  <a href="#">View all products</a>
+                  <a href="?page=multivendorx#&tab=payouts">See What’s Due</a>
                 </div>
                 <span className="icon">
                   <i className="adminlib-dynamic-pricing"></i>
@@ -271,13 +306,13 @@ const ViewStore = () => {
           <div className="column">
             <div className="cards">
               <div className="title-wrapper">
-                <div>CURRENT BALANCE</div>
+                <div>Requested Payout</div>
                 <span className="">+0.00%</span>
               </div>
               <div className="card-body">
                 <div className="value">
                   <span>$3892</span>
-                  <a href="#">View all order</a>
+                  <a href="?page=multivendorx#&tab=transactions-history">Track Withdrawal Request</a>
                 </div>
                 <span className="icon">
                   <i className="adminlib-dynamic-pricing"></i>
@@ -290,7 +325,7 @@ const ViewStore = () => {
         <div className="row">
 
           <div className="column">
-            <h3>Badge Acquired</h3>
+            <h3>Recent Activity</h3>
 
             <div className="activity-wrapper">
               <div className="activity">
