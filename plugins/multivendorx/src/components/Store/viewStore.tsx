@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import {
   BarChart,
   Bar,
@@ -14,21 +14,69 @@ import {
 import "./viewStore.scss";
 import "../AdminDashboard/adminDashboard.scss";
 import BannerImg from '../../assets/images/banner-placeholder.jpg';
-import { AdminBreadcrumbs } from 'zyra';
+import { AdminBreadcrumbs, CommonPopup, getApiLink } from 'zyra';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { __ } from '@wordpress/i18n';
 
+const overviewData = [
+  { name: 'Total Products', value: 18 },
+  { name: 'Product sold', value: 6 },
+  { name: 'Store Visitors', value: 42 },
+  { name: 'Reviews', value: 9 },
+];
+type AnnouncementForm = {
+  title: string;
+  url: string;
+  content: string;
+  stores: string; // ✅ renamed vendors → stores
+};
 const ViewStore = () => {
-  const overviewData = [
-    { name: 'Total Products', value: 18 },
-    { name: 'Product sold', value: 6 },
-    { name: 'Store Visitors', value: 42 },
-    { name: 'Reviews', value: 9 },
-  ];
+  const [data, setData] = useState({});
+  const [successMsg, setSuccessMsg] = useState<string | null>(null);
+  const [addAnnouncements, setAddAnnouncements] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [formData, setFormData] = useState<AnnouncementForm>({
+    title: '',
+    url: '',
+    content: '',
+    stores: '',
+  });
+  const location = useLocation();
+  const hash = location.hash.replace(/^#/, '');
+
+  // Turn hash into a URLSearchParams object
+  const params = new URLSearchParams(hash);
+
+  // Extract `id`
+  const viewId = params.get('id');
+
+  const handleCloseForm = () => {
+    setAddAnnouncements(false);
+    setFormData({ title: '', url: '', content: '', stores: '' }); // reset form
+    setError(null); // clear any error
+};
+  useEffect(() => {
+    if (!viewId) return;
+
+    axios({
+      method: 'GET',
+      url: getApiLink(appLocalizer, `store/${viewId}`),
+      headers: { 'X-WP-Nonce': appLocalizer.nonce },
+    })
+      .then((res: any) => {
+        const data = res.data || {};
+        setData(data);
+      })
+  }, [viewId]);
+
   const COLORS = ['#4CAF50', '#FF9800', '#F44336', '#2196F3'];
   return (
     <>
       <AdminBreadcrumbs
         activeTabIcon="adminlib-storefront"
-        tabTitle="View Store"
+        tabTitle={'Viewing ' + data.name}
+        description={data.description}
         buttons={[
           {
             label: 'Back',
@@ -41,20 +89,16 @@ const ViewStore = () => {
       <div className="store-view-wrapper">
         <div className="store-header row">
           <div className="column profile-section">
-            <span className="avater"><img src="https://99designs-blog.imgix.net/blog/wp-content/uploads/2022/06/Starbucks_Corporation_Logo_2011.svg-e1657703028844.png?auto=format&q=60&fit=max&w=930" /></span>
-            <div className="name">Lorem ipsum</div>
-            <div className="des">Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim, facere delectus reprehenderit facilis dolore, ipsum esse fugiat praesentium, perspiciatis impedit laboriosam ex? Deserunt, qui ipsam.</div>
-            <div className="details">
-              <i className="adminlib-wholesale"></i>
-              Lorem ipsum dolor sit amet.
-            </div>
+            <span className="avater"><img src={data.image} /></span>
+            <div className="name">{data.name}</div>
+            <div className="des">{data.description}</div>
             <div className="details">
               <i className="adminlib-form-phone"></i>
-              + 9874563210
+              {data.phone}
             </div>
             <div className="details">
               <i className="adminlib-mail"></i>
-              store@gmail.com
+              {data.email}
             </div>
             <div className="review">
               <i className="adminlib-star"></i>
@@ -65,12 +109,104 @@ const ViewStore = () => {
             </div>
             <div className="buttons">
               <a className="admin-btn btn-purple"><i className="adminlib-mail"></i> Send Mail</a>
+              {addAnnouncements && (
+                <CommonPopup
+                  open={addAnnouncements}
+                  onClose={handleCloseForm}
+                  width="500px"
+                  header={
+                    <>
+                      <div className="title">
+                        <i className="adminlib-cart"></i>
+                        {__('Add Announcement', 'multivendorx')}
+                      </div>
+                      <p>{__('Publish important news, updates, or alerts that appear directly in store dashboards, ensuring sellers never miss critical information.','multivendorx')}</p>
+                      <i
+                        onClick={handleCloseForm}
+                        className="icon adminlib-close"
+                      ></i>
+                    </>
+                  }
+                  footer={
+                    <>
+                      <div
+                        onClick={handleCloseForm}
+                        className="admin-btn btn-red"
+                      >
+                        Cancel
+                      </div>
+                      <div
+                        onClick={!submitting ? handleSubmit : undefined}
+                        className={`admin-btn btn-purple ${submitting ? 'disabled' : ''}`}
+                        style={{ opacity: submitting ? 0.6 : 1, pointerEvents: submitting ? 'none' : 'auto' }}
+                      >
+                        {submitting ? 'Submitting...' : 'Submit'}
+                      </div>
+
+                    </>
+                  }
+                >
+
+                  <div className="content">
+                    <div className="form-group-wrapper">
+                      <div className="form-group">
+                        <label htmlFor="title">Title</label>
+                        <BasicInput
+                          type="text"
+                          name="title"
+                          value={formData.title}
+                          onChange={handleChange}
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label htmlFor="url">Enter Url</label>
+                        <BasicInput
+                          type="text"
+                          name="url"
+                          value={formData.url}
+                          onChange={handleChange}
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label htmlFor="content">Enter Content</label>
+                        <TextArea
+                          name="content"
+                          inputClass="textarea-input"
+                          value={formData.content}
+                          onChange={handleChange}
+                        />
+                      </div>
+
+                      <div className="form-group">
+                        <label htmlFor="stores">Stores</label> {/* ✅ vendors → stores */}
+                        <SelectInput
+                          name="stores"
+                          type="multi-select"
+                          options={storeOptions}
+                          value={formData.stores ? formData.stores.split(',') : []} // ✅ CSV → array
+                          onChange={(newValue: any) => {
+                            const selectedValues = Array.isArray(newValue)
+                              ? newValue.map((opt) => opt.value)
+                              : [];
+                            setFormData((prev) => ({
+                              ...prev,
+                              stores: selectedValues.join(','),
+                            }));
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {error && <p className="error-text">{error}</p>}
+                </CommonPopup>
+              )}
             </div>
           </div>
 
           <div
             className="column store-image"
-            style={{ backgroundImage: `url('https://cdn.vectorstock.com/i/500p/57/56/shopping-cart-banner-online-store-vector-42935756.jpg')` }}
+            style={{ backgroundImage: `url(${data.banner})` }}
           >
             {/* <img src="https://res.cloudinary.com/walden-global-services/image/upload/v1544584558/dandelion/29.jpg" alt="" /> */}
           </div>

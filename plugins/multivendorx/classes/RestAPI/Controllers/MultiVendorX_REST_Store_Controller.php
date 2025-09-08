@@ -65,11 +65,13 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
 
      // POST permission
     public function create_item_permissions_check($request) {
-        return current_user_can( 'manage_options' );
+        // return current_user_can( 'manage_options' );
+        return true;
     }
 
     public function update_item_permissions_check($request) {
-        return current_user_can('manage_options');
+        // return current_user_can('manage_options');
+        return true;
     }
 
 
@@ -117,8 +119,13 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
     }
 
     public function create_item( $request ) {
-        $store_data = $request->get_param('formData');
+        $nonce = $request->get_header( 'X-WP-Nonce' );
+        if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
+            return new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
+        }
+        $registrations = $request->get_header( 'registrations' );
 
+        $store_data = $request->get_param('formData');
         // Create store object
         $store = new \MultiVendorX\Store\Store();
 
@@ -131,11 +138,26 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
 
         $insert_id = $store->save();
 
-        if ( $insert_id ) {
+        if ( $insert_id && ! $registrations ) {
             foreach ( $store_data as $key => $value ) {
                 if ( ! in_array( $key, $core_fields, true ) ) {
                     $store->update_meta( $key, $value );
                 }
+            }
+        }
+
+        if ( $registrations ) {
+            // Collect all non-core fields into one array
+            $non_core_fields = [];
+            foreach ( $store_data as $key => $value ) {
+                if ( ! in_array( $key, $core_fields, true ) ) {
+                    $non_core_fields[$key] = $value;
+                }
+            }
+
+            // Save them under one key
+            if ( ! empty( $non_core_fields ) ) {
+                $store->update_meta( 'multivendorx-registration-data', $non_core_fields );
             }
         }
 
@@ -145,11 +167,10 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
         ] );
     }
 
-
     public function get_item( $request ) {
         $id = absint( $request->get_param( 'id' ) );
         $fetch_user = $request->get_param( 'fetch_user' );
-
+        $registrations = $request->get_header( 'registrations' );
         if ($fetch_user) {
             $users = StoreUtil::get_store_users($id);
 
@@ -160,9 +181,13 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             return rest_ensure_response( $response );
         }
 
-
         // Load the store
         $store = new \MultiVendorX\Store\Store( $id );
+        if ( $registrations ) {
+            $response = StoreUtil::get_store_registration_form( $store->get_id() );
+
+            return rest_ensure_response( $response );
+        }
 
         $response = [
             'id'          => $store->get_id(),
@@ -172,7 +197,6 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             'who_created' => $store->get('who_created'),
             'status'      => $store->get('status'),
         ];
-
 
         // Add meta data
         foreach ( $store->meta_data as $key => $values ) {
