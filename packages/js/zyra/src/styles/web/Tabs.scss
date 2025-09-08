@@ -55,6 +55,7 @@
       border-radius: 50%;
       color: $theme-color;
       cursor: pointer;
+      position: relative;
     }
 
     .adminlib-notification {
@@ -99,8 +100,22 @@
     .icon-wrapper {
       position: relative;
 
+      .count {
+        position: absolute;
+        font-size: 0.75rem;
+        right: 0.45rem;
+        top: 0.125rem;
+        padding: 0.125rem;
+        background: red;
+        border-radius: 50%;
+        width: 0.75rem;
+        height: 0.75rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
       .dropdown-menu {
-        display: none;
         position: absolute;
         top: 2rem;
         overflow: hidden;
@@ -198,33 +213,28 @@
             }
           }
         }
-      }
+        .footer{
+          padding: 0.75rem;
+          border: $border-light-small;
+        }
+        &.notification {
+          min-width: 25rem;
 
-      &:hover {
-        .dropdown-menu {
-          display: block;
+          .title {
+            padding: 0.75rem;
+            border-bottom: $border-light-small;
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.25rem;
+            align-items: center;
+          }
+
         }
       }
     }
   }
 }
 
-.notification {
-  padding: 0.5rem;
-
-  .title {
-    font-size: 1.25rem;
-  }
-
-  .dropdown-menu {
-    max-width: 24rem;
-
-    .title {
-      font-size: 1.25rem;
-      padding: 0.313rem;
-    }
-  }
-}
 
 .title-section {
   margin: 0 2rem;
@@ -330,10 +340,11 @@
       font-size: 1rem;
       color: #000;
     }
-    .admin-btn{
-    margin-top: 0.313rem;
+
+    .admin-btn {
+      margin-top: 0.313rem;
+    }
   }
-}
 }
 
 .general-wrapper {

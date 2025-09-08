@@ -133,11 +133,9 @@ if ($current_page && empty($current_sub)) {
 
 
                         <li class="dropdown login-user">
-                            <a href="" class="dropdown-toggle">
-                                <div class="avatar-wrapper">
-                                    <i class="adminlib-person"></i>
-                                </div>
-                            </a>
+                            <div class="avatar-wrapper">
+                                <i class="adminlib-icon adminlib-person"></i>
+                            </div>
                             <div class="dropdown-menu">
 
                                 <div class="dropdown-header">

@@ -46,7 +46,7 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
                 'icon'    => 'adminlib-cart',
                 'slug'    => 'dashboard',
                 'submenu' => array(),
-                'capability' => ['manage_users']
+                'capability' => ['edit_products']
             ),
             'products' => array(
                 'name'    => 'Products',
