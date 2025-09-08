@@ -33,6 +33,7 @@ class Install {
         // }
             
         $this->create_database_table();
+        $this->create_database_triggers();
         $this->plugin_create_pages();
         update_option( 'dc_product_vendor_plugin_db_version', MULTIVENDORX_PLUGIN_VERSION );
 
@@ -106,12 +107,14 @@ class Install {
             `order_id` bigint(20) unsigned DEFAULT NULL,
             `commission_id` bigint(20) unsigned DEFAULT NULL,
             `entry_type` enum('Dr','Cr') NOT NULL,
-            `transaction_type` enum('Commission','Withdrawal','Refund','Adjustment') NOT NULL,
-            `amount` decimal(10,2) NOT NULL,
+            `transaction_type` enum('Commission','Withdrawal','Refund','Reversed') NOT NULL,
+            `amount` float(20,2) NOT NULL,
+            `balance` float(20,2) NOT NULL,
+            `locking_balance` float(20,2) NOT NULL,
             `currency` varchar(10) NOT NULL,
             `narration` text NOT NULL,
-            `status` enum('Pending','Processed','Completed') DEFAULT 'Pending',
-            `available_at` datetime DEFAULT NULL,
+            `status` enum('Pending','Processed','Completed', 'Failed') DEFAULT 'Pending',
+            `available_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
             `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
             PRIMARY KEY (`id`),
             KEY `idx_store` (`store_id`),
@@ -130,6 +133,79 @@ class Install {
         dbDelta( $sql_store_users );
         dbDelta( $sql_store_meta );
         dbDelta( $sql_transaction );
+
+        
+        // $sql = "
+        //     DROP IF EXISTS update_store_balance
+
+            
+        //     ";
+
+        // $wpdb->query($sql);
+
+
+
+
+    }
+
+    public function create_database_triggers() {
+        global $wpdb;
+
+        // Drop the trigger if it exists
+        $wpdb->query("DROP TRIGGER IF EXISTS update_store_balance");
+
+        // Create the trigger
+        $sql = "
+        CREATE TRIGGER update_store_balance
+        BEFORE INSERT ON wp_multivendorx_transaction_ledger
+        FOR EACH ROW
+        BEGIN
+            DECLARE last_balance DECIMAL(20,2);
+            DECLARE last_locking_balance DECIMAL(20,2);
+
+            SELECT balance, locking_balance
+            INTO last_balance, last_locking_balance
+            FROM wp_multivendorx_transaction_ledger
+            WHERE store_id = NEW.store_id
+            ORDER BY id DESC
+            LIMIT 1;
+
+            IF last_balance IS NULL THEN
+                SET last_balance = 0.00;
+            END IF;
+            IF last_locking_balance IS NULL THEN
+                SET last_locking_balance = 0.00;
+            END IF;
+
+            IF NEW.transaction_type = 'Commission' AND NEW.entry_type = 'Cr' THEN
+                IF NEW.status = 'Completed' THEN
+                    SET NEW.balance = last_balance + NEW.amount;
+                    SET NEW.locking_balance = last_locking_balance;
+                ELSEIF NEW.status = 'Pending' THEN
+                    SET NEW.balance = last_balance;
+                    SET NEW.locking_balance = last_locking_balance + NEW.amount;
+                ELSE
+                    SET NEW.balance = last_balance;
+                    SET NEW.locking_balance = last_locking_balance;
+                END IF;
+            ELSEIF NEW.transaction_type = 'Withdrawal' AND NEW.entry_type = 'Dr' THEN
+                IF NEW.status = 'Completed' THEN
+                    SET NEW.balance = last_balance - NEW.amount;
+                    SET NEW.locking_balance = last_locking_balance;
+                ELSEIF NEW.status = 'Failed' THEN
+                    SET NEW.balance = last_balance;
+                    SET NEW.locking_balance = last_locking_balance;
+                END IF;
+            ELSE
+                SET NEW.balance = last_balance;
+                SET NEW.locking_balance = last_locking_balance;
+            END IF;
+        END;
+        ";
+
+        // Execute the trigger
+        $wpdb->query($sql);
+
     }
 
     /**
@@ -142,7 +218,7 @@ class Install {
         $settings = get_option('multivendorx_identity_verification_settings', []);
 
         // 2. Modify only what you need
-        $settings['payment_methods']['ID']['verification_methods'] = [
+        $settings['all_verification_methods']['ID']['verification_methods'] = [
             [
                 'label'    => 'National Id',
                 'required' => true,
