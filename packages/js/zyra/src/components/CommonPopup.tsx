@@ -24,6 +24,7 @@ type PopupProps = {
   header?: ReactNode;
   footer?: ReactNode;
   width?: number | string;
+  height?: number | string;
 };
 
 const CommonPopup = ({
@@ -34,6 +35,7 @@ const CommonPopup = ({
   header,
   footer,
   width,
+  height = "fit-content"
 }: PopupProps) => {
   return (
     <Dialog
@@ -44,7 +46,7 @@ const CommonPopup = ({
       PaperProps={{
         sx: {
           margin: 0,
-          height: "fit-content",
+          height: height,
           minWidth: width,
           width: width,
           position: "fixed",

@@ -32,6 +32,8 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
   pro = "4.1.23",
 }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [notifOpen, setNotifOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   // Close dropdown on click outside
@@ -52,6 +54,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
   useEffect(() => {
     setDropdownOpen(results.length > 0);
   }, [results]);
+
 
   return (
     <>
@@ -161,32 +164,54 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
           </div>
 
           {/* start notification */}
-          <div className="icon-wrapper notification">
+          <div className="icon-wrapper">
             <i
               className="admin-icon adminlib-notification"
               title="Notifications"
+              onClick={() => {
+                setNotifOpen(!notifOpen);
+                setProfileOpen(false);
+              }}
             ></i>
-            <div className="dropdown-menu">
-              <div className="title">Notification</div>
-              <div className="notification">
-                <ul>
-                  <li>
-                    <a href="#">
-                      <i className="adminlib-user-network-icon"></i>
-                      <span>Congratulation Lettie</span>
-                      <span>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Tenetur, blanditiis.</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i className="adminlib-user-network-icon"></i>
-                      <span>Congratulation Lettie</span>
-                      <span>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Tenetur, blanditiis.</span>
-                    </a>
-                  </li>
-                </ul>
+            <span className="count">2</span>
+            {notifOpen && (
+              <div className="dropdown-menu notification">
+                <div className="title">Notification <span className="admin-badge green">8 New</span></div>
+                <div className="notification">
+                  <ul>
+                    <li>
+                      <a href="#">
+                        <div className="icon">
+                          <i className="adminlib-user-network-icon red"></i>
+                        </div>
+                        <div className="details">
+                          <span className="heading">Congratulation Lettie</span>
+                          <span className="message">Won the monthly best seller gold badge</span>
+                          <span className="time">2 days ago</span>
+                        </div>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#">
+                        <div className="icon">
+                          <i className="adminlib-user-network-icon green"></i>
+                        </div>
+                        <div className="details">
+                          <span>New Message</span>
+                          <span>You have new message from Natalie</span>
+                        </div>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+                <div className="footer">
+                  <div className="admin-btn btn-purple">
+                    <i className="adminlib-eye"></i>
+                    View all notification
+                  </div>
+                </div>
               </div>
-            </div>
+            )}
           </div>
           {/* end notification */}
 
@@ -196,30 +221,36 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
               title="Admin support"
             ></i>
           </div>
-
+          <span className="count">10</span>
           <div className="icon-wrapper">
             <i
               className="admin-icon adminlib-user-circle"
               title="Admin support"
+              onClick={() => {
+                setProfileOpen(!profileOpen);
+                setNotifOpen(false);
+              }}
             ></i>
-            <div className="dropdown-menu">
-              <div className="dropdown-body">
-                <ul>
-                  <li>
-                    <a href="#">
-                      <i className="adminlib-person"></i>
-                      Manage Plan
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i className="adminlib-user-network-icon"></i>
-                      Contact Support
-                    </a>
-                  </li>
-                </ul>
+            {profileOpen && (
+              <div className="dropdown-menu">
+                <div className="dropdown-body">
+                  <ul>
+                    <li>
+                      <a href="#">
+                        <i className="adminlib-person"></i>
+                        Manage Plan
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#">
+                        <i className="adminlib-user-network-icon"></i>
+                        Contact Support
+                      </a>
+                    </li>
+                  </ul>
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>

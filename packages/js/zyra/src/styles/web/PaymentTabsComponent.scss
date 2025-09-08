@@ -40,6 +40,9 @@
                     .title-wrapper {
                         display: flex;
                         gap: 0.5rem;
+                        justify-content: start;
+                        align-items: center;
+                        padding-bottom: 0.313rem;
 
                         .title {
                             font-size: 1.125rem;
