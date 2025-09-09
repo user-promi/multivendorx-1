@@ -8,13 +8,16 @@ defined('ABSPATH') || exit;
 
 class Disbursement {
     public function __construct() {
-        add_action('woocommerce_order_status_changed', array($this, 'disbursement_process'), 10, 4);
+        add_action('woocommerce_order_status_changed', array($this, 'disbursement_process'), 30, 4);
         add_action( 'multivendorx_transaction_status_update', array($this, 'transaction_status_update'));
         add_action( 'multivendorx_payout_cron', array($this, 'multivendorx_payout_cron'));
         
     }
 
     public function disbursement_process($order_id, $old_status, $new_status, $order) {
+        if ($order->get_parent_id() == 0) {
+            return;
+        }
 
         $disbursement_status = MultiVendorX()->setting->get_setting( 'disbursement_order_status' );
         if( !empty($disbursement_status) && in_array($new_status, $disbursement_status)){
