@@ -104,9 +104,9 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
                 ),
                 'capability' => ['read_shop_coupons']
             ),
-			'analytics' => array(
+			'reports' => array(
                 'name'    => 'Stats / Report',
-                'slug'    => 'coupons',
+                'slug'    => 'reports',
                 'submenu' => array(
                     array(
                         'key'  => 'overview',
@@ -129,7 +129,7 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
                 ),
                 'capability' => ['read_shop_coupons']
             ),
-			'analytics' => array(
+			'payments' => array(
                 'name'    => 'Payments',
                 'slug'    => 'payments',
                 'submenu' => array(

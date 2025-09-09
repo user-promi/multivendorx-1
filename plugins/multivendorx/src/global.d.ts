@@ -28,6 +28,8 @@ declare global {
         assistants_list: any;
         all_payments: any;
         all_store_settings: any;
+        store_payment_settings: any;
+        store_id: any;
         freeVersion : any;
         marketplace_site:any;
         site_url:any;

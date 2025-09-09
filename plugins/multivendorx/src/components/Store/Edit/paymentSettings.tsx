@@ -26,7 +26,11 @@ const PaymentSettings = ({ id }: { id: string }) => {
 	const storePayment: StorePaymentConfig =
 		(appLocalizer.all_store_settings as StorePaymentConfig) || {};
 
-	const paymentOptions = Object.values(storePayment).map((p) => ({
+	const filteredStorePayment = Object.fromEntries(
+		Object.entries(storePayment).filter(([_, value]) => value !== null)
+		);
+
+	const paymentOptions = Object.values(filteredStorePayment).map((p) => ({
 		key: p.id,
 		value: p.id,
 		label: p.label,
