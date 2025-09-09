@@ -441,7 +441,7 @@ export default {
             pro_module: true,
             category: 'analytics_tools'
         },
-        { type: 'separator', id: 'marketplace_boosters', label: 'Marketplace boosters' },
+        { type: 'separator', id: 'marketplace_boosters', label: 'Marketplace Boosters' },
         {
             id: 'marketplace-membership',
             name: __('Marketplace Membership', 'multivendorx'),
@@ -620,8 +620,8 @@ export default {
             icon: 'adminlib-rules',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/shipstation/',
             //settings_link: appLocalizer.site_url,
-            pro_module: true,
-            category: 'integration'
+            pro_module: false,
+            category: 'store_management'
         },
         {
             id: 'mvx-blocks',
