@@ -27,6 +27,11 @@ const StoreReviews: React.FC = () => {
         pageSize: 10,
     });
     const [pageCount, setPageCount] = useState(0);
+    const [expandedRow, setExpandedRow] = useState<string | null>(null);
+
+    const toggleRow = (rowId: string) => {
+        setExpandedRow(expandedRow === rowId ? null : rowId);
+    };
 
     // Fetch total rows on mount
     useEffect(() => {
@@ -148,15 +153,7 @@ const StoreReviews: React.FC = () => {
             header: __('Store', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell title={row.original.store_name || ''}>
-                    <div className="admin-badge green">More</div>
-                </TableCell>
-            ),
-        },
-        {
-            header: __('Action', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.store_name || ''}>
-                    <div className="admin-badge green">More</div>
+                    <div className="admin-badge green" onClick={() => toggleRow(row.id)}>More</div>
                 </TableCell>
             ),
         },

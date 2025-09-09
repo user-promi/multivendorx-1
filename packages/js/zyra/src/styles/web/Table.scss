@@ -14,7 +14,7 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    align-items: center;  
+    align-items: center;
     gap: 0.5rem;
 
     .bulk-action {
@@ -149,6 +149,22 @@
         width: 100%;
         border-bottom: $border-light-small;
 
+        .hover-action-cell {
+          width: 100%;
+          position: absolute;
+          height: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background: #0000001f;
+          top: 0;
+          display: none;
+        }
+
+        &:hover .hover-action-cell {
+          display: Flex;
+        }
+
         .admin-column {
           padding: 0.313rem 0.85rem;
           font-size: 0.9rem;
@@ -172,6 +188,7 @@
           &:has(.product-expand) {
             min-width: 3rem;
           }
+
         }
 
         .admin-column:first-child {
@@ -198,7 +215,8 @@
         .admin-column:has(.product-expand) {
           min-width: 3rem;
         }
-        .admin-column:has(.single-column){
+
+        .admin-column:has(.single-column) {
           flex-grow: 1;
         }
 

@@ -408,8 +408,8 @@ const Announcements: React.FC = () => {
                                 />
                             </div>
 
-                            <div className="form-group">
-                                <label htmlFor="stores">Stores</label> {/* ✅ vendors → stores */}
+                            <div className="form-group ">
+                                <label htmlFor="stores">Stores</label> 
                                 <SelectInput
                                     name="stores"
                                     type="multi-select"
