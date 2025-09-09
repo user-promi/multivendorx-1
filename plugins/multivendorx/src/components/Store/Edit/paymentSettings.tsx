@@ -126,22 +126,6 @@ const PaymentSettings = ({ id }: { id: string }) => {
 							</div>
 						</div>
 
-						{/* Commission Amount */}
-						<div className="form-group-wrapper">
-							<div className="form-group">
-								<label htmlFor="commission_amount">Commission Amount</label>
-								<BasicInput
-									name="commission_amount"
-									type="number"
-									wrapperClass="setting-form-input"
-									descClass="settings-metabox-description"
-									description='To set vendor commission as 0 pass "0" in the Commission Amount filed'
-									value={formData.commission_amount}
-									onChange={handleChange}
-								/>
-							</div>
-						</div>
-
 						{selectedProvider?.fields?.map((field) => (
 							<div className="form-group-wrapper" key={field.name}>
 								<div className="form-group">
@@ -158,6 +142,20 @@ const PaymentSettings = ({ id }: { id: string }) => {
 								</div>
 							</div>
 						))}
+
+						{/* Commission Amount */}
+						<div className="form-group-wrapper">
+							<label>Commission</label>
+							<div className="form-group">
+								<label htmlFor="product-name">Fixed</label>
+								<BasicInput name="commission_fixed" wrapperClass="setting-form-input" descClass="settings-metabox-description" value={formData.commission_fixed} onChange={handleChange} />
+							</div>
+
+							<div className="form-group">
+								<label htmlFor="product-name">Percentage</label>
+								<BasicInput name="commission_percentage" wrapperClass="setting-form-input" descClass="settings-metabox-description" value={formData.commission_percentage} onChange={handleChange} />
+							</div>
+						</div>
 
 					</div>
 				</div>
