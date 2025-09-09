@@ -78,7 +78,8 @@ class Payment {
             $store_id,
             'Bank Transfer',
             $status,
-            $order_id, $transaction_id
+            $order_id, 
+            $transaction_id
         );
 
         

@@ -10,7 +10,7 @@ defined('ABSPATH') || exit;
 
 class PaymentProcessor {
     public function __construct() {
-        add_action('multivendorx_after_payment_complete', array( $this, 'after_payment_complete'), 10, 4);
+        add_action('multivendorx_after_payment_complete', array( $this, 'after_payment_complete'), 10, 5);
         // add_action('multivendorx_after_real_time_payment_complete', array( $this, 'after_real_time_payment_complete'), 10, 2);
     }
 
