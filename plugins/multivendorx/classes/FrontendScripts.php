@@ -315,7 +315,8 @@ class FrontendScripts {
                 'store-commissions',
                 'store-inventory',
                 'review-management',
-                'order-actions-refunds'
+                'order-actions-refunds',
+                'advertising'
             )
 		);
 
@@ -401,6 +402,7 @@ class FrontendScripts {
                         'freeVersion'              => MultiVendorX()->version,
                         'marketplace_site'         => get_bloginfo(),
                         'site_url'                 => site_url(),
+                        'woocommerce_currency'     => get_woocommerce_currency(),
 					) ),
                 ),
                 'multivendorx-product-tab-script' => array(
