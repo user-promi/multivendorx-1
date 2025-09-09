@@ -2,6 +2,7 @@ import { __ } from '@wordpress/i18n';
 export default {
     category: true,
     tab:"modules",
+    description: "Manage marketplace features by enabling or disabling modules. Turning a module on activates its settings and workflows, while turning it off hides them from admin and vendors.",
     modules: [
         { type: 'separator', id: 'marketplace_types', label: 'Marketplace Types' },
         {

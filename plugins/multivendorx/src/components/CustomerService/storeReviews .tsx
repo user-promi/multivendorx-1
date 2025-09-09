@@ -201,6 +201,9 @@ const StoreReviews: React.FC = () => {
                     handlePagination={requestApiForData}
                     perPageOption={[10, 25, 50]}
                     typeCounts={[]}
+                    onRowClick={(row: any) => {
+                        handleEdit(row.id);
+                    }}
                 />
             </div>
         </>

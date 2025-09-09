@@ -3,6 +3,46 @@
 .admin-dashboard {
     padding: 0 2rem 2rem;
 
+    .admin-table-wrapper {
+        margin: 0;
+    }
+
+    &.tab {
+        margin: 2rem;
+        background: #fff;
+
+        .tab-titles {
+            display: flex;
+            gap: 1rem;
+            padding-top: 1.313rem;
+
+            .title {
+                padding-bottom: 0.313rem;
+                cursor: pointer;
+
+                p {
+                    font-size: .938rem;
+                    line-height: 1.5;
+                    color: #000;
+                    font-weight: 500;
+                }
+
+                &.active {
+                    color: $theme-color;
+                    border-bottom: 0.126rem solid $theme-color;
+
+                    p{
+                        color: $theme-color;
+                    }
+                }
+            }
+        }
+
+        .column {
+            border: $border-light-small;
+        }
+    }
+
 }
 
 .row {
@@ -14,7 +54,6 @@
 .column {
     width: 100%;
     padding: 1.5rem;
-    // border: $border-light-medium;
     background: #fff;
     border-radius: 0.313rem;
 
@@ -22,6 +61,11 @@
         display: flex;
         flex-wrap: wrap;
         gap: 1rem;
+    }
+
+    .header {
+        display: flex;
+        justify-content: space-between;
     }
 
     h3,
@@ -142,7 +186,7 @@
             color: $theme-color;
         }
 
-        i{
+        i {
             font-size: 1.625rem;
             color: #000;
             padding: 0.5rem;
@@ -211,10 +255,136 @@
 }
 
 .quick-link {
-    padding-top: 2rem;
-
     .quick-links-wrapper {
         display: flex;
         gap: 0.85rem;
     }
 }
+
+// action start
+.overview-card-wrapper {
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+    padding: 0.5rem 0;
+
+    .action {
+        width: 100%;
+        padding: 1rem;
+        border-radius: 0.313rem;
+
+        .title {
+            justify-content: space-between;
+            display: flex;
+            font-size: 2.5rem;
+            line-height: 2.5rem;
+            color: #000;
+            margin-bottom: 1.313rem;
+
+            i {
+                font-size: 1.5rem;
+            }
+        }
+
+        .description {
+            font-size: 1.125rem;
+            color: #000;
+            font-weight: 500;
+        }
+    }
+
+    .action:nth-child(1) {
+        background: #5007aa14;
+
+        i {
+            color: $theme-color;
+        }
+    }
+
+    .action:nth-child(2) {
+        background: #bfdeed;
+
+        i {
+            color: #003d66;
+        }
+    }
+
+    .action:nth-child(3) {
+        background: #d9f5f0;
+
+        i {
+            color: #06be9f;
+        }
+    }
+
+    .action:nth-child(4) {
+        background: #5007aa14;
+
+        i {
+            color: $theme-color;
+        }
+    }
+
+    .action:nth-child(5) {
+        background: #b89d0325;
+
+        i {
+            color: #b89d03;
+        }
+    }
+
+    .action:nth-child(6) {
+        background: #b8039a1f;
+
+        i {
+            color: #b8039a;
+        }
+    }
+}
+
+// action style end
+
+// top items start
+.top-items {
+    .items {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+        padding: 0.625rem 0;
+
+        .left-side {
+            display: flex;
+            gap: 0.5rem;
+            align-items: start;
+
+            .icon {
+                font-size: 1.25rem;
+                margin-top: 0.313rem;
+            }
+
+            .image {
+                img {
+                    height: 2.5rem;
+                }
+            }
+
+            .item-title {
+                font-size: 1rem;
+                color: #000;
+            }
+
+            .sub-text {
+                font-size: 0.813rem;
+                padding-top: 0.125rem;
+            }
+        }
+
+        .right-side {
+            .price {
+                font-size: 1.125rem;
+            }
+        }
+    }
+}
+
+// top items end

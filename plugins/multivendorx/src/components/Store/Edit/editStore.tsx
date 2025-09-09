@@ -155,8 +155,9 @@ const EditStore = () => {
                 appLocalizer={appLocalizer}
                 tabTitleSection={
                     <div className="tab-title">
+                        <div className="content">
                         <div className="tab-wrapper">
-                            <div className="title">{"Editing "+data.name}</div>
+                            <div className="title"><i className="adminlib-storefront"></i>{data.name}</div>
                             <div className="dsc">{data.description}</div>
                         </div>
                         <div className="status-wrapper">
@@ -184,6 +185,7 @@ const EditStore = () => {
                                     View Store
                                 </a>
                         )}
+                        </div>
                         </div>
                     </div>
                 }

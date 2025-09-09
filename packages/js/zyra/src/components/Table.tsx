@@ -618,17 +618,6 @@ const Table: React.FC<TableProps> = ({
                                                         </details>
                                                     </td>
                                                 )}
-                                                <div className="hover-action-cell">
-                                                    <button
-                                                        className="admin-btn btn-green"
-                                                        onClick={(e) => {
-                                                            e.stopPropagation();
-                                                            console.log("Row action for", productId);
-                                                        }}
-                                                    >
-                                                        More
-                                                    </button>
-                                                </div>
                                             </tr>
                                         );
                                     })}

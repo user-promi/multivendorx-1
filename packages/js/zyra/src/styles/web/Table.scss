@@ -148,22 +148,8 @@
         display: flex;
         width: 100%;
         border-bottom: $border-light-small;
+        cursor: pointer;
 
-        .hover-action-cell {
-          width: 100%;
-          position: absolute;
-          height: 100%;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          background: #0000001f;
-          top: 0;
-          display: none;
-        }
-
-        &:hover .hover-action-cell {
-          display: Flex;
-        }
 
         .admin-column {
           padding: 0.313rem 0.85rem;
@@ -228,6 +214,10 @@
         .basic-input:focus {
           border: 0.063rem solid #ccd0d5 !important;
           /*for overwrite common style*/
+        }
+
+        &:hover{
+          background: $theme-background-color;
         }
       }
 

@@ -426,6 +426,7 @@ const Announcements: React.FC = () => {
                                     }}
                                 />
                             </div>
+                            <span className="space"></span>
                         </div>
                     </div>
 

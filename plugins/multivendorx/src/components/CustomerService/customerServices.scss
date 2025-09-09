@@ -39,91 +39,17 @@
     }
 }
 
-// action start
-.action-card-wrapper {
-    display: flex;
-    gap: 1rem;
-    width: 100%;
-    padding: 0.5rem 0;
-
-    .action {
-        width: 100%;
-        padding: 1rem;
-        border-radius: 0.313rem;
-
-        .title {
-            justify-content: space-between;
-            display: flex;
-            font-size: 2.5rem;
-            line-height: 2.5rem;
-            color: #000;
-            margin-bottom: 1.313rem;
-
-            i {
-                font-size: 1.5rem;
-            }
-        }
-
-        .description {
-            font-size: 1.125rem;
-            color: #000;
-            font-weight: 500;
-        }
-    }
-
-    .action:nth-child(1) {
-        background: #5007aa14;
-
-        i {
-            color: $theme-color;
-        }
-    }
-
-    .action:nth-child(2) {
-        background: #bfdeed;
-
-        i {
-            color: #003d66;
-        }
-    }
-
-    .action:nth-child(3) {
-        background: #d9f5f0;
-
-        i {
-            color: #06be9f;
-        }
-    }
-
-    .action:nth-child(4) {
-        background: #5007aa14;
-
-        i {
-            color: $theme-color;
-        }
-    }
-    .action:nth-child(5) {
-        background: #b89d0325;
-
-        i {
-            color: #b89d03;
-        }
-    }
-}
-
-// action style end
-
 // tab system start
 .action-tab-wrapper {
     .tab-titles {
         display: flex;
-        gap: 1.125rem;
-        border-bottom: $border-light-medium;
         margin-bottom: 1rem;
+        gap: 0.5rem;
 
         .title {
-            padding-bottom: 0.625rem;
+            padding: 0.313rem 0.813rem;
             cursor: pointer;
+            border-radius: 0.313rem;
 
             h2 {
                 color: #121116;
@@ -132,9 +58,9 @@
                 font-weight: 500;
             }
 
-            &.active {
-                border-bottom: .126rem solid #5007aa;
-
+            &.active,
+            &:hover {
+                background: $theme-background-color;
                 h2 {
                     color: $theme-color;
                 }

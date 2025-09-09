@@ -56,6 +56,10 @@
       color: $theme-color;
       cursor: pointer;
       position: relative;
+
+      &:hover{
+        background: #e7e6e6cf;
+      }
     }
 
     .adminlib-notification {
@@ -103,8 +107,8 @@
       .count {
         position: absolute;
         font-size: 0.75rem;
-        right: 0rem;
-        top: -0.313rem;
+        right: -0.25rem;
+        top: -0.45rem;
         padding: 0.125rem;
         background: red;
         border-radius: 50%;
@@ -371,22 +375,35 @@
 }
 
 .tab-title {
-  display: flex;
-  justify-content: space-between;
   padding: 1.5rem;
   align-items: center;
   background: #fff;
-  margin: 2rem 2rem 0;
+  margin: 2rem;
+
+  .content {
+    border-bottom: $border-light-small;
+    display: flex;
+    justify-content: space-between;
+  }
 
   .tab-wrapper {
     .title {
-      font-size: 1.313rem;
-      color: #000;
+      font-size: 1.45rem;
+      display: flex;
+      align-items: end;
+      gap: 0.313rem;
+      line-height: 1.5rem;
+    }
+
+    i {
+      font-size: 1.5rem;
+      color: $theme-color;
     }
 
     .dsc {
       font-size: 0.85rem;
       font-weight: 400;
+      padding-top: 0.313rem;
     }
   }
 

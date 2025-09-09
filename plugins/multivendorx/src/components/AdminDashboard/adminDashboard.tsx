@@ -313,6 +313,38 @@ const AdminDashboard = () => {
         {/* last */}
         <div className="row">
           <div className="column w-35">
+            <div className="quick-link">
+
+              <h3>Quick Link</h3>
+              <div className="quick-links-wrapper">
+                {quickLinks.map((link, index) => (
+                  <a href={link.href} className="admin-btn btn-purple" key={index}>
+                    <i className={link.iconClass}></i> {link.text}
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="column w-65">
+            {/* Left column - 60% */}
+            <div className="cards-wrapper">
+              {resources.map((res, index) => (
+                <div className="cards" key={index}>
+                  <i className={res.iconClass}></i>
+                  <h3>{res.title}</h3>
+                  <p>{res.desc}</p>
+                  <a href={res.href} target="blank">
+                    {res.linkText}
+                  </a>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="row">
+          <div className="column w-35">
             <h3>This is what you get</h3>
 
             <div className="activity-wrapper">
@@ -328,36 +360,6 @@ const AdminDashboard = () => {
               ))}
             </div>
           </div>
-
-          <div className="column w-65">
-        {/* Left column - 60% */}
-          <div className="cards-wrapper">
-            {resources.map((res, index) => (
-              <div className="cards" key={index}>
-                <i className={res.iconClass}></i>
-                <h3>{res.title}</h3>
-                <p>{res.desc}</p>
-                <a href={res.href} target="blank">
-                  {res.linkText}
-                </a>
-              </div>
-            ))}
-          </div>
-
-        {/* Right column - 40%: Quick Links */}
-
-        <div className="quick-link">
-
-          <h3>Quick Link</h3>
-          <div className="quick-links-wrapper">
-            {quickLinks.map((link, index) => (
-              <a href={link.href} className="admin-btn btn-purple" key={index}>
-                <i className={link.iconClass}></i> {link.text}
-              </a>
-            ))}
-          </div>
-        </div>
-    </div>
         </div>
 
       </div>
