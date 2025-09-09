@@ -36,7 +36,7 @@ class Module {
         // Init helper classes.
         $this->init_classes();
         add_filter('multivendorx_payment_providers', [$this, 'add_payment_provider']);
-        add_filter( 'woocommerce_payment_gateways', [ $this, 'register_gateway' ] );
+        // add_filter( 'woocommerce_payment_gateways', [ $this, 'register_gateway' ] );
 
     }
 
