@@ -14,7 +14,7 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    align-items: center;  
+    align-items: center;
     gap: 0.5rem;
 
     .bulk-action {
@@ -148,6 +148,8 @@
         display: flex;
         width: 100%;
         border-bottom: $border-light-small;
+        cursor: pointer;
+
 
         .admin-column {
           padding: 0.313rem 0.85rem;
@@ -172,6 +174,7 @@
           &:has(.product-expand) {
             min-width: 3rem;
           }
+
         }
 
         .admin-column:first-child {
@@ -198,7 +201,8 @@
         .admin-column:has(.product-expand) {
           min-width: 3rem;
         }
-        .admin-column:has(.single-column){
+
+        .admin-column:has(.single-column) {
           flex-grow: 1;
         }
 
@@ -210,6 +214,10 @@
         .basic-input:focus {
           border: 0.063rem solid #ccd0d5 !important;
           /*for overwrite common style*/
+        }
+
+        &:hover{
+          background: $theme-background-color;
         }
       }
 

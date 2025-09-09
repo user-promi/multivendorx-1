@@ -170,7 +170,7 @@ const Modules: React.FC<ModuleProps> = ({
             <AdminBreadcrumbs
                 activeTabIcon="adminlib-module"
                 tabTitle="Modules"
-                description={'lorem Central hub for managing marketplace announcements. Review past updates and create new ones to keep stores informed.'}
+                description={'Manage marketplace features by enabling or disabling modules. Turning a module on activates its settings and workflows, while turning it off hides them from admin and vendors.'}
                 
             />
 

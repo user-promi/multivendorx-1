@@ -234,4 +234,18 @@
             background: $background-color;
         }
     }
+
+    .toggle-header {
+        max-width: 100%;
+        margin-bottom: 0.5rem;
+
+        h1 {
+            background: #f9f4f4b8;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.125rem;
+            padding: 0.5rem;
+        }
+    }
 }

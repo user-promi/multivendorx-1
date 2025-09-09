@@ -408,6 +408,8 @@ const Tabs: React.FC<TabsProps> = ({
 
   return (
     <>
+      {tabTitleSection && <>{tabTitleSection}</>}
+
       <AdminBreadcrumbs
         activeTabIcon={tabIcon}
         tabTitle={parentTab}
@@ -416,8 +418,6 @@ const Tabs: React.FC<TabsProps> = ({
         tabData={tabData}
         goPremium={true}
       />
-
-      {tabTitleSection && <>{tabTitleSection}</>}
 
       <div className="general-wrapper">
         {HeaderSection && <HeaderSection />}

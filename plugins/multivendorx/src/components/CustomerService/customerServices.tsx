@@ -46,11 +46,11 @@ const CustomerServices = () => {
             <AdminBreadcrumbs
                 activeTabIcon="adminlib-cart"
                 tabTitle="Customer Service"
-                description={'lorem Central hub for managing marketplace announcements. Review past updates and create new ones to keep stores informed.'}
+                description={'Manage store reviews, support requests, financial transactions, and reported issues.'}
             />
             <div className="work-board">
                 <div className="row">
-                    <div className="action-card-wrapper">
+                    <div className="overview-card-wrapper">
                         {CustomerServicesStats.map(stat => (
                             <div className="action" key={stat.id}>
                                 <div className="title">

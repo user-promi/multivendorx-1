@@ -77,8 +77,8 @@ const Notification = () => {
         <>
             <AdminBreadcrumbs
                 activeTabIcon="adminlib-cart"
-                tabTitle="Notification Dashboard"
-                description={'lorem Central hub for managing marketplace announcements. Review past updates and create new ones to keep stores informed.'}
+                tabTitle="Actions Dashboard"
+                description={'Manage all pending administrative actions including approvals, payouts, and notifications.'}
             />
 
             {/* Workboard Stats */}
@@ -86,7 +86,7 @@ const Notification = () => {
                 <div className="row">
                     <div className="column">
                         <div className="title"><i className="adminlib-person"></i> Account Overview</div>
-                        <div className="action-card-wrapper">
+                        <div className="overview-card-wrapper">
                             <div className="action">
                                 <div className="title">
                                     3
@@ -106,7 +106,7 @@ const Notification = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="action-card-wrapper">
+                        <div className="overview-card-wrapper">
                             <div className="action">
                                 <div className="title">
                                     99
@@ -128,7 +128,13 @@ const Notification = () => {
                         </div>
                     </div>
                     <div className="column">
-                        <div className="title"><i className="adminlib-book"></i> Tasks</div>
+                        <div className="header">
+                            <div className="title"><i className="adminlib-book"></i> Tasks</div>
+                            <div className="admin-btn btn-purple">
+                                <i className="adminlib-plus-circle-o"></i>
+                                Add task
+                            </div>
+                        </div>
                         <div className="task-manager">
 
                             {/* Task Table */}
@@ -158,12 +164,6 @@ const Notification = () => {
                                     ))}
                                 </tbody>
                             </table>
-                            <div className="buttons-wrapper">
-                                <div className="admin-btn btn-purple">
-                                    <i className="adminlib-plus-circle-o"></i>
-                                    Add task
-                                </div>
-                            </div>
                         </div>
                     </div>
                     <div className="column">

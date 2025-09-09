@@ -144,6 +144,19 @@ a {
   }
 }
 
+.admin-icon {
+  padding: 0.313rem;
+  border-radius: 0.313rem;
+  font-size: 1.313rem;
+
+  @each $name, $style in $icon-color-palette {
+    &.#{$name} {
+      background: map-get($style, background);
+      color: map-get($style, color);
+    }
+  }
+}
+
 
 .text-green {
   color: #00bd9d;

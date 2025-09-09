@@ -7,7 +7,13 @@ type SearchItem = {
   desc?: string;
   link: string;
 };
-
+interface Notification {
+  heading: string;
+  message: string;
+  time: string;
+  icon?: string;
+  color?: string;
+}
 type AdminHeaderProps = {
   brandImg: string;
   query: string;
@@ -34,6 +40,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
+  const [messageOpen, setMessageOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   // Close dropdown on click outside
@@ -55,7 +62,29 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
     setDropdownOpen(results.length > 0);
   }, [results]);
 
-
+  const [messages] = useState<Notification[]>([
+    {
+      heading: "Congratulation Lettie",
+      message: "Won the monthly best seller gold badge",
+      time: "2 days ago",
+      icon: "adminlib-user-network-icon red",
+      color: "green",
+    },
+    {
+      heading: "New Order Received",
+      message: "Order #1024 has been placed",
+      time: "1 hour ago",
+      icon: "adminlib-cart-icon",
+      color: "blue",
+    },
+    {
+      heading: "New Review",
+      message: "John left a 5-star review",
+      time: "30 mins ago",
+      icon: "adminlib-star-icon",
+      color: "yellow",
+    },
+  ]);
   return (
     <>
       <div className="admin-header">
@@ -171,6 +200,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
               onClick={() => {
                 setNotifOpen(!notifOpen);
                 setProfileOpen(false);
+                setMessageOpen(false);
               }}
             ></i>
             <span className="count">2</span>
@@ -268,8 +298,42 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
             <i
               className="admin-icon adminlib-enquiry"
               title="Admin support"
+              onClick={() => {
+                setMessageOpen(!messageOpen);
+                setProfileOpen(false);
+                setNotifOpen(false);
+              }}
             ></i>
-          <span className="count">10</span>
+            <span className="count">10</span>
+            {messageOpen && (
+              <div className="dropdown-menu notification">
+                <div className="title">Message <span className="admin-badge green">8 New</span></div>
+                <div className="notification">
+                  <ul>
+                    {messages.map((msg, index) => (
+                      <li key={index}>
+                        <a href="#">
+                          <div className={`icon admin-badge ${msg.color || "green"}`}>
+                            <i className={msg.icon || "adminlib-user-network-icon"}></i>
+                          </div>
+                          <div className="details">
+                            <span className="heading">{msg.heading}</span>
+                            <span className="message">{msg.message}</span>
+                            <span className="time">{msg.time}</span>
+                          </div>
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="footer">
+                  <div className="admin-btn btn-purple">
+                    <i className="adminlib-eye"></i>
+                    View all message
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
           <div className="icon-wrapper">
             <i
