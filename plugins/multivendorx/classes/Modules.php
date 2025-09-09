@@ -91,20 +91,31 @@ class Modules {
 						'module_file'  => MultiVendorX()->plugin_path . 'modules/StorePolicy/Module.php',
 						'module_class' => 'MultiVendorX\StorePolicy\Module',
 					),
-                    'staff-manager' => array(
-						'id'           => 'staff-manager',
-						'module_file'  => MultiVendorX()->plugin_path . 'modules/StaffManager/Module.php',
-						'module_class' => 'MultiVendorX\StaffManager\Module',
+                    'bank-transfer' => array(
+                        'id'           => 'bank-transfer',
+						'module_file'  => MultiVendorX()->plugin_path . 'modules/BankTransfer/Module.php',
+						'module_class' => 'MultiVendorX\BankTransfer\Module',
 					),
                     'stripe-connect' => array(
-						'id'           => 'stripe-connect',
+                        'id'           => 'stripe-connect',
 						'module_file'  => MultiVendorX()->plugin_path . 'modules/StripeConnect/Module.php',
 						'module_class' => 'MultiVendorX\StripeConnect\Module',
 					),
                     'paypal-payout' => array(
-						'id'           => 'paypal-payout',
+                        'id'           => 'paypal-payout',
 						'module_file'  => MultiVendorX()->plugin_path . 'modules/PaypalPayout/Module.php',
 						'module_class' => 'MultiVendorX\PaypalPayout\Module',
+					),
+                    //pro modules
+                    'staff-manager' => array(
+                        'id'           => 'staff-manager',
+                        'module_file'  => MultiVendorX()->plugin_path . 'modules/StaffManager/Module.php',
+                        'module_class' => 'MultiVendorX\StaffManager\Module',
+                    ),
+                    'paypal-marketplace' => array(
+						'id'           => 'paypal-marketplace',
+						'module_file'  => MultiVendorX()->plugin_path . 'modules/PaypalMarketplace/Module.php',
+						'module_class' => 'MultiVendorX\PaypalMarketplace\Module',
 					),
 				)
             );

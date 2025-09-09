@@ -5,10 +5,10 @@
  * @package MultiVendorX
  */
 
-namespace MultiVendorX\StripeConnect;
+namespace MultiVendorX\BankTransfer;
 
 /**
- * MultiVendorX Stripe Connect Module class
+ * MultiVendorX Module class
  *
  * @class       Module class
  * @version     6.0.0
@@ -41,9 +41,9 @@ class Module {
 
     public function add_payment_provider($providers) {
         $providers[] =  [
-            'id'    => 'stripe-connect',
-            'name'  => 'Stripe Connect',
-            'class' => 'MultiVendorX\\StripeConnect\\Payment'
+            'id'    => 'bank-transfer',
+            'name'  => 'Bank Transfer',
+            'class' => 'MultiVendorX\\BankTransfer\\Payment'
         ];
 
         return $providers;
@@ -54,7 +54,7 @@ class Module {
      * @return void
      */
     public function init_classes() {
-        $this->container['stripe_connect'] = new Payment();
+        $this->container['bank_transfer'] = new Payment();
     }
 
     /**

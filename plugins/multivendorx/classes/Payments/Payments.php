@@ -65,5 +65,4 @@ class Payments {
         return $store_settings;
     }
 
-
 }

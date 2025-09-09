@@ -416,10 +416,15 @@ class FrontendScripts {
 						'ajaxurl'     => admin_url( 'admin-ajax.php' ),
 					),
 				),
-                'multivendorx-dashboard-components-script' => array(
-                    'object_name' => 'color',
+                'multivendorx-dashboard-script' => array(
+                    'object_name' => 'appLocalizer',
                     'data'        => array(
-                        'color'            => MultiVendorX()->setting->get_setting( 'store_color_settings' ),
+                        'apiUrl'                   => untrailingslashit( get_rest_url() ),
+						'restUrl'                  => MultiVendorX()->rest_namespace,
+						'nonce'                    => wp_create_nonce( 'wp_rest' ),
+                        'color'                    => MultiVendorX()->setting->get_setting( 'store_color_settings' ),
+                        'store_payment_settings'    => MultiVendorX()->payments->get_all_store_payment_settings(),
+                        'store_id'                  => get_user_meta(wp_get_current_user()->ID, 'multivendorx_active_store', true),
                     ),
                 ),
                 'multivendorx-registration-form-script'          => array(

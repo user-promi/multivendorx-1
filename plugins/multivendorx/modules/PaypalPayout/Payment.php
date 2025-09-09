@@ -25,7 +25,7 @@ class Payment {
             'icon'      => 'PP',
             'id'        => $this->get_id(),
             'label'     => 'Paypal Payout',
-            'connected' => true,
+            'enableOption' => true,
             'desc'      => 'Full marketplace solution with instant payouts, comprehensive dispute handling, and global coverage. Best for established marketplaces.',
             'formFields' => [
                 [
@@ -54,18 +54,24 @@ class Payment {
     }
 
     public function get_store_payment_settings() {
-        return [
-            'id'    => $this->get_id(),
-            'label' => __('Paypal Payout', 'multivendorx'),
-            'fields' => [
-                [
-                    'name'        => 'paypal_email',
-                    'type'        => 'email',
-                    'label'       => __('PayPal Email', 'multivendorx'),
-                    'placeholder' => __('Enter your PayPal email address', 'multivendorx'),
+        $payment_admin_settings = MultiVendorX()->setting->get_setting( 'payment_methods', [] );
+
+        $paypal_settings = !empty($payment_admin_settings['paypal-payout']) ? $payment_admin_settings['paypal-payout'] : [];
+        
+        if ($paypal_settings['enable']) {
+            return [
+                'id'    => $this->get_id(),
+                'label' => __('Paypal Payout', 'multivendorx'),
+                'fields' => [
+                    [
+                        'name'        => 'paypal_email',
+                        'type'        => 'email',
+                        'label'       => __('PayPal Email', 'multivendorx'),
+                        'placeholder' => __('Enter your PayPal email address', 'multivendorx'),
+                    ]
                 ]
-            ]
-        ];
+            ];
+        }
     }
 
     public function process_payment($store_id, $amount, $order_id = null, $transaction_id = null) {

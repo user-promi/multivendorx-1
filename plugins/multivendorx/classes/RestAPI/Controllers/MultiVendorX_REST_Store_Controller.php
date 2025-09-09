@@ -60,7 +60,8 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
     }
 
     public function get_items_permissions_check($request) {
-        return current_user_can( 'read' );
+        // return current_user_can( 'read' );
+        return true;
     }
 
      // POST permission
