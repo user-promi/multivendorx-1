@@ -152,8 +152,16 @@ class Enrollment {
 		foreach ( $order->get_items() as $item_id => $item ) {
 			$product = $item->get_product();
 
-			$moodle_course_id = $product->get_meta( 'moodle_course_id', true );
-            $linked_course_id = $product->get_meta( 'linked_course_id', true );
+			if ( $product->is_type( 'variation' ) ) {
+				$parent_id = $product->get_parent_id();
+				$parent_product = wc_get_product( $parent_id );
+		
+				$moodle_course_id = $parent_product->get_meta( 'moodle_course_id', true );
+				$linked_course_id = $parent_product->get_meta( 'linked_course_id', true );
+			} else {
+				$moodle_course_id = $product->get_meta( 'moodle_course_id', true );
+				$linked_course_id = $product->get_meta( 'linked_course_id', true );
+			}
 
 			if ( ! $moodle_course_id ) {
 				Util::log( "Skipping enrollment - Moodle course ID is missing. Linked Course ID: #{$linked_course_id}" );
