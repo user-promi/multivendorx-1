@@ -153,9 +153,9 @@ class Enrollment {
 			$product = $item->get_product();
 
 			if ( $product->is_type( 'variation' ) ) {
-				$parent_id = $product->get_parent_id();
+				$parent_id      = $product->get_parent_id();
 				$parent_product = wc_get_product( $parent_id );
-		
+
 				$moodle_course_id = $parent_product->get_meta( 'moodle_course_id', true );
 				$linked_course_id = $parent_product->get_meta( 'linked_course_id', true );
 			} else {
@@ -366,7 +366,7 @@ class Enrollment {
 				'preferences' => array(
 					array(
 						'type'  => 'auth_forcepasswordchange',
-						'value' => 1,
+						'value' => apply_filters( 'moowoodle_force_password_change', 1 ),
 					),
 				),
 			);
@@ -485,7 +485,7 @@ class Enrollment {
 		$user_data['preferences'] = array(
 			array(
 				'type'  => 'auth_forcepasswordchange',
-				'value' => 1,
+				'value' => apply_filters( 'moowoodle_force_password_change', 1 ),
 			),
 		);
 

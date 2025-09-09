@@ -132,7 +132,7 @@ class TestConnection {
 						'preferences' => array(
 							0 => array(
 								'type'  => 'auth_forcepasswordchange',
-								'value' => 1,
+								'value' => apply_filters( 'moowoodle_force_password_change', 1 ),
 							),
 						),
 					),
@@ -196,7 +196,7 @@ class TestConnection {
 						'preferences' => array(
 							0 => array(
 								'type'  => 'auth_forcepasswordchange',
-								'value' => 1,
+								'value' => apply_filters( 'moowoodle_force_password_change', 1 ),
 							),
 						),
 					),
