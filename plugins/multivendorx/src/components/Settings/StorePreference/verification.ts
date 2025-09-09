@@ -106,14 +106,14 @@ export default {
                         {
                             key: 'registration_notice',
                             label: __('Registration Notice', 'multivendorx'),
-                            desc: __('This message will be displayed on the registration page.', 'multivendorx'),
+                            desc: __('Displayed after registration until email verification is completed.', 'multivendorx'),
                             type: 'textarea',
                             class: 'mvx-setting-textarea',
                         },
                         {
                             key: 'login_notice',
                             label: __('Login Notice', 'multivendorx'),
-                            desc: __('This message will be shown on the login page.', 'multivendorx'),
+                            desc: __('Displayed if login is attempted before email verification.', 'multivendorx'),
                             type: 'textarea',
                             class: 'mvx-setting-textarea',
                         },
