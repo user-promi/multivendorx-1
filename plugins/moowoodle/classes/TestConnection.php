@@ -124,16 +124,19 @@ class TestConnection {
 						'email'       => 'moowoodletestuser@gmail.com',
 						'username'    => 'moowoodletestuser',
 						'password'    => 'Moowoodle@123',
-						'auth'        => 'manual',
+						'auth'        => apply_filters( 'moowoodle_auth_change', 'manual' ),
 						'firstname'   => 'moowoodle',
 						'lastname'    => 'testuser',
 						'city'        => 'moowoodlecity',
 						'country'     => 'IN',
-						'preferences' => array(
-							0 => array(
-								'type'  => 'auth_forcepasswordchange',
-								'value' => apply_filters( 'moowoodle_force_password_change', 1 ),
-							),
+						'preferences' => apply_filters(
+							'moowoodle_user_preferences',
+							array(
+								0 => array(
+									'type'  => 'auth_forcepasswordchange',
+									'value' => 1,
+								),
+							)
 						),
 					),
 				),
@@ -188,16 +191,19 @@ class TestConnection {
 						'email'       => 'moowoodletestuser@gmail.com',
 						'username'    => 'moowoodletestuser',
 						'password'    => 'Moowoodle@123',
-						'auth'        => 'manual',
+						'auth'        => apply_filters( 'moowoodle_auth_change', 'manual' ),
 						'firstname'   => 'moowoodle',
 						'lastname'    => 'testuser',
 						'city'        => 'citymoowoodle',
 						'country'     => 'IN',
-						'preferences' => array(
-							0 => array(
-								'type'  => 'auth_forcepasswordchange',
-								'value' => apply_filters( 'moowoodle_force_password_change', 1 ),
-							),
+						'preferences' => apply_filters(
+							'moowoodle_user_preferences',
+							array(
+								0 => array(
+									'type'  => 'auth_forcepasswordchange',
+									'value' => 1,
+								),
+							)
 						),
 					),
 				),

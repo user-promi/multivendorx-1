@@ -360,14 +360,18 @@ class Enrollment {
 				'email'       => $email,
 				'username'    => $username,
 				'password'    => $password,
+				'auth'        => apply_filters( 'moowoodle_auth_change', 'manual' ),
 				'auth'        => 'manual',
 				'firstname'   => $first_name,
 				'lastname'    => $last_name,
-				'preferences' => array(
+				'preferences' => apply_filters(
+					'moowoodle_user_preferences',
 					array(
-						'type'  => 'auth_forcepasswordchange',
-						'value' => apply_filters( 'moowoodle_force_password_change', 1 ),
-					),
+						0 => array(
+							'type'  => 'auth_forcepasswordchange',
+							'value' => 1,
+						),
+					)
 				),
 			);
 
@@ -480,13 +484,16 @@ class Enrollment {
 			$user_data['email']    = ( $purchaser_details ) ? $purchaser_details->user_email : '';
 			$user_data['username'] = $username;
 			$user_data['password'] = $password;
-			$user_data['auth']     = 'manual';
+			$user_data['auth']     = apply_filters( 'moowoodle_auth_change', 'manual' );
 		}
-		$user_data['preferences'] = array(
+		$user_data['preferences'] = apply_filters(
+			'moowoodle_user_preferences',
 			array(
-				'type'  => 'auth_forcepasswordchange',
-				'value' => apply_filters( 'moowoodle_force_password_change', 1 ),
-			),
+				array(
+					'type'  => 'auth_forcepasswordchange',
+					'value' => 1,
+				),
+			)
 		);
 
 		/**
