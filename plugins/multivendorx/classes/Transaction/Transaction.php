@@ -29,6 +29,9 @@ class Transaction {
     public function create_transaction($commission_id, $vendor_order, $main_order) {
         global $wpdb;
 
+        $payment_method = $main_order->get_payment_method();
+        // if (payment method is stripe or paypal marketplace and the changes then this function return)
+        
         $disbursement_status = MultiVendorX()->setting->get_setting( 'disbursement_order_status', [] );
         if( in_array($vendor_order->get_status(), $disbursement_status)){
             $disbursement_method = MultiVendorX()->setting->get_setting( 'disbursement_method' );

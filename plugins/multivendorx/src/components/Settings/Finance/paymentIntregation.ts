@@ -1,9 +1,8 @@
 import { __ } from '@wordpress/i18n';
-import payPal from '../../../assets/images/paypal.png';
 
-const methods = Object.entries(appLocalizer?.all_payments).map(([key, value]) => {
-    return value;
-});
+const methods = appLocalizer?.all_payments
+    ? Object.entries(appLocalizer.all_payments).map(([_, value]) => value)
+    : [];
 
 export default {
     id: 'payment-integration',
