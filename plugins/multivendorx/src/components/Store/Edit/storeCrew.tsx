@@ -87,21 +87,27 @@ return (
                         </div>
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <label htmlFor="product-name">Store Users</label>
+                                <label>Store Managers</label>
                                 <SelectInput
-                                    name="country"
-                                    options={[
-                                        { value: 'vendor1', label: 'John’s Fashion Hub' },
-                                        { value: 'vendor2', label: 'Tech World' },
-                                        { value: 'vendor3', label: 'Green Grocery' },
-                                        { value: 'vendor4', label: 'Home Essentials' },
-                                        { value: 'vendor5', label: 'Book Paradise' },
-                                    ]}
-
+                                    name="store_managers"
+                                    options={appLocalizer?.managers_list || []}
                                     type="multi-select"
-                                    onChange={(newValue) => {
-                                        if (!newValue || Array.isArray(newValue)) return;
-                                        const updated = { ...formData, user: newValue.value, state: '' }; // reset state
+                                    value={(formData.store_managers || []).map((id: any) => {
+                                        const match = (appLocalizer?.managers_list || []).find(
+                                            (opt: any) => String(opt.value) === String(id)
+                                        );
+                                        return match ? match.value : String(id);
+                                    })}
+                                    onChange={(selected: any) => {
+                                        const store_managers =
+                                            (selected as any[])?.map(
+                                                (option) => option.value
+                                            ) || [];
+                                        const updated = {
+                                            ...formData,
+                                            store_managers,
+                                            state: '',
+                                        };
                                         setFormData(updated);
                                         autoSave(updated);
                                     }}
@@ -110,21 +116,27 @@ return (
                         </div>
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <label htmlFor="product-name">Store Users</label>
+                                <label>Product Managers</label>
                                 <SelectInput
-                                    name="country"
-                                    options={[
-                                        { value: 'vendor1', label: 'John’s Fashion Hub' },
-                                        { value: 'vendor2', label: 'Tech World' },
-                                        { value: 'vendor3', label: 'Green Grocery' },
-                                        { value: 'vendor4', label: 'Home Essentials' },
-                                        { value: 'vendor5', label: 'Book Paradise' },
-                                    ]}
-
+                                    name="product_managers"
+                                    options={appLocalizer?.product_managers_list || []}
                                     type="multi-select"
-                                    onChange={(newValue) => {
-                                        if (!newValue || Array.isArray(newValue)) return;
-                                        const updated = { ...formData, user: newValue.value, state: '' }; // reset state
+                                    value={(formData.product_managers || []).map((id: any) => {
+                                        const match = (appLocalizer?.product_managers_list || []).find(
+                                            (opt: any) => String(opt.value) === String(id)
+                                        );
+                                        return match ? match.value : String(id);
+                                    })}
+                                    onChange={(selected: any) => {
+                                        const product_managers =
+                                            (selected as any[])?.map(
+                                                (option) => option.value
+                                            ) || [];
+                                        const updated = {
+                                            ...formData,
+                                            product_managers,
+                                            state: '',
+                                        };
                                         setFormData(updated);
                                         autoSave(updated);
                                     }}
@@ -133,21 +145,56 @@ return (
                         </div>
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <label htmlFor="product-name">Store Users</label>
+                                <label>Customer Supports</label>
                                 <SelectInput
-                                    name="country"
-                                    options={[
-                                        { value: 'vendor1', label: 'John’s Fashion Hub' },
-                                        { value: 'vendor2', label: 'Tech World' },
-                                        { value: 'vendor3', label: 'Green Grocery' },
-                                        { value: 'vendor4', label: 'Home Essentials' },
-                                        { value: 'vendor5', label: 'Book Paradise' },
-                                    ]}
-
+                                    name="customer_supports"
+                                    options={appLocalizer?.customer_support_list || []}
                                     type="multi-select"
-                                    onChange={(newValue) => {
-                                        if (!newValue || Array.isArray(newValue)) return;
-                                        const updated = { ...formData, user: newValue.value, state: '' }; // reset state
+                                    value={(formData.customer_supports || []).map((id: any) => {
+                                        const match = (appLocalizer?.customer_support_list || []).find(
+                                            (opt: any) => String(opt.value) === String(id)
+                                        );
+                                        return match ? match.value : String(id);
+                                    })}
+                                    onChange={(selected: any) => {
+                                        const customer_supports =
+                                            (selected as any[])?.map(
+                                                (option) => option.value
+                                            ) || [];
+                                        const updated = {
+                                            ...formData,
+                                            customer_supports,
+                                            state: '',
+                                        };
+                                        setFormData(updated);
+                                        autoSave(updated);
+                                    }}
+                                />
+                            </div>
+                        </div>
+                        <div className="form-group-wrapper">
+                            <div className="form-group">
+                                <label>Order Assistants</label>
+                                <SelectInput
+                                    name="order_assistants"
+                                    options={appLocalizer?.assistants_list || []}
+                                    type="multi-select"
+                                    value={(formData.order_assistants || []).map((id: any) => {
+                                        const match = (appLocalizer?.assistants_list || []).find(
+                                            (opt: any) => String(opt.value) === String(id)
+                                        );
+                                        return match ? match.value : String(id);
+                                    })}
+                                    onChange={(selected: any) => {
+                                        const order_assistants =
+                                            (selected as any[])?.map(
+                                                (option) => option.value
+                                            ) || [];
+                                        const updated = {
+                                            ...formData,
+                                            order_assistants,
+                                            state: '',
+                                        };
                                         setFormData(updated);
                                         autoSave(updated);
                                     }}

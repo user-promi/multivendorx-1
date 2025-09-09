@@ -22,6 +22,10 @@ declare global {
         capabilities: any;
         custom_roles: any;
         store_owners: any;
+        managers_list: any;
+        product_managers_list: any;
+        customer_support_list: any;
+        assistants_list: any;
         all_payments: any;
         all_store_settings: any;
         freeVersion : any;
