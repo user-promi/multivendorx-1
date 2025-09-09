@@ -16,10 +16,6 @@ export default {
             type: 'nested',
             label: __('Low stock alerts', 'multivendorx'),
             single: true,
-            desc: __(
-                'Automatically notify stores when product inventory drops below a specified level',
-                'multivendorx'
-            ),
             nestedFields: [
                 {
                     key: 'low_stock_alert',
@@ -51,10 +47,6 @@ export default {
             type: 'nested',
             label: __('Out of stock alerts', 'multivendorx'),
             single: true,
-            desc: __(
-                'Automatically notify stores when products become completely unavailable',
-                'multivendorx'
-            ),
             nestedFields: [
                 {
                     key: 'out_of_stock_alert',
