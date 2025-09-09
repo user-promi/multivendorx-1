@@ -59,7 +59,7 @@ export default {
             label: sprintf(
                 '%1$s (%2$s)',
                 __( 'Advertising cost', 'mvx-pro' ),
-                appLocalizer.woocommerce_currency
+                appLocalizer?.woocommerce_currency
             ),
             desc: __(
                 'Set the price for each advertising slot. Enter "0" to allow stores to advertise for free.',

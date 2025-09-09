@@ -87,30 +87,34 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
 
   function isLastRowComplete() {
     if (rows.length === 0) return true;
-    const lastRow = rows.at(-1) || {};
-
+    const lastRowIndex = rows.length - 1;
+    const lastRow = rows[lastRowIndex] || {};
+  
+    // ✅ Skip validation for row 0
+    if (lastRowIndex === 0) return true;
+  
     return fields.every((f) => {
-      if (f.skipFirstRow && rows.length === 1) return true;
-      if (f.firstRowOnly && rows.length > 1) return true;
-
+      if (f.skipFirstRow && lastRowIndex === 0) return true;
+      if (f.firstRowOnly && lastRowIndex > 0) return true;
+  
       const val = lastRow[f.key];
-
+  
       // dependency check
       if (f.dependent) {
         const depVal = lastRow[f.dependent.key];
         const depActive = Array.isArray(depVal)
           ? depVal.includes(f.dependent.value)
           : depVal === f.dependent.value;
-
-        // skip validation if dependency not satisfied
+  
         if ((f.dependent.set && !depActive) || (!f.dependent.set && depActive)) {
           return true;
         }
       }
-
+  
       return val !== undefined && val !== "";
     });
   }
+  
 
   function addRow() {
     if (single) return;
@@ -194,9 +198,9 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
               options={
                 Array.isArray(field.options)
                   ? field.options.map((opt) => ({
-                      value: String(opt.value),
-                      label: opt.label ?? String(opt.value),
-                    }))
+                    value: String(opt.value),
+                    label: opt.label ?? String(opt.value),
+                  }))
                   : []
               }
               value={typeof val === "object" ? val.value : val}
@@ -235,8 +239,8 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
                 look === "toggle"
                   ? "toggle-btn"
                   : field.selectDeselect === true
-                  ? "checkbox-list-side-by-side"
-                  : "simple-checkbox"
+                    ? "checkbox-list-side-by-side"
+                    : "simple-checkbox"
               }
               descClass="settings-metabox-description"
               description={field.desc}
@@ -291,17 +295,22 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
       {rows.map((row, rowIndex) => (
         <div key={`nested-row-${rowIndex}`} className={`nested-row ${single ? "" : "multiple"}`}>
           {fields.map((field) => renderField(field, row, rowIndex))}
-          {!single && rowIndex === rows.length - 1 && (
+          {!single && (
             <div className="buttons-wrapper">
-              <button
-                type="button"
-                className="admin-btn btn-green"
-                onClick={addRow}
-                disabled={!isLastRowComplete()}
-              >
-                + {addButtonLabel}
-              </button>
-              {rows.length > 1 && (
+              {/* Add button only on last row */}
+              {rowIndex === rows.length - 1 && (
+                <button
+                  type="button"
+                  className="admin-btn btn-green"
+                  onClick={addRow}
+                  disabled={!isLastRowComplete()}
+                >
+                  + {addButtonLabel}
+                </button>
+              )}
+
+              {/* Delete button on all rows except row 0 */}
+              {rows.length > 1 && rowIndex > 0 && (
                 <button
                   type="button"
                   className="admin-btn btn-red"
@@ -310,8 +319,10 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
                   {deleteButtonLabel}
                 </button>
               )}
+
             </div>
           )}
+
         </div>
       ))}
       {description && (

@@ -5,10 +5,10 @@
  * @package MultiVendorX
  */
 
-namespace MultiVendorX\StripeConnect;
+namespace MultiVendorX\PaypalMarketplace;
 
 /**
- * MultiVendorX Stripe Connect Module class
+ * MultiVendorX Module class
  *
  * @class       Module class
  * @version     6.0.0
@@ -36,14 +36,15 @@ class Module {
         // Init helper classes.
         $this->init_classes();
         add_filter('multivendorx_payment_providers', [$this, 'add_payment_provider']);
+        // add_filter( 'woocommerce_payment_gateways', [ $this, 'register_gateway' ] );
 
     }
 
     public function add_payment_provider($providers) {
         $providers[] =  [
-            'id'    => 'stripe-connect',
-            'name'  => 'Stripe Connect',
-            'class' => 'MultiVendorX\\StripeConnect\\Payment'
+            'id'    => 'paypal-marketplace',
+            'name'  => 'Paypal Marketplace',
+            'class' => 'MultiVendorX\\PaypalMarketplace\\Payment'
         ];
 
         return $providers;
@@ -54,7 +55,12 @@ class Module {
      * @return void
      */
     public function init_classes() {
-        $this->container['stripe_connect'] = new Payment();
+        $this->container['paypal_marketplace'] = new Payment();
+    }
+
+    public function register_gateway( $gateways ) {
+        $gateways[] = $this->container['paypal_marketplace'];
+        return $gateways;
     }
 
     /**

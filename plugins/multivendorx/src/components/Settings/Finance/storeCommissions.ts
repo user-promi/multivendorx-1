@@ -71,6 +71,7 @@ export default {
                         },
                     ],
                     skipFirstRow: true,
+                    after: "then",
                     dependent: {
                         key: 'rule_type',
                         set: true,
@@ -87,6 +88,7 @@ export default {
                         },
                     ],
                     skipFirstRow: true,
+                    after: "then",
                     dependent: {
                         key: 'rule_type',
                         set: true,

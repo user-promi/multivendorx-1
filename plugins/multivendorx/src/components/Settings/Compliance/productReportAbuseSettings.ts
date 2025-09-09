@@ -22,7 +22,7 @@ export default {
                 },
 				{
                     key: 'only_guest_can_report',
-					label: __('Anyone logged in or guest)', 'multivendorx'),
+					label: __('Anyone logged in or guest', 'multivendorx'),
                     value: 'only_guest_can_report',
                 },
             ],

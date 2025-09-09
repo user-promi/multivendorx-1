@@ -10,7 +10,8 @@ defined('ABSPATH') || exit;
 
 class PaymentProcessor {
     public function __construct() {
-        add_action('multivendorx_after_payment_complete', array( $this, 'after_payment_complete'), 10, 4);
+        add_action('multivendorx_after_payment_complete', array( $this, 'after_payment_complete'), 10, 5);
+        // add_action('multivendorx_after_real_time_payment_complete', array( $this, 'after_real_time_payment_complete'), 10, 2);
     }
 
     
@@ -109,5 +110,35 @@ class PaymentProcessor {
             );
         }
     }
+
+
+    // public function after_real_time_payment_complete($store_id, $order_id) {
+    //     global $wpdb;
+
+    //     $order         = $order_id > 0 ? wc_get_order($order_id) : null;
+    //     $commission_id = $order ? $order->get_meta('multivendorx_commission_id', true) : null;
+    //     $commission    = $commission_id ? CommissionUtil::get_commission_db($commission_id) : null;
+
+    //     $amount = $commission ? (float) $commission->commission_total : 0.00;
+
+    //     $data = [
+    //         'receiver_id'      => (int) $store_id,
+    //         'order_id'         => $order_id > 0 ? (int) $order_id : null,
+    //         'commission_id'    => $commission_id ? (int) $commission_id : null,
+    //         'receiver_type'    => 'Store',
+    //         'amount'           => $amount,
+    //         'currency'         => get_woocommerce_currency(),
+    //         'narration'        => "Payment Successful",
+    //     ];
+
+    //     $format = ["%d", "%d", "%d", "%s", "%f", "%s", "%s"];
+
+    //     $wpdb->insert(
+    //         $wpdb->prefix . Utill::TABLES['real_time_transaction'],
+    //         $data,
+    //         $format
+    //     );
+        
+    // }
 
 }

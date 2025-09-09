@@ -147,6 +147,10 @@ class Admin {
                     'name'   => __( 'Help & Support', 'multivendorx' ),
                     'subtab' => '',
                 ),
+                'advertisement' => array(
+                    'name'   => __( 'Advertisement', 'multivendorx' ),
+                    'subtab' => '',
+                ),
                 // 'setup' => array(
                 //     'name'   => __( 'Setup', 'multivendorx' ),
                 //     'subtab' => '',

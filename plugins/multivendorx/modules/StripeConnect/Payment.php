@@ -5,7 +5,7 @@ namespace MultiVendorX\StripeConnect;
 
 defined('ABSPATH') || exit;
 
-class Stripe_Payment {
+class Payment {
     public function __construct(){
         // $this->hi();
         add_action('multivendorx_process_stripe-connect_payment', array($this, 'process_payment'), 10, 2);
@@ -20,7 +20,7 @@ class Stripe_Payment {
             'icon'      => 'ST',
             'id'        => $this->get_id(),
             'label'     => 'Stripe Connect',
-            'connected' => true,
+            'enableOption' => true,
             'desc'      => 'Full marketplace solution with instant payouts, comprehensive dispute handling, and global coverage. Best for established marketplaces.',
             'formFields' => [
                 [
@@ -49,13 +49,22 @@ class Stripe_Payment {
     }
 
     public function get_store_payment_settings() {
-        return [
-            'id'    => $this->get_id(),
-            'label' => __('Stripe Connect', 'multivendorx'),
-            'fields' => []
-        ];
+        $payment_admin_settings = MultiVendorX()->setting->get_setting( 'payment_methods', [] );
+
+        $stripe_settings = !empty($payment_admin_settings['stripe-connect']) ? $payment_admin_settings['stripe-connect'] : [];
+        
+        if ($stripe_settings['enable']) {
+
+            return [
+                'id'    => $this->get_id(),
+                'label' => __('Stripe Connect', 'multivendorx'),
+                'fields' => []
+            ];
+        }
+
     }
 
+ 
     // public function process_payment($order_id, $store_id, $amount) {
     //     $secret_key = '';
     //     $connected_account_id = '';

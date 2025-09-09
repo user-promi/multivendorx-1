@@ -135,7 +135,7 @@ class Store {
         $table = "{$wpdb->prefix}" . Utill::TABLES['store_meta'];
 
         $exists = $wpdb->get_var($wpdb->prepare(
-            "SELECT ID FROM $table WHERE store_id = %d AND meta_key = %s LIMIT 1",
+            "SELECT ID FROM $table WHERE store_id = %d AND meta_key = %s",
             $this->id, $key
         ));
 

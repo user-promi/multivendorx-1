@@ -229,7 +229,7 @@ export default {
         },
         { type: 'separator', id: 'payment_management', label: 'Payment Management' },
         {
-            id: 'bank-payment',
+            id: 'bank-transfer',
             name: __('Bank Transfer', 'multivendorx'),
             desc: "Manually transfer money directly to the store's bank account.",
             icon: 'adminlib-rules',
@@ -238,16 +238,16 @@ export default {
             pro_module: false,
             category: 'payment_management'
         },
-        {
-            id: 'paypal-masspay',
-            name: __('PayPal Masspay', 'multivendorx'),
-            desc: "Schedule payment to multiple stores at the same time.",
-            icon: 'adminlib-rules',
-            doc_link: 'https://multivendorx.com/docs/knowledgebase/paypal-masspay/',
-            //settings_link: appLocalizer.site_url,
-            pro_module: false,
-            category: 'payment_management'
-        },
+        // {
+        //     id: 'paypal-masspay',
+        //     name: __('PayPal Masspay', 'multivendorx'),
+        //     desc: "Schedule payment to multiple stores at the same time.",
+        //     icon: 'adminlib-rules',
+        //     doc_link: 'https://multivendorx.com/docs/knowledgebase/paypal-masspay/',
+        //     //settings_link: appLocalizer.site_url,
+        //     pro_module: false,
+        //     category: 'payment_management'
+        // },
         {
             id: 'paypal-payout',
             name: __('PayPal Payout', 'multivendorx'),
@@ -265,7 +265,7 @@ export default {
             icon: 'adminlib-rules',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/paypal-marketplace-real-time-split/',
             //settings_link: admin_url('admin.php?page=wc-settings&tab=checkout&section=mvx_paypal_marketplace'),
-            pro_module: true,
+            pro_module: false,
             category: 'payment_management'
         },
         {
@@ -441,7 +441,7 @@ export default {
             pro_module: true,
             category: 'analytics_tools'
         },
-        { type: 'separator', id: 'marketplace_boosters', label: 'Marketplace boosters' },
+        { type: 'separator', id: 'marketplace_boosters', label: 'Marketplace Boosters' },
         {
             id: 'marketplace-membership',
             name: __('Marketplace Membership', 'multivendorx'),
@@ -620,8 +620,8 @@ export default {
             icon: 'adminlib-rules',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/shipstation/',
             //settings_link: appLocalizer.site_url,
-            pro_module: true,
-            category: 'integration'
+            pro_module: false,
+            category: 'store_management'
         },
         {
             id: 'mvx-blocks',

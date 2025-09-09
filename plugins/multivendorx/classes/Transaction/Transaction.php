@@ -19,21 +19,32 @@ class Transaction {
     public function __construct() {
         $this->init_classes();
 
-        add_action( 'multivendorx_after_calculate_commission', array($this, 'create_transaction'), 10, 3 );
+        add_action( 'woocommerce_order_status_changed', array($this, 'create_transaction'), 20, 4 );
     }
 
     public function init_classes() {
         $this->container = array();
     }
 
-    public function create_transaction($commission_id, $vendor_order, $main_order) {
+    public function create_transaction($order_id, $old_status, $new_status, $order) {
         global $wpdb;
 
-        $disbursement_status = MultiVendorX()->setting->get_setting( 'disbursement_order_status', [] );
-        if( in_array($vendor_order->get_status(), $disbursement_status)){
+        if ($order->get_parent_id() == 0) {
+            return;
+        }
+
+        $payment_method = $order->get_payment_method();
+        // if (payment method is stripe or paypal marketplace and the check charges then this function return)
+        $disbursement_status = MultiVendorX()->setting->get_setting( 'disbursement_order_status' );
+        if( !empty($disbursement_status) && in_array($new_status, $disbursement_status)){
             $disbursement_method = MultiVendorX()->setting->get_setting( 'disbursement_method' );
-            $lock_period         = (int) MultiVendorX()->setting->get_setting( 'commission_lock_period', 0 );
-            
+            $commission_id = $order->get_meta( 'multivendorx_commission_id', true);
+            $exists = $this->get_transaction_db($commission_id);
+            if (!empty($exists)) {
+                return;
+            }
+
+            $lock_period = (int) MultiVendorX()->setting->get_setting( 'commission_lock_period', 0 );
             $status = 'Pending';
             $time   = current_time('mysql');
 
@@ -60,7 +71,7 @@ class Transaction {
                 'transaction_type' => 'Commission',
                 'amount'           => (float) $commission->commission_total,
                 'currency'         => get_woocommerce_currency(),
-                'narration'        => "Commission received for order " . $vendor_order->get_id(),
+                'narration'        => "Commission received for order " . $order->get_id(),
                 'status'           => $status,
                 'available_at'     => $time
             ];
@@ -89,8 +100,8 @@ class Transaction {
     public static function get_transaction_db( $commission_id ) {
         global $wpdb;
         $transaction = $wpdb->get_row(
-            $wpdb->prepare( "SELECT * FROM `" . $wpdb->prefix . Utill::TABLES['transaction'] . "` WHERE commission_id = %d", $commission_id )
+            $wpdb->prepare( "SELECT * FROM `" . $wpdb->prefix . Utill::TABLES['transaction'] . "` WHERE commission_id = %d", $commission_id ), ARRAY_A 
         );
-        return $transaction ?? new \stdClass();
+        return $transaction ?? [];
     }
 }
