@@ -197,50 +197,51 @@
             li {
               margin: 0;
             }
+
             a {
+              display: flex;
+              gap: 0.813rem;
+              padding: 0.75rem;
+              align-items: start;
+              border-bottom: $border-light-small;
+
+              &:hover {
+                background: #f3f3f3;
+              }
+
+              .icon {
+                padding: 0.313rem;
+                border-radius: 50%;
                 display: flex;
-                gap: 0.813rem;
-                padding: 0.75rem;
-                align-items: start;
-                border-bottom: $border-light-small;
+                justify-content: center;
+                align-items: center;
 
-                &:hover {
-                  background: #f3f3f3;
-                }
-
-                .icon {
-                  padding: 0.313rem;
-                  border-radius: 50%;
-                  display: flex;
-                  justify-content: center;
-                  align-items: center;
-
-                  i {
-                    font-size: 1.5rem;
-                  }
-                }
-
-                .details {
-                  span {
-                    display: block;
-                  }
-
-                  .heading {
-                    font-size: 0.95rem;
-                    color: #000;
-                  }
-
-                  .message {
-                    color: #00000082;
-                    padding: 0.313rem 0;
-                  }
-
-                  .time {
-                    font-size: 0.813rem;
-                    color: #0000004a;
-                  }
+                i {
+                  font-size: 1.5rem;
                 }
               }
+
+              .details {
+                span {
+                  display: block;
+                }
+
+                .heading {
+                  font-size: 0.95rem;
+                  color: #000;
+                }
+
+                .message {
+                  color: #00000082;
+                  padding: 0.313rem 0;
+                }
+
+                .time {
+                  font-size: 0.813rem;
+                  color: #0000004a;
+                }
+              }
+            }
           }
         }
       }
@@ -575,8 +576,25 @@
   }
 }
 
-.title-wrapper {
-  font-size: 1.125rem;
-  font-weight: 500;
-  margin-bottom: 0.425rem;
+
+// section divider start
+.divider-section {
+  padding: 1.5rem 0;
+  border-bottom: $border-light-small;
+
+  .title {
+    font-size: 1.15rem;
+    width: auto;
+  }
 }
+
+.divider-section:first-child {
+  padding: 1.5rem 0;
+  margin: 0 2rem;
+}
+
+.divider-section:not(:first-child) {
+  width: 100%;
+}
+
+// section divider end
