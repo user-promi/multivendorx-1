@@ -85,7 +85,7 @@ export default {
             key: 'payment_schedules',
             type: 'setting-toggle',
             label: __('Payout frequency', 'multivendorx'),
-            settingDescription: __("Decide how often store commissions are released:", 'multivendorx'),
+            settingDescription: __("Decide how often store commissions are released", 'multivendorx'),
             desc: __("<ul><li>If Manual is selected, stores handle withdrawals themselves from their dashboard.</li><li>Otherwise, commissions are automatically disbursed to stores based on the chosen schedule.</li></ul>", 'multivendorx'),
             options: [
                 {
