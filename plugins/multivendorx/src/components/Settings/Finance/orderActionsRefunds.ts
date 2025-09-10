@@ -16,7 +16,7 @@ export default {
             type: 'checkbox',
             label: __( 'Eligible order status for refund', 'multivendorx' ),
             class: 'mvx-toggle-checkbox',
-            desc: __(
+            settingDescription: __(
                 'Customers can only request a refund when their order is in the selected status',
                 'multivendorx'
             ),
@@ -49,7 +49,7 @@ export default {
             key: 'refund_days',
             type: 'number',
             label: __( 'Refund claim period', 'multivendorx' ),
-            desc: __(
+            settingDescription: __(
                 'Set the number of days within which a customer can request a refund',
                 'multivendorx'
             ),
@@ -61,9 +61,9 @@ export default {
         {
             key: 'abuse_report_reasons',
             type: 'multi-string',
-            label: __( 'Predefined refund reasons', 'multivendorx' ),
-            placeholder: __( 'Enter a reason and click +', 'multivendorx' ),
-            desc: __(
+            label: __( 'Refund reasons', 'multivendorx' ),
+            placeholder: __( 'Enter refund reasons here…', 'multivendorx' ),
+            settingDescription: __(
                 'Add one or more reasons that stores can select when handling refund requests',
                 'multivendorx'
             ),
