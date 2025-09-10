@@ -24,21 +24,24 @@
           line-height: 0.95rem;
         }
       }
+
       &.width-50{
         width: 50%;
       }
+
       &.vertical{
         flex-direction: column;
         margin-bottom: 2rem;
+
         &.settings-input-content{
           width: fit-content;
         }
+
         .settings-form-label{
           width: 100%;
         }
       }
     }
-
   }
 }
 

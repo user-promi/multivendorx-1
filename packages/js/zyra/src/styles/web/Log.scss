@@ -1,5 +1,4 @@
 .section-log-container{ 
-
   .log-container-wrapper {
     min-height: 6.25rem;
     height: 100%;
@@ -12,6 +11,7 @@
     line-height: 1.173rem;
     word-break: break-all;
     background-color: rgb(21 23 24);
+    margin: 1rem;
 
     .wrapper-header{
       display: flex;
@@ -59,6 +59,7 @@
 
 .log-section{
   flex-direction: column;
+
   .settings-input-content{
     width: 100%;
   }

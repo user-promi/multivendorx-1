@@ -3,9 +3,11 @@
 .MuiDialogContent-root{
     padding: 0 !important; 
   }
+
   .popup-wrapper{
     display: flex;
     gap: 1rem;
+
     .left-section{
       width: 45%;
       background-size: cover;
@@ -48,16 +50,19 @@
           i{
             font-size: 1.5rem;
           }
+
           p{
             font-size: 0.95rem;
           }
         }
       }
+
       .more-text{
         font-size: 1rem;
         font-weight: 500;
         margin-top: 0.5rem;
       }
+
       .footer-button{
         display: flex;
         justify-content: end;
@@ -71,6 +76,7 @@
       }
     }
   }
+
   .module-popup-content{
     .popup-wrapper{
       padding: 2rem;
@@ -91,6 +97,7 @@
           }
         }
       }
+
       .module-right-section{
         h2{
           font-size: 1.4rem;
@@ -105,10 +112,12 @@
       }      
     }
   }
+
   .MuiPaper-root:has(.module-popup-content) {
     min-width: 30vw;
     max-width: 30vw;
   }
+
   // common popup styles
   .admin-popup-content{
     padding: 1.5rem;;

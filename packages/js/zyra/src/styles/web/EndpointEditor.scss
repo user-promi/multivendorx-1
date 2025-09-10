@@ -1,7 +1,6 @@
 @use '../../global.scss' as *;
 
 .endpoints-wrapper {
-
     .endpoint {
         .menu-item {
             margin-bottom: 0.5rem;
@@ -22,6 +21,7 @@
                     .input-label{
                         font-size: 0.95rem;
                     }
+
                     i {
                         font-size: 1.125rem;
                     }
@@ -56,6 +56,7 @@
                     }
                 }
             }
+
             .sub-menu {
                     display: flex;
                     align-items: center;
@@ -71,6 +72,7 @@
                         }
                     }
                 }
+
             input {
                 width: fit-content;
                 background: #fff;

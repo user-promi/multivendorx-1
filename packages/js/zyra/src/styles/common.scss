@@ -1,5 +1,5 @@
 @use '../global.scss' as *;
-@import url('https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap');
+@import 'https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap';
 
 body {
   padding: 0;
@@ -9,12 +9,6 @@ body {
 
 .sb-show-main {
   background: #f0f0f1;
-}
-
-p {
-  font-size: 0.875rem;
-  margin: 0;
-  line-height: 1.5;
 }
 
 a {
@@ -30,13 +24,14 @@ a {
 
 .form-select-field-wrapper input:focus {
   box-shadow: none !important;
-  /* for overwrite react components*/
+
+  /* for overwrite react components */
   outline: none;
 }
 
 #admin-main-wrapper {
   margin-left: -1.25rem;
-  font-family: "Figtree", sans-serif;
+  font-family: Figtree, sans-serif;
 
   a:focus {
     box-shadow: none;
@@ -50,6 +45,11 @@ a {
   h5,
   h6 {
     margin: 0;
+  }
+
+  p {
+    font-size: 0.875rem;
+    line-height: 1.5;
   }
 
   .wp-admin-notice {
@@ -67,7 +67,6 @@ a {
 // button style start
 .admin-btn {
   outline: none;
-  border: none;
   cursor: pointer;
   display: flex;
   justify-content: center;
@@ -246,7 +245,6 @@ a {
     border-radius: 0.25rem;
     border: 0.063rem solid #e0e4e9;
     position: relative;
-    transition: height 0.4s ease;
     width: 100%;
     height: 16rem;
     overflow: hidden;
@@ -303,7 +301,6 @@ a {
     }
   }
 }
-
 // radio input end
 
 // all input style start
@@ -360,11 +357,13 @@ a {
 
       input {
         border: none !important;
-        /*for overwrite common style*/
+
+        /* for overwrite common style */
 
         &:focus {
           box-shadow: none !important;
-          /*for overwrite common style*/
+
+          /* for overwrite common style */
         }
       }
 
@@ -435,21 +434,6 @@ input[type="radio"] {
   border-radius: 50%;
 }
 
-// input[type="checkbox"] {
-//   vertical-align: middle;
-// }
-
-// input[type="checkbox"] {
-//   width: 1.313rem;
-//   height: 1.313rem;
-//   border-width: 0.125rem;
-// }
-
-// input[type="checkbox"]:focus {
-//   outline: none;
-//   box-shadow: none;
-// }
-
 input[type="checkbox"]:checked {
   border: none;
 }
@@ -490,8 +474,6 @@ input[type="checkbox"]:focus {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-bottom: 0.625rem;
-    margin-bottom: 0.625rem;
     border-bottom: $border-light-small;
     padding-bottom: 0.5rem;
     margin-bottom: 0.5rem;
@@ -529,17 +511,12 @@ input[type="checkbox"]:focus {
     }
 
     .default-checkbox {
-
       label {
         padding: 0 0 0.313rem 0.313rem;
         font-size: 0.875rem;
         position: relative;
       }
     }
-  }
-
-  .settings-metabox-description {
-    padding-top: 0.313rem;
   }
 
   .default-checkbox:has(input:checked) {
@@ -551,24 +528,6 @@ input[type="checkbox"]:focus {
   }
 }
 
-// input:checked::before,
-// input.sdhgf::before {
-//   background-color: $theme-color;
-//   border-radius: .25rem;
-//   color: #fff;
-//   content: "\e809" !important;
-//   font-family: AdminLibrary !important;
-//   height: 1.313rem !important;
-//   line-height: 1.1;
-//   margin: -.19rem 0 0 -.2rem !important;
-//   // width: 1.313rem !important;
-//   font-size: 1rem;
-//   border:none
-// }
-// input.sdhgf::before {
-//   content: "\e91c" !important;
-// }
-// all input style end
 
 // metabox description start
 .settings-metabox-note {
@@ -627,7 +586,7 @@ input[type="checkbox"]:focus {
 
 // pro tag start
 .admin-pro-tag {
-  background: rgba(227, 80, 71, .18);
+  background: rgb(227 80 71 / 18%);
   color: #e35047;
   font-size: .75rem;
   font-weight: 700;
@@ -812,6 +771,7 @@ input[type="checkbox"]:focus {
   max-width: 15.625rem;
   position: sticky;
   top: 1.875rem;
+
   // border: $border-light-small;
 
   .section-meta {
@@ -855,6 +815,7 @@ input[type="checkbox"]:focus {
     }
   }
 }
+
 // form Elements end
 
 // section divider start
@@ -876,6 +837,7 @@ input[type="checkbox"]:focus {
 .divider-section:not(:first-child) {
   width: 100%;
 }
+
 // section divider end
 
 // calender style start
@@ -1033,7 +995,6 @@ input[type="checkbox"]:focus {
   }
 
   .overlay {
-    display: none;
     width: 100%;
     height: 100%;
     position: absolute;
@@ -1270,10 +1231,9 @@ input[type="checkbox"]:focus {
   position: fixed;
   z-index: 99999;
   background: #fff;
-  box-shadow: 0 1rem 3rem rgba(136, 135, 135, 0.18);
+  box-shadow: 0 1rem 3rem rgb(136 135 135 / 18%);
   right: 1.85rem;
   top: 7rem;
-
   animation: noticeSlide 7s ease-in-out forwards;
 
   &.notice-error {
@@ -1359,12 +1319,14 @@ input[type="checkbox"]:focus {
         input {
           width: 100%;
           border: none !important;
-          /*overwrite common style*/
+
+          /* overwrite common style */
           padding: 0;
 
           &:focus {
             box-shadow: none !important;
-            /*overwrite common style*/
+
+            /* overwrite common style */
           }
         }
       }
@@ -1513,7 +1475,6 @@ input[type="checkbox"]:focus {
     margin: 0;
 
     > :nth-child(3) {
-
       > :first-child {
         padding: 0 0.313rem;
 
