@@ -6,8 +6,6 @@ import React, { useEffect, useState, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 
-import '../styles/web/MapsInput.scss';
-
 // Types
 interface MapsInputProps {
     wrapperClass?: string;

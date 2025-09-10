@@ -31,7 +31,7 @@
       cursor: pointer;
 
       &.active {
-        background: #5007aa;
+        background: $theme-color;
         color: #fff;
       }
     }
@@ -58,7 +58,7 @@
     }
 
     .module-list-item {
-      flex: 0 0 19rem; // 3-column layout
+      flex: 0 0 19rem;
       box-sizing: border-box;
       border: $border-light-small;
       border-radius: $border-radius-large;
@@ -137,7 +137,7 @@
 
           i {
             font-size: 1.125rem;
-            color: #5007aa;
+            color: $theme-color;
           }
         }
       }

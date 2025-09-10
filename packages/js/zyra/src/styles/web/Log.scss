@@ -1,80 +1,4 @@
-.section-log-container{
-  .button-section {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    margin: 0.5rem 0;
-
-    .download-btn {
-      position: relative;
-      padding-left: 2.2rem;
-
-      &::before {
-        content: " ";
-        display: block;
-        position: absolute;
-        left: 0.945rem;
-        top: 52%;
-        width: 0.63rem;
-        height: 0.125rem;
-        border-style: solid;
-        border-width: 0 0.125rem 0.125rem;
-      }
-
-      &::after {
-        content: " ";
-        display: block;
-        position: absolute;
-        left: 0.945rem;
-        top: 52%;
-        width: 0;
-        height: 0;
-        margin-left: 0.25rem;
-        margin-top: -0.438rem;
-        border-style: solid;
-        border-width: 0.25rem 0.25rem 0 0.25 rem;
-        border-color: transparent;
-        border-top-color: inherit;
-        animation: downloadarrow 1s linear infinite;
-        animation-play-state: paused;
-      }
-      
-      &:hover {
-        background-color: #65438f;
-        color: #fff;
-
-        &::before {
-          border-color: #cdefbd;
-        }
-
-        &::after {
-          border-top-color: #cdefbd;
-          animation-play-state: running;
-        }
-      }
-
-      @keyframes downloadarrow {
-        0% {
-          margin-top: -0.438rem;
-          opacity: 1;
-        }
-
-        0.001% {
-          margin-top: -0.945rem;
-          opacity: 0.4;
-        }
-
-        50% {
-          opacity: 1;
-        }
-
-        100% {
-          margin-top: 0;
-          opacity: 0.4;
-        }
-      }
-    }
-  }
+.section-log-container{ 
 
   .log-container-wrapper {
     min-height: 6.25rem;
@@ -131,12 +55,10 @@
     }
 
   }
-
 }
 
 .log-section{
   flex-direction: column;
-
   .settings-input-content{
     width: 100%;
   }

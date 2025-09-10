@@ -423,8 +423,8 @@ const Tabs: React.FC<TabsProps> = ({
         {HeaderSection && <HeaderSection />}
         <div className="middle-child-container">
           {menuStack.length > 1 && (
-            <div id="current-tab-lists" className="current-tab-lists">
-              <div className="current-tab-lists-container">{renderAllMenuItems(currentMenu)}</div>
+            <div id="tabs-wrapper" className="tabs-wrapper">
+              <div className="tabs">{renderAllMenuItems(currentMenu)}</div>
             </div>
           )}
 

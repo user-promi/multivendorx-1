@@ -4,7 +4,7 @@ import RefundRequest from './refundRequest';
 import AbuseReports from './abuseReports';
 import StoreReviews from './storeReviews ';
 import './customerServices.scss';
-import { useEffect, useState } from 'react';
+import '../AdminDashboard/adminDashboard.scss';
 
 const CustomerServices = () => {
 
