@@ -54,10 +54,10 @@ export default {
                 {
                     key: 'rule',
                     type: 'select',
-                    label: 'Is',
+                    label: 'is',
                     options: [
-                        { value: 'less_than', label: 'Up to' },
-                        { value: 'more_than', label: 'More than' },
+                        { value: 'less_than', label: 'up to' },
+                        { value: 'more_than', label: 'more than' },
                     ],
                     skipFirstRow: true,
                 },
@@ -118,7 +118,7 @@ export default {
                     desc: __('Fixed amount per transaction', 'multivendorx'),
                     preParameter: __('$', 'multivendorx'),
                     size: "8rem",
-                    before: 'Fixed',
+                    before: 'fixed',
                     after: "+",
                 },
                 {
@@ -130,6 +130,7 @@ export default {
                     ),
                     size: '8rem',
                     parameter: __('%', 'multivendorx'),
+                    after: "commission will be charged.",
                 },
 
             ],

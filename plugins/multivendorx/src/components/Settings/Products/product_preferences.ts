@@ -149,7 +149,7 @@ export default {
                 {
                     key: 'no',
                     label: __(
-                        'Keep spaces',
+                        'Keep spaces (   )',
                         'multivendorx'
                     ),
                     value: 'no',
@@ -157,7 +157,7 @@ export default {
                 {
                     key: 'underscore',
                     label: __(
-                        'Replace with underscore',
+                        'Replace with underscore ( _ )',
                         'multivendorx'
                     ),
                     value: 'underscore',
@@ -165,7 +165,7 @@ export default {
                 {
                     key: 'dash',
                     label: __(
-                        'Replace with dash',
+                        'Replace with dash ( - )',
                         'multivendorx'
                     ),
                     value: 'dash',
