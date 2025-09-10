@@ -117,8 +117,6 @@ const EditStore = () => {
         },
     ];
 
-
-
     const getForm = (tabId: string) => {
         switch (tabId) {
             case 'store':
@@ -168,7 +166,6 @@ const EditStore = () => {
                                 options={statusOptions}
                                 type="single-select"
                                 onChange={(newValue: any) => {
-                                    console.log(newValue)
                                     if (!newValue || Array.isArray(newValue)) return;
 
                                     const updated = { ...data, status: newValue.value };
@@ -177,13 +174,23 @@ const EditStore = () => {
                                 }}
                             />
                             {editId && (
-                                <a
-                                    href={`?page=multivendorx#&tab=stores&view&id=${editId}`}
-                                    className="admin-btn btn-purple"
-                                >
-                                    <i className="adminlib-eye"></i>
-                                    View Store
-                                </a>
+                                <>
+                                    <a
+                                        href={`?page=multivendorx#&tab=stores&view&id=${editId}`}
+                                        className="admin-btn btn-purple"
+                                    >
+                                        <i className="adminlib-eye"></i>
+                                        Store Details
+                                    </a>
+                                    <a
+                                        href={`${appLocalizer.site_url}/store/${data.slug}`}
+                                        target="_blank"
+                                        className="admin-btn btn-purple"
+                                    >
+                                        <i className="adminlib-eye"></i>
+                                        View Public Store
+                                    </a>
+                                </>
                         )}
                         </div>
                         </div>
