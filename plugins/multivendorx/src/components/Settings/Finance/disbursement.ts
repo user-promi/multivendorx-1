@@ -63,8 +63,8 @@ export default {
             type: 'number',
             size: '8rem',
             before:__('Wait', 'multivendorx'),
-            after:__('before commissions become eligible for payout', 'multivendorx'),
-            parameter: __('%', 'multivendorx'),
+            after:__('days before commissions become eligible for payout', 'multivendorx'),
+            parameter: __('day', 'multivendorx'),
         },
         {
             key: 'payout_threshold_amount',
@@ -121,44 +121,33 @@ export default {
 
             ],
         },
-        //hour
+        //Hourly
         {
-            key: 'disbursement_hourly',
-            type: 'nested',
-            label: __('Hourly Disbursement', 'multivendorx'), // updated label
-            single: true,
-            desc: __(
-                'Hourly disbursement: This is the default commission amount that will be applicable for all transactions every hour.',
-                'multivendorx'
-            ),
-            nestedFields: [
+            key: 'payouts_every_hour',
+            label: __('Hourly payouts', 'multivendorx'),
+            type: 'number',
+            size: '8rem',
+            options: [
                 {
                     key: 'payouts_every_hour',
-                    label: __('Hourly', 'multivendorx'),
-                    desc: __('Payouts every hour', 'multivendorx'),
-                    type: 'number',
-                    size: '8rem',
-                    options: [
-                        {
-                            key: 'payouts_every_hour',
-                            value: 'payouts_every_hour',
-                        },
-                    ],
-                    parameter: __('hour', 'multivendorx'),
+                    value: 'payouts_every_hour',
                 },
             ],
+            after:__('minute of every hour', 'multivendorx'),
+            before:__('At', 'multivendorx'),
+            parameter:__('th', 'multivendorx'),
             dependent: {
-                key: 'payment_schedule',
+                key: 'payment_schedules',
                 set: true,
                 value: 'hourly',
             },
         },
-
         //fort
         {
             key: 'disbursement_fortnightly', // updated key
             type: 'nested',
             label: __('Fortnightly disbursement', 'multivendorx'), // updated label
+            before:__('Of', 'multivendorx'),
             single: true,
             desc: __(
                 'Every two weeks: This is the default commission amount that will be disbursed to stores every fortnight.',
@@ -168,6 +157,7 @@ export default {
                 {
                     key: 'payout_frequency',
                     type: 'select',
+                    before:__('On', 'multivendorx'),
                     // label: __('Payout frequency', 'multivendorx'),
                     options: [
                         {
@@ -185,6 +175,7 @@ export default {
                 {
                     key: 'payout_day',
                     type: 'dropdown',
+                    before:__('At', 'multivendorx'),
                     // label: __('Payout Day', 'multivendorx'),
                     // settingDescription: __("Select the day of the week to release store commissions:", 'multivendorx'),
                     // desc: __("<ul><li>Choose the specific day when store commissions should be disbursed.</li></ul>", 'multivendorx'),
@@ -224,7 +215,7 @@ export default {
             nestedFields: [
                 {
                     key: 'payouts_every_month', // day of month
-                    before: __('Monthly Payout', 'multivendorx'),
+                    before: __('On', 'multivendorx'),
                     desc: __(
                         'Date of the month: (defaults to last day if shorter month)',
                         'multivendorx'
@@ -242,7 +233,7 @@ export default {
                 {
                     key: 'monthly_payout_time', // time of day
                     type: 'time', // links to TimeSelect component
-                    before: __('Monthly Payout Time', 'multivendorx'),
+                    before: __('At', 'multivendorx'),
                     description: __('Select the time of day your monthly payout should occur.', 'multivendorx'),
                     defaultValue: '09:00',
                 },
@@ -258,6 +249,7 @@ export default {
             key: 'daily_payout_time', // unique key for daily payout time
             type: 'time', // links to TimeSelect component
             label: __('Daily payout time', 'multivendorx'),
+            before:__('At', 'multivendorx'),
             description: __('Once per day<br/>Run payouts at:', 'multivendorx'),
             defaultValue: '09:00', // optional: default payout time
             dependent: {
@@ -281,7 +273,7 @@ export default {
                 {
                     key: 'weekly_payout_day', // day of week toggle
                     type: 'dropdown',
-                    label: __('Day of the Week', 'multivendorx'),
+                    before:__('On', 'multivendorx'),
                     description: __('Select the day of the week for payouts:', 'multivendorx'),
                     options: [
                         { key: 'sunday', label: __('Sunday', 'multivendorx'), value: 'sunday' },
@@ -296,7 +288,7 @@ export default {
                 {
                     key: 'weekly_payout_time', // time of day
                     type: 'time', // links to TimeSelect component
-                    before: __('Time of Day', 'multivendorx'),
+                    before: __('At', 'multivendorx'),
                     description: __('Select the time of day for weekly payouts.', 'multivendorx'),
                     defaultValue: '09:00',
                 },
