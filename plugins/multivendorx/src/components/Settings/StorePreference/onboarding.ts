@@ -16,7 +16,7 @@ export default {
             type: 'setting-toggle',
             label: __( 'New store registration approval', 'multivendorx' ),
             desc: __(
-                'Decide how you want to approve new stores for your marketplace:<ul><li>Manual approval — Admin reviews and approves each store before granting dashboard access.</li><li>Automatic approval — Stores get immediate dashboard access and can start upload products.</li></ul>',
+                'Decide how you want to approve new stores for your marketplace:<ul><li>Manual approval - Admin reviews each store request and decides whether to approve or reject it before granting access to the marketplace.</li><li>Automatic approval - Stores are instantly approved, gaining dashboard access right away to upload and sell products.</li></ul>',
                 'multivendorx'
             ),
             options: [
@@ -73,7 +73,7 @@ export default {
                 {
                     key: 'payment_information',
                     label: __( 'Payment information', 'multivendorx' ),
-                    desc: __( 'Requires stores to set up, payout methods (bank account/ PayPal / Stripe etc.)', 'multivendorx' ),
+                    desc: __( 'Requires stores to set up, payout methods (Bank account/ PayPal / Stripe etc.)', 'multivendorx' ),
                     value: 'payment_information',
                 }, 
                 {
@@ -97,7 +97,7 @@ export default {
                 {
                     key: 'store_policies',
                     label: __( 'Store policies', 'multivendorx' ),
-                    desc: __( 'Requires merchants to outline refund rules, shipping terms, and general conditions.', 'multivendorx' ),
+                    desc: __( 'Merchants can override refund rules, shipping terms, and general conditions.', 'multivendorx' ),
                     value: 'store_policies',
                 },
             ],
