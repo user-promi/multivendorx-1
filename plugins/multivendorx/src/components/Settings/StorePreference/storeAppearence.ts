@@ -21,7 +21,7 @@ export default {
             type: 'file',
             label: __('Branding logo', 'multivendorx'),
             size: 'small',
-            desc: __('Upload a logo to brand the vendor dashboard. If left blank, the site name will be shown instead.', 'multivendorx'),
+            settingDescription: __('Upload your brand logo for the Store Dashboard. If not added, the site name will be shown.', 'multivendorx'),
         },
         {
             key: 'section',
@@ -35,7 +35,7 @@ export default {
             key: 'store_color_settings',
             type: 'color-setting',
             label: 'Dashboard color scheme',
-            desc: 'Set the color theme for store dashboards - the admin interface stores use to manage their business',
+            settingDescription: 'Choose a dashboard color scheme from predefined sets or customize your own. Each scheme defines the button style, and hover effects for a consistent look.',
             showPreview: true,
             predefinedOptions: [
                 {
