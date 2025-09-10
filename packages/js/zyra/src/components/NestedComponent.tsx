@@ -301,11 +301,11 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
               {rowIndex === rows.length - 1 && (
                 <button
                   type="button"
-                  className="admin-btn btn-green"
+                  className="admin-btn btn-purple"
                   onClick={addRow}
                   disabled={!isLastRowComplete()}
                 >
-                  + {addButtonLabel}
+                  <i className="adminlib-plus-circle-o"></i> {addButtonLabel}
                 </button>
               )}
 
@@ -316,7 +316,7 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
                   className="admin-btn btn-red"
                   onClick={() => removeRow(rowIndex)}
                 >
-                  {deleteButtonLabel}
+                  <i className="adminlib-close"></i> {deleteButtonLabel}
                 </button>
               )}
 

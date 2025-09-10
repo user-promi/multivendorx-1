@@ -1,9 +1,4 @@
 import { __ } from '@wordpress/i18n';
-import image1 from "../../../assets/images/popup-image.png";
-import image2 from "../../../assets/images/popup-image.png";
-import image3 from "../../../assets/images/popup-image.png";
-
-
 
 export default {
     id: 'store-appearance',

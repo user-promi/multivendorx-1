@@ -6,7 +6,6 @@ import React, { useState, useEffect, useRef } from 'react';
 /**
  * Internal dependencies
  */
-import '../styles/web/MergeComponent.scss';
 
 // Types
 interface Field {

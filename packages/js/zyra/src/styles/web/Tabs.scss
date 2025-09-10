@@ -77,11 +77,6 @@
       select {
         margin: 0;
         border: none;
-
-        &:focus {
-          outline: none;
-          box-shadow: none;
-        }
       }
 
       .adminlib-search {
@@ -98,6 +93,16 @@
         padding-left: 2rem;
         position: relative;
         border-right: $border-light-small;
+
+        &:focus {
+          outline: none;
+          box-shadow: none;
+        }
+      }
+
+      select:focus {
+        outline: none;
+        box-shadow: none;
       }
     }
 
@@ -131,58 +136,6 @@
         border-radius: 0.313rem;
         transition: all 0.3s ease;
         z-index: 9999;
-
-        .dropdown-header {
-          padding: 1.125rem 1.75rem;
-          background: #f5f6fa;
-          border-bottom: 0.063rem solid #f5f6fa;
-
-          .user-card {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-
-            .user-avatar {
-              border-radius: 50%;
-              height: 40px;
-              width: 40px;
-              display: flex;
-              justify-content: center;
-              align-items: center;
-              color: #fff;
-              background: #9d72ff;
-              font-size: 14px;
-              font-weight: 700;
-              letter-spacing: .06em;
-              flex-shrink: 0;
-              position: relative;
-
-              span {
-                color: #fff;
-                font-size: 14px;
-                font-weight: 700;
-                letter-spacing: .06em;
-              }
-            }
-
-            .user-info {
-              display: flex;
-              flex-direction: column;
-              gap: 0.125rem;
-
-              .user-name {
-                font-size: .875rem;
-                font-weight: 700;
-                color: #364a63;
-              }
-
-              .user-email {
-                font-size: 0.75rem;
-                font-weight: 400;
-              }
-            }
-          }
-        }
 
         .dropdown-body {
           margin: 0;
@@ -243,8 +196,8 @@
 
             li {
               margin: 0;
-
-              a {
+            }
+            a {
                 display: flex;
                 gap: 0.813rem;
                 padding: 0.75rem;
@@ -288,7 +241,6 @@
                   }
                 }
               }
-            }
           }
         }
       }
