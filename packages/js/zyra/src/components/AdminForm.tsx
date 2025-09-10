@@ -1132,6 +1132,8 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             selectDeselectValue="Select / Deselect All"
                             description={inputField.desc}
                             inputClass={inputField.key}
+                            before={inputField.before}
+                            after={inputField.after}
                             options={
                                 Array.isArray(inputField.options)
                                     ? inputField.options.map((opt) => ({

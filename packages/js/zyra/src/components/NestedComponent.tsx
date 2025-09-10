@@ -89,32 +89,32 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
     if (rows.length === 0) return true;
     const lastRowIndex = rows.length - 1;
     const lastRow = rows[lastRowIndex] || {};
-  
+
     // ✅ Skip validation for row 0
     if (lastRowIndex === 0) return true;
-  
+
     return fields.every((f) => {
       if (f.skipFirstRow && lastRowIndex === 0) return true;
       if (f.firstRowOnly && lastRowIndex > 0) return true;
-  
+
       const val = lastRow[f.key];
-  
+
       // dependency check
       if (f.dependent) {
         const depVal = lastRow[f.dependent.key];
         const depActive = Array.isArray(depVal)
           ? depVal.includes(f.dependent.value)
           : depVal === f.dependent.value;
-  
+
         if ((f.dependent.set && !depActive) || (!f.dependent.set && depActive)) {
           return true;
         }
       }
-  
+
       return val !== undefined && val !== "";
     });
   }
-  
+
 
   function addRow() {
     if (single) return;
@@ -195,6 +195,8 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
               name={field.key}
               description={field.desc}
               inputClass={field.className}
+              before={field.before}
+              after={field.after}
               options={
                 Array.isArray(field.options)
                   ? field.options.map((opt) => ({

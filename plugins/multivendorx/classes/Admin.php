@@ -124,6 +124,10 @@ class Admin {
                     'name'   => __( 'Memberships', 'multivendorx' ),
                     'subtab' => 'payment-membership-message',
                 ),
+                'advertisement' => array(
+                    'name'   => __( 'Advertisement', 'multivendorx' ),
+                    'subtab' => '',
+                ),
                 'settings' => array(
                     'name'   => __( 'Settings', 'multivendorx' ),
                     'subtab' => 'marketplace-settings',
@@ -150,10 +154,6 @@ class Admin {
                 // ),
                 'help-support' => array(
                     'name'   => __( 'Help & Support', 'multivendorx' ),
-                    'subtab' => '',
-                ),
-                'advertisement' => array(
-                    'name'   => __( 'Advertisement', 'multivendorx' ),
                     'subtab' => '',
                 ),
                 // 'setup' => array(

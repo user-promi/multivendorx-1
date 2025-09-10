@@ -23,7 +23,8 @@ a {
 }
 
 .form-select-field-wrapper input:focus {
-  box-shadow: none !important;  /* for overwrite react components */  
+  box-shadow: none !important;
+  /* for overwrite react components */
   outline: none;
 }
 
@@ -203,7 +204,8 @@ a {
       display: flex;
     }
   }
-}  // copy btn end
+}
+// copy btn end
 
 // all input style start
 .basic-input,
@@ -447,7 +449,9 @@ input[type="checkbox"]:focus {
   display: flex;
   gap: 0.125rem;
   z-index: 2;
-}  // pro tag end
+}
+
+// pro tag end
 
 // admin form start
 .main-input-wrapper {
@@ -539,6 +543,7 @@ input[type="checkbox"]:focus {
     font-size: 1.5rem;
   }
 }
+
 // page title end
 
 // calender style start
@@ -667,7 +672,9 @@ input[type="checkbox"]:focus {
   flex-direction: column;
   gap: 0.5rem;
   position: relative;
-} // merge components end
+}
+
+// merge components end
 
 // visibility control container
 .tabs {
@@ -711,7 +718,9 @@ input[type="checkbox"]:focus {
   input[id="hidden"]:checked~.glider {
     transform: translateX(100%);
   }
-}  // visibility control container end
+}
+
+// visibility control container end
 
 // cross btn start
 .wrapper-close {
@@ -787,9 +796,9 @@ input[type="checkbox"]:focus {
   100% {
     transform: translateX(120%);
   }
-}  
-// admin save notice popup end
+}
 
+// admin save notice popup end
 .settings-input-content {
   position: relative;
   width: 70%;
@@ -843,7 +852,9 @@ input[type="checkbox"]:focus {
         border: none;
       }
     }
-  }  // multi input style end  
+  }
+
+  // multi input style end  
 }
 
 .select-deselect-trigger {
@@ -895,7 +906,8 @@ input[type="checkbox"]:focus {
   align-items: end;
   gap: 0.625rem;
   padding-top: 0.5rem;
-}  // footer button style end
+}
+// footer button style end
 
 .settings-from-multi-select {
   > :first-child {
@@ -935,12 +947,32 @@ input[type="checkbox"]:focus {
 }
 
 .form-select-field-wrapper {
+
+  .select-wrapper {
+    display: inline-flex;
+    gap: 0.5rem;
+    align-items: center;
+    width: 100%;
+
+    .react-select{
+      width: 100%;
+    }
+
+    .before,
+    .after {
+      font-size: 0.95rem;
+    }
+  }
+
   input {
     box-shadow: none;
   }
+
 }
 
 // pro image wrapper start
 .image-wrapper {
   margin: 2rem;
-} // pro image wrapper end
+}
+
+// pro image wrapper end
