@@ -5,7 +5,7 @@ import BrandSmall from '../../../assets/images/brand-icon.png';
 import StoreSettings from './storeSettings';
 
 import PaymentSettings from './paymentSettings';
-import StoreQueue from './storeCrew';
+import StoreSquad from './storeSquad';
 import PolicySettings from './policySettings';
 import ShippingSettings from './shippingSettings';
 import StoreRegistration from './storeRegistrationForm';
@@ -74,7 +74,7 @@ const EditStore = () => {
             type: 'file',
             content: {
                 id: 'users',
-                name: 'Store Crew',
+                name: 'Store Squad',
                 desc: 'Store Users',
                 icon: 'adminlib-credit-card',
             },
@@ -91,9 +91,9 @@ const EditStore = () => {
         {
             type: 'file',
             content: {
-                id: 'vendor-shipping',
-                name: 'Vendor Shipping',
-                desc: 'Vendor Shipping',
+                id: 'store-shipping',
+                name: 'Store Shipping',
+                desc: 'Store Shipping',
                 icon: 'adminlib-credit-card',
             },
         },
@@ -110,24 +110,22 @@ const EditStore = () => {
             type: 'file',
             content: {
                 id: 'store-application',
-                name: 'Vendor Application',
-                desc: 'Vendor Application',
+                name: 'Store Application',
+                desc: 'Store Application',
                 icon: 'adminlib-credit-card',
             },
         },
     ];
-
-
 
     const getForm = (tabId: string) => {
         switch (tabId) {
             case 'store':
                 return <StoreSettings id={editId} />;
             case 'users':
-                return <StoreQueue id={editId} />;
+                return <StoreSquad id={editId} />;
             case 'payment':
                 return <PaymentSettings id={editId} />;
-            case 'vendor-shipping':
+            case 'store-shipping':
                 return <ShippingSettings id={editId} />;
             case 'store-policy':
                 return <PolicySettings id={editId} />;
@@ -168,7 +166,6 @@ const EditStore = () => {
                                 options={statusOptions}
                                 type="single-select"
                                 onChange={(newValue: any) => {
-                                    console.log(newValue)
                                     if (!newValue || Array.isArray(newValue)) return;
 
                                     const updated = { ...data, status: newValue.value };
@@ -177,13 +174,23 @@ const EditStore = () => {
                                 }}
                             />
                             {editId && (
-                                <a
-                                    href={`?page=multivendorx#&tab=stores&view&id=${editId}`}
-                                    className="admin-btn btn-purple"
-                                >
-                                    <i className="adminlib-eye"></i>
-                                    View Store
-                                </a>
+                                <>
+                                    <a
+                                        href={`?page=multivendorx#&tab=stores&view&id=${editId}`}
+                                        className="admin-btn btn-purple"
+                                    >
+                                        <i className="adminlib-eye"></i>
+                                        Store Details
+                                    </a>
+                                    <a
+                                        href={`${appLocalizer.site_url}/store/${data.slug}`}
+                                        target="_blank"
+                                        className="admin-btn btn-purple"
+                                    >
+                                        <i className="adminlib-eye"></i>
+                                        View Public Store
+                                    </a>
+                                </>
                         )}
                         </div>
                         </div>

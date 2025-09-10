@@ -48,6 +48,11 @@ class Admin {
         add_action('created_term', array($this, 'save_product_cat_commission_fields'), 10, 3);
         add_action('edit_term', array($this, 'save_product_cat_commission_fields'), 10, 3);
         add_action( 'init', array( $this, 'register_multivendorx_custom_post_types' ), 5 );
+
+        //add store tab in coupons section backend
+        add_filter('woocommerce_coupon_data_tabs', array(&$this, 'add_store_tab_in_coupon'));
+        add_action('woocommerce_coupon_data_panels', array(&$this, 'add_content_in_store_tab'), 10, 1);
+        add_action('woocommerce_coupon_options_save', array(&$this, 'save_store_in_coupon'), 10, 2);
     }
 
     /**
@@ -234,7 +239,7 @@ class Admin {
 			FrontendScripts::localize_scripts( 'multivendorx-admin-script' );
         }
 
-        if ( get_current_screen()->id === 'product' ) {
+        if ( get_current_screen()->id === 'product' || get_current_screen()->id === 'shop_coupon' ) {
             FrontendScripts::admin_load_scripts();
             FrontendScripts::enqueue_script( 'multivendorx-product-tab-script' );
             FrontendScripts::localize_scripts( 'multivendorx-product-tab-script' );
@@ -381,11 +386,6 @@ class Admin {
         
         if ( $linked_store_id ) {
             update_post_meta( $post_id, 'multivendorx_store_id', $linked_store_id );
-
-            wp_update_post( array(
-                'ID'          => $post_id,
-                'post_author' => $linked_store_id,
-            ) );
         }
 
         if ( $fixed_commission_per_product ) {
@@ -530,5 +530,51 @@ class Admin {
         
     }
     
+    public function add_store_tab_in_coupon( $coupon_data_tabs ) {
+        $coupon_data_tabs['store'] = array(
+            'label'  => __( 'Store', 'multivendorx' ),
+            'target' => 'store_coupon_data',
+            'class'  => 'store_coupon_data',
+        );	
+        return $coupon_data_tabs; 
+    }
+
+    public function add_content_in_store_tab( $coupon_id ) {
+
+        $current_coupon = get_post( $coupon_id );
+        $linked_store = get_post_meta( $coupon_id, 'multivendorx_store_id', true );
+       
+        ?>
+        <div id="store_coupon_data" class="panel woocommerce_options_panel">
+            <p class="form-field">
+                <label for="linked_store"><?php _e( 'Assign Store', 'multivendorx' ); ?></label>
+                <select class="wc-store-search"
+                    style="width: 50%;"
+                    id="linked_store"
+                    name="coupon_linked_store"
+                    data-placeholder="<?php esc_attr_e( 'Search for a store…', 'multivendorx' ); ?>"
+                    data-action="search_stores">
+
+                    <?php
+                    if ( $linked_store ) {
+                        $store = Store::get_store_by_id( $linked_store );
+                        if ( $store ) {
+                            echo '<option value="' . esc_attr( $store->get_id() ) . '" selected="selected">' . esc_html( $store->get('name') ) . '</option>';
+                        }
+                    }
+                    ?>
+                </select>
+            </p>
+        </div>
+        <?php
+    }
+
+    public function save_store_in_coupon($post_id) {
+        $linked_store_id = absint( filter_input( INPUT_POST, 'linked_store' ) );
+        
+        if ( $linked_store_id ) {
+            update_post_meta( $post_id, 'multivendorx_store_id', $linked_store_id );
+        }
+    }
     
 }
