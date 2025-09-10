@@ -5,7 +5,7 @@ import BrandSmall from '../../../assets/images/brand-icon.png';
 import StoreSettings from './storeSettings';
 
 import PaymentSettings from './paymentSettings';
-import StoreQueue from './storeCrew';
+import StoreSquad from './storeSquad';
 import PolicySettings from './policySettings';
 import ShippingSettings from './shippingSettings';
 import StoreRegistration from './storeRegistrationForm';
@@ -74,7 +74,7 @@ const EditStore = () => {
             type: 'file',
             content: {
                 id: 'users',
-                name: 'Store Crew',
+                name: 'Store Squad',
                 desc: 'Store Users',
                 icon: 'adminlib-credit-card',
             },
@@ -91,9 +91,9 @@ const EditStore = () => {
         {
             type: 'file',
             content: {
-                id: 'vendor-shipping',
-                name: 'Vendor Shipping',
-                desc: 'Vendor Shipping',
+                id: 'store-shipping',
+                name: 'Store Shipping',
+                desc: 'Store Shipping',
                 icon: 'adminlib-credit-card',
             },
         },
@@ -110,8 +110,8 @@ const EditStore = () => {
             type: 'file',
             content: {
                 id: 'store-application',
-                name: 'Vendor Application',
-                desc: 'Vendor Application',
+                name: 'Store Application',
+                desc: 'Store Application',
                 icon: 'adminlib-credit-card',
             },
         },
@@ -124,10 +124,10 @@ const EditStore = () => {
             case 'store':
                 return <StoreSettings id={editId} />;
             case 'users':
-                return <StoreQueue id={editId} />;
+                return <StoreSquad id={editId} />;
             case 'payment':
                 return <PaymentSettings id={editId} />;
-            case 'vendor-shipping':
+            case 'store-shipping':
                 return <ShippingSettings id={editId} />;
             case 'store-policy':
                 return <PolicySettings id={editId} />;
