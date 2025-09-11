@@ -1132,6 +1132,8 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             selectDeselectValue="Select / Deselect All"
                             description={inputField.desc}
                             inputClass={inputField.key}
+                            before={inputField.before}
+                            after={inputField.after}
                             options={
                                 Array.isArray(inputField.options)
                                     ? inputField.options.map((opt) => ({
@@ -1891,7 +1893,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                                 htmlFor={inputField.key}
                             >
                                 <div className="title">{inputField.label}</div>
-                                <div className="settings-description">{inputField.settingDescription}</div>
+                                <div className="settings-metabox-description">{inputField.settingDescription}</div>
                             </label>
                         )}
 

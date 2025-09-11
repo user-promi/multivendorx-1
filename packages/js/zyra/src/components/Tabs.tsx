@@ -100,7 +100,7 @@ const findTabDescription = (items: TabData[], activeTabId: string): ReactNode =>
   for (const item of items) {
     if (isFile(item) && item.content.id === activeTabId) {
       const tab = item.content;
-      if (tab.id === 'support' || tab.id === 'store' || tab.id === 'users' || tab.id === 'payment' || tab.id === 'vendor-shipping' || tab.id === 'store-policy' || tab.id === 'store-application') return null;
+      if (tab.id === 'support' || tab.id === 'store' || tab.id === 'users' || tab.id === 'payment' || tab.id === 'vendor-shipping' || tab.id === 'store-policy' || tab.id === 'store-application' || tab.id === 'Store Shipping') return null;
 
       return (
         <div className="divider-section" key={tab.id}>
@@ -423,8 +423,8 @@ const Tabs: React.FC<TabsProps> = ({
         {HeaderSection && <HeaderSection />}
         <div className="middle-child-container">
           {menuStack.length > 1 && (
-            <div id="current-tab-lists" className="current-tab-lists">
-              <div className="current-tab-lists-container">{renderAllMenuItems(currentMenu)}</div>
+            <div id="tabs-wrapper" className="tabs-wrapper">
+              <div className="tabs-item">{renderAllMenuItems(currentMenu)}</div>
             </div>
           )}
 

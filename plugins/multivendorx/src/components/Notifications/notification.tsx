@@ -226,6 +226,7 @@ const Notification = () => {
                 <div className="row">
                     <div className="column">
                         <div className="action-tab-wrapper">
+                            <div className="title"><i className="adminlib-person"></i> Account Overview</div>
                             {/* Tab Titles */}
                             <div className="tab-titles">
                                 {tabs.map((tab) => (
@@ -234,7 +235,7 @@ const Notification = () => {
                                         className={`title ${activeTab === tab.id ? "active" : ""}`}
                                         onClick={() => setActiveTab(tab.id)}
                                     >
-                                        <h2>{tab.label}</h2>
+                                        <p>{tab.label}</p>
                                     </div>
                                 ))}
                             </div>

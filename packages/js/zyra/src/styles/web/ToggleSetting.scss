@@ -193,9 +193,10 @@ div:has(.exclusion-modal) {
     position: relative;
     width: fit-content;
 }
+
 .toggle-setting-wrapper {
     display: flex;
-    
+
     div {
         list-style-type: none;
         margin: 0;
@@ -220,29 +221,101 @@ div:has(.exclusion-modal) {
             align-items: center;
             gap: 0.5rem;
 
-            img{
-                width: 3rem;
+            img {
+                height: 3rem;
             }
         }
+
+        &:last-child label {
+            border-top-right-radius: 0.313rem;
+            border-bottom-right-radius: 0.313rem;
+            border-right: $border-light-medium;
+        }
+
+        &:first-child label {
+            border-top-left-radius: 0.313rem;
+            border-bottom-left-radius: 0.313rem;
+        }
+
         input:checked+label {
             color: $theme-color;
             background: #ece2f9;
             border: $border-theme-medium;
         }
-        input:checked+label .toggle-setting-wrapper label{
-            border-left: 0;
-        }
-        &:last-child label{
-            border-top-right-radius: 0.313rem;
-            border-bottom-right-radius: 0.313rem;
-            border-right: $border-light-medium;
-        }
-        &:first-child label{
-            border-top-left-radius: 0.313rem;
-            border-bottom-left-radius: 0.313rem;
+
+    }
+
+    div:has(input:checked)+div label {
+        border-left: none;
+    }
+}
+
+// toggle checkbox start
+.toggle-checkbox-header {
+    min-width: fit-content;
+    display: flex;
+    gap: 0.313rem;
+    margin-right: 0.945rem;
+    position: relative;
+    z-index: 0;
+
+    .toggle-checkbox {
+        margin: 0;
+    }
+
+    .admin-pro-tag {
+        position: relative;
+        display: inline;
+        margin-left: 0.75rem;
+    }
+}
+// toggle checkbox end
+
+.toggle-checkbox {
+    margin-left: auto;
+    position: relative;
+
+    input[type="checkbox"] {
+        height: 0;
+        width: 0;
+        visibility: hidden;
+        display: none; // hide for toggle button
+    }
+
+    label {
+        cursor: pointer;
+        width: 2.785rem;
+        height: 1.2rem;
+        background: $theme-background-color;
+        display: block;
+        border-radius: $border-radius-button;
+        position: relative;
+        border: $border-theme-medium;
+
+        &::after {
+            content: "";
+            position: absolute;
+            top: 51%;
+            transform: translateY(-50%);
+            left: 0.313rem;
+            width: 0.75rem;
+            height: 0.8rem;
+            border-radius: 90rem;
+            transition: 0.3s;
+            z-index: 1;
+            border: $border-theme-medium;
+            background: #fff;
         }
     }
-    div:has(input:checked) + div label{
-        border-left: none;
+
+    input:checked+label {
+        border: $border-theme-medium;
+        border-color: $theme-color;
+    }
+
+    input:checked+label::after {
+        left: calc(100% - 1.313rem);
+        transform: translateY(-50%);
+        background: $theme-color
     }
 }

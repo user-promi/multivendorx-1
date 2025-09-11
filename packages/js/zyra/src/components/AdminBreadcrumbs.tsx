@@ -83,11 +83,11 @@ const AdminBreadcrumbs: React.FC<AdminBreadcrumbsProps> = ({
                     </div>
                 </div>
                 {description && <div className="description">{description}</div>}
-                {renderBreadcrumb && <div className="breadcrumbs-menu">{renderBreadcrumb()}</div>}
+                {renderBreadcrumb && <div className="breadcrumbs">{renderBreadcrumb()}</div>}
 
                 {renderMenuItems && tabData.length > 0 && (
-                    <div id="top-level-tab-lists" className="current-tab-lists">
-                        <div className="current-tab-lists-container">
+                    <div className="tabs-wrapper">
+                        <div className="tabs-item">
                             {renderMenuItems(tabData)}
                         </div>
                         {goPremium && (<a href={goPremiumLink} className="menu-item pro-btn">
@@ -97,7 +97,6 @@ const AdminBreadcrumbs: React.FC<AdminBreadcrumbsProps> = ({
                 )}
             </div>
             {noticeHTML && <div className="wp-admin-notice" dangerouslySetInnerHTML={{ __html: noticeHTML }} />}
-
         </>
 
     );
