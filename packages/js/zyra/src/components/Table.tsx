@@ -412,7 +412,7 @@ const Table: React.FC<TableProps> = ({
                     ))}
                 </div>
             )}
-            {/* <div className="filter-wrapper">
+            <div className="filter-wrapper">
                 <div className="wrap-bulk-all-date">
                     {realtimeFilter &&
                         realtimeFilter.map((filter: RealtimeFilter) => (
@@ -430,7 +430,7 @@ const Table: React.FC<TableProps> = ({
                         ))}
                 </div>
                 {bulkActionComp && bulkActionComp()}
-            </div> */}
+            </div>
 
             {loading ? (
                 <LoadingTable />

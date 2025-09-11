@@ -1,4 +1,4 @@
-@use '../components/config.scss' as *;
+@use './dashboardCommon.scss' as *;
 
 body:has(#store-dashboard) {
     background: #f8f7fa;
@@ -42,13 +42,14 @@ a {
         }
     }
 
-    .dashboard-tabs {
+    ul {
         padding: 0;
         margin: 1rem 0;
 
         li {
             padding: 0 0.75rem;
             position: relative;
+            margin-top: 0.313rem;
 
             .admin-arrow {
                 position: absolute;
@@ -57,18 +58,17 @@ a {
                 font-size: 1.4rem;
             }
 
-            a.tab {
+            a {
                 display: flex;
                 position: relative;
                 align-items: center;
                 transition: all 0.3s ease;
-                font-weight: 700;
                 font-size: 0.975rem;
                 letter-spacing: .01em;
                 text-transform: none;
                 line-height: 1.25rem;
-                color: #444050;
-                padding: 0.625rem;
+                color: #000000d8;
+                padding: 0.5rem 0.625rem;
                 border-radius: 0.375rem;
                 gap: 0.5rem;
 
@@ -79,54 +79,69 @@ a {
                 }
             }
 
-            &.active,
             &:hover {
-                a.tab {
+                a {
                     background-color: #f3f2f3;
                 }
             }
+
+            &.active {
+                a {
+                    background-color: $theme-background-color;
+                    color: $theme-color;
+                }
+            }
         }
-    }
 
-    .subtabs {
-        list-style-type: none;
-        padding: 0;
+        ul {
+            margin: 0;
 
-        li {
-            padding: 0.063rem 0;
-            padding-left: 3rem;
-
-            a {
-                font-size: 0.875rem;
-                letter-spacing: .01em;
-                text-transform: none;
-                line-height: 1.25rem;
-                color: #526484;
+            li a {
+                padding-left: 2rem;
             }
         }
     }
+
+    // .subtabs {
+    //     list-style-type: none;
+    //     padding: 0;
+
+    //     li {
+    //         padding: 0.063rem 0;
+    //         padding-left: 3rem;
+
+    //         a {
+    //             font-size: 0.875rem;
+    //             letter-spacing: .01em;
+    //             text-transform: none;
+    //             line-height: 1.25rem;
+    //             color: #526484;
+    //         }
+    //     }
+    // }
 }
 
 .tab-wrapper {
-    padding: 5rem 8rem 0 22rem;
+    width: 100%;
     min-height: 100vh;
-    background-color: #f5f6fa;
+    margin: 0 4rem 0 20rem;
 
     .top-navbar {
-        width: calc(100% - 18rem);
+        width: calc(100% - 28rem);
         background: #fff;
         display: flex;
         justify-content: space-between;
-        min-height: 4rem;
-        max-height: 4rem;
+        min-height: 3.5rem;
+        max-height: 3.5rem;
+        border-radius: 0.313rem;
         align-items: center;
         padding: 0 2rem;
         position: fixed;
-        right: 0;
         z-index: 999;
         box-shadow: 0 1px 3px #364a630d;
         border-bottom: 1px solid #e5e9f2;
-        top: 0;
+        box-shadow: 0 0.125rem 0.5rem 0 rgba(47, 43, 61, 0.12);
+        top: 1rem;
 
         .navbar-rightside {
             .navbar-right {
@@ -150,6 +165,7 @@ a {
 
                     .adminlib-icon {
                         color: #526484;
+                        font-size: 1.25rem;
                     }
 
                 }
@@ -307,6 +323,9 @@ a {
     }
 
     .content-wrapper {
+        min-height: 100vh;
+        background-color: #f5f6fa;
+        padding-top: 7rem;
 
         .title-wrapper {
             display: flex;
@@ -387,10 +406,10 @@ a {
     }
 
     .column {
-        width: 100%;
-        padding: 1rem;
-        border: 0.063rem solid #b4b6b947;
+        padding: 1.625rem;
         border-radius: 0.313rem;
+        box-shadow: 0 0.125rem 0.5rem 0 rgba(47, 43, 61, 0.12);
+        background: #fff;
 
         .action-btn-wrapper {
             display: flex;
@@ -545,7 +564,100 @@ a {
             }
         }
     }
+
+    // cart header start
+    .card-header {
+        display: flex;
+        justify-content: space-between;
+        padding-bottom: 2rem;
+
+        .left {
+            .title {
+                font-size: 1.25rem;
+                font-weight: 500;
+            }
+
+            .des {
+                font-size: 0.95rem;
+                padding-top: 0.45rem;
+                color: #00000094;
+            }
+        }
+
+        .right {
+            span {
+                font-size: 0.875rem;
+                color: #0000009e;
+            }
+
+            i {
+                font-size: 1.25rem;
+                padding: 0.5rem;
+                border-radius: 50%;
+                transition: all 0.4s ease;
+                ;
+
+                &:hover {
+                    background: #0000001a;
+                }
+            }
+        }
+    }
+
+    // cart header end
 }
+
+// page title start
+.page-title-wrapper {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 1.5rem;
+
+    .page-title {
+        display: flex;
+        flex-direction: column;
+
+        .title {
+            font-size: 1.625rem;
+            line-height: 2rem;
+            padding-bottom: 0.5rem;
+        }
+    }
+}
+
+// page title end
+
+// analytics-container start
+.analytics-container {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 2.5rem;
+
+    .analytics-item {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+
+        .analytics-icon {
+            i {
+                padding: 0.5rem;
+                font-size: 1.625rem;
+                border-radius: 0.313rem;
+            }
+        }
+
+        .details {
+            .number {
+                font-size: 1.25rem;
+                line-height: 1.5rem;
+                padding-bottom: 0.313rem;
+                font-weight: 500;
+            }
+        }
+    }
+}
+
+// analytics-container end
 
 .MuiDialog-container {
     .left {
@@ -586,33 +698,34 @@ a {
             padding: 0.5rem 0;
             margin-top: 0.5rem;
         }
+
         .tab-titles {
-        display: flex;
-        gap: 1.125rem;
-        border-bottom: $border-light-medium;
-        margin: 1rem 0;
+            display: flex;
+            gap: 1.125rem;
+            border-bottom: $border-light-medium;
+            margin: 1rem 0;
 
-        .title {
-            padding-bottom: 0.625rem;
-            cursor: pointer;
-
-            h2 {
-                color: #121116;
-                font-size: .938rem;
-                line-height: 1.5;
-                font-weight: 500;
-                margin: 0;
-            }
-
-            &.active {
-                border-bottom: .126rem solid #5007aa;
+            .title {
+                padding-bottom: 0.625rem;
+                cursor: pointer;
 
                 h2 {
-                    color: $theme-color;
+                    color: #121116;
+                    font-size: .938rem;
+                    line-height: 1.5;
+                    font-weight: 500;
+                    margin: 0;
+                }
+
+                &.active {
+                    border-bottom: .126rem solid #5007aa;
+
+                    h2 {
+                        color: var(--themeCoolor);
+                    }
                 }
             }
         }
-    }
     }
 
     .title-wrapper {
@@ -661,15 +774,91 @@ a {
 }
 
 // table style
-#store-dashboard{
-    .admin-table-wrapper{
+#store-dashboard {
+    display: flex;
+
+    .admin-table-wrapper {
         margin: 0;
     }
-    .header-wrapper{
+
+    .header-wrapper {
         background: #fff;
         display: flex;
         justify-content: end;
         padding: 2rem;
         padding-bottom: 0;
+    }
+}
+
+// top items start
+.top-items {
+    .items {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+        padding: 0.625rem 0;
+
+        .left-side {
+            display: flex;
+            gap: 0.5rem;
+            align-items: start;
+
+            .icon {
+                font-size: 1.25rem;
+                margin-top: 0.313rem;
+            }
+
+            .image {
+                img {
+                    height: 2.5rem;
+                }
+            }
+
+            .item-title {
+                font-size: 1rem;
+                color: #000;
+            }
+
+            .sub-text {
+                font-size: 0.813rem;
+                padding-top: 0.125rem;
+            }
+        }
+
+        .right-side {
+            .price {
+                font-size: 1.125rem;
+            }
+        }
+    }
+}
+
+// top items end
+
+
+.tab-titles {
+    display: flex;
+    gap: 1rem;
+
+    .title {
+        padding-bottom: 0.313rem;
+        cursor: pointer;
+
+        p {
+            font-size: .938rem;
+            line-height: 1.5;
+            color: #000;
+            font-weight: 500;
+            margin: 0;
+        }
+
+        &.active {
+            color: $theme-color;
+            border-bottom: 0.126rem solid $theme-color;
+
+            p {
+                color: $theme-color;
+            }
+        }
     }
 }

@@ -26,7 +26,6 @@ export default function replaceDashboardDivs(container: HTMLElement) {
   } else {
     console.warn("Global color config not found, skipping theme CSS variables.");
   }
-
   const children = container.querySelectorAll<HTMLDivElement>("div[id]");
   children.forEach((div) => {
     const id = div.id; // e.g. "dashboard", "all-orders"

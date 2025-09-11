@@ -68,7 +68,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/auction-product',
             //settings_link: appLocalizer.site_url,
             pro_module: true,
-			req_pluging: ['WooCommerce Simple Auction'],'YITH WooCommerce Auction',
+			req_pluging: ['WooCommerce Simple Auction , YITH WooCommerce Auction'],
             category: 'marketplace_types'
         },
         {
@@ -131,7 +131,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/gift-card/',
             //settings_link: appLocalizer.site_url,
             pro_module: true,
-			req_pluging: ['yith WooCommerce Gift Cards']
+			req_pluging: ['yith WooCommerce Gift Cards'],
             category: 'product_type'
         },
         { type: 'separator', id: 'store_management', label: 'Store Management' },
@@ -355,7 +355,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/weight-shipping',
             //settings_link: admin_url('admin.php?page=wc-settings&tab=shipping'),
             pro_module: false,
-			req_pluging: ['Table Rate Shipping']
+			req_pluging: ['Table Rate Shipping'],
             category: 'shipping_management'
         },
         {
@@ -366,7 +366,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/per-product-shipping',
             //settings_link: admin_url('admin.php?page=wc-settings&tab=shipping'),
             pro_module: true,
-			req_pluging: ['Per Product Shipping for WooCommerce']
+			req_pluging: ['Per Product Shipping for WooCommerce'],
             category: 'shipping_management'
         },
         { type: 'separator', id: 'customer_experience', label: 'Customer Experience' },
@@ -551,7 +551,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/mvx-elementor',
             //settings_link: appLocalizer.site_url,
             pro_module: false,
-			req_pluging: ['Elementor Website Builder','Elementor Pro']
+			req_pluging: ['Elementor Website Builder','Elementor Pro'],
             category: 'integration'
         },
         {
@@ -562,7 +562,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/mvx-buddypress',
             //settings_link: admin_url('admin.php?page=mvx#&submenu=settings&name=social'),
             pro_module: false,
-			req_pluging: ['BuddyPress']
+			req_pluging: ['BuddyPress'],
             category: 'integration'
         },
         {
@@ -573,7 +573,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/mvx-wpml',
             //settings_link: appLocalizer.site_url,
             pro_module: false,
-				req_pluging: ['WPML','WooCommerce Multilingual']
+				req_pluging: ['WPML','WooCommerce Multilingual'],
             category: 'integration'
         },
         {
@@ -584,7 +584,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/mvx-acf',
             //settings_link: appLocalizer.site_url,
             pro_module: true,
-			req_pluging: ['Advance Custom Field']
+			req_pluging: ['Advance Custom Field'],
             category: 'integration'
         },
         {
@@ -595,7 +595,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/geo-my-wp',
             //settings_link: appLocalizer.site_url,
             pro_module: true,
-			req_pluging: ['GEOmyWP']
+			req_pluging: ['GEOmyWP'],
             category: 'integration'
         },
         {
@@ -606,7 +606,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/affiliate-product/',
             //settings_link: appLocalizer.site_url,
             pro_module: true,
-			req_pluging: ['Affiliate WP']
+			req_pluging: ['Affiliate WP'],
             category: 'integration'
         },
         {
@@ -617,7 +617,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/mvx-product-addon',
             //settings_link: appLocalizer.site_url,
             pro_module: true,
-			req_pluging: ['Product Addons']
+			req_pluging: ['Product Addons'],
             category: 'integration'
         },
         {
