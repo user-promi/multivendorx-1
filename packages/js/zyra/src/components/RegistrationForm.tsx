@@ -543,7 +543,6 @@ const CustomFrom: React.FC<CustomFormProps> = ({
 
     return (
         <>
-                // Render Registration form here general
             <div className="registration-from-wrapper">
                 { /* Render element type section */}
                 <Elements

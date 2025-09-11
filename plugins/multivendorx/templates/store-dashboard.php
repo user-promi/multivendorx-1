@@ -83,7 +83,7 @@ if ($current_page && empty($current_sub)) {
                         class="tab-name <?php echo ($current_page === $section['slug'] && empty($current_sub)) ? 'active' : ''; ?>">
                         <?php if (!empty($section['submenu'])): ?>
                             <a href="#" class="tab" onclick="return false;">
-                                <i class="<?php echo esc_html($section['iocn']); ?>"></i>
+                                <i class="<?php echo esc_html($section['icon']); ?>"></i>
                                 <?php echo esc_html($section['name']); ?>
                             </a>
                         <?php else: ?>

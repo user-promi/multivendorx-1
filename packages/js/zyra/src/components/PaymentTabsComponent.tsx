@@ -8,14 +8,14 @@ import MultiCheckBox from "./MultiCheckbox";
 interface PaymentFormField {
   key: string;
   type:
-  | "text"
-  | "password"
-  | "number"
-  | "checkbox"
-  | "verification-methods"
-  | "textarea"
-  | "payment-tabs"
-  | "setting-toggle";
+    | "text"
+    | "password"
+    | "number"
+    | "checkbox"
+    | "verification-methods"
+    | "textarea"
+    | "payment-tabs"
+    | "setting-toggle";
   label: string;
   placeholder?: string;
   nestedFields?: any[];
@@ -75,14 +75,8 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
 
   const toggleEnable = (methodId: string, enable: boolean, icon?: string) => {
     handleInputChange(methodId, "enable", enable);
-
-    if (enable) {
-      setActiveTab(icon || null); // 👈 open the tab on enable
-    } else {
-      setActiveTab(null); // 👈 close tab on disable
-    }
+    setActiveTab(enable ? icon || null : null);
   };
-
 
   const renderField = (methodId: string, field: PaymentFormField) => {
     const fieldValue = value[methodId]?.[field.key];
@@ -117,9 +111,9 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
             options={
               Array.isArray(field.options)
                 ? field.options.map((opt) => ({
-                  ...opt,
-                  value: String(opt.value),
-                }))
+                    ...opt,
+                    value: String(opt.value),
+                  }))
                 : []
             }
             value={fieldValue || ""}
@@ -177,7 +171,6 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
   return (
     <div className="payment-tabs-component">
       {methods.map((method) => {
-        console.log(value)
         const isEnabled = !!value?.[method.id]?.enable;
         const isActive = activeTab === method.icon;
 
@@ -186,9 +179,7 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
             {/* Header */}
             <div
               className="payment-method"
-              onClick={() =>
-                setActiveTab(isActive ? null : method.icon)
-              }
+              onClick={() => setActiveTab(isActive ? null : method.icon)}
             >
               <div className="details">
                 <div className="payment-method-icon">
@@ -207,7 +198,6 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
                 </div>
               </div>
 
-              {/* Enable / Disable Toggle */}
               <div className="right-section toggle-btn">
                 <MultiCheckBox
                   khali_dabba={false}
@@ -224,11 +214,9 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
                     toggleEnable(method.id, newEnabled, method.icon);
                   }}
                 />
-
               </div>
             </div>
 
-            {/* Form */}
             {isEnabled && isActive && (
               <div
                 className={`${method.wrapperClass || ""} payment-method-form`}

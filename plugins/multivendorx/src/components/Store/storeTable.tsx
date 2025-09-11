@@ -175,7 +175,15 @@ const StoreTable: React.FC = () => {
                                         }
                                     >
                                         <i className="adminlib-eye"></i>
-                                        {__('View Store', 'multivendorx')}
+                                        {__('Store Details', 'multivendorx')}
+                                    </li>
+                                    <li
+                                        onClick={() =>
+                                            window.open(`${appLocalizer.site_url}/store/${row.original.store_slug}`, '_blank')
+                                        }
+                                    >
+                                        <i className="adminlib-eye"></i>
+                                        {__('View Public Store', 'multivendorx')}
                                     </li>
                                     <li
                                         onClick={() =>

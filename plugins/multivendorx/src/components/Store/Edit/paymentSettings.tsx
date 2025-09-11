@@ -3,23 +3,23 @@ import axios from 'axios';
 import { BasicInput, ToggleSetting, getApiLink } from 'zyra';
 
 interface PaymentField {
-  name: string;
-  type?: string;
-  label: string;
-  placeholder?: string;
+	name: string;
+	type?: string;
+	label: string;
+	placeholder?: string;
 }
 
 interface PaymentProvider {
-  id: string;
-  label: string;
-  fields?: PaymentField[];
+	id: string;
+	label: string;
+	fields?: PaymentField[];
 }
 
 interface StorePaymentConfig {
-  [key: string]: PaymentProvider;
+	[key: string]: PaymentProvider;
 }
 
-const PaymentSettings = ({ id }: { id: string }) => {
+const PaymentSettings = ({ id }: { id: string|null }) => {
 	const [formData, setFormData] = useState<{ [key: string]: string }>({});
 	const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
@@ -28,7 +28,7 @@ const PaymentSettings = ({ id }: { id: string }) => {
 
 	const filteredStorePayment = Object.fromEntries(
 		Object.entries(storePayment).filter(([_, value]) => value !== null)
-		);
+	);
 
 	const paymentOptions = Object.values(filteredStorePayment).map((p) => ({
 		key: p.id,
@@ -122,22 +122,6 @@ const PaymentSettings = ({ id }: { id: string }) => {
 									options={paymentOptions}
 									value={formData.payment_method || ""}
 									onChange={handleToggleChange}
-									/>
-							</div>
-						</div>
-
-						{/* Commission Amount */}
-						<div className="form-group-wrapper">
-							<div className="form-group">
-								<label htmlFor="commission_amount">Commission Amount</label>
-								<BasicInput
-									name="commission_amount"
-									type="number"
-									wrapperClass="setting-form-input"
-									descClass="settings-metabox-description"
-									description='To set vendor commission as 0 pass "0" in the Commission Amount filed'
-									value={formData.commission_amount}
-									onChange={handleChange}
 								/>
 							</div>
 						</div>
@@ -147,18 +131,36 @@ const PaymentSettings = ({ id }: { id: string }) => {
 								<div className="form-group">
 									<label htmlFor={field.name}>{field.label}</label>
 									<BasicInput
-									name={field.name}
-									type={field.type || "text"}
-									wrapperClass="setting-form-input"
-									descClass="settings-metabox-description"
-									placeholder={field.placeholder || ""}
-									value={formData[field.name] || ""}
-									onChange={handleChange}
+										name={field.name}
+										type={field.type || "text"}
+										wrapperClass="setting-form-input"
+										descClass="settings-metabox-description"
+										placeholder={field.placeholder || ""}
+										value={formData[field.name] || ""}
+										onChange={handleChange}
 									/>
 								</div>
 							</div>
 						))}
+					</div>
+				</div>
+				{/* Commission Amount */}
+				<div className="card-wrapper width-35">
+					<div className="card-content">
+						<div className="card-title">
+							Commission Value
+						</div>
+						<div className="form-group-wrapper">
+							<div className="form-group">
+								<label htmlFor="product-name">Fixed</label>
+								<BasicInput name="commission_fixed" wrapperClass="setting-form-input" descClass="settings-metabox-description" value={formData.commission_fixed} onChange={handleChange} />
+							</div>
 
+							<div className="form-group">
+								<label htmlFor="product-name">Percentage</label>
+								<BasicInput name="commission_percentage" wrapperClass="setting-form-input" descClass="settings-metabox-description" value={formData.commission_percentage} onChange={handleChange} />
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>

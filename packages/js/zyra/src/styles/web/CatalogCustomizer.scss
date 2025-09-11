@@ -159,6 +159,7 @@
         i{
             transform: rotate(-45deg);
         }
+
         p{
             font-size: 1rem;
         }
@@ -214,7 +215,6 @@
         }
     }
 
-
     .description {
         flex: 1 0 31.25rem;
 
@@ -246,9 +246,11 @@
             }
         }
     }
+
     &.disable{
         opacity: 0.5;
     }
+
     &:hover {
         .button-visibility {
             visibility: visible;

@@ -40,18 +40,18 @@ export default {
         {
             key: 'disbursement_method',
             type: 'setting-toggle',
-            label: __('Commission Settlement', 'multivendorx'),
+            label: __('Commission settlement', 'multivendorx'),
             settingDescription: __("Select how commissions are released from the admin account.", 'multivendorx'),
             desc: __("<ul><li>Instant Payout – Commissions are released immediately.</li><li>Scheduled / Delayed Payout – Commissions are released after a waiting period.</li></ul>", 'multivendorx'),
             options: [
                 {
                     key: 'instantly',
-                    label: __('Instant Payout', 'multivendorx'),
+                    label: __('Instant payout', 'multivendorx'),
                     value: 'instantly',
                 },
                 {
                     key: 'waiting',
-                    label: __('Scheduled / Delayed Payout', 'multivendorx'),
+                    label: __('Scheduled / delayed payout', 'multivendorx'),
                     value: 'waiting',
                 },
             ],
@@ -63,7 +63,8 @@ export default {
             type: 'number',
             size: '8rem',
             before:__('Wait', 'multivendorx'),
-            after:__('days before commissions become eligible for payout', 'multivendorx'),
+            after:__('before commissions become eligible for payout', 'multivendorx'),
+            parameter: __('days', 'multivendorx'),
         },
         {
             key: 'payout_threshold_amount',
@@ -84,7 +85,7 @@ export default {
             key: 'payment_schedules',
             type: 'setting-toggle',
             label: __('Payout frequency', 'multivendorx'),
-            settingDescription: __("Decide how often store commissions are released:", 'multivendorx'),
+            settingDescription: __("Decide how often store commissions are released", 'multivendorx'),
             desc: __("<ul><li>If Manual is selected, stores handle withdrawals themselves from their dashboard.</li><li>Otherwise, commissions are automatically disbursed to stores based on the chosen schedule.</li></ul>", 'multivendorx'),
             options: [
                 {
@@ -120,7 +121,7 @@ export default {
 
             ],
         },
-        //hour
+        //Hourly
         {
             key: 'payouts_every_hour',
             label: __('Hourly payouts', 'multivendorx'),
@@ -133,7 +134,7 @@ export default {
                 },
             ],
             after:__('minute of every hour', 'multivendorx'),
-            before:__('at', 'multivendorx'),
+            before:__('At', 'multivendorx'),
             parameter:__('th', 'multivendorx'),
             dependent: {
                 key: 'payment_schedules',
@@ -141,12 +142,12 @@ export default {
                 value: 'hourly',
             },
         },
-
         //fort
         {
             key: 'disbursement_fortnightly', // updated key
             type: 'nested',
-            label: __('Fortnightly Disbursement', 'multivendorx'), // updated label
+            label: __('Fortnightly disbursement', 'multivendorx'), // updated label
+            before:__('Of', 'multivendorx'),
             single: true,
             desc: __(
                 'Every two weeks: This is the default commission amount that will be disbursed to stores every fortnight.',
@@ -156,6 +157,7 @@ export default {
                 {
                     key: 'payout_frequency',
                     type: 'select',
+                    addonBefore:__('On', 'multivendorx'),
                     // label: __('Payout frequency', 'multivendorx'),
                     options: [
                         {
@@ -173,6 +175,7 @@ export default {
                 {
                     key: 'payout_day',
                     type: 'dropdown',
+                    before:__('at', 'multivendorx'),
                     // label: __('Payout Day', 'multivendorx'),
                     // settingDescription: __("Select the day of the week to release store commissions:", 'multivendorx'),
                     // desc: __("<ul><li>Choose the specific day when store commissions should be disbursed.</li></ul>", 'multivendorx'),
@@ -203,7 +206,7 @@ export default {
         {
             key: 'disbursement_monthly', // main key for monthly nested
             type: 'nested',
-            label: __('Monthly Disbursement', 'multivendorx'), // main label
+            label: __('Monthly disbursement', 'multivendorx'), // main label
             single: true,
             desc: __(
                 'Once per month: Set the day of the month and time for store commissions payout.',
@@ -212,7 +215,7 @@ export default {
             nestedFields: [
                 {
                     key: 'payouts_every_month', // day of month
-                    before: __('Monthly Payout', 'multivendorx'),
+                    before: __('On', 'multivendorx'),
                     desc: __(
                         'Date of the month: (defaults to last day if shorter month)',
                         'multivendorx'
@@ -230,7 +233,7 @@ export default {
                 {
                     key: 'monthly_payout_time', // time of day
                     type: 'time', // links to TimeSelect component
-                    before: __('Monthly Payout Time', 'multivendorx'),
+                    before: __('At', 'multivendorx'),
                     description: __('Select the time of day your monthly payout should occur.', 'multivendorx'),
                     defaultValue: '09:00',
                 },
@@ -245,7 +248,8 @@ export default {
         {
             key: 'daily_payout_time', // unique key for daily payout time
             type: 'time', // links to TimeSelect component
-            label: __('Daily Payout Time', 'multivendorx'),
+            label: __('Daily payout time', 'multivendorx'),
+            before:__('At', 'multivendorx'),
             description: __('Once per day<br/>Run payouts at:', 'multivendorx'),
             defaultValue: '09:00', // optional: default payout time
             dependent: {
@@ -259,7 +263,7 @@ export default {
         {
             key: 'disbursement_weekly', // main key for weekly nested
             type: 'nested',
-            label: __('Weekly Disbursement', 'multivendorx'), // main label
+            label: __('Weekly disbursement', 'multivendorx'), // main label
             single: true,
             desc: __(
                 'Once per week: Select the day and time of the week for store commissions payout.',
@@ -269,7 +273,7 @@ export default {
                 {
                     key: 'weekly_payout_day', // day of week toggle
                     type: 'dropdown',
-                    label: __('Day of the Week', 'multivendorx'),
+                    before:__('On', 'multivendorx'),
                     description: __('Select the day of the week for payouts:', 'multivendorx'),
                     options: [
                         { key: 'sunday', label: __('Sunday', 'multivendorx'), value: 'sunday' },
@@ -284,7 +288,7 @@ export default {
                 {
                     key: 'weekly_payout_time', // time of day
                     type: 'time', // links to TimeSelect component
-                    before: __('Time of Day', 'multivendorx'),
+                    before: __('at', 'multivendorx'),
                     description: __('Select the time of day for weekly payouts.', 'multivendorx'),
                     defaultValue: '09:00',
                 },
@@ -298,7 +302,7 @@ export default {
         {
             key: 'withdrawals_fees',
             type: 'nested',
-            label: __('Free Withdrawals and Fees', 'multivendorx'),
+            label: __('Free withdrawals and fees', 'multivendorx'),
             single: true,
             settingDescription: __(
                 'Control how many times stores can withdraw without fees.',
@@ -319,28 +323,16 @@ export default {
                     after: __('free withdrawals. After that, each withdrawal costs', 'multivendorx'),
                 },
                 {
-                    key: 'withdrawal_fee_fixed', // updated key
+                    key: 'withdrawal_fee', // updated key
                     type: 'number',
                     size: '5rem',
                     options: [
                         {
-                            key: 'withdrawal_fee_fixed',
-                            value: 'withdrawal_fee_fixed',
+                            key: 'withdrawal_fee',
+                            value: 'withdrawal_fee',
                         },
                     ],
                     preParameter: __('$', 'multivendorx'),
-                },
-                {
-                    key: 'withdrawal_fee_percentage', // updated key
-                    type: 'number',
-                    size: '5rem',
-                    options: [
-                        {
-                            key: 'withdrawal_fee_percentage',
-                            value: 'withdrawal_fee_percentage',
-                        },
-                    ],
-                    before: __('+', 'multivendorx'),
                     parameter: __('%', 'multivendorx'),
                 },
             ],

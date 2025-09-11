@@ -1,5 +1,5 @@
 @use '../global.scss' as *;
-@import url('https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap');
+@import 'https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap';
 
 body {
   padding: 0;
@@ -9,12 +9,6 @@ body {
 
 .sb-show-main {
   background: #f0f0f1;
-}
-
-p {
-  font-size: 0.875rem;
-  margin: 0;
-  line-height: 1.5;
 }
 
 a {
@@ -30,13 +24,13 @@ a {
 
 .form-select-field-wrapper input:focus {
   box-shadow: none !important;
-  /* for overwrite react components*/
+  /* for overwrite react components */
   outline: none;
 }
 
 #admin-main-wrapper {
   margin-left: -1.25rem;
-  font-family: "Figtree", sans-serif;
+  font-family: Figtree, sans-serif;
 
   a:focus {
     box-shadow: none;
@@ -67,7 +61,6 @@ a {
 // button style start
 .admin-btn {
   outline: none;
-  border: none;
   cursor: pointer;
   display: flex;
   justify-content: center;
@@ -144,6 +137,18 @@ a {
   }
 }
 
+.admin-icon {
+  padding: 0.313rem;
+  border-radius: 0.313rem;
+  font-size: 1.313rem;
+
+  @each $name, $style in $icon-color-palette {
+    &.#{$name} {
+      background: map-get($style, background);
+      color: map-get($style, color);
+    }
+  }
+}
 
 .text-green {
   color: #00bd9d;
@@ -200,98 +205,7 @@ a {
     }
   }
 }
-
 // copy btn end
-
-// radio input start
-.radio-group {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-
-  label {
-    font-size: 0.875rem;
-    margin-left: 0.313rem;
-  }
-
-  // color radio
-  .color-radio {
-    width: 49%;
-
-    .color-palette {
-      display: flex;
-      margin-top: 0.5rem;
-
-      div {
-        width: 25%;
-      }
-    }
-  }
-
-  .image-radio {
-    padding: 0.6rem 1rem 0.8rem;
-    border-radius: 0.25rem;
-    border: 0.063rem solid #e0e4e9;
-    position: relative;
-    transition: height 0.4s ease;
-    width: 100%;
-    height: 16rem;
-    overflow: hidden;
-    transition: all 0.5s ease;
-
-    input {
-      position: absolute;
-      top: 0.9rem;
-      right: 0.813rem;
-      border-radius: 0.125rem;
-      opacity: 0;
-      width: 1rem;
-    }
-
-    label {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-
-      .image-radio-overlay {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        top: 0;
-        left: 0;
-        background-color: #795b9d;
-        color: #fff;
-        opacity: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 0.25rem;
-        transition: all 0.3s ease;
-      }
-    }
-
-    .admin-pro-tag {
-      top: 1.425rem;
-      right: 1rem;
-    }
-
-    &.active {
-      input {
-        opacity: 1;
-      }
-    }
-
-    &:hover {
-      height: auto;
-
-      .image-radio-overlay {
-        opacity: 0.5;
-      }
-    }
-  }
-}
-
-// radio input end
 
 // all input style start
 .basic-input,
@@ -347,11 +261,13 @@ a {
 
       input {
         border: none !important;
-        /*for overwrite common style*/
+
+        /* for overwrite common style */
 
         &:focus {
           box-shadow: none !important;
-          /*for overwrite common style*/
+
+          /* for overwrite common style */
         }
       }
 
@@ -422,21 +338,6 @@ input[type="radio"] {
   border-radius: 50%;
 }
 
-// input[type="checkbox"] {
-//   vertical-align: middle;
-// }
-
-// input[type="checkbox"] {
-//   width: 1.313rem;
-//   height: 1.313rem;
-//   border-width: 0.125rem;
-// }
-
-// input[type="checkbox"]:focus {
-//   outline: none;
-//   box-shadow: none;
-// }
-
 input[type="checkbox"]:checked {
   border: none;
 }
@@ -477,8 +378,6 @@ input[type="checkbox"]:focus {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-bottom: 0.625rem;
-    margin-bottom: 0.625rem;
     border-bottom: $border-light-small;
     padding-bottom: 0.5rem;
     margin-bottom: 0.5rem;
@@ -516,17 +415,12 @@ input[type="checkbox"]:focus {
     }
 
     .default-checkbox {
-
       label {
         padding: 0 0 0.313rem 0.313rem;
         font-size: 0.875rem;
         position: relative;
       }
     }
-  }
-
-  .settings-metabox-description {
-    padding-top: 0.313rem;
   }
 
   .default-checkbox:has(input:checked) {
@@ -538,83 +432,9 @@ input[type="checkbox"]:focus {
   }
 }
 
-// input:checked::before,
-// input.sdhgf::before {
-//   background-color: $theme-color;
-//   border-radius: .25rem;
-//   color: #fff;
-//   content: "\e809" !important;
-//   font-family: AdminLibrary !important;
-//   height: 1.313rem !important;
-//   line-height: 1.1;
-//   margin: -.19rem 0 0 -.2rem !important;
-//   // width: 1.313rem !important;
-//   font-size: 1rem;
-//   border:none
-// }
-// input.sdhgf::before {
-//   content: "\e91c" !important;
-// }
-// all input style end
-
-// metabox description start
-.settings-metabox-note {
-  width: 67%;
-  background: #ece2f991;
-  padding: 0.5rem 0.8rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  border: 0.063rem solid $theme-color;
-  border-radius: 0.313rem;
-
-  i {
-    font-size: 1.313rem;
-    color: $theme-color;
-  }
-
-  p {
-    font-size: 0.875rem;
-  }
-}
-
-.settings-metabox-description,
-.settings-description {
-  padding-top: 0.313rem;
-  color: #424242d0;
-  width: 100%;
-  line-height: 1.5;
-
-  b {
-    color: #000000b7;
-  }
-
-  p {
-    margin-bottom: 0.5rem;
-  }
-
-  ul {
-    list-style-type: none;
-    margin: 0;
-  }
-
-  li {
-    list-style-type: number;
-    margin-left: 0.875rem;
-  }
-
-  code {
-    padding: 0.063rem 0.125rem 0.125rem;
-    font-size: 0.688rem;
-    line-height: 0.5rem;
-  }
-}
-
-// metabox description end
-
 // pro tag start
 .admin-pro-tag {
-  background: rgba(227, 80, 71, .18);
+  background: rgb(227 80 71 / 18%);
   color: #e35047;
   font-size: .75rem;
   font-weight: 700;
@@ -630,6 +450,8 @@ input[type="checkbox"]:focus {
   gap: 0.125rem;
   z-index: 2;
 }
+
+// pro tag end
 
 // admin form start
 .main-input-wrapper {
@@ -707,74 +529,6 @@ input[type="checkbox"]:focus {
   }
 }
 
-// free form start
-.form-field {
-  position: relative;
-  margin-bottom: 0.5rem;
-  transition: all 0.8s ease;
-
-  .free-form {
-    display: flex;
-    margin-bottom: 1rem;
-    align-items: center;
-    gap: 1rem;
-
-
-  }
-
-  &.active {
-    .main-input-wrapper {
-      border-color: #8c8c8c;
-    }
-  }
-}
-
-.edit-form-wrapper {
-  display: flex;
-
-  p,
-  .form-label {
-    width: 30%;
-    font-size: 0.9rem;
-
-  }
-
-  .settings-form-group-radio,
-  .set-name {
-    width: 100%;
-    position: relative;
-
-    .basic-input,
-    .basic-select {
-      background: #d6b5ff21;
-      border-color: #d6b5ff;
-      width: 100%;
-    }
-  }
-
-  .button-visibility {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    .adminlib-eye {
-      color: #0101d9d6 !important;
-    }
-  }
-}
-
-// free form start
-
-// form divider start
-.section-divider-container {
-  border: $border-light-medium;
-  text-align: center;
-  font-size: 0.75rem;
-  margin: 1.5rem 0;
-}
-
-// form divider end
-
 // page title start
 .admin-page-title {
   display: flex;
@@ -791,82 +545,6 @@ input[type="checkbox"]:focus {
 }
 
 // page title end
-
-// form Elements start
-.elements-section {
-  background-color: #e7e9ecc2;
-  padding: 1.125rem;
-  max-width: 15.625rem;
-  position: sticky;
-  top: 1.875rem;
-  // border: $border-light-small;
-
-  .section-meta {
-    margin-bottom: 1rem;
-
-    h2 {
-      // color: #ffffff7d;
-      font-size: 1.625rem;
-      font-weight: 500;
-      line-height: 1.5rem;
-    }
-  }
-
-  .section-container {
-    // border: 0.063rem solid #3d3d3d;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.85rem;
-    border-radius: $border-radius-small;
-
-    .elements-items {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      flex-direction: column;
-      cursor: pointer;
-      padding: 0.875rem;
-      border: $border-light-small;
-      border-radius: 0.313rem;
-      background: #fff;
-
-      i {
-        font-size: 2rem;
-        color: #0000007a;
-      }
-
-      p {
-        font-size: 0.84rem;
-      }
-    }
-  }
-}
-
-// form Elements end
-
-// section divider start
-.divider-section {
-  padding: 1.5rem 0;
-  border-bottom: $border-light-small;
-
-  .title {
-    font-size: 1.15rem;
-    width: auto;
-  }
-}
-
-.divider-section:first-child {
-  padding: 1.5rem 0;
-  margin: 0 2rem;
-}
-
-.divider-section:not(:first-child) {
-  width: 100%;
-}
-
-
-// section divider end
 
 // calender style start
 .settings-calender {
@@ -988,122 +666,6 @@ input[type="checkbox"]:focus {
 
 }
 
-// file input start
-.file-uploader {
-  align-items: center;
-  display: flex;
-  position: relative;
-  justify-content: center;
-  flex-direction: column;
-  width: 100%;
-  border: 0.125rem dashed #b4b6b9;
-  padding: 1rem 0;
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-  min-height: 8.5rem;
-
-  .upload-icon {
-    font-size: 3.313rem;
-    color: $theme-color;
-  }
-
-  span {
-    font-size: 1rem;
-    font-weight: 500;
-  }
-
-  .title {
-    font-size: 1.313rem;
-    margin-bottom: 0.4rem;
-  }
-
-  button {
-    margin-top: 0.4rem;
-  }
-
-  .overlay {
-    display: none;
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    background: #5007aa0a;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: all 0.5s ease;
-    opacity: 0;
-
-    .button-wrapper {
-      display: flex;
-      gap: 0.5rem;
-    }
-  }
-
-  &:hover .overlay {
-    opacity: 1;
-  }
-
-  &.medium {
-    width: 50%;
-  }
-
-  &.small {
-    width: 20%;
-
-    i {
-      font-size: 1.8rem;
-    }
-
-    .title {
-      font-size: 0.9rem;
-    }
-
-    span {
-      font-size: 0.75rem;
-    }
-
-    button {
-      margin: 0;
-    }
-  }
-}
-
-.uploaded-image {
-  display: flex;
-  gap: 0.625rem;
-  margin-top: 1rem;
-
-  .image {
-    height: 5rem;
-    position: relative;
-
-    img {
-      height: 100%;
-    }
-
-    i {
-      position: absolute;
-      right: 0.125rem;
-      top: 0.125rem;
-      background: #ff0404d6;
-      border-radius: 50%;
-      padding: 0.2rem;
-      font-size: 0.625rem;
-      line-height: 0.62rem;
-      color: #fff;
-      opacity: 0;
-      cursor: pointer;
-    }
-
-    &:hover i {
-      opacity: 1;
-    }
-  }
-}
-
-// file input end
-
 // merge components start
 .merge-components {
   display: flex;
@@ -1113,76 +675,6 @@ input[type="checkbox"]:focus {
 }
 
 // merge components end
-
-// toggle btn start
-.toggle-checkbox-header {
-  min-width: fit-content;
-  display: flex;
-  gap: 0.313rem;
-  margin-right: 0.945rem;
-  position: relative;
-  z-index: 0;
-
-  .toggle-checkbox {
-    margin: 0;
-  }
-
-  .admin-pro-tag {
-    position: relative;
-    display: inline;
-    margin-left: 0.75rem;
-  }
-}
-
-.toggle-checkbox {
-  margin-left: auto;
-  position: relative;
-
-  input[type="checkbox"] {
-    height: 0;
-    width: 0;
-    visibility: hidden;
-    display: none; // hide for toggle button
-  }
-
-  label {
-    cursor: pointer;
-    width: 2.785rem;
-    height: 1.2rem;
-    background: $theme-background-color;
-    display: block;
-    border-radius: $border-radius-button;
-    position: relative;
-    border: $border-theme-medium;
-
-    &::after {
-      content: "";
-      position: absolute;
-      top: 51%;
-      transform: translateY(-50%);
-      left: 0.313rem;
-      width: 0.75rem;
-      height: 0.8rem;
-      border-radius: 90rem;
-      transition: 0.3s;
-      z-index: 1;
-      border: $border-theme-medium;
-      background: #fff;
-    }
-  }
-
-  input:checked+label {
-    border: $border-theme-medium;
-    border-color: $theme-color;
-  }
-
-  input:checked+label::after {
-    left: calc(100% - 1.313rem);
-    transform: translateY(-50%);
-    background: $theme-color
-  }
-}
-
 
 // visibility control container
 .tabs {
@@ -1250,7 +742,7 @@ input[type="checkbox"]:focus {
   cursor: pointer;
 }
 
-// admin notice 
+// admin save notice popup
 .admin-notice-wrapper {
   display: flex;
   justify-content: flex-start;
@@ -1260,10 +752,9 @@ input[type="checkbox"]:focus {
   position: fixed;
   z-index: 99999;
   background: #fff;
-  box-shadow: 0 1rem 3rem rgba(136, 135, 135, 0.18);
+  box-shadow: 0 1rem 3rem rgb(136 135 135 / 18%);
   right: 1.85rem;
   top: 7rem;
-
   animation: noticeSlide 7s ease-in-out forwards;
 
   &.notice-error {
@@ -1307,14 +798,10 @@ input[type="checkbox"]:focus {
   }
 }
 
-
+// admin save notice popup end
 .settings-input-content {
   position: relative;
   width: 70%;
-
-  // input:focus {
-  //   box-shadow: none;
-  // }
 
   // multi input style start
   .settings-basic-child-wrap {
@@ -1349,12 +836,14 @@ input[type="checkbox"]:focus {
         input {
           width: 100%;
           border: none !important;
-          /*overwrite common style*/
+
+          /* overwrite common style */
           padding: 0;
 
           &:focus {
             box-shadow: none !important;
-            /*overwrite common style*/
+
+            /* overwrite common style */
           }
         }
       }
@@ -1365,71 +854,11 @@ input[type="checkbox"]:focus {
     }
   }
 
-  // multi input style end
+  // multi input style end  
 }
 
 .select-deselect-trigger {
   margin-bottom: 1rem;
-}
-
-.img-checkbox-wrapper {
-  display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
-  gap: 0.75rem;
-  flex-wrap: wrap;
-
-  .img-checkbox {
-    display: flex;
-    align-items: flex-start;
-    justify-content: flex-start;
-    gap: 0.75rem;
-    position: relative;
-    flex-direction: column;
-    padding: 1rem;
-    border-radius: $border-radius-small;
-    border: $border-light-medium;
-
-    img {
-      height: 3rem;
-    }
-
-    .custom-img-meta-wrapper {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      justify-content: center;
-      margin-bottom: 0.5rem;
-    }
-
-    input[type="checkbox"] {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      left: 0;
-      outline: none;
-      border: none;
-      box-shadow: none;
-      background: transparent;
-      color: transparent;
-
-      &::before {
-        top: 0.63rem;
-        position: absolute;
-        right: 0.315rem;
-        width: 1.25rem;
-        height: 1.25rem;
-        border-radius: $border-radius-small;
-        background: transparent;
-      }
-    }
-
-    &:has(input:checked) {
-      box-shadow: 0 0 0.0 0.063rem $color-active;
-      background: $theme-background-color;
-    }
-  }
 }
 
 .simple-checkbox {
@@ -1478,32 +907,13 @@ input[type="checkbox"]:focus {
   gap: 0.625rem;
   padding-top: 0.5rem;
 }
-
 // footer button style end
 
-// multi select start
-// .settings-from-multi-select {
-
-//   &:first-child {
-//     &:nth-child(3) {
-//       &:first-child {
-//         padding: 0 0.313rem;
-//         &:first-child{
-//           margin: 0;
-//         }
-//         &:last-child{
-//           margin: 0;
-//         }
-//       }
-//     }
-//   }
-// }
 .settings-from-multi-select {
   > :first-child {
     margin: 0;
 
     > :nth-child(3) {
-
       > :first-child {
         padding: 0 0.313rem;
 
@@ -1537,12 +947,28 @@ input[type="checkbox"]:focus {
 }
 
 .form-select-field-wrapper {
+
+  .select-wrapper {
+    display: inline-flex;
+    gap: 0.5rem;
+    align-items: center;
+    width: 100%;
+
+    .react-select{
+      width: 100%;
+    }
+
+    .before,
+    .after {
+      font-size: 0.95rem;
+    }
+  }
+
   input {
     box-shadow: none;
   }
-}
 
-// multi select end
+}
 
 // pro image wrapper start
 .image-wrapper {

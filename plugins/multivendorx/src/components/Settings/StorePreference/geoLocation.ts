@@ -3,9 +3,9 @@ import google from '../../../assets/images/google.png';
 import mapbox from '../../../assets/images/mapbox-logo.png';
 
 export default {
-    id: 'geo-location',
+    id: 'geolocation',
     priority: 3,
-    name: 'Geo Location',
+    name: 'Geolocation',
     desc: __('Help customers discover stores and products near them by enabling location-based search and maps.', 'multivendorx'),
     icon: 'adminlib-form-section',
     submitUrl: 'settings',
@@ -14,8 +14,8 @@ export default {
             key: 'radius_search_unit',
             type: 'setting-toggle',
             label: __('Show map on', 'multivendorx'),
-            settingDescription: __('Decide where the store map should appear:', 'multivendorx'),
-            desc: __('<ul><li>Store listing – Display a map on the page that lists all stores, showing their locations for easier discovery.</li><li>Shop page – show the map on the shop page where all products are displayed.</li><li>Both – show the map on both pages for maximum visibility.</li></ul>', 'multivendorx'),
+            settingDescription: __('Decide where the store map should appear', 'multivendorx'),
+            desc: __('<ul><li>Store listing – Display a map on the page that lists all stores, showing their locations for easier discovery.</li><li>Shop page – Display a map on the store’s shop page showing the store’s location.</li><li>Both – Show the map on both pages for maximum visibility.</li></ul>', 'multivendorx'),
             options: [
                 {
                     key: 'store_lisiting',
@@ -39,7 +39,7 @@ export default {
             type: 'setting-toggle',
             defaulValue: 'google_map_set',
             label: __('Map provider', 'multivendorx'),
-            settingDescription: __('Choose the service that powers your maps and location search:', 'multivendorx'),
+            settingDescription: __('Choose the service that powers your maps and location search', 'multivendorx'),
             desc: __('<ul><li>Google Maps – reliable and widely used, requires a Google API key.<li>Mapbox – customizable map provider, may also require an API key.</li></ul>', 'multivendorx'),
             options: [
                 {

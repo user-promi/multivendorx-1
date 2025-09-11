@@ -43,9 +43,9 @@ interface BasicInputProps {
     disabled?: boolean;
     readOnly?: boolean;
     size?: string;
-    before?: string;
-    after?: string;
-    preParameter?:string;
+    addonBefore?: string;
+    addonAfter?: string;
+    prefixUnit?:string;
 }
 
 const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
@@ -69,8 +69,8 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
             onBlur,
             parameter,
             size,
-            before,
-            after,
+            addonBefore,
+            addonAfter,
             generate,
             proSetting,
             description,
@@ -78,7 +78,7 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
             rangeUnit,
             disabled = false,
             readOnly = false,
-            preParameter
+            prefixUnit
         },
         ref
     ) => {
@@ -130,7 +130,7 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
         return (
             <>
                 <div
-                    className={`${wrapperClass || ''} ${generate ? 'generate' : ''} ${preParameter || parameter ? 'inner-input' : ''}
+                    className={`${wrapperClass || ''} ${generate ? 'generate' : ''} ${prefixUnit || parameter ? 'inner-input' : ''}
 `}
                 >
                     {inputLabel && (
@@ -146,17 +146,17 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
                         </DisplayButton>
                     ) : (
                         <>
-                            {before && (
+                            {addonBefore && (
                                 <span
                                     className="before"
-                                    dangerouslySetInnerHTML={{ __html: before }}
+                                    dangerouslySetInnerHTML={{ __html: addonBefore }}
                                 />
                             )}
                             <div className="input-wrapper" style={{ width: size || '100%' }}>
-                            {preParameter && (
+                            {prefixUnit && (
                                 <span
                                     className="pre"
-                                    dangerouslySetInnerHTML={{ __html: preParameter }}
+                                    dangerouslySetInnerHTML={{ __html: prefixUnit }}
                                 />
                             )}
                             <input
@@ -184,10 +184,10 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
                                 />
                             )}
                             </div>
-                            {after && (
+                            {addonAfter && (
                                 <span
                                     className="after"
-                                    dangerouslySetInnerHTML={{ __html: after }}
+                                    dangerouslySetInnerHTML={{ __html: addonAfter }}
                                 />
                             )}
                         </>

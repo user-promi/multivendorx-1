@@ -1,9 +1,4 @@
 import { __ } from '@wordpress/i18n';
-import image1 from "../../../assets/images/popup-image.png";
-import image2 from "../../../assets/images/popup-image.png";
-import image3 from "../../../assets/images/popup-image.png";
-
-
 
 export default {
     id: 'store-appearance',
@@ -21,7 +16,7 @@ export default {
             type: 'file',
             label: __('Branding logo', 'multivendorx'),
             size: 'small',
-            desc: __('Upload brand image as logo', 'multivendorx'),
+            settingDescription: __('Upload your brand logo for the Store Dashboard. If not added, the site name will be shown.', 'multivendorx'),
         },
         {
             key: 'section',
@@ -35,13 +30,13 @@ export default {
             key: 'store_color_settings',
             type: 'color-setting',
             label: 'Dashboard color scheme',
-            desc: 'Set the color theme for store dashboards - the admin interface stores use to manage their business',
+            settingDescription: 'Choose a dashboard color scheme from predefined sets or customize your own. Each scheme defines the button style, and hover effects for a consistent look.',
             showPreview: true,
             predefinedOptions: [
                 {
-                    key: 'purple_pulse',
-                    label: 'Purple Pulse',
-                    value: 'purple_pulse',
+                    key: 'orchid_bloom',
+                    label: 'Orchid Bloom',
+                    value: 'orchid_bloom',
                     colors: {
                         themeColor: '#3c1f5d',
                         buttonBg: '#5b3488ff',
@@ -49,25 +44,56 @@ export default {
                     },
                 },
                 {
-                    key: 'majestic_orange',
-                    label: 'Majestic Orange',
-                    value: 'majestic_orange',
+                    key: 'emerald_edge',
+                    label: 'Emerald Edge',
+                    value: 'emerald_edge',
                     colors: {
-                        themeColor: '#0D9394',
-                        buttonBg: '#14b8b8ff',
-                        buttonHoverBg: '#077575ff',
+                        themeColor: '#2ecc71',       // Green
+                        buttonBg: '#27ae60',
+                        buttonHoverBg: '#1e8449',
                     },
                 },
                 {
-                    key: 'ocean',
-                    label: 'Ocean',
-                    value: 'ocean',
+                    key: 'solar_ember',
+                    label: 'Solar Ember',
+                    value: 'solar_ember',
                     colors: {
-                        themeColor: '#fa1547ff',
-                        buttonBg: '#f33e65ff',
-                        buttonHoverBg: '#c2294aff',
+                        themeColor: '#e67e22',       // Orange
+                        buttonBg: '#d35400',
+                        buttonHoverBg: '#ba4a00',
                     },
                 },
+                {
+                    key: 'crimson_blaze',
+                    label: 'Crimson Blaze',
+                    value: 'crimson_blaze',
+                    colors: {
+                        themeColor: '#e74c3c',       // Red
+                        buttonBg: '#c0392b',
+                        buttonHoverBg: '#922b21',
+                    },
+                },
+                {
+                    key: 'golden_ray',
+                    label: 'Golden Ray',
+                    value: 'golden_ray',
+                    colors: {
+                        themeColor: '#f1c40f',       // Yellow
+                        buttonBg: '#f39c12',
+                        buttonHoverBg: '#d68910',
+                    },
+                },
+                {
+                    key: 'obsidian_night',
+                    label: 'Obsidian Night',
+                    value: 'obsidian_night',
+                    colors: {
+                        themeColor: '#2c3e50',       // Black/Dark Gray
+                        buttonBg: '#1c2833',
+                        buttonHoverBg: '#17202a',
+                    },
+                },
+
             ],
         }
     ],

@@ -1,7 +1,6 @@
 @use '../../global.scss' as *;
 
 .endpoints-wrapper {
-
     .endpoint {
         .menu-item {
             margin-bottom: 0.5rem;
@@ -19,9 +18,10 @@
                     align-items: center;
                     gap: 0.5rem;
 
-                    .input-label{
+                    .input-label {
                         font-size: 0.95rem;
                     }
+
                     i {
                         font-size: 1.125rem;
                     }
@@ -56,21 +56,23 @@
                     }
                 }
             }
+
             .sub-menu {
-                    display: flex;
-                    align-items: center;
-                    gap: 0.5rem;
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
 
-                    i:last-child{
-                        opacity: 0;
-                    }
+                i:last-child {
+                    opacity: 0;
+                }
 
-                    &:hover{
-                        i:last-child{
-                            opacity: 1;
-                        }
+                &:hover {
+                    i:last-child {
+                        opacity: 1;
                     }
                 }
+            }
+
             input {
                 width: fit-content;
                 background: #fff;

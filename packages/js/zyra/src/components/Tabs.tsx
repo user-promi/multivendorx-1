@@ -2,7 +2,6 @@ import { useState, useEffect, ReactNode } from 'react';
 import { LinkProps } from 'react-router-dom';
 import '../styles/web/Tabs.scss';
 import AdminBreadcrumbs from './AdminBreadcrumbs';
-import AdminFooter, { SupportLink } from './AdminFooter';
 
 type TabContent = {
   id: string;
@@ -10,6 +9,7 @@ type TabContent = {
   desc?: string;
   icon?: string;
   link?: string;
+  hideTabHeader?:boolean,
   proDependent?: boolean;
 };
 
@@ -28,10 +28,9 @@ type TabsProps = {
   prepareUrl: (tabId: string) => string;
   HeaderSection?: () => JSX.Element;
   BannerSection?: () => JSX.Element;
-  supprot: SupportLink[];
+  supprot: any[];
   Link: React.ElementType<LinkProps>;
   settingName?: string;
-  // Add navigation function prop
   onNavigate?: (url: string) => void;
   tabTitleSection?: React.ReactNode;
 };
@@ -100,15 +99,18 @@ const findTabDescription = (items: TabData[], activeTabId: string): ReactNode =>
   for (const item of items) {
     if (isFile(item) && item.content.id === activeTabId) {
       const tab = item.content;
-      if (tab.id === 'support' || tab.id === 'store' || tab.id === 'users' || tab.id === 'payment' || tab.id === 'vendor-shipping' || tab.id === 'store-policy' || tab.id === 'store-application') return null;
+      if (tab.id === "support") return null;
 
       return (
-        <div className="divider-section" key={tab.id}>
-          <div className="title">{tab.name}</div>
-          {tab.desc && <div className="desc">{tab.desc}</div>}
-        </div>
+        !tab.hideTabHeader && (
+          <div className="divider-section" key={tab.id}>
+            {tab.name && <div className="title">{tab.name}</div>}
+            {tab.desc && <div className="desc">{tab.desc}</div>}
+          </div>
+        )
       );
     }
+
     if (isFolder(item)) {
       const desc = findTabDescription(item.content, activeTabId);
       if (desc) return desc;
@@ -116,6 +118,7 @@ const findTabDescription = (items: TabData[], activeTabId: string): ReactNode =>
   }
   return null;
 };
+
 
 // Helper function to search for breadcrumb path
 const searchForBreadcrumbPath = (
@@ -161,7 +164,7 @@ const Tabs: React.FC<TabsProps> = ({
   settingName = '',
   onNavigate,
   tabTitleSection
-  
+
 }) => {
   const [activeTab, setActiveTab] = useState(currentTab);
   const [menuStack, setMenuStack] = useState<TabData[][]>([tabData]);
@@ -408,6 +411,8 @@ const Tabs: React.FC<TabsProps> = ({
 
   return (
     <>
+      {tabTitleSection && <>{tabTitleSection}</>}
+
       <AdminBreadcrumbs
         activeTabIcon={tabIcon}
         tabTitle={parentTab}
@@ -417,14 +422,12 @@ const Tabs: React.FC<TabsProps> = ({
         goPremium={true}
       />
 
-      {tabTitleSection && <>{tabTitleSection}</>}
-
       <div className="general-wrapper">
         {HeaderSection && <HeaderSection />}
         <div className="middle-child-container">
           {menuStack.length > 1 && (
-            <div id="current-tab-lists" className="current-tab-lists">
-              <div className="current-tab-lists-container">{renderAllMenuItems(currentMenu)}</div>
+            <div id="tabs-wrapper" className="tabs-wrapper">
+              <div className="tabs-item">{renderAllMenuItems(currentMenu)}</div>
             </div>
           )}
 

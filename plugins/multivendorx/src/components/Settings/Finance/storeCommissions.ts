@@ -54,10 +54,10 @@ export default {
                 {
                     key: 'rule',
                     type: 'select',
-                    label: 'Is',
+                    label: 'is',
                     options: [
-                        { value: 'less_than', label: 'Up to' },
-                        { value: 'more_than', label: 'More than' },
+                        { value: 'less_than', label: 'up to' },
+                        { value: 'more_than', label: 'more than' },
                     ],
                     skipFirstRow: true,
                 },
@@ -71,6 +71,7 @@ export default {
                         },
                     ],
                     skipFirstRow: true,
+                    after: "then",
                     dependent: {
                         key: 'rule_type',
                         set: true,
@@ -87,6 +88,7 @@ export default {
                         },
                     ],
                     skipFirstRow: true,
+                    after: "then",
                     dependent: {
                         key: 'rule_type',
                         set: true,
@@ -116,7 +118,7 @@ export default {
                     desc: __('Fixed amount per transaction', 'multivendorx'),
                     preParameter: __('$', 'multivendorx'),
                     size: "8rem",
-                    before: 'Fixed',
+                    before: 'fixed',
                     after: "+",
                 },
                 {
@@ -128,6 +130,7 @@ export default {
                     ),
                     size: '8rem',
                     parameter: __('%', 'multivendorx'),
+                    after: "commission will be charged.",
                 },
 
             ],
@@ -200,7 +203,7 @@ export default {
             type: 'setting-toggle',
             label: __('Tax amount', 'multivendorx'),
             settingDescription: __('Configure how taxes are treated in commission calculations.', 'multivendorx'),
-            desc: __('<li>No Tax Inclusion: Calculate commission on pre-tax amount only.<li>100% Tax Inclusion: Include full tax amount in commission base.<li>Commission-Based Tax: Calculate commission on total order value including taxes, not just product price', 'multivendorx'),
+            desc: __('<li>No Tax : Calculate commission on pre-tax amount only.<li>Full Tax: Include 100% tax in commission base.<li>Commission-Based Tax: Calculate commission on total order value including taxes, not just product price', 'multivendorx'),
 
             options: [
                 {

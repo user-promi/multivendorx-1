@@ -6,6 +6,7 @@ import chalk from 'chalk';
 const pluginFiles = [
     "release/assets/",
     "classes/",
+    "modules/",
     "languages/",
     "log/",
     "templates/",

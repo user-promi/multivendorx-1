@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { BasicInput, TextArea, FileInput, SelectInput, getApiLink } from 'zyra';
 
-const StoreSettings = ({ id }: { id: string }) => {
+const StoreSettings = ({ id }: { id: string|null }) => {
 	const [formData, setFormData] = useState<{ [key: string]: string }>({});
 	const statusOptions = [
 		{ label: "Active", value: "active" },
@@ -280,6 +280,54 @@ const StoreSettings = ({ id }: { id: string }) => {
 							</div>
 						</div>
 					</div> */}
+				</div>
+
+				<div className="card-wrapper width-35">
+					<div className="card-content">
+						<div className="card-title">
+
+						</div>
+
+						<div className="form-group-wrapper">
+							<div className="form-group">
+								<label htmlFor="product-name">Profile Image</label>
+								<FileInput
+									value={formData.image}
+									inputClass="form-input"
+									name="image"
+									type="hidden"
+									onButtonClick={() => runUploader('image')}
+									imageWidth={75}
+									imageHeight={75}
+									openUploader="Upload Image"
+									imageSrc={imagePreviews.image}
+									buttonClass="admin-btn btn-purple"
+									descClass="settings-metabox-description"
+								/>
+							</div>
+						</div>
+
+						<div className="form-group-wrapper">
+							<div className="form-group">
+								<label htmlFor="product-name">Store Banner Image</label>
+								<FileInput
+									value={formData.banner}
+									inputClass="form-input"
+									name="banner"
+									type="hidden"
+									onButtonClick={() => runUploader('banner')}
+									imageWidth={75}
+									imageHeight={75}
+									openUploader="Upload Image"
+									imageSrc={imagePreviews.banner}
+									buttonClass="admin-btn btn-purple"
+									descClass="settings-metabox-description"
+								/>
+							</div>
+						</div>
+
+					</div>
+
 					<div className="card-content">
 						<div className="card-title">Social information</div>
 						{/* Facebook */}
@@ -351,54 +399,6 @@ const StoreSettings = ({ id }: { id: string }) => {
 								/>
 							</div>
 						</div>
-					</div>
-
-				</div>
-
-				<div className="card-wrapper width-35">
-					<div className="card-content">
-						<div className="card-title">
-
-						</div>
-
-						<div className="form-group-wrapper">
-							<div className="form-group">
-								<label htmlFor="product-name">Profile Image</label>
-								<FileInput
-									value={formData.image}
-									inputClass="form-input"
-									name="image"
-									type="hidden"
-									onButtonClick={() => runUploader('image')}
-									imageWidth={75}
-									imageHeight={75}
-									openUploader="Upload Image"
-									imageSrc={imagePreviews.image}
-									buttonClass="admin-btn btn-purple"
-									descClass="settings-metabox-description"
-								/>
-							</div>
-						</div>
-
-						<div className="form-group-wrapper">
-							<div className="form-group">
-								<label htmlFor="product-name">Store Banner Image</label>
-								<FileInput
-									value={formData.banner}
-									inputClass="form-input"
-									name="banner"
-									type="hidden"
-									onButtonClick={() => runUploader('banner')}
-									imageWidth={75}
-									imageHeight={75}
-									openUploader="Upload Image"
-									imageSrc={imagePreviews.banner}
-									buttonClass="admin-btn btn-purple"
-									descClass="settings-metabox-description"
-								/>
-							</div>
-						</div>
-
 					</div>
 				</div>
 			</div>

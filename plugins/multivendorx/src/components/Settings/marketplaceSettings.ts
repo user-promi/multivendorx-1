@@ -24,18 +24,26 @@ export default {
             type: 'select',
             label: __( 'Store registration page', 'multivendorx' ),
             desc: __(
-                'Select the page where you have inserted the <code>[store_registration]</code> shortcode. This page will be used to onboard new stores.',
+                'Choose the page with [store_registration] shortcode, this is where stores sign up.',
                 'multivendorx'
             ),
             className:"select-class",
             options: appLocalizer.pages_list,
         },
+        // {
+        //     key: "sample_map",
+        //     type: "map",
+        //     label: 'Sample map', 
+        //     desc: "This is a simple map",
+        //     Lat: 22.5726,
+        //     Lng: 88.3639
+        // },
         {
             key: 'store_dashboard_page',
             type: 'select',
             label: __( 'Store dashboard page', 'multivendorx' ),
             desc: __(
-                'Select the page on which you have inserted <code>[mvx_store]</code> shortcode. This will be the main dashboard page for your vendors to manage their store.',
+                'The page with [mvx_store] shortcode will act as the store’s control center.',
                 'multivendorx'
             ),
             options: appLocalizer.pages_list,
@@ -45,7 +53,7 @@ export default {
             type: 'text',
             label: __( 'Store URL', 'multivendorx' ),
             desc: __(
-                'Define the custom slug for the store URL. For example, in the URL: https://yourdomain.com/store/[this-text]/[store-name], "[this-text]" will be replaced by the slug you set here.',
+                'Set a custom slug for your store URL. For example, in the URL: https://yourdomain.com/[store]/store-slug, the default word [store] can be replaced with any slug you define here.',
                 'multivendorx'
             ),
             size:"8rem",
@@ -56,7 +64,7 @@ export default {
             key: 'section',
             type: 'section',
             hint: __(
-                'Enable content styling tools for vendors',
+                'Enable content styling tools for stores',
                 'multivendorx'
             ),
         },
@@ -65,10 +73,10 @@ export default {
             type: 'text',
             label: __( 'Tinymce API', 'multivendorx' ),
             desc: __(
-                'To enable styling tools (rich text editing) <a href="https://www.tiny.cloud/blog/how-to-get-tinymce-cloud-up-in-less-than-5-minutes/" target="_blank">get the API key</a> and paste it here.<br> This allows them to format their product descriptions and other content with ease.',
+                'To enable styling tools (rich text editing) <a href="https://www.tiny.cloud/blog/how-to-get-tinymce-cloud-up-in-less-than-5-minutes/" target="_blank">get the API key</a> and paste it here.This allows them to format their product descriptions and other content with ease.',
                 'multivendorx'
             ),
-        },
+        },        
         {
             key: 'section',
             type: 'section',

@@ -3,17 +3,11 @@ import { __ } from '@wordpress/i18n';
 export default {
     id: 'store-invoice',
     priority: 5,
-    name: __('Invoice', 'mvx-pro'),
-    desc: __('Select the PDF output mode', 'mvx-pro'),
+    name: __('Invoice & Taxation', 'mvx-pro'),
+    desc: __('Set up when and how invoices are generated in your marketplace', 'mvx-pro'),
     icon: 'adminlib-clock2',
     submitUrl: 'settings',
     modal: [
-        {
-            key: 'separator_content',
-            type: 'section',
-            desc: __( 'Set up when and how invoices are generated in your marketplace', 'multivendorx' ),
-            hint: __( 'Invoice generation settings', 'multivendorx' ),
-        },
         {
             key: 'mvx_tinymce_api_section',
             type: 'number',

@@ -144,6 +144,14 @@ const ViewStore = () => {
             label: 'Back',
             onClick: () => window.location.assign('?page=multivendorx#&tab=stores'),
             className: 'admin-btn btn-purple'
+          },
+          {
+            label: 'View Public Store',
+            onClick: () => window.open(
+              `${appLocalizer.site_url}/store/${data.slug}/`,
+              '_blank'
+            ),
+            className: 'admin-btn btn-purple'
           }
         ]}
       />

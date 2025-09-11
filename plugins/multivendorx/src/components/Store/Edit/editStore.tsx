@@ -5,7 +5,7 @@ import BrandSmall from '../../../assets/images/brand-icon.png';
 import StoreSettings from './storeSettings';
 
 import PaymentSettings from './paymentSettings';
-import StoreQueue from './storeCrew';
+import StoreSquad from './storeSquad';
 import PolicySettings from './policySettings';
 import ShippingSettings from './shippingSettings';
 import StoreRegistration from './storeRegistrationForm';
@@ -67,6 +67,7 @@ const EditStore = () => {
                 id: 'store',
                 name: 'Basic Info',
                 desc: 'Store Info',
+                hideTabHeader: true,
                 icon: 'adminlib-credit-card',
             },
         },
@@ -74,8 +75,9 @@ const EditStore = () => {
             type: 'file',
             content: {
                 id: 'users',
-                name: 'Store Crew',
+                name: 'Store Squad',
                 desc: 'Store Users',
+                hideTabHeader: true,
                 icon: 'adminlib-credit-card',
             },
         },
@@ -85,15 +87,17 @@ const EditStore = () => {
                 id: 'payment',
                 name: 'Payment',
                 desc: 'Payment Methods',
+                hideTabHeader: true,
                 icon: 'adminlib-credit-card',
             },
         },
         {
             type: 'file',
             content: {
-                id: 'vendor-shipping',
-                name: 'Vendor Shipping',
-                desc: 'Vendor Shipping',
+                id: 'store-shipping',
+                name: 'Store Shipping',
+                desc: 'Store Shipping',
+                hideTabHeader: true,
                 icon: 'adminlib-credit-card',
             },
         },
@@ -103,6 +107,7 @@ const EditStore = () => {
                 id: 'store-policy',
                 name: 'Store Policy',
                 desc: 'Store Policy',
+                hideTabHeader: true,
                 icon: 'adminlib-credit-card',
             },
         },
@@ -110,24 +115,23 @@ const EditStore = () => {
             type: 'file',
             content: {
                 id: 'store-application',
-                name: 'Vendor Application',
-                desc: 'Vendor Application',
+                name: 'Store Application',
+                desc: 'Store Application',
+                hideTabHeader: true,
                 icon: 'adminlib-credit-card',
             },
         },
     ];
-
-
 
     const getForm = (tabId: string) => {
         switch (tabId) {
             case 'store':
                 return <StoreSettings id={editId} />;
             case 'users':
-                return <StoreQueue id={editId} />;
+                return <StoreSquad id={editId} />;
             case 'payment':
                 return <PaymentSettings id={editId} />;
-            case 'vendor-shipping':
+            case 'store-shipping':
                 return <ShippingSettings id={editId} />;
             case 'store-policy':
                 return <PolicySettings id={editId} />;
@@ -155,35 +159,46 @@ const EditStore = () => {
                 appLocalizer={appLocalizer}
                 tabTitleSection={
                     <div className="tab-title">
-                        <div className="tab-wrapper">
-                            <div className="title">{"Editing "+data.name}</div>
-                            <div className="dsc">{data.description}</div>
-                        </div>
-                        <div className="status-wrapper">
-                            <span>Status: </span>
-                            <SelectInput
-                                name="status"
-                                value={data.status}
-                                options={statusOptions}
-                                type="single-select"
-                                onChange={(newValue: any) => {
-                                    console.log(newValue)
-                                    if (!newValue || Array.isArray(newValue)) return;
+                        <div className="content">
+                            <div className="tab-wrapper">
+                                <div className="title"><i className="adminlib-storefront"></i>{data.name}</div>
+                                <div className="dsc">{data.description}</div>
+                            </div>
+                            <div className="status-wrapper">
+                                <span>Status: </span>
+                                <SelectInput
+                                    name="status"
+                                    value={data.status}
+                                    options={statusOptions}
+                                    type="single-select"
+                                    onChange={(newValue: any) => {
+                                        if (!newValue || Array.isArray(newValue)) return;
 
-                                    const updated = { ...data, status: newValue.value };
-                                    setData(updated);
-                                    autoSave(updated);
-                                }}
-                            />
-                            {editId && (
-                                <a
-                                    href={`?page=multivendorx#&tab=stores&view&id=${editId}`}
-                                    className="admin-btn btn-purple"
-                                >
-                                    <i className="adminlib-eye"></i>
-                                    View Store
-                                </a>
-                        )}
+                                        const updated = { ...data, status: newValue.value };
+                                        setData(updated);
+                                        autoSave(updated);
+                                    }}
+                                />
+                                {editId && (
+                                    <>
+                                        <a
+                                            href={`?page=multivendorx#&tab=stores&view&id=${editId}`}
+                                            className="admin-btn btn-purple"
+                                        >
+                                            <i className="adminlib-eye"></i>
+                                            Store Details
+                                        </a>
+                                        <a
+                                            href={`${appLocalizer.site_url}/store/${data.slug}`}
+                                            target="_blank"
+                                            className="admin-btn btn-purple"
+                                        >
+                                            <i className="adminlib-eye"></i>
+                                            View Public Store
+                                        </a>
+                                    </>
+                                )}
+                            </div>
                         </div>
                     </div>
                 }
