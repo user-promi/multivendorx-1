@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { BasicInput, SelectInput, getApiLink } from 'zyra';
 
-const StoreSquad = ({ id }: { id: string }) => {
+const StoreSquad = ({ id }: { id: string|null }) => {
     const [formData, setFormData] = useState<{ [key: string]: any }>({});
     
     const [successMsg, setSuccessMsg] = useState<string | null>(null);
