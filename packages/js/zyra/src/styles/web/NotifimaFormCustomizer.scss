@@ -29,12 +29,13 @@
           padding: .35rem;
           position: absolute;
         }
+
         .setting-wrapper{
             position: absolute;
             background: #fff;
             z-index: 2;
             padding: 1rem; 
-            box-shadow: 0 .25rem .5rem rgba(0,0,0,.125);
+            box-shadow: 0 .25rem .5rem rgb(0 0 0 / 12.5%);
             top: 3.063rem;
         }
       }

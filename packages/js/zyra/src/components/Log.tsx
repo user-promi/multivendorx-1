@@ -114,11 +114,12 @@ const Log: React.FC< LogProps > = ( {
 
     return (
         <div className="section-log-container">
-            <div className="button-section">
+            <div className="buttons-wrapper">
                 <button
                     onClick={ handleDownloadLog }
-                    className="admin-btn btn-purple download-btn"
+                    className="admin-btn btn-purple"
                 >
+                    <i className="adminlib-import"></i>
                     Download
                 </button>
                 <button

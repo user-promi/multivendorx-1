@@ -12,7 +12,6 @@
 
   .wrap-bulk-all-date {
     display: flex;
-    align-items: center;
     justify-content: flex-start;
     align-items: center;
     gap: 0.5rem;
@@ -99,9 +98,7 @@
         font-size: 0.9rem;
         font-weight: 500;
         display: flex;
-        flex-basis: 0;
-        flex-grow: 1;
-        flex-shrink: 0;
+        flex: 1 0 0;
         width: 100%;
       }
 
@@ -138,6 +135,7 @@
 
         h4.hide-title {
           display: none;
+
           /* For hide title in desktop */
         }
       }
@@ -156,9 +154,7 @@
           font-size: 0.9rem;
           display: flex;
           align-items: center;
-          flex-basis: 0;
-          flex-grow: 1;
-          flex-shrink: 0;
+          flex: 1 0 0;
 
           img {
             width: 3.125rem;
@@ -208,12 +204,14 @@
 
         .basic-input {
           border: none !important;
-          /*for overwrite common style*/
+
+          /* for overwrite common style */
         }
 
         .basic-input:focus {
           border: 0.063rem solid #ccd0d5 !important;
-          /*for overwrite common style*/
+
+          /* for overwrite common style */
         }
 
         &:hover{
@@ -271,11 +269,9 @@
 .table-pagination {
   display: flex;
   justify-content: space-between;
-  // background: #fff;
   align-items: center;
   padding: 0 1rem;
   height: 3rem;
-  // width: 100%;
 
   .pagination-arrow {
     display: flex;
@@ -404,7 +400,7 @@
     overflow: hidden;
     border: $border-light-small;
     position: absolute;
-    inset: 0px 0px auto auto;
+    inset: 0 0 auto auto;
     background: #fff;
     display: none;
     z-index: 2;
@@ -440,7 +436,7 @@
 
     &.show {
       display: block;
-      transform: translate(0px, 20px);
+      transform: translate(0, 20px);
     }
   }
 

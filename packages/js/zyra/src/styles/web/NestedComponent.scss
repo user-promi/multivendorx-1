@@ -6,7 +6,7 @@
         flex-wrap: wrap;
         justify-content: start;
         align-items: start;
-        gap: 1rem;
+        gap: 0.5rem;
 
         &.multiple {
             padding: 1rem;
@@ -22,10 +22,13 @@
         label {
             font-size: 0.95rem;
             display: inline-block;
-            padding-right: 0.5rem;
             color: $text-color;
         }
-
+        .settings-input-content{
+            .toggle-setting-container{
+                padding-left: 0.5rem;
+            }
+        }
         .toggle-setting-container,
         .form-select-field-wrapper {
             display: inline-block;
@@ -54,7 +57,6 @@
             width: fit-content;
         }
     }
-
     .nested-row.multiple:first-child {
         background: transparent;
         padding: 0;

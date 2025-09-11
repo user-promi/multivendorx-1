@@ -41,35 +41,36 @@
 
 // tab system start
 .action-tab-wrapper {
-    .tab-titles {
-        display: flex;
-        margin-bottom: 1rem;
-        gap: 0.5rem;
+    // .tab-titles {
+    //     display: flex;
+    //     margin-bottom: 1rem;
+    //     gap: 0.5rem;
 
-        .title {
-            padding: 0.313rem 0.813rem;
-            cursor: pointer;
-            border-radius: 0.313rem;
+    //     .title {
+    //         padding: 0.313rem 0.813rem;
+    //         cursor: pointer;
+    //         border-radius: 0.313rem;
 
-            h2 {
-                color: #121116;
-                font-size: .938rem;
-                line-height: 1.5;
-                font-weight: 500;
-            }
+    //         h2 {
+    //             color: #121116;
+    //             font-size: .938rem;
+    //             line-height: 1.5;
+    //             font-weight: 500;
+    //         }
 
-            &.active,
-            &:hover {
-                background: $theme-background-color;
-                h2 {
-                    color: $theme-color;
-                }
-            }
-        }
-    }
+    //         &.active,
+    //         &:hover {
+    //             background: $theme-background-color;
+    //             h2 {
+    //                 color: $theme-color;
+    //             }
+    //         }
+    //     }
+    // }
 
     .admin-table-wrapper {
         margin: 0;
+        padding-top: 1rem;
     }
 }
 

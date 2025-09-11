@@ -11,38 +11,38 @@
         margin: 2rem;
         background: #fff;
 
-        .tab-titles {
-            display: flex;
-            gap: 1rem;
-            padding-top: 1.313rem;
-
-            .title {
-                padding-bottom: 0.313rem;
-                cursor: pointer;
-
-                p {
-                    font-size: .938rem;
-                    line-height: 1.5;
-                    color: #000;
-                    font-weight: 500;
-                }
-
-                &.active {
-                    color: $theme-color;
-                    border-bottom: 0.126rem solid $theme-color;
-
-                    p{
-                        color: $theme-color;
-                    }
-                }
-            }
-        }
-
         .column {
             border: $border-light-small;
         }
     }
 
+}
+
+.tab-titles {
+    display: flex;
+    gap: 1rem;
+    padding-top: 1.313rem;
+
+    .title {
+        padding-bottom: 0.313rem;
+        cursor: pointer;
+
+        p {
+            font-size: .938rem;
+            line-height: 1.5;
+            color: #000;
+            font-weight: 500;
+        }
+
+        &.active {
+            color: $theme-color;
+            border-bottom: 0.126rem solid $theme-color;
+
+            p {
+                color: $theme-color;
+            }
+        }
+    }
 }
 
 .row {
@@ -258,6 +258,7 @@
     .quick-links-wrapper {
         display: flex;
         gap: 0.85rem;
+        flex-wrap: wrap;
     }
 }
 

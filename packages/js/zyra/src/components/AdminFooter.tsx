@@ -6,7 +6,6 @@ import React from 'react';
 /**
  * Internal dependencies
  */
-import '../styles/web/AdminFooter.scss';
 
 // Types
 export interface SupportLink {

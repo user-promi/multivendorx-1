@@ -57,7 +57,7 @@
       cursor: pointer;
       position: relative;
 
-      &:hover{
+      &:hover {
         background: #e7e6e6cf;
       }
     }
@@ -77,11 +77,6 @@
       select {
         margin: 0;
         border: none;
-
-        &:focus {
-          outline: none;
-          box-shadow: none;
-        }
       }
 
       .adminlib-search {
@@ -98,6 +93,16 @@
         padding-left: 2rem;
         position: relative;
         border-right: $border-light-small;
+
+        &:focus {
+          outline: none;
+          box-shadow: none;
+        }
+      }
+
+      select:focus {
+        outline: none;
+        box-shadow: none;
       }
     }
 
@@ -130,59 +135,7 @@
         background: #fff;
         border-radius: 0.313rem;
         transition: all 0.3s ease;
-        z-index: 999;
-
-        .dropdown-header {
-          padding: 1.125rem 1.75rem;
-          background: #f5f6fa;
-          border-bottom: 0.063rem solid #f5f6fa;
-
-          .user-card {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-
-            .user-avatar {
-              border-radius: 50%;
-              height: 40px;
-              width: 40px;
-              display: flex;
-              justify-content: center;
-              align-items: center;
-              color: #fff;
-              background: #9d72ff;
-              font-size: 14px;
-              font-weight: 700;
-              letter-spacing: .06em;
-              flex-shrink: 0;
-              position: relative;
-
-              span {
-                color: #fff;
-                font-size: 14px;
-                font-weight: 700;
-                letter-spacing: .06em;
-              }
-            }
-
-            .user-info {
-              display: flex;
-              flex-direction: column;
-              gap: 0.125rem;
-
-              .user-name {
-                font-size: .875rem;
-                font-weight: 700;
-                color: #364a63;
-              }
-
-              .user-email {
-                font-size: 0.75rem;
-                font-weight: 400;
-              }
-            }
-          }
-        }
+        z-index: 9999;
 
         .dropdown-body {
           margin: 0;
@@ -243,49 +196,49 @@
 
             li {
               margin: 0;
+            }
 
-              a {
+            a {
+              display: flex;
+              gap: 0.813rem;
+              padding: 0.75rem;
+              align-items: start;
+              border-bottom: $border-light-small;
+
+              &:hover {
+                background: #f3f3f3;
+              }
+
+              .icon {
+                padding: 0.313rem;
+                border-radius: 50%;
                 display: flex;
-                gap: 0.813rem;
-                padding: 0.75rem;
-                align-items: start;
-                border-bottom: $border-light-small;
+                justify-content: center;
+                align-items: center;
 
-                &:hover {
-                  background: #f3f3f3;
+                i {
+                  font-size: 1.5rem;
+                }
+              }
+
+              .details {
+                span {
+                  display: block;
                 }
 
-                .icon {
-                  padding: 0.313rem;
-                  border-radius: 50%;
-                  display: flex;
-                  justify-content: center;
-                  align-items: center;
-
-                  i {
-                    font-size: 1.5rem;
-                  }
+                .heading {
+                  font-size: 0.95rem;
+                  color: #000;
                 }
 
-                .details {
-                  span {
-                    display: block;
-                  }
+                .message {
+                  color: #00000082;
+                  padding: 0.313rem 0;
+                }
 
-                  .heading {
-                    font-size: 0.95rem;
-                    color: #000;
-                  }
-
-                  .message {
-                    color: #00000082;
-                    padding: 0.313rem 0;
-                  }
-
-                  .time {
-                    font-size: 0.813rem;
-                    color: #0000004a;
-                  }
+                .time {
+                  font-size: 0.813rem;
+                  color: #0000004a;
                 }
               }
             }
@@ -296,13 +249,12 @@
   }
 }
 
-
 .title-section {
   margin: 0 2rem;
   padding: 1.5rem;
   background: #fff;
 
-  .current-tab-lists {
+  .tabs-wrapper {
     padding-top: 0.5rem;
     display: flex;
     justify-content: space-between;
@@ -338,7 +290,7 @@
 
     i {
       margin-right: 0.5rem;
-      color: #5007aa;
+      color: $theme-color;
       font-size: 1.8rem;
     }
 
@@ -358,7 +310,7 @@
     padding: 0.938rem 0;
   }
 
-  .breadcrumbs-menu {
+  .breadcrumbs {
     padding-top: 0.938rem;
 
     a {
@@ -435,65 +387,9 @@
   .tab-description-body {
     padding: 0 1.8rem;
   }
-
-
-
-  // .tab-description-header {
-  //   padding: 0 1.8rem;
-
-  //   .child {
-  //     // display: flex;
-  //     // align-items: flex-start;
-  //     // justify-content: flex-start;
-  //     // gap: 1rem;
-  //     border-bottom: 0.063rem solid #e0e4e9;
-  //     padding: 1.5rem 0;
-  //     // font-size: 0.875rem;
-  //     // line-height: 1.5;
-  //     // padding: 0 0 1.875rem;
-
-  //     .tab-name {
-  //       font-size: 1.313rem;
-  //       line-height: 1;
-  //       font-weight: 500;
-  //       letter-spacing: .0.045rem;
-  //     }
-
-  //     .tab-desc {
-  //       margin-top: 0.5rem;
-  //     }
-
-  //     p {
-  //       position: relative;
-  //       margin: 0;
-
-  //       &::after {
-  //         position: absolute;
-  //         content: "";
-  //         bottom: -2.45rem; // For header icon bottom style
-  //         left: 0;
-  //         background: $color-active;
-  //         width: 100%;
-  //         height: 0.125rem;
-  //       }
-
-  //       i {
-  //         width: 3rem;
-  //         height: 3rem;
-  //         background: $menu-color;
-  //         color: $color-active;
-  //         border-radius: 0.188rem;
-  //         font-size: 2rem;
-  //         display: flex;
-  //         align-items: center;
-  //         justify-content: center;
-  //       }
-  //     }
-  //   }
-  // }
 }
 
-.current-tab-lists {
+.tabs-wrapper {
   // width: 100%;
   background: #fff;
 
@@ -520,17 +416,16 @@
 
 .middle-child-container {
   position: relative;
-  // display: flex;
   color: #121116;
   line-height: 1.5;
   background-color: #fff;
 
-  .current-tab-lists {
+  .tabs-wrapper {
     padding: 0 2rem;
   }
 
   &.show-menu {
-    .current-tab-lists {
+    .tabs-wrapper {
       max-width: 4.125rem;
 
       .brand {
@@ -547,7 +442,6 @@
         .logo-small {
           display: block;
         }
-
       }
 
       .menu-coll-btn {
@@ -563,17 +457,18 @@
   }
 }
 
-.middle-child-container:has(.current-tab-lists) {
+.middle-child-container:has(.tabs-wrapper) {
   padding-top: 2rem;
 }
 
-.current-tab-lists-container {
+.tabs-item {
   position: relative;
   display: flex;
   gap: 1.5rem;
 
   .menu-item {
     position: relative;
+
     // width: 100%;
     // padding: 1rem 0.63rem 1.125rem 1.25rem;
     // border-top: 0.063rem solid #e0e4e9;
@@ -620,7 +515,6 @@
       box-shadow: none;
     }
   }
-
 
   .active-current-tab {
     color: $color-active;
@@ -682,54 +576,25 @@
   }
 }
 
-@media screen and (width <=50.211rem) {
-  .current-tab-lists {
-    max-width: 4.125rem;
 
-    .brand {
-      margin: 0 auto;
+// section divider start
+.divider-section {
+  padding: 1.5rem 0;
+  border-bottom: $border-light-small;
 
-      img.logo {
-        display: none; // Hide for responsive
-      }
-
-      .logo-small {
-        display: block;
-        width: 3.125rem;
-      }
-
-      p {
-        display: none; // Hide for responsive
-      }
-    }
-
-    .current-tab-lists-container {
-      .menu-coll-btn {
-        display: none; // Hide for responsive
-      }
-
-      .tab-wrapper {
-        .subtab-wrapper {
-          padding-left: 0;
-        }
-      }
-
-      a {
-        div {
-          &:nth-child(2) {
-            display: none; // Hide for responsive
-          }
-        }
-      }
-    }
+  .title {
+    font-size: 1.15rem;
+    width: auto;
   }
 }
 
-
-
-
-.title-wrapper {
-  font-size: 1.125rem;
-  font-weight: 500;
-  margin-bottom: 0.425rem;
+.divider-section:first-child {
+  padding: 1.5rem 0;
+  margin: 0 2rem;
 }
+
+.divider-section:not(:first-child) {
+  width: 100%;
+}
+
+// section divider end

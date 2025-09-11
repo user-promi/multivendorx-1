@@ -4,8 +4,10 @@
     display: flex;
     gap: 2rem;
     padding-top: 1rem;
+
     .color-palette-wrapper {
         width: 22%;
+
         .predefined {
             display: flex;
             gap: 0.5rem;
@@ -98,7 +100,7 @@
     width: 78%;
     height: 35rem;
     overflow: hidden;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 10px rgb(0 0 0 / 10%);
 
     .tabs-wrapper {
         width: 10rem;
@@ -187,7 +189,6 @@
     }
 
     .tab-wrapper {
-        // padding-left: 18.125rem;
         width: calc(100% - 10rem);
         min-height: 100vh;
         background-color: #f5f6fa;
@@ -275,6 +276,7 @@
 
 .image-list{
     width: 25%;
+
     .image-thumbnail{
         display: flex;
         gap: 0.313rem;

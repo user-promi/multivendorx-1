@@ -1,5 +1,4 @@
 @use '../../global.scss' as *;
-
    
     .carousel-list {
       list-style: none;
@@ -10,12 +9,15 @@
     .carousel-item {
       display: none;
       margin: 0;
+
       span{
         font-size: 0.75rem;
       }
+
       .description{
         font-weight: 400;
       }
+
       a{
         color: $theme-color;
         text-decoration: underline;
