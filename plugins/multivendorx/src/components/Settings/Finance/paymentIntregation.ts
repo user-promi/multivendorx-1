@@ -7,7 +7,7 @@ const methods = appLocalizer?.all_payments
 export default {
     id: 'payment-integration',
     priority: 3,
-    name: __( 'Marketplace payouts', 'multivendorx' ),
+    name: __( 'Marketplace Payouts', 'multivendorx' ),
     desc: __("Choose which payment integrations to enable for store payouts",'multivendorx'),
     icon: 'adminlib-rules',
     submitUrl: 'settings',
