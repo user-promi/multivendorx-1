@@ -27,6 +27,8 @@ interface NestedField {
   prefixUnit?: string;
   addonBefore?: string;
   addonAfter?: string;
+  addonBeforeFirstRow?:string;
+  addonAfterFirstRow?:string;
   desc?: string;
   size?: string;
   min?: number;
@@ -175,8 +177,16 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
               value={val}
               prefixUnit={field.prefixUnit}
               parameter={field.parameter}
-              addonBefore={field.addonBefore}
-              addonAfter={field.addonAfter}
+              addonBefore={
+                rowIndex === 0
+                  ? field.addonBeforeFirstRow ?? field.addonBefore
+                  : field.addonBefore
+              }
+              addonAfter={
+                rowIndex === 0
+                  ? field.addonAfterFirstRow ?? field.addonAfter
+                  : field.addonAfter
+              }
               min={field.min ?? 0}
               description={field.desc}
               size={field.size}
