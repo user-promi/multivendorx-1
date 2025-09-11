@@ -127,7 +127,7 @@ const EditStore = () => {
         switch (tabId) {
             case 'store':
                 return <StoreSettings id={editId} />;
-            case 'users':
+            case 'staff':
                 return <StoreSquad id={editId} />;
             case 'payment':
                 return <PaymentSettings id={editId} />;

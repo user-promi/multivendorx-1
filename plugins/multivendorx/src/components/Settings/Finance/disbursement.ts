@@ -229,7 +229,7 @@ export default {
                 {
                     key: 'monthly_payout_time', // time of day
                     type: 'time', // links to TimeSelect component
-                    addonBefore: __('At', 'multivendorx'),
+                    addonBefore: __('at', 'multivendorx'),
                     description: __('Select the time of day your monthly payout should occur.', 'multivendorx'),
                     defaultValue: '09:00',
                 },
@@ -321,7 +321,7 @@ export default {
                 {
                     key: 'withdrawal_fee', // updated key
                     type: 'number',
-                    size: '5rem',
+                    size: '8rem',
                     options: [
                         {
                             key: 'withdrawal_fee',
