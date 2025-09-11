@@ -157,7 +157,7 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
 			 'store_support' => array(
                 'name'    => 'Store Support',
                 'icon'    => 'adminlib-cart',
-                'slug'    => 'store_support',
+                'slug'    => 'store-support',
                 'submenu' => array(),
                 'capability' => ['manage_users']
             ),

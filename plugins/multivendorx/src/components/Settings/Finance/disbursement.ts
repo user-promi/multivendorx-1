@@ -209,17 +209,13 @@ export default {
             label: __('Monthly disbursement', 'multivendorx'), // main label
             single: true,
             desc: __(
-                'Once per month: Set the day of the month and time for store commissions payout.',
+                'Date of the month: (defaults to last day if shorter month)<br>Once per month: Set the day of the month and time for store commissions payout.',
                 'multivendorx'
             ),
             nestedFields: [
                 {
                     key: 'payouts_every_month', // day of month
                     addonBefore: __('On', 'multivendorx'),
-                    desc: __(
-                        'Date of the month: (defaults to last day if shorter month)',
-                        'multivendorx'
-                    ),
                     type: 'number',
                     size: '8rem',
                     options: [

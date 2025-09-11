@@ -70,6 +70,8 @@ export default {
                             value: 'product_price',
                         },
                     ],
+                    prefixUnit:'$',
+                    size:"8rem",
                     skipFirstRow: true,
                     addonAfter: "then",
                     dependent: {
@@ -104,8 +106,9 @@ export default {
                             value: 'order_value',
                         },
                     ],
+                    size:"8rem",
+                    prefixUnit:'$',
                     addonAfter: "then",
-                    // skipFirstRow: true,
                     dependent: {
                         key: 'rule_type',
                         set: true,
@@ -119,6 +122,7 @@ export default {
                     prefixUnit: __('$', 'multivendorx'),
                     size: "8rem",
                     addonBefore: 'fixed',
+                    addonBeforeFirstRow:"Fixed",
                     addonAfter: "+",
                 },
                 {
@@ -131,8 +135,8 @@ export default {
                     size: '8rem',
                     parameter: __('%', 'multivendorx'),
                     addonAfter: "commission will be charged.",
+                    addonAfterFirstRow:"",
                 },
-
             ],
             dependent: {
                 key: 'commission_type',
@@ -140,7 +144,6 @@ export default {
                 value: 'store_order',
             },
         },
-
         {
             key: 'commission_per_item',
             type: 'nested',
