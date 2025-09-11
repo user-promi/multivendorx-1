@@ -24,9 +24,9 @@ interface NestedField {
   skipFirstRow?: boolean;
   skipLabel?: boolean;
   parameter?: string;
-  preParameter?: string;
-  before?: string;
-  after?: string;
+  prefixUnit?: string;
+  addonBefore?: string;
+  addonAfter?: string;
   desc?: string;
   size?: string;
   min?: number;
@@ -154,6 +154,8 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
               options={field.options || []}
               value={val}
               onChange={(newVal) => handleChange(rowIndex, field.key, newVal)}
+              addonBefore={field.addonBefore}
+              addonAfter={field.addonAfter}  
             />
           </div>
         );
@@ -171,10 +173,10 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
               id={`${field.key}-${rowIndex}`}
               name={field.key}
               value={val}
-              prefixUnit={field.preParameter}
+              prefixUnit={field.prefixUnit}
               parameter={field.parameter}
-              addonBefore={field.before}
-              addonAfter={field.after}
+              addonBefore={field.addonBefore}
+              addonAfter={field.addonAfter}
               min={field.min ?? 0}
               description={field.desc}
               size={field.size}
@@ -195,8 +197,8 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
               name={field.key}
               description={field.desc}
               inputClass={field.className}
-              before={field.before}
-              after={field.after}
+              addonBefore={field.addonBefore}
+              addonAfter={field.addonAfter}
               options={
                 Array.isArray(field.options)
                   ? field.options.map((opt) => ({

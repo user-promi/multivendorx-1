@@ -33,8 +33,8 @@ interface SelectInputProps {
     proSetting?: boolean;
     description?: string;
     descClass?: string;
-    before?: string;
-    after?: string;
+    addonBefore?: string;
+    addonAfter?: string;
 }
 
 const SelectInput: React.FC<SelectInputProps> = ({
@@ -52,8 +52,8 @@ const SelectInput: React.FC<SelectInputProps> = ({
     proSetting,
     description,
     descClass,
-    before,
-    after,
+    addonBefore,
+    addonAfter,
 }) => {
     const customStyles = {
         control: (provided: any, state: any) => ({
@@ -125,7 +125,7 @@ const SelectInput: React.FC<SelectInputProps> = ({
             )}
 
             <div className="select-wrapper">
-                {before && (<div className="before">{before}</div>)}
+                {addonBefore && (<div className="before">{addonBefore}</div>)}
                 <Select
                     name={name}
                     className={`${inputClass} react-select`}
@@ -138,7 +138,7 @@ const SelectInput: React.FC<SelectInputProps> = ({
                     closeMenuOnSelect={true}
                     isMulti={type === 'multi-select'}
                 />
-                {after && (<div className="after">{after}</div>)}
+                {addonAfter && (<div className="after">{addonAfter}</div>)}
             </div>
             {proSetting && <span className="admin-pro-tag"><i className="adminlib-pro-tag"></i>Pro</span>}
             {description && (
