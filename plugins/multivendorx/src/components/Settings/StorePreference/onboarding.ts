@@ -102,6 +102,11 @@ export default {
                 },
             ],
             selectDeselect: true,
+            dependent: {
+                key: 'disable_setup_wizard', // parent dependent key
+                set: true,
+                value: 'enable_guided_setup', // updated value
+            },
         },                
         {
             key: 'setup_wizard_introduction',
@@ -115,6 +120,11 @@ export default {
                 'This message appears at the beginning of the setup process to set expectations and encourage completion.',
                 'multivendorx'
             ),
+            dependent: {
+                key: 'disable_setup_wizard', // parent dependent key
+                set: true,
+                value: 'enable_guided_setup', // updated value
+            },
         },
     ],
 };

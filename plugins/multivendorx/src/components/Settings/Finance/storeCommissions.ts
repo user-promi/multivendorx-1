@@ -70,8 +70,10 @@ export default {
                             value: 'product_price',
                         },
                     ],
+                    prefixUnit:'$',
+                    size:"8rem",
                     skipFirstRow: true,
-                    after: "then",
+                    addonAfter: "then",
                     dependent: {
                         key: 'rule_type',
                         set: true,
@@ -88,7 +90,7 @@ export default {
                         },
                     ],
                     skipFirstRow: true,
-                    after: "then",
+                    addonAfter: "then",
                     dependent: {
                         key: 'rule_type',
                         set: true,
@@ -104,8 +106,9 @@ export default {
                             value: 'order_value',
                         },
                     ],
-                    after: "then",
-                    // skipFirstRow: true,
+                    size:"8rem",
+                    prefixUnit:'$',
+                    addonAfter: "then",
                     dependent: {
                         key: 'rule_type',
                         set: true,
@@ -116,10 +119,11 @@ export default {
                     key: 'commission_fixed',
                     type: 'text',
                     desc: __('Fixed amount per transaction', 'multivendorx'),
-                    preParameter: __('$', 'multivendorx'),
+                    prefixUnit: __('$', 'multivendorx'),
                     size: "8rem",
-                    before: 'fixed',
-                    after: "+",
+                    addonBefore: 'fixed',
+                    addonBeforeFirstRow:"Fixed",
+                    addonAfter: "+",
                 },
                 {
                     key: 'commission_percentage',
@@ -130,9 +134,9 @@ export default {
                     ),
                     size: '8rem',
                     parameter: __('%', 'multivendorx'),
-                    after: "commission will be charged.",
+                    addonAfter: "commission will be charged.",
+                    addonAfterFirstRow:"",
                 },
-
             ],
             dependent: {
                 key: 'commission_type',
@@ -140,7 +144,6 @@ export default {
                 value: 'store_order',
             },
         },
-
         {
             key: 'commission_per_item',
             type: 'nested',
@@ -155,10 +158,10 @@ export default {
                     key: 'commission_fixed',
                     type: 'number',
                     desc: __('Fixed amount per transaction', 'multivendorx'),
-                    preParameter: __('$', 'catalogx'),
+                    prefixUnit: __('$', 'multivendorx'),
                     size: "8rem",
-                    before: 'Fixed',
-                    after: "+",
+                    addonBefore: 'Fixed',
+                    addonAfter: "+",
                 },
                 {
                     key: 'commission_percentage',

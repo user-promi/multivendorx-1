@@ -23,12 +23,14 @@ interface ToggleSettingProps {
     wrapperClass?: string;
     descClass?: string;
     value: string;
-    onChange: ( value: string ) => void;
+    onChange: (value: string) => void;
     proChanged?: () => void;
     proSetting?: boolean;
     khali_dabba?: boolean;
     iconEnable?: boolean; // <-- new prop to render icons
     key?: string;
+    addonBefore?: string;
+    addonAfter?: string;
 }
 
 const ToggleSetting: React.FC<ToggleSettingProps> = ({
@@ -42,10 +44,14 @@ const ToggleSetting: React.FC<ToggleSettingProps> = ({
     proSetting = false,
     khali_dabba,
     iconEnable = false, // default false
+    addonAfter,
+    addonBefore
 }) => {
     return (
         <>
             <div className="toggle-setting-container">
+                {addonBefore && <span className="before">{addonBefore}</span>}
+
                 <div className="toggle-setting-wrapper">
                     {options.map((option) => (
                         <div
@@ -74,8 +80,8 @@ const ToggleSetting: React.FC<ToggleSettingProps> = ({
                                     <i className={option.value}></i> // render icon if icon=true
                                 ) : option.img ? (
                                     <>
-                                    <img src={option.img} />
-                                    {option.label}
+                                        <img src={option.img} />
+                                        {option.label}
                                     </>
                                 ) : (
                                     option.label
@@ -87,6 +93,8 @@ const ToggleSetting: React.FC<ToggleSettingProps> = ({
                         </div>
                     ))}
                 </div>
+                {addonAfter && <span className="after">{addonAfter}</span>}
+
                 {proSetting && <span className="admin-pro-tag"><i className="adminlib-pro-tag"></i>Pro</span>}
             </div>
             {description && (
