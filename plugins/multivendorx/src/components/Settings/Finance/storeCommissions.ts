@@ -71,7 +71,7 @@ export default {
                         },
                     ],
                     skipFirstRow: true,
-                    addonAfter: "then",
+                    after: "then",
                     dependent: {
                         key: 'rule_type',
                         set: true,
@@ -88,7 +88,7 @@ export default {
                         },
                     ],
                     skipFirstRow: true,
-                    addonAfter: "then",
+                    after: "then",
                     dependent: {
                         key: 'rule_type',
                         set: true,
@@ -104,7 +104,7 @@ export default {
                             value: 'order_value',
                         },
                     ],
-                    addonAfter: "then",
+                    after: "then",
                     // skipFirstRow: true,
                     dependent: {
                         key: 'rule_type',
@@ -116,10 +116,10 @@ export default {
                     key: 'commission_fixed',
                     type: 'text',
                     desc: __('Fixed amount per transaction', 'multivendorx'),
-                    meter: __('$', 'multivendorx'),
+                    preParameter: __('$', 'multivendorx'),
                     size: "8rem",
-                    addonBefore: 'fixed',
-                    addonAfter: "+",
+                    before: 'fixed',
+                    after: "+",
                 },
                 {
                     key: 'commission_percentage',
@@ -130,7 +130,7 @@ export default {
                     ),
                     size: '8rem',
                     parameter: __('%', 'multivendorx'),
-                    addonAfter: "commission will be charged.",
+                    after: "commission will be charged.",
                 },
 
             ],
@@ -155,10 +155,10 @@ export default {
                     key: 'commission_fixed',
                     type: 'number',
                     desc: __('Fixed amount per transaction', 'multivendorx'),
-                    meter: __('$', 'catalogx'),
+                    preParameter: __('$', 'catalogx'),
                     size: "8rem",
-                    addonBefore: 'Fixed',
-                    addonAfter: "+",
+                    before: 'Fixed',
+                    after: "+",
                 },
                 {
                     key: 'commission_percentage',
@@ -203,7 +203,7 @@ export default {
             type: 'setting-toggle',
             label: __('Tax amount', 'multivendorx'),
             settingDescription: __('Configure how taxes are treated in commission calculations.', 'multivendorx'),
-            desc: __('<li>No Tax Inclusion: Calculate commission on pre-tax amount only.<li>100% Tax Inclusion: Include full tax amount in commission base.<li>Commission-Based Tax: Calculate commission on total order value including taxes, not just product price', 'multivendorx'),
+            desc: __('<li>No Tax : Calculate commission on pre-tax amount only.<li>Full Tax: Include 100% tax in commission base.<li>Commission-Based Tax: Calculate commission on total order value including taxes, not just product price', 'multivendorx'),
 
             options: [
                 {

@@ -62,9 +62,9 @@ export default {
             settingDescription: __('Keep payouts on hold for a safety buffer. Helps cover refunds, cancellations, or disputes.', 'multivendorx'),
             type: 'number',
             size: '8rem',
-            addonBefore:__('Wait', 'multivendorx'),
-            addonAfter:__('days before commissions become eligible for payout', 'multivendorx'),
-            parameter: __('day', 'multivendorx'),
+            before:__('Wait', 'multivendorx'),
+            after:__('before commissions become eligible for payout', 'multivendorx'),
+            parameter: __('days', 'multivendorx'),
         },
         {
             key: 'payout_threshold_amount',
@@ -72,7 +72,7 @@ export default {
             desc: __(
                 'Define the minimum amount a store must accumulate before payouts are processed.', 'multivendorx'),
             type: 'number',
-            meter: __('$', 'multivendorx'),
+            preParameter: __('$', 'multivendorx'),
             size: '8rem',
             options: [
                 {
@@ -133,8 +133,8 @@ export default {
                     value: 'payouts_every_hour',
                 },
             ],
-            addonAfter:__('minute of every hour', 'multivendorx'),
-            addonBefore:__('At', 'multivendorx'),
+            after:__('minute of every hour', 'multivendorx'),
+            before:__('At', 'multivendorx'),
             parameter:__('th', 'multivendorx'),
             dependent: {
                 key: 'payment_schedules',
@@ -147,7 +147,7 @@ export default {
             key: 'disbursement_fortnightly', // updated key
             type: 'nested',
             label: __('Fortnightly disbursement', 'multivendorx'), // updated label
-            addonBefore:__('Of', 'multivendorx'),
+            before:__('Of', 'multivendorx'),
             single: true,
             desc: __(
                 'Every two weeks: This is the default commission amount that will be disbursed to stores every fortnight.',
@@ -175,7 +175,7 @@ export default {
                 {
                     key: 'payout_day',
                     type: 'dropdown',
-                    addonBefore:__('At', 'multivendorx'),
+                    before:__('at', 'multivendorx'),
                     // label: __('Payout Day', 'multivendorx'),
                     // settingDescription: __("Select the day of the week to release store commissions:", 'multivendorx'),
                     // desc: __("<ul><li>Choose the specific day when store commissions should be disbursed.</li></ul>", 'multivendorx'),
@@ -215,7 +215,7 @@ export default {
             nestedFields: [
                 {
                     key: 'payouts_every_month', // day of month
-                    addonBefore: __('On', 'multivendorx'),
+                    before: __('On', 'multivendorx'),
                     desc: __(
                         'Date of the month: (defaults to last day if shorter month)',
                         'multivendorx'
@@ -233,7 +233,7 @@ export default {
                 {
                     key: 'monthly_payout_time', // time of day
                     type: 'time', // links to TimeSelect component
-                    addonBefore: __('At', 'multivendorx'),
+                    before: __('At', 'multivendorx'),
                     description: __('Select the time of day your monthly payout should occur.', 'multivendorx'),
                     defaultValue: '09:00',
                 },
@@ -249,7 +249,7 @@ export default {
             key: 'daily_payout_time', // unique key for daily payout time
             type: 'time', // links to TimeSelect component
             label: __('Daily payout time', 'multivendorx'),
-            addonBefore:__('At', 'multivendorx'),
+            before:__('At', 'multivendorx'),
             description: __('Once per day<br/>Run payouts at:', 'multivendorx'),
             defaultValue: '09:00', // optional: default payout time
             dependent: {
@@ -273,7 +273,7 @@ export default {
                 {
                     key: 'weekly_payout_day', // day of week toggle
                     type: 'dropdown',
-                    addonBefore:__('On', 'multivendorx'),
+                    before:__('On', 'multivendorx'),
                     description: __('Select the day of the week for payouts:', 'multivendorx'),
                     options: [
                         { key: 'sunday', label: __('Sunday', 'multivendorx'), value: 'sunday' },
@@ -288,7 +288,7 @@ export default {
                 {
                     key: 'weekly_payout_time', // time of day
                     type: 'time', // links to TimeSelect component
-                    addonBefore: __('At', 'multivendorx'),
+                    before: __('at', 'multivendorx'),
                     description: __('Select the time of day for weekly payouts.', 'multivendorx'),
                     defaultValue: '09:00',
                 },
@@ -319,8 +319,8 @@ export default {
                             value: 'free_withdrawals',
                         },
                     ],
-                    addonBefore: __('Stores get', 'multivendorx'),
-                    addonAfter: __('free withdrawals. After that, each withdrawal costs', 'multivendorx'),
+                    before: __('Stores get', 'multivendorx'),
+                    after: __('free withdrawals. After that, each withdrawal costs', 'multivendorx'),
                 },
                 {
                     key: 'withdrawal_fee', // updated key
@@ -332,7 +332,7 @@ export default {
                             value: 'withdrawal_fee',
                         },
                     ],
-                    meter: __('$', 'multivendorx'),
+                    preParameter: __('$', 'multivendorx'),
                     parameter: __('%', 'multivendorx'),
                 },
             ],

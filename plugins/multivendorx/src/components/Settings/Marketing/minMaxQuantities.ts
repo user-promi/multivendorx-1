@@ -20,7 +20,7 @@ export default {
             nestedFields: [
                 {
                     key: 'mvx_commission_percentage_per_unit',
-                    meter: __('Min', 'multivendorx'),
+                    preParameter: __('Min', 'multivendorx'),
                     type: 'number',
                     desc: __(
                         'Minimum order quantity',
@@ -29,7 +29,7 @@ export default {
                 },
                 {
                     key: 'mvx_commission_fixed_per_unit',
-                    meter: __('Max', 'multivendorx'),
+                    preParameter: __('Max', 'multivendorx'),
                     type: 'number',
                     desc: __(
                         'Maximum order quantity.',
