@@ -1,4 +1,20 @@
 <div class="content-wrapper">
+    <div class="page-title-wrapper">
+        <div class="page-title">
+            <div class="title">Add a new Product</div>
+            <div class="des">Orders placed across your store</div>
+        </div>
+
+        <div class="buttons-wrapper">
+            <div class="admin-btn btn-purple">
+                Save draft
+            </div>
+            <div class="admin-btn btn-purple">
+                Publish product
+            </div>
+        </div>
+    </div>
+
     <div class="container-wrapper">
         <div class="card-wrapper width-65">
             <div class="card-content">
@@ -17,9 +33,10 @@
             <div class="card-content">
                 <div class="card-title">Description</div>
                 <div class="form-group-wrapper">
-                    <div class="form-group"><textarea class="textarea-input" name="description" rows="4" cols="50"></textarea></div>
+                    <div class="form-group"><textarea class="textarea-input" name="description" rows="4"
+                            cols="50"></textarea></div>
                 </div>
-            </div><button class="admin-btn btn-purple">Submit</button>
+            </div>
         </div>
         <div class="card-wrapper width-35">
             <div class="card-content">
