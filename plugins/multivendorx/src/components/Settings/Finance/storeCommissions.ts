@@ -71,7 +71,7 @@ export default {
                         },
                     ],
                     skipFirstRow: true,
-                    after: "then",
+                    addonAfter: "then",
                     dependent: {
                         key: 'rule_type',
                         set: true,
@@ -88,7 +88,7 @@ export default {
                         },
                     ],
                     skipFirstRow: true,
-                    after: "then",
+                    addonAfter: "then",
                     dependent: {
                         key: 'rule_type',
                         set: true,
@@ -104,7 +104,7 @@ export default {
                             value: 'order_value',
                         },
                     ],
-                    after: "then",
+                    addonAfter: "then",
                     // skipFirstRow: true,
                     dependent: {
                         key: 'rule_type',
@@ -116,10 +116,10 @@ export default {
                     key: 'commission_fixed',
                     type: 'text',
                     desc: __('Fixed amount per transaction', 'multivendorx'),
-                    preParameter: __('$', 'multivendorx'),
+                    meter: __('$', 'multivendorx'),
                     size: "8rem",
-                    before: 'fixed',
-                    after: "+",
+                    addonBefore: 'fixed',
+                    addonAfter: "+",
                 },
                 {
                     key: 'commission_percentage',
@@ -130,7 +130,7 @@ export default {
                     ),
                     size: '8rem',
                     parameter: __('%', 'multivendorx'),
-                    after: "commission will be charged.",
+                    addonAfter: "commission will be charged.",
                 },
 
             ],
@@ -155,10 +155,10 @@ export default {
                     key: 'commission_fixed',
                     type: 'number',
                     desc: __('Fixed amount per transaction', 'multivendorx'),
-                    preParameter: __('$', 'catalogx'),
+                    meter: __('$', 'catalogx'),
                     size: "8rem",
-                    before: 'Fixed',
-                    after: "+",
+                    addonBefore: 'Fixed',
+                    addonAfter: "+",
                 },
                 {
                     key: 'commission_percentage',
