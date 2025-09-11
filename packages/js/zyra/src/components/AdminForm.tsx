@@ -42,7 +42,7 @@ import ColorSettingInput from './ColorSettingInput';
 import EndpointEditor from './EndpointEditor';
 import PaymentTabsComponent from './PaymentTabsComponent';
 import VerificationMethods from './VerificationMethods';
-import SystemInfoAccordion from './SystemInfoAccordion';
+import SystemInfo from './SystemInfo';
 import MultiInput from './MultiInput';
 
 // Types
@@ -141,8 +141,8 @@ interface InputField {
     icon?: string;
     iconEnable?: boolean;
     size?: string;
-    before?: string;
-    after?: string;
+    addonBefore?: string;
+    addonAfter?: string;
     proSetting?: boolean;
     moduleEnabled?: boolean;
     parameter?: string;
@@ -163,7 +163,7 @@ interface InputField {
     inputWrapperClass?: string;
     wrapperClass?: string;
     tour?: string;
-    preParameter?: string;
+    prefixUnit?: string;
     rightContent?: boolean;
     dependentPlugin?: boolean;
     dependentSetting?: string;
@@ -662,8 +662,8 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             max={inputField.max ?? 50} // for range max value
                             value={value || inputField.value}
                             size={inputField.size}
-                            before={inputField.before}
-                            after={inputField.after}
+                            addonBefore={inputField.addonBefore}
+                            addonAfter={inputField.addonAfter}
                             proSetting={isProSetting(
                                 inputField.proSetting ?? false
                             )}
@@ -687,7 +687,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                                     handleChange(e, inputField.key);
                                 }
                             }}
-                            preParameter={inputField.preParameter}
+                            prefixUnit={inputField.prefixUnit}
                             parameter={inputField.parameter} // for showing text beside the text box
                             generate={inputField.generate}
                         />
@@ -1131,8 +1131,6 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             selectDeselectValue="Select / Deselect All"
                             description={inputField.desc}
                             inputClass={inputField.key}
-                            before={inputField.before}
-                            after={inputField.after}
                             options={
                                 Array.isArray(inputField.options)
                                     ? inputField.options.map((opt) => ({
@@ -1704,7 +1702,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                     break;
                 case 'system-info':
                     input = (
-                        <SystemInfoAccordion
+                        <SystemInfo
                             appLocalizer={appLocalizer}
                             apiLink={String(inputField.apiLink)}
                             copyButtonLabel={inputField.copyButtonLabel}
@@ -1864,7 +1862,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                                 htmlFor={inputField.key}
                             >
                                 <div className="title">{inputField.label}</div>
-                                <div className="settings-metabox-description">{inputField.settingDescription}</div>
+                                <div className="settings-description">{inputField.settingDescription}</div>
                             </label>
                         )}
 
