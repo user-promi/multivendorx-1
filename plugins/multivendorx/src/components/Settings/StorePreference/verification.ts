@@ -84,7 +84,7 @@ export default {
                     formFields: [
                         {
                             key: 'verification_methods',
-                            type: 'verification-methods', // custom type
+                            type: 'verification-methods',
                             label: 'Verification Methods',
                             addButtonLabel: 'Add New Method',
                             deleteButtonLabel: 'Remove',
