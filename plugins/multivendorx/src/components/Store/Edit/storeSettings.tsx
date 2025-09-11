@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { BasicInput, TextArea, FileInput, SelectInput, getApiLink } from 'zyra';
 
-const StoreSettings = ({ id }: { id: string }) => {
+const StoreSettings = ({ id }: { id: string|null }) => {
 	const [formData, setFormData] = useState<{ [key: string]: string }>({});
 	const statusOptions = [
 		{ label: "Active", value: "active" },

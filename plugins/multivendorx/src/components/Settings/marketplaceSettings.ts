@@ -64,7 +64,7 @@ export default {
             key: 'section',
             type: 'section',
             hint: __(
-                'Enable content styling tools for vendors',
+                'Enable content styling tools for stores',
                 'multivendorx'
             ),
         },
@@ -76,7 +76,7 @@ export default {
                 'To enable styling tools (rich text editing) <a href="https://www.tiny.cloud/blog/how-to-get-tinymce-cloud-up-in-less-than-5-minutes/" target="_blank">get the API key</a> and paste it here.This allows them to format their product descriptions and other content with ease.',
                 'multivendorx'
             ),
-        },
+        },        
         {
             key: 'section',
             type: 'section',

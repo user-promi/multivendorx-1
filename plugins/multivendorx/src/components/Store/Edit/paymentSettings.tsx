@@ -19,7 +19,7 @@ interface StorePaymentConfig {
 	[key: string]: PaymentProvider;
 }
 
-const PaymentSettings = ({ id }: { id: string }) => {
+const PaymentSettings = ({ id }: { id: string|null }) => {
 	const [formData, setFormData] = useState<{ [key: string]: string }>({});
 	const [successMsg, setSuccessMsg] = useState<string | null>(null);
 

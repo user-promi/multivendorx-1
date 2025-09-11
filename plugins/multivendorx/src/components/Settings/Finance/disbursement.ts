@@ -63,8 +63,8 @@ export default {
             type: 'number',
             size: '8rem',
             before:__('Wait', 'multivendorx'),
-            after:__('days before commissions become eligible for payout', 'multivendorx'),
-            parameter: __('day', 'multivendorx'),
+            after:__('before commissions become eligible for payout', 'multivendorx'),
+            parameter: __('days', 'multivendorx'),
         },
         {
             key: 'payout_threshold_amount',
@@ -157,7 +157,7 @@ export default {
                 {
                     key: 'payout_frequency',
                     type: 'select',
-                    before:__('On', 'multivendorx'),
+                    addonBefore:__('On', 'multivendorx'),
                     // label: __('Payout frequency', 'multivendorx'),
                     options: [
                         {
@@ -175,7 +175,7 @@ export default {
                 {
                     key: 'payout_day',
                     type: 'dropdown',
-                    before:__('At', 'multivendorx'),
+                    before:__('at', 'multivendorx'),
                     // label: __('Payout Day', 'multivendorx'),
                     // settingDescription: __("Select the day of the week to release store commissions:", 'multivendorx'),
                     // desc: __("<ul><li>Choose the specific day when store commissions should be disbursed.</li></ul>", 'multivendorx'),
@@ -288,7 +288,7 @@ export default {
                 {
                     key: 'weekly_payout_time', // time of day
                     type: 'time', // links to TimeSelect component
-                    before: __('At', 'multivendorx'),
+                    before: __('at', 'multivendorx'),
                     description: __('Select the time of day for weekly payouts.', 'multivendorx'),
                     defaultValue: '09:00',
                 },

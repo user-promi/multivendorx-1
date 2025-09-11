@@ -175,7 +175,7 @@ export default {
         {
             key: 'separator_content',
             type: 'section',
-            desc: __( 'Products similar in type, category, or vendor are displayed as related items to guide customers toward additional purchases.', 'multivendorx' ),
+            desc: __( 'Products similar in type, category, or stores are displayed as related items to guide customers toward additional purchases.', 'multivendorx' ),
             hint: __('Related products source','multivendorx'),
         },
         {

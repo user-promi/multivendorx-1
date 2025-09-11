@@ -12,7 +12,7 @@ import "../styles/web/SystemInfoAccordion.scss";
 import { getApiLink } from "../utils/apiService";
 
 // Types
-interface SystemInfoAccordionProps {
+interface SystemInfoProps {
     apiLink: string;
     appLocalizer: Record<string, any>;
     copyButtonLabel?: string;
@@ -32,14 +32,12 @@ interface InfoSection {
 
 type ApiResponse = Record<string, InfoSection>;
 
-const SystemInfoAccordion: React.FC<SystemInfoAccordionProps> = ({
+const SystemInfo: React.FC<SystemInfoProps> = ({
     apiLink,
     appLocalizer,
     copyButtonLabel = "Copy System Info", // dynamic label
     copiedLabel = "Copied!", // dynamic label
 }) => {
-    console.log(appLocalizer)
-    console.log(apiLink)
     const [data, setData] = useState<ApiResponse | null>(null);
     const [openKeys, setOpenKeys] = useState<string[]>([]);
     const [loading, setLoading] = useState(true);
@@ -56,7 +54,7 @@ const SystemInfoAccordion: React.FC<SystemInfoAccordionProps> = ({
                 setData(response.data);
             })
             .catch((err) => {
-
+                // handle error silently
             })
             .finally(() => setLoading(false));
     }, [apiLink, appLocalizer]);
@@ -95,12 +93,6 @@ const SystemInfoAccordion: React.FC<SystemInfoAccordionProps> = ({
     return (
         <div className="system-info">
             {/* Copy Button */}
-            {/* <div className="copy-info-bar">
-                <button type="button" onClick={copyToClipboard} className="copy-btn">
-                    {copyButtonLabel}
-                </button>
-                {copied && <span className="copy-success">{copiedLabel}</span>}
-            </div> */}
             <div className="buttons-wrapper">
                 <div className="admin-btn btn-purple" onClick={copyToClipboard}>
                     <i className="adminlib-vendor-form-copy"></i>
@@ -142,4 +134,4 @@ const SystemInfoAccordion: React.FC<SystemInfoAccordionProps> = ({
     );
 };
 
-export default SystemInfoAccordion;
+export default SystemInfo;
