@@ -2,7 +2,6 @@ import { useState, useEffect, ReactNode } from 'react';
 import { LinkProps } from 'react-router-dom';
 import '../styles/web/Tabs.scss';
 import AdminBreadcrumbs from './AdminBreadcrumbs';
-import AdminFooter, { SupportLink } from './AdminFooter';
 
 type TabContent = {
   id: string;
@@ -28,10 +27,9 @@ type TabsProps = {
   prepareUrl: (tabId: string) => string;
   HeaderSection?: () => JSX.Element;
   BannerSection?: () => JSX.Element;
-  supprot: SupportLink[];
+  supprot: any[];
   Link: React.ElementType<LinkProps>;
   settingName?: string;
-  // Add navigation function prop
   onNavigate?: (url: string) => void;
   tabTitleSection?: React.ReactNode;
 };
