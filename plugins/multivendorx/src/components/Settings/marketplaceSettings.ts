@@ -57,8 +57,8 @@ export default {
                 'multivendorx'
             ),
             size:"8rem",
-            before: appLocalizer.site_url + '/',
-            after: "/sample-store-slug/",
+            addonBefore: appLocalizer.site_url + '/',
+            addonAfter: "/sample-store-slug/",
         },
         {
             key: 'section',

@@ -62,8 +62,8 @@ export default {
             settingDescription: __('Keep payouts on hold for a safety buffer. Helps cover refunds, cancellations, or disputes.', 'multivendorx'),
             type: 'number',
             size: '8rem',
-            before:__('Wait', 'multivendorx'),
-            after:__('before commissions become eligible for payout', 'multivendorx'),
+            addonBefore:__('Wait', 'multivendorx'),
+            addonAfter:__('before commissions become eligible for payout', 'multivendorx'),
             parameter: __('days', 'multivendorx'),
         },
         {
@@ -72,7 +72,7 @@ export default {
             desc: __(
                 'Define the minimum amount a store must accumulate before payouts are processed.', 'multivendorx'),
             type: 'number',
-            preParameter: __('$', 'multivendorx'),
+            prefixUnit: __('$', 'multivendorx'),
             size: '8rem',
             options: [
                 {
@@ -319,8 +319,8 @@ export default {
                             value: 'free_withdrawals',
                         },
                     ],
-                    before: __('Stores get', 'multivendorx'),
-                    after: __('free withdrawals. After that, each withdrawal costs', 'multivendorx'),
+                    addonBefore: __('Stores get', 'multivendorx'),
+                    addonAfter: __('free withdrawals. After that, each withdrawal costs', 'multivendorx'),
                 },
                 {
                     key: 'withdrawal_fee', // updated key
@@ -332,7 +332,7 @@ export default {
                             value: 'withdrawal_fee',
                         },
                     ],
-                    preParameter: __('$', 'multivendorx'),
+                    prefixUnit: __('$', 'multivendorx'),
                     parameter: __('%', 'multivendorx'),
                 },
             ],
