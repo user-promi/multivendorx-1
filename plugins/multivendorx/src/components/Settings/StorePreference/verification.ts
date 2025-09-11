@@ -12,7 +12,7 @@ import twitter from '../../../assets/images/twitter.png';
 
 export default {
     id: 'identity-verification',
-    priority: 7,
+    priority: 3,
     name: __('Verification', 'mvx-pro'),
     desc: __(
         'Enable various forms of identity verification for stores and ensure a trusted marketplace.',
