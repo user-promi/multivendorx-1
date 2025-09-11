@@ -49,6 +49,13 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
             ],
         ]);
 
+        register_rest_route($this->namespace, '/' . $this->rest_base . '/bulk', [
+            [
+                'methods'             => \WP_REST_Server::EDITABLE,
+                'callback'            => [$this, 'bulk_update_items'],
+                'permission_callback' => [$this, 'update_item_permissions_check'],
+            ],
+        ]);
     }
 
     public function get_items_permissions_check($request) {
@@ -65,59 +72,47 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
     }
 
 
-    // GET 
-    public function get_items( $request ) {
-        $nonce = $request->get_header( 'X-WP-Nonce' );
-        if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
-            return new \WP_Error(
-                'invalid_nonce',
-                __( 'Invalid nonce', 'multivendorx' ),
-                array( 'status' => 403 )
-            );
-        }
-    
-        $limit  = max( intval( $request->get_param( 'row' ) ), 10 );
-        $page   = max( intval( $request->get_param( 'page' ) ), 1 );
-        $offset = ( $page - 1 ) * $limit;
-        $count  = $request->get_param( 'count' );
-    
-        // Default type
-        $type = $request->get_param( 'type' ) ?: 'multivendorx_kb';
-    
-        // If only count requested
-        if ( $count ) {
-            $total = wp_count_posts( $type );
-            // Include both publish and pending
-            $total_count = ( (int) $total->publish ) + ( (int) $total->pending );
-            return rest_ensure_response( $total_count );
+    public function get_items($request) {
+        $nonce = $request->get_header('X-WP-Nonce');
+        if (!wp_verify_nonce($nonce, 'wp_rest')) {
+            return new \WP_Error('invalid_nonce', __('Invalid nonce', 'multivendorx'), ['status' => 403]);
         }
 
-        $query = new \WP_Query( array(
+        $limit  = max(intval($request->get_param('row')), 10);
+        $page   = max(intval($request->get_param('page')), 1);
+        $offset = ($page - 1) * $limit;
+        $type   = $request->get_param('type') ?: 'multivendorx_kb';
+        $status = $request->get_param('status') ?: 'all';
+        $args = [
             'post_type'      => $type,
             'posts_per_page' => $limit,
-            'post_status'    => array( 'publish', 'pending' ),
+            'post_status'    => $status,
             'offset'         => $offset,
             'orderby'        => 'date',
             'order'          => 'DESC',
-        ) );
-    
-        $formatted_items = array();
-    
-        foreach ( $query->posts as $post ) {
+        ];
 
-            $formatted_items[] = apply_filters(
-                'multivendorx_' . $type,
-                array(
-                    'id'      => (int) $post->ID,
-                    'title'   => $post->post_title,
-                    'content' => $post->post_content,
-                    'status'  => $post->post_status,
-                    'date'    => get_the_date( 'c', $post ),
-                )
-            );
+        $query = new \WP_Query($args);
+
+        $formatted_items = [];
+        foreach ($query->posts as $post) {
+            $formatted_items[] = [
+                'id'      => (int) $post->ID,
+                'title'   => $post->post_title,
+                'content' => $post->post_content,
+                'status'  => $post->post_status,
+                'date'    => get_the_date('c', $post),
+            ];
         }
-    
-        return rest_ensure_response( $formatted_items );
+
+        $counts = wp_count_posts($type);
+
+        return rest_ensure_response([
+            'items'   => $formatted_items,
+            'all'     => (int) $counts->publish + (int) $counts->pending,
+            'publish' => (int) $counts->publish,
+            'pending' => (int) $counts->pending,
+        ]);
     }
     
     public function create_item( $request ) {
@@ -254,6 +249,41 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
     
         return rest_ensure_response( $response );
     }
-    
-    
+
+    public function bulk_update_items($request) {
+        $nonce = $request->get_header('X-WP-Nonce');
+        if (!wp_verify_nonce($nonce, 'wp_rest')) {
+            return new \WP_Error(
+                'invalid_nonce',
+                __('Invalid nonce', 'multivendorx'),
+                array('status' => 403)
+            );
+        }
+
+        $params = $request->get_json_params();
+        $action = isset($params['action']) ? sanitize_key($params['action']) : '' ;
+        $ids = isset($params['ids']) ? array_map('absint', $params['ids']) : [];
+
+        if (empty($action) || empty($ids)) {
+            return new \WP_Error(
+                'invalid_params',
+                __('Missing action or IDs', 'multivendorx'),
+                array('status' => 400)
+            );
+        }
+
+        foreach ($ids as $id) {
+            switch ($action) {
+                case 'publish':
+                case 'pending':
+                    wp_update_post(['ID' => $id, 'post_status' => $action]);
+                    break;
+                case 'delete':
+                    wp_delete_post($id, true);
+                    break;
+            }
+        }
+
+        return rest_ensure_response(['success' => true]);
+    }
 }
