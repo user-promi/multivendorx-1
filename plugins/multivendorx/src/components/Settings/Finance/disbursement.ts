@@ -321,7 +321,7 @@ export default {
                 {
                     key: 'withdrawal_fee', // updated key
                     type: 'number',
-                    size: '5rem',
+                    size: '8rem',
                     options: [
                         {
                             key: 'withdrawal_fee',

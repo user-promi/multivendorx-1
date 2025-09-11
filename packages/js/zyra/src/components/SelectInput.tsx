@@ -63,15 +63,14 @@ const SelectInput: React.FC<SelectInputProps> = ({
             minHeight: '2.213rem',
             height: '2.213rem',
             maxHeight: '2.213rem',
-            margin: 0,
-            padding: 0,
+            paddingTop: 0,
+            paddingBottom: 0,
         }),
         valueContainer: (provided: any) => ({
             ...provided,
             margin: 0,
             paddingTop: 0,
-            paddingBottom: 0,
-        }),
+            paddingBottom: 0,        }),
         option: (provided: any, state: any) => ({
             ...provided,
             backgroundColor: state.isSelected
@@ -90,10 +89,18 @@ const SelectInput: React.FC<SelectInputProps> = ({
         multiValue: (provided: any) => ({
             ...provided,
             backgroundColor: '#ece2f9f1',
+            marginTop: 0,
+            marginBottom: 0,
+            paddingTop: 0,
+            paddingBottom: 0,
         }),
         multiValueLabel: (provided: any) => ({
             ...provided,
             color: '#5007aa',
+            marginTop: 0,
+            marginBottom: 0,
+            paddingTop: 0,
+            paddingBottom: 0,
         }),
     };
 
