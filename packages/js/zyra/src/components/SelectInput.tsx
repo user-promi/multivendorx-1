@@ -81,7 +81,6 @@ const SelectInput: React.FC<SelectInputProps> = ({
                     : 'white',
             color: state.isSelected ? 'black' : 'black',
             cursor: 'pointer',
-            paddingTop: 0,
         }),
         menu: (provided: any) => ({
             ...provided,
