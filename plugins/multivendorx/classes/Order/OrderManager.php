@@ -341,6 +341,7 @@ class OrderManager {
      * @return  void
      */
     public static function create_coupon_item($order, $items) {
+
         $parent_order = $items['parent_order'];
         $line_items = $items['line_items'];
 
@@ -350,7 +351,9 @@ class OrderManager {
             $product_ids[] = $item->get_product_id();
         }
 
-        foreach( $parent_order->get_coupons() as $coupon ) {
+        foreach( $parent_order->get_coupons() as $coupon_item ) {
+            $coupon_code = $coupon_item->get_code();        // e.g. "SUMMER10"
+            $coupon  = new \WC_Coupon( $coupon_code ); 
             if( !in_array( 
                     $coupon->get_discount_type(),
                     apply_filters( 'mvx_order_available_coupon_types', [ 'fixed_product', 'percent', 'fixed_cart' ], $order, $coupon )

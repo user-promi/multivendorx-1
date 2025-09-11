@@ -297,7 +297,8 @@ class FrontendScripts {
             array(
                 'general',
                 'store-registration-form',
-                'seller-dashboard',
+                'privacy-settings',
+                'store-coupon',
                 'store',
                 'products',
                 'policy',

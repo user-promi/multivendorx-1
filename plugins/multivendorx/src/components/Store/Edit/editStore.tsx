@@ -5,7 +5,7 @@ import BrandSmall from '../../../assets/images/brand-icon.png';
 import StoreSettings from './storeSettings';
 
 import PaymentSettings from './paymentSettings';
-import StoreSquad from './storeStaff';
+import StoreSquad from './storeSquad';
 import PolicySettings from './policySettings';
 import ShippingSettings from './shippingSettings';
 import StoreRegistration from './storeRegistrationForm';
@@ -67,17 +67,15 @@ const EditStore = () => {
                 id: 'store',
                 name: 'Basic Info',
                 desc: 'Store Info',
-                hideTabHeader: true,
                 icon: 'adminlib-credit-card',
             },
         },
         {
             type: 'file',
             content: {
-                id: 'staff',
-                name: 'Store Staff',
+                id: 'users',
+                name: 'Store Squad',
                 desc: 'Store Users',
-                hideTabHeader: true,
                 icon: 'adminlib-credit-card',
             },
         },
@@ -87,7 +85,6 @@ const EditStore = () => {
                 id: 'payment',
                 name: 'Payment',
                 desc: 'Payment Methods',
-                hideTabHeader: true,
                 icon: 'adminlib-credit-card',
             },
         },
@@ -97,7 +94,6 @@ const EditStore = () => {
                 id: 'store-shipping',
                 name: 'Store Shipping',
                 desc: 'Store Shipping',
-                hideTabHeader: true,
                 icon: 'adminlib-credit-card',
             },
         },
@@ -107,7 +103,6 @@ const EditStore = () => {
                 id: 'store-policy',
                 name: 'Store Policy',
                 desc: 'Store Policy',
-                hideTabHeader: true,
                 icon: 'adminlib-credit-card',
             },
         },
@@ -117,7 +112,6 @@ const EditStore = () => {
                 id: 'store-application',
                 name: 'Store Application',
                 desc: 'Store Application',
-                hideTabHeader: true,
                 icon: 'adminlib-credit-card',
             },
         },
@@ -160,45 +154,45 @@ const EditStore = () => {
                 tabTitleSection={
                     <div className="tab-title">
                         <div className="content">
-                            <div className="tab-wrapper">
-                                <div className="title"><i className="adminlib-storefront"></i>{data.name}</div>
-                                <div className="dsc">{data.description}</div>
-                            </div>
-                            <div className="status-wrapper">
-                                <span>Status: </span>
-                                <SelectInput
-                                    name="status"
-                                    value={data.status}
-                                    options={statusOptions}
-                                    type="single-select"
-                                    onChange={(newValue: any) => {
-                                        if (!newValue || Array.isArray(newValue)) return;
+                        <div className="tab-wrapper">
+                            <div className="title"><i className="adminlib-storefront"></i>{data.name}</div>
+                            <div className="dsc">{data.description}</div>
+                        </div>
+                        <div className="status-wrapper">
+                            <span>Status: </span>
+                            <SelectInput
+                                name="status"
+                                value={data.status}
+                                options={statusOptions}
+                                type="single-select"
+                                onChange={(newValue: any) => {
+                                    if (!newValue || Array.isArray(newValue)) return;
 
-                                        const updated = { ...data, status: newValue.value };
-                                        setData(updated);
-                                        autoSave(updated);
-                                    }}
-                                />
-                                {editId && (
-                                    <>
-                                        <a
-                                            href={`?page=multivendorx#&tab=stores&view&id=${editId}`}
-                                            className="admin-btn btn-purple"
-                                        >
-                                            <i className="adminlib-eye"></i>
-                                            Store Details
-                                        </a>
-                                        <a
-                                            href={`${appLocalizer.site_url}/store/${data.slug}`}
-                                            target="_blank"
-                                            className="admin-btn btn-purple"
-                                        >
-                                            <i className="adminlib-eye"></i>
-                                            View Public Store
-                                        </a>
-                                    </>
-                                )}
-                            </div>
+                                    const updated = { ...data, status: newValue.value };
+                                    setData(updated);
+                                    autoSave(updated);
+                                }}
+                            />
+                            {editId && (
+                                <>
+                                    <a
+                                        href={`?page=multivendorx#&tab=stores&view&id=${editId}`}
+                                        className="admin-btn btn-purple"
+                                    >
+                                        <i className="adminlib-eye"></i>
+                                        Store Details
+                                    </a>
+                                    <a
+                                        href={`${appLocalizer.site_url}/store/${data.slug}`}
+                                        target="_blank"
+                                        className="admin-btn btn-purple"
+                                    >
+                                        <i className="adminlib-eye"></i>
+                                        View Public Store
+                                    </a>
+                                </>
+                        )}
+                        </div>
                         </div>
                     </div>
                 }
