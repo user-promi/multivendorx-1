@@ -6,7 +6,7 @@ use MultiVendorX\Utill;
 
 defined('ABSPATH') || exit;
 
-class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
+class MultiVendorX_REST_Actions_Items_Controller extends \WP_REST_Controller {
     /**
 	 * Endpoint namespace.
 	 *
@@ -19,7 +19,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
 	 *
 	 * @var string
 	 */
-	protected $rest_base = 'store';
+	protected $rest_base = 'actions-items';
 
     public function register_routes() {
         register_rest_route( $this->namespace, '/' . $this->rest_base, [
@@ -80,84 +80,66 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
     public function get_items( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
-            return new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
+            return new \WP_Error(
+                'invalid_nonce',
+                __( 'Invalid nonce', 'multivendorx' ),
+                array( 'status' => 403 )
+            );
         }
-
-        $status = $request->get_param( 'status' );
-        if( $status ){
-            return $this->get_pending_stores( $request );
-        }
-        $limit          = max( intval( $request->get_param( 'row' ) ), 10 );
-        $page           = max( intval( $request->get_param( 'page' ) ), 1 );
-        $offset         = ( $page - 1 ) * $limit;
-        $count          = $request->get_param( 'count' );
-
-        $stores = StoreUtil::get_store();
+    
+        $count = $request->get_param( 'count' );
+        $response = array();
     
         if ( $count ) {
+            // Pending products
+            $pending_products = wc_get_products( array(
+                'status'   => 'pending',
+                'limit'    => -1,
+                'return'   => 'ids',
+                'meta_key' => 'multivendorx_store_id',
+            ) );
+            $pending_products = count( $pending_products );
+    
             global $wpdb;
-            $table_name = "{$wpdb->prefix}" . Utill::TABLES['store'];
-
-            // Get total count
-            $total_count = $wpdb->get_var( "SELECT COUNT(*) FROM $table_name" );
-            return rest_ensure_response( (int) $total_count );
-        }
-
-        $formatted_stores = array();
-        foreach ( $stores as $store ) {
-            $store_id       = (int) $store['ID'];
-            $store_name     = $store['name'];
-            $store_slug     = $store['slug'];
-            $status         = $store['status'];
-            $formatted_stores[] = apply_filters(
-                'multivendorx_stores',
-                array(
-					'id'                => $store_id,
-					'store_name'        => $store_name,
-					'store_slug'        => $store_slug,
-					'status'      => $status,
-				)
+    
+            // Pending stores
+            $store_table   = "{$wpdb->prefix}" . Utill::TABLES['store'];
+            $pending_stores = (int) $wpdb->get_var(
+                "SELECT COUNT(*) 
+                 FROM {$store_table} 
+                 WHERE status = 'pending'"
+            );
+    
+            // Pending coupons
+            $pending_coupons = get_posts( array(
+                'post_type'      => 'shop_coupon',
+                'post_status'    => 'pending',
+                'numberposts'    => -1,
+                'fields'         => 'ids',
+                'meta_key'       => 'multivendorx_store_id',
+            ) );
+            $pending_coupons = count( $pending_coupons );
+    
+            // Pending transactions
+            $transaction_table   = "{$wpdb->prefix}" . Utill::TABLES['transaction'];
+            $pending_transactions = (int) $wpdb->get_var(
+                "SELECT COUNT(*) 
+                 FROM {$transaction_table} 
+                 WHERE status = 'pending'"
+            );
+    
+            // Build response
+            $response = array(
+                'pending_products'     => $pending_products,
+                'pending_stores'       => $pending_stores,
+                'pending_coupons'      => $pending_coupons,
+                'pending_transactions' => $pending_transactions,
             );
         }
-
-        return rest_ensure_response( $formatted_stores );
+    
+        return rest_ensure_response( $response );
     }
-
-    public function get_pending_stores( $request ){
-        $limit          = max( intval( $request->get_param( 'row' ) ), 10 );
-        $page           = max( intval( $request->get_param( 'page' ) ), 1 );
-        $offset         = ( $page - 1 ) * $limit;
-        $count          = $request->get_param( 'count' );
-
-        $stores = StoreUtil::get_stores_by_status('pending');
-        if ( $count ) {
-            global $wpdb;
-            $table_name = "{$wpdb->prefix}" . Utill::TABLES['store'];
-
-            // Get total count
-            $total_count = $wpdb->get_var("SELECT COUNT(*) FROM $table_name WHERE status = 'pending'");
-            return rest_ensure_response( (int) $total_count );
-        }
-
-        $formatted_stores = array();
-        foreach ( $stores as $store ) {
-            $store_id       = (int) $store['ID'];
-            $store_name     = $store['name'];
-            $store_slug     = $store['slug'];
-            $status         = $store['status'];
-            $formatted_stores[] = apply_filters(
-                'multivendorx_stores',
-                array(
-					'id'                => $store_id,
-					'store_name'        => $store_name,
-					'store_slug'        => $store_slug,
-					'status'      => $status,
-				)
-            );
-        }
-
-        return rest_ensure_response( $formatted_stores );
-    }
+    
 
     public function create_item( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );

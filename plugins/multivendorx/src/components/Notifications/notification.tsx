@@ -1,23 +1,70 @@
-import { AdminBreadcrumbs } from 'zyra';
+import { AdminBreadcrumbs, getApiLink } from 'zyra';
 import WithdrawalRequests from './withdrawalRequests';
 import Products from './products';
 import Vendors from './vendors';
 import Coupons from './coupon';
 import Transactions from './transaction';
 import { useEffect, useState } from 'react';
+import axios from 'axios';
 
-const Notification = () => {
+interface CountData {
+    pending_products: number;
+    pending_stores: number;
+    pending_coupons: number;
+    pending_transactions: number;
+}
+
+const ActionsDashboard = () => {
 
 
     const [activeTab, setActiveTab] = useState("products");
+    const [countData, setCountData] = useState<CountData>({
+        pending_products: 0,
+        pending_stores: 0,
+        pending_coupons: 0,
+        pending_transactions: 0,
+    });
 
+    useEffect(() => {
+        axios({
+            method: 'GET',
+            url: getApiLink(appLocalizer, 'actions-items'),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            params: { count: true },
+        })
+            .then((response) => {
+                setCountData(response.data)
+            })
+            .catch();
+    }, []);
 
     const tabs = [
-        { id: "products", label: "Products", content: <Products /> },
-        { id: "vendors", label: "Vendors", content: <Vendors /> },
-        { id: "coupons", label: "Coupons", content: <Coupons /> },
-        { id: "transactions", label: "Transaction", content: <Transactions /> },
+        { 
+            id: "products", 
+            label: "Products", 
+            content: <Products />, 
+            count: countData.pending_products 
+        },
+        { 
+            id: "stores", 
+            label: "Stores", 
+            content: <Vendors />, 
+            count: countData.pending_stores 
+        },
+        { 
+            id: "coupons", 
+            label: "Coupons", 
+            content: <Coupons />, 
+            count: countData.pending_coupons 
+        },
+        { 
+            id: "transactions", 
+            label: "Transactions", 
+            content: <Transactions />, 
+            count: countData.pending_transactions 
+        },
     ];
+    
     const workboardStats = [
         {
             id: 'reviews',
@@ -89,7 +136,7 @@ const Notification = () => {
                         <div className="overview-card-wrapper">
                             <div className="action">
                                 <div className="title">
-                                    3
+                                    {countData.pending_products}
                                     <i className="adminlib-cart"></i>
                                 </div>
                                 <div className="description">
@@ -98,18 +145,18 @@ const Notification = () => {
                             </div>
                             <div className="action">
                                 <div className="title">
-                                    52
+                                    {countData.pending_stores}
                                     <i className="adminlib-tools"></i>
                                 </div>
                                 <div className="description">
-                                    Pending Vendors
+                                    Pending Stores
                                 </div>
                             </div>
                         </div>
                         <div className="overview-card-wrapper">
                             <div className="action">
                                 <div className="title">
-                                    99
+                                    {countData.pending_coupons}
                                     <i className="adminlib-catalog"></i>
                                 </div>
                                 <div className="description">
@@ -118,11 +165,11 @@ const Notification = () => {
                             </div>
                             <div className="action">
                                 <div className="title">
-                                    3
+                                    {countData.pending_transactions}
                                     <i className="adminlib-module"></i>
                                 </div>
                                 <div className="description">
-                                    Pending Transaction
+                                    Pending Transactions
                                 </div>
                             </div>
                         </div>
@@ -235,7 +282,7 @@ const Notification = () => {
                                         className={`title ${activeTab === tab.id ? "active" : ""}`}
                                         onClick={() => setActiveTab(tab.id)}
                                     >
-                                        <p>{tab.label}</p>
+                                        <p>{tab.label} ({tab.count})</p>
                                     </div>
                                 ))}
                             </div>
@@ -260,4 +307,4 @@ const Notification = () => {
     );
 };
 
-export default Notification;
+export default ActionsDashboard;

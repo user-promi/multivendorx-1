@@ -570,8 +570,7 @@ class Admin {
     }
 
     public function save_store_in_coupon($post_id) {
-        $linked_store_id = absint( filter_input( INPUT_POST, 'linked_store' ) );
-        
+        $linked_store_id = absint( filter_input( INPUT_POST, 'coupon_linked_store' ) );
         if ( $linked_store_id ) {
             update_post_meta( $post_id, 'multivendorx_store_id', $linked_store_id );
         }

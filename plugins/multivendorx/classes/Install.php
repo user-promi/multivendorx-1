@@ -257,6 +257,8 @@ class Install {
             'Product not received',
             'Product not as described',
             'Product damaged/defective',
+            'Wrong item received',
+            'Order arrived late'
         ];
     
         // 6. Save back to DB
@@ -264,8 +266,6 @@ class Install {
         update_option('multivendorx_review_management_settings', $review_settings);
         update_option('multivendorx_order_actions_refunds_settings', $order_settings);
     }
-    
-    
     
 
     public function plugin_create_pages() {
