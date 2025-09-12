@@ -42,7 +42,7 @@ export default {
             type: 'setting-toggle',
             label: __('Commission settlement', 'multivendorx'),
             settingDescription: __("Select how commissions are released from the admin account.", 'multivendorx'),
-            desc: __("<ul><li>Instant Payout – Commissions are released immediately.</li><li>Scheduled / Delayed Payout – Commissions are released after a waiting period.</li></ul>", 'multivendorx'),
+            desc: __("<ul><li>Instant Payout - Commissions are released immediately.</li><li>Scheduled / Delayed Payout - Commissions are released after a waiting period.</li></ul>", 'multivendorx'),
             options: [
                 {
                     key: 'instantly',
