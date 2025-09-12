@@ -22,7 +22,7 @@ export default {
                 },
 				{
                     key: 'only_logged_in_can_report',
-					label: __('Anyone logged in user', 'multivendorx'),
+					label: __('Any logged in user', 'multivendorx'),
                     value: 'only_logged_in_can_report',
                 },
 				{
