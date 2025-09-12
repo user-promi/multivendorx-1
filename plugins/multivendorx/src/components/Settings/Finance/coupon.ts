@@ -15,19 +15,19 @@ export default {
             desc: __('<ul><li>Stores - commission is calculated after the coupon is applied.Example: Product $100 – 20% coupon = $80 → Store earns 80% of $80 = $64</li><li>Admin - Commission is calculated on the original price, admin covers the discount.Example: Product $100 – 20% coupon = $80 → Store earns 80% of $100 = $80</li><li>His His Whose Whose – Discount is split according to commission rates. Both admin and store bear their share.Example: Product $100 – 20% coupon = $80 Admin commission 10% → Admin bears 10% of $20 = $2 Store bears remaining 90% → Store bears $18 of the discount</li></ul>','multivendorx'),
             options: [
                 {
-                    key: 'store_coupon',
+                    key: 'store',
 					label: __('Stores', 'multivendorx'),
-                    value: 'commission_include_coupon',
+                    value: 'store',
                 },
 				{
-                    key: 'admin_coupon',
+                    key: 'admin',
                     label: __('Admin', 'multivendorx'),
-                    value: 'mannual',
+                    value: 'admin',
                 },
 				{
-                    key: 'his_his-whose_whose',
+                    key: 'seperate',
                     label: __('His His Whose Whose', 'multivendorx'),
-                    value: 'mannual',
+                    value: 'seperate',
                 },
             ],
             look: 'toggle',

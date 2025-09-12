@@ -124,7 +124,7 @@ class Store {
 
         $meta = [];
         foreach ( $rows as $row ) {
-            $meta[ $row['meta_key'] ][] =  $row['meta_value'];
+            $meta[ $row['meta_key'] ] =  $row['meta_value'];
         }
 
         return $meta;
@@ -172,7 +172,7 @@ class Store {
     }
 
     public static function get_store_by_id( $id ) {
-        return new self( $id );
+        return $id ? new self( $id ) : null;
     }
 
     public static function get_store_by_slug( $slug ) {

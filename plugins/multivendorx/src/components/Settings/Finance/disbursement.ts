@@ -123,7 +123,7 @@ export default {
         },
         //Hourly
         {
-            key: 'payouts_every_hour',
+            key: 'disbursement_hourly',
             label: __('Hourly payouts', 'multivendorx'),
             type: 'number',
             size: '8rem',

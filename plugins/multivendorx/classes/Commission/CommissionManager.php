@@ -54,7 +54,6 @@ class CommissionManager {
                     $product_id = $item['variation_id'] ? $item['variation_id'] : $item['product_id'];
 
                     $item_commission = $this->get_item_commission( $product_id, $item_id, $item, $order, $vendor );
-                    
                     $commission_values = $this->get_commission_amount( $product_id, $item, $vendor );
                     $commission_rate = [
                         'mode' => 'store',
@@ -87,7 +86,24 @@ class CommissionManager {
                             case 'price':
                             case 'quantity':
                                 foreach ($order->get_items() as $item_id => $item) {
-                                    $line_total = $order->get_item_subtotal($item, false, false) * $item['qty'];
+                                    // $line_total = $order->get_item_subtotal($item, false, false) * $item['qty'];
+                                    $store_coupon = false;
+                                    if ( $order->get_coupon_codes() ) {
+                                        foreach ( $order->get_coupon_codes() as $coupon_code ) {
+                                            $coupon   = new \WC_Coupon( $coupon_code );
+                                            $store_id = (int) get_post_meta( $coupon->get_id(), 'multivendorx_store_id', true );
+
+                                            if ( $store_id && Store::get_store_by_id( $store_id ) ) {
+                                                $store_coupon = true;
+                                            }
+                                        }
+                                    }
+
+                                    if ( MultiVendorX()->setting->get_setting( 'commission_include_coupon' ) == 'seperate' && empty( MultiVendorX()->setting->get_setting( 'admin_coupon_excluded' ) ) && !$store_coupon ) {
+                                        $line_total = $order->get_item_total( $item, false, false ) * $item['qty'];
+                                    } else {
+                                        $line_total = $order->get_item_subtotal( $item, false, false ) * $item['qty'];
+                                    }
     
                                     $base_value = $row['rule_type'] === 'price'
                                         ? (float) wc_get_product($item['variation_id'] ?: $item['product_id'])->get_price()
@@ -123,6 +139,11 @@ class CommissionManager {
             // Action hook to adjust items commission rates before save.
             $order->update_meta_data('multivendorx_order_items_commission_rates', apply_filters('mvx_vendor_order_items_commission_rates', $commission_rates, $order));
             
+            if ( MultiVendorX()->setting->get_setting( 'commission_include_coupon' ) == 'store' && empty( MultiVendorX()->setting->get_setting( 'admin_coupon_excluded' )) ) {
+                $total_discount = $order->get_discount_total();
+                $commission_amount = (float) $commission_amount - (float) $total_discount;
+            }
+
             // $order->save(); // Avoid using save() if it will save letter in same flow.
 
             // && !get_user_meta($vendor_id, '_vendor_give_shipping', true)
@@ -192,24 +213,25 @@ class CommissionManager {
         $product_value_total = 0;
 
         // Check order coupon created by vendor or not
-        $order_coupon_author_is_vendor = false;
+        $store_coupon = false;
         if ( $order->get_coupon_codes() ) {
             foreach ( $order->get_coupon_codes() as $coupon_code ) {
-                $coupon = new \WC_Coupon($coupon_code);
-                $order_coupon_author_is_vendor = $coupon && VendorUtil::is_user_vendor( get_post_field ( 'post_author', $coupon->get_id() ) ) ? true : false;
+                $coupon   = new \WC_Coupon( $coupon_code );
+                $store_id = (int) get_post_meta( $coupon->get_id(), 'multivendorx_store_id', true );
+
+                if ( $store_id && Store::get_store_by_id( $store_id ) ) {
+                    $store_coupon = true;
+                }
             }
         }
+
 
         // Calculate item total based on condition
-        if ( !empty (MultiVendorX()->setting->get_setting( 'commission_include_coupon' )) ) {
+        if ( MultiVendorX()->setting->get_setting( 'commission_include_coupon' ) == 'seperate' && empty( MultiVendorX()->setting->get_setting( 'admin_coupon_excluded' ) ) && !$store_coupon ) {
             $line_total = $order->get_item_total( $item, false, false ) * $item['qty'];
-            if ( !empty( MultiVendorX()->setting->get_setting( 'admin_coupon_excluded' ) ) && !$order_coupon_author_is_vendor ) {
-                $line_total = $order->get_item_subtotal( $item, false, false ) * $item['qty'];
-            }
         } else {
-            $line_total = $order->get_item_total( $item, false, false ) * $item['qty'];
+            $line_total = $order->get_item_subtotal( $item, false, false ) * $item['qty'];
         }
-
         // Filter the item total before calculating item commission.
         $line_total = apply_filters( 'mvx_get_commission_line_total', $line_total, $item, $order );
 
@@ -292,8 +314,9 @@ class CommissionManager {
             }
             
             // store commission
-            $store_commission_percentage = $vendor->get_meta('commission_percentage') ?? 0;
-            $store_commission_fixed = $vendor->get_meta('commission_fixed') ?? 0;
+            $store_commission_percentage = (float) ($vendor->get_meta('commission_percentage') ?? 0);
+            $store_commission_fixed = (float) ($vendor->get_meta('commission_fixed') ?? 0);
+           
             if ( $store_commission_percentage > 0 || $store_commission_fixed > 0 ) {
                 return [
                     'commission_val' => $store_commission_percentage,
@@ -302,7 +325,8 @@ class CommissionManager {
             }
 
             // Global 
-            $commission_per_item = MultiVendorX()->setting->get_setting( 'commission_per_item' );
+            $commission_per_item = reset(MultiVendorX()->setting->get_setting( 'commission_per_item' ));
+
             if ( ! empty($commission_per_item) ) {
                 return [
                     'commission_val' => $commission_per_item['commission_percentage'],

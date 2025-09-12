@@ -55,7 +55,7 @@ class Payment extends RealtimeGateway {
 
         $paypal_settings = !empty($payment_admin_settings['paypal-marketplace']) ? $payment_admin_settings['paypal-marketplace'] : [];
         
-        if ($paypal_settings['enable']) {
+        if ($paypal_settings && $paypal_settings['enable']) {
             return [
                 'id'    => $this->get_id(),
                 'label' => __('Paypal Marketplace', 'multivendorx'),

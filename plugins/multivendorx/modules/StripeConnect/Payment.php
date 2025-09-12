@@ -53,7 +53,7 @@ class Payment {
 
         $stripe_settings = !empty($payment_admin_settings['stripe-connect']) ? $payment_admin_settings['stripe-connect'] : [];
         
-        if ($stripe_settings['enable']) {
+        if ($stripe_settings && $stripe_settings['enable']) {
 
             return [
                 'id'    => $this->get_id(),
