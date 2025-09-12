@@ -16,11 +16,11 @@ if (empty($active_store)) {
 }
 
 if (get_option('permalink_structure')) {
-    $current_page = get_query_var('dashboard_page');
-    $current_sub = get_query_var('dashboard_subpage');
+    $current_page = get_query_var('tab');
+    $current_sub = get_query_var('subtab');
 } else {
-    $current_page = filter_input(INPUT_GET, 'dashboard_page', FILTER_SANITIZE_STRING);
-    $current_sub = filter_input(INPUT_GET, 'dashboard_subpage', FILTER_SANITIZE_STRING);
+    $current_page = filter_input(INPUT_GET, 'tab', FILTER_DEFAULT);
+    $current_sub = filter_input(INPUT_GET, 'subtab', FILTER_DEFAULT);
 }
 
 function get_endpoint_url($page = '', $sub = '')
@@ -35,11 +35,12 @@ function get_endpoint_url($page = '', $sub = '')
         }
     } else {
         $url = add_query_arg(array('dashboard' => '1'), home_url('/'));
-        if ($page && $page !== 'dashboard') {
-            $url = add_query_arg('dashboard_page', $page, $url);
+        if ($page) {
+            $url = add_query_arg('tab', $page, $url);
         }
+
         if ($sub) {
-            $url = add_query_arg('dashboard_subpage', $sub, $url);
+            $url = add_query_arg('subtab', $sub, $url);
         }
     }
     return esc_url($url);
