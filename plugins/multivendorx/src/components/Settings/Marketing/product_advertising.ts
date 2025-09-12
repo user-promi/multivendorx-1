@@ -31,7 +31,7 @@ export default {
                 'Set how long a product will stay advertised. Stores can choose the duration up to this limit.',
                 'mvx-pro'
             ),
-            parameter: __('Days', 'multivendorx'),
+            parameter: __('days', 'multivendorx'),
             size: '8rem',
             moduleEnabled: 'advertisement',
             proSetting: true,
