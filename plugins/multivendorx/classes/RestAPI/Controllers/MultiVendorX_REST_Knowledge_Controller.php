@@ -71,48 +71,114 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
         return current_user_can('manage_options');
     }
 
+    /**
+     * Get knowledge base items based on filter options.
+     *
+     * Filters supported in $args:
+     * - id, type, status, search
+     * - condition (AND/OR), limit, offset
+     *
+     * @param array $args Filter options.
+     * @return array|int List of matching items or count.
+     */
+    public static function get_knowledge_items( $args ) {
+        global $wpdb;
 
-    public function get_items($request) {
-        $nonce = $request->get_header('X-WP-Nonce');
-        if (!wp_verify_nonce($nonce, 'wp_rest')) {
-            return new \WP_Error('invalid_nonce', __('Invalid nonce', 'multivendorx'), ['status' => 403]);
+        $type   = isset( $args['type'] ) ? sanitize_key( $args['type'] ) : 'multivendorx_kb';
+        $status = isset( $args['status'] ) ? sanitize_key( $args['status'] ) : 'all';
+        $limit  = isset( $args['limit'] ) ? intval( $args['limit'] ) : 10;
+        $offset = isset( $args['offset'] ) ? intval( $args['offset'] ) : 0;
+        $search = isset( $args['search'] ) ? sanitize_text_field( $args['search'] ) : '';
+
+        $where = [ $wpdb->prepare( "post_type = %s", $type ) ];
+
+        if ( $status !== 'all' ) {
+            $where[] = $wpdb->prepare( "post_status = %s", $status );
+        } else {
+            $where[] = "post_status IN ('publish', 'pending')";
         }
 
-        $limit  = max(intval($request->get_param('row')), 10);
-        $page   = max(intval($request->get_param('page')), 1);
-        $offset = ($page - 1) * $limit;
-        $type   = $request->get_param('type') ?: 'multivendorx_kb';
-        $status = $request->get_param('status') ?: 'all';
-        $args = [
-            'post_type'      => $type,
-            'posts_per_page' => $limit,
-            'post_status'    => $status,
-            'offset'         => $offset,
-            'orderby'        => 'date',
-            'order'          => 'DESC',
-        ];
+        if ( ! empty( $search ) ) {
+            $like = '%' . $wpdb->esc_like( $search ) . '%';
+            $where[] = $wpdb->prepare( "(post_title LIKE %s OR post_content LIKE %s)", $like, $like );
+        }
 
-        $query = new \WP_Query($args);
+        $table = $wpdb->posts;
+        $where_sql = ! empty( $where ) ? 'WHERE ' . implode( ' AND ', $where ) : '';
 
-        $formatted_items = [];
-        foreach ($query->posts as $post) {
-            $formatted_items[] = [
-                'id'      => (int) $post->ID,
-                'title'   => $post->post_title,
-                'content' => $post->post_content,
-                'status'  => $post->post_status,
-                'date'    => get_the_date('c', $post),
+        // If only counting
+        if ( isset( $args['count'] ) && $args['count'] ) {
+            $query = "SELECT COUNT(*) FROM $table $where_sql";
+            $results = $wpdb->get_var( $query ); // phpcs:ignore
+            return intval( $results );
+        }
+
+        // Full data query
+        $query = "
+            SELECT ID, post_title, post_content, post_status, post_date
+            FROM $table
+            $where_sql
+            ORDER BY post_date DESC
+        ";
+
+        $query = $wpdb->prepare($query);
+
+        $results = $wpdb->get_results($query, ARRAY_A); // phpcs:ignore
+
+        // Format
+        $items = [];
+        foreach ( $results as $row ) {
+            $items[] = [
+                'id'      => (int) $row['ID'],
+                'title'   => $row['post_title'],
+                'content' => $row['post_content'],
+                'status'  => $row['post_status'],
+                'date'    => $row['post_date'],
             ];
         }
 
-        $counts = wp_count_posts($type);
+        return $items;
+    }
 
-        return rest_ensure_response([
-            'items'   => $formatted_items,
-            'all'     => (int) $counts->publish + (int) $counts->pending,
-            'publish' => (int) $counts->publish,
-            'pending' => (int) $counts->pending,
-        ]);
+    public function get_items( $request ) {
+        $nonce = $request->get_header( 'X-WP-Nonce' );
+        if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
+            return new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), [ 'status' => 403 ] );
+        }
+
+        $limit  = max( intval( $request->get_param( 'row' ) ), 10 );
+        $page   = max( intval( $request->get_param( 'page' ) ), 1 );
+        $offset = ( $page - 1 ) * $limit;
+
+        $args = [
+            'type'   => $request->get_param( 'type' ) ?: 'multivendorx_kb',
+            'status' => $request->get_param( 'status' ) ?: 'all',
+            'search' => $request->get_param( 'search' ),
+            'limit'  => $limit,
+            'offset' => $offset,
+        ];
+
+        // Data
+        $items = self::get_knowledge_items( $args );
+
+        // Counts
+        $args_count = $args;
+        unset( $args_count['limit'], $args_count['offset'] );
+        $args_count['count'] = true;
+
+        $total   = self::get_knowledge_items( $args_count );
+        $publish = self::get_knowledge_items( array_merge( $args_count, [ 'status' => 'publish' ] ) );
+        $pending = self::get_knowledge_items( array_merge( $args_count, [ 'status' => 'pending' ] ) );
+
+        return rest_ensure_response( [
+            'items'   => $items,
+            'total'   => $total,
+            'page'    => $page,
+            'limit'   => $limit,
+            'all'     => $total,
+            'publish' => $publish,
+            'pending' => $pending,
+        ] );
     }
     
     public function create_item( $request ) {

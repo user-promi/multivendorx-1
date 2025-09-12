@@ -177,15 +177,15 @@ export const KnowledgeBase: React.FC = () => {
             params: { page: currentPage, row: rowsPerPage, status },
         })
             .then((response) => {
-                const res = response.data;
-                setData(res.items || []);
-                setAnnouncementStatus([
-                    { key: 'all', name: 'All', count: res.all || 0 },
-                    { key: 'publish', name: 'Published', count: res.publish || 0 },
-                    { key: 'pending', name: 'Pending', count: res.pending || 0 },
-                ]);
-            })
-            .catch(() => setError(__('Failed to load entries', 'multivendorx')));
+            const res = response.data;
+            setData(res.items || []);
+            setTotalRows(res.total || 0);
+            setAnnouncementStatus([
+                { key: 'all', name: 'All', count: res.all ?? res.total ?? 0 },
+                { key: 'publish', name: 'Published', count: res.publish ?? 0 },
+                { key: 'pending', name: 'Pending', count: res.pending ?? 0 },
+            ]);
+            }).catch(() => setError(__('Failed to load entries', 'multivendorx')));
     };
 
     useEffect(() => {
