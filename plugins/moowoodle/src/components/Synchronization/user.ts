@@ -37,6 +37,7 @@ export default {
                     img: moodleLogo,
                 },
             ],
+            multiSelect:true,
         },
         {
             key: 'wordpress_user_role',
