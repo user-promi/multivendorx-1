@@ -164,12 +164,12 @@ export default {
                     options: [
                         {
                             key: 'first',
-                            label: __('1st Week', 'multivendorx'),
+                            label: __('1st', 'multivendorx'),
                             value: 'first',
                         },
                         {
                             key: 'second',
-                            label: __('2nd Week', 'multivendorx'),
+                            label: __('2nd', 'multivendorx'),
                             value: 'second',
                         },
                     ],
