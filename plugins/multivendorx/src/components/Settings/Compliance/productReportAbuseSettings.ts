@@ -21,8 +21,13 @@ export default {
                     value: 'only_loggedin_can_report',
                 },
 				{
+                    key: 'only_logged_in_can_report',
+					label: __('Anyone logged in user', 'multivendorx'),
+                    value: 'only_logged_in_can_report',
+                },
+				{
                     key: 'only_guest_can_report',
-					label: __('Anyone logged in or guest', 'multivendorx'),
+					label: __('Guest', 'multivendorx'),
                     value: 'only_guest_can_report',
                 },
             ],
