@@ -105,7 +105,7 @@ class Rewrites {
             ],
             [
                 '^dashboard/([^/]+)/?([^/]*)/?$',
-                'index.php?pagename=dashboard&dashboard_page=$matches[1]&dashboard_subpage=$matches[2]',
+                'index.php?pagename=dashboard&tab=$matches[1]&subtab=$matches[2]',
                 'top',
             ],
         ];
@@ -120,8 +120,8 @@ class Rewrites {
     public function register_query_var( $vars ) {
         $vars[] = $this->custom_store_url;
         $vars[] = 'store_review';
-        $vars[] = 'dashboard_page';
-        $vars[] = 'dashboard_subpage';
+        $vars[] = 'tab';
+        $vars[] = 'subtab';
 
         foreach ( $this->query_vars as $var ) {
             $vars[] = $var;
@@ -154,7 +154,7 @@ class Rewrites {
     }
 
     public function dashboard_template( $template ) {
-        $page     = get_query_var( 'dashboard_page' );
+        $page     = get_query_var( 'tab' );
 
         if ( ! empty( $page ) ) {
             return MultiVendorX()->util->get_template( 'store-dashboard.php', [] );
