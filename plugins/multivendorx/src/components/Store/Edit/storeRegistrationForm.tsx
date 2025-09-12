@@ -51,7 +51,7 @@ const StoreRegistration = ({ id }: { id: string|null }) => {
 		});
 	};
 
-	const handleSubmit = (status: 'active' | 'reject') => {
+	const handleSubmit = (status: 'approve' | 'rejected') => {
 		const updatedData = { ...formData, status };
 		axios({
 			method: 'PUT',
@@ -61,7 +61,7 @@ const StoreRegistration = ({ id }: { id: string|null }) => {
 		}).then((res) => {
 			if (res.data.success) {
 				setSuccessMsg(
-					status === 'active'
+					status === 'approve'
 						? 'Store approved successfully!'
 						: 'Store rejected successfully!'
 				);
@@ -115,24 +115,24 @@ const StoreRegistration = ({ id }: { id: string|null }) => {
 
 						<div className="form-group-wrapper">
 							<div className="form-group">
-								<TextArea name="note" wrapperClass="setting-from-textarea"
+								<TextArea name="store_application_note" wrapperClass="setting-from-textarea"
 									placeholder='Optional note for approval or rejection'
 									inputClass="textarea-input"
-									descClass="settings-metabox-description" value={formData.note} onChange={handleChange} />
+									descClass="settings-metabox-description" value={formData.store_application_note} onChange={handleChange} />
 							</div>
 						</div>
 
 						<div className="buttons-wrapper" >
 							<button
 								className="admin-btn btn-green"
-								onClick={() => handleSubmit('active')}
+								onClick={() => handleSubmit('approve')}
 							>
 								Approve
 							</button>
 
 							<button
 								className="admin-btn btn-red"
-								onClick={() => handleSubmit('reject')}
+								onClick={() => handleSubmit('rejected')}
 							>
 								Reject
 							</button>

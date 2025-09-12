@@ -231,12 +231,12 @@ class StoreUtil {
         }
     
         // Get registration form data (serialized meta)
-        $store_meta = $store->get_meta( 'multivendorx-registration-data' );
+        $store_meta = $store->get_meta( 'multivendorx_registration_data' );
         $submitted_data = [];
         if ( !empty($store_meta) && is_serialized($store_meta) ) {
             $submitted_data = unserialize($store_meta);
         }
-    
+           
         // Fetch form settings
         $form_settings = MultivendorX()->setting->get_option(
             'multivendorx_store_registration_form_settings',
@@ -266,4 +266,42 @@ class StoreUtil {
     
         return $response;
     }
+
+    public static function set_primary_owner( $user_id, $store_id ) {
+        global $wpdb;
+
+        $table_name = $wpdb->prefix . Utill::TABLES['store_users'];
+
+        // Check if store_id already exists
+        $exists = $wpdb->get_var(
+            $wpdb->prepare(
+                "SELECT ID FROM $table_name WHERE store_id = %d",
+                $store_id
+            )
+        );
+
+        if ( $exists ) {
+            // Update
+            $wpdb->update(
+                $table_name,
+                [ 'primary_owner' => $user_id ],
+                [ 'store_id' => $store_id ],
+                [ '%d' ],
+                [ '%d' ]
+            );
+        } else {
+            // Insert
+            $wpdb->insert(
+                $table_name,
+                [
+                    'store_id'      => $store_id,
+                    'user_id'       => $user_id,
+                    'role_id'       => MultiVendorX()->setting->get_setting( 'approve_store' ) == 'automatically' ? 'store_owner' : null,
+                    'primary_owner' => MultiVendorX()->setting->get_setting( 'approve_store' ) == 'automatically' ? $user_id : null,
+                ],
+                [ '%d', '%d', '%s', '%d' ]
+            );
+        }
+    }
+
 }

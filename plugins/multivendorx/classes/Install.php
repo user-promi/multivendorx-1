@@ -79,7 +79,7 @@ class Install {
             `name` varchar(20) NOT NULL,
             `slug` varchar(20) NOT NULL,
             `description` TEXT DEFAULT NULL,
-            `who_created` TEXT DEFAULT NULL,
+            `who_created` bigint(20) DEFAULT NULL,
             `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
             PRIMARY KEY (`ID`)
         ) $collate;";
@@ -88,8 +88,8 @@ class Install {
             `ID` bigint(20) NOT NULL AUTO_INCREMENT,
             `store_id` bigint(20) NOT NULL,
             `user_id` bigint(20) NOT NULL,
-            `role_id` varchar(50) NOT NULL,
-            `primary_owner` TEXT DEFAULT NULL,
+            `role_id` varchar(50) DEFAULT NULL,
+            `primary_owner` bigint(20) DEFAULT NULL,
             PRIMARY KEY (`ID`)
         ) $collate;";
 

@@ -15,6 +15,8 @@ if (empty($active_store)) {
     update_user_meta($current_user->ID, 'multivendorx_active_store', reset($store_ids));
 }
 
+$store = Store::get_store_by_id( $active_store );
+
 if (get_option('permalink_structure')) {
     $current_page = get_query_var('tab');
     $current_sub = get_query_var('subtab');
@@ -221,61 +223,72 @@ if ($current_page && empty($current_sub)) {
                     </ul>
                 </div>
             </div>
-            
             <?php
-            $div_id = '';
-            $allowed = true;
-
-            if ($current_page) {
-                foreach ($all_endpoints as $key => $section) {
-                    if ($section['slug'] === $current_page) {
-                        if (!empty($section['capability'])) {
-                            $allowed = false;
-
-                            foreach ($section['capability'] as $cap) {
-                                if (current_user_can($cap) && in_array($cap, $capability_settings, true)) {
-                                    $allowed = true;
-                                    break;
+            if ($store->get('status') == 'pending') { ?>
+                <div>
+                    <?php echo 'waiting for approval'; ?>
+                </div>
+            <?php  
+            } elseif ($store->get('status') == 'reject') { ?>
+                <div>
+                    <?php echo 'The application is rejected'; ?>
+                </div>
+            <?php  
+            } else {
+                $div_id = '';
+                $allowed = true;
+    
+                if ($current_page) {
+                    foreach ($all_endpoints as $key => $section) {
+                        if ($section['slug'] === $current_page) {
+                            if (!empty($section['capability'])) {
+                                $allowed = false;
+    
+                                foreach ($section['capability'] as $cap) {
+                                    if (current_user_can($cap) && in_array($cap, $capability_settings, true)) {
+                                        $allowed = true;
+                                        break;
+                                    }
                                 }
                             }
-                        }
-
-                        if ($current_sub && !empty($section['submenu'])) {
-                            foreach ($section['submenu'] as $submenu) {
-                                if ($submenu['slug'] === $current_sub) {
-                                    if (!empty($submenu['capability'])) {
-                                        $allowed = false;
-
-                                        foreach ($submenu['capability'] as $cap) {
-                                            if (current_user_can($cap) && in_array($cap, $capability_settings, true)) {
-                                                $allowed = true;
-                                                break;
+    
+                            if ($current_sub && !empty($section['submenu'])) {
+                                foreach ($section['submenu'] as $submenu) {
+                                    if ($submenu['slug'] === $current_sub) {
+                                        if (!empty($submenu['capability'])) {
+                                            $allowed = false;
+    
+                                            foreach ($submenu['capability'] as $cap) {
+                                                if (current_user_can($cap) && in_array($cap, $capability_settings, true)) {
+                                                    $allowed = true;
+                                                    break;
+                                                }
                                             }
                                         }
+                                        $div_id = $submenu['key'];
+                                        break;
                                     }
-                                    $div_id = $submenu['key'];
-                                    break;
                                 }
+                            } else {
+                                $div_id = $key;
+                            }
+                            break;
+                        }
+                    }
+    
+                    if ($div_id) {
+                        if ($allowed) {
+                            $template_file = plugin_dir_path(__FILE__) . $div_id . '.php';
+                            if (file_exists($template_file)) {
+                                MultiVendorX()->util->get_template('add-product.php');
+                            } else {
+                                ?>
+                                <div class="content-wrapper" id="<?php echo esc_attr($div_id) ?>"><?php echo esc_attr($div_id) ?>
+                                </div><?php
                             }
                         } else {
-                            $div_id = $key;
+                            echo '<div>You do not have permission to access this section.</div>';
                         }
-                        break;
-                    }
-                }
-
-                if ($div_id) {
-                    if ($allowed) {
-                        $template_file = plugin_dir_path(__FILE__) . $div_id . '.php';
-                        if (file_exists($template_file)) {
-                            MultiVendorX()->util->get_template('add-product.php');
-                        } else {
-                            ?>
-                            <div class="content-wrapper" id="<?php echo esc_attr($div_id) ?>"><?php echo esc_attr($div_id) ?>
-                            </div><?php
-                        }
-                    } else {
-                        echo '<div>You do not have permission to access this section.</div>';
                     }
                 }
             }
