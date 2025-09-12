@@ -4,7 +4,7 @@ export default {
     id: 'seo',
     priority: 5,
     name: __( 'SEO', 'mvx-pro' ),
-    desc: __( 'Allow stores to optimize their products for better search engine visibility using SEO plugins.', 'mvx-pro' ),
+    desc: __( 'Enable stores to enhance their product visibility using advanced third-party SEO plugins.', 'mvx-pro' ),
     icon: 'adminlib-support',
     submitUrl: 'settings',
     modal: [       
@@ -15,7 +15,7 @@ export default {
             settingDescription: __('Let stores manage SEO and boost their visibility using advanced plugins.',
                 'multivendorx'
             ),
-            desc: __( '<ul><li>Yoast SEO – Add custom titles, meta descriptions, and keywords to products.</li><li>Rank Math – Similar to Yoast, but with advanced options like rich snippets and keyword analysis.</li></ul>', 'mvx-pro' ),
+            desc: __( 'Stores are enabled to professionally optimize product titles, meta descriptions, keywords, rich snippets, and other SEO features through this advanced, third-party supported SEO integration using Yoast SEO or Rank Math.', 'mvx-pro' ),
                 options: [
                 {
                     key: 'yoast',
