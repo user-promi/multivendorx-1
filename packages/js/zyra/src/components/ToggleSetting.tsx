@@ -49,7 +49,6 @@ const ToggleSetting: React.FC<ToggleSettingProps> = ({
     addonBefore,
     multiSelect = false,
 }) => {
-    console.log("op",value)
 
     const handleChange = (optionValue: string, isPro: boolean) => {
         if (isPro && !khali_dabba) {
@@ -57,7 +56,6 @@ const ToggleSetting: React.FC<ToggleSettingProps> = ({
             return;
         }
 
-        console.log(optionValue)
         if (multiSelect) {
             const current = Array.isArray(value) ? value : [];
             let newValues: string[];
@@ -66,7 +64,6 @@ const ToggleSetting: React.FC<ToggleSettingProps> = ({
             } else {
                 newValues = [...current, optionValue];
             }
-            console.log("newval",newValues)
             onChange(newValues);
         } else {
             onChange(optionValue);
