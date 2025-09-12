@@ -150,7 +150,7 @@ export default {
             before:__('Of', 'multivendorx'),
             single: true,
             desc: __(
-                'Every two weeks: This is the default commission amount that will be disbursed to stores every fortnight.',
+                'Commissions are automatically sent to stores every 14 days based on your selected schedule. For example, if you choose "1st week Friday", payouts will occur on the first Friday of each two-week cycle.',
                 'multivendorx'
             ),
             nestedFields: [
