@@ -22,17 +22,68 @@ export default {
     submitUrl: 'settings',
 
     modal: [
+        // {
+        //     key: 'badge_img',
+        //     type: 'file',
+        //     label: __('Verified badge', 'mvx-pro'),
+        //     width: 75,
+        //     height: 75,
+        //     desc: __(
+        //         'Upload (32px height) size badge that will appear next to verified stores for credibility.',
+        //         'mvx-pro'
+        //     ),
+        //     //proSetting:true
+        // },
         {
             key: 'badge_img',
-            type: 'file',
-            label: __('Verified badge', 'mvx-pro'),
-            width: 75,
-            height: 75,
+            type: 'setting-toggle',
+            label: __('Verified badge', 'multivendorx'),
             desc: __(
                 'Upload (32px height) size badge that will appear next to verified stores for credibility.',
-                'mvx-pro'
+                'multivendorx'
             ),
-            //proSetting:true
+            options: [
+                {
+                    key: 'icon1',
+                    value: __('icon1', 'multivendorx'),
+                    icon: 'adminlib-cart',
+                },
+                {
+                    key: 'icon2',
+                    value: __('icon2', 'multivendorx'),
+                    icon: 'adminlib-info',
+                },
+                {
+                    key: 'icon3',
+                    value: __('icon3', 'multivendorx'),
+                    icon: 'adminlib-book',
+                },
+                {
+                    key: 'icon4',
+                    value: __('icon4', 'multivendorx'),
+                    icon: 'adminlib-info',
+                },
+                {
+                    key: 'icon5',
+                    value: __('icon5', 'multivendorx'),
+                    icon: 'adminlib-cart',
+                },
+                {
+                    key: 'icon6',
+                    value: __('icon6', 'multivendorx'),
+                    icon: 'adminlib-info',
+                },
+                {
+                    key: 'icon7',
+                    value: __('icon7', 'multivendorx'),
+                    icon: 'adminlib-book',
+                },
+                {
+                    key: 'icon8',
+                    value: __('icon8', 'multivendorx'),
+                    icon: 'adminlib-info',
+                },
+            ],
         },
         {
             key: 'unverified_store_access',

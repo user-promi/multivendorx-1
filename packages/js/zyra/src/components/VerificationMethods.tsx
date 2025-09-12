@@ -142,11 +142,7 @@ const VerificationMethods: React.FC<VerificationMethodsProps> = ({
                         }
                       }}
                     />
-                  </div>
-                  <div className="button-wrapper">
-                    <button type="button" onClick={() => saveRow(idx)}>
-                      <i className="adminlib-check"></i>
-                    </button>
+                    <div className="admin-badge green" onClick={() => saveRow(idx)}> <i className="adminlib-plus-circle-o"></i> Add</div>
                   </div>
                 </div>
               ) : (
@@ -158,7 +154,7 @@ const VerificationMethods: React.FC<VerificationMethodsProps> = ({
                 </>
               )}
             </div>
-
+             {editingIndex && (
             <div className="action-section">
               <div className="action-icons">
                 <i
@@ -190,6 +186,7 @@ const VerificationMethods: React.FC<VerificationMethodsProps> = ({
                 </div>
               </div>
             </div>
+            )}
           </li>
         ))}
       </ul>

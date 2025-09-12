@@ -179,22 +179,19 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
             {/* Header */}
             <div
               className="payment-method"
-              // onClick={() => setActiveTab(isActive ? null : method.icon)}
             >
               <div className="details">
                 <div className="toggle-icon">
                   {isEnabled ? (
                     <i
-                      className="adminlib-info"
-                      onClick={() => {
-                        // when icon clicked, set enable = true
-                        if (!isEnabled) {
-                          toggleEnable(method.id, true, method.icon);
-                        }
-                      }}
+                      className="adminlib-eye"
+                      onClick={() => toggleEnable(method.id, false, method.icon)}
                     />
                   ) : (
-                    <i className="adminlib-centralized-connections disable" />
+                    <i
+                      className="adminlib-eye-blocked disable"
+                      onClick={() => toggleEnable(method.id, true, method.icon)}
+                    />
                   )}
                 </div>
                 <div className="payment-method-icon">
@@ -230,7 +227,7 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
                   }}
                 /> */}
                 {isEnabled && (
-                  <div className="admin-btn btn-purple" onClick={() => setActiveTab(isActive ? null : method.icon)} ><i className="adminlib-eye"></i> Manage</div>
+                  <div className="admin-btn btn-purple" onClick={() => setActiveTab(isActive ? null : method.icon)} >Manage</div>
                 )}
               </div>
             </div>

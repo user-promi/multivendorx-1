@@ -201,7 +201,7 @@ div:has(.exclusion-modal) {
         list-style-type: none;
         margin: 0;
 
-        input[type="radio"] {
+        input{
             display: none; // for radio button hide
         }
 
@@ -223,6 +223,9 @@ div:has(.exclusion-modal) {
 
             img {
                 height: 3rem;
+            }
+            i{
+                font-size: 1.313rem;
             }
         }
 

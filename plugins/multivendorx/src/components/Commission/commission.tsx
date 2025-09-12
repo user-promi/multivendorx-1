@@ -374,22 +374,22 @@ const Commission: React.FC = () => {
                 </div>
             ),
         },
-        {
-            name: 'bulk-action',
-            render: () => (
-                <div className=" bulk-action">
-                    <select name="action" className="basic-select" ref={bulkSelectRef}>
-                        <option value="">{__('Bulk actions')}</option>
-                        <option value="mark_paid">{__('Mark Paid')}</option>
-                        <option value="delete">{__('Delete')}</option>
-                        <option value="restore">{__('Restore')}</option>
-                    </select>
-                    {/* <button name="bulk-action-apply" className="admin-btn btn-purple" onClick={handleBulkAction}>
-                        {__('Apply')}
-                    </button> */}
-                </div>
-            ),
-        },
+        // {
+        //     name: 'bulk-action',
+        //     render: () => (
+        //         <div className=" bulk-action">
+        //             <select name="action" className="basic-select" ref={bulkSelectRef}>
+        //                 <option value="">{__('Bulk actions')}</option>
+        //                 <option value="mark_paid">{__('Mark Paid')}</option>
+        //                 <option value="delete">{__('Delete')}</option>
+        //                 <option value="restore">{__('Restore')}</option>
+        //             </select>
+        //             {/* <button name="bulk-action-apply" className="admin-btn btn-purple" onClick={handleBulkAction}>
+        //                 {__('Apply')}
+        //             </button> */}
+        //         </div>
+        //     ),
+        // },
         {
             name: 'date',
             render: (updateFilter) => (
@@ -442,6 +442,25 @@ const Commission: React.FC = () => {
         },
     ];
 
+    const BulkAction: React.FC = () => (
+        <div className="bulk-actiondddddddd">
+            <select name="action" className="basic-select" ref={bulkSelectRef}>
+                <option value="">{__("Bulk actions", "multivendorx")}</option>
+                <option value="mark_paid">{__("Mark Paid", "multivendorx")}</option>
+                <option value="delete">{__("Delete", "multivendorx")}</option>
+                <option value="restore">{__("Restore", "multivendorx")}</option>
+            </select>
+
+            <button
+                name="bulk-action-apply"
+                className="admin-btn btn-purple"
+                onClick={handleBulkAction}
+            >
+                {__("Apply", "multivendorx")}
+            </button>
+        </div>
+    );
+
     return (
         <>
             <AdminBreadcrumbs
@@ -466,6 +485,7 @@ const Commission: React.FC = () => {
                         handlePagination={requestApiForData}
                         perPageOption={[10, 25, 50]}
                         typeCounts={commissionStatus as CommissionStatus}
+                        bulkActionComp={() => <BulkAction />}
                     />
                 </div>
             )}

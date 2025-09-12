@@ -35,19 +35,41 @@
 }
 
 .admin-filter-wrapper {
-  position: absolute;
-  display: flex;
-  bottom: 1rem;
-  left: 50%;
-  transform: translateX(-50%);
+  display: flex; 
   border-radius: 0.313rem;
   background: #fff;
+  min-height: 2.188rem;
+  justify-content: center;
+  width: 100%;
 
   .wrap-bulk-all-date {
     display: flex;
-    gap: 0.5rem;
-    padding: 0.5rem;
-    background: #e9e9e9;
+    gap: 0.313rem;
+    align-items: center;
+    padding: 0 0.5rem;
+    background: $theme-background-color;
+    border-radius: 0.313rem;
+
+    span {
+      font-size: 1rem;
+      color: $theme-color;
+    }
+
+    select,
+    input {
+      background: transparent;
+      border: none !important;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%235007aa'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.75rem center;
+      background-size: 1rem;
+      color: $theme-color;
+
+      &:focus{
+        outline: none;
+        box-shadow: none;
+      }
+    }
   }
 }
 
@@ -214,13 +236,13 @@
           /* for overwrite common style */
         }
 
-        &:hover{
-          background: $theme-background-color;
+        &:hover {
+          background: #c2c2c247;
         }
       }
 
       .admin-row:has(input[type="checkbox"]:checked) {
-        background: $theme-background-color;
+        background: #c2c2c247;
       }
 
       .dropdown-select {
