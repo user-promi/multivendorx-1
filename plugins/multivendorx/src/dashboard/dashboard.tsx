@@ -17,7 +17,7 @@ import '../dashboard/dashboard1.scss';
 import { Table, TableCell } from 'zyra';
 import { ColumnDef } from '@tanstack/react-table';
 import React, { useState, useEffect } from "react";
-
+import '../components/dashboard.scss'
 
 type StoreRow = {
   id?: number;

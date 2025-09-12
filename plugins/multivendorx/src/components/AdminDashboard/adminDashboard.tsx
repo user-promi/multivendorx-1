@@ -30,7 +30,7 @@ const salesIcon = new L.DivIcon({
 });
 
 import "./adminDashboard.scss";
-import "../../dashboard/dashboardCommon.scss";
+import "../dashboard.scss";
 import BestSellingProducts from './bestSellingProducts';
 import TopSellers from './topSellers';
 
@@ -195,7 +195,16 @@ const AdminDashboard = () => {
         {/* chart */}
         <div className="row">
           <div className="column w-65">
-            <h3>Revenue Trend (Last 7 Months)</h3>
+            <div className="card-header">
+              <div className="left">
+                <div className="title">
+                  Revenue Trend (Last 7 Months)
+                </div>
+              </div>
+              <div className="right">
+                <span>Updated 1 month ago</span>
+              </div>
+            </div>
             <ResponsiveContainer width="100%" height={300}>
               <LineChart data={data}>
                 <CartesianGrid strokeDasharray="3 3" />
@@ -207,7 +216,16 @@ const AdminDashboard = () => {
             </ResponsiveContainer>
           </div>
           <div className="column w-35">
-            <h3>Sales by Locations</h3>
+            <div className="card-header">
+              <div className="left">
+                <div className="title">
+                  Sales by Locations
+                </div>
+              </div>
+              <div className="right">
+                <span>Updated 1 month ago</span>
+              </div>
+            </div>
             <MapContainer
               center={[20, 0]}
               zoom={2}

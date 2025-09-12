@@ -221,6 +221,7 @@ if ($current_page && empty($current_sub)) {
                     </ul>
                 </div>
             </div>
+            
             <?php
             $div_id = '';
             $allowed = true;
