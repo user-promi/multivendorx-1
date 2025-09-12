@@ -7,8 +7,6 @@
 
 namespace MultiVendorX\StripeConnect;
 
-require_once 'StripeGateway.php';
-
 /**
  * MultiVendorX Stripe Connect Module class
  *
@@ -48,7 +46,7 @@ class Module {
             $stripe_account_id = get_user_meta($vendor_id, '_stripe_connect_account_id', true);
 
             if (!$stripe_account_id) {
-                $account = $this->container['stripe_connect']->gateway->create_account();
+                $account = $this->container['stripe_connect']->create_account();
                 if ($account) {
                     $stripe_account_id = $account->id;
                     update_user_meta($vendor_id, '_stripe_connect_account_id', $stripe_account_id);
@@ -58,7 +56,7 @@ class Module {
                 }
             }
 
-            $account_link = $this->container['stripe_connect']->gateway->create_account_link($stripe_account_id);
+            $account_link = $this->container['stripe_connect']->create_account_link($stripe_account_id);
 
             if ($account_link) {
                 wp_redirect($account_link->url);
