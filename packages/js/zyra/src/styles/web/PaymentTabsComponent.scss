@@ -28,10 +28,12 @@
                         color: #5007aa;
                         cursor: pointer;
                     }
-                    .disable{
+
+                    .disable {
                         color: #8a888873;
                     }
                 }
+
                 .payment-method-icon {
                     padding: 0.313rem;
                     background: $theme-background-color;
@@ -63,11 +65,13 @@
                             display: flex;
                             gap: 1rem;
                         }
-                        .admin-badge{
+
+                        .admin-badge {
                             padding: 0.313rem;
                         }
                     }
-                    .method-desc{
+
+                    .method-desc {
                         font-size: 0.75rem;
                     }
                 }
@@ -78,11 +82,13 @@
                     font-size: 2rem;
                 }
             }
-            .admin-btn{
-                    opacity: 0;
-                }
-            &:hover{
-                .admin-btn{
+
+            .admin-btn {
+                opacity: 0;
+            }
+
+            &:hover {
+                .admin-btn {
                     opacity: 1;
                 }
             }
@@ -91,10 +97,18 @@
         .payment-method-form {
             display: flex;
             flex-wrap: wrap;
-            padding: 1rem;
             border: $border-light-small;
             border-top: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, opacity 0.4s ease;
+            max-height: 0;
+            opacity: 0;
 
+            &.open{
+                opacity: 1;
+                max-height: 25rem;
+                padding: 1rem;
+            }
             .button-wrapper {
                 width: 100%;
                 display: flex;
