@@ -6,7 +6,6 @@ import {
     RowSelectionState,
     PaginationState,
 } from '@tanstack/react-table';
-import AddCoupon from './add-coupons';
 
 type StoreRow = {
     id: number;

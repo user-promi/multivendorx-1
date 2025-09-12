@@ -5,7 +5,7 @@ import BrandSmall from '../../../assets/images/brand-icon.png';
 import StoreSettings from './storeSettings';
 
 import PaymentSettings from './paymentSettings';
-import StoreSquad from './storeSquad';
+import StoreSquad from './storeStaff';
 import PolicySettings from './policySettings';
 import ShippingSettings from './shippingSettings';
 import StoreRegistration from './storeRegistrationForm';
@@ -74,8 +74,8 @@ const EditStore = () => {
         {
             type: 'file',
             content: {
-                id: 'users',
-                name: 'Store Squad',
+                id: 'staff',
+                name: 'Store Staff',
                 desc: 'Store Users',
                 hideTabHeader: true,
                 icon: 'adminlib-credit-card',
@@ -127,7 +127,7 @@ const EditStore = () => {
         switch (tabId) {
             case 'store':
                 return <StoreSettings id={editId} />;
-            case 'users':
+            case 'staff':
                 return <StoreSquad id={editId} />;
             case 'payment':
                 return <PaymentSettings id={editId} />;

@@ -62,8 +62,8 @@ export default {
             settingDescription: __('Keep payouts on hold for a safety buffer. Helps cover refunds, cancellations, or disputes.', 'multivendorx'),
             type: 'number',
             size: '8rem',
-            before:__('Wait', 'multivendorx'),
-            after:__('before commissions become eligible for payout', 'multivendorx'),
+            addonBefore:__('Wait', 'multivendorx'),
+            addonAfter:__('before commissions become eligible for payout', 'multivendorx'),
             parameter: __('days', 'multivendorx'),
         },
         {
@@ -72,7 +72,7 @@ export default {
             desc: __(
                 'Define the minimum amount a store must accumulate before payouts are processed.', 'multivendorx'),
             type: 'number',
-            preParameter: __('$', 'multivendorx'),
+            prefixUnit: __('$', 'multivendorx'),
             size: '8rem',
             options: [
                 {
@@ -133,8 +133,8 @@ export default {
                     value: 'payouts_every_hour',
                 },
             ],
-            after:__('minute of every hour', 'multivendorx'),
-            before:__('At', 'multivendorx'),
+            addonAfter:__('minute of every hour', 'multivendorx'),
+            addonBefore:__('At', 'multivendorx'),
             parameter:__('th', 'multivendorx'),
             dependent: {
                 key: 'payment_schedules',
@@ -157,7 +157,7 @@ export default {
                 {
                     key: 'payout_frequency',
                     type: 'select',
-                    addonBefore:__('On', 'multivendorx'),
+                    label:__('On', 'multivendorx'),
                     // label: __('Payout frequency', 'multivendorx'),
                     options: [
                         {
@@ -175,7 +175,7 @@ export default {
                 {
                     key: 'payout_day',
                     type: 'dropdown',
-                    before:__('at', 'multivendorx'),
+                    addonBefore:__('at', 'multivendorx'),
                     // label: __('Payout Day', 'multivendorx'),
                     // settingDescription: __("Select the day of the week to release store commissions:", 'multivendorx'),
                     // desc: __("<ul><li>Choose the specific day when store commissions should be disbursed.</li></ul>", 'multivendorx'),
@@ -209,17 +209,13 @@ export default {
             label: __('Monthly disbursement', 'multivendorx'), // main label
             single: true,
             desc: __(
-                'Once per month: Set the day of the month and time for store commissions payout.',
+                'Date of the month: (defaults to last day if shorter month)<br>Once per month: Set the day of the month and time for store commissions payout.',
                 'multivendorx'
             ),
             nestedFields: [
                 {
                     key: 'payouts_every_month', // day of month
-                    before: __('On', 'multivendorx'),
-                    desc: __(
-                        'Date of the month: (defaults to last day if shorter month)',
-                        'multivendorx'
-                    ),
+                    addonBefore: __('On', 'multivendorx'),
                     type: 'number',
                     size: '8rem',
                     options: [
@@ -233,7 +229,7 @@ export default {
                 {
                     key: 'monthly_payout_time', // time of day
                     type: 'time', // links to TimeSelect component
-                    before: __('At', 'multivendorx'),
+                    addonBefore: __('at', 'multivendorx'),
                     description: __('Select the time of day your monthly payout should occur.', 'multivendorx'),
                     defaultValue: '09:00',
                 },
@@ -249,7 +245,7 @@ export default {
             key: 'daily_payout_time', // unique key for daily payout time
             type: 'time', // links to TimeSelect component
             label: __('Daily payout time', 'multivendorx'),
-            before:__('At', 'multivendorx'),
+            addonBefore:__('At', 'multivendorx'),
             description: __('Once per day<br/>Run payouts at:', 'multivendorx'),
             defaultValue: '09:00', // optional: default payout time
             dependent: {
@@ -273,7 +269,7 @@ export default {
                 {
                     key: 'weekly_payout_day', // day of week toggle
                     type: 'dropdown',
-                    before:__('On', 'multivendorx'),
+                    addonBefore:__('On', 'multivendorx'),
                     description: __('Select the day of the week for payouts:', 'multivendorx'),
                     options: [
                         { key: 'sunday', label: __('Sunday', 'multivendorx'), value: 'sunday' },
@@ -288,7 +284,7 @@ export default {
                 {
                     key: 'weekly_payout_time', // time of day
                     type: 'time', // links to TimeSelect component
-                    before: __('at', 'multivendorx'),
+                    addonBefore: __('at', 'multivendorx'),
                     description: __('Select the time of day for weekly payouts.', 'multivendorx'),
                     defaultValue: '09:00',
                 },
@@ -319,20 +315,20 @@ export default {
                             value: 'free_withdrawals',
                         },
                     ],
-                    before: __('Stores get', 'multivendorx'),
-                    after: __('free withdrawals. After that, each withdrawal costs', 'multivendorx'),
+                    addonBefore: __('Stores get', 'multivendorx'),
+                    addonAfter: __('free withdrawals. After that, each withdrawal costs', 'multivendorx'),
                 },
                 {
                     key: 'withdrawal_fee', // updated key
                     type: 'number',
-                    size: '5rem',
+                    size: '8rem',
                     options: [
                         {
                             key: 'withdrawal_fee',
                             value: 'withdrawal_fee',
                         },
                     ],
-                    preParameter: __('$', 'multivendorx'),
+                    prefixUnit: __('$', 'multivendorx'),
                     parameter: __('%', 'multivendorx'),
                 },
             ],
