@@ -405,27 +405,27 @@ a {
         padding: 0.625rem 0;
     }
 
-    .column {
-        padding: 1.625rem;
-        border-radius: 0.313rem;
-        box-shadow: 0 0.125rem 0.5rem 0 rgba(47, 43, 61, 0.12);
-        background: #fff;
+    // .column {
+    //     padding: 1.625rem;
+    //     border-radius: 0.313rem;
+    //     box-shadow: 0 0.125rem 0.5rem 0 rgba(47, 43, 61, 0.12);
+    //     background: #fff;
 
-        .action-btn-wrapper {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
+    //     .action-btn-wrapper {
+    //         display: flex;
+    //         flex-wrap: wrap;
+    //         gap: 1rem;
+    //     }
 
-        h3 {
-            padding-bottom: 0.85rem;
-            margin: 0;
-        }
+    //     h3 {
+    //         padding-bottom: 0.85rem;
+    //         margin: 0;
+    //     }
 
-        .admin-table-wrapper {
-            padding: 0;
-        }
-    }
+    //     .admin-table-wrapper {
+    //         padding: 0;
+    //     }
+    // }
 
     .cards {
         .title-wrapper {
@@ -566,44 +566,43 @@ a {
     }
 
     // cart header start
-    .card-header {
-        display: flex;
-        justify-content: space-between;
-        padding-bottom: 2rem;
+    // .card-header {
+    //     display: flex;
+    //     justify-content: space-between;
+    //     padding-bottom: 2rem;
 
-        .left {
-            .title {
-                font-size: 1.25rem;
-                font-weight: 500;
-            }
+    //     .left {
+    //         .title {
+    //             font-size: 1.25rem;
+    //             font-weight: 500;
+    //         }
 
-            .des {
-                font-size: 0.95rem;
-                padding-top: 0.45rem;
-                color: #00000094;
-            }
-        }
+    //         .des {
+    //             font-size: 0.95rem;
+    //             padding-top: 0.45rem;
+    //             color: #00000094;
+    //         }
+    //     }
 
-        .right {
-            span {
-                font-size: 0.875rem;
-                color: #0000009e;
-            }
+    //     .right {
+    //         span {
+    //             font-size: 0.875rem;
+    //             color: #0000009e;
+    //         }
 
-            i {
-                font-size: 1.25rem;
-                padding: 0.5rem;
-                border-radius: 50%;
-                transition: all 0.4s ease;
-                ;
+    //         i {
+    //             font-size: 1.25rem;
+    //             padding: 0.5rem;
+    //             border-radius: 50%;
+    //             transition: all 0.4s ease;
+    //             ;
 
-                &:hover {
-                    background: #0000001a;
-                }
-            }
-        }
-    }
-
+    //             &:hover {
+    //                 background: #0000001a;
+    //             }
+    //         }
+    //     }
+    // }
     // cart header end
 }
 
