@@ -92,7 +92,7 @@ export default {
             options: [
                 {
                     key: 'mannual',
-                    label: __('Mannual', 'multivendorx'),
+                    label: __('Manual', 'multivendorx'),
                     value: 'Mannual',
                 },
                 {
