@@ -15,7 +15,7 @@ export default {
             type: 'setting-toggle',
             label: __('Show map on', 'multivendorx'),
             settingDescription: __('Decide where the store map should appear', 'multivendorx'),
-            desc: __('<ul><li>Store listing – Display a map on the page that lists all stores, showing their locations for easier discovery.</li><li>Shop page – Display a map on the store’s shop page showing the store’s location.</li><li>Both – Show the map on both pages for maximum visibility.</li></ul>', 'multivendorx'),
+            desc: __('<ul><li>Store listing - Display a map on the page that lists all stores, showing their locations for easier discovery.</li><li>Shop page - Display a map on the store’s shop page showing the store’s location.</li><li>Both - Show the map on both pages for maximum visibility.</li></ul>', 'multivendorx'),
             options: [
                 {
                     key: 'store_lisiting',
@@ -40,7 +40,7 @@ export default {
             defaulValue: 'google_map_set',
             label: __('Map provider', 'multivendorx'),
             settingDescription: __('Choose the service that powers your maps and location search', 'multivendorx'),
-            desc: __('<ul><li>Google Maps – reliable and widely used, requires a Google API key.<li>Mapbox – customizable map provider, may also require an API key.</li></ul>', 'multivendorx'),
+            desc: __('<ul><li>Google Maps - reliable and widely used, requires a Google API key.<li>Mapbox - customizable map provider, may also require an API key.</li></ul>', 'multivendorx'),
             options: [
                 {
                     key: 'google_map_set',
@@ -90,7 +90,7 @@ export default {
             label: 'Location search',
             single: true,
             settingDescription: __('Define how customers can control their search radius when looking for nearby stores.', 'multivendorx'),
-            desc: __('<ul><li>Minimum distance – set the smallest possible radius a customer can select. For example, if set to 1 km, customers cannot search for anything closer than 1 km.<li>Maximum distance – set the largest radius available for search. For example, setting it to 500 km allows customers to expand their search across a wider region.</li><li>Units – decide whether distances are measured in kilometers or miles, depending on your store’s target region.</li></ul>', 'multivendorx'),
+            desc: __('<ul><li>Minimum distance - set the smallest possible radius a customer can select. For example, if set to 1 km, customers cannot search for anything closer than 1 km.<li>Maximum distance - set the largest radius available for search. For example, setting it to 500 km allows customers to expand their search across a wider region.</li><li>Units - decide whether distances are measured in kilometers or miles, depending on your store’s target region.</li></ul>', 'multivendorx'),
             nestedFields: [
                 {
                     key: 'radius_search_min_distance',
