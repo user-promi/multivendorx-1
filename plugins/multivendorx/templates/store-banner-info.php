@@ -11,7 +11,7 @@ if ( ! $store ) {
 
 $meta_data  = $store->get_all_meta();
 $banner     = $meta_data['banner'] ?? MultiVendorX()->plugin_url . 'assets/images/banner-placeholder.jpg';
-$profile    = $meta_data['image'] ?? MultiVendorX()->plugin_url . 'assets/images/WP-stdavatar.png';
+$profile    = $meta_data['image'] ?? MultiVendorX()->plugin_url . 'assets/images/default-store.jpg';
 $description = $store->get('description');
 
 ?>

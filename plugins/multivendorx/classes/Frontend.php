@@ -36,7 +36,7 @@ class Frontend {
 
              $logo_html = '';
             if ( in_array( 'show_store_logo_next_to_products', $store_details ) ) {
-                $logo_url  = $store->get( 'image' ) ?: MultiVendorX()->plugin_url . 'assets/images/WP-stdavatar.png';
+                $logo_url  = $store->get( 'image' ) ?: MultiVendorX()->plugin_url . 'assets/images/default-store.jpg';
                 $logo_html = '<img src="' . esc_url( $logo_url ) . '" alt="' . esc_attr( $name ) . '" />';
             }
 
