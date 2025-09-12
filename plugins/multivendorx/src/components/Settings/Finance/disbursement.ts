@@ -72,7 +72,7 @@ export default {
             settingDescription: __(
                 'Set the lowest balance a store must reach before they can get paid.', 'multivendorx'),
             type: 'number',
-            addonBefore:__('Stores need', 'multivendorx'),
+            addonBefore:__('Stores must accumulate at least', 'multivendorx'),
             prefixUnit: __('$', 'multivendorx'),
             addonAfter:__(' to get paid', 'multivendorx'),
             size: '8rem',

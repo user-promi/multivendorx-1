@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 export default {
     id: 'store-commissions',
     priority: 1,
-    name: __('Store commissions', 'multivendorx'),
+    name: __('Store Commissions', 'multivendorx'),
     desc: __(
         "Tailor your marketplace commission plan to decide how much revenue stores earn from each sale.",
         'multivendorx'
@@ -17,7 +17,7 @@ export default {
             label: __('Commission type', 'multivendorx'),
             settingDescription: __("Choose how commissions should be calculated for your marketplace.", 'multivendorx'),
             desc: __(
-                '<ul><li>Store order based commission is calculated on the total order amount for each store separately. Example: If a customer buys from three stores, commission is applied three times – once for each store order.</li><li>Per item based commission is calculated on every single item sold, regardless of which store it belongs to. Example: If an order has five items, commission is applied five times – once for each item.</li></ul>',
+                '<ul><li>Store order based: Calculated on the full order amount of each store. Example: A customer buys from 3 stores → commission applies separately to each store’s order.</li><li>Per item based: Applied to each product in the order. Example: An order with 5 items → commission applies 5 times, once per item.</li></ul>',
                 'multivendorx'
             ),
             options: [
