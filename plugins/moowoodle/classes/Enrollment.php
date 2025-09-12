@@ -153,15 +153,14 @@ class Enrollment {
 			$product = $item->get_product();
 
 			if ( $product->is_type( 'variation' ) ) {
-				$parent_id      = $product->get_parent_id();
-				$parent_product = wc_get_product( $parent_id );
-
-				$moodle_course_id = $parent_product->get_meta( 'moodle_course_id', true );
-				$linked_course_id = $parent_product->get_meta( 'linked_course_id', true );
-			} else {
-				$moodle_course_id = $product->get_meta( 'moodle_course_id', true );
-				$linked_course_id = $product->get_meta( 'linked_course_id', true );
+				$parent = wc_get_product( $product->get_parent_id() );
+				if ( $parent ) {
+					$product = $parent;
+				}
 			}
+			
+			$moodle_course_id = $product->get_meta( 'moodle_course_id', true );
+			$linked_course_id = $product->get_meta( 'linked_course_id', true );
 
 			if ( ! $moodle_course_id ) {
 				Util::log( "Skipping enrollment - Moodle course ID is missing. Linked Course ID: #{$linked_course_id}" );
@@ -301,12 +300,6 @@ class Enrollment {
 
 		if ( ! $moodle_user_id ) {
 			$moodle_user_id = $this->create_user( $user_data );
-		} else {
-			$settings = MooWoodle()->setting->get_setting( 'update_moodle_user', array() );
-
-			if ( in_array( 'update_moodle_user', $settings, true ) ) {
-				$this->update_moodle_user( $moodle_user_id, $user_data['purchaser_id'] );
-			}
 		}
 
 		update_user_meta( $user_data['purchaser_id'], 'moowoodle_moodle_user_id', $moodle_user_id );
@@ -360,21 +353,19 @@ class Enrollment {
 				'email'       => $email,
 				'username'    => $username,
 				'password'    => $password,
-				'auth'        => apply_filters( 'moowoodle_auth_change', 'manual' ),
-				'auth'        => 'manual',
+				'auth'        => apply_filters( 'moowoodle_new_user_auth_type', 'manual' ),
 				'firstname'   => $first_name,
 				'lastname'    => $last_name,
-				'preferences' => apply_filters(
-					'moowoodle_user_preferences',
+				'preferences' => array_merge(
 					array(
-						0 => array(
+						array(
 							'type'  => 'auth_forcepasswordchange',
-							'value' => 1,
+							'value' => apply_filters( 'moowoodle_new_user_forcepasswordchange_preferences', 1 ),
 						),
-					)
+					),
+					apply_filters( 'moowoodle_new_user_additional_preferences', array() )
 				),
 			);
-
 			$response = MooWoodle()->external_service->do_request( 'create_users', array( 'users' => array( $user_data ) ) );
 
 			if ( empty( $response['data'] ) ) {
@@ -431,79 +422,6 @@ class Enrollment {
 		return str_shuffle( $password );
 	}
 
-	/**
-	 * Update Moodle user details with data from the WordPress purchaser.
-	 *
-	 * Fetches user data and sends an update request to Moodle for the given Moodle user ID.
-	 *
-	 * @param int $moodle_user_id Moodle user ID to update.
-	 * @param int $purchaser_id WordPress user ID of the purchaser.
-	 * @return int Returns the Moodle user ID after update.
-	 */
-	private function update_moodle_user( $moodle_user_id, $purchaser_id ) {
-
-		$purchaser_data = $this->get_user_data( $purchaser_id, $moodle_user_id );
-
-		// update user data on moodle.
-		MooWoodle()->external_service->do_request(
-			'update_users',
-			array(
-				'users' => array( $purchaser_data ),
-			)
-		);
-
-		return $moodle_user_id;
-	}
-
-    /**
-	 * Info about a user to be created/updated in Moodle.
-	 *
-	 * @param int $purchaser_id    WordPress user ID of the purchaser.
-	 * @param int $moodle_user_id  Optional. Moodle user ID. Default 0.
-	 * @return array Returns an array of user data formatted for Moodle API.
-	 */
-	private function get_user_data( $purchaser_id, $moodle_user_id = 0 ) {
-		// Prepare user data.
-		$purchaser_details = ( $purchaser_id ) ? get_userdata( $purchaser_id ) : false;
-		$username          = ( $purchaser_details ) ? $purchaser_details->user_login : '';
-		$username          = str_replace( ' ', '', strtolower( $username ) );
-		$password          = get_user_meta( $purchaser_id, 'moowoodle_moodle_user_pwd', true );
-
-		// If password not exist create a password.
-		if ( ! $password ) {
-			$password = $this->generate_password();
-			add_user_meta( $purchaser_id, 'moowoodle_moodle_user_pwd', $password );
-		}
-
-		$user_data = array();
-
-		// Moodle user.
-		if ( $moodle_user_id ) {
-			$user_data['id'] = $moodle_user_id;
-		} else {
-			$user_data['email']    = ( $purchaser_details ) ? $purchaser_details->user_email : '';
-			$user_data['username'] = $username;
-			$user_data['password'] = $password;
-			$user_data['auth']     = apply_filters( 'moowoodle_auth_change', 'manual' );
-		}
-		$user_data['preferences'] = apply_filters(
-			'moowoodle_user_preferences',
-			array(
-				array(
-					'type'  => 'auth_forcepasswordchange',
-					'value' => 1,
-				),
-			)
-		);
-
-		/**
-		 * Filter after prepare users data.
-         *
-		 * @var array $user_data
-		 * @var \WC_Order $order
-		 */
-		return apply_filters( 'moowoodle_moodle_users_data', $user_data );
-	}
 
     /**
 	 * Display WC order thankyou page containt.
