@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { TextArea, getApiLink } from 'zyra';
 
-const StoreRegistration = ({ id }: { id: string }) => {
+const StoreRegistration = ({ id }: { id: string|null }) => {
 	const [formData, setFormData] = useState<{ [key: string]: string }>({});
 	const [successMsg, setSuccessMsg] = useState<string | null>(null);
 

@@ -26,6 +26,7 @@ class Shortcode {
         FrontendScripts::enqueue_script( 'multivendorx-dashboard-script' );
         FrontendScripts::localize_scripts( 'multivendorx-dashboard-script' );
         FrontendScripts::enqueue_style( 'multivendorx-dashboard-style' );
+        wp_enqueue_style( 'dashicons' );
 
         FrontendScripts::enqueue_script( 'multivendorx-registration-form-script' );
         FrontendScripts::localize_scripts( 'multivendorx-registration-form-script' );

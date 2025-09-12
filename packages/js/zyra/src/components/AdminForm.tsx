@@ -42,9 +42,8 @@ import ColorSettingInput from './ColorSettingInput';
 import EndpointEditor from './EndpointEditor';
 import PaymentTabsComponent from './PaymentTabsComponent';
 import VerificationMethods from './VerificationMethods';
-import SystemInfoAccordion from './SystemInfoAccordion';
+import SystemInfo from './SystemInfo';
 import MultiInput from './MultiInput';
-import TimeSelect from './TimeSelect';
 
 // Types
 declare const wp: any;
@@ -142,8 +141,8 @@ interface InputField {
     icon?: string;
     iconEnable?: boolean;
     size?: string;
-    before?: string;
-    after?: string;
+    addonBefore?: string;
+    addonAfter?: string;
     proSetting?: boolean;
     moduleEnabled?: boolean;
     parameter?: string;
@@ -164,7 +163,7 @@ interface InputField {
     inputWrapperClass?: string;
     wrapperClass?: string;
     tour?: string;
-    preParameter?: string;
+    prefixUnit?: string;
     rightContent?: boolean;
     dependentPlugin?: boolean;
     dependentSetting?: string;
@@ -663,8 +662,8 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             max={inputField.max ?? 50} // for range max value
                             value={value || inputField.value}
                             size={inputField.size}
-                            before={inputField.before}
-                            after={inputField.after}
+                            addonBefore={inputField.addonBefore}
+                            addonAfter={inputField.addonAfter}
                             proSetting={isProSetting(
                                 inputField.proSetting ?? false
                             )}
@@ -688,7 +687,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                                     handleChange(e, inputField.key);
                                 }
                             }}
-                            preParameter={inputField.preParameter}
+                            prefixUnit={inputField.prefixUnit}
                             parameter={inputField.parameter} // for showing text beside the text box
                             generate={inputField.generate}
                         />
@@ -1132,8 +1131,6 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             selectDeselectValue="Select / Deselect All"
                             description={inputField.desc}
                             inputClass={inputField.key}
-                            before={inputField.before}
-                            after={inputField.after}
                             options={
                                 Array.isArray(inputField.options)
                                     ? inputField.options.map((opt) => ({
@@ -1337,34 +1334,6 @@ const AdminForm: React.FC<AdminFormProps> = ({
                         />
                     );
                     break;
-                case 'setting-time':
-                    input = (
-                        <TimeSelect
-                            khali_dabba={appLocalizer?.khali_dabba ?? false}
-                            wrapperClass={`setting-form-input`}
-                            descClass="settings-metabox-description"
-                            description={inputField.desc}
-                            key={inputField.key}
-                            value={String(value ?? inputField.defaultValue ?? '')}
-                            proSetting={isProSetting(inputField.proSetting ?? false)}
-                            onChange={(data) => {
-                                if (
-                                    hasAccess(
-                                        inputField.proSetting ?? false,
-                                        String(inputField.moduleEnabled ?? ''),
-                                        String(inputField.dependentSetting ?? ''),
-                                        String(inputField.dependentPlugin ?? '')
-                                    )
-                                ) {
-                                    settingChanged.current = true;
-                                    updateSetting(inputField.key, data);
-                                }
-                            }}
-                            proChanged={() => setModelOpen(true)}
-                        />
-                    );
-                    break;
-
 
                 // Check in MVX
                 case 'wpeditor':
@@ -1733,7 +1702,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                     break;
                 case 'system-info':
                     input = (
-                        <SystemInfoAccordion
+                        <SystemInfo
                             appLocalizer={appLocalizer}
                             apiLink={String(inputField.apiLink)}
                             copyButtonLabel={inputField.copyButtonLabel}

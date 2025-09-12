@@ -63,8 +63,8 @@ export default {
             label: __('Messenger theme color', 'multivendorx'),
             desc: __('Pick a theme color for your Facebook Messenger chat window.', 'multivendorx'),
             value: '#5007aa',
-            after: 'hshhsh',
-            before: 'hhdhhd',
+            addonAfter: 'hshhsh',
+            addonBefore: 'hhdhhd',
             // dependent: {
             //     key: 'chat_provider',
             //     set: true,

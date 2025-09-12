@@ -34,6 +34,7 @@ declare global {
         marketplace_site:any;
         site_url:any;
         woocommerce_currency:any;
+        color: any;
     }
     interface Color{
         color: any;

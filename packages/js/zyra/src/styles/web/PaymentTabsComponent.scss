@@ -10,20 +10,34 @@
             align-items: center;
             justify-content: space-between;
             gap: 1rem;
-            padding: 1rem;
+            padding: 0.5rem 0.625rem;
             background: #f9f4f4b8;
             cursor: pointer;
 
             .details {
                 display: flex;
-                gap: 1rem;
+                gap: 0.5rem;
+                align-items: center;
 
+                .toggle-icon {
+                    padding-right: 0.5rem;
+                    border-right: $border-light-small;
+
+                    i {
+                        font-size: 1.313rem;
+                        color: #5007aa;
+                        cursor: pointer;
+                    }
+                    .disable{
+                        color: #8a888873;
+                    }
+                }
                 .payment-method-icon {
-                    padding: 0.5rem;
+                    padding: 0.313rem;
                     background: $theme-background-color;
                     border-radius: 0.5rem;
-                    width: 3rem;
-                    height: 3rem;
+                    width: 2rem;
+                    height: 2rem;
                     display: flex;
                     justify-content: center;
                     align-items: center;
@@ -42,13 +56,19 @@
                         gap: 0.5rem;
                         justify-content: start;
                         align-items: center;
-                        padding-bottom: 0.313rem;
 
                         .title {
-                            font-size: 1.125rem;
+                            font-size: 1rem;
+                            line-height: 1rem;
                             display: flex;
                             gap: 1rem;
                         }
+                        .admin-badge{
+                            padding: 0.313rem;
+                        }
+                    }
+                    .method-desc{
+                        font-size: 0.75rem;
                     }
                 }
             }
@@ -56,6 +76,14 @@
             .payment-method-arrow {
                 i {
                     font-size: 2rem;
+                }
+            }
+            .admin-btn{
+                    opacity: 0;
+                }
+            &:hover{
+                .admin-btn{
+                    opacity: 1;
                 }
             }
         }

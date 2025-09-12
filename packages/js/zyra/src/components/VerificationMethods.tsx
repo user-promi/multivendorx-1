@@ -41,7 +41,6 @@ const VerificationMethods: React.FC<VerificationMethodsProps> = ({
     else setForm(rows[editingIndex] || {});
   }, [editingIndex, rows]);
 
-  // 🔹 Outside click handler to close edit form
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (editingIndex !== null && formRef.current && !formRef.current.contains(e.target as Node)) {
@@ -49,9 +48,7 @@ const VerificationMethods: React.FC<VerificationMethodsProps> = ({
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [editingIndex]);
 
   const handleFieldChange = (key: string, val: any) => {
@@ -64,7 +61,6 @@ const VerificationMethods: React.FC<VerificationMethodsProps> = ({
       setValidationMsg("⚠️ Please fill the label for the last row before adding a new one");
       return;
     }
-
     setRows((prev) => [...prev, {}]);
     setEditingIndex(rows.length);
     setForm({});
@@ -76,7 +72,6 @@ const VerificationMethods: React.FC<VerificationMethodsProps> = ({
       setValidationMsg("⚠️ Label is required");
       return;
     }
-
     const newRows = [...rows];
     newRows[index] = { ...newRows[index], label: form.label };
     setRows(newRows);
@@ -88,7 +83,6 @@ const VerificationMethods: React.FC<VerificationMethodsProps> = ({
 
   const cancelEdit = () => {
     if (editingIndex !== null) {
-      // if it's a new row and has no label, remove it instead of saving
       if (!rows[editingIndex]?.label?.trim()) {
         const newRows = rows.filter((_, i) => i !== editingIndex);
         setRows(newRows);
@@ -99,7 +93,6 @@ const VerificationMethods: React.FC<VerificationMethodsProps> = ({
     setForm({});
     setValidationMsg("");
   };
-
 
   const deleteRow = (index: number) => {
     const newRows = rows.filter((_, i) => i !== index);
@@ -127,8 +120,6 @@ const VerificationMethods: React.FC<VerificationMethodsProps> = ({
   return (
     <div className="fileds-wrapper">
       {label && <h4>{label}</h4>}
-
-
 
       <ul className="fileds">
         {rows.map((row, idx) => (
@@ -161,7 +152,9 @@ const VerificationMethods: React.FC<VerificationMethodsProps> = ({
               ) : (
                 <>
                   <div>{row.label}</div>
-                  <span className={row.required ? "" : "admin-badge red"}>{row.required ? 'Not Required' : 'Required'}</span>
+                  <span className={row.required ? "" : "admin-badge red"}>
+                    {row.required ? 'Not Required' : 'Required'}
+                  </span>
                 </>
               )}
             </div>
@@ -170,9 +163,7 @@ const VerificationMethods: React.FC<VerificationMethodsProps> = ({
               <div className="action-icons">
                 <i
                   className="adminlib-more-vertical"
-                  onClick={() =>
-                    setOpenDropdownIndex(openDropdownIndex === idx ? null : idx)
-                  }
+                  onClick={() => setOpenDropdownIndex(openDropdownIndex === idx ? null : idx)}
                 ></i>
 
                 <div className={`action-dropdown ${openDropdownIndex === idx ? 'show' : ''}`}>
@@ -202,15 +193,15 @@ const VerificationMethods: React.FC<VerificationMethodsProps> = ({
           </li>
         ))}
       </ul>
+
       {editingIndex === null && (
         <button type="button" className="admin-btn btn-green" onClick={startAdd}>
           {addButtonLabel}
         </button>
       )}
 
-
       {validationMsg && (
-        <p className="validation-msg" style={{ color: "red", marginTop: "8px" }}>
+        <p className="validation-msg" >
           {validationMsg}
         </p>
       )}
