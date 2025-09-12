@@ -69,10 +69,12 @@ export default {
         {
             key: 'payout_threshold_amount',
             label: __('Minimum payout threshold', 'multivendorx'),
-            desc: __(
-                'Define the minimum amount a store must accumulate before payouts are processed.', 'multivendorx'),
+            settingDescription: __(
+                'Set the lowest balance a store must reach before they can get paid.', 'multivendorx'),
             type: 'number',
+            addonBefore:__('Stores must accumulate at least', 'multivendorx'),
             prefixUnit: __('$', 'multivendorx'),
+            addonAfter:__(' to get paid', 'multivendorx'),
             size: '8rem',
             options: [
                 {
@@ -123,7 +125,7 @@ export default {
         },
         //Hourly
         {
-            key: 'payouts_every_hour',
+            key: 'disbursement_hourly',
             label: __('Hourly payouts', 'multivendorx'),
             type: 'number',
             size: '8rem',
@@ -150,7 +152,7 @@ export default {
             before:__('Of', 'multivendorx'),
             single: true,
             desc: __(
-                'Every two weeks: This is the default commission amount that will be disbursed to stores every fortnight.',
+                'Commissions are automatically sent to stores every 14 days based on your selected schedule. For example, if you choose "1st week Friday", payouts will occur on the first Friday of each two-week cycle.',
                 'multivendorx'
             ),
             nestedFields: [
@@ -162,12 +164,12 @@ export default {
                     options: [
                         {
                             key: 'first',
-                            label: __('1st', 'multivendorx'),
+                            label: __('1st Week', 'multivendorx'),
                             value: 'first',
                         },
                         {
                             key: 'second',
-                            label: __('2nd', 'multivendorx'),
+                            label: __('2nd Week', 'multivendorx'),
                             value: 'second',
                         },
                     ],
@@ -175,7 +177,6 @@ export default {
                 {
                     key: 'payout_day',
                     type: 'dropdown',
-                    addonBefore:__('at', 'multivendorx'),
                     // label: __('Payout Day', 'multivendorx'),
                     // settingDescription: __("Select the day of the week to release store commissions:", 'multivendorx'),
                     // desc: __("<ul><li>Choose the specific day when store commissions should be disbursed.</li></ul>", 'multivendorx'),
@@ -191,6 +192,7 @@ export default {
                 },
                 {
                     key: 'store_opening_time',
+                    addonBefore:__('at', 'multivendorx'),
                     type: 'time',
                     // label: __('Store Opening Time', 'multivendorx'),
                     // description: __('Select the time your store opens.', 'multivendorx'),
@@ -319,17 +321,18 @@ export default {
                     addonAfter: __('free withdrawals. After that, each withdrawal costs', 'multivendorx'),
                 },
                 {
-                    key: 'withdrawal_fee', // updated key
+                    key: 'withdrawal_fixed', // updated key
                     type: 'number',
                     size: '8rem',
-                    options: [
-                        {
-                            key: 'withdrawal_fee',
-                            value: 'withdrawal_fee',
-                        },
-                    ],
                     prefixUnit: __('$', 'multivendorx'),
-                    parameter: __('%', 'multivendorx'),
+                    addonBefore: 'Fixed',
+                    addonAfter: "+",
+                },
+                {
+                    key: 'withdrawal_percentage', // updated key
+                    type: 'number',
+                    size: '8rem',
+                    parameter: __('%', 'catalogx'),
                 },
             ],
         },

@@ -58,7 +58,7 @@ class Payment {
 
         $paypal_settings = !empty($payment_admin_settings['paypal-payout']) ? $payment_admin_settings['paypal-payout'] : [];
         
-        if ($paypal_settings['enable']) {
+        if ($paypal_settings && $paypal_settings['enable']) {
             return [
                 'id'    => $this->get_id(),
                 'label' => __('Paypal Payout', 'multivendorx'),
@@ -82,7 +82,7 @@ class Payment {
 
         if (!empty($payment_admin_settings['paypal-payout'])) {
             $paypal_settings = $payment_admin_settings['paypal-payout'];
-            if ($paypal_settings['enable']) {
+            if ($paypal_settings && $paypal_settings['enable']) {
                 //add in paramiters 
                 $receiver_email = $store->get_meta('payment_method') == 'paypal-payout' ? $store->get_meta('paypal_email') : ""; // receiver sandbox email
                 $sandbox = $paypal_settings['payment_mode'] == 'sandbox' ? true : false;   // sandbox mode

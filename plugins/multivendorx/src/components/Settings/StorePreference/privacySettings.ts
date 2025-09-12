@@ -16,10 +16,10 @@ export default {
             class: 'mvx-toggle-checkbox',
             options: [
                 {
-                    key: 'show_store_name_on_products',
+                    key: 'show_store_name',
                     label: __( 'Name', 'multivendorx' ),
                     desc: __( 'Include the store name on product listings, archive, checkout, and cart pages.', 'multivendorx' ),
-                    value: 'show_store_name_on_products',
+                    value: 'show_store_name',
                 },
                 {
                     key: 'show_store_logo_next_to_products',

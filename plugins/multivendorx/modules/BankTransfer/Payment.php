@@ -52,9 +52,9 @@ class Payment {
     public function get_store_payment_settings() {
         $payment_admin_settings = MultiVendorX()->setting->get_setting( 'payment_methods', [] );
 
-        $paypal_settings = !empty($payment_admin_settings['bank-transfer']) ? $payment_admin_settings['bank-transfer'] : [];
+        $settings = !empty($payment_admin_settings['bank-transfer']) ? $payment_admin_settings['bank-transfer'] : [];
         
-        if ($paypal_settings['enable']) {
+        if ($settings && $settings['enable']) {
             return [
                 'id'    => $this->get_id(),
                 'label' => __('Bank Transfer', 'multivendorx'),
