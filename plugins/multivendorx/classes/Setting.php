@@ -90,7 +90,7 @@ class Setting {
                 'multivendorx_disbursement_settings',
                 'multivendorx_commissions_settings',
                 'multivendorx_spmv_pages_settings',
-                'multivendorx_products_capability_settings',
+                'multivendorx_product_preferencess_settings',
                 'multivendorx_products_settings',
                 'multivendorx_refund_management_settings',
                 'multivendorx_identity_verification_settings',
