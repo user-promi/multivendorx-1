@@ -5,7 +5,7 @@ import mapbox from '../../../assets/images/mapbox-logo.png';
 export default {
     id: 'automation',
     priority: 1,
-    name: 'Automation',
+    name: 'AI & Automation',
     desc: __('Help customers discover stores and products near them by enabling location-based search and maps.', 'multivendorx'),
     icon: 'adminlib-form-section',
     submitUrl: 'settings',

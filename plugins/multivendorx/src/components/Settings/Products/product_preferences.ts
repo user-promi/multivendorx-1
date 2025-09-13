@@ -18,7 +18,7 @@ export default {
 			settingDescription: __( 'Select the product fields stores can configure when adding or managing their products.', 'multivendorx' ),
             class: 'mvx-toggle-checkbox',
             desc: __(
-                '<li>Virtual products - Choose this option for products that don’t have a physical form (e.g., services, memberships). <li>Downloadable products - Use this option for products that customers can download (e.g., software, eBooks).',
+                '<li>Virtual products - Choose this option for products that don’t have a physical form (e.g., services, memberships). <li>Downloadable products: Use this option for products that customers can download (e.g., software, eBooks).',
                 'multivendorx'
             ),
             options: [
@@ -186,11 +186,11 @@ export default {
                 'multivendorx'
             ),
             settingDescription: __(
-                'Choose whether related products are shown from the same vendor only or from the entire marketplace.',
+                'Choose whether related products are shown from the same store only or from the entire marketplace.',
                 'multivendorx'
             ),
             desc: __(
-                '<li>Same store - Show related products only from the current store.</li><li>All stores - Show related products from across the marketplace.</li>',
+                '<li>Same store: Show related products only from the current store.</li><li>All stores: Show related products from across the marketplace.</li>',
                 'multivendorx'
             ),
             options: [
