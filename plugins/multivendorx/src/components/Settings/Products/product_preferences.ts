@@ -110,7 +110,7 @@ export default {
                 'multivendorx'
             ),
             settingDescription: __(
-                'Choose how SKUs for simple, external, or parent products are generated:',
+                'Choose how SKUs for simple, external, or parent products are generated.',
                 'multivendorx'
             ),
             options: [

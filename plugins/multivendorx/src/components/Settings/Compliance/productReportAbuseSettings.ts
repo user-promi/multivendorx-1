@@ -38,8 +38,12 @@ export default {
             type: 'multi-string',
             label: __( 'Reasons for abuse report', 'multivendorx' ),
             placeholder: __( 'Add a reason for reporting a product', 'multivendorx' ),
+            settingDescription: __(
+                'Define one or more preset reasons that stores can choose from when submitting an abuse report.',
+                'multivendorx'
+            ),
             desc: __(
-                'Define one or more preset reasons that stores can choose from when submitting an abuse report.<br><b>Note</b>: Users can report products for various issues. When enabling logged-in user restriction, anonymous reports will be blocked. Abuse reports are reviewed by administrators who can take appropriate action including product removal or store penalties.',
+                '<b>Note</b>: Users can report products for various issues. When enabling logged-in user restriction, anonymous reports will be blocked. Abuse reports are reviewed by administrators who can take appropriate action including product removal or store penalties.',
                 'multivendorx'
             ),
             name: 'abuse_report_reasons',
