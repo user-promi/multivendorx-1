@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import CommonPopup from "./CommonPopup";
 
 // Accepts searchIndex-style items directly
 type SearchItem = {
@@ -42,6 +43,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
   const [profileOpen, setProfileOpen] = useState(false);
   const [messageOpen, setMessageOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const [contactSupportPopup, setContactSupportPopup] = useState(false);
 
   // Close dropdown on click outside
   useEffect(() => {
@@ -355,7 +357,9 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
                       </a>
                     </li>
                     <li>
-                      <a href="#">
+                      <a onClick={(e) => {
+                        setContactSupportPopup(true);
+                      }}>
                         <i className="adminlib-user-network-icon"></i>
                         Contact Support
                       </a>
@@ -367,6 +371,43 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
           </div>
         </div>
       </div>
+
+      {contactSupportPopup && (
+        <CommonPopup
+          open={contactSupportPopup}
+          onClose={() => setContactSupportPopup(false)}
+          width="500px"
+          height="100%"
+          header={
+            <>
+              <div className="title">
+                <i className="adminlib-cart"></i>
+                Welcome to Urban Trends, your one-stop shop
+              </div>
+              <p>Publish important news, updates, or alerts that appear directly in store dashboards,</p>
+              <i
+                className="icon adminlib-close"
+                onClick={(e) => {
+                  setContactSupportPopup(false);
+                }}
+              ></i>
+            </>
+          }
+          footer={
+            <>
+
+              <div className="admin-btn btn-red" onClick={(e) => {
+                setContactSupportPopup(false);
+              }}>Close</div>
+            </>
+          }
+        >
+          <div className="content">
+            
+          </div>
+        </CommonPopup>
+      )
+      }
     </>
   );
 };

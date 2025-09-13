@@ -23,7 +23,7 @@ type AnnouncementStatus = {
     name: string;
     count: number;
 };
-export const Payouts: React.FC = () => {
+export const TransactionHistory: React.FC = () => {
     const [submitting, setSubmitting] = useState(false);
     const [data, setData] = useState<KBRow[] | null>(null);
     const [addEntry, setAddEntry] = useState(false);
@@ -150,7 +150,6 @@ export const Payouts: React.FC = () => {
     }, [pagination]);
 
     // Columns
-    // Columns
     const columns: ColumnDef<StoreRow>[] = [
         {
             id: 'select',
@@ -170,7 +169,55 @@ export const Payouts: React.FC = () => {
             ),
         },
         {
-            header: __('Title', 'multivendorx'),
+            header: __('Store name', 'multivendorx'),
+            cell: ({ row }) => (
+                <TableCell title={row.original.title || ''}>
+                    {row.original.title || '-'}
+                </TableCell>
+            ),
+        },
+        {
+            header: __('Total earnings', 'multivendorx'),
+            cell: ({ row }) => (
+                <TableCell title={row.original.title || ''}>
+                    {row.original.title || '-'}
+                </TableCell>
+            ),
+        },
+        {
+            header: __('Paid amount', 'multivendorx'),
+            cell: ({ row }) => (
+                <TableCell title={row.original.title || ''}>
+                    {row.original.title || '-'}
+                </TableCell>
+            ),
+        },
+        {
+            header: __('Pending payout', 'multivendorx'),
+            cell: ({ row }) => (
+                <TableCell title={row.original.title || ''}>
+                    {row.original.title || '-'}
+                </TableCell>
+            ),
+        },
+        {
+            header: __('Withdrawal requests', 'multivendorx'),
+            cell: ({ row }) => (
+                <TableCell title={row.original.title || ''}>
+                    {row.original.title || '-'}
+                </TableCell>
+            ),
+        },
+        {
+            header: __('Last request date', 'multivendorx'),
+            cell: ({ row }) => (
+                <TableCell title={row.original.title || ''}>
+                    {row.original.title || '-'}
+                </TableCell>
+            ),
+        },
+        {
+            header: __('Payment status', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell title={row.original.title || ''}>
                     {row.original.title || '-'}
@@ -206,43 +253,150 @@ export const Payouts: React.FC = () => {
             ),
         },
     ];
-
+    const overview = [
+        {
+            id: 'sales',
+            label: 'Total Sales',
+            count: 475,
+            icon: 'adminlib-star',
+        },
+        {
+            id: 'earnings',
+            label: 'Admin Earnings',
+            count: 625,
+            icon: 'adminlib-support',
+        },
+        {
+            id: 'Vendors',
+            label: 'Vendors',
+            count: 8,
+            icon: 'adminlib-global-community',
+        },
+        {
+            id: 'Pending',
+            label: 'Pending',
+            count: 3,
+            icon: 'adminlib-catalog',
+        },
+        {
+            id: 'Products',
+            label: 'Products',
+            count: 2,
+            icon: 'adminlib-calendar',
+        },
+        {
+            id: 'Withdrawals',
+            label: 'Withdrawals',
+            count: 10,
+            icon: 'adminlib-calendar',
+        },
+    ];
+    const [activeTab, setActiveTab] = useState("products");
+    const tabs = [
+        { id: "products", label: "Transaction History", content:  <Table
+                            data={data}
+                            columns={columns as ColumnDef<Record<string, any>, any>[]}
+                            rowSelection={rowSelection}
+                            onRowSelectionChange={setRowSelection}
+                            defaultRowsPerPage={10}
+                            pagination={pagination}
+                            realtimeFilter={realtimeFilter}
+                            onPaginationChange={setPagination}
+                            handlePagination={requestData}
+                            perPageOption={[10, 25, 50]}
+                            onRowClick={(row: any) => {
+                                handleEdit(row.id);
+                            }}
+                            typeCounts={announcementStatus as AnnouncementStatus[]}
+                        />},
+        { id: "stores", label: "Transaction Data", content:  <Table
+                            data={data}
+                            columns={columns as ColumnDef<Record<string, any>, any>[]}
+                            rowSelection={rowSelection}
+                            onRowSelectionChange={setRowSelection}
+                            defaultRowsPerPage={10}
+                            pagination={pagination}
+                            realtimeFilter={realtimeFilter}
+                            onPaginationChange={setPagination}
+                            handlePagination={requestData}
+                            perPageOption={[10, 25, 50]}
+                            onRowClick={(row: any) => {
+                                handleEdit(row.id);
+                            }}
+                            typeCounts={announcementStatus as AnnouncementStatus[]}
+                        />},
+    ];
     return (
         <>
             <AdminBreadcrumbs
                 activeTabIcon="adminlib-book"
-                tabTitle="Payouts"
+                tabTitle="Storewise Transaction History"
                 description={"Build your knowledge base: add new guides or manage existing ones in one place."}
-            />
-            <div className="admin-dashboard">
-                <div className="row">
-                    <div className="column"></div>
-                    <div className="column"></div>
-                    <div className="column"></div>
-                    <div className="column"></div>
-                </div>
-            </div>
+                buttons={[
+                    {
+                        label: 'Select Store',
+                        onClick: () => window.location.assign('?page=multivendorx#&tab=stores'),
+                        className: 'admin-btn btn-purple'
+                    },
+                ]}
+                
 
-            <div className="admin-table-wrapper">
-                <Table
-                    data={data}
-                    columns={columns as ColumnDef<Record<string, any>, any>[]}
-                    rowSelection={rowSelection}
-                    onRowSelectionChange={setRowSelection}
-                    defaultRowsPerPage={10}
-                    pagination={pagination}
-                    realtimeFilter={realtimeFilter}
-                    onPaginationChange={setPagination}
-                    handlePagination={requestData}
-                    perPageOption={[10, 25, 50]}
-                    onRowClick={(row: any) => {
-                        handleEdit(row.id);
-                    }}
-                    typeCounts={announcementStatus as AnnouncementStatus[]}
-                />
+            />
+
+            <div className="admin-dashboard">
+                <div className="header">
+                    <div className="title-wrapper">
+                        <div className="title">You are viewing Store 1</div>
+                        <div className="des">Here's what's happening with your marketplace today</div>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="overview-card-wrapper">
+                        {overview.map((stat) => (
+                            <div className="action" key={stat.id}>
+                                <div className="title">
+                                    {stat.count}
+                                    <i className={stat.icon}></i>
+                                </div>
+                                <div className="description">{stat.label}</div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                <div className="row">
+                    {/* Tab Titles */}
+                    <div className="column">
+                        
+                    <div className="tab-titles">
+                        {tabs.map((tab) => (
+                            <div
+                                key={tab.id}
+                                className={`title ${activeTab === tab.id ? "active" : ""}`}
+                                onClick={() => setActiveTab(tab.id)}
+                            >
+                                <p><i className="adminlib-cart"></i>{tab.label}</p>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Tab Content */}
+                    <div className="tab-content">
+                        {tabs.map(
+                            (tab) =>
+                                activeTab === tab.id && (
+                                    <div key={tab.id} className="tab-panel">
+                                        {tab.content}
+                                    </div>
+                                )
+                        )}
+                    </div>
+
+                    </div>
+                </div>
             </div>
         </>
     );
 };
 
-export default Payouts;
+export default TransactionHistory;

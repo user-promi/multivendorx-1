@@ -73,15 +73,6 @@ const Notification = () => {
             dueDate: "2025-09-08",
         },
     ];
-    const analyticsData = [
-        { icon: "adminlib-tools red", number: "230k", text: "Total Earnings" },
-        { icon: "adminlib-book green", number: "45k", text: "Awaiting Disbursement" },
-        { icon: "adminlib-global-community yellow", number: "1.2M", text: "Pending Withdrawal" },
-        { icon: "adminlib-wholesale blue", number: "500k", text: "Completed / Paid Disbursement" },
-        { icon: "adminlib-tools red", number: "230k", text: "Refund / Chargeback Impact" },
-        { icon: "adminlib-book green", number: "45k", text: "Manual Adjustments" },
-        { icon: "adminlib-global-community yellow", number: "1.2M", text: "Upcoming Unlock" },
-    ];
     return (
         <>
             <AdminBreadcrumbs
@@ -91,10 +82,11 @@ const Notification = () => {
             />
 
             {/* Workboard Stats */}
-            <div className="work-board">
+            <div className="work-board">            
+
                 <div className="row">
-                    <div className="column width-65">
-                        <div className="card-header">
+                    <div className="column">
+                         <div className="card-header">
                             <div className="left">
                                 <div className="title">
                                     Account Overview
@@ -104,28 +96,48 @@ const Notification = () => {
                                 <span>Updated 1 month ago</span>
                             </div>
                         </div>
-                        <div className="card-body">
-                            <div className="analytics-container">
-
-                                {analyticsData.map((item, idx) => (
-                                    <div key={idx} className="analytics-item">
-                                        <div className="analytics-icon">
-                                            <i className={item.icon}></i>
-                                        </div>
-                                        <div className="details">
-                                            <div className="number">{item.number}</div>
-                                            <div className="text">{item.text}</div>
-                                        </div>
-                                    </div>
-                                ))}
-
+                        <div className="overview-card-wrapper">
+                            <div className="action">
+                                <div className="title">
+                                    3
+                                    <i className="adminlib-cart"></i>
+                                </div>
+                                <div className="description">
+                                    Pending Products
+                                </div>
+                            </div>
+                            <div className="action">
+                                <div className="title">
+                                    52
+                                    <i className="adminlib-tools"></i>
+                                </div>
+                                <div className="description">
+                                    Pending Vendors
+                                </div>
+                            </div>
+                        </div>
+                        <div className="overview-card-wrapper">
+                            <div className="action">
+                                <div className="title">
+                                    99
+                                    <i className="adminlib-catalog"></i>
+                                </div>
+                                <div className="description">
+                                    Pending Coupons
+                                </div>
+                            </div>
+                            <div className="action">
+                                <div className="title">
+                                    3
+                                    <i className="adminlib-module"></i>
+                                </div>
+                                <div className="description">
+                                    Pending Transaction
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-
-                <div className="row">
                     <div className="column">
                         <div className="card-header">
                             <div className="left">
@@ -164,6 +176,7 @@ const Notification = () => {
                             </table>
                         </div>
                     </div>
+
                     <div className="column">
                         <div className="card-header">
                             <div className="left">

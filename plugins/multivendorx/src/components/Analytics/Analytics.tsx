@@ -36,8 +36,10 @@ const salesIcon = new L.DivIcon({
 import "../../dashboard/dashboardCommon.scss";
 import Overview from './Overview';
 import Leaders from './Leaders';
-import Transactions from './Transactions';
+import Transactions from './Payout';
 import Revenue from './Revenue';
+import RefundedOrders from './RefundedOrders';
+import StoreOrders from './StoreOrders';
 
 const Analytics = () => {
   const location = useLocation();
@@ -113,11 +115,12 @@ const Analytics = () => {
   const [activeTab, setActiveTab] = useState("overview");
   const tabs = [
     { id: "overview", label: "Overview", content: <Overview overview={overview} data={data} overviewData={overviewData} pieData={pieData} /> },
-    { id: "leaders", label: "Leaders", content: <Leaders/> },
     { id: "revenue", label: "Revenue", content: <Revenue/> },
-    { id: "transactions", label: "Transactions", content: <Transactions/> },
+    { id: "payout", label: "Payout", content: <Transactions/> },
+    { id: "storeOrder ", label: "Store Order ", content: <StoreOrders/> },
+    { id: "refundedOrders", label: "Refunded Orders", content: <RefundedOrders/> },
   ];
-
+  
   const COLORS = ["#5007aa", "#00c49f", "#ff7300", "#d400ffff"];
   return (
     <>
@@ -128,6 +131,7 @@ const Analytics = () => {
 
       />
       <div className="admin-dashboard tab">
+
         <div className="row">
               {/* Tab Titles */}
               <div className="tab-titles">

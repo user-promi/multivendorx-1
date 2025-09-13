@@ -16,7 +16,7 @@ interface AdminBreadcrumbsProps {
     buttons?: any[];
     goPremium?: boolean;
     goPremiumLink?: string;
-    description?:string;
+    description?: string;
 }
 
 const AdminBreadcrumbs: React.FC<AdminBreadcrumbsProps> = ({
@@ -81,6 +81,7 @@ const AdminBreadcrumbs: React.FC<AdminBreadcrumbsProps> = ({
                                 );
                             })}
                     </div>
+
                 </div>
                 {description && <div className="description">{description}</div>}
                 {renderBreadcrumb && <div className="breadcrumbs">{renderBreadcrumb()}</div>}

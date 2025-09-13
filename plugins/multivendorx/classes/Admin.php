@@ -112,8 +112,8 @@ class Admin {
                     'subtab' => '',
                     'count'  => $commission_count,
                 ),
-                'payouts' => array(
-                    'name'   => __( 'Payouts', 'multivendorx' ),
+                'transaction-history' => array(
+                    'name'   => __( 'Transaction History', 'multivendorx' ),
                     'subtab' => '',
                 ),
                 'analytics' => array(
