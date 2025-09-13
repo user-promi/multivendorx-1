@@ -609,91 +609,85 @@ const Commission: React.FC = () => {
                     }
                 >
 
-                    <div className="content">
-                        <div className="heading">
-                            Vendor Details
-                        </div>
-                        <div className="vendor-details">
-                            <div className="name">
-                                Joye Hop
-                            </div>
-                            <div className="details">
-                                <div className="email">
-                                    <b>Email:</b> test_vendor@test.com
+                    <div className="content multi">
+                        <div className="section left">
+                            <div className="vendor-details">
+                                <div className="name">
+                                    Joye Hop
                                 </div>
-                                <div className="method">
-                                    <b>Payment Mode:</b> <span className="admin-badge blue">Stripe Connect</span>
+                                <div className="details">
+                                    <div className="email">
+                                        <i className="adminlib-mail"></i><b>Email:</b> test_vendor@test.com
+                                    </div>
+                                    <div className="method">
+                                        <i className="adminlib-form-paypal-email"></i><b>Payment Method:</b> <span className="admin-badge blue">Stripe Connect</span>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div className="heading">
-                            Commission Overview
-                        </div>
-                        <div className="commission-details">
-                            <div className="items">
-                                <div className="text">Associated Vendor</div>
-                                <div className="value">Lather & Loom</div>
-                            </div>
-                            <div className="items">
-                                <div className="text">Associated Order</div>
-                                <div className="value">#501421</div>
-                            </div>
-                            <div className="items">
-                                <div className="text">Order Status</div>
-                                <div className="value"><span className="admin-badge yellow">On hold</span></div>
-                            </div>
-                            <div className="items">
-                                <div className="text">Commission Status</div>
-                                <div className="value"><span className="admin-badge red">Unpaid</span></div>
-                            </div>
-                            <div className="items">
-                                <div className="text">Commission Amount</div>
-                                <div className="value">$28.50</div>
-                            </div>
-                            <div className="items">
-                                <div className="text">Shipping</div>
-                                <div className="value">$28.50</div>
-                            </div>
-                            <div className="items">
-                                <div className="text">Tax</div>
-                                <div className="value">$28.50</div>
-                            </div>
-                        </div>
-
-                        <div className="row">
-                            <div className="section">
-                                <div className="heading">
-                                    Order Details
-                                </div>
-                                <Table
-                                    data={demoData}
-                                    columns={popupColumns as ColumnDef<Record<string, any>, any>[]}
-                                    rowSelection={{}}
-                                    onRowSelectionChange={() => { }}
-                                    defaultRowsPerPage={5}
-                                />
                             </div>
 
-                            <div className="section">
-                                <div className="heading">
-                                    Shipping
-                                </div>
-                                <Table
-                                    data={demoData}
-                                    columns={popupColumns as ColumnDef<Record<string, any>, any>[]}
-                                    rowSelection={{}}
-                                    onRowSelectionChange={() => { }}
-                                    defaultRowsPerPage={5}
-                                />
-                            </div>
-                        </div>
+                            <div className="popup-divider"></div>
 
-                        <div className="heading">
-                            Commission Notes
+                            <div className="heading">
+                                Order Details
+                            </div>
+                            <Table
+                                data={demoData}
+                                columns={popupColumns as ColumnDef<Record<string, any>, any>[]}
+                                rowSelection={{}}
+                                onRowSelectionChange={() => { }}
+                                defaultRowsPerPage={5}
+                            />
+
+                            <div className="heading">
+                                Shipping
+                            </div>
+                            <Table
+                                data={demoData}
+                                columns={popupColumns as ColumnDef<Record<string, any>, any>[]}
+                                rowSelection={{}}
+                                onRowSelectionChange={() => { }}
+                                defaultRowsPerPage={5}
+                            />
+
                         </div>
-                        <div className="settings-metabox-note">
-                            <i className="adminlib-info"></i>
-                            <p>Commission for order (ID: 27297) is created.</p>
+                        <div className="section right">
+                            <div className="heading">
+                                Commission Overview
+                            </div>
+                            <div className="commission-details">
+                                <div className="items">
+                                    <div className="text">Associated Order</div>
+                                    <div className="value">#501421</div>
+                                </div>
+                                <div className="items">
+                                    <div className="text">Order Status</div>
+                                    <div className="value"><span className="admin-badge yellow">On hold</span></div>
+                                </div>
+                                <div className="items">
+                                    <div className="text">Commission Status</div>
+                                    <div className="value"><span className="admin-badge red">Unpaid</span></div>
+                                </div>
+                                <div className="items">
+                                    <div className="text">Commission Amount</div>
+                                    <div className="value">$28.50</div>
+                                </div>
+                                <div className="items">
+                                    <div className="text">Shipping</div>
+                                    <div className="value">$28.50</div>
+                                </div>
+                                <div className="items">
+                                    <div className="text">Tax</div>
+                                    <div className="value">$28.50</div>
+                                </div>
+                            </div>
+                            <div className="popup-divider"></div>
+                            <div className="heading">
+                                Commission Notes
+                            </div>
+                            <div className="settings-metabox-note">
+                                <i className="adminlib-info"></i>
+                                <p>Commission for order (ID: 27297) is created.</p>
+                            </div>
                         </div>
                     </div>
 

@@ -58,11 +58,13 @@ export default {
             type: 'number',
             label: __('Advertising cost', 'multivendorx'),
             prefixUnit: __('$', 'multivendorx'),
-            addonAfter:__('amount stores must pay to use per advertising slot. Use 0 if you want advertising to be free.', 'multivendorx'),
+            addonAfter:__('stores must pay to use per advertising slot. Use 0 if you want advertising to be free.', 'multivendorx'),
+            size: '8rem',
             dependent: {
                 key: 'store_can_purchase_advertisement',
                 set: true,
             },
+            placeholder: 0,
             //proSetting:true
         },
         {

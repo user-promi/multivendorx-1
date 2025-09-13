@@ -281,13 +281,15 @@
   }
 
   .title-wrapper {
-    font-size: 1.4rem;
     font-weight: 500;
     margin-bottom: 0;
     color: $text-color;
     display: flex;
     justify-content: space-between;
 
+    .title{
+      font-size: 1.4rem;
+    }
     i {
       margin-right: 0.5rem;
       color: $theme-color;

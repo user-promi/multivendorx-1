@@ -102,7 +102,6 @@ export const TransactionHistory: React.FC = () => {
                 tabTitle="Storewise Transaction History"
                 description={"Build your knowledge base: add new guides or manage existing ones in one place."}
                 customContent={
-                    <div className="status-wrapper">
                         <SelectInput
                             name="store"
                             value={selectedStore?.value || ""}
@@ -111,7 +110,6 @@ export const TransactionHistory: React.FC = () => {
                             onChange={(newValue: any) => setSelectedStore(newValue)}
                             onInputChange={(inputValue: string) => handleSearch(inputValue)}
                         />
-                    </div>
                 }
             />
 

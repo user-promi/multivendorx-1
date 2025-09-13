@@ -32,7 +32,8 @@
             line-height: 1.5;
             color: #000;
             font-weight: 500;
-            i{
+
+            i {
                 padding-right: 0.313rem;
                 font-size: 1.125rem;
             }
@@ -247,9 +248,10 @@
             font-size: 1rem;
             flex-direction: column;
 
-            &.inactive{
+            &.inactive {
                 text-decoration: line-through;
             }
+
             span {
                 font-size: 0.8rem;
                 color: $text-color
@@ -259,17 +261,19 @@
         &:hover {
             background: #f4f2f2;
         }
-        &.inactive{
+
+        &.inactive {
             background: #ff00000d;
 
-            .icon{
+            .icon {
                 background: #fde8e4;
 
-                i{
+                i {
                     color: #f06b4f;
                 }
             }
-            .details{
+
+            .details {
                 color: #f06b4f;
             }
         }
@@ -411,3 +415,36 @@
 }
 
 // top items end
+
+
+// support start
+.support-wrapper {
+    .support {
+        display: flex;
+        gap: 1rem;
+        padding: 0.313rem;
+        margin-bottom: 0.313rem;
+        border-bottom: $border-light-small;
+
+        .image {
+            i {
+                font-size: 1.45rem;
+                color: $theme-color;
+            }
+        }
+
+        .details {
+            .name {
+                font-size: 1.063rem;
+                color: #000;
+                padding-bottom: 0.313rem;
+            }
+
+            .des {
+                color: #acaaaa;
+            }
+        }
+    }
+}
+
+// support end
