@@ -19,24 +19,26 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 
-const overviewData = [
-  { name: 'Total Products', value: 18 },
-  { name: 'Product sold', value: 6 },
-  { name: 'Store Visitors', value: 42 },
-  { name: 'Reviews', value: 9 },
-];
+type Transaction = {
+  balance: string;
+  locking_balance: string;
+};
+
 type AnnouncementForm = {
   title: string;
   url: string;
   content: string;
-  stores: string; // ✅ renamed vendors → stores
+  stores: string;
 };
 const ViewStore = () => {
   const [data, setData] = useState({});
+  const [transaction, setTransaction] = useState<Transaction>({
+    balance: '0.00',
+    locking_balance: '0.00',
+  });  
   const [submitting, setSubmitting] = useState(false);
   const [storeOptions, setStoreOptions] = useState<{ value: string; label: string }[]>([]);
-
-  const [successMsg, setSuccessMsg] = useState<string | null>(null);
+  const [productCounts, setProductCounts] = useState<{ status: string, value: number }[]>([]);
   const [addAnnouncements, setAddAnnouncements] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [formData, setFormData] = useState<AnnouncementForm>({
@@ -71,7 +73,7 @@ const ViewStore = () => {
     try {
       setSubmitting(true);
 
-      const endpoint = getApiLink(appLocalizer, 'announcement'); // always POST
+      const endpoint = getApiLink(appLocalizer, 'announcement');
       const method = 'POST';
 
       const payload = {
@@ -112,6 +114,37 @@ const ViewStore = () => {
         const data = res.data || {};
         setData(data);
       })
+
+    axios({
+      method: 'GET',
+      url: getApiLink(appLocalizer, `products/${viewId}`),
+      headers: { 'X-WP-Nonce': appLocalizer.nonce },
+    })
+      .then((res: any) => {
+        const data = res.data || {};
+        const formatted = [
+          { name: 'Pending', value: data.pending || 0 },
+          { name: 'Draft', value: data.draft || 0 },
+          { name: 'Published', value: data.publish || 0 },
+        ];
+        setProductCounts(formatted);
+      })
+      .catch(() => {
+        setError(__('Failed to load product counts', 'multivendorx'));
+      });
+      axios({
+        method: 'GET',
+        url: getApiLink(appLocalizer, `transaction/${viewId}`),
+        headers: { 'X-WP-Nonce': appLocalizer.nonce },
+    })
+        .then((response) => {
+            const data = response?.data || {};
+            console.log(data)
+            setTransaction(data)
+        })
+        .catch((error) => {
+           
+        });
     axios({
       method: 'GET',
       url: getApiLink(appLocalizer, 'store'),
@@ -301,7 +334,7 @@ const ViewStore = () => {
               </div>
               <div className="card-body">
                 <div className="value">
-                  <span>$7,892</span>
+                  <span>{transaction.locking_balance}</span>
                   <a href="?page=multivendorx#&tab=payouts">See What’s Due</a>
                 </div>
                 <span className="icon">
@@ -383,14 +416,14 @@ const ViewStore = () => {
               <ResponsiveContainer width="100%" height={250}>
                 <PieChart>
                   <Pie
-                    data={overviewData}
+                    data={productCounts}
                     cx="50%"
                     cy="50%"
                     outerRadius={80}
                     dataKey="value"
                     label
                   >
-                    {overviewData.map((entry, index) => (
+                    {productCounts.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                     ))}
                   </Pie>

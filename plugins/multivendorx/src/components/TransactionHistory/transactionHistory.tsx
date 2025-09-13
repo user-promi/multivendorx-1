@@ -1,355 +1,130 @@
 /* global appLocalizer */
-import React, { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import { __ } from '@wordpress/i18n';
-import { Table, getApiLink, TableCell, AdminBreadcrumbs, BasicInput, TextArea, CommonPopup } from 'zyra';
-import { ColumnDef, RowSelectionState, PaginationState } from '@tanstack/react-table';
 import "../Announcements/announcements.scss";
+import TransactionHistoryTable from './transactionHistoryTable';
+import TransactionDataTable from './transactionDataTable';
+import { AdminBreadcrumbs, getApiLink, SelectInput } from 'zyra';
+import axios from 'axios';
 
-type KBRow = {
-    id?: number;
-    title?: string;
-    content?: string;
-    status?: 'publish' | 'pending' | string;
-};
-
-type KBForm = {
-    title: string;
-    content: string;
-    status?: 'publish' | 'pending';
-};
-type AnnouncementStatus = {
-    key: string;
-    name: string;
-    count: number;
-};
 export const TransactionHistory: React.FC = () => {
-    const [submitting, setSubmitting] = useState(false);
-    const [data, setData] = useState<KBRow[] | null>(null);
-    const [addEntry, setAddEntry] = useState(false);
-    const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
-    const [totalRows, setTotalRows] = useState(0);
-    const [pagination, setPagination] = useState<PaginationState>({
-        pageIndex: 0,
-        pageSize: 10,
-    });
-    const [announcementStatus, setAnnouncementStatus] = useState<AnnouncementStatus[] | null>(null);
+    const [overview, setOverview] = useState<any[]>([]);
+    const [activeTab, setActiveTab] = useState("products");
+    const [allStores, setAllStores] = useState<any[]>([]);
+    const [filteredStores, setFilteredStores] = useState<any[]>([]);
+    const [selectedStore, setSelectedStore] = useState<any>(null);
 
-    const [editId, setEditId] = useState<number | null>(null);
-    const [error, setError] = useState<string | null>(null);
-    const [showDropdown, setShowDropdown] = useState(false);
-    const [formData, setFormData] = useState<KBForm>({
-        title: '',
-        content: '',
-        status: 'pending',
-    });
-    const bulkSelectRef = useRef<HTMLSelectElement>(null);
-    const [modalDetails, setModalDetails] = useState<string>('');
-
-    const handleBulkAction = () => {
-        if (appLocalizer.khali_dabba) {
-            if (!Object.keys(rowSelection).length) {
-                setModalDetails('Select rows.');
-                setOpenModal(true);
-                return;
-            }
-            if (!bulkSelectRef.current?.value) {
-                setModalDetails('Please select a action.');
-                setOpenModal(true);
-                return;
-            }
-            setData(null);
-        }
-    };
-    const toggleDropdown = (id: any) => {
-        if (showDropdown === id) {
-            setShowDropdown(false);
-            return;
-        }
-        setShowDropdown(id);
-    };
-    // Open edit modal
-    const handleEdit = async (id: number) => {
-        try {
-            const response = await axios.get(getApiLink(appLocalizer, `knowledge/${id}`), {
-                headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            });
-            if (response.data) {
-                setFormData({
-                    title: response.data.title || '',
-                    content: response.data.content || '',
-                    status: response.data.status || 'pending',
-                });
-                setEditId(id);
-                setAddEntry(true);
-            }
-        } catch {
-            setError(__('Failed to load entry', 'multivendorx'));
-        }
-    };
-
-    // Submit form
-    const handleSubmit = async (status: 'publish' | 'pending') => {
-        if (submitting) return; // prevent multiple clicks
-        setSubmitting(true);
-
-        try {
-            const endpoint = editId
-                ? getApiLink(appLocalizer, `knowledge/${editId}`)
-                : getApiLink(appLocalizer, 'knowledge');
-
-            const method = editId ? 'PUT' : 'POST';
-            const payload = { ...formData, status };
-
-            const response = await axios({
-                method,
-                url: endpoint,
-                headers: { 'X-WP-Nonce': appLocalizer.nonce },
-                data: payload,
-            });
-
-            if (response.data.success) {
-                setAddEntry(false);
-                setFormData({ title: '', content: '', status: 'pending' });
-                setEditId(null);
-                requestData(pagination.pageSize, pagination.pageIndex + 1);
-            } else {
-                setError(__('Failed to save entry', 'multivendorx'));
-            }
-        } catch {
-            setError(__('Failed to save entry', 'multivendorx'));
-        } finally {
-            setSubmitting(false); // re-enable buttons
-        }
-    };
-
-
-    // Fetch data
-    const requestData = (rowsPerPage = 10, currentPage = 1) => {
-        setData(null);
+    // 🔹 Fetch stores on mount
+    useEffect(() => {
         axios({
             method: 'GET',
-            url: getApiLink(appLocalizer, 'knowledge'),
+            url: getApiLink(appLocalizer, 'store'),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            params: { page: currentPage, row: rowsPerPage },
+            params: { options: true },
         })
             .then((response) => {
-                setData(response.data || []);
-                setAnnouncementStatus([
-                    { key: 'all', name: 'All', count: response.data.all || 0 },
-                    { key: 'publish', name: 'Published', count: response.data.publish || 0 },
-                    { key: 'pending', name: 'Pending', count: response.data.pending || 0 },
-                ]);
+                if (response?.data?.length) {
+                    const mappedStores = response.data.map((store: any) => ({
+                        value: store.id,
+                        label: store.store_name,
+                    }));
+                    setAllStores(mappedStores);
+                    setFilteredStores(mappedStores.slice(0, 5));
+                    setSelectedStore(mappedStores[0]);
+                }
             })
-            .catch(() => setError(__('Failed to load entries', 'multivendorx')));
+            .catch((error) => {
+                console.error("Error fetching stores:", error);
+            });
+    }, []);
+
+    // 🔹 Fetch wallet/transaction overview whenever store changes
+    useEffect(() => {
+        if (!selectedStore) return;
+
+        axios({
+            method: 'GET',
+            url: getApiLink(appLocalizer, `transaction/${selectedStore.value}`),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+        })
+            .then((response) => {
+                const data = response?.data || {};
+                const dynamicOverview = [
+                    { id: 'total_balance', label: 'Total Balance', count: data.balance ?? 0, icon: 'adminlib-wallet' },
+                    { id: 'pending', label: 'Pending', count: data.pending ?? 0, icon: 'adminlib-clock' },
+                    { id: 'locked', label: 'Locked', count: data.locking_balance ?? 0, icon: 'adminlib-lock' },
+                    { id: 'withdrawable', label: 'Withdrawable', count: data.withdrawable ?? 0, icon: 'adminlib-cash' },
+                    { id: 'commission', label: 'Commission', count: data.commission ?? 0, icon: 'adminlib-star' },
+                    { id: 'gateway_fees', label: 'Gateway Fees', count: data.gateway_fees ?? 0, icon: 'adminlib-credit-card' },
+                ];
+                setOverview(dynamicOverview);
+            })
+            .catch((error) => {
+                setOverview([
+                    { id: 'total_balance', label: 'Total Balance', count: 0, icon: 'adminlib-wallet' },
+                    { id: 'pending', label: 'Pending', count: 0, icon: 'adminlib-clock' },
+                    { id: 'locked', label: 'Locked', count: 0, icon: 'adminlib-lock' },
+                    { id: 'withdrawable', label: 'Withdrawable', count: 0, icon: 'adminlib-cash' },
+                    { id: 'commission', label: 'Commission', count: 0, icon: 'adminlib-star' },
+                    { id: 'gateway_fees', label: 'Gateway Fees', count: 0, icon: 'adminlib-credit-card' },
+                ]);
+            });
+    }, [selectedStore]);
+
+    const handleSearch = (inputValue: string) => {
+        if (!inputValue) {
+            setFilteredStores(allStores.slice(0, 5));
+        } else {
+            const filtered = allStores.filter(store =>
+                store.label?.toLowerCase().includes(inputValue.toLowerCase())
+            );
+            setFilteredStores(filtered);
+        }
     };
 
-    useEffect(() => {
-        const currentPage = pagination.pageIndex + 1;
-        requestData(pagination.pageSize, currentPage);
-    }, [pagination]);
-
-    // Columns
-    const columns: ColumnDef<StoreRow>[] = [
-        {
-            id: 'select',
-            header: ({ table }) => (
-                <input
-                    type="checkbox"
-                    checked={table.getIsAllRowsSelected()}
-                    onChange={table.getToggleAllRowsSelectedHandler()}
-                />
-            ),
-            cell: ({ row }) => (
-                <input
-                    type="checkbox"
-                    checked={row.getIsSelected()}
-                    onChange={row.getToggleSelectedHandler()}
-                />
-            ),
-        },
-        {
-            header: __('Store name', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.title || ''}>
-                    {row.original.title || '-'}
-                </TableCell>
-            ),
-        },
-        {
-            header: __('Total earnings', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.title || ''}>
-                    {row.original.title || '-'}
-                </TableCell>
-            ),
-        },
-        {
-            header: __('Paid amount', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.title || ''}>
-                    {row.original.title || '-'}
-                </TableCell>
-            ),
-        },
-        {
-            header: __('Pending payout', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.title || ''}>
-                    {row.original.title || '-'}
-                </TableCell>
-            ),
-        },
-        {
-            header: __('Withdrawal requests', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.title || ''}>
-                    {row.original.title || '-'}
-                </TableCell>
-            ),
-        },
-        {
-            header: __('Last request date', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.title || ''}>
-                    {row.original.title || '-'}
-                </TableCell>
-            ),
-        },
-        {
-            header: __('Payment status', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.title || ''}>
-                    {row.original.title || '-'}
-                </TableCell>
-            ),
-        },
-        {
-            header: __('Status', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.status || ''}>
-                    {row.original.status || '-'}
-                </TableCell>
-            ),
-        },
-
-    ];
-
-    const realtimeFilter: RealtimeFilter[] = [
-        {
-            name: 'bulk-action',
-            render: () => (
-                <div className="bulk-action">
-                    <select name="action" className="basic-select" ref={bulkSelectRef}>
-                        <option value="">{__('Bulk actions')}</option>
-                        <option value="publish">{__('Publish', 'multivendorx')}</option>
-                        <option value="pending">{__('Pending', 'multivendorx')}</option>
-                        <option value="delete">{__('Delete', 'multivendorx')}</option>
-                    </select>
-                    {/* <button name="bulk-action-apply" className="admin-btn btn-purple" onClick={handleBulkAction}>
-                        {__('Apply')}
-                    </button> */}
-                </div>
-            ),
-        },
-    ];
-    const overview = [
-        {
-            id: 'sales',
-            label: 'Total Sales',
-            count: 475,
-            icon: 'adminlib-star',
-        },
-        {
-            id: 'earnings',
-            label: 'Admin Earnings',
-            count: 625,
-            icon: 'adminlib-support',
-        },
-        {
-            id: 'Vendors',
-            label: 'Vendors',
-            count: 8,
-            icon: 'adminlib-global-community',
-        },
-        {
-            id: 'Pending',
-            label: 'Pending',
-            count: 3,
-            icon: 'adminlib-catalog',
-        },
-        {
-            id: 'Products',
-            label: 'Products',
-            count: 2,
-            icon: 'adminlib-calendar',
-        },
-        {
-            id: 'Withdrawals',
-            label: 'Withdrawals',
-            count: 10,
-            icon: 'adminlib-calendar',
-        },
-    ];
-    const [activeTab, setActiveTab] = useState("products");
     const tabs = [
-        { id: "products", label: "Transaction History", content:  <Table
-                            data={data}
-                            columns={columns as ColumnDef<Record<string, any>, any>[]}
-                            rowSelection={rowSelection}
-                            onRowSelectionChange={setRowSelection}
-                            defaultRowsPerPage={10}
-                            pagination={pagination}
-                            realtimeFilter={realtimeFilter}
-                            onPaginationChange={setPagination}
-                            handlePagination={requestData}
-                            perPageOption={[10, 25, 50]}
-                            onRowClick={(row: any) => {
-                                handleEdit(row.id);
-                            }}
-                            typeCounts={announcementStatus as AnnouncementStatus[]}
-                        />},
-        { id: "stores", label: "Transaction Data", content:  <Table
-                            data={data}
-                            columns={columns as ColumnDef<Record<string, any>, any>[]}
-                            rowSelection={rowSelection}
-                            onRowSelectionChange={setRowSelection}
-                            defaultRowsPerPage={10}
-                            pagination={pagination}
-                            realtimeFilter={realtimeFilter}
-                            onPaginationChange={setPagination}
-                            handlePagination={requestData}
-                            perPageOption={[10, 25, 50]}
-                            onRowClick={(row: any) => {
-                                handleEdit(row.id);
-                            }}
-                            typeCounts={announcementStatus as AnnouncementStatus[]}
-                        />},
+        {
+            id: "products",
+            label: "Wallet Transaction",
+            content: <TransactionHistoryTable storeId={selectedStore?.value} />
+        },
+        {
+            id: "stores",
+            label: "Direct Transaction",
+            content: <TransactionDataTable storeId={selectedStore?.value} />
+        },
     ];
+
     return (
         <>
             <AdminBreadcrumbs
                 activeTabIcon="adminlib-book"
                 tabTitle="Storewise Transaction History"
                 description={"Build your knowledge base: add new guides or manage existing ones in one place."}
-                buttons={[
-                    {
-                        label: 'Select Store',
-                        onClick: () => window.location.assign('?page=multivendorx#&tab=stores'),
-                        className: 'admin-btn btn-purple'
-                    },
-                ]}
-                
-
+                customContent={
+                    <div className="status-wrapper">
+                        <SelectInput
+                            name="store"
+                            value={selectedStore?.value || ""}
+                            options={filteredStores}
+                            type="single-select"
+                            onChange={(newValue: any) => setSelectedStore(newValue)}
+                            onInputChange={(inputValue: string) => handleSearch(inputValue)}
+                        />
+                    </div>
+                }
             />
 
             <div className="admin-dashboard">
                 <div className="header">
                     <div className="title-wrapper">
-                        <div className="title">You are viewing Store 1</div>
+                        <div className="title">
+                            {selectedStore ? `You are viewing ${selectedStore.label}` : "Select a store"}
+                        </div>
                         <div className="des">Here's what's happening with your marketplace today</div>
                     </div>
                 </div>
+
                 <div className="row">
                     <div className="overview-card-wrapper">
                         {overview.map((stat) => (
@@ -365,33 +140,29 @@ export const TransactionHistory: React.FC = () => {
                 </div>
 
                 <div className="row">
-                    {/* Tab Titles */}
                     <div className="column">
-                        
-                    <div className="tab-titles">
-                        {tabs.map((tab) => (
-                            <div
-                                key={tab.id}
-                                className={`title ${activeTab === tab.id ? "active" : ""}`}
-                                onClick={() => setActiveTab(tab.id)}
-                            >
-                                <p><i className="adminlib-cart"></i>{tab.label}</p>
-                            </div>
-                        ))}
-                    </div>
+                        <div className="tab-titles">
+                            {tabs.map((tab) => (
+                                <div
+                                    key={tab.id}
+                                    className={`title ${activeTab === tab.id ? "active" : ""}`}
+                                    onClick={() => setActiveTab(tab.id)}
+                                >
+                                    <p><i className="adminlib-cart"></i>{tab.label}</p>
+                                </div>
+                            ))}
+                        </div>
 
-                    {/* Tab Content */}
-                    <div className="tab-content">
-                        {tabs.map(
-                            (tab) =>
-                                activeTab === tab.id && (
-                                    <div key={tab.id} className="tab-panel">
-                                        {tab.content}
-                                    </div>
-                                )
-                        )}
-                    </div>
-
+                        <div className="tab-content">
+                            {tabs.map(
+                                (tab) =>
+                                    activeTab === tab.id && (
+                                        <div key={tab.id} className="tab-panel">
+                                            {tab.content}
+                                        </div>
+                                    )
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>
