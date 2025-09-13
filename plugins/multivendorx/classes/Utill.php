@@ -24,12 +24,12 @@ class Utill {
      * @var array
      */
     const TABLES = array(
-        'commission'    => 'multivendorx_commission',
+        'commission'    => 'multivendorx_commissions',
         'store'         => 'multivendorx_store',
         'store_users'   => 'multivendorx_store_users',
         'store_meta'    => 'multivendorx_store_meta',
-        'transaction'   => 'multivendorx_transaction_ledger',
-        'real_time_transaction'   => 'multivendorx_real_time_transaction',
+        'transaction'   => 'multivendorx_transactions',
+        'real_time_transaction'   => 'multivendorx_real_time_transactions',
     );
 
     /**

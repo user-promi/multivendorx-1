@@ -153,6 +153,7 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
                 'icon'    => 'adminlib-cart',
                 'slug'    => 'store-support',
                 'submenu' =>  array(
+                    array(
                         'key'  => 'Knowladgebase',
                         'name' => 'knowladgebase',
                         'slug' => 'Knowladgebase',
@@ -164,6 +165,7 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
                         'slug' => 'tickets',
                         'capability' => ['read_shop_coupons', 'edit_shop_coupons']
                     ),
+                ),
                 'capability' => ['manage_users']
             ),
 			 'knowledgebase' => array(
@@ -171,11 +173,13 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
                 'icon'    => 'adminlib-cart',
                 'slug'    => 'team',
                 'submenu' => array(
+                    array(
                         'key'  => 'storeagents',
                         'name' => 'Store Agents',
                         'slug' => 'storeagents',
                         'capability' => ['read_shop_coupons', 'edit_shop_coupons', 'delete_shop_coupons']
                     ),
+                ),
                 'capability' => ['manage_users']
             ),
         );

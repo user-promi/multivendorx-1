@@ -28,7 +28,7 @@ if ($store) {
     // review add later 
 
     $html = '';
-    $store_details = MultiVendorX()->setting->get_setting( 'store_branding_details' );
+    $store_details = MultiVendorX()->setting->get_setting( 'store_branding_details', [] );
     if (in_array( 'show_store_description', $store_details )) {
         $html .= apply_filters('the_content', $store->get('description') );
     }

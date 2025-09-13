@@ -24,11 +24,13 @@ class Frontend {
         add_action('woocommerce_get_item_data', array($this, 'add_sold_by_text_cart'), 30, 2);
 
         add_filter('woocommerce_product_tabs', array($this, 'product_vendor_tab'));
+
+        add_filter('woocommerce_related_products', array($this, 'show_related_products'), 99, 3);
         // add_filter('woocommerce_login_redirect', array($this, 'multivendorx_store_login'), 10, 2);
     }
     public function show_store_info($product_id) {
         
-        $store_details = MultiVendorX()->setting->get_setting( 'store_branding_details' );
+        $store_details = MultiVendorX()->setting->get_setting( 'store_branding_details', [] );
         if (in_array( 'show_store_name', $store_details )) {
             $store = StoreUtil::get_products_vendor($product_id);
             if (!$store) return;
@@ -106,6 +108,43 @@ class Frontend {
     public function woocommerce_product_store_tab() {
         MultiVendorX()->util->get_template( 'store-single-product-tab.php' );
     }
+
+    /**
+     * Show related products or not
+     *
+     * @return array
+     */
+    public function show_related_products($query, $product_id, $args) {
+        if ($product_id) {
+            $store = StoreUtil::get_products_vendor($product_id) ?? '';
+            $related = MultiVendorX()->setting->get_setting( 'recommendation_source', '');
+            if (!empty($related) && 'none' == $related) {
+                return array();
+            } elseif (!empty($related) && 'all_stores' == $related) {
+                return $query;
+            } elseif (!empty($related) && 'same_store' == $related && $store && !empty($store->get_id())) {
+                $query = get_posts( array(
+                    'post_type' => 'product',
+                    'post_status' => 'publish',
+                    'fields' => 'ids',
+                    'exclude'   => $product_id,
+                    'meta_query'     => [
+                        [
+                            'key'     => 'multivendorx_store_id',
+                            'value'   => $store->get_id(),
+                            'compare' => '=',
+                        ],
+                    ],
+                    'orderby' => 'rand'
+                ));
+                if ($query) {
+                    return $query;
+                }
+            }
+        }
+        return $query;
+    }
+
 
     public function vendor_dashboard_template($template) {
         //checking change later when all function ready
