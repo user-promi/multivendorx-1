@@ -14,7 +14,7 @@ const Notification = () => {
 
     const tabs = [
         { id: "products", label: "Products", content: <Products /> },
-        { id: "vendors", label: "Vendors", content: <Vendors /> },
+        { id: "stores", label: "Stores", content: <Vendors /> },
         { id: "coupons", label: "Coupons", content: <Coupons /> },
         { id: "transactions", label: "Transaction", content: <Transactions /> },
     ];
@@ -144,13 +144,6 @@ const Notification = () => {
 
                             {/* Task Table */}
                             <table className="task-table">
-                                {/* <thead>
-                                    <tr>
-                                        <th>Task Title</th>
-                                        <th>Priority</th>
-                                        <th>Due Date</th>
-                                    </tr>
-                                </thead> */}
                                 <tbody>
                                     {tasks.map((task) => (
                                         <tr

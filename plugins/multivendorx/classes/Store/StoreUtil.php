@@ -267,6 +267,23 @@ class StoreUtil {
         return $response;
     }
 
+    public static function get_stores_by_status( $status ) {
+        global $wpdb;
+    
+        $table = "{$wpdb->prefix}" . Utill::TABLES['store'];
+        $stores = $wpdb->get_results(
+            $wpdb->prepare(
+                "SELECT * FROM {$table} WHERE status = %s",
+                $status
+            ),
+            ARRAY_A
+        );
+    
+        return $stores ?: [];
+    }
+    
+
+
     public static function set_primary_owner( $user_id, $store_id ) {
         global $wpdb;
 

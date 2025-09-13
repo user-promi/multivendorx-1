@@ -32,7 +32,7 @@ const Coupons: React.FC = () => {
     useEffect(() => {
         axios({
             method: 'GET',
-            url: getApiLink(appLocalizer, 'store'),
+            url: getApiLink(appLocalizer, 'coupons'),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
             params: { count: true },
         })
@@ -68,7 +68,7 @@ const Coupons: React.FC = () => {
         setData(null);
         axios({
             method: 'GET',
-            url: getApiLink(appLocalizer, 'store'),
+            url: getApiLink(appLocalizer, 'coupons'),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
             params: {
                 page: currentPage,
@@ -116,18 +116,26 @@ const Coupons: React.FC = () => {
             ),
         },
         {
-            header: __('Store', 'multivendorx'),
+            header: __('Title', 'multivendorx'),
             cell: ({ row }) => (
-                <TableCell title={row.original.store_name || ''}>
-                    {row.original.store_name || '-'}
+                <TableCell title={row.original.title || ''}>
+                    {row.original.title || '-'}
                 </TableCell>
             ),
         },
         {
-            header: __('Slug', 'multivendorx'),
+            header: __('Code', 'multivendorx'),
             cell: ({ row }) => (
-                <TableCell title={row.original.store_slug || ''}>
-                    {row.original.store_slug || '-'}
+                <TableCell title={row.original.code || ''}>
+                    {row.original.code || '-'}
+                </TableCell>
+            ),
+        },
+        {
+            header: __('Amount', 'multivendorx'),
+            cell: ({ row }) => (
+                <TableCell title={row.original.amount || ''}>
+                    {row.original.amount || '-'}
                 </TableCell>
             ),
         },
@@ -139,6 +147,7 @@ const Coupons: React.FC = () => {
                 </TableCell>
             ),
         },
+        
         {
             header: __('Action', 'multivendorx'),
             cell: ({ row }) => (
