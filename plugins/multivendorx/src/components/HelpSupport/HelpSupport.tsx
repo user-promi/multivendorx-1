@@ -15,7 +15,40 @@ const HelpSupport: React.FC = () => {
                         <div className="card-header">
                             <div className="left">
                                 <div className="title">
-                                    Channels
+                                    Discover more marketing tools
+                                </div>
+                            </div>
+                        </div>
+                        <div className="card-body">
+                            <div className="support-wrapper">
+                                <div className="support">
+                                    <div className="image">
+                                        <i className="adminlib-cart"></i>
+                                    </div>
+                                    <div className="details">
+                                        <div className="name">Google for WooCommerce</div>
+                                        <div className="des">Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum, accusantium dolore officia eaque voluptas nobis.</div>
+                                    </div>
+                                </div>
+
+                                <div className="support">
+                                    <div className="image">
+                                        <i className="adminlib-cart"></i>
+                                    </div>
+                                    <div className="details">
+                                        <div className="name">Google for WooCommerce</div>
+                                        <div className="des">Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum, accusantium dolore officia eaque voluptas nobis.</div>
+                                    </div>
+                                </div>
+
+                                <div className="support">
+                                    <div className="image">
+                                        <i className="adminlib-cart"></i>
+                                    </div>
+                                    <div className="details">
+                                        <div className="name">Google for WooCommerce</div>
+                                        <div className="des">Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum, accusantium dolore officia eaque voluptas nobis.</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -32,7 +65,7 @@ const HelpSupport: React.FC = () => {
                             <div className="support-wrapper">
                                 <div className="support">
                                     <div className="image">
-
+                                        <i className="adminlib-cart"></i>
                                     </div>
                                     <div className="details">
                                         <div className="name">Google for WooCommerce</div>

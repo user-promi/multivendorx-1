@@ -202,14 +202,6 @@ const Announcements: React.FC = () => {
         setPageCount(Math.ceil(totalRows / rowsPerPage));
     }, [pagination]);
 
-    const toggleDropdown = (id: any) => {
-        if (showDropdown === id) {
-            setShowDropdown(false);
-            return;
-        }
-        setShowDropdown(id);
-    };
-
     // Fetch data from backend
     function requestData(rowsPerPage = 10, currentPage = 1, typeCount = '') {
         setData(null);
@@ -336,8 +328,6 @@ const Announcements: React.FC = () => {
             </select>
         </div>
     );
-
-    const [open, setOpen] = useState(false);
 
     return (
         <>
