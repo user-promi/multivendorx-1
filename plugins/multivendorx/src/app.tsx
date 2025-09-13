@@ -14,13 +14,13 @@ import Memberships from './components/Membership/membership';
 import Brand from './assets/images/mvx-brand-logo.png';
 import { searchIndex, SearchItem } from './searchIndex';
 import { __ } from '@wordpress/i18n';
+import Notification from './components/Notifications/notification';
 import Announcements from './components/Announcements/announcements';
 import Knowledgebase from './components/Knowledgebase/knowledgebase';
 import Blogs from './components/Blogs/blogs';
 import Commission from './components/Commission/commission';
 import Payouts from './components/Payouts/payouts';
 import Analytics from './components/Analytics/Analytics';
-import ActionsDashboard from './components/Notifications/notification';
 
 localStorage.setItem('force_multivendorx_context_reload', 'true');
 
@@ -46,21 +46,21 @@ const Route = () => {
 
   return (
     <>
-      {currentTab.get('tab') === 'settings' && <Settings id="settings" />}
-      {currentTab.get('tab') === 'memberships' && <Memberships />}
-      {currentTab.get('tab') === 'status-tools' && <StatusAndTools id="status-tools" />}
-      {currentTab.get('tab') === 'modules' && <Modules />}
-      {currentTab.get('tab') === 'stores' && <Store />}
-      {currentTab.get('tab') === 'commissions' && <Commission />}
-      {currentTab.get('tab') === 'customer-support' && <CustomerServices />}
-      {currentTab.get('tab') === 'actions-items' && <ActionsDashboard />}
-      {currentTab.get('tab') === 'dashboard' && <AdminDashboard />}
-      {currentTab.get('tab') === 'announcement' && <Announcements />}
-      {currentTab.get('tab') === 'knowledgebase' && <Knowledgebase />}
-      {currentTab.get('tab') === 'payouts' && <Payouts />}
-      {currentTab.get('tab') === 'blogs' && <Blogs />}
-      {currentTab.get('tab') === 'setup' && <SetupWizard />}
-      {currentTab.get('tab') === 'analytics' && <Analytics />}
+      {tab === 'settings' && <Settings id="settings" />}
+      {tab === 'memberships' && <Memberships />}
+      {tab === 'status-tools' && <StatusAndTools id="status-tools" />}
+      {tab === 'modules' && <Modules />}
+      {tab === 'stores' && <Store />}
+      {tab === 'commissions' && <Commission />}
+      {tab === 'customer-support' && <CustomerServices />}
+      {tab === 'actions-items' && <Notification />}
+      {tab === 'dashboard' && <AdminDashboard />}
+      {tab === 'announcement' && <Announcements />}
+      {tab === 'knowledgebase' && <Knowledgebase />}
+      {tab === 'payouts' && <Payouts />}
+      {tab === 'blogs' && <Blogs />}
+      {tab === 'setup' && <SetupWizard />}
+      {tab === 'analytics' && <Analytics />}
     </>
   );
 };

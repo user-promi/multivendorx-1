@@ -1,70 +1,23 @@
-import { AdminBreadcrumbs, getApiLink } from 'zyra';
+import { AdminBreadcrumbs } from 'zyra';
 import WithdrawalRequests from './withdrawalRequests';
 import Products from './products';
 import Vendors from './vendors';
 import Coupons from './coupon';
 import Transactions from './transaction';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 
-interface CountData {
-    pending_products: number;
-    pending_stores: number;
-    pending_coupons: number;
-    pending_transactions: number;
-}
-
-const ActionsDashboard = () => {
+const Notification = () => {
 
 
     const [activeTab, setActiveTab] = useState("products");
-    const [countData, setCountData] = useState<CountData>({
-        pending_products: 0,
-        pending_stores: 0,
-        pending_coupons: 0,
-        pending_transactions: 0,
-    });
 
-    useEffect(() => {
-        axios({
-            method: 'GET',
-            url: getApiLink(appLocalizer, 'actions-items'),
-            headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            params: { count: true },
-        })
-            .then((response) => {
-                setCountData(response.data)
-            })
-            .catch();
-    }, []);
 
     const tabs = [
-        { 
-            id: "products", 
-            label: "Products", 
-            content: <Products />, 
-            count: countData.pending_products 
-        },
-        { 
-            id: "stores", 
-            label: "Stores", 
-            content: <Vendors />, 
-            count: countData.pending_stores 
-        },
-        { 
-            id: "coupons", 
-            label: "Coupons", 
-            content: <Coupons />, 
-            count: countData.pending_coupons 
-        },
-        { 
-            id: "transactions", 
-            label: "Transactions", 
-            content: <Transactions />, 
-            count: countData.pending_transactions 
-        },
+        { id: "products", label: "Products", content: <Products /> },
+        { id: "stores", label: "Stores", content: <Vendors /> },
+        { id: "coupons", label: "Coupons", content: <Coupons /> },
+        { id: "transactions", label: "Transaction", content: <Transactions /> },
     ];
-    
     const workboardStats = [
         {
             id: 'reviews',
@@ -144,42 +97,6 @@ const ActionsDashboard = () => {
                         <div className="card-header">
                             <div className="left">
                                 <div className="title">
-
-                                    {countData.pending_products}
-                                    <i className="adminlib-cart"></i>
-                                </div>
-                                <div className="description">
-                                    Pending Products
-                                </div>
-                            </div>
-                            <div className="action">
-                                <div className="title">
-                                    {countData.pending_stores}
-                                    <i className="adminlib-tools"></i>
-                                </div>
-                                <div className="description">
-                                    Pending Stores
-                                </div>
-                            </div>
-                        </div>
-                        <div className="overview-card-wrapper">
-                            <div className="action">
-                                <div className="title">
-                                    {countData.pending_coupons}
-                                    <i className="adminlib-catalog"></i>
-                                </div>
-                                <div className="description">
-                                    Pending Coupons
-                                </div>
-                            </div>
-                            <div className="action">
-                                <div className="title">
-                                    {countData.pending_transactions}
-                                    <i className="adminlib-module"></i>
-                                </div>
-                                <div className="description">
-                                    Pending Transactions
-                                </div>
                                     Account Overview
                                 </div>
                             </div>
@@ -201,6 +118,7 @@ const ActionsDashboard = () => {
                                         </div>
                                     </div>
                                 ))}
+
                             </div>
                         </div>
                     </div>
@@ -226,13 +144,6 @@ const ActionsDashboard = () => {
 
                             {/* Task Table */}
                             <table className="task-table">
-                                {/* <thead>
-                                    <tr>
-                                        <th>Task Title</th>
-                                        <th>Priority</th>
-                                        <th>Due Date</th>
-                                    </tr>
-                                </thead> */}
                                 <tbody>
                                     {tasks.map((task) => (
                                         <tr
@@ -340,7 +251,7 @@ const ActionsDashboard = () => {
                                         className={`title ${activeTab === tab.id ? "active" : ""}`}
                                         onClick={() => setActiveTab(tab.id)}
                                     >
-                                        <p>{tab.label} ({tab.count})</p>
+                                        <p><i className="adminlib-cart"></i>{tab.label}</p>
                                     </div>
                                 ))}
                             </div>
@@ -365,4 +276,4 @@ const ActionsDashboard = () => {
     );
 };
 
-export default ActionsDashboard;
+export default Notification;
