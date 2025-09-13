@@ -36,35 +36,40 @@ class Module {
         // Init helper classes.
         $this->init_classes();
         add_filter('multivendorx_payment_providers', [$this, 'add_payment_provider']);
-        add_action('admin_init', [$this, 'onboard_vendor']);
 
+        // CHANGED: Use the specific admin_post hook for our action
+        add_action('admin_post_multivendorx_stripe_connect_onboard', [$this, 'onboard_vendor']);
     }
 
     public function onboard_vendor() {
-        if (isset($_GET['action']) && $_GET['action'] == 'multivendorx_stripe_connect_onboard') {
-            $vendor_id = get_current_user_id();
-            $stripe_account_id = get_user_meta($vendor_id, '_stripe_connect_account_id', true);
+        // ADDED: Verify the nonce for security. This will fail if the link wasn't generated correctly.
+        check_admin_referer('multivendorx_stripe_connect_onboard_nonce');
 
-            if (!$stripe_account_id) {
-                $account = $this->container['stripe_connect']->create_account();
-                if ($account) {
-                    $stripe_account_id = $account->id;
-                    update_user_meta($vendor_id, '_stripe_connect_account_id', $stripe_account_id);
-                } else {
-                    // Handle error
-                    wp_die('Could not create Stripe account.');
-                }
-            }
+        // Note: No need to check for $_GET['action'] anymore because this function only runs on our specific hook.
+        
+        $vendor_id = get_current_user_id();
 
-            $account_link = $this->container['stripe_connect']->create_account_link($stripe_account_id);
+        $stripe_account_id = get_user_meta($vendor_id, '_stripe_connect_account_id', true);
 
-            if ($account_link) {
-                wp_redirect($account_link->url);
-                exit;
+        if (!$stripe_account_id) {
+            $account = $this->container['stripe_connect']->create_account();
+            if ($account) {
+                $stripe_account_id = $account->id;
+                update_user_meta($vendor_id, '_stripe_connect_account_id', $stripe_account_id);
             } else {
                 // Handle error
-                wp_die('Could not create account link.');
+                wp_die('Could not create Stripe account.');
             }
+        }
+
+        $account_link = $this->container['stripe_connect']->create_account_link($stripe_account_id);
+
+        if ($account_link) {
+            wp_redirect($account_link->url);
+            exit;
+        } else {
+            // Handle error
+            wp_die('Could not create account link.');
         }
     }
 

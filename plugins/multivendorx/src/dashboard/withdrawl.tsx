@@ -5,6 +5,8 @@ import { BasicInput, ToggleSetting, getApiLink } from 'zyra';
 console.log(appLocalizer?.store_id);
 
 interface PaymentField {
+  key: number;
+  action: string;
   html: string | TrustedHTML;
   name: string;
   type?: string;
@@ -121,9 +123,8 @@ const Withdrawl: React.FC = () => {
 						</div>
 		
 						{/* Dynamic Fields */}
-						{selectedProvider?.fields?.map((field, index) => {
-							console.log('kk');
-							// Case 1: PHP provided raw HTML block
+						{Array.isArray(selectedProvider?.fields) && selectedProvider.fields.map((field, index) => {
+							// Case 1: Raw HTML
 							if (field.type === "html" && field.html) {
 								return (
 									<div
@@ -134,23 +135,55 @@ const Withdrawl: React.FC = () => {
 								);
 							}
 
-							// Case 2: Normal input field
-							return (
-								<div className="form-group-wrapper" key={field.name || index}>
-									<div className="form-group">
-										{field.label && <label htmlFor={field.name}>{field.label}</label>}
-										<BasicInput
-											name={field.name || ""}
-											type={field.type || "text"}
-											wrapperClass="setting-form-input"
-											descClass="settings-metabox-description"
-											placeholder={field.placeholder || ""}
-											value={formData[field.name || ""] || ""}
-											onChange={handleChange}
-										/>
-									</div>
-								</div>
-							);
+							if (field.type === "button") {
+								return (
+								  <div className="form-group-wrapper" key={field.key || index}>
+									<button
+									  type="button"
+									  className="btn btn-primary"
+									  onClick={() => {
+										axios.post(
+										  appLocalizer.ajaxurl,
+										  new URLSearchParams({
+											action: field.action || "create_stripe_account",
+											_ajax_nonce: appLocalizer.nonce,
+											...formData,
+										  }),
+										  {
+											headers: { "Content-Type": "application/x-www-form-urlencoded" },
+										  }
+										).then(res => {
+										  if (res.data.success && res.data.data.onboarding_url) {
+											window.location.href = res.data.data.onboarding_url;
+										  } else {
+											alert(res.data.data.message || "Something went wrong.");
+										  }
+										});
+									  }}
+									>
+									  {field.label}
+									</button>
+								  </div>
+								);
+							  }
+																	  
+							{/* Case 3: Normal input field */}
+						return (
+							<div className="form-group-wrapper" key={field.key || index}>
+							<div className="form-group">
+								{field.label && <label htmlFor={field.key}>{field.label}</label>}
+								<BasicInput
+								name={field.key || ""}
+								type={field.type || "text"}
+								wrapperClass="setting-form-input"
+								descClass="settings-metabox-description"
+								placeholder={field.placeholder || ""}
+								value={formData[field.key || ""] || ""}
+								onChange={handleChange}
+								/>
+							</div>
+							</div>
+						);
 						})}
 
 					</div>
