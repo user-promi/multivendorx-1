@@ -11,7 +11,7 @@ export default {
         {
             key: 'store_seo_options',
             type: 'setting-toggle',
-            label: __( 'SEO mode', 'mvx-pro' ),
+            label: __( 'Third-Party SEO Tools', 'mvx-pro' ),
             settingDescription: __('Let stores manage SEO and boost their visibility using advanced plugins.',
                 'multivendorx'
             ),
