@@ -57,11 +57,8 @@ const CommonPopup = ({
       }}
       hideBackdrop={false}
     >
-      {header ? (
-        <div className="title-wrapper">{header}</div>
-      ) : (
-        <DialogTitle>{title}</DialogTitle>
-      )}
+      {header && <div className="title-wrapper">{header}</div>}
+
 
       <DialogContent>
         <div>{children}</div>

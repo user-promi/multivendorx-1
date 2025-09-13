@@ -16,7 +16,28 @@ const EditCommission = () => {
 
     return (
         <>
-        Edit Commison{editId}
+            <div className="admin-dashboard">
+                <div className="row">
+                    <div className="column">
+                        <div className="card-header">
+                            <div className="left">
+                                <div className="title">
+                                    Commission Overview
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="column">
+                        <div className="card-header">
+                            <div className="left">
+                                <div className="title">
+                                    Vendor Details
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
         </>
     );
