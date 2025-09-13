@@ -391,8 +391,8 @@ export default {
             category: 'customer_experience'
         },
         {
-            id: 'store-support',
-            name: __('Store Support', 'multivendorx'),
+            id: 'customer-support',
+            name: __('Customer Support', 'multivendorx'),
             desc: "Built-in ticketing system for customers to raise and track support requests.",
             icon: 'adminlib-rules',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/store-support/',
