@@ -5,7 +5,7 @@ export default {
     priority: 4,
     name: __( 'Refunds', 'multivendorx' ),
     desc: __(
-        'Control refund rules, eligibility stages, and valid claim periods',
+        'Control refund rules, eligibility stages, and valid claim periods.',
         'multivendorx'
     ),
     icon: 'adminlib-order',

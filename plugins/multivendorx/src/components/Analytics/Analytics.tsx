@@ -35,7 +35,6 @@ const salesIcon = new L.DivIcon({
 // import "./adminDashboard.scss";
 import "../../dashboard/dashboardCommon.scss";
 import Overview from './Overview';
-import Leaders from './Leaders';
 import Transactions from './Payout';
 import Revenue from './Revenue';
 import RefundedOrders from './RefundedOrders';
@@ -83,24 +82,12 @@ const Analytics = () => {
     },
     {
       id: 'Vendors',
-      label: 'Vendors',
+      label: 'Total Store',
       count: 8,
       icon: 'adminlib-global-community',
     },
     {
-      id: 'Pending',
-      label: 'Pending',
-      count: 3,
-      icon: 'adminlib-catalog',
-    },
-    {
-      id: 'Products',
-      label: 'Products',
-      count: 2,
-      icon: 'adminlib-calendar',
-    },
-    {
-      id: 'Withdrawals',
+      id: 'Pending Withdrawals',
       label: 'Withdrawals',
       count: 10,
       icon: 'adminlib-calendar',

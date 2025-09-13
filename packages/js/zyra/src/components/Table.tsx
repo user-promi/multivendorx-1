@@ -640,14 +640,16 @@ const Table: React.FC<TableProps> = ({
                                 </div>
                             ) : (
                                 <div className="admin-filter-wrapper">
-                                    {realtimeFilter?.map((filter) => (
-                                    <div className="wrap-bulk-all-date">
-                                        <span className="title"><i className="adminlib-contact-form"></i> Filter: </span>                                       
-                                        <React.Fragment key={filter.name}>
-                                            {filter.render(handleFilterChange, filterData[filter.name])}
-                                        </React.Fragment>                                        
-                                    </div>
-                                    ))}
+                                    {realtimeFilter && (
+                                        <div className="wrap-bulk-all-date">
+                                            <span className="title"><i className="adminlib-contact-form"></i> Filter: </span>
+                                            {realtimeFilter?.map((filter) => (
+                                                <React.Fragment key={filter.name}>
+                                                    {filter.render(handleFilterChange, filterData[filter.name])}
+                                                </React.Fragment>
+                                            ))}
+                                        </div>
+                                    )}
                                 </div>
                             )}
 

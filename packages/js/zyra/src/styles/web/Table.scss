@@ -165,11 +165,17 @@
 
     .admin-table-body {
       .table-row-custom {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
+        // display: flex;
+        // align-items: center;
+        // gap: 0.5rem;
 
-
+        .name{
+          font-weight: 500;
+        }
+        .sub-text{
+          color: #0000007a;
+          padding-top: 0.313rem;
+        }
         .product-image {
           width: 2.313rem;
           height: 2.313rem;

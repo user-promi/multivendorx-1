@@ -21,6 +21,8 @@ import Blogs from './components/Blogs/blogs';
 import Commission from './components/Commission/commission';
 import TransactionHistory from './components/TransactionHistory/transactionHistory';
 import Analytics from './components/Analytics/Analytics';
+import Advertisement from './components/Advertisement/Advertisement';
+import HelpSupport from './components/HelpSupport/HelpSupport';
 
 localStorage.setItem('force_multivendorx_context_reload', 'true');
 
@@ -61,6 +63,8 @@ const Route = () => {
       {tab === 'blogs' && <Blogs />}
       {tab === 'setup' && <SetupWizard />}
       {tab === 'analytics' && <Analytics />}
+      {tab === 'advertisement' && <Advertisement />}
+      {tab === 'help-support' && <HelpSupport />}
     </>
   );
 };
