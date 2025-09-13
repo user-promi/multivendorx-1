@@ -373,7 +373,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
 
     public function create_wp_user( $email, $name ) {
         if ( email_exists( $email ) ) {
-            return new WP_Error( 'email_exists', __( 'Email already registered.' ) );
+            return new WP_Error( 'email_exists', __( 'Email already registered.', 'multivendorx' ) );
         }
 
         $username = sanitize_user( current( explode( '@', $email ) ), true );

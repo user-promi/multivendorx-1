@@ -624,12 +624,11 @@ const Table: React.FC<TableProps> = ({
                                 </tbody>
                             </table>
                             {Object.keys(rowSelection || {}).length >= 2 ? (
-                                <div className="admin-filter-wrapper">
+                                <div className="admin-filter-wrapper bulk">
                                     <div className="wrap-bulk-all-date">
-                                        <span>{Object.keys(rowSelection).length} rows selected</span>
-
+                                        <span className="title"><i className="adminlib-catalog"></i> Bulk Action: </span>
+                                        <span className="count">{Object.keys(rowSelection).length} rows selected</span>
                                         {bulkActionComp && bulkActionComp()}
-
                                         <div
                                             className="close-btn"
                                             onClick={() => onRowSelectionChange?.({})}
@@ -642,7 +641,8 @@ const Table: React.FC<TableProps> = ({
                             ) : (
                                 <div className="admin-filter-wrapper">
                                     {realtimeFilter?.map((filter) => (
-                                    <div className="wrap-bulk-all-date">                                        
+                                    <div className="wrap-bulk-all-date">
+                                        <span className="title"><i className="adminlib-contact-form"></i> Filter: </span>                                       
                                         <React.Fragment key={filter.name}>
                                             {filter.render(handleFilterChange, filterData[filter.name])}
                                         </React.Fragment>                                        

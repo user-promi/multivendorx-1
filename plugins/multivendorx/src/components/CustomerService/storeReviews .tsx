@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
-import { Table, getApiLink, TableCell } from 'zyra';
+import { Table, getApiLink, TableCell, CommonPopup } from 'zyra';
 import {
     ColumnDef,
     RowSelectionState,
@@ -28,6 +28,7 @@ const StoreReviews: React.FC = () => {
     });
     const [pageCount, setPageCount] = useState(0);
     const [expandedRow, setExpandedRow] = useState<string | null>(null);
+    const [moreDetails, setMoreDetails] = useState(false);
 
     const toggleRow = (rowId: string) => {
         setExpandedRow(expandedRow === rowId ? null : rowId);
@@ -153,7 +154,9 @@ const StoreReviews: React.FC = () => {
             header: __('Store', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell title={row.original.store_name || ''}>
-                    <div className="admin-badge green" onClick={() => toggleRow(row.id)}>More</div>
+                    <div className="admin-badge green more-btn" onClick={(e) => {
+                        setMoreDetails(true);
+                    }}>More</div>
                 </TableCell>
             ),
         },
@@ -201,11 +204,78 @@ const StoreReviews: React.FC = () => {
                     handlePagination={requestApiForData}
                     perPageOption={[10, 25, 50]}
                     typeCounts={[]}
-                    onRowClick={(row: any) => {
-                        handleEdit(row.id);
-                    }}
                 />
             </div>
+            {moreDetails && (
+                <CommonPopup
+                    open={moreDetails}
+                    onClose={() => setMoreDetails(false)}
+                    width="500px"
+                    header={
+                        <>
+                            <div className="title">
+                                <i className="adminlib-cart"></i>
+                                Welcome to Urban Trends, your one-stop shop
+                            </div>
+                            <p>Publish important news, updates, or alerts that appear directly in store dashboards,</p>
+                            <i
+                                // onClick={handleCloseForm}
+                                className="icon adminlib-close"
+                                onClick={(e) => {
+                                    setMoreDetails(false);
+                                }}
+                            ></i>
+                        </>
+                    }
+                    footer={
+                        <>
+
+                            <div className="admin-btn btn-red" onClick={(e) => {
+                                setMoreDetails(false);
+                            }}>Close</div>
+                        </>
+                    }
+                >
+
+                    <div className="content">
+                        <div className="form-group-wrapper">
+                            <div className="form-group">
+                                <label htmlFor="title">Prioruty</label>
+                                <div className="tag-wrapper">
+                                    <div className="admin-badge red">Urgent</div>
+                                </div>
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="title">Status</label>
+                                <div className="tag-wrapper">
+                                    <div className="admin-badge red">Urgent</div>
+                                    <div className="admin-badge green">Urgent</div>
+                                    <div className="admin-badge blue">Urgent</div>
+                                </div>
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="title">category</label>
+                                <div className="tag-wrapper">
+                                    <div className="admin-badge red">Urgent</div>
+                                    <div className="admin-badge green">Urgent</div>
+                                    <div className="admin-badge yellow">Urgent</div>
+                                    <div className="admin-badge blue">Urgent</div>
+                                </div>
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="title">group</label>
+                                <div className="tag-wrapper">
+                                    <div className="admin-badge red">Urgent</div>
+                                    <div className="admin-badge red">Urgent</div>
+                                    <div className="admin-badge red">Urgent</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </CommonPopup>
+            )
+            }
         </>
     );
 };

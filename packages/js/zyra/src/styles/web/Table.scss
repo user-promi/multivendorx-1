@@ -43,7 +43,7 @@
   width: 100%;
   position: sticky;
   bottom: 1rem;
-
+    
   .wrap-bulk-all-date {
     display: flex;
     gap: 0.313rem;
@@ -55,6 +55,10 @@
     span {
       font-size: 1rem;
       color: $theme-color;
+
+      &.title{
+        font-weight: 500;
+      }
     }
 
     select,
@@ -67,13 +71,20 @@
       background-size: 1rem;
       color: $theme-color;
 
+      option{
+        color: #000;
+      }
       &:focus{
         outline: none;
-        box-shadow: none;
+        box-shadow: none !important; /*for overwrite common style*/
       }
     }
   }
-
+  &.bulk{
+      .wrap-bulk-all-date{
+        background: #E2C290;
+      }
+    }
   .close-btn{
     color: #f06b4f;
     font-size: 0.95rem;
