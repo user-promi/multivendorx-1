@@ -13,6 +13,7 @@ use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Knowledge_Controller;
 use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Products_Controller;
 use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Coupons_Controller;
 use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Payouts_Controller;
+use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Transaction_Controller;
 
 defined('ABSPATH') || exit;
 
@@ -47,6 +48,7 @@ class Rest {
             'products'  => new MultiVendorX_REST_Products_Controller(),
             'coupons'   => new MultiVendorX_REST_Coupons_Controller(),
             'payouts'   => new MultiVendorX_REST_Payouts_Controller(),
+            'transaction'=> new MultiVendorX_REST_Transaction_Controller(),
         );
     }
 
