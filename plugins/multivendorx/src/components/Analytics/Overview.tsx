@@ -85,7 +85,13 @@ const Overview: React.FC<OverviewProps> = ({
       {/* Line & Bar Charts */}
       <div className="row">
         <div className="column w-65">
-          <h3>Sales Trend</h3>
+          <div className="card-header">
+            <div className="left">
+              <div className="title">
+                Sales Trend
+              </div>
+            </div>
+          </div>
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={data}>
               <CartesianGrid strokeDasharray="3 3" />
@@ -101,7 +107,13 @@ const Overview: React.FC<OverviewProps> = ({
         </div>
 
         <div className="column w-35">
-          <h3>Orders & Items</h3>
+          <div className="card-header">
+            <div className="left">
+              <div className="title">
+               Orders & Items
+              </div>
+            </div>
+          </div>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={overviewData}>
               <CartesianGrid strokeDasharray="3 3" />
@@ -118,8 +130,14 @@ const Overview: React.FC<OverviewProps> = ({
 
       {/* Pie Chart */}
       <div className="row">
-        <div className="column w-35">
-          <h3>Revenue Distribution</h3>
+        <div className="column">
+          <div className="card-header">
+            <div className="left">
+              <div className="title">
+                Revenue Distribution
+              </div>
+            </div>
+          </div>
           <ResponsiveContainer width="100%" height={300}>
             <PieChart>
               <Pie data={pieData} cx="50%" cy="50%" outerRadius={100} dataKey="value" label>
@@ -132,11 +150,14 @@ const Overview: React.FC<OverviewProps> = ({
             </PieChart>
           </ResponsiveContainer>
         </div>
-      </div>
-
-      <div className="row">
         <div className="column">
-          <h3>Top Vendors</h3>
+          <div className="card-header">
+            <div className="left">
+              <div className="title">
+                Top Vendors
+              </div>
+            </div>
+          </div>
           <div className="top-items">
             <div className="items">
               <div className="left-side">
@@ -169,7 +190,13 @@ const Overview: React.FC<OverviewProps> = ({
           </div>
         </div>
         <div className="column">
-          <h3>Top Products</h3>
+          <div className="card-header">
+            <div className="left">
+              <div className="title">
+                Top Products
+              </div>
+            </div>
+          </div>
           <div className="top-items">
             {products.map((product) => (
               <div className="items" key={product.id}>
@@ -189,6 +216,10 @@ const Overview: React.FC<OverviewProps> = ({
             ))}
           </div>
         </div>
+      </div>
+
+      <div className="row">
+        
       </div>
     </div>
   );

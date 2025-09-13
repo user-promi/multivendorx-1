@@ -44,6 +44,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
   const [messageOpen, setMessageOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [contactSupportPopup, setContactSupportPopup] = useState(false);
+  const [popupContent, setPopupContent] = useState<string>("Loading...");
 
   // Close dropdown on click outside
   useEffect(() => {
@@ -58,7 +59,15 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-
+  useEffect(() => {
+    if (contactSupportPopup) {
+      setPopupContent("Loading...");
+      fetch("https://tawk.to/chat/5d2eebf19b94cd38bbe7c9ad/1fsg8cq8n") // or an API endpoint
+        .then((res) => res.text())
+        .then((html) => setPopupContent(html))
+        .catch(() => setPopupContent("Failed to load content."));
+    }
+  }, [contactSupportPopup]);
   // Open dropdown automatically when there are results
   useEffect(() => {
     setDropdownOpen(results.length > 0);
@@ -377,33 +386,18 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
           open={contactSupportPopup}
           onClose={() => setContactSupportPopup(false)}
           width="500px"
-          height="100%"
-          header={
-            <>
-              <div className="title">
-                <i className="adminlib-cart"></i>
-                Welcome to Urban Trends, your one-stop shop
-              </div>
-              <p>Publish important news, updates, or alerts that appear directly in store dashboards,</p>
-              <i
-                className="icon adminlib-close"
-                onClick={(e) => {
-                  setContactSupportPopup(false);
-                }}
-              ></i>
-            </>
-          }
-          footer={
-            <>
-
-              <div className="admin-btn btn-red" onClick={(e) => {
-                setContactSupportPopup(false);
-              }}>Close</div>
-            </>
-          }
         >
-          <div className="content">
-            
+          <div>
+            <iframe
+              src="https://tawk.to/chat/5d2eebf19b94cd38bbe7c9ad/1fsg8cq8n"
+              title="Support Chat"
+              style={{
+                border: 'none',
+                width: '100%',
+                height: '35rem',
+              }}
+              allow="microphone; camera"
+            />
           </div>
         </CommonPopup>
       )
