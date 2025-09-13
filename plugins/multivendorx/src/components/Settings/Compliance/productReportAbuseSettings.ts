@@ -13,7 +13,7 @@ export default {
             type: 'setting-toggle',
             label: __( 'Who can report', 'multivendorx' ),
             settingDescription: __( 'Decide if only logged-in customers can submit abuse reports, or if reporting is open to everyone.', 'multivendorx' ),
-			desc: __( '<ul><li>logged-in customers: Only registered and logged-in customers can report products.</li><li>Anyone logged in or guest: Anyone can report products, whether logged in or not.</li></ul>', 'multivendorx' ),
+			desc: __( '<ul><li>logged-in customers - Only registered and logged-in customers can report products.</li><li>Anyone logged in or guest - Anyone can report products, whether logged in or not.</li></ul>', 'multivendorx' ),
             options: [
                 {
                     key: 'only_loggedin_can_report',
@@ -21,8 +21,13 @@ export default {
                     value: 'only_loggedin_can_report',
                 },
 				{
+                    key: 'only_logged_in_can_report',
+					label: __('Any logged in user', 'multivendorx'),
+                    value: 'only_logged_in_can_report',
+                },
+				{
                     key: 'only_guest_can_report',
-					label: __('Anyone logged in or guest', 'multivendorx'),
+					label: __('Guest', 'multivendorx'),
                     value: 'only_guest_can_report',
                 },
             ],

@@ -115,12 +115,6 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
                         'capability' => ['read_shop_coupons', 'edit_shop_coupons', 'delete_shop_coupons']
                     ),
                     array(
-                        'key'  => 'advanced report',
-                        'name' => 'Advanced Report',
-                        'slug' => 'advance report',
-                        'capability' => ['read_shop_coupons', 'edit_shop_coupons']
-                    ),
-                    array(
                         'key'  => 'banking overview',
                         'name' => 'Banking Overview',
                         'slug' => 'banking overview',
@@ -158,14 +152,30 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
                 'name'    => 'Store Support',
                 'icon'    => 'adminlib-cart',
                 'slug'    => 'store-support',
-                'submenu' => array(),
+                'submenu' =>  array(
+                        'key'  => 'Knowladgebase',
+                        'name' => 'knowladgebase',
+                        'slug' => 'Knowladgebase',
+                        'capability' => ['read_shop_coupons', 'edit_shop_coupons', 'delete_shop_coupons']
+                    ),
+                    array(
+                        'key'  => 'tickets',
+                        'name' => 'Tickets',
+                        'slug' => 'tickets',
+                        'capability' => ['read_shop_coupons', 'edit_shop_coupons']
+                    ),
                 'capability' => ['manage_users']
             ),
 			 'knowledgebase' => array(
-                'name'    => 'Knowledgebase',
+                'name'    => 'Team',
                 'icon'    => 'adminlib-cart',
-                'slug'    => 'knowledgebase',
-                'submenu' => array(),
+                'slug'    => 'team',
+                'submenu' => array(
+                        'key'  => 'storeagents',
+                        'name' => 'Store Agents',
+                        'slug' => 'storeagents',
+                        'capability' => ['read_shop_coupons', 'edit_shop_coupons', 'delete_shop_coupons']
+                    ),
                 'capability' => ['manage_users']
             ),
         );

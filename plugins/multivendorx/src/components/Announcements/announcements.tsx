@@ -322,13 +322,20 @@ const Announcements: React.FC = () => {
                         <option value="pending">{__('Pending', 'multivendorx')}</option>
                         <option value="delete">{__('Delete', 'multivendorx')}</option>
                     </select>
-                    {/* <button name="bulk-action-apply" className="admin-btn btn-purple" onClick={handleBulkAction}>
-                        {__('Apply')}
-                    </button> */}
                 </div>
             ),
         },
     ];
+    const BulkAction: React.FC = () => (
+        <div className=" bulk-action">
+            <select name="action" className="basic-select" ref={bulkSelectRef}>
+                <option value="">{__('Bulk actions')}</option>
+                <option value="publish">{__('Publish', 'multivendorx')}</option>
+                <option value="pending">{__('Pending', 'multivendorx')}</option>
+                <option value="delete">{__('Delete', 'multivendorx')}</option>
+            </select>
+        </div>
+    );
 
     const [open, setOpen] = useState(false);
 
@@ -409,7 +416,7 @@ const Announcements: React.FC = () => {
                             </div>
 
                             <div className="form-group ">
-                                <label htmlFor="stores">Stores</label> 
+                                <label htmlFor="stores">Stores</label>
                                 <SelectInput
                                     name="stores"
                                     type="multi-select"
@@ -451,6 +458,7 @@ const Announcements: React.FC = () => {
                     onRowClick={(row: any) => {
                         handleEdit(row.id);
                     }}
+                    bulkActionComp={() => <BulkAction />}
                 />
             </div>
         </>

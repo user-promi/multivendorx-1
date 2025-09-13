@@ -65,6 +65,7 @@ const SelectInput: React.FC<SelectInputProps> = ({
             maxHeight: '2.213rem',
             paddingTop: 0,
             paddingBottom: 0,
+            margin: 0,
         }),
         valueContainer: (provided: any) => ({
             ...provided,

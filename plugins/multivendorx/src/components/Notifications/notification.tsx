@@ -120,6 +120,15 @@ const ActionsDashboard = () => {
             dueDate: "2025-09-08",
         },
     ];
+    const analyticsData = [
+        { icon: "adminlib-tools red", number: "230k", text: "Total Earnings" },
+        { icon: "adminlib-book green", number: "45k", text: "Awaiting Disbursement" },
+        { icon: "adminlib-global-community yellow", number: "1.2M", text: "Pending Withdrawal" },
+        { icon: "adminlib-wholesale blue", number: "500k", text: "Completed / Paid Disbursement" },
+        { icon: "adminlib-tools red", number: "230k", text: "Refund / Chargeback Impact" },
+        { icon: "adminlib-book green", number: "45k", text: "Manual Adjustments" },
+        { icon: "adminlib-global-community yellow", number: "1.2M", text: "Upcoming Unlock" },
+    ];
     return (
         <>
             <AdminBreadcrumbs
@@ -131,11 +140,11 @@ const ActionsDashboard = () => {
             {/* Workboard Stats */}
             <div className="work-board">
                 <div className="row">
-                    <div className="column">
-                        <div className="title"><i className="adminlib-person"></i> Account Overview</div>
-                        <div className="overview-card-wrapper">
-                            <div className="action">
+                    <div className="column width-65">
+                        <div className="card-header">
+                            <div className="left">
                                 <div className="title">
+
                                     {countData.pending_products}
                                     <i className="adminlib-cart"></i>
                                 </div>
@@ -171,15 +180,46 @@ const ActionsDashboard = () => {
                                 <div className="description">
                                     Pending Transactions
                                 </div>
+                                    Account Overview
+                                </div>
+                            </div>
+                            <div className="right">
+                                <span>Updated 1 month ago</span>
+                            </div>
+                        </div>
+                        <div className="card-body">
+                            <div className="analytics-container">
+
+                                {analyticsData.map((item, idx) => (
+                                    <div key={idx} className="analytics-item">
+                                        <div className="analytics-icon">
+                                            <i className={item.icon}></i>
+                                        </div>
+                                        <div className="details">
+                                            <div className="number">{item.number}</div>
+                                            <div className="text">{item.text}</div>
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
                         </div>
                     </div>
+                </div>
+
+
+                <div className="row">
                     <div className="column">
-                        <div className="header">
-                            <div className="title"><i className="adminlib-book"></i> Tasks</div>
-                            <div className="admin-btn btn-purple">
-                                <i className="adminlib-plus-circle-o"></i>
-                                Add task
+                        <div className="card-header">
+                            <div className="left">
+                                <div className="title">
+                                    Tasks
+                                </div>
+                            </div>
+                            <div className="right">
+                                <div className="admin-btn btn-purple">
+                                    <i className="adminlib-plus-circle-o"></i>
+                                    Add task
+                                </div>
                             </div>
                         </div>
                         <div className="task-manager">
@@ -214,7 +254,16 @@ const ActionsDashboard = () => {
                         </div>
                     </div>
                     <div className="column">
-                        <div className="title"><i className="adminlib-notification"></i> Notification</div>
+                        <div className="card-header">
+                            <div className="left">
+                                <div className="title">
+                                    Notification
+                                </div>
+                            </div>
+                            <div className="right">
+                                <span>Updated 1 month ago</span>
+                            </div>
+                        </div>
                         <div className="notification-wrapper">
                             <ul>
                                 <li>
@@ -273,7 +322,16 @@ const ActionsDashboard = () => {
                 <div className="row">
                     <div className="column">
                         <div className="action-tab-wrapper">
-                            <div className="title"><i className="adminlib-person"></i> Account Overview</div>
+                            <div className="card-header">
+                                <div className="left">
+                                    <div className="title">
+                                        Account Overview
+                                    </div>
+                                </div>
+                                <div className="right">
+                                    <i className="adminlib-more-vertical"></i>
+                                </div>
+                            </div>
                             {/* Tab Titles */}
                             <div className="tab-titles">
                                 {tabs.map((tab) => (

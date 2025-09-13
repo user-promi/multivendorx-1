@@ -603,7 +603,6 @@ a {
             }
         }
     }
-
     // cart header end
 }
 
@@ -624,10 +623,9 @@ a {
         }
     }
 }
-
 // page title end
 
-// analytics-container start
+// analytics-container start  remove this 
 .analytics-container {
     display: flex;
     justify-content: space-between;
@@ -656,7 +654,6 @@ a {
         }
     }
 }
-
 // analytics-container end
 
 .MuiDialog-container {
