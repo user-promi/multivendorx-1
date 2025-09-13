@@ -136,7 +136,7 @@ class Install {
             PRIMARY KEY (`id`),
             KEY `idx_store` (`receiver_id`),
             KEY `idx_order` (`order_id`),
-            KEY `idx_commission` (`commission_id`),
+            KEY `idx_commission` (`commission_id`)
         ) $collate;";
 
         // Include upgrade functions if not loaded.
