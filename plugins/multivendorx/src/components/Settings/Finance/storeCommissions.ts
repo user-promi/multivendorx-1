@@ -37,6 +37,10 @@ export default {
             key: 'commission_per_store_order',
             type: 'nested',
             label: 'Commission value',
+            desc: __(
+                'Define commission rates based on total order value. Multiple rules can be created for different order value ranges.',
+                'multivendorx'
+            ),
             addButtonLabel: 'Add new',
             deleteButtonLabel: 'Remove',
             nestedFields: [
@@ -118,7 +122,6 @@ export default {
                 {
                     key: 'commission_fixed',
                     type: 'text',
-                    desc: __('Fixed amount per transaction', 'multivendorx'),
                     prefixUnit: __('$', 'multivendorx'),
                     size: "8rem",
                     addonBefore: 'fixed',
@@ -128,10 +131,6 @@ export default {
                 {
                     key: 'commission_percentage',
                     type: 'number',
-                    desc: __(
-                        'Percentage of product price per transaction',
-                        'multivendorx'
-                    ),
                     size: '8rem',
                     parameter: __('%', 'multivendorx'),
                     addonAfter: "commission will be charged.",
@@ -150,14 +149,13 @@ export default {
             label: 'Commission value',
             single: true,
             desc: __(
-                'This is the default commission amount that will be applicable for all transactions.',
+                'Set global commission rates that apply to each individual item quantity. Commission will be calculated by multiplying the rate with the total number of items across all products in the order.',
                 'multivendorx'
             ),
             nestedFields: [
                 {
                     key: 'commission_fixed',
                     type: 'number',
-                    desc: __('Fixed amount per transaction', 'multivendorx'),
                     prefixUnit: __('$', 'multivendorx'),
                     size: "8rem",
                     addonBefore: 'Fixed',
@@ -166,10 +164,6 @@ export default {
                 {
                     key: 'commission_percentage',
                     type: 'number',
-                    desc: __(
-                        'Percentage of product price per transaction',
-                        'multivendorx'
-                    ),
                     parameter: __('%', 'catalogx'),
                     size: "8rem",
                 },

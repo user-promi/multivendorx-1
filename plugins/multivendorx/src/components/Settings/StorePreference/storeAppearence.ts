@@ -32,8 +32,8 @@ export default {
         {
             key: 'store_color_settings',
             type: 'color-setting',
-            label: 'Dashboard color scheme',
-            settingDescription: 'Choose a dashboard color scheme from predefined sets or customize your own. Each scheme defines the button style, and hover effects for a consistent look.',
+            label: 'Store shop page layout',
+            settingDescription: 'Choose how the store’s shop page appears, including banner, logo, and description  .',
             images: [
                 {
                     key: 'template1',
