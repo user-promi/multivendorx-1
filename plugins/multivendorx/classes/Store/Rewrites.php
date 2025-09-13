@@ -30,50 +30,89 @@ class Rewrites {
         add_filter( 'template_include', [ $this, 'dashboard_template' ], 10 );
 
         add_action( 'wp', [ $this, 'flash_rewrite_rules' ], 10 );
-        // add_action( 'pre_get_posts', [ $this, 'store_query_filter' ] );
+        add_action( 'pre_get_posts', [ $this, 'store_query_filter' ] );
 
     }
 
-    public function store_query_filter($query) {
+    // public function store_query_filter($query) {
 
-        if ( is_admin() || ! $query->is_main_query() ) {
-            return;
-        }
+    //     if ( is_admin() || ! $query->is_main_query() ) {
+    //         return;
+    //     }
     
     
-        $store_slug = get_query_var( 'store' );
-        if ( empty( $store_slug ) ) {
-            return;
-        }
+    //     $store_slug = get_query_var( 'store' );
+    //     if ( empty( $store_slug ) ) {
+    //         return;
+    //     }
     
-        $store_obj = Store::get_store_by_slug( $store_slug );
+    //     $store_obj = Store::get_store_by_slug( $store_slug );
        
     
-        if ( ! $store_obj ) {
-            return;
-        }
+    //     if ( ! $store_obj ) {
+    //         return;
+    //     }
     
-        $store_id = $store_obj->get_id();
+    //     $store_id = $store_obj->get_id();
 
-        if ( ! $store_id ) {
-            return;
+    //     if ( ! $store_id ) {
+    //         return;
+    //     }
+    
+    //     // convert main query into a product archive for this store
+    //     $meta_query   = $query->get( 'meta_query', [] );
+    //     $meta_query[] = [
+    //         'key'     => 'multivendorx_store_id',
+    //         'value'   => $store_id,
+    //         'compare' => '=',
+    //     ];
+    
+    //     $query->set( 'post_type', 'product' );
+    //     $query->set( 'post_status', 'publish' );
+    //     $query->set( 'meta_query', $meta_query );
+    //     $query->set( 'posts_per_page', apply_filters( 'mvx_store_products_per_page',
+    //         wc_get_default_products_per_row() * wc_get_default_product_rows_per_page() ) );
+    // }
+
+    public function store_query_filter( $query ) {
+        if ( current_user_can( 'manage_woocommerce' ) ) {
+            return $query;
         }
-    
-        // convert main query into a product archive for this store
-        $meta_query   = $query->get( 'meta_query', [] );
-        $meta_query[] = [
-            'key'     => 'multivendorx_store_id',
-            'value'   => $store_id,
-            'compare' => '=',
-        ];
-    
-        $query->set( 'post_type', 'product' );
-        $query->set( 'post_status', 'publish' );
-        $query->set( 'meta_query', $meta_query );
-        $query->set( 'posts_per_page', apply_filters( 'mvx_store_products_per_page',
-            wc_get_default_products_per_row() * wc_get_default_product_rows_per_page() ) );
+
+        if ( ! isset( $query->query_vars['post_type'] ) ) {
+            return $query;
+        }
+
+        if ( is_admin() && $query->is_main_query() && $query->query_vars['post_type'] === 'product' ) {
+            $store_slug = get_query_var( 'store' );
+            if ( empty( $store_slug ) ) {
+                return;
+            }
+        
+            $store_obj = Store::get_store_by_slug( $store_slug );
+        
+        
+            if ( ! $store_obj ) {
+                return;
+            }
+        
+            $store_id = $store_obj->get_id();
+
+            if ( ! $store_id ) {
+                return;
+            }
+            
+            $meta_query   = $query->get( 'meta_query', [] );
+            $meta_query[] = [
+                'key'     => 'multivendorx_store_id',
+                'value'   => $store_id,
+                'compare' => '=',
+            ];
+            $query->set( 'meta_query', $meta_query );
+        }
+
+        return $query;
     }
-
 
     public function register_rule() {
 
