@@ -321,4 +321,46 @@ class StoreUtil {
         }
     }
 
+    public static function get_store_product_policies($product_id = 0) {
+        $product = wc_get_product($product_id);
+        $policies = array();
+        if ($product) {
+            $store_policy = MultiVendorX()->setting->get_setting('store_policy', []);
+            $shipping_policy = MultiVendorX()->setting->get_setting('shipping_policy', []);
+            $refund_policy = MultiVendorX()->setting->get_setting('refund_policy', []);
+            $cancellation_policy = MultiVendorX()->setting->get_setting('cancellation_policy', []);
+
+            $store_id = get_post_meta($product_id, 'multivendorx_store_id', true);
+            $store = new Store($store_id);
+            $privacy_override_settings = MultiVendorX()->setting->get_setting('store_policy_override', []);
+            
+            if ( in_array ('store', $privacy_override_settings) ) {
+                $store_policy = $store->get_meta('store_policy');
+            }
+            if ( in_array ('shipping', $privacy_override_settings) ) {
+                $shipping_policy = $store->get_meta('shipping_policy');
+            }
+            if ( in_array ('refund_return', $privacy_override_settings) ) {
+                $refund_policy = $store->get_meta('return_policy');
+                $cancellation_policy = $store->get_meta('exchange_policy');
+            }
+
+            if (!empty($store_policy)) {
+                $policies['store_policy'] = $store_policy;
+            }
+
+            if (!empty($shipping_policy)) {
+                $policies['shipping_policy'] = $shipping_policy;
+            }
+
+            if (!empty($refund_policy)) {
+                $policies['refund_policy'] = $refund_policy;
+            }
+            if (!empty($cancellation_policy)) {
+                $policies['cancellation_policy'] = $cancellation_policy;
+            }
+        }
+        return $policies;
+    }
+
 }
