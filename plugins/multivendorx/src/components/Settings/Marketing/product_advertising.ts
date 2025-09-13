@@ -56,15 +56,9 @@ export default {
         {
             key: 'cost',
             type: 'number',
-            label: sprintf(
-                '%1$s (%2$s)',
-                __( 'Advertising cost', 'mvx-pro' ),
-                appLocalizer?.woocommerce_currency
-            ),
-            desc: __(
-                'Set the price for each advertising slot. Enter "0" to allow stores to advertise for free.',
-                'mvx-pro'
-            ),
+            label: __('Advertising cost', 'multivendorx'),
+            prefixUnit: __('$', 'multivendorx'),
+            addonAfter:__('amount stores must pay to use per advertising slot. Use 0 if you want advertising to be free.', 'multivendorx'),
             dependent: {
                 key: 'store_can_purchase_advertisement',
                 set: true,
