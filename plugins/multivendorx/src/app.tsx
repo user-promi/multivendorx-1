@@ -46,23 +46,6 @@ const Route = () => {
 
   return (
     <>
-<<<<<<< HEAD
-      {tab === 'settings' && <Settings id="settings" />}
-      {tab === 'memberships' && <Memberships />}
-      {tab === 'status-tools' && <StatusAndTools id="status-tools" />}
-      {tab === 'modules' && <Modules />}
-      {tab === 'stores' && <Store />}
-      {tab === 'commissions' && <Commission />}
-      {tab === 'customer-support' && <CustomerServices />}
-      {tab === 'actions-items' && <Notification />}
-      {tab === 'dashboard' && <AdminDashboard />}
-      {tab === 'announcement' && <Announcements />}
-      {tab === 'knowledgebase' && <Knowledgebase />}
-      {tab === 'payouts' && <Payouts />}
-      {tab === 'blogs' && <Blogs />}
-      {tab === 'setup' && <SetupWizard />}
-      {tab === 'analytics' && <Analytics />}
-=======
       {currentTab.get('tab') === 'settings' && <Settings id="settings" />}
       {currentTab.get('tab') === 'memberships' && <Memberships />}
       {currentTab.get('tab') === 'status-tools' && <StatusAndTools id="status-tools" />}
@@ -78,7 +61,6 @@ const Route = () => {
       {currentTab.get('tab') === 'blogs' && <Blogs />}
       {currentTab.get('tab') === 'setup' && <SetupWizard />}
       {currentTab.get('tab') === 'analytics' && <Analytics />}
->>>>>>> e738776 (before payout)
     </>
   );
 };
