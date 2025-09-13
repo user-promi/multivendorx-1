@@ -248,7 +248,6 @@ const AdminDashboard = () => {
               </div>
             </div>
           </div>
-          
           <div className="column">
             <div className="card-header">
               <div className="left">

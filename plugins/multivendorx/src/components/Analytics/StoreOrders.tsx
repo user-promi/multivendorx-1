@@ -34,7 +34,7 @@ const overview = [
     icon: 'adminlib-global-community',
   },
 ];
-const Transactions: React.FC = () => {
+const StoreOrders: React.FC = () => {
   const [data, setData] = useState<StoreRow[] | null>(null);
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
   const [pagination, setPagination] = useState<PaginationState>({
@@ -130,22 +130,6 @@ const Transactions: React.FC = () => {
   ];
   return (
     <>
-      <div className="dashboard-overview">
-        <div className="row">
-          <div className="overview-card-wrapper">
-            {overview.map((stat) => (
-              <div className="action" key={stat.id}>
-                <div className="title">
-                  {stat.count}
-                  <i className={stat.icon}></i>
-                </div>
-                <div className="description">{stat.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-      <div className="admin-table-wrapper">
         <Table
           data={demoData}
           columns={columns as ColumnDef<Record<string, any>, any>[]}
@@ -159,9 +143,8 @@ const Transactions: React.FC = () => {
           perPageOption={[10, 25, 50]}
           typeCounts={[]}
         />
-      </div>
     </>
   );
 };
 
-export default Transactions;
+export default StoreOrders;
