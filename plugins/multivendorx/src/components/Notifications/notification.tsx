@@ -164,12 +164,6 @@ const Notification = () => {
                                             onClick={() => setShowDetails(task)}
                                         >
                                             <td>{task.title}</td>
-                                            <td>
-                                                <span className={`priority ${task.priority.toLowerCase()}`}>
-                                                    {task.priority}
-                                                </span>
-                                            </td>
-                                            <td>{task.dueDate}</td>
                                         </tr>
                                     ))}
                                 </tbody>
