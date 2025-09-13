@@ -106,17 +106,7 @@ class Modules {
 						'module_file'  => MultiVendorX()->plugin_path . 'modules/PaypalPayout/Module.php',
 						'module_class' => 'MultiVendorX\PaypalPayout\Module',
 					),
-                    //pro modules
-                    'staff-manager' => array(
-                        'id'           => 'staff-manager',
-                        'module_file'  => MultiVendorX()->plugin_path . 'modules/StaffManager/Module.php',
-                        'module_class' => 'MultiVendorX\StaffManager\Module',
-                    ),
-                    'paypal-marketplace' => array(
-						'id'           => 'paypal-marketplace',
-						'module_file'  => MultiVendorX()->plugin_path . 'modules/PaypalMarketplace/Module.php',
-						'module_class' => 'MultiVendorX\PaypalMarketplace\Module',
-					),
+
 				)
             );
         }
@@ -161,7 +151,6 @@ class Modules {
             }
 
             $module = $all_modules[ $modules_id ];
-
             // Check if the module is available.
             if ( ! $this->is_module_available( $module, $license_active ) ) {
                 continue;
@@ -177,8 +166,7 @@ class Modules {
                 require_once $module['module_file'];
 
                 $module_class                   = $module['module_class'];
-                $this->container[ $modules_id ] = new $module_class();
-
+                $this->container[ $modules_id ] = new $module_class();                  
                 /**
                  * Module activation hook
                  *
@@ -261,7 +249,6 @@ class Modules {
      */
     public function activate_modules( $modules ) {
         $active_modules = $this->get_active_modules();
-
         $this->active_modules = array_unique( array_merge( $active_modules, $modules ) );
 
         update_option( self::ACTIVE_MODULES_DB_KEY, $this->active_modules );
