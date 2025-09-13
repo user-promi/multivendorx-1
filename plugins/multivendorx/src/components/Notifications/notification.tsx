@@ -14,7 +14,7 @@ const Notification = () => {
 
     const tabs = [
         { id: "products", label: "Products", content: <Products /> },
-        { id: "vendors", label: "Vendors", content: <Vendors /> },
+        { id: "stores", label: "Stores", content: <Vendors /> },
         { id: "coupons", label: "Coupons", content: <Coupons /> },
         { id: "transactions", label: "Transaction", content: <Transactions /> },
     ];
@@ -73,6 +73,15 @@ const Notification = () => {
             dueDate: "2025-09-08",
         },
     ];
+    const analyticsData = [
+        { icon: "adminlib-tools red", number: "230k", text: "Total Earnings" },
+        { icon: "adminlib-book green", number: "45k", text: "Awaiting Disbursement" },
+        { icon: "adminlib-global-community yellow", number: "1.2M", text: "Pending Withdrawal" },
+        { icon: "adminlib-wholesale blue", number: "500k", text: "Completed / Paid Disbursement" },
+        { icon: "adminlib-tools red", number: "230k", text: "Refund / Chargeback Impact" },
+        { icon: "adminlib-book green", number: "45k", text: "Manual Adjustments" },
+        { icon: "adminlib-global-community yellow", number: "1.2M", text: "Upcoming Unlock" },
+    ];
     return (
         <>
             <AdminBreadcrumbs
@@ -84,68 +93,57 @@ const Notification = () => {
             {/* Workboard Stats */}
             <div className="work-board">
                 <div className="row">
-                    <div className="column">
-                        <div className="title"><i className="adminlib-person"></i> Account Overview</div>
-                        <div className="overview-card-wrapper">
-                            <div className="action">
+                    <div className="column width-65">
+                        <div className="card-header">
+                            <div className="left">
                                 <div className="title">
-                                    3
-                                    <i className="adminlib-cart"></i>
-                                </div>
-                                <div className="description">
-                                    Pending Products
+                                    Account Overview
                                 </div>
                             </div>
-                            <div className="action">
-                                <div className="title">
-                                    52
-                                    <i className="adminlib-tools"></i>
-                                </div>
-                                <div className="description">
-                                    Pending Vendors
-                                </div>
+                            <div className="right">
+                                <span>Updated 1 month ago</span>
                             </div>
                         </div>
-                        <div className="overview-card-wrapper">
-                            <div className="action">
-                                <div className="title">
-                                    99
-                                    <i className="adminlib-catalog"></i>
-                                </div>
-                                <div className="description">
-                                    Pending Coupons
-                                </div>
-                            </div>
-                            <div className="action">
-                                <div className="title">
-                                    3
-                                    <i className="adminlib-module"></i>
-                                </div>
-                                <div className="description">
-                                    Pending Transaction
-                                </div>
+                        <div className="card-body">
+                            <div className="analytics-container">
+
+                                {analyticsData.map((item, idx) => (
+                                    <div key={idx} className="analytics-item">
+                                        <div className="analytics-icon">
+                                            <i className={item.icon}></i>
+                                        </div>
+                                        <div className="details">
+                                            <div className="number">{item.number}</div>
+                                            <div className="text">{item.text}</div>
+                                        </div>
+                                    </div>
+                                ))}
+
                             </div>
                         </div>
                     </div>
+                </div>
+
+
+                <div className="row">
                     <div className="column">
-                        <div className="header">
-                            <div className="title"><i className="adminlib-book"></i> Tasks</div>
-                            <div className="admin-btn btn-purple">
-                                <i className="adminlib-plus-circle-o"></i>
-                                Add task
+                        <div className="card-header">
+                            <div className="left">
+                                <div className="title">
+                                    Tasks
+                                </div>
+                            </div>
+                            <div className="right">
+                                <div className="admin-btn btn-purple">
+                                    <i className="adminlib-plus-circle-o"></i>
+                                    Add task
+                                </div>
                             </div>
                         </div>
                         <div className="task-manager">
 
                             {/* Task Table */}
                             <table className="task-table">
-                                {/* <thead>
-                                    <tr>
-                                        <th>Task Title</th>
-                                        <th>Priority</th>
-                                        <th>Due Date</th>
-                                    </tr>
-                                </thead> */}
                                 <tbody>
                                     {tasks.map((task) => (
                                         <tr
@@ -167,7 +165,16 @@ const Notification = () => {
                         </div>
                     </div>
                     <div className="column">
-                        <div className="title"><i className="adminlib-notification"></i> Notification</div>
+                        <div className="card-header">
+                            <div className="left">
+                                <div className="title">
+                                    Notification
+                                </div>
+                            </div>
+                            <div className="right">
+                                <span>Updated 1 month ago</span>
+                            </div>
+                        </div>
                         <div className="notification-wrapper">
                             <ul>
                                 <li>
@@ -226,7 +233,16 @@ const Notification = () => {
                 <div className="row">
                     <div className="column">
                         <div className="action-tab-wrapper">
-                            <div className="title"><i className="adminlib-person"></i> Account Overview</div>
+                            <div className="card-header">
+                                <div className="left">
+                                    <div className="title">
+                                        Account Overview
+                                    </div>
+                                </div>
+                                <div className="right">
+                                    <i className="adminlib-more-vertical"></i>
+                                </div>
+                            </div>
                             {/* Tab Titles */}
                             <div className="tab-titles">
                                 {tabs.map((tab) => (
@@ -235,7 +251,7 @@ const Notification = () => {
                                         className={`title ${activeTab === tab.id ? "active" : ""}`}
                                         onClick={() => setActiveTab(tab.id)}
                                     >
-                                        <p>{tab.label}</p>
+                                        <p><i className="adminlib-cart"></i>{tab.label}</p>
                                     </div>
                                 ))}
                             </div>

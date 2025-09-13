@@ -34,7 +34,7 @@ const Vendors: React.FC = () => {
             method: 'GET',
             url: getApiLink(appLocalizer, 'store'),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            params: { count: true },
+            params: { count: true, status: 'pending' },
         })
             .then((response) => {
                 setTotalRows(response.data || 0);
@@ -73,6 +73,7 @@ const Vendors: React.FC = () => {
             params: {
                 page: currentPage,
                 row: rowsPerPage,
+                status: 'pending'
             },
         })
             .then((response) => {

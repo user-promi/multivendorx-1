@@ -11,9 +11,9 @@ export default {
         {
             key: 'approve_store',
             type: 'setting-toggle',
-            label: __( 'Who Pays Affiliate Commissions', 'multivendorx' ),
+            label: __( 'Who pays affiliate commissions', 'multivendorx' ),
             desc: __(
-                'Select who is responsible for paying affiliate referral commissions.:<ul><li>Admin – Commission is paid by the admin.</li><li>Store – Commission is paid by the vendor.</li></ul>',
+                'Select who is responsible for paying affiliate referral commissions.:<ul><li>Admin - Commission is paid by the admin.</li><li>Store - Commission is paid by the vendor.</li></ul>',
                 'multivendorx'
             ),
             options: [

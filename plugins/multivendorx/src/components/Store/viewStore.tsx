@@ -269,7 +269,7 @@ const ViewStore = () => {
                   <a href="#">View Full Earnings</a>
                 </div>
                 <span className="icon">
-                  <i className="adminlib-dynamic-pricing"></i>
+                  <i className="adminlib-rules"></i>
                 </span>
               </div>
             </div>
@@ -287,7 +287,7 @@ const ViewStore = () => {
                   <a href="?page=multivendorx#&tab=payouts">Check Paid History</a>
                 </div>
                 <span className="icon">
-                  <i className="adminlib-dynamic-pricing"></i>
+                  <i className="adminlib-rules"></i>
                 </span>
               </div>
             </div>
@@ -305,7 +305,7 @@ const ViewStore = () => {
                   <a href="?page=multivendorx#&tab=payouts">See What’s Due</a>
                 </div>
                 <span className="icon">
-                  <i className="adminlib-dynamic-pricing"></i>
+                  <i className="adminlib-rules"></i>
                 </span>
               </div>
             </div>
@@ -323,7 +323,7 @@ const ViewStore = () => {
                   <a href="?page=multivendorx#&tab=transactions-history">Track Withdrawal Request</a>
                 </div>
                 <span className="icon">
-                  <i className="adminlib-dynamic-pricing"></i>
+                  <i className="adminlib-rules"></i>
                 </span>
               </div>
             </div>

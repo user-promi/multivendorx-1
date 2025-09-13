@@ -1,14 +1,4 @@
-.w-65 {
-    width: 65%;
-}
-
-.w-35 {
-    width: 35%;
-}
-
-.w-45 {
-    width: 45%;
-}
+@use './config.scss' as *;
 
 .column {
     padding: 1.625rem;
@@ -36,7 +26,9 @@
 .card-header {
     display: flex;
     justify-content: space-between;
-    padding-bottom: 2rem;
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+    border-bottom: $border-light-small;
 
     .left {
         .title {
@@ -62,11 +54,76 @@
             padding: 0.5rem;
             border-radius: 50%;
             transition: all 0.4s ease;
-            ;
+            cursor: pointer;
 
             &:hover {
-                background: #0000001a;
+                background: #5a59591a;
+            }
+        }
+        .admin-btn{
+            padding: 0.313rem 0.5rem;
+            i{
+                padding: 0;
+                font-size: 1rem;
             }
         }
     }
+}
+.w-65 {
+    width: 65%;
+}
+
+.w-35 {
+    width: 35%;
+}
+
+.w-45 {
+    width: 45%;
+}
+
+
+.analytics-container {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 2.5rem;
+
+    .analytics-item {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+
+        .analytics-icon {
+            i {
+                padding: 0.5rem;
+                font-size: 1.625rem;
+                border-radius: 0.313rem;
+            }
+        }
+
+        .details {
+            .number {
+                font-size: 1.25rem;
+                line-height: 1.5rem;
+                padding-bottom: 0.313rem;
+                font-weight: 500;
+            }
+        }
+    }
+}
+
+.red{
+    background: #fde8e4;
+    color: #f06b4f;
+}
+.green{
+    background: #d9f5f0;
+    color: #06be9f;
+}
+.yellow{
+    background: #fff0e1;
+    color: #ff9f43;
+}
+.blue{
+    background: #bfdeed6e;
+    color: #003d66de;
 }

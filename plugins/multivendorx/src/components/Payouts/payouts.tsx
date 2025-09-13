@@ -45,17 +45,7 @@ export const Payouts: React.FC = () => {
     });
     const bulkSelectRef = useRef<HTMLSelectElement>(null);
     const [modalDetails, setModalDetails] = useState<string>('');
-    const handleCloseForm = () => {
-        setAddEntry(false);
-        setFormData({ title: '', url: '', content: '', stores: '' }); // reset form
-        setEditId(null); // reset edit mode
-        setError(null); // clear any error
-    };
-    // Handle input changes
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
-    };
+
     const handleBulkAction = () => {
         if (appLocalizer.khali_dabba) {
             if (!Object.keys(rowSelection).length) {
@@ -223,78 +213,15 @@ export const Payouts: React.FC = () => {
                 activeTabIcon="adminlib-book"
                 tabTitle="Payouts"
                 description={"Build your knowledge base: add new guides or manage existing ones in one place."}
-                buttons={[
-                    <div className="admin-btn btn-purple" onClick={() => setAddEntry(true)}>
-                        <i className="adminlib-plus-circle-o"></i>
-                        Add New
-                    </div>,
-                ]}
             />
-
-            {addEntry && (
-                <CommonPopup
-                    open={addEntry}
-                    onClose={handleCloseForm}
-                    width="500px"
-                    header={
-                        <>
-                            <div className="title">
-                                <i className="adminlib-cart"></i>
-                                {editId ? __('Edit Knowledgebase', 'multivendorx') : __('Add Knowledgebase', 'multivendorx')}
-                            </div>
-                            <p>Write and publish a new knowledge base article to help stores navigate their dashboard.</p>
-                            <i
-                                onClick={handleCloseForm}
-                                className="icon adminlib-close"
-                            ></i>
-                        </>
-                    }
-                    footer={
-                        <>
-                            <div
-                                onClick={handleCloseForm}
-                                className="admin-btn btn-red"
-                            >
-                                Cancel
-                            </div>
-                            <button
-                                type="button"
-                                onClick={() => handleSubmit('publish')}
-                                className="admin-btn btn-purple"
-                                disabled={submitting}
-                            >
-                                {submitting ? 'Saving...' : 'Publish'}
-                            </button>
-                            <button
-                                type="button"
-                                onClick={() => handleSubmit('pending')}
-                                className="admin-btn btn-yellow"
-                                disabled={submitting}
-                            >
-                                {submitting ? 'Saving...' : 'Pending'}
-                            </button>
-                        </>
-                    }
-                >
-                    <div className="content">
-                        <div className="form-group-wrapper">
-                            <div className="form-group">
-                                <label htmlFor="title">Title</label>
-                                <BasicInput type="text" name="title" value={formData.title} onChange={handleChange} />
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="content">Content</label>
-                                <TextArea
-                                    name="content"
-                                    inputClass="textarea-input"
-                                    value={formData.content}
-                                    onChange={handleChange}
-                                />
-                            </div>
-                        </div>
-                    </div>
-                </CommonPopup>
-            )}
+            <div className="admin-dashboard">
+                <div className="row">
+                    <div className="column"></div>
+                    <div className="column"></div>
+                    <div className="column"></div>
+                    <div className="column"></div>
+                </div>
+            </div>
 
             <div className="admin-table-wrapper">
                 <Table

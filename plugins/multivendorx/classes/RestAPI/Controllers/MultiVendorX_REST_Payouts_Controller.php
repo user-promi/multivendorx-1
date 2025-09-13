@@ -6,7 +6,7 @@ use MultiVendorX\Utill;
 
 defined('ABSPATH') || exit;
 
-class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
+class MultiVendorX_REST_Payouts_Controller extends \WP_REST_Controller {
     /**
 	 * Endpoint namespace.
 	 *
@@ -19,7 +19,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
 	 *
 	 * @var string
 	 */
-	protected $rest_base = 'store';
+	protected $rest_base = 'payouts';
 
     public function register_routes() {
         register_rest_route( $this->namespace, '/' . $this->rest_base, [
@@ -78,118 +78,72 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
 
     // GET 
     public function get_items( $request ) {
+        // Verify nonce
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
-            return new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
+            return new \WP_Error(
+                'invalid_nonce',
+                __( 'Invalid nonce', 'multivendorx' ),
+                array( 'status' => 403 )
+            );
         }
-
-        $status = $request->get_param( 'status' );
-        if( $status ){
-            return $this->get_pending_stores( $request );
-        }
-        $limit          = max( intval( $request->get_param( 'row' ) ), 10 );
-        $page           = max( intval( $request->get_param( 'page' ) ), 1 );
-        $offset         = ( $page - 1 ) * $limit;
-        $count          = $request->get_param( 'count' );
-
-        $stores = StoreUtil::get_store();
     
+        // Pagination
+        $limit  = max( intval( $request->get_param( 'row' ) ), 10 );
+        $page   = max( intval( $request->get_param( 'page' ) ), 1 );
+        $offset = ( $page - 1 ) * $limit;
+        $count  = $request->get_param( 'count' );
+    
+        // Count only
         if ( $count ) {
-            global $wpdb;
-            $table_name = "{$wpdb->prefix}" . Utill::TABLES['store'];
-
-            // Get total count
-            $total_count = $wpdb->get_var( "SELECT COUNT(*) FROM $table_name" );
-            return rest_ensure_response( (int) $total_count );
+            $pending_products_count = count( wc_get_products( array(
+                'status'   => 'pending',
+                'limit'    => -1,
+                'return'   => 'ids',
+                'meta_key' => 'multivendorx_store_id',
+            ) ) );
+    
+            return rest_ensure_response( (int) $pending_products_count );
         }
-
-        $formatted_stores = array();
-        foreach ( $stores as $store ) {
-            $store_id       = (int) $store['ID'];
-            $store_name     = $store['name'];
-            $store_slug     = $store['slug'];
-            $status         = $store['status'];
-            $formatted_stores[] = apply_filters(
-                'multivendorx_stores',
+    
+        // Fetch pending products with pagination
+        $pending_products = wc_get_products( array(
+            'status'   => 'pending',
+            'limit'    => $limit,
+            'offset'   => $offset,
+            'return'   => 'objects',
+            'meta_key' => 'multivendorx_store_id',
+        ) );
+    
+        $formatted_products = array();
+        foreach ( $pending_products as $product ) {
+            $formatted_products[] = apply_filters(
+                'multivendorx_product',
                 array(
-					'id'                => $store_id,
-					'store_name'        => $store_name,
-					'store_slug'        => $store_slug,
-					'status'      => $status,
-				)
+                    'id'     => $product->get_id(),
+                    'name'   => $product->get_name(),
+                    'sku'    => $product->get_sku(),
+                    'price'  => $product->get_price(),
+                    'status' => $product->get_status(),
+                )
             );
         }
-
-        return rest_ensure_response( $formatted_stores );
+    
+        return rest_ensure_response( $formatted_products );
     }
-
-    public function get_pending_stores( $request ){
-        $limit          = max( intval( $request->get_param( 'row' ) ), 10 );
-        $page           = max( intval( $request->get_param( 'page' ) ), 1 );
-        $offset         = ( $page - 1 ) * $limit;
-        $count          = $request->get_param( 'count' );
-
-        $stores = StoreUtil::get_stores_by_status('pending');
-        if ( $count ) {
-            global $wpdb;
-            $table_name = "{$wpdb->prefix}" . Utill::TABLES['store'];
-
-            // Get total count
-            $total_count = $wpdb->get_var("SELECT COUNT(*) FROM $table_name WHERE status = 'pending'");
-            return rest_ensure_response( (int) $total_count );
-        }
-
-        $formatted_stores = array();
-        foreach ( $stores as $store ) {
-            $store_id       = (int) $store['ID'];
-            $store_name     = $store['name'];
-            $store_slug     = $store['slug'];
-            $status         = $store['status'];
-            $formatted_stores[] = apply_filters(
-                'multivendorx_stores',
-                array(
-					'id'                => $store_id,
-					'store_name'        => $store_name,
-					'store_slug'        => $store_slug,
-					'status'      => $status,
-				)
-            );
-        }
-
-        return rest_ensure_response( $formatted_stores );
-    }
-
+    
     public function create_item( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             return new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
         }
         $registrations = $request->get_header( 'registrations' );
+
         $store_data = $request->get_param('formData');
-
-        $current_user = wp_get_current_user();
-
-        if (!empty($store_data['userName']) && !empty($store_data['userEmail'])) {
-            $user_create = $this->create_wp_user($store_data['userEmail'], $store_data['userName']);
-            if ($user_create) {
-                $current_user = new \WP_User( $user_create );
-            }
-            unset($store_data['userName']);
-            unset($store_data['userEmail']);
-        }
-
         // Create store object
         $store = new \MultiVendorX\Store\Store();
-        
+
         $core_fields = [ 'name', 'slug', 'description', 'who_created', 'status' ];
-        $store_data['who_created'] = $current_user->ID;
-
-        if ( MultiVendorX()->setting->get_setting( 'approve_store' ) == 'automatically' ) {
-            $store_data['status'] = 'active';
-        } else {
-            $store_data['status'] = 'pending';
-        }
-
         foreach ( $core_fields as $field ) {
             if ( isset( $store_data[ $field ] ) ) {
                 $store->set( $field, $store_data[ $field ] );
@@ -217,37 +171,13 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
 
             // Save them under one key
             if ( ! empty( $non_core_fields ) ) {
-                $store->update_meta( 'multivendorx_registration_data', serialize($non_core_fields) );
+                $store->update_meta( 'multivendorx-registration-data', $non_core_fields );
             }
-
-
-            if ( MultiVendorX()->setting->get_setting( 'approve_store' ) == 'automatically' ) {
-                $current_user->set_role( 'store_owner' );
-            } else {
-                if ( ! in_array( 'store_owner', (array) $current_user->roles ) ) {
-                    $role = get_option( 'default_role' );
-                    $current_user->set_role( $role );
-                }
-            }
-
-            StoreUtil::set_primary_owner($current_user->ID, $insert_id);
-
-            update_user_meta($current_user->ID, 'multivendorx_active_store', $insert_id);
-
-            wp_set_current_user( $current_user->ID );
-            wp_set_auth_cookie( $current_user->ID );
-            do_action( 'wp_login', $current_user->user_login, $current_user );
-
-            return rest_ensure_response( [
-                'success' => true,
-                'id'      => $insert_id,
-                'redirect'  => get_permalink( MultiVendorX()->setting->get_setting( 'store_dashboard_page' ) ),
-            ] );
         }
 
         return rest_ensure_response( [
             'success' => true,
-            'id'      => $insert_id
+            'id'      => $insert_id,
         ] );
     }
 
@@ -269,6 +199,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
         $store = new \MultiVendorX\Store\Store( $id );
         if ( $registrations ) {
             $response = StoreUtil::get_store_registration_form( $store->get_id() );
+
             return rest_ensure_response( $response );
         }
 
@@ -294,30 +225,6 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
         $data = $request->get_json_params();
 
         $store = new \MultiVendorX\Store\Store( $id );
-
-        if (!empty($data['registration_data']) && !empty($data['core_data'])) {
-            if ($data['status'] == 'approve') {
-                $users = StoreUtil::get_store_users($id);
-                $user = get_userdata( reset($users) );
-                if ( $user ) {
-                    $user->set_role( 'store_owner' ); 
-                    StoreUtil::set_primary_owner($user->ID, $id);
-                    return rest_ensure_response( [
-                            'success' => true
-                        ] );
-                }
-    
-            } elseif ($data['status'] == 'rejected') {
-                $store->set( 'status', 'rejected' );
-                $store->update_meta('store_application_note', $data['store_application_note'] ?? '');
-    
-                $store->save();
-                return rest_ensure_response( [
-                            'success' => true
-                        ] );
-            }
-            return;
-        }
 
         if ( $data['store_owners'] ) {
             StoreUtil::add_store_users([
@@ -353,6 +260,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
         ] );
     }
 
+
     public function get_states_by_country($request) {
         $country_code = $request->get_param('country');
         $states = WC()->countries->get_states($country_code);
@@ -370,39 +278,4 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
 
         return rest_ensure_response($state_list);
     }
-
-    public function create_wp_user( $email, $name ) {
-        if ( email_exists( $email ) ) {
-            return new WP_Error( 'email_exists', __( 'Email already registered.' ) );
-        }
-
-        $username = sanitize_user( current( explode( '@', $email ) ), true );
-
-        if ( username_exists( $username ) ) {
-            $username .= rand( 1000, 9999 ); // append random digits if exists
-        }
-
-        $password = wp_generate_password();
-
-        $name_parts = explode( ' ', trim( $name ), 2 );
-        $first_name = $name_parts[0];
-
-        $userdata = [
-            'user_login'   => $username,
-            'user_pass'    => $password,
-            'user_email'   => $email,
-            'first_name'   => $first_name,
-            'role'         => get_option( 'default_role' ),
-        ];
-
-        // Create user
-        $user_id = wp_insert_user( $userdata );
-
-        if ( is_wp_error( $user_id ) ) {
-            return $user_id; // Return error object
-        }
-
-        return $user_id;
-    }
-
 }

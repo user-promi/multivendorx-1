@@ -634,19 +634,20 @@ const Table: React.FC<TableProps> = ({
                                             className="close-btn"
                                             onClick={() => onRowSelectionChange?.({})}
                                         >
-                                            <i className="adminlib-close"></i>
+                                            <i className="adminlib-vendor-form-delete"></i>
+                                            Delete
                                         </div>
                                     </div>
                                 </div>
                             ) : (
                                 <div className="admin-filter-wrapper">
-                                    <div className="wrap-bulk-all-date">
-                                        {realtimeFilter?.map((filter) => (
-                                            <React.Fragment key={filter.name}>
-                                                {filter.render(handleFilterChange, filterData[filter.name])}
-                                            </React.Fragment>
-                                        ))}
+                                    {realtimeFilter?.map((filter) => (
+                                    <div className="wrap-bulk-all-date">                                        
+                                        <React.Fragment key={filter.name}>
+                                            {filter.render(handleFilterChange, filterData[filter.name])}
+                                        </React.Fragment>                                        
                                     </div>
+                                    ))}
                                 </div>
                             )}
 

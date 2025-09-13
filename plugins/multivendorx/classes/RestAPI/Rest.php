@@ -10,6 +10,9 @@ use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Commission_Controller;
 use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Status_Controller;
 use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Announcement_Controller;
 use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Knowledge_Controller;
+use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Products_Controller;
+use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Coupons_Controller;
+use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Payouts_Controller;
 
 defined('ABSPATH') || exit;
 
@@ -41,6 +44,9 @@ class Rest {
             'status'    => new MultiVendorX_REST_Status_Controller(),
             'announcement' => new MultiVendorX_REST_Announcement_Controller(),
             'knowledge' => new MultiVendorX_REST_Knowledge_Controller(),
+            'products'  => new MultiVendorX_REST_Products_Controller(),
+            'coupons'   => new MultiVendorX_REST_Coupons_Controller(),
+            'payouts'   => new MultiVendorX_REST_Payouts_Controller(),
         );
     }
 
