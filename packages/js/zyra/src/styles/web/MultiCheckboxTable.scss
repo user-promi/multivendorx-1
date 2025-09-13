@@ -237,14 +237,15 @@
 
     .toggle-header {
         max-width: 100%;
-        margin-bottom: 0.5rem;
+        margin: 0.625rem 0;
+        cursor: pointer;
 
         h1 {
             background: #f9f4f4b8;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 1.125rem;
+            font-size: 1rem;
             padding: 0.5rem;
         }
     }

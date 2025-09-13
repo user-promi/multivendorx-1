@@ -325,7 +325,7 @@ export default {
                     type: 'number',
                     size: '8rem',
                     prefixUnit: __('$', 'multivendorx'),
-                    addonBefore: 'Fixed',
+                    addonBefore: 'fixed',
                     addonAfter: "+",
                 },
                 {

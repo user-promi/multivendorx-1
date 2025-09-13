@@ -39,7 +39,7 @@ export default {
             type: 'setting-toggle',
             label: __('Verified badge', 'multivendorx'),
             desc: __(
-                'Upload (32px height) size badge that will appear next to verified stores for credibility.',
+                'Select a badge from the list above. Once a store is verified, the chosen badge will appear beside its name.',
                 'multivendorx'
             ),
             options: [

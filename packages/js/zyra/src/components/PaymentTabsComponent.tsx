@@ -232,9 +232,10 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
               </div>
             </div>
 
-            {isEnabled && isActive && (
               <div
-                className={`${method.wrapperClass || ""} payment-method-form`}
+                 className={`${method.wrapperClass || ""} payment-method-form 
+                 ${isEnabled && isActive ? "open" : ""
+            }`}
               >
                 {method.formFields.map((field) => (
                   <div key={field.key} className="form-group">
@@ -245,7 +246,7 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
                   </div>
                 ))}
               </div>
-            )}
+            
           </div>
         );
       })}

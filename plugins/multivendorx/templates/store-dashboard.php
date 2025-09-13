@@ -79,7 +79,17 @@ if ($current_page && empty($current_sub)) {
                 <img src="https://multivendorx.com/wp-content/uploads/2025/06/multivendorx-logo-180x40.png" alt="">
                 <i class='adminlib-menu'></i>
             </div>
-
+            <script type="text/javascript">
+                var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+                (function(){
+                var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+                s1.async=true;
+                s1.src='https://embed.tawk.to/5d2eebf19b94cd38bbe7c9ad/1fsg8cq8n';
+                s1.charset='UTF-8';
+                s1.setAttribute('crossorigin','*');
+                s0.parentNode.insertBefore(s1,s0);
+                })();
+                </script>
             <ul class="dashboard-tabs">
                 <?php foreach ($all_endpoints as $section): ?>
                     <li

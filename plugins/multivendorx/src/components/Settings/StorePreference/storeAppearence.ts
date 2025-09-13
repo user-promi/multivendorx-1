@@ -1,4 +1,7 @@
 import { __ } from '@wordpress/i18n';
+import template1 from '../../../assets/images/template/store/template1.jpg';
+import template2 from '../../../assets/images/template/store/template2.jpg';
+import template3 from '../../../assets/images/template/store/template3.jpg';
 
 export default {
     id: 'store-appearance',
@@ -31,6 +34,32 @@ export default {
             type: 'color-setting',
             label: 'Dashboard color scheme',
             settingDescription: 'Choose a dashboard color scheme from predefined sets or customize your own. Each scheme defines the button style, and hover effects for a consistent look.',
+            images: [
+                {
+                    key: 'template1',
+                    label: 'Outer Space',
+                    img: template1,
+                    value: 'template1',
+                },
+                {
+                    key: 'template2',
+                    label: 'Green Lagoon',
+                    img: template2,
+                    value: 'template2',
+                },
+                {
+                    key: 'template3',
+                    label: 'Old West',
+                    img: template3,
+                    value: 'template3',
+                },
+            ],
+        },
+        {
+            key: 'store_color_settings',
+            type: 'color-setting',
+            label: 'Dashboard color scheme',
+            settingDescription: 'Choose a dashboard color scheme from predefined sets or customize your own. Each scheme defines the button style, and hover effects for a consistent look.',
             showPreview: true,
             predefinedOptions: [
                 {
@@ -48,7 +77,7 @@ export default {
                     label: 'Emerald Edge',
                     value: 'emerald_edge',
                     colors: {
-                        themeColor: '#2ecc71',       // Green
+                        themeColor: '#2ecc71',       
                         buttonBg: '#27ae60',
                         buttonHoverBg: '#1e8449',
                     },

@@ -9,37 +9,37 @@ import '../AdminDashboard/adminDashboard.scss';
 const CustomerServices = () => {
 
     const CustomerServicesStats = [
-    {
-        id: 'reviews',
-        label: 'Pending Reviews',
-        count: 12,
-        icon: 'adminlib-star',
-    },
-    {
-        id: 'support',
-        label: 'Open Support Tickets',
-        count: 5,
-        icon: 'adminlib-support',
-    },
-    {
-        id: 'withdrawals',
-        label: 'Withdrawal Requests',
-        count: 8,
-        icon: 'adminlib-global-community', 
-    },
-    {
-        id: 'refunds',
-        label: 'Refund Requests',
-        count: 3,
-        icon: 'adminlib-catalog', 
-    },
-    {
-        id: 'abuse',
-        label: 'Abuse Reports',
-        count: 2,
-        icon: 'adminlib-calendar',
-    },
-];
+        {
+            id: 'reviews',
+            label: 'Pending Reviews',
+            count: 12,
+            icon: 'adminlib-star',
+        },
+        {
+            id: 'support',
+            label: 'Open Support Tickets',
+            count: 5,
+            icon: 'adminlib-support',
+        },
+        {
+            id: 'withdrawals',
+            label: 'Withdrawal Requests',
+            count: 8,
+            icon: 'adminlib-global-community',
+        },
+        {
+            id: 'refunds',
+            label: 'Refund Requests',
+            count: 3,
+            icon: 'adminlib-catalog',
+        },
+        {
+            id: 'abuse',
+            label: 'Abuse Reports',
+            count: 2,
+            icon: 'adminlib-calendar',
+        },
+    ];
 
     return (
         <>
@@ -67,18 +67,48 @@ const CustomerServices = () => {
 
                 <div className="row">
                     <div className="column">
-                        <div className="title"><i className="adminlib-storefront"></i> Store Reviews</div>
+                        <div className="card-header">
+                            <div className="left">
+                                <div className="title">
+                                    Store Reviews
+                                </div>
+                                <div className="des">Lorem ipsum dolor sit amet.</div>
+                            </div>
+                            <div className="right">
+                                <i className="adminlib-more-vertical"></i>
+                            </div>
+                        </div>
                         <StoreReviews />
                     </div>
                 </div>
 
                 <div className="row">
                     <div className="column">
-                        <div className="title"><i className="adminlib-storefront"></i> Refund Requests</div>
+                        <div className="card-header">
+                            <div className="left">
+                                <div className="title">
+                                    Refund Requests
+                                </div>
+                                <div className="des">Lorem ipsum dolor sit amet.</div>
+                            </div>
+                            <div className="right">
+                                <i className="adminlib-more-vertical"></i>
+                            </div>
+                        </div>
                         <RefundRequest />
                     </div>
                     <div className="column">
-                        <div className="title"><i className="adminlib-storefront"></i> Abuse Reports</div>
+                        <div className="card-header">
+                            <div className="left">
+                                <div className="title">
+                                    Abuse Reports
+                                </div>
+                                <div className="des">Lorem ipsum dolor sit amet.</div>
+                            </div>
+                            <div className="right">
+                                <i className="adminlib-more-vertical"></i>
+                            </div>
+                        </div>
                         <AbuseReports />
                     </div>
                 </div>
