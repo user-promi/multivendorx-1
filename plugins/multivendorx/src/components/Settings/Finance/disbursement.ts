@@ -63,7 +63,7 @@ export default {
             type: 'number',
             size: '8rem',
             addonBefore:__('Wait', 'multivendorx'),
-            addonAfter:__('before commissions become eligible for payout', 'multivendorx'),
+            addonAfter:__('before commissions become eligible for payout.', 'multivendorx'),
             parameter: __('days', 'multivendorx'),
         },
         {
@@ -74,7 +74,7 @@ export default {
             type: 'number',
             addonBefore:__('Stores must accumulate at least', 'multivendorx'),
             prefixUnit: __('$', 'multivendorx'),
-            addonAfter:__(' to get paid', 'multivendorx'),
+            addonAfter:__(' to get paid.', 'multivendorx'),
             size: '8rem',
             options: [
                 {
@@ -87,7 +87,7 @@ export default {
             key: 'payment_schedules',
             type: 'setting-toggle',
             label: __('Payout frequency', 'multivendorx'),
-            settingDescription: __("Decide how often store commissions are released", 'multivendorx'),
+            settingDescription: __("Decide how often store commissions are released.", 'multivendorx'),
             desc: __("<ul><li>If Manual is selected, stores handle withdrawals themselves from their dashboard.</li><li>Otherwise, commissions are automatically disbursed to stores based on the chosen schedule.</li></ul>", 'multivendorx'),
             options: [
                 {
