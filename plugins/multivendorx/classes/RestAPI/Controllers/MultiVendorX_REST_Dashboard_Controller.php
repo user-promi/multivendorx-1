@@ -48,9 +48,9 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
                 'submenu' => array(),
                 'capability' => ['edit_products']
             ),            
-            'products' => array(
+            'store-settings' => array(
                 'name'    => 'Store Settings',
-                'slug'    => 'products',
+                'slug'    => 'store-settings',
                 'icon'    => 'adminlib-cart',
                 'submenu' => array(
                     array(
@@ -75,9 +75,9 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
                         'capability' => ['read_products', 'edit_products', 'upload_files']
                     ),
                     array(
-                        'key'  => 'add-product',
+                        'key'  => 'shop-policies',
                         'name' => 'Shop Policies',
-                        'slug' => 'add-product',
+                        'slug' => 'shop-policies',
                         'icon'    => 'adminlib-cart',
                         'capability' => ['read_products', 'edit_products', 'upload_files']
                     ),
@@ -103,13 +103,6 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
                         'icon'    => 'adminlib-cart',
                         'capability' => ['read_products', 'edit_products', 'delete_products']
                     ),
-                    array(
-                        'key'  => 'add-product',
-                        'name' => 'Add Product',
-                        'slug' => 'add-product',
-                        'icon'    => 'adminlib-cart',
-                        'capability' => ['read_products', 'edit_products', 'upload_files']
-                    )
                     ),
                 'capability' => ['manage_products']
             ),
@@ -144,12 +137,6 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
                         'slug' => 'all-coupons',
                         'capability' => ['read_shop_coupons', 'edit_shop_coupons', 'delete_shop_coupons']
                     ),
-                    array(
-                        'key'  => 'add-coupons',
-                        'name' => 'Add Coupons',
-                        'slug' => 'add-coupons',
-                        'capability' => ['read_shop_coupons', 'edit_shop_coupons']
-                    )
                 ),
                 'capability' => ['read_shop_coupons']
             ),
