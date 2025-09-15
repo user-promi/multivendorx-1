@@ -22,7 +22,18 @@ export default {
             size: '9rem',
             moduleEnabled: 'advertisement',
             proSetting: true,
+        },  
+        {
+            key: 'cost',
+            type: 'number',
+            label: __('Advertising cost', 'multivendorx'),
+            prefixUnit: __('$', 'multivendorx'),
+            addonAfter:__('stores must pay to use per advertising slot. Use 0 if you want advertising to be free.', 'multivendorx'),
+            size: '8rem',
+            placeholder: 0,
+            //proSetting:true
         },
+
         {
             key: 'expire_after_days',
             type: 'number',
@@ -35,38 +46,7 @@ export default {
             size: '8rem',
             moduleEnabled: 'advertisement',
             proSetting: true,
-        },
-        {
-            key: 'store_can_purchase_advertisement',
-            label: __( 'Allow stores to purchase advertising', 'multivendorx' ),
-            type: 'checkbox',
-            desc: __(
-                'Enable to let stores purchase advertising from the product listing or edit page.',
-                'multivendorx'
-            ),
-            options: [
-                {
-                    key: 'store_can_purchase_advertisement',
-                    value: 'store_can_purchase_advertisement',
-                },
-            ],
-            look: 'toggle',
-            //proSetting:true
-        },        
-        {
-            key: 'cost',
-            type: 'number',
-            label: __('Advertising cost', 'multivendorx'),
-            prefixUnit: __('$', 'multivendorx'),
-            addonAfter:__('stores must pay to use per advertising slot. Use 0 if you want advertising to be free.', 'multivendorx'),
-            size: '8rem',
-            dependent: {
-                key: 'store_can_purchase_advertisement',
-                set: true,
-            },
-            placeholder: 0,
-            //proSetting:true
-        },
+        }, 
         {
             key: 'store_advertisement_advanced_settings',
             type: 'checkbox',
