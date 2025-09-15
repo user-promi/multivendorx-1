@@ -26,9 +26,6 @@ interface EndpointEditorProps {
 }
 
 const EndpointManager: React.FC<EndpointEditorProps> = ({
-  name,
-  proSetting,
-  proSettingChanged,
   apilink,
   appLocalizer,
   onChange,

@@ -1,4 +1,4 @@
-import React, {
+import {
     ChangeEvent,
     MouseEvent,
     FocusEvent,
@@ -45,7 +45,7 @@ interface BasicInputProps {
     size?: string;
     addonBefore?: string;
     addonAfter?: string;
-    prefixUnit?:string;
+    prefixUnit?: string;
 }
 
 const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
@@ -130,8 +130,7 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
         return (
             <>
                 <div
-                    className={`${wrapperClass || ''} ${generate ? 'generate' : ''} ${prefixUnit || parameter ? 'inner-input' : ''}
-`}
+                    className={`${wrapperClass || ''} ${generate ? 'generate' : ''} ${prefixUnit || parameter ? 'inner-input' : ''}`}
                 >
                     {inputLabel && (
                         <label htmlFor={id}>{inputLabel}</label>
@@ -153,36 +152,36 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
                                 />
                             )}
                             <div className="input-wrapper" style={{ width: size || '100%' }}>
-                            {prefixUnit && (
-                                <span
-                                    className="pre"
-                                    dangerouslySetInnerHTML={{ __html: prefixUnit }}
+                                {prefixUnit && (
+                                    <span
+                                        className="pre"
+                                        dangerouslySetInnerHTML={{ __html: prefixUnit }}
+                                    />
+                                )}
+                                <input
+                                    ref={ref}
+                                    className={['basic-input', inputClass].join(' ')}
+                                    id={id}
+                                    type={type}
+                                    name={name}
+                                    placeholder={placeholder}
+                                    {...(type !== 'file' && onChange ? { value } : {})}
+                                    {...((type === 'number' || type === 'range') ? { min, max } : {})}
+                                    onChange={onChange}
+                                    onClick={onClick}
+                                    onMouseOver={onMouseOver}
+                                    onMouseOut={onMouseOut}
+                                    onFocus={onFocus}
+                                    onBlur={onBlur}
+                                    disabled={disabled}
+                                    readOnly={readOnly}
                                 />
-                            )}
-                            <input
-                                ref={ref}
-                                className={['basic-input', inputClass].join(' ')}
-                                id={id}
-                                type={type}
-                                name={name}
-                                placeholder={placeholder}
-                                {...(type !== 'file' && onChange ? { value } : {})}
-                                {...((type === 'number' || type === 'range') ? { min, max } : {})}
-                                onChange={onChange}
-                                onClick={onClick}
-                                onMouseOver={onMouseOver}
-                                onMouseOut={onMouseOut}
-                                onFocus={onFocus}
-                                onBlur={onBlur}
-                                disabled={disabled}
-                                readOnly={readOnly}
-                            />
-                            {parameter && (
-                                <span
-                                    className="parameter"
-                                    dangerouslySetInnerHTML={{ __html: parameter }}
-                                />
-                            )}
+                                {parameter && (
+                                    <span
+                                        className="parameter"
+                                        dangerouslySetInnerHTML={{ __html: parameter }}
+                                    />
+                                )}
                             </div>
                             {addonAfter && (
                                 <span

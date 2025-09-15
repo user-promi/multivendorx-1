@@ -662,9 +662,9 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             min={inputField.min ?? 0} // for range min value
                             max={inputField.max ?? 50} // for range max value
                             value={value || inputField.value}
-                            size={inputField.size}
-                            addonBefore={inputField.addonBefore}
-                            addonAfter={inputField.addonAfter}
+                            size={inputField.size}//Width of the input container.
+                            addonBefore={inputField.addonBefore}//Content displayed before input (icon/text).
+                            addonAfter={inputField.addonAfter}//Content displayed after input (icon/text).
                             proSetting={isProSetting(
                                 inputField.proSetting ?? false
                             )}
@@ -688,9 +688,9 @@ const AdminForm: React.FC<AdminFormProps> = ({
                                     handleChange(e, inputField.key);
                                 }
                             }}
-                            prefixUnit={inputField.prefixUnit}
+                            prefixUnit={inputField.prefixUnit}//Symbol/unit shown inside input at start.
                             parameter={inputField.parameter} // for showing text beside the text box
-                            generate={inputField.generate}
+                            generate={inputField.generate}//Enables generate button for random/auto value generation.
                         />
                     );
                     break;
@@ -739,7 +739,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             type="file"
                             key={inputField.key}
                             name={inputField.name}
-                            value={value}
+                            value={value}// current value of the file input (usually a file path or File object)
                             proSetting={isProSetting(
                                 inputField.proSetting ?? false
                             )}
@@ -818,12 +818,12 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             wrapperClass="settings-color-picker"
                             inputClass="setting-color-picker"
                             descClass="settings-metabox-description"
-                            description={inputField.desc}
+                            description={inputField.desc}// optional description displayed under the input
                             key={inputField.key}
                             id={inputField.id}
                             name={inputField.name}
                             type={inputField.type}
-                            value={value || '#000000'}
+                            value={value || '#000000'}// current value of the input; defaults to black if empty
                             proSetting={isProSetting(
                                 inputField.proSetting ?? false
                             )}
@@ -903,7 +903,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             <LazyMapsInput
                                 wrapperClass="settings-basic-input-class"
                                 descClass="settings-metabox-description"
-                                description={inputField.desc}
+                                description={inputField.desc}// optional description displayed under the map input
                                 containerId="store-maps"
                                 containerClass="store-maps gmap"
                                 proSetting={isProSetting(
@@ -920,7 +920,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                     input = (
                         <GoogleMap
                             wrapperClass="settings-basic-input-class"
-                            placeholder="Enter location"
+                            placeholder="Enter location"// placeholder text displayed in the search input
                             center={
                                 inputField.center ?? { lat: -22.0, lng: 22.5 }
                             } // for default location
@@ -936,10 +936,10 @@ const AdminForm: React.FC<AdminFormProps> = ({
                                     wrapperClass="settings-basic-input-class"
                                     inputClass="admin-btn btn-purple"
                                     descClass="settings-metabox-description"
-                                    description={inputField.desc}
-                                    name={inputField.name}
-                                    type={inputField.type}
-                                    placeholder={inputField.placeholder}
+                                    description={inputField.desc}// optional description displayed under the input
+                                    name={inputField.name}// name attribute for the input
+                                    type={inputField.type}// input type (text, number, password, etc.)
+                                    placeholder={inputField.placeholder}// placeholder text inside the input
                                     proSetting={isProSetting(
                                         inputField.proSetting ?? false
                                     )}
@@ -960,11 +960,11 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             listClass="multi-list"
                             itemClass="multi-item"
                             deleteBtnClass="admin-btn btn-red"
-                            placeholder={inputField.placeholder}
+                            placeholder={inputField.placeholder}// placeholder text inside the input
                             values={value}
                             name={inputField.key}
                             proSetting={isProSetting(inputField.proSetting ?? false)}
-                            description={inputField.desc}
+                            description={inputField.desc}// optional description shown below the input
                             descClass="settings-metabox-description"
                             onStringChange={(e) => {
                                 if (
@@ -989,7 +989,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             inputClass="setting-form-input"
                             descClass="settings-metabox-description"
                             activeClass="radio-select-active"
-                            description={inputField.desc}
+                            description={inputField.desc}// optional description displayed below the radio group
                             value={
                                 typeof value === 'number'
                                     ? value.toString()
@@ -997,7 +997,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             }
                             name={inputField.name}
                             keyName={inputField.key}
-                            options={Array.isArray(value) ? value : []}
+                            options={Array.isArray(value) ? value : []}// array of radio options (ensure it's an array)
                             proSetting={isProSetting(
                                 inputField.proSetting ?? false
                             )}
@@ -1036,8 +1036,8 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             idPrefix="radio-select-under"
                             descClass="settings-metabox-description"
                             activeClass="radio-select-active"
-                            description={inputField.desc}
-                            type="radio-select"
+                            description={inputField.desc}// optional description displayed under the radio group
+                            type="radio-select"// input type indicating this is a custom radio select
                             value={
                                 typeof value === 'number'
                                     ? value.toString()
@@ -1045,7 +1045,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             }
                             name={inputField.name}
                             keyName={inputField.key}
-                            options={Array.isArray(inputField.options) ? inputField.options : []}
+                            options={Array.isArray(inputField.options) ? inputField.options : []}// array of radio options
                             proSetting={isProSetting(
                                 inputField.proSetting ?? false
                             )}
@@ -1078,11 +1078,11 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             wrapperClass="form-group-color-setting"
                             inputClass="setting-form-input"
                             descClass="settings-metabox-description"
-                            description={inputField.desc}
-                            showPreview={inputField.showPreview ?? false}
-                            predefinedOptions={inputField.predefinedOptions ?? []}
-                            images={inputField.images ?? []}
-                            value={value}
+                            description={inputField.desc}// optional description displayed under the input
+                            showPreview={inputField.showPreview ?? false}// whether to show a color preview box
+                            predefinedOptions={inputField.predefinedOptions ?? []} // array of predefined color options for quick selection
+                            images={inputField.images ?? []}// optional array of images associated with colors
+                            value={value}// currently selected color value
                             idPrefix="color-setting"
                             onChange={(e) => handleChange(e, inputField.key)}
                         />
@@ -1096,7 +1096,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             wrapperClass="form-select-field-wrapper"
                             descClass="settings-metabox-description"
                             name={inputField.key}
-                            description={inputField.desc}
+                            description={inputField.desc}// optional description displayed below the select input
                             inputClass={inputField.className}
                             options={
                                 Array.isArray(inputField.options)
@@ -1129,8 +1129,8 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             descClass="settings-metabox-description"
                             selectDeselectClass="btn-purple select-deselect-trigger"
                             selectDeselect={inputField.selectDeselect}
-                            selectDeselectValue="Select / Deselect All"
-                            description={inputField.desc}
+                            selectDeselectValue="Select / Deselect All"// text for select/deselect all button
+                            description={inputField.desc}// optional description displayed below the select
                             inputClass={inputField.key}
                             options={
                                 Array.isArray(inputField.options)
@@ -1141,7 +1141,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                                     }))
                                     : []
                             }
-                            type="multi-select"
+                            type="multi-select"// input type; allows multiple selections
                             value={
                                 typeof value === 'number'
                                     ? value.toString()
@@ -1193,12 +1193,12 @@ const AdminForm: React.FC<AdminFormProps> = ({
                                     : 'default-checkbox'
                             } // this props for change classes default/ Toggle
                             inputClass={inputField.class}
-                            tour={inputField.tour}
+                            tour={inputField.tour}// optional guided tour tooltip
                             hintOuterClass="settings-metabox-description"
                             hintInnerClass="hover-tooltip"
                             idPrefix="toggle-switch"
-                            selectDeselect={inputField.selectDeselect}
-                            selectDeselectValue="Select / Deselect All"
+                            selectDeselect={inputField.selectDeselect}// enable "Select / Deselect All"
+                            selectDeselectValue="Select / Deselect All"// text for select/deselect all
                             rightContentClass="settings-metabox-description"
                             rightContent={inputField.rightContent} // for place checkbox right
                             options={
@@ -1307,8 +1307,10 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             descClass="settings-metabox-description"
                             description={inputField.desc}
                             key={inputField.key}
-                            iconEnable={inputField.iconEnable}
-                            multiSelect={inputField.multiSelect}
+                            iconEnable={inputField.iconEnable}// If true, will display the toggle value as an icon
+                            multiSelect={inputField.multiSelect}// If true, allows selecting multiple options (checkboxes), else single select (radio)
+                            addonBefore={inputField.addonBefore}// Optional content displayed before the toggle group
+                            addonAfter={inputField.addonAfter}// Optional content displayed after the toggle group
                             options={
                                 Array.isArray(inputField.options)
                                     ? inputField.options.map((opt) => ({
@@ -1381,8 +1383,8 @@ const AdminForm: React.FC<AdminFormProps> = ({
                         <Label
                             wrapperClass="form-group-only-label"
                             descClass="settings-metabox-description"
-                            value={String(inputField.valuename)}
-                            description={inputField.desc}
+                            value={String(inputField.valuename)}//The actual text of the label.
+                            description={inputField.desc}//Optional descriptive text, often used for guidance or help text.
                         />
                     );
                     break;
@@ -1392,9 +1394,9 @@ const AdminForm: React.FC<AdminFormProps> = ({
                         <Section
                             key={`${inputField.key}`}
                             wrapperClass="divider-section"
-                            value={inputField.label}
-                            hint={inputField.hint}
-                            description={inputField.desc}
+                            value={inputField.label}//Optional main heading/title of the section.
+                            hint={inputField.hint}//Optional hint or subtext below the title, can include HTML.
+                            description={inputField.desc}//Optional descriptive text displayed below the hint.
                         />
                     );
                     break;
@@ -1404,7 +1406,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                         <BlockText
                             key={inputField.blocktext}
                             blockTextClass="settings-metabox-note"
-                            value={String(inputField.blocktext)}
+                            value={String(inputField.blocktext)}// Text or HTML content to display inside the block (safe HTML injected).
                         />
                     );
                     break;
@@ -1416,7 +1418,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             text={
                                 setting[inputField.key]?.button_text ||
                                 'Button Text'
-                            }
+                            }// The label shown on the button (fallback to "Button Text" if not set).
                             proSetting={isProSetting(
                                 inputField.proSetting ?? false
                             )}
@@ -1542,7 +1544,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             proSetting={isProSetting(
                                 inputField.proSetting ?? false
                             )}
-                            modules={modules}
+                            modules={modules}//Active module list for dependency validation.
                             onChange={(key, data) => {
                                 if (
                                     hasAccess(
@@ -1579,16 +1581,16 @@ const AdminForm: React.FC<AdminFormProps> = ({
                         <MergeComponent
                             wrapperClass={`setting-form-input`}
                             descClass="settings-metabox-description"
-                            description={inputField.desc}
+                            description={inputField.desc}// Help text / description displayed below the component
                             value={
                                 typeof value === 'object' && value !== null
                                     ? value
-                                    : {}
+                                    : {}// Current value (ensures it’s an object, else fallback to empty object)
                             }
                             fields={
                                 Array.isArray(inputField.fields)
                                     ? inputField.fields
-                                    : []
+                                    : []// List of field definitions (each has name, type, options, etc.)
                             }
                             proSetting={isProSetting(
                                 inputField.proSetting ?? false
@@ -1620,7 +1622,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                     input = (
                         <ShortCodeTable
                             descClass="settings-metabox-description"
-                            description={inputField.desc}
+                            description={inputField.desc}// Help text / description shown under the table
                             key={inputField.key}
                             icon={inputField.icon}
                             options={
@@ -1628,7 +1630,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                                     ? inputField.options
                                     : []
                             } // array includes label and description
-                            optionLabel={inputField.optionLabel}
+                            optionLabel={inputField.optionLabel}// Label header for the options column
                         />
                     );
                     break;
@@ -1638,7 +1640,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                         <DoActionBtn
                             appLocalizer={appLocalizer}
                             buttonKey={inputField.key}
-                            apilink={String(inputField.apilink)} // apilink
+                            apilink={String(inputField.apilink)} // API endpoint to trigger the action
                             value={String(inputField.value)}
                             description={String(inputField.desc)}
                             proSetting={isProSetting(
@@ -1649,8 +1651,8 @@ const AdminForm: React.FC<AdminFormProps> = ({
                                     inputField.proSetting ?? false
                                 )
                             }
-                            interval={Number(inputField.interval)}
-                            tasks={inputField.tasks ?? []}
+                            interval={Number(inputField.interval)}// Time interval (e.g., for polling or scheduling tasks)
+                            tasks={inputField.tasks ?? []}// List of tasks/actions handled by this button
                             parameter={String(inputField.parameter)} // api for each status of synchronization
                         />
                     );
@@ -1673,7 +1675,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                                     ? (value as [string, string][])
                                     : [['key', String(value)]]
                             }
-                            syncFieldsMap={inputField.syncFieldsMap ?? {}}
+                            syncFieldsMap={inputField.syncFieldsMap ?? {}}// Map of available sync fields for systems (default to empty object if not provided)
                             onChange={(data) => {
                                 if (
                                     hasAccess(
@@ -1711,8 +1713,8 @@ const AdminForm: React.FC<AdminFormProps> = ({
                         <SystemInfo
                             appLocalizer={appLocalizer}
                             apiLink={String(inputField.apiLink)}
-                            copyButtonLabel={inputField.copyButtonLabel}
-                            copiedLabel={inputField.copiedLabel}
+                            copyButtonLabel={inputField.copyButtonLabel}//The button text before copying (e.g., “Copy Info”).
+                            copiedLabel={inputField.copiedLabel}//The text shown after copying (e.g., “Copied!”).
                         />
                     );
                     break;
@@ -1725,8 +1727,8 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             setting={setting}
                             updateSetting={updateSetting}
                             mailchimpKey={inputField.key}
-                            selectKey={String(inputField.selectKey)}
-                            optionKey={String(inputField.optionKey)}
+                            selectKey={String(inputField.selectKey)}//Stores which Mailchimp list is chosen.
+                            optionKey={String(inputField.optionKey)}//Stores all available lists fetched from Mailchimp.
                             onChange={handleChange}
                             proSettingChanged={() =>
                                 proSettingChanged(
@@ -1734,7 +1736,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                                 )
                             }
                             settingChanged={settingChanged}
-                            apiLink={String(inputField.apiLink)} // fetch api
+                            apiLink={String(inputField.apiLink)} //The API URL to fetch Mailchimp lists from.
                         />
                     );
                     break;
@@ -1763,11 +1765,11 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             id={inputField.key}
                             label={inputField.label}
                             description={inputField.desc}
-                            fields={inputField.nestedFields ?? []}
+                            fields={inputField.nestedFields ?? []}//The list of inner fields that belong to this section.
                             value={value}
-                            addButtonLabel={inputField.addButtonLabel}
-                            deleteButtonLabel={inputField.deleteButtonLabel}
-                            single={inputField.single}
+                            addButtonLabel={inputField.addButtonLabel}//The text shown on the button to add a new item.
+                            deleteButtonLabel={inputField.deleteButtonLabel}//The text shown on the button to remove an item.
+                            single={inputField.single}//If set to true, only one item is allowed.
                             onChange={(val: any) => {
                                 if (
                                     hasAccess(
@@ -1794,10 +1796,10 @@ const AdminForm: React.FC<AdminFormProps> = ({
                     input = (
                         <VerificationMethods
                             key={inputField.key}
-                            label={inputField.label}
-                            nestedFields={inputField.nestedFields ?? []}
-                            addButtonLabel={inputField.addButtonLabel}
-                            deleteButtonLabel={inputField.deleteButtonLabel}
+                            label={inputField.label}//Section label/title.
+                            nestedFields={inputField.nestedFields ?? []}//Array of nested input fields for verification method configuration.
+                            addButtonLabel={inputField.addButtonLabel}//Label text for the "Add" button.
+                            deleteButtonLabel={inputField.deleteButtonLabel}//Label text for the "Delete" button.
                             value={value}
                             onChange={(val) => {
                                 updateSetting(inputField.key, val);
@@ -1819,7 +1821,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                                     inputField.proSetting ?? false
                                 )
                             }
-                            apilink={String(inputField.apiLink)}
+                            apilink={String(inputField.apiLink)}//API URL for backend communication.
                             appLocalizer={appLocalizer}
                             onChange={(data) => {
                                 settingChanged.current = true;
@@ -1837,10 +1839,10 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             proSettingChanged={() =>
                                 proSettingChanged(inputField.proSetting ?? false)
                             }
-                            apilink={String(inputField.apiLink)}
+                            apilink={String(inputField.apiLink)}//API endpoint used for communication with backend.
                             appLocalizer={appLocalizer}
-                            methods={inputField.modal ?? []}
-                            buttonEnable={inputField.buttonEnable}
+                            methods={inputField.modal ?? []}//Array of available payment methods/options.
+                            buttonEnable={inputField.buttonEnable}//Flag to enable/disable action buttons in the UI.
                             value={value || {}}
                             onChange={(data) => {
                                 settingChanged.current = true;
