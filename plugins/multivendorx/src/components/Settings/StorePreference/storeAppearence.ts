@@ -25,31 +25,32 @@ export default {
             key: 'section',
             type: 'section',
             hint: __(
-                'Store customization',
+                'Store customizer',
                 'multivendorx'
             ),
+            desc: __("Control how your store looks and feels. Set the banner style, logo placement, and customize the dashboard color scheme to match your brand identity.",'multivendorx'),
         },
         {
             key: 'store_color_settings',
             type: 'color-setting',
-            label: 'Store shop page layout',
+            label: 'Shop banner section',
             settingDescription: 'Choose how the store’s shop page appears, including banner, logo, and description  .',
             images: [
                 {
                     key: 'template1',
-                    label: 'Outer Space',
+                    label: 'Prime view',
                     img: template1,
                     value: 'template1',
                 },
                 {
                     key: 'template2',
-                    label: 'Green Lagoon',
+                    label: 'Nova style',
                     img: template2,
                     value: 'template2',
                 },
                 {
                     key: 'template3',
-                    label: 'Old West',
+                    label: 'Aura mode',
                     img: template3,
                     value: 'template3',
                 },
