@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { __ } from '@wordpress/i18n';
-import { BasicInput, CommonPopup, MultiCheckBox, Table, TableCell, TextArea } from 'zyra';
+import { BasicInput, CommonPopup, MultiCheckBox, SelectInput, Table, TableCell, TextArea } from 'zyra';
 import {
     ColumnDef,
     RowSelectionState,
@@ -17,7 +17,11 @@ type StoreRow = {
     expiry?: string;       // Expiry Date
     status?: string;
 };
-
+const discountOptions = [
+    { label: "Percentage discount", value: "percent" },
+    { label: "Fixed cart discount", value: "fixed_cart" },
+    { label: "Fixed product discount", value: "fixed_product" },
+];
 const AllCoupon: React.FC = () => {
     const [data, setData] = useState<StoreRow[]>([]);
 
@@ -50,7 +54,15 @@ const AllCoupon: React.FC = () => {
                     <div className="form-group-wrapper">
                         <div className="form-group">
                             <label>Discount type</label>
-                            <BasicInput type="text" name="discount_type" />
+                            <SelectInput
+                                name="discount_type"
+                                value={data.discount_type}
+                                options={discountOptions}
+                                type="single-select"
+                                onChange={(newValue: any) => {
+
+                                }}
+                            />
                         </div>
                     </div>
 
@@ -345,14 +357,14 @@ const AllCoupon: React.FC = () => {
         <>
             <div className="header-wrapper">
                 <div
-                className="admin-btn btn-purple"
-                onClick={() => setAddCoupon(true)}
-            >
-                <i className="adminlib-plus-circle-o"></i>
-                Add New
+                    className="admin-btn btn-purple"
+                    onClick={() => setAddCoupon(true)}
+                >
+                    <i className="adminlib-plus-circle-o"></i>
+                    Add New
+                </div>
             </div>
-            </div>
-            
+
             {AddCoupon && (
                 <CommonPopup
                     open={AddCoupon}
