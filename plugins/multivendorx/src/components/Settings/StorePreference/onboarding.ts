@@ -67,31 +67,31 @@ export default {
                 {
                     key: 'store_profile_setup',
                     label: __( 'Store profile', 'multivendorx' ),
-                    desc: __( 'Store owners must provide: store name, business description, logo upload, basic branding information', 'multivendorx' ),
+                    desc: __( 'Store owners must provide: store name, business description, logo upload, basic branding information.', 'multivendorx' ),
                     value: 'store_profile_setup',
                 },
                 {
                     key: 'payment_information',
                     label: __( 'Payment information', 'multivendorx' ),
-                    desc: __( 'Requires stores to set up, payout methods (Bank account/ PayPal / Stripe etc.)', 'multivendorx' ),
+                    desc: __( 'Requires stores to set up, payout methods (Bank account/ PayPal / Stripe etc).', 'multivendorx' ),
                     value: 'payment_information',
                 }, 
                 {
                     key: 'shipping_configuration',
                     label: __( 'Shipping setup', 'multivendorx' ),
-                    desc: __( 'Forces stores to complete : Geographic shipping zones, delivery rates and pricing, ', 'multivendorx' ),
+                    desc: __( 'Forces stores to complete: Geographic shipping zones, delivery rates and pricing. ', 'multivendorx' ),
                     value: 'shipping_configuration',
                 },
                 {
                     key: 'first_product_upload',
                     label: __( 'First product', 'multivendorx' ),
-                    desc: __( 'Mandates that store to upload at least one product listing, complete product details before going live, ensures the store is not empty when launched', 'multivendorx' ),
+                    desc: __( 'Mandates that store to upload at least one product listing, complete product details before going live, ensures the store is not empty when launched.', 'multivendorx' ),
                     value: 'first_product_upload',
                 },
                 {
                     key: 'identity_verification',
                     label: __( 'Identity verification', 'multivendorx' ),
-                    desc: __( 'Requires stores to submit government-issued documents, business address verification, Know Your Customer (KYC) compliance', 'multivendorx' ),
+                    desc: __( 'Requires stores to submit government-issued documents, business address verification, Know Your Customer (KYC) compliance.', 'multivendorx' ),
                     value: 'identity_verification',
                 },
                 {
