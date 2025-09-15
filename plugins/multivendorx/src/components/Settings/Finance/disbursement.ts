@@ -42,7 +42,7 @@ export default {
             type: 'setting-toggle',
             label: __('Commission settlement', 'multivendorx'),
             settingDescription: __("Select how commissions are released from the admin account.", 'multivendorx'),
-            desc: __("<ul><li>Instant Payout - Commissions are released immediately.</li><li>Scheduled / Delayed Payout - Commissions are released after a waiting period.</li></ul>", 'multivendorx'),
+            desc: __("<ul><li>Instant Payout - Commissions are immediately credited to the store’s wallet balance.</li><li>Scheduled / Delayed Payout - Commissions are credited to the wallet after a waiting period.</li></ul>", 'multivendorx'),
             options: [
                 {
                     key: 'instantly',
@@ -70,11 +70,29 @@ export default {
             key: 'payout_threshold_amount',
             label: __('Minimum payout threshold', 'multivendorx'),
             settingDescription: __(
-                'Set the lowest balance a store must reach before they can get paid.', 'multivendorx'),
+                'Set the minimum balance a store must reach in their wallet before receiving payouts.', 'multivendorx'),
             type: 'number',
             preText:__('Stores must accumulate at least', 'multivendorx'),
             preInsideText: __('$', 'multivendorx'),
-            postText:__(' to get paid.', 'multivendorx'),
+            postText:__(' in wallet receive a payout.', 'multivendorx'),
+            size: '8rem',
+            options: [
+                {
+                    key: 'commission_percentage',
+                    value: 'commission_percentage',
+                },
+            ],
+        },
+        
+        {
+            key: 'wallet_threshold_amount',
+            label: __('Minimum wallet reserve', 'multivendorx'),
+            settingDescription: __(
+                'Always keep a fixed balance in the store’s wallet as a reserve. This amount cannot be withdrawn.', 'multivendorx'),
+            type: 'number',
+            preText:__('Stores must always keep at least', 'multivendorx'),
+            preInsideText: __('$', 'multivendorx'),
+            postText:__(' in their wallet as a safety reserve.', 'multivendorx'),
             size: '8rem',
             options: [
                 {

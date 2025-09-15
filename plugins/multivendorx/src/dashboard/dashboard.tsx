@@ -13,11 +13,11 @@ import {
 } from 'recharts';
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
-import '../dashboard/dashboard1.scss';
 import { Table, TableCell } from 'zyra';
 import { ColumnDef } from '@tanstack/react-table';
 import React, { useState, useEffect } from "react";
-import '../components/dashboard.scss'
+import "../components/dashboard.scss";
+import '../dashboard/dashboard1.scss';
 
 type StoreRow = {
   id?: number;

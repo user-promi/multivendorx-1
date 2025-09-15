@@ -75,9 +75,9 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
                         'capability' => ['read_products', 'edit_products', 'upload_files']
                     ),
                     array(
-                        'key'  => 'add-product',
+                        'key'  => 'shop-policies',
                         'name' => 'Shop Policies',
-                        'slug' => 'add-product',
+                        'slug' => 'shop-policies',
                         'icon'    => 'adminlib-cart',
                         'capability' => ['read_products', 'edit_products', 'upload_files']
                     ),
@@ -103,13 +103,6 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
                         'icon'    => 'adminlib-cart',
                         'capability' => ['read_products', 'edit_products', 'delete_products']
                     ),
-                    array(
-                        'key'  => 'add-product',
-                        'name' => 'Add Product',
-                        'slug' => 'add-product',
-                        'icon'    => 'adminlib-cart',
-                        'capability' => ['read_products', 'edit_products', 'upload_files']
-                    )
                     ),
                 'capability' => ['manage_products']
             ),
@@ -137,6 +130,7 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
             'coupons' => array(
                 'name'    => 'Coupons',
                 'slug'    => 'coupons',
+                'icon'    => 'adminlib-cart',
                 'submenu' => array(
                     array(
                         'key'  => 'all-coupons',
@@ -144,18 +138,13 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
                         'slug' => 'all-coupons',
                         'capability' => ['read_shop_coupons', 'edit_shop_coupons', 'delete_shop_coupons']
                     ),
-                    array(
-                        'key'  => 'add-coupons',
-                        'name' => 'Add Coupons',
-                        'slug' => 'add-coupons',
-                        'capability' => ['read_shop_coupons', 'edit_shop_coupons']
-                    )
                 ),
                 'capability' => ['read_shop_coupons']
             ),
 			'reports' => array(
                 'name'    => 'Stats / Report',
                 'slug'    => 'reports',
+                'icon'    => 'adminlib-cart',
                 'submenu' => array(
                     array(
                         'key'  => 'overview',
@@ -175,6 +164,7 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
 			'payments' => array(
                 'name'    => 'Payments',
                 'slug'    => 'payments',
+                'icon'    => 'adminlib-cart',
                 'submenu' => array(
                     array(
                         'key'  => 'withdrawl',
