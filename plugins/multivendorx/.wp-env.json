@@ -22,8 +22,5 @@
                 "WP_TESTS_DOMAIN": "localhost"
             }
         }
-    },
-    "mappings": {
-        "wp-content/debug.log": "./debug.log"
     }
 }
