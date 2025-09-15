@@ -27,8 +27,8 @@ export default {
             key: 'cost',
             type: 'number',
             label: __('Advertising cost', 'multivendorx'),
-            prefixUnit: __('$', 'multivendorx'),
-            addonAfter:__('stores must pay to use per advertising slot. Use 0 if you want advertising to be free.', 'multivendorx'),
+            preInsideText: __('$', 'multivendorx'),
+            postText:__('stores must pay to use per advertising slot. Use 0 if you want advertising to be free.', 'multivendorx'),
             size: '8rem',
             placeholder: 0,
             //proSetting:true
@@ -42,7 +42,7 @@ export default {
                 'Set how long a product will stay advertised. Stores can choose the duration up to this limit.',
                 'mvx-pro'
             ),
-            parameter: __('days', 'multivendorx'),
+            postInsideText: __('days', 'multivendorx'),
             size: '8rem',
             moduleEnabled: 'advertisement',
             proSetting: true,
