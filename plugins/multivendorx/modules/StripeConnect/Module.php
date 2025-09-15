@@ -37,8 +37,6 @@ class Module {
         $this->init_classes();
         add_filter('multivendorx_payment_providers', [$this, 'add_payment_provider']);
 
-        // CHANGED: Use the specific admin_post hook for our action
-        add_action('admin_post_multivendorx_stripe_connect_onboard', [$this, 'onboard_vendor']);
     }
 
     public function onboard_vendor() {
