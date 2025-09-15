@@ -18,7 +18,7 @@ export default {
     },
     icon: 'adminlib-general-tab',
     submitUrl: 'settings',
-    modal: [    
+    modal: [          
         {
             key: 'store_registration_page',
             type: 'select',
