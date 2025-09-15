@@ -2,7 +2,7 @@ import { __ } from '@wordpress/i18n';
 
 export default {
     id: 'log',
-    priority: 4,
+    priority: 2,
     name: __( 'Log', 'multivendorx' ),
     desc: __(
         'Controls how stores are onboarded and what access they get.',

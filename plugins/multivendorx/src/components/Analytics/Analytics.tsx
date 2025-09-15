@@ -35,9 +35,10 @@ const salesIcon = new L.DivIcon({
 // import "./adminDashboard.scss";
 import "../../dashboard/dashboardCommon.scss";
 import Overview from './Overview';
-import Leaders from './Leaders';
-import Transactions from './Transactions';
+import Transactions from './Payout';
 import Revenue from './Revenue';
+import RefundedOrders from './RefundedOrders';
+import StoreOrders from './StoreOrders';
 
 const Analytics = () => {
   const location = useLocation();
@@ -81,24 +82,12 @@ const Analytics = () => {
     },
     {
       id: 'Vendors',
-      label: 'Vendors',
+      label: 'Total Store',
       count: 8,
       icon: 'adminlib-global-community',
     },
     {
-      id: 'Pending',
-      label: 'Pending',
-      count: 3,
-      icon: 'adminlib-catalog',
-    },
-    {
-      id: 'Products',
-      label: 'Products',
-      count: 2,
-      icon: 'adminlib-calendar',
-    },
-    {
-      id: 'Withdrawals',
+      id: 'Pending Withdrawals',
       label: 'Withdrawals',
       count: 10,
       icon: 'adminlib-calendar',
@@ -113,11 +102,12 @@ const Analytics = () => {
   const [activeTab, setActiveTab] = useState("overview");
   const tabs = [
     { id: "overview", label: "Overview", content: <Overview overview={overview} data={data} overviewData={overviewData} pieData={pieData} /> },
-    { id: "leaders", label: "Leaders", content: <Leaders/> },
     { id: "revenue", label: "Revenue", content: <Revenue/> },
-    { id: "transactions", label: "Transactions", content: <Transactions/> },
+    { id: "payout", label: "Payout", content: <Transactions/> },
+    { id: "storeOrder ", label: "Store Order ", content: <StoreOrders/> },
+    { id: "refundedOrders", label: "Refunded Orders", content: <RefundedOrders/> },
   ];
-
+  
   const COLORS = ["#5007aa", "#00c49f", "#ff7300", "#d400ffff"];
   return (
     <>
@@ -128,6 +118,7 @@ const Analytics = () => {
 
       />
       <div className="admin-dashboard tab">
+
         <div className="row">
               {/* Tab Titles */}
               <div className="tab-titles">

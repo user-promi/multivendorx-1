@@ -45,7 +45,7 @@ export default {
                 {
                     key: 'general',
                     label: __( 'General', 'multivendorx' ),
-					desc: __( 'Store can add description, and price of the product', 'multivendorx' ),
+					desc: __( 'Store can add description, and price of the product.', 'multivendorx' ),
                     value: 'general',
                 },
                 {
@@ -110,7 +110,7 @@ export default {
                 'multivendorx'
             ),
             settingDescription: __(
-                'Choose how SKUs for simple, external, or parent products are generated:',
+                'Choose how SKUs for simple, external, or parent products are generated.',
                 'multivendorx'
             ),
             options: [
@@ -186,11 +186,11 @@ export default {
                 'multivendorx'
             ),
             settingDescription: __(
-                'Choose whether related products are shown from the same vendor only or from the entire marketplace.',
+                'Choose whether related products are shown from the same store only or from the entire marketplace.',
                 'multivendorx'
             ),
             desc: __(
-                '<li>Same store - Show related products only from the current store.</li><li>All stores - Show related products from across the marketplace.</li>',
+                '<li>Same store: Show related products only from the current store.</li><li>All stores: Show related products from across the marketplace.</li>',
                 'multivendorx'
             ),
             options: [

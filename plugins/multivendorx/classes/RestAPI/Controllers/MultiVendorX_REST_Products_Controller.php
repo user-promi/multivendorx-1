@@ -134,9 +134,35 @@ class MultiVendorX_REST_Products_Controller extends \WP_REST_Controller {
     }
 
     public function get_item( $request ) {
-        $id = absint( $request->get_param( 'id' ) );
-
+        $store_id = absint( $request->get_param( 'id' ) ); // store ID
+    
+        if ( ! $store_id ) {
+            return rest_ensure_response([
+                'pending' => 0,
+                'draft'   => 0,
+                'publish' => 0,
+            ]);
+        }
+    
+        // Define statuses
+        $statuses = ['pending', 'draft', 'publish'];
+        $counts = [];
+    
+        foreach ( $statuses as $status ) {
+            $products = wc_get_products([
+                'status'    => $status,
+                'limit'     => -1,         
+                'return'    => 'ids',      
+                'meta_key'  => 'multivendorx_store_id',
+                'meta_value'=> $store_id,
+            ]);
+    
+            $counts[$status] = count($products);
+        }
+    
+        return rest_ensure_response($counts);
     }
+    
 
     public function update_item( $request ) {
         $id   = absint( $request->get_param( 'id' ) );

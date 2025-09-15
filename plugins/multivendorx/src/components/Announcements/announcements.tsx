@@ -241,14 +241,6 @@ const Announcements: React.FC = () => {
         setPageCount(Math.ceil(totalRows / rowsPerPage));
     }, [pagination]);
 
-    const toggleDropdown = (id: any) => {
-        if (showDropdown === id) {
-            setShowDropdown(false);
-            return;
-        }
-        setShowDropdown(id);
-    };
-
     // Fetch data from backend
     function requestData(
         rowsPerPage = 10,
@@ -325,7 +317,7 @@ const Announcements: React.FC = () => {
             header: __('Status', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell title={row.original.status || ''}>
-                    {row.original.status || '-'}
+                    {row.original.status ? row.original.status.charAt(0).toUpperCase() + row.original.status.slice(1) : '-'}
                 </TableCell>
             ),
         },
@@ -385,8 +377,6 @@ const Announcements: React.FC = () => {
             </select>
         </div>
     );
-
-    const [open, setOpen] = useState(false);
 
     return (
         <>

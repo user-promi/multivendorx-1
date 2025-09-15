@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import CommonPopup from "./CommonPopup";
 
 // Accepts searchIndex-style items directly
 type SearchItem = {
@@ -42,6 +43,8 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
   const [profileOpen, setProfileOpen] = useState(false);
   const [messageOpen, setMessageOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const [contactSupportPopup, setContactSupportPopup] = useState(false);
+  const [popupContent, setPopupContent] = useState<string>("Loading...");
 
   // Close dropdown on click outside
   useEffect(() => {
@@ -56,7 +59,15 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-
+  useEffect(() => {
+    if (contactSupportPopup) {
+      setPopupContent("Loading...");
+      fetch("https://tawk.to/chat/5d2eebf19b94cd38bbe7c9ad/1fsg8cq8n") // or an API endpoint
+        .then((res) => res.text())
+        .then((html) => setPopupContent(html))
+        .catch(() => setPopupContent("Failed to load content."));
+    }
+  }, [contactSupportPopup]);
   // Open dropdown automatically when there are results
   useEffect(() => {
     setDropdownOpen(results.length > 0);
@@ -355,7 +366,9 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
                       </a>
                     </li>
                     <li>
-                      <a href="#">
+                      <a onClick={(e) => {
+                        setContactSupportPopup(true);
+                      }}>
                         <i className="adminlib-user-network-icon"></i>
                         Contact Support
                       </a>
@@ -367,6 +380,28 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
           </div>
         </div>
       </div>
+
+      {contactSupportPopup && (
+        <CommonPopup
+          open={contactSupportPopup}
+          onClose={() => setContactSupportPopup(false)}
+          width="500px"
+        >
+          <div>
+            <iframe
+              src="https://tawk.to/chat/5d2eebf19b94cd38bbe7c9ad/1fsg8cq8n"
+              title="Support Chat"
+              style={{
+                border: 'none',
+                width: '100%',
+                height: '35rem',
+              }}
+              allow="microphone; camera"
+            />
+          </div>
+        </CommonPopup>
+      )
+      }
     </>
   );
 };

@@ -9,7 +9,7 @@ export default {
     submitUrl: 'settings',
     modal: [
         {
-            key: 'store-policy',
+            key: 'store_policy',
             type: 'textarea',
             desc: __(
                 'Policies created by the admin are displayed by default. Stores can edit and override their own policies.',

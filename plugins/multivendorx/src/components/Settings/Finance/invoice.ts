@@ -7,7 +7,7 @@ export default {
     id: 'store-invoice',
     priority: 5,
     name: __('Invoice & Taxation', 'mvx-pro'),
-    desc: __('Set up when and how invoices are generated in your marketplace', 'mvx-pro'),
+    desc: __('Set up when and how invoices are generated in your marketplace.', 'mvx-pro'),
     icon: 'adminlib-clock2',
     submitUrl: 'settings',
     modal: [

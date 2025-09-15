@@ -241,7 +241,7 @@ export const KnowledgeBase: React.FC = () => {
             header: __('Status', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell title={row.original.status || ''}>
-                    {row.original.status || '-'}
+                    {row.original.status ? row.original.status.charAt(0).toUpperCase() + row.original.status.slice(1) : '-'}
                 </TableCell>
             ),
         },

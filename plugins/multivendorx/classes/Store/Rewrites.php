@@ -26,52 +26,45 @@ class Rewrites {
         add_action( 'init', [ $this, 'register_rule' ] );
         add_filter( 'query_vars', [ $this, 'register_query_var' ] );
         add_filter( 'template_include', [ $this, 'store_template' ], 10 );
-        add_filter( 'template_include', [ $this, 'store_review_template' ], 10 );
+        // add_filter( 'template_include', [ $this, 'store_review_template' ], 10 );
         add_filter( 'template_include', [ $this, 'dashboard_template' ], 10 );
 
         add_action( 'wp', [ $this, 'flash_rewrite_rules' ], 10 );
-        // add_action( 'pre_get_posts', [ $this, 'store_query_filter' ] );
+        add_action( 'pre_get_posts', [ $this, 'store_query_filter' ] );
 
     }
 
-    public function store_query_filter($query) {
-
+    public function store_query_filter( $query ) {
         if ( is_admin() || ! $query->is_main_query() ) {
             return;
         }
-    
-    
+
         $store_slug = get_query_var( 'store' );
         if ( empty( $store_slug ) ) {
             return;
         }
-    
+
         $store_obj = Store::get_store_by_slug( $store_slug );
-       
-    
         if ( ! $store_obj ) {
             return;
         }
-    
-        $store_id = $store_obj->get_id();
 
+        $store_id = $store_obj->get_id();
         if ( ! $store_id ) {
             return;
         }
-    
-        // convert main query into a product archive for this store
+
+        // Force query to load products
+        $query->set( 'post_type', 'product' );
+
+        // Add vendor filter
         $meta_query   = $query->get( 'meta_query', [] );
         $meta_query[] = [
             'key'     => 'multivendorx_store_id',
             'value'   => $store_id,
             'compare' => '=',
         ];
-    
-        $query->set( 'post_type', 'product' );
-        $query->set( 'post_status', 'publish' );
         $query->set( 'meta_query', $meta_query );
-        $query->set( 'posts_per_page', apply_filters( 'mvx_store_products_per_page',
-            wc_get_default_products_per_row() * wc_get_default_product_rows_per_page() ) );
     }
 
 
@@ -136,8 +129,13 @@ class Rewrites {
         if ( ! empty( $store_name ) ) {
             $store = Store::get_store_by_slug($store_name);
 
+            // if ( get_query_var( 'store_review' ) ) {
+            //     return MultiVendorX()->util->get_template( 'store-review.php', [] );
+            // }
+
             if ( $store ) {
-                 return MultiVendorX()->util->get_template( 'store.php', ['store_id' => $store->get_id()] );
+                MultiVendorX()->util->get_template( 'store.php', ['store_id' => $store->get_id()] );
+                exit;
             }
         }
 

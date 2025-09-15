@@ -1,13 +1,16 @@
-import { AdminBreadcrumbs } from 'zyra';
-import WithdrawalRequests from './withdrawalRequests';
+import { AdminBreadcrumbs, getApiLink } from 'zyra';
 import Products from './products';
 import Vendors from './vendors';
 import Coupons from './coupon';
 import Transactions from './transaction';
 import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 const Notification = () => {
-
+    const [productCount, setProductCount] = useState<number>(0);
+    const [couponCount, setCouponCount] = useState<number>(0);
+    const [transactionCount, setTransactionCount] = useState<number>(0);
+    const [storeCount, setStoreCount] = useState<number>(0);
 
     const [activeTab, setActiveTab] = useState("products");
 
@@ -18,47 +21,46 @@ const Notification = () => {
         { id: "coupons", label: "Coupons", content: <Coupons /> },
         { id: "transactions", label: "Transaction", content: <Transactions /> },
     ];
-    const workboardStats = [
-        {
-            id: 'reviews',
-            label: 'Pending Products',
-            count: 12,
-        },
-        {
-            id: 'reviews',
-            label: 'Pending Vendors',
-            count: 12,
-        },
-        {
-            id: 'reviews',
-            label: 'Pending Coupons',
-            count: 12,
-        },
-        {
-            id: 'reviews',
-            label: 'Pending Transaction',
-            count: 12,
-        },
-    ];
+    // Fetch total rows on mount
+    useEffect(() => {
+        axios({
+            method: 'GET',
+            url: getApiLink(appLocalizer, 'products'),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            params: { count: true },
+        })
+            .then((response) => {
+                setProductCount(response.data || 0);
+            })
 
-    const withdrawalExtraStats = [
-        { id: 'reverse', label: 'Reverse Withdrawal', value: '₹0.00' },
-        { id: 'collected', label: 'Total Collected', value: '₹25,440.00' },
-        { id: 'remaining', label: 'Remaining Balance', value: '₹12,850.00' },
-        { id: 'transactions', label: 'Total Transactions', value: '156' },
-    ];
+        axios({
+            method: 'GET',
+            url: getApiLink(appLocalizer, 'coupons'),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            params: { count: true },
+        })
+            .then((response) => {
+                setCouponCount(response.data || 0);
+            })
+        axios({
+            method: 'GET',
+            url: getApiLink(appLocalizer, 'store'),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            params: { count: true, status: 'pending' },
+        })
+            .then((response) => {
+                setStoreCount(response.data || 0);
+            })
+    }, []);
+
     const tasks = [
         {
             id: 1,
             title: "Fix login bug",
-            priority: "High",
-            dueDate: "2025-09-10",
         },
         {
             id: 2,
             title: "Update dashboard UI",
-            priority: "Medium",
-            dueDate: "2025-09-15",
         },
         {
             id: 3,
@@ -69,18 +71,7 @@ const Notification = () => {
         {
             id: 4,
             title: "Deploy staging server",
-            priority: "High",
-            dueDate: "2025-09-08",
         },
-    ];
-    const analyticsData = [
-        { icon: "adminlib-tools red", number: "230k", text: "Total Earnings" },
-        { icon: "adminlib-book green", number: "45k", text: "Awaiting Disbursement" },
-        { icon: "adminlib-global-community yellow", number: "1.2M", text: "Pending Withdrawal" },
-        { icon: "adminlib-wholesale blue", number: "500k", text: "Completed / Paid Disbursement" },
-        { icon: "adminlib-tools red", number: "230k", text: "Refund / Chargeback Impact" },
-        { icon: "adminlib-book green", number: "45k", text: "Manual Adjustments" },
-        { icon: "adminlib-global-community yellow", number: "1.2M", text: "Upcoming Unlock" },
     ];
     return (
         <>
@@ -92,8 +83,9 @@ const Notification = () => {
 
             {/* Workboard Stats */}
             <div className="work-board">
+
                 <div className="row">
-                    <div className="column width-65">
+                    <div className="column">
                         <div className="card-header">
                             <div className="left">
                                 <div className="title">
@@ -104,28 +96,48 @@ const Notification = () => {
                                 <span>Updated 1 month ago</span>
                             </div>
                         </div>
-                        <div className="card-body">
-                            <div className="analytics-container">
-
-                                {analyticsData.map((item, idx) => (
-                                    <div key={idx} className="analytics-item">
-                                        <div className="analytics-icon">
-                                            <i className={item.icon}></i>
-                                        </div>
-                                        <div className="details">
-                                            <div className="number">{item.number}</div>
-                                            <div className="text">{item.text}</div>
-                                        </div>
-                                    </div>
-                                ))}
-
+                        <div className="overview-card-wrapper">
+                            <div className="action">
+                                <div className="title">
+                                    {productCount}
+                                    <i className="adminlib-cart"></i>
+                                </div>
+                                <div className="description">
+                                    Pending Products
+                                </div>
+                            </div>
+                            <div className="action">
+                                <div className="title">
+                                    {storeCount}
+                                    <i className="adminlib-tools"></i>
+                                </div>
+                                <div className="description">
+                                    Pending Stores
+                                </div>
+                            </div>
+                        </div>
+                        <div className="overview-card-wrapper">
+                            <div className="action">
+                                <div className="title">
+                                    {couponCount}
+                                    <i className="adminlib-catalog"></i>
+                                </div>
+                                <div className="description">
+                                    Pending Coupons
+                                </div>
+                            </div>
+                            <div className="action">
+                                <div className="title">
+                                    {transactionCount}
+                                    <i className="adminlib-module"></i>
+                                </div>
+                                <div className="description">
+                                    Pending Transaction
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-
-                <div className="row">
                     <div className="column">
                         <div className="card-header">
                             <div className="left">
@@ -152,18 +164,13 @@ const Notification = () => {
                                             onClick={() => setShowDetails(task)}
                                         >
                                             <td>{task.title}</td>
-                                            <td>
-                                                <span className={`priority ${task.priority.toLowerCase()}`}>
-                                                    {task.priority}
-                                                </span>
-                                            </td>
-                                            <td>{task.dueDate}</td>
                                         </tr>
                                     ))}
                                 </tbody>
                             </table>
                         </div>
                     </div>
+
                     <div className="column">
                         <div className="card-header">
                             <div className="left">

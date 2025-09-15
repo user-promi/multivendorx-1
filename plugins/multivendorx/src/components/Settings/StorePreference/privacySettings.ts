@@ -94,19 +94,19 @@ export default {
             class: 'mvx-toggle-checkbox',
             options: [
                 {
-                    key: 'enable_per_store_policy_store',
+                    key: 'store',
                     label: __( 'Store', 'multivendorx' ),
-                    value: 'enable_per_store_policy_store',
+                    value: 'store',
                 },
                 {
-                    key: 'enable_per_store_policy_shipping',
+                    key: 'shipping',
                     label: __( 'Shipping', 'multivendorx' ),
-                    value: 'enable_per_store_policy_shipping',
+                    value: 'shipping',
                 },
                 {
-                    key: 'enable_per_store_policy_refund',
+                    key: 'refund_return',
                     label: __( 'Refund and return', 'multivendorx' ),
-                    value: 'enable_per_store_policy_refund',
+                    value: 'refund_return',
                 },
             ],
             selectDeselect: true,

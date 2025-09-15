@@ -37,13 +37,13 @@
 .admin-filter-wrapper {
   display: flex; 
   border-radius: 0.313rem;
-  background: #fff;
+  background: transparent;
   min-height: 2.188rem;
   justify-content: center;
   width: 100%;
   position: sticky;
   bottom: 1rem;
-
+    
   .wrap-bulk-all-date {
     display: flex;
     gap: 0.313rem;
@@ -55,6 +55,10 @@
     span {
       font-size: 1rem;
       color: $theme-color;
+
+      &.title{
+        font-weight: 500;
+      }
     }
 
     select,
@@ -67,13 +71,20 @@
       background-size: 1rem;
       color: $theme-color;
 
+      option{
+        color: #000;
+      }
       &:focus{
         outline: none;
-        box-shadow: none;
+        box-shadow: none !important; /*for overwrite common style*/
       }
     }
   }
-
+  &.bulk{
+      .wrap-bulk-all-date{
+        background: #E2C290;
+      }
+    }
   .close-btn{
     color: #f06b4f;
     font-size: 0.95rem;
@@ -154,11 +165,17 @@
 
     .admin-table-body {
       .table-row-custom {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
+        // display: flex;
+        // align-items: center;
+        // gap: 0.5rem;
 
-
+        .name{
+          font-weight: 500;
+        }
+        .sub-text{
+          color: #0000007a;
+          padding-top: 0.313rem;
+        }
         .product-image {
           width: 2.313rem;
           height: 2.313rem;

@@ -82,7 +82,10 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             return new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
         }
-
+        $options = $request->get_param( 'options' );
+        if( $options ){
+            return $this->get_stores_dropdown( $request );
+        }
         $status = $request->get_param( 'status' );
         if( $status ){
             return $this->get_pending_stores( $request );
@@ -158,6 +161,21 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
 
         return rest_ensure_response( $formatted_stores );
     }
+    
+    public function get_stores_dropdown( $request ) {
+        $stores = StoreUtil::get_store();
+    
+        $formatted_stores = array();
+        foreach ( $stores as $store ) {
+            $formatted_stores[] = array(
+                'id'         => (int) $store['ID'],
+                'store_name' => $store['name'],
+            );
+        }
+    
+        return rest_ensure_response( $formatted_stores );
+    }
+    
 
     public function create_item( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
@@ -373,7 +391,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
 
     public function create_wp_user( $email, $name ) {
         if ( email_exists( $email ) ) {
-            return new WP_Error( 'email_exists', __( 'Email already registered.' ) );
+            return new WP_Error( 'email_exists', __( 'Email already registered.', 'multivendorx' ) );
         }
 
         $username = sanitize_user( current( explode( '@', $email ) ), true );
