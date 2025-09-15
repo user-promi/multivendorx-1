@@ -190,7 +190,7 @@ export default {
                 'multivendorx'
             ),
             desc: __(
-                '<li>Same store: Show related products only from the current store.</li><li>All stores: Show related products from across the marketplace.</li>',
+                '<li>Same store - Show related products only from the current store.</li><li>All stores - Show related products from across the marketplace.</li><li>Do not display - Hide related products completely.</li>',
                 'multivendorx'
             ),
             options: [
@@ -206,6 +206,14 @@ export default {
                     key: 'all_stores',
                     label: __(
                         'All stores',
+                        'multivendorx'
+                    ),
+                    value: 'all_stores',
+                },
+                {
+                    key: 'all_stores',
+                    label: __(
+                        'Do not display',
                         'multivendorx'
                     ),
                     value: 'all_stores',

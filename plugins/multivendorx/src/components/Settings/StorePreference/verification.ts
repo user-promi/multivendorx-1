@@ -15,9 +15,7 @@ export default {
     priority: 3,
     name: __('Verification', 'mvx-pro'),
     desc: __(
-        'Enable various forms of identity verification for stores and ensure a trusted marketplace.',
-        'mvx-pro'
-    ),
+        'Seller verification confirms a store identity with address, contact, and social profiles-building trust and boosting buyer confidence.','mvx-pro'),
     icon: 'adminlib-clock2',
     submitUrl: 'settings',
 
@@ -130,7 +128,7 @@ export default {
                     icon: payPal,
                     label: 'Identity Verification',
                     connected: false,
-                    desc: 'Verify user identity using government-issued documents or facial recognition. Ensures authenticity of users.',
+                    desc: 'Verify store identity using government-issued documents or facial recognition. Ensures authenticity of users.',
                     wrapperClass: 'add-method',
                     formFields: [
                         {
@@ -152,7 +150,7 @@ export default {
                     icon: email,
                     label: 'Email Verification',
                     connected: true,
-                    desc: 'Verify user email addresses to prevent fake registrations and enhance security.',
+                    desc: 'Verify stores email addresses to prevent fake registrations and enhance security.',
                     formFields: [
                         {
                             key: 'registration_notice',
@@ -175,7 +173,7 @@ export default {
                     icon: social,
                     label: 'Social Verification',
                     connected: true,
-                    desc: 'Verify user email addresses to prevent fake registrations and enhance security.',
+                    desc: 'Allow stores to verify their identity by connecting social media accounts.',
                     wrapperClass: 'social-verification',
                     formFields: [
                         {
@@ -187,7 +185,7 @@ export default {
                                     icon: google,
                                     label: 'Google Connect',
                                     connected: false,
-                                    desc: 'Connect and authenticate users via Google accounts.',
+                                    desc: 'Connect and authenticate stores via Google accounts.',
                                     formFields: [
                                         { key: 'client_id', type: 'text', label: 'Google Client ID', placeholder: 'Enter Google Client ID' },
                                         { key: 'client_secret', type: 'password', label: 'Google Client Secret', placeholder: 'Enter Google Client Secret' },
@@ -199,7 +197,7 @@ export default {
                                     icon: twitter,
                                     label: 'Twitter Connect',
                                     connected: false,
-                                    desc: 'Connect and authenticate users via Twitter accounts.',
+                                    desc: 'Connect and authenticate stores via Twitter accounts.',
                                     formFields: [
                                         { key: 'api_key', type: 'text', label: 'Twitter API Key', placeholder: 'Enter Twitter API Key' },
                                         { key: 'api_secret_key', type: 'password', label: 'Twitter API Secret Key', placeholder: 'Enter Twitter API Secret Key' },
@@ -211,7 +209,7 @@ export default {
                                     icon: facebook,
                                     label: 'Facebook Connect',
                                     connected: false,
-                                    desc: 'Connect and authenticate users via Facebook accounts.',
+                                    desc: 'Connect and authenticate stores via Facebook accounts.',
                                     formFields: [
                                         { key: 'app_id', type: 'text', label: 'Facebook App ID', placeholder: 'Enter Facebook App ID' },
                                         { key: 'app_secret', type: 'password', label: 'Facebook App Secret', placeholder: 'Enter Facebook App Secret' },
@@ -222,7 +220,7 @@ export default {
                                     icon: LinkedIn,
                                     label: 'LinkedIn Connect',
                                     connected: false,
-                                    desc: 'Connect and authenticate users via LinkedIn accounts.',
+                                    desc: 'Connect and authenticate stores via LinkedIn accounts.',
                                     formFields: [
                                         { key: 'client_id', type: 'text', label: 'LinkedIn Client ID', placeholder: 'Enter LinkedIn Client ID' },
                                         { key: 'client_secret', type: 'password', label: 'LinkedIn Client Secret', placeholder: 'Enter LinkedIn Client Secret' },
