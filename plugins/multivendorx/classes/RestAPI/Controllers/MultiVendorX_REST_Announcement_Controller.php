@@ -75,16 +75,16 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
                 array( 'status' => 403 )
             );
         }
-
+    
         $limit  = max( intval( $request->get_param( 'row' ) ), 10 );
         $page   = max( intval( $request->get_param( 'page' ) ), 1 );
         $offset = ( $page - 1 ) * $limit;
-
+    
         $type   = $request->get_param( 'type' ) ?: 'multivendorx_an';
         $status = $request->get_param( 'status' );
-
-        // Build base query
-        $query_args = [
+    
+        // Use get_posts instead of WP_Query
+        $args = [
             'post_type'      => $type,
             'posts_per_page' => $limit,
             'offset'         => $offset,
@@ -92,17 +92,17 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
             'order'          => 'DESC',
             'post_status'    => $status ? [$status] : ['publish', 'draft', 'pending', 'private'],
         ];
-
-        $query = new \WP_Query( $query_args );
-
+    
+        $posts = get_posts( $args );
+    
         $items = [];
-        foreach ( $query->posts as $post ) {
+        foreach ( $posts as $post ) {
             $id      = (int) $post->ID;
             $title   = $post->post_title;
             $content = $post->post_content;
             $status  = $post->post_status;
             $stores  = get_post_meta( $id, '_mvx_announcement_stores', true );
-
+    
             $store_names = [];
             if ( is_array( $stores ) ) {
                 foreach ( $stores as $store_id ) {
@@ -112,7 +112,7 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
                     }
                 }
             }
-
+    
             $items[] = [
                 'id'      => $id,
                 'title'   => $title,
@@ -122,9 +122,10 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
                 'date'    => get_the_date( 'c', $post ),
             ];
         }
-
-        // Counts
+    
+        // Counts using wp_count_posts
         $counts = wp_count_posts( $type );
+    
         $response = [
             'items' => $items,
             'counts' => [
@@ -133,10 +134,10 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
                 'pending' => (int) $counts->pending,
             ],
         ];
-
+    
         return rest_ensure_response( $response );
     }
-    
+        
     
     
     
