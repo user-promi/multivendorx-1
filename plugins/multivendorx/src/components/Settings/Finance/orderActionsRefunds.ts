@@ -59,7 +59,7 @@ export default {
             moduleEnabled: 'marketplace-refund',
         },
         {
-            key: 'abuse_report_reasons',
+            key: 'refund_reasons',
             type: 'multi-string',
             label: __( 'Refund reasons', 'multivendorx' ),
             placeholder: __( 'Enter refund reasons here…', 'multivendorx' ),

@@ -38,22 +38,29 @@ export default {
             images: [
                 {
                     key: 'template1',
-                    label: 'Prime view',
+                    label: 'Neo frame',
                     img: template1,
                     value: 'template1',
                 },
                 {
                     key: 'template2',
-                    label: 'Nova style',
+                    label: 'Elegant wave',
                     img: template2,
                     value: 'template2',
                 },
-                {
-                    key: 'template3',
-                    label: 'Aura mode',
-                    img: template3,
-                    value: 'template3',
-                },
+                // {
+                //     key: 'template3',
+                //     label: 'Classic Vibe',
+                //     img: template3,
+                //     value: 'template3',
+                // },
+                
+                // {
+                //     key: 'template3',
+                //     label: 'Modern Glow',
+                //     img: template3,
+                //     value: 'template3',
+                // },
             ],
         },
         {
