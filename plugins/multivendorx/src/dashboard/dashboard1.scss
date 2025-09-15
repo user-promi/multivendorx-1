@@ -13,6 +13,8 @@ a {
     text-decoration: none;
 }
 
+
+
 .dashboard-tabs-wrapper {
     width: 16rem;
     overflow: hidden;
@@ -44,7 +46,10 @@ a {
 
     ul {
         padding: 0;
-        margin: 1rem 0;
+        max-height: 80vh;
+        overflow: auto;
+        margin: 0;
+
 
         li {
             padding: 0 0.75rem;
@@ -68,7 +73,7 @@ a {
                 text-transform: none;
                 line-height: 1.25rem;
                 color: #000000d8;
-                padding: 0.5rem 0.625rem;
+                padding: 0.625rem;
                 border-radius: 0.375rem;
                 gap: 0.5rem;
 
@@ -78,13 +83,9 @@ a {
                     align-items: center;
                 }
             }
-
-            &:hover {
-                a {
-                    background-color: #f3f2f3;
-                }
+            a.tab:hover{
+                 background-color: #f3f2f3;
             }
-
             &.active {
                 a {
                     background-color: $theme-background-color;
@@ -93,11 +94,15 @@ a {
             }
         }
 
-        ul {
+        .subtabs {
             margin: 0;
 
             li a {
                 padding-left: 2rem;
+
+                &:hover {
+                    background-color: #f3f2f3;
+                }
             }
         }
     }
@@ -326,6 +331,7 @@ a {
         min-height: 100vh;
         background-color: #f5f6fa;
         padding-top: 7rem;
+        padding-bottom: 4rem;
 
         .title-wrapper {
             display: flex;
@@ -370,33 +376,6 @@ a {
         box-shadow: 0 1px 3px #364a630d;
         background: #fff;
         padding: 1.5rem;
-
-        .card-title {
-            font-size: 1.125rem;
-            margin-bottom: 1.313rem;
-        }
-
-        .form-group-wrapper {
-            display: flex;
-            gap: 1rem;
-            align-items: end;
-
-
-            .form-group {
-                display: flex;
-                flex-direction: column;
-                width: 100%;
-                margin-bottom: 1rem;
-
-                label {
-                    font-size: .875rem;
-                    font-weight: 500;
-                    color: #344357;
-                    margin-bottom: .5rem;
-                }
-            }
-        }
-
     }
 
     .row {
@@ -603,6 +582,7 @@ a {
             }
         }
     }
+
     // cart header end
 }
 
@@ -610,7 +590,9 @@ a {
 .page-title-wrapper {
     display: flex;
     justify-content: space-between;
-    padding-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+    border-bottom: $border-light-small;
 
     .page-title {
         display: flex;
@@ -622,7 +604,22 @@ a {
             padding-bottom: 0.5rem;
         }
     }
+
+    .breadcrumbs {
+        span {
+            a {
+                color: $theme-color;
+            }
+
+            &:last-child {
+                a {
+                    color: #0000007a;
+                }
+            }
+        }
+    }
 }
+
 // page title end
 
 // analytics-container start  remove this 
@@ -654,6 +651,7 @@ a {
         }
     }
 }
+
 // analytics-container end
 
 .MuiDialog-container {
@@ -694,34 +692,6 @@ a {
             font-weight: 500;
             padding: 0.5rem 0;
             margin-top: 0.5rem;
-        }
-
-        .tab-titles {
-            display: flex;
-            gap: 1.125rem;
-            border-bottom: $border-light-medium;
-            margin: 1rem 0;
-
-            .title {
-                padding-bottom: 0.625rem;
-                cursor: pointer;
-
-                h2 {
-                    color: #121116;
-                    font-size: .938rem;
-                    line-height: 1.5;
-                    font-weight: 500;
-                    margin: 0;
-                }
-
-                &.active {
-                    border-bottom: .126rem solid #5007aa;
-
-                    h2 {
-                        color: var(--themeCoolor);
-                    }
-                }
-            }
         }
     }
 
@@ -784,6 +754,7 @@ a {
         justify-content: end;
         padding: 2rem;
         padding-bottom: 0;
+        gap: 1rem;
     }
 }
 
@@ -832,29 +803,38 @@ a {
 
 // top items end
 
+.content {
+    flex-direction: column;
 
-.tab-titles {
-    display: flex;
-    gap: 1rem;
+    .tab-titles {
+        display: flex;
+        gap: 1rem;
 
-    .title {
-        padding-bottom: 0.313rem;
-        cursor: pointer;
+        .title {
+            padding-bottom: 0.313rem;
+            cursor: pointer;
 
-        p {
-            font-size: .938rem;
-            line-height: 1.5;
-            color: #000;
-            font-weight: 500;
-            margin: 0;
-        }
-
-        &.active {
-            color: $theme-color;
-            border-bottom: 0.126rem solid $theme-color;
+            h2 {
+                font-size: 1rem;
+                margin-bottom: 0;
+                font-weight: 500;
+            }
 
             p {
+                font-size: .938rem;
+                line-height: 1.5;
+                color: #000;
+                font-weight: 500;
+                margin: 0;
+            }
+
+            &.active {
                 color: $theme-color;
+                border-bottom: 0.126rem solid $theme-color;
+
+                p {
+                    color: $theme-color;
+                }
             }
         }
     }

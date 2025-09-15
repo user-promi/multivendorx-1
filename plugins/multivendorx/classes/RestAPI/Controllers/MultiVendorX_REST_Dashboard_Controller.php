@@ -130,6 +130,7 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
             'coupons' => array(
                 'name'    => 'Coupons',
                 'slug'    => 'coupons',
+                'icon'    => 'adminlib-cart',
                 'submenu' => array(
                     array(
                         'key'  => 'all-coupons',
@@ -143,6 +144,7 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
 			'reports' => array(
                 'name'    => 'Stats / Report',
                 'slug'    => 'reports',
+                'icon'    => 'adminlib-cart',
                 'submenu' => array(
                     array(
                         'key'  => 'overview',
@@ -162,6 +164,7 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
 			'payments' => array(
                 'name'    => 'Payments',
                 'slug'    => 'payments',
+                'icon'    => 'adminlib-cart',
                 'submenu' => array(
                     array(
                         'key'  => 'withdrawl',
