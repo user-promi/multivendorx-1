@@ -65,8 +65,14 @@ class Rewrites {
             'compare' => '=',
         ];
         $query->set( 'meta_query', $meta_query );
-    }
+       
+        // Pagination fix
+        $paged = max( 1, get_query_var( 'paged' ) );
+        $query->set( 'paged', $paged );
+        $query->set( 'wc_query', 'product_query' ); // WooCommerce flag
 
+
+    }
 
     public function register_rule() {
 

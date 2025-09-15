@@ -23,7 +23,7 @@ class Frontend {
         add_filter( 'multivendorx_query_vars', array($this, 'add_query_vars_for_policy') );
         add_filter( 'multivendorx_store_tabs', [ $this, 'add_store_policy_tab' ], 10, 2 );
         
-        add_filter( 'template_include', [ $this, 'store_policy_template' ] );
+        // add_filter( 'template_include', [ $this, 'store_policy_template' ] );
 
     }
 
