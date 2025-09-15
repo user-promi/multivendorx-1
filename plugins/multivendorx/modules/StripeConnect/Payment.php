@@ -77,14 +77,12 @@ class Payment
 
     public function handle_oauth_callback() {
         if (!isset($_GET['code'], $_GET['state'])) {
-            return;
+            wp_safe_redirect(home_url('/?dashboard=1&tab=payments&subtab=withdrawl&error=stripe_oauth'));
+            exit;
         }
     
         $state = sanitize_text_field($_GET['state']);
-    
-        // Resolve vendor id from transient (state must match one created earlier)
         $vendor_id = get_transient('mvx_stripe_oauth_state_' . $state);
-        // consume the transient immediately
         delete_transient('mvx_stripe_oauth_state_' . $state);
     
         if (empty($vendor_id)) {
@@ -96,7 +94,7 @@ class Payment
         $payment_admin_settings = MultiVendorX()->setting->get_setting('payment_methods', []);
         $stripe_settings = $payment_admin_settings['stripe-connect'] ?? [];
         $secret_key = $stripe_settings['secret_key'] ?? '';
-        $client_id = $stripe_settings['client_id'] ?? '';
+        $client_id  = $stripe_settings['client_id'] ?? '';
     
         $redirect_uri = home_url('/');
         $redirect_uri = add_query_arg([
@@ -104,7 +102,7 @@ class Payment
             'tab'       => 'payments',
             'subtab'    => 'withdrawl',
         ], $redirect_uri);
-
+    
         $response = wp_remote_post("https://connect.stripe.com/oauth/token", [
             'body' => [
                 'grant_type'    => 'authorization_code',
@@ -112,36 +110,67 @@ class Payment
                 'client_secret' => $secret_key,
                 'code'          => $code,
                 'redirect_uri'  => $redirect_uri,
+                'service_agreement' => 'recipient', // important like old code
             ]
         ]);
-
+    
         if (is_wp_error($response)) {
-            wp_die(__('Stripe OAuth connection failed.', 'multivendorx'));
+            wp_safe_redirect(add_query_arg([
+                'dashboard' => 1,
+                'tab'       => 'payments',
+                'subtab'    => 'withdrawl',
+                'error'     => 'stripe_oauth_failed',
+            ], home_url('/')));
+            exit;
         }
     
         $body = json_decode(wp_remote_retrieve_body($response), true);
     
         if (!empty($body['error'])) {
-            $desc = isset($body['error_description']) ? ' - ' . esc_html($body['error_description']) : '';
-            wp_die(__('Stripe connection failed:', 'multivendorx') . ' ' . esc_html($body['error']) . $desc);
+            wp_safe_redirect(add_query_arg([
+                'dashboard' => 1,
+                'tab'       => 'payments',
+                'subtab'    => 'withdrawl',
+                'error'     => sanitize_text_field($body['error']),
+            ], home_url('/')));
+            exit;
         }
     
         if (!empty($body['stripe_user_id'])) {
             update_user_meta($vendor_id, '_stripe_connect_account_id', sanitize_text_field($body['stripe_user_id']));
-            $final_url = home_url('/');
+            update_user_meta($vendor_id, '_vendor_payment_mode', 'stripe-connect');
+            update_user_meta($vendor_id, 'vendor_connected', 1);
+            update_user_meta($vendor_id, 'admin_client_id', $client_id);
+    
+            if (!empty($body['access_token'])) {
+                update_user_meta($vendor_id, 'access_token', sanitize_text_field($body['access_token']));
+            }
+            if (!empty($body['refresh_token'])) {
+                update_user_meta($vendor_id, 'refresh_token', sanitize_text_field($body['refresh_token']));
+            }
+            if (!empty($body['stripe_publishable_key'])) {
+                update_user_meta($vendor_id, 'stripe_publishable_key', sanitize_text_field($body['stripe_publishable_key']));
+            }
+    
+            // ✅ Redirect back to vendor billing tab with success
             $final_url = add_query_arg([
                 'dashboard' => 1,
                 'tab'       => 'payments',
                 'subtab'    => 'withdrawl',
                 'connected' => 'stripe',
-            ], $final_url);
-            
+            ], home_url('/'));
             wp_safe_redirect($final_url);
-            exit;            
+            exit;
         }
     
-        wp_die(__('Stripe connection failed.', 'multivendorx'));
-    }
+        wp_safe_redirect(add_query_arg([
+            'dashboard' => 1,
+            'tab'       => 'payments',
+            'subtab'    => 'withdrawl',
+            'error'     => 'stripe_connection_failed',
+        ], home_url('/')));
+        exit;
+    }    
     
     public function init_stripe() {
         $payment_admin_settings = MultiVendorX()->setting->get_setting('payment_methods', []);
@@ -193,7 +222,7 @@ class Payment
 
     public function get_store_payment_settings() {
         $payment_admin_settings = MultiVendorX()->setting->get_setting('payment_methods', []);
-        $stripe_settings = !empty($payment_admin_settings['stripe-connect']) ? $payment_admin_settings['stripe-connect'] : [];
+        $stripe_settings = $payment_admin_settings['stripe-connect'] ?? [];
     
         if ($stripe_settings && $stripe_settings['enable']) {
             $vendor_id = get_current_user_id();
