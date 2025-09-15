@@ -68,9 +68,9 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
                         'capability' => ['read_products', 'edit_products', 'upload_files']
                     ),                    
                     array(
-                        'key'  => 'store-settings',
-                        'name' => 'Store Settings',
-                        'slug' => 'store-settings',
+                        'key'  => 'payout-configuration',
+                        'name' => 'Payout Configuration',
+                        'slug' => 'payout-configuration',
                         'icon'    => 'adminlib-cart',
                         'capability' => ['read_products', 'edit_products', 'upload_files']
                     ),
