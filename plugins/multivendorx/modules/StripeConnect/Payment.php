@@ -21,24 +21,21 @@ class Payment
     
         // Use admin_post endpoint for OAuth callback (works whether user is logged-in or not)
         add_action('admin_post_multivendorx_stripe_oauth_callback', [$this, 'handle_oauth_callback']);
-        add_action('admin_post_nopriv_multivendorx_stripe_oauth_callback', [$this, 'handle_oauth_callback']);
+
     }    
     
     public function ajax_create_account() {
         if (!is_user_logged_in()) {
-            file_put_contents(plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s") . ": ajax_create_account: User not logged in\n", FILE_APPEND);
             wp_send_json_error(['message' => __('You must be logged in.', 'multivendorx')]);
         }
     
         $vendor_id = get_current_user_id();
-        file_put_contents(plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s") . ": ajax_create_account: Vendor ID = " . $vendor_id . "\n", FILE_APPEND);
     
         $payment_admin_settings = MultiVendorX()->setting->get_setting('payment_methods', []);
         $stripe_settings = $payment_admin_settings['stripe-connect'] ?? [];
         $client_id = $stripe_settings['client_id'] ?? '';
     
         if (empty($client_id)) {
-            file_put_contents(plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s") . ": ajax_create_account: Missing client_id\n", FILE_APPEND);
             wp_send_json_error(['message' => __('Stripe Client ID not configured.', 'multivendorx')]);
         }
     
@@ -56,8 +53,6 @@ class Payment
             'state'         => $state,
         ], 'https://connect.stripe.com/oauth/authorize');
     
-        file_put_contents(plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s") . ": ajax_create_account: Onboarding URL generated: " . $onboarding_url . "\n", FILE_APPEND);
-    
         wp_send_json_success([
             'message'        => __('Redirecting to Stripe onboarding...', 'multivendorx'),
             'onboarding_url' => $onboarding_url,
@@ -65,10 +60,8 @@ class Payment
     }
     
     public function handle_oauth_callback() {
-        file_put_contents(plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s") . ": handle_oauth_callback: Called with params: " . var_export($_GET, true) . "\n", FILE_APPEND);
-    
+        
         if (!isset($_GET['code'], $_GET['state'])) {
-            file_put_contents(plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s") . ": handle_oauth_callback: Missing code/state\n", FILE_APPEND);
             wp_safe_redirect(home_url('/?dashboard=1&tab=payments&subtab=withdrawl&error=stripe_oauth'));
             exit;
         }
@@ -76,16 +69,13 @@ class Payment
         $state = sanitize_text_field($_GET['state']);
         $vendor_id = get_transient('mvx_stripe_oauth_state_' . $state);
         delete_transient('mvx_stripe_oauth_state_' . $state);
-    
-        file_put_contents(plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s") . ": handle_oauth_callback: Vendor ID from state = " . var_export($vendor_id, true) . "\n", FILE_APPEND);
-    
+
         if (empty($vendor_id)) {
             wp_die(__('Invalid or expired OAuth state.', 'multivendorx'));
         }
     
         $code = sanitize_text_field($_GET['code']);
-        file_put_contents(plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s") . ": handle_oauth_callback: Code = " . $code . "\n", FILE_APPEND);
-    
+        
         $payment_admin_settings = MultiVendorX()->setting->get_setting('payment_methods', []);
         $stripe_settings = $payment_admin_settings['stripe-connect'] ?? [];
         $secret_key = $stripe_settings['secret_key'] ?? '';
@@ -99,9 +89,7 @@ class Payment
                 'grant_type' => 'authorization_code',
                 'code'       => $code,
             ]);
-    
-            file_put_contents(plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s") . ": handle_oauth_callback: SDK Response = " . var_export($resp->toArray(), true) . "\n", FILE_APPEND);
-    
+
             if (!empty($resp->stripe_user_id)) {
                 update_user_meta($vendor_id, '_stripe_connect_account_id', sanitize_text_field($resp->stripe_user_id));
                 update_user_meta($vendor_id, '_vendor_payment_mode', 'stripe-connect');
@@ -117,9 +105,6 @@ class Payment
                 if (!empty($resp->stripe_publishable_key)) {
                     update_user_meta($vendor_id, 'stripe_publishable_key', sanitize_text_field($resp->stripe_publishable_key));
                 }
-    
-                file_put_contents(plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s") . ": handle_oauth_callback: Vendor " . $vendor_id . " successfully connected\n", FILE_APPEND);
-    
                 wp_safe_redirect(add_query_arg('connected', 'stripe', home_url('/?dashboard=1&tab=payments&subtab=withdrawl')));
                 exit;
             }
@@ -128,7 +113,6 @@ class Payment
             exit;
     
         } catch (\Stripe\Exception\ApiErrorException $e) {
-            file_put_contents(plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s") . ": handle_oauth_callback: Stripe SDK Error " . $e->getMessage() . "\n", FILE_APPEND);
             wp_safe_redirect(add_query_arg('error', 'stripe_sdk_error', home_url('/?dashboard=1&tab=payments&subtab=withdrawl')));
             exit;
         }
@@ -137,14 +121,11 @@ class Payment
     
     public function ajax_disconnect_account() {
         if (!is_user_logged_in()) {
-            file_put_contents(plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s") . ": ajax_disconnect_account: User not logged in\n", FILE_APPEND);
             wp_send_json_error(['message' => __('You must be logged in.', 'multivendorx')]);
         }
     
         $vendor_id = get_current_user_id();
         delete_user_meta($vendor_id, '_stripe_connect_account_id');
-        file_put_contents(plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s") . ": ajax_disconnect_account: Vendor " . $vendor_id . " disconnected\n", FILE_APPEND);
-    
         wp_send_json_success(['message' => __('Your Stripe account has been disconnected.', 'multivendorx')]);
     }
     
