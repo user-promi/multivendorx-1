@@ -26,27 +26,25 @@ class Payment
     
     public function ajax_create_account() {
         if (!is_user_logged_in()) {
+            file_put_contents(plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s") . ": ajax_create_account: User not logged in\n", FILE_APPEND);
             wp_send_json_error(['message' => __('You must be logged in.', 'multivendorx')]);
         }
     
         $vendor_id = get_current_user_id();
+        file_put_contents(plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s") . ": ajax_create_account: Vendor ID = " . $vendor_id . "\n", FILE_APPEND);
     
         $payment_admin_settings = MultiVendorX()->setting->get_setting('payment_methods', []);
         $stripe_settings = $payment_admin_settings['stripe-connect'] ?? [];
         $client_id = $stripe_settings['client_id'] ?? '';
     
         if (empty($client_id)) {
+            file_put_contents(plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s") . ": ajax_create_account: Missing client_id\n", FILE_APPEND);
             wp_send_json_error(['message' => __('Stripe Client ID not configured.', 'multivendorx')]);
         }
     
-        // create a random state token and persist it for a short time
-        $redirect_uri = home_url('/'); 
-        $redirect_uri = add_query_arg([
-            'dashboard' => 1,
-            'tab'       => 'payments',
-            'subtab'    => 'withdrawl',
-        ], $redirect_uri);
-
+        // ✅ Use admin-post.php as redirect
+        $redirect_uri = admin_url('admin-post.php?action=multivendorx_stripe_oauth_callback');
+    
         $state = wp_generate_password(24, false, false);
         set_transient('mvx_stripe_oauth_state_' . $state, $vendor_id, 5 * MINUTE_IN_SECONDS);
     
@@ -58,25 +56,19 @@ class Payment
             'state'         => $state,
         ], 'https://connect.stripe.com/oauth/authorize');
     
+        file_put_contents(plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s") . ": ajax_create_account: Onboarding URL generated: " . $onboarding_url . "\n", FILE_APPEND);
+    
         wp_send_json_success([
             'message'        => __('Redirecting to Stripe onboarding...', 'multivendorx'),
             'onboarding_url' => $onboarding_url,
         ]);
     }
     
-    public function ajax_disconnect_account() {
-        if (!is_user_logged_in()) {
-            wp_send_json_error(['message' => __('You must be logged in.', 'multivendorx')]);
-        }
-    
-        $vendor_id = get_current_user_id();
-        delete_user_meta($vendor_id, '_stripe_connect_account_id');
-    
-        wp_send_json_success(['message' => __('Your Stripe account has been disconnected.', 'multivendorx')]);
-    }
-
     public function handle_oauth_callback() {
+        file_put_contents(plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s") . ": handle_oauth_callback: Called with params: " . var_export($_GET, true) . "\n", FILE_APPEND);
+    
         if (!isset($_GET['code'], $_GET['state'])) {
+            file_put_contents(plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s") . ": handle_oauth_callback: Missing code/state\n", FILE_APPEND);
             wp_safe_redirect(home_url('/?dashboard=1&tab=payments&subtab=withdrawl&error=stripe_oauth'));
             exit;
         }
@@ -85,92 +77,77 @@ class Payment
         $vendor_id = get_transient('mvx_stripe_oauth_state_' . $state);
         delete_transient('mvx_stripe_oauth_state_' . $state);
     
+        file_put_contents(plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s") . ": handle_oauth_callback: Vendor ID from state = " . var_export($vendor_id, true) . "\n", FILE_APPEND);
+    
         if (empty($vendor_id)) {
             wp_die(__('Invalid or expired OAuth state.', 'multivendorx'));
         }
     
         $code = sanitize_text_field($_GET['code']);
+        file_put_contents(plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s") . ": handle_oauth_callback: Code = " . $code . "\n", FILE_APPEND);
     
         $payment_admin_settings = MultiVendorX()->setting->get_setting('payment_methods', []);
         $stripe_settings = $payment_admin_settings['stripe-connect'] ?? [];
         $secret_key = $stripe_settings['secret_key'] ?? '';
         $client_id  = $stripe_settings['client_id'] ?? '';
     
-        $redirect_uri = home_url('/');
-        $redirect_uri = add_query_arg([
-            'dashboard' => 1,
-            'tab'       => 'payments',
-            'subtab'    => 'withdrawl',
-        ], $redirect_uri);
+        // ✅ Use Stripe SDK for token exchange
+        try {
+            \Stripe\Stripe::setApiKey($secret_key);
     
-        $response = wp_remote_post("https://connect.stripe.com/oauth/token", [
-            'body' => [
-                'grant_type'    => 'authorization_code',
-                'client_id'     => $client_id,
-                'client_secret' => $secret_key,
-                'code'          => $code,
-                'redirect_uri'  => $redirect_uri,
-                'service_agreement' => 'recipient', // important like old code
-            ]
-        ]);
+            $resp = \Stripe\OAuth::token([
+                'grant_type' => 'authorization_code',
+                'code'       => $code,
+            ]);
     
-        if (is_wp_error($response)) {
-            wp_safe_redirect(add_query_arg([
-                'dashboard' => 1,
-                'tab'       => 'payments',
-                'subtab'    => 'withdrawl',
-                'error'     => 'stripe_oauth_failed',
-            ], home_url('/')));
-            exit;
-        }
+            file_put_contents(plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s") . ": handle_oauth_callback: SDK Response = " . var_export($resp->toArray(), true) . "\n", FILE_APPEND);
     
-        $body = json_decode(wp_remote_retrieve_body($response), true);
+            if (!empty($resp->stripe_user_id)) {
+                update_user_meta($vendor_id, '_stripe_connect_account_id', sanitize_text_field($resp->stripe_user_id));
+                update_user_meta($vendor_id, '_vendor_payment_mode', 'stripe-connect');
+                update_user_meta($vendor_id, 'vendor_connected', 1);
+                update_user_meta($vendor_id, 'admin_client_id', $client_id);
     
-        if (!empty($body['error'])) {
-            wp_safe_redirect(add_query_arg([
-                'dashboard' => 1,
-                'tab'       => 'payments',
-                'subtab'    => 'withdrawl',
-                'error'     => sanitize_text_field($body['error']),
-            ], home_url('/')));
-            exit;
-        }
+                if (!empty($resp->access_token)) {
+                    update_user_meta($vendor_id, 'access_token', sanitize_text_field($resp->access_token));
+                }
+                if (!empty($resp->refresh_token)) {
+                    update_user_meta($vendor_id, 'refresh_token', sanitize_text_field($resp->refresh_token));
+                }
+                if (!empty($resp->stripe_publishable_key)) {
+                    update_user_meta($vendor_id, 'stripe_publishable_key', sanitize_text_field($resp->stripe_publishable_key));
+                }
     
-        if (!empty($body['stripe_user_id'])) {
-            update_user_meta($vendor_id, '_stripe_connect_account_id', sanitize_text_field($body['stripe_user_id']));
-            update_user_meta($vendor_id, '_vendor_payment_mode', 'stripe-connect');
-            update_user_meta($vendor_id, 'vendor_connected', 1);
-            update_user_meta($vendor_id, 'admin_client_id', $client_id);
+                file_put_contents(plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s") . ": handle_oauth_callback: Vendor " . $vendor_id . " successfully connected\n", FILE_APPEND);
     
-            if (!empty($body['access_token'])) {
-                update_user_meta($vendor_id, 'access_token', sanitize_text_field($body['access_token']));
-            }
-            if (!empty($body['refresh_token'])) {
-                update_user_meta($vendor_id, 'refresh_token', sanitize_text_field($body['refresh_token']));
-            }
-            if (!empty($body['stripe_publishable_key'])) {
-                update_user_meta($vendor_id, 'stripe_publishable_key', sanitize_text_field($body['stripe_publishable_key']));
+                wp_safe_redirect(add_query_arg('connected', 'stripe', home_url('/?dashboard=1&tab=payments&subtab=withdrawl')));
+                exit;
             }
     
-            // ✅ Redirect back to vendor billing tab with success
-            $final_url = add_query_arg([
-                'dashboard' => 1,
-                'tab'       => 'payments',
-                'subtab'    => 'withdrawl',
-                'connected' => 'stripe',
-            ], home_url('/'));
-            wp_safe_redirect($final_url);
+            wp_safe_redirect(add_query_arg('error', 'stripe_connection_failed', home_url('/?dashboard=1&tab=payments&subtab=withdrawl')));
+            exit;
+    
+        } catch (\Stripe\Exception\ApiErrorException $e) {
+            file_put_contents(plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s") . ": handle_oauth_callback: Stripe SDK Error " . $e->getMessage() . "\n", FILE_APPEND);
+            wp_safe_redirect(add_query_arg('error', 'stripe_sdk_error', home_url('/?dashboard=1&tab=payments&subtab=withdrawl')));
             exit;
         }
+    }
+        
     
-        wp_safe_redirect(add_query_arg([
-            'dashboard' => 1,
-            'tab'       => 'payments',
-            'subtab'    => 'withdrawl',
-            'error'     => 'stripe_connection_failed',
-        ], home_url('/')));
-        exit;
-    }    
+    public function ajax_disconnect_account() {
+        if (!is_user_logged_in()) {
+            file_put_contents(plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s") . ": ajax_disconnect_account: User not logged in\n", FILE_APPEND);
+            wp_send_json_error(['message' => __('You must be logged in.', 'multivendorx')]);
+        }
+    
+        $vendor_id = get_current_user_id();
+        delete_user_meta($vendor_id, '_stripe_connect_account_id');
+        file_put_contents(plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s") . ": ajax_disconnect_account: Vendor " . $vendor_id . " disconnected\n", FILE_APPEND);
+    
+        wp_send_json_success(['message' => __('Your Stripe account has been disconnected.', 'multivendorx')]);
+    }
+    
     
     public function init_stripe() {
         $payment_admin_settings = MultiVendorX()->setting->get_setting('payment_methods', []);
@@ -232,11 +209,15 @@ class Payment
     
             if ($stripe_account_id) {
                 $account = $this->get_account($stripe_account_id);
-                if ($account && $account->charges_enabled) {
-                    $onboarding_status = 'Connected';
-                    $is_onboarded = true;
+                if ($account) {
+                    if ($account->charges_enabled) {
+                        $onboarding_status = 'Connected';
+                        $is_onboarded = true;
+                    } else {
+                        $onboarding_status = 'Connected – Verification Required';
+                    }
                 }
-            }
+            }            
     
             $fields = [
                 [
