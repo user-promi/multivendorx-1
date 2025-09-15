@@ -48,6 +48,12 @@ export default {
                     img: template2,
                     value: 'template2',
                 },
+                {
+                key: 'template3',
+                label: 'Classic Vibe',
+                img: template3,
+                value: 'template3',
+                }
                 // {
                 //     key: 'template3',
                 //     label: 'Classic Vibe',
