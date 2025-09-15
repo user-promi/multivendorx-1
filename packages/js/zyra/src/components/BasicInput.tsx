@@ -34,7 +34,7 @@ interface BasicInputProps {
     onMouseOut?: (e: MouseEvent<HTMLInputElement>) => void;
     onFocus?: (e: FocusEvent<HTMLInputElement>) => void;
     onBlur?: (e: FocusEvent<HTMLInputElement>) => void;
-    parameter?: string;
+    postInsideText?: string;
     generate?: string;
     proSetting?: boolean;
     description?: string;
@@ -43,9 +43,9 @@ interface BasicInputProps {
     disabled?: boolean;
     readOnly?: boolean;
     size?: string;
-    addonBefore?: string;
-    addonAfter?: string;
-    prefixUnit?: string;
+    preText?: string;
+    postText?: string;
+    preInsideText?: string;
 }
 
 const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
@@ -67,10 +67,10 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
             onMouseOut,
             onFocus,
             onBlur,
-            parameter,
+            postInsideText,
             size,
-            addonBefore,
-            addonAfter,
+            preText,
+            postText,
             generate,
             proSetting,
             description,
@@ -78,7 +78,7 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
             rangeUnit,
             disabled = false,
             readOnly = false,
-            prefixUnit
+            preInsideText
         },
         ref
     ) => {
@@ -130,7 +130,7 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
         return (
             <>
                 <div
-                    className={`${wrapperClass || ''} ${generate ? 'generate' : ''} ${prefixUnit || parameter ? 'inner-input' : ''}`}
+                    className={`${wrapperClass || ''} ${generate ? 'generate' : ''} ${preInsideText || postInsideText ? 'inner-input' : ''}`}
                 >
                     {inputLabel && (
                         <label htmlFor={id}>{inputLabel}</label>
@@ -145,17 +145,17 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
                         </DisplayButton>
                     ) : (
                         <>
-                            {addonBefore && (
+                            {preText && (
                                 <span
                                     className="before"
-                                    dangerouslySetInnerHTML={{ __html: addonBefore }}
+                                    dangerouslySetInnerHTML={{ __html: preText }}
                                 />
                             )}
                             <div className="input-wrapper" style={{ width: size || '100%' }}>
-                                {prefixUnit && (
+                                {preInsideText && (
                                     <span
                                         className="pre"
-                                        dangerouslySetInnerHTML={{ __html: prefixUnit }}
+                                        dangerouslySetInnerHTML={{ __html: preInsideText }}
                                     />
                                 )}
                                 <input
@@ -176,17 +176,17 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
                                     disabled={disabled}
                                     readOnly={readOnly}
                                 />
-                                {parameter && (
+                                {postInsideText && (
                                     <span
                                         className="parameter"
-                                        dangerouslySetInnerHTML={{ __html: parameter }}
+                                        dangerouslySetInnerHTML={{ __html: postInsideText }}
                                     />
                                 )}
                             </div>
-                            {addonAfter && (
+                            {postText && (
                                 <span
                                     className="after"
-                                    dangerouslySetInnerHTML={{ __html: addonAfter }}
+                                    dangerouslySetInnerHTML={{ __html: postText }}
                                 />
                             )}
                         </>

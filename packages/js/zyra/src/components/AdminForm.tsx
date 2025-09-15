@@ -141,10 +141,11 @@ interface InputField {
     icon?: string;
     iconEnable?: boolean;
     size?: string;
-    addonBefore?: string;
-    addonAfter?: string;
+    preText?: string;
+    postText?: string;
     proSetting?: boolean;
     moduleEnabled?: boolean;
+    postInsideText?: string;
     parameter?: string;
     generate?: string;
     dependent?: DependentCondition | DependentCondition[];
@@ -164,7 +165,7 @@ interface InputField {
     inputWrapperClass?: string;
     wrapperClass?: string;
     tour?: string;
-    prefixUnit?: string;
+    preInsideText?: string;
     rightContent?: boolean;
     dependentPlugin?: boolean;
     dependentSetting?: string;
@@ -663,8 +664,8 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             max={inputField.max ?? 50} // for range max value
                             value={value || inputField.value}
                             size={inputField.size}//Width of the input container.
-                            addonBefore={inputField.addonBefore}//Content displayed before input (icon/text).
-                            addonAfter={inputField.addonAfter}//Content displayed after input (icon/text).
+                            preText={inputField.preText}//Content displayed before input (icon/text).
+                            postText={inputField.postText}//Content displayed after input (icon/text).
                             proSetting={isProSetting(
                                 inputField.proSetting ?? false
                             )}
@@ -688,8 +689,8 @@ const AdminForm: React.FC<AdminFormProps> = ({
                                     handleChange(e, inputField.key);
                                 }
                             }}
-                            prefixUnit={inputField.prefixUnit}//Symbol/unit shown inside input at start.
-                            parameter={inputField.parameter} // for showing text beside the text box
+                            preInsideText={inputField.preInsideText}//Symbol/unit shown inside input at start.
+                            postInsideText={inputField.postInsideText} // for showing text beside the text box
                             generate={inputField.generate}//Enables generate button for random/auto value generation.
                         />
                     );
@@ -1309,8 +1310,8 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             key={inputField.key}
                             iconEnable={inputField.iconEnable}// If true, will display the toggle value as an icon
                             multiSelect={inputField.multiSelect}// If true, allows selecting multiple options (checkboxes), else single select (radio)
-                            addonBefore={inputField.addonBefore}// Optional content displayed before the toggle group
-                            addonAfter={inputField.addonAfter}// Optional content displayed after the toggle group
+                            preText={inputField.preText}// Optional content displayed before the toggle group
+                            postText={inputField.postText}// Optional content displayed after the toggle group
                             options={
                                 Array.isArray(inputField.options)
                                     ? inputField.options.map((opt) => ({
