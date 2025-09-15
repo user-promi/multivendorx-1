@@ -230,6 +230,8 @@ class Admin {
     public function enqueue_admin_script() {
         if ( get_current_screen()->id === 'toplevel_page_multivendorx' ) {
             wp_enqueue_script( 'wp-element' );
+            wp_enqueue_editor();
+            wp_enqueue_script( 'mce-view' );
             // Support for media
             wp_enqueue_media();
             FrontendScripts::admin_load_scripts();

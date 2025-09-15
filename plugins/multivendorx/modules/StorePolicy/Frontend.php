@@ -59,12 +59,12 @@ class Frontend {
         return MultiVendorX()->store->storeutil->get_store_url( $store_id, 'policy' );
     }
 
-    public function store_policy_template( $template ) {
+    // public function store_policy_template( $template ) {
 
-        if ( get_query_var( 'store_policy' ) ) {
-            return MultiVendorX()->util->get_template( 'store-policy.php', [] );
-        }
+    //     if ( get_query_var( 'store_policy' ) ) {
+    //         return MultiVendorX()->util->get_template( 'store-policy.php', [] );
+    //     }
 
-        return $template;
-    }
+    //     return $template;
+    // }
 }
