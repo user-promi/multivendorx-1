@@ -61,7 +61,7 @@ export default {
             type: 'text',
             label: __('Google map API key', 'multivendorx'),
             desc: __(
-                '<a href="https://developers.google.com/maps/documentation/javascript/get-api-key#get-an-api-key" target="_blank">Click here to generate key</a>',
+                '<a href="https://developers.google.com/maps/documentation/javascript/get-api-key#get-an-api-key" target="_blank">Click here to generate key.</a>',
                 'multivendorx'
             ),
             dependent: {
@@ -75,7 +75,7 @@ export default {
             type: 'text',
             label: __('Mapbox access token', 'multivendorx'),
             desc: __(
-                '<a href="https://docs.mapbox.com/help/getting-started/access-tokens/" target="_blank">Click here to generate access token</a>',
+                '<a href="https://docs.mapbox.com/help/getting-started/access-tokens/" target="_blank">Click here to generate access token.</a>',
                 'multivendorx'
             ),
             dependent: {
