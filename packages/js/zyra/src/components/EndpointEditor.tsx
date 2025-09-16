@@ -13,6 +13,7 @@ interface Endpoint {
   name: string;
   slug: string;
   submenu: Submenu[];
+  icon: string;
   visible?: boolean; // show/hide
 }
 
@@ -158,7 +159,7 @@ const EndpointManager: React.FC<EndpointEditorProps> = ({
           >
             <div className="name-wrapper">
               {key !== 'dashboard' && <i className="adminlib-drag"></i>}
-              <i className="adminlib-add-product"></i>
+              <i className={endpoint.icon}></i>
               <div className="name">
                 {endpoint.name}
                 {key !== 'dashboard' && <> <code>{endpoint.slug}</code></>}

@@ -360,7 +360,7 @@ input[type="checkbox"]:checked::before {
 }
 
 input.minus-icon::before {
-  content: "\e900";
+  content: "\e92a";
   padding: 0.063rem;
 }
 
@@ -638,6 +638,7 @@ input[type="checkbox"]:focus {
     }
 
     @keyframes wobble1 {
+
       0%,
       100% {
         transform: translateY(0%) scale(1);
@@ -651,6 +652,7 @@ input[type="checkbox"]:focus {
     }
 
     @keyframes wobble2 {
+
       0%,
       100% {
         transform: translateY(0%) scale(1);
@@ -853,10 +855,11 @@ input[type="checkbox"]:focus {
       }
     }
   }
-
   // multi input style end  
 }
-
+.settings-input-content:has(.grid-table){
+  width: 100%;
+}
 .select-deselect-trigger {
   margin-bottom: 1rem;
 }
@@ -954,7 +957,7 @@ input[type="checkbox"]:focus {
     align-items: center;
     width: 100%;
 
-    .react-select{
+    .react-select {
       width: 100%;
     }
 
@@ -976,6 +979,38 @@ input[type="checkbox"]:focus {
 }
 
 // pro image wrapper end
-.more-btn{
+.more-btn {
   cursor: pointer;
 }
+
+// live chart
+.live-chat-wrapper {
+  position: fixed;
+  z-index: 99999;
+  width: 25%;
+  right: 1rem;
+  bottom: 1rem;
+  border-radius: 0.313rem;
+  box-shadow: 0 0.125rem 0.5rem 0 rgba(47, 43, 61, 0.12);
+  transform: translateX(110%);
+  transition: all 0.4s ease;
+  background: #fff;
+
+  &.open {
+    transform: translateX(0);
+  }
+
+  i {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 99;
+    color: #000;
+    font-size: 1.125rem;
+    background: #fff;
+    padding: 0.125rem;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+}// live chart
+

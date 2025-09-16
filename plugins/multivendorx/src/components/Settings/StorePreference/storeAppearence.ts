@@ -11,7 +11,7 @@ export default {
         "Control how stores look and feel on your marketplace.",
         'multivendorx'
     ),
-    icon: 'adminlib-clock2',
+    icon: 'adminlib-appearance',
     submitUrl: 'settings',
     modal: [
         {

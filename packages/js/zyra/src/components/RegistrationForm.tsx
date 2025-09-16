@@ -111,12 +111,12 @@ const selectOptions: SelectOption[] = [
         label: 'Date Picker',
     },
     {
-        icon: 'adminlib-alarm icon-form-address01',
+        icon: 'adminlib-alarm icon-form-address',
         value: 'TimePicker',
         label: 'Time Picker',
     },
     {
-        icon: 'adminlib-divider icon-form-address01',
+        icon: 'adminlib-divider icon-form-address',
         value: 'divider',
         label: 'Divider',
     },

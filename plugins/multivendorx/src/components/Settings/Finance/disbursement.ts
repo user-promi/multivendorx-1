@@ -341,7 +341,7 @@ export default {
                 {
                     key: 'withdrawal_fixed', // updated key
                     type: 'number',
-                    size: '8rem',
+                    size: '5rem',
                     preInsideText: __('$', 'multivendorx'),
                     preText: 'fixed',
                     postText: "+",
@@ -349,7 +349,7 @@ export default {
                 {
                     key: 'withdrawal_percentage', // updated key
                     type: 'number',
-                    size: '8rem',
+                    size: '5rem',
                     postText: __('.', 'multivendorx'),
                     postInsideText: __('%', 'multivendorx'),
                 },

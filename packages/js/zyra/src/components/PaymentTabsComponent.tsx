@@ -3,6 +3,7 @@ import "../styles/web/PaymentTabsComponent.scss";
 import VerificationMethods from "./VerificationMethods";
 import TextArea from "./TextArea";
 import ToggleSetting from "./ToggleSetting";
+import MultiCheckBox from "./MultiCheckbox";
 
 interface PaymentFormField {
   key: string;
@@ -57,6 +58,7 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
   onChange,
 }) => {
   const [activeTab, setActiveTab] = useState<string | null>(null);
+  const [openDropdownIndex, setOpenDropdownIndex] = useState<number | null>(null);
 
   const handleInputChange = (
     methodKey: string,
@@ -194,20 +196,21 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
               </div>
               <div className="details" onClick={() => setActiveTab(isActive ? null : method.icon)}>
                 <div className="details-wrapper">
-                <div className="payment-method-icon">
-                  <img src={method.icon} alt={method.label} />
-                </div>
-                <div className="payment-method-info">
-                  <div className="title-wrapper">
-                    <span className="title">{method.label}</span>
-                    <div
-                      className={`admin-badge ${isEnabled ? "green" : "red"}`}
-                    >
-                      {isEnabled ? "Active" : "Inactive"}
-                    </div>
+                  <div className="payment-method-icon">
+                    {/* <img src={method.icon} alt={method.label} /> */}
+                    <i className={method.icon}></i>
                   </div>
-                  <div className="method-desc">{method.desc}</div>
-                </div>
+                  <div className="payment-method-info">
+                    <div className="title-wrapper">
+                      <span className="title">{method.label}</span>
+                      <div
+                        className={`admin-badge ${isEnabled ? "green" : "red"}`}
+                      >
+                        {isEnabled ? "Active" : "Inactive"}
+                      </div>
+                    </div>
+                    <div className="method-desc">{method.desc}</div>
+                  </div>
                 </div>
                 {isEnabled && (
                   <div className="admin-btn btn-purple" onClick={() => setActiveTab(isActive ? null : method.icon)} >Manage</div>
@@ -215,12 +218,12 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
               </div>
 
               <div className="right-section toggle-btn" onClick={() => toggleEnable(method.id, true, method.icon)}>
-                <i className="adminlib-more-vertical" ></i>
+                <i className="adminlib-more-vertical"></i>                                
               </div>
             </div>
 
             <div
-              className={`${method.wrapperClass || ""} payment-method-form 
+              className={`${method.wrapperClass || ""} payment-method-form
                  ${isEnabled && isActive ? "open" : ""
                 }`}
             >
