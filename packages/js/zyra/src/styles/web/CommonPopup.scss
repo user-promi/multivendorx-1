@@ -1,31 +1,6 @@
 @use '../../global.scss' as *;
 
 .MuiDialog-container {
-    .content {
-        padding: 1rem 2rem;
-        max-height: 70vh;
-
-        .form-group-wrapper {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-
-            .form-group {
-                display: flex;
-                flex-direction: column;
-                gap: 0.313rem;
-
-                label {
-                    font-size: 0.9rem;
-                }
-            }
-
-            .space{
-                margin: 3.5rem;
-            }
-        }
-    }
-
     .title-wrapper {
         padding: 1.313rem;
         border-bottom: $border-light-small;

@@ -24,6 +24,7 @@ a {
 
 .form-select-field-wrapper input:focus {
   box-shadow: none !important;
+
   /* for overwrite react components */
   outline: none;
 }
@@ -205,6 +206,7 @@ a {
     }
   }
 }
+
 // copy btn end
 
 // all input style start
@@ -636,7 +638,6 @@ input[type="checkbox"]:focus {
     }
 
     @keyframes wobble1 {
-
       0%,
       100% {
         transform: translateY(0%) scale(1);
@@ -650,7 +651,6 @@ input[type="checkbox"]:focus {
     }
 
     @keyframes wobble2 {
-
       0%,
       100% {
         transform: translateY(0%) scale(1);
@@ -907,6 +907,7 @@ input[type="checkbox"]:focus {
   gap: 0.625rem;
   padding-top: 0.5rem;
 }
+
 // footer button style end
 
 .settings-from-multi-select {
@@ -947,7 +948,6 @@ input[type="checkbox"]:focus {
 }
 
 .form-select-field-wrapper {
-
   .select-wrapper {
     display: inline-flex;
     gap: 0.5rem;
@@ -976,3 +976,6 @@ input[type="checkbox"]:focus {
 }
 
 // pro image wrapper end
+.more-btn{
+  cursor: pointer;
+}

@@ -134,6 +134,10 @@ class Store {
         global $wpdb;
         $table = "{$wpdb->prefix}" . Utill::TABLES['store_meta'];
 
+        if ( is_array( $value ) || is_object( $value ) ) {
+            $value = wp_json_encode( $value );
+        }
+
         $exists = $wpdb->get_var($wpdb->prepare(
             "SELECT ID FROM $table WHERE store_id = %d AND meta_key = %s",
             $this->id, $key

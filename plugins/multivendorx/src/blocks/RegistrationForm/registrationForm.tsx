@@ -8,7 +8,6 @@ const RegistrationForm = () => {
     const [toast, setToast] = useState(false);
     const [responseMessage, setResponseMessage] = useState('');
     const formData = registrationForm;
-    const submitUrl = `${registrationForm.apiUrl}/catalogx/v1/enquiries`;
 
     const onSubmit = (submittedFormData: Record<string, any>) => {
         setLoading(true);
@@ -18,19 +17,15 @@ const RegistrationForm = () => {
     
         // Core fields
         if (submittedFormData['name']) mappedData['name'] = submittedFormData['name'];
-        if (submittedFormData['decription'] || submittedFormData['description'])
-            mappedData['description'] = submittedFormData['decription'] || submittedFormData['description'];
+        if (submittedFormData['description'] || submittedFormData['description'])
+            mappedData['description'] = submittedFormData['description'] || submittedFormData['description'];
     
         // Optional: slug, who_created (if coming from form)
         if (submittedFormData['slug']) mappedData['slug'] = submittedFormData['slug'];
-        if (submittedFormData['who_created']) mappedData['who_created'] = submittedFormData['who_created'];
     
-        // Default status to 'pending'
-        mappedData['status'] = 'pending';
-        mappedData['who_created'] = 'site_owner';
         // Other fields as meta
         Object.keys(submittedFormData).forEach((key) => {
-            if (!['name', 'description', 'slug', 'who_created', 'status'].includes(key)) {
+            if (!['name', 'description', 'slug'].includes(key)) {
                 mappedData[key] = submittedFormData[key];
             }
         });
@@ -46,6 +41,9 @@ const RegistrationForm = () => {
         })
         .then((response) => {
             console.log('Store created:', response.data);
+            if ( response.data.redirect !== '' ) {
+                window.location.href = response.data.redirect;
+            }
             setLoading(false);
         })
         .catch((error) => {

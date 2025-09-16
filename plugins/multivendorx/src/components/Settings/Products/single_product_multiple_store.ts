@@ -36,6 +36,11 @@ export default {
                     label: __( 'Top rated store', 'multivendorx' ),
                     value: __( 'top-rated-store', 'multivendorx' ),
                 },
+                {
+                    key: 'top-rated-store',
+                    label: __( 'Based on nearby location', 'multivendorx' ),
+                    value: __( 'based-on-nearby-location', 'multivendorx' ),
+                },
             ],
         },
         {
@@ -46,6 +51,7 @@ export default {
                 'Decide where additional SPMV offers should be displayed on the single product page to make them visible to customers.',
                 'multivendorx'
             ),
+            postText:__(' single page product tabs.', 'multivendorx'),
             options: [
                 {
                     key: 'none',
@@ -54,17 +60,17 @@ export default {
                 },
                 {
                     key: 'above-tabs',
-                    label: __( 'Above single page product tabs', 'multivendorx' ),
+                    label: __( 'Above', 'multivendorx' ),
                     value: 'above-tabs',
                 },
                 {
                     key: 'inside-tabs',
-                    label: __( 'Display inside single page product tabs', 'multivendorx' ),
+                    label: __( 'Inside', 'multivendorx' ),
                     value: 'inside-tabs',
                 },
                 {
                     key: 'after-tabs',
-                    label: __( 'After single page product tabs', 'multivendorx' ),
+                    label: __( 'After', 'multivendorx' ),
                     value: 'after-tabs',
                 },
             ],

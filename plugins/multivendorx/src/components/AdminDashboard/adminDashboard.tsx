@@ -22,7 +22,14 @@ const salesByLocations = [
   { name: "Germany", coordinates: [51, 10], sales: 5400 },
   { name: "Australia", coordinates: [-25, 133], sales: 4300 },
 ];
-
+interface Payment {
+  id: number;
+  customer: string;
+  amount: string;
+  method: string;
+  date: string;
+  status: 'Paid' | 'Pending' | 'Failed';
+}
 // Custom marker icon (optional)
 const salesIcon = new L.DivIcon({
   className: "custom-marker",
@@ -30,7 +37,7 @@ const salesIcon = new L.DivIcon({
 });
 
 import "./adminDashboard.scss";
-import "../../dashboard/dashboardCommon.scss";
+import "../dashboard.scss";
 import BestSellingProducts from './bestSellingProducts';
 import TopSellers from './topSellers';
 
@@ -55,7 +62,6 @@ const AdminDashboard = () => {
     { name: 'Low Stock Items', value: 42 },
     { name: 'Pending Payouts', value: 9 },
   ];
-  const COLORS = ['#4CAF50', '#FF9800', '#F44336', '#2196F3'];
   const items = [
     { text: "Set up seller Registration Form Fields", active: true },
     { text: "Set up payments", active: true },
@@ -100,11 +106,40 @@ const AdminDashboard = () => {
   ];
 
   const quickLinks = [
-    { text: "Add Vendor", iconClass: "icon-add", href: "#" },
-    { text: "Commission", iconClass: "icon-commission", href: "#" },
-    { text: "Add Product", iconClass: "icon-product", href: "#" },
-    { text: "Payment", iconClass: "icon-payment", href: "#" },
+    { text: "Stores", iconClass: "icon-add", href: "#" },
+    { text: "Commissions", iconClass: "icon-commission", href: "#" },
+    { text: "Products", iconClass: "icon-product", href: "#" },
+    { text: "Payouts", iconClass: "icon-payment", href: "#" },
+    { text: "Disbursements", iconClass: "icon-payment", href: "#" },
+    { text: "Customer Support", iconClass: "icon-payment", href: "#" },
   ];
+
+const payments: Payment[] = [
+  {
+    id: 1,
+    customer: "John Doe",
+    amount: "$380",
+    method: "Credit Card",
+    date: "2025-09-01",
+    status: "Paid",
+  },
+  {
+    id: 2,
+    customer: "Jane Smith",
+    amount: "$120",
+    method: "PayPal",
+    date: "2025-09-03",
+    status: "Pending",
+  },
+  {
+    id: 3,
+    customer: "Robert Brown",
+    amount: "$220",
+    method: "Bank Transfer",
+    date: "2025-09-05",
+    status: "Failed",
+  },
+];
   return (
     <>
       <div className="admin-dashboard">
@@ -192,67 +227,48 @@ const AdminDashboard = () => {
           </div>
         </div>
 
-        {/* chart */}
-        <div className="row">
-          <div className="column w-65">
-            <h3>Revenue Trend (Last 7 Months)</h3>
-            <ResponsiveContainer width="100%" height={300}>
-              <LineChart data={data}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="month" />
-                <YAxis />
-                <Tooltip />
-                <Line type="monotone" dataKey="revenue" stroke="#5007aa" strokeWidth={3} />
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
-          <div className="column w-35">
-            <h3>Sales by Locations</h3>
-            <MapContainer
-              center={[20, 0]}
-              zoom={2}
-              style={{ height: "300px", width: "100%" }}
-            >
-              <TileLayer
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-              />
-              {salesByLocations.map(({ name, coordinates, sales }) => (
-                <Marker
-                  key={name}
-                  position={coordinates as [number, number]}
-                  icon={salesIcon}
-                >
-                  <Popup>
-                    <strong>{name}</strong>
-                    <br />
-                    Sales: ${sales}
-                  </Popup>
-                </Marker>
-              ))}
-            </MapContainer>
-          </div>
-        </div>
-
-        {/* table */}
         <div className="row">
           <div className="column">
-            <h3>Best Selling Products</h3>
-            <BestSellingProducts />
-          </div>
-          <div className="column ">
-            <div className="chart-wrapper">
-              <h3>Top Sellers</h3>
-              <TopSellers />
+            <div className="card-header">
+              <div className="left">
+                <div className="title">
+                  Payments
+                </div>
+              </div>
+              <div className="right">
+                <span>Updated 1 month ago</span>
+              </div>
+            </div>
+            <div className="top-items">
+              {payments.map((payment) => (
+                <div className="items" key={payment.id}>
+                  <div className="left-side">
+                    <div className="image">
+                      {/* <img src={payment.image} alt={payment.customer} /> */}
+                    </div>
+                    <div className="details">
+                      <div className="item-title">{payment.customer}</div>
+                      <div className="sub-text">{payment.method}</div>
+                    </div>
+                  </div>
+                  <div className="right-side">
+                    <div className="price">{payment.amount}</div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
-        </div>
-
-        {/* recent activity */}
-        <div className="row">
           <div className="column">
-            <h3>Recent Activity</h3>
-
+            <div className="card-header">
+              <div className="left">
+                <div className="title">
+                  Notification
+                </div>
+              </div>
+              <div className="right">
+                <span>Updated 1 month ago</span>
+              </div>
+            </div>
             <div className="activity-wrapper">
               <div className="activity">
                 <span className="icon">
@@ -292,11 +308,93 @@ const AdminDashboard = () => {
                 </div>
               </div>
             </div>
+          </div>
+          <div className="column">
+            <div className="card-header">
+              <div className="left">
+                <div className="title">
+                  Quick Link
+                </div>
+                <div className="des">Lorem ipsum dolor sit amet.</div>
+              </div>
+              <div className="right">
+                <i className="adminlib-more-vertical"></i>
+              </div>
+            </div>
+            <div className="quick-links-wrapper">
+              {quickLinks.map((link, index) => (
+                <a href={link.href} className="admin-btn btn-purple" key={index}>
+                  <i className={link.iconClass}></i> {link.text}
+                </a>
+              ))}
+            </div>
 
+            <div className="card-header">
+              <div className="left">
+                <div className="title">
+                  Sales by Locations
+                </div>
+                <div className="des">Lorem ipsum dolor sit amet.</div>
+              </div>
+              <div className="right">
+                <i className="adminlib-more-vertical"></i>
+              </div>
+            </div>
+            <MapContainer
+              center={[20, 0]}
+              zoom={2}
+              style={{ height: "300px", width: "100%" }}
+            >
+              <TileLayer
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+              />
+              {salesByLocations.map(({ name, coordinates, sales }) => (
+                <Marker
+                  key={name}
+                  position={coordinates as [number, number]}
+                  icon={salesIcon}
+                >
+                  <Popup>
+                    <strong>{name}</strong>
+                    <br />
+                    Sales: ${sales}
+                  </Popup>
+                </Marker>
+              ))}
+            </MapContainer>
+          </div>
+        </div>
+
+        {/* recent activity */}
+        <div className="row">
+          <div className="column">
+            <div className="card-header">
+              <div className="left">
+                <div className="title">
+                  Top Sellers
+                </div>
+                <div className="des">Lorem ipsum dolor sit amet.</div>
+              </div>
+              <div className="right">
+                <i className="adminlib-more-vertical"></i>
+              </div>
+            </div>
+            <TopSellers />
           </div>
           <div className="column ">
             <div className="chart-wrapper">
-              <h3>System Overview</h3>
+              <div className="card-header">
+                <div className="left">
+                  <div className="title">
+                    System Overview
+                  </div>
+                  <div className="des">Lorem ipsum dolor sit amet.</div>
+                </div>
+                <div className="right">
+                  <i className="adminlib-more-vertical"></i>
+                </div>
+              </div>
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={overviewData}>
                   <CartesianGrid strokeDasharray="3 3" />
@@ -310,24 +408,50 @@ const AdminDashboard = () => {
           </div>
         </div>
 
-        {/* last */}
-        <div className="row">
-          <div className="column w-35">
-            <div className="quick-link">
 
-              <h3>Quick Link</h3>
-              <div className="quick-links-wrapper">
-                {quickLinks.map((link, index) => (
-                  <a href={link.href} className="admin-btn btn-purple" key={index}>
-                    <i className={link.iconClass}></i> {link.text}
-                  </a>
-                ))}
+        {/* chart */}
+        <div className="row">
+          <div className="column w-65">
+            <div className="card-header">
+              <div className="left">
+                <div className="title">
+                  Revenue Trend (Last 7 Months)
+                </div>
+                <div className="des">Lorem ipsum dolor sit amet.</div>
+              </div>
+              <div className="right">
+                <i className="adminlib-more-vertical"></i>
               </div>
             </div>
+            <ResponsiveContainer width="100%" height={300}>
+              <LineChart data={data}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="month" />
+                <YAxis />
+                <Tooltip />
+                <Line type="monotone" dataKey="revenue" stroke="#5007aa" strokeWidth={3} />
+              </LineChart>
+            </ResponsiveContainer>
           </div>
+          <div className="column w-35">
+            <div className="card-header">
+              <div className="left">
+                <div className="title">
+                  Best Selling Products
+                </div>
+                <div className="des">Lorem ipsum dolor sit amet.</div>
+              </div>
+              <div className="right">
+                <i className="adminlib-more-vertical"></i>
+              </div>
+            </div>
+            <BestSellingProducts />
+          </div>
+        </div>
 
-          <div className="column w-65">
-            {/* Left column - 60% */}
+        <div className="row">
+
+          <div className="column">
             <div className="cards-wrapper">
               {resources.map((res, index) => (
                 <div className="cards" key={index}>
@@ -345,15 +469,25 @@ const AdminDashboard = () => {
 
         <div className="row">
           <div className="column w-35">
-            <h3>This is what you get</h3>
+            <div className="card-header">
+              <div className="left">
+                <div className="title">
+                  This is what you get
+                </div>
+                <div className="des">Lorem ipsum dolor sit amet.</div>
+              </div>
+              <div className="right">
+                <i className="adminlib-more-vertical"></i>
+              </div>
+            </div>
 
             <div className="activity-wrapper">
               {items.map((item, index) => (
-                <div className="activity" key={index}>
+                <div className={`activity ${item.active ? "" : "inactive"}`} key={index}>
                   <span className="icon">
                     <i className={item.active ? "adminlib-check" : "adminlib-close"}></i>
                   </span>
-                  <div className="details">
+                  <div className={`details ${item.active ? "" : "inactive"}`}>
                     {item.text}
                   </div>
                 </div>

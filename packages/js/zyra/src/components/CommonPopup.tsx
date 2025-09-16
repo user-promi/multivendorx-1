@@ -1,7 +1,6 @@
 import { ReactNode, forwardRef } from "react";
 import {
   Dialog,
-  DialogTitle,
   DialogContent,
   DialogActions,
   Slide,
@@ -30,7 +29,6 @@ type PopupProps = {
 const CommonPopup = ({
   open,
   onClose,
-  title = "Popup",
   children,
   header,
   footer,
@@ -57,11 +55,8 @@ const CommonPopup = ({
       }}
       hideBackdrop={false}
     >
-      {header ? (
-        <div className="title-wrapper">{header}</div>
-      ) : (
-        <DialogTitle>{title}</DialogTitle>
-      )}
+      {header && <div className="title-wrapper">{header}</div>}
+
 
       <DialogContent>
         <div>{children}</div>

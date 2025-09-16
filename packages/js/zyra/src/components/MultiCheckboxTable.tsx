@@ -386,7 +386,12 @@ const MultiCheckboxTable: React.FC<MultiCheckboxTableProps> = ({
     moduleChange,
 }) => {
 
-    const [openGroup, setOpenGroup] = useState<string | null>(null);
+    const [openGroup, setOpenGroup] = useState<string | null>(() => {
+        if (!Array.isArray(rows) && rows && Object.keys(rows).length > 0) {
+            return Object.keys(rows)[0];   // open the first group by default
+        }
+        return null;                     // no group open if rows is an array
+    });
 
     return (
         <>
@@ -481,8 +486,7 @@ const MultiCheckboxTable: React.FC<MultiCheckboxTableProps> = ({
                                             setOpenGroup(
                                                 isOpen ? null : groupKey
                                             )
-                                        }
-                                        style={{ cursor: "pointer" }}>
+                                        }>
                                         <h1>
                                             {group.label}
                                             <i className={`adminlib-${isOpen ? "keyboard-arrow-down" : "pagination-right-arrow"}`}></i>

@@ -412,7 +412,7 @@ const Table: React.FC<TableProps> = ({
                     ))}
                 </div>
             )}
-            <div className="filter-wrapper">
+            {/* <div className="filter-wrapper">
                 <div className="wrap-bulk-all-date">
                     {realtimeFilter &&
                         realtimeFilter.map((filter: RealtimeFilter) => (
@@ -430,7 +430,7 @@ const Table: React.FC<TableProps> = ({
                         ))}
                 </div>
                 {bulkActionComp && bulkActionComp()}
-            </div>
+            </div> */}
 
             {loading ? (
                 <LoadingTable />
@@ -622,31 +622,37 @@ const Table: React.FC<TableProps> = ({
                                         );
                                     })}
                                 </tbody>
-                                {realtimeFilter && Object.keys(rowSelection || {}).length >= 2 && (
-                                    <div className="admin-filter-wrapper">
+                            </table>
+                            {Object.keys(rowSelection || {}).length >= 2 ? (
+                                <div className="admin-filter-wrapper bulk">
+                                    <div className="wrap-bulk-all-date">
+                                        <span className="title"><i className="adminlib-catalog"></i> Bulk Action: </span>
+                                        <span className="count">{Object.keys(rowSelection).length} rows selected</span>
+                                        {bulkActionComp && bulkActionComp()}
+                                        <div
+                                            className="close-btn"
+                                            onClick={() => onRowSelectionChange?.({})}
+                                        >
+                                            <i className="adminlib-vendor-form-delete"></i>
+                                            Delete
+                                        </div>
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="admin-filter-wrapper">
+                                    {realtimeFilter && (
                                         <div className="wrap-bulk-all-date">
-                                            <span>{Object.keys(rowSelection || {}).length} rows selected</span>
-                                            {realtimeFilter.map((filter: RealtimeFilter) => (
+                                            <span className="title"><i className="adminlib-contact-form"></i> Filter: </span>
+                                            {realtimeFilter?.map((filter) => (
                                                 <React.Fragment key={filter.name}>
-                                                    {filter.render(
-                                                        handleFilterChange,
-                                                        filterData[filter.name as keyof Record<string, any>]
-                                                    )}
+                                                    {filter.render(handleFilterChange, filterData[filter.name])}
                                                 </React.Fragment>
                                             ))}
-                                            <div
-                                                className="close-btn"
-                                                onClick={() => onRowSelectionChange?.({})} // clear selection
-                                            >
-                                                <i className="adminlib-close"></i>
-                                            </div>
                                         </div>
+                                    )}
+                                </div>
+                            )}
 
-                                        {bulkActionComp && bulkActionComp()}
-                                    </div>
-                                )}
-
-                            </table>
                             { /* Pagination Controls */}
                             {(data?.length as number) > 10 && (
                                 <div className="table-pagination">

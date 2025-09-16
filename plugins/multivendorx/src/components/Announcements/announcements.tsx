@@ -202,14 +202,6 @@ const Announcements: React.FC = () => {
         setPageCount(Math.ceil(totalRows / rowsPerPage));
     }, [pagination]);
 
-    const toggleDropdown = (id: any) => {
-        if (showDropdown === id) {
-            setShowDropdown(false);
-            return;
-        }
-        setShowDropdown(id);
-    };
-
     // Fetch data from backend
     function requestData(rowsPerPage = 10, currentPage = 1, typeCount = '') {
         setData(null);
@@ -281,7 +273,7 @@ const Announcements: React.FC = () => {
             header: __('Status', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell title={row.original.status || ''}>
-                    {row.original.status || '-'}
+                    {row.original.status ? row.original.status.charAt(0).toUpperCase() + row.original.status.slice(1) : '-'}
                 </TableCell>
             ),
         },
@@ -322,15 +314,20 @@ const Announcements: React.FC = () => {
                         <option value="pending">{__('Pending', 'multivendorx')}</option>
                         <option value="delete">{__('Delete', 'multivendorx')}</option>
                     </select>
-                    {/* <button name="bulk-action-apply" className="admin-btn btn-purple" onClick={handleBulkAction}>
-                        {__('Apply')}
-                    </button> */}
                 </div>
             ),
         },
     ];
-
-    const [open, setOpen] = useState(false);
+    const BulkAction: React.FC = () => (
+        <div className=" bulk-action">
+            <select name="action" className="basic-select" ref={bulkSelectRef}>
+                <option value="">{__('Bulk actions')}</option>
+                <option value="publish">{__('Publish', 'multivendorx')}</option>
+                <option value="pending">{__('Pending', 'multivendorx')}</option>
+                <option value="delete">{__('Delete', 'multivendorx')}</option>
+            </select>
+        </div>
+    );
 
     return (
         <>
@@ -409,12 +406,12 @@ const Announcements: React.FC = () => {
                             </div>
 
                             <div className="form-group ">
-                                <label htmlFor="stores">Stores</label> 
+                                <label htmlFor="stores">Stores</label>
                                 <SelectInput
                                     name="stores"
                                     type="multi-select"
                                     options={storeOptions}
-                                    value={formData.stores ? formData.stores.split(',') : []} // ✅ CSV → array
+                                    value={formData.stores ? formData.stores.split(',') : []}
                                     onChange={(newValue: any) => {
                                         const selectedValues = Array.isArray(newValue)
                                             ? newValue.map((opt) => opt.value)
@@ -451,6 +448,7 @@ const Announcements: React.FC = () => {
                     onRowClick={(row: any) => {
                         handleEdit(row.id);
                     }}
+                    bulkActionComp={() => <BulkAction />}
                 />
             </div>
         </>

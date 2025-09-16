@@ -5,7 +5,7 @@ export default {
     priority: 4,
     name: __( 'Refunds', 'multivendorx' ),
     desc: __(
-        'Control refund rules, eligibility stages, and valid claim periods',
+        'Control refund rules, eligibility stages, and valid claim periods.',
         'multivendorx'
     ),
     icon: 'adminlib-order',
@@ -17,7 +17,7 @@ export default {
             label: __( 'Eligible order status for refund', 'multivendorx' ),
             class: 'mvx-toggle-checkbox',
             settingDescription: __(
-                'Customers can only request a refund when their order is in the selected status',
+                'Customers can only request a refund when their order is in the selected status.',
                 'multivendorx'
             ),
             options: [
@@ -50,21 +50,21 @@ export default {
             type: 'number',
             label: __( 'Refund claim period', 'multivendorx' ),
             settingDescription: __(
-                'Set the number of days within which a customer can request a refund',
+                'Set the number of days within which a customer can request a refund.',
                 'multivendorx'
             ),
             size: '8rem',
             max: 365,
-            parameter: 'days',
+            postInsideText: 'days',
             moduleEnabled: 'marketplace-refund',
         },
         {
-            key: 'abuse_report_reasons',
+            key: 'refund_reasons',
             type: 'multi-string',
             label: __( 'Refund reasons', 'multivendorx' ),
             placeholder: __( 'Enter refund reasons here…', 'multivendorx' ),
             settingDescription: __(
-                'Add one or more reasons that stores can select when handling refund requests',
+                'Add one or more reasons that stores can select when handling refund requests.',
                 'multivendorx'
             ),
             name: 'abuse_report_reasons',

@@ -12,17 +12,40 @@ export default {
     submitUrl: 'settings',
     modal: [
         {
-            key: 'total_available_slot',
-            type: 'number',
-            label: __( 'Number products promoted per store', 'mvx-pro' ),
-            desc: __(
-                'Set the number of advertising slots available to stores. This limits how many products they can promote at the same time.',
-                'mvx-pro'
-            ),
-            size: '9rem',
-            moduleEnabled: 'advertisement',
-            proSetting: true,
-        },
+                key: 'store_promotion_limit',
+                label: __('Store promotion limit', 'multivendorx'),
+                settingDescription: __(
+                'Define how many products a store can promote for free and the cost for additional paid promotions.', 'multivendorx'),
+                type: 'number',
+                preText: __('Each store can promote up to', 'multivendorx'),
+                postText: __('products for free, and additionally promote up to', 'multivendorx'),
+                insideText: [
+                {
+                key: 'paid_promotion_limit',
+                type: 'number',
+                preText: '',
+                postText: __('paid products at a cost of', 'multivendorx'),
+                },
+                {
+                key: 'promotion_slot_cost',
+                type: 'number',
+                preInsideText: __('$', 'multivendorx'),
+                postText: __('per slot.', 'multivendorx'),
+                }
+                ],
+                size: '8rem',
+        }, 
+        // {
+        //     key: 'cost',
+        //     type: 'number',
+        //     label: __('Advertising cost', 'multivendorx'),
+        //     preInsideText: __('$', 'multivendorx'),
+        //     postText:__('stores must pay to use per advertising slot. Use 0 if you want advertising to be free.', 'multivendorx'),
+        //     size: '8rem',
+        //     placeholder: 0,
+        //     //proSetting:true
+        // },
+
         {
             key: 'expire_after_days',
             type: 'number',
@@ -31,46 +54,11 @@ export default {
                 'Set how long a product will stay advertised. Stores can choose the duration up to this limit.',
                 'mvx-pro'
             ),
-            parameter: __('Days', 'multivendorx'),
+            postInsideText: __('days', 'multivendorx'),
             size: '8rem',
             moduleEnabled: 'advertisement',
             proSetting: true,
-        },
-        {
-            key: 'store_can_purchase_advertisement',
-            label: __( 'Allow stores to purchase advertising', 'multivendorx' ),
-            type: 'checkbox',
-            desc: __(
-                'Enable to let stores purchase advertising from the product listing or edit page.',
-                'multivendorx'
-            ),
-            options: [
-                {
-                    key: 'store_can_purchase_advertisement',
-                    value: 'store_can_purchase_advertisement',
-                },
-            ],
-            look: 'toggle',
-            //proSetting:true
-        },        
-        {
-            key: 'cost',
-            type: 'number',
-            label: sprintf(
-                '%1$s (%2$s)',
-                __( 'Advertising cost', 'mvx-pro' ),
-                appLocalizer?.woocommerce_currency
-            ),
-            desc: __(
-                'Set the price for each advertising slot. Enter "0" to allow stores to advertise for free.',
-                'mvx-pro'
-            ),
-            dependent: {
-                key: 'store_can_purchase_advertisement',
-                set: true,
-            },
-            //proSetting:true
-        },
+        }, 
         {
             key: 'store_advertisement_advanced_settings',
             type: 'checkbox',

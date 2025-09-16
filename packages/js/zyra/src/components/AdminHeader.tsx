@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import CommonPopup from "./CommonPopup";
 
 // Accepts searchIndex-style items directly
 type SearchItem = {
@@ -14,6 +15,21 @@ interface Notification {
   icon?: string;
   color?: string;
 }
+
+interface DropdownOption {
+  value: string;
+  label: string;
+}
+
+interface NotificationItem {
+  heading: string;
+  message: string;
+  time: string;
+  icon?: string;
+  color?: string;
+  link?: string; // optional for individual notification
+}
+
 type AdminHeaderProps = {
   brandImg: string;
   query: string;
@@ -24,7 +40,17 @@ type AdminHeaderProps = {
   selectValue: string;
   free?: string;
   pro?: string;
+  showDropdown?: boolean;
+  dropdownOptions?: DropdownOption[];
+
+  notifications?: NotificationItem[];
+  messages?: NotificationItem[];
+  notificationsLink?: string;
+  messagesLink?: string;
+  showNotifications?: boolean;
+  showMessages?: boolean;
 };
+
 
 const AdminHeader: React.FC<AdminHeaderProps> = ({
   brandImg,
@@ -35,13 +61,23 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
   onSelectChange,
   selectValue,
   free,
-  pro = "4.1.23",
+  pro,
+  showDropdown,
+  dropdownOptions,
+  notificationsLink,
+  notifications,
+  messagesLink,
+  messages,
+  showMessages,
+  showNotifications
 }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [messageOpen, setMessageOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const [contactSupportPopup, setContactSupportPopup] = useState(false);
+  const [popupContent, setPopupContent] = useState<string>("Loading...");
 
   // Close dropdown on click outside
   useEffect(() => {
@@ -56,35 +92,20 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-
+  useEffect(() => {
+    if (contactSupportPopup) {
+      setPopupContent("Loading...");
+      fetch("https://tawk.to/chat/5d2eebf19b94cd38bbe7c9ad/1fsg8cq8n") // or an API endpoint
+        .then((res) => res.text())
+        .then((html) => setPopupContent(html))
+        .catch(() => setPopupContent("Failed to load content."));
+    }
+  }, [contactSupportPopup]);
   // Open dropdown automatically when there are results
   useEffect(() => {
     setDropdownOpen(results.length > 0);
   }, [results]);
 
-  const [messages] = useState<Notification[]>([
-    {
-      heading: "Congratulation Lettie",
-      message: "Won the monthly best seller gold badge",
-      time: "2 days ago",
-      icon: "adminlib-user-network-icon red",
-      color: "green",
-    },
-    {
-      heading: "New Order Received",
-      message: "Order #1024 has been placed",
-      time: "1 hour ago",
-      icon: "adminlib-cart-icon",
-      color: "blue",
-    },
-    {
-      heading: "New Review",
-      message: "John left a 5-star review",
-      time: "30 mins ago",
-      icon: "adminlib-star-icon",
-      color: "yellow",
-    },
-  ]);
   return (
     <>
       <div className="admin-header">
@@ -96,7 +117,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
               <i className="adminlib-adminlib-info"></i> <b>Free:</b> {free}
             </span>
             <span className="admin-badge red">
-              <i className="adminlib-pro-tag"></i> Pro: {pro}
+              <i className="adminlib-pro-tag"></i> Pro: {pro ? pro : "Not Installed"}
             </span>
           </div>
         </div>
@@ -110,35 +131,24 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
               value={query}
               onChange={(e) => onSearchChange(e.target.value)}
             />
-            <select
-              value={selectValue}
-              onChange={(e) => onSelectChange(e.target.value)}
-            >
-              <option value="all">All</option>
-              <option value="modules">Modules</option>
-              <option value="settings">Settings</option>
-            </select>
+            {showDropdown && dropdownOptions && dropdownOptions.length > 0 && (
+              <select
+                value={selectValue}
+                onChange={(e) => onSelectChange(e.target.value)}
+              >
+                {dropdownOptions.map((opt) => (
+                  <option key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </option>
+                ))}
+              </select>
+            )}
+
 
             {/* dropdown render */}
             {dropdownOpen && results.length > 0 && (
               <ul
                 className="search-dropdown"
-                style={{
-                  position: "absolute",
-                  top: "100%",
-                  left: 0,
-                  width: "260px",
-                  maxHeight: "250px",
-                  overflowY: "auto",
-                  background: "#fff",
-                  border: "1px solid #ddd",
-                  borderRadius: "6px",
-                  marginTop: "4px",
-                  padding: 0,
-                  listStyle: "none",
-                  boxShadow: "0 2px 8px rgba(0,0,0,0.12)",
-                  zIndex: 1000,
-                }}
               >
                 {results.map((r, i) => {
                   const name = r.name || "(No name)";
@@ -150,16 +160,6 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
                       onClick={() => {
                         onResultClick(r);
                         setDropdownOpen(false); // close dropdown on click
-                      }}
-                      style={{
-                        padding: "8px 12px",
-                        cursor: "pointer",
-                        fontSize: "14px",
-                        color: "#333",
-                        borderBottom: "1px solid #f0f0f0",
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "8px",
                       }}
                       onMouseEnter={(e) =>
                         (e.currentTarget.style.background = "#f5f7fa")
@@ -192,149 +192,105 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
             )}
           </div>
 
-          {/* start notification */}
-          <div className="icon-wrapper">
-            <i
-              className="admin-icon adminlib-notification"
-              title="Notifications"
-              onClick={() => {
-                setNotifOpen(!notifOpen);
-                setProfileOpen(false);
-                setMessageOpen(false);
-              }}
-            ></i>
-            <span className="count">2</span>
-            {notifOpen && (
-              <div className="dropdown-menu notification">
-                <div className="title">Notification <span className="admin-badge green">8 New</span></div>
-                <div className="notification">
-                  <ul>
-                    <li>
-                      <a href="#">
-                        <div className="icon admin-badge green">
-                          <i className="adminlib-user-network-icon red"></i>
-                        </div>
-                        <div className="details">
-                          <span className="heading">Congratulation Lettie</span>
-                          <span className="message">Won the monthly best seller gold badge</span>
-                          <span className="time">2 days ago</span>
-                        </div>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#">
-                        <div className="icon admin-badge red">
-                          <i className="adminlib-user-network-icon red"></i>
-                        </div>
-                        <div className="details">
-                          <span className="heading">Congratulation Lettie</span>
-                          <span className="message">Won the monthly best seller gold badge</span>
-                          <span className="time">2 days ago</span>
-                        </div>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#">
-                        <div className="icon admin-badge blue">
-                          <i className="adminlib-user-network-icon red"></i>
-                        </div>
-                        <div className="details">
-                          <span className="heading">Congratulation Lettie</span>
-                          <span className="message">Won the monthly best seller gold badge</span>
-                          <span className="time">2 days ago</span>
-                        </div>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#">
-                        <div className="icon admin-badge yellow">
-                          <i className="adminlib-user-network-icon red"></i>
-                        </div>
-                        <div className="details">
-                          <span className="heading">Congratulation Lettie</span>
-                          <span className="message">Won the monthly best seller gold badge</span>
-                          <span className="time">2 days ago</span>
-                        </div>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#">
-                        <div className="icon admin-badge blue">
-                          <i className="adminlib-user-network-icon red"></i>
-                        </div>
-                        <div className="details">
-                          <span className="heading">Congratulation Lettie</span>
-                          <span className="message">Won the monthly best seller gold badge</span>
-                          <span className="time">2 days ago</span>
-                        </div>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#">
-                        <div className="icon admin-badge yellow">
-                          <i className="adminlib-user-network-icon red"></i>
-                        </div>
-                        <div className="details">
-                          <span className="heading">Congratulation Lettie</span>
-                          <span className="message">Won the monthly best seller gold badge</span>
-                          <span className="time">2 days ago</span>
-                        </div>
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-                <div className="footer">
-                  <div className="admin-btn btn-purple">
-                    <i className="adminlib-eye"></i>
-                    View all notification
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-          {/* end notification */}
 
-          <div className="icon-wrapper">
-            <i
-              className="admin-icon adminlib-enquiry"
-              title="Admin support"
-              onClick={() => {
-                setMessageOpen(!messageOpen);
-                setProfileOpen(false);
-                setNotifOpen(false);
-              }}
-            ></i>
-            <span className="count">10</span>
-            {messageOpen && (
-              <div className="dropdown-menu notification">
-                <div className="title">Message <span className="admin-badge green">8 New</span></div>
-                <div className="notification">
-                  <ul>
-                    {messages.map((msg, index) => (
-                      <li key={index}>
-                        <a href="#">
-                          <div className={`icon admin-badge ${msg.color || "green"}`}>
-                            <i className={msg.icon || "adminlib-user-network-icon"}></i>
-                          </div>
-                          <div className="details">
-                            <span className="heading">{msg.heading}</span>
-                            <span className="message">{msg.message}</span>
-                            <span className="time">{msg.time}</span>
-                          </div>
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                <div className="footer">
-                  <div className="admin-btn btn-purple">
-                    <i className="adminlib-eye"></i>
-                    View all message
+          {/* Notifications */}
+          {showNotifications && notifications && notifications.length > 0 && (
+            <div className="icon-wrapper">
+              <i
+                className="admin-icon adminlib-notification"
+                title="Notifications"
+                onClick={() => {
+                  setNotifOpen(!notifOpen);
+                  setProfileOpen(false);
+                  setMessageOpen(false);
+                }}
+              ></i>
+              <span className="count">{notifications.length}</span>
+
+              {notifOpen && (
+                <div className="dropdown-menu notification">
+                  <div className="title">
+                    Notifications <span className="admin-badge green">{notifications.length} New</span>
                   </div>
+                  <div className="notification">
+                    <ul>
+                      {notifications.map((item, idx) => (
+                        <li key={idx}>
+                          <a href={item.link || "#"}>
+                            <div className={`icon admin-badge ${item.color || "green"}`}>
+                              <i className={item.icon || "adminlib-user-network-icon"}></i>
+                            </div>
+                            <div className="details">
+                              <span className="heading">{item.heading}</span>
+                              <span className="message">{item.message}</span>
+                              <span className="time">{item.time}</span>
+                            </div>
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  {notificationsLink && (
+                    <div className="footer">
+                      <a href={notificationsLink} className="admin-btn btn-purple">
+                        <i className="adminlib-eye"></i> View all notifications
+                      </a>
+                    </div>
+                  )}
                 </div>
-              </div>
-            )}
-          </div>
+              )}
+            </div>
+          )}
+
+          {/* Messages */}
+          {showMessages && messages && messages.length > 0 && (
+            <div className="icon-wrapper">
+              <i
+                className="admin-icon adminlib-enquiry"
+                title="Messages"
+                onClick={() => {
+                  setMessageOpen(!messageOpen);
+                  setProfileOpen(false);
+                  setNotifOpen(false);
+                }}
+              ></i>
+              <span className="count">{messages.length}</span>
+
+              {messageOpen && (
+                <div className="dropdown-menu notification">
+                  <div className="title">
+                    Messages <span className="admin-badge green">{messages.length} New</span>
+                  </div>
+                  <div className="notification">
+                    <ul>
+                      {messages.map((msg, idx) => (
+                        <li key={idx}>
+                          <a href={msg.link || "#"}>
+                            <div className={`icon admin-badge ${msg.color || "green"}`}>
+                              <i className={msg.icon || "adminlib-user-network-icon"}></i>
+                            </div>
+                            <div className="details">
+                              <span className="heading">{msg.heading}</span>
+                              <span className="message">{msg.message}</span>
+                              <span className="time">{msg.time}</span>
+                            </div>
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  {messagesLink && (
+                    <div className="footer">
+                      <a href={messagesLink} className="admin-btn btn-purple">
+                        <i className="adminlib-eye"></i> View all messages
+                      </a>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+
           <div className="icon-wrapper">
             <i
               className="admin-icon adminlib-user-circle"
@@ -355,7 +311,9 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
                       </a>
                     </li>
                     <li>
-                      <a href="#">
+                      <a onClick={(e) => {
+                        setContactSupportPopup(true);
+                      }}>
                         <i className="adminlib-user-network-icon"></i>
                         Contact Support
                       </a>
@@ -365,8 +323,31 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
               </div>
             )}
           </div>
+          
         </div>
       </div>
+
+      {contactSupportPopup && (
+        <CommonPopup
+          open={contactSupportPopup}
+          onClose={() => setContactSupportPopup(false)}
+          width="500px"
+        >
+          <div>
+            <iframe
+              src="https://tawk.to/chat/5d2eebf19b94cd38bbe7c9ad/1fsg8cq8n"
+              title="Support Chat"
+              style={{
+                border: 'none',
+                width: '100%',
+                height: '35rem',
+              }}
+              allow="microphone; camera"
+            />
+          </div>
+        </CommonPopup>
+      )
+      }
     </>
   );
 };

@@ -120,7 +120,7 @@ class StoreUtil {
         $capabilities = [
             'products' => [
                 'label' => 'Manage Products',
-                'desc'  => 'Set how vendors handle their product listings',
+                'settingDescription'  => 'Allow stores to create, edit, and control their product listings, including uploading media and publishing items for sale.',
                 'capability' =>
                 [
                     //'manage_users' => 'Manage Users',
@@ -134,7 +134,7 @@ class StoreUtil {
             ],
             'orders' => [
                 'label' => 'Manage Orders',
-                'desc'  => 'Set how vendors handle their order listings',
+                'settingDescription'  => 'Define how stores interact with customer orders, from viewing and updating details to adding order notes or processing cancellations.',
                 'capability' =>
                 [
                     'read_shop_orders' => 'View Orders',
@@ -146,7 +146,7 @@ class StoreUtil {
             ],
             'coupons' => [
                 'label' => 'Coupon Management',
-                'desc'  => 'Set how vendors handle their coupons listings',
+                'settingDescription'  => 'Enable stores to create and manage discount codes, adjust coupon settings, and track active promotions.',
                 'capability' =>
                 [
                     'manage_shop_coupons' => 'Manage Coupons',
@@ -157,7 +157,7 @@ class StoreUtil {
             ],
             'analytics' => [
                 'label' => 'Analytics & Report',
-                'desc'  => 'Set how vendors handle their coupons listings',
+                'settingDescription'  => 'Give stores access to performance insights, sales data editing, and export options for business tracking and analysis.',
                 'capability' =>
                 [
                     'read_shop_report' => 'View Reports',
@@ -167,7 +167,7 @@ class StoreUtil {
             ],
             'inventory' => [
                 'label' => 'Inventory Management',
-                'desc'  => 'Set how vendors handle their coupons listings',
+                'settingDescription'  => 'Let stores monitor stock levels, update quantities, and set alerts to prevent overselling or stockouts.',
                 'capability' =>
                 [
                     'read_shop_report' => 'Manage Inventory',
@@ -177,7 +177,7 @@ class StoreUtil {
             ],
             'commission' => [
                 'label' => 'Commission & Earning',
-                'desc'  => 'Set how vendors handle their coupons listings',
+                'settingDescription'  => 'Provide stores with tools to review their earnings, track commission history, and request withdrawals when eligible.',
                 'capability' =>
                 [
                     'read_shop_earning' => 'View Earning',
@@ -231,12 +231,12 @@ class StoreUtil {
         }
     
         // Get registration form data (serialized meta)
-        $store_meta = $store->get_meta( 'multivendorx-registration-data' );
+        $store_meta = $store->get_meta( 'multivendorx_registration_data' );
         $submitted_data = [];
         if ( !empty($store_meta) && is_serialized($store_meta) ) {
             $submitted_data = unserialize($store_meta);
         }
-    
+           
         // Fetch form settings
         $form_settings = MultivendorX()->setting->get_option(
             'multivendorx_store_registration_form_settings',
@@ -266,4 +266,152 @@ class StoreUtil {
     
         return $response;
     }
+
+    public static function get_stores_by_status( $status ) {
+        global $wpdb;
+    
+        $table = "{$wpdb->prefix}" . Utill::TABLES['store'];
+        $stores = $wpdb->get_results(
+            $wpdb->prepare(
+                "SELECT * FROM {$table} WHERE status = %s",
+                $status
+            ),
+            ARRAY_A
+        );
+    
+        return $stores ?: [];
+    }
+    
+
+
+    public static function set_primary_owner( $user_id, $store_id ) {
+        global $wpdb;
+
+        $table_name = $wpdb->prefix . Utill::TABLES['store_users'];
+
+        // Check if store_id already exists
+        $exists = $wpdb->get_var(
+            $wpdb->prepare(
+                "SELECT ID FROM $table_name WHERE store_id = %d",
+                $store_id
+            )
+        );
+
+        if ( $exists ) {
+            // Update
+            $wpdb->update(
+                $table_name,
+                [ 'primary_owner' => $user_id ],
+                [ 'store_id' => $store_id ],
+                [ '%d' ],
+                [ '%d' ]
+            );
+        } else {
+            // Insert
+            $wpdb->insert(
+                $table_name,
+                [
+                    'store_id'      => $store_id,
+                    'user_id'       => $user_id,
+                    'role_id'       => MultiVendorX()->setting->get_setting( 'approve_store' ) == 'automatically' ? 'store_owner' : null,
+                    'primary_owner' => MultiVendorX()->setting->get_setting( 'approve_store' ) == 'automatically' ? $user_id : null,
+                ],
+                [ '%d', '%d', '%s', '%d' ]
+            );
+        }
+    }
+
+    public static function get_store_product_policies($product_id = 0) {
+        $product = wc_get_product($product_id);
+        $policies = array();
+        if ($product) {
+            $shipping_policy = get_post_meta($product_id, 'multivendorx_shipping_policy', true);
+            $refund_policy = get_post_meta($product_id, 'multivendorx_refund_policy', true);
+            $cancellation_policy = get_post_meta($product_id, 'multivendorx_cancellation_policy', true);
+
+            $store_policy = MultiVendorX()->setting->get_setting('store_policy', []);
+            if (!empty($shipping_policy)) {
+                $shipping_policy = MultiVendorX()->setting->get_setting('shipping_policy', []);
+            }
+            if (!empty($refund_policy)) {
+                $refund_policy = MultiVendorX()->setting->get_setting('refund_policy', []);
+            }
+            if (!empty($cancellation_policy)) {
+                $cancellation_policy = MultiVendorX()->setting->get_setting('cancellation_policy', []);
+            }
+
+            $store_id = get_post_meta($product_id, 'multivendorx_store_id', true);
+            $store = new Store($store_id);
+            $privacy_override_settings = MultiVendorX()->setting->get_setting('store_policy_override', []);
+            
+            if ( in_array ('store', $privacy_override_settings) ) {
+                $store_policy = $store->get_meta('store_policy');
+            }
+            if ( in_array ('shipping', $privacy_override_settings) ) {
+                $shipping_policy = $store->get_meta('shipping_policy');
+            }
+            if ( in_array ('refund_return', $privacy_override_settings) ) {
+                $refund_policy = $store->get_meta('return_policy');
+                $cancellation_policy = $store->get_meta('exchange_policy');
+            }
+
+            if (!empty($store_policy)) {
+                $policies['store_policy'] = $store_policy;
+            }
+
+            if (!empty($shipping_policy)) {
+                $policies['shipping_policy'] = $shipping_policy;
+            }
+
+            if (!empty($refund_policy)) {
+                $policies['refund_policy'] = $refund_policy;
+            }
+            if (!empty($cancellation_policy)) {
+                $policies['cancellation_policy'] = $cancellation_policy;
+            }
+        }
+        return $policies;
+    }
+
+    public static function get_store_policies($store_id = 0) {
+        $policies = array();
+            $store_policy = MultiVendorX()->setting->get_setting('store_policy', []);
+            $shipping_policy = MultiVendorX()->setting->get_setting('shipping_policy', []);
+            $refund_policy = MultiVendorX()->setting->get_setting('refund_policy', []);
+            $cancellation_policy = MultiVendorX()->setting->get_setting('cancellation_policy', []);
+
+            if ($store_id) {
+                $store = new Store($store_id);
+                $privacy_override_settings = MultiVendorX()->setting->get_setting('store_policy_override', []);
+                
+                if ( in_array ('store', $privacy_override_settings) ) {
+                    $store_policy = $store->get_meta('store_policy');
+                }
+                if ( in_array ('shipping', $privacy_override_settings) ) {
+                    $shipping_policy = $store->get_meta('shipping_policy');
+                }
+                if ( in_array ('refund_return', $privacy_override_settings) ) {
+                    $refund_policy = $store->get_meta('return_policy');
+                    $cancellation_policy = $store->get_meta('exchange_policy');
+                }
+            }
+
+            if (!empty($store_policy)) {
+                $policies['store_policy'] = $store_policy;
+            }
+
+            if (!empty($shipping_policy)) {
+                $policies['shipping_policy'] = $shipping_policy;
+            }
+
+            if (!empty($refund_policy)) {
+                $policies['refund_policy'] = $refund_policy;
+            }
+            if (!empty($cancellation_policy)) {
+                $policies['cancellation_policy'] = $cancellation_policy;
+            }
+
+        return $policies;
+    }
+
 }

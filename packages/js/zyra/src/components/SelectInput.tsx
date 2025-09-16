@@ -33,8 +33,8 @@ interface SelectInputProps {
     proSetting?: boolean;
     description?: string;
     descClass?: string;
-    addonBefore?: string;
-    addonAfter?: string;
+    preText?: string;
+    postText?: string;
 }
 
 const SelectInput: React.FC<SelectInputProps> = ({
@@ -52,8 +52,8 @@ const SelectInput: React.FC<SelectInputProps> = ({
     proSetting,
     description,
     descClass,
-    addonBefore,
-    addonAfter,
+    preText,
+    postText,
 }) => {
     const customStyles = {
         control: (provided: any, state: any) => ({
@@ -65,6 +65,7 @@ const SelectInput: React.FC<SelectInputProps> = ({
             maxHeight: '2.213rem',
             paddingTop: 0,
             paddingBottom: 0,
+            margin: 0,
         }),
         valueContainer: (provided: any) => ({
             ...provided,
@@ -131,7 +132,7 @@ const SelectInput: React.FC<SelectInputProps> = ({
             )}
 
             <div className="select-wrapper">
-                {addonBefore && (<div className="before">{addonBefore}</div>)}
+                {preText && (<div className="before">{preText}</div>)}
                 <Select
                     name={name}
                     className={`${inputClass} react-select`}
@@ -144,7 +145,7 @@ const SelectInput: React.FC<SelectInputProps> = ({
                     closeMenuOnSelect={true}
                     isMulti={type === 'multi-select'}
                 />
-                {addonAfter && (<div className="after">{addonAfter}</div>)}
+                {postText && (<div className="after">{postText}</div>)}
             </div>
             {proSetting && <span className="admin-pro-tag"><i className="adminlib-pro-tag"></i>Pro</span>}
             {description && (

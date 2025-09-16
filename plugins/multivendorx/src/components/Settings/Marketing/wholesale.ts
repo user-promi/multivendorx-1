@@ -13,7 +13,7 @@ export default {
             type: 'setting-toggle',
             label: __('Wholesale buyer verification', 'multivendorx'),
             settingDescription: __('Decide how wholesale buyers are approved before they can access bulk pricing.','multivendorx'),
-			desc: __('<ul><li>Automatic:Any user registering as a wholesale buyer is instantly approved without admin review.</li><li>Manual-Admin must review and approve each wholesale buyer request before access is granted.</li></ul>', 'mvx-pro'),
+			desc: __('<ul><li>Automatic - Any user registering as a wholesale buyer is instantly approved without admin review.</li><li>Manual - Admin must review and approve each wholesale buyer request before access is granted.</li></ul>', 'mvx-pro'),
             options: [
                 {
                     key: 'automatic',
@@ -33,7 +33,7 @@ export default {
             type: 'setting-toggle',
             label: __('Who can see wholesale prices', 'multivendorx'),
             settingDescription: __('Choose which users can see wholesale pricing in store catalogs.','multivendorx'),
-	      	desc: __('<ul><li>All registered users – Every logged-in customer can see wholesale prices, regardless of approval status.</li><li>Approved wholesale buyers only – Only users approved as wholesale buyers can see wholesale prices.</li></ul>', 'mvx-pro'),
+	      	desc: __('<ul><li>All registered users - Every logged-in customer can see wholesale prices, regardless of approval status.</li><li>Approved wholesale buyers only - Only users approved as wholesale buyers can see wholesale prices.</li></ul>', 'mvx-pro'),
             options: [
                 {
                     key: 'registered',
@@ -53,7 +53,7 @@ export default {
             type: 'setting-toggle',
             label: __('Wholesale price display', 'multivendorx'),
             settingDescription: __('Control whether wholesale prices are shown alongside retail prices or separately.','multivendorx'),
-			desc: __('<ul><li>Along with retail prices – Display both retail and wholesale prices side by side, so buyers can compare.</li><li>Wholesale price only – Replace retail pricing with wholesale pricing for eligible buyers.</li></ul>', 'mvx-pro'),
+			desc: __('<ul><li>Along with retail prices - Display both retail and wholesale prices side by side, so buyers can compare.</li><li>Wholesale price only - Replace retail pricing with wholesale pricing for eligible buyers.</li></ul>', 'mvx-pro'),
            options: [
                 {
                     key: 'with_retail',

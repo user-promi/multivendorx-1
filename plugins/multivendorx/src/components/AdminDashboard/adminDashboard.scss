@@ -20,7 +20,7 @@
 
 .tab-titles {
     display: flex;
-    gap: 1rem;
+    gap: 1.313rem;
     padding-top: 1.313rem;
 
     .title {
@@ -32,6 +32,11 @@
             line-height: 1.5;
             color: #000;
             font-weight: 500;
+
+            i {
+                padding-right: 0.313rem;
+                font-size: 1.125rem;
+            }
         }
 
         &.active {
@@ -52,10 +57,10 @@
 }
 
 .column {
-    width: 100%;
-    padding: 1.5rem;
-    background: #fff;
-    border-radius: 0.313rem;
+    // width: 100%;
+    // padding: 1.5rem;
+    // background: #fff;
+    // border-radius: 0.313rem;
 
     .action-btn-wrapper {
         display: flex;
@@ -68,19 +73,19 @@
         justify-content: space-between;
     }
 
-    h3,
-    .title {
-        padding-bottom: 0.85rem;
-        font-size: 1.125rem;
-        color: #000;
-        font-weight: 500;
+    // h3,
+    // .title {
+    //     padding-bottom: 0.85rem;
+    //     font-size: 1.125rem;
+    //     color: #000;
+    //     font-weight: 500;
 
-        i {
-            padding-right: 0.313rem;
-            color: $theme-color;
-            font-size: 1.125rem;
-        }
-    }
+    //     i {
+    //         padding-right: 0.313rem;
+    //         color: $theme-color;
+    //         font-size: 1.125rem;
+    //     }
+    // }
 
     .admin-table-wrapper {
         padding: 0;
@@ -221,9 +226,10 @@
         display: flex;
         align-items: center;
         gap: 0.5rem;
-        padding: 0.5rem;
-        margin-bottom: 0.5rem;
+        padding: 0.313rem;
+        margin-bottom: 0.313rem;
         transition: all 0.5s ease;
+        border-radius: 0.313rem;
 
         .icon {
             font-size: 1.125rem;
@@ -242,6 +248,10 @@
             font-size: 1rem;
             flex-direction: column;
 
+            &.inactive {
+                text-decoration: line-through;
+            }
+
             span {
                 font-size: 0.8rem;
                 color: $text-color
@@ -251,16 +261,32 @@
         &:hover {
             background: #f4f2f2;
         }
+
+        &.inactive {
+            background: #ff00000d;
+
+            .icon {
+                background: #fde8e4;
+
+                i {
+                    color: #f06b4f;
+                }
+            }
+
+            .details {
+                color: #f06b4f;
+            }
+        }
     }
 }
 
-.quick-link {
-    .quick-links-wrapper {
-        display: flex;
-        gap: 0.85rem;
-        flex-wrap: wrap;
-    }
+.quick-links-wrapper {
+    display: flex;
+    gap: 0.85rem;
+    flex-wrap: wrap;
+    padding-bottom: 2rem;
 }
+
 
 // action start
 .overview-card-wrapper {
@@ -389,3 +415,36 @@
 }
 
 // top items end
+
+
+// support start
+.support-wrapper {
+    .support {
+        display: flex;
+        gap: 1rem;
+        padding: 0.313rem;
+        margin-bottom: 0.313rem;
+        border-bottom: $border-light-small;
+
+        .image {
+            i {
+                font-size: 1.45rem;
+                color: $theme-color;
+            }
+        }
+
+        .details {
+            .name {
+                font-size: 1.063rem;
+                color: #000;
+                padding-bottom: 0.313rem;
+            }
+
+            .des {
+                color: #acaaaa;
+            }
+        }
+    }
+}
+
+// support end

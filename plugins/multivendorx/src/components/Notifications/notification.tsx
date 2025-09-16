@@ -1,64 +1,66 @@
-import { AdminBreadcrumbs } from 'zyra';
-import WithdrawalRequests from './withdrawalRequests';
+import { AdminBreadcrumbs, getApiLink } from 'zyra';
 import Products from './products';
 import Vendors from './vendors';
 import Coupons from './coupon';
 import Transactions from './transaction';
 import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 const Notification = () => {
-
+    const [productCount, setProductCount] = useState<number>(0);
+    const [couponCount, setCouponCount] = useState<number>(0);
+    const [transactionCount, setTransactionCount] = useState<number>(0);
+    const [storeCount, setStoreCount] = useState<number>(0);
 
     const [activeTab, setActiveTab] = useState("products");
 
 
     const tabs = [
         { id: "products", label: "Products", content: <Products /> },
-        { id: "vendors", label: "Vendors", content: <Vendors /> },
+        { id: "stores", label: "Stores", content: <Vendors /> },
         { id: "coupons", label: "Coupons", content: <Coupons /> },
         { id: "transactions", label: "Transaction", content: <Transactions /> },
     ];
-    const workboardStats = [
-        {
-            id: 'reviews',
-            label: 'Pending Products',
-            count: 12,
-        },
-        {
-            id: 'reviews',
-            label: 'Pending Vendors',
-            count: 12,
-        },
-        {
-            id: 'reviews',
-            label: 'Pending Coupons',
-            count: 12,
-        },
-        {
-            id: 'reviews',
-            label: 'Pending Transaction',
-            count: 12,
-        },
-    ];
+    // Fetch total rows on mount
+    useEffect(() => {
+        axios({
+            method: 'GET',
+            url: getApiLink(appLocalizer, 'products'),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            params: { count: true },
+        })
+            .then((response) => {
+                setProductCount(response.data || 0);
+            })
 
-    const withdrawalExtraStats = [
-        { id: 'reverse', label: 'Reverse Withdrawal', value: '₹0.00' },
-        { id: 'collected', label: 'Total Collected', value: '₹25,440.00' },
-        { id: 'remaining', label: 'Remaining Balance', value: '₹12,850.00' },
-        { id: 'transactions', label: 'Total Transactions', value: '156' },
-    ];
+        axios({
+            method: 'GET',
+            url: getApiLink(appLocalizer, 'coupons'),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            params: { count: true },
+        })
+            .then((response) => {
+                setCouponCount(response.data || 0);
+            })
+        axios({
+            method: 'GET',
+            url: getApiLink(appLocalizer, 'store'),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            params: { count: true, status: 'pending' },
+        })
+            .then((response) => {
+                setStoreCount(response.data || 0);
+            })
+    }, []);
+
     const tasks = [
         {
             id: 1,
             title: "Fix login bug",
-            priority: "High",
-            dueDate: "2025-09-10",
         },
         {
             id: 2,
             title: "Update dashboard UI",
-            priority: "Medium",
-            dueDate: "2025-09-15",
         },
         {
             id: 3,
@@ -69,8 +71,6 @@ const Notification = () => {
         {
             id: 4,
             title: "Deploy staging server",
-            priority: "High",
-            dueDate: "2025-09-08",
         },
     ];
     return (
@@ -83,13 +83,23 @@ const Notification = () => {
 
             {/* Workboard Stats */}
             <div className="work-board">
+
                 <div className="row">
                     <div className="column">
-                        <div className="title"><i className="adminlib-person"></i> Account Overview</div>
+                        <div className="card-header">
+                            <div className="left">
+                                <div className="title">
+                                    Account Overview
+                                </div>
+                            </div>
+                            <div className="right">
+                                <span>Updated 1 month ago</span>
+                            </div>
+                        </div>
                         <div className="overview-card-wrapper">
                             <div className="action">
                                 <div className="title">
-                                    3
+                                    {productCount}
                                     <i className="adminlib-cart"></i>
                                 </div>
                                 <div className="description">
@@ -98,18 +108,18 @@ const Notification = () => {
                             </div>
                             <div className="action">
                                 <div className="title">
-                                    52
+                                    {storeCount}
                                     <i className="adminlib-tools"></i>
                                 </div>
                                 <div className="description">
-                                    Pending Vendors
+                                    Pending Stores
                                 </div>
                             </div>
                         </div>
                         <div className="overview-card-wrapper">
                             <div className="action">
                                 <div className="title">
-                                    99
+                                    {couponCount}
                                     <i className="adminlib-catalog"></i>
                                 </div>
                                 <div className="description">
@@ -118,7 +128,7 @@ const Notification = () => {
                             </div>
                             <div className="action">
                                 <div className="title">
-                                    3
+                                    {transactionCount}
                                     <i className="adminlib-module"></i>
                                 </div>
                                 <div className="description">
@@ -127,25 +137,25 @@ const Notification = () => {
                             </div>
                         </div>
                     </div>
+
                     <div className="column">
-                        <div className="header">
-                            <div className="title"><i className="adminlib-book"></i> Tasks</div>
-                            <div className="admin-btn btn-purple">
-                                <i className="adminlib-plus-circle-o"></i>
-                                Add task
+                        <div className="card-header">
+                            <div className="left">
+                                <div className="title">
+                                    Tasks
+                                </div>
+                            </div>
+                            <div className="right">
+                                <div className="admin-btn btn-purple">
+                                    <i className="adminlib-plus-circle-o"></i>
+                                    Add task
+                                </div>
                             </div>
                         </div>
                         <div className="task-manager">
 
                             {/* Task Table */}
                             <table className="task-table">
-                                {/* <thead>
-                                    <tr>
-                                        <th>Task Title</th>
-                                        <th>Priority</th>
-                                        <th>Due Date</th>
-                                    </tr>
-                                </thead> */}
                                 <tbody>
                                     {tasks.map((task) => (
                                         <tr
@@ -154,20 +164,24 @@ const Notification = () => {
                                             onClick={() => setShowDetails(task)}
                                         >
                                             <td>{task.title}</td>
-                                            <td>
-                                                <span className={`priority ${task.priority.toLowerCase()}`}>
-                                                    {task.priority}
-                                                </span>
-                                            </td>
-                                            <td>{task.dueDate}</td>
                                         </tr>
                                     ))}
                                 </tbody>
                             </table>
                         </div>
                     </div>
+
                     <div className="column">
-                        <div className="title"><i className="adminlib-notification"></i> Notification</div>
+                        <div className="card-header">
+                            <div className="left">
+                                <div className="title">
+                                    Notification
+                                </div>
+                            </div>
+                            <div className="right">
+                                <span>Updated 1 month ago</span>
+                            </div>
+                        </div>
                         <div className="notification-wrapper">
                             <ul>
                                 <li>
@@ -226,7 +240,16 @@ const Notification = () => {
                 <div className="row">
                     <div className="column">
                         <div className="action-tab-wrapper">
-                            <div className="title"><i className="adminlib-person"></i> Account Overview</div>
+                            <div className="card-header">
+                                <div className="left">
+                                    <div className="title">
+                                        Account Overview
+                                    </div>
+                                </div>
+                                <div className="right">
+                                    <i className="adminlib-more-vertical"></i>
+                                </div>
+                            </div>
                             {/* Tab Titles */}
                             <div className="tab-titles">
                                 {tabs.map((tab) => (
@@ -235,7 +258,7 @@ const Notification = () => {
                                         className={`title ${activeTab === tab.id ? "active" : ""}`}
                                         onClick={() => setActiveTab(tab.id)}
                                     >
-                                        <p>{tab.label}</p>
+                                        <p><i className="adminlib-cart"></i>{tab.label}</p>
                                     </div>
                                 ))}
                             </div>

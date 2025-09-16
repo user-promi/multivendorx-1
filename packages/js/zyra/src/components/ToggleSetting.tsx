@@ -14,6 +14,7 @@ interface Option {
     value: string;
     label?: string;
     img?: string;
+    icon?: string;
     proSetting?: boolean;
 }
 
@@ -29,8 +30,8 @@ interface ToggleSettingProps {
     khali_dabba?: boolean;
     iconEnable?: boolean;
     key?: string;
-    addonBefore?: string;
-    addonAfter?: string;
+    preText?: string;
+    postText?: string;
     multiSelect?: boolean;
 }
 
@@ -45,8 +46,8 @@ const ToggleSetting: React.FC<ToggleSettingProps> = ({
     proSetting = false,
     khali_dabba,
     iconEnable = false,
-    addonAfter,
-    addonBefore,
+    postText,
+    preText,
     multiSelect = false,
 }) => {
 
@@ -73,7 +74,7 @@ const ToggleSetting: React.FC<ToggleSettingProps> = ({
     return (
         <>
             <div className="toggle-setting-container">
-                {addonBefore && <span className="before">{addonBefore}</span>}
+                {preText && <span className="before">{preText}</span>}
 
                 <div className="toggle-setting-wrapper">
                     {options.map((option) => {
@@ -105,6 +106,11 @@ const ToggleSetting: React.FC<ToggleSettingProps> = ({
                                             <img src={option.img} />
                                             {option.label}
                                         </>
+                                    ) : option.icon ? (
+                                        <>
+                                            <i className={option.icon} ></i>
+                                            {option.label}
+                                        </>
                                     ) : (
                                         option.label
                                     )}
@@ -116,7 +122,7 @@ const ToggleSetting: React.FC<ToggleSettingProps> = ({
                         );
                     })}
                 </div>
-                {addonAfter && <span className="after">{addonAfter}</span>}
+                {postText && <span className="after">{postText}</span>}
                 {proSetting && <span className="admin-pro-tag"><i className="adminlib-pro-tag"></i>Pro</span>}
             </div>
             {description && (

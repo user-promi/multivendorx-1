@@ -35,9 +35,10 @@ const salesIcon = new L.DivIcon({
 // import "./adminDashboard.scss";
 import "../../dashboard/dashboardCommon.scss";
 import Overview from './Overview';
-import Leaders from './Leaders';
-import Transactions from './Transactions';
+import Transactions from './Payout';
 import Revenue from './Revenue';
+import RefundedOrders from './RefundedOrders';
+import StoreOrders from './StoreOrders';
 
 const Analytics = () => {
   const location = useLocation();
@@ -69,38 +70,38 @@ const Analytics = () => {
   const overview = [
     {
       id: 'sales',
-      label: 'Total Sales',
+      label: 'Gross Sales',
       count: 475,
       icon: 'adminlib-star',
     },
     {
       id: 'earnings',
-      label: 'Admin Earnings',
-      count: 625,
+      label: 'Net Sales',
+      count: "7896",
       icon: 'adminlib-support',
     },
     {
       id: 'Vendors',
-      label: 'Vendors',
-      count: 8,
+      label: 'Admin Commission',
+      count: "85669",
       icon: 'adminlib-global-community',
     },
     {
-      id: 'Pending',
-      label: 'Pending',
-      count: 3,
-      icon: 'adminlib-catalog',
-    },
-    {
-      id: 'Products',
-      label: 'Products',
-      count: 2,
+      id: 'Pending Withdrawals',
+      label: 'Vendor Payout Pending',
+      count: "88200",
       icon: 'adminlib-calendar',
     },
     {
-      id: 'Withdrawals',
-      label: 'Withdrawals',
-      count: 10,
+      id: 'Pending Withdrawals',
+      label: 'Refunds',
+      count: "600",
+      icon: 'adminlib-calendar',
+    },
+    {
+      id: 'Pending Withdrawals',
+      label: 'Discounts Applied',
+      count: "102",
       icon: 'adminlib-calendar',
     },
   ];
@@ -112,12 +113,12 @@ const Analytics = () => {
   ];
   const [activeTab, setActiveTab] = useState("overview");
   const tabs = [
-    { id: "overview", label: "Overview", content: <Overview overview={overview} data={data} overviewData={overviewData} pieData={pieData} /> },
-    { id: "leaders", label: "Leaders", content: <Leaders/> },
-    { id: "revenue", label: "Revenue", content: <Revenue/> },
-    { id: "transactions", label: "Transactions", content: <Transactions/> },
+    { id: "overview", label: "Marketplace Report", content: <Overview overview={overview} data={data} overviewData={overviewData} pieData={pieData} /> },
+    { id: "revenue", label: "Product-wise Report", content: <Revenue/> },
+    { id: "payout", label: "Store-wise Report", content: <Transactions/> },
+    { id: "refundedOrders", label: "Traffic & Conversion", content: <RefundedOrders/> },
   ];
-
+  
   const COLORS = ["#5007aa", "#00c49f", "#ff7300", "#d400ffff"];
   return (
     <>
@@ -128,6 +129,7 @@ const Analytics = () => {
 
       />
       <div className="admin-dashboard tab">
+
         <div className="row">
               {/* Tab Titles */}
               <div className="tab-titles">

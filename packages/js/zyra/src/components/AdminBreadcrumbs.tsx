@@ -16,7 +16,8 @@ interface AdminBreadcrumbsProps {
     buttons?: any[];
     goPremium?: boolean;
     goPremiumLink?: string;
-    description?:string;
+    description?: string;
+    customContent?: React.ReactNode;
 }
 
 const AdminBreadcrumbs: React.FC<AdminBreadcrumbsProps> = ({
@@ -28,7 +29,8 @@ const AdminBreadcrumbs: React.FC<AdminBreadcrumbsProps> = ({
     buttons = [],
     goPremium = false,
     goPremiumLink,
-    description
+    description,
+    customContent,
 }) => {
     const [noticeHTML, setNoticeHTML] = useState('');
 
@@ -79,8 +81,10 @@ const AdminBreadcrumbs: React.FC<AdminBreadcrumbsProps> = ({
                                         {label}
                                     </button>
                                 );
-                            })}
+                            })}                        
                     </div>
+                    {customContent && <div className="custom-content">{customContent}</div>}
+
                 </div>
                 {description && <div className="description">{description}</div>}
                 {renderBreadcrumb && <div className="breadcrumbs">{renderBreadcrumb()}</div>}

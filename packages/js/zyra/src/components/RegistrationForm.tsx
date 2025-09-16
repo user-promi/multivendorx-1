@@ -132,7 +132,7 @@ const selectOptionsStore: SelectOption[] = [
         icon: 'adminlib-text icon-form-textarea',
         value: 'textarea',
         label: 'Store Desc',
-        name: 'decription',
+        name: 'description',
     },
     {
         icon: 'adminlib-t-letter-bold icon-form-textbox',
@@ -179,68 +179,6 @@ const selectOptionsStore: SelectOption[] = [
     { icon: 'adminlib-unread icon-form-email', value: 'email', label: 'Paypal Email',name:'paypal_email' },
 
 ];
-// /**
-//  * Component that renders an action section for adding new items.
-//  *
-//  * @param {AddNewBtnProps} props          - The props object.
-//  * @param {() => void}     props.onAddNew - Callback function invoked when the add button is clicked.
-//  * @param {boolean}        props.large    - If true, renders the large version of the button.
-//  */
-// export const AddNewBtn: React.FC<AddNewBtnProps> = ({ onAddNew, large }) => {
-// 	return (
-// 		<>
-// 			{large ? (
-// 				<div className="addnew">
-// 					<div
-// 						role="button"
-// 						tabIndex={0}
-// 						onClick={() => onAddNew?.()}
-// 					>
-// 						<i className="admin-font adminlib-move"></i>
-// 					</div>
-// 					<p>{'Click to add next text field'}</p>
-// 				</div>
-// 			) : (
-// 				<div
-// 					className="add-new-sections"
-// 					role="button"
-// 					tabIndex={0}
-// 					onClick={() => onAddNew?.()}
-// 				>
-// 					<div>
-// 						<span>
-// 							<i className="admin-font adminlib-move"></i>
-// 						</span>
-// 					</div>
-// 				</div>
-// 			)}
-// 		</>
-// 	);
-// };
-
-// /**
-//  * Component that renders a delete button section.
-//  *
-//  * @param {DeleteBtnProps} props            - The props object.
-//  * @param {() => void}     props.onDelete   - Callback function invoked when the delete button is clicked.
-//  * @param {boolean}        props.hideDelete - If true, hides or disables the delete button.
-//  */
-// export const DeleteBtn: React.FC<DeleteBtnProps> = ({
-// 	onDelete,
-// 	hideDelete,
-// }) => {
-// 	return (
-// 		<div
-// 			className={`delete ${hideDelete ? 'disable' : ''}`}
-// 			role="button"
-// 			tabIndex={0}
-// 			onClick={() => onDelete?.()}
-// 		>
-// 			<i className="admin-font adminlib-close"></i>
-// 		</div>
-// 	);
-// };
-
 interface FormField {
     id: number;
     type: string;
@@ -365,34 +303,6 @@ const CustomFrom: React.FC<CustomFormProps> = ({
      * Function generate a empty form field and return it.
      * By default it set the type to simple text
      */
-
-    // const getNewFormField = (type: string = 'text'): FormField => {
-    //     const newFormField: FormField = {
-    //         id: randMaxId ?? 0, // Ensure randMaxId is a number (or fallback to 0)
-    //         type,
-    //         label: '',
-    //         required: false,
-    //         name: `${type}-${getUniqueName()}`,
-    //     };
-
-    //     if (
-    //         ['multiselect', 'radio', 'dropdown', 'checkboxes'].includes(
-    //             type
-    //         )
-    //     ) {
-    //         newFormField.label = DEFAULT_LABEL_SELECT;
-    //         newFormField.options = DEFAULT_OPTIONS;
-    //     } else {
-    //         newFormField.label = DEFAULT_LABEL_SIMPLE(type);
-    //         newFormField.placeholder = DEFAULT_PLACEHOLDER(type);
-    //     }
-
-    //     // update randMaxId by 1
-    //     setRendMaxId((prev) => (prev ?? 0) + 1);
-
-    //     return newFormField;
-    // };
-
     const getNewFormField = (
         type: string = 'text',
         fixedName?: string
@@ -425,24 +335,6 @@ const CustomFrom: React.FC<CustomFormProps> = ({
      * @param {string} [type="text"] - The type of the new form field to create.
      * @return {FormField | undefined} The newly created form field object, or undefined if blocked.
      */
-    // const appendNewFormField = (index: number, type = 'text') => {
-    //     if (proSettingChange()) return;
-    //     const newField = getNewFormField(type);
-
-    //     // Create a new array with the new element inserted
-    //     const newFormFieldList = [
-    //         ...formFieldList.slice(0, index + 1),
-    //         newField,
-    //         ...formFieldList.slice(index + 1),
-    //     ];
-
-    //     // Update the state with the new array
-    //     settingHasChanged.current = true;
-    //     setFormFieldList(newFormFieldList);
-
-    //     return newField;
-    // };
-
     const appendNewFormField = (
         index: number,
         type = 'text',

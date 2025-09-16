@@ -318,7 +318,8 @@ class FrontendScripts {
                 'store-inventory',
                 'review-management',
                 'order-actions-refunds',
-                'advertising'
+                'advertising',
+                'product-preferencess'
             )
 		);
 

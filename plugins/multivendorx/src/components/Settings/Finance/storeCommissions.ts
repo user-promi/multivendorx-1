@@ -17,7 +17,7 @@ export default {
             label: __('Commission type', 'multivendorx'),
             settingDescription: __("Choose how commissions should be calculated for your marketplace.", 'multivendorx'),
             desc: __(
-                '<ul><li>Store order based: Calculated on the full order amount of each store. Example: A customer buys from 3 stores → commission applies separately to each store’s order.</li><li>Per item based: Applied to each product in the order. Example: An order with 5 items → commission applies 5 times, once per item.</li></ul>',
+                '<ul><li>Store order based - Calculated on the full order amount of each store. Example: A customer buys from 3 stores → commission applies separately to each store’s order.</li><li>Per item based - Applied to each product in the order. Example: An order with 5 items → commission applies 5 times, once per item.</li></ul>',
                 'multivendorx'
             ),
             options: [
@@ -37,6 +37,10 @@ export default {
             key: 'commission_per_store_order',
             type: 'nested',
             label: 'Commission value',
+            desc: __(
+                'Define commission rates based on total order value. Multiple rules can be created for different order value ranges.',
+                'multivendorx'
+            ),
             addButtonLabel: 'Add new',
             deleteButtonLabel: 'Remove',
             nestedFields: [
@@ -70,10 +74,10 @@ export default {
                             value: 'product_price',
                         },
                     ],
-                    prefixUnit:'$',
+                    preInsideText:'$',
                     size:"8rem",
                     skipFirstRow: true,
-                    addonAfter: "then",
+                    postText: "then",
                     dependent: {
                         key: 'rule_type',
                         set: true,
@@ -90,7 +94,7 @@ export default {
                         },
                     ],
                     skipFirstRow: true,
-                    addonAfter: "then",
+                    postText: "then",
                     dependent: {
                         key: 'rule_type',
                         set: true,
@@ -107,8 +111,8 @@ export default {
                         },
                     ],
                     size:"8rem",
-                    prefixUnit:'$',
-                    addonAfter: "then",
+                    preInsideText:'$',
+                    postText: "then",
                     dependent: {
                         key: 'rule_type',
                         set: true,
@@ -118,24 +122,19 @@ export default {
                 {
                     key: 'commission_fixed',
                     type: 'text',
-                    desc: __('Fixed amount per transaction', 'multivendorx'),
-                    prefixUnit: __('$', 'multivendorx'),
+                    preInsideText: __('$', 'multivendorx'),
                     size: "8rem",
-                    addonBefore: 'fixed',
-                    addonBeforeFirstRow:"Fixed",
-                    addonAfter: "+",
+                    preText: 'fixed',
+                    preTextFirstRow:"Fixed",
+                    postText: "+",
                 },
                 {
                     key: 'commission_percentage',
                     type: 'number',
-                    desc: __(
-                        'Percentage of product price per transaction',
-                        'multivendorx'
-                    ),
                     size: '8rem',
-                    parameter: __('%', 'multivendorx'),
-                    addonAfter: "commission will be charged.",
-                    addonAfterFirstRow:"",
+                    postInsideText: __('%', 'multivendorx'),
+                    postText: "commission will be charged.",
+                    postTextFirstRow:"",
                 },
             ],
             dependent: {
@@ -150,27 +149,22 @@ export default {
             label: 'Commission value',
             single: true,
             desc: __(
-                'This is the default commission amount that will be applicable for all transactions.',
+                'Set global commission rates that apply to each individual item quantity. Commission will be calculated by multiplying the rate with the total number of items across all products in the order.',
                 'multivendorx'
             ),
             nestedFields: [
                 {
                     key: 'commission_fixed',
                     type: 'number',
-                    desc: __('Fixed amount per transaction', 'multivendorx'),
-                    prefixUnit: __('$', 'multivendorx'),
+                    preInsideText: __('$', 'multivendorx'),
                     size: "8rem",
-                    addonBefore: 'Fixed',
-                    addonAfter: "+",
+                    preText: 'Fixed',
+                    postText: "+",
                 },
                 {
                     key: 'commission_percentage',
                     type: 'number',
-                    desc: __(
-                        'Percentage of product price per transaction',
-                        'multivendorx'
-                    ),
-                    parameter: __('%', 'catalogx'),
+                    postInsideText: __('%', 'multivendorx'),
                     size: "8rem",
                 },
             ],
@@ -184,7 +178,7 @@ export default {
             key: 'separator_content',
             type: 'section',
             hint: __("What's included along with store commission", 'multivendorx'),
-            desc: __('Choose which order components are factored into commission calculations', 'multivendorx')
+            desc: __('Choose which order components are factored into commission calculations.', 'multivendorx')
         },
         {
             key: 'give_shipping',
@@ -206,7 +200,7 @@ export default {
             type: 'setting-toggle',
             label: __('Tax amount', 'multivendorx'),
             settingDescription: __('Configure how taxes are treated in commission calculations.', 'multivendorx'),
-            desc: __('<li>No Tax : Calculate commission on pre-tax amount only.<li>Full Tax: Include 100% tax in commission base.<li>Commision based tax: Calculate commission on total order value including taxes, not just product price', 'multivendorx'),
+            desc: __('<li>No tax - Calculate commission on pre-tax amount only.<li>Full tax - Include 100% tax in commission base.<li>Commision based tax - Calculate commission on total order value including taxes, not just product price.', 'multivendorx'),
 
             options: [
                 {

@@ -1,10 +1,13 @@
 import { __ } from '@wordpress/i18n';
+import template1 from '../../../assets/images/template/store/template1.jpg';
+import template2 from '../../../assets/images/template/store/template2.jpg';
+import template3 from '../../../assets/images/template/store/template3.jpg';
 
 export default {
     id: 'store-invoice',
     priority: 5,
     name: __('Invoice & Taxation', 'mvx-pro'),
-    desc: __('Set up when and how invoices are generated in your marketplace', 'mvx-pro'),
+    desc: __('Set up when and how invoices are generated in your marketplace.', 'mvx-pro'),
     icon: 'adminlib-clock2',
     submitUrl: 'settings',
     modal: [
@@ -139,6 +142,32 @@ export default {
             width: 75,
             proSetting: true,
             moduleEnabled: 'invoice',
+        },
+        {
+            key: 'store_color_settings',
+            type: 'color-setting',
+            label: 'Dashboard color scheme',
+            settingDescription: 'Choose a dashboard color scheme from predefined sets or customize your own. Each scheme defines the button style, and hover effects for a consistent look.',
+            images: [
+                {
+                    key: 'template1',
+                    label: 'Outer Space',
+                    img: template1,
+                    value: 'template1',
+                },
+                {
+                    key: 'template2',
+                    label: 'Green Lagoon',
+                    img: template2,
+                    value: 'template2',
+                },
+                {
+                    key: 'template3',
+                    label: 'Old West',
+                    img: template3,
+                    value: 'template3',
+                },
+            ],
         },
     ],
 };

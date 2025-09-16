@@ -79,7 +79,7 @@ class Install {
             `name` varchar(20) NOT NULL,
             `slug` varchar(20) NOT NULL,
             `description` TEXT DEFAULT NULL,
-            `who_created` TEXT DEFAULT NULL,
+            `who_created` bigint(20) DEFAULT NULL,
             `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
             PRIMARY KEY (`ID`)
         ) $collate;";
@@ -88,8 +88,8 @@ class Install {
             `ID` bigint(20) NOT NULL AUTO_INCREMENT,
             `store_id` bigint(20) NOT NULL,
             `user_id` bigint(20) NOT NULL,
-            `role_id` varchar(50) NOT NULL,
-            `primary_owner` TEXT DEFAULT NULL,
+            `role_id` varchar(50) DEFAULT NULL,
+            `primary_owner` bigint(20) DEFAULT NULL,
             PRIMARY KEY (`ID`)
         ) $collate;";
 
@@ -107,7 +107,7 @@ class Install {
             `order_id` bigint(20) unsigned DEFAULT NULL,
             `commission_id` bigint(20) unsigned DEFAULT NULL,
             `entry_type` enum('Dr','Cr') NOT NULL,
-            `transaction_type` enum('Commission','Withdrawal','Refund','Reversed') NOT NULL,
+            `transaction_type` enum('Commission','Withdrawal','Refund','Reversed', 'COD received') NOT NULL,
             `amount` float(20,2) NOT NULL,
             `balance` float(20,2) NOT NULL,
             `locking_balance` float(20,2) NOT NULL,
@@ -136,7 +136,7 @@ class Install {
             PRIMARY KEY (`id`),
             KEY `idx_store` (`receiver_id`),
             KEY `idx_order` (`order_id`),
-            KEY `idx_commission` (`commission_id`),
+            KEY `idx_commission` (`commission_id`)
         ) $collate;";
 
         // Include upgrade functions if not loaded.
@@ -257,6 +257,8 @@ class Install {
             'Product not received',
             'Product not as described',
             'Product damaged/defective',
+            'Wrong item received',
+            'Order arrived late'
         ];
     
         // 6. Save back to DB
@@ -264,8 +266,6 @@ class Install {
         update_option('multivendorx_review_management_settings', $review_settings);
         update_option('multivendorx_order_actions_refunds_settings', $order_settings);
     }
-    
-    
     
 
     public function plugin_create_pages() {

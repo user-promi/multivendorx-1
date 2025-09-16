@@ -19,8 +19,10 @@ import Announcements from './components/Announcements/announcements';
 import Knowledgebase from './components/Knowledgebase/knowledgebase';
 import Blogs from './components/Blogs/blogs';
 import Commission from './components/Commission/commission';
-import Payouts from './components/Payouts/payouts';
+import TransactionHistory from './components/TransactionHistory/transactionHistory';
 import Analytics from './components/Analytics/Analytics';
+import Advertisement from './components/Advertisement/Advertisement';
+import HelpSupport from './components/HelpSupport/HelpSupport';
 
 localStorage.setItem('force_multivendorx_context_reload', 'true');
 
@@ -57,10 +59,12 @@ const Route = () => {
       {tab === 'dashboard' && <AdminDashboard />}
       {tab === 'announcement' && <Announcements />}
       {tab === 'knowledgebase' && <Knowledgebase />}
-      {tab === 'payouts' && <Payouts />}
+      {tab === 'transaction-history' && <TransactionHistory />}
       {tab === 'blogs' && <Blogs />}
       {tab === 'setup' && <SetupWizard />}
       {tab === 'analytics' && <Analytics />}
+      {tab === 'advertisement' && <Advertisement />}
+      {tab === 'help-support' && <HelpSupport />}
     </>
   );
 };
@@ -154,6 +158,44 @@ const App = () => {
         onSelectChange={handleSelectChange}
         selectValue={selectValue}
         free={appLocalizer.freeVersion}
+        showDropdown={true} 
+        dropdownOptions={[
+          { value: 'all', label: 'All' },
+          { value: 'modules', label: 'Modules' },
+          { value: 'settings', label: 'Settings' },
+        ]}
+        showMessages={true}
+        notifications={[
+          {
+            heading: "New Order Received",
+            message: "Order #1024 has been placed",
+            time: "1 hour ago",
+            icon: "adminlib-cart-icon",
+            color: "blue",
+            link: "/orders"
+          },
+          {
+            heading: "New Review",
+            message: "John left a 5-star review",
+            time: "30 mins ago",
+            icon: "adminlib-star-icon",
+            color: "yellow",
+            link: "/reviews"
+          }
+        ]}
+        notificationsLink="/notifications"
+        showNotifications={true}
+        messages={[
+          {
+            heading: "Support Ticket #123",
+            message: "Customer reported an issue",
+            time: "15 mins ago",
+            icon: "adminlib-user-network-icon",
+            color: "red",
+            link: "/tickets/123"
+          }
+        ]}
+        messagesLink="/messages"
       />
       <Route />
     </>

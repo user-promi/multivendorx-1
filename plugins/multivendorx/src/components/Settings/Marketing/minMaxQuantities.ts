@@ -20,21 +20,13 @@ export default {
             nestedFields: [
                 {
                     key: 'mvx_commission_percentage_per_unit',
-                    prefixUnit: __('Min', 'multivendorx'),
+                    preInsideText: __('Min', 'multivendorx'),
                     type: 'number',
-                    desc: __(
-                        'Minimum order quantity',
-                        'multivendorx'
-                    ),
                 },
                 {
                     key: 'mvx_commission_fixed_per_unit',
-                    prefixUnit: __('Max', 'multivendorx'),
+                    preInsideText: __('Max', 'multivendorx'),
                     type: 'number',
-                    desc: __(
-                        'Maximum order quantity.',
-                        'multivendorx'
-                    ),
                 },
             ],
         },
