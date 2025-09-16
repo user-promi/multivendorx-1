@@ -106,6 +106,11 @@ class Modules {
 						'module_file'  => MultiVendorX()->plugin_path . 'modules/PaypalPayout/Module.php',
 						'module_class' => 'MultiVendorX\PaypalPayout\Module',
 					),
+                    'question-answer' => array(
+                        'id'           => 'question-answer',
+						'module_file'  => MultiVendorX()->plugin_path . 'modules/QuestionsAnswers/Module.php',
+						'module_class' => 'MultiVendorX\QuestionsAnswers\Module',
+					),
 
 				)
             );
