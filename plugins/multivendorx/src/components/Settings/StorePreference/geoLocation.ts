@@ -14,7 +14,7 @@ export default {
             key: 'radius_search_unit',
             type: 'setting-toggle',
             label: __('Show map on', 'multivendorx'),
-            settingDescription: __('Decide where the store map should appear', 'multivendorx'),
+            settingDescription: __('Decide where the store map should appear.', 'multivendorx'),
             desc: __('<ul><li>Store listing - Display a map on the page that lists all stores, showing their locations for easier discovery.</li><li>Shop page - Display a map on the store’s shop page showing the store’s location.</li><li>Both - Show the map on both pages for maximum visibility.</li></ul>', 'multivendorx'),
             options: [
                 {
@@ -39,7 +39,7 @@ export default {
             type: 'setting-toggle',
             defaulValue: 'google_map_set',
             label: __('Map provider', 'multivendorx'),
-            settingDescription: __('Choose the service that powers your maps and location search', 'multivendorx'),
+            settingDescription: __('Choose the service that powers your maps and location search.', 'multivendorx'),
             desc: __('<ul><li>Google Maps - reliable and widely used, requires a Google API key.<li>Mapbox - customizable map provider, may also require an API key.</li></ul>', 'multivendorx'),
             options: [
                 {
@@ -61,7 +61,7 @@ export default {
             type: 'text',
             label: __('Google map API key', 'multivendorx'),
             desc: __(
-                '<a href="https://developers.google.com/maps/documentation/javascript/get-api-key#get-an-api-key" target="_blank">Click here to generate key</a>',
+                '<a href="https://developers.google.com/maps/documentation/javascript/get-api-key#get-an-api-key" target="_blank">Click here to generate key.</a>',
                 'multivendorx'
             ),
             dependent: {
@@ -75,7 +75,7 @@ export default {
             type: 'text',
             label: __('Mapbox access token', 'multivendorx'),
             desc: __(
-                '<a href="https://docs.mapbox.com/help/getting-started/access-tokens/" target="_blank">Click here to generate access token</a>',
+                '<a href="https://docs.mapbox.com/help/getting-started/access-tokens/" target="_blank">Click here to generate access token.</a>',
                 'multivendorx'
             ),
             dependent: {

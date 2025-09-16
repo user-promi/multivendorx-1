@@ -5,7 +5,7 @@ export default {
     priority: 4,
     name: __('Store inventory', 'multivendorx'),
     desc: __(
-        'Manage inventory alerts and stock monitoring settings for stores in your marketplace',
+        'Manage inventory alerts and stock monitoring settings for stores in your marketplace.',
         'multivendorx'
     ),
     icon: 'adminlib-general-tab',
