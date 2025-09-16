@@ -595,7 +595,7 @@ class Admin {
 
     function render_multivendorx_cod_order_payment_box( $post ) {
         $order = wc_get_order( $post->ID );
-        $value = $order->get_meta( 'multivendorx_cod_order_payment', true );
+        $value = $order ? $order->get_meta( 'multivendorx_cod_order_payment', true ) : '';
         ?>
         <p>
             <label>

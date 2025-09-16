@@ -179,6 +179,11 @@ class FrontendScripts {
 					'deps'    => array( 'jquery', 'jquery-blockui', 'wp-element', 'wp-i18n', 'react-jsx-runtime' ),
 					'version' => $version,
 				),
+                'multivendorx-qna-frontend-script' => array(
+					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'modules/QuestionsAnswers/js/' . MULTIVENDORX_PLUGIN_SLUG . '-frontend.min.js',
+					'deps'    => array( 'jquery' ),
+					'version' => $version,
+				),
 			)
         );
         foreach ( $register_scripts as $name => $props ) {
@@ -419,6 +424,13 @@ class FrontendScripts {
 					'object_name' => 'dashboard',
 					'data'        => array(
 						'ajaxurl'     => admin_url( 'admin-ajax.php' ),
+					),
+				),
+                'multivendorx-qna-frontend-script' => array(
+					'object_name' => 'qnaFrontend',
+					'data'        => array(
+						'ajaxurl'     => admin_url( 'admin-ajax.php' ),
+                        'nonce'    => wp_create_nonce('qna_ajax_nonce'),
 					),
 				),
                 'multivendorx-dashboard-script' => array(
