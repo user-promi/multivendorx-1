@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from "react";
-import CommonPopup from "./CommonPopup";
 
 // Accepts searchIndex-style items directly
 type SearchItem = {
@@ -323,31 +322,31 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
               </div>
             )}
           </div>
-          
+
         </div>
       </div>
 
-      {contactSupportPopup && (
-        <CommonPopup
-          open={contactSupportPopup}
-          onClose={() => setContactSupportPopup(false)}
-          width="500px"
-        >
-          <div>
-            <iframe
-              src="https://tawk.to/chat/5d2eebf19b94cd38bbe7c9ad/1fsg8cq8n"
-              title="Support Chat"
-              style={{
-                border: 'none',
-                width: '100%',
-                height: '35rem',
-              }}
-              allow="microphone; camera"
-            />
-          </div>
-        </CommonPopup>
-      )
-      }
+      <div className={`live-chat-wrapper ${contactSupportPopup ? "open" : ""}`}>
+        <i className="adminlib-close"
+          onClick={(e) => {
+            setContactSupportPopup(false);
+          }}></i>
+          {/* <i className="adminlib-minus"
+          onClick={(e) => {
+            setContactSupportPopup(false);
+          }}></i> */}
+        <iframe
+          src="https://tawk.to/chat/5d2eebf19b94cd38bbe7c9ad/1fsg8cq8n"
+          title="Support Chat"
+          style={{
+            border: 'none',
+            width: '100%',
+            height: '35rem',
+          }}
+          allow="microphone; camera"
+        />
+        {/* <div className="tawk-icon tawk-icon-chat-bubble"></div> */}
+      </div>
     </>
   );
 };

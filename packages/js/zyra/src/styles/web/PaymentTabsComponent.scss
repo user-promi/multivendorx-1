@@ -15,14 +15,17 @@
             cursor: pointer;
 
             .toggle-icon {
-                width: 2rem;
+                padding-right: 0.5rem;
+                border-right: $border-light-small;
 
                 i {
                     font-size: 1.313rem;
+                    color: #5007aa;
+                    cursor: pointer;
                 }
 
-                .adminlib-eye {
-                    color: rgb(7 7 192 / 84.2%);
+                .disable {
+                    color: #8a888873;
                 }
             }
 
@@ -38,20 +41,7 @@
                     gap: 0.5rem;
                 }
 
-                .toggle-icon {
-                    padding-right: 0.5rem;
-                    border-right: $border-light-small;
 
-                    i {
-                        font-size: 1.313rem;
-                        color: #5007aa;
-                        cursor: pointer;
-                    }
-
-                    .disable {
-                        color: #8a888873;
-                    }
-                }
 
                 .payment-method-icon {
                     padding: 0.313rem;

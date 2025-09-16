@@ -25,148 +25,23 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.adminlib-youtube:before {
-  content: "\e900";
-}
-.adminlib-verification9:before {
-  content: "\e901";
-}
-.adminlib-verification8:before {
-  content: "\e902";
-}
-.adminlib-verification7:before {
-  content: "\e903";
-}
-.adminlib-verification6 .path1:before {
+.adminlib-review:before {
   content: "\e904";
-  color: rgb(239, 72, 54);
 }
-.adminlib-verification6 .path2:before {
+.adminlib-report:before {
   content: "\e905";
-  margin-left: -1em;
-  color: rgb(192, 57, 43);
 }
-.adminlib-verification6 .path3:before {
+.adminlib-payment:before {
   content: "\e906";
-  margin-left: -1em;
-  color: rgb(203, 70, 55);
 }
-.adminlib-verification6 .path4:before {
+.adminlib-finance:before {
   content: "\e907";
-  margin-left: -1em;
-  color: rgb(255, 182, 28);
-}
-.adminlib-verification6 .path5:before {
-  content: "\e908";
-  margin-left: -1em;
-  color: rgb(243, 156, 18);
-}
-.adminlib-verification6 .path6:before {
-  content: "\e909";
-  margin-left: -1em;
-  color: rgb(252, 209, 22);
-}
-.adminlib-verification6 .path7:before {
-  content: "\e90a";
-  margin-left: -1em;
-  color: rgb(233, 195, 26);
-}
-.adminlib-verification6 .path8:before {
-  content: "\e90b";
-  margin-left: -1em;
-  color: rgb(166, 58, 46);
-}
-.adminlib-verification5:before {
-  content: "\e90c";
-}
-.adminlib-verification4:before {
-  content: "\e90d";
-}
-.adminlib-verification3:before {
-  content: "\e90e";
-}
-.adminlib-verification2:before {
-  content: "\e90f";
-  color: #1c274c;
-}
-.adminlib-verification1:before {
-  content: "\e910";
-  color: #0063fb;
-}
-.adminlib-twitter:before {
-  content: "\e911";
-}
-.adminlib-social-share:before {
-  content: "\e912";
-}
-.adminlib-single-product:before {
-  content: "\e913";
-}
-.adminlib-product:before {
-  content: "\e914";
-}
-.adminlib-privacy:before {
-  content: "\e915";
-}
-.adminlib-onboarding:before {
-  content: "\e916";
-}
-.adminlib-multi-product:before {
-  content: "\e917";
-}
-.adminlib-menu-manager:before {
-  content: "\e918";
-}
-.adminlib-marketplace:before {
-  content: "\e919";
-}
-.adminlib-location:before {
-  content: "\e91a";
-}
-.adminlib-linkedin-border:before {
-  content: "\e91b";
-}
-.adminlib-linkedin:before {
-  content: "\e91c";
-}
-.adminlib-graph:before {
-  content: "\e91d";
 }
 .adminlib-google:before {
-  content: "\e91e";
+  content: "\e908";
 }
-.adminlib-form:before {
-  content: "\e91f";
-}
-.adminlib-facebook-fill:before {
-  content: "\e920";
-}
-.adminlib-facebook:before {
-  content: "\e921";
-}
-.adminlib-customer-service:before {
-  content: "\e922";
-}
-.adminlib-booking:before {
-  content: "\e923";
-}
-.adminlib-bar-chart:before {
-  content: "\e924";
-}
-.adminlib-appointments:before {
-  content: "\e925";
-}
-.adminlib-appearance:before {
-  content: "\e926";
-}
-.adminlib-advertisement:before {
-  content: "\e927";
-}
-.adminlib-actions-dashboard:before {
-  content: "\e928";
-}
-.adminlib-actions:before {
-  content: "\e929";
+.adminlib-cohort:before {
+  content: "\e909";
 }
 .adminlib-cart:before {
   content: "\8907";
@@ -239,6 +114,96 @@
 }
 .adminlib-plus-circle-o:before {
   content: "\e8f7";
+}
+.adminlib-youtube:before {
+  content: "\e900";
+}
+.adminlib-verification9:before {
+  content: "\e901";
+}
+.adminlib-verification8:before {
+  content: "\e902";
+}
+.adminlib-verification7:before {
+  content: "\e903";
+}
+.adminlib-verification5:before {
+  content: "\e90c";
+}
+.adminlib-verification3:before {
+  content: "\e90e";
+}
+.adminlib-verification2:before {
+  content: "\e90f";
+}
+.adminlib-verification1:before {
+  content: "\e910";
+}
+.adminlib-twitter:before {
+  content: "\e911";
+}
+.adminlib-social-share:before {
+  content: "\e912";
+}
+.adminlib-single-product:before {
+  content: "\e913";
+}
+.adminlib-product:before {
+  content: "\e914";
+}
+.adminlib-privacy:before {
+  content: "\e915";
+}
+.adminlib-onboarding:before {
+  content: "\e916";
+}
+.adminlib-multi-product:before {
+  content: "\e917";
+}
+.adminlib-menu-manager:before {
+  content: "\e918";
+}
+.adminlib-marketplace:before {
+  content: "\e919";
+}
+.adminlib-location:before {
+  content: "\e91a";
+}
+.adminlib-linkedin-border:before {
+  content: "\e91b";
+}
+.adminlib-linkedin:before {
+  content: "\e91c";
+}
+.adminlib-form:before {
+  content: "\e91f";
+}
+.adminlib-facebook-fill:before {
+  content: "\e920";
+}
+.adminlib-facebook:before {
+  content: "\e921";
+}
+.adminlib-customer-service:before {
+  content: "\e922";
+}
+.adminlib-booking:before {
+  content: "\e923";
+}
+.adminlib-bar-chart:before {
+  content: "\e924";
+}
+.adminlib-appointments:before {
+  content: "\e925";
+}
+.adminlib-appearance:before {
+  content: "\e926";
+}
+.adminlib-advertisement:before {
+  content: "\e927";
+}
+.adminlib-actions:before {
+  content: "\e929";
 }
 .adminlib-minus:before {
   content: "\e92a";
@@ -324,7 +289,7 @@
 .adminlib-wholesale:before {
   content: "\e945";
 }
-.adminlib-Subscription-Courses:before {
+.adminlib-subscription-courses:before {
   content: "\e946";
 }
 .adminlib-wholesal:before {
@@ -435,7 +400,7 @@
 .adminlib-form-textarea:before {
   content: "\e96a";
 }
-.adminlib-form-address01:before {
+.adminlib-form-address:before {
   content: "\e96b";
 }
 .adminlib-form-address02:before {
@@ -516,7 +481,7 @@
 .adminlib-t-letter-bold:before {
   content: "\e985";
 }
-.adminlib-clock2:before {
+.adminlib-clock:before {
   content: "\e986";
 }
 .adminlib-alarm:before {
@@ -588,7 +553,7 @@
 .adminlib-Gift-a-Course:before {
   content: "\e99d";
 }
-.adminlib-Classroom-Enrollment:before {
+.adminlib-classroom-enrollment:before {
   content: "\e99e";
 }
 .adminlib-Bulk-Course-Sync:before {

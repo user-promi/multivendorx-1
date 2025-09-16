@@ -550,7 +550,7 @@ const Commission: React.FC = () => {
     return (
         <>
             <AdminBreadcrumbs
-                activeTabIcon="adminlib-cart"
+                activeTabIcon="adminlib-commission"
                 tabTitle="Commissions"
                 description={'Details of commissions earned by each store for every order, including order amount, commission rate, and payout status.'}
             />
