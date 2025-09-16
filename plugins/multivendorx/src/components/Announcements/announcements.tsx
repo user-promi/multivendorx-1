@@ -1,5 +1,5 @@
 /* global appLocalizer */
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, ReactNode } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 
@@ -13,6 +13,10 @@ import {
 import "./announcements.scss";
 
 type StoreRow = {
+    stores: any;
+    date: any;
+    title: string;
+    content: string;
     id?: number;
     store_name?: string;
     store_slug?: string;
@@ -24,24 +28,24 @@ type AnnouncementStatus = {
     count: number;
 };
 
+type FilterData = {
+    searchField: string;
+    typeCount?: any;
+};
+
 type AnnouncementForm = {
     title: string;
     url: string;
     content: string;
-    stores: string; // ✅ renamed vendors → stores
+    stores: string;
 };
 
 export interface RealtimeFilter {
     name: string;
     render: (updateFilter: (key: string, value: any) => void, filterValue: any) => ReactNode;
 }
-const bulkActionOptions = [
-    { value: '', label: __('Bulk actions', 'multivendorx') },
-    { value: 'publish', label: __('Publish', 'multivendorx') },
-    { value: 'pending', label: __('Pending', 'multivendorx') },
-    { value: 'delete', label: __('Delete', 'multivendorx') },
-];
-const Announcements: React.FC = () => {
+
+export const Announcements: React.FC = () => {
     const [submitting, setSubmitting] = useState(false);
     const [data, setData] = useState<StoreRow[] | null>(null);
     const [addAnnouncements, setAddAnnouncements] = useState(false);
@@ -93,7 +97,41 @@ const Announcements: React.FC = () => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
-
+    const handleBulkAction = async () => {
+        const action = bulkSelectRef.current?.value;
+        const selectedIds = Object.keys(rowSelection).map((key) => {
+            const index = Number(key);
+            return data && data[index] ? data[index].id : null;
+        }).filter((id): id is number => id !== null);
+    
+        if (!selectedIds.length) {
+            setModalDetails('Select rows.');
+            setOpenModal(true);
+            return;
+        }
+    
+        if (!action) {
+            setModalDetails('Please select an action.');
+            setOpenModal(true);
+            return;
+        }
+    
+        setData(null);
+    
+        try {
+            await axios({
+                method: 'PUT',
+                url: getApiLink(appLocalizer, 'knowledge'),
+                headers: { 'X-WP-Nonce': appLocalizer.nonce },
+                data: { bulk: true, action, ids: selectedIds },
+            });
+    
+            requestData(pagination.pageSize, pagination.pageIndex + 1, '');
+            setRowSelection({});
+        } catch (err) {
+            setError(__('Failed to perform bulk action', 'multivendorx'));
+        }
+    }; 
 
     const handleEdit = async (id: number) => {
         try {
@@ -122,18 +160,19 @@ const Announcements: React.FC = () => {
         }
     };
 
-    const handleSubmit = async () => {
+    const handleSubmit = async (status: 'publish' | 'pending') => {
         if (submitting) return; // prevent double-click
+        setSubmitting(true);
 
         try {
-            setSubmitting(true);
             const endpoint = editId
                 ? getApiLink(appLocalizer, `announcement/${editId}`)
                 : getApiLink(appLocalizer, 'announcement');
             const method = editId ? 'PUT' : 'POST';
 
             const payload = {
-                ...formData,
+                ...formData, 
+                status,
                 stores: formData.stores ? formData.stores.split(',') : [],
             };
 
@@ -146,9 +185,9 @@ const Announcements: React.FC = () => {
 
             if (response.data.success) {
                 setAddAnnouncements(false);
-                setFormData({ title: '', url: '', content: '', stores: '' });
+                setFormData({ title: '', url: '', content: '', stores: 'pending' });
                 setEditId(null);
-                requestData(pagination.pageSize, pagination.pageIndex + 1);
+                requestData(pagination.pageSize, pagination.pageIndex + 1, '');
             } else {
                 setError(__('Failed to save announcement', 'multivendorx'));
             }
@@ -158,94 +197,25 @@ const Announcements: React.FC = () => {
             setSubmitting(false);
         }
     };
+    
 
+    const requestApiForData = ( rowsPerPage: number, currentPage: number, filterData: FilterData ) => {
 
-    const handleBulkAction = async () => {
-        const action = bulkSelectRef.current?.value;
-        const selectedIds = Object.keys(rowSelection).map((key) => {
-            const index = Number(key);
-            return data && data[index] ? data[index].id : null;
-        }).filter((id): id is number => id !== null);
-
-        if (!selectedIds.length) {
-            setModalDetails('Select rows.');
-            setOpenModal(true);
-            return;
-        }
-
-        if (!action) {
-            setModalDetails('Please select an action.');
-            setOpenModal(true);
-            return;
-        }
-
-        setData(null);
-
-        try {
-            await axios({
-            method: 'PUT',
-            url: getApiLink(appLocalizer, 'knowledge/bulk'),
-            headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            data: { action, ids: selectedIds },
-        });
-        requestData(pagination.pageSize, pagination.pageIndex + 1);
-        setRowSelection({}); // Clear selection
-        } catch (err) {
-            setError(__('Failed to perform bulk action', 'multivendorx'));
-        }
+    setData( null );
+        requestData(
+            rowsPerPage,
+            currentPage,
+            filterData?.typeCount,
+            filterData?.searchField,
+        );
     };
-    // Fetch total rows on mount
-    useEffect(() => {
-        axios({
-            method: 'GET',
-            url: getApiLink(appLocalizer, 'store'),
-            headers: { 'X-WP-Nonce': appLocalizer.nonce },
-        })
-            .then((response) => {
-                if (response.data && Array.isArray(response.data)) {
-                    const options = response.data.map((store: any) => ({
-                        value: store.id.toString(),
-                        label: store.store_name,
-                    }));
-                    setStoreOptions(options);
-                }
-
-            })
-            .catch(() => {
-                setError(__('Failed to load stores', 'multivendorx'));
-            });
-
-        axios({
-            method: 'GET',
-            url: getApiLink(appLocalizer, 'announcement'),
-            headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            params: { count: true },
-        })
-            .then((response) => {
-                setTotalRows(response.data || 0);
-                setPageCount(Math.ceil(response.data / pagination.pageSize));
-            })
-            .catch(() => {
-                setError(__('Failed to load total rows', 'multivendorx'));
-            });
-    }, []);
-
-    const handleDateOpen = () => {
-        setOpenDatePicker(!openDatePicker);
-    };
-
-    useEffect(() => {
-        const currentPage = pagination.pageIndex + 1;
-        const rowsPerPage = pagination.pageSize;
-        requestData(rowsPerPage, currentPage);
-        setPageCount(Math.ceil(totalRows / rowsPerPage));
-    }, [pagination]);
 
     // Fetch data from backend
     function requestData(
         rowsPerPage = 10,
         currentPage = 1,
-        status: string = 'all'
+        typeCount: '',
+        searchField: ''
     ) {
         setData(null);
         axios({
@@ -255,28 +225,51 @@ const Announcements: React.FC = () => {
             params: {
                 page: currentPage,
                 row: rowsPerPage,
-                status: status
+                status: typeCount === 'all' ? '' : typeCount,
+                s: searchField,
             },
+        }).then((response) => {
+            const res = response.data;
+            setData(res.items);
+            setPageCount(Math.ceil((res.total || 0) / rowsPerPage));
+            setAnnouncementStatus([
+                { key: 'all', name: 'All', count: res.all || 0 },
+                { key: 'publish', name: 'Published', count: res.publish || 0 },
+                { key: 'pending', name: 'Pending', count: res.pending || 0 },
+            ]);
         })
-            .then((response) => {
-                const { items, counts } = response.data;
-                setData(items || []);
-                setAnnouncementStatus([
-                    { key: 'all', name: 'All', count: counts.all || 0 },
-                    { key: 'publish', name: 'Published', count: counts.publish || 0 },
-                    { key: 'pending', name: 'Pending', count: counts.pending || 0 },
-                ]);
-            })
-            .catch(() => {
-                setError(__('Failed to load announcements', 'multivendorx'));
-                setData([]);
-            });
+        .catch(() => {
+            setError(__('Failed to load announcements', 'multivendorx'));
+        });
     }
 
-    const requestApiForData = (rowsPerPage: number, currentPage: number, filterData?: any) => {
-        setData(null);
-        requestData(rowsPerPage, currentPage, filterData?.typeCount || '');
-    };
+    const realtimeFilter: RealtimeFilter[] = [
+        {
+            name: 'searchField',
+            render: ( updateFilter, filterValue ) => (
+                <>
+                    <div className="admin-header-search-section search-section">
+                        <input
+                            name="searchField"
+                            type="text"
+                            className="basic-input"
+                            placeholder={ __( 'Search', 'moowoodle-pro' ) }
+                            onChange={ ( e ) => {
+                                updateFilter( e.target.name, e.target.value );
+                            } }
+                            value={ filterValue || '' }
+                        />
+                    </div>
+                </>
+            ),
+        },
+    ];
+
+
+    useEffect(() => {
+        const currentPage = pagination.pageIndex + 1;
+        requestData(pagination.pageSize, currentPage);
+    }, [pagination]);
 
     // Columns
     const columns: ColumnDef<StoreRow>[] = [
@@ -323,12 +316,21 @@ const Announcements: React.FC = () => {
         },
         {
             header: __('Sent To', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={Array.isArray(row.original.status) ? row.original.stores.join(', ') : row.original.stores || ''}>
-                    {Array.isArray(row.original.stores) ? row.original.stores.join(', ') : row.original.stores || '-'}
-                </TableCell>
-            ),
-        },
+            cell: ({ row }) => {
+                const stores = Array.isArray(row.original.stores) ? row.original.stores : [];
+                let displayStores = stores;
+        
+                if (stores.length > 2) {
+                    displayStores = [...stores.slice(0, 2), '...'];
+                }
+        
+                return (
+                    <TableCell title={stores.join(', ')}>
+                        {displayStores.join(', ')}
+                    </TableCell>
+                );
+            },
+        },        
         {
             header: __('Date', 'multivendorx'),
             cell: ({ row }) => {
@@ -346,30 +348,9 @@ const Announcements: React.FC = () => {
             },
         },
     ];
-
-    const realtimeFilter: RealtimeFilter[] = [
-        {
-            name: 'bulk-action',
-            render: () => (
-                <div className=" bulk-action">
-                    <select name="action" className="basic-select" ref={bulkSelectRef}>
-                        {bulkActionOptions.map(option => (
-                            <option key={option.value} value={option.value}>
-                                {option.label}
-                            </option>
-                        ))}
-                    </select>
-                    <button name="bulk-action-apply" className="admin-btn btn-purple" onClick={handleBulkAction}>
-                        {__('Apply')}
-                    </button>
-
-                </div>
-            ),
-        },
-    ];
     const BulkAction: React.FC = () => (
         <div className=" bulk-action">
-            <select name="action" className="basic-select" ref={bulkSelectRef}>
+            <select name="action" className="basic-select" ref={bulkSelectRef} onChange={handleBulkAction}>
                 <option value="">{__('Bulk actions')}</option>
                 <option value="publish">{__('Publish', 'multivendorx')}</option>
                 <option value="pending">{__('Pending', 'multivendorx')}</option>
@@ -421,14 +402,22 @@ const Announcements: React.FC = () => {
                             >
                                 Cancel
                             </div>
-                            <div
-                                onClick={!submitting ? handleSubmit : undefined}
-                                className={`admin-btn btn-purple ${submitting ? 'disabled' : ''}`}
-                                style={{ opacity: submitting ? 0.6 : 1, pointerEvents: submitting ? 'none' : 'auto' }}
+                            <button
+                                type="button"
+                                onClick={() => handleSubmit('publish')}
+                                className="admin-btn btn-purple"
+                                disabled={submitting}
                             >
-                                {submitting ? 'Submitting...' : 'Submit'}
-                            </div>
-
+                                {submitting ? 'Saving...' : 'Publish'}
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => handleSubmit('pending')}
+                                className="admin-btn btn-yellow"
+                                disabled={submitting}
+                            >
+                                {submitting ? 'Saving...' : 'Pending'}
+                            </button>
                         </>
                     }
                 >
@@ -487,9 +476,9 @@ const Announcements: React.FC = () => {
                     rowSelection={rowSelection}
                     onRowSelectionChange={setRowSelection}
                     defaultRowsPerPage={10}
+                    realtimeFilter={ realtimeFilter }
                     pageCount={pageCount}
                     pagination={pagination}
-                    realtimeFilter={realtimeFilter}
                     onPaginationChange={setPagination}
                     handlePagination={requestApiForData}
                     perPageOption={[10, 25, 50]}

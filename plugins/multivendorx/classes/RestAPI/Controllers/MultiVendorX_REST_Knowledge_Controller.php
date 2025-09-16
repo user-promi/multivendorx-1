@@ -59,7 +59,6 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
             'post_type'      => 'multivendorx_kb',
             'post_status'    => [ 'publish', 'pending' ],
             'posts_per_page' => 10,
-            'offset'         => 0,
             's'              => '',
         ];
         $query_args = wp_parse_args( $args, $defaults );
@@ -118,7 +117,6 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
         // Counts
         $totalcounts = self::get_knowledge_items( [ 'count' => true ] );
     
-        file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":orders: : " . var_export($status_param, true) . "\n", FILE_APPEND);
         // Fix: treat $status_param as string, not array
         switch ( $status_param ) {
             case 'publish':
