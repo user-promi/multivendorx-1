@@ -8,7 +8,7 @@ export default {
     priority: 5,
     name: __('Appearance', 'multivendorx'),
     desc: __(
-        "Control how stores look and feel on your marketplace",
+        "Control how stores look and feel on your marketplace.",
         'multivendorx'
     ),
     icon: 'adminlib-clock2',
@@ -34,7 +34,7 @@ export default {
             key: 'store_color_settings',
             type: 'color-setting',
             label: 'Shop banner section',
-            settingDescription: 'Choose how the store’s shop page appears, including banner, logo, and description  .',
+            settingDescription: 'Choose how the store’s shop page appears, including banner, logo, and description.',
             images: [
                 {
                     key: 'template1',

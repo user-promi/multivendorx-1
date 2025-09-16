@@ -178,7 +178,7 @@ export default {
             key: 'separator_content',
             type: 'section',
             hint: __("What's included along with store commission", 'multivendorx'),
-            desc: __('Choose which order components are factored into commission calculations', 'multivendorx')
+            desc: __('Choose which order components are factored into commission calculations.', 'multivendorx')
         },
         {
             key: 'give_shipping',

@@ -350,6 +350,7 @@ export default {
                     key: 'withdrawal_percentage', // updated key
                     type: 'number',
                     size: '8rem',
+                    postText: __('.', 'multivendorx'),
                     postInsideText: __('%', 'multivendorx'),
                 },
             ],
