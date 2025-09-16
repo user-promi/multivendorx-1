@@ -70,26 +70,38 @@ const Analytics = () => {
   const overview = [
     {
       id: 'sales',
-      label: 'Total Sales',
+      label: 'Gross Sales',
       count: 475,
       icon: 'adminlib-star',
     },
     {
       id: 'earnings',
-      label: 'Admin Earnings',
-      count: 625,
+      label: 'Net Sales',
+      count: "7896",
       icon: 'adminlib-support',
     },
     {
       id: 'Vendors',
-      label: 'Total Store',
-      count: 8,
+      label: 'Admin Commission',
+      count: "85669",
       icon: 'adminlib-global-community',
     },
     {
       id: 'Pending Withdrawals',
-      label: 'Withdrawals',
-      count: 10,
+      label: 'Vendor Payout Pending',
+      count: "88200",
+      icon: 'adminlib-calendar',
+    },
+    {
+      id: 'Pending Withdrawals',
+      label: 'Refunds',
+      count: "600",
+      icon: 'adminlib-calendar',
+    },
+    {
+      id: 'Pending Withdrawals',
+      label: 'Discounts Applied',
+      count: "102",
       icon: 'adminlib-calendar',
     },
   ];
@@ -101,11 +113,10 @@ const Analytics = () => {
   ];
   const [activeTab, setActiveTab] = useState("overview");
   const tabs = [
-    { id: "overview", label: "Overview", content: <Overview overview={overview} data={data} overviewData={overviewData} pieData={pieData} /> },
-    { id: "revenue", label: "Revenue", content: <Revenue/> },
-    { id: "payout", label: "Payout", content: <Transactions/> },
-    { id: "storeOrder ", label: "Store Order ", content: <StoreOrders/> },
-    { id: "refundedOrders", label: "Refunded Orders", content: <RefundedOrders/> },
+    { id: "overview", label: "Marketplace Report", content: <Overview overview={overview} data={data} overviewData={overviewData} pieData={pieData} /> },
+    { id: "revenue", label: "Product-wise Report", content: <Revenue/> },
+    { id: "payout", label: "Store-wise Report", content: <Transactions/> },
+    { id: "refundedOrders", label: "Traffic & Conversion", content: <RefundedOrders/> },
   ];
   
   const COLORS = ["#5007aa", "#00c49f", "#ff7300", "#d400ffff"];
