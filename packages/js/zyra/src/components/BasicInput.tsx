@@ -126,7 +126,6 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
                 onChange(event);
             }
         };
-
         return (
             <>
                 <div
@@ -165,7 +164,7 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
                                     type={type}
                                     name={name}
                                     placeholder={placeholder}
-                                    {...(type !== 'file' && onChange ? { value } : {})}
+                                    value={value ?? ''}
                                     {...((type === 'number' || type === 'range') ? { min, max } : {})}
                                     onChange={onChange}
                                     onClick={onClick}
@@ -192,7 +191,7 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
                         </>
                     )}
                     {generate &&
-                        (value === '' ? (
+                        ((!value || value === '') ? (
                             <DisplayButton
                                 wraperClass="admin-btn btn-purple"
                                 onClick={generateSSOKey}
