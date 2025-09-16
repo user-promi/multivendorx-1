@@ -80,7 +80,7 @@ export default {
                 {
                     key: 'group_items_by_store_in_cart',
                     label: __( 'Group items by store in cart', 'multivendorx' ),
-                    desc: __( 'Organize cart contents by individual stores for clarity', 'multivendorx' ),
+                    desc: __( 'Organize cart contents by individual stores for clarity.', 'multivendorx' ),
                     value: 'group_items_by_store_in_cart',
                 },
             ],
