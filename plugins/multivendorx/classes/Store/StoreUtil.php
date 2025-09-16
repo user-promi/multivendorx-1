@@ -120,7 +120,7 @@ class StoreUtil {
         $capabilities = [
             'products' => [
                 'label' => 'Manage Products',
-                'desc'  => 'Set how vendors handle their product listings',
+                'settingDescription'  => 'Allow stores to create, edit, and control their product listings, including uploading media and publishing items for sale.',
                 'capability' =>
                 [
                     //'manage_users' => 'Manage Users',
@@ -134,7 +134,7 @@ class StoreUtil {
             ],
             'orders' => [
                 'label' => 'Manage Orders',
-                'desc'  => 'Set how vendors handle their order listings',
+                'settingDescription'  => 'Define how stores interact with customer orders, from viewing and updating details to adding order notes or processing cancellations.',
                 'capability' =>
                 [
                     'read_shop_orders' => 'View Orders',
@@ -146,7 +146,7 @@ class StoreUtil {
             ],
             'coupons' => [
                 'label' => 'Coupon Management',
-                'desc'  => 'Set how vendors handle their coupons listings',
+                'settingDescription'  => 'Enable stores to create and manage discount codes, adjust coupon settings, and track active promotions.',
                 'capability' =>
                 [
                     'manage_shop_coupons' => 'Manage Coupons',
@@ -157,7 +157,7 @@ class StoreUtil {
             ],
             'analytics' => [
                 'label' => 'Analytics & Report',
-                'desc'  => 'Set how vendors handle their coupons listings',
+                'settingDescription'  => 'Give stores access to performance insights, sales data editing, and export options for business tracking and analysis.',
                 'capability' =>
                 [
                     'read_shop_report' => 'View Reports',
@@ -167,7 +167,7 @@ class StoreUtil {
             ],
             'inventory' => [
                 'label' => 'Inventory Management',
-                'desc'  => 'Set how vendors handle their coupons listings',
+                'settingDescription'  => 'Let stores monitor stock levels, update quantities, and set alerts to prevent overselling or stockouts.',
                 'capability' =>
                 [
                     'read_shop_report' => 'Manage Inventory',
@@ -177,7 +177,7 @@ class StoreUtil {
             ],
             'commission' => [
                 'label' => 'Commission & Earning',
-                'desc'  => 'Set how vendors handle their coupons listings',
+                'settingDescription'  => 'Provide stores with tools to review their earnings, track commission history, and request withdrawals when eligible.',
                 'capability' =>
                 [
                     'read_shop_earning' => 'View Earning',
