@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 import ProPopup from '../Popup/Popup';
-import { Table, getApiLink, TableCell } from 'zyra';
+import { Table, getApiLink, TableCell, AdminBreadcrumbs } from 'zyra';
 import Dialog from '@mui/material/Dialog';
 import {
     ColumnDef,
@@ -50,6 +50,15 @@ type Category = {
 };
 
 const Course: React.FC = () => {
+    const [ showDropdown, setShowDropdown ] = useState( false );
+
+    const toggleDropdown = ( id: any ) => {
+        if ( showDropdown === id ) {
+            setShowDropdown( false );
+            return;
+        }
+        setShowDropdown( id );
+    };
     const [data, setData] = useState<CourseRow[] | null>(null);
     const [category, setCategory] = useState<Category>({});
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
@@ -199,13 +208,13 @@ const Course: React.FC = () => {
                     ],
                 },
             })
-            .then(() => {
-                requestData();
-            })
-            .catch(() => {
-                setError(__('Failed to perform action', 'moowoodle'));
-                setData([]);
-            });
+                .then(() => {
+                    requestData();
+                })
+                .catch(() => {
+                    setError(__('Failed to perform action', 'moowoodle'));
+                    setData([]);
+                });
         } else {
             setOpenDialog(true);
         }
@@ -332,24 +341,24 @@ const Course: React.FC = () => {
             cell: ({ row }) => (
                 <TableCell title={__('Product Name')}>
                     {row.original.products &&
-                    Object.keys(row.original.products).length
+                        Object.keys(row.original.products).length
                         ? Object.entries(row.original.products).map(
-                              ([name, url], index) => (
-                                  <div key={index} className="action-section">
-                                      <p>{name}</p>
-                                      <div className="action-btn">
-                                          <a
-                                              target="_blank"
-                                              rel="noreferrer"
-                                              href={url}
-                                              className=""
-                                          >
-                                              {__('Edit product', 'moowoodle')}
-                                          </a>
-                                      </div>
-                                  </div>
-                              )
-                          )
+                            ([name, url], index) => (
+                                <div key={index} className="action-section">
+                                    <p>{name}</p>
+                                    <div className="action-btn">
+                                        <a
+                                            target="_blank"
+                                            rel="noreferrer"
+                                            href={url}
+                                            className=""
+                                        >
+                                            {__('Edit product', 'moowoodle')}
+                                        </a>
+                                    </div>
+                                </div>
+                            )
+                        )
                         : '-'}
                 </TableCell>
             ),
@@ -385,89 +394,103 @@ const Course: React.FC = () => {
                 </div>
             ),
             cell: ({ row }) => (
-                <div className="action-icons">
-                    <i
-                        className="adminlib-refresh"
-                        title="Sync course data"
-                        onClick={() => {
-                            handleSingleAction(
-                                'sync_courses',
-                                row.original.id!,
-                                row.original.moodle_course_id!
-                            );
-                        }}
-                    ></i>
-
-                    {row.original.products &&
-                    Object.keys(row.original.products).length ? (
-                        <i
-                            className="adminlib-update-product"
-                            title={__(
-                                'Sync Course Data & Update Product',
-                                'moowoodle'
-                            )}
-                            onClick={() => {
-                                handleSingleAction(
-                                    'update_product',
-                                    row.original.id!,
-                                    row.original.moodle_course_id!
-                                );
-                            }}
-                        ></i>
-                    ) : (
-                        <i
-                            className="adminlib-add-product"
-                            title={__('Create Product', 'moowoodle')}
-                            onClick={() => {
-                                handleSingleAction(
-                                    'create_product',
-                                    row.original.id!,
-                                    row.original.moodle_course_id!
-                                );
-                            }}
-                        ></i>
-                    )}
-                </div>
+                <TableCell title={__('Action', 'moowoodle')}>
+                    <div className="action-section">
+                        <div className="action-icons">
+                            <i
+                                className="adminlib-more-vertical"
+                                onClick={() => toggleDropdown(row.original.id)}
+                            ></i>
+        
+                            <div
+                                className={`action-dropdown ${
+                                    showDropdown === row.original.id ? 'show' : ''
+                                }`}
+                            >
+                                <ul>
+                                    <li
+                                        onClick={() =>
+                                            handleSingleAction(
+                                                'sync_courses',
+                                                row.original.id!,
+                                                row.original.moodle_course_id!
+                                            )
+                                        }
+                                    >
+                                        <i className="adminlib-refresh"></i>
+                                        {__('Sync Course Data', 'moowoodle')}
+                                    </li>
+        
+                                    {row.original.products &&
+                                    Object.keys(row.original.products).length ? (
+                                        <li
+                                            onClick={() =>
+                                                handleSingleAction(
+                                                    'update_product',
+                                                    row.original.id!,
+                                                    row.original.moodle_course_id!
+                                                )
+                                            }
+                                        >
+                                            <i className="adminlib-update-product"></i>
+                                            {__(
+                                                'Sync Course Data & Update Product',
+                                                'moowoodle'
+                                            )}
+                                        </li>
+                                    ) : (
+                                        <li
+                                            onClick={() =>
+                                                handleSingleAction(
+                                                    'create_product',
+                                                    row.original.id!,
+                                                    row.original.moodle_course_id!
+                                                )
+                                            }
+                                        >
+                                            <i className="adminlib-add-product"></i>
+                                            {__('Create Product', 'moowoodle')}
+                                        </li>
+                                    )}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </TableCell>
             ),
-        },
+        }
+        
     ];
 
+    const BulkAction: React.FC = () => (
+        <div className=" bulk-action">
+            <select name="action" className="basic-select" ref={bulkSelectRef} >
+                <option value="">
+                    {__('Bulk actions', 'moowoodle')}
+                </option>
+                <option value="sync_courses">
+                    {__('Sync course', 'moowoodle')}
+                </option>
+                <option value="create_product">
+                    {__('Create product', 'moowoodle')}
+                </option>
+                <option value="update_product">
+                    {__('Update product', 'moowoodle')}
+                </option>
+            </select>
+            {!appLocalizer.khali_dabba && (
+                <span className="admin-pro-tag">pro</span>
+            )}
+            <button
+                name="bulk-action-apply"
+                className="admin-btn btn-purple"
+                onClick={handleBulkAction}
+            >
+                {__('Apply', 'moowoodle')}
+            </button>
+        </div>
+    );
     const realtimeFilter: RealtimeFilter[] = [
-        {
-            name: 'bulk-action',
-            render: () => (
-                <div className="course-bulk-action bulk-action">
-                    <select
-                        className="basic-select"
-                        name="action"
-                        ref={bulkSelectRef}
-                    >
-                        <option value="">
-                            {__('Bulk actions', 'moowoodle')}
-                        </option>
-                        <option value="sync_courses">
-                            {__('Sync course', 'moowoodle')}
-                        </option>
-                        <option value="create_product">
-                            {__('Create product', 'moowoodle')}
-                        </option>
-                        <option value="update_product">
-                            {__('Update product', 'moowoodle')}
-                        </option>
-                    </select>
-                    {!appLocalizer.khali_dabba && (
-                        <span className="admin-pro-tag">pro</span>
-                    )}
-                    <button
-                        name="bulk-action-apply"
-                        className="admin-btn btn-purple"
-                        onClick={handleBulkAction}
-                    >
-                        {__('Apply', 'moowoodle')}
-                    </button>
-                </div>
-            ),
-        },
         {
             name: 'catagoryField',
             render: (
@@ -570,9 +593,11 @@ const Course: React.FC = () => {
                     </div>
                 </div>
             )}
-            <div className="admin-page-title">
-                <p>{__('Courses', 'moowoodle')}</p>
-            </div>
+            <AdminBreadcrumbs
+                activeTabIcon="adminlib-Subscription-Courses"
+                description={__('Comprehensive course data is displayed here, including linked products, enrollment numbers, and related details.', 'moowoodle')}
+                tabTitle={__('Courses', 'moowoodle')}
+            />
             {error && (
                 <div className="admin-notice-display-title error">
                     <i className="admin-font adminlib-icon-no"></i>
@@ -593,6 +618,7 @@ const Course: React.FC = () => {
                     handlePagination={requestApiForData}
                     perPageOption={[10, 25, 50]}
                     typeCounts={[]}
+                    bulkActionComp={()=><BulkAction/>}
                 />
             </div>
         </>

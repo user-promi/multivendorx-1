@@ -3,8 +3,6 @@ import Brand from '../../assets/images/brand.png';
 import BrandSmall from '../../assets/images/brand-small.png';
 import React, { useEffect, JSX } from 'react';
 import { __ } from '@wordpress/i18n';
-// Context
-import { SettingProvider, useSetting } from '../../contexts/SettingContext';
 // Services
 import { getTemplateData } from '../../services/templateService';
 // Utils
@@ -17,6 +15,8 @@ import {
     Banner,
     Tabs,
     useModules,
+    useSetting,
+    SettingProvider,
 } from 'zyra';
 
 import ShowProPopup from '../Popup/Popup';

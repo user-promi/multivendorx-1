@@ -4,8 +4,6 @@ import BrandSmall from '../../assets/images/brand-small.png';
 import { useLocation, Link } from 'react-router-dom';
 import React, { useEffect, JSX } from 'react';
 import { __ } from '@wordpress/i18n';
-// Context
-import { SettingProvider, useSetting } from '../../contexts/SettingContext';
 // Services
 import { getTemplateData } from '../../services/templateService';
 // Utils
@@ -16,8 +14,11 @@ import {
     AdminForm,
     Banner,
     Tabs,
+    useModules,
+    useSetting,
+    SettingProvider,
 } from 'zyra';
-import { useModules } from '../../contexts/ModuleContext';
+
 import ShowProPopup from '../Popup/Popup';
 
 // Types

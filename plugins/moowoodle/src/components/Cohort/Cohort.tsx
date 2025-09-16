@@ -2,12 +2,19 @@ import React, { useState } from 'react';
 import ProPopup from '../Popup/Popup';
 import { Dialog } from '@mui/material';
 import './cohorts.scss';
+import { AdminBreadcrumbs } from 'zyra';
+import { __ } from '@wordpress/i18n';
 
 const Cohort: React.FC = () => {
     const [openDialog, setOpenDialog] = useState(false);
 
     return (
         <>
+            <AdminBreadcrumbs
+                activeTabIcon="adminlib-cart"
+                tabTitle={__('Cohorts', 'moowoodle')}
+                description={__('Cohort information is presented with associated products and student enrollments to support administrative actions.', 'moowoodle')}
+            />
             <div id="cohort-list-table">
                 <Dialog
                     className="admin-module-popup"

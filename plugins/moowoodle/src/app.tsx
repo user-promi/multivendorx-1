@@ -1,7 +1,6 @@
 import { useLocation } from 'react-router-dom';
 
 import Settings from './components/Settings/Settings';
-import { ModuleProvider } from './contexts/ModuleContext';
 import Synchronization from './components/Synchronization/Synchronization';
 import Cohort from './components/Cohort/Cohort';
 import Enrollment from './components/Enrollment/Enrollment';
@@ -159,33 +158,29 @@ const App = () => {
     };
     return (
         <>
-            <ModuleProvider
-                modules={(window as any).appLocalizer?.active_modules || []}
-            >
-                <Banner
-                    products={products}
-                    isPro={appLocalizer.khali_dabba}
-                    proUrl={appLocalizer.shop_url}
-                    tag="Why Premium"
-                    buttonText="View Pricing"
-                    bgCode="#852aff"
-                    textCode="#fff"
-                    btnCode="#fff"
-                    btnBgCode="#e35047"
-                />
-                <AdminHeader
-                    brandImg={Brand}
-                    query={query}
-                    results={results}
-                    onSearchChange={handleSearchChange}
-                    onResultClick={handleResultClick}
-                    onSelectChange={handleSelectChange}
-                    selectValue={selectValue}
-                    free={appLocalizer.free_version}
-                    pro={appLocalizer.pro_version}
-                />
-                <Route />
-            </ModuleProvider>
+            <Banner
+                products={products}
+                isPro={appLocalizer.khali_dabba}
+                proUrl={appLocalizer.shop_url}
+                tag="Why Premium"
+                buttonText="View Pricing"
+                bgCode="#852aff"
+                textCode="#fff"
+                btnCode="#fff"
+                btnBgCode="#e35047"
+            />
+            <AdminHeader
+                brandImg={Brand}
+                query={query}
+                results={results}
+                onSearchChange={handleSearchChange}
+                onResultClick={handleResultClick}
+                onSelectChange={handleSelectChange}
+                selectValue={selectValue}
+                free={appLocalizer.free_version}
+                pro={appLocalizer.pro_version}
+            />
+            <Route />
         </>
     );
 };

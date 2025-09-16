@@ -65,13 +65,13 @@ class Admin {
 					'name'   => __( 'Enrolments', 'moowoodle' ) . $pro_sticker,
 					'subtab' => '',
 				),
-				'settings'        => array(
-					'name'   => __( 'Settings', 'moowoodle' ),
-					'subtab' => 'general',
-				),
 				'synchronization' => array(
 					'name'   => __( 'Synchronization', 'moowoodle' ),
 					'subtab' => 'synchronize-course',
+				),
+				'settings'        => array(
+					'name'   => __( 'Settings', 'moowoodle' ),
+					'subtab' => 'general',
 				),
 			);
 

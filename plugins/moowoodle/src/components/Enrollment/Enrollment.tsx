@@ -2,12 +2,19 @@ import React, { useState } from 'react';
 import ProPopup from '../Popup/Popup';
 import './Enrollment.scss';
 import { Dialog } from '@mui/material';
+import { AdminBreadcrumbs } from 'zyra';
+import { __ } from '@wordpress/i18n';
 
 const Enrollment: React.FC = () => {
     const [openDialog, setOpenDialog] = useState(false);
 
     return (
         <>
+            <AdminBreadcrumbs
+                activeTabIcon="adminlib-form"
+                tabTitle={__('All Enrollments', 'moowoodle')}
+                description={__('Enrollment records are presented, showing students, their courses, enrollment dates, and current status.', 'moowoodle')}
+            />
             <div id="enrollment-list-table">
                 <Dialog
                     className="admin-module-popup"
