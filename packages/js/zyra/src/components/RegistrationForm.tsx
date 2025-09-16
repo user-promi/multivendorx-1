@@ -132,7 +132,7 @@ const selectOptionsStore: SelectOption[] = [
         icon: 'adminlib-text icon-form-textarea',
         value: 'textarea',
         label: 'Store Desc',
-        name: 'decription',
+        name: 'description',
     },
     {
         icon: 'adminlib-t-letter-bold icon-form-textbox',
