@@ -142,6 +142,7 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
     
     
     public function create_item( $request ) {
+        $nonce = $request->get_header( 'X-WP-Nonce' );
         $data = $request->get_json_params();
     
         // Unwrap formData if present

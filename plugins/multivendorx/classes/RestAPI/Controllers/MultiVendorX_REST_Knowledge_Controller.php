@@ -89,13 +89,11 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
 
         if ( isset( $args['count'] ) && $args['count'] ) {
             $counts = wp_count_posts( 'multivendorx_kb' );
-            if ( $args['status'] === 'publish' ) {
-                return isset( $counts->publish ) ? (int) $counts->publish : 0;
-            }
-            if ( $args['status'] === 'pending' ) {
-                return isset( $counts->pending ) ? (int) $counts->pending : 0;
-            }
-            return array_sum( (array) $counts );
+            $total = array_sum( (array) $counts ) ? array_sum( (array) $counts ) : 0;
+            $publish = isset( $counts->publish ) ? (int) $counts->publish : 0;
+            $pending = isset( $counts->pending ) ? (int) $counts->pending : 0;
+            $totalcounts = ['total' => $total, 'publish' => $publish, 'pending' => $pending];
+            return $totalcounts ;
         }
 
         $posts = get_posts( $query_args );
@@ -136,22 +134,21 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
         $items = self::get_knowledge_items( $args );
 
         // Counts
-        $total   = self::get_knowledge_items( [ 'count' => true, 'status' => 'all' ] );
-        $publish = self::get_knowledge_items( [ 'count' => true, 'status' => 'publish' ] );
-        $pending = self::get_knowledge_items( [ 'count' => true, 'status' => 'pending' ] );
+        $totalcounts   = self::get_knowledge_items( [ 'count' => true ] );
 
         return rest_ensure_response( [
             'items'   => $items,
             'total'   => $total,
             'page'    => $page,
             'limit'   => $limit,
-            'all'     => $total,
-            'publish' => $publish,
-            'pending' => $pending,
+            'all'     => $totalcounts['total'],
+            'publish' => $totalcounts['publish'],
+            'pending' => $totalcounts['pending'],
         ] );
     }
 
     public function create_item( $request ) {
+        $nonce = $request->get_header( 'X-WP-Nonce' );
         $data     = $request->get_json_params();
         $formData = isset($data['formData']) ? $data['formData'] : $data;
 
