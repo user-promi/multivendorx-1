@@ -38,19 +38,19 @@ export default {
             images: [
                 {
                     key: 'template1',
-                    label: 'Neo frame',
+                    label: 'Neo Frame',
                     img: template1,
                     value: 'template1',
                 },
                 {
                     key: 'template2',
-                    label: 'Elegant wave',
+                    label: 'Elegant Wave',
                     img: template2,
                     value: 'template2',
                 },
                 {
                 key: 'template3',
-                label: 'Classic vibe',
+                label: 'Classic Vibe',
                 img: template3,
                 value: 'template3',
                 }
