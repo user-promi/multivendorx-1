@@ -97,13 +97,18 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
                 'icon'    => 'adminlib-cart',
                 'submenu' => array(
                     array(
-                        'key'  => 'all-products',
+                        'key'  => 'products',
                         'name' => 'All Products',
-                        'slug' => 'all-products',
-                        'icon'    => 'adminlib-cart',
-                        'capability' => ['read_products', 'edit_products', 'delete_products']
+                        'slug' => 'products',
+                        'capability' => ['read_shop_orders', 'edit_shop_orders', 'delete_shop_orders']
                     ),
+                    array(
+                        'key'  => 'add-product',
+                        'name' => 'Edit Product',
+                        'slug' => 'add-product',
+                        'capability' => ['read_shop_orders', 'edit_shop_orders', 'delete_shop_orders']
                     ),
+                ),
                 'capability' => ['manage_products']
             ),
             'orders' => array(
@@ -131,14 +136,6 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
                 'name'    => 'Coupons',
                 'slug'    => 'coupons',
                 'icon'    => 'adminlib-cart',
-                'submenu' => array(
-                    array(
-                        'key'  => 'all-coupons',
-                        'name' => 'All Coupons',
-                        'slug' => 'all-coupons',
-                        'capability' => ['read_shop_coupons', 'edit_shop_coupons', 'delete_shop_coupons']
-                    ),
-                ),
                 'capability' => ['read_shop_coupons']
             ),
 			'reports' => array(
@@ -182,6 +179,44 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
                         'key'  => 'refund',
                         'name' => 'Refund',
                         'slug' => 'refund',
+                        'capability' => ['read_shop_coupons', 'edit_shop_coupons']
+                    )
+                ),
+                'capability' => ['read_shop_coupons']
+            ),
+            'finance' => array(
+                'name'    => 'Finance',
+                'slug'    => 'finance',
+                'icon'    => 'adminlib-cart',
+                'submenu' => array(
+                    array(
+                        'key'  => 'transactions',
+                        'name' => 'Transactions',
+                        'slug' => 'transactions',
+                        'capability' => ['read_shop_coupons', 'edit_shop_coupons', 'delete_shop_coupons']
+                    ),
+                    array(
+                        'key'  => 'commissions',
+                        'name' => 'Commissions',
+                        'slug' => 'commissions',
+                        'capability' => ['read_shop_coupons', 'edit_shop_coupons']
+                    ),
+                    array(
+                        'key'  => 'invoices',
+                        'name' => 'Invoices',
+                        'slug' => 'invoices',
+                        'capability' => ['read_shop_coupons', 'edit_shop_coupons']
+                    ),
+                    array(
+                        'key'  => 'taxes',
+                        'name' => 'Taxes',
+                        'slug' => 'taxes',
+                        'capability' => ['read_shop_coupons', 'edit_shop_coupons']
+                    ),
+                    array(
+                        'key'  => 'withdrawals',
+                        'name' => 'Withdrawals',
+                        'slug' => 'withdrawals',
                         'capability' => ['read_shop_coupons', 'edit_shop_coupons']
                     )
                 ),
