@@ -107,7 +107,7 @@ class Install {
             `order_id` bigint(20) unsigned DEFAULT NULL,
             `commission_id` bigint(20) unsigned DEFAULT NULL,
             `entry_type` enum('Dr','Cr') NOT NULL,
-            `transaction_type` enum('Commission','Withdrawal','Refund','Reversed') NOT NULL,
+            `transaction_type` enum('Commission','Withdrawal','Refund','Reversed', 'COD received') NOT NULL,
             `amount` float(20,2) NOT NULL,
             `balance` float(20,2) NOT NULL,
             `locking_balance` float(20,2) NOT NULL,

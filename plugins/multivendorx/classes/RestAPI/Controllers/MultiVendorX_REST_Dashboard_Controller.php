@@ -62,7 +62,7 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
                     ),
                     array(
                         'key'  => 'store-information',
-                        'name' => 'store Information',
+                        'name' => 'Store Information',
                         'slug' => 'store-information',
                         'icon'    => 'adminlib-cart',
                         'capability' => ['read_products', 'edit_products', 'upload_files']

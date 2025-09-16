@@ -3,7 +3,6 @@ import "../styles/web/PaymentTabsComponent.scss";
 import VerificationMethods from "./VerificationMethods";
 import TextArea from "./TextArea";
 import ToggleSetting from "./ToggleSetting";
-import MultiCheckBox from "./MultiCheckbox";
 
 interface PaymentFormField {
   key: string;
