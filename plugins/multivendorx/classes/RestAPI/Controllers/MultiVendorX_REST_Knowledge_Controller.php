@@ -259,32 +259,4 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
         ]);
     }
 
-    // public function bulk_update_items($request) {
-    //     $nonce = $request->get_header('X-WP-Nonce');
-    //     if (!wp_verify_nonce($nonce, 'wp_rest')) {
-    //         return new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), [ 'status' => 403 ] );
-    //     }
-
-    //     $params = $request->get_json_params();
-    //     $action = sanitize_key( $params['action'] ?? '' );
-    //     $ids    = array_map( 'absint', $params['ids'] ?? [] );
-
-    //     if ( empty($action) || empty($ids) ) {
-    //         return new \WP_Error( 'invalid_params', __( 'Missing action or IDs', 'multivendorx' ), [ 'status' => 400 ] );
-    //     }
-
-    //     foreach ( $ids as $id ) {
-    //         switch ( $action ) {
-    //             case 'publish':
-    //             case 'pending':
-    //                 wp_update_post([ 'ID' => $id, 'post_status' => $action ]);
-    //                 break;
-    //             case 'delete':
-    //                 wp_delete_post( $id, true );
-    //                 break;
-    //         }
-    //     }
-
-    //     return rest_ensure_response(['success' => true]);
-    // }
 }
