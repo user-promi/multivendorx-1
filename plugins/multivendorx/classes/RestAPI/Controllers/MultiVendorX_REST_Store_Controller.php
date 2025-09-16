@@ -271,6 +271,10 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
 
     public function get_item( $request ) {
         $id = absint( $request->get_param( 'id' ) );
+        $store = $request->get_param( 'store' );
+        if( $store ){
+            return $this->get_store_products_and_category( $request );
+        }
         $fetch_user = $request->get_param( 'fetch_user' );
         $registrations = $request->get_header( 'registrations' );
         if ($fetch_user) {
@@ -422,5 +426,60 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
 
         return $user_id;
     }
-
+    
+    public function get_store_products_and_category( $request ) {
+        $id = absint( $request->get_param( 'id' ) );
+    
+        if ( ! $id ) {
+            return new \WP_Error(
+                'invalid_store_id',
+                __( 'Invalid store ID', 'multivendorx' ),
+                array( 'status' => 400 )
+            );
+        }
+    
+        // ✅ Fetch products for this store
+        $products = wc_get_products( array(
+            'status'     => 'publish', // or use your $status variable if dynamic
+            'limit'      => -1,
+            'return'     => 'ids',
+            'meta_key'   => 'multivendorx_store_id',
+            'meta_value' => $id,
+        ) );
+    
+        $product_data = array();
+        if ( ! empty( $products ) ) {
+            foreach ( $products as $product_id ) {
+                $product_obj = wc_get_product( $product_id );
+                if ( $product_obj ) {
+                    $product_data[] = array(
+                        'value'    => $product_obj->get_id(),
+                        'label'  => $product_obj->get_name(),
+                    );
+                }
+            }
+        }
+    
+        // ✅ Fetch categories
+        $categories = get_terms( array(
+            'taxonomy'   => 'product_cat',
+            'hide_empty' => false,
+        ) );
+    
+        $category_data = array();
+        if ( ! is_wp_error( $categories ) && ! empty( $categories ) ) {
+            foreach ( $categories as $cat ) {
+                $category_data[] = array(
+                    'value'    => $cat->term_id,
+                    'label'  => $cat->name,
+                );
+            }
+        }
+    
+        return rest_ensure_response( array(
+            'products'   => $product_data,
+            'categories' => $category_data,
+        ) );
+    }
+    
 }

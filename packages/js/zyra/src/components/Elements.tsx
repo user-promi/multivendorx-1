@@ -25,7 +25,7 @@ const Elements: React.FC< ElementsProps > = ( { selectOptions, onClick,label } )
             <main className="section-container">
                 { selectOptions.map( ( option ) => (
                     <div
-                        key={ option.value } // ✅ Added key for React's rendering optimization
+                        key={ option.value } //Added key for React's rendering optimization
                         role="button"
                         tabIndex={ 0 }
                         className="elements-items"

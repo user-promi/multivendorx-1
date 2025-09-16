@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import React, { useState, ChangeEvent, FocusEvent } from 'react';
+import React, { useState, FocusEvent } from 'react';
 import "../styles/web/MultiInputString.scss";
 
 // Types

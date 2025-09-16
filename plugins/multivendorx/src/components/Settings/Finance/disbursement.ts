@@ -62,9 +62,9 @@ export default {
             settingDescription: __('Keep payouts on hold for a safety buffer. Helps cover refunds, cancellations, or disputes.', 'multivendorx'),
             type: 'number',
             size: '8rem',
-            addonBefore:__('Wait', 'multivendorx'),
-            addonAfter:__('before commissions are credited to the wallet balance.', 'multivendorx'),
-            parameter: __('days', 'multivendorx'),
+            preText:__('Wait', 'multivendorx'),
+            postText:__('before commissions become eligible for payout.', 'multivendorx'),
+            postInsideText: __('days', 'multivendorx'),
         },
         {
             key: 'payout_threshold_amount',
@@ -72,9 +72,9 @@ export default {
             settingDescription: __(
                 'Set the minimum balance a store must reach in their wallet before receiving payouts.', 'multivendorx'),
             type: 'number',
-            addonBefore:__('Stores must accumulate at least', 'multivendorx'),
-            prefixUnit: __('$', 'multivendorx'),
-            addonAfter:__(' in wallet receive a payout.', 'multivendorx'),
+            preText:__('Stores must accumulate at least', 'multivendorx'),
+            preInsideText: __('$', 'multivendorx'),
+            postText:__(' in wallet receive a payout.', 'multivendorx'),
             size: '8rem',
             options: [
                 {
@@ -90,9 +90,9 @@ export default {
             settingDescription: __(
                 'Always keep a fixed balance in the store’s wallet as a reserve. This amount cannot be withdrawn.', 'multivendorx'),
             type: 'number',
-            addonBefore:__('Stores must always keep at least', 'multivendorx'),
-            prefixUnit: __('$', 'multivendorx'),
-            addonAfter:__(' in their wallet as a safety reserve.', 'multivendorx'),
+            preText:__('Stores must always keep at least', 'multivendorx'),
+            preInsideText: __('$', 'multivendorx'),
+            postText:__(' in their wallet as a safety reserve.', 'multivendorx'),
             size: '8rem',
             options: [
                 {
@@ -153,9 +153,9 @@ export default {
                     value: 'payouts_every_hour',
                 },
             ],
-            addonAfter:__('minute of every hour.', 'multivendorx'),
-            addonBefore:__('At', 'multivendorx'),
-            parameter:__('th', 'multivendorx'),
+            postText:__('minute of every hour', 'multivendorx'),
+            preText:__('At', 'multivendorx'),
+            postInsideText:__('th', 'multivendorx'),
             dependent: {
                 key: 'payment_schedules',
                 set: true,
@@ -210,7 +210,7 @@ export default {
                 },
                 {
                     key: 'store_opening_time',
-                    addonBefore:__('at', 'multivendorx'),
+                    preText:__('at', 'multivendorx'),
                     type: 'time',
                     // label: __('Store Opening Time', 'multivendorx'),
                     // description: __('Select the time your store opens.', 'multivendorx'),
@@ -235,7 +235,7 @@ export default {
             nestedFields: [
                 {
                     key: 'payouts_every_month', // day of month
-                    addonBefore: __('On', 'multivendorx'),
+                    preText: __('On', 'multivendorx'),
                     type: 'number',
                     size: '8rem',
                     options: [
@@ -244,12 +244,12 @@ export default {
                             value: 'payouts_every_month',
                         },
                     ],
-                    parameter: __('day', 'multivendorx'),
+                    postInsideText: __('day', 'multivendorx'),
                 },
                 {
                     key: 'monthly_payout_time', // time of day
                     type: 'time', // links to TimeSelect component
-                    addonBefore: __('at', 'multivendorx'),
+                    preText: __('at', 'multivendorx'),
                     description: __('Select the time of day your monthly payout should occur.', 'multivendorx'),
                     defaultValue: '09:00',
                 },
@@ -265,7 +265,7 @@ export default {
             key: 'daily_payout_time', // unique key for daily payout time
             type: 'time', // links to TimeSelect component
             label: __('Daily payout time', 'multivendorx'),
-            addonBefore:__('At', 'multivendorx'),
+            preText:__('At', 'multivendorx'),
             description: __('Once per day<br/>Run payouts at:', 'multivendorx'),
             defaultValue: '09:00', // optional: default payout time
             dependent: {
@@ -289,7 +289,7 @@ export default {
                 {
                     key: 'weekly_payout_day', // day of week toggle
                     type: 'dropdown',
-                    addonBefore:__('On', 'multivendorx'),
+                    preText:__('On', 'multivendorx'),
                     description: __('Select the day of the week for payouts:', 'multivendorx'),
                     options: [
                         { key: 'sunday', label: __('Sunday', 'multivendorx'), value: 'sunday' },
@@ -304,7 +304,7 @@ export default {
                 {
                     key: 'weekly_payout_time', // time of day
                     type: 'time', // links to TimeSelect component
-                    addonBefore: __('at', 'multivendorx'),
+                    preText: __('at', 'multivendorx'),
                     description: __('Select the time of day for weekly payouts.', 'multivendorx'),
                     defaultValue: '09:00',
                 },
@@ -335,22 +335,22 @@ export default {
                             value: 'free_withdrawals',
                         },
                     ],
-                    addonBefore: __('Stores get', 'multivendorx'),
-                    addonAfter: __('free withdrawals. After that, each withdrawal costs', 'multivendorx'),
+                    preText: __('Stores get', 'multivendorx'),
+                    postText: __('free withdrawals. After that, each withdrawal costs', 'multivendorx'),
                 },
                 {
                     key: 'withdrawal_fixed', // updated key
                     type: 'number',
                     size: '8rem',
-                    prefixUnit: __('$', 'multivendorx'),
-                    addonBefore: 'fixed',
-                    addonAfter: "+",
+                    preInsideText: __('$', 'multivendorx'),
+                    preText: 'fixed',
+                    postText: "+",
                 },
                 {
                     key: 'withdrawal_percentage', // updated key
                     type: 'number',
                     size: '8rem',
-                    parameter: __('%', 'catalogx'),
+                    postInsideText: __('%', 'multivendorx'),
                 },
             ],
         },

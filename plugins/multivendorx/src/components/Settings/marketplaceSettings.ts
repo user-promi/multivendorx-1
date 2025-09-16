@@ -18,7 +18,7 @@ export default {
     },
     icon: 'adminlib-general-tab',
     submitUrl: 'settings',
-    modal: [    
+    modal: [          
         {
             key: 'store_registration_page',
             type: 'select',
@@ -57,8 +57,8 @@ export default {
                 'multivendorx'
             ),
             size:"8rem",
-            addonBefore: appLocalizer.site_url + '/',
-            addonAfter: "/sample-store-slug/",
+            preText: appLocalizer.site_url + '/',
+            postText: "/sample-store-slug/",
         },
         {
             key: 'section',
