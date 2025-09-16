@@ -6,6 +6,7 @@
  */
 
 namespace MultiVendorX\StorePolicy;
+use MultiVendorX\Store\StoreUtil;
 
 /**
  * MultiVendorX Store Policy Frontend class
@@ -22,6 +23,8 @@ class Frontend {
         add_filter( 'multivendorx_rewrite_rules', array($this, 'add_rule_for_policy'), 10, 2);
         add_filter( 'multivendorx_query_vars', array($this, 'add_query_vars_for_policy') );
         add_filter( 'multivendorx_store_tabs', [ $this, 'add_store_policy_tab' ], 10, 2 );
+
+        add_filter('woocommerce_product_tabs', array($this, 'product_policy_tab'));
         
         // add_filter( 'template_include', [ $this, 'store_policy_template' ] );
 
@@ -67,4 +70,29 @@ class Frontend {
 
     //     return $template;
     // }
+
+    public function product_policy_tab($tabs) {
+        global $product;
+        if ($product) {
+            $policies = StoreUtil::get_store_product_policies($product->get_id());
+            if (count($policies) > 0) {
+                $tabs['policies'] = array(
+                    'title' => __('Policies', 'multivendorx'),
+                    'priority' => 30,
+                    'callback' => array($this, 'woocommerce_product_policies_tab')
+                );
+            }
+        }
+
+        return $tabs;
+    }
+
+    /**
+     * Add Polices tab html
+     *
+     * @return void
+     */
+    public function woocommerce_product_policies_tab() {
+        MultiVendorX()->util->get_template( 'store-single-product-policy-tab.php' );
+    }
 }
