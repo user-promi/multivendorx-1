@@ -31,19 +31,12 @@ export interface RealtimeFilter {
     name: string;
     render: (updateFilter: (key: string, value: any) => void, filterValue: any) => ReactNode;
 }
-const bulkActionOptions = [
-    { value: '', label: __('Bulk actions', 'multivendorx') },
-    { value: 'publish', label: __('Publish', 'multivendorx') },
-    { value: 'pending', label: __('Pending', 'multivendorx') },
-    { value: 'delete', label: __('Delete', 'multivendorx') },
-];
 
 export const KnowledgeBase: React.FC = () => {
     const [submitting, setSubmitting] = useState(false);
     const [data, setData] = useState<KBRow[] | null>(null);
     const [addEntry, setAddEntry] = useState(false);
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
-    const [totalRows, setTotalRows] = useState(0);
     const [pagination, setPagination] = useState<PaginationState>({
         pageIndex: 0,
         pageSize: 10,
@@ -199,7 +192,6 @@ export const KnowledgeBase: React.FC = () => {
     }).then((response) => {
         const res = response.data;
         setData(res.items);
-        setTotalRows(res.total);
         setPageCount(Math.ceil((res.total || 0) / rowsPerPage));
         setStatus([
             { key: 'all', name: 'All', count: res.all ?? res.total ?? 0 },

@@ -182,7 +182,7 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
     
         $data = $request->get_json_params();
     
-        // ✅ Check for bulk update
+        // Check for bulk update
         if ( isset($data['bulk']) && !empty($data['ids']) && !empty($data['action']) ) {
             $action = sanitize_key( $data['action'] );
             $ids    = array_map( 'absint', $data['ids'] );
