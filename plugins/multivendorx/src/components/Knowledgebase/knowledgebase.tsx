@@ -43,6 +43,7 @@ export const KnowledgeBase: React.FC = () => {
     });
     const [announcementStatus, setAnnouncementStatus] = useState<AnnouncementStatus[] | null>(null);
 
+    const [pageCount, setPageCount] = useState(0);
     const [editId, setEditId] = useState<number | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [showDropdown, setShowDropdown] = useState(false);
@@ -168,25 +169,27 @@ export const KnowledgeBase: React.FC = () => {
         rowsPerPage = 10,
         currentPage = 1,
         status: string = 'all'
-    ) => {
+      ) => {
         setData(null);
         axios({
-            method: 'GET',
-            url: getApiLink(appLocalizer, 'knowledge'),
-            headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            params: { page: currentPage, row: rowsPerPage, status },
+          method: 'GET',
+          url: getApiLink(appLocalizer, 'knowledge'),
+          headers: { 'X-WP-Nonce': appLocalizer.nonce },
+          params: { page: currentPage, row: rowsPerPage, status },
         })
-            .then((response) => {
+          .then((response) => {
             const res = response.data;
             setData(res.items || []);
-            setTotalRows(res.total || 0);
+            setTotalRows(res.total);
+            setPageCount(Math.ceil((res.total || 0) / rowsPerPage));
             setAnnouncementStatus([
-                { key: 'all', name: 'All', count: res.all ?? res.total ?? 0 },
-                { key: 'publish', name: 'Published', count: res.publish ?? 0 },
-                { key: 'pending', name: 'Pending', count: res.pending ?? 0 },
+              { key: 'all', name: 'All', count: res.all ?? res.total ?? 0 },
+              { key: 'publish', name: 'Published', count: res.publish ?? 0 },
+              { key: 'pending', name: 'Pending', count: res.pending ?? 0 },
             ]);
-            }).catch(() => setError(__('Failed to load entries', 'multivendorx')));
-    };
+          })
+          .catch(() => setError(__('Failed to load entries', 'multivendorx')));
+      };      
 
     useEffect(() => {
         const currentPage = pagination.pageIndex + 1;
@@ -194,79 +197,83 @@ export const KnowledgeBase: React.FC = () => {
     }, [pagination]);
 
     // Columns
-    // Columns
     const columns: ColumnDef<KBRow>[] = [
         {
-            id: 'select',
-            header: ({ table }) => (
-                <input
-                    type="checkbox"
-                    checked={table.getIsAllRowsSelected()}
-                    onChange={table.getToggleAllRowsSelectedHandler()}
-                />
-            ),
-            cell: ({ row }) => (
-                <input
-                    type="checkbox"
-                    checked={row.getIsSelected()}
-                    onChange={row.getToggleSelectedHandler()}
-                />
-            ),
+          id: 'select',
+          header: ({ table }) => (
+            <input
+              type="checkbox"
+              checked={table.getIsAllRowsSelected()}
+              onChange={table.getToggleAllRowsSelectedHandler()}
+            />
+          ),
+          cell: ({ row }) => (
+            <input
+              type="checkbox"
+              checked={row.getIsSelected()}
+              onChange={row.getToggleSelectedHandler()}
+            />
+          ),
         },
         {
-            header: __('Title', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.title || ''}>
-                    {row.original.title || '-'}
-                </TableCell>
-            ),
+          header: __('Title', 'multivendorx'),
+          cell: ({ row }) => (
+            <TableCell title={row.original.title || ''}>
+              {row.original.title || '-'}
+            </TableCell>
+          ),
         },
         {
-            header: __('Date', 'multivendorx'),
-            cell: ({ row }) => {
-                const rawDate = row.original.date;
-                let formattedDate = '-';
-                if (rawDate) {
-                    const dateObj = new Date(rawDate);
-                    formattedDate = new Intl.DateTimeFormat('en-US', {
-                        month: 'short',
-                        day: 'numeric',
-                        year: 'numeric',
-                    }).format(dateObj);
-                }
-                return <TableCell title={formattedDate}>{formattedDate}</TableCell>;
-            },
+          header: __('Date', 'multivendorx'),
+          cell: ({ row }) => {
+            const rawDate = row.original.date;
+            let formattedDate = '-';
+            if (rawDate) {
+              const dateObj = new Date(rawDate);
+              formattedDate = new Intl.DateTimeFormat('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric',
+              }).format(dateObj);
+            }
+            return <TableCell title={formattedDate}>{formattedDate}</TableCell>;
+          },
         },
         {
-            header: __('Status', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.status || ''}>
-                    {row.original.status ? row.original.status.charAt(0).toUpperCase() + row.original.status.slice(1) : '-'}
-                </TableCell>
-            ),
+          header: __('Status', 'multivendorx'),
+          cell: ({ row }) => (
+            <TableCell title={row.original.status || ''}>
+              {row.original.status
+                ? row.original.status.charAt(0).toUpperCase() + row.original.status.slice(1)
+                : '-'}
+            </TableCell>
+          ),
         },
+      ];      
 
-    ];
-
-    const realtimeFilter: RealtimeFilter[] = [
+      const realtimeFilter: RealtimeFilter[] = [
         {
-            name: 'bulk-action',
-            render: () => (
-                <div className=" bulk-action">
-                    <select name="action" className="basic-select" ref={bulkSelectRef}>
-                        {bulkActionOptions.map(option => (
-                            <option key={option.value} value={option.value}>
-                                {option.label}
-                            </option>
-                        ))}
-                    </select>
-                    <button name="bulk-action-apply" className="admin-btn btn-purple" onClick={handleBulkAction}>
-                        {__('Apply')}
-                    </button>
-                </div>
-            ),
+          name: 'bulk-action',
+          render: () => (
+            <div className="bulk-action">
+              <select name="action" className="basic-select" ref={bulkSelectRef}>
+                {bulkActionOptions.map(option => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+              <button
+                name="bulk-action-apply"
+                className="admin-btn btn-purple"
+                onClick={handleBulkAction}
+              >
+                {__('Apply')}
+              </button>
+            </div>
+          ),
         },
-    ];
+      ];      
 
     return (
         <>
@@ -348,22 +355,23 @@ export const KnowledgeBase: React.FC = () => {
             )}
 
             <div className="admin-table-wrapper">
-                <Table
-                    data={data}
-                    columns={columns as ColumnDef<Record<string, any>, any>[]}
-                    rowSelection={rowSelection}
-                    onRowSelectionChange={setRowSelection}
-                    defaultRowsPerPage={10}
-                    pagination={pagination}
-                    realtimeFilter={realtimeFilter}
-                    onPaginationChange={setPagination}
-                    handlePagination={requestData}
-                    perPageOption={[10, 25, 50]}
-                    onRowClick={(row: any) => {
-                        handleEdit(row.id);
-                    }}
-                    typeCounts={announcementStatus as AnnouncementStatus[]}
-                />
+            <Table
+                data={data}
+                columns={columns as ColumnDef<Record<string, any>, any>[]}
+                rowSelection={rowSelection}
+                onRowSelectionChange={setRowSelection}
+                defaultRowsPerPage={10}
+                pageCount={pageCount}
+                pagination={pagination}
+                realtimeFilter={realtimeFilter}
+                onPaginationChange={setPagination}
+                handlePagination={requestData}
+                perPageOption={[10, 25, 50]}
+                onRowClick={(row: any) => {
+                    handleEdit(row.id);
+                }}
+                typeCounts={announcementStatus as AnnouncementStatus[]}
+            />
             </div>
         </>
     );
