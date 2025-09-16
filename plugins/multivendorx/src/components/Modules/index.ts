@@ -68,7 +68,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/auction-product',
             //settings_link: appLocalizer.site_url,
             pro_module: true,
-			req_pluging: ['<a href="https://codecanyon.net/item/woocommerce-simple-auctions-wordpress-auctions/6811382" target="blank">WooCommerce Simple Auction</a>, YITH WooCommerce Auction'],
+			req_pluging: ['<a href="https://codecanyon.net/item/woocommerce-simple-auctions-wordpress-auctions/6811382" target="blank">WooCommerce Simple Auction</a>, <a href="https://yithemes.com/themes/plugins/yith-woocommerce-auctions/" target="blank">YITH WooCommerce Auction</a>'],
             category: 'marketplace_types'
         },
         {
