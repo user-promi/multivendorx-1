@@ -16,8 +16,9 @@ import {
     AdminForm,
     Banner,
     Tabs,
+    useModules,
 } from 'zyra';
-import { useModules } from '../../contexts/ModuleContext';
+
 import ShowProPopup from '../Popup/Popup';
 import { useLocation, Link } from 'react-router-dom';
 
@@ -28,11 +29,7 @@ interface SettingsProps {
     id: string;
 }
 
-interface Products {
-    title: string;
-    description: string;
-    icon?: string;
-}
+
 
 const supportLink = [
     {
@@ -55,65 +52,6 @@ const supportLink = [
         icon: 'adminlib-support',
         description: __('Participate in product enhancement.', 'moowoodle'),
         link: 'https://github.com/multivendorx/multivendorx/issues',
-    },
-];
-
-const products: Products[] = [
-    {
-        title: __(
-            'Automated user and course synchronization with scheduler',
-            'moowoodle'
-        ),
-        description: __(
-            'Utilize personalized scheduling options to synchronize users and courses between WordPress and Moodle.',
-            'moowoodle'
-        ),
-        icon: __(
-            'adminlib-support',
-            'moowoodle')
-    },
-    {
-        title: __('Convenient Single Sign-On login', 'moowoodle'),
-        description: __(
-            'SSO enables students to access their purchased courses without the need to log in separately to the Moodle site.',
-            'moowoodle'
-        ),
-        icon: __(
-            'adminlib-support',
-            'moowoodle')
-    },
-    {
-        title: __('Steady Income through Course Subscriptions', 'moowoodle'),
-        description: __(
-            'Generate consistent revenue by offering courses with subscription-based model.',
-            'moowoodle'
-        ),
-        icon: __(
-            'adminlib-support',
-            'moowoodle')
-    },
-    {
-        title: __('Synchronize Courses in Bulk', 'moowoodle'),
-        description: __(
-            'Effortlessly synchronize multiple courses at once, ideal for managing large course catalogs.',
-            'moowoodle'
-        ),
-        icon: __(
-            'adminlib-support',
-            'moowoodle')
-    },
-    {
-        title: __(
-            'Automatic User Synchronization for Moodle™ and WordPress',
-            'moowoodle'
-        ),
-        description: __(
-            'Synchronizes user accounts between Moodle™ and WordPress, ensuring consistent user management across both platforms without manual intervention.',
-            'moowoodle'
-        ),
-        icon: __(
-            'adminlib-support',
-            'moowoodle')
     },
 ];
 
@@ -171,21 +109,6 @@ const Settings: React.FC<SettingsProps> = () => {
     );
     const location = new URLSearchParams(useLocation().hash.substring(1));
 
-    const getBanner = () => {
-        return (
-            <Banner
-                products={products}
-                isPro={appLocalizer.khali_dabba}
-                proUrl={appLocalizer.shop_url}
-                tag="Why Premium"
-                buttonText="View Pricing"
-                bgCode="#0a3981" // background color
-                textCode="#fff" // text code
-                btnCode="#fff" // button color
-                btnBgCode="#ff9843" // button backgroud color
-            />
-        );
-    };
     // Render the dynamic form
     const GetForm = (currentTab: string | null): JSX.Element | null => {
         // get the setting context
@@ -248,7 +171,6 @@ const Settings: React.FC<SettingsProps> = () => {
                 tabData={settingsArray as any}
                 currentTab={location.get('subtab') as string}
                 getForm={GetForm}
-                BannerSection={getBanner}
                 prepareUrl={(subTab: string) =>
                     `?page=moowoodle#&tab=settings&subtab=${subTab}`
                 }

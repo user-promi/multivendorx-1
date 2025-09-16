@@ -288,7 +288,6 @@ class FrontendScripts {
 		// Get my account menu.
 		$my_account_menu = wc_get_account_menu_items();
 		unset( $my_account_menu['my-courses'] );
-
         $localize_scripts = apply_filters(
             'moowoodle_localize_scripts',
             array(
@@ -316,6 +315,8 @@ class FrontendScripts {
 						'wc_email_url'             => admin_url( '/admin.php?page=wc-settings&tab=email&section=enrollmentemail' ),
 						'moodle_site_url'          => MooWoodle()->setting->get_setting( 'moodle_url' ),
 						'wp_user_roles'            => wp_roles()->get_names(),
+						'free_version'             => MooWoodle()->version,
+						'pro_version'              => apply_filters( 'moowoodle_update_pro_version', false ),
 						'md_user_roles'            => array(
 							1 => __( 'Manager', 'moowoodle' ),
 							2 => __( 'Course creator', 'moowoodle' ),

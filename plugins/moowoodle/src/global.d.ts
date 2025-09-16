@@ -22,6 +22,8 @@ declare global {
         wp_user_roles: any;
         md_user_roles: any;
         pro_settings_list: any;
+        free_version:any;
+        pro_version:any;
     }
 
     interface CourseMyAcc {
