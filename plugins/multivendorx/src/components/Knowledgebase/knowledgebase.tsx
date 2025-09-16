@@ -1,5 +1,5 @@
 /* global appLocalizer */
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, ReactNode } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 import { Table, getApiLink, TableCell, AdminBreadcrumbs, BasicInput, TextArea, CommonPopup } from 'zyra';
@@ -7,6 +7,7 @@ import { ColumnDef, RowSelectionState, PaginationState } from '@tanstack/react-t
 import "../Announcements/announcements.scss";
 
 type KBRow = {
+    date: any;
     id?: number;
     title?: string;
     content?: string;
@@ -23,7 +24,13 @@ type AnnouncementStatus = {
     name: string;
     count: number;
 };
-
+type FilterData = {
+    typeCount?: any;
+};
+export interface RealtimeFilter {
+    name: string;
+    render: (updateFilter: (key: string, value: any) => void, filterValue: any) => ReactNode;
+}
 const bulkActionOptions = [
     { value: '', label: __('Bulk actions', 'multivendorx') },
     { value: 'publish', label: __('Publish', 'multivendorx') },
@@ -41,7 +48,7 @@ export const KnowledgeBase: React.FC = () => {
         pageIndex: 0,
         pageSize: 10,
     });
-    const [announcementStatus, setAnnouncementStatus] = useState<AnnouncementStatus[] | null>(null);
+    const [announcementStatus, setStatus] = useState<AnnouncementStatus[] | null>(null);
 
     const [pageCount, setPageCount] = useState(0);
     const [editId, setEditId] = useState<number | null>(null);
@@ -72,34 +79,35 @@ export const KnowledgeBase: React.FC = () => {
             const index = Number(key);
             return data && data[index] ? data[index].id : null;
         }).filter((id): id is number => id !== null);
-
+    
         if (!selectedIds.length) {
             setModalDetails('Select rows.');
             setOpenModal(true);
             return;
         }
-
+    
         if (!action) {
             setModalDetails('Please select an action.');
             setOpenModal(true);
             return;
         }
-
+    
         setData(null);
-
+    
         try {
             await axios({
-            method: 'PUT',
-            url: getApiLink(appLocalizer, 'knowledge/bulk'),
-            headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            data: { action, ids: selectedIds },
-        });
-        requestData(pagination.pageSize, pagination.pageIndex + 1);
-        setRowSelection({}); // Clear selection
+                method: 'PUT',
+                url: getApiLink(appLocalizer, 'knowledge'),
+                headers: { 'X-WP-Nonce': appLocalizer.nonce },
+                data: { bulk: true, action, ids: selectedIds },
+            });
+    
+            requestData(pagination.pageSize, pagination.pageIndex + 1, '');
+            setRowSelection({});
         } catch (err) {
             setError(__('Failed to perform bulk action', 'multivendorx'));
         }
-    };
+    };    
 
     const toggleDropdown = (id: any) => {
         if (showDropdown === id) {
@@ -152,7 +160,7 @@ export const KnowledgeBase: React.FC = () => {
                 setAddEntry(false);
                 setFormData({ title: '', content: '', status: 'pending' });
                 setEditId(null);
-                requestData(pagination.pageSize, pagination.pageIndex + 1);
+                requestData(pagination.pageSize, pagination.pageIndex + 1,'');
             } else {
                 setError(__('Failed to save entry', 'multivendorx'));
             }
@@ -164,36 +172,47 @@ export const KnowledgeBase: React.FC = () => {
     };
 
 
+    const requestApiForData = ( rowsPerPage: number, currentPage: number, filterData: FilterData ) => {
+    setData( null );
+        requestData(
+            rowsPerPage,
+            currentPage,
+            filterData?.typeCount,
+        );
+    };
+
     // Fetch data
-    const requestData = (
-        rowsPerPage = 10,
-        currentPage = 1,
-        status: string = 'all'
-      ) => {
-        setData(null);
+    function requestData (
+        rowsPerPage = 10, 
+        currentPage = 1, 
+        typeCount: '' 
+    ) {
         axios({
-          method: 'GET',
+          method: 'get',
           url: getApiLink(appLocalizer, 'knowledge'),
           headers: { 'X-WP-Nonce': appLocalizer.nonce },
-          params: { page: currentPage, row: rowsPerPage, status },
+          params: { 
+            page: currentPage, 
+            row: rowsPerPage, 
+            status: typeCount === 'all' ? '' : typeCount,
+        },
+    }).then((response) => {
+        const res = response.data;
+        setData(res.items);
+        setTotalRows(res.total);
+        setPageCount(Math.ceil((res.total || 0) / rowsPerPage));
+        setStatus([
+            { key: 'all', name: 'All', count: res.all ?? res.total ?? 0 },
+            { key: 'publish', name: 'Published', count: res.publish ?? 0 },
+            { key: 'pending', name: 'Pending', count: res.pending ?? 0 },
+        ]);
         })
-          .then((response) => {
-            const res = response.data;
-            setData(res.items || []);
-            setTotalRows(res.total);
-            setPageCount(Math.ceil((res.total || 0) / rowsPerPage));
-            setAnnouncementStatus([
-              { key: 'all', name: 'All', count: res.all ?? res.total ?? 0 },
-              { key: 'publish', name: 'Published', count: res.publish ?? 0 },
-              { key: 'pending', name: 'Pending', count: res.pending ?? 0 },
-            ]);
-          })
-          .catch(() => setError(__('Failed to load entries', 'multivendorx')));
-      };      
+        .catch(() => setError(__('Failed to load entries', 'multivendorx')));
+    };      
 
     useEffect(() => {
         const currentPage = pagination.pageIndex + 1;
-        requestData(pagination.pageSize, currentPage);
+        requestData(pagination.pageSize, currentPage, '');
     }, [pagination]);
 
     // Columns
@@ -249,31 +268,18 @@ export const KnowledgeBase: React.FC = () => {
             </TableCell>
           ),
         },
-      ];      
-
-      const realtimeFilter: RealtimeFilter[] = [
-        {
-          name: 'bulk-action',
-          render: () => (
-            <div className="bulk-action">
-              <select name="action" className="basic-select" ref={bulkSelectRef}>
-                {bulkActionOptions.map(option => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-              <button
-                name="bulk-action-apply"
-                className="admin-btn btn-purple"
-                onClick={handleBulkAction}
-              >
-                {__('Apply')}
-              </button>
+      ];
+      
+        const BulkAction: React.FC = () => (
+            <div className=" bulk-action">
+                <select name="action" className="basic-select" ref={bulkSelectRef} onChange={handleBulkAction}>
+                    <option value="">{__('Bulk actions')}</option>
+                    <option value="publish">{__('Publish', 'multivendorx')}</option>
+                    <option value="pending">{__('Pending', 'multivendorx')}</option>
+                    <option value="delete">{__('Delete', 'multivendorx')}</option>
+                </select>
             </div>
-          ),
-        },
-      ];      
+        );
 
     return (
         <>
@@ -363,14 +369,14 @@ export const KnowledgeBase: React.FC = () => {
                 defaultRowsPerPage={10}
                 pageCount={pageCount}
                 pagination={pagination}
-                realtimeFilter={realtimeFilter}
                 onPaginationChange={setPagination}
-                handlePagination={requestData}
+                handlePagination={requestApiForData}
                 perPageOption={[10, 25, 50]}
                 onRowClick={(row: any) => {
                     handleEdit(row.id);
                 }}
                 typeCounts={announcementStatus as AnnouncementStatus[]}
+                bulkActionComp={() => <BulkAction />}
             />
             </div>
         </>

@@ -31,29 +31,10 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
                 'callback'            => [ $this, 'create_item' ],
                 'permission_callback' => [ $this, 'create_item_permissions_check' ],
             ],
-        ] );
-
-        register_rest_route($this->namespace, '/' . $this->rest_base . '/(?P<id>[\d]+)', [
             [
-                'methods'             => \WP_REST_Server::READABLE,
-                'callback'            => [$this, 'get_item'],
-                'permission_callback' => [$this, 'get_items_permissions_check'],
-                'args'                => [
-                    'id' => ['required' => true],
-                ],
-            ],
-            [
-                'methods'             => \WP_REST_Server::EDITABLE,
-                'callback'            => [$this, 'update_item'],
-                'permission_callback' => [$this, 'update_item_permissions_check'],
-            ],
-        ]);
-
-        register_rest_route($this->namespace, '/' . $this->rest_base . '/bulk', [
-            [
-                'methods'             => \WP_REST_Server::EDITABLE,
-                'callback'            => [$this, 'bulk_update_items'],
-                'permission_callback' => [$this, 'update_item_permissions_check'],
+                'methods'             => \WP_REST_Server::EDITABLE, // <-- add this
+                'callback'            => [ $this, 'update_item' ],
+                'permission_callback' => [ $this, 'update_item_permissions_check' ],
             ],
         ]);
     }
@@ -117,25 +98,39 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             return new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), [ 'status' => 403 ] );
         }
-
+    
         $limit  = max( intval( $request->get_param( 'row' ) ), 10 );
         $page   = max( intval( $request->get_param( 'page' ) ), 1 );
         $offset = ( $page - 1 ) * $limit;
-
+        $status_param = $request->get_param( 'status' );
+    
         $args = [
             'post_type'      => 'multivendorx_kb',
-            'status'         => $request->get_param( 'status' ) ?: 'all',
+            'status'         => $status_param ?: 'all',
             's'              => $request->get_param( 'search' ),
             'posts_per_page' => $limit,
             'offset'         => $offset,
         ];
-
+    
         // Data
         $items = self::get_knowledge_items( $args );
-
+    
         // Counts
-        $totalcounts   = self::get_knowledge_items( [ 'count' => true ] );
-
+        $totalcounts = self::get_knowledge_items( [ 'count' => true ] );
+    
+        file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":orders: : " . var_export($status_param, true) . "\n", FILE_APPEND);
+        // Fix: treat $status_param as string, not array
+        switch ( $status_param ) {
+            case 'publish':
+                $total = $totalcounts['publish'];
+                break;
+            case 'pending':
+                $total = $totalcounts['pending'];
+                break;
+            default:
+                $total = $totalcounts['total'];
+        }
+    
         return rest_ensure_response( [
             'items'   => $items,
             'total'   => $total,
@@ -145,7 +140,7 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
             'publish' => $totalcounts['publish'],
             'pending' => $totalcounts['pending'],
         ] );
-    }
+    }    
 
     public function create_item( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
@@ -184,33 +179,55 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             return new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), [ 'status' => 403 ] );
         }
-
+    
+        $data = $request->get_json_params();
+    
+        // ✅ Check for bulk update
+        if ( isset($data['bulk']) && !empty($data['ids']) && !empty($data['action']) ) {
+            $action = sanitize_key( $data['action'] );
+            $ids    = array_map( 'absint', $data['ids'] );
+    
+            foreach ( $ids as $id ) {
+                switch ( $action ) {
+                    case 'publish':
+                    case 'pending':
+                        wp_update_post([ 'ID' => $id, 'post_status' => $action ]);
+                        break;
+                    case 'delete':
+                        wp_delete_post( $id, true );
+                        break;
+                }
+            }
+    
+            return rest_ensure_response([ 'success' => true, 'bulk' => true ]);
+        }
+    
+        // ✅ Normal single update
         $id   = absint( $request->get_param( 'id' ) );
         $post = get_post( $id );
-
+    
         if ( ! $post || $post->post_type !== 'multivendorx_kb' ) {
             return new \WP_Error( 'not_found', __( 'Knowledge Base article not found', 'multivendorx' ), [ 'status' => 404 ] );
         }
-
-        $data    = $request->get_json_params();
+    
         $title   = sanitize_text_field( $data['title'] ?? $post->post_title );
         $content = sanitize_textarea_field( $data['content'] ?? $post->post_content );
         $status  = ( isset($data['status']) && $data['status'] === 'publish' ) ? 'publish' : 'pending';
-
+    
         $updated_id = wp_update_post([
             'ID'           => $id,
             'post_title'   => $title,
             'post_content' => $content,
             'post_status'  => $status,
         ], true );
-
+    
         if ( is_wp_error( $updated_id ) ) {
             return rest_ensure_response([
                 'success' => false,
                 'message' => $updated_id->get_error_message(),
             ]);
         }
-
+    
         return rest_ensure_response([
             'success' => true,
             'id'      => $id,
@@ -218,7 +235,7 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
             'content' => $content,
             'status'  => $status,
         ]);
-    }
+    }    
 
     public function get_item( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
@@ -242,32 +259,32 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
         ]);
     }
 
-    public function bulk_update_items($request) {
-        $nonce = $request->get_header('X-WP-Nonce');
-        if (!wp_verify_nonce($nonce, 'wp_rest')) {
-            return new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), [ 'status' => 403 ] );
-        }
+    // public function bulk_update_items($request) {
+    //     $nonce = $request->get_header('X-WP-Nonce');
+    //     if (!wp_verify_nonce($nonce, 'wp_rest')) {
+    //         return new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), [ 'status' => 403 ] );
+    //     }
 
-        $params = $request->get_json_params();
-        $action = sanitize_key( $params['action'] ?? '' );
-        $ids    = array_map( 'absint', $params['ids'] ?? [] );
+    //     $params = $request->get_json_params();
+    //     $action = sanitize_key( $params['action'] ?? '' );
+    //     $ids    = array_map( 'absint', $params['ids'] ?? [] );
 
-        if ( empty($action) || empty($ids) ) {
-            return new \WP_Error( 'invalid_params', __( 'Missing action or IDs', 'multivendorx' ), [ 'status' => 400 ] );
-        }
+    //     if ( empty($action) || empty($ids) ) {
+    //         return new \WP_Error( 'invalid_params', __( 'Missing action or IDs', 'multivendorx' ), [ 'status' => 400 ] );
+    //     }
 
-        foreach ( $ids as $id ) {
-            switch ( $action ) {
-                case 'publish':
-                case 'pending':
-                    wp_update_post([ 'ID' => $id, 'post_status' => $action ]);
-                    break;
-                case 'delete':
-                    wp_delete_post( $id, true );
-                    break;
-            }
-        }
+    //     foreach ( $ids as $id ) {
+    //         switch ( $action ) {
+    //             case 'publish':
+    //             case 'pending':
+    //                 wp_update_post([ 'ID' => $id, 'post_status' => $action ]);
+    //                 break;
+    //             case 'delete':
+    //                 wp_delete_post( $id, true );
+    //                 break;
+    //         }
+    //     }
 
-        return rest_ensure_response(['success' => true]);
-    }
+    //     return rest_ensure_response(['success' => true]);
+    // }
 }
