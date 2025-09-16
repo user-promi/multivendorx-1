@@ -4,6 +4,7 @@ use MultiVendorX\Store\StoreUtil;
 use MultiVendorX\Store\Store;
 
 $all_endpoints = MultiVendorX()->rest->dashboard->all_endpoints();
+file_put_contents(plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":all_endpoints: : " . var_export($all_endpoints, true) . "\n", FILE_APPEND);
 $current_user = wp_get_current_user();
 $role = reset($current_user->roles);
 $capability_settings = MultiVendorX()->setting->get_setting($role);
@@ -15,7 +16,7 @@ if (empty($active_store)) {
     update_user_meta($current_user->ID, 'multivendorx_active_store', reset($store_ids));
 }
 
-$store = Store::get_store_by_id( $active_store );
+$store = Store::get_store_by_id($active_store);
 
 if (get_option('permalink_structure')) {
     $current_page = get_query_var('tab');
@@ -87,6 +88,7 @@ if ($current_page && empty($current_sub)) {
                             <a href="#" class="tab" onclick="return false;">
                                 <i class="<?php echo esc_html($section['icon']); ?>"></i>
                                 <?php echo esc_html($section['name']); ?>
+                                <i class="admin-arrow adminlib-pagination-right-arrow"></i>
                             </a>
                         <?php else: ?>
                             <a class="tab" href="<?php echo esc_url(get_endpoint_url($section['slug'])); ?>">
@@ -94,21 +96,21 @@ if ($current_page && empty($current_sub)) {
                                 <?php echo esc_html($section['name']); ?>
                             </a>
                         <?php endif; ?>
-                        <i class="admin-arrow adminlib-pagination-right-arrow"></i>
+
+                        <?php if (!empty($section['submenu'])): ?>
+                            <ul class="subtabs">
+                                <?php foreach ($section['submenu'] as $submenu): ?>
+                                    <li
+                                        class="<?php echo ($current_page === $section['slug'] && $current_sub === $submenu['slug']) ? 'active' : ''; ?>">
+                                        <a href="<?php echo esc_url(get_endpoint_url($section['slug'], $submenu['slug'])); ?>">
+                                            <?php echo esc_html($submenu['name']); ?>
+                                        </a>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
+                        <?php endif; ?>
                     </li>
 
-                    <?php if (!empty($section['submenu'])): ?>
-                        <ul class="subtabs">
-                            <?php foreach ($section['submenu'] as $submenu): ?>
-                                <li
-                                    class="<?php echo ($current_page === $section['slug'] && $current_sub === $submenu['slug']) ? 'active' : ''; ?>">
-                                    <a href="<?php echo esc_url(get_endpoint_url($section['slug'], $submenu['slug'])); ?>">
-                                        <?php echo esc_html($submenu['name']); ?>
-                                    </a>
-                                </li>
-                            <?php endforeach; ?>
-                        </ul>
-                    <?php endif; ?>
                 <?php endforeach; ?>
             </ul>
         </div>
@@ -184,27 +186,27 @@ if ($current_page && empty($current_sub)) {
                                     </ul>
                                 </div>
                                 <div class="store-wrapper">
-                                        <h3>Switch stores</h3>
-                                        <ul>
-                                            <?php
-                                            foreach( $store_ids as $id) {
-                                                if ($id == $active_store) continue; // skip active one
-                                                $store = Store::get_store_by_id( $id );
-                                                ?>
-                                                <li>
-                                                    <a href="javascript:void(0);" 
-                                                    class="switch-store" 
-                                                    data-store-id="<?php echo esc_attr($id); ?>">
-                                                        <i class="adminlib-user-network-icon"></i>
-                                                        <?php echo esc_html($store->get('name')); ?>
-                                                    </a>
-                                                </li>
-                                                
-                                            <?php
-                                            }
+                                    <h3>Switch stores</h3>
+                                    <ul>
+                                        <?php
+                                        foreach ($store_ids as $id) {
+                                            if ($id == $active_store)
+                                                continue; // skip active one
+                                            $store = Store::get_store_by_id($id);
                                             ?>
-                                        </ul>
-                                    </div>
+                                            <li>
+                                                <a href="javascript:void(0);" class="switch-store"
+                                                    data-store-id="<?php echo esc_attr($id); ?>">
+                                                    <i class="adminlib-user-network-icon"></i>
+                                                    <?php echo esc_html($store->get('name')); ?>
+                                                </a>
+                                            </li>
+
+                                            <?php
+                                        }
+                                        ?>
+                                    </ul>
+                                </div>
 
                                 <div class="dropdown-footer">
                                     <ul>
@@ -227,22 +229,22 @@ if ($current_page && empty($current_sub)) {
                 <div>
                     <?php echo 'waiting for approval'; ?>
                 </div>
-            <?php  
+            <?php
             } elseif ($store->get('status') == 'reject') { ?>
                 <div>
                     <?php echo 'The application is rejected'; ?>
                 </div>
-            <?php  
+            <?php
             } else {
                 $div_id = '';
                 $allowed = true;
-    
+
                 if ($current_page) {
                     foreach ($all_endpoints as $key => $section) {
                         if ($section['slug'] === $current_page) {
                             if (!empty($section['capability'])) {
                                 $allowed = false;
-    
+
                                 foreach ($section['capability'] as $cap) {
                                     if (current_user_can($cap) && in_array($cap, $capability_settings, true)) {
                                         $allowed = true;
@@ -250,13 +252,13 @@ if ($current_page && empty($current_sub)) {
                                     }
                                 }
                             }
-    
+
                             if ($current_sub && !empty($section['submenu'])) {
                                 foreach ($section['submenu'] as $submenu) {
                                     if ($submenu['slug'] === $current_sub) {
                                         if (!empty($submenu['capability'])) {
                                             $allowed = false;
-    
+
                                             foreach ($submenu['capability'] as $cap) {
                                                 if (current_user_can($cap) && in_array($cap, $capability_settings, true)) {
                                                     $allowed = true;
@@ -274,7 +276,7 @@ if ($current_page && empty($current_sub)) {
                             break;
                         }
                     }
-    
+
                     if ($div_id) {
                         if ($allowed) {
                             $template_file = plugin_dir_path(__FILE__) . $div_id . '.php';
