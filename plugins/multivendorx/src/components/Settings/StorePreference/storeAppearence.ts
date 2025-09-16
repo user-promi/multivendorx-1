@@ -50,7 +50,7 @@ export default {
                 },
                 {
                 key: 'template3',
-                label: 'Classic Vibe',
+                label: 'Classic vibe',
                 img: template3,
                 value: 'template3',
                 }

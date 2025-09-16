@@ -8,10 +8,19 @@ export default {
     submitUrl: 'settings',
     modal: [
         {
+            key: 'store_rating_page',
+            type: 'blocktext',
+            label: __( 'no_label', 'multivendorx' ),
+            blocktext: __(
+                '<b>MultiVendorX processes all payments through the store wallet. Commission earnings are first credited to the wallet balance, while real-time payments from customers are sent directly to the store.</b>',
+                'multivendorx'
+            ),
+        },
+        {
             key: 'disbursement_order_status',
             type: 'checkbox',
             label: __('Eligible Order Statuses for Commission Payout', 'multivendorx'),
-            settingDescription: __("Choose which order statuses qualify for commission payouts.", 'multivendorx'),
+            settingDescription: __("Select the order statuses after which commissions will be added to the store wallet.", 'multivendorx'),
             class: 'mvx-toggle-checkbox',
             options: [
                 {
@@ -36,34 +45,15 @@ export default {
                 },
             ],
             selectDeselect: true,
-        },
-        {
-            key: 'disbursement_method',
-            type: 'setting-toggle',
-            label: __('Commission settlement', 'multivendorx'),
-            settingDescription: __("Select how commissions are released from the admin account.", 'multivendorx'),
-            desc: __("<ul><li>Instant Payout - Commissions are immediately credited to the store’s wallet balance.</li><li>Scheduled / Delayed Payout - Commissions are credited to the wallet after a waiting period.</li></ul>", 'multivendorx'),
-            options: [
-                {
-                    key: 'instantly',
-                    label: __('Instant payout', 'multivendorx'),
-                    value: 'instantly',
-                },
-                {
-                    key: 'waiting',
-                    label: __('Scheduled / delayed payout', 'multivendorx'),
-                    value: 'waiting',
-                },
-            ],
-        },
+        },  
         {
             key: 'commission_lock_period',
             label: __('Lock period', 'multivendorx'),
-            settingDescription: __('Keep payouts on hold for a safety buffer. Helps cover refunds, cancellations, or disputes.', 'multivendorx'),
+            settingDescription: __('Keep payouts on hold in a safety buffer as pending balance to cover refunds, cancellations, or disputes.', 'multivendorx'),
             type: 'number',
             size: '8rem',
             preText:__('Wait', 'multivendorx'),
-            postText:__('before commissions become eligible for payout.', 'multivendorx'),
+            postText:__('before pending balance will be available for payout.', 'multivendorx'),
             postInsideText: __('days', 'multivendorx'),
         },
         {

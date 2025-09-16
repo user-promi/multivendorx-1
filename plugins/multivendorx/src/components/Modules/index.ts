@@ -12,7 +12,7 @@ export default {
             icon: 'adminlib-rules', 
             doc_link: 'https://multivendorx.com/docs/knowledgebase/booking-product',
             //settings_link: appLocalizer.site_url,
-			req_pluging: ['WooCommerce Booking', 'wordpress'],
+			req_pluging: ['<a href="https://woocommerce.com/products/woocommerce-bookings/" target="blank">WooCommerce Booking</a>'],
             pro_module: true,
             category: 'marketplace_types'
         },
@@ -24,7 +24,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/appointment-product/',
             //settings_link: appLocalizer.site_url,
             pro_module: true,
-			req_pluging: ['WooCommerce Appointment', 'wordpress'],
+			req_pluging: ['<a href="https://bookingwp.com/plugins/woocommerce-appointments/" target="blank">WooCommerce Appointment</a>'],
             category: 'marketplace_types'
         },
         {
@@ -35,7 +35,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/subscription-product',
             //settings_link: appLocalizer.site_url,
             pro_module: true,
-			req_pluging: ['WooCommerce Subscription', 'wordpress'],
+			req_pluging: ['<a href="https://woocommerce.com/products/woocommerce-subscriptions/" target="blank">WooCommerce Subscription</a>'],
             category: 'marketplace_types'
         },
         {
@@ -46,7 +46,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/accommodation-product',
             //settings_link: appLocalizer.site_url,
             pro_module: true,
-			req_pluging: ['WooCommerce Accomodation & Booking', 'WooCommerce Booking'],
+			req_pluging: ['<a href="https://woocommerce.com/products/woocommerce-accommodation-bookings/" target="blank">WooCommerce Accomodation & Booking</a>', '<a href="https://woocommerce.com/products/woocommerce-bookings/" target="blank">WooCommerce Booking</a>'],
             category: 'marketplace_types'
         },
         {
@@ -57,7 +57,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/bundle-product',
             //settings_link: appLocalizer.site_url,
             pro_module: true,
-			req_pluging: ['Product Bundle'],
+			req_pluging: ['<a href="https://woocommerce.com/products/product-bundles/" target="blank">Product Bundle</a>'],
             category: 'marketplace_types'
         },
         {
@@ -68,7 +68,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/auction-product',
             //settings_link: appLocalizer.site_url,
             pro_module: true,
-			req_pluging: ['WooCommerce Simple Auction , YITH WooCommerce Auction'],
+			req_pluging: ['<a href="https://codecanyon.net/item/woocommerce-simple-auctions-wordpress-auctions/6811382" target="blank">WooCommerce Simple Auction</a>, YITH WooCommerce Auction'],
             category: 'marketplace_types'
         },
         {
@@ -79,7 +79,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/rental-product',
             //settings_link: appLocalizer.site_url,
             pro_module: true,
-			req_pluging: ['R&B WooCommerce Booking & Rental'],
+			req_pluging: ['<a href="https://codecanyon.net/item/rnb-woocommerce-rental-booking-system/14835145?ref=redqteam" target="blank">RnB WooCommerce Booking & Rental</a>'],
             category: 'marketplace_types'
         },
         { type: 'separator', id: 'product_type', label: 'Product Types' },
@@ -131,7 +131,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/gift-card/',
             //settings_link: appLocalizer.site_url,
             pro_module: true,
-			req_pluging: ['yith WooCommerce Gift Cards'],
+			req_pluging: ['<a href="https://wordpress.org/plugins/yith-woocommerce-gift-cards/" target="blank">YITH WooCommerce Gift Cards</a>'],
             category: 'product_type'
         },
         { type: 'separator', id: 'store_management', label: 'Store Management' },
@@ -355,7 +355,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/weight-shipping',
             //settings_link: admin_url('admin.php?page=wc-settings&tab=shipping'),
             pro_module: false,
-			req_pluging: ['Table Rate Shipping'],
+			req_pluging: ['<a href="https://woocommerce.com/products/table-rate-shipping/" target="blank">Table Rate Shipping</a>'],
             category: 'shipping_management'
         },
         {
@@ -366,7 +366,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/per-product-shipping',
             //settings_link: admin_url('admin.php?page=wc-settings&tab=shipping'),
             pro_module: true,
-			req_pluging: ['Per Product Shipping for WooCommerce'],
+			req_pluging: ['<a href="https://woocommerce.com/products/per-product-shipping/" target="blank">Per Product Shipping for WooCommerce</a>'],
             category: 'shipping_management'
         },
         { type: 'separator', id: 'customer_experience', label: 'Customer Experience' },
@@ -551,7 +551,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/mvx-elementor',
             //settings_link: appLocalizer.site_url,
             pro_module: false,
-			req_pluging: ['Elementor Website Builder','Elementor Pro'],
+			req_pluging: ['<a href="https://wordpress.org/plugins/elementor/" target="blank">Elementor Website Builder</a>','<a href="https://elementor.com/pricing/" target="blank">Elementor Pro</a>'],
             category: 'integration'
         },
         {
@@ -562,7 +562,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/mvx-buddypress',
             //settings_link: admin_url('admin.php?page=mvx#&submenu=settings&name=social'),
             pro_module: false,
-			req_pluging: ['BuddyPress'],
+			req_pluging: ['<a href="https://wordpress.org/plugins/buddypress/" target="blank">BuddyPress</a>'],
             category: 'integration'
         },
         {
@@ -573,7 +573,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/mvx-wpml',
             //settings_link: appLocalizer.site_url,
             pro_module: false,
-				req_pluging: ['WPML','WooCommerce Multilingual'],
+				req_pluging: ['<a href="https://wpml.org/" target="blank">WPML</a>','<a href="https://wordpress.org/plugins/woocommerce-multilingual/" target="blank">WooCommerce Multilingual</a>'],
             category: 'integration'
         },
         {
@@ -584,7 +584,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/mvx-acf',
             //settings_link: appLocalizer.site_url,
             pro_module: true,
-			req_pluging: ['Advance Custom Field'],
+			req_pluging: ['<a href="https://wordpress.org/plugins/advanced-custom-fields/" target="blank">Advance Custom Field</a>'],
             category: 'integration'
         },
         {
@@ -595,7 +595,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/geo-my-wp',
             //settings_link: appLocalizer.site_url,
             pro_module: true,
-			req_pluging: ['GEOmyWP'],
+			req_pluging: ['<a href="https://wordpress.org/plugins/geo-my-wp/" target="blank">GEOmyWP</a>'],
             category: 'integration'
         },
         {
@@ -606,7 +606,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/affiliate-product/',
             //settings_link: appLocalizer.site_url,
             pro_module: true,
-			req_pluging: ['Affiliate WP'],
+			req_pluging: ['<a href="https://affiliatewp.com/" target="blank">Affiliate WP</a>'],
             category: 'integration'
         },
         {
@@ -617,7 +617,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/mvx-product-addon',
             //settings_link: appLocalizer.site_url,
             pro_module: true,
-			req_pluging: ['Product Addons'],
+			req_pluging: ['<a href="https://woocommerce.com/products/product-add-ons/" target="blank">Product Addons</a>'],
             category: 'integration'
         },
         {
