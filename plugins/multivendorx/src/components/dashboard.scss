@@ -272,6 +272,7 @@
         padding: 1.125rem;
         position: sticky;
         top: 1.875rem;
+        min-height: 90vh;
 
         .tab-titles {
             padding: 0;
@@ -288,7 +289,7 @@
         }
 
         .section-meta {
-            margin-bottom: 1rem;
+            padding: 0.75rem 0;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -299,8 +300,35 @@
                 font-weight: 500;
                 line-height: 1.5rem;
             }
-            i{
+
+            i {
                 font-size: 1.5rem;
+                transition: transform 0.3s ease;
+
+                &.rotate {
+                    transform: rotate(90deg);
+
+                }
+            }
+        }
+
+        .section-container {
+            overflow: hidden;
+            max-height: 0;
+            opacity: 0;
+            transition: max-height 0.35s ease, opacity 0.25s ease;
+
+            &.open {
+                max-height: 1000px;
+                opacity: 1;
+            }
+
+            i{
+                font-size: 1.313rem;
+                padding: 0.313rem;
+                background: #ece2f9f1;
+                color: #5007aa;
+                border-radius: 0.313rem;
             }
         }
     }
