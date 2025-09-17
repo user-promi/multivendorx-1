@@ -4,7 +4,7 @@ export default {
     id: 'tool',
     priority: 50,
     name: __('Tools', 'moowoodle'),
-    desc: __('Review all system logs and errors', 'moowoodle'),
+    desc: __('Manage advanced settings for synchronization, error logging, and connection handling.', 'moowoodle'),
     icon: 'adminlib-tools',
     submitUrl: 'settings',
     modal: [
@@ -39,6 +39,7 @@ export default {
             size:'8rem',
             postInsideText: __('sec', 'moowoodle'),
             label: __('Connection timeout', 'moowoodle'),
+            postInsideText: __('Sec', 'multivendorx'),
             parameter: __('Seconds', 'moowoodle'),
         },
         {
