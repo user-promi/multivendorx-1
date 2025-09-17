@@ -37,6 +37,21 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
                 'permission_callback' => [ $this, 'update_item_permissions_check' ],
             ],
         ]);
+        register_rest_route($this->namespace, '/' . $this->rest_base . '/(?P<id>[\d]+)', [
+            [
+                'methods'             => \WP_REST_Server::READABLE,
+                'callback'            => [$this, 'get_item'],
+                'permission_callback' => [$this, 'get_items_permissions_check'],
+                'args'                => [
+                    'id' => ['required' => true],
+                ],
+            ],
+            [
+                'methods'             => \WP_REST_Server::EDITABLE,
+                'callback'            => [ $this, 'update_item' ],
+                'permission_callback' => [ $this, 'update_item_permissions_check' ],
+            ],
+        ]);
     
     }    
 
@@ -213,7 +228,7 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
     
         $data = $request->get_json_params();
     
-        // ✅ Bulk update handling
+        // Bulk update handling
         if ( isset($data['bulk']) && !empty($data['ids']) && !empty($data['action']) ) {
             $action = sanitize_key( $data['action'] );
             $ids    = array_map( 'absint', $data['ids'] );
@@ -233,24 +248,18 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
             return rest_ensure_response([ 'success' => true, 'bulk' => true ]);
         }
     
-        // ✅ Normal single update
-        $id   = absint( $request->get_param( 'id' ) );
-        $post = get_post( $id );
+        // Normal single update
+        $post = get_post(  );
     
         if ( ! $post || $post->post_type !== 'multivendorx_an' ) {
             return new \WP_Error( 'not_found', __( 'Announcement not found', 'multivendorx' ), [ 'status' => 404 ] );
         }
     
-        $title   = sanitize_text_field( $data['title'] ?? $post->post_title );
-        $content = sanitize_textarea_field( $data['content'] ?? $post->post_content );
-        $status  = ( isset($data['status']) && $data['status'] === 'publish' ) ? 'publish' : 'pending';
-        $stores  = isset($data['stores']) ? (array) $data['stores'] : get_post_meta( $id, 'multivendorx_announcement_stores', true );
-    
         $updated_id = wp_update_post([
-            'ID'           => $id,
-            'post_title'   => $title,
-            'post_content' => $content,
-            'post_status'  => $status,
+            'ID'           => absint( $request->get_param( 'id' ) ),
+            'post_title'   => $post->post_title,
+            'post_content' => $post->post_content,
+            'post_status'  => $data['status'] === 'publish' ? 'publish' : 'pending',
         ], true );
     
         if ( is_wp_error( $updated_id ) ) {
