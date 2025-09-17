@@ -310,7 +310,445 @@ const Revenue: React.FC = () => {
         </div>
 
       </div> */}
+      <div className="row">
+        <div className="column">
+          <div className="card-header">
+            <div className="left">
+              <div className="title">
+                Top Categories
+              </div>
+              <div className="des">3 categories showing top performers</div>
+            </div>
+          </div>
+          {/* 1st product */}
+          <div className="column">
+            <div className="card-header">
+              <div className="left">
+                <div className="product-name">
+                  Electronics
+                </div>
+              </div>
+              <div className="right">
+                <div className="price">
+                  <b>Total Sales:</b> $125,000
+                </div>
+              </div>
+            </div>
+            <div className="top-items">
+              <div className="items">
+                <div className="left-side">
+                  <div className="icon">
+                    <span className="admin-icon red">#1</span>
+                  </div>
+                  <div className="details">
+                    <div className="item-title">Lather & Loom</div>
+                    <div className="sub-text">3 orders</div>
+                  </div>
+                </div>
+                <div className="right-side">
+                  <div className="price">$380</div>
+                </div>
+              </div>
+              <div className="items">
+                <div className="left-side">
+                  <div className="icon">
+                    <span className="admin-icon green">#2</span>
+                  </div>
+                  <div className="details">
+                    <div className="item-title">Lather & Loom</div>
+                    <div className="sub-text">3 orders</div>
+                  </div>
+                </div>
+                <div className="right-side">
+                  <div className="price">$380</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {/* 2nd product */}
+          <div className="column">
+            <div className="card-header">
+              <div className="left">
+                <div className="product-name">
+                  Clothing
+                </div>
+              </div>
+              <div className="right">
+                <div className="price">
+                  <b>Total Sales:</b> $125,000
+                </div>
+              </div>
+            </div>
+            <div className="top-items">
+              <div className="items">
+                <div className="left-side">
+                  <div className="icon">
+                    <span className="admin-icon red">#1</span>
+                  </div>
+                  <div className="details">
+                    <div className="item-title">Lather & Loom</div>
+                    <div className="sub-text">3 orders</div>
+                  </div>
+                </div>
+                <div className="right-side">
+                  <div className="price">$380</div>
+                </div>
+              </div>
+              <div className="items">
+                <div className="left-side">
+                  <div className="icon">
+                    <span className="admin-icon green">#2</span>
+                  </div>
+                  <div className="details">
+                    <div className="item-title">Lather & Loom</div>
+                    <div className="sub-text">3 orders</div>
+                  </div>
+                </div>
+                <div className="right-side">
+                  <div className="price">$380</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {/* 3rd product */}
+          <div className="column">
+            <div className="card-header">
+              <div className="left">
+                <div className="product-name">
+                  Home & Garden
+                </div>
+              </div>
+              <div className="right">
+                <div className="price">
+                  <b>Total Sales:</b> $125,000
+                </div>
+              </div>
+            </div>
+            <div className="top-items">
+              <div className="items">
+                <div className="left-side">
+                  <div className="icon">
+                    <span className="admin-icon red">#1</span>
+                  </div>
+                  <div className="details">
+                    <div className="item-title">Lather & Loom</div>
+                    <div className="sub-text">3 orders</div>
+                  </div>
+                </div>
+                <div className="right-side">
+                  <div className="price">$380</div>
+                </div>
+              </div>
+              <div className="items">
+                <div className="left-side">
+                  <div className="icon">
+                    <span className="admin-icon green">#2</span>
+                  </div>
+                  <div className="details">
+                    <div className="item-title">Lather & Loom</div>
+                    <div className="sub-text">3 orders</div>
+                  </div>
+                </div>
+                <div className="right-side">
+                  <div className="price">$380</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
+        <div className="column">
+          <div className="card-header">
+            <div className="left">
+              <div className="title">
+                Top Brands
+              </div>
+              <div className="des">3 brands showing top performers</div>
+            </div>
+          </div>
+          {/* 1st product */}
+          <div className="column">
+            <div className="card-header">
+              <div className="left">
+                <div className="product-name">
+                  Apple
+                </div>
+              </div>
+              <div className="right">
+                <div className="price">
+                  <b>Total Sales:</b> $125,000
+                </div>
+              </div>
+            </div>
+            <div className="top-items">
+              <div className="items">
+                <div className="left-side">
+                  <div className="icon">
+                    <span className="admin-icon red">#1</span>
+                  </div>
+                  <div className="details">
+                    <div className="item-title">Lather & Loom</div>
+                    <div className="sub-text">3 orders</div>
+                  </div>
+                </div>
+                <div className="right-side">
+                  <div className="price">$380</div>
+                </div>
+              </div>
+              <div className="items">
+                <div className="left-side">
+                  <div className="icon">
+                    <span className="admin-icon green">#2</span>
+                  </div>
+                  <div className="details">
+                    <div className="item-title">Lather & Loom</div>
+                    <div className="sub-text">3 orders</div>
+                  </div>
+                </div>
+                <div className="right-side">
+                  <div className="price">$380</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {/* 2nd product */}
+          <div className="column">
+            <div className="card-header">
+              <div className="left">
+                <div className="product-name">
+                  Nike
+                </div>
+              </div>
+              <div className="right">
+                <div className="price">
+                  <b>Total Sales:</b> $125,000
+                </div>
+              </div>
+            </div>
+            <div className="top-items">
+              <div className="items">
+                <div className="left-side">
+                  <div className="icon">
+                    <span className="admin-icon red">#1</span>
+                  </div>
+                  <div className="details">
+                    <div className="item-title">Lather & Loom</div>
+                    <div className="sub-text">3 orders</div>
+                  </div>
+                </div>
+                <div className="right-side">
+                  <div className="price">$380</div>
+                </div>
+              </div>
+              <div className="items">
+                <div className="left-side">
+                  <div className="icon">
+                    <span className="admin-icon green">#2</span>
+                  </div>
+                  <div className="details">
+                    <div className="item-title">Lather & Loom</div>
+                    <div className="sub-text">3 orders</div>
+                  </div>
+                </div>
+                <div className="right-side">
+                  <div className="price">$380</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {/* 3rd product */}
+          <div className="column">
+            <div className="card-header">
+              <div className="left">
+                <div className="product-name">
+                  Samsung
+                </div>
+              </div>
+              <div className="right">
+                <div className="price">
+                  <b>Total Sales:</b> $125,000
+                </div>
+              </div>
+            </div>
+            <div className="top-items">
+              <div className="items">
+                <div className="left-side">
+                  <div className="icon">
+                    <span className="admin-icon red">#1</span>
+                  </div>
+                  <div className="details">
+                    <div className="item-title">Lather & Loom</div>
+                    <div className="sub-text">3 orders</div>
+                  </div>
+                </div>
+                <div className="right-side">
+                  <div className="price">$380</div>
+                </div>
+              </div>
+              <div className="items">
+                <div className="left-side">
+                  <div className="icon">
+                    <span className="admin-icon green">#2</span>
+                  </div>
+                  <div className="details">
+                    <div className="item-title">Lather & Loom</div>
+                    <div className="sub-text">3 orders</div>
+                  </div>
+                </div>
+                <div className="right-side">
+                  <div className="price">$380</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="column">
+          <div className="card-header">
+            <div className="left">
+              <div className="title">
+                Top Stores
+              </div>
+              <div className="des">3 stores showing top performers</div>
+            </div>
+          </div>
+          {/* 1st product */}
+          <div className="column">
+            <div className="card-header">
+              <div className="left">
+                <div className="product-name">
+                  Downtown Flagship
+                </div>
+              </div>
+              <div className="right">
+                <div className="price">
+                  <b>Total Sales:</b> $125,000
+                </div>
+              </div>
+            </div>
+            <div className="top-items">
+              <div className="items">
+                <div className="left-side">
+                  <div className="icon">
+                    <span className="admin-icon red">#1</span>
+                  </div>
+                  <div className="details">
+                    <div className="item-title">Lather & Loom</div>
+                    <div className="sub-text">3 orders</div>
+                  </div>
+                </div>
+                <div className="right-side">
+                  <div className="price">$380</div>
+                </div>
+              </div>
+              <div className="items">
+                <div className="left-side">
+                  <div className="icon">
+                    <span className="admin-icon green">#2</span>
+                  </div>
+                  <div className="details">
+                    <div className="item-title">Lather & Loom</div>
+                    <div className="sub-text">3 orders</div>
+                  </div>
+                </div>
+                <div className="right-side">
+                  <div className="price">$380</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {/* 2nd product */}
+          <div className="column">
+            <div className="card-header">
+              <div className="left">
+                <div className="product-name">
+                  Mall Location
+                </div>
+              </div>
+              <div className="right">
+                <div className="price">
+                  <b>Total Sales:</b> $125,000
+                </div>
+              </div>
+            </div>
+            <div className="top-items">
+              <div className="items">
+                <div className="left-side">
+                  <div className="icon">
+                    <span className="admin-icon red">#1</span>
+                  </div>
+                  <div className="details">
+                    <div className="item-title">Lather & Loom</div>
+                    <div className="sub-text">3 orders</div>
+                  </div>
+                </div>
+                <div className="right-side">
+                  <div className="price">$380</div>
+                </div>
+              </div>
+              <div className="items">
+                <div className="left-side">
+                  <div className="icon">
+                    <span className="admin-icon green">#2</span>
+                  </div>
+                  <div className="details">
+                    <div className="item-title">Lather & Loom</div>
+                    <div className="sub-text">3 orders</div>
+                  </div>
+                </div>
+                <div className="right-side">
+                  <div className="price">$380</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {/* 3rd product */}
+          <div className="column">
+            <div className="card-header">
+              <div className="left">
+                <div className="product-name">
+                  Suburban Store
+                </div>
+              </div>
+              <div className="right">
+                <div className="price">
+                  <b>Total Sales:</b> $125,000
+                </div>
+              </div>
+            </div>
+            <div className="top-items">
+              <div className="items">
+                <div className="left-side">
+                  <div className="icon">
+                    <span className="admin-icon red">#1</span>
+                  </div>
+                  <div className="details">
+                    <div className="item-title">Lather & Loom</div>
+                    <div className="sub-text">3 orders</div>
+                  </div>
+                </div>
+                <div className="right-side">
+                  <div className="price">$380</div>
+                </div>
+              </div>
+              <div className="items">
+                <div className="left-side">
+                  <div className="icon">
+                    <span className="admin-icon green">#2</span>
+                  </div>
+                  <div className="details">
+                    <div className="item-title">Lather & Loom</div>
+                    <div className="sub-text">3 orders</div>
+                  </div>
+                </div>
+                <div className="right-side">
+                  <div className="price">$380</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <div className="row">
         <div className="column">
           <div className="card-header">

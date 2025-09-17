@@ -12,7 +12,7 @@ export default {
             type: 'blocktext',
             label: __( 'no_label', 'multivendorx' ),
             blocktext: __(
-                '<b>MultiVendorX processes all payments through the store wallet. Commission earnings are first credited to the wallet balance, while real-time payments from customers are sent directly to the store.</b>',
+                '<b>From MultiVendorX 5.0.0, Wallet Support has been introduced. Workflow: Customer makes a purchase ➝ Commission is credited to the store wallet ➝ Payout is released from the wallet based on the configured schedule.</b>',
                 'multivendorx'
             ),
         },
