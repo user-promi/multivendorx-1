@@ -8,13 +8,7 @@ use MultiVendorX\Store\Store;
 defined('ABSPATH') || exit;
 
 class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
-    /**
-	 * Endpoint namespace.
-	 *
-	 * @var string
-	 */
-	protected $namespace = 'multivendorx/v1';
-
+    
 	/**
 	 * Route base.
 	 *
@@ -23,7 +17,7 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
 	protected $rest_base = 'commission';
 
     public function register_routes() {
-        register_rest_route( $this->namespace, '/' . $this->rest_base, [
+        register_rest_route( MultiVendorX()->rest_namespace, '/' . $this->rest_base, [
             [
                 'methods'             => \WP_REST_Server::READABLE,
                 'callback'            => [ $this, 'get_items' ],
@@ -36,7 +30,7 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
             ],
         ] );
 
-        register_rest_route($this->namespace, '/' . $this->rest_base . '/(?P<id>[\d]+)', [
+        register_rest_route(MultiVendorX()->rest_namespace, '/' . $this->rest_base . '/(?P<id>[\d]+)', [
             [
                 'methods'             => \WP_REST_Server::READABLE,
                 'callback'            => [$this, 'get_item'],
