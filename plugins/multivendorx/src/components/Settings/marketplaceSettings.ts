@@ -47,6 +47,7 @@ export default {
                 'multivendorx'
             ),
             options: appLocalizer.pages_list,
+            
         },
         {
             key: 'store_url',
@@ -59,6 +60,7 @@ export default {
             size:"8rem",
             preText: appLocalizer.site_url + '/',
             postText: "/sample-store-slug/",
+            proSetting:true,
         },
         {
             key: 'section',
