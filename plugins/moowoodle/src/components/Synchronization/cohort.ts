@@ -44,6 +44,8 @@ export default {
         {
             key: 'sync_cohort_btn',
             type: 'do-action-btn',
+            label:'On-Demand Cohort',
+            settingDescription : 'All cohorts are immediately fetched from Moodle and updated in WordPress. This action runs independently of the scheduled synchronization settings.',
             interval: 2500,
             apilink: 'synchronization',
             parameter: 'cohort',

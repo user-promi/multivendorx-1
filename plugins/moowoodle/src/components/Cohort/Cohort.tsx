@@ -11,7 +11,7 @@ const Cohort: React.FC = () => {
     return (
         <>
             <AdminBreadcrumbs
-                activeTabIcon="adminlib-cart"
+                activeTabIcon="adminlib-cohort"
                 tabTitle={__('Cohorts', 'moowoodle')}
                 description={__('Cohort information is presented with associated products and student enrollments to support administrative actions.', 'moowoodle')}
             />

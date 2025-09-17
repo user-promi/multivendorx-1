@@ -50,14 +50,14 @@ type Category = {
 };
 
 const Course: React.FC = () => {
-    const [ showDropdown, setShowDropdown ] = useState( false );
+    const [showDropdown, setShowDropdown] = useState(false);
 
-    const toggleDropdown = ( id: any ) => {
-        if ( showDropdown === id ) {
-            setShowDropdown( false );
+    const toggleDropdown = (id: any) => {
+        if (showDropdown === id) {
+            setShowDropdown(false);
             return;
         }
-        setShowDropdown( id );
+        setShowDropdown(id);
     };
     const [data, setData] = useState<CourseRow[] | null>(null);
     const [category, setCategory] = useState<Category>({});
@@ -87,6 +87,20 @@ const Course: React.FC = () => {
             .catch(() => {
                 setError(__('Failed to load categories', 'moowoodle'));
             });
+    }, []);
+    
+    // add this inside your component
+    useEffect(() => {
+        const handleClickOutside = (e: MouseEvent) => {
+            // if click is not on dropdown toggle or inside dropdown → close it
+            if (!(e.target as HTMLElement).closest(".action-dropdown") &&
+                !(e.target as HTMLElement).closest(".adminlib-more-vertical")) {
+                setShowDropdown(false);
+            }
+        };
+
+        document.addEventListener("click", handleClickOutside);
+        return () => document.removeEventListener("click", handleClickOutside);
     }, []);
 
     // Fetch total rows on mount
@@ -401,11 +415,10 @@ const Course: React.FC = () => {
                                 className="adminlib-more-vertical"
                                 onClick={() => toggleDropdown(row.original.id)}
                             ></i>
-        
+
                             <div
-                                className={`action-dropdown ${
-                                    showDropdown === row.original.id ? 'show' : ''
-                                }`}
+                                className={`action-dropdown ${showDropdown === row.original.id ? 'show' : ''
+                                    }`}
                             >
                                 <ul>
                                     <li
@@ -420,9 +433,9 @@ const Course: React.FC = () => {
                                         <i className="adminlib-refresh"></i>
                                         {__('Sync Course Data', 'moowoodle')}
                                     </li>
-        
+
                                     {row.original.products &&
-                                    Object.keys(row.original.products).length ? (
+                                        Object.keys(row.original.products).length ? (
                                         <li
                                             onClick={() =>
                                                 handleSingleAction(
@@ -459,7 +472,7 @@ const Course: React.FC = () => {
                 </TableCell>
             ),
         }
-        
+
     ];
 
     const BulkAction: React.FC = () => (
@@ -594,7 +607,7 @@ const Course: React.FC = () => {
                 </div>
             )}
             <AdminBreadcrumbs
-                activeTabIcon="adminlib-Subscription-Courses"
+                activeTabIcon="adminlib-subscription-courses"
                 description={__('Comprehensive course data is displayed here, including linked products, enrollment numbers, and related details.', 'moowoodle')}
                 tabTitle={__('Courses', 'moowoodle')}
             />
@@ -618,7 +631,7 @@ const Course: React.FC = () => {
                     handlePagination={requestApiForData}
                     perPageOption={[10, 25, 50]}
                     typeCounts={[]}
-                    bulkActionComp={()=><BulkAction/>}
+                    bulkActionComp={() => <BulkAction />}
                 />
             </div>
         </>

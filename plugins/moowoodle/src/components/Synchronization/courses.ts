@@ -101,6 +101,8 @@ export default {
         },
         {
             key: 'sync_course_btn',
+            label: 'Fetch Courses',
+            settingDescription: 'Courses are fetched from Moodle and synchronized with WordPress, ensuring product details remain updated.',
             type: 'do-action-btn',
             interval: 2500,
             apilink: 'synchronization',
