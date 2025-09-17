@@ -182,6 +182,52 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
                                         dangerouslySetInnerHTML={{ __html: postInsideText }}
                                     />
                                 )}
+                                {generate &&
+                                    ((!value || value === '') ? (
+                                        <DisplayButton
+                                            wraperClass="admin-btn btn-purple"
+                                            onClick={generateSSOKey}
+                                        >
+                                            <>
+                                                <i className="adminlib-star-icon"></i>
+                                                <span className="text">Generate</span>
+                                            </>
+                                        </DisplayButton>
+                                    ) : (
+                                        <>
+                                            <DisplayButton
+                                                wraperClass="clear-btn"
+                                                onClick={handleClear}
+                                            >
+                                                <i className="adminlib-delete"></i>
+                                            </DisplayButton>
+
+                                            <DisplayButton
+                                                wraperClass="copy-btn"
+                                                onClick={handleCopy}
+                                            >
+                                                <>
+                                                    <i className="adminlib-vendor-form-copy"></i>
+                                                    <span
+                                                        className={
+                                                            !copied
+                                                                ? 'tooltip'
+                                                                : 'tooltip tool-clip'
+                                                        }
+                                                    >
+                                                        {copied ? (
+                                                            <>
+                                                                <i className="adminlib-success-notification"></i>
+                                                                Copied
+                                                            </>
+                                                        ) : (
+                                                            'Copy to clipboard'
+                                                        )}
+                                                    </span>
+                                                </>
+                                            </DisplayButton>
+                                        </>
+                                    ))}
                             </div>
                             {postText && (
                                 <span
@@ -191,52 +237,6 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
                             )}
                         </>
                     )}
-                    {generate &&
-                        ((!value || value === '') ? (
-                            <DisplayButton
-                                wraperClass="admin-btn btn-purple"
-                                onClick={generateSSOKey}
-                            >
-                                <>
-                                    <i className="adminlib-star-icon"></i>
-                                    <span className="text">Generate</span>
-                                </>
-                            </DisplayButton>
-                        ) : (
-                            <>
-                                <DisplayButton
-                                    wraperClass="clear-btn"
-                                    onClick={handleClear}
-                                >
-                                    <i className="adminlib-delete"></i>
-                                </DisplayButton>
-
-                                <DisplayButton
-                                    wraperClass="copy-btn"
-                                    onClick={handleCopy}
-                                >
-                                    <>
-                                        <i className="adminlib-vendor-form-copy"></i>
-                                        <span
-                                            className={
-                                                !copied
-                                                    ? 'tooltip'
-                                                    : 'tooltip tool-clip'
-                                            }
-                                        >
-                                            {copied ? (
-                                                <>
-                                                    <i className="adminlib-success-notification"></i>
-                                                    Copied
-                                                </>
-                                            ) : (
-                                                'Copy to clipboard'
-                                            )}
-                                        </span>
-                                    </>
-                                </DisplayButton>
-                            </>
-                        ))}
 
                     {proSetting && <span className="admin-pro-tag"><i className="adminlib-pro-tag"></i>Pro</span>}
 

@@ -163,7 +163,7 @@ a {
 .copy-btn {
   width: 2.2rem;
   height: 2.2rem;
-  box-shadow: 0 0 1rem rgb(0 0 0 / 16.4%);
+  // box-shadow: 0 0 1rem rgb(0 0 0 / 16.4%);
   padding: 0;
   border-radius: 0.25rem;
   background: #fff;
@@ -179,7 +179,7 @@ a {
     border-radius: 0.25rem;
     color: #fff;
     display: none;
-    width: 7rem;
+    width: 5.125rem;
     right: 0%;
 
     &::after {
@@ -189,14 +189,14 @@ a {
       transform: translateX(-50%) rotate(45deg);
       width: 0.504rem;
       height: 0.504rem;
-      background: $color-active;
+      background: #65438f;
       right: 8%;
     }
 
     &.tool-clip {
       display: flex;
       gap: 0.313rem;
-      width: 5rem;
+      width: 3rem;
     }
   }
 
@@ -284,10 +284,11 @@ a {
       }
     }
   }
-
+  .input-wrapper {
+    display: flex;
+  }
   &.generate {
     .basic-input {
-      border-right: 0;
       border-top-right-radius: 0;
       border-bottom-right-radius: 0;
       margin-right: 0;
@@ -299,19 +300,20 @@ a {
     }
 
     .copy-btn {
-      background: $theme-color;
-      color: #fff;
+      background: $theme-background-color;
+      color: $theme-color;
       border-top-left-radius: 0;
       border-bottom-left-radius: 0;
+      width: 4rem;
     }
 
     .clear-btn {
       background: transparent;
-      padding: 0 0.5rem;
-      font-size: 1.4rem;
+      font-size: 1.125rem;
       border: none;
       border-top: 0.063rem solid #e0e4e9;
       border-bottom: 0.063rem solid #e0e4e9;
+      color: #ff0000a8;
     }
   }
 }
