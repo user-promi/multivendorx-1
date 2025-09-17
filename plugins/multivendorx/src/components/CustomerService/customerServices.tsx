@@ -5,6 +5,7 @@ import AbuseReports from './abuseReports';
 import StoreReviews from './storeReviews ';
 import './customerServices.scss';
 import '../AdminDashboard/adminDashboard.scss';
+import Qna from './qnaTable';
 
 const CustomerServices = () => {
 
@@ -112,6 +113,7 @@ const CustomerServices = () => {
                         <AbuseReports />
                     </div>
                 </div>
+                <Qna/>
             </div>
         </>
     );
