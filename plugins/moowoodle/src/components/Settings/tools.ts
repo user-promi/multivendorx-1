@@ -49,8 +49,9 @@ export default {
                 'Select the interval for the user synchronization process. Based on this schedule, the cron job will run to sync users between WordPress and Moodle.',
                 'moowoodle'
             ),
-            size:'9rem',
+            size:'8rem',
             proSetting: true,
+            postInsideText: __('Min', 'multivendorx'),
             parameter: __('Minutes', 'moowoodle'),
             label: __('Automatic synchronization frequency', 'moowoodle'),
         },

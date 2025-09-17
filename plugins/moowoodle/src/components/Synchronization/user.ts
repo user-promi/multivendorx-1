@@ -6,7 +6,7 @@ import moodleLogo from '@/assets/images/moodle-to-wordpress.png';
 export default {
     id: 'synchronize-user',
     priority: 20,
-    name: __('User Synchronization', 'moowoodle'),
+    name: __('Users Synchronization', 'moowoodle'),
     desc: __(
         'Synchronization on demand with automatic, real-time updates.',
         'moowoodle'

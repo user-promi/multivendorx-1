@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 export default {
     id: 'synchronize-course',
     priority: 10,
-    name: __('Courses and Products Synchronization', 'moowoodle'),
+    name: __('Courses Synchronization', 'moowoodle'),
     desc: __(
         'Fetch Moodle courses & generate products on demand.',
         'moowoodle'
@@ -101,7 +101,7 @@ export default {
         },
         {
             key: 'sync_course_btn',
-            label: 'Fetch Courses',
+            label: 'Sync courses from Moodle to WordPress ',
             settingDescription: 'Courses are fetched from Moodle and synchronized with WordPress, ensuring product details remain updated.',
             type: 'do-action-btn',
             interval: 2500,
