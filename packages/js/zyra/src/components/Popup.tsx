@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { DialogContent, DialogContentText } from '@mui/material';
 
 /**
@@ -13,7 +13,10 @@ export interface PopupMessage {
     icon: string;
     text: string;
 }
-
+export interface BtnLink {
+    value: string;
+    link: string;
+}
 // Types
 export interface PopupProps {
     proUrl?: string;
@@ -30,21 +33,48 @@ export interface PopupProps {
     SettingDescription?: string;
     pluginUrl?: string;
     modulePageUrl?: string;
+    btnLink?: BtnLink[];
 }
 
 const ProPopup: React.FC<PopupProps> = (props) => {
+    const { btnLink = [], proUrl = '#' } = props;
+    // default to first btnLink's link if present, otherwise fallback to proUrl
+    const [selectedLink, setSelectedLink] = useState<string>(
+        btnLink.length ? btnLink[0].link : proUrl
+
+    );
+    // update selectedLink if props change
+    useEffect(() => {
+        setSelectedLink(btnLink.length ? btnLink[0].link : proUrl);
+    }, [btnLink, proUrl]);
     return (
         <DialogContent className={`${props.messages ? "pro-popup-content" : "module-popup-content"}`}>
-            <DialogContentText>
+            <DialogContentText sx={{ fontFamily: "Figtree, sans-serif" }}>
                 <div className="popup-wrapper">
                     {props.messages && (
                         <>
                             <div className="top-section">
                                 <div className="heading">Upgrade Your Plan</div>
                                 <div className="description">Lorem ipsum dolor sit amet.</div>
-                                <div className="admin-btn btn-red">
+
+                                <select
+                                    value={selectedLink}
+                                    onChange={(e) => setSelectedLink(e.target.value)}
+                                >
+                                    {btnLink.map((b, idx) => (
+                                        <option key={idx} value={b.link}>
+                                            {b.value}
+                                        </option>
+                                    ))}
+                                </select>
+                                <a
+                                    className="admin-btn btn-red"
+                                    href={selectedLink}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                >
                                     Upgrade my plan <i className="adminlib-arrow-right arrow-icon"></i>
-                                </div>
+                                </a>
                             </div>
                             <div className="content">
                                 <div className="heading-text">
@@ -130,7 +160,7 @@ const ProPopup: React.FC<PopupProps> = (props) => {
                     )}
                 </div>
             </DialogContentText>
-        </DialogContent>
+        </DialogContent >
     );
 };
 
