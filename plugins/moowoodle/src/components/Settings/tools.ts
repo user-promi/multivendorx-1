@@ -37,7 +37,7 @@ export default {
                 'moowoodle'
             ),
             label: __('Connection timeout', 'moowoodle'),
-            preInsideText: __('Sec', 'multivendorx'),
+            postInsideText: __('Sec', 'multivendorx'),
             parameter: __('Seconds', 'moowoodle'),
         },
         {
