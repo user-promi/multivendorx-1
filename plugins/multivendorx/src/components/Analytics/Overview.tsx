@@ -274,6 +274,29 @@ const Overview: React.FC<OverviewProps> = ({
           <div className="card-header">
             <div className="left">
               <div className="title">
+                Revenue trade
+              </div>
+            </div>
+          </div>
+          <ResponsiveContainer width="100%" height={300}>
+            <LineChart data={data}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="month" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Line type="monotone" dataKey="revenue" stroke="#5007aa" strokeWidth={3} name="Top Category" />
+              <Line type="monotone" dataKey="net_sale" stroke="#ff7300" strokeWidth={3} name="Top Brand" />
+              <Line type="monotone" dataKey="admin_amount" stroke="#00c49f" strokeWidth={3} name="Top Store" />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+      <div className="row">
+        <div className="column">
+          <div className="card-header">
+            <div className="left">
+              <div className="title">
                 Top sold category
               </div>
             </div>

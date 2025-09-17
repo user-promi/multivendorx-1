@@ -857,11 +857,15 @@ input[type="checkbox"]:focus {
       }
     }
   }
+
   // multi input style end  
 }
-.settings-input-content:has(.grid-table){
+
+.settings-input-content:has(.grid-table),
+.settings-input-content:has(.registration-from-wrapper) {
   width: 100%;
 }
+
 .select-deselect-trigger {
   margin-bottom: 1rem;
 }
@@ -1002,6 +1006,11 @@ input[type="checkbox"]:focus {
     transform: translateX(0);
   }
 
+  &.minimized {
+    width: 0;
+    height: 0;
+  }
+
   i {
     position: absolute;
     top: 1rem;
@@ -1013,6 +1022,25 @@ input[type="checkbox"]:focus {
     padding: 0.125rem;
     border-radius: 50%;
     cursor: pointer;
-  }
-}// live chart
 
+    &.icon {
+      right: 3rem;
+    }
+  }
+}
+
+// live chart
+.minimized-icon {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  background: #5007aa;
+  z-index: 9999;
+
+  .admin-icon {
+    color: #fff;
+    font-size: 1.313rem;
+    padding: 0.75rem;
+    border-radius: 50%;
+  }
+}

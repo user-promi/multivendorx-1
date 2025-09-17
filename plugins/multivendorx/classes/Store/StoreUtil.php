@@ -83,10 +83,6 @@ class StoreUtil {
                 'title' => __( 'Products', 'multivendorx' ),
                 'url'   => $this->get_store_url( $store_id ),
             ],
-            'reviews'       => [
-                'title' => __( 'Reviews', 'multivendorx' ),
-                'url'   => $this->get_store_review_url( $store_id ),
-            ],
         ];
 
         return apply_filters( 'multivendorx_store_tabs', $tabs, $store_id );
@@ -110,10 +106,6 @@ class StoreUtil {
         }
 
         return apply_filters( 'multivendorx_get_store_url', home_url( $path ), $custom_store_url, $store_id, $tab );
-    }
-
-    public function get_store_review_url($store_id) {
-        return $this->get_store_url( $store_id, 'reviews' );
     }
 
     public static function get_store_capability() {

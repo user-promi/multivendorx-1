@@ -1,98 +1,63 @@
-@font-face {
-    font-family: 'popup-icon';
-    src: url('../../assets/fonts/popup-icon.eot?t3vbhj');
-    src: url('../../assets/fonts/popup-icon.eot?t3vbhj#iefix') format('embedded-opentype'),
-        url('../../assets/fonts/popup-icon.ttf?t3vbhj') format('truetype'),
-        url('../../assets/fonts/popup-icon.woff?t3vbhj') format('woff'),
-        url('../../assets/fonts/popup-icon.svg?t3vbhj#popup-icon') format('svg');
-    font-weight: normal;
-    font-style: normal;
-    font-display: block;
-}
-
-[class^="popup-icon-"],
-[class*=" popup-icon-"] {
-    /* use !important to prevent issues with browser extensions that change fonts */
-    font-family: 'popup-icon' !important;
-    speak: never;
-    font-style: normal;
-    font-weight: normal;
-    font-variant: normal;
-    text-transform: none;
-    line-height: 1;
-
-    /* Better Font Rendering =========== */
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-}
-
-.popup-icon-Subscription-Details:before {
-    content: "\e900";
-    color: #431580;
-}
-
-.popup-icon-subscription-dashboard:before {
-    content: "\e901";
-    color: #431580;
-}
-
-.popup-icon-star-notifima:before {
-    content: "\e902";
-    color: #ceaaff;
-}
-
-.popup-icon-recaptcha:before {
-    content: "\e903";
-    color: #431580;
-}
-
-.popup-icon-export-subscribers:before {
-    content: "\e90f";
-    color: #431580;
-}
-
-.popup-icon-export-import:before {
-    content: "\e910";
-    color: #431580;
-}
-
-.popup-icon-double-opt-in:before {
-    content: "\e911";
-    color: #431580;
-}
-
-.popup-icon-ban-spam-mail:before {
-    content: "\e912";
-    color: #431580;
-}
-
-.popup-icon-mailchimp:before {
-    content: "\e904";
-}
-
-.MuiPaper-root {
-    min-width: 45vw;
-}
-
-.MuiDialog-container .adminlib-cross {
-    text-align: right;
-    cursor: pointer;
-    font-size: 1.2rem;
-    color: #852aff;
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
+.MuiDialog-container {
+    .adminlib-cross {
+        position: absolute;
+        right: 1rem;
+        top: 1rem;
+        font-size: 1.125rem;
+        color: #5007aa;
+        cursor: pointer;
+    }
 }
 
 .popup-wrapper {
-    .right-section h4{
-        color: #852aff;
+    .top-section {
+        padding: 4rem 2rem;
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        background: #ece2f9f1;
+
+        .heading {
+            font-size: 2.625rem;
+            color: #5007aa;
+            font-weight: 600;
+        }
+
     }
-    .left-section {
-        background-image: url(../../assets/images/popup-image.png);
+
+    .content {
+        .heading-text {
+            font-size: 1.25rem;
+            color: #000000e3;
+            font-weight: 600;
+        }
+
+        ul {
+            max-height: 40vh;
+            overflow: auto;
+
+            li {
+                .title {
+                    font-size: 1.063rem;
+                    font-weight: 600;
+                    color: #000000e0;
+                }
+
+                .sub-text {
+                    font-size: 0.95rem;
+                    line-height: 1.313rem;
+                }
+            }
+        }
     }
-    .more-text,
-    .feature-item i{
-      color: #431580;
+
+    .admin-btn {
+        font-size: 1.063rem;
+        font-weight: 500;
+
+        .arrow-icon {
+            transform: rotate(-45deg);
+        }
     }
 }
