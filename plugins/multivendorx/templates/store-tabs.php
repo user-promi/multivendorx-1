@@ -47,9 +47,9 @@ switch ( $current_tab ) {
         MultiVendorX()->util->get_template( 'store-review.php', [] );
         break;
 
-    // case 'policy':
-    //     MultiVendorX()->util->get_template( 'store-policy.php', ['store_id' => $store_id] );
-    //     break;
+    case 'policy':
+        MultiVendorX()->util->get_template( 'store-policy.php', ['store_id' => $store_id] );
+        break;
 
     case 'products':
     default:

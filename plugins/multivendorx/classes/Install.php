@@ -107,7 +107,7 @@ class Install {
             `order_id` bigint(20) unsigned DEFAULT NULL,
             `commission_id` bigint(20) unsigned DEFAULT NULL,
             `entry_type` enum('Dr','Cr') NOT NULL,
-            `transaction_type` enum('Commission','Withdrawal','Refund','Reversed') NOT NULL,
+            `transaction_type` enum('Commission','Withdrawal','Refund','Reversed', 'COD received') NOT NULL,
             `amount` float(20,2) NOT NULL,
             `balance` float(20,2) NOT NULL,
             `locking_balance` float(20,2) NOT NULL,
@@ -139,6 +139,20 @@ class Install {
             KEY `idx_commission` (`commission_id`)
         ) $collate;";
 
+        $sql_qna = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}" . Utill::TABLES['product_qna'] . "` (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            product_id INT NOT NULL,
+            question_text TEXT NOT NULL,
+            question_by INT NOT NULL,
+            question_date DATETIME NOT NULL,
+            answer_text TEXT,
+            answer_by INT,
+            answer_date DATETIME,
+            total_votes INT DEFAULT 0,
+            voters TEXT,
+            question_visibility VARCHAR(50) DEFAULT 'public'
+        ) $collate;";
+
         // Include upgrade functions if not loaded.
         if ( ! function_exists( 'dbDelta' ) ) {
             require_once ABSPATH . 'wp-admin/includes/upgrade.php';
@@ -150,6 +164,7 @@ class Install {
         dbDelta( $sql_store_meta );
         dbDelta( $sql_transaction );
         dbDelta( $sql_real_time_transaction );
+        dbDelta( $sql_qna );
     }
 
     public function create_database_triggers() {
