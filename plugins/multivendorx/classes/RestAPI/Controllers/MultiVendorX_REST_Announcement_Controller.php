@@ -188,7 +188,7 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
             'post_title'   => $request->get_param('title'),
             'post_content' => $request->get_param('content'),
             'post_type'    => 'multivendorx_an',
-            'post_status'  => $request->get_param('status') === 'publish'  ? 'publish' : 'pending',   // ✅ use dynamic status
+            'post_status'  => $request->get_param('status') === 'publish'  ? 'publish' : 'pending',
         ], true);
     
         if ( is_wp_error( $post_id ) ) {
@@ -212,10 +212,10 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
         return rest_ensure_response([
             'success' => true,
             'id'      => $post_id,
-            'title'   => $title,
+            'title'   => $request->get_param('title'),
             'url'     => $url,
-            'content' => $content,
-            'status'  => $status,
+            'content' => $request->get_param('content'),
+            'status'  => $request->get_param('status') === 'publish'  ? 'publish' : 'pending',
             'stores'  => $stores,
         ]);
     }
@@ -226,7 +226,9 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
             return new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), [ 'status' => 403 ] );
         }
     
-        $data = $request->get_json_params();
+        $data = $request->get_params();
+
+        $stores  = $request->get_param('stores') ?: [];   
     
         // Bulk update handling
         if ( isset($data['bulk']) && !empty($data['ids']) && !empty($data['action']) ) {
@@ -256,7 +258,7 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
         }
     
         $updated_id = wp_update_post([
-            'ID'           => absint( $request->get_param( 'id' ) ),
+            'id'           => absint( $request->get_param( 'id' ) ),
             'post_title'   => $post->post_title,
             'post_content' => $post->post_content,
             'post_status'  => $data['status'] === 'publish' ? 'publish' : 'pending',
@@ -276,10 +278,10 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
     
         return rest_ensure_response([
             'success' => true,
-            'id'      => $id,
-            'title'   => $title,
-            'content' => $content,
-            'status'  => $status,
+            'id'      => absint( $request->get_param( 'id' ) ),
+            'title'   => $post->post_title,
+            'content' => $post->post_content,
+            'status'  => $data['status'] === 'publish' ? 'publish' : 'pending',
             'stores'  => $stores,
         ]);
     }
@@ -314,19 +316,14 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
             );
         }
     
-        $title   = $post->post_title;
-        $content = $post->post_content;
-        $url     = get_post_meta( $id, 'multivendorx_announcement_url', true );
-        $stores  = get_post_meta( $id, 'multivendorx_announcement_stores', true );
-    
         $store_data = array();
         if ( ! empty( $stores ) && is_array( $stores ) ) {
             foreach ( $stores as $store_id ) {
                 $store_obj = MultivendorX()->store->get_store_by_id( $store_id );
-                if ( $store_obj && ! empty( $store_obj->data['name'] ) ) {
+                if ( $store_obj ) {
                     $store_data[] = array(
                         'id'   => $store_id,
-                        'name' => $store_obj->data['name'],
+                        'name' => $store_obj->get('name'),
                     );
                 }
             }
@@ -334,10 +331,10 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
 
         $response = array(
             'id'      => $id,
-            'title'   => $title,
-            'content' => $content,
-            'url'     => $url,
-            'stores'  => $store_data,
+            'title'   => $post->post_title,
+            'content' => $post->post_content,
+            'url'     => get_post_meta( $id, 'multivendorx_announcement_url', true ),
+            'stores'  => get_post_meta( $id, 'multivendorx_announcement_stores', true ),
             'date'    => get_post_time( 'Y-m-d H:i:s', true, $post ),
         );
 

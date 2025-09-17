@@ -179,9 +179,9 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
         return rest_ensure_response([
             'success' => true,
             'id'      => $post_id,
-            'title'   => $title,
-            'content' => $content,
-            'status'  => $status,
+            'title'   => $request->get_param('title'),
+            'content' => $request->get_param('content'),
+            'status'  => $request->get_param('status') === 'publish'  ? 'publish' : 'pending',
         ]);
     }
 
