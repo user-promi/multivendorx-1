@@ -5,10 +5,10 @@
  * @package MultiVendorX
  */
 
-namespace MultiVendorX\StripeConnect;
+namespace MultiVendorX\QuestionsAnswers;
 
 /**
- * MultiVendorX Stripe Connect Module class
+ * MultiVendorX Questions and answers Module class
  *
  * @class       Module class
  * @version     6.0.0
@@ -35,25 +35,18 @@ class Module {
     public function __construct() {
         // Init helper classes.
         $this->init_classes();
-        add_filter('multivendorx_payment_providers', [$this, 'add_payment_provider']);
     }
 
-    public function add_payment_provider($providers) {
-        $providers[] =  [
-            'id'    => 'stripe-connect',
-            'name'  => 'Stripe Connect',
-            'class' => 'MultiVendorX\\StripeConnect\\Payment'
-        ];
-
-        return $providers;
-    }
     /**
      * Init helper classes
      *
      * @return void
      */
     public function init_classes() {
-        $this->container['stripe_connect'] = new Payment();
+        $this->container['frontend'] = new Frontend();
+        $this->container['admin'] = new Admin();
+        $this->container['util'] = new Util();
+        $this->container['ajax'] = new Ajax();
     }
 
     /**

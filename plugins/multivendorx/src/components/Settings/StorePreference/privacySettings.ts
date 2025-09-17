@@ -5,7 +5,7 @@ export default {
     priority: 6,
     name: __( 'Privacy', 'multivendorx' ),
     desc: __('Manage how store details are shared with customers, from branding and contact info to policies and profile visibility.','multivendorx'),
-    icon: 'adminlib-storefront',
+    icon: 'adminlib-privacy',
     submitUrl: 'settings',
     modal: [ 
         {

@@ -7,7 +7,7 @@ export default {
     priority: 3,
     name: 'Geolocation',
     desc: __('Help customers discover stores and products near them by enabling location-based search and maps.', 'multivendorx'),
-    icon: 'adminlib-form-section',
+    icon: 'adminlib-location',
     submitUrl: 'settings',
     modal: [
         {

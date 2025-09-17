@@ -1,14 +1,4 @@
 import { __ } from '@wordpress/i18n';
-import payPal from '../../../assets/images/paypal.png';
-import email from '../../../assets/images/email.png';
-import social from '../../../assets/images/social.png';
-import google from '../../../assets/images/google.png';
-import facebook from '../../../assets/images/facebook.png';
-import LinkedIn from '../../../assets/images/LinkedIn.png';
-import twitter from '../../../assets/images/twitter.png';
-
-
-
 
 export default {
     id: 'identity-verification',
@@ -16,22 +6,10 @@ export default {
     name: __('Verification', 'mvx-pro'),
     desc: __(
         'Seller verification confirms a store identity with address, contact, and social profiles-building trust and boosting buyer confidence.','mvx-pro'),
-    icon: 'adminlib-clock2',
+    icon: 'adminlib-verification',
     submitUrl: 'settings',
 
     modal: [
-        // {
-        //     key: 'badge_img',
-        //     type: 'file',
-        //     label: __('Verified badge', 'mvx-pro'),
-        //     width: 75,
-        //     height: 75,
-        //     desc: __(
-        //         'Upload (32px height) size badge that will appear next to verified stores for credibility.',
-        //         'mvx-pro'
-        //     ),
-        //     //proSetting:true
-        // },
         {
             key: 'badge_img',
             type: 'setting-toggle',
@@ -71,11 +49,11 @@ export default {
                     value: __('icon6', 'multivendorx'),
                     icon: 'adminlib-verification7',
                 },
-                {
-                    key: 'icon7',
-                    value: __('icon7', 'multivendorx'),
-                    icon: 'adminlib-verification8',
-                },
+                // {
+                //     key: 'icon7',
+                //     value: __('icon7', 'multivendorx'),
+                //     icon: 'adminlib-verification8',
+                // },
                 {
                     key: 'icon8',
                     value: __('icon8', 'multivendorx'),
@@ -125,7 +103,7 @@ export default {
             modal: [
                 {
                     id:'id-verification',
-                    icon: payPal,
+                    icon: "adminlib-verification3",
                     label: 'Identity Verification',
                     connected: false,
                     desc: 'Verify store identity using government-issued documents or facial recognition. Ensures authenticity of users.',
@@ -147,7 +125,7 @@ export default {
                 },
                 {
                     id:'email-verification',
-                    icon: email,
+                    icon: "adminlib-mail",
                     label: 'Email Verification',
                     connected: true,
                     desc: 'Verify stores email addresses to prevent fake registrations and enhance security.',
@@ -170,7 +148,7 @@ export default {
                 },
                 {
                     id:'social-verification',
-                    icon: social,
+                    icon: "adminlib-social-share",
                     label: 'Social Verification',
                     connected: true,
                     desc: 'Allow stores to verify their identity by connecting social media accounts.',
@@ -182,7 +160,7 @@ export default {
                             modal: [
                                 {
                                     id:'google-connect',
-                                    icon: google,
+                                    icon: "adminlib-google",
                                     label: 'Google Connect',
                                     connected: false,
                                     desc: 'Connect and authenticate stores via Google accounts.',
@@ -194,7 +172,7 @@ export default {
                                 },
                                 {
                                     id:'twitter-connect',
-                                    icon: twitter,
+                                    icon: "adminlib-twitter",
                                     label: 'Twitter Connect',
                                     connected: false,
                                     desc: 'Connect and authenticate stores via Twitter accounts.',
@@ -206,7 +184,7 @@ export default {
                                 },
                                 {
                                     id:'facebook-connect',
-                                    icon: facebook,
+                                    icon: "adminlib-facebook",
                                     label: 'Facebook Connect',
                                     connected: false,
                                     desc: 'Connect and authenticate stores via Facebook accounts.',
@@ -217,7 +195,7 @@ export default {
                                 },
                                 {
                                     id:'linkedin-connect',
-                                    icon: LinkedIn,
+                                    icon: "adminlib-linkedin",
                                     label: 'LinkedIn Connect',
                                     connected: false,
                                     desc: 'Connect and authenticate stores via LinkedIn accounts.',
