@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 export default {
     id: 'synchronize-cohort',
     priority: 30,
-    name: __('Cohort synchronization', 'moowoodle'),
+    name: __('Cohort Synchronization', 'moowoodle'),
     desc: __('Fetch Moodle cohort on demand & generate products on demand.', 'moowoodle'),
     icon: 'adminlib-book',
     submitUrl: 'settings',

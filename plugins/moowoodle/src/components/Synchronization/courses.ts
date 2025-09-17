@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 export default {
     id: 'synchronize-course',
     priority: 10,
-    name: __('Courses and Products synchronization', 'moowoodle'),
+    name: __('Courses and Products Synchronization', 'moowoodle'),
     desc: __(
         'Fetch Moodle courses & generate products on demand.',
         'moowoodle'
@@ -67,7 +67,7 @@ export default {
         {
             key: 'product_sync_option',
             type: 'checkbox',
-            desettingDescription: __('Course information from Moodle is used to generate new products or refresh existing ones in WordPress.', 'moowoodle'),
+            settingDescription: __('Course information from Moodle is used to generate new products or refresh existing ones in WordPress.', 'moowoodle'),
             label: __('Course & product synchronization', 'moowoodle'),
             selectDeselect: true,
             options: [
