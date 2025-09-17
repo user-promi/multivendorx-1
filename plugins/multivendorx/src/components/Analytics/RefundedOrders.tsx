@@ -14,13 +14,13 @@ const overview = [
   },
   {
     id: 'earnings',
-    label: 'Vendor Commission',
+    label: 'Store Commission',
     count: 625,
     icon: 'adminlib-support',
   },
   {
     id: 'Vendors',
-    label: 'Vendor Net Commission',
+    label: 'Store Net Commission',
     count: 8,
     icon: 'adminlib-global-community',
   },
@@ -74,7 +74,7 @@ const RefundedOrders: React.FC = () => {
 };
 const pieData = [
   { name: "Admin", value: 1200 },
-  { name: "Vendor", value: 2400 },
+  { name: "Store", value: 2400 },
   { name: "Shipping", value: 800 },
   { name: "Free", value: 200 },
 ];
@@ -140,7 +140,7 @@ const demoData: RefundRow[] = [
       ),
     },
     {
-      header: __('Vendor', 'multivendorx'),
+      header: __('Store', 'multivendorx'),
       cell: ({ row }) => (
         <TableCell title={row.original.vendor || ''}>
           {row.original.vendor || '-'}
@@ -196,7 +196,7 @@ const demoData: RefundRow[] = [
               </div>
             </div>
       
-            {/* <div className="row">
+            <div className="row">
               <div className="column">
                 <div className="card-header">
                   <div className="left">
@@ -240,8 +240,8 @@ const demoData: RefundRow[] = [
                   ))}
                 </div>
               </div>
-            </div> */}
-            <div className="row">
+            </div>
+            {/* <div className="row">
               <div className="column">
                 <div className="card-header">
                   <div className="left">
@@ -283,7 +283,7 @@ const demoData: RefundRow[] = [
                 </ResponsiveContainer>
               </div>
       
-            </div>
+            </div> */}
         <Table
           data={demoData}
           columns={columns as ColumnDef<Record<string, any>, any>[]}

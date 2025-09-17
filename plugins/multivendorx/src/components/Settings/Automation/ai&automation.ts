@@ -10,5 +10,14 @@ export default {
     icon: 'adminlib-form-section',
     submitUrl: 'settings',
     modal: [
+        {
+            key: 'registration page',
+            type: 'blocktext',
+            label: __('no_label', 'multivendorx'),
+            blocktext: __(
+                'Coming Soon',
+                'multivendorx'
+            ),
+        },
     ],
 };
