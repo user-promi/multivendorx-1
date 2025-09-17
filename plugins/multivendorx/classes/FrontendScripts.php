@@ -184,6 +184,11 @@ class FrontendScripts {
 					'deps'    => array( 'jquery' ),
 					'version' => $version,
 				),
+                'multivendorx-review-frontend-script' => array(
+					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'modules/StoreReview/js/' . MULTIVENDORX_PLUGIN_SLUG . '-frontend.min.js',
+					'deps'    => array( 'jquery' ),
+					'version' => $version,
+				),
 			)
         );
         foreach ( $register_scripts as $name => $props ) {
@@ -431,6 +436,13 @@ class FrontendScripts {
 					'data'        => array(
 						'ajaxurl'     => admin_url( 'admin-ajax.php' ),
                         'nonce'    => wp_create_nonce('qna_ajax_nonce'),
+					),
+				),
+                'multivendorx-review-frontend-script' => array(
+					'object_name' => 'review',
+					'data'        => array(
+						'ajaxurl'     => admin_url( 'admin-ajax.php' ),
+                        'nonce'    => wp_create_nonce('review_ajax_nonce'),
 					),
 				),
                 'multivendorx-dashboard-script' => array(
