@@ -158,7 +158,7 @@ class Enrollment {
 					$product = $parent;
 				}
 			}
-			
+
 			$moodle_course_id = $product->get_meta( 'moodle_course_id', true );
 			$linked_course_id = $product->get_meta( 'linked_course_id', true );
 
@@ -366,7 +366,7 @@ class Enrollment {
 					apply_filters( 'moowoodle_new_user_additional_preferences', array() )
 				),
 			);
-			$response = MooWoodle()->external_service->do_request( 'create_users', array( 'users' => array( $user_data ) ) );
+			$response  = MooWoodle()->external_service->do_request( 'create_users', array( 'users' => array( $user_data ) ) );
 
 			if ( empty( $response['data'] ) ) {
 				throw new \Exception( 'Invalid response from Moodle while creating user.' );
