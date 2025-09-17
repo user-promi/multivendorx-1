@@ -77,12 +77,16 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [contactSupportPopup, setContactSupportPopup] = useState(false);
   const [popupContent, setPopupContent] = useState<string>("Loading...");
+  const [isMinimized, setIsMinimized] = useState(false);
 
   // Close dropdown on click outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
         setDropdownOpen(false);
+        setNotifOpen(false);
+        setMessageOpen(false);
+        // setProfileOpen(false);
       }
     };
 
@@ -326,15 +330,20 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
         </div>
       </div>
 
-      <div className={`live-chat-wrapper ${contactSupportPopup ? "open" : ""}`}>
+      <div className={`live-chat-wrapper
+          ${contactSupportPopup ? "open" : ""}
+          ${isMinimized ? "minimized" : ""}`}>
         <i className="adminlib-close"
           onClick={(e) => {
             setContactSupportPopup(false);
           }}></i>
-          {/* <i className="adminlib-minus"
-          onClick={(e) => {
-            setContactSupportPopup(false);
-          }}></i> */}
+        <i
+          className="adminlib-minus icon"
+          onClick={() => {
+            setIsMinimized(!isMinimized);
+            setContactSupportPopup(true);
+          }}
+        ></i>
         <iframe
           src="https://tawk.to/chat/5d2eebf19b94cd38bbe7c9ad/1fsg8cq8n"
           title="Support Chat"
@@ -345,8 +354,15 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
           }}
           allow="microphone; camera"
         />
-        {/* <div className="tawk-icon tawk-icon-chat-bubble"></div> */}
       </div>
+      {isMinimized &&
+        <div onClick={(e) => {
+          setContactSupportPopup(true);
+          setIsMinimized(false);
+        }} className="minimized-icon">
+          <i className="admin-icon adminlib-enquiry" title="Messages"></i>
+        </div>
+      }
     </>
   );
 };
