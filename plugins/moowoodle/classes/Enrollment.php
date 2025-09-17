@@ -188,10 +188,12 @@ class Enrollment {
 				$email_data['course'][ $product->get_id() ] = $product->get_name();
 			}
 		}
-		$email = WC()->mailer()->emails['EnrollmentEmail'];
-
-		$email->trigger( $order->get_billing_email(), $email_data );
-
+		
+		if ( count( $email_data ) > 0 ) {
+			$email = WC()->mailer()->emails['EnrollmentEmail'];
+			$email->trigger( $order->get_billing_email(), $email_data );
+		}
+		
 		do_action( 'moowoodle_after_enrol_moodle_user', $order );
 	}
 
