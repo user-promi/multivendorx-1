@@ -60,19 +60,17 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
     }
 
     public function get_items_permissions_check($request) {
-        // return current_user_can( 'read' );
-        return true;
+        return current_user_can( 'read' );
     }
 
      // POST permission
     public function create_item_permissions_check($request) {
-        // return current_user_can( 'manage_options' );
-        return true;
+        return current_user_can( 'create_stores' );
     }
 
     public function update_item_permissions_check($request) {
-        // return current_user_can('manage_options');
-        return true;
+        return current_user_can('edit_stores');
+        // return true;
     }
 
 
@@ -187,15 +185,6 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
 
         $current_user = wp_get_current_user();
 
-        if (!empty($store_data['userName']) && !empty($store_data['userEmail'])) {
-            $user_create = $this->create_wp_user($store_data['userEmail'], $store_data['userName']);
-            if ($user_create) {
-                $current_user = new \WP_User( $user_create );
-            }
-            unset($store_data['userName']);
-            unset($store_data['userEmail']);
-        }
-
         // Create store object
         $store = new \MultiVendorX\Store\Store();
         
@@ -252,9 +241,9 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
 
             update_user_meta($current_user->ID, 'multivendorx_active_store', $insert_id);
 
-            wp_set_current_user( $current_user->ID );
-            wp_set_auth_cookie( $current_user->ID );
-            do_action( 'wp_login', $current_user->user_login, $current_user );
+            // wp_set_current_user( $current_user->ID );
+            // wp_set_auth_cookie( $current_user->ID );
+            // do_action( 'wp_login', $current_user->user_login, $current_user );
 
             return rest_ensure_response( [
                 'success' => true,
@@ -393,40 +382,6 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
         return rest_ensure_response($state_list);
     }
 
-    public function create_wp_user( $email, $name ) {
-        if ( email_exists( $email ) ) {
-            return new WP_Error( 'email_exists', __( 'Email already registered.', 'multivendorx' ) );
-        }
-
-        $username = sanitize_user( current( explode( '@', $email ) ), true );
-
-        if ( username_exists( $username ) ) {
-            $username .= rand( 1000, 9999 ); // append random digits if exists
-        }
-
-        $password = wp_generate_password();
-
-        $name_parts = explode( ' ', trim( $name ), 2 );
-        $first_name = $name_parts[0];
-
-        $userdata = [
-            'user_login'   => $username,
-            'user_pass'    => $password,
-            'user_email'   => $email,
-            'first_name'   => $first_name,
-            'role'         => get_option( 'default_role' ),
-        ];
-
-        // Create user
-        $user_id = wp_insert_user( $userdata );
-
-        if ( is_wp_error( $user_id ) ) {
-            return $user_id; // Return error object
-        }
-
-        return $user_id;
-    }
-    
     public function get_store_products_and_category( $request ) {
         $id = absint( $request->get_param( 'id' ) );
     
