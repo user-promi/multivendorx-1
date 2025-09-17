@@ -58,18 +58,42 @@ class Install {
         // Get the charset collate for the tables.
         $collate = $wpdb->get_charset_collate();
 
+        // $sql_commission = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}" . Utill::TABLES['commission'] . "` (
+        //     `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+        //     `order_id` bigint(20) NOT NULL,
+        //     `store_id` bigint(20) NOT NULL,
+        //     `commission_amount` float(20, 2) NOT NULL DEFAULT 0,
+        //     `shipping` float(20, 2) NOT NULL DEFAULT 0,
+        //     `tax` float(20, 2) NOT NULL DEFAULT 0,
+        //     `commission_total` float(20, 2) NOT NULL DEFAULT 0,
+        //     `commission_refunded` float(20, 2) NOT NULL DEFAULT 0,
+        //     `paid_status` varchar(20) NOT NULL,
+        //     `commission_note`  longtext NULL,
+        //     `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        //     PRIMARY KEY (`ID`)
+        // ) $collate;";
+
         $sql_commission = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}" . Utill::TABLES['commission'] . "` (
             `ID` bigint(20) NOT NULL AUTO_INCREMENT,
             `order_id` bigint(20) NOT NULL,
             `store_id` bigint(20) NOT NULL,
+            `facilitator_id` bigint(20) NOT NULL DEFAULT 0,
+            `customer_id` bigint(20) NOT NULL,
+            `total_order_amount` float(10, 2) NOT NULL DEFAULT 0,
             `commission_amount` float(20, 2) NOT NULL DEFAULT 0,
-            `shipping` float(20, 2) NOT NULL DEFAULT 0,
-            `tax` float(20, 2) NOT NULL DEFAULT 0,
+            `facilitator_fee` float(20, 2) NOT NULL DEFAULT 0,
+            `gateway_fee` float(20, 2) NOT NULL DEFAULT 0,
+            `shipping_amount` float(20, 2) NOT NULL DEFAULT 0,
+            `tax_amount` float(20, 2) NOT NULL DEFAULT 0,
+            `shipping_tax_amount` float(20, 2) NOT NULL DEFAULT 0,
+            `discount_amount` float(20, 2) NOT NULL DEFAULT 0,
             `commission_total` float(20, 2) NOT NULL DEFAULT 0,
             `commission_refunded` float(20, 2) NOT NULL DEFAULT 0,
-            `paid_status` varchar(20) NOT NULL,
+            `currency` varchar(10) NOT NULL,
+            `status` enum('paid','refunded','partially_refunded','cancelled') DEFAULT 'paid',
             `commission_note`  longtext NULL,
-            `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
             PRIMARY KEY (`ID`)
         ) $collate;";
 
