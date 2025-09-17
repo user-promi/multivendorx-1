@@ -59,6 +59,7 @@ export const Announcements: React.FC = () => {
     const [openDatePicker, setOpenDatePicker] = useState(false);
 
     const [pageCount, setPageCount] = useState(0);
+    const [page, setPage] = useState('');
     const [showDropdown, setShowDropdown] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const bulkSelectRef = useRef<HTMLSelectElement>(null);
@@ -126,7 +127,7 @@ export const Announcements: React.FC = () => {
                 data: { bulk: true, action, ids: selectedIds },
             });
     
-            requestData(pagination.pageSize, pagination.pageIndex + 1, '');
+            requestData(pagination.pageSize, pagination.pageIndex + 1, page);
             setRowSelection({});
         } catch (err) {
             setError(__('Failed to perform bulk action', 'multivendorx'));
@@ -148,7 +149,7 @@ export const Announcements: React.FC = () => {
                     url: response.data.url || '',
                     content: response.data.content || '',
                     stores: response.data.stores
-                        ? response.data.stores.map((s: any) => s.id).join(',') // ✅ store IDs in CSV
+                        ? response.data.stores.map((s: any) => s.id).join(',')
                         : '',
                 });
                 setEditId(id);
@@ -187,7 +188,7 @@ export const Announcements: React.FC = () => {
                 setAddAnnouncements(false);
                 setFormData({ title: '', url: '', content: '', stores: 'pending' });
                 setEditId(null);
-                requestData(pagination.pageSize, pagination.pageIndex + 1, '');
+                requestData(pagination.pageSize, pagination.pageIndex + 1, page);
             } else {
                 setError(__('Failed to save announcement', 'multivendorx'));
             }
@@ -197,11 +198,10 @@ export const Announcements: React.FC = () => {
             setSubmitting(false);
         }
     };
-    
+
 
     const requestApiForData = ( rowsPerPage: number, currentPage: number, filterData: FilterData ) => {
-
-    setData( null );
+        setData( null );
         requestData(
             rowsPerPage,
             currentPage,
@@ -214,10 +214,28 @@ export const Announcements: React.FC = () => {
     function requestData(
         rowsPerPage = 10,
         currentPage = 1,
-        typeCount: '',
-        searchField: ''
+        typeCount: string = '',
+        searchField: string = ''
     ) {
         setData(null);
+        axios({
+            method: 'GET',
+            url: getApiLink(appLocalizer, 'store'),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+        })
+        .then((response) => {
+            if (response.data && Array.isArray(response.data)) {
+                const options = response.data.map((store: any) => ({
+                    value: store.id.toString(),
+                    label: store.store_name,
+                }));
+                setStoreOptions(options);
+            }
+
+        })
+        .catch(() => {
+            setError(__('Failed to load stores', 'multivendorx'));
+        });
         axios({
             method: 'GET',
             url: getApiLink(appLocalizer, 'announcement'),
@@ -237,6 +255,7 @@ export const Announcements: React.FC = () => {
                 { key: 'publish', name: 'Published', count: res.publish || 0 },
                 { key: 'pending', name: 'Pending', count: res.pending || 0 },
             ]);
+            setPage(typeCount == 'all' ? '' : typeCount);
         })
         .catch(() => {
             setError(__('Failed to load announcements', 'multivendorx'));
@@ -268,7 +287,7 @@ export const Announcements: React.FC = () => {
 
     useEffect(() => {
         const currentPage = pagination.pageIndex + 1;
-        requestData(pagination.pageSize, currentPage);
+        requestData(pagination.pageSize, currentPage, page);
     }, [pagination]);
 
     // Columns
@@ -318,6 +337,7 @@ export const Announcements: React.FC = () => {
             header: __('Sent To', 'multivendorx'),
             cell: ({ row }) => {
                 const stores = Array.isArray(row.original.stores) ? row.original.stores : [];
+                console.log(stores)
                 let displayStores = stores;
         
                 if (stores.length > 2) {

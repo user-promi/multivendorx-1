@@ -42,8 +42,8 @@ export const KnowledgeBase: React.FC = () => {
         pageSize: 10,
     });
     const [announcementStatus, setStatus] = useState<AnnouncementStatus[] | null>(null);
-
     const [pageCount, setPageCount] = useState(0);
+    const [page, setPage] = useState('');
     const [editId, setEditId] = useState<number | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [showDropdown, setShowDropdown] = useState(false);
@@ -95,7 +95,7 @@ export const KnowledgeBase: React.FC = () => {
                 data: { bulk: true, action, ids: selectedIds },
             });
     
-            requestData(pagination.pageSize, pagination.pageIndex + 1, '');
+            requestData(pagination.pageSize, pagination.pageIndex + 1, page);
             setRowSelection({});
         } catch (err) {
             setError(__('Failed to perform bulk action', 'multivendorx'));
@@ -153,7 +153,7 @@ export const KnowledgeBase: React.FC = () => {
                 setAddEntry(false);
                 setFormData({ title: '', content: '', status: 'pending' });
                 setEditId(null);
-                requestData(pagination.pageSize, pagination.pageIndex + 1,'');
+                requestData(pagination.pageSize, pagination.pageIndex + 1, page);
             } else {
                 setError(__('Failed to save entry', 'multivendorx'));
             }
@@ -175,10 +175,10 @@ export const KnowledgeBase: React.FC = () => {
     };
 
     // Fetch data
-    function requestData (
-        rowsPerPage = 10, 
-        currentPage = 1, 
-        typeCount: '' 
+    function requestData(
+        rowsPerPage: number = 10,
+        currentPage: number = 1,
+        typeCount: string = ''
     ) {
         axios({
           method: 'get',
@@ -198,13 +198,14 @@ export const KnowledgeBase: React.FC = () => {
             { key: 'publish', name: 'Published', count: res.publish ?? 0 },
             { key: 'pending', name: 'Pending', count: res.pending ?? 0 },
         ]);
+        setPage(typeCount == 'all' ? '' : typeCount);
         })
         .catch(() => setError(__('Failed to load entries', 'multivendorx')));
     };      
 
     useEffect(() => {
         const currentPage = pagination.pageIndex + 1;
-        requestData(pagination.pageSize, currentPage, '');
+        requestData(pagination.pageSize, currentPage, page);
     }, [pagination]);
 
     // Columns
@@ -233,6 +234,14 @@ export const KnowledgeBase: React.FC = () => {
               {row.original.title || '-'}
             </TableCell>
           ),
+        },
+        {
+            header: __('Content', 'multivendorx'),
+            cell: ({ row }) => (
+              <TableCell title={row.original.content || ''}>
+                {row.original.content || '-'}
+              </TableCell>
+            ),
         },
         {
           header: __('Date', 'multivendorx'),

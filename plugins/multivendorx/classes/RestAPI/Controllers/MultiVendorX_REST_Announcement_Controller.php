@@ -58,25 +58,22 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
      */
     public static function get_announcement_items( $args ) {
         $defaults = [
-            'post_type'      => 'multivendorx_an',
             'post_status'    => [ 'publish', 'pending' ],
             'posts_per_page' => 10,
             's'              => '',
         ];
+
+        if ( $args['count'] ) {
+            $count_posts = wp_count_posts('multivendorx_an' );
+            if ( $count_posts ) return ['total' => array_sum( (array) $count_posts ), 'publish' => $count_posts->publish, 'pending' => $count_posts->pending];
+            else [];
+        }
+
         $query_args = wp_parse_args( $args, $defaults );
 
         // Handle count-only mode
-        if ( isset( $args['status'] ) && $args['status'] !== 'all' ) {
+        if ( $args['status'] && $args['status'] !== 'all' ) {
             $query_args['post_status'] = $args['status'];
-        }
-
-        if ( isset( $args['count'] ) && $args['count'] ) {
-            $counts = wp_count_posts( 'multivendorx_an' );
-            $total = array_sum( (array) $counts ) ? array_sum( (array) $counts ) : 0;
-            $publish = isset( $counts->publish ) ? (int) $counts->publish : 0;
-            $pending = isset( $counts->pending ) ? (int) $counts->pending : 0;
-            $totalcounts = ['total' => $total, 'publish' => $publish, 'pending' => $pending];
-            return $totalcounts ;
         }
 
         // Fetch posts
@@ -84,21 +81,18 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
         $items = [];
 
         foreach ( $posts as $post ) {
-            $id     = (int) $post->ID;
-            $stores = get_post_meta( $id, '_mvx_announcement_stores', true );
+            $stores = (array) get_post_meta( $post->ID, 'multivendorx_announcement_stores', true );
             $store_names = [];
 
-            if ( is_array( $stores ) ) {
-                foreach ( $stores as $store_id ) {
-                    $store_obj = MultivendorX()->store->get_store_by_id( $store_id );
-                    if ( $store_obj && ! empty( $store_obj->data['name'] ) ) {
-                        $store_names[] = $store_obj->data['name'];
-                    }
+            foreach ( $stores as $store_id ) {
+                $store_obj = MultivendorX()->store->get_store_by_id( $store_id );
+                if ( $store_obj ) {
+                    $store_names[] = $store_obj->get('name');
                 }
             }
 
             $items[] = [
-                'id'      => $id,
+                'id'      => $post->ID,
                 'title'   => $post->post_title,
                 'content' => $post->post_content,
                 'status'  => $post->post_status,
@@ -162,36 +156,24 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
             'pending' => $totalcounts['pending'],
         ] );        
     }    
-        
-    
-    
-    
+
     public function create_item( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
-        $data = $request->get_json_params();
-    
-        // Unwrap formData if present
-        $formData = isset($data['formData']) ? $data['formData'] : $data;
-    
-        $title   = isset($formData['title']) ? sanitize_text_field($formData['title']) : '';
-        $content = isset($formData['content']) ? sanitize_textarea_field($formData['content']) : '';
-        $stores  = isset($formData['stores']) ? $formData['stores'] : [];
-        $status  = ( isset($formData['status']) && in_array($formData['status'], ['publish','pending'], true) )
-            ? $formData['status']
-            : 'publish'; // fallback
-    
-        if ( is_string( $stores ) ) {
-            $stores = array_filter( array_map( 'trim', explode( ',', $stores ) ) );
-        } elseif ( ! is_array( $stores ) ) {
-            $stores = [];
+        if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
+            return new \WP_Error(
+                'invalid_nonce',
+                __( 'Invalid nonce', 'multivendorx' ),
+                [ 'status' => 403 ]
+            );
         }
+
+        $stores  = $request->get_param('stores') ?: [];   
     
-        // Insert post
         $post_id = wp_insert_post([
-            'post_title'   => $title,
-            'post_content' => $content,
+            'post_title'   => $request->get_param('title'),
+            'post_content' => $request->get_param('content'),
             'post_type'    => 'multivendorx_an',
-            'post_status'  => $status,   // ✅ use dynamic status
+            'post_status'  => $request->get_param('status') === 'publish'  ? 'publish' : 'pending',   // ✅ use dynamic status
         ], true);
     
         if ( is_wp_error( $post_id ) ) {
@@ -203,13 +185,13 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
     
         // Save stores if provided
         if ( ! empty($stores) ) {
-            update_post_meta( $post_id, '_mvx_announcement_stores', $stores );
+            update_post_meta( $post_id, 'multivendorx_announcement_stores', $stores );
         }
     
         // Optionally save URL as post meta
         $url = $formData['url'] ?? '';
         if ( ! empty($url) ) {
-            update_post_meta( $post_id, '_mvx_announcement_url', esc_url_raw($url) );
+            update_post_meta( $post_id, 'multivendorx_announcement_url', esc_url_raw($url) );
         }
     
         return rest_ensure_response([
@@ -218,7 +200,7 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
             'title'   => $title,
             'url'     => $url,
             'content' => $content,
-            'status'  => $status,   // ✅ return back status
+            'status'  => $status,
             'stores'  => $stores,
         ]);
     }
@@ -262,7 +244,7 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
         $title   = sanitize_text_field( $data['title'] ?? $post->post_title );
         $content = sanitize_textarea_field( $data['content'] ?? $post->post_content );
         $status  = ( isset($data['status']) && $data['status'] === 'publish' ) ? 'publish' : 'pending';
-        $stores  = isset($data['stores']) ? (array) $data['stores'] : get_post_meta( $id, '_mvx_announcement_stores', true );
+        $stores  = isset($data['stores']) ? (array) $data['stores'] : get_post_meta( $id, 'multivendorx_announcement_stores', true );
     
         $updated_id = wp_update_post([
             'ID'           => $id,
@@ -280,7 +262,7 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
     
         // Update stores
         if ( ! empty($stores) ) {
-            update_post_meta( $id, '_mvx_announcement_stores', $stores );
+            update_post_meta( $id, 'multivendorx_announcement_stores', $stores );
         }
     
         return rest_ensure_response([
@@ -325,8 +307,8 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
     
         $title   = $post->post_title;
         $content = $post->post_content;
-        $url     = get_post_meta( $id, '_mvx_announcement_url', true );
-        $stores  = get_post_meta( $id, '_mvx_announcement_stores', true );
+        $url     = get_post_meta( $id, 'multivendorx_announcement_url', true );
+        $stores  = get_post_meta( $id, 'multivendorx_announcement_stores', true );
     
         $store_data = array();
         if ( ! empty( $stores ) && is_array( $stores ) ) {

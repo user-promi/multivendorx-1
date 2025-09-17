@@ -32,7 +32,22 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
                 'permission_callback' => [ $this, 'create_item_permissions_check' ],
             ],
             [
-                'methods'             => \WP_REST_Server::EDITABLE, // <-- add this
+                'methods'             => \WP_REST_Server::EDITABLE,
+                'callback'            => [ $this, 'update_item' ],
+                'permission_callback' => [ $this, 'update_item_permissions_check' ],
+            ],
+        ]);
+        register_rest_route($this->namespace, '/' . $this->rest_base . '/(?P<id>[\d]+)', [
+            [
+                'methods'             => \WP_REST_Server::READABLE,
+                'callback'            => [$this, 'get_item'],
+                'permission_callback' => [$this, 'get_items_permissions_check'],
+                'args'                => [
+                    'id' => ['required' => true],
+                ],
+            ],
+            [
+                'methods'             => \WP_REST_Server::EDITABLE,
                 'callback'            => [ $this, 'update_item' ],
                 'permission_callback' => [ $this, 'update_item_permissions_check' ],
             ],
@@ -56,24 +71,21 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
      */
     public static function get_knowledge_items( $args ) {
         $defaults = [
-            'post_type'      => 'multivendorx_kb',
             'post_status'    => [ 'publish', 'pending' ],
             'posts_per_page' => 10,
             's'              => '',
         ];
-        $query_args = wp_parse_args( $args, $defaults );
 
-        if ( isset( $args['status'] ) && $args['status'] !== 'all' ) {
-            $query_args['post_status'] = $args['status'];
+        if ( $args['count'] ) {
+            $count_posts = wp_count_posts( 'multivendorx_kb' );
+            if ( $count_posts ) return ['total' => array_sum( (array) $count_posts ), 'publish' => (int) $count_posts->publish, 'pending' => (int) $count_posts->pending];
+            else [];
         }
 
-        if ( isset( $args['count'] ) && $args['count'] ) {
-            $counts = wp_count_posts( 'multivendorx_kb' );
-            $total = array_sum( (array) $counts ) ? array_sum( (array) $counts ) : 0;
-            $publish = isset( $counts->publish ) ? (int) $counts->publish : 0;
-            $pending = isset( $counts->pending ) ? (int) $counts->pending : 0;
-            $totalcounts = ['total' => $total, 'publish' => $publish, 'pending' => $pending];
-            return $totalcounts ;
+        $query_args = wp_parse_args( $args, $defaults );
+
+        if ( $args['status'] && $args['status'] !== 'all' ) {
+            $query_args['post_status'] = $args['status'];
         }
 
         $posts = get_posts( $query_args );
@@ -106,7 +118,7 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
         $args = [
             'post_type'      => 'multivendorx_kb',
             'status'         => $status_param ?: 'all',
-            's'              => $request->get_param( 'search' ),
+            's'              => $request->get_param( 's' ) ?: '',
             'posts_per_page' => $limit,
             'offset'         => $offset,
         ];
@@ -142,18 +154,19 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
 
     public function create_item( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
-        $data     = $request->get_json_params();
-        $formData = isset($data['formData']) ? $data['formData'] : $data;
-
-        $title   = sanitize_text_field( $formData['title'] ?? '' );
-        $content = sanitize_textarea_field( $formData['content'] ?? '' );
-        $status  = ( isset($formData['status']) && $formData['status'] === 'publish' ) ? 'publish' : 'pending';
-
+        if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
+            return new \WP_Error(
+                'invalid_nonce',
+                __( 'Invalid nonce', 'multivendorx' ),
+                [ 'status' => 403 ]
+            );
+        }
+        
         $post_id = wp_insert_post([
-            'post_title'   => $title,
-            'post_content' => $content,
+            'post_title'   => $request->get_param('title'),
+            'post_content' => $request->get_param('content'),
             'post_type'    => 'multivendorx_kb',
-            'post_status'  => $status,
+            'post_status'  => $request->get_param('status') === 'publish'  ? 'publish' : 'pending',
         ], true );
 
         if ( is_wp_error( $post_id ) ) {
@@ -178,10 +191,9 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
             return new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), [ 'status' => 403 ] );
         }
     
-        $data = $request->get_json_params();
-    
+        $data = $request->get_params();
         // Check for bulk update
-        if ( isset($data['bulk']) && !empty($data['ids']) && !empty($data['action']) ) {
+        if ( $data['bulk'] && !empty($data['ids']) && !empty($data['action']) ) {
             $action = sanitize_key( $data['action'] );
             $ids    = array_map( 'absint', $data['ids'] );
     
@@ -200,23 +212,18 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
             return rest_ensure_response([ 'success' => true, 'bulk' => true ]);
         }
     
-        // ✅ Normal single update
-        $id   = absint( $request->get_param( 'id' ) );
-        $post = get_post( $id );
+        // Normal single update
+        $post = get_post( absint( $request->get_param( 'id' ) ) );
     
         if ( ! $post || $post->post_type !== 'multivendorx_kb' ) {
             return new \WP_Error( 'not_found', __( 'Knowledge Base article not found', 'multivendorx' ), [ 'status' => 404 ] );
         }
     
-        $title   = sanitize_text_field( $data['title'] ?? $post->post_title );
-        $content = sanitize_textarea_field( $data['content'] ?? $post->post_content );
-        $status  = ( isset($data['status']) && $data['status'] === 'publish' ) ? 'publish' : 'pending';
-    
         $updated_id = wp_update_post([
             'ID'           => $id,
-            'post_title'   => $title,
-            'post_content' => $content,
-            'post_status'  => $status,
+            'post_title'   => $post->post_title,
+            'post_content' => $post->post_content,
+            'post_status'  => $data['status'] === 'publish' ? 'publish' : 'pending',
         ], true );
     
         if ( is_wp_error( $updated_id ) ) {
@@ -229,9 +236,9 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
         return rest_ensure_response([
             'success' => true,
             'id'      => $id,
-            'title'   => $title,
-            'content' => $content,
-            'status'  => $status,
+            'title'   => $post->post_title,
+            'content' => $post->post_content,
+            'status'  => $data['status'] === 'publish' ? 'publish' : 'pending',
         ]);
     }    
 
@@ -241,8 +248,7 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
             return new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), [ 'status' => 403 ] );
         }
 
-        $id   = absint( $request->get_param( 'id' ) );
-        $post = get_post( $id );
+        $post = get_post( absint( $request->get_param( 'id' ) ) );
 
         if ( ! $post || $post->post_type !== 'multivendorx_kb' ) {
             return new \WP_Error( 'not_found', __( 'Knowledge Base article not found', 'multivendorx' ), [ 'status' => 404 ] );
