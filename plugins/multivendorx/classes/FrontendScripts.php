@@ -442,6 +442,7 @@ class FrontendScripts {
                         'color'                    => MultiVendorX()->setting->get_setting( 'store_color_settings' ),
                         'store_payment_settings'    => MultiVendorX()->payments->get_all_store_payment_settings(),
                         'store_id'                  => get_user_meta(wp_get_current_user()->ID, 'multivendorx_active_store', true),
+                        'ajaxurl'     => admin_url( 'admin-ajax.php' ),
                     ),
                 ),
                 'multivendorx-registration-form-script'          => array(
