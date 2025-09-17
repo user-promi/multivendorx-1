@@ -449,7 +449,7 @@ export const Announcements: React.FC = () => {
                                     name="stores"
                                     type="multi-select"
                                     options={storeOptions}
-                                    value={formData.stores ? formData.stores.split(',') : []} // ✅ CSV → array
+                                    value={formData.stores ? formData.stores.split(',') : []}
                                     onChange={(newValue: any) => {
                                         const selectedValues = Array.isArray(newValue)
                                             ? newValue.map((opt) => opt.value)
