@@ -165,7 +165,8 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
                                     name={name}
                                     placeholder={placeholder}
                                     value={value ?? ''}
-                                    {...((type === 'number' || type === 'range') ? { min, max } : {})}
+                                    min={['number', 'range'].includes(type) ? min : undefined}
+                                    max={['number', 'range'].includes(type) ? max : undefined}
                                     onChange={onChange}
                                     onClick={onClick}
                                     onMouseOver={onMouseOver}
