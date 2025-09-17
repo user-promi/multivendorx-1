@@ -251,7 +251,7 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
         }
     
         // Normal single update
-        $post = get_post(  );
+        $post = get_post( absint( $request->get_param( 'id' ) ) );
     
         if ( ! $post || $post->post_type !== 'multivendorx_an' ) {
             return new \WP_Error( 'not_found', __( 'Announcement not found', 'multivendorx' ), [ 'status' => 404 ] );
