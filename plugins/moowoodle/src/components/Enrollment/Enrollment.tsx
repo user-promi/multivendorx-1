@@ -10,11 +10,7 @@ const Enrollment: React.FC = () => {
 
     return (
         <>
-            <AdminBreadcrumbs
-                activeTabIcon="adminlib-form"
-                tabTitle={__('All Enrollments', 'moowoodle')}
-                description={__('Enrollment records are presented, showing students, their courses, enrollment dates, and current status.', 'moowoodle')}
-            />
+
             <div id="enrollment-list-table">
                 <Dialog
                     className="admin-module-popup"
@@ -28,8 +24,13 @@ const Enrollment: React.FC = () => {
                     ></span>
                     <ProPopup />
                 </Dialog>
+                <AdminBreadcrumbs
+                    activeTabIcon="adminlib-form"
+                    tabTitle={__('All Enrollments', 'moowoodle')}
+                    description={__('Enrollment records are presented, showing students, their courses, enrollment dates, and current status.', 'moowoodle')}
+                />
                 <div
-                    className="enrollment-img"
+                    className="enrollment-img image-wrapper"
                     onClick={() => {
                         setOpenDialog(true);
                     }}

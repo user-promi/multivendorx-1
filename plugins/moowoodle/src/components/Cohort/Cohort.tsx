@@ -10,11 +10,6 @@ const Cohort: React.FC = () => {
 
     return (
         <>
-            <AdminBreadcrumbs
-                activeTabIcon="adminlib-cohort"
-                tabTitle={__('Cohorts', 'moowoodle')}
-                description={__('Cohort information is presented with associated products and student enrollments to support administrative actions.', 'moowoodle')}
-            />
             <div id="cohort-list-table">
                 <Dialog
                     className="admin-module-popup"
@@ -28,8 +23,13 @@ const Cohort: React.FC = () => {
                     ></span>
                     <ProPopup />
                 </Dialog>
+                <AdminBreadcrumbs
+                    activeTabIcon="adminlib-cohort"
+                    tabTitle={__('Cohorts', 'moowoodle')}
+                    description={__('Cohort information is presented with associated products and student enrollments to support administrative actions.', 'moowoodle')}
+                />
                 <div
-                    className="cohort-img"
+                    className="cohort-img image-wrapper"
                     onClick={() => {
                         setOpenDialog(true);
                     }}

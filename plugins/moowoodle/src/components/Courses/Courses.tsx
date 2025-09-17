@@ -306,7 +306,7 @@ const Course: React.FC = () => {
                         alt={row.original.course_name || 'Course Image'}
                     />
                     <div className="action-section">
-                        <p>{row.original.course_name}</p>
+                        <div>{row.original.course_name}</div>
                         <div className="action-btn">
                             <a
                                 target="_blank"
@@ -359,7 +359,7 @@ const Course: React.FC = () => {
                         ? Object.entries(row.original.products).map(
                             ([name, url], index) => (
                                 <div key={index} className="action-section">
-                                    <p>{name}</p>
+                                    <div>{name}</div>
                                     <div className="action-btn">
                                         <a
                                             target="_blank"
@@ -382,7 +382,7 @@ const Course: React.FC = () => {
             cell: ({ row }) => (
                 <TableCell title={__('Enrolled users')}>
                     <div className="action-section">
-                        <p>{row.original.enroled_user || 0}</p>
+                        <div>{row.original.enroled_user || 0}</div>
                         <div className="action-btn">
                             <a
                                 target="_blank"
@@ -403,7 +403,7 @@ const Course: React.FC = () => {
                 <div className="table-action-column">
                     {__('Action', 'moowoodle')}
                     {!appLocalizer.khali_dabba && (
-                        <span className="admin-pro-tag">pro</span>
+                        <span className="admin-pro-tag"><i className="adminlib-pro-tag"></i> Pro</span>
                     )}
                 </div>
             ),
