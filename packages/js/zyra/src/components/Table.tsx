@@ -654,7 +654,7 @@ const Table: React.FC<TableProps> = ({
                             )}
 
                             { /* Pagination Controls */}
-                            {(data?.length as number) > 10 && (
+                            {(data?.length as number) == defaultRowsPerPage && (
                                 <div className="table-pagination">
                                     { /* Page size dropdown */}
                                     <div className="pagination-number-wrapper">
