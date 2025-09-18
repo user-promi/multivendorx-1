@@ -19,12 +19,11 @@ interface ElementsProps {
 const Elements: React.FC<ElementsProps> = ({ selectOptions, onClick, label }) => {
     const [isOpen, setIsOpen] = useState(true);
     return (
-        <aside className="elements-section"
-            onClick={() => setIsOpen((prev) => !prev)}
-            role="button"
-            tabIndex={0}
-        >
-            <div className="section-meta">
+        <aside className="elements-section">
+            <div className="section-meta"
+                onClick={() => setIsOpen((prev) => !prev)}
+                role="button"
+                tabIndex={0}>
                 {label && <h2>{label}</h2>}
                 <i className={`adminlib-pagination-right-arrow ${isOpen ? "rotate" : ""}`}></i>
             </div>
@@ -32,7 +31,7 @@ const Elements: React.FC<ElementsProps> = ({ selectOptions, onClick, label }) =>
             <main className={`section-container ${isOpen ? "open" : "closed"}`}>
                 {selectOptions.map((option) => (
                     <div
-                        key={option.value} //Added key for React's rendering optimization
+                        key={option.value}
                         role="button"
                         tabIndex={0}
                         className="elements-items"

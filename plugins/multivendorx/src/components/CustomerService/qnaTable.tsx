@@ -9,8 +9,8 @@ import {
     RowSelectionState,
     PaginationState,
 } from '@tanstack/react-table';
-import { useLocation } from 'react-router-dom';
-import ViewCommission from './viewCommission';
+import EditQna from './editQna';
+
 export interface RealtimeFilter {
     name: string;
     render: (updateFilter: (key: string, value: any) => void, filterValue: any) => ReactNode;
@@ -39,10 +39,9 @@ type CommissionRow = {
 type FilterData = {
     searchAction?: string;
     searchField?: string;
-    typeCount?: any;
 };
 
-const Commission: React.FC = () => {
+const Qna: React.FC = () => {
     const dateRef = useRef<HTMLDivElement | null>(null);
     const [openModal, setOpenModal] = useState(false);
     const [modalDetails, setModalDetails] = useState<string>('');
@@ -70,14 +69,13 @@ const Commission: React.FC = () => {
         setOpenDatePicker(!openDatePicker);
     };
 
-    const [commissionStatus, setCommissionStatus] = useState<CommissionStatus[] | null>(null);
     const [pageCount, setPageCount] = useState(0);
 
     // Fetch total rows on mount
     useEffect(() => {
         axios({
             method: 'GET',
-            url: getApiLink(appLocalizer, 'commission'),
+            url: getApiLink(appLocalizer, 'qna'),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
             params: { count: true },
         })
@@ -88,6 +86,18 @@ const Commission: React.FC = () => {
             .catch(() => {
                 setError(__('Failed to load total rows', 'multivendorx'));
             });
+    }, []);
+    useEffect(() => {
+        const handleClickOutside = (e: MouseEvent) => {
+            // if click is not on dropdown toggle or inside dropdown → close it
+            if (!(e.target as HTMLElement).closest(".action-dropdown") &&
+                !(e.target as HTMLElement).closest(".adminlib-more-vertical")) {
+                setShowDropdown(false);
+            }
+        };
+
+        document.addEventListener("click", handleClickOutside);
+        return () => document.removeEventListener("click", handleClickOutside);
     }, []);
 
     useEffect(() => {
@@ -125,49 +135,19 @@ const Commission: React.FC = () => {
     function requestData(
         rowsPerPage = 10,
         currentPage = 1,
-        typeCount = '',
     ) {
         setData(null);
         axios({
             method: 'GET',
-            url: getApiLink(appLocalizer, 'commission'),
+            url: getApiLink(appLocalizer, 'qna'),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
             params: {
                 page: currentPage,
                 row: rowsPerPage,
-                status: typeCount === 'all' ? '' : typeCount,
             },
         })
             .then((response) => {
                 setData(response.data || []);
-                setCommissionStatus([
-                    {
-                        key: 'all',
-                        name: 'All',
-                        count: response.data.all || 0,
-                    },
-                    {
-                        key: 'paid',
-                        name: 'Paid',
-                        count: response.data.paid || 0,
-                    },
-                    {
-                        key: 'unpaid',
-                        name: 'Unpaid',
-                        count: response.data.unpaid || 0,
-                    },
-                    {
-                        key: 'refund',
-                        name: 'Refund',
-                        count: response.data.refund || 0,
-                    },
-                    {
-                        key: 'trash',
-                        name: 'Trash',
-                        count: response.data.trash || 0,
-                    },
-                ]);
-
             })
             .catch(() => {
                 setError(__('Failed to load stores', 'multivendorx'));
@@ -185,7 +165,6 @@ const Commission: React.FC = () => {
         requestData(
             rowsPerPage,
             currentPage,
-            filterData?.typeCount,
         );
     };
 
@@ -208,68 +187,49 @@ const Commission: React.FC = () => {
                 />
             ),
         },
-
+        
         {
-            header: __('Store Name', 'multivendorx'),
+            header: __('Product Name', 'multivendorx'),
             cell: ({ row }) => (
-                <TableCell title={row.original.storeName || ''}>
-                    {row.original.storeName ?? '-'}
+                <TableCell title={row.original.product_name || ''}>
+                    {row.original.product_name ? (
+                        <a href={row.original.product_link} target="_blank" rel="noreferrer">
+                            {row.original.product_name}
+                        </a>
+                    ) : (
+                        '-'
+                    )}
                 </TableCell>
             ),
         },
         {
-            header: __('Product Amount', 'multivendorx'),
+            header: __('Question', 'multivendorx'),
             cell: ({ row }) => (
-                <TableCell title={row.original.commissionAmount || ''}>
-                    {row.original.commissionAmount ?? '-'}
+                <TableCell title={row.original.question_text || ''}>
+                    {row.original.question_text ?? '-'}
                 </TableCell>
             ),
         },
         {
-            header: __('Commission Earned', 'multivendorx'),
+            header: __('Answer', 'multivendorx'),
             cell: ({ row }) => (
-                <TableCell title={row.original.commissionAmount || ''}>
-                    {row.original.commissionAmount ?? '-'}
+                <TableCell title={row.original.answer_text || ''}>
+                    {row.original.answer_text ?? '-'}
                 </TableCell>
             ),
         },
         {
-            header: __('Shipping', 'multivendorx'),
+            header: __('Asked By', 'multivendorx'),
             cell: ({ row }) => (
-                <TableCell title={row.original.shipping || ''}>
-                    {row.original.shipping ?? '-'}
-                </TableCell>
-            ),
-        },
-        {
-            header: __('Tax', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.tax || ''}>
-                    {row.original.tax ?? '-'}
-                </TableCell>
-            ),
-        },
-        {
-            header: __('Commission Total', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.commissionTotal || ''}>
-                    {row.original.commissionTotal ?? '-'}
-                </TableCell>
-            ),
-        },
-
-        {
-            header: __('Paid Status', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.paidStatus || ''}>
-                    <span className="admin-badge red">{row.original.paidStatus ?? '-'}</span>
+                <TableCell title={row.original.author_name || ''}>
+                    {row.original.author_name ?? '-'}
                 </TableCell>
             ),
         },
         {
             header: __('Date', 'multivendorx'),
             cell: ({ row }) => {
-                const rawDate = row.original.createTime;
+                const rawDate = row.original.question_date;
                 let formattedDate = '-';
                 if (rawDate) {
                     const dateObj = new Date(rawDate);
@@ -282,6 +242,30 @@ const Commission: React.FC = () => {
                 return <TableCell title={formattedDate}>{formattedDate}</TableCell>;
             },
         },
+        {
+            header: __('Time Ago', 'multivendorx'),
+            cell: ({ row }) => (
+                <TableCell title={row.original.time_ago || ''}>
+                    {row.original.time_ago ?? '-'}
+                </TableCell>
+            ),
+        },
+        {
+            header: __('Votes', 'multivendorx'),
+            cell: ({ row }) => (
+                <TableCell title={String(row.original.total_votes) || ''}>
+                    {row.original.total_votes ?? 0}
+                </TableCell>
+            ),
+        },
+        {
+            header: __('Visibility', 'multivendorx'),
+            cell: ({ row }) => (
+                <TableCell title={row.original.question_visibility || ''}>
+                    {row.original.question_visibility ?? '-'}
+                </TableCell>
+            ),
+        },        
         {
             header: __('Action', 'multivendorx'),
             cell: ({ row }) => (
@@ -369,22 +353,6 @@ const Commission: React.FC = () => {
                 </div>
             ),
         },
-        // {
-        //     name: 'bulk-action',
-        //     render: () => (
-        //         <div className=" bulk-action">
-        //             <select name="action" className="basic-select" ref={bulkSelectRef}>
-        //                 <option value="">{__('Bulk actions')}</option>
-        //                 <option value="mark_paid">{__('Mark Paid')}</option>
-        //                 <option value="delete">{__('Delete')}</option>
-        //                 <option value="restore">{__('Restore')}</option>
-        //             </select>
-        //             {/* <button name="bulk-action-apply" className="admin-btn btn-purple" onClick={handleBulkAction}>
-        //                 {__('Apply')}
-        //             </button> */}
-        //         </div>
-        //     ),
-        // },
         {
             name: 'date',
             render: (updateFilter) => (
@@ -437,25 +405,6 @@ const Commission: React.FC = () => {
         },
     ];
 
-    const BulkAction: React.FC = () => (
-        <div className="bulk-actiondddddddd">
-            <select name="action" className="basic-select" ref={bulkSelectRef}>
-                <option value="">{__("Bulk actions", "multivendorx")}</option>
-                <option value="mark_paid">{__("Mark Paid", "multivendorx")}</option>
-                <option value="delete">{__("Delete", "multivendorx")}</option>
-                <option value="restore">{__("Restore", "multivendorx")}</option>
-            </select>
-
-            <button
-                name="bulk-action-apply"
-                className="admin-btn btn-purple"
-                onClick={handleBulkAction}
-            >
-                {__("Apply", "multivendorx")}
-            </button>
-        </div>
-    );
-    // 👉 Demo data for commissions
     // Type for an order line
     interface OrderItem {
         id: number;
@@ -469,11 +418,6 @@ const Commission: React.FC = () => {
 
     return (
         <>
-            <AdminBreadcrumbs
-                activeTabIcon="adminlib-commission"
-                tabTitle="Commissions"
-                description={'Details of commissions earned by each store for every order, including order amount, commission rate, and payout status.'}
-            />
             <div className="admin-table-wrapper">
                 <Table
                     data={data}
@@ -487,20 +431,18 @@ const Commission: React.FC = () => {
                     onPaginationChange={setPagination}
                     handlePagination={requestApiForData}
                     perPageOption={[10, 25, 50]}
-                    typeCounts={commissionStatus as CommissionStatus}
-                    bulkActionComp={() => <BulkAction />}
                 />
             </div>
 
             {viewCommission && selectedCommissionId !== null && (
-                <ViewCommission
+                <EditQna
                     open={viewCommission}
                     onClose={() => setViewCommission(false)}
-                    commissionId={selectedCommissionId}
+                    qnaId={selectedCommissionId}
                 />
             )}
         </>
     );
 };
 
-export default Commission;
+export default Qna;
