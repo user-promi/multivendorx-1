@@ -24,7 +24,12 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
+.adminlib-filter:before {
+  content: "\e900";
+}
+.adminlib-bulk-action:before {
+  content: "\e901";
+}
 .adminlib-review:before {
   content: "\e904";
 }

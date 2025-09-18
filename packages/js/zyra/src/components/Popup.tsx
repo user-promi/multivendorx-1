@@ -10,8 +10,9 @@ import { DialogContent, DialogContentText } from '@mui/material';
 import '../styles/web/Popup.scss';
 
 export interface PopupMessage {
-    icon: string;
-    text: string;
+  text: string;   
+  des: string;    
+  icon?: string; 
 }
 export interface BtnLink {
     site: string;
@@ -35,6 +36,7 @@ export interface PopupProps {
     pluginUrl?: string;
     modulePageUrl?: string;
     btnLink?: BtnLink[];
+    upgradeBtnText?: string;
 }
 
 const ProPopup: React.FC<PopupProps> = (props) => {
@@ -58,6 +60,7 @@ const ProPopup: React.FC<PopupProps> = (props) => {
                                 <div className="description">{props.moreText}</div>
                                 <div className="price">{selectedBtn.price}</div>
                                 <div className="select-wrapper">
+                                    For website with
                                     <select
                                         value={selectedBtn.link}
                                         onChange={(e) => {
@@ -71,15 +74,15 @@ const ProPopup: React.FC<PopupProps> = (props) => {
                                             </option>
                                         ))}
                                     </select>
-                                    site License
+                                    site license
                                 </div>
                                 <a
-                                    className="admin-btn btn-red"
+                                    className="admin-btn"
                                     href={selectedBtn.link}
                                     target="_blank"
                                     rel="noreferrer"
                                 >
-                                    Upgrade my plan <i className="adminlib-arrow-right arrow-icon"></i>
+                                    {props.upgradeBtnText} <i className="adminlib-arrow-right arrow-icon"></i>
                                 </a>
                             </div>
                             <div className="popup-content">
@@ -94,7 +97,7 @@ const ProPopup: React.FC<PopupProps> = (props) => {
                                                 <div className="title">
                                                     {message.text}
                                                 </div>
-                                                <div className="sub-text">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Deleniti eum quo, sapiente libero quam et.</div>
+                                                <div className="sub-text">{message.des}</div>
                                             </li>
                                         )
                                     )}

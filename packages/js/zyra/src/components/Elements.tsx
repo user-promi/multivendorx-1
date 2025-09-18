@@ -24,7 +24,7 @@ const Elements: React.FC<ElementsProps> = ({ selectOptions, onClick, label }) =>
                 onClick={() => setIsOpen((prev) => !prev)}
                 role="button"
                 tabIndex={0}>
-                {label && <h2>{label}</h2>}
+                {label && <h2>{label} (6)</h2>} 
                 <i className={`adminlib-pagination-right-arrow ${isOpen ? "rotate" : ""}`}></i>
             </div>
 
