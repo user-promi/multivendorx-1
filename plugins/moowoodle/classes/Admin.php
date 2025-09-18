@@ -148,7 +148,7 @@ class Admin {
      *
 	 * @return never
 	 */
-	public function handle_external_redirects() {
+	public static function handle_external_redirects() {
 		wp_safe_redirect( esc_url_raw( MOOWOODLE_PRO_SHOP_URL ) );
 		exit;
 	}

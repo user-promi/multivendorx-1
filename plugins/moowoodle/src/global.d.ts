@@ -12,6 +12,7 @@ declare global {
         restUrl: string;
         nonce: string;
         shop_url: string;
+        video_url:string;
         tab_name: string;
         khali_dabba: boolean;
         accountmenu: any;
@@ -23,7 +24,8 @@ declare global {
         md_user_roles: any;
         pro_settings_list: any;
         free_version:any;
-        pro_version:any;
+        chat_url:any;
+        pro_data:any;
     }
 
     interface CourseMyAcc {

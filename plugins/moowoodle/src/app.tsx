@@ -178,7 +178,10 @@ const App = () => {
                 onSelectChange={handleSelectChange}
                 selectValue={selectValue}
                 free={appLocalizer.free_version}
-                pro={appLocalizer.pro_version}
+                pro={appLocalizer.pro_data.version}
+                showProfile={true}
+                chatUrl={appLocalizer.chat_url}
+                managePlanUrl={appLocalizer.pro_data.manage_plan_url}
             />
             <Route />
         </>

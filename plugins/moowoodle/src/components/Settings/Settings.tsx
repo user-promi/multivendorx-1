@@ -30,31 +30,6 @@ interface SettingsProps {
 }
 
 
-
-const supportLink = [
-    {
-        title: __('Get in touch with Support', 'moowoodle'),
-        icon: 'adminlib-mail',
-        description: __(
-            'Reach out to the support team for assistance or guidance.',
-            'moowoodle'
-        ),
-        link: 'https://dualcube.com/forums/?utm_source=wpadmin&utm_medium=pluginsettings&utm_campaign=moowoodle',
-    },
-    {
-        title: __('Explore Documentation', 'moowoodle'),
-        icon: 'adminlib-submission-message',
-        description: __('Understand the plugin and its settings.', 'moowoodle'),
-        link: 'https://dualcube.com/knowledgebase/?utm_source=wpadmin&utm_medium=pluginsettings&utm_campaign=moowoodle',
-    },
-    {
-        title: __('Contribute Here', 'moowoodle'),
-        icon: 'adminlib-support',
-        description: __('Participate in product enhancement.', 'moowoodle'),
-        link: 'https://github.com/multivendorx/multivendorx/issues',
-    },
-];
-
 const faqs = [
     {
         question: __(
@@ -140,7 +115,7 @@ const Settings: React.FC<SettingsProps> = () => {
                 <Support
                     title="Thank you for using MooWoodle"
                     subTitle="We want to help you enjoy a wonderful experience with all of our products."
-                    url="https://www.youtube.com/embed/fL7wPVYopTU?si=BZeP1WwCxBSSoM7h"
+                    url={appLocalizer.video_url}
                     faqData={faqs}
                 />
             );
@@ -177,7 +152,6 @@ const Settings: React.FC<SettingsProps> = () => {
                 appLocalizer={appLocalizer}
                 brandImg={Brand}
                 smallbrandImg={BrandSmall}
-                supprot={supportLink}
                 Link={Link}
                 settingName={'Settings'}
             />
