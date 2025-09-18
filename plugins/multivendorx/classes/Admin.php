@@ -55,7 +55,7 @@ class Admin {
         add_action('woocommerce_coupon_options_save', array($this, 'save_store_in_coupon'), 10, 2);
     
         // Display radios after order actions for COD order if shipping not found
-        add_action( 'add_meta_boxes', array($this, 'add_option_for_payment'));
+        add_action( 'add_meta_boxes', array($this, 'add_option_for_payment'), 10, 2);
         add_action( 'woocommerce_process_shop_order_meta', array($this, 'save_option_for_payment'));
 
     }
@@ -582,18 +582,22 @@ class Admin {
         }
     }
 
-    function add_option_for_payment($screen_id) {
+    public function add_option_for_payment($page, $order) {
+        if( $page && $page != 'woocommerce_page_wc-orders' ) return;
+        if(  $order->get_parent_id() == 0 ) return;
+        
         add_meta_box(
-            'multivendorx_cod_order_payment_box',                        // ID
-            __( 'COD Order Payment', 'multivendorx' ),                   // Title
-            [ $this, 'render_multivendorx_cod_order_payment_box' ],                 // Callback
-            $screen_id,                                                // Post type
-            'side',                                                      // Context (same sidebar as order actions)
-            'default'                                                    // Priority
+            'multivendorx_cod_order_payment_box', 
+            __( 'COD Order Payment', 'multivendorx' ), 
+            [ $this, 'render_multivendorx_cod_order_payment_box' ], 
+            $page,
+            'side',  
+            'default'
         );
+        
     }
 
-    function render_multivendorx_cod_order_payment_box( $post ) {
+    public function render_multivendorx_cod_order_payment_box( $post ) {
         $order = wc_get_order( $post->ID );
         $value = $order ? $order->get_meta( 'multivendorx_cod_order_payment', true ) : '';
         ?>
@@ -611,10 +615,11 @@ class Admin {
     }
 
     public function save_option_for_payment( $order_id ) {
+
         $selected = filter_input( INPUT_POST, 'order_payment', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
         if ( $selected !== null ) {
             $order = wc_get_order($order_id);
-            $order->update_meta( 'multivendorx_cod_order_payment', $selected );
+            $order->update_meta_data( 'multivendorx_cod_order_payment', $selected );
             $order->save();
         }
     }
