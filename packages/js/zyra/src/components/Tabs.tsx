@@ -33,6 +33,7 @@ type TabsProps = {
   settingName?: string;
   onNavigate?: (url: string) => void;
   tabTitleSection?: React.ReactNode;
+  appLocalizer?:any;
 };
 
 // Helper functions outside component to avoid recreation on every render
@@ -163,8 +164,8 @@ const Tabs: React.FC<TabsProps> = ({
   Link,
   settingName = '',
   onNavigate,
-  tabTitleSection
-
+  tabTitleSection,
+  appLocalizer,
 }) => {
   const [activeTab, setActiveTab] = useState(currentTab);
   const [menuStack, setMenuStack] = useState<TabData[][]>([tabData]);
@@ -405,10 +406,7 @@ const Tabs: React.FC<TabsProps> = ({
 
   const parentTab = findTabName(tabData, activeTab) || '';
 
-
-
   const tabIcon = getCurrentTabIcon();
-
   return (
     <>
       {tabTitleSection && <>{tabTitleSection}</>}
@@ -419,7 +417,8 @@ const Tabs: React.FC<TabsProps> = ({
         renderBreadcrumb={renderBreadcrumbLinks}
         renderMenuItems={renderAllMenuItems}
         tabData={tabData}
-        goPremium={true}
+        goPremium={!appLocalizer.khali_dabba}
+        goPremiumLink={appLocalizer.shop_url}
       />
 
       <div className="general-wrapper">

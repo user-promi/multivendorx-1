@@ -349,9 +349,6 @@ const Table: React.FC<TableProps> = ({
                 }
                 // Call filter function
                 handlePagination?.(defaultRowsPerPage, 1, filterData);
-                // Set current page to one.
-                // setCurrentPage(1);
-                // Clear the interval.
                 clearInterval(intervalId);
                 counterId.current = null;
             }
@@ -420,26 +417,6 @@ const Table: React.FC<TableProps> = ({
                     ))}
                 </div>
             )}
-            {/* <div className="filter-wrapper">
-                <div className="wrap-bulk-all-date">
-                    {realtimeFilter &&
-                        realtimeFilter.map((filter: RealtimeFilter) => (
-                            <React.Fragment key={filter.name}>
-                                {filter.render(
-                                    handleFilterChange,
-                                    filterData[
-                                    filter.name as keyof Record<
-                                        string,
-                                        any
-                                    >
-                                    ]
-                                )}
-                            </React.Fragment>
-                        ))}
-                </div>
-                {bulkActionComp && bulkActionComp()}
-            </div> */}
-
             {loading ? (
                 <LoadingTable />
             ) : (
@@ -633,107 +610,105 @@ const Table: React.FC<TableProps> = ({
                             </table>
 
                             { /* Pagination Controls */}
-                            {(data?.length as number) > 10 && (
-                                <div className="table-pagination">
-                                    { /* Page size dropdown */}
-                                    <div className="pagination-number-wrapper">
-                                        Rows per page:
-                                        <select
-                                            className='basic-select'
-                                            value={
-                                                table.getState().pagination.pageSize
-                                            }
-                                            onChange={(e) =>
-                                                table.setPageSize(
-                                                    Number(e.target.value)
-                                                )
-                                            }
-                                        >
-                                            {perPageOption.map((size) => (
-                                                <option key={size} value={size}>
-                                                    {size}
-                                                </option>
-                                            ))}
-                                        </select>
-                                    </div>
-                                    <div className="pagination-arrow">
-                                        <span
-                                            tabIndex={0}
-                                            className={`${!table.getCanPreviousPage()
-                                                ? 'pagination-button-disabled'
-                                                : ''
-                                                }`}
-                                            onClick={() => {
-                                                if (!table.getCanPreviousPage())
-                                                    return;
-                                                table.setPageIndex(0);
-                                            }}
-                                        >
-                                            <i className="admin-font adminlib-pagination-prev-arrow"></i>
-                                        </span>
-                                        <span
-                                            tabIndex={0}
-                                            className={`${!table.getCanPreviousPage()
-                                                ? 'pagination-button-disabled'
-                                                : ''
-                                                }`}
-                                            onClick={() => {
-                                                if (!table.getCanPreviousPage())
-                                                    return;
-                                                table.previousPage();
-                                            }}
-                                        >
-                                            <i className="admin-font adminlib-pagination-left-arrow"></i>
-                                        </span>
-                                        {/* <span>
+                            <div className="table-pagination">
+                                { /* Page size dropdown */}
+                                <div className="pagination-number-wrapper">
+                                    Rows per page:
+                                    <select
+                                        className='basic-select'
+                                        value={
+                                            table.getState().pagination.pageSize
+                                        }
+                                        onChange={(e) =>
+                                            table.setPageSize(
+                                                Number(e.target.value)
+                                            )
+                                        }
+                                    >
+                                        {perPageOption.map((size) => (
+                                            <option key={size} value={size}>
+                                                {size}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div className="pagination-arrow">
+                                    <span
+                                        tabIndex={0}
+                                        className={`${!table.getCanPreviousPage()
+                                            ? 'pagination-button-disabled'
+                                            : ''
+                                            }`}
+                                        onClick={() => {
+                                            if (!table.getCanPreviousPage())
+                                                return;
+                                            table.setPageIndex(0);
+                                        }}
+                                    >
+                                        <i className="admin-font adminlib-pagination-prev-arrow"></i>
+                                    </span>
+                                    <span
+                                        tabIndex={0}
+                                        className={`${!table.getCanPreviousPage()
+                                            ? 'pagination-button-disabled'
+                                            : ''
+                                            }`}
+                                        onClick={() => {
+                                            if (!table.getCanPreviousPage())
+                                                return;
+                                            table.previousPage();
+                                        }}
+                                    >
+                                        <i className="admin-font adminlib-pagination-left-arrow"></i>
+                                    </span>
+                                    {/* <span>
                                         Page{ ' ' }
                                         { table.getState().pagination
                                             .pageIndex + 1 }{ ' ' }
                                         of { pageCount }
                                     </span> */}
-                                        <div className="pagination">
-                                            {Array.from({ length: pageCount }, (_, i) => (
-                                                <button
-                                                    key={i}
-                                                    className={`number-btn ${table.getState().pagination.pageIndex === i ? "active" : ""}`}
-                                                    onClick={() => table.setPageIndex(i)}
-                                                >
-                                                    {i + 1}
-                                                </button>
-                                            ))}
-                                        </div>
-
-                                        <span
-                                            tabIndex={0}
-                                            className={`${!table.getCanNextPage()
-                                                ? 'pagination-button-disabled'
-                                                : ''
-                                                }`}
-                                            onClick={() => {
-                                                if (!table.getCanNextPage())
-                                                    return;
-                                                table.nextPage();
-                                            }}
-                                        >
-                                            <i className="admin-font adminlib-pagination-right-arrow"></i>
-                                        </span>
-                                        <span
-                                            tabIndex={0}
-                                            className={`${!table.getCanNextPage()
-                                                ? 'pagination-button-disabled'
-                                                : ''
-                                                }`}
-                                            onClick={() => {
-                                                if (!table.getCanNextPage())
-                                                    return;
-                                                table.setPageIndex(pageCount - 1);
-                                            }}
-                                        >
-                                            <i className="admin-font adminlib-pagination-next-arrow"></i>
-                                        </span>
+                                    <div className="pagination">
+                                        {Array.from({ length: pageCount }, (_, i) => (
+                                            <button
+                                                key={i}
+                                                className={`number-btn ${table.getState().pagination.pageIndex === i ? "active" : ""}`}
+                                                onClick={() => table.setPageIndex(i)}
+                                            >
+                                                {i + 1}
+                                            </button>
+                                        ))}
                                     </div>
+
+                                    <span
+                                        tabIndex={0}
+                                        className={`${!table.getCanNextPage()
+                                            ? 'pagination-button-disabled'
+                                            : ''
+                                            }`}
+                                        onClick={() => {
+                                            if (!table.getCanNextPage())
+                                                return;
+                                            table.nextPage();
+                                        }}
+                                    >
+                                        <i className="admin-font adminlib-pagination-right-arrow"></i>
+                                    </span>
+                                    <span
+                                        tabIndex={0}
+                                        className={`${!table.getCanNextPage()
+                                            ? 'pagination-button-disabled'
+                                            : ''
+                                            }`}
+                                        onClick={() => {
+                                            if (!table.getCanNextPage())
+                                                return;
+                                            table.setPageIndex(pageCount - 1);
+                                        }}
+                                    >
+                                        <i className="admin-font adminlib-pagination-next-arrow"></i>
+                                    </span>
                                 </div>
-                            )}
+                            </div>
                         </div>
                     )}
                     <div className="admin-filter-wrapper ">
@@ -753,9 +728,11 @@ const Table: React.FC<TableProps> = ({
                             </div>
                         ) : (
                             <>
-                                {realtimeFilter && (
+                                {realtimeFilter && realtimeFilter.length > 0 && (
                                     <div className="wrap-bulk-all-date">
-                                        <span className="title"><i className="adminlib-filter"></i> Filter: </span>
+                                        <span className="title">
+                                            <i className="adminlib-filter"></i> Filter:
+                                        </span>
                                         {realtimeFilter?.map((filter) => (
                                             <React.Fragment key={filter.name}>
                                                 {filter.render(handleFilterChange, filterData[filter.name])}
@@ -763,9 +740,12 @@ const Table: React.FC<TableProps> = ({
                                         ))}
                                     </div>
                                 )}
+
                                 {searchFilter && (
                                     <div className="wrap-bulk-all-date">
-                                        <span className="title"><i className="adminlib-search"></i> Search: </span>
+                                        <span className="title">
+                                            <i className="adminlib-search"></i> Search:
+                                        </span>
                                         {searchFilter?.map((filter) => (
                                             <React.Fragment key={filter.name}>
                                                 {filter.render(handleFilterChange, filterData[filter.name])}
@@ -773,7 +753,24 @@ const Table: React.FC<TableProps> = ({
                                         ))}
                                     </div>
                                 )}
+
+                                {/* Show Reset button only if filters are applied */}
+                                {Object.keys(filterData).length > 0 && (
+                                    <div className="wrap-bulk-all-date reset-wrapper">
+                                        <span
+                                            className="admin-btn btn-reset"
+                                            onClick={() => {
+                                                setFilterData({});            // clear all filters
+                                                onRowSelectionChange?.({});   // clear row selection if any
+                                                handlePagination?.(defaultRowsPerPage, 1, {}); // reload data
+                                            }}
+                                        >
+                                            <i className="adminlib-refresh"></i> Reset
+                                        </span>
+                                    </div>
+                                )}
                             </>
+
                         )}
                     </div>
                     {successMsg && (
