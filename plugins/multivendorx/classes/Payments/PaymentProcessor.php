@@ -14,7 +14,7 @@ class PaymentProcessor {
         // add_action('multivendorx_after_real_time_payment_complete', array( $this, 'after_real_time_payment_complete'), 10, 2);
     
         //COD payments.
-        // add_action('woocommerce_order_status_changed', array($this, 'cod_order_process'), 30, 4);
+        add_action('woocommerce_order_status_changed', array($this, 'cod_order_process'), 30, 4);
         
     }
 
@@ -168,59 +168,59 @@ class PaymentProcessor {
         
     // }
 
-    // public function cod_order_process($order_id, $old_status, $new_status, $order) {
-    //     if ($order->get_parent_id() == 0) {
-    //         return;
-    //     }
+    public function cod_order_process($order_id, $old_status, $new_status, $order) {
+        if ($order->get_parent_id() == 0) {
+            return;
+        }
 
-    //     $payment_method = $order->get_payment_method();
+        $payment_method = $order->get_payment_method();
 
-    //     if ($payment_method == 'cod' && $new_status == 'completed') {
-    //         global $wpdb;
-    //         $order         = wc_get_order($order_id);
-    //         $commission_id = $order ? $order->get_meta('multivendorx_commission_id', true) : null;
-    //         $commission    = $commission_id ? CommissionUtil::get_commission_db($commission_id) : null;
+        if ($payment_method == 'cod' && $new_status == 'completed') {
+            global $wpdb;
+            $order         = wc_get_order($order_id);
+            $commission_id = $order ? $order->get_meta('multivendorx_commission_id', true) : null;
+            $commission    = $commission_id ? CommissionUtil::get_commission_db($commission_id) : null;
 
-    //         $amount = $commission ? (float) $commission->commission_total : 0.00;
-    //             $data = [
-    //             'store_id'         => (int) $commission->store_id,
-    //             'order_id'         => (int) $order_id,
-    //             'commission_id'    => (int) $commission_id,
-    //             'entry_type'       => 'Dr',
-    //             'transaction_type' => 'COD received',
-    //             'amount'           => $amount,
-    //             'currency'         => get_woocommerce_currency(),
-    //             'narration'        => "Withdrawal released via COD",
-    //             'status'           => 'Completed',
-    //         ];
+            $amount = $commission ? (float) $commission->commission_total : 0.00;
+                $data = [
+                'store_id'         => (int) $commission->store_id,
+                'order_id'         => (int) $order_id,
+                'commission_id'    => (int) $commission_id,
+                'entry_type'       => 'Dr',
+                'transaction_type' => 'COD received',
+                'amount'           => $amount,
+                'currency'         => get_woocommerce_currency(),
+                'narration'        => "COD payment received for order no. - " . $order_id,
+                'status'           => 'Completed',
+            ];
 
-    //         $format = ["%d", "%d", "%d", "%s", "%s", "%f", "%s", "%s", "%s"];
+            $format = ["%d", "%d", "%d", "%s", "%s", "%f", "%s", "%s", "%s"];
 
-    //         // check shipping
-    //         // if shipping == admin then do nothing
-    //         // if shipping == store {
-    //             // $wpdb->insert(
-    //             //     $wpdb->prefix . Utill::TABLES['transaction'],
-    //             //     $data,
-    //             //     $format
-    //             // );
-    //         // }
+            // check shipping
+            // if shipping == admin then do nothing
+            // if shipping == store {
+                // $wpdb->insert(
+                //     $wpdb->prefix . Utill::TABLES['transaction'],
+                //     $data,
+                //     $format
+                // );
+            // }
 
-    //         //if shipping not found then else
-    //         $payment =  $order->get_meta('multivendorx_cod_order_payment', true );
-    //         if ($payment == 'admin') {
-    //             return;
-    //         } elseif ($payment == 'store'){
-    //              $wpdb->insert(
-    //                 $wpdb->prefix . Utill::TABLES['transaction'],
-    //                 $data,
-    //                 $format
-    //             );
-    //         } else {
-    //             $order->set_status($old_status);
-    //             $order->save();
-    //         }
-    //     }
-    // }
+            //if shipping not found then else
+            $payment =  $order->get_meta('multivendorx_cod_order_payment', true );
+            if ($payment == 'admin') {
+                return;
+            } elseif ($payment == 'store'){
+                 $wpdb->insert(
+                    $wpdb->prefix . Utill::TABLES['transaction'],
+                    $data,
+                    $format
+                );
+            } else {
+                $order->set_status($old_status);
+                $order->save();
+            }
+        }
+    }
 
 }
