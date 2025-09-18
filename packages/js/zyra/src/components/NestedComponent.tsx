@@ -330,7 +330,7 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
                   className="admin-btn btn-red"
                   onClick={() => removeRow(rowIndex)}
                 >
-                  <i className="adminlib-close"></i> {deleteButtonLabel}
+                  <i className="adminlib-delete"></i> {deleteButtonLabel}
                 </button>
               )}
 
