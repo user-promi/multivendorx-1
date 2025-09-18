@@ -762,7 +762,7 @@ const CustomFrom: React.FC<CustomFormProps> = ({
                                                     </div>
 
                                                     {/* Show settings only if field is editable */}
-                                                    {/* {!formField.readonly && (
+                                                    {!formField.readonly && (
                                                         <SettingMetaBox
                                                             formField={formField}
                                                             opened={isInputBoxClick}
@@ -774,7 +774,7 @@ const CustomFrom: React.FC<CustomFormProps> = ({
                                                             }
                                                             inputTypeList={selectOptions}
                                                         />
-                                                    )} */}
+                                                    )}
                                                 </section>
                                             )}
 
@@ -987,27 +987,7 @@ const CustomFrom: React.FC<CustomFormProps> = ({
                     />
                 </div>
                 <div className="registration-edit-form">
-                    <div className="tab-titles">
-                        {settingstabs.map((tab) => (
-                            <div
-                                key={tab.id}
-                                className={`title ${settingsActiveTab === tab.id ? "active" : ""}`}
-                                onClick={() => setSettingsActiveTab(tab.id)}
-                            >
-                                <p>{tab.label}</p>
-                            </div>
-                        ))}
-                    </div>
-                    <div className="tab-contend">
-                        {settingstabs.map(
-                            (tab) =>
-                                settingsActiveTab === tab.id && (
-                                    <div key={tab.id} className="tab-panel">
-                                        {tab.content}
-                                    </div>
-                                )
-                        )}
-                    </div>
+                    
                 </div>
             </div>
 

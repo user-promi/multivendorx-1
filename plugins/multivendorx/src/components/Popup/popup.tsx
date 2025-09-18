@@ -7,55 +7,35 @@ import './popup.scss';
 const proPopupContent = {
     proUrl: typeof appLocalizer !== 'undefined' ? appLocalizer.pro_url : '#',
     title: __(
-        'Boost to Product Notifima Pro to access premium features!',
-        'notifima'
+        'Your students will love this!',
+        'multivendorx'
     ),
-    moreText: __( 'More surprises? Oh yes.', 'notifima' ),
+    moreText: __( 'Better courses, bigger profits', 'multivendorx' ),
+    upgradeBtnText: __( 'Yes, Upgrade Me!', 'multivendorx' ),
     messages: [
         {
-            icon: 'popup-icon-double-opt-in',
-            text: __( 'Double Opt-in.', 'notifima' ),
+            text: __( 'Bulk Course Sync', 'multivendorx' ),
+            des: __( 'Sync multiple Moodle™ courses to WordPress with one click.', 'multivendorx' ),
         },
         {
-            icon: 'popup-icon-ban-spam-mail',
-            text: __( 'Ban Spam Mail.', 'notifima' ),
-        },
-        {
-            icon: 'popup-icon-export-subscribers',
-            text: __( 'Export Subscribers.', 'notifima' ),
-        },
-        {
-            icon: 'popup-icon-subscription-dashboard',
-            text: __( 'Subscription Dashboard.', 'notifima' ),
-        },
-        {
-            icon: 'popup-icon-mailchimp',
-            text: __( 'MailChimp Integration.', 'notifima' ),
-        },
-        {
-            icon: 'popup-icon-recaptcha',
-            text: __( 'Recaptcha Support.', 'notifima' ),
-        },
-        {
-            icon: 'popup-icon-subscription-dashboard',
-            text: __( 'Subscription Details.', 'notifima' ),
-        },
-        {
-            icon: 'popup-icon-export-import',
-            text: __( 'Export/Import Stock.', 'notifima' ),
+            text: __( 'Cohort Enrollment', 'multivendorx' ),
+            des: __( 'Sell and enroll entire Moodle™ cohorts via WooCommerce.', 'multivendorx' ),
         },
     ],
     btnLink: [
         {
-            value: '1 site License ($299)',
+            site: '1',
+            price: '$299',
             link: 'https://multivendorx.com/checkout/'
         },
         {
-            value: '3 site License ($399)',
+            site: '3',
+            price: '$399',
             link: 'https://multivendorx.com/checkout/$399'
         },
         {
-            value: '10 site License ($599)',
+            site: '10',
+            price: '$599',
             link: 'https://multivendorx.com/checkout/$599'
         },
     ]
