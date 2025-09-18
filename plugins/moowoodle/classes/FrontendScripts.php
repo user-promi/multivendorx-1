@@ -319,10 +319,13 @@ class FrontendScripts {
 						'wp_user_roles'            => wp_roles()->get_names(),
 						'free_version'             => MooWoodle()->version,
 						'products_link'            => MOOWOODLE_PRODUCTS_LINKS,
-						'pro_data'                 => apply_filters( 'moowoodle_update_pro_data', array(
-														'version'        => false,
-														'manage_plan_url'=> MOOWOODLE_PRO_SHOP_URL,
-													)),
+						'pro_data'                 => apply_filters(
+                            'moowoodle_update_pro_data',
+                            array(
+								'version'         => false,
+								'manage_plan_url' => MOOWOODLE_PRO_SHOP_URL,
+                            )
+                        ),
 						'md_user_roles'            => array(
 							1 => __( 'Manager', 'moowoodle' ),
 							2 => __( 'Course creator', 'moowoodle' ),

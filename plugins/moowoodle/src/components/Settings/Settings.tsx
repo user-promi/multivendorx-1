@@ -23,12 +23,11 @@ import ShowProPopup from '../Popup/Popup';
 import { useLocation, Link } from 'react-router-dom';
 
 // Types
-type SettingItem = Record<string, any>;
+type SettingItem = Record< string, any >;
 
 interface SettingsProps {
     id: string;
 }
-
 
 const faqs = [
     {
@@ -77,65 +76,65 @@ const faqs = [
     },
 ];
 
-const Settings: React.FC<SettingsProps> = () => {
+const Settings: React.FC< SettingsProps > = () => {
     const settingsArray: SettingItem[] = getAvailableSettings(
         getTemplateData(),
         []
     );
-    const location = new URLSearchParams(useLocation().hash.substring(1));
+    const location = new URLSearchParams( useLocation().hash.substring( 1 ) );
 
     // Render the dynamic form
-    const GetForm = (currentTab: string | null): JSX.Element | null => {
+    const GetForm = ( currentTab: string | null ): JSX.Element | null => {
         // get the setting context
         const { setting, settingName, setSetting, updateSetting } =
             useSetting();
         const { modules } = useModules();
 
-        if (!currentTab) return null;
-        const settingModal = getSettingById(settingsArray as any, currentTab);
+        if ( ! currentTab ) return null;
+        const settingModal = getSettingById( settingsArray as any, currentTab );
 
         // Ensure settings context is initialized
-        if (settingName !== currentTab) {
+        if ( settingName !== currentTab ) {
             setSetting(
                 currentTab,
-                appLocalizer.settings_databases_value[currentTab] || {}
+                appLocalizer.settings_databases_value[ currentTab ] || {}
             );
         }
 
         // eslint-disable-next-line react-hooks/rules-of-hooks
-        useEffect(() => {
-            if (settingName === currentTab) {
-                appLocalizer.settings_databases_value[settingName] = setting;
+        useEffect( () => {
+            if ( settingName === currentTab ) {
+                appLocalizer.settings_databases_value[ settingName ] = setting;
             }
-        }, [setting, settingName, currentTab]);
+        }, [ setting, settingName, currentTab ] );
 
         // Special component
-        if (currentTab === 'support') {
+        if ( currentTab === 'support' ) {
             return (
                 <Support
                     title="Thank you for using MooWoodle"
                     subTitle="We want to help you enjoy a wonderful experience with all of our products."
-                    url={appLocalizer.video_url}
-                    faqData={faqs}
+                    url={ appLocalizer.video_url }
+                    faqData={ faqs }
                 />
             );
         }
 
         return (
             <>
-                {settingName === currentTab ? (
+                { settingName === currentTab ? (
                     <AdminForm
-                        settings={settingModal as SettingContent}
-                        proSetting={appLocalizer.pro_settings_list}
-                        setting={setting}
-                        updateSetting={updateSetting}
-                        appLocalizer={appLocalizer}
-                        modules={modules}
-                        Popup={ShowProPopup}
+                        settings={ settingModal as SettingContent }
+                        proSetting={ appLocalizer.pro_settings_list }
+                        setting={ setting }
+                        updateSetting={ updateSetting }
+                        appLocalizer={ appLocalizer }
+                        modules={ modules }
+                        Popup={ ShowProPopup }
                     />
                 ) : (
                     <>Loading...</>
-                )}
+                ) }
             </>
         );
     };
@@ -143,17 +142,17 @@ const Settings: React.FC<SettingsProps> = () => {
     return (
         <SettingProvider>
             <Tabs
-                tabData={settingsArray as any}
-                currentTab={location.get('subtab') as string}
-                getForm={GetForm}
-                prepareUrl={(subTab: string) =>
-                    `?page=moowoodle#&tab=settings&subtab=${subTab}`
+                tabData={ settingsArray as any }
+                currentTab={ location.get( 'subtab' ) as string }
+                getForm={ GetForm }
+                prepareUrl={ ( subTab: string ) =>
+                    `?page=moowoodle#&tab=settings&subtab=${ subTab }`
                 }
-                appLocalizer={appLocalizer}
-                brandImg={Brand}
-                smallbrandImg={BrandSmall}
-                Link={Link}
-                settingName={'Settings'}
+                appLocalizer={ appLocalizer }
+                brandImg={ Brand }
+                smallbrandImg={ BrandSmall }
+                Link={ Link }
+                settingName={ 'Settings' }
             />
         </SettingProvider>
     );

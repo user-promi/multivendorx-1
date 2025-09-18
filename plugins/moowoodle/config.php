@@ -11,20 +11,20 @@ define( 'MOOWOODLE_PLUGIN_SLUG', 'moowoodle' );
 define( 'MOOWOODLE_YOUTUBE_VIDEO_URL', 'https://www.youtube.com/embed/fL7wPVYopTU?si=BZeP1WwCxBSSoM7h' );
 define( 'MOOWOODLE_CHAT_URL', 'https://tawk.to/chat/5d2eebf19b94cd38bbe7c9ad/1fsg8cq8n' );
 
-const MOOWOODLE_PRODUCTS_LINKS = [
-    [
-        'site' => '1',
+const MOOWOODLE_PRODUCTS_LINKS = array(
+    array(
+        'site'  => '1',
         'price' => '$199',
-        'link' => 'https://dualcube.com/product/moowoodle-pro/?add-to-cart=18156'
-    ],
-    [
-        'site' => '3',
+        'link'  => 'https://dualcube.com/product/moowoodle-pro/?add-to-cart=18156',
+    ),
+    array(
+        'site'  => '3',
         'price' => '$349',
-        'link' => 'https://dualcube.com/product/moowoodle-pro/?add-to-cart=18158'
-    ],
-    [
-        'site' => '10',
+        'link'  => 'https://dualcube.com/product/moowoodle-pro/?add-to-cart=18158',
+    ),
+    array(
+        'site'  => '10',
         'price' => '$499',
-        'link' => 'https://dualcube.com/product/moowoodle-pro/?add-to-cart=18157'
-    ],
-];
+        'link'  => 'https://dualcube.com/product/moowoodle-pro/?add-to-cart=18157',
+    ),
+);

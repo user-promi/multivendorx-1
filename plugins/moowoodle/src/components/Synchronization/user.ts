@@ -6,7 +6,7 @@ import moodleLogo from '@/assets/images/moodle-to-wordpress.png';
 export default {
     id: 'synchronize-user',
     priority: 20,
-    name: __('Users Synchronization', 'moowoodle'),
+    name: __( 'Users Synchronization', 'moowoodle' ),
     desc: __(
         'Synchronization on demand with automatic, real-time updates.',
         'moowoodle'
@@ -22,7 +22,7 @@ export default {
                 "The synchronization flow specifies the direction of data transfer. To enable two-way synchronization, select both directions. This applies to existing users as well. With 'Real-time profile synchronization', user profile information will sync immediately whenever users update their profiles.<br><br> <span class='highlighted-part'>User uniqueness will be checked based on email. If the user exists in the other system, their profile information will be synchronized; otherwise, a new user will be created. <br>Synchronizing user information fails if the same username is found in another instance but linked to a different email address.</span>",
                 'moowoodle'
             ),
-            label: __('Synchronization flow between sites', 'moowoodle'),
+            label: __( 'Synchronization flow between sites', 'moowoodle' ),
             options: [
                 {
                     key: 'wordpress_to_moodle',
@@ -37,7 +37,7 @@ export default {
                     img: moodleLogo,
                 },
             ],
-            multiSelect:true,
+            multiSelect: true,
             proSetting: true,
         },
         {
@@ -47,9 +47,9 @@ export default {
                 'Users from the chosen roles will be added or updated in Moodle.',
                 'moowoodle'
             ),
-            label: __('WordPress user role to synchronize', 'moowoodle'),
-            options: Object.entries(appLocalizer.wp_user_roles).map(
-                ([key, label]) => {
+            label: __( 'WordPress user role to synchronize', 'moowoodle' ),
+            options: Object.entries( appLocalizer.wp_user_roles ).map(
+                ( [ key, label ] ) => {
                     return {
                         key,
                         label,
@@ -71,9 +71,9 @@ export default {
                 'Users from the chosen roles will be added or updated in WordPress.',
                 'moowoodle'
             ),
-            label: __('Moodle user role to synchronize', 'moowoodle'),
-            options: Object.entries(appLocalizer.md_user_roles).map(
-                ([key, label]) => {
+            label: __( 'Moodle user role to synchronize', 'moowoodle' ),
+            options: Object.entries( appLocalizer.md_user_roles ).map(
+                ( [ key, label ] ) => {
                     return {
                         key,
                         label,
@@ -95,7 +95,7 @@ export default {
                 "Define the user profile information mapping between WordPress and Moodle. Add multiple rows above to define all the profile data you wish to map. Any remaining profile field will be excluded from the synchronization process.<br>User will be created based on their e-mail id, hence email id can't be mapped.",
                 'moowoodle'
             ),
-            label: __('Profile information mapping', 'moowoodle'),
+            label: __( 'Profile information mapping', 'moowoodle' ),
             selectDeselect: true,
             syncFieldsMap: {
                 wordpress: {
@@ -126,11 +126,11 @@ export default {
                 'If enabled, the real-time profile update scheduler will initiate based on the "synchronization flow" settings.<br>When a new user is added or updates their profile information, it will be synchronized between WordPress to Moodle, or vice versa, according to the profile information mapping settings above, based on the specified direction.',
                 'moowoodle'
             ),
-            label: __('Real-Time profile synchronization', 'moowoodle'),
+            label: __( 'Real-Time profile synchronization', 'moowoodle' ),
             options: [
                 {
                     key: 'realtime_user_sync',
-                    label: __('', 'moowoodle'),
+                    label: __( '', 'moowoodle' ),
                     value: 'realtime_user_sync',
                 },
             ],
