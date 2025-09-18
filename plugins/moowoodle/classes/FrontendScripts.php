@@ -318,6 +318,7 @@ class FrontendScripts {
 						'moodle_site_url'          => MooWoodle()->setting->get_setting( 'moodle_url' ),
 						'wp_user_roles'            => wp_roles()->get_names(),
 						'free_version'             => MooWoodle()->version,
+						'products_link'            => MOOWOODLE_PRODUCTS_LINKS,
 						'pro_data'                 => apply_filters( 'moowoodle_update_pro_data', array(
 														'version'        => false,
 														'manage_plan_url'=> MOOWOODLE_PRO_SHOP_URL,

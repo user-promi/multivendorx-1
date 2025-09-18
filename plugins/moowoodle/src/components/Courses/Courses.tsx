@@ -88,7 +88,7 @@ const Course: React.FC = () => {
                 setError(__('Failed to load categories', 'moowoodle'));
             });
     }, []);
-    
+
     // add this inside your component
     useEffect(() => {
         const handleClickOutside = (e: MouseEvent) => {
@@ -333,12 +333,7 @@ const Course: React.FC = () => {
             header: __('Category', 'moowoodle'),
             cell: ({ row }) => (
                 <TableCell title={__('Category Name')}>
-                    <a
-                        href={row.original.category_url}
-                        title={row.original.category_name}
-                    >
-                        {row.original.category_name || '-'}
-                    </a>
+                    {row.original.category_name || '-'}
                 </TableCell>
             ),
         },
@@ -531,6 +526,8 @@ const Course: React.FC = () => {
                 </div>
             ),
         },
+    ];
+    const searchFilter: RealtimeFilter[] = [
         {
             name: 'searchCourseField',
             render: (
@@ -578,7 +575,6 @@ const Course: React.FC = () => {
             ),
         },
     ];
-
     return (
         <>
             {openDialog && (
@@ -624,6 +620,7 @@ const Course: React.FC = () => {
                     rowSelection={rowSelection}
                     onRowSelectionChange={setRowSelection}
                     realtimeFilter={realtimeFilter}
+                    searchFilter={searchFilter}
                     defaultRowsPerPage={10}
                     pageCount={pageCount}
                     pagination={pagination}

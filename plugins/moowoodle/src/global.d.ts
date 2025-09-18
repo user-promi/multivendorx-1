@@ -26,6 +26,7 @@ declare global {
         free_version:any;
         chat_url:any;
         pro_data:any;
+        products_link:any;
     }
 
     interface CourseMyAcc {

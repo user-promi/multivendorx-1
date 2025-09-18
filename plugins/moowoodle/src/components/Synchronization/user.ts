@@ -38,6 +38,7 @@ export default {
                 },
             ],
             multiSelect:true,
+            proSetting: true,
         },
         {
             key: 'wordpress_user_role',
@@ -53,11 +54,11 @@ export default {
                         key,
                         label,
                         value: key,
+                        proSetting: true,
                     };
                 }
             ),
             selectDeselect: true,
-            proSetting: true,
             dependent: {
                 key: 'user_sync_direction',
                 value: 'wordpress_to_moodle',
@@ -77,11 +78,11 @@ export default {
                         key,
                         label,
                         value: key,
+                        proSetting: true,
                     };
                 }
             ),
             selectDeselect: true,
-            proSetting: true,
             dependent: {
                 key: 'user_sync_direction',
                 value: 'moodle_to_wordpress',
