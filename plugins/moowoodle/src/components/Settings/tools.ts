@@ -11,7 +11,7 @@ export default {
         {
             key: 'moowoodle_adv_log',
             type: 'checkbox',
-            label: __('Advance Log', 'moowoodle'),
+            label: __('Advance log', 'moowoodle'),
             desc: __(
                 `<span class="highlighted-part">Activating this option will log more detailed error information. Enable it only when essential, as it may result in a larger log file.</span>`,
                 'moowoodle'
@@ -39,7 +39,7 @@ export default {
             size:'8rem',
             postInsideText: __('sec', 'moowoodle'),
             label: __('Connection timeout', 'moowoodle'),
-            postInsideText: __('Sec', 'multivendorx'),
+            postInsideText: __('sec', 'multivendorx'),
             parameter: __('Seconds', 'moowoodle'),
         },
         {
@@ -51,7 +51,7 @@ export default {
             ),
             size:'8rem',
             proSetting: true,
-            postInsideText: __('Min', 'multivendorx'),
+            postInsideText: __('min', 'multivendorx'),
             parameter: __('Minutes', 'moowoodle'),
             label: __('Automatic synchronization frequency', 'moowoodle'),
         },

@@ -28,7 +28,7 @@ export default {
             desc: sprintf(
                 /* translators: %s: URL to Moodle token page */
                 __(
-                    'Enter Moodle access token. You can generate the access token from <a href="%s" target="_blank" rel="noreferrer">here</a>. <br>Navigation: Dashboard => Site administration => Server => Manage tokens.',
+                    'Enter Moodle access token. You can generate the access token from <a href="%s" target="_blank" rel="noreferrer">here</a>. <br>Navigation: Dashboard → Site administration → Server → Manage tokens.',
                     'moowoodle'
                 ),
                 appLocalizer.moodle_site_url + 'admin/webservice/tokens.php'

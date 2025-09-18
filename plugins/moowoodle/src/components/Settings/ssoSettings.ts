@@ -5,7 +5,7 @@ export default {
     id: 'sso',
     priority: 30,
     name: __('Single Sign On', 'moowoodle'),
-    desc: __('Manage seamless login and logout synchronization', 'moowoodle'),
+    desc: __('Manage seamless login and logout synchronization.', 'moowoodle'),
     icon: 'adminlib-vpn-key',
     submitUrl: 'settings',
     proDependent: true,
@@ -14,7 +14,7 @@ export default {
             key: 'moowoodle_sso_enable',
             type: 'checkbox',
             desc: __(
-                'Enabling this option allows users to access Moodle courses directly, bypassing the need for login',
+                'Enabling this option allows users to access Moodle courses directly, bypassing the need for login.',
                 'moowoodle'
             ),
             label: __('Single Sign On', 'moowoodle'),
@@ -45,7 +45,7 @@ export default {
                     'admin/settings.php?section=authsettingmoowoodle'
             ),
             size:'50%',
-            label: __('SSO Secret Key', 'moowoodle'),
+            label: __('SSO secret key', 'moowoodle'),
             proSetting: true,
             generate: true,
         },
