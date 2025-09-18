@@ -264,6 +264,31 @@ export default {
             desc: __('', 'multivendorx'),
             nestedFields
         },
-
+        {
+            key: 'facilitator_fees',
+            type: 'nested',
+            label: 'Facilitator Fees',
+            single: true,
+            desc: __(
+                '',
+                'multivendorx'
+            ),
+            nestedFields: [
+                {
+                    key: 'facilitator_fixed',
+                    type: 'number',
+                    preInsideText: __('$', 'multivendorx'),
+                    size: "8rem",
+                    preText: 'Fixed',
+                    postText: "+",
+                },
+                {
+                    key: 'facilitator_percentage',
+                    type: 'number',
+                    postInsideText: __('%', 'multivendorx'),
+                    size: "8rem",
+                },
+            ],
+        },
     ],
 };
