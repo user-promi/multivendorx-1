@@ -42,7 +42,6 @@ export default {
             size: '8rem',
             postInsideText: __( 'sec', 'moowoodle' ),
             label: __( 'Connection timeout', 'moowoodle' ),
-            postInsideText: __( 'sec', 'multivendorx' ),
             parameter: __( 'Seconds', 'moowoodle' ),
         },
         {
@@ -53,7 +52,6 @@ export default {
                 'moowoodle'
             ),
             size: '8rem',
-            proSetting: true,
             postInsideText: __( 'min', 'multivendorx' ),
             parameter: __( 'Minutes', 'moowoodle' ),
             label: __( 'Automatic synchronization frequency', 'moowoodle' ),

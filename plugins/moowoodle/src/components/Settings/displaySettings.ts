@@ -38,10 +38,10 @@ export default {
             ),
             label: __( "Endpoint menu position - 'My Course'", 'moowoodle' ),
             options: Object.entries( appLocalizer.accountmenu ).map(
-                ( [ name ], index ) => {
+                ( [ key, label ], index ) => {
                     return {
                         key: index,
-                        label: name,
+                        label: label,
                         value: index,
                     };
                 }
