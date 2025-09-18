@@ -209,12 +209,15 @@
           padding: 0.313rem 0.85rem;
           font-size: 0.9rem;
           display: flex;
-          align-items: center;
           flex: 1 0 0;
 
+          .table-row-custom{
+            display: flex;
+            gap: 0.5rem;
+          }
           img {
             width: 3.125rem;
-            height: auto;
+            height: 100%;
             border: 0.063rem solid #e0e4e9;
           }
 
@@ -459,8 +462,7 @@
     display: none;
     z-index: 2;
     border-radius: 0.313rem;
-    width: 10rem;
-
+    width: 11rem;
     ul {
       padding: 0.313rem 0;
       margin: 0;
@@ -470,7 +472,6 @@
         display: flex;
         align-items: center;
         gap: 0.425rem;
-        width: 100%;
         font-size: 0.813rem;
         font-weight: 500;
         cursor: pointer;
@@ -478,6 +479,7 @@
 
         i {
           font-size: 1rem;
+          width: 10%;
         }
 
         &.delete {
@@ -490,7 +492,7 @@
 
     &.show {
       display: block;
-      transform: translate(0, 20px);
+      transform: translate(0, 30px);
     }
   }
 

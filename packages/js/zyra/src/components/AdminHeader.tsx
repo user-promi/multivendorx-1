@@ -48,6 +48,7 @@ type AdminHeaderProps = {
   messagesLink?: string;
   showNotifications?: boolean;
   showMessages?: boolean;
+  showProfile?: boolean;
 };
 
 
@@ -68,7 +69,8 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
   messagesLink,
   messages,
   showMessages,
-  showNotifications
+  showNotifications,
+  showProfile,
 }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
@@ -294,39 +296,40 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
             </div>
           )}
 
-          <div className="icon-wrapper">
-            <i
-              className="admin-icon adminlib-user-circle"
-              title="Admin support"
-              onClick={() => {
-                setProfileOpen(!profileOpen);
-                setNotifOpen(false);
-              }}
-            ></i>
-            {profileOpen && (
-              <div className="dropdown-menu">
-                <div className="dropdown-body">
-                  <ul>
-                    <li>
-                      <a href="#">
-                        <i className="adminlib-person"></i>
-                        Manage Plan
-                      </a>
-                    </li>
-                    <li>
-                      <a onClick={(e) => {
-                        setContactSupportPopup(true);
-                      }}>
-                        <i className="adminlib-user-network-icon"></i>
-                        Contact Support
-                      </a>
-                    </li>
-                  </ul>
+          { showProfile && (
+            <div className="icon-wrapper">
+              <i
+                className="admin-icon adminlib-user-circle"
+                title="Admin support"
+                onClick={() => {
+                  setProfileOpen(!profileOpen);
+                  setNotifOpen(false);
+                }}
+              ></i>
+              {profileOpen && (
+                <div className="dropdown-menu">
+                  <div className="dropdown-body">
+                    <ul>
+                      <li>
+                        <a href="#">
+                          <i className="adminlib-person"></i>
+                          Manage Plan
+                        </a>
+                      </li>
+                      <li>
+                        <a onClick={(e) => {
+                          setContactSupportPopup(true);
+                        }}>
+                          <i className="adminlib-user-network-icon"></i>
+                          Contact Support
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
                 </div>
-              </div>
-            )}
-          </div>
-
+              )}
+            </div>
+          )}
         </div>
       </div>
 
