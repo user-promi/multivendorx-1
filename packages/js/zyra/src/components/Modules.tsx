@@ -311,44 +311,46 @@ const Modules: React.FC<ModuleProps> = ({
                                             className="meta-description"
                                             dangerouslySetInnerHTML={{ __html: module.desc }}
                                         ></p>
-                                        {requiredPlugins.length > 0 && (
-                                            <div className="requires">
-                                                <div className="requires-title">Requires:</div>
-                                                {requiredPlugins.map((plugin: { name: string; link: string }, idx: number) => (
-                                                    <span key={idx}>
-                                                        <a href={plugin.link} target="_blank" rel="noopener noreferrer">
-                                                            {plugin.name}
-                                                        </a>
-                                                        {idx < requiredPlugins.length - 1 ? ', ' : ''}
-                                                    </span>
-                                                ))}
-                                                {/* <p className="meta-description">{requiredPlugins.join(', ')}</p> */}
-                                            </div>
-                                        )}
                                     </div>
                                 </div>
-                                <div className="module-footer">
-                                    <div className="buttons">
-                                        {module.doc_link && (<a href={module.doc_link}><i className="adminlib-book"></i></a>)}
-                                        {module.video_link && (<a href={module.video_link}><i className="adminlib-button-appearance"></i></a>)}
-                                    </div>
-                                    <div
-                                        className="toggle-checkbox"
-                                        data-tour={`${module.id}-showcase-tour`}
-                                    >
-                                        <input
-                                            type="checkbox"
-                                            className="woo-toggle-checkbox"
-                                            id={`toggle-switch-${module.id}`}
-                                            checked={modules.includes(module.id)}
-                                            onChange={(e) => handleOnChange(e, module.id)}
-                                        />
-                                        <label
-                                            htmlFor={`toggle-switch-${module.id}`}
-                                            className="toggle-switch-is_hide_cart_checkout"
-                                        ></label>
+                                <div className="footer-wrapper">
+                                    {requiredPlugins.length > 0 && (
+                                        <div className="requires">
+                                            <div className="requires-title">Requires:</div>
+                                            {requiredPlugins.map((plugin: { name: string; link: string }, idx: number) => (
+                                                <span key={idx}>
+                                                    <a href={plugin.link} target="_blank" rel="noopener noreferrer">
+                                                        {plugin.name}
+                                                    </a>
+                                                    {idx < requiredPlugins.length - 1 ? ', ' : ''}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    )}
+                                    <div className="module-footer">
+                                        <div className="buttons">
+                                            {module.doc_link && (<a href={module.doc_link}><i className="adminlib-book"></i></a>)}
+                                            {module.video_link && (<a href={module.video_link}><i className="adminlib-button-appearance"></i></a>)}
+                                        </div>
+                                        <div
+                                            className="toggle-checkbox"
+                                            data-tour={`${module.id}-showcase-tour`}
+                                        >
+                                            <input
+                                                type="checkbox"
+                                                className="woo-toggle-checkbox"
+                                                id={`toggle-switch-${module.id}`}
+                                                checked={modules.includes(module.id)}
+                                                onChange={(e) => handleOnChange(e, module.id)}
+                                            />
+                                            <label
+                                                htmlFor={`toggle-switch-${module.id}`}
+                                                className="toggle-switch-is_hide_cart_checkout"
+                                            ></label>
+                                        </div>
                                     </div>
                                 </div>
+
                             </div>
                         );
                     })}

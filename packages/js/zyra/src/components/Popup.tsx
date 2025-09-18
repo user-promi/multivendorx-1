@@ -14,7 +14,8 @@ export interface PopupMessage {
     text: string;
 }
 export interface BtnLink {
-    value: string;
+    site: string;
+    price: string;
     link: string;
 }
 // Types
@@ -38,15 +39,14 @@ export interface PopupProps {
 
 const ProPopup: React.FC<PopupProps> = (props) => {
     const { btnLink = [], proUrl = '#' } = props;
-    // default to first btnLink's link if present, otherwise fallback to proUrl
-    const [selectedLink, setSelectedLink] = useState<string>(
-        btnLink.length ? btnLink[0].link : proUrl
 
+    const [selectedBtn, setSelectedBtn] = useState<BtnLink>(
+        btnLink.length ? btnLink[0] : { site: '', price: '', link: proUrl }
     );
-    // update selectedLink if props change
     useEffect(() => {
-        setSelectedLink(btnLink.length ? btnLink[0].link : proUrl);
+        setSelectedBtn(btnLink.length ? btnLink[0] : { site: '', price: '', link: proUrl });
     }, [btnLink, proUrl]);
+
     return (
         <DialogContent className={`${props.messages ? "pro-popup-content" : "module-popup-content"}`}>
             <DialogContentText sx={{ fontFamily: "Figtree, sans-serif" }}>
@@ -54,29 +54,35 @@ const ProPopup: React.FC<PopupProps> = (props) => {
                     {props.messages && (
                         <>
                             <div className="top-section">
-                                <div className="heading">Upgrade Your Plan</div>
-                                <div className="description">Lorem ipsum dolor sit amet.</div>
-
-                                <select
-                                    value={selectedLink}
-                                    onChange={(e) => setSelectedLink(e.target.value)}
-                                >
-                                    {btnLink.map((b, idx) => (
-                                        <option key={idx} value={b.link}>
-                                            {b.value}
-                                        </option>
-                                    ))}
-                                </select>
+                                <div className="heading">{props.title}</div>
+                                <div className="description">{props.moreText}</div>
+                                <div className="price">{selectedBtn.price}</div>
+                                <div className="select-wrapper">
+                                    <select
+                                        value={selectedBtn.link}
+                                        onChange={(e) => {
+                                            const found = btnLink.find((b) => b.link === e.target.value);
+                                            if (found) setSelectedBtn(found);
+                                        }}
+                                    >
+                                        {btnLink.map((b, idx) => (
+                                            <option key={idx} value={b.link}>
+                                                {b.site}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    site License
+                                </div>
                                 <a
                                     className="admin-btn btn-red"
-                                    href={selectedLink}
+                                    href={selectedBtn.link}
                                     target="_blank"
                                     rel="noreferrer"
                                 >
                                     Upgrade my plan <i className="adminlib-arrow-right arrow-icon"></i>
                                 </a>
                             </div>
-                            <div className="content">
+                            <div className="popup-content">
                                 <div className="heading-text">
                                     Why should you upgrade?
                                 </div>

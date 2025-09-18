@@ -43,7 +43,18 @@
   width: 100%;
   position: sticky;
   bottom: 1rem;
-    
+  .search-section{
+    display: flex;
+    align-items: center;
+    padding-left: 0.5rem;
+
+    i{
+      font-size: 1.25rem;
+    }
+    input{
+      padding-left: 0;
+    }
+  }
   .wrap-bulk-all-date {
     display: flex;
     gap: 0.313rem;

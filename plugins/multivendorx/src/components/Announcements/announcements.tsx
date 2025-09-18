@@ -267,7 +267,8 @@ export const Announcements: React.FC = () => {
             name: 'searchField',
             render: ( updateFilter, filterValue ) => (
                 <>
-                    <div className="admin-header-search-section search-section">
+                    <div className="search-section">
+                        <i className="adminlib-search"></i>
                         <input
                             name="searchField"
                             type="text"
