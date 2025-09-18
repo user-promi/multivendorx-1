@@ -11,6 +11,7 @@ import {
     PaginationState,
 } from '@tanstack/react-table';
 import "./announcements.scss";
+import { DateRangePicker, RangeKeyDict } from 'react-date-range';
 
 type StoreRow = {
     stores: any;
@@ -90,7 +91,9 @@ export const Announcements: React.FC = () => {
         setEditId(null); // reset edit mode
         setError(null); // clear any error
     };
-
+    const handleDateOpen = () => {
+        setOpenDatePicker(!openDatePicker);
+    };
     // Handle form input change
     const handleChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -104,21 +107,21 @@ export const Announcements: React.FC = () => {
             const index = Number(key);
             return data && data[index] ? data[index].id : null;
         }).filter((id): id is number => id !== null);
-    
+
         if (!selectedIds.length) {
             setModalDetails('Select rows.');
             setOpenModal(true);
             return;
         }
-    
+
         if (!action) {
             setModalDetails('Please select an action.');
             setOpenModal(true);
             return;
         }
-    
+
         setData(null);
-    
+
         try {
             await axios({
                 method: 'PUT',
@@ -126,13 +129,13 @@ export const Announcements: React.FC = () => {
                 headers: { 'X-WP-Nonce': appLocalizer.nonce },
                 data: { bulk: true, action, ids: selectedIds },
             });
-    
+
             requestData(pagination.pageSize, pagination.pageIndex + 1, page);
             setRowSelection({});
         } catch (err) {
             setError(__('Failed to perform bulk action', 'multivendorx'));
         }
-    }; 
+    };
 
     const handleEdit = async (id: number) => {
         try {
@@ -172,7 +175,7 @@ export const Announcements: React.FC = () => {
             const method = editId ? 'PUT' : 'POST';
 
             const payload = {
-                ...formData, 
+                ...formData,
                 status,
                 stores: formData.stores ? formData.stores.split(',') : [],
             };
@@ -200,8 +203,8 @@ export const Announcements: React.FC = () => {
     };
 
 
-    const requestApiForData = ( rowsPerPage: number, currentPage: number, filterData: FilterData ) => {
-        setData( null );
+    const requestApiForData = (rowsPerPage: number, currentPage: number, filterData: FilterData) => {
+        setData(null);
         requestData(
             rowsPerPage,
             currentPage,
@@ -223,19 +226,19 @@ export const Announcements: React.FC = () => {
             url: getApiLink(appLocalizer, 'store'),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
         })
-        .then((response) => {
-            if (response.data && Array.isArray(response.data)) {
-                const options = response.data.map((store: any) => ({
-                    value: store.id.toString(),
-                    label: store.store_name,
-                }));
-                setStoreOptions(options);
-            }
+            .then((response) => {
+                if (response.data && Array.isArray(response.data)) {
+                    const options = response.data.map((store: any) => ({
+                        value: store.id.toString(),
+                        label: store.store_name,
+                    }));
+                    setStoreOptions(options);
+                }
 
-        })
-        .catch(() => {
-            setError(__('Failed to load stores', 'multivendorx'));
-        });
+            })
+            .catch(() => {
+                setError(__('Failed to load stores', 'multivendorx'));
+            });
         axios({
             method: 'GET',
             url: getApiLink(appLocalizer, 'announcement'),
@@ -257,35 +260,189 @@ export const Announcements: React.FC = () => {
             ]);
             setPage(typeCount == 'all' ? '' : typeCount);
         })
-        .catch(() => {
-            setError(__('Failed to load announcements', 'multivendorx'));
-        });
+            .catch(() => {
+                setError(__('Failed to load announcements', 'multivendorx'));
+            });
     }
+
+    // const realtimeFilter: RealtimeFilter[] = [
+    //     {
+    //         name: 'searchField',
+    //         render: ( updateFilter, filterValue ) => (
+    //             <>
+    //                 <div className="search-section">
+    //                     <i className="adminlib-search"></i>
+    //                     <input
+    //                         name="searchField"
+    //                         type="text"
+    //                         className="basic-input"
+    //                         placeholder={ __( 'Search', 'moowoodle-pro' ) }
+    //                         onChange={ ( e ) => {
+    //                             updateFilter( e.target.name, e.target.value );
+    //                         } }
+    //                         value={ filterValue || '' }
+    //                     />
+    //                 </div>
+    //             </>
+    //         ),
+    //     },
+    // ];
 
     const realtimeFilter: RealtimeFilter[] = [
         {
+            name: 'courseField',
+            render: (updateFilter: (key: string, value: string) => void, filterValue: string | undefined) => (
+                <div className="   course-field">
+                    <select
+                        name="courseField"
+                        onChange={(e) => updateFilter(e.target.name, e.target.value)}
+                        value={filterValue || ''}
+                        className="basic-select"
+                    >
+                        <option value="">Courses</option>
+                        {/* {Object.entries(courses).map(([courseId, courseName]) => (
+                            <option key={courseId} value={courseId}>
+                                {courseName}
+                            </option>
+                        ))} */}
+                    </select>
+                </div>
+            ),
+        },
+        {
+            name: 'groupField',
+            render: (updateFilter: (key: string, value: string) => void, filterValue: string | undefined) => (
+                <div className="   group-field">
+                    <select
+                        name="groupField"
+                        onChange={(e) => updateFilter(e.target.name, e.target.value)}
+                        value={filterValue || ''}
+                        className="basic-select"
+                    >
+                        <option value="">Groups</option>
+                        {/* {Object.entries(groups).map(([groupId, groupName]) => (
+                            <option key={groupId} value={groupId}>
+                                {' '}
+                                {groupName}{' '}
+                            </option>
+                        ))} */}
+                    </select>
+                </div>
+            ),
+        },
+        {
+            name: 'cohortField',
+            render: (updateFilter: (key: string, value: string) => void, filterValue: string | undefined) => (
+                <div className="   cohort-field">
+                    <select
+                        name="cohortField"
+                        onChange={(e) => updateFilter(e.target.name, e.target.value)}
+                        value={filterValue || ''}
+                        className="basic-select"
+                    >
+                        <option value="">Cohorts</option>
+                        {/* {Object.entries(cohorts).map(([cohortId, cohortName]) => (
+                            <option key={cohortId} value={cohortId}>
+                                {cohortName}
+                            </option>
+                        ))} */}
+                    </select>
+                </div>
+            ),
+        },
+        {
+            name: 'date',
+            render: (updateFilter) => (
+                <div ref={dateRef}>
+                    <div className="  ">
+                        <input
+                            value={`${selectedRange[0].startDate.toLocaleDateString()} - ${selectedRange[0].endDate.toLocaleDateString()}`}
+                            onClick={() => handleDateOpen()}
+                            className="basic-input"
+                            type="text"
+                            placeholder={'DD/MM/YYYY'}
+                        />
+                    </div>
+                    {openDatePicker && (
+                        <div className="date-picker-section-wrapper" id="date-picker-wrapper">
+                            <DateRangePicker
+                                ranges={selectedRange}
+                                months={1}
+                                direction="vertical"
+                                scroll={{ enabled: true }}
+                                maxDate={new Date()}
+                                onChange={(ranges: RangeKeyDict) => {
+                                    // const selection: Range = ranges.selection;
+
+                                    // if (selection?.endDate instanceof Date) {
+                                    //     // Set end of day to endDate
+                                    //     selection.endDate.setHours(23, 59, 59, 999);
+                                    // }
+
+                                    // // Update local range state
+                                    // setSelectedRange([
+                                    //     {
+                                    //         startDate: selection.startDate || new Date(),
+                                    //         endDate: selection.endDate || new Date(),
+                                    //         key: selection.key || 'selection',
+                                    //     },
+                                    // ]);
+
+                                    // // Update external filters (could be used by table or search logic)
+                                    // updateFilter('date', {
+                                    //     start_date: selection.startDate,
+                                    //     end_date: selection.endDate,
+                                    // });
+                                }}
+                            />
+                        </div>
+                    )}
+                </div>
+            ),
+        },
+    ];
+    const searchFilter: RealtimeFilter[] = [
+        {
             name: 'searchField',
-            render: ( updateFilter, filterValue ) => (
+            render: (updateFilter, filterValue) => (
                 <>
                     <div className="search-section">
-                        <i className="adminlib-search"></i>
                         <input
                             name="searchField"
                             type="text"
                             className="basic-input"
-                            placeholder={ __( 'Search', 'moowoodle-pro' ) }
-                            onChange={ ( e ) => {
-                                updateFilter( e.target.name, e.target.value );
-                            } }
-                            value={ filterValue || '' }
+                            placeholder={__('Search', 'moowoodle-pro')}
+                            onChange={(e) => {
+                                updateFilter(e.target.name, e.target.value);
+                            }}
+                            value={filterValue || ''}
                         />
                     </div>
                 </>
             ),
         },
+        {
+            name: 'searchAction',
+            render: (updateFilter, filterValue) => (
+                <>
+                    <div className="   search-action">
+                        <select
+                            name="searchAction"
+                            className="basic-select"
+                            onChange={(e) => {
+                                updateFilter(e.target.name, e.target.value);
+                            }}
+                            value={filterValue || ''}
+                        >
+                            <option value="">Select</option>
+                            <option value="name">Name</option>
+                            <option value="email">Email</option>
+                        </select>
+                    </div>
+                </>
+            ),
+        },
     ];
-
-
     useEffect(() => {
         const currentPage = pagination.pageIndex + 1;
         requestData(pagination.pageSize, currentPage, page);
@@ -340,18 +497,18 @@ export const Announcements: React.FC = () => {
                 const stores = Array.isArray(row.original.stores) ? row.original.stores : [];
                 console.log(stores)
                 let displayStores = stores;
-        
+
                 if (stores.length > 2) {
                     displayStores = [...stores.slice(0, 2), '...'];
                 }
-        
+
                 return (
                     <TableCell title={stores.join(', ')}>
                         {displayStores.join(', ')}
                     </TableCell>
                 );
             },
-        },        
+        },
         {
             header: __('Date', 'multivendorx'),
             cell: ({ row }) => {
@@ -497,7 +654,8 @@ export const Announcements: React.FC = () => {
                     rowSelection={rowSelection}
                     onRowSelectionChange={setRowSelection}
                     defaultRowsPerPage={10}
-                    realtimeFilter={ realtimeFilter }
+                    realtimeFilter={realtimeFilter}
+                    searchFilter={searchFilter}
                     pageCount={pageCount}
                     pagination={pagination}
                     onPaginationChange={setPagination}
