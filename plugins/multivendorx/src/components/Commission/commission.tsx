@@ -331,7 +331,7 @@ const Commission: React.FC = () => {
         {
             name: 'commissionStatus',
             render: (updateFilter: (key: string, value: string) => void, filterValue: string | undefined) => (
-                <div className="admin-header-search-section course-field">
+                <div className="   course-field">
                     <select
                         name="commissionStatus"
                         onChange={(e) => updateFilter(e.target.name, e.target.value)}
@@ -351,7 +351,7 @@ const Commission: React.FC = () => {
         {
             name: 'vendor',
             render: (updateFilter: (key: string, value: string) => void, filterValue: string | undefined) => (
-                <div className="admin-header-search-section group-field">
+                <div className="   group-field">
                     <select
                         name="vendor"
                         onChange={(e) => updateFilter(e.target.name, e.target.value)}
@@ -389,7 +389,7 @@ const Commission: React.FC = () => {
             name: 'date',
             render: (updateFilter) => (
                 <div ref={dateRef}>
-                    <div className="admin-header-search-section">
+                    <div className="  ">
                         <input
                             value={`${selectedRange[0].startDate.toLocaleDateString()} - ${selectedRange[0].endDate.toLocaleDateString()}`}
                             onClick={() => handleDateOpen()}
