@@ -29,7 +29,7 @@ class PaymentProcessor {
 
             if ($withdrawals_fees['free_withdrawals'] < $withdrawals_count) {
 
-                $deduct_amount = (float) $amount * ((float) $withdrawals_fees['withdrawal_fee_percentage'] / 100) + (float) $withdrawals_fees['withdrawal_fee_fixed'];
+                $deduct_amount = (float) $amount * ((float) $withdrawals_fees['withdrawal_percentage'] / 100) + (float) $withdrawals_fees['withdrawal_fixed'];
                 $amount = $amount - $deduct_amount;
 
                 $data = [
