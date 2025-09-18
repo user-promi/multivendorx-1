@@ -49,6 +49,8 @@ type AdminHeaderProps = {
   showNotifications?: boolean;
   showMessages?: boolean;
   showProfile?: boolean;
+  chatUrl?: string;
+  managePlanUrl?: string;
 };
 
 
@@ -71,6 +73,8 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
   showMessages,
   showNotifications,
   showProfile,
+  chatUrl,
+  managePlanUrl,
 }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
@@ -78,7 +82,6 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
   const [messageOpen, setMessageOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [contactSupportPopup, setContactSupportPopup] = useState(false);
-  const [popupContent, setPopupContent] = useState<string>("Loading...");
   const [isMinimized, setIsMinimized] = useState(false);
 
   // Close dropdown on click outside
@@ -88,7 +91,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
         setDropdownOpen(false);
         setNotifOpen(false);
         setMessageOpen(false);
-        // setProfileOpen(false);
+        setProfileOpen(false);
       }
     };
 
@@ -97,15 +100,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-  useEffect(() => {
-    if (contactSupportPopup) {
-      setPopupContent("Loading...");
-      fetch("https://tawk.to/chat/5d2eebf19b94cd38bbe7c9ad/1fsg8cq8n") // or an API endpoint
-        .then((res) => res.text())
-        .then((html) => setPopupContent(html))
-        .catch(() => setPopupContent("Failed to load content."));
-    }
-  }, [contactSupportPopup]);
+
   // Open dropdown automatically when there are results
   useEffect(() => {
     setDropdownOpen(results.length > 0);
@@ -113,7 +108,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
 
   return (
     <>
-      <div className="admin-header">
+      <div className="admin-header" ref={wrapperRef} >
         <div className="left-section">
           <img className="brand-logo" src={brandImg} alt="Logo" />
 
@@ -128,7 +123,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
         </div>
 
         <div className="right-section">
-          <div className="search-field" style={{ position: "relative" }} ref={wrapperRef}>
+          <div className="search-field" style={{ position: "relative" }}>
             <i className="adminlib-search"></i>
             <input
               type="text"
@@ -296,7 +291,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
             </div>
           )}
 
-          { showProfile && (
+          {showProfile && (
             <div className="icon-wrapper">
               <i
                 className="admin-icon adminlib-user-circle"
@@ -311,7 +306,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
                   <div className="dropdown-body">
                     <ul>
                       <li>
-                        <a href="#">
+                        <a href={managePlanUrl}>
                           <i className="adminlib-person"></i>
                           Manage Plan
                         </a>
@@ -348,7 +343,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
           }}
         ></i>
         <iframe
-          src="https://tawk.to/chat/5d2eebf19b94cd38bbe7c9ad/1fsg8cq8n"
+          src={chatUrl}
           title="Support Chat"
           style={{
             border: 'none',
