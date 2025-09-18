@@ -1,5 +1,41 @@
 import { __ } from '@wordpress/i18n';
 
+const gatewayList = appLocalizer.gateway_list || [];
+const gatewayFields = gatewayList.flatMap(gateway => [
+    {
+        key: `${gateway.value}_fixed`,
+        type: 'number',
+        preInsideText: __('$', 'multivendorx'),
+        size: "8rem",
+        preText: gateway.label,
+        postText: "+",
+    },
+    {
+        key: `${gateway.value}_percentage`,
+        type: 'number',
+        postInsideText: __('%', 'multivendorx'),
+        size: "8rem",
+    }
+]);
+
+const nestedFields = [
+    {
+        key: 'default_fixed',
+        type: 'number',
+        preInsideText: __('$', 'multivendorx'),
+        size: "8rem",
+        preText: 'Default',
+        postText: "+",
+    },
+    {
+        key: 'default_percentage',
+        type: 'number',
+        postInsideText: __('%', 'multivendorx'),
+        size: "8rem",
+    },
+    ...gatewayFields
+];
+
 export default {
     id: 'store-commissions',
     priority: 1,
@@ -220,6 +256,39 @@ export default {
                 },
             ],
         },
-
+        {
+            key: 'gateway_fees',
+            type: 'nested',
+            label: __('Gateway Fees', 'multivendorx'),
+            single: true,
+            desc: __('', 'multivendorx'),
+            nestedFields
+        },
+        {
+            key: 'facilitator_fees',
+            type: 'nested',
+            label: 'Facilitator Fees',
+            single: true,
+            desc: __(
+                '',
+                'multivendorx'
+            ),
+            nestedFields: [
+                {
+                    key: 'facilitator_fixed',
+                    type: 'number',
+                    preInsideText: __('$', 'multivendorx'),
+                    size: "8rem",
+                    preText: 'Fixed',
+                    postText: "+",
+                },
+                {
+                    key: 'facilitator_percentage',
+                    type: 'number',
+                    postInsideText: __('%', 'multivendorx'),
+                    size: "8rem",
+                },
+            ],
+        },
     ],
 };

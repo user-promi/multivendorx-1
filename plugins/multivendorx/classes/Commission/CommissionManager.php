@@ -171,8 +171,32 @@ class CommissionManager {
                 }
             }
 
+            
+            if (!empty( MultiVendorX()->setting->get_setting('gateway_fees') )) {
+                $fixed_fee      = 0;
+                $percentage_fee = 0;
+                $gateway_settings = reset(MultiVendorX()->setting->get_setting('gateway_fees', []));
+                $parent_order = wc_get_order($order->get_parent_id());
+
+                $payment_method = $parent_order->get_payment_method();
+                $fixed_fee = (float) (
+                    $gateway_settings[ $payment_method . '_fixed' ]
+                    ?? $gateway_settings['default_fixed']
+                    ?? 0
+                );
+
+                $percentage_fee = (float) (
+                    $gateway_settings[ $payment_method . '_percentage' ]
+                    ?? $gateway_settings['default_percentage']
+                    ?? 0
+                );
+
+                $gateway_fee = (float) $commission_amount * ((float) $percentage_fee / 100) + (float) $fixed_fee;
+            }
+
+
             // in commission total add facilitator_fee and gateway fee.
-            $commission_total = (float) $commission_amount + (float) $shipping_amount + (float) $tax_amount + (float) $shipping_tax_amount;
+            $commission_total = (float) $commission_amount + (float) $shipping_amount + (float) $tax_amount + (float) $shipping_tax_amount - (float) $gateway_fee;
             $commission_total = apply_filters( 'mvx_commission_total_amount', $commission_total, $commission_id );
 
             // insert | update commission into commission table.
@@ -182,6 +206,7 @@ class CommissionManager {
                 'customer_id'           => $order->get_customer_id(),
                 'total_order_amount'    => $order->get_total(),
                 'commission_amount'     => $commission_amount,
+                'gateway_fee'           => $gateway_fee ?? 0,
                 'shipping_amount'       => $shipping_amount,
                 'tax_amount'            => $tax_amount,
                 'shipping_tax_amount'   => $shipping_tax_amount,
@@ -190,7 +215,7 @@ class CommissionManager {
                 'currency'              => get_woocommerce_currency(),
                 'status'                => $order->get_status() == 'cancelled' ? 'cancelled' : 'paid'
             ];
-            $format = [ "%d", "%d", "%d", "%f", "%f", "%f", "%f", "%f", "%f", "%f", "%s", "%s" ];
+            $format = [ "%d", "%d", "%d", "%f", "%f", "%f", "%f", "%f", "%f", "%f", "%f", "%s", "%s" ];
             if ( ! $commission_id ) {
                 $wpdb->insert( $wpdb->prefix . Utill::TABLES['commission'], $data, $format );
                 $commission_id = $wpdb->insert_id;
@@ -330,7 +355,7 @@ class CommissionManager {
             }
 
             // Global 
-            $commission_per_item = reset(MultiVendorX()->setting->get_setting( 'commission_per_item' ));
+            $commission_per_item = reset(MultiVendorX()->setting->get_setting( 'commission_per_item', [] ));
 
             if ( ! empty($commission_per_item) ) {
                 return [

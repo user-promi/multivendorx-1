@@ -348,8 +348,22 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
         if ( $data['store_owners'] ) {
             StoreUtil::add_store_users([
                 'store_id' => $data['id'],
-                'store_owners' => $data['store_owners'],
+                'users' => $data['store_owners'],
                 'role_id' => 'store_owner',
+            ]);
+
+            return rest_ensure_response( [
+                'success' => true
+            ] );
+        }
+
+        if ( $data['facilitators'] ) {
+file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":data:  : " . var_export($data, true) . "\n", FILE_APPEND);
+
+            StoreUtil::add_store_users([
+                'store_id' => $data['id'],
+                'users' => $data['facilitators'],
+                'role_id' => 'facilitator',
             ]);
 
             return rest_ensure_response( [

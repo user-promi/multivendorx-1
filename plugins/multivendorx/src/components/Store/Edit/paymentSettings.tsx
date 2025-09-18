@@ -180,6 +180,24 @@ const PaymentSettings = ({ id }: { id: string|null }) => {
 						</div>
 					</div>
 				</div>
+				<div className="card-wrapper width-35">
+					<div className="card-content">
+						<div className="card-title">
+							Facilitator
+						</div>
+						<div className="form-group-wrapper">
+							<div className="form-group">
+								<label htmlFor="product-name">Fixed</label>
+								<BasicInput preInsideText={"$"} postText={"+"} name="facilitator_fixed" wrapperClass="setting-form-input" descClass="settings-metabox-description" value={formData.facilitator_fixed} onChange={handleChange} />
+							</div>
+
+							<div className="form-group">
+								<label htmlFor="product-name">Percentage</label>
+								<BasicInput postInsideText={"%"} name="facilitator_percentage" wrapperClass="setting-form-input" descClass="settings-metabox-description" value={formData.facilitator_percentage} onChange={handleChange} />
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</>
 	);
