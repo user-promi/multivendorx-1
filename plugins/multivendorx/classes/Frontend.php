@@ -24,6 +24,13 @@ class Frontend {
         add_filter('woocommerce_product_tabs', array($this, 'product_vendor_tab'));
 
         add_filter('woocommerce_related_products', array($this, 'show_related_products'), 99, 3);
+        
+        if ( !empty(MultiVendorX()->setting->get_setting( 'store_order_display') )) {
+
+            add_action( 'woocommerce_before_calculate_totals', array( $this, 'cart_items_sort_by_store' ), 10 );
+            add_action( 'woocommerce_before_cart', array( $this, 'message_multiple_vendors_cart' ), 10 );
+            add_filter( 'render_block_woocommerce/cart-line-items-block', array( $this, 'message_multiple_vendors_cart_block' ), 10 );
+        }
         // add_filter('woocommerce_login_redirect', array($this, 'multivendorx_store_login'), 10, 2);
     
     }
@@ -144,6 +151,67 @@ class Frontend {
         return $query;
     }
 
+    public function message_multiple_vendors_cart() {
+        $stores_in_cart = $this->get_stores_in_cart();
+        if ( count($stores_in_cart) > 1 ) {
+            wc_print_notice(esc_html__('The products in your cart are sold by multiple different vendor partners. The order will be placed simultaneously with all vendors and you will receive a package from each of them.', 'multivendorx'), 'notice' );
+        }
+    }
+
+    public function message_multiple_vendors_cart_block( $block_content ) {
+        $message = '';
+        $stores_in_cart = $this->get_stores_in_cart();
+        if ( count($stores_in_cart) > 1 ) {
+            $message = __('The products in your cart are sold by multiple different vendor partners. The order will be placed simultaneously with all vendors and you will receive a package from each of them.', 'multivendorx');
+        }
+        return $message.$block_content;
+    }
+    
+    public function get_stores_in_cart() {
+        $cart = WC()->cart;
+        $stores = array();
+        if ( is_object($cart) ) {
+            foreach ( $cart->get_cart() as $cart_item ) {
+                $store = StoreUtil::get_products_vendor( $cart_item['product_id'] );
+                if ( $store ) {
+                    $store_id = $store->get_id();
+                    if ( !empty($store_id) ) {
+                        array_push($stores, $store_id);
+                    }
+                }
+            }
+        }
+        return array_unique(array_filter($stores));
+    }
+
+    public function cart_items_sort_by_store( $cart ) {
+        $store_groups   = [];
+        $admin_products  = [];
+
+        foreach ( $cart->get_cart() as $cart_item_key => $cart_item ) {
+            $store = StoreUtil::get_products_vendor( $cart_item['product_id'] );
+
+            if ( $store ) {
+                $store_groups[ $store->get_id() ][ $cart_item_key ] = $cart_item;
+            } else {
+                $admin_products[ $cart_item_key ] = $cart_item;
+            }
+        }
+
+        $new_cart = [];
+
+        foreach ( $store_groups as $cart_item_key => $items ) {
+            foreach ( $items as $key => $item ) {
+                $new_cart[ $key ] = $item;
+            }
+        }
+
+        foreach ( $admin_products as $key => $item ) {
+            $new_cart[ $key ] = $item;
+        }
+
+        $cart->cart_contents = $new_cart;
+    }
 
     public function vendor_dashboard_template($template) {
         //checking change later when all function ready
