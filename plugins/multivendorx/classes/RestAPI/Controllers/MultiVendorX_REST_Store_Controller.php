@@ -71,50 +71,72 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
     public function get_items( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
-            return new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
-        }
-        $options = $request->get_param( 'options' );
-        if( $options ){
-            return $this->get_stores_dropdown( $request );
-        }
-        $status = $request->get_param( 'status' );
-        if( $status ){
-            return $this->get_pending_stores( $request );
-        }
-        $limit          = max( intval( $request->get_param( 'row' ) ), 10 );
-        $page           = max( intval( $request->get_param( 'page' ) ), 1 );
-        $offset         = ( $page - 1 ) * $limit;
-        $count          = $request->get_param( 'count' );
+            $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
+            
+            // Log the error
+            if ( is_wp_error( $error ) ) {
+				MultiVendorX()->util->log(
+                    "MVX REST Error:\n" .
+                    "\tCode: " . $error->get_error_code() . "\n" .
+                    "\tMessage: " . $error->get_error_message() . "\n" .
+                    "\tData: " . wp_json_encode( $error->get_error_data() ) . "\n"
+                );
+            }
 
-        $stores = StoreUtil::get_store();
-    
-        if ( $count ) {
-            global $wpdb;
-            $table_name = "{$wpdb->prefix}" . Utill::TABLES['store'];
-
-            // Get total count
-            $total_count = $wpdb->get_var( "SELECT COUNT(*) FROM $table_name" );
-            return rest_ensure_response( (int) $total_count );
+            return $error;
         }
 
-        $formatted_stores = array();
-        foreach ( $stores as $store ) {
-            $store_id       = (int) $store['ID'];
-            $store_name     = $store['name'];
-            $store_slug     = $store['slug'];
-            $status         = $store['status'];
-            $formatted_stores[] = apply_filters(
-                'multivendorx_stores',
-                array(
-					'id'                => $store_id,
-					'store_name'        => $store_name,
-					'store_slug'        => $store_slug,
-					'status'      => $status,
-				)
+        try {
+            $options = $request->get_param( 'options' );
+            if( $options ){
+                return $this->get_stores_dropdown( $request );
+            }
+
+            $status = $request->get_param( 'status' );
+            if( $status ){
+                return $this->get_pending_stores( $request );
+            }
+
+            $limit          = max( intval( $request->get_param( 'row' ) ), 10 );
+            $page           = max( intval( $request->get_param( 'page' ) ), 1 );
+            $offset         = ( $page - 1 ) * $limit;
+            $count          = $request->get_param( 'count' );
+
+            $stores = StoreUtil::get_store();
+
+            if ( $count ) {
+                global $wpdb;
+                $table_name = "{$wpdb->prefix}" . Utill::TABLES['store'];
+
+                $total_count = $wpdb->get_var( "SELECT COUNT(*) FROM $table_name" );
+                return rest_ensure_response( (int) $total_count );
+            }
+
+            $formatted_stores = array();
+            foreach ( $stores as $store ) {
+                $formatted_stores[] = apply_filters(
+                    'multivendorx_stores',
+                    array(
+                        'id'         => (int) $store['ID'],
+                        'store_name' => $store['name'],
+                        'store_slug' => $store['slug'],
+                        'status'     => $store['status'],
+                    )
+                );
+            }
+
+            return rest_ensure_response( $formatted_stores );
+
+        } catch ( \Exception $e ) {
+            MultiVendorX()->util->log(
+                "MVX REST Exception:\n" .
+                "\tMessage: " . $e->getMessage() . "\n" .
+                "\tFile: " . $e->getFile() . "\n" .
+                "\tLine: " . $e->getLine() . "\n"
             );
-        }
 
-        return rest_ensure_response( $formatted_stores );
+            return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
+        }
     }
 
     public function get_pending_stores( $request ){
