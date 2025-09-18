@@ -392,6 +392,9 @@ class FrontendScripts {
         $gateways = WC()->payment_gateways->payment_gateways();
         $gateway_list = [];
         foreach ( $gateways as $gateway_id => $gateway ) {
+            if ( $gateway_id === 'cheque' ) {
+                continue;
+            }
             $gateway_list[] = array(
                 'label' => $gateway->get_title(),
                 'value' => $gateway_id,
