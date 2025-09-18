@@ -4,7 +4,7 @@
         right: 1rem;
         top: 1rem;
         font-size: 1.125rem;
-        color: #5007aa;
+        color: #fff;
         cursor: pointer;
     }
 }
@@ -27,12 +27,23 @@
         .description {
             color: #fff;
             font-size: 1.625rem;
-            margin-bottom: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .price {
+            font-size: 2.4rem;
+            color: #fff;
+            font-weight: 600;
         }
 
         .admin-btn {
             background: #fff;
             margin-top: 1rem;
+        }
+
+        .select-wrapper {
+            color: #fff;
+            font-size: 1.125rem;
         }
 
         select {
@@ -43,20 +54,19 @@
             appearance: none;
             -webkit-appearance: none;
             -moz-appearance: none;
-
             background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'><path fill='%23fff' d='M5 7l5 5 5-5z'/></svg>");
             background-repeat: no-repeat;
             background-position: right 0.75rem center;
             background-size: 1rem;
-            border-radius: 4px;
 
-            option{
+            option {
                 color: #1a1a1aa4;
             }
         }
     }
 
-    .content {
+    .popup-content {
+        padding: 1rem 0 1rem 2rem ;
         .heading-text {
             font-size: 1.25rem;
             color: #000000e3;
