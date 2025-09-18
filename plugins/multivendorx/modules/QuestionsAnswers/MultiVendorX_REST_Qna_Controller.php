@@ -139,33 +139,111 @@ class MultiVendorX_REST_Qna_Controller extends \WP_REST_Controller {
             return new \WP_Error( 'invalid_id', __( 'Invalid ID', 'multivendorx' ), [ 'status' => 400 ] );
         }
     
-        $q = reset(Util::get_question_information( [ 'id' => $id ] ));
+        $q = reset( Util::get_question_information( [ 'id' => $id ] ) );
         if ( ! $q ) {
             return new \WP_Error( 'not_found', __( 'Question not found', 'multivendorx' ), [ 'status' => 404 ] );
         }
     
-        $product = wc_get_product( $q['product_id'] );
+        $product       = wc_get_product( $q['product_id'] );
+        $product_name  = '';
+        $product_link  = '';
+        $product_image = '';
+    
+        if ( $product ) {
+            $product_name  = $product->get_name();
+            $product_link  = get_permalink( $product->get_id() );
+            $product_image = wp_get_attachment_url( $product->get_image_id() ); // ✅ Featured image
+        }
     
         $data = [
-            'id'              => (int) $q['id'],
-            'product_id'      => (int) $q['product_id'],
-            'product_name'    => $product ? $product->get_name() : '',
-            'product_link'    => $product ? get_permalink( $product->get_id() ) : '',
-            'question_text'   => $q['question_text'],
-            'answer_text'     => $q['answer_text'],
-            'question_by'     => (int) $q['question_by'],
-            'author_name'     => get_the_author_meta( 'display_name', $q['question_by'] ),
-            'question_date'   => $q['question_date'],
-            'time_ago'        => human_time_diff( strtotime( $q['question_date'] ), current_time( 'timestamp' ) ) . ' ago',
-            'total_votes'     => (int) $q['total_votes'],
+            'id'                  => (int) $q['id'],
+            'product_id'          => (int) $q['product_id'],
+            'product_name'        => $product_name,
+            'product_link'        => $product_link,
+            'product_image'       => $product_image, // ✅ added image
+            'question_text'       => $q['question_text'],
+            'answer_text'         => $q['answer_text'],
+            'question_by'         => (int) $q['question_by'],
+            'author_name'         => get_the_author_meta( 'display_name', $q['question_by'] ),
+            'question_date'       => $q['question_date'],
+            'time_ago'            => human_time_diff( strtotime( $q['question_date'] ), current_time( 'timestamp' ) ) . ' ago',
+            'total_votes'         => (int) $q['total_votes'],
             'question_visibility' => $q['question_visibility'],
         ];
     
         return rest_ensure_response( $data );
     }
     
+    
+    
     public function update_item( $request ) {
-        $id   = absint( $request->get_param( 'id' ) );
-
+        $nonce = $request->get_header( 'X-WP-Nonce' );
+        if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
+            return new \WP_Error(
+                'invalid_nonce',
+                __( 'Invalid nonce', 'multivendorx' ),
+                [ 'status' => 403 ]
+            );
+        }
+    
+        $id = absint( $request->get_param( 'id' ) );
+        if ( ! $id ) {
+            return new \WP_Error(
+                'invalid_id',
+                __( 'Invalid question ID', 'multivendorx' ),
+                [ 'status' => 400 ]
+            );
+        }
+    
+        // Fetch the question first
+        $q = reset( Util::get_question_information( [ 'id' => $id ] ) );
+        if ( ! $q ) {
+            return new \WP_Error(
+                'not_found',
+                __( 'Question not found', 'multivendorx' ),
+                [ 'status' => 404 ]
+            );
+        }
+    
+        // Fields that can be updated
+        $answer_text = $request->get_param( 'answer_text' );
+        $visibility  = $request->get_param( 'question_visibility' );
+    
+        $data_to_update = [];
+    
+        if ( isset( $answer_text ) ) {
+            $data_to_update['answer_text'] = sanitize_textarea_field( $answer_text );
+        }
+    
+        if ( isset( $visibility ) ) {
+            $allowed = [ 'public', 'private', 'hidden' ];
+            if ( in_array( $visibility, $allowed, true ) ) {
+                $data_to_update['question_visibility'] = sanitize_text_field( $visibility );
+            } else {
+                return new \WP_Error(
+                    'invalid_visibility',
+                    __( 'Invalid visibility value', 'multivendorx' ),
+                    [ 'status' => 400 ]
+                );
+            }
+        }
+    
+        if ( empty( $data_to_update ) ) {
+            return new \WP_Error(
+                'nothing_to_update',
+                __( 'No valid fields to update', 'multivendorx' ),
+                [ 'status' => 400 ]
+            );
+        }
+    
+        // Save via Util helper (implement update_question in Util)
+        $updated = Util::update_question( $id, $data_to_update );
+    
+        if ( ! $updated ) {
+            return rest_ensure_response( [ 'success' => false ] );
+        }
+    
+        return rest_ensure_response( [ 'success' => true ] );
     }
+    
 }
