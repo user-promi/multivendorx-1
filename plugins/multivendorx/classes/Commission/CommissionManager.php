@@ -45,7 +45,7 @@ class CommissionManager {
 
             $commission_type = MultiVendorX()->setting->get_setting( 'commission_type' );
 
-            $commission_amount = $shipping_amount = $tax_amount = $shipping_tax_amount = 0;
+            $commission_amount = $shipping_amount = $tax_amount = $shipping_tax_amount = $facilitator_fee = $gateway_fee = 0;
             $commission_rates = [];
 
             if ( $commission_type == 'per_item' ) {
@@ -171,7 +171,7 @@ class CommissionManager {
                 }
             }
 
-            
+            //gateway fee calculation
             if (!empty( MultiVendorX()->setting->get_setting('gateway_fees') )) {
                 $fixed_fee      = 0;
                 $percentage_fee = 0;
@@ -194,9 +194,29 @@ class CommissionManager {
                 $gateway_fee = (float) $commission_amount * ((float) $percentage_fee / 100) + (float) $fixed_fee;
             }
 
+           // facilitator fee calculation
+            $fixed_fee      = 0;
+            $percentage_fee = 0;
+
+            $vendor_facilitator = $vendor->get_meta('facilitator');
+
+            if ( !empty($vendor_facilitator) ) {
+                $fixed_fee      = (float) $vendor->get_meta('facilitator_fixed');
+                $percentage_fee = (float) $vendor->get_meta('facilitator_percentage');
+            } else {
+                $settings = MultiVendorX()->setting->get_setting('facilitator');
+                if ( !empty($settings) ) {
+                    $fees = reset(MultiVendorX()->setting->get_setting('facilitator_fees', []));
+                    $fixed_fee      = (float) $fees['facilitator_fixed'];
+                    $percentage_fee = (float) $fees['facilitator_percentage'];
+                    
+                }
+            }
+            
+            $facilitator_fee = (float) $commission_amount * ((float) $percentage_fee / 100) + (float) $fixed_fee;
 
             // in commission total add facilitator_fee and gateway fee.
-            $commission_total = (float) $commission_amount + (float) $shipping_amount + (float) $tax_amount + (float) $shipping_tax_amount - (float) $gateway_fee;
+            $commission_total = (float) $commission_amount + (float) $shipping_amount + (float) $tax_amount + (float) $shipping_tax_amount - (float) $gateway_fee - (float) $facilitator_fee;
             $commission_total = apply_filters( 'mvx_commission_total_amount', $commission_total, $commission_id );
 
             // insert | update commission into commission table.

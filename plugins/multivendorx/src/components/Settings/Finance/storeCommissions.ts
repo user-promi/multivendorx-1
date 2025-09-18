@@ -264,6 +264,18 @@ export default {
             desc: __('', 'multivendorx'),
             nestedFields
         },
+
+        {
+            key: 'facilitator',
+            type: 'select',
+            label: __( 'Facilitators', 'multivendorx' ),
+            desc: __(
+                '',
+                'multivendorx'
+            ),
+            className:"select-class",
+            options: appLocalizer.facilitators_list,
+        },
         {
             key: 'facilitator_fees',
             type: 'nested',
