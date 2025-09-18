@@ -7,56 +7,59 @@ import './popup.scss';
 const proPopupContent = {
     proUrl: typeof appLocalizer !== 'undefined' ? appLocalizer.pro_url : '#',
     title: __(
-        'Boost to Product Notifima Pro to access premium features!',
-        'notifima'
+        'Upgrade Your Plan',
+        'multivendorx'
     ),
-    moreText: __( 'More surprises? Oh yes.', 'notifima' ),
+    moreText: __( 'More surprises? Oh yes.', 'multivendorx' ),
     messages: [
         {
             icon: 'popup-icon-double-opt-in',
-            text: __( 'Double Opt-in.', 'notifima' ),
+            text: __( 'Double Opt-in.', 'multivendorx' ),
         },
         {
             icon: 'popup-icon-ban-spam-mail',
-            text: __( 'Ban Spam Mail.', 'notifima' ),
+            text: __( 'Ban Spam Mail.', 'multivendorx' ),
         },
         {
             icon: 'popup-icon-export-subscribers',
-            text: __( 'Export Subscribers.', 'notifima' ),
+            text: __( 'Export Subscribers.', 'multivendorx' ),
         },
         {
             icon: 'popup-icon-subscription-dashboard',
-            text: __( 'Subscription Dashboard.', 'notifima' ),
+            text: __( 'Subscription Dashboard.', 'multivendorx' ),
         },
         {
             icon: 'popup-icon-mailchimp',
-            text: __( 'MailChimp Integration.', 'notifima' ),
+            text: __( 'MailChimp Integration.', 'multivendorx' ),
         },
         {
             icon: 'popup-icon-recaptcha',
-            text: __( 'Recaptcha Support.', 'notifima' ),
+            text: __( 'Recaptcha Support.', 'multivendorx' ),
         },
         {
             icon: 'popup-icon-subscription-dashboard',
-            text: __( 'Subscription Details.', 'notifima' ),
+            text: __( 'Subscription Details.', 'multivendorx' ),
         },
         {
             icon: 'popup-icon-export-import',
-            text: __( 'Export/Import Stock.', 'notifima' ),
+            text: __( 'Export/Import Stock.', 'multivendorx' ),
         },
     ],
     btnLink: [
         {
-            value: '1 site License ($299)',
+            site: '1',
+            price: '$299',
             link: 'https://multivendorx.com/checkout/'
         },
         {
-            value: '3 site License ($399)',
+            site: '3',
+            price: '$399',
             link: 'https://multivendorx.com/checkout/$399'
         },
         {
-            value: '10 site License ($599)',
-            link: 'https://multivendorx.com/checkout/$599'
+            site: '10',
+            price: '$599',
+            link: 'https://multivendorx.com/checkout/$399'
         },
     ]
 };

@@ -20,7 +20,7 @@ if (!defined('ABSPATH')) {
 $store_id = $args['store_id'];
 // $count = $vendor->get_review_count();
 // $is_enable = mvx_seller_review_enable($vendor_term_id);
-// $current_user = wp_get_current_user();
+$current_user = wp_get_current_user();
 // $reviews_lists = $vendor->get_reviews_and_rating(0);
 // // Multi review
 // $review_options_data = mvx_get_option('mvx_review_management_tab_settings');
@@ -87,7 +87,7 @@ $store_id = $args['store_id'];
                             <input id="store_for_rating" name="store_for_rating" type="hidden" value="<?php echo esc_attr($store_id); ?>"  >
                             <input id="author" name="author" type="hidden" value="<?php echo esc_attr($current_user->display_name); ?>" size="30" aria-required="true">                  
                             <input id="email" name="email" type="hidden" value="<?php echo esc_attr($current_user->user_email); ?>" size="30" aria-required="true">
-                            <input name="review_submit" type="button" id="submit" class="submit" value="<?php esc_attr_e('Submit', 'multivendorx') ?>">
+                            <input name="review_submit" type="button" id="review_submit" value="<?php esc_attr_e('Submit', 'multivendorx') ?>">
 
                         </p>                
                     </form>
