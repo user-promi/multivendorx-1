@@ -101,7 +101,7 @@ export default {
         },
         {
             key: 'sync_course_btn',
-            label: 'Sync courses from Moodle to WordPress ',
+            label: 'On-demand course ',
             settingDescription: 'Courses are fetched from Moodle and synchronized with WordPress, ensuring product details remain updated.',
             type: 'do-action-btn',
             interval: 2500,
