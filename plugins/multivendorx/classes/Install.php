@@ -200,7 +200,7 @@ class Install {
         // Create the trigger
         $sql = "
         CREATE TRIGGER update_store_balance
-        BEFORE INSERT ON wp_multivendorx_transaction_ledger
+        BEFORE INSERT ON wp_multivendorx_transactions
         FOR EACH ROW
         BEGIN
             DECLARE last_balance DECIMAL(20,2);
@@ -208,7 +208,7 @@ class Install {
 
             SELECT balance, locking_balance
             INTO last_balance, last_locking_balance
-            FROM wp_multivendorx_transaction_ledger
+            FROM wp_multivendorx_transactions
             WHERE store_id = NEW.store_id
             ORDER BY id DESC
             LIMIT 1;
