@@ -19,7 +19,7 @@ export default {
                 'When enabled, the course duration, such as the start and end dates, will be visible on the shop page.',
                 'moowoodle'
             ),
-            label: __('Display course duration in Shop Page', 'moowoodle'),
+            label: __('Display course duration in 'Shop Page'', 'moowoodle'),
             options: [
                 {
                     key: 'start_end_date',
@@ -36,7 +36,7 @@ export default {
                 "'<b>My Course</b>' menu will appear beneath the selected menu on the WooCommerce 'My Account' page of customer dashboard.",
                 'moowoodle'
             ),
-            label: __('Endpoint menu position - My Course', 'moowoodle'),
+            label: __('Endpoint menu position - 'My Course'', 'moowoodle'),
             options: Object.entries(appLocalizer.accountmenu).map(
                 ([name], index) => {
                     return {
