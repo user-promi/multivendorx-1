@@ -42,18 +42,12 @@ const AdminBreadcrumbs: React.FC<AdminBreadcrumbsProps> = ({
             );
             if (notice) {
                 setNoticeHTML(notice.outerHTML); // save notice HTML
-                notice.remove(); // remove from DOM
+                notice.remove();
             }
         };
 
         // Run immediately once
         captureNotice();
-
-        // Run every 2 seconds (2000ms)
-        const intervalId = setInterval(captureNotice, 2000);
-
-        // Cleanup on unmount
-        return () => clearInterval(intervalId);
     }, []);
 
     return (
