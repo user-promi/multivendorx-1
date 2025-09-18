@@ -1,103 +1,115 @@
 import React, { useEffect, useState } from 'react';
 
 interface ButtonConfig {
-    label?: string;
-    onClick?: () => void;
-    iconClass?: string;
-    className?: string;
+  label?: string;
+  onClick?: () => void;
+  iconClass?: string;
+  className?: string;
 }
 
 interface AdminBreadcrumbsProps {
-    activeTabIcon?: string;
-    tabTitle?: string;
-    renderBreadcrumb?: () => React.ReactNode;
-    renderMenuItems?: (items: any[]) => React.ReactNode;
-    tabData?: any[];
-    buttons?: any[];
-    goPremium?: boolean;
-    goPremiumLink?: string;
-    description?: string;
-    customContent?: React.ReactNode;
+  activeTabIcon?: string;
+  tabTitle?: string;
+  renderBreadcrumb?: () => React.ReactNode;
+  renderMenuItems?: (items: any[]) => React.ReactNode;
+  tabData?: any[];
+  buttons?: any[];
+  goPremium?: boolean;
+  goPremiumLink?: string;
+  description?: string;
+  customContent?: React.ReactNode;
 }
 
 const AdminBreadcrumbs: React.FC<AdminBreadcrumbsProps> = ({
-    activeTabIcon = '',
-    tabTitle = '',
-    renderBreadcrumb,
-    renderMenuItems,
-    tabData = [],
-    buttons = [],
-    goPremium = false,
-    goPremiumLink,
-    description,
-    customContent,
+  activeTabIcon = '',
+  tabTitle = '',
+  renderBreadcrumb,
+  renderMenuItems,
+  tabData = [],
+  buttons = [],
+  goPremium = false,
+  goPremiumLink,
+  description,
+  customContent,
 }) => {
-    const [noticeHTML, setNoticeHTML] = useState('');
+  const [notices, setNotices] = useState<string[]>([]);
 
-    useEffect(() => {
-        // Function to check for notice
-        const captureNotice = () => {
-            const notice = document.querySelector(
-                '#screen-meta + .wrap .notice, #wpbody-content .notice'
-            );
-            if (notice) {
-                setNoticeHTML(notice.outerHTML); // save notice HTML
-                notice.remove();
-            }
-        };
+  useEffect(() => {
+    const captureNotices = () => {
+      const noticeNodes = document.querySelectorAll(
+        '#screen-meta + .wrap .notice, #wpbody-content .notice'
+      );
 
-        // Run immediately once
-        captureNotice();
-    }, []);
+      if (noticeNodes.length > 0) {
+        const htmlArray: string[] = [];
+        noticeNodes.forEach((node) => {
+          htmlArray.push(node.outerHTML);
+          node.remove(); // remove from DOM so we control rendering
+        });
+        setNotices(htmlArray);
+      }
+    };
 
-    return (
-        <>
-            <div className="title-section">
-                <div className="title-wrapper">
-                    <div className="title">
-                        {activeTabIcon && <i className={activeTabIcon}></i>}
-                        {tabTitle}
-                    </div>
+    captureNotices();
+  }, []);
 
-                    <div className="buttons">
-                        {buttons.length > 0 &&
-                            buttons.map((btn, index) => {
-                                if (React.isValidElement(btn)) return <React.Fragment key={index}>{btn}</React.Fragment>;
+  return (
+    <>
+      <div className="title-section">
+        <div className="title-wrapper">
+          <div className="title">
+            {activeTabIcon && <i className={activeTabIcon}></i>}
+            {tabTitle}
+          </div>
 
-                                const { label, onClick, iconClass, className } = btn as ButtonConfig;
-                                return (
-                                    <button
-                                        key={index}
-                                        className={`breadcrumb-btn ${className || ''}`}
-                                        onClick={onClick}
-                                    >
-                                        {iconClass && <i className={iconClass}></i>}
-                                        {label}
-                                    </button>
-                                );
-                            })}                        
-                    </div>
-                    {customContent && <div className="custom-content">{customContent}</div>}
+          <div className="buttons">
+            {buttons.length > 0 &&
+              buttons.map((btn, index) => {
+                if (React.isValidElement(btn)) return <React.Fragment key={index}>{btn}</React.Fragment>;
 
-                </div>
-                {description && <div className="description">{description}</div>}
-                {renderBreadcrumb && <div className="breadcrumbs">{renderBreadcrumb()}</div>}
+                const { label, onClick, iconClass, className } = btn as ButtonConfig;
+                return (
+                  <button
+                    key={index}
+                    className={`breadcrumb-btn ${className || ''}`}
+                    onClick={onClick}
+                  >
+                    {iconClass && <i className={iconClass}></i>}
+                    {label}
+                  </button>
+                );
+              })}
+          </div>
 
-                {renderMenuItems && tabData.length > 0 && (
-                    <div className="tabs-wrapper">
-                        <div className="tabs-item">
-                            {renderMenuItems(tabData)}
-                        </div>
-                        {goPremium && (<a href={goPremiumLink} className="menu-item pro-btn">
-                            <i className="adminlib-pro-tag"></i> Upgrade<i className="adminlib-arrow-right"></i>
-                        </a>)}
-                    </div>
-                )}
-            </div>
-            {noticeHTML && <div className="wp-admin-notice" dangerouslySetInnerHTML={{ __html: noticeHTML }} />}
-        </>
+          {customContent && <div className="custom-content">{customContent}</div>}
+        </div>
 
-    );
+        {description && <div className="description">{description}</div>}
+        {renderBreadcrumb && <div className="breadcrumbs">{renderBreadcrumb()}</div>}
+
+        {renderMenuItems && tabData.length > 0 && (
+          <div className="tabs-wrapper">
+            <div className="tabs-item">{renderMenuItems(tabData)}</div>
+            {goPremium && (
+              <a href={goPremiumLink} className="menu-item pro-btn">
+                <i className="adminlib-pro-tag"></i> Upgrade<i className="adminlib-arrow-right"></i>
+              </a>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* render multiple notices */}
+      {notices.length > 0 &&
+        notices.map((html, i) => (
+          <div
+            key={i}
+            className="wp-admin-notice"
+            dangerouslySetInnerHTML={{ __html: html }}
+          />
+        ))}
+    </>
+  );
 };
 
 export default AdminBreadcrumbs;

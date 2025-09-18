@@ -11,7 +11,7 @@ import '../styles/web/Popup.scss';
 
 export interface PopupMessage {
   text: string;   
-  des: string;    
+  des?: string;    
   icon?: string; 
 }
 export interface BtnLink {
@@ -28,7 +28,7 @@ export interface PopupProps {
     moduleName?: string;
     settings?: string;
     plugin?: string;
-    message?: string;
+    message?: any;
     moduleButton?: string;
     pluginDescription?: string;
     pluginButton?: string;
