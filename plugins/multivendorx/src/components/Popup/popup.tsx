@@ -7,42 +7,19 @@ import './popup.scss';
 const proPopupContent = {
     proUrl: typeof appLocalizer !== 'undefined' ? appLocalizer.pro_url : '#',
     title: __(
-        'Upgrade Your Plan',
+        'Your students will love this!',
         'multivendorx'
     ),
-    moreText: __( 'More surprises? Oh yes.', 'multivendorx' ),
+    moreText: __( 'Better courses, bigger profits', 'multivendorx' ),
+    upgradeBtnText: __( 'Yes, Upgrade Me!', 'multivendorx' ),
     messages: [
         {
-            icon: 'popup-icon-double-opt-in',
-            text: __( 'Double Opt-in.', 'multivendorx' ),
+            text: __( 'Bulk Course Sync', 'multivendorx' ),
+            des: __( 'Sync multiple Moodle™ courses to WordPress with one click.', 'multivendorx' ),
         },
         {
-            icon: 'popup-icon-ban-spam-mail',
-            text: __( 'Ban Spam Mail.', 'multivendorx' ),
-        },
-        {
-            icon: 'popup-icon-export-subscribers',
-            text: __( 'Export Subscribers.', 'multivendorx' ),
-        },
-        {
-            icon: 'popup-icon-subscription-dashboard',
-            text: __( 'Subscription Dashboard.', 'multivendorx' ),
-        },
-        {
-            icon: 'popup-icon-mailchimp',
-            text: __( 'MailChimp Integration.', 'multivendorx' ),
-        },
-        {
-            icon: 'popup-icon-recaptcha',
-            text: __( 'Recaptcha Support.', 'multivendorx' ),
-        },
-        {
-            icon: 'popup-icon-subscription-dashboard',
-            text: __( 'Subscription Details.', 'multivendorx' ),
-        },
-        {
-            icon: 'popup-icon-export-import',
-            text: __( 'Export/Import Stock.', 'multivendorx' ),
+            text: __( 'Cohort Enrollment', 'multivendorx' ),
+            des: __( 'Sell and enroll entire Moodle™ cohorts via WooCommerce.', 'multivendorx' ),
         },
     ],
     btnLink: [
@@ -59,7 +36,7 @@ const proPopupContent = {
         {
             site: '10',
             price: '$599',
-            link: 'https://multivendorx.com/checkout/$399'
+            link: 'https://multivendorx.com/checkout/$599'
         },
     ]
 };

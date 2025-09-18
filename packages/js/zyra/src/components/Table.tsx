@@ -57,7 +57,13 @@ interface RealtimeFilter {
         filterValue: any
     ) => ReactNode;
 }
-
+interface SearchFilter {
+    name: string;
+    render: (
+        updateFilter: (key: string, value: any) => void,
+        filterValue: any
+    ) => ReactNode;
+}
 export const TableCell: React.FC<TableCellProps> = ({
     title,
     fieldValue,
@@ -237,6 +243,7 @@ interface TableProps {
     onRowSelectionChange?: OnChangeFn<RowSelectionState>;
     defaultRowsPerPage?: number;
     realtimeFilter?: RealtimeFilter[];
+    searchFilter?: SearchFilter[];
     bulkActionComp?: () => React.ReactNode;
     pageCount: number;
     pagination: PaginationState;
@@ -263,6 +270,7 @@ const Table: React.FC<TableProps> = ({
     defaultRowsPerPage = 10,
     bulkActionComp,
     realtimeFilter,
+    searchFilter,
     pageCount,
     pagination,
     onPaginationChange,
@@ -623,35 +631,6 @@ const Table: React.FC<TableProps> = ({
                                     })}
                                 </tbody>
                             </table>
-                            {Object.keys(rowSelection || {}).length >= 2 ? (
-                                <div className="admin-filter-wrapper bulk">
-                                    <div className="wrap-bulk-all-date">
-                                        <span className="title"><i className="adminlib-catalog"></i> Bulk Action: </span>
-                                        <span className="count">{Object.keys(rowSelection).length} rows selected</span>
-                                        {bulkActionComp && bulkActionComp()}
-                                        <div
-                                            className="close-btn"
-                                            onClick={() => onRowSelectionChange?.({})}
-                                        >
-                                            <i className="adminlib-vendor-form-delete"></i>
-                                            Delete
-                                        </div>
-                                    </div>
-                                </div>
-                            ) : (
-                                <div className="admin-filter-wrapper">
-                                    {realtimeFilter && (
-                                        <div className="wrap-bulk-all-date">
-                                            <span className="title"><i className="adminlib-contact-form"></i> Filter: </span>
-                                            {realtimeFilter?.map((filter) => (
-                                                <React.Fragment key={filter.name}>
-                                                    {filter.render(handleFilterChange, filterData[filter.name])}
-                                                </React.Fragment>
-                                            ))}
-                                        </div>
-                                    )}
-                                </div>
-                            )}
 
                             { /* Pagination Controls */}
                                 <div className="table-pagination">
@@ -755,6 +734,46 @@ const Table: React.FC<TableProps> = ({
                                 </div>
                         </div>
                     )}
+                    <div className="admin-filter-wrapper ">
+                        {Object.keys(rowSelection || {}).length >= 2 ? (
+
+                            <div className="wrap-bulk-all-date bulk">
+                                <span className="title"><i className="adminlib-bulk-action"></i> Bulk Action: </span>
+                                <span className="count">{Object.keys(rowSelection).length} rows selected</span>
+                                {bulkActionComp && bulkActionComp()}
+                                <div
+                                    className="close-btn"
+                                    onClick={() => onRowSelectionChange?.({})}
+                                >
+                                    <i className="adminlib-vendor-form-delete"></i>
+                                    Delete
+                                </div>
+                            </div>
+                        ) : (
+                            <>
+                                {realtimeFilter && (
+                                    <div className="wrap-bulk-all-date">
+                                        <span className="title"><i className="adminlib-filter"></i> Filter: </span>
+                                        {realtimeFilter?.map((filter) => (
+                                            <React.Fragment key={filter.name}>
+                                                {filter.render(handleFilterChange, filterData[filter.name])}
+                                            </React.Fragment>
+                                        ))}
+                                    </div>
+                                )}
+                                {searchFilter && (
+                                    <div className="wrap-bulk-all-date">
+                                        <span className="title"><i className="adminlib-search"></i> Search: </span>
+                                        {searchFilter?.map((filter) => (
+                                            <React.Fragment key={filter.name}>
+                                                {filter.render(handleFilterChange, filterData[filter.name])}
+                                            </React.Fragment>
+                                        ))}
+                                    </div>
+                                )}
+                            </>
+                        )}
+                    </div>
                     {successMsg && (
                         <div className="admin-notice-display-title">
                             <i className="admin-font adminlib-icon-yes"></i>
