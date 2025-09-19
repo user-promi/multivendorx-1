@@ -1042,3 +1042,77 @@ input[type="checkbox"]:focus {
     border-radius: 50%;
   }
 }
+
+// action icon and dropdown
+.action-icons {
+  display: flex;
+  gap: 0.313rem;
+  padding-top: 0.063rem;
+  position: relative;
+  cursor: pointer;
+
+  i:first-child {
+    padding: 0.5rem 0.313rem;
+    border-radius: 50%;
+    background: transparent;
+    transition: all 0.5s ease;
+    width: 1.4rem;
+    height: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+
+    &:hover {
+      background: #ebebeb;
+    }
+  }
+
+  .action-dropdown {
+    overflow: hidden;
+    border: $border-light-small;
+    position: absolute;
+    inset: 0 0 auto auto;
+    background: #fff;
+    display: none;
+    z-index: 2;
+    border-radius: 0.313rem;
+    width: 11rem;
+
+    ul {
+      padding: 0.313rem 0;
+      margin: 0;
+
+      li {
+        padding: 0 0.625rem;
+        display: flex;
+        align-items: center;
+        gap: 0.425rem;
+        font-size: 0.813rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s linear;
+
+        i {
+          font-size: 1rem;
+          width: 10%;
+        }
+
+        &.delete {
+          color: #f06b4f;
+          margin: 0;
+          border-top: $border-light-small;
+        }
+      }
+    }
+
+    &.show {
+      display: block;
+      transform: translate(0, 30px);
+    }
+  }
+
+  .adminlib-update-data {
+    font-size: 1rem;
+  }
+}
