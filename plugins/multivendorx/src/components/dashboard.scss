@@ -413,3 +413,55 @@
     }
 }
 // form end
+
+
+
+.admin-top-filter {
+  display: flex;
+  align-items: center;
+  border-bottom: $border-light-small;
+  margin-bottom: 1.25rem;
+  padding-bottom: 1.25rem;
+  justify-content: space-between;
+
+  .search-field {
+    display: flex;
+    border: 0.063rem solid #5007aa;
+    border-radius: 0.313rem;
+
+    .search-section {
+      display: flex;
+      align-items: center;
+      padding-left: 0.313rem;
+
+      i {
+        font-size: 1.25rem;
+        color: #5007aa;
+        padding-right: 0.5rem;
+      }
+      input {
+        border: none !important;
+
+        &:focus {
+          border: none !important;
+          box-shadow: none !important;
+        }
+      }
+    }
+    select{
+       background: #ece2f9f1 url("data:image/svg+xml,%3Csvg%20width='20'%20height='20'%20xmlns='http://www.w3.org/2000/svg'%3E%3Cpath%20d='M5%206l5%205%205-5%202%201-7%207-7-7%202-1z'%20fill='%235007aa'/%3E%3C/svg%3E")
+    no-repeat right 5px top 55%;;
+    color: #5007aa;
+        margin: 0;
+        border: 0.125rem solid #ece2f9f1;
+        width: 6rem;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+
+        option{
+            background: #fff;
+            
+        }
+      }
+  }
+}

@@ -43,23 +43,19 @@
     background: $theme-background-color;
     border-radius: 0.313rem;
 
-    span {
+    .title {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      padding: 0 0.5rem;
+      border-radius: 0.313rem;
+      color: #fff;
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
       font-size: 1rem;
-      color: $theme-color;
 
-      &.title {
-        height: 100%;
-        display: flex;
-        align-items: center;
-        padding: 0 0.5rem;
-        border-radius: 0.313rem;
-        color: #fff;
-        border-top-right-radius: 0;
-        border-bottom-right-radius: 0;
-
-        i {
-          font-size: 1.313rem;
-        }
+      i {
+        font-size: 1.313rem;
       }
     }
 
@@ -111,40 +107,6 @@
   }
 }
 
-.admin-top-filter {
-  display: flex;
-  align-items: center;
-  border-bottom: $border-light-small;
-  margin-bottom: 1.25rem;
-  padding-bottom: 1.25rem;
-  justify-content: space-between;
-
-  .search-field {
-    display: flex;
-    gap: 0.313rem;
-
-    .search-section {
-      display: flex;
-      align-items: center;
-      border: $border-light-small;
-      border-radius: 0.313rem;
-      padding-left: 0.5rem;
-
-      i {
-        font-size: 1.25rem;
-      }
-
-      input {
-        border: none !important;
-
-        &:focus {
-          border: none !important;
-          box-shadow: none !important;
-        }
-      }
-    }
-  }
-}
 
 // admin table filter style
 .admin-table-wrapper-filter {
@@ -474,79 +436,6 @@
   }
 }
 
-.action-icons {
-  display: flex;
-  gap: 0.313rem;
-  padding-top: 0.063rem;
-  position: relative;
-  cursor: pointer;
-
-  i:first-child {
-    padding: 0.5rem 0.313rem;
-    border-radius: 50%;
-    background: transparent;
-    transition: all 0.5s ease;
-    width: 1.4rem;
-    height: 1rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-
-    &:hover {
-      background: #ebebeb;
-    }
-  }
-
-  .action-dropdown {
-    overflow: hidden;
-    border: $border-light-small;
-    position: absolute;
-    inset: 0 0 auto auto;
-    background: #fff;
-    display: none;
-    z-index: 2;
-    border-radius: 0.313rem;
-    width: 11rem;
-
-    ul {
-      padding: 0.313rem 0;
-      margin: 0;
-
-      li {
-        padding: 0 0.625rem;
-        display: flex;
-        align-items: center;
-        gap: 0.425rem;
-        font-size: 0.813rem;
-        font-weight: 500;
-        cursor: pointer;
-        transition: all 0.3s linear;
-
-        i {
-          font-size: 1rem;
-          width: 10%;
-        }
-
-        &.delete {
-          color: #f06b4f;
-          margin: 0;
-          border-top: $border-light-small;
-        }
-      }
-    }
-
-    &.show {
-      display: block;
-      transform: translate(0, 30px);
-    }
-  }
-
-  .adminlib-update-data {
-    font-size: 1rem;
-  }
-}
-
 .line {
   float: left;
   width: 100%;
@@ -599,9 +488,33 @@
   position: relative;
 }
 
+// .date-picker-section-wrapper {
+//   visibility: visible;
+//   position: fixed;
+//   inset: auto auto 0px 0px;
+//   margin: 0px;
+//   transform: translate(620px, -180px);
+//   border: $border-light-small;
+// }
 .date-picker-section-wrapper {
+  position: relative;
+  width: 14rem;
+}
+
+.date-picker {
   position: absolute;
-  z-index: 9;
+  right: 0;
+  z-index: 100;
+  border: $border-light-small;
+}
+
+.date-picker.open-bottom {
+  top: calc(100% + 4px);
+  /* 4px gap */
+}
+
+.date-picker.open-top {
+  bottom: calc(100% + 4px);
 }
 
 @keyframes shine-lines {
