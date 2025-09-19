@@ -85,6 +85,7 @@ export const Announcements: React.FC = () => {
     });
     const [announcementStatus, setAnnouncementStatus] = useState<AnnouncementStatus[] | null>(null);
     const [storeOptions, setStoreOptions] = useState<{ value: string; label: string }[]>([]);
+    const [pickerPosition, setPickerPosition] = useState<"top" | "bottom">("bottom");
 
     const handleCloseForm = () => {
         setAddAnnouncements(false);
@@ -93,6 +94,14 @@ export const Announcements: React.FC = () => {
         setError(null); // clear any error
     };
     const handleDateOpen = () => {
+        if (dateRef.current) {
+            const rect = dateRef.current.getBoundingClientRect();
+            const viewportHeight = window.innerHeight;
+
+            // if there's less than 300px below, open upward
+            setPickerPosition(viewportHeight - rect.bottom < 300 ? "top" : "bottom");
+        }
+        // setOpenDatePicker(true);
         setOpenDatePicker(!openDatePicker);
     };
     // Handle form input change
@@ -353,76 +362,63 @@ export const Announcements: React.FC = () => {
         },
         {
             name: 'date',
-            render: ( updateFilter ) => (
-                <div ref={ dateRef }>
-                    <div className="admin-header-search-section">
-                        <input
-                            value={ `${ selectedRange[ 0 ].startDate.toLocaleDateString() } - ${ selectedRange[ 0 ].endDate.toLocaleDateString() }` }
-                            onClick={ () => handleDateOpen() }
-                            className="basic-input"
-                            type="text"
-                            placeholder={ 'DD/MM/YYYY' }
-                        />
-                    </div>
-                    { openDatePicker && (
-                        <div className="date-picker-section-wrapper" id="date-picker-wrapper">
+            render: (updateFilter) => (
+                <div className="date-picker-section-wrapper" ref={dateRef}>
+                    <input
+                        value={`${selectedRange[0].startDate.toLocaleDateString("en-US", {
+                            month: "short",
+                            day: "2-digit",
+                            year: "numeric",
+                        })} - ${selectedRange[0].endDate.toLocaleDateString("en-US", {
+                            month: "short",
+                            day: "2-digit",
+                            year: "numeric",
+                        })}`}
+                        onClick={handleDateOpen}
+                        className="basic-input"
+                        type="text"
+                        placeholder="DD/MM/YYYY"
+                    />
+                    {openDatePicker && (
+                        <div className={`date-picker ${pickerPosition === "top" ? "open-top" : "open-bottom"
+                            }`} id="date-picker-wrapper">
                             <DateRangePicker
-                                ranges={ selectedRange }
-                                months={ 1 }
+                                ranges={selectedRange}
+                                months={1}
                                 direction="vertical"
-                                scroll={ { enabled: true } }
-                                maxDate={ new Date() }
-                                onChange={ ( ranges: RangeKeyDict ) => {
+                                scroll={{ enabled: true }}
+                                maxDate={new Date()}
+                                onChange={(ranges: RangeKeyDict) => {
                                     const selection: Range = ranges.selection;
 
-                                    if ( selection?.endDate instanceof Date ) {
+                                    if (selection?.endDate instanceof Date) {
                                         // Set end of day to endDate
-                                        selection.endDate.setHours( 23, 59, 59, 999 );
+                                        selection.endDate.setHours(23, 59, 59, 999);
                                     }
 
                                     // Update local range state
-                                    setSelectedRange( [
+                                    setSelectedRange([
                                         {
                                             startDate: selection.startDate || new Date(),
                                             endDate: selection.endDate || new Date(),
                                             key: selection.key || 'selection',
                                         },
-                                    ] );
+                                    ]);
 
                                     // Update external filters (could be used by table or search logic)
-                                    updateFilter( 'date', {
+                                    updateFilter('date', {
                                         start_date: selection.startDate,
                                         end_date: selection.endDate,
-                                    } );
-                                } }
+                                    });
+                                }}
                             />
                         </div>
-                    ) }
+                    )}
                 </div>
             ),
         },
     ];
     const searchFilter: RealtimeFilter[] = [
-        {
-            name: 'searchField',
-            render: (updateFilter, filterValue) => (
-                <>
-                    <div className="search-section">
-                        <i className="adminlib-search"></i>
-                        <input
-                            name="searchField"
-                            type="text"
-                            className="basic-input"
-                            placeholder={__('Search', 'multivendorx')}
-                            onChange={(e) => {
-                                updateFilter(e.target.name, e.target.value);
-                            }}
-                            value={filterValue || ''}
-                        />
-                    </div>
-                </>
-            ),
-        },
         {
             name: 'searchAction',
             render: (updateFilter, filterValue) => (
@@ -430,7 +426,6 @@ export const Announcements: React.FC = () => {
                     <div className="   search-action">
                         <select
                             name="searchAction"
-                            className="basic-select"
                             onChange={(e) => {
                                 updateFilter(e.target.name, e.target.value);
                             }}
@@ -440,6 +435,25 @@ export const Announcements: React.FC = () => {
                             <option value="name">Name</option>
                             <option value="email">Email</option>
                         </select>
+                    </div>
+                </>
+            ),
+        },
+        {
+            name: 'searchField',
+            render: (updateFilter, filterValue) => (
+                <>
+                    <div className="search-section">
+                        <input
+                            name="searchField"
+                            type="text"
+                            placeholder={__('Search', 'multivendorx')}
+                            onChange={(e) => {
+                                updateFilter(e.target.name, e.target.value);
+                            }}
+                            value={filterValue || ''}
+                        />
+                        <i className="adminlib-search"></i>
                     </div>
                 </>
             ),
