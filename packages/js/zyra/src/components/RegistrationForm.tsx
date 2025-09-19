@@ -179,6 +179,24 @@ const selectOptionsStore: SelectOption[] = [
     { icon: 'adminlib-unread icon-form-email', value: 'email', label: 'Paypal Email', name: 'paypal_email' },
 
 ];
+const demoFormField = {
+    id: 21,
+    type: "text",
+    label: "Enter your text",
+    required: false,
+    name: "text-mfpbb9yy",
+    placeholder: "text",
+    chosen: false,
+    selected: false,
+};
+
+// ✅ Example select/dropdown options
+const demoSelectOptions = [
+    { value: "text", label: "Text" },
+    { value: "textarea", label: "Textarea" },
+    { value: "number", label: "Number" },
+    { value: "checkbox", label: "Checkbox" },
+];
 interface FormField {
     id: number;
     type: string;
@@ -434,6 +452,7 @@ const CustomFrom: React.FC<CustomFormProps> = ({
     };
     const [activeTab, setActiveTab] = useState("blocks");
     const [settingsActiveTab, setSettingsActiveTab] = useState("blocks");
+    const [showMetaBox, setShowMetaBox] = useState(false);
     const tabs = [
         {
             id: "blocks",
@@ -452,7 +471,7 @@ const CustomFrom: React.FC<CustomFormProps> = ({
                         }}
                     />
                     <Elements
-                        label="Multivendor Free"
+                        label="MultivendorX Free"
                         selectOptions={selectOptionsStore}
                         onClick={(type) => {
                             const option = selectOptionsStore.find((o) => o.value === type);
@@ -472,7 +491,7 @@ const CustomFrom: React.FC<CustomFormProps> = ({
                         }}
                     />
                     <Elements
-                        label="Multivendor Pro"
+                        label="MultivendorX Pro"
                         selectOptions={selectOptionsStore}
                         onClick={(type) => {
                             const option = selectOptionsStore.find((o) => o.value === type);
@@ -535,7 +554,7 @@ const CustomFrom: React.FC<CustomFormProps> = ({
                         }}
                     />
                     <Elements
-                        label="Multivendor Free"
+                        label="MultivendorX Free"
                         selectOptions={selectOptionsStore}
                         onClick={(type) => {
                             const option = selectOptionsStore.find((o) => o.value === type);
@@ -555,7 +574,7 @@ const CustomFrom: React.FC<CustomFormProps> = ({
                         }}
                     />
                     <Elements
-                        label="Multivendor Pro"
+                        label="MultivendorX Pro"
                         selectOptions={selectOptionsStore}
                         onClick={(type) => {
                             const option = selectOptionsStore.find((o) => o.value === type);
@@ -685,14 +704,15 @@ const CustomFrom: React.FC<CustomFormProps> = ({
                                             ></div>
                                         );
                                     }
-
                                     return (
                                         <main
                                             key={index}
-                                            className={`form-field ${opendInput?.id === formField.id
-                                                ? 'active'
-                                                : ''
-                                                }`}
+                                            // className={`form-field 
+                                            //     ${opendInput?.id === formField.id
+                                            //     ? 'active'
+                                            //     : ''
+                                            //     }`}
+                                            className="form-field"
                                         >
                                             { /* Render dragable button */}
                                             {opendInput?.id === formField.id && (
@@ -760,7 +780,7 @@ const CustomFrom: React.FC<CustomFormProps> = ({
                                                             btnType="button"
                                                         />
                                                     </div>
-
+                                                    <i className="adminlib-setting"></i>
                                                     {/* Show settings only if field is editable */}
                                                     {/* {!formField.readonly && (
                                                         <SettingMetaBox
@@ -777,8 +797,6 @@ const CustomFrom: React.FC<CustomFormProps> = ({
                                                     )} */}
                                                 </section>
                                             )}
-
-
 
                                             { /* Render main content */}
                                             <section
@@ -922,7 +940,7 @@ const CustomFrom: React.FC<CustomFormProps> = ({
                                                     </div>
                                                 )}
                                             </section>
-                                            <DisplayButton
+                                            {/* <DisplayButton
                                                 wraperClass={'add-new-sections'}
                                                 children={
                                                     <div className="icon-wrapper">
@@ -935,7 +953,7 @@ const CustomFrom: React.FC<CustomFormProps> = ({
                                                     setOpendInput(newInput);
                                                 }}
                                                 btnType='button'
-                                            />
+                                            /> */}
                                         </main>
                                     );
                                 })}
@@ -987,27 +1005,17 @@ const CustomFrom: React.FC<CustomFormProps> = ({
                     />
                 </div>
                 <div className="registration-edit-form">
-                    <div className="tab-titles">
-                        {settingstabs.map((tab) => (
-                            <div
-                                key={tab.id}
-                                className={`title ${settingsActiveTab === tab.id ? "active" : ""}`}
-                                onClick={() => setSettingsActiveTab(tab.id)}
-                            >
-                                <p>{tab.label}</p>
-                            </div>
-                        ))}
-                    </div>
-                    <div className="tab-contend">
-                        {settingstabs.map(
-                            (tab) =>
-                                settingsActiveTab === tab.id && (
-                                    <div key={tab.id} className="tab-panel">
-                                        {tab.content}
-                                    </div>
-                                )
-                        )}
-                    </div>
+                    <SettingMetaBox
+                        formField={demoFormField}
+                        opened={{ click: true }} 
+                        onChange={(key, value) => {
+                            console.log("Field changed:", key, value);
+                        }}
+                        onTypeChange={(newType) => {
+                            console.log("Type changed:", newType);
+                        }}
+                        inputTypeList={demoSelectOptions}
+                    />
                 </div>
             </div>
 

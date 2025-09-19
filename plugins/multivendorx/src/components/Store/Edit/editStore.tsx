@@ -9,6 +9,7 @@ import StoreSquad from './storeStaff';
 import PolicySettings from './policySettings';
 import ShippingSettings from './shippingSettings';
 import StoreRegistration from './storeRegistrationForm';
+import Facilitator from './facilitator';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
@@ -121,6 +122,16 @@ const EditStore = () => {
                 icon: 'adminlib-credit-card',
             },
         },
+        {
+            type: 'file',
+            content: {
+                id: 'store-facilitator',
+                name: 'Store Facilitator',
+                desc: 'Store Facilitator',
+                hideTabHeader: true,
+                icon: 'adminlib-credit-card',
+            },
+        },
     ];
 
     const getForm = (tabId: string) => {
@@ -137,6 +148,8 @@ const EditStore = () => {
                 return <PolicySettings id={editId} />;
             case 'store-application':
                 return <StoreRegistration id={editId} />;
+            case 'store-facilitator':
+                return <Facilitator id={editId} />;
             default:
                 return <div></div>;
         }

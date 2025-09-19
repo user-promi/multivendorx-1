@@ -180,6 +180,7 @@ const PaymentSettings = ({ id }: { id: string|null }) => {
 						</div>
 					</div>
 				</div>
+				
 			</div>
 		</>
 	);

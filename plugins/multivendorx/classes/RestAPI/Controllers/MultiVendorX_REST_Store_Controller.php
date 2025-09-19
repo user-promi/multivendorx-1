@@ -348,7 +348,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
         if ( $data['store_owners'] ) {
             StoreUtil::add_store_users([
                 'store_id' => $data['id'],
-                'store_owners' => $data['store_owners'],
+                'users' => $data['store_owners'],
                 'role_id' => 'store_owner',
             ]);
 
@@ -356,7 +356,6 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                 'success' => true
             ] );
         }
-        
         $store->set( 'name',        $data['name'] ?? $store->get('name') );
         $store->set( 'slug',        $data['slug'] ?? $store->get('slug') );
         $store->set( 'description', $data['description'] ?? $store->get('description') );

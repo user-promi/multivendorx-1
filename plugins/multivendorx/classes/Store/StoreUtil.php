@@ -21,7 +21,7 @@ class StoreUtil {
 
         $store_id = $args['store_id'] ?? 0;
         $role_id  = $args['role_id'] ?? '';
-        $owners   = $args['store_owners'] ?? [];
+        $owners   = $args['users'] ?? [];
 
         // remove old users not in list
         $wpdb->query($wpdb->prepare(

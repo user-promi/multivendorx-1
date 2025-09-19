@@ -118,8 +118,6 @@ class Setting {
                 'multivendorx_store_commissions_settings', 
                 'multivendorx_order_actions_refunds_settings', 
                 'multivendorx_menu_manager_settings', 
-                             
-                
 			)
         );
 
