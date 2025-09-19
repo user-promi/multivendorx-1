@@ -393,7 +393,8 @@ const Table: React.FC<TableProps> = ({
     });
     const typeCountActive = filterData.typeCount || 'all';
     return (
-        <>
+        <>  
+            <div className="admin-top-filter">
             {typeCounts && typeCounts.length > 0 && (
                 <div className="admin-table-wrapper-filter">
                     {typeCounts.map((countInfo, index) => (
@@ -412,11 +413,21 @@ const Table: React.FC<TableProps> = ({
                         >
                             {`${countInfo.name} (${countInfo.count})`}
                             {index !== typeCounts.length - 1 && ' |'}{' '}
-                            { /* Add '|' except for the last item */}
                         </div>
                     ))}
                 </div>
+
             )}
+            {searchFilter && (
+                <div className="search-field">
+                    {searchFilter?.map((filter) => (
+                        <React.Fragment key={filter.name}>
+                            {filter.render(handleFilterChange, filterData[filter.name])}
+                        </React.Fragment>
+                    ))}
+                </div>
+            )}
+            </div>
             {loading ? (
                 <LoadingTable />
             ) : (
@@ -715,7 +726,7 @@ const Table: React.FC<TableProps> = ({
                         {Object.keys(rowSelection || {}).length >= 2 ? (
 
                             <div className="wrap-bulk-all-date bulk">
-                                <span className="title"><i className="adminlib-bulk-action"></i> Bulk Action: </span>
+                                <span className="title"><i className="adminlib-bulk-action"></i> Bulk Action </span>
                                 <span className="count">{Object.keys(rowSelection).length} rows selected</span>
                                 {bulkActionComp && bulkActionComp()}
                                 <div
@@ -729,24 +740,11 @@ const Table: React.FC<TableProps> = ({
                         ) : (
                             <>
                                 {realtimeFilter && realtimeFilter.length > 0 && (
-                                    <div className="wrap-bulk-all-date">
+                                    <div className="wrap-bulk-all-date filter">
                                         <span className="title">
-                                            <i className="adminlib-filter"></i> Filter:
+                                            <i className="adminlib-filter"></i> Filter
                                         </span>
                                         {realtimeFilter?.map((filter) => (
-                                            <React.Fragment key={filter.name}>
-                                                {filter.render(handleFilterChange, filterData[filter.name])}
-                                            </React.Fragment>
-                                        ))}
-                                    </div>
-                                )}
-
-                                {searchFilter && (
-                                    <div className="wrap-bulk-all-date">
-                                        <span className="title">
-                                            <i className="adminlib-search"></i> Search:
-                                        </span>
-                                        {searchFilter?.map((filter) => (
                                             <React.Fragment key={filter.name}>
                                                 {filter.render(handleFilterChange, filterData[filter.name])}
                                             </React.Fragment>

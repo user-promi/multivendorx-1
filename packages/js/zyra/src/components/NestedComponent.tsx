@@ -15,7 +15,7 @@ interface NestedFieldOption {
 interface NestedField {
   look?: string;
   key: string;
-  type: "number" | "select" | "text" | "url" | "dropdown" | "time" | "checkbox";
+  type: "number" | "select" | "text" | "url" | "dropdown" | "time" | "checkbox" | "devider";
   label?: string;
   placeholder?: string;
   options?: NestedFieldOption[];
@@ -59,6 +59,7 @@ interface NestedComponentProps {
   onChange: (value: Record<string, any>[]) => void;
   single?: boolean;
   description?: string;
+  wrapperClass?: string;
 }
 
 const NestedComponent: React.FC<NestedComponentProps> = ({
@@ -70,6 +71,7 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
   deleteButtonLabel = "Delete",
   single = false,
   description,
+  wrapperClass,
 }) => {
   const [rows, setRows] = useState<Record<string, any>[]>([]);
 
@@ -298,7 +300,11 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
           </div>
         );
       }
-
+      case "devider": {
+        return (
+          <span className="devider"></span>
+        )
+      }
       default:
         return null;
     }
@@ -307,7 +313,8 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
   return (
     <div className="nested-wrapper" id={id}>
       {rows.map((row, rowIndex) => (
-        <div key={`nested-row-${rowIndex}`} className={`nested-row ${single ? "" : "multiple"}`}>
+        <>
+        <div key={`nested-row-${rowIndex}`} className={`nested-row ${single ? "" : "multiple"} ${wrapperClass}`}>
           {fields.map((field) => renderField(field, row, rowIndex))}
           {!single && (
             <div className="buttons-wrapper">
@@ -338,6 +345,7 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
           )}
 
         </div>
+        </>
       ))}
       {description && (
         <p

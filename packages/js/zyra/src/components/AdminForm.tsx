@@ -164,6 +164,7 @@ interface InputField {
     look?: string;
     inputWrapperClass?: string;
     wrapperClass?: string;
+    rowClass?: string;
     tour?: string;
     preInsideText?: string;
     rightContent?: boolean;
@@ -1768,6 +1769,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             description={inputField.desc}
                             fields={inputField.nestedFields ?? []}//The list of inner fields that belong to this section.
                             value={value}
+                            wrapperClass={inputField.rowClass}
                             addButtonLabel={inputField.addButtonLabel}//The text shown on the button to add a new item.
                             deleteButtonLabel={inputField.deleteButtonLabel}//The text shown on the button to remove an item.
                             single={inputField.single}//If set to true, only one item is allowed.

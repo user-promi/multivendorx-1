@@ -15,6 +15,10 @@ const gatewayFields = gatewayList.flatMap(gateway => [
         type: 'number',
         postInsideText: __('%', 'multivendorx'),
         size: "8rem",
+    },
+    {   
+        key: 'devider',
+        type: 'devider',
     }
 ]);
 
@@ -32,6 +36,10 @@ const nestedFields = [
         type: 'number',
         postInsideText: __('%', 'multivendorx'),
         size: "8rem",
+    },
+    {   
+        key: 'devider',
+        type: 'devider',
     },
     ...gatewayFields
 ];
@@ -257,9 +265,16 @@ export default {
             ],
         },
         {
+            key: 'separator_content',
+            type: 'section',
+            hint: __("What's excluded along with store commission", 'multivendorx'),
+            desc: __('Choose which order components are factored into commission calculations.', 'multivendorx')
+        },
+        {
             key: 'gateway_fees',
             type: 'nested',
             label: __('Gateway Fees', 'multivendorx'),
+            rowClass: 'single-line',            
             single: true,
             desc: __('', 'multivendorx'),
             nestedFields

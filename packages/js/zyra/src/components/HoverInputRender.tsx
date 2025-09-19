@@ -61,16 +61,16 @@ const HoverInputRender: React.FC< HoverInputRenderProps > = ( {
 
     return (
         <>
-            { ! showTextBox && (
+            {/* { ! showTextBox && ( */}
                 <div
-                    onMouseEnter={ handleMouseEnter }
-                    onMouseLeave={ handleMouseLeave }
+                    // onMouseEnter={ handleMouseEnter }
+                    // onMouseLeave={ handleMouseLeave }
                     style={ { cursor: 'pointer' } }
                 >
                     { renderStaticContent( { label, placeholder } ) }
                 </div>
-            ) }
-            { showTextBox && (
+            {/* ) } */}
+            {/* { showTextBox && (
                 <div
                     className="main-input-wrapper"
                     role="button"
@@ -84,7 +84,7 @@ const HoverInputRender: React.FC< HoverInputRenderProps > = ( {
                         placeholder,
                     } ) }
                 </div>
-            ) }
+            ) } */}
         </>
     );
 };

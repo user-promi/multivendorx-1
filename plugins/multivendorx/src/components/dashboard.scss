@@ -256,7 +256,7 @@
 // card styles start
 
 
-
+// form start
 .registration-from-wrapper {
     display: flex;
     align-items: flex-start;
@@ -291,9 +291,10 @@
             min-height: 80vh;
             max-height: 80vh;
             overflow-y: auto;
-            scrollbar-width: thin;               
-            scrollbar-color: #abaaac57 #f1f1f1;             
+            scrollbar-width: thin;
+            scrollbar-color: #abaaac57 #f1f1f1;
         }
+
         .section-meta {
             padding: 0.625rem 0;
             display: flex;
@@ -353,19 +354,62 @@
     }
 }
 
-.meta-setting-modal-content{
-    h3{
+.meta-setting-modal-content {
+    h3 {
         font-size: 1.4rem;
     }
-    .edit-field-wrapper{
+
+    .edit-field-wrapper {
         margin-bottom: 0.625rem;
-        label{
+
+        label {
             font-size: 1rem;
         }
+
         input,
-        select{
+        select {
             width: 100%;
             padding-top: 0.313rem;
         }
     }
 }
+
+.form-field {
+
+    .edit-form-wrapper {
+        border: 0.063rem dashed transparent;
+        padding: 0.313rem;
+    }
+
+    &.active {
+        .edit-form-wrapper {
+            border-color: $theme-color;
+        }
+    }
+
+    .meta-menu {
+        position: absolute;
+        right: -1.8rem;
+        top: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.45rem;
+
+        button {
+            padding: 0.313rem;
+            border: none;
+            background: #fde8e4;
+            color: #f06b4f;
+        }
+
+        i {
+            font-size: 1.25rem;
+        }
+
+        .copy-btn {
+            background: #d9f5f0;
+            color: #06be9f;
+        }
+    }
+}
+// form end

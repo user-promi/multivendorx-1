@@ -31,6 +31,7 @@ const SimpleInput: React.FC< SimpleInputProps > = ( {
                             className="basic-input"
                             type="text"
                             placeholder={ placeholder }
+                            readOnly
                         />
                     </div>
                 </div>
