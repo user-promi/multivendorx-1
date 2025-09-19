@@ -94,9 +94,7 @@ const ProPopup: React.FC<PopupProps> = (props) => {
                                     {props.messages?.map(
                                         (message, index) => (
                                             <li>
-                                                <div className="title">
-                                                    {message.text}
-                                                </div>
+                                                <div className="title"><i className={message.icon}></i> {message.text}</div>
                                                 <div className="sub-text">{message.des}</div>
                                             </li>
                                         )

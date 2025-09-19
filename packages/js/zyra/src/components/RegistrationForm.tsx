@@ -707,19 +707,18 @@ const CustomFrom: React.FC<CustomFormProps> = ({
                                     return (
                                         <main
                                             key={index}
-                                            // className={`form-field 
-                                            //     ${opendInput?.id === formField.id
-                                            //     ? 'active'
-                                            //     : ''
-                                            //     }`}
-                                            className="form-field"
+                                            className={`form-field 
+                                                ${opendInput?.id === formField.id
+                                                ? 'active'
+                                                : ''
+                                                }`}
                                         >
                                             { /* Render dragable button */}
-                                            {opendInput?.id === formField.id && (
+                                            {/* {opendInput?.id === formField.id && (
                                                 <div className="bth-move">
                                                     <i className="admin-font adminlib-move"></i>
                                                 </div>
-                                            )}
+                                            )} */}
 
                                             { /* Render setting section */}
                                             {/* {opendInput?.id === formField.id && (
@@ -769,18 +768,16 @@ const CustomFrom: React.FC<CustomFormProps> = ({
                                             {opendInput?.id === formField.id && (
                                                 <section className="meta-menu">
                                                     {/* Always show delete button */}
-                                                    <div className="btn-delete">
-                                                        <DisplayButton
-                                                            onClick={() => {
-                                                                deleteParticularFormField(index);
-                                                                setOpendInput(null);
-                                                            }}
-                                                            wraperClass={`delete`}
-                                                            children={<i className="admin-font adminlib-close"></i>}
-                                                            btnType="button"
-                                                        />
-                                                    </div>
-                                                    <i className="adminlib-setting"></i>
+                                                    <DisplayButton
+                                                        onClick={() => {
+                                                            deleteParticularFormField(index);
+                                                            setOpendInput(null);
+                                                        }}
+                                                        wraperClass={`delete`}
+                                                        children={<i className="admin-font adminlib-delete"></i>}
+                                                        btnType="button"
+                                                    />
+                                                    <i className="copy-btn adminlib-vendor-form-copy"></i>
                                                     {/* Show settings only if field is editable */}
                                                     {/* {!formField.readonly && (
                                                         <SettingMetaBox

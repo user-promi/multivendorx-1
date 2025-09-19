@@ -73,42 +73,42 @@
       }
     }
 
-    .meta-menu {
-      width: fit-content;
-      position: absolute;
-      margin-top: 0.5rem;
-      z-index: 1;
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      background: $theme-background-color;
-      padding: 0.5rem 0;
-      right: 0.625rem;
-      top: -2.70rem;
+    // .meta-menu {
+    //   width: fit-content;
+    //   position: absolute;
+    //   margin-top: 0.5rem;
+    //   z-index: 1;
+    //   display: flex;
+    //   align-items: center;
+    //   justify-content: flex-start;
+    //   background: $theme-background-color;
+    //   padding: 0.5rem 0;
+    //   right: 0.625rem;
+    //   top: -2.70rem;
 
-      .btn-delete {
-        border-right: $border-light-small;
+    //   .btn-delete {
+    //     border-right: $border-light-small;
 
-        .delete {
-          border: none;
-          background: transparent;
+    //     .delete {
+    //       border: none;
+    //       background: transparent;
 
-          i {
-            color: #000;
-            font-size: 1rem;
-          }
-        }
-      }
+    //       i {
+    //         color: #000;
+    //         font-size: 1rem;
+    //       }
+    //     }
+    //   }
 
-      &>div {
-        padding: 0 0.5rem;
-        color: $color-white;
-        cursor: pointer;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-    }
+    //   &>div {
+    //     padding: 0 0.5rem;
+    //     color: $color-white;
+    //     cursor: pointer;
+    //     display: flex;
+    //     justify-content: center;
+    //     align-items: center;
+    //   }
+    // }
 
     .bth-move {
       position: absolute;

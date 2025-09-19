@@ -105,7 +105,7 @@
           color: #000;
           margin-bottom: 0.625rem;
 
-          .admin-badge{
+          .admin-badge {
             padding: 0.125rem 0.5rem;
             margin-left: 0.125rem;
             font-size: 0.75rem;
@@ -120,43 +120,56 @@
           gap: 0.5rem;
           flex-wrap: wrap;
 
-          div{
+          div {
             color: #000;
           }
         }
       }
 
-      .module-footer {
-        display: flex;
-        padding-top: 1rem;
-        align-items: center;
-        margin-top: 0.5rem;
-        border-top: $border-light-small;
-
-        .buttons {
+      .footer-wrapper {
+        .requires {
           display: flex;
-          gap: 0.5rem;
+          gap: 0.125rem;
 
-          i {
-            font-size: 1.125rem;
+          .requires-title {
+            font-size: 0.9rem;
             color: $theme-color;
+            font-weight: 600;
+          }
+        }
+
+        .module-footer {
+          display: flex;
+          padding-top: 1rem;
+          align-items: center;
+          margin-top: 0.5rem;
+          border-top: $border-light-small;
+
+          .buttons {
+            display: flex;
+            gap: 0.5rem;
+
+            i {
+              font-size: 1.125rem;
+              color: $theme-color;
+            }
           }
         }
       }
 
-      fieldset{
+      fieldset {
         border: $border-light-small;
         margin-top: .313rem;
         padding: 0 .5rem .5rem;
 
-        legend{
+        legend {
           border-radius: .25rem;
           color: #e35047;
           margin-left: .25rem;
           padding: .188rem .375rem;
           text-align: left;
 
-          &.free{
+          &.free {
             color: #000;
           }
         }

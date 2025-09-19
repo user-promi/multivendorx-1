@@ -2,7 +2,8 @@
 import React, { useState, useEffect, useRef, ReactNode } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
-
+import 'react-date-range/dist/styles.css'; // main style file
+import 'react-date-range/dist/theme/default.css'; // theme css file
 import { Table, getApiLink, TableCell, AdminBreadcrumbs, BasicInput, TextArea, CommonPopup, SelectInput } from 'zyra';
 
 import {
@@ -352,51 +353,51 @@ export const Announcements: React.FC = () => {
         },
         {
             name: 'date',
-            render: (updateFilter) => (
-                <div ref={dateRef}>
-                    <div className="  ">
+            render: ( updateFilter ) => (
+                <div ref={ dateRef }>
+                    <div className="admin-header-search-section">
                         <input
-                            value={`${selectedRange[0].startDate.toLocaleDateString()} - ${selectedRange[0].endDate.toLocaleDateString()}`}
-                            onClick={() => handleDateOpen()}
+                            value={ `${ selectedRange[ 0 ].startDate.toLocaleDateString() } - ${ selectedRange[ 0 ].endDate.toLocaleDateString() }` }
+                            onClick={ () => handleDateOpen() }
                             className="basic-input"
                             type="text"
-                            placeholder={'DD/MM/YYYY'}
+                            placeholder={ 'DD/MM/YYYY' }
                         />
                     </div>
-                    {openDatePicker && (
+                    { openDatePicker && (
                         <div className="date-picker-section-wrapper" id="date-picker-wrapper">
                             <DateRangePicker
-                                ranges={selectedRange}
-                                months={1}
+                                ranges={ selectedRange }
+                                months={ 1 }
                                 direction="vertical"
-                                scroll={{ enabled: true }}
-                                maxDate={new Date()}
-                                onChange={(ranges: RangeKeyDict) => {
-                                    // const selection: Range = ranges.selection;
+                                scroll={ { enabled: true } }
+                                maxDate={ new Date() }
+                                onChange={ ( ranges: RangeKeyDict ) => {
+                                    const selection: Range = ranges.selection;
 
-                                    // if (selection?.endDate instanceof Date) {
-                                    //     // Set end of day to endDate
-                                    //     selection.endDate.setHours(23, 59, 59, 999);
-                                    // }
+                                    if ( selection?.endDate instanceof Date ) {
+                                        // Set end of day to endDate
+                                        selection.endDate.setHours( 23, 59, 59, 999 );
+                                    }
 
-                                    // // Update local range state
-                                    // setSelectedRange([
-                                    //     {
-                                    //         startDate: selection.startDate || new Date(),
-                                    //         endDate: selection.endDate || new Date(),
-                                    //         key: selection.key || 'selection',
-                                    //     },
-                                    // ]);
+                                    // Update local range state
+                                    setSelectedRange( [
+                                        {
+                                            startDate: selection.startDate || new Date(),
+                                            endDate: selection.endDate || new Date(),
+                                            key: selection.key || 'selection',
+                                        },
+                                    ] );
 
-                                    // // Update external filters (could be used by table or search logic)
-                                    // updateFilter('date', {
-                                    //     start_date: selection.startDate,
-                                    //     end_date: selection.endDate,
-                                    // });
-                                }}
+                                    // Update external filters (could be used by table or search logic)
+                                    updateFilter( 'date', {
+                                        start_date: selection.startDate,
+                                        end_date: selection.endDate,
+                                    } );
+                                } }
                             />
                         </div>
-                    )}
+                    ) }
                 </div>
             ),
         },
@@ -407,11 +408,12 @@ export const Announcements: React.FC = () => {
             render: (updateFilter, filterValue) => (
                 <>
                     <div className="search-section">
+                        <i className="adminlib-search"></i>
                         <input
                             name="searchField"
                             type="text"
                             className="basic-input"
-                            placeholder={__('Search', 'moowoodle-pro')}
+                            placeholder={__('Search', 'multivendorx')}
                             onChange={(e) => {
                                 updateFilter(e.target.name, e.target.value);
                             }}
