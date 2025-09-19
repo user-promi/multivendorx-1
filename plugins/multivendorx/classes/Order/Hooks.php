@@ -101,6 +101,9 @@ class Hooks {
      * @return  void
      */
     public function create_vendor_order( $order ) {
+        if ( is_numeric( $order ) ) {
+            $order = wc_get_order( $order );
+        }
 
         if ( $order->get_parent_id() || $order->get_meta('has_multivendorx_sub_order') ) {
             return;

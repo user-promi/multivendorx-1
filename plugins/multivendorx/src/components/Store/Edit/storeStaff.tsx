@@ -201,6 +201,35 @@ return (
                                 />
                             </div>
                         </div>
+                        <div className="form-group-wrapper">
+                            <div className="form-group">
+                                <label>Facilitators</label>
+                                <SelectInput
+                                    name="facilitators"
+                                    options={appLocalizer?.facilitators_list || []}
+                                    type="multi-select"
+                                    value={(formData.facilitators || []).map((id: any) => {
+                                        const match = (appLocalizer?.facilitators_list || []).find(
+                                            (opt: any) => String(opt.value) === String(id)
+                                        );
+                                        return match ? match.value : String(id);
+                                    })}
+                                    onChange={(selected: any) => {
+                                        const facilitators =
+                                            (selected as any[])?.map(
+                                                (option) => option.value
+                                            ) || [];
+                                        const updated = {
+                                            ...formData,
+                                            facilitators,
+                                            state: '',
+                                        };
+                                        setFormData(updated);
+                                        autoSave(updated);
+                                    }}
+                                />
+                            </div>
+                        </div>
                     </div>
 
                 </div>

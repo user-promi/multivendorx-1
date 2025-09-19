@@ -211,12 +211,12 @@ export default {
                     value: 'all_stores',
                 },
                 {
-                    key: 'all_stores',
+                    key: 'none',
                     label: __(
                         'Do not display',
                         'multivendorx'
                     ),
-                    value: 'all_stores',
+                    value: 'none',
                 },
             ],
         }
