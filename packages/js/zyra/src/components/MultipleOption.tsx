@@ -141,6 +141,7 @@ const MultipleOptions: React.FC< MultipleOptionsProps > = ( {
                         onChange={ ( event ) =>
                             onLabelChange( event.target.value )
                         }
+                        readOnly
                     />
 
                     <ReactSortable

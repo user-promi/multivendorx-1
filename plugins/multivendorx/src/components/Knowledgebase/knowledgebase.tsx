@@ -301,10 +301,11 @@ export const KnowledgeBase: React.FC = () => {
                     open={addEntry}
                     onClose={handleCloseForm}
                     width="500px"
+                    height='60%'
                     header={
                         <>
                             <div className="title">
-                                <i className="adminlib-cart"></i>
+                                <i className="adminlib-book"></i>
                                 {editId ? __('Edit Knowledgebase', 'multivendorx') : __('Add Knowledgebase', 'multivendorx')}
                             </div>
                             <p>Write and publish a new knowledge base article to help stores navigate their dashboard.</p>

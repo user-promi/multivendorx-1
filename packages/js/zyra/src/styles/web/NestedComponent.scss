@@ -8,6 +8,14 @@
         align-items: center;
         gap: 0.5rem;
 
+        .devider{
+            width: 100%;
+        }
+        &.single-line{
+            .before{
+                width: 10rem;
+            }
+        }
         &.multiple {
             padding: 1rem;
             margin-bottom: 1.5rem;

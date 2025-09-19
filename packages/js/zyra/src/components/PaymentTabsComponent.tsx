@@ -197,7 +197,6 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
               <div className="details" onClick={() => setActiveTab(isActive ? null : method.icon)}>
                 <div className="details-wrapper">
                   <div className="payment-method-icon">
-                    {/* <img src={method.icon} alt={method.label} /> */}
                     <i className={method.icon}></i>
                   </div>
                   <div className="payment-method-info">
@@ -218,7 +217,7 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
               </div>
 
               <div className="right-section toggle-btn" onClick={() => toggleEnable(method.id, true, method.icon)}>
-                <i className="adminlib-more-vertical"></i>                                
+                <i className="adminlib-more-vertical"></i>
               </div>
             </div>
 
