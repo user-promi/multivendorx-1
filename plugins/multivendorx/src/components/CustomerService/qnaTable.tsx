@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 import { DateRangePicker, RangeKeyDict, Range } from 'react-date-range';
-import { Table, getApiLink, TableCell, AdminBreadcrumbs, CommonPopup } from 'zyra';
+import { Table, getApiLink, TableCell } from 'zyra';
 import {
     ColumnDef,
     RowSelectionState,
@@ -11,65 +11,40 @@ import {
 } from '@tanstack/react-table';
 import EditQna from './editQna';
 
-export interface RealtimeFilter {
-    name: string;
-    render: (updateFilter: (key: string, value: any) => void, filterValue: any) => ReactNode;
-}
-// Type declarations
-type CommissionStatus = {
-    key: string;
-    name: string;
-    count: number;
-};
-type CommissionRow = {
-    id?: number;
-    orderId?: number;
-    storeId?: number;
-    storeName?: string;
-    commissionAmount?: string;
-    shipping?: string;
-    tax?: string;
-    commissionTotal?: string;
-    commissionRefunded?: string;
-    paidStatus?: 'paid' | 'unpaid' | string; // enum-like if you want
-    commissionNote?: string | null;
-    createTime?: string; // ISO datetime string
-};
-
-type FilterData = {
-    searchAction?: string;
-    searchField?: string;
+// QnA Row Type
+type QnaRow = {
+    id: number;
+    product_id: number;
+    product_name: string;
+    product_link: string;
+    question_text: string;
+    answer_text: string | null;
+    question_by: number;
+    author_name: string;
+    question_date: string;
+    time_ago: string;
+    total_votes: number;
+    question_visibility: string;
 };
 
 const Qna: React.FC = () => {
     const dateRef = useRef<HTMLDivElement | null>(null);
-    const [openModal, setOpenModal] = useState(false);
-    const [modalDetails, setModalDetails] = useState<string>('');
-    const [error, setError] = useState<String>();
-    const [data, setData] = useState<CommissionRow[] | null>(null);
-    const bulkSelectRef = useRef<HTMLSelectElement>(null);
+    const [error, setError] = useState<string>();
+    const [data, setData] = useState<QnaRow[] | null>(null);
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
     const [totalRows, setTotalRows] = useState<number>(0);
     const [openDatePicker, setOpenDatePicker] = useState(false);
-    const [viewCommission, setViewCommission] = useState(false);
-    const [selectedCommissionId, setSelectedCommissionId] = useState<number | null>(null);
+
+    const [viewQna, setViewQna] = useState(false);
+    const [selectedQnaId, setSelectedQnaId] = useState<number | null>(null);
 
     const [pagination, setPagination] = useState<PaginationState>({
         pageIndex: 0,
         pageSize: 10,
     });
-    const [selectedRange, setSelectedRange] = useState([
-        {
-            startDate: new Date(new Date().getTime() - 30 * 24 * 60 * 60 * 1000),
-            endDate: new Date(),
-            key: 'selection',
-        },
-    ]);
-    const handleDateOpen = () => {
-        setOpenDatePicker(!openDatePicker);
-    };
-
     const [pageCount, setPageCount] = useState(0);
+
+    const [showDropdown, setShowDropdown] = useState(false);
 
     // Fetch total rows on mount
     useEffect(() => {
@@ -87,6 +62,14 @@ const Qna: React.FC = () => {
                 setError(__('Failed to load total rows', 'multivendorx'));
             });
     }, []);
+
+    useEffect(() => {
+        const currentPage = pagination.pageIndex + 1;
+        const rowsPerPage = pagination.pageSize;
+        requestData(rowsPerPage, currentPage);
+        setPageCount(Math.ceil(totalRows / rowsPerPage));
+    }, [pagination]);
+
     useEffect(() => {
         const handleClickOutside = (e: MouseEvent) => {
             // if click is not on dropdown toggle or inside dropdown → close it
@@ -100,37 +83,6 @@ const Qna: React.FC = () => {
         return () => document.removeEventListener("click", handleClickOutside);
     }, []);
 
-    useEffect(() => {
-        const currentPage = pagination.pageIndex + 1;
-        const rowsPerPage = pagination.pageSize;
-        requestData(rowsPerPage, currentPage);
-        setPageCount(Math.ceil(totalRows / rowsPerPage));
-
-    }, [pagination]);
-    const [showDropdown, setShowDropdown] = useState(false);
-    const handleBulkAction = () => {
-        if (appLocalizer.khali_dabba) {
-            if (!Object.keys(rowSelection).length) {
-                setModalDetails('Select rows.');
-                setOpenModal(true);
-                return;
-            }
-            if (!bulkSelectRef.current?.value) {
-                setModalDetails('Please select a action.');
-                setOpenModal(true);
-                return;
-            }
-            setData(null);
-        }
-    };
-
-    const toggleDropdown = (id: any) => {
-        if (showDropdown === id) {
-            setShowDropdown(false);
-            return;
-        }
-        setShowDropdown(id);
-    };
     // Fetch data from backend.
     function requestData(
         rowsPerPage = 10,
@@ -150,26 +102,17 @@ const Qna: React.FC = () => {
                 setData(response.data || []);
             })
             .catch(() => {
-                setError(__('Failed to load stores', 'multivendorx'));
+                setError(__('Failed to load Q&A', 'multivendorx'));
                 setData([]);
             });
     }
 
-    // Handle pagination and filter changes
-    const requestApiForData = (
-        rowsPerPage: number,
-        currentPage: number,
-        filterData: FilterData
-    ) => {
-        setData(null);
-        requestData(
-            rowsPerPage,
-            currentPage,
-        );
+    // Refresh table when child updates
+    const handleUpdated = () => {
+        requestData(pagination.pageSize, pagination.pageIndex + 1);
     };
 
-    // Column definitions
-    const columns: ColumnDef<CommissionRow>[] = [
+    const columns: ColumnDef<QnaRow>[] = [
         {
             id: 'select',
             header: ({ table }) => (
@@ -187,7 +130,6 @@ const Qna: React.FC = () => {
                 />
             ),
         },
-        
         {
             header: __('Product Name', 'multivendorx'),
             cell: ({ row }) => (
@@ -265,7 +207,7 @@ const Qna: React.FC = () => {
                     {row.original.question_visibility ?? '-'}
                 </TableCell>
             ),
-        },        
+        },
         {
             header: __('Action', 'multivendorx'),
             cell: ({ row }) => (
@@ -275,7 +217,7 @@ const Qna: React.FC = () => {
                             <i
                                 className="adminlib-more-vertical"
                                 onClick={() =>
-                                    toggleDropdown(row.original.id)
+                                    setShowDropdown(showDropdown === row.original.id ? false : row.original.id)
                                 }
                             ></i>
                             <div
@@ -287,21 +229,12 @@ const Qna: React.FC = () => {
                                 <ul>
                                     <li
                                         onClick={() => {
-                                            setSelectedCommissionId(row.original.id ?? null);
-                                            setViewCommission(true);
+                                            setSelectedQnaId(row.original.id ?? null);
+                                            setViewQna(true);
                                         }}
                                     >
                                         <i className="adminlib-eye"></i>
-                                        {__('View', 'multivendorx')}
-                                    </li>
-
-                                    <li
-                                        onClick={() =>
-                                            (window.location.href = `?page=multivendorx#&tab=stores&edit/${row.original.id}`)
-                                        }
-                                    >
-                                        <i className="adminlib-create"></i>
-                                        {__('Delete', 'multivendorx')}
+                                        {__('Edit', 'multivendorx')}
                                     </li>
                                 </ul>
                             </div>
@@ -311,110 +244,6 @@ const Qna: React.FC = () => {
             ),
         }
     ];
-    const realtimeFilter: RealtimeFilter[] = [
-        {
-            name: 'commissionStatus',
-            render: (updateFilter: (key: string, value: string) => void, filterValue: string | undefined) => (
-                <div className="   course-field">
-                    <select
-                        name="commissionStatus"
-                        onChange={(e) => updateFilter(e.target.name, e.target.value)}
-                        value={filterValue || ''}
-                        className="basic-select"
-                    >
-                        <option value="">Commission Status</option>
-                        {/* { Object.entries( courses ).map( ( [ courseId, courseName ] ) => (
-                            <option key={ courseId } value={ courseId }>
-                                { courseName }
-                            </option>
-                        ) ) } */}
-                    </select>
-                </div>
-            ),
-        },
-        {
-            name: 'vendor',
-            render: (updateFilter: (key: string, value: string) => void, filterValue: string | undefined) => (
-                <div className="   group-field">
-                    <select
-                        name="vendor"
-                        onChange={(e) => updateFilter(e.target.name, e.target.value)}
-                        value={filterValue || ''}
-                        className="basic-select"
-                    >
-                        <option value="">All Vendors</option>
-                        {/* { Object.entries( groups ).map( ( [ groupId, groupName ] ) => (
-                            <option key={ groupId } value={ groupId }>
-                                { ' ' }
-                                { groupName }{ ' ' }
-                            </option>
-                        ) ) } */}
-                    </select>
-                </div>
-            ),
-        },
-        {
-            name: 'date',
-            render: (updateFilter) => (
-                <div ref={dateRef}>
-                    <div className="  ">
-                        <input
-                            value={`${selectedRange[0].startDate.toLocaleDateString()} - ${selectedRange[0].endDate.toLocaleDateString()}`}
-                            onClick={() => handleDateOpen()}
-                            className="basic-input"
-                            type="text"
-                            placeholder={'DD/MM/YYYY'}
-                        />
-                    </div>
-                    {openDatePicker && (
-                        <div className="date-picker-section-wrapper" id="date-picker-wrapper">
-                            <DateRangePicker
-                                ranges={selectedRange}
-                                months={1}
-                                direction="vertical"
-                                scroll={{ enabled: true }}
-                                maxDate={new Date()}
-                                onChange={(ranges: RangeKeyDict) => {
-                                    const selection: Range = ranges.selection;
-
-                                    if (selection?.endDate instanceof Date) {
-                                        // Set end of day to endDate
-                                        selection.endDate.setHours(23, 59, 59, 999);
-                                    }
-
-                                    // Update local range state
-                                    setSelectedRange([
-                                        {
-                                            startDate: selection.startDate || new Date(),
-                                            endDate: selection.endDate || new Date(),
-                                            key: selection.key || 'selection',
-                                        },
-                                    ]);
-
-                                    // Update external filters (could be used by table or search logic)
-                                    updateFilter('date', {
-                                        start_date: selection.startDate,
-                                        end_date: selection.endDate,
-                                    });
-                                }}
-                            />
-                        </div>
-                    )}
-                </div>
-            ),
-        },
-    ];
-
-    // Type for an order line
-    interface OrderItem {
-        id: number;
-        name: string;
-        sku: string;
-        cost: string;
-        discount?: string;
-        qty: number;
-        total: string;
-    }
 
     return (
         <>
@@ -425,20 +254,20 @@ const Qna: React.FC = () => {
                     rowSelection={rowSelection}
                     onRowSelectionChange={setRowSelection}
                     defaultRowsPerPage={10}
-                    realtimeFilter={realtimeFilter}
                     pageCount={pageCount}
                     pagination={pagination}
                     onPaginationChange={setPagination}
-                    handlePagination={requestApiForData}
+                    handlePagination={requestData}
                     perPageOption={[10, 25, 50]}
                 />
             </div>
 
-            {viewCommission && selectedCommissionId !== null && (
+            {viewQna && selectedQnaId !== null && (
                 <EditQna
-                    open={viewCommission}
-                    onClose={() => setViewCommission(false)}
-                    qnaId={selectedCommissionId}
+                    open={viewQna}
+                    onClose={() => setViewQna(false)}
+                    qnaId={selectedQnaId}
+                    onUpdated={handleUpdated}  
                 />
             )}
         </>
