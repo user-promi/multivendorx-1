@@ -54,7 +54,7 @@ const Reviews: React.FC = () => {
                             Completed
                         </div>
                     </div>
-                    <div className="des">Manage your store information and preferences</div>
+                    <div className="des">September 10, 2025 8:06 am</div>
                 </div>
             </div > {/* page title end */}
 
@@ -312,16 +312,22 @@ const Reviews: React.FC = () => {
 
                     {/* Shipping start */}
                     <div className="card-content">
-                        <div className="card-title">Shipping address</div>
-                        <div>45 Roker Terrace</div>
-                        <div> Latheronwheel</div>
-                        <div> KW5 8NW,London</div>
-                        <div> UK</div>
+                        <div className="card-title">Billing address</div>
+
+                        <div className="address">
+                            <div>45 Roker Terrace</div>
+                            <div> Latheronwheel</div>
+                            <div> KW5 8NW,London</div>
+                            <div> UK</div>
+                        </div>
+
+                        <div className="card-title">Payment method</div>
+                        <div className="admin-badge blue">Direct bank transfer</div>
                     </div> {/* Shipping start */}
 
                     {/* Shipping start */}
                     <div className="card-content">
-                        <div className="card-title">Billing address</div>
+                        <div className="card-title">Shipping address</div>
                         <div>45 Roker Terrace</div>
                         <div> Latheronwheel</div>
                         <div> KW5 8NW,London</div>
@@ -376,14 +382,6 @@ const Reviews: React.FC = () => {
                             </ul>
 
                         </div>
-
-                        {/* <div className="note-wrapper">
-                            <div className="form-group-wrapper">
-                                <div className="form-group"><label for="product-name">Slug</label>
-                                    <div className=" "><input className="basic-input " type="text" name="slug" value="" /></div>
-                                </div>
-                            </div>
-                        </div> */}
                     </div>
                 </div>
             </div >

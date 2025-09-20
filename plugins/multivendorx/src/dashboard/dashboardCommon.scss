@@ -85,8 +85,16 @@ $border-radius-button: 8rem;
     padding: 1.5rem;
 
     .card-title {
-        font-size: 1.125rem;
+        font-size: 1.25rem;
         margin-bottom: 1.313rem;
+    }
+
+    .admin-badge {
+        width: fit-content;
+    }
+
+    .address {
+        margin-bottom: 1.5rem;
     }
 
     .form-group-wrapper {
