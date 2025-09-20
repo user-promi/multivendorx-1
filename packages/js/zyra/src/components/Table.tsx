@@ -727,7 +727,10 @@ const Table: React.FC<TableProps> = ({
 
                             <div className="wrap-bulk-all-date bulk">
                                 <span className="count">{Object.keys(rowSelection).length} rows selected</span>
-                                <span className="select count">Select all</span>
+                                <span className="select count" 
+                                    onClick={() => table.toggleAllRowsSelected(true)}>
+                                        Select all
+                                </span>
                                 {bulkActionComp && bulkActionComp()}
                                 <div
                                     className="close-btn"

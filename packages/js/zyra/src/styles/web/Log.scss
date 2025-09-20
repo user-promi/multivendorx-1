@@ -2,7 +2,6 @@
   .log-container-wrapper {
     min-height: 6.25rem;
     height: 100%;
-    width: 100%;
     border-radius: 0.25rem;
     padding: 0.5rem;
     padding-bottom: 1rem;
@@ -11,7 +10,7 @@
     line-height: 1.173rem;
     word-break: break-all;
     background-color: rgb(21 23 24);
-    margin: 1rem;
+    margin-top: 1rem;
 
     .wrapper-header{
       display: flex;

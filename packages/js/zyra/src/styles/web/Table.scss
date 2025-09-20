@@ -21,6 +21,7 @@
         display: flex;
         border: 0.063rem solid #5007aa;
         border-radius: 0.313rem;
+        margin-left: auto;
 
         .search-section {
             display: flex;
@@ -145,6 +146,10 @@
                 height: 95%;
                 display: flex;
                 align-items: center;
+
+                &.select{
+                  border: none;
+                }
             }
 
             .select {
@@ -321,6 +326,7 @@
 
           img {
             width: 3.125rem;
+            height: -webkit-max-content;
             border: 0.063rem solid #e0e4e9;
           }
 
