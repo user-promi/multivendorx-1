@@ -48,7 +48,7 @@ const Reviews: React.FC = () => {
             {/* page title start */}
             < div className="page-title-wrapper" >
                 <div className="page-title">
-                    <div className="title">View Order #8456
+                    <div className="title">Order #8456
                         <div className="admin-badge green">
                             <i className="adminlib-check"></i>
                             Completed
