@@ -1,0 +1,237 @@
+20/09/2025 13:11:57:orders: : array (
+  'offset' => NULL,
+  'order' => 'desc',
+  'orderby' => 'date ID',
+  'paged' => 1,
+  'post__in' => 
+  array (
+  ),
+  'post__not_in' => 
+  array (
+  ),
+  'posts_per_page' => 10,
+  'name' => NULL,
+  'post_parent__in' => 
+  array (
+  ),
+  'post_parent__not_in' => 
+  array (
+  ),
+  's' => NULL,
+  'fields' => 
+  array (
+    0 => 'id',
+    1 => 'parent_id',
+    2 => 'number',
+    3 => 'order_key',
+    4 => 'created_via',
+    5 => 'version',
+    6 => 'status',
+    7 => 'currency',
+    8 => 'date_created',
+    9 => 'date_created_gmt',
+    10 => 'date_modified',
+    11 => 'date_modified_gmt',
+    12 => 'discount_total',
+    13 => 'discount_tax',
+    14 => 'shipping_total',
+    15 => 'shipping_tax',
+    16 => 'cart_tax',
+    17 => 'total',
+    18 => 'total_tax',
+    19 => 'prices_include_tax',
+    20 => 'customer_id',
+    21 => 'customer_ip_address',
+    22 => 'customer_user_agent',
+    23 => 'customer_note',
+    24 => 'billing',
+    25 => 'shipping',
+    26 => 'payment_method',
+    27 => 'payment_method_title',
+    28 => 'transaction_id',
+    29 => 'date_paid',
+    30 => 'date_paid_gmt',
+    31 => 'date_completed',
+    32 => 'date_completed_gmt',
+    33 => 'cart_hash',
+    34 => 'meta_data',
+    35 => 'line_items',
+    36 => 'tax_lines',
+    37 => 'shipping_lines',
+    38 => 'fee_lines',
+    39 => 'coupon_lines',
+    40 => 'refunds',
+    41 => 'payment_url',
+    42 => 'is_editable',
+    43 => 'needs_payment',
+    44 => 'needs_processing',
+  ),
+  'post_type' => 'shop_order',
+  'meta_query' => 
+  array (
+    0 => 
+    array (
+      'key' => 'multivendorx_store_id',
+      'value' => 1,
+      'compare' => '=',
+    ),
+  ),
+)
+20/09/2025 13:12:03:orders: : array (
+  'offset' => NULL,
+  'order' => 'desc',
+  'orderby' => 'date ID',
+  'paged' => 1,
+  'post__in' => 
+  array (
+  ),
+  'post__not_in' => 
+  array (
+  ),
+  'posts_per_page' => 10,
+  'name' => NULL,
+  'post_parent__in' => 
+  array (
+  ),
+  'post_parent__not_in' => 
+  array (
+  ),
+  's' => NULL,
+  'fields' => 
+  array (
+    0 => 'id',
+    1 => 'parent_id',
+    2 => 'number',
+    3 => 'order_key',
+    4 => 'created_via',
+    5 => 'version',
+    6 => 'status',
+    7 => 'currency',
+    8 => 'date_created',
+    9 => 'date_created_gmt',
+    10 => 'date_modified',
+    11 => 'date_modified_gmt',
+    12 => 'discount_total',
+    13 => 'discount_tax',
+    14 => 'shipping_total',
+    15 => 'shipping_tax',
+    16 => 'cart_tax',
+    17 => 'total',
+    18 => 'total_tax',
+    19 => 'prices_include_tax',
+    20 => 'customer_id',
+    21 => 'customer_ip_address',
+    22 => 'customer_user_agent',
+    23 => 'customer_note',
+    24 => 'billing',
+    25 => 'shipping',
+    26 => 'payment_method',
+    27 => 'payment_method_title',
+    28 => 'transaction_id',
+    29 => 'date_paid',
+    30 => 'date_paid_gmt',
+    31 => 'date_completed',
+    32 => 'date_completed_gmt',
+    33 => 'cart_hash',
+    34 => 'meta_data',
+    35 => 'line_items',
+    36 => 'tax_lines',
+    37 => 'shipping_lines',
+    38 => 'fee_lines',
+    39 => 'coupon_lines',
+    40 => 'refunds',
+    41 => 'payment_url',
+    42 => 'is_editable',
+    43 => 'needs_payment',
+    44 => 'needs_processing',
+  ),
+  'post_type' => 'shop_order',
+  'meta_query' => 
+  array (
+    0 => 
+    array (
+      'key' => 'multivendorx_store_id',
+      'value' => 1,
+      'compare' => '=',
+    ),
+  ),
+)
+20/09/2025 13:46:53:orders: : array (
+  'offset' => NULL,
+  'order' => 'desc',
+  'orderby' => 'date ID',
+  'paged' => 1,
+  'post__in' => 
+  array (
+  ),
+  'post__not_in' => 
+  array (
+  ),
+  'posts_per_page' => 10,
+  'name' => NULL,
+  'post_parent__in' => 
+  array (
+  ),
+  'post_parent__not_in' => 
+  array (
+  ),
+  's' => NULL,
+  'fields' => 
+  array (
+    0 => 'id',
+    1 => 'parent_id',
+    2 => 'number',
+    3 => 'order_key',
+    4 => 'created_via',
+    5 => 'version',
+    6 => 'status',
+    7 => 'currency',
+    8 => 'date_created',
+    9 => 'date_created_gmt',
+    10 => 'date_modified',
+    11 => 'date_modified_gmt',
+    12 => 'discount_total',
+    13 => 'discount_tax',
+    14 => 'shipping_total',
+    15 => 'shipping_tax',
+    16 => 'cart_tax',
+    17 => 'total',
+    18 => 'total_tax',
+    19 => 'prices_include_tax',
+    20 => 'customer_id',
+    21 => 'customer_ip_address',
+    22 => 'customer_user_agent',
+    23 => 'customer_note',
+    24 => 'billing',
+    25 => 'shipping',
+    26 => 'payment_method',
+    27 => 'payment_method_title',
+    28 => 'transaction_id',
+    29 => 'date_paid',
+    30 => 'date_paid_gmt',
+    31 => 'date_completed',
+    32 => 'date_completed_gmt',
+    33 => 'cart_hash',
+    34 => 'meta_data',
+    35 => 'line_items',
+    36 => 'tax_lines',
+    37 => 'shipping_lines',
+    38 => 'fee_lines',
+    39 => 'coupon_lines',
+    40 => 'refunds',
+    41 => 'payment_url',
+    42 => 'is_editable',
+    43 => 'needs_payment',
+    44 => 'needs_processing',
+  ),
+  'post_type' => 'shop_order',
+  'meta_query' => 
+  array (
+    0 => 
+    array (
+      'key' => 'multivendorx_store_id',
+      'value' => 1,
+      'compare' => '=',
+    ),
+  ),
+)
