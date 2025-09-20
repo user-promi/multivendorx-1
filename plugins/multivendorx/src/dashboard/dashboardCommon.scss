@@ -1,4 +1,3 @@
-
 $theme-color: #5007aa;
 $accent-color: #e35047;
 $light-accent-color: #e26f76;
@@ -29,6 +28,7 @@ $border-radius-button: 8rem;
 .textarea-input {
     min-height: 1.5rem !important;
 }
+
 // .btn-purple{
 //     color: var(--buttonText) !important;
 //     background: var(--buttonBg) !important;
@@ -39,22 +39,26 @@ $border-radius-button: 8rem;
 //     }
 // }
 
-.red{
+.red {
     background: #fde8e4;
     color: #f06b4f;
 }
-.green{
+
+.green {
     background: #d9f5f0;
     color: #06be9f;
 }
-.yellow{
+
+.yellow {
     background: #fff0e1;
     color: #ff9f43;
 }
-.blue{
+
+.blue {
     background: #bfdeed6e;
     color: #003d66de;
 }
+
 // card styles start
 .width-35 {
     width: 35%;
@@ -148,21 +152,22 @@ $border-radius-button: 8rem;
         }
     }
 }
+
 // card styles start
 
 
 // add product page
-.card-content{
-    .right-form-wrapper{
+.card-content {
+    .right-form-wrapper {
         display: flex;
         justify-content: end;
 
-        .form-group{
+        .form-group {
             width: 40%;
             display: flex;
             align-items: center;
 
-            label{
+            label {
                 width: 50%;
             }
         }
@@ -170,3 +175,29 @@ $border-radius-button: 8rem;
 }
 
 // add product page end
+
+.coupons-calculation-wrapper {
+    display: flex;
+    justify-content: space-between;
+
+    .div {
+        width: 100%;
+    }
+
+    table {
+        width: 30rem;
+
+        tr {
+            padding: 0.313rem;
+            height: 2rem;
+
+            td {
+                font-size: 1.125rem;
+                font-weight: 500;
+            }
+        }
+        tr:last-child{
+            border-top: $border-light-small ;
+        }
+    }
+}
