@@ -777,7 +777,6 @@ const CustomFrom: React.FC<CustomFormProps> = ({
                                                         children={<i className="admin-font adminlib-delete"></i>}
                                                         btnType="button"
                                                     />
-                                                    <i className="copy-btn adminlib-vendor-form-copy"></i>
                                                     {/* Show settings only if field is editable */}
                                                     {/* {!formField.readonly && (
                                                         <SettingMetaBox
