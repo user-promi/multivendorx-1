@@ -208,79 +208,51 @@ const Commission: React.FC = () => {
                 />
             ),
         },
-
         {
             header: __('Store Name', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.storeName || ''}>
-                    {row.original.storeName ?? '-'}
-                </TableCell>
-            ),
+            cell: ({ row }) => <TableCell title={row.original.storeName || '-'}>{row.original.storeName || '-'}</TableCell>,
         },
         {
-            header: __('Product Amount', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.commissionAmount || ''}>
-                    {row.original.commissionAmount ?? '-'}
-                </TableCell>
-            ),
+            header: __('Order Amount', 'multivendorx'),
+            cell: ({ row }) => <TableCell title={row.original.totalOrderAmount || '-'}>{row.original.totalOrderAmount || '-'}</TableCell>,
         },
         {
             header: __('Commission Earned', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.commissionAmount || ''}>
-                    {row.original.commissionAmount ?? '-'}
-                </TableCell>
-            ),
+            cell: ({ row }) => <TableCell title={row.original.commissionAmount || '-'}>{row.original.commissionAmount || '-'}</TableCell>,
         },
         {
-            header: __('Shipping', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.shipping || ''}>
-                    {row.original.shipping ?? '-'}
-                </TableCell>
-            ),
+            header: __('Facilitator Fee', 'multivendorx'),
+            cell: ({ row }) => <TableCell title={row.original.facilitatorFee || '-'}>{row.original.facilitatorFee || '-'}</TableCell>,
         },
         {
-            header: __('Tax', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.tax || ''}>
-                    {row.original.tax ?? '-'}
-                </TableCell>
-            ),
+            header: __('Gateway Fee', 'multivendorx'),
+            cell: ({ row }) => <TableCell title={row.original.gatewayFee || '-'}>{row.original.gatewayFee || '-'}</TableCell>,
+        },
+        {
+            header: __('Shipping Amount', 'multivendorx'),
+            cell: ({ row }) => <TableCell title={row.original.shippingAmount || '-'}>{row.original.shippingAmount || '-'}</TableCell>,
+        },
+        {
+            header: __('Tax Amount', 'multivendorx'),
+            cell: ({ row }) => <TableCell title={row.original.taxAmount || '-'}>{row.original.taxAmount || '-'}</TableCell>,
+        },
+        {
+            header: __('Discount Amount', 'multivendorx'),
+            cell: ({ row }) => <TableCell title={row.original.discountAmount || '-'}>{row.original.discountAmount || '-'}</TableCell>,
         },
         {
             header: __('Commission Total', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.commissionTotal || ''}>
-                    {row.original.commissionTotal ?? '-'}
-                </TableCell>
-            ),
+            cell: ({ row }) => <TableCell title={row.original.commissionTotal || '-'}>{row.original.commissionTotal || '-'}</TableCell>,
         },
-
         {
             header: __('Paid Status', 'multivendorx'),
             cell: ({ row }) => (
-                <TableCell title={row.original.paidStatus || ''}>
-                    <span className="admin-badge red">{row.original.paidStatus ?? '-'}</span>
+                <TableCell title={row.original.status || '-'}>
+                    <span className={`admin-badge ${row.original.status === 'paid' ? 'green' : 'red'}`}>
+                        {row.original.status || '-'}
+                    </span>
                 </TableCell>
             ),
-        },
-        {
-            header: __('Date', 'multivendorx'),
-            cell: ({ row }) => {
-                const rawDate = row.original.createTime;
-                let formattedDate = '-';
-                if (rawDate) {
-                    const dateObj = new Date(rawDate);
-                    formattedDate = new Intl.DateTimeFormat('en-US', {
-                        month: 'short',
-                        day: 'numeric',
-                        year: 'numeric',
-                    }).format(dateObj);
-                }
-                return <TableCell title={formattedDate}>{formattedDate}</TableCell>;
-            },
         },
         {
             header: __('Action', 'multivendorx'),
@@ -288,18 +260,8 @@ const Commission: React.FC = () => {
                 <TableCell title="Action">
                     <div className="action-section">
                         <div className="action-icons">
-                            <i
-                                className="adminlib-more-vertical"
-                                onClick={() =>
-                                    toggleDropdown(row.original.id)
-                                }
-                            ></i>
-                            <div
-                                className={`action-dropdown ${showDropdown === row.original.id
-                                    ? 'show'
-                                    : ''
-                                    }`}
-                            >
+                            <i className="adminlib-more-vertical" onClick={() => toggleDropdown(row.original.id)}></i>
+                            <div className={`action-dropdown ${showDropdown === row.original.id ? 'show' : ''}`}>
                                 <ul>
                                     <li
                                         onClick={() => {
@@ -307,17 +269,14 @@ const Commission: React.FC = () => {
                                             setViewCommission(true);
                                         }}
                                     >
-                                        <i className="adminlib-eye"></i>
-                                        {__('View', 'multivendorx')}
+                                        <i className="adminlib-eye"></i> {__('View', 'multivendorx')}
                                     </li>
-
                                     <li
                                         onClick={() =>
                                             (window.location.href = `?page=multivendorx#&tab=stores&edit/${row.original.id}`)
                                         }
                                     >
-                                        <i className="adminlib-create"></i>
-                                        {__('Delete', 'multivendorx')}
+                                        <i className="adminlib-create"></i> {__('Delete', 'multivendorx')}
                                     </li>
                                 </ul>
                             </div>
@@ -325,8 +284,9 @@ const Commission: React.FC = () => {
                     </div>
                 </TableCell>
             ),
-        }
+        },
     ];
+
     const realtimeFilter: RealtimeFilter[] = [
         {
             name: 'commissionStatus',

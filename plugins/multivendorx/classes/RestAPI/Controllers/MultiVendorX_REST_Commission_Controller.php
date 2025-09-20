@@ -49,18 +49,17 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
     }
 
     public function get_items_permissions_check($request) {
-        return current_user_can( 'read' );
+        return current_user_can( 'read' ) || current_user_can( 'edit_stores' );
     }
 
      // POST permission
     public function create_item_permissions_check($request) {
-        return current_user_can( 'manage_options' );
+        return current_user_can( 'manage_options' )|| current_user_can( 'edit_stores' );
     }
 
     public function update_item_permissions_check($request) {
-        return current_user_can('manage_options');
+        return current_user_can('manage_options')||current_user_can( 'edit_stores' );
     }
-
 
     // GET 
     public function get_items( $request ) {
@@ -73,24 +72,40 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
             );
         }
     
-        $limit  = max( intval( $request->get_param( 'row' ) ), 10 );
-        $page   = max( intval( $request->get_param( 'page' ) ), 1 );
-        $offset = ( $page - 1 ) * $limit;
-        $count  = $request->get_param( 'count' );
+        $limit   = max( intval( $request->get_param( 'row' ) ), 10 );
+        $page    = max( intval( $request->get_param( 'page' ) ), 1 );
+        $offset  = ( $page - 1 ) * $limit;
+        $count   = $request->get_param( 'count' );
+        $storeId = $request->get_param( 'store_id' );
     
-        // fetch commissions
-        $commissions = CommissionUtil::get_commissions(
-            array(
-                'perpage' => $limit,
-                'page'    => $page,
-            ),
-            false // keep as array of stdClass instead of Commission object
+        // Prepare filter for CommissionUtil
+        $filter = array(
+            'perpage' => $limit,
+            'page'    => $page,
         );
-
+    
+        if ( ! empty( $storeId ) ) {
+            $filter['store_id'] = intval( $storeId );
+        }
+    
+        // Fetch commissions
+        $commissions = CommissionUtil::get_commissions(
+            $filter,
+            false // return stdClass instead of Commission object
+        );
+    
         if ( $count ) {
             global $wpdb;
             $table_name  = "{$wpdb->prefix}" . Utill::TABLES['commission'];
-            $total_count = $wpdb->get_var( "SELECT COUNT(*) FROM $table_name" );
+            
+            if ( ! empty( $storeId ) ) {
+                $total_count = $wpdb->get_var( $wpdb->prepare(
+                    "SELECT COUNT(*) FROM $table_name WHERE store_id = %d",
+                    $storeId
+                ));
+            } else {
+                $total_count = $wpdb->get_var( "SELECT COUNT(*) FROM $table_name" );
+            }
     
             return rest_ensure_response( (int) $total_count );
         }
@@ -98,53 +113,62 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
         $formatted_commissions = array();
     
         foreach ( $commissions as $commission ) {
-            $store   = new Store( $commission->store_id );
-            $store_name    = $store ? $store->get('name') : '';
+            $store      = new Store( $commission->store_id );
+            $store_name = $store ? $store->get('name') : '';
+    
             $formatted_commissions[] = apply_filters(
                 'multivendorx_commission',
                 array(
                     'id'                  => (int) $commission->ID,
-                    'orderId'            => (int) $commission->order_id,
-                    'storeId'            => (int) $commission->store_id,
-                    'storeName'            => $store_name,
-                    'commissionAmount'   => $commission->commission_amount,
-                    'shipping'            => $commission->shipping,
-                    'tax'                 => $commission->tax,
-                    'commissionTotal'    => $commission->commission_total,
-                    'commissionRefunded' => $commission->commission_refunded,
-                    'paidStatus'         => $commission->paid_status,
-                    'commissionNote'     => $commission->commission_note,
-                    'createTime'         => $commission->create_time,
+                    'orderId'             => (int) $commission->order_id,
+                    'storeId'             => (int) $commission->store_id,
+                    'storeName'           => $store_name,
+                    'totalOrderAmount'    => $commission->total_order_amount,
+                    'commissionAmount'    => $commission->commission_amount,
+                    'facilitatorFee'      => $commission->facilitator_fee,
+                    'gatewayFee'          => $commission->gateway_fee,
+                    'shippingAmount'      => $commission->shipping_amount,
+                    'taxAmount'           => $commission->tax_amount,
+                    'shippingTaxAmount'   => $commission->shipping_tax_amount,
+                    'discountAmount'      => $commission->discount_amount,
+                    'commissionTotal'     => $commission->commission_total,
+                    'commissionRefunded'  => $commission->commission_refunded,
+                    'currency'            => $commission->currency,
+                    'status'              => $commission->status,
+                    'commissionNote'      => $commission->commission_note,
+                    'createdAt'           => $commission->created_at,
+                    'updatedAt'           => $commission->updated_at,
                 )
             );
         }
     
         return rest_ensure_response( $formatted_commissions );
     }
-
+    
     public function get_item( $request ) {
+        // Verify nonce
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             return new \WP_Error(
                 'invalid_nonce',
                 __( 'Invalid nonce', 'multivendorx' ),
-                array( 'status' => 403 )
+                [ 'status' => 403 ]
             );
         }
     
+        // Get commission ID from request
         $id = absint( $request->get_param( 'id' ) );
-        $commissionObj = CommissionUtil::get_commission( $id );
-        file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":orders: : " . var_export($commissionObj, true) . "\n", FILE_APPEND);
-        // Make sure commission object and its data exist
-        if ( ! $commissionObj || ! isset( $commissionObj->commission ) ) {
+    
+        // Fetch raw commission data (stdClass)
+        $commission = \MultiVendorX\Commission\CommissionUtil::get_commission_db( $id );
+    
+        if ( ! $commission || empty( $commission->ID ) ) {
             return new \WP_Error(
                 'not_found',
                 __( 'Commission not found', 'multivendorx' ),
                 [ 'status' => 404 ]
             );
         }
-    
-        $commission = $commissionObj->commission; // <-- real data here
     
         // Validate order ID
         if ( empty( $commission->order_id ) ) {
@@ -166,7 +190,7 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
             );
         }
     
-        // Build items like WooCommerce order page
+        // Build line items
         $items = [];
         foreach ( $order->get_items() as $item_id => $item ) {
             $product = $item->get_product();
@@ -181,22 +205,26 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
             ];
         }
     
+        // Prepare response
         $response = [
             'commission_id' => absint( $commission->ID ),
             'order_id'      => $order_id,
             'vendor_id'     => absint( $commission->store_id ),
-            'status'        => $commission->paid_status,
+            'status'        => $commission->status,
             'amount'        => wc_price( $commission->commission_amount ),
-            'shipping'      => wc_price( $commission->shipping ),
-            'tax'           => wc_price( $commission->tax ),
+            'shipping'      => wc_price( $commission->shipping_amount ),
+            'tax'           => wc_price( $commission->tax_amount ),
             'total'         => wc_price( $commission->commission_total ),
             'note'          => $commission->commission_note,
-            'created'       => $commission->create_time,
+            'created'       => $commission->created_at,
             'items'         => $items,
         ];
     
         return rest_ensure_response( $response );
     }
+    
+    
+    
     
     
 }

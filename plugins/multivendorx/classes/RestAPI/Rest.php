@@ -56,13 +56,9 @@ class Rest {
         } else {
             $args['meta_query'] = array( $store_meta_query );
         }
-        file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":orders: : " . var_export($args, true) . "\n", FILE_APPEND);
         return $args;
     }
     
-
-
-
     public function give_permission($permission, $context, $object_id, $post_type) {
         $current_user = wp_get_current_user();
         $user_id      = $current_user->ID;
