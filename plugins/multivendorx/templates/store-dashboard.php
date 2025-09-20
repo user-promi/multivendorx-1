@@ -4,7 +4,6 @@ use MultiVendorX\Store\StoreUtil;
 use MultiVendorX\Store\Store;
 
 $all_endpoints = MultiVendorX()->rest->dashboard->all_endpoints();
-file_put_contents(plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":all_endpoints: : " . var_export($all_endpoints, true) . "\n", FILE_APPEND);
 $current_user = wp_get_current_user();
 $role = reset($current_user->roles);
 $capability_settings = MultiVendorX()->setting->get_setting($role);

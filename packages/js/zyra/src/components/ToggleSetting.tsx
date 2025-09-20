@@ -87,7 +87,7 @@ const ToggleSetting: React.FC<ToggleSettingProps> = ({
                                 role="button"
                                 tabIndex={0}
                                 key={option.key}
-                                onChange={() => handleChange(option.value, !!option.proSetting)}
+                                onClick={() => handleChange(option.value, !!option.proSetting)}
                             >
                                 <input
                                     className="toggle-setting-form-input"
