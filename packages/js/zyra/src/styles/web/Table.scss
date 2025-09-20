@@ -22,16 +22,17 @@
         border: 0.063rem solid #5007aa;
         border-radius: 0.313rem;
         margin-left: auto;
+        background: #fff;
 
         .search-section {
             display: flex;
             align-items: center;
-            padding-left: 0.313rem;
 
             i {
                 font-size: 1.25rem;
                 color: #5007aa;
                 padding-right: 0.5rem;
+
             }
 
             input {
@@ -51,6 +52,7 @@
             margin: 0;
             border: 0.125rem solid #ece2f9f1;
             width: 6rem;
+            border-radius: 0.313rem;
             border-top-right-radius: 0;
             border-bottom-right-radius: 0;
 
@@ -132,7 +134,9 @@
                 /* for overwrite common style */
             }
         }
-
+        .bulk-action{
+          display: flex;
+        }
         &.bulk {
             background: #000;
             color: #fff;
@@ -147,9 +151,9 @@
                 display: flex;
                 align-items: center;
 
-                &.select{
-                  border: none;
-                }
+                // &.select{
+                //   border: none;
+                // }
             }
 
             .select {
@@ -184,6 +188,10 @@
             .title {
                 background: $theme-color;
             }
+        }
+        .red{
+          background: #fde8e4 !important;
+          padding: 0 1.25rem;
         }
     }
 
@@ -322,6 +330,7 @@
           .table-row-custom {
             display: flex;
             gap: 0.5rem;
+            align-items: center;
           }
 
           img {
@@ -378,10 +387,6 @@
           border: 0.063rem solid #ccd0d5 !important;
 
           /* for overwrite common style */
-        }
-
-        &:hover {
-          background: #c2c2c247;
         }
       }
 
@@ -555,6 +560,7 @@
 .action-section {
   display: flex;
   flex-direction: column;
+  align-items: start;
 
   .action-btn {
     display: flex;
