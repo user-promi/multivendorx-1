@@ -28,6 +28,7 @@ a {
   /* for overwrite react components */
   outline: none;
 }
+
 #admin-main-wrapper {
   margin-left: -1.25rem;
   font-family: Figtree, sans-serif;
@@ -138,7 +139,7 @@ a {
 }
 
 .admin-icon {
-  padding: 0.313rem;
+  padding: 0.313rem 1rem;
   border-radius: 0.313rem;
   font-size: 1.313rem;
 
@@ -283,9 +284,11 @@ a {
       }
     }
   }
+
   .input-wrapper {
     display: flex;
   }
+
   &.generate {
     .basic-input {
       border-top-right-radius: 0;
@@ -1103,6 +1106,10 @@ input[type="checkbox"]:focus {
           margin: 0;
           border-top: $border-light-small;
         }
+        a:hover{
+          color: #000;
+        }
+
       }
     }
 
@@ -1114,5 +1121,17 @@ input[type="checkbox"]:focus {
 
   .adminlib-update-data {
     font-size: 1rem;
+  }
+
+  .hover-icon {
+    position: absolute;
+    margin: 0;
+    left: -3.5rem;
+    display: none;
+  }
+  &:hover{
+    .hover-icon{
+      display: flex;
+    }
   }
 }

@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { Table, TableCell } from "zyra";
 import { __ } from '@wordpress/i18n';
 import { ColumnDef } from "@tanstack/react-table";
+import productImage from "../assets/images/default.png";
+import { Table } from "zyra";
 
 type StoreRow = {
     id: number;
@@ -15,73 +16,116 @@ type StoreRow = {
 };
 
 const Reviews: React.FC = () => {
-    const [storeProducts, setStoreProducts] = useState<{ value: string; label: string }[]>([]);
-    const [data, setData] = useState<StoreRow[]>([]);
-    const [totalRows, setTotalRows] = useState<number>(0);
-    const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 10 });
-    // 🔹 Add demo data on mount
-    useEffect(() => {
-        const demoData: StoreRow[] = [
-            {
-                id: 25831,
-                store_name: "EAA2US8Z",
-                type: "Fixed Cart Discount",
-                amount: "10.6",
-                usage: "0 / 200",
-                expiry: "2025-12-31",
-                status: "Active",
-            },
-            {
-                id: 25832,
-                store_name: "WELCOME10",
-                type: "Percentage",
-                amount: "10%",
-                usage: "12 / 100",
-                expiry: "2026-01-15",
-                status: "Active",
-            },
-            {
-                id: 25833,
-                store_name: "FREESHIP",
-                type: "Free Shipping",
-                amount: "—",
-                usage: "5 / ∞",
-                expiry: "2025-10-01",
-                status: "Expired",
-            },
-        ];
-        setData(demoData);
-        setTotalRows(demoData.length);
-    }, []);
-
-
-    const columns: ColumnDef<StoreRow>[] = [
-        {
-            header: __('Coupon Name', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.store_name || ''}>
-                    {row.original.store_name || '-'}
-                </TableCell>
-            ),
-        },
+    const orderData = [
+        { icon: "adminlib-tools red", number: "September 10, 2025 8:10 am", text: "Order date " },
+        { icon: "adminlib-book green", number: "Direct bank transfer", text: "Payment method" },
+        { icon: "adminlib-global-community yellow", number: "California, USA", text: "Delivery location" },
+        { icon: "adminlib-wholesale blue", number: "4", text: "Products Quantity" },
     ];
     return (
         <>
             {/* page title start */}
             < div className="page-title-wrapper" >
                 <div className="page-title">
-                    <div className="title">view Order</div>
+                    <div className="title">View Order #8456</div>
                     <div className="des">Manage your store information and preferences</div>
                 </div>
                 <div className="buttons-wrapper">
-                    <div className="admin-btn btn-purple">
-                        Order
+                    <div className="admin-badge green">
+                        <i className="adminlib-check"></i>
+                        Completed
                     </div>
                 </div>
-
             </div > {/* page title end */}
+
+            <div className="container-wrapper">
+                <div className="card-wrapper width-65">
+                    <div className="card-content">
+
+                    </div>
+                </div>
+                <div className="card-wrapper width-35">
+                    {/* customer details start */}
+                    <div className="card-content">
+                        <div className="card-title">Customer details</div>
+                        <div className="details">
+                            <div className="icon">
+                                <img src="https://demos.pixinvent.com/vuexy-html-admin-template/assets/img/avatars/1.png" alt="" />
+                            </div>
+                            <div className="content">
+                                <div className="title">Shamus Tuttle</div>
+                                <div className="des">Customer id: #5003546</div>
+                            </div>
+                        </div>
+                        <div className="details">
+                            <div className="icon ">
+                                <i className="adminlib-cart green"></i>
+                            </div>
+                            <div className="content">
+                                <div className="title">4 Orders</div>
+                            </div>
+                        </div>
+                    </div> {/* customer details start */}
+                    
+                    
+                </div>
+            </div>
+
+
+
             <div className="row">
-                <div className="column">
+                <div className="column ">
+                    <div className="order-overview">
+                        <div className="details left">
+                            <div className="text-wrapper">
+                                <div className="text">
+                                    Order Id
+                                </div>
+                                <div className="sub-text">
+                                    #58752
+                                </div>
+                            </div>
+                            <div className="text-wrapper">
+                                <div className="text">
+                                    Order Date
+                                </div>
+                                <div className="sub-text">
+                                    September 10, 2025 8:06 am
+                                </div>
+                            </div>
+                            <div className="text-wrapper">
+                                <div className="text">
+                                    Payment method
+                                </div>
+                                <div className="sub-text">
+                                    Payment via Direct bank transfer
+                                </div>
+                            </div>
+                        </div>
+                        <div className="details right">
+                            <div className="text-wrapper">
+                                <div className="text">
+                                    Status
+                                </div>
+                                <div className="sub-text">
+                                    <div className="admin-badge green">
+                                        <i className="adminlib-check"></i>
+                                        Completed
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="text-wrapper">
+                                <div className="text">
+                                    Location
+                                </div>
+                                <div className="sub-text">
+                                    California, USA
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {/* <div className="column">
                     <div className="details-wrapper">
                         <div className="details">
                             <div className="heading">Order date :</div>
@@ -96,7 +140,7 @@ const Reviews: React.FC = () => {
                             <div className="text">California, USA</div>
                         </div>
                     </div>
-                </div>
+                </div> */}
             </div>
 
             <div className="row">
@@ -148,25 +192,59 @@ const Reviews: React.FC = () => {
             </div>
 
             <div className="row">
-                {/* <Table
-                        data={data}
-                        columns={columns as ColumnDef<Record<string, any>, any>[]}
-                        // rowSelection={rowSelection}
-                        // onRowSelectionChange={setRowSelection}
-                        defaultRowsPerPage={10}
-                        // pageCount={pageCount}
-                        // pagination={pagination}
-                        // onPaginationChange={setPagination}
-                        // perPageOption={[10, 25, 50]}
-                        // typeCounts={[]}
-                        // realtimeFilter={[]}
-                        pagination={false}
-                    /> */}
+                <div className="column item-details-table">
+                    <div className="table-wrapper">
+                        <table className="admin-table">
+                            <thead className="admin-table-header">
+                                <tr className="header-row">
+                                    <td className="header-col">Item</td>
+                                    <td className="header-col">Cost</td>
+                                    <td className="header-col">Discount</td>
+                                    <td className="header-col">Qty</td>
+                                    <td className="header-col">Total</td>
+                                    <td className="header-col">Commission</td>
+                                </tr>
+                            </thead>
+                            <tbody className="admin-table-body">
+                                <tr className="admin-row  simple">
+                                    <td className="admin-column">
+                                        <div className="item-details">
+                                            <div className="image">
+                                                <img src={productImage} alt="product" />
+                                            </div>
+                                            <div className="details">
+                                                <div className="name">Charcoal Detox</div>
+                                                <div className="sku">SKU:  8676</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td className="admin-column">
+                                        $100
+                                    </td>
+                                    <td className="admin-column">
+                                        $5
+                                    </td>
+                                    <td className="admin-column">
+                                        x 1
+                                    </td>
+                                    <td className="admin-column">
+                                        $95
+                                    </td>
+                                    <td className="admin-column">
+                                        $20
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
+
             <div className="row">
                 <div className="column">
                     <div className="coupons-calculation-wrapper">
                         <div className="left">
+                            <div className="coupon">Coupon(s): <a href="#" className="admin-badge blue">COUPON30</a></div>
                             <div className="admin-btn btn-purple">Refund</div>
                         </div>
                         <div className="right">

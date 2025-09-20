@@ -727,7 +727,10 @@ const Table: React.FC<TableProps> = ({
 
                             <div className="wrap-bulk-all-date bulk">
                                 <span className="count">{Object.keys(rowSelection).length} rows selected</span>
-                                <span className="select count">Select all</span>
+                                <span className="select count" 
+                                    onClick={() => table.toggleAllRowsSelected(true)}>
+                                        Select all
+                                </span>
                                 {bulkActionComp && bulkActionComp()}
                                 <div
                                     className="close-btn"
@@ -754,9 +757,8 @@ const Table: React.FC<TableProps> = ({
 
                                 {/* Show Reset button only if filters are applied */}
                                 {Object.keys(filterData).length > 0 && (
-                                    <div className="wrap-bulk-all-date reset-wrapper">
+                                    <div className="wrap-bulk-all-date filter admin-badge red">
                                         <span
-                                            className="admin-btn btn-reset"
                                             onClick={() => {
                                                 setFilterData({});            // clear all filters
                                                 onRowSelectionChange?.({});   // clear row selection if any

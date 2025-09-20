@@ -4,121 +4,112 @@
     padding: 0 !important; 
   }
 
-  // .popup-wrapper{
-  //   display: flex;
-  //   gap: 1rem;
-
-  //   .left-section{
-  //     width: 45%;
-  //     background-size: cover;
-  //     background-repeat: no-repeat;
-  //     background-position: center;
-  //   }
-  
-  //   .right-section{
-  //     width: 55%;
-  //     padding: 1.5rem;
-  //     height: 60vh;
-
-  //     h4{
-  //       font-size: 2.5rem;
-  //       font-weight: 400;
-  //       margin: 0;
-  //       line-height: 3.5rem;
-  
-  //       .pro-tag{
-  //         font-weight: 600;
-  //       }
-  //     }
-  
-  //     .features-list{
-  //       list-style: none;
-  //       padding: 0;
-  //       margin: 0;
-  //       font-size: 1.5rem;
-  //       line-height: 2.5rem;
-  //       margin-top: 1rem;
-  //       height: 60%;
-  //       overflow-y: scroll;
-  
-  //       .feature-item {
-  //         display: flex;
-  //         align-items: center;
-  //         gap: 1.2rem;
-  //         margin-bottom: 1rem;
-  
-  //         i{
-  //           font-size: 1.5rem;
-  //         }
-
-  //         p{
-  //           font-size: 0.95rem;
-  //         }
-  //       }
-  //     }
-
-  //     .more-text{
-  //       font-size: 1rem;
-  //       font-weight: 500;
-  //       margin-top: 0.5rem;
-  //     }
-
-  //     .footer-button{
-  //       display: flex;
-  //       justify-content: end;
-  //       padding-top: 1rem;
-  
-  //       a{
-  //         padding: 0.5rem 1rem;
-  //         font-size: 1rem;
-  //         font-weight: 700;
-  //       }
-  //     }
-  //   }
-  // }
-
-  .module-popup-content{
-    .popup-wrapper{
-      padding: 2rem;
-
-      .module-left-section{
-        width: 35%;
-        display: flex;
-
-        .module-icon{
-          padding: 1rem;
-          background: $menu-color;
-          height: fit-content;
-          border-radius: 0.313rem;
-
-          i{
-            font-size: 3rem;
-            color: $color-active;
-          }
-        }
-      }
-
-      .module-right-section{
-        h2{
-          font-size: 1.4rem;
-          margin: 0;
-        }
-
-        .footer-button{
-          display: flex;
-          justify-content: end;
-          margin-top: 1.212rem;
-        }
-      }      
+  .MuiDialog-container {
+    .adminlib-cross {
+        position: absolute;
+        right: 1rem;
+        top: 1rem;
+        font-size: 1.125rem;
+        color: #fff;
+        cursor: pointer;
     }
-  }
+}
 
-  .MuiPaper-root:has(.module-popup-content) {
-    min-width: 30vw;
-    max-width: 30vw;
-  }
+.popup-wrapper {
+    .top-section {
+        padding: 2.5rem 2rem;
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        background: #5007aa;
 
-  // common popup styles
-  .admin-popup-content{
-    padding: 1.5rem;;
-  }
+        .heading {
+            font-size: 2.125rem;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .description {
+            color: #fff;
+            font-size: 1.25rem;
+        }
+
+        .price {
+            font-size: 2.4rem;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .admin-btn {
+            background: #fff;
+            margin-top: 1rem;
+            color: #000;
+        }
+
+        .select-wrapper {
+            color: #fff;
+            font-size: 1.125rem;
+        }
+
+        select {
+            background: transparent;
+            font-size: 1.125rem;
+            border: none;
+            color: #fff;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'><path fill='%23fff' d='M5 7l5 5 5-5z'/></svg>");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 1rem;
+            margin-bottom: 0.125rem;
+
+            option {
+                color: #1a1a1aa4;
+            }
+
+            &:focus{
+                box-shadow: none;
+            }
+        }
+    }
+
+    .popup-content {
+        padding: 1rem 0 1rem 2rem ;
+        .heading-text {
+            font-size: 1.25rem;
+            color: #000000e3;
+            font-weight: 600;
+        }
+
+        ul {
+            max-height: 20vh;
+            overflow: auto;
+            padding-right: 2rem;
+
+            li {
+                .title {
+                    font-size: 1.063rem;
+                    font-weight: 600;
+                    color: #000000e0;
+                }
+
+                .sub-text {
+                    font-size: 0.95rem;
+                    line-height: 1.313rem;
+                }
+            }
+        }
+    }
+
+    .admin-btn {
+        font-size: 1.063rem;
+        font-weight: 500;
+
+        .arrow-icon {
+            transform: rotate(-45deg);
+        }
+    }
+}

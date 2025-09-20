@@ -58,9 +58,14 @@
             background-repeat: no-repeat;
             background-position: right 0.75rem center;
             background-size: 1rem;
+            margin-bottom: 0.125rem;
 
             option {
                 color: #1a1a1aa4;
+            }
+
+            &:focus{
+                box-shadow: none;
             }
         }
     }
