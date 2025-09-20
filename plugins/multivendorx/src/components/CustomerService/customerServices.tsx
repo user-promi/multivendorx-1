@@ -113,7 +113,10 @@ const CustomerServices = () => {
                         <AbuseReports />
                     </div>
                 </div>
-                <Qna/>
+                <div className="title">
+                    QNA Table
+                </div>
+                <Qna />
             </div>
         </>
     );

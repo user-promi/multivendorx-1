@@ -156,14 +156,6 @@ const EditStore = () => {
     };
     return (
         <>
-            {/* <Link
-                to="?page=multivendorx#&tab=stores"
-                className="button"
-            >
-                Back
-            </Link> */}
-
-
             <Tabs
                 tabData={tabData}
                 currentTab={currentTab}

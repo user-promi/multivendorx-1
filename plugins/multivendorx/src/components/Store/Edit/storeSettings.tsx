@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { BasicInput, TextArea, FileInput, SelectInput, getApiLink } from 'zyra';
 
-const StoreSettings = ({ id }: { id: string|null }) => {
+const StoreSettings = ({ id }: { id: string | null }) => {
 	const [formData, setFormData] = useState<{ [key: string]: string }>({});
 	const statusOptions = [
 		{ label: "Active", value: "active" },
@@ -179,7 +179,7 @@ const StoreSettings = ({ id }: { id: string|null }) => {
 									value={formData.country}
 									options={appLocalizer.country_list || []}
 									type="single-select"
-									onChange={(newValue) => {
+									onChange={(newValue:any) => {
 										if (!newValue || Array.isArray(newValue)) return;
 										const updated = { ...formData, country: newValue.value, state: '' }; // reset state
 										setFormData(updated);

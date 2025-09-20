@@ -11,6 +11,7 @@ declare global {
         apiUrl: string;
         restUrl: string;
         nonce: string;
+        woo_nonce:string,
         khali_dabba: boolean;
         tab_name: string;
         settings_databases_value: any;
