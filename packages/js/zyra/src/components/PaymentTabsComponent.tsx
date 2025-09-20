@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "../styles/web/PaymentTabsComponent.scss";
 import VerificationMethods from "./VerificationMethods";
 import TextArea from "./TextArea";
@@ -59,6 +59,8 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
 }) => {
   const [activeTab, setActiveTab] = useState<string | null>(null);
   const [openDropdownIndex, setOpenDropdownIndex] = useState<number | null>(null);
+  const [openMenu, setOpenMenu] = useState<string | null>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   const handleInputChange = (
     methodKey: string,
@@ -78,7 +80,15 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
     handleInputChange(methodId, "enable", enable);
     setActiveTab(enable ? icon || null : null);
   };
-
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setOpenMenu(null);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
   const renderField = (methodId: string, field: PaymentFormField) => {
     const fieldValue = value[methodId]?.[field.key];
 
@@ -174,6 +184,7 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
       {methods.map((method) => {
         const isEnabled = !!value?.[method.id]?.enable;
         const isActive = activeTab === method.icon;
+        const isMenuOpen = openMenu === method.id;
 
         return (
           <div key={method.id} className="payment-method-card">
@@ -215,9 +226,25 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
                   <div className="admin-btn btn-purple" onClick={() => setActiveTab(isActive ? null : method.icon)} >Manage</div>
                 )}
               </div>
-
-              <div className="right-section toggle-btn" onClick={() => toggleEnable(method.id, true, method.icon)}>
-                <i className="adminlib-more-vertical"></i>
+              {/* onClick={() => toggleEnable(method.id, true, method.icon)} */}
+              <div className="right-section action-icons" ref={menuRef} >
+                <i className="adminlib-more-vertical"
+                  onClick={() => setOpenMenu(isMenuOpen ? null : method.id)}>
+                </i>
+                {isMenuOpen && (
+                  <div className="action-dropdown">
+                    <ul>
+                      <li onClick={() => console.log("Edit")}>
+                        <i className="adminlib-eye"></i>
+                        Disable
+                      </li>
+                      <li onClick={() => console.log("Edit")}>
+                        <i className="adminlib-eye"></i>
+                        Manege
+                      </li>
+                    </ul>
+                  </div>
+                )}
               </div>
             </div>
 
