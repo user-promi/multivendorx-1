@@ -85,8 +85,16 @@ $border-radius-button: 8rem;
     padding: 1.5rem;
 
     .card-title {
-        font-size: 1.125rem;
+        font-size: 1.25rem;
         margin-bottom: 1.313rem;
+    }
+
+    .admin-badge {
+        width: fit-content;
+    }
+
+    .address {
+        margin-bottom: 1.5rem;
     }
 
     .form-group-wrapper {
@@ -213,6 +221,7 @@ $border-radius-button: 8rem;
 .coupons-calculation-wrapper {
     display: flex;
     justify-content: space-between;
+    padding-top: 2rem;
 
     .coupon {
         display: flex;
@@ -238,6 +247,10 @@ $border-radius-button: 8rem;
                 font-size: 1.125rem;
                 font-weight: 500;
             }
+
+            input {
+                width: 3rem;
+            }
         }
 
         tr:last-child {
@@ -258,14 +271,59 @@ $border-radius-button: 8rem;
     }
 }
 
-.table-wrapper .admin-table .admin-table-body .admin-row .admin-column:first-child {
-    flex: 0 0 10rem;
-    max-width: 10rem;
-}
+// view order table
+.view-order-table {
+    tr {
+        td:first-child {
+            min-width: 50%;
+        }
+    }
 
-.table-wrapper .admin-table .admin-table-body .admin-row .admin-column:not(:first-child) {
-    flex: 1;
-    text-align: center;
+    .item-details {
+        display: flex;
+        gap: 0.625rem;
+
+        .name {
+            font-size: 1.063rem;
+            margin-bottom: 0.625rem;
+            font-weight: 600;
+        }
+
+        .sku {
+            font-size: 0.813rem;
+        }
+
+        .sub-text {
+            font-size: 0.95rem;
+            margin-bottom: 0.45rem;
+
+            span {
+                width: 4rem;
+                font-weight: 600;
+            }
+        }
+
+        .icon {
+            width: 3.125rem;
+            display: flex;
+            align-items: start;
+
+            i {
+                width: 3.125rem;
+                height: 3.125rem;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 2rem;
+            }
+        }
+    }
+
+    .admin-column {
+        input {
+            width: 3rem;
+        }
+    }
 }
 
 
@@ -289,3 +347,84 @@ $border-radius-button: 8rem;
         }
     }
 }
+
+// notification style start
+.notification-wrapper {
+    ul {
+        margin: 0;
+        padding: 0;
+
+        li {
+            display: flex;
+            padding: 0.625rem;
+            border: $border-light-small;
+            cursor: pointer;
+            border-radius: 0.313rem;
+            margin-bottom: 1rem;
+
+            .icon-wrapper {
+                width: 10%;
+                padding-top: 0.313rem;
+
+                i {
+                    font-size: 1.125rem;
+                    padding: 0.313rem;
+                    border-radius: 0.313rem;
+
+                    &.blue {
+                        background: rgba(0, 0, 255, 0.233);
+                        color: blue;
+                    }
+
+                    &.orange {
+                        color: orange;
+                        background: rgba(255, 166, 0, 0.336);
+                    }
+
+                    &.green {
+                        color: rgba(19, 134, 4, 0.904);
+                        background: rgba(0, 128, 0, 0.349);
+                    }
+
+                    &.red {
+                        color: rgb(224, 5, 5);
+                        background: rgba(255, 0, 0, 0.37);
+                    }
+                }
+            }
+
+            .details {
+                width: 90%;
+                position: relative;
+                flex-direction: column;
+                margin: 0;
+                align-items: start;
+
+                .notification-title {
+                    font-size: 0.9rem;
+                    color: #000000e1;
+                    padding-bottom: 0.313rem;
+                }
+
+                .des {
+                    font-size: 0.8rem;
+                    color: #0000008c;
+                }
+
+                span {
+                    position: absolute;
+                    right: 0;
+                    top: 0;
+                    color: #000000e1;
+                    font-weight: 500;
+                }
+            }
+
+            &:hover {
+                background-color: #dfdfdf79;
+            }
+        }
+    }
+}
+
+// notification style end

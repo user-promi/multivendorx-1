@@ -377,17 +377,17 @@
           flex-grow: 1;
         }
 
-        .basic-input {
-          border: none !important;
+        // .basic-input {
+        //   border: none !important;
 
-          /* for overwrite common style */
-        }
+        //   /* for overwrite common style */
+        // }
 
-        .basic-input:focus {
-          border: 0.063rem solid #ccd0d5 !important;
+        // .basic-input:focus {
+        //   border: 0.063rem solid #ccd0d5 !important;
 
-          /* for overwrite common style */
-        }
+        //   /* for overwrite common style */
+        // }
       }
 
       .admin-row:has(input[type="checkbox"]:checked) {
