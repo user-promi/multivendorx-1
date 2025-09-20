@@ -231,7 +231,7 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
                 <i className="adminlib-more-vertical"
                   onClick={() => setOpenMenu(isMenuOpen ? null : method.id)}>
                 </i>
-                {isMenuOpen && (
+                {openMenu && (
                   <div className="action-dropdown">
                     <ul>
                       <li onClick={() => console.log("Edit")}>
