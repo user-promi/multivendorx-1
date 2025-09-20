@@ -60,6 +60,13 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
                         'slug' => 'store-information',
                         'icon'    => 'adminlib-cart',
                         'capability' => ['read_products', 'edit_products', 'upload_files']
+                    ),
+                    array(
+                        'key'  => 'social-media',
+                        'name' => 'Social Media',
+                        'slug' => 'social-media',
+                        'icon'    => 'adminlib-cart',
+                        'capability' => ['read_products', 'edit_products', 'upload_files']
                     ),                    
                     array(
                         'key'  => 'payout-configuration',
@@ -79,6 +86,13 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
                         'key'  => 'privacy',
                         'name' => 'Privacy',
                         'slug' => 'privacy',
+                        'icon'    => 'adminlib-cart',
+                        'capability' => ['read_products', 'edit_products', 'upload_files']
+                    ),
+                    array(
+                        'key'  => 'additional-info',
+                        'name' => 'Additional Information',
+                        'slug' => 'additional-info',
                         'icon'    => 'adminlib-cart',
                         'capability' => ['read_products', 'edit_products', 'upload_files']
                     ),
