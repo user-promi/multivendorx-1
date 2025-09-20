@@ -726,8 +726,8 @@ const Table: React.FC<TableProps> = ({
                         {Object.keys(rowSelection || {}).length >= 2 ? (
 
                             <div className="wrap-bulk-all-date bulk">
-                                <span className="title"><i className="adminlib-bulk-action"></i> Bulk Action </span>
                                 <span className="count">{Object.keys(rowSelection).length} rows selected</span>
+                                <span className="select count">Select all</span>
                                 {bulkActionComp && bulkActionComp()}
                                 <div
                                     className="close-btn"

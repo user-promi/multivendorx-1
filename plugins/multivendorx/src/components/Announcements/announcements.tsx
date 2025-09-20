@@ -274,30 +274,6 @@ export const Announcements: React.FC = () => {
                 setError(__('Failed to load announcements', 'multivendorx'));
             });
     }
-
-    // const realtimeFilter: RealtimeFilter[] = [
-    //     {
-    //         name: 'searchField',
-    //         render: ( updateFilter, filterValue ) => (
-    //             <>
-    //                 <div className="search-section">
-    //                     <i className="adminlib-search"></i>
-    //                     <input
-    //                         name="searchField"
-    //                         type="text"
-    //                         className="basic-input"
-    //                         placeholder={ __( 'Search', 'moowoodle-pro' ) }
-    //                         onChange={ ( e ) => {
-    //                             updateFilter( e.target.name, e.target.value );
-    //                         } }
-    //                         value={ filterValue || '' }
-    //                     />
-    //                 </div>
-    //             </>
-    //         ),
-    //     },
-    // ];
-
     const realtimeFilter: RealtimeFilter[] = [
         {
             name: 'courseField',
