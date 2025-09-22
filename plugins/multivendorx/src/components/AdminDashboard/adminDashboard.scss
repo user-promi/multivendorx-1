@@ -1,5 +1,64 @@
 @use '../config.scss' as *;
 
+
+.header-search {
+    ul {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        width: 19rem;
+        max-height: 22rem;
+        overflow-y: auto;
+        background: #fff;
+        border: $border-light-small;
+        border-radius: 0.313rem;
+        margin-top: 0.313rem;
+        padding: 0;
+        list-style: none;
+        z-index: 1000;
+
+        li {
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #333;
+            border-bottom: $border-light-small;
+            display: flex;
+            align-items: start;
+            gap: 0.5rem;
+            margin: 0;
+            transition: all 0.5s ease;
+            
+            &:hover{
+                background: #f3f3f3;
+            }
+            .icon-wrapper {
+                margin-top: 0.625rem;
+
+                i {
+                    padding: 0.5rem;
+                    font-size: 1.125rem;
+                    border-radius: 50%;
+                    background: $theme-background-color;
+                    color: $theme-color;
+                }
+            }
+
+            .title {
+                font-size: 1rem;
+            }
+
+            .desc {
+                font-size: 0.813rem;
+                line-height: 0.95rem;
+                padding-top: 0.313rem;
+                color: #00000094;
+            }
+        }
+
+    }
+}
+
 .admin-dashboard {
     padding: 0 2rem 2rem;
 
@@ -387,10 +446,12 @@
             .icon {
                 font-size: 1.25rem;
                 margin-top: 0.313rem;
-                span{
+
+                span {
                     font-size: 1rem;
                 }
             }
+
             .image {
                 img {
                     height: 2.5rem;
