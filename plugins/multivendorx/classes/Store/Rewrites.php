@@ -92,8 +92,8 @@ class Rewrites {
                 'top',
             ],
             [
-                '^dashboard/([^/]+)/?([^/]*)/?$',
-                'index.php?pagename=dashboard&tab=$matches[1]&subtab=$matches[2]',
+                '^dashboard/([^/]+)/?([^/]*)/?([0-9]*)/?$',
+                'index.php?pagename=dashboard&tab=$matches[1]&subtab=$matches[2]&value=$matches[3]',
                 'top',
             ],
         ];
@@ -109,6 +109,7 @@ class Rewrites {
         $vars[] = $this->custom_store_url;
         $vars[] = 'tab';
         $vars[] = 'subtab';
+        $vars[] = 'value';
 
         foreach ( $this->query_vars as $var ) {
             $vars[] = $var;

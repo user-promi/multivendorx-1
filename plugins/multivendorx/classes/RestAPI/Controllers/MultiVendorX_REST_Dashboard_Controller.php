@@ -111,9 +111,9 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
                         'capability' => ['read_shop_orders', 'edit_shop_orders', 'delete_shop_orders']
                     ),
                     array(
-                        'key'  => 'add-product',
+                        'key'  => 'edit-product',
                         'name' => 'Edit Product',
-                        'slug' => 'add-product',
+                        'slug' => 'edit-product',
                         'capability' => ['read_shop_orders', 'edit_shop_orders', 'delete_shop_orders']
                     ),
                 ),
