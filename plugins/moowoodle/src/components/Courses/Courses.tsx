@@ -75,18 +75,6 @@ const Course: React.FC = () => {
     const [openDialog, setOpenDialog] = useState(false);
     const [openModal, setOpenModal] = useState(false);
     const [modalDetails, setModalDetails] = useState<string>('');
-    const [filters, setFilters] = useState<FilterData>({
-        searchAction: 'course',
-        searchCourseField: '',
-        catagoryField: '',
-    });
-    const updateFilter = (key: string, value: string) => {
-        const newFilters = { ...filters, [key]: value };
-        setFilters(newFilters);
-
-        // fetch data with updated filters
-        requestApiForData(pagination.pageSize, pagination.pageIndex + 1, newFilters);
-    };
 
     // Fetch categories on mount
     useEffect(() => {
@@ -155,7 +143,7 @@ const Course: React.FC = () => {
         courseField = '',
         productField = '',
         catagoryField = '',
-        searchAction = '',
+        searchAction = 'course',
         searchCourseField = ''
     ) {
         setData(null);
@@ -194,7 +182,7 @@ const Course: React.FC = () => {
             filterData.searchCourseField
         );
     };
-    
+
     // Handle single row action
     const handleSingleAction = (
         actionName: string,
@@ -404,83 +392,128 @@ const Course: React.FC = () => {
                     )}
                 </div>
             ),
+            // cell: ({ row }) => (
+            //     <TableCell title={__('Action', 'moowoodle')}>
+            //         <div className="action-section">
+            //             <div className="action-icons">
+            //                 <i
+            //                     className="adminlib-more-vertical"
+            //                     onClick={() =>
+            //                         toggleDropdown(row.original.id)
+            //                     }
+            //                 ></i>
+
+            //                 <div
+            //                     className={`action-dropdown ${showDropdown === row.original.id
+            //                         ? 'show'
+            //                         : ''
+            //                         }`}
+            //                 >
+            //                     <ul>
+            //                         <li
+            //                             onClick={() =>
+            //                                 handleSingleAction(
+            //                                     'sync_courses',
+            //                                     row.original.id!,
+            //                                     row.original.moodle_course_id!
+            //                                 )
+            //                             }
+            //                         >
+            //                             <i className="adminlib-refresh"></i>
+            //                             {__(
+            //                                 'Sync Course Data',
+            //                                 'moowoodle'
+            //                             )}
+            //                         </li>
+
+            //                         {row.original.products &&
+            //                             Object.keys(row.original.products)
+            //                                 .length ? (
+            //                             <li
+            //                                 onClick={() =>
+            //                                     handleSingleAction(
+            //                                         'update_product',
+            //                                         row.original.id!,
+            //                                         row.original
+            //                                             .moodle_course_id!
+            //                                     )
+            //                                 }
+            //                             >
+            //                                 <i className="adminlib-update-product"></i>
+            //                                 {__(
+            //                                     'Sync Course Data & Update Product',
+            //                                     'moowoodle'
+            //                                 )}
+            //                             </li>
+            //                         ) : (
+            //                             <li
+            //                                 onClick={() =>
+            //                                     handleSingleAction(
+            //                                         'create_product',
+            //                                         row.original.id!,
+            //                                         row.original
+            //                                             .moodle_course_id!
+            //                                     )
+            //                                 }
+            //                             >
+            //                                 <i className="adminlib-add-product"></i>
+            //                                 {__(
+            //                                     'Create Product',
+            //                                     'moowoodle'
+            //                                 )}
+            //                             </li>
+            //                         )}
+            //                     </ul>
+            //                 </div>
+            //             </div>
+            //         </div>
+            //     </TableCell>
+            // ),
             cell: ({ row }) => (
-                <TableCell title={__('Action', 'moowoodle')}>
-                    <div className="action-section">
-                        <div className="action-icons">
-                            <i
-                                className="adminlib-more-vertical"
-                                onClick={() =>
-                                    toggleDropdown(row.original.id)
-                                }
-                            ></i>
-
-                            <div
-                                className={`action-dropdown ${showDropdown === row.original.id
-                                        ? 'show'
-                                        : ''
-                                    }`}
-                            >
-                                <ul>
-                                    <li
-                                        onClick={() =>
-                                            handleSingleAction(
-                                                'sync_courses',
-                                                row.original.id!,
-                                                row.original.moodle_course_id!
-                                            )
-                                        }
-                                    >
-                                        <i className="adminlib-refresh"></i>
-                                        {__(
-                                            'Sync Course Data',
-                                            'moowoodle'
-                                        )}
-                                    </li>
-
-                                    {row.original.products &&
-                                        Object.keys(row.original.products)
-                                            .length ? (
-                                        <li
-                                            onClick={() =>
-                                                handleSingleAction(
-                                                    'update_product',
-                                                    row.original.id!,
-                                                    row.original
-                                                        .moodle_course_id!
-                                                )
-                                            }
-                                        >
-                                            <i className="adminlib-update-product"></i>
-                                            {__(
-                                                'Sync Course Data & Update Product',
-                                                'moowoodle'
-                                            )}
-                                        </li>
-                                    ) : (
-                                        <li
-                                            onClick={() =>
-                                                handleSingleAction(
-                                                    'create_product',
-                                                    row.original.id!,
-                                                    row.original
-                                                        .moodle_course_id!
-                                                )
-                                            }
-                                        >
-                                            <i className="adminlib-add-product"></i>
-                                            {__(
-                                                'Create Product',
-                                                'moowoodle'
-                                            )}
-                                        </li>
-                                    )}
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </TableCell>
+                <TableCell
+                    type="action-dropdown"
+                    rowData={row.original}
+                    header={{
+                        actions: [
+                            {
+                                label: __('Sync Course Data', 'moowoodle'),
+                                icon: 'adminlib-refresh',
+                                onClick: (rowData) => {
+                                    handleSingleAction(
+                                        'sync_courses',
+                                        rowData.id!,
+                                        rowData.moodle_course_id!
+                                    );
+                                },
+                                hover: true,
+                            },
+                            {
+                                label:
+                                    row.original.products &&
+                                        Object.keys(row.original.products).length
+                                        ? __('Sync Course Data & Update Product', 'moowoodle')
+                                        : __('Create Product', 'moowoodle'),
+                                icon:
+                                    row.original.products &&
+                                        Object.keys(row.original.products).length
+                                        ? 'adminlib-update-product'
+                                        : 'adminlib-add-product',
+                                onClick: (rowData) => {
+                                    handleSingleAction(
+                                        row.original.products &&
+                                            Object.keys(row.original.products).length
+                                            ? 'update_product'
+                                            : 'create_product',
+                                        rowData.id!,
+                                        rowData.moodle_course_id!
+                                    );
+                                },
+                            },
+                        ],
+                    }}
+                />
             ),
+
         },
     ];
 
@@ -514,14 +547,15 @@ const Course: React.FC = () => {
             </button>
         </div>
     );
+
     const realtimeFilter: RealtimeFilter[] = [
         {
             name: 'catagoryField',
-            render: (_, filterValue) => (
+            render: (updateFilter, filterValue) => (
                 <div className="catagory-field">
                     <select
                         className="basic-select"
-                        value={filters.catagoryField || ''}
+                        value={filterValue || ''}
                         onChange={(e) => updateFilter('catagoryField', e.target.value)}
                     >
                         <option value="">{__('Category', 'moowoodle')}</option>
@@ -536,27 +570,15 @@ const Course: React.FC = () => {
 
     const searchFilter: RealtimeFilter[] = [
         {
-            name: 'searchCourseField',
-            render: (_, filterValue) => (
-                <div className="search-course-field">
-                    <input
-                        type="text"
-                        className="basic-input"
-                        value={filters.searchCourseField || ''}
-                        placeholder={__('Search…', 'moowoodle')}
-                        onChange={(e) => updateFilter('searchCourseField', e.target.value)}
-                    />
-                </div>
-            ),
-        },
-        {
             name: 'searchAction',
-            render: (_, filterValue) => (
+            render: (updateFilter, filterValue) => (
                 <div className="search-action">
                     <select
                         className="basic-select"
-                        value={filters.searchAction || 'course'}
-                        onChange={(e) => updateFilter('searchAction', e.target.value)}
+                        value={filterValue || ''}
+                        onChange={(e) => {
+                            updateFilter('searchAction', e.target.value)
+                        }}
                     >
                         <option value="course">{__('Course', 'moowoodle')}</option>
                         <option value="shortname">{__('Short name', 'moowoodle')}</option>
@@ -564,6 +586,24 @@ const Course: React.FC = () => {
                 </div>
             ),
         },
+        {
+            name: 'searchCourseField',
+            render: (updateFilter, filterValue) => (
+                <div className="search-section">
+                    <input
+                        type="text"
+                        className="basic-input"
+                        value={filterValue || ''}
+                        placeholder={__('Search…', 'moowoodle')}
+                        onChange={(e) => {
+                            updateFilter('searchCourseField', e.target.value)
+                        }}
+                    />
+                    <i className="adminlib-search"></i>
+                </div>
+            ),
+        },
+
     ];
 
     return (
@@ -625,6 +665,7 @@ const Course: React.FC = () => {
                     perPageOption={[10, 25, 50]}
                     typeCounts={[]}
                     bulkActionComp={() => <BulkAction />}
+                    totalRows={totalRows}
                 />
             </div>
         </>
