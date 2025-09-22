@@ -194,29 +194,8 @@ class CommissionManager {
                 $gateway_fee = (float) $commission_amount * ((float) $percentage_fee / 100) + (float) $fixed_fee;
             }
 
-           // facilitator fee calculation
-            $fixed_fee      = 0;
-            $percentage_fee = 0;
-
-            $vendor_facilitator = $vendor->get_meta('facilitator');
-
-            if ( !empty($vendor_facilitator) ) {
-                $fixed_fee      = (float) $vendor->get_meta('facilitator_fixed');
-                $percentage_fee = (float) $vendor->get_meta('facilitator_percentage');
-            } else {
-                $settings = MultiVendorX()->setting->get_setting('facilitator');
-                if ( !empty($settings) ) {
-                    $fees = reset(MultiVendorX()->setting->get_setting('facilitator_fees', []));
-                    $fixed_fee      = (float) $fees['facilitator_fixed'];
-                    $percentage_fee = (float) $fees['facilitator_percentage'];
-                    
-                }
-            }
-            
-            $facilitator_fee = (float) $commission_amount * ((float) $percentage_fee / 100) + (float) $fixed_fee;
-
             // in commission total add facilitator_fee and gateway fee.
-            $commission_total = (float) $commission_amount + (float) $shipping_amount + (float) $tax_amount + (float) $shipping_tax_amount - (float) $gateway_fee - (float) $facilitator_fee;
+            $commission_total = (float) $commission_amount + (float) $shipping_amount + (float) $tax_amount + (float) $shipping_tax_amount - (float) $gateway_fee;
             $commission_total = apply_filters( 'mvx_commission_total_amount', $commission_total, $commission_id );
 
             // insert | update commission into commission table.
@@ -236,6 +215,19 @@ class CommissionManager {
                 'status'                => $order->get_status() == 'cancelled' ? 'cancelled' : 'paid'
             ];
             $format = [ "%d", "%d", "%d", "%f", "%f", "%f", "%f", "%f", "%f", "%f", "%f", "%s", "%s" ];
+            
+            $filtered = apply_filters(
+                'multivendorx_before_commission_insert',
+                [
+                    'data'   => $data,
+                    'format' => $format,
+                ],
+                $vendor, $commission_amount
+            );
+
+            $data   = $filtered['data'];
+            $format = $filtered['format'];
+
             if ( ! $commission_id ) {
                 $wpdb->insert( $wpdb->prefix . Utill::TABLES['commission'], $data, $format );
                 $commission_id = $wpdb->insert_id;

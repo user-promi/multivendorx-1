@@ -21,6 +21,7 @@ class Shortcode {
 
     public function frontend_scripts() {
         wp_enqueue_script( 'wp-element' );
+        wp_enqueue_media();
         FrontendScripts::load_scripts();
         FrontendScripts::enqueue_script( 'multivendorx-dashboard-components-script' );
         FrontendScripts::enqueue_script( 'multivendorx-dashboard-script' );

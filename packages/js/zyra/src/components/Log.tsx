@@ -125,9 +125,9 @@ const Log: React.FC< LogProps > = ( {
                 <button
                     className="admin-btn btn-red"
                     onClick={ handleClearLog }
-                >
-                    <span className="text">Clear</span>
+                >   
                     <i className="adminlib-delete"></i>
+                    <span className="text">Clear</span>
                 </button>
             </div>
             <div className="log-container-wrapper">

@@ -14,6 +14,7 @@ use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Products_Controller;
 use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Coupons_Controller;
 use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Payouts_Controller;
 use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Transaction_Controller;
+use MultiVendorX\Store\StoreUtil;
 
 defined('ABSPATH') || exit;
 
@@ -30,8 +31,52 @@ class Rest {
     public function __construct() {
         $this->init_classes();
         add_action( 'rest_api_init', array( $this, 'register_rest_routes' ), 10 );
+        add_filter('woocommerce_rest_check_permissions', array($this,'give_permission'), 10, 4);
+        add_filter('woocommerce_rest_shop_order_object_query', array($this, 'filter_orders_by_store_id'), 10, 2);
     }
+     /**
+     * Filter orders by store_id in line items
+     */
+    public function filter_orders_by_store_id( $args, $request ) {
+        if ( ! isset( $request['store_id'] ) ) {
+            return $args;
+        }
+    
+        $store_id = absint( $request['store_id'] );
 
+        $store_meta_query = array(
+            'key'   => 'multivendorx_store_id',
+            'value' => $store_id,
+            'compare' => '='
+        );
+    
+        if ( isset( $args['meta_query'] ) ) {
+            $args['meta_query']['relation'] = 'AND';
+            $args['meta_query'][] = $store_meta_query;
+        } else {
+            $args['meta_query'] = array( $store_meta_query );
+        }
+        return $args;
+    }
+    
+    public function give_permission($permission, $context, $object_id, $post_type) {
+        $current_user = wp_get_current_user();
+        $user_id      = $current_user->ID;
+    
+        // Fetch custom user meta
+        $active_store = get_user_meta($user_id, 'multivendorx_active_store', true);
+    
+        // Get all users for that store
+        $users = StoreUtil::get_store_users($active_store);
+    
+        if (is_array($users) && in_array($user_id, $users)) {
+            return true;
+        }
+    
+        return $permission; // fallback to default
+    }
+    
+    
     /**
      * Initialize all REST API controller classes.
      */

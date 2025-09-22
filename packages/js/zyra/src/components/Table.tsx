@@ -47,7 +47,9 @@ interface TableCellProps {
     isExpanded?: any;
     onToggleRow?: (e: any) => void;
     onToggleActive?: (e: any) => void;
-    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    onChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
+    showDropdown?: number | null;
+    rowData?: any;
 }
 
 interface RealtimeFilter {
@@ -74,10 +76,33 @@ export const TableCell: React.FC<TableCellProps> = ({
     rowId,
     onToggleRow,
     onToggleActive,
+    rowData,
     isExpanded,
 }) => {
     const [cellData, setCellData] = useState(fieldValue);
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+    const [showDropdown, setShowDropdown] = useState<number | null>(null);
+
+    const toggleDropdown = (id: number) => {
+        setShowDropdown(prev => (prev === id ? null : id));
+    };
+    useEffect(() => {
+        const handleClickOutside = (e: MouseEvent) => {
+            // if click is not on dropdown toggle or inside dropdown → close it
+            if (
+                !(e.target as HTMLElement).closest('.action-dropdown') &&
+                !(e.target as HTMLElement).closest(
+                    '.adminlib-more-vertical'
+                )
+            ) {
+                setShowDropdown(null);
+            }
+        };
+
+        document.addEventListener('click', handleClickOutside);
+        return () =>
+            document.removeEventListener('click', handleClickOutside);
+    }, []);
     useEffect(() => {
         setCellData(fieldValue);
     }, [fieldValue]);
@@ -204,6 +229,47 @@ export const TableCell: React.FC<TableCellProps> = ({
                 </select>
             );
             break;
+        case 'action-dropdown':
+            content = (
+                <div className="action-section">
+                    <div className="action-icons">
+                        <i
+                            className="adminlib-more-vertical"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                toggleDropdown(rowId)
+                            }}
+                        ></i>
+                        <div className={`action-dropdown ${showDropdown === rowId ? 'show' : ''}`}>
+                            <ul>
+                                {header.actions?.map((action: {
+                                    label: string;
+                                    icon: string;
+                                    onClick: (row: any) => void;
+                                    className?: string;
+                                    hover?: boolean;
+                                }) => (
+                                    <li
+                                        key={action.label}
+                                        className={`${action.className || ''} ${action.hover ? 'hover' : ''}`}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            // if (rowData) {
+                                            action.onClick(rowData);
+                                            // }
+                                        }}
+                                    >
+                                        <i className={action.icon}></i>
+                                        <span>{action.label}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            );
+            break;
+
         default:
             content = (
                 <div
@@ -393,40 +459,40 @@ const Table: React.FC<TableProps> = ({
     });
     const typeCountActive = filterData.typeCount || 'all';
     return (
-        <>  
+        <>
             <div className="admin-top-filter">
-            {typeCounts && typeCounts.length > 0 && (
-                <div className="admin-table-wrapper-filter">
-                    {typeCounts.map((countInfo, index) => (
-                        <div
-                            key={index} // Add a key for better React performance
-                            role="button"
-                            tabIndex={0}
-                            onClick={() => {
-                                setFilterData({ typeCount: countInfo.key });
-                            }}
-                            className={
-                                countInfo.key === typeCountActive
-                                    ? 'type-count-active'
-                                    : ''
-                            }
-                        >
-                            {`${countInfo.name} (${countInfo.count})`}
-                            {index !== typeCounts.length - 1 && ' |'}{' '}
-                        </div>
-                    ))}
-                </div>
+                {typeCounts && typeCounts.length > 0 && (
+                    <div className="admin-table-wrapper-filter">
+                        {typeCounts.map((countInfo, index) => (
+                            <div
+                                key={index} // Add a key for better React performance
+                                role="button"
+                                tabIndex={0}
+                                onClick={() => {
+                                    setFilterData({ typeCount: countInfo.key });
+                                }}
+                                className={
+                                    countInfo.key === typeCountActive
+                                        ? 'type-count-active'
+                                        : ''
+                                }
+                            >
+                                {`${countInfo.name} (${countInfo.count})`}
+                                {index !== typeCounts.length - 1 && ' |'}{' '}
+                            </div>
+                        ))}
+                    </div>
 
-            )}
-            {searchFilter && (
-                <div className="search-field">
-                    {searchFilter?.map((filter) => (
-                        <React.Fragment key={filter.name}>
-                            {filter.render(handleFilterChange, filterData[filter.name])}
-                        </React.Fragment>
-                    ))}
-                </div>
-            )}
+                )}
+                {searchFilter && (
+                    <div className="search-field">
+                        {searchFilter?.map((filter) => (
+                            <React.Fragment key={filter.name}>
+                                {filter.render(handleFilterChange, filterData[filter.name])}
+                            </React.Fragment>
+                        ))}
+                    </div>
+                )}
             </div>
             {loading ? (
                 <LoadingTable />
@@ -497,74 +563,6 @@ const Table: React.FC<TableProps> = ({
                                             return null;
 
                                         return (
-                                            // <tr
-                                            //     key={productId}
-                                            //     className={`admin-row ${isVariation ? 'variation-row' : ''
-                                            //         } ${product.type === 'Variable' ? 'variable' : 'simple'
-                                            //         } ${expandElement?.[productId] ? 'active' : ''
-                                            //         }`}
-                                            //     onClick={() => onRowClick?.(row.original)}
-                                            //     style={{ cursor: onRowClick ? 'pointer' : 'default' }}
-                                            // >
-
-                                            //     {row
-                                            //         .getVisibleCells()
-                                            //         .filter((cell) =>
-                                            //             visibleColumns.find(
-                                            //                 (col) =>
-                                            //                     col.id ===
-                                            //                     cell.column
-                                            //                         .id ||
-                                            //                     col.header ===
-                                            //                     cell.column
-                                            //                         .id
-                                            //             )
-                                            //         )
-                                            //         .map((cell) => (
-                                            //             <td
-                                            //                 key={cell.id}
-                                            //                 className="admin-column"
-                                            //             >
-                                            //                 {flexRender(
-                                            //                     cell.column
-                                            //                         .columnDef
-                                            //                         .cell,
-                                            //                     cell.getContext()
-                                            //                 )}
-                                            //             </td>
-                                            //         ))}
-
-                                            //     {isSmallScreen && (
-                                            //         <td className="responsive-cell">
-                                            //             <details>
-                                            //                 <summary></summary>
-                                            //                 <ul className="text-sm">
-                                            //                     {getHiddenColumns(
-                                            //                         row
-                                            //                     ).map(
-                                            //                         (
-                                            //                             cell: any
-                                            //                         ) => (
-                                            //                             <li
-                                            //                                 key={
-                                            //                                     cell.id
-                                            //                                 }
-                                            //                             >
-                                            //                                 {flexRender(
-                                            //                                     cell
-                                            //                                         .column
-                                            //                                         .columnDef
-                                            //                                         .cell,
-                                            //                                     cell.getContext()
-                                            //                                 )}
-                                            //                             </li>
-                                            //                         )
-                                            //                     )}
-                                            //                 </ul>
-                                            //             </details>
-                                            //         </td>
-                                            //     )}
-                                            // </tr>
                                             <tr
                                                 key={productId}
                                                 className={`admin-row ${isVariation ? 'variation-row' : ''} ${product.type === 'Variable' ? 'variable' : 'simple'} ${expandElement?.[productId] ? 'active' : ''}`}
@@ -624,24 +622,13 @@ const Table: React.FC<TableProps> = ({
                             <div className="table-pagination">
                                 { /* Page size dropdown */}
                                 <div className="pagination-number-wrapper">
-                                    Rows per page:
-                                    <select
-                                        className='basic-select'
-                                        value={
-                                            table.getState().pagination.pageSize
-                                        }
-                                        onChange={(e) =>
-                                            table.setPageSize(
-                                                Number(e.target.value)
-                                            )
-                                        }
-                                    >
-                                        {perPageOption.map((size) => (
-                                            <option key={size} value={size}>
-                                                {size}
-                                            </option>
-                                        ))}
-                                    </select>
+                                    {`Showing ${table.getState().pagination.pageIndex * table.getState().pagination.pageSize + 1} 
+                                        to ${Math.min(
+                                        (table.getState().pagination.pageIndex + 1) *
+                                        table.getState().pagination.pageSize,
+                                        table.getPageCount() * table.getState().pagination.pageSize
+                                    )} 
+                                    of ${flattenedData.length} entries`}
                                 </div>
                                 <div className="pagination-arrow">
                                     <span
@@ -727,7 +714,10 @@ const Table: React.FC<TableProps> = ({
 
                             <div className="wrap-bulk-all-date bulk">
                                 <span className="count">{Object.keys(rowSelection).length} rows selected</span>
-                                <span className="select count">Select all</span>
+                                <span className="select count"
+                                    onClick={() => table.toggleAllRowsSelected(true)}>
+                                    Select all
+                                </span>
                                 {bulkActionComp && bulkActionComp()}
                                 <div
                                     className="close-btn"
@@ -754,9 +744,8 @@ const Table: React.FC<TableProps> = ({
 
                                 {/* Show Reset button only if filters are applied */}
                                 {Object.keys(filterData).length > 0 && (
-                                    <div className="wrap-bulk-all-date reset-wrapper">
+                                    <div className="wrap-bulk-all-date filter admin-badge red">
                                         <span
-                                            className="admin-btn btn-reset"
                                             onClick={() => {
                                                 setFilterData({});            // clear all filters
                                                 onRowSelectionChange?.({});   // clear row selection if any

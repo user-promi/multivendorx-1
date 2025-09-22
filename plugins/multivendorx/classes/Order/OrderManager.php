@@ -20,7 +20,9 @@ class OrderManager {
     public function __construct() {
         $this->init_classes();
         // Filter the query of order table before it is fetch.
-        add_filter('woocommerce_order_query_args', [$this, 'set_filter_order_query']);
+        if (is_admin()) {
+            add_filter('woocommerce_order_query_args', [$this, 'set_filter_order_query']);
+        }
     }
 
     /**

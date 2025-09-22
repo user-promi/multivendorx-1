@@ -1,103 +1,70 @@
 /* global appLocalizer */
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 import { Table, getApiLink, TableCell } from 'zyra';
-import {
-    ColumnDef,
-    RowSelectionState,
-    PaginationState,
-} from '@tanstack/react-table';
+import { ColumnDef, RowSelectionState, PaginationState } from '@tanstack/react-table';
 
-type StoreRow = {
-    id?: number;
-    store_name?: string;
-    store_slug?: string;
-    status?: string;
+type TransactionRow = {
+    id: number;
+    date: string;
+    store_name: string;
+    order_details: string;
+    transaction_type: string;
+    payment_mode: string;
+    credit: number;
+    debit: number;
+    balance: number;
+    status: string;
 };
 
 const Transactions: React.FC = () => {
-
-    const [data, setData] = useState<StoreRow[] | null>(null);
-
+    const [data, setData] = useState<TransactionRow[] | null>(null);
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
     const [totalRows, setTotalRows] = useState<number>(0);
-    const [pagination, setPagination] = useState<PaginationState>({
-        pageIndex: 0,
-        pageSize: 10,
-    });
+    const [pagination, setPagination] = useState<PaginationState>({ pageIndex: 0, pageSize: 10 });
     const [pageCount, setPageCount] = useState(0);
+    const [showDropdown, setShowDropdown] = useState<number | false>(false);
+    const [modalTransaction, setModalTransaction] = useState<TransactionRow | null>(null);
 
-    // Fetch total rows on mount
+    // Fetch total pending transactions
     useEffect(() => {
         axios({
             method: 'GET',
-            url: getApiLink(appLocalizer, 'store'),
+            url: getApiLink(appLocalizer, 'transaction'),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            params: { count: true },
+            params: { count: true, status: 'Completed' },
         })
-            .then((response) => {
-                setTotalRows(response.data || 0);
-                setPageCount(Math.ceil(response.data / pagination.pageSize));
-            })
-            .catch(() => {
-                setError(__('Failed to load total rows', 'multivendorx'));
-            });
+        .then((response) => {
+            setTotalRows(response.data || 0);
+            setPageCount(Math.ceil(response.data / pagination.pageSize));
+        });
     }, []);
 
+    // Fetch paginated transactions
     useEffect(() => {
         const currentPage = pagination.pageIndex + 1;
-        const rowsPerPage = pagination.pageSize;
-        requestData(rowsPerPage, currentPage);
-        setPageCount(Math.ceil(totalRows / rowsPerPage));
+        requestData(pagination.pageSize, currentPage);
+        setPageCount(Math.ceil(totalRows / pagination.pageSize));
     }, [pagination]);
-    const [ showDropdown, setShowDropdown ] = useState( false );
-    
-        const toggleDropdown = ( id: any ) => {
-            if ( showDropdown === id ) {
-                setShowDropdown( false );
-                return;
-            }
-            setShowDropdown( id );
-        };
-    // Fetch data from backend.
-    function requestData(
-        rowsPerPage = 10,
-        currentPage = 1,
-    ) {
+
+    const toggleDropdown = (id: number) => {
+        setShowDropdown(showDropdown === id ? false : id);
+    };
+
+    const requestData = (rowsPerPage = 10, currentPage = 1) => {
         setData(null);
         axios({
             method: 'GET',
-            url: getApiLink(appLocalizer, 'store'),
+            url: getApiLink(appLocalizer, 'transaction'),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            params: {
-                page: currentPage,
-                row: rowsPerPage,
-            },
+            params: { row: rowsPerPage, page: currentPage, status: 'Completed' },
         })
-            .then((response) => {
-                setData(response.data || []);
-            })
-            .catch(() => {
-                setError(__('Failed to load stores', 'multivendorx'));
-                setData([]);
-            });
-    }
-
-    // Handle pagination and filter changes
-    const requestApiForData = (
-        rowsPerPage: number,
-        currentPage: number,
-    ) => {
-        setData(null);
-        requestData(
-            rowsPerPage,
-            currentPage,
-        );
+        .then((response) => setData(response.data || []))
+        .catch(() => setData([]));
     };
 
-    // Column definitions
-    const columns: ColumnDef<StoreRow>[] = [
+    const columns: ColumnDef<TransactionRow>[] = [
         {
             id: 'select',
             header: ({ table }) => (
@@ -116,71 +83,81 @@ const Transactions: React.FC = () => {
             ),
         },
         {
+            header: __('Date', 'multivendorx'),
+            cell: ({ row }) => {
+                const rawDate = row.original.date;
+                let formattedDate = '-';
+                if (rawDate) {
+                    const dateObj = new Date(rawDate);
+                    formattedDate = new Intl.DateTimeFormat('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric',
+                    }).format(dateObj);
+                }
+                return <TableCell title={formattedDate}>{formattedDate}</TableCell>;
+            },
+        },
+        {
             header: __('Store', 'multivendorx'),
+            cell: ({ row }) => <TableCell>{row.original.store_name || '-'}</TableCell>,
+        },
+        {
+            header: __('Order Details', 'multivendorx'),
+            cell: ({ row }) => <TableCell>{row.original.order_details}</TableCell>,
+        },
+        {
+            header: __('Credit', 'multivendorx'),
             cell: ({ row }) => (
-                <TableCell title={row.original.store_name || ''}>
-                    {row.original.store_name || '-'}
+                <TableCell>
+                    {(Number(row.original.credit) || 0).toFixed(2)}
                 </TableCell>
             ),
         },
         {
-            header: __('Slug', 'multivendorx'),
+            header: __('Debit', 'multivendorx'),
             cell: ({ row }) => (
-                <TableCell title={row.original.store_slug || ''}>
-                    {row.original.store_slug || '-'}
+                <TableCell>
+                    {(Number(row.original.debit) || 0).toFixed(2)}
                 </TableCell>
             ),
         },
+        {
+            header: __('Balance', 'multivendorx'),
+            cell: ({ row }) => (
+                <TableCell>
+                    {(Number(row.original.balance) || 0).toFixed(2)}
+                </TableCell>
+            ),
+        },
+        
         {
             header: __('Status', 'multivendorx'),
             cell: ({ row }) => (
-                <TableCell title={row.original.status || ''}>
-                    {row.original.status || '-'}
+                <TableCell>
+                    <span className={`admin-badge ${row.original.status === 'pending' ? 'red' : 'green'}`}>
+                        {row.original.status}
+                    </span>
                 </TableCell>
             ),
         },
         {
             header: __('Action', 'multivendorx'),
             cell: ({ row }) => (
-                <TableCell title="Action">
+                <TableCell>
                     <div className="action-section">
-                        <div className="action-icons">
-                            <i
-                                className="adminlib-more-vertical"
-                                onClick={() =>
-                                    toggleDropdown(row.original.order_id)
-                                }
-                            ></i>
-                            <div
-                                className={`action-dropdown ${showDropdown === row.original.order_id
-                                        ? 'show'
-                                        : ''
-                                    }`}
-                            >
-                        <ul>
-                            <li
-                                onClick={() =>
-                                    (window.location.href = `?page=multivendorx#&tab=stores&view&id=${row.original.id}`)
-                                }
-                            >
-                                <i className="adminlib-eye"></i>
-                                { __( 'View Store', 'multivendorx' ) }
-                            </li>
-                            <li
-                                onClick={() =>
-                                    (window.location.href = `?page=multivendorx#&tab=stores&edit/${row.original.id}`)
-                                }
-                            >
-                                <i className="adminlib-create"></i>
-                                { __( 'Edit Store', 'multivendorx' ) }
-                            </li>
-                        </ul>
-                        </div>
+                        <i className="adminlib-more-vertical" onClick={() => toggleDropdown(row.original.id)}></i>
+                        <div className={`action-dropdown ${showDropdown === row.original.id ? 'show' : ''}`}>
+                            <ul>
+                                <li onClick={() => setModalTransaction(row.original)}>
+                                    <i className="adminlib-eye"></i> {__('View', 'multivendorx')}
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </TableCell>
             ),
-        }
+        },
     ];
 
     return (
@@ -195,11 +172,18 @@ const Transactions: React.FC = () => {
                     pageCount={pageCount}
                     pagination={pagination}
                     onPaginationChange={setPagination}
-                    handlePagination={requestApiForData}
+                    handlePagination={requestData}
                     perPageOption={[10, 25, 50]}
                     typeCounts={[]}
                 />
             </div>
+
+            {/* {modalTransaction && (
+                <TransactionDetailsModal
+                    transaction={modalTransaction}
+                    onClose={() => setModalTransaction(null)}
+                />
+            )} */}
         </>
     );
 };
