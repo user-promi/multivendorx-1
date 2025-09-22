@@ -147,7 +147,7 @@ const StoreOrders: React.FC = () => {
               </div>
             </div>
           </div>
-          <Table
+          {/* <Table
           data={demoData}
           columns={columns as ColumnDef<Record<string, any>, any>[]}
           rowSelection={rowSelection}
@@ -159,7 +159,7 @@ const StoreOrders: React.FC = () => {
           // handlePagination={requestApiForData}
           perPageOption={[10, 25, 50]}
           typeCounts={[]}
-        />
+        /> */}
       </div>
     </div>
         

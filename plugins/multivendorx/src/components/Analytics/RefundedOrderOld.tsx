@@ -176,7 +176,7 @@ const RefundedOrderOld: React.FC = () => {
               <span>Updated 1 month ago</span>
             </div>
           </div>
-          <Table
+          {/* <Table
             data={demoData}
             columns={columns as ColumnDef<Record<string, any>, any>[]}
             rowSelection={rowSelection}
@@ -188,7 +188,7 @@ const RefundedOrderOld: React.FC = () => {
             // handlePagination={requestApiForData}
             perPageOption={[10, 25, 50]}
             typeCounts={[]}
-          />
+          /> */}
         </div>
       </div>
     </>
