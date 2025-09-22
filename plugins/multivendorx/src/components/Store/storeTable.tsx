@@ -8,7 +8,6 @@ import {
     RowSelectionState,
     PaginationState,
 } from '@tanstack/react-table';
-
 type StoreRow = {
     id?: number;
     store_name?: string;
@@ -51,15 +50,6 @@ const StoreTable: React.FC = () => {
         requestData(rowsPerPage, currentPage);
         setPageCount(Math.ceil(totalRows / rowsPerPage));
     }, [pagination]);
-    const [ showDropdown, setShowDropdown ] = useState( false );
-
-    const toggleDropdown = ( id: any ) => {
-        if ( showDropdown === id ) {
-            setShowDropdown( false );
-            return;
-        }
-        setShowDropdown( id );
-    };
     // Fetch data from backend.
     function requestData(
         rowsPerPage = 10,
@@ -153,62 +143,46 @@ const StoreTable: React.FC = () => {
         {
             header: __('Action', 'multivendorx'),
             cell: ({ row }) => (
-                <TableCell title="Action">
-                    <div className="action-section">
-                        <div className="action-icons">
-                            <i
-                                className="adminlib-more-vertical"
-                                onClick={() =>
-                                    toggleDropdown(row.original.id)
-                                }
-                            ></i>
-                            <div
-                                className={`action-dropdown ${showDropdown === row.original.id
-                                    ? 'show'
-                                    : ''
-                                    }`}
-                            >
-                                <ul>
-                                    <li
-                                        onClick={() =>
-                                            (window.location.href = `?page=multivendorx#&tab=stores&view&id=${row.original.id}`)
-                                        }
-                                    >
-                                        <i className="adminlib-eye"></i>
-                                        {__('Store Details', 'multivendorx')}
-                                    </li>
-                                    <li
-                                        onClick={() =>
-                                            window.open(`${appLocalizer.site_url}/store/${row.original.store_slug}`, '_blank')
-                                        }
-                                    >
-                                        <i className="adminlib-eye"></i>
-                                        {__('View Public Store', 'multivendorx')}
-                                    </li>
-                                    <li
-                                        onClick={() =>
-                                            (window.location.href = `?page=multivendorx#&tab=stores&edit/${row.original.id}`)
-                                        }
-                                    >
-                                        <i className="adminlib-create"></i>
-                                        {__('Edit Store', 'multivendorx')}
-                                    </li>
-                                    <li
-                                        onClick={() =>
-                                            (window.location.href = `?page=multivendorx#&tab=stores&edit/${row.original.id}`)
-                                        }
-                                        className="delete"
-                                    >
-                                        <i className="adminlib-vendor-form-delete"></i>
-                                        {__('Delete', 'multivendorx')}
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </TableCell>
+                <TableCell
+                    type="action-dropdown"
+                    rowData={row.original}
+                    header={{
+                        actions: [
+                            {
+                                label: __('Store Details', 'multivendorx'),
+                                icon: 'adminlib-eye',
+                                onClick: (rowData) => {
+                                    window.location.href = `?page=multivendorx#&tab=stores&view&id=${rowData.id}`;
+                                },
+                                hover: true
+                            },
+                            {
+                                label: __('View Public Store', 'multivendorx'),
+                                icon: 'adminlib-eye',
+                                onClick: (rowData) => {
+                                    window.open(`${appLocalizer.site_url}/store/${rowData.store_slug}`, '_blank');
+                                },
+                                hover: true
+                            },
+                            {
+                                label: __('Edit Store', 'multivendorx'),
+                                icon: 'adminlib-create',
+                                onClick: (rowData) => {
+                                    window.location.href = `?page=multivendorx#&tab=stores&edit/${rowData.id}`;
+                                },
+                            },
+                            {
+                                label: __('Delete', 'multivendorx'),
+                                icon: 'adminlib-vendor-form-delete',
+                                onClick: (rowData) => {
+                                    window.location.href = `?page=multivendorx#&tab=stores&edit/${rowData.id}`;
+                                },
+                            },
+                        ],
+                    }}
+                />
             ),
-        }
+        },
     ];
 
     return (
