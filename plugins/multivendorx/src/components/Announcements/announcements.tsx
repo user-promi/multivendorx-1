@@ -62,7 +62,6 @@ export const Announcements: React.FC = () => {
 
     const [pageCount, setPageCount] = useState(0);
     const [page, setPage] = useState('');
-    const [showDropdown, setShowDropdown] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const bulkSelectRef = useRef<HTMLSelectElement>(null);
     const [openModal, setOpenModal] = useState(false);

@@ -93,7 +93,7 @@ class Admin {
                 "
             > Pro </span>' : '';
 
-            $commission_count = CommissionUtil::get_commissions(['paid_status' => 'unpaid'], true, true);
+            $commission_count = CommissionUtil::get_commissions(['status' => 'unpaid'], true, true);
             // Array contain multivendorx submenu.
             $submenus = array(
                 'dashboard' => array(

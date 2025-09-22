@@ -123,14 +123,8 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
         </div>
 
         <div className="right-section">
-          <div className="search-field" style={{ position: "relative" }}>
-            <i className="adminlib-search"></i>
-            <input
-              type="text"
-              placeholder="Search Here"
-              value={query}
-              onChange={(e) => onSearchChange(e.target.value)}
-            />
+          <div className="search-field">
+
             {showDropdown && dropdownOptions && dropdownOptions.length > 0 && (
               <select
                 value={selectValue}
@@ -143,6 +137,15 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
                 ))}
               </select>
             )}
+            <div className="search-section">
+              <input
+                type="text"
+                placeholder="Search Here"
+                value={query}
+                onChange={(e) => onSearchChange(e.target.value)}
+              />
+              <i className="adminlib-search"></i>
+            </div>
 
 
             {/* dropdown render */}
