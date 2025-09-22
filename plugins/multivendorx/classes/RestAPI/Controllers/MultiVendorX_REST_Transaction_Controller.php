@@ -1,7 +1,7 @@
 <?php
 
 namespace MultiVendorX\RestAPI\Controllers;
-use MultiVendorX\Store\StoreUtil;
+use MultiVendorX\Transaction\Transaction; 
 use MultiVendorX\Utill;
 
 defined('ABSPATH') || exit;
@@ -74,58 +74,52 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
             );
         }
     
+        // Get request parameters
         $limit    = max( intval( $request->get_param( 'row' ) ), 10 );
         $page     = max( intval( $request->get_param( 'page' ) ), 1 );
         $offset   = ( $page - 1 ) * $limit;
         $count    = $request->get_param( 'count' );
-        $store_id = intval( $request->get_param( 'store_id' ) ); 
-    
-        global $wpdb;
-        $table_name = "{$wpdb->prefix}" . Utill::TABLES['transaction'];
-    
-        // Return total count for store
-        if ( $count && $store_id ) {
-            $total_count = $wpdb->get_var(
-                "SELECT COUNT(*) FROM $table_name WHERE store_id = {$store_id}"
-            );
-            return rest_ensure_response( (int) $total_count );
+        $store_id = intval( $request->get_param( 'store_id' ) );
+        $status    = $request->get_param( 'status' );
+        
+        $args = array();
+        if ( $count ) {
+            $args['count'] = true;
         }
-    
-        // Fetch store-specific transaction data
+        if ( $status ) {
+            $args['status'] = $status;
+        }
         if ( $store_id ) {
-            $results = $wpdb->get_results(
-                $wpdb->prepare(
-                    "SELECT id, created_at, narration, transaction_type, entry_type, amount, balance, status
-                     FROM $table_name 
-                     WHERE store_id = %d 
-                     ORDER BY created_at DESC 
-                     LIMIT %d OFFSET %d",
-                    $store_id,
-                    $limit,
-                    $offset
-                ),
-                ARRAY_A
-            );
-    
-            // Map results to frontend-friendly keys
-            $formatted = array_map(function($row) {
-                return [
-                    'date'             => $row['created_at'],
-                    'order_details'    => $row['narration'],
-                    'transaction_type' => $row['transaction_type'],
-                    'payment_mode'     => $row['entry_type'],
-                    'credit'           => $row['entry_type'] === 'Cr' ? $row['amount'] : 0,
-                    'debit'            => $row['entry_type'] === 'Dr' ? $row['amount'] : 0,
-                    'balance'          => $row['balance'],
-                    'status'           => $row['status'],
-                ];
-            }, $results);
-    
-            return rest_ensure_response( $formatted );
+            $args['store_id'] = $store_id;
         }
+        // If requesting count, return immediately
+        if ( $count ) {
+            $transactions = Transaction::get_transaction_information( $args );
+            return rest_ensure_response( (int) $transactions );
+        }
+        $args['limit'] = $limit;
+        $args['offset'] = $offset;
+
+        // Use the reusable transaction query function
+        $transactions = Transaction::get_transaction_information( $args );
+
+        // Map results to frontend-friendly structure
+        $formatted = array_map( function( $row ) {
+            return [
+                'date'             => $row['created_at'],
+                'order_details'    => $row['narration'],
+                'transaction_type' => $row['transaction_type'],
+                'payment_mode'     => $row['entry_type'],
+                'credit'           => $row['entry_type'] === 'Cr' ? $row['amount'] : 0,
+                'debit'            => $row['entry_type'] === 'Dr' ? $row['amount'] : 0,
+                'balance'          => $row['balance'],
+                'status'           => $row['status'],
+            ];
+        }, $transactions );
     
-        return rest_ensure_response([]);
+        return rest_ensure_response( $formatted );
     }
+    
     
     
     public function create_item( $request ) {
