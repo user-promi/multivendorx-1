@@ -324,6 +324,7 @@ interface TableProps {
     expandElement?: Record<string, boolean>;
     expandedRows?: Record<string, boolean>;
     onRowClick?: (rowData: Record<string, any>) => void;
+    totalRows?: number
 }
 
 const Table: React.FC<TableProps> = ({
@@ -346,6 +347,7 @@ const Table: React.FC<TableProps> = ({
     expandElement,
     expandedRows,
     onRowClick,
+    totalRows = 0
 }) => {
     console.log(pagination);
     const [loading, setLoading] = useState<boolean>(false);
@@ -624,10 +626,28 @@ const totalRows = flattenedData.length;
                             { /* Pagination Controls */}
                             <div className="table-pagination">
                                 <div className="pagination-number-wrapper">
-
-                                    {`Showing ${table.getState().pagination.pageIndex * table.getState().pagination.pageSize + 1} 
-                                        to  ${table.getState().pagination.pageIndex * table.getState().pagination.pageSize + 1} + ${flattenedData.length} -1
-                                    of ${flattenedData.length} entries `}
+                                    {`Showing ${pagination.pageIndex * pagination.pageSize + 1} to ${Math.min(
+                                        (pagination.pageIndex + 1) * pagination.pageSize,
+                                        totalRows
+                                    )} of ${totalRows} entries`}
+                                    Rows per page:
+                                    <select
+                                        className='basic-select'
+                                        value={
+                                            table.getState().pagination.pageSize
+                                        }
+                                        onChange={(e) =>
+                                            table.setPageSize(
+                                                Number(e.target.value)
+                                            )
+                                        }
+                                    >
+                                        {perPageOption.map((size) => (
+                                            <option key={size} value={size}>
+                                                {size}
+                                            </option>
+                                        ))}
+                                    </select>
                                 </div>
                                 <div className="pagination-arrow">
                                     <span
@@ -728,7 +748,7 @@ const totalRows = flattenedData.length;
                             </div>
                         ) : (
                             <>
-                                {realtimeFilter && realtimeFilter.length > 0 && (
+                                {data?.length !== 0 && realtimeFilter && realtimeFilter.length > 0 && (
                                     <div className="wrap-bulk-all-date filter">
                                         <span className="title">
                                             <i className="adminlib-filter"></i> Filter
