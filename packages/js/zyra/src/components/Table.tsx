@@ -240,7 +240,7 @@ export const TableCell: React.FC<TableCellProps> = ({
                                 toggleDropdown(rowId)
                             }}
                         ></i>
-                        <div className={`action-dropdown ${showDropdown === rowId ? 'show' : ''}`}>
+                        <div className={`action-dropdown ${showDropdown === rowId ? 'show' : 'hover'}`}>
                             <ul>
                                 {header.actions?.map((action: {
                                     label: string;
@@ -254,9 +254,7 @@ export const TableCell: React.FC<TableCellProps> = ({
                                         className={`${action.className || ''} ${action.hover ? 'hover' : ''}`}
                                         onClick={(e) => {
                                             e.stopPropagation();
-                                            // if (rowData) {
                                             action.onClick(rowData);
-                                            // }
                                         }}
                                     >
                                         <i className={action.icon}></i>
@@ -351,6 +349,7 @@ const Table: React.FC<TableProps> = ({
     onRowClick,
     totalRows = 0
 }) => {
+    console.log(pagination);
     const [loading, setLoading] = useState<boolean>(false);
     const [filterData, setFilterData] = useState<Record<string, any>>(
         {}
@@ -460,6 +459,10 @@ const Table: React.FC<TableProps> = ({
 
     });
     const typeCountActive = filterData.typeCount || 'all';
+    const { pageIndex, pageSize } = table.getState().pagination;
+const totalRows = flattenedData.length;
+    const start = totalRows === 0 ? 0 : pageIndex * pageSize + 1;
+    const end = totalRows === 0 ? 0 : Math.min(start + pageSize - 1, totalRows);
     return (
         <>
             <div className="admin-top-filter">
@@ -622,7 +625,6 @@ const Table: React.FC<TableProps> = ({
 
                             { /* Pagination Controls */}
                             <div className="table-pagination">
-                                { /* Page size dropdown */}
                                 <div className="pagination-number-wrapper">
                                     {`Showing ${pagination.pageIndex * pagination.pageSize + 1} to ${Math.min(
                                         (pagination.pageIndex + 1) * pagination.pageSize,

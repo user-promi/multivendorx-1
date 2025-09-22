@@ -123,20 +123,22 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
         </div>
 
         <div className="right-section">
-          <div className="search-field">
+          <div className="search-field header-search">
+            <div className="search-action">
+              {showDropdown && dropdownOptions && dropdownOptions.length > 0 && (
+                <select
+                  value={selectValue}
+                  onChange={(e) => onSelectChange(e.target.value)}
+                >
+                  {dropdownOptions.map((opt) => (
+                    <option key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </option>
+                  ))}
+                </select>
+              )}
+            </div>
 
-            {showDropdown && dropdownOptions && dropdownOptions.length > 0 && (
-              <select
-                value={selectValue}
-                onChange={(e) => onSelectChange(e.target.value)}
-              >
-                {dropdownOptions.map((opt) => (
-                  <option key={opt.value} value={opt.value}>
-                    {opt.label}
-                  </option>
-                ))}
-              </select>
-            )}
             <div className="search-section">
               <input
                 type="text"
@@ -146,7 +148,6 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
               />
               <i className="adminlib-search"></i>
             </div>
-
 
             {/* dropdown render */}
             {dropdownOpen && results.length > 0 && (
@@ -164,26 +165,17 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
                         onResultClick(r);
                         setDropdownOpen(false); // close dropdown on click
                       }}
-                      onMouseEnter={(e) =>
-                        (e.currentTarget.style.background = "#f5f7fa")
-                      }
-                      onMouseLeave={(e) =>
-                        (e.currentTarget.style.background = "transparent")
-                      }
                     >
-                      {r.icon && <i className={r.icon}></i>}
-                      <div>
-                        <div style={{ fontWeight: 500 }}>
+                      <div className="icon-wrapper">
+                        {r.icon && <i className={r.icon}></i>}
+                      </div>
+
+                      <div className="details">
+                        <div className="title">
                           {name.length > 60 ? name.substring(0, 60) + "..." : name}
                         </div>
                         {desc && (
-                          <div
-                            style={{
-                              fontSize: "12px",
-                              color: "#666",
-                              marginTop: "2px",
-                            }}
-                          >
+                          <div className="desc">
                             {desc.length > 80 ? desc.substring(0, 80) + "..." : desc}
                           </div>
                         )}

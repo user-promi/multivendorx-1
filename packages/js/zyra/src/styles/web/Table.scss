@@ -581,17 +581,11 @@
   position: relative;
 }
 
-// .date-picker-section-wrapper {
-//   visibility: visible;
-//   position: fixed;
-//   inset: auto auto 0px 0px;
-//   margin: 0px;
-//   transform: translate(620px, -180px);
-//   border: $border-light-small;
-// }
 .date-picker-section-wrapper {
   position: relative;
-  width: 14rem;
+  input{
+    width: 14rem;
+  }
 }
 
 .date-picker {

@@ -67,73 +67,9 @@
       padding: 0.313rem;
     }
 
-    .search-field {
-      position: relative;
-      display: flex;
-      border: $border-light-small;
-      border-radius: 0.125rem;
 
-      ul {
-        position: absolute;
-        top: 100%;
-        left: 0;
-        width: 260px;
-        max-height: 250px;
-        overflow-y: auto;
-        background: #fff;
-        border: 1px solid #ddd;
-        border-radius: 6px;
-        margin-top: 4px;
-        padding: 0;
-        list-style: none;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
-        z-index: 1000;
 
-        li {
-          padding: 8px 12px;
-          cursor: pointer;
-          font-size: 14px;
-          color: #333;
-          border-bottom: 1px solid #f0f0f0;
-          display: flex;
-          align-items: center;
-          gap: 8px;
-        }
-        
-      }      
-
-      input,
-      select {
-        margin: 0;
-        border: none;
-      }
-
-      .adminlib-search {
-        position: absolute;
-        left: 0.5rem;
-        z-index: 9;
-        font-size: 1.313rem;
-        top: 20%;
-        border-right: 0;
-      }
-
-      input {
-        width: 16rem;
-        padding-left: 2rem;
-        position: relative;
-        border-right: $border-light-small;
-
-        &:focus {
-          outline: none;
-          box-shadow: none;
-        }
-      }
-
-      select:focus {
-        outline: none;
-        box-shadow: none;
-      }
-    }
+    
 
     .icon-wrapper {
       position: relative;
