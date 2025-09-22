@@ -48,16 +48,30 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
                 'icon'    => 'adminlib-storefront',
                 'submenu' => array(
                     array(
-                        'key'  => 'storefront',
-                        'name' => 'Storefront',
-                        'slug' => 'storefront',
+                        'key'  => 'general',
+                        'name' => 'General',
+                        'slug' => 'general',
                         'icon'    => 'adminlib-cart',
                         'capability' => ['read_products', 'edit_products', 'delete_products']
                     ),
                     array(
-                        'key'  => 'store-address',
-                        'name' => 'Address',
-                        'slug' => 'store-address',
+                        'key'  => 'appearance',
+                        'name' => 'Appearance',
+                        'slug' => 'appearance',
+                        'icon'    => 'adminlib-cart',
+                        'capability' => ['read_products', 'edit_products', 'delete_products']
+                    ),
+                    array(
+                        'key'  => 'store-address-location',
+                        'name' => 'Business Address & Location',
+                        'slug' => 'store-address-location',
+                        'icon'    => 'adminlib-cart',
+                        'capability' => ['read_products', 'edit_products', 'upload_files']
+                    ),
+                     array(
+                        'key'  => 'contact-information',
+                        'name' => 'Contact Information',
+                        'slug' => 'contact-information',
                         'icon'    => 'adminlib-cart',
                         'capability' => ['read_products', 'edit_products', 'upload_files']
                     ),
@@ -96,6 +110,13 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
                         'icon'    => 'adminlib-cart',
                         'capability' => ['read_products', 'edit_products', 'upload_files']
                     ),
+                    array(
+                        'key'  => 'shipping',
+                        'name' => 'Shipping',
+                        'slug' => 'shipping',
+                        'icon'    => 'adminlib-cart',
+                        'capability' => ['read_products', 'edit_products', 'upload_files']
+                    ), 
                     ),
                 'capability' => ['manage_products']
             ),
@@ -111,9 +132,9 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
                         'capability' => ['read_shop_orders', 'edit_shop_orders', 'delete_shop_orders']
                     ),
                     array(
-                        'key'  => 'add-product',
+                        'key'  => 'edit-product',
                         'name' => 'Edit Product',
-                        'slug' => 'add-product',
+                        'slug' => 'edit-product',
                         'capability' => ['read_shop_orders', 'edit_shop_orders', 'delete_shop_orders']
                     ),
                 ),

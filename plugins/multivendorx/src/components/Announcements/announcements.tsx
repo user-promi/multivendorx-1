@@ -4,7 +4,7 @@ import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
-import { Table, getApiLink, TableCell, AdminBreadcrumbs, BasicInput, TextArea, CommonPopup, SelectInput } from 'zyra';
+import { Table, getApiLink, TableCell, AdminBreadcrumbs, BasicInput, TextArea, CommonPopup, SelectInput, CalendarInput } from 'zyra';
 
 import {
     ColumnDef,
@@ -84,25 +84,14 @@ export const Announcements: React.FC = () => {
     });
     const [announcementStatus, setAnnouncementStatus] = useState<AnnouncementStatus[] | null>(null);
     const [storeOptions, setStoreOptions] = useState<{ value: string; label: string }[]>([]);
-    const [pickerPosition, setPickerPosition] = useState<"top" | "bottom">("bottom");
-
+   
     const handleCloseForm = () => {
         setAddAnnouncements(false);
         setFormData({ title: '', url: '', content: '', stores: '' }); // reset form
         setEditId(null); // reset edit mode
         setError(null); // clear any error
     };
-    const handleDateOpen = () => {
-        if (dateRef.current) {
-            const rect = dateRef.current.getBoundingClientRect();
-            const viewportHeight = window.innerHeight;
 
-            // if there's less than 300px below, open upward
-            setPickerPosition(viewportHeight - rect.bottom < 300 ? "top" : "bottom");
-        }
-        // setOpenDatePicker(true);
-        setOpenDatePicker(!openDatePicker);
-    };
     // Handle form input change
     const handleChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -338,58 +327,70 @@ export const Announcements: React.FC = () => {
         {
             name: 'date',
             render: (updateFilter) => (
-                <div className="date-picker-section-wrapper" ref={dateRef}>
-                    <input
-                        value={`${selectedRange[0].startDate.toLocaleDateString("en-US", {
-                            month: "short",
-                            day: "2-digit",
-                            year: "numeric",
-                        })} - ${selectedRange[0].endDate.toLocaleDateString("en-US", {
-                            month: "short",
-                            day: "2-digit",
-                            year: "numeric",
-                        })}`}
-                        onClick={handleDateOpen}
-                        className="basic-input"
-                        type="text"
-                        placeholder="DD/MM/YYYY"
-                    />
-                    {openDatePicker && (
-                        <div className={`date-picker ${pickerPosition === "top" ? "open-top" : "open-bottom"
-                            }`} id="date-picker-wrapper">
-                            <DateRangePicker
-                                ranges={selectedRange}
-                                months={1}
-                                direction="vertical"
-                                scroll={{ enabled: true }}
-                                maxDate={new Date()}
-                                onChange={(ranges: RangeKeyDict) => {
-                                    const selection: Range = ranges.selection;
+                // <div className="date-picker-section-wrapper" ref={dateRef}>
+                //     <input
+                //         value={`${selectedRange[0].startDate.toLocaleDateString("en-US", {
+                //             month: "short",
+                //             day: "2-digit",
+                //             year: "numeric",
+                //         })} - ${selectedRange[0].endDate.toLocaleDateString("en-US", {
+                //             month: "short",
+                //             day: "2-digit",
+                //             year: "numeric",
+                //         })}`}
+                //         onClick={handleDateOpen}
+                //         className="basic-input"
+                //         type="text"
+                //         placeholder="DD/MM/YYYY"
+                //     />
+                //     {openDatePicker && (
+                //         <div className={`date-picker ${pickerPosition === "top" ? "open-top" : "open-bottom"
+                //             }`} id="date-picker-wrapper">
+                //             <DateRangePicker
+                //                 ranges={selectedRange}
+                //                 months={1}
+                //                 direction="vertical"
+                //                 scroll={{ enabled: true }}
+                //                 maxDate={new Date()}
+                //                 onChange={(ranges: RangeKeyDict) => {
+                //                     const selection: Range = ranges.selection;
 
-                                    if (selection?.endDate instanceof Date) {
-                                        // Set end of day to endDate
-                                        selection.endDate.setHours(23, 59, 59, 999);
-                                    }
+                //                     if (selection?.endDate instanceof Date) {
+                //                         // Set end of day to endDate
+                //                         selection.endDate.setHours(23, 59, 59, 999);
+                //                     }
 
-                                    // Update local range state
-                                    setSelectedRange([
-                                        {
-                                            startDate: selection.startDate || new Date(),
-                                            endDate: selection.endDate || new Date(),
-                                            key: selection.key || 'selection',
-                                        },
-                                    ]);
+                //                     // Update local range state
+                //                     setSelectedRange([
+                //                         {
+                //                             startDate: selection.startDate || new Date(),
+                //                             endDate: selection.endDate || new Date(),
+                //                             key: selection.key || 'selection',
+                //                         },
+                //                     ]);
 
-                                    // Update external filters (could be used by table or search logic)
-                                    updateFilter('date', {
-                                        start_date: selection.startDate,
-                                        end_date: selection.endDate,
-                                    });
-                                }}
-                            />
-                        </div>
-                    )}
-                </div>
+                //                     // Update external filters (could be used by table or search logic)
+                //                     updateFilter('date', {
+                //                         start_date: selection.startDate,
+                //                         end_date: selection.endDate,
+                //                     });
+                //                 }}
+                //             />
+                //         </div>
+                //     )}
+                // </div>
+                <CalendarInput
+                    wrapperClass="my-calendar-wrapper"
+                    inputClass="my-input"
+                    onChange={(range) => {
+                        console.log('Selected Range:', range);
+                        updateFilter('date', {
+                            start_date: range.startDate,
+                            end_date: range.endDate,
+                        });
+                    }}
+                />
+
             ),
         },
     ];

@@ -103,7 +103,7 @@ class Setting {
                 'multivendorx_review_management_settings',
                 'multivendorx_order_settings',
                 'multivendorx_social_settings',
-                'multivendorx_vendor_invoice_settings',
+                'multivendorx_product_store_category_control_settings',
                 'multivendorx_wholesale_settings',
                 'multivendorx_store_support_settings',
                 'multivendorx_policy_settings',
