@@ -6,7 +6,7 @@ const StoreInformation = () => {
     const id = appLocalizer.store_id;
     const [formData, setFormData] = useState<{ [key: string]: string }>({});
     const [successMsg, setSuccessMsg] = useState<string | null>(null);
-	const [stateOptions, setStateOptions] = useState<{ label: string; value: string }[]>([]);
+    const [stateOptions, setStateOptions] = useState<{ label: string; value: string }[]>([]);
 
     useEffect(() => {
         if (!id) return;
@@ -28,22 +28,22 @@ const StoreInformation = () => {
             return () => clearTimeout(timer);
         }
     }, [successMsg]);
-	useEffect(() => {
-		if (formData.country) {
-			fetchStatesByCountry(formData.country);
-		}
-	}, [formData.country]);
+    useEffect(() => {
+        if (formData.country) {
+            fetchStatesByCountry(formData.country);
+        }
+    }, [formData.country]);
 
 
-	const fetchStatesByCountry = (countryCode: string) => {
-		axios({
-			method: 'GET',
-			url: getApiLink(appLocalizer, `states/${countryCode}`),
-			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-		}).then((res) => {
-			setStateOptions(res.data || []);
-		})
-	};
+    const fetchStatesByCountry = (countryCode: string) => {
+        axios({
+            method: 'GET',
+            url: getApiLink(appLocalizer, `states/${countryCode}`),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+        }).then((res) => {
+            setStateOptions(res.data || []);
+        })
+    };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
@@ -81,17 +81,17 @@ const StoreInformation = () => {
 
             <div className="page-title-wrapper">
                 <div className="page-title">
-                    <div className="title">StoreInformation</div>
+                    <div className="title">Store Information</div>
                     <div className="des">Manage your store information and preferences</div>
                 </div>
             </div>
             <div className="container-wrapper">
                 <div className="card-wrapper width-65">
-                    <div className="card-content">
+                    {/* <div className="card-content">
                         <div className="card-title">
                             Basic information
                         </div>
-
+                        
                         <div className="form-group-wrapper">
                             <div className="form-group">
                                 <label htmlFor="product-name">Phone</label>
@@ -140,6 +140,83 @@ const StoreInformation = () => {
                                         autoSave(updated);
                                     }}
                                 />
+                            </div>
+                        </div>
+                    </div> */}
+                    <div className="card-content">
+                        <div className="card-title">
+                            Basic information
+                        </div>
+
+                        <div className="form-group-wrapper">
+                            <div className="form-group">
+                                <label htmlFor="product-name">Name</label>
+                                <BasicInput name="phone" wrapperClass="setting-form-input" descClass="settings-metabox-description" />
+                            </div>
+                        </div>
+                        <div className="form-group-wrapper">
+                            <div className="form-group">
+                                <label htmlFor="product-name">Slug</label>
+                                <BasicInput name="phone" wrapperClass="setting-form-input" descClass="settings-metabox-description" />
+                            </div>
+                        </div>
+
+                        <div className="form-group-wrapper">
+                            <div className="form-group">
+                                <label htmlFor="product-name">Description</label>
+                                <TextArea
+                                    name="content"
+                                    inputClass="textarea-input"
+                                // value={formData.content}
+                                // onChange={handleChange}
+                                />
+                            </div>
+                        </div>
+
+                        <div className="form-group-wrapper">
+                            <div className="form-group">
+                                <label htmlFor="product-name">Message to Buyers</label>
+                                <BasicInput name="phone" wrapperClass="setting-form-input" descClass="settings-metabox-description" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="card-content">
+                        <div className="card-title">Contact & Communication </div>
+                        <div className="form-group-wrapper">
+                            <div className="form-group">
+                                <label htmlFor="product-name">Phone</label>
+                                <BasicInput name="phone" value={formData.phone} wrapperClass="setting-form-input" descClass="settings-metabox-description" onChange={handleChange} />
+                            </div>
+                        </div>
+                        <div className="form-group-wrapper">
+                            <div className="form-group">
+                                <label htmlFor="product-name">Email / Additional Email</label>
+                                <BasicInput name="phone" wrapperClass="setting-form-input" descClass="settings-metabox-description" />
+                            </div>
+                        </div>
+                        <div className="form-group-wrapper">
+                            <div className="form-group">
+                                <label htmlFor="product-name">Live Chat (Enable, WhatsApp, etc.)</label>
+                                <BasicInput name="phone" wrapperClass="setting-form-input" descClass="settings-metabox-description" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="card-wrapper width-35">
+                    <div className="card-content">
+                        <div className="card-title">Appearance </div>
+                        <div className="form-group-wrapper">
+                            <div className="form-group">
+                                <label htmlFor="product-name">Logo</label>
+                                <BasicInput name="phone" wrapperClass="setting-form-input" descClass="settings-metabox-description" />
+                            </div>
+                        </div>
+                        <div className="form-group-wrapper">
+                            <div className="form-group">
+                                <label htmlFor="product-name">Banner / Cover Image</label>
+                                <BasicInput name="phone" wrapperClass="setting-form-input" descClass="settings-metabox-description" />
                             </div>
                         </div>
                     </div>

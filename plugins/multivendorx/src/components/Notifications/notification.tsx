@@ -61,27 +61,23 @@ const Notification = () => {
                 setTransactionCount(response.data || 0);
             })
     }, []);
+    const [tasks, setTasks] = useState<string[]>([]);
+    const [showInput, setShowInput] = useState(false);
+    const [task, setTask] = useState("");
 
-    const tasks = [
-        {
-            id: 1,
-            title: "Fix login bug",
-        },
-        {
-            id: 2,
-            title: "Update dashboard UI",
-        },
-        {
-            id: 3,
-            title: "Write unit tests",
-            priority: "Low",
-            dueDate: "2025-09-20",
-        },
-        {
-            id: 4,
-            title: "Deploy staging server",
-        },
-    ];
+    const handleAddClick = () => setShowInput(true);
+
+    const handleConfirm = () => {
+        if (!task.trim()) return;
+        setTasks([...tasks, task]);
+        setTask("");
+        setShowInput(false);
+    };
+
+    const handleCancel = () => {
+        setTask("");
+        setShowInput(false);
+    };
     return (
         <>
             <AdminBreadcrumbs
@@ -161,22 +157,43 @@ const Notification = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="task-manager">
+                        <div className="task-list-wrapper">
+                            <ul className="task-list">
+                                {tasks.map((t, idx) => (
+                                    <li key={idx} className="task-item">
+                                        <input type="checkbox" />
+                                        <span>{t}</span>
+                                        <i className="adminlib-delete delete-icon"></i>
+                                    </li>
+                                ))}
+                            </ul>
 
-                            {/* Task Table */}
-                            <table className="task-table">
-                                <tbody>
-                                    {tasks.map((task) => (
-                                        <tr
-                                            key={task.id}
-                                            className="task-row"
-                                            onClick={() => setShowDetails(task)}
-                                        >
-                                            <td>{task.title}</td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+                            {showInput && (
+                                <span className="add-mode">
+                                    <input
+                                        type="text"
+                                        value={task}
+                                        onChange={(e) => setTask(e.target.value)}
+                                        placeholder="Enter task"
+                                        className="basic-input"
+                                        autoFocus
+                                    />
+
+                                    <div className="buttons-wrapper">
+                                        <button className="admin-btn btn-red" onClick={handleCancel}>
+                                            <i className="adminlib-close"></i> Cancel
+                                        </button>
+                                        <button className="admin-btn btn-purple" onClick={handleConfirm}>
+                                            <i className="adminlib-plus-circle-o"></i> Add
+                                        </button>
+                                    </div>
+                                </span>
+                            )}
+                            {!showInput && (
+                                <button className="admin-btn btn-purple" onClick={handleAddClick}>
+                                    + Add Task
+                                </button>
+                            )}
                         </div>
                     </div>
 
