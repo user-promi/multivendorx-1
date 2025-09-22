@@ -55,9 +55,9 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
                         'capability' => ['read_products', 'edit_products', 'delete_products']
                     ),
                     array(
-                        'key'  => 'store-information',
-                        'name' => 'Store Information',
-                        'slug' => 'store-information',
+                        'key'  => 'store-address',
+                        'name' => 'Address',
+                        'slug' => 'store-address',
                         'icon'    => 'adminlib-cart',
                         'capability' => ['read_products', 'edit_products', 'upload_files']
                     ),
@@ -70,14 +70,14 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
                     ),                    
                     array(
                         'key'  => 'payout-configuration',
-                        'name' => 'Payout Configuration',
+                        'name' => 'Payout',
                         'slug' => 'payout-configuration',
                         'icon'    => 'adminlib-cart',
                         'capability' => ['read_products', 'edit_products', 'upload_files']
                     ),
                     array(
                         'key'  => 'shop-policies',
-                        'name' => 'Shop Policies',
+                        'name' => 'Policies',
                         'slug' => 'shop-policies',
                         'icon'    => 'adminlib-cart',
                         'capability' => ['read_products', 'edit_products', 'upload_files']
@@ -90,9 +90,9 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
                         'capability' => ['read_products', 'edit_products', 'upload_files']
                     ),
                     array(
-                        'key'  => 'additional-info',
-                        'name' => 'Additional Information',
-                        'slug' => 'additional-info',
+                        'key'  => 'seo_visibility',
+                        'name' => 'SEO & visibility',
+                        'slug' => 'seo_visibility',
                         'icon'    => 'adminlib-cart',
                         'capability' => ['read_products', 'edit_products', 'upload_files']
                     ),
