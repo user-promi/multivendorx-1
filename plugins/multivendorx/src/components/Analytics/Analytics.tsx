@@ -41,11 +41,46 @@ import RefundedOrders from './RefundedOrders';
 import StoreOrders from './StoreOrders';
 import RevenueOld from './RevenueOld';
 import RefundedOrderOld from './RefundedOrderOld';
+import axios from 'axios';
 
 const Analytics = () => {
-  const location = useLocation();
-  const hash = location.hash;
-  const isTabActive = hash.includes('tab=dashboard');
+
+  function requestOrders() {
+    axios({
+      method: "GET",
+      url: `${appLocalizer.apiUrl}/wc-analytics`,
+      headers: { "X-WP-Nonce": appLocalizer.nonce },
+    }).then(response => {
+      console.log("data->", response.data)
+    });
+
+    axios({
+      method: "GET",
+      url: `${appLocalizer.apiUrl}/wc/v3/reports`,
+      headers: { "X-WP-Nonce": appLocalizer.nonce },
+    })
+    .then(response => console.log(response.data))
+    .catch(error => console.error(error));
+
+    axios({
+      method: "GET",
+      url: `${appLocalizer.apiUrl}/wc-analytics/leaderboards/categories`,
+      headers: { "X-WP-Nonce": appLocalizer.nonce },
+      // params: {
+      //   per_page: 10, // limit categories
+      //   orderby: "sales", // sort by sales
+      //   order: "desc"
+      // }
+    })
+    .then(response => console.log(response.data))
+    .catch(error => console.error(error));
+    
+    
+  }
+
+  useEffect(() => {
+    requestOrders();
+  }, []);
 
   // Dummy chart data
   const data = [

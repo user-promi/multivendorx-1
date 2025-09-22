@@ -179,6 +179,16 @@ class FrontendScripts {
 					'deps'    => array( 'jquery', 'jquery-blockui', 'wp-element', 'wp-i18n', 'react-jsx-runtime' ),
 					'version' => $version,
 				),
+                'multivendorx-store-products-script' => array(
+					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'js/' . MULTIVENDORX_PLUGIN_SLUG . '-store-products.min.js',
+					'deps'    => array( 'jquery', 'jquery-blockui', 'wp-element', 'wp-i18n', 'react-jsx-runtime' ),
+					'version' => $version,
+				),
+                'multivendorx-product-classify-script' => array(
+					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'js/' . MULTIVENDORX_PLUGIN_SLUG . '-product-classify.min.js',
+					'deps'    => array( 'jquery', 'jquery-blockui', 'wp-element', 'wp-i18n', 'react-jsx-runtime' ),
+					'version' => $version,
+				),
                 'multivendorx-qna-frontend-script' => array(
 					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'modules/QuestionsAnswers/js/' . MULTIVENDORX_PLUGIN_SLUG . '-frontend.min.js',
 					'deps'    => array( 'jquery' ),
@@ -329,7 +339,8 @@ class FrontendScripts {
                 'review-management',
                 'order-actions-refunds',
                 'advertising',
-                'product-preferencess'
+                'product-preferencess',
+                'product-store-category-control'
             )
 		);
 
@@ -443,6 +454,16 @@ class FrontendScripts {
 					'object_name' => 'dashboard',
 					'data'        => array(
 						'ajaxurl'     => admin_url( 'admin-ajax.php' ),
+					),
+				),
+                'multivendorx-product-classify-script' => array(
+					'object_name' => 'mvx_product_classify',
+					'data'        => array(
+						'ajaxurl'     => admin_url( 'admin-ajax.php' ),
+                        'initial_graphic_url' => MultiVendorX()->plugin_url.'assets/images/select-category-graphic.png',
+                        'i18n' => array(
+                            'select_cat_list' => __( 'Select a category from the list', 'multivendorx' )
+                        )
 					),
 				),
                 'multivendorx-qna-frontend-script' => array(

@@ -406,4 +406,53 @@ class StoreUtil {
         return $policies;
     }
 
+    // public static function get_endpoint_url($page = '', $sub = '') {
+    //     if (get_option('permalink_structure')) {
+    //         $url = home_url('/dashboard');
+    //         if ($page && $page !== 'dashboard') {
+    //             $url .= '/' . $page;
+    //         }
+    //         if ($sub) {
+    //             $url .= '/' . $sub;
+    //         }
+    //     } else {
+    //         $url = add_query_arg(array('dashboard' => '1'), home_url('/'));
+    //         if ($page) {
+    //             $url = add_query_arg('tab', $page, $url);
+    //         }
+
+    //         if ($sub) {
+    //             $url = add_query_arg('subtab', $sub, $url);
+    //         }
+    //     }
+    //     return esc_url($url);
+    // }
+
+    public static function get_endpoint_url($page = '', $sub = '', $value = '') {
+        if (get_option('permalink_structure')) {
+            $url = home_url('/dashboard');
+            if ($page && $page !== 'dashboard') {
+                $url .= '/' . $page;
+            }
+            if ($sub) {
+                $url .= '/' . $sub;
+            }
+            if ($value) {
+                $url .= '/' . $value;
+            }
+        } else {
+            $url = add_query_arg(array('dashboard' => '1'), home_url('/'));
+            if ($page) {
+                $url = add_query_arg('tab', $page, $url);
+            }
+            if ($sub) {
+                $url = add_query_arg('subtab', $sub, $url);
+            }
+            if ($value) {
+                $url = add_query_arg('value', $value, $url);
+            }
+        }
+        return esc_url($url);
+    }
+
 }

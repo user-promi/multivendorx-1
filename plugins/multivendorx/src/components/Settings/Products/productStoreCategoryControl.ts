@@ -20,7 +20,7 @@ export default {
     modal: [
            
         {
-            key: 'sku_generator_attribute_spaces',
+            key: 'category_pyramid_guide',
             type: 'setting-toggle',
             label: __(
                 'Category selection method',
@@ -31,20 +31,20 @@ export default {
             ),
             options: [
                 {
-                    key: 'no',
+                    key: 'yes',
                     label: __(
                         'Guided sequential selection',
                         'multivendorx'
                     ),
-                    value: 'no',
+                    value: 'yes',
                 },
                 {
-                    key: 'underscore',
+                    key: 'no',
                     label: __(
                         'Free multi-selection',
                         'multivendorx'
                     ),
-                    value: 'underscore',
+                    value: 'no',
                 },
             ],
         },      

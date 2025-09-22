@@ -1,167 +1,117 @@
-<div class="content-wrapper">
-    <div class="page-title-wrapper">
-        <div class="page-title">
-            <div class="title">Edit Product</div>
-            <div class="breadcrumbs">
-                <span><a href="#">Products</a></span>
-                <span> / <a href="">Edit Product</a></span>
-            </div>
-        </div>
+<?php
+/*
+ * The template for displaying vendor add product
+ * Override this template by copying it to yourtheme/MultiVendorX/vendor-dashboard/product-manager/add-product.php
+ *
+ * @author 		MultiVendorX
+ * @package MultiVendorX/Templates
+ * @version   3.3.0
+ */
 
-        <div class="buttons-wrapper">
-            <div class="admin-btn btn-purple">
-                Save draft
-            </div>
-            <div class="admin-btn btn-purple">
-                Publish product
-            </div>
+use MultiVendorX\Store\StoreUtil;
+
+$self = $args['self'];
+
+$current_vendor_id = apply_filters('mvx_current_loggedin_vendor_id', get_current_user_id());
+
+// If vendor does not have product submission cap then show message
+if (is_user_logged_in() && !current_user_can('edit_products')) {
+    ?>
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <?php _e('You do not have enough permission to submit a new product. Please contact site administrator.', 'multivendorx'); ?>
         </div>
     </div>
+    <?php
+    return;
+}
 
-    <div class="container-wrapper">
-        <div class="card-wrapper width-65">
-            <div class="card-content">
-                <div class="card-title">Product information</div>
-                <div class="form-group-wrapper">
-                    <div class="form-group"><label for="product-name">Name</label>
-                        <div class=" "><input class="basic-input " type="text" name="name" value=""></div>
+?>
+<div class="col-md-12 add-product-outer-wrapper">
+    <div class="select-product-cat-wrapper">
+        <?php $is_new_listing = isset($_REQUEST['new_listing']) ? true : false;
+        $is_cats_hier = isset($_REQUEST['cats_hier']) ? true : false;
+        if( ( $is_new_listing && $is_cats_hier ) || MultiVendorX()->modules->is_active('spmv') == false ) {
+        ?> 
+        <!-- New product list categories hierarchically -->
+        <div class="select-cat-step-wrapper">
+            <div class="cat-step1" >
+                <div class="panel panel-default pannel-outer-heading mt-0">
+                    <div class="panel-heading d-flex">
+                        <h1><span class="primary-color"><span><?php _e( 'Step 1 of', 'multivendorx' );?></span> <?php _e( '2:', 'multivendorx' );?></span> <?php _e('Select a product category', 'multivendorx'); ?></h1>
+                        <h3><?php _e('Once a category is assigned to a product, it cannot be altered.', 'multivendorx'); ?></h3>
                     </div>
-                </div>
-                <div class="form-group-wrapper">
-                    <div class="form-group"><label for="product-name">Slug</label>
-                        <div class=" "><input class="basic-input " type="text" name="slug" value=""></div>
-                    </div>
-                </div>
-            </div>
-            <div class="card-content">
-                <div class="card-title">Product short description</div>
-                <div class="form-group-wrapper">
-                    <div class="form-group"><textarea class="textarea-input" name="description" rows="4"
-                            cols="50"></textarea></div>
-                </div>
-            </div>
-            <div class="card-content">
-                <div class="card-title">Product description</div>
-                <div class="form-group-wrapper">
-                    <div class="form-group"><textarea class="textarea-input" name="description" rows="4"
-                            cols="50"></textarea></div>
-                </div>
-            </div>
-            <div class="card-content">
-                <div class="right-form-wrapper">
-                    <div class="form-group">
-                        <label for="product-type">Product Type: </label>
-                        <select class="basic-select" id="product-type" name="product-type">
-                            <option value="simple" selected="selected">Simple product</option>
-                            <option value="grouped">Grouped product</option>
-                            <option value="external">External/Affiliate product</option>
-                            <option value="variable">Variable product</option>
-                            <option value="booking">Bookable product</option>
-                            <option value="appointment">Appointable product</option>
-                            <option value="subscription">Simple subscription</option>
-                            <option value="variable-subscription">Variable subscription</option>
-                            <option value="accommodation-booking">Accommodation product</option>
-                            <option value="bundle">Product bundle</option>
-                            <option value="auction">Auction</option>
-                            <option value="redq_rental">Rental Product</option>
-                            <option value="gift-card">Gift Card</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- Product Type tabs start -->
-                <div class="content">
-                    <div class="tab-titles">
-                        <div class="title active" id="general-tab">
-                            <h2>General</h2>
-                        </div>
-                        <div class="title" id="inventory-tab">
-                            <h2>Inventory</h2>
-                        </div>
-                        <div class="title" id="shipping-tab">
-                            <h2>Shipping</h2>
-                        </div>
-                        <div class="title" id="linked-products-tab">
-                            <h2>Linked Products</h2>
-                        </div>
-                    </div>
-
-                    <div class="tab-content">
-                        <div class="tab-panel" id="general">
-                            <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. In distinctio velit sit qui veritatis necessitatibus?.</p>
-                        </div>
-                        <div class="tab-panel" id="inventory" style="display:none;">
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat voluptatibus quidem blanditiis ut facere harum cumque. Tempore, blanditiis molestias, consequuntur reprehenderit laboriosam dolore dolorum, omnis numquam corporis iusto accusantium provident cupiditate praesentium. Et, reiciendis. Reiciendis.</p>
-                        </div>
-                        <div class="tab-panel" id="shipping" style="display:none;">
-                            <p>Lorem ipsum dolor sit amet.</p>
-                        </div>
-                        <div class="tab-panel" id="linked-products" style="display:none;">
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis animi totam incidunt numquam iusto est?</p>
-                        </div>
-                    </div>
-
-                </div> <!-- Product Type tabs start -->
-
-            </div>
-        </div>
-
-        <!-- right section start -->
-        <div class="card-wrapper width-35">
-            <div class="card-content">
-                <div class="card-title">Upload Image</div>
-                <div class="form-group-wrapper">
-                    <div class="form-group"><label for="product-name">Feature image</label>
-                        <div class="file-uploader   "
-                            style="background-image: url(&quot;http://localhost:8889/wp-content/plugins/multivendorx/release/assets/js/../images/default5b4e5f67eaa946fd23dc.png&quot;);">
-                            <i class="adminlib-cloud-upload"></i><input class="form-input" type="hidden"
-                                name="image"><span class="title">Drag and drop your file
-                                here</span><span>Or</span><button class="admin-btn btn-purple admin-btn"
-                                type="button">Upload Image</button>
-                            <div class="overlay">
-                                <div class="button-wrapper"><button class="admin-btn btn-red"
-                                        type="button">Remove</button><button class="admin-btn btn-purple"
-                                        type="button">Replace</button></div>
+                    <div class="panel-body panel-content-padding form-horizontal breadcrumb-panel">
+                        <div class="product-search-wrapper categories-search-wrapper">
+                            <div class="form-text"><?php _e('Search category', 'multivendorx'); ?></div>
+                            <div class="form-input">
+                                <input id="search-categories-keyword" type="text" placeholder="<?php esc_attr_e('Example: tshirt, music, album etc...', 'multivendorx'); ?>">
+                                <ul id="searched-categories-results" class="list-group">
+                                    
+                                </ul>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="form-group-wrapper">
-                    <div class="form-group"><label for="product-name">Product gallery</label>
-                        <div class="file-uploader   "
-                            style="background-image: url(&quot;http://localhost:8889/wp-content/plugins/multivendorx/release/assets/js/../images/banner-placeholder0fce5a9d0b5ce3a49dba.jpg&quot;);">
-                            <i class="adminlib-cloud-upload"></i><input class="form-input" type="hidden"
-                                name="banner"><span class="title">Drag and drop your file
-                                here</span><span>Or</span><button class="admin-btn btn-purple admin-btn"
-                                type="button">Upload Image</button>
-                            <div class="overlay">
-                                <div class="button-wrapper"><button class="admin-btn btn-red"
-                                        type="button">Remove</button><button class="admin-btn btn-purple"
-                                        type="button">Replace</button></div>
+                <div class="panel panel-default pannel-outer-heading mvx-categories-level-panel has-scroller"> 
+                        <div class="cat-column-scroller cat-left-scroller"><i class="mvx-font ico-left-arrow-icon"></i></div>
+                    <div class="form-horizontal cat-list-holder">
+                        <div class="mvx-product-categories-wrap cat-column-wrapper">
+                            <div class="mvx-product-cat-level 1-level-cat cat-column" data-level="1"  data-mcs-theme="dark">
+                                <ul class="mvx-product-categories 1-level" data-cat-level="1">
+                                    <?php echo $self->mvx_list_categories( apply_filters( 'mvx_vendor_product_classify_first_level_categories', array(
+                                    'taxonomy' => 'product_cat', 
+                                    'hide_empty' => false, 
+                                    'html_list' => true,
+                                    'cat_link'  => 'javascript:void(0)',
+                                    ) ) ); ?>
+                                </ul>
                             </div>
                         </div>
                     </div>
+                        <div class="cat-column-scroller cat-right-scroller"><i class="mvx-font ico-right-arrow-icon"></i></div>
                 </div>
             </div>
-            <div class="card-content">
-                <div class="card-title">Product categories</div>
-                <div class="form-group-wrapper">
+        </div>
+        <?php }else{ ?>
+        <!-- List a product by name or gtin -->
+        <div class="cat-intro">
+            <div class="panel panel-default pannel-outer-heading mt-0"> 
+                <div class="panel-body panel-content-padding form-horizontal text-center">
+                    <img src="<?php echo MultiVendorX()->plugin_url.'assets/images/add-product-graphic.png'; ?>" alt="">
+                    <h1 class="heading-underline"><?php _e('List a New Product', 'multivendorx'); ?></h1>
+                    <div class="serach-product-cat-wrapper">
+                        <h2><?php _e('Search from our existing Product Catalog', 'multivendorx'); ?></h2>
+                        <form class="search-pro-by-name-gtin">
+                            <input type="text" placeholder="<?php esc_attr_e('Product name, UPC, ISBN ...', 'multivendorx'); ?>" class="form-control inline-input search-product-name-gtin-keyword" required>
+                            <button type="button" class="btn btn-default search-product-name-gtin-btn"><?php echo strtoupper(__('Search', 'multivendorx')); ?></button> 
+                        </form>
+                        <br>
+                        <button class="btn btn-default view-all-products-btn"><?php esc_html_e('View All Products', 'multivendorx'); ?></button>
+                        <?php 
 
-                </div>
-            </div>
-            <div class="card-content">
-                <div class="card-title">Product tags</div>
-                <div class="form-group-wrapper">
+                         if (get_option('permalink_structure')) {
+                            $category_url = '?new_listing=1&cats_hier=1';
+                        } else {
+                            $category_url = StoreUtil::get_endpoint_url('products', 'edit-product' ) . '&new_listing=1&cats_hier=1';
+                        }
 
+                        
+                        $url = ( MultiVendorX()->setting->get_setting('category_pyramid_guide') == 'no' ) ? esc_url(StoreUtil::get_endpoint_url( 'products', 'edit-product')) : $category_url; ?>
+                        <p><?php _e('Not in the catalog?', 'multivendorx'); ?> <a href="<?php echo $url; ?>" class="cat-step-btn"><?php _e('Create a new product', 'multivendorx'); ?> <i class="mvx-font ico-right-arrow-icon"></i></a></p>
+                    </div>
                 </div>
             </div>
-            <div class="card-content">
-                <div class="card-title">Brands</div>
-                <div class="form-group-wrapper">
-
-                </div>
+            <div class="panel panel-custom mt-15 product-search-panel searched-products-name-gtin-panel">
+                <div class="panel-heading d-flex"><?php _e('Your search results:', 'multivendorx'); ?></div>
+                <div class="panel-body search-result-holder p-0 searched-result-products-name-gtin"></div>
             </div>
-        </div> <!-- right section end -->
+            <div id="result-view-all-products-name"></div>          
+        </div>
+        <!-- End List a product by name or gtin -->
+        <?php } ?>
+        <div class="clearfix"></div>
     </div>
 </div>
-</div>
+<?php
+do_action('mvx_frontend_product_manager_template');

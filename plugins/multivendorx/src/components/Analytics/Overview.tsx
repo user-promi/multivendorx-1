@@ -1,5 +1,5 @@
 import { ColumnDef } from "@tanstack/react-table";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { __ } from '@wordpress/i18n';
 import {
   ResponsiveContainer,
@@ -17,6 +17,7 @@ import {
   Cell,
 } from "recharts";
 import { Table, TableCell } from "zyra";
+import axios from "axios";
 
 type Stat = {
   id: string | number;
@@ -36,29 +37,7 @@ type OverviewProps = {
   pieData: { name: string; value: number }[];
   COLORS?: string[];
 };
-// const products: Product[] = [
-//   {
-//     id: 1,
-//     title: "Citrus Bloom",
-//     sold: 3,
-//     price: "$380",
-//     image: "https://demos.pixinvent.com/vuexy-html-admin-template/assets/img/products/headphones.png",
-//   },
-//   {
-//     id: 2,
-//     title: "Leather Backpack",
-//     sold: 5,
-//     price: "$120",
-//     image: "https://demos.pixinvent.com/vuexy-html-admin-template/assets/img/products/apple-watch.png",
-//   },
-//   {
-//     id: 3,
-//     title: "Smart Watch",
-//     sold: 2,
-//     price: "$220",
-//     image: "https://demos.pixinvent.com/vuexy-html-admin-template/assets/img/products/play-station.png",
-//   },
-// ];
+
 const products: Product[] = [
   {
     id: 1,
@@ -201,6 +180,27 @@ const Overview: React.FC<OverviewProps> = ({
   pieData,
   COLORS = ["#5007aa", "#00c49f", "#ff7300", "#d400ffff", "#004ec4ff"],
 }) => {
+  const [topSellingProducts, setTopSellingProducts] = useState<any[]>([]);
+
+  function requestTopSellingProducts() {
+    axios({
+      method: "GET",
+      url: `${appLocalizer.apiUrl}/wc-analytics/products`,
+      headers: { "X-WP-Nonce": appLocalizer.nonce },
+      params: {
+        orderby: "sales",
+        order: "desc",
+        per_page: 5,
+      },
+    })
+      .then((response) => {
+        setTopSellingProducts(response.data);
+      })
+  }
+  useEffect(() => {
+    requestTopSellingProducts();
+  }, []);
+
   return (
     <div className="dashboard-overview">
       {/* Top Stats */}
@@ -341,37 +341,47 @@ const Overview: React.FC<OverviewProps> = ({
               </div>
             </div>
           </div>
+
           <div className="top-items">
-            <div className="items">
-              <div className="left-side">
-                <div className="icon">
-                  <i className="adminlib-pro-tag admin-icon red"></i>
+            {topSellingProducts && topSellingProducts.length > 0 ? (
+              topSellingProducts.map((product, index) => (
+                <div className="items" key={product.id}>
+                  <div className="left-side">
+                    <div className="icon">
+                      <i className={`adminlib-pro-tag admin-icon ${index % 2 === 0 ? "red" : "green"}`}></i>
+                    </div>
+                    <div className="details">
+                      <div className="item-title">
+                        {/* Clickable product name */}
+                        <a
+                          href={product.permalink || `/product/${product.slug}/`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{ textDecoration: "underline", color: "#0073aa" }}
+                        >
+                          {product.name}
+                        </a>
+                      </div>
+                      <div className="sub-text">
+                        {product.total_sales ? `${product.total_sales} orders` : "0 orders"}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="right-side">
+                    <div className="price">
+                      {product.price
+                        ? `$${(parseFloat(product.price) * product.total_sales).toFixed(2)}`
+                        : "$0"}
+                    </div>
+                  </div>
                 </div>
-                <div className="details">
-                  <div className="item-title">Lather & Loom</div>
-                  <div className="sub-text">3 orders</div>
-                </div>
-              </div>
-              <div className="right-side">
-                <div className="price">$380</div>
-              </div>
-            </div>
-            <div className="items">
-              <div className="left-side">
-                <div className="icon">
-                  <i className="adminlib-pro-tag admin-icon green"></i>
-                </div>
-                <div className="details">
-                  <div className="item-title">Lather & Loom</div>
-                  <div className="sub-text">3 orders</div>
-                </div>
-              </div>
-              <div className="right-side">
-                <div className="price">$380</div>
-              </div>
-            </div>
+              ))
+            ) : (
+              <div>No top-selling products available.</div>
+            )}
           </div>
         </div>
+
         <div className="column">
           <div className="card-header">
             <div className="left">
