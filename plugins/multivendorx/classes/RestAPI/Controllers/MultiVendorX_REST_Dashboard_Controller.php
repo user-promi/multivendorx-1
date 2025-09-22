@@ -90,9 +90,9 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
                         'capability' => ['read_products', 'edit_products', 'upload_files']
                     ),
                     array(
-                        'key'  => 'additional-info',
-                        'name' => 'Additional Information',
-                        'slug' => 'additional-info',
+                        'key'  => 'seo_visibility',
+                        'name' => 'SEO & visibility',
+                        'slug' => 'seo_visibility',
                         'icon'    => 'adminlib-cart',
                         'capability' => ['read_products', 'edit_products', 'upload_files']
                     ),
