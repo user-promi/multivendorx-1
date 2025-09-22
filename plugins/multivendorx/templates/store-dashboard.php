@@ -2,6 +2,7 @@
 
 use MultiVendorX\Store\StoreUtil;
 use MultiVendorX\Store\Store;
+use MultiVendorX\Store\Products;
 
 $all_endpoints = MultiVendorX()->rest->dashboard->all_endpoints();
 $current_user = wp_get_current_user();
@@ -25,29 +26,6 @@ if (get_option('permalink_structure')) {
     $current_sub = filter_input(INPUT_GET, 'subtab', FILTER_DEFAULT);
 }
 
-function get_endpoint_url($page = '', $sub = '')
-{
-    if (get_option('permalink_structure')) {
-        $url = home_url('/dashboard');
-        if ($page && $page !== 'dashboard') {
-            $url .= '/' . $page;
-        }
-        if ($sub) {
-            $url .= '/' . $sub;
-        }
-    } else {
-        $url = add_query_arg(array('dashboard' => '1'), home_url('/'));
-        if ($page) {
-            $url = add_query_arg('tab', $page, $url);
-        }
-
-        if ($sub) {
-            $url = add_query_arg('subtab', $sub, $url);
-        }
-    }
-    return esc_url($url);
-}
-
 if (empty($current_page)) {
     $current_page = 'dashboard';
 }
@@ -57,7 +35,7 @@ if ($current_page && empty($current_sub)) {
     foreach ($all_endpoints as $section) {
         if ($section['slug'] === $current_page && !empty($section['submenu'])) {
             $first_sub = $section['submenu'][0]['slug'];
-            wp_safe_redirect(get_endpoint_url($current_page, $first_sub));
+            wp_safe_redirect(StoreUtil::get_endpoint_url($current_page, $first_sub));
             exit;
         }
     }
@@ -90,7 +68,7 @@ if ($current_page && empty($current_sub)) {
                                 <i class="admin-arrow adminlib-pagination-right-arrow"></i>
                             </a>
                         <?php else: ?>
-                            <a class="tab" href="<?php echo esc_url(get_endpoint_url($section['slug'])); ?>">
+                            <a class="tab" href="<?php echo esc_url(StoreUtil::get_endpoint_url($section['slug'])); ?>">
                                 <i class="<?php echo esc_html($section['icon']); ?>"></i>
                                 <?php echo esc_html($section['name']); ?>
                             </a>
@@ -101,7 +79,7 @@ if ($current_page && empty($current_sub)) {
                                 <?php foreach ($section['submenu'] as $submenu): ?>
                                     <li
                                         class="<?php echo ($current_page === $section['slug'] && $current_sub === $submenu['slug']) ? 'active' : ''; ?>">
-                                        <a href="<?php echo esc_url(get_endpoint_url($section['slug'], $submenu['slug'])); ?>">
+                                        <a href="<?php echo esc_url(StoreUtil::get_endpoint_url($section['slug'], $submenu['slug'])); ?>">
                                             <?php echo esc_html($submenu['name']); ?>
                                         </a>
                                     </li>
@@ -283,7 +261,11 @@ if ($current_page && empty($current_sub)) {
                         if ($allowed) {
                             $template_file = plugin_dir_path(__FILE__) . $div_id . '.php';
                             if (file_exists($template_file)) {
-                                MultiVendorX()->util->get_template('add-product.php');
+                                if ($div_id == 'edit-product') {
+
+                                    $edit_product = new Products();
+                                    $edit_product->output();
+                                }
                             } else {
                                 ?>
                                 <div class="content-wrapper" id="<?php echo esc_attr($div_id) ?>">     
