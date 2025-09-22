@@ -315,7 +315,7 @@ const payments: Payment[] = [
                 <div className="title">
                   Quick Link
                 </div>
-                <div className="des">Lorem ipsum dolor sit amet.</div>
+                <div className="des">Save time by accessing the areas that impact daily operations the most.</div>
               </div>
               <div className="right">
                 <i className="adminlib-more-vertical"></i>
@@ -334,7 +334,7 @@ const payments: Payment[] = [
                 <div className="title">
                   Sales by Locations
                 </div>
-                <div className="des">Lorem ipsum dolor sit amet.</div>
+                <div className="des">Discover where your marketplace performs best and uncover untapped regions to grow your reach.</div>
               </div>
               <div className="right">
                 <i className="adminlib-more-vertical"></i>
@@ -374,7 +374,7 @@ const payments: Payment[] = [
                 <div className="title">
                   Top Sellers
                 </div>
-                <div className="des">Lorem ipsum dolor sit amet.</div>
+                <div className="des">Track the vendors driving the most revenue so you can reward performance and strengthen partnerships.</div>
               </div>
               <div className="right">
                 <i className="adminlib-more-vertical"></i>
@@ -389,7 +389,7 @@ const payments: Payment[] = [
                   <div className="title">
                     System Overview
                   </div>
-                  <div className="des">Lorem ipsum dolor sit amet.</div>
+                  <div className="des">Get an at-a-glance health check of your marketplace.</div>
                 </div>
                 <div className="right">
                   <i className="adminlib-more-vertical"></i>
@@ -417,7 +417,7 @@ const payments: Payment[] = [
                 <div className="title">
                   Revenue Trend (Last 7 Months)
                 </div>
-                <div className="des">Lorem ipsum dolor sit amet.</div>
+                <div className="des">Monitor growth patterns over time to plan campaigns, forecast earnings, and adjust strategies.</div>
               </div>
               <div className="right">
                 <i className="adminlib-more-vertical"></i>
@@ -439,7 +439,7 @@ const payments: Payment[] = [
                 <div className="title">
                   Best Selling Products
                 </div>
-                <div className="des">Lorem ipsum dolor sit amet.</div>
+                <div className="des">See which products dominate sales and use the insights to guide promotions or vendor recommendations.</div>
               </div>
               <div className="right">
                 <i className="adminlib-more-vertical"></i>
@@ -474,7 +474,7 @@ const payments: Payment[] = [
                 <div className="title">
                   This is what you get
                 </div>
-                <div className="des">Lorem ipsum dolor sit amet.</div>
+                <div className="des">Essential steps to configure and launch your marketplace.</div>
               </div>
               <div className="right">
                 <i className="adminlib-more-vertical"></i>
