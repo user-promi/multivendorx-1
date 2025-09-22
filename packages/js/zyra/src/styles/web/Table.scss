@@ -531,6 +531,46 @@
   }
 }
 
+.action-icons:hover {
+  .action-dropdown {
+    display: block;
+    left: -6rem;
+
+    ul {
+      display: flex;
+      gap: 0.125rem;
+      margin: 0;
+
+      li {
+        position: relative;
+        display: none;
+
+        span {
+          position: absolute;
+          top: -1.125rem;
+          left: -100%;
+          width: 6rem;
+          text-align: center;
+          display: none;
+          transition: all 0.4s ease;
+        }
+
+        &:hover {
+          span {
+            display: block;
+          }
+        }
+
+        &.hover {
+          li {
+            display: block;
+          }
+        }
+      }
+    }
+  }
+}
+
 .no-data {
   padding: 5rem;
   background: #fff;
@@ -541,11 +581,17 @@
   position: relative;
 }
 
+// .date-picker-section-wrapper {
+//   visibility: visible;
+//   position: fixed;
+//   inset: auto auto 0px 0px;
+//   margin: 0px;
+//   transform: translate(620px, -180px);
+//   border: $border-light-small;
+// }
 .date-picker-section-wrapper {
   position: relative;
-  input{
-    width: 14rem;
-  }
+  width: 14rem;
 }
 
 .date-picker {
