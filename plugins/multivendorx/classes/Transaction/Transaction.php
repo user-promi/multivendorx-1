@@ -178,4 +178,83 @@ class Transaction {
         );
         return $transaction ?? [];
     }
+
+    public static function get_transaction_information( $args ) {
+        global $wpdb;
+    
+        $where = array();
+    
+        // Filter by id(s)
+        if ( isset( $args['id'] ) ) {
+            $ids     = is_array( $args['id'] ) ? $args['id'] : array( $args['id'] );
+            $ids     = implode( ',', array_map( 'intval', $ids ) );
+            $where[] = "id IN ($ids)";
+        }
+    
+        // Filter by store_id
+        if ( isset( $args['store_id'] ) ) {
+            $where[] = ' ( store_id = ' . esc_sql( intval( $args['store_id'] ) ) . ' ) ';
+        }
+    
+        // Filter by order_id
+        if ( isset( $args['order_id'] ) ) {
+            $where[] = ' ( order_id = ' . esc_sql( intval( $args['order_id'] ) ) . ' ) ';
+        }
+    
+        // Filter by commission_id
+        if ( isset( $args['commission_id'] ) ) {
+            $where[] = ' ( commission_id = ' . esc_sql( intval( $args['commission_id'] ) ) . ' ) ';
+        }
+    
+        // Filter by transaction_type
+        if ( isset( $args['transaction_type'] ) ) {
+            $where[] = " ( transaction_type = '" . esc_sql( $args['transaction_type'] ) . "' ) ";
+        }
+    
+        // Filter by status
+        if ( isset( $args['status'] ) ) {
+            $where[] = " ( status = '" . esc_sql( $args['status'] ) . "' ) ";
+        }
+    
+        // Filter by date range (available_at)
+        if ( isset( $args['start_date'] ) ) {
+            $where[] = ' ( available_at >= ' . esc_sql( $args['start_date'] ) . ' ) ';
+        }
+    
+        if ( isset( $args['end_date'] ) ) {
+            $where[] = ' ( available_at <= ' . esc_sql( $args['end_date'] ) . ' ) ';
+        }
+    
+        $table = $wpdb->prefix . Utill::TABLES['transaction'];
+    
+        // Count query
+        if ( isset( $args['count'] ) ) {
+            $query = "SELECT COUNT(*) FROM $table";
+        } else {
+            $query = "SELECT * FROM $table";
+        }
+    
+        // Add WHERE conditions
+        if ( ! empty( $where ) ) {
+            $condition = $args['condition'] ?? ' AND ';
+            $query    .= ' WHERE ' . implode( $condition, $where );
+        }
+    
+        // Add limit & offset
+        if ( isset( $args['limit'] ) && isset( $args['offset'] ) ) {
+            $limit  = esc_sql( intval( $args['limit'] ) );
+            $offset = esc_sql( intval( $args['offset'] ) );
+            $query .= " LIMIT $limit OFFSET $offset";
+        }
+    
+        // Execute query
+        if ( isset( $args['count'] ) ) {
+            $results = $wpdb->get_var( $query ); // phpcs:ignore
+            return $results ?? 0;
+        } else {
+            $results = $wpdb->get_results( $query, ARRAY_A ); // phpcs:ignore
+            return $results ?? array();
+        }
+    }
+    
 }

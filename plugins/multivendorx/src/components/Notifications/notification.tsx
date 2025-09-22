@@ -51,6 +51,15 @@ const Notification = () => {
             .then((response) => {
                 setStoreCount(response.data || 0);
             })
+        axios({
+            method: 'GET',
+            url: getApiLink(appLocalizer, 'transaction'),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            params: { count: true, status: 'Pending' },
+        })
+            .then((response) => {
+                setTransactionCount(response.data || 0);
+            })
     }, []);
 
     const tasks = [
