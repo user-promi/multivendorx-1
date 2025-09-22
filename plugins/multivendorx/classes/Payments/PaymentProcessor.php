@@ -165,7 +165,9 @@ class PaymentProcessor {
     //         $data,
     //         $format
     //     );
-        
+
+            // $transaction_id = $wpdb->insert_id;
+            // do_action('multivendorx_additional_table_entry', $transaction_id, $commission, $order);
     // }
 
     public function cod_order_process($order_id, $old_status, $new_status, $order) {
