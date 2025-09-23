@@ -349,7 +349,6 @@ const Table: React.FC<TableProps> = ({
     onRowClick,
     totalCounts = 0
 }) => {
-    console.log(pagination);
     const [loading, setLoading] = useState<boolean>(false);
     const [filterData, setFilterData] = useState<Record<string, any>>(
         {}
@@ -778,7 +777,6 @@ const Table: React.FC<TableProps> = ({
                                     </div>
                                 )}
                             </>
-
                         )}
                     </div>
                     {successMsg && (
