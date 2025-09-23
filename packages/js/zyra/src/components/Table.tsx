@@ -324,7 +324,7 @@ interface TableProps {
     expandElement?: Record<string, boolean>;
     expandedRows?: Record<string, boolean>;
     onRowClick?: (rowData: Record<string, any>) => void;
-    totalRows?: number
+    totalCounts?: number
 }
 
 const Table: React.FC<TableProps> = ({
@@ -347,7 +347,7 @@ const Table: React.FC<TableProps> = ({
     expandElement,
     expandedRows,
     onRowClick,
-    totalRows = 0
+    totalCounts = 0
 }) => {
     console.log(pagination);
     const [loading, setLoading] = useState<boolean>(false);
@@ -460,7 +460,7 @@ const Table: React.FC<TableProps> = ({
     });
     const typeCountActive = filterData.typeCount || 'all';
     const { pageIndex, pageSize } = table.getState().pagination;
-const totalRows = flattenedData.length;
+    const totalRows = flattenedData.length;
     const start = totalRows === 0 ? 0 : pageIndex * pageSize + 1;
     const end = totalRows === 0 ? 0 : Math.min(start + pageSize - 1, totalRows);
     return (
@@ -626,10 +626,7 @@ const totalRows = flattenedData.length;
                             { /* Pagination Controls */}
                             <div className="table-pagination">
                                 <div className="pagination-number-wrapper">
-                                    {`Showing ${pagination.pageIndex * pagination.pageSize + 1} to ${Math.min(
-                                        (pagination.pageIndex + 1) * pagination.pageSize,
-                                        totalRows
-                                    )} of ${totalRows} entries`}
+
                                     Rows per page:
                                     <select
                                         className='basic-select'
@@ -648,6 +645,11 @@ const totalRows = flattenedData.length;
                                             </option>
                                         ))}
                                     </select>
+                                    
+                                    {`Showing ${pagination.pageIndex * pagination.pageSize + 1} to ${Math.min(
+                                        (pagination.pageIndex + 1) * pagination.pageSize,
+                                        totalCounts
+                                    )} of ${totalCounts} entries`}
                                 </div>
                                 <div className="pagination-arrow">
                                     <span
