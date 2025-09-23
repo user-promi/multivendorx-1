@@ -89,6 +89,29 @@ const Commission: React.FC = () => {
                 setError(__('Failed to load total rows', 'multivendorx'));
             });
     }, []);
+    const handleSingleAction = (action: string, commissionId: number) => {
+        if (action === 'delete_commission') {
+            // Confirm before deleting
+            if (!window.confirm(__('Are you sure you want to delete this commission?', 'multivendorx'))) {
+                return;
+            }
+
+            axios({
+                method: 'DELETE',
+                url: getApiLink(appLocalizer, `commission/${commissionId}`),
+                headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            })
+                .then(() => {
+                    // Refresh the table after deletion
+                    requestData(pagination.pageSize, pagination.pageIndex + 1);
+                })
+                .catch((err) => {
+                    console.error('Failed to delete commission', err);
+                    setModalDetails(__('Failed to delete commission', 'multivendorx'));
+                    setOpenModal(true);
+                });
+        }
+    };
 
     useEffect(() => {
         const currentPage = pagination.pageIndex + 1;
@@ -257,34 +280,32 @@ const Commission: React.FC = () => {
         {
             header: __('Action', 'multivendorx'),
             cell: ({ row }) => (
-                <TableCell title="Action">
-                    <div className="action-section">
-                        <div className="action-icons">
-                            <i className="adminlib-more-vertical" onClick={() => toggleDropdown(row.original.id)}></i>
-                            <div className={`action-dropdown ${showDropdown === row.original.id ? 'show' : ''}`}>
-                                <ul>
-                                    <li
-                                        onClick={() => {
-                                            setSelectedCommissionId(row.original.id ?? null);
-                                            setViewCommission(true);
-                                        }}
-                                    >
-                                        <i className="adminlib-eye"></i> {__('View', 'multivendorx')}
-                                    </li>
-                                    <li
-                                        onClick={() =>
-                                            (window.location.href = `?page=multivendorx#&tab=stores&edit/${row.original.id}`)
-                                        }
-                                    >
-                                        <i className="adminlib-create"></i> {__('Delete', 'multivendorx')}
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </TableCell>
+                <TableCell
+                    type="action-dropdown"
+                    rowData={row.original}
+                    header={{
+                        actions: [
+                            {
+                                label: __('View', 'multivendorx'),
+                                icon: 'adminlib-eye',
+                                onClick: (rowData) => {
+                                    setSelectedCommissionId(rowData.id ?? null);
+                                    setViewCommission(true);
+                                },
+                                hover: true,
+                            },
+                            {
+                                label: __('Delete', 'multivendorx'),
+                                icon: 'adminlib-create',
+                                onClick: (rowData) => handleSingleAction('delete_commission', rowData.id!),
+                                hover: true,
+                            },
+                        ],
+                    }}
+                />
             ),
         },
+
     ];
 
     const realtimeFilter: RealtimeFilter[] = [
@@ -449,6 +470,7 @@ const Commission: React.FC = () => {
                     perPageOption={[10, 25, 50]}
                     typeCounts={commissionStatus as CommissionStatus}
                     bulkActionComp={() => <BulkAction />}
+                    totalCounts={totalRows}
                 />
             </div>
 

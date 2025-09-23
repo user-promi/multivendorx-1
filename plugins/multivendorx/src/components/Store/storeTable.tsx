@@ -154,7 +154,7 @@ const StoreTable: React.FC = () => {
                                 onClick: (rowData) => {
                                     window.location.href = `?page=multivendorx#&tab=stores&view&id=${rowData.id}`;
                                 },
-                                hover: true
+                                hover: true,
                             },
                             {
                                 label: __('View Public Store', 'multivendorx'),
@@ -162,7 +162,7 @@ const StoreTable: React.FC = () => {
                                 onClick: (rowData) => {
                                     window.open(`${appLocalizer.site_url}/store/${rowData.store_slug}`, '_blank');
                                 },
-                                hover: true
+                                hover: true,
                             },
                             {
                                 label: __('Edit Store', 'multivendorx'),
@@ -170,6 +170,7 @@ const StoreTable: React.FC = () => {
                                 onClick: (rowData) => {
                                     window.location.href = `?page=multivendorx#&tab=stores&edit/${rowData.id}`;
                                 },
+                                hover: true,
                             },
                             {
                                 label: __('Delete', 'multivendorx'),
@@ -177,12 +178,26 @@ const StoreTable: React.FC = () => {
                                 onClick: (rowData) => {
                                     window.location.href = `?page=multivendorx#&tab=stores&edit/${rowData.id}`;
                                 },
+                                hover: true,
+                            },
+                            {
+                                label: __('Approve', 'multivendorx'),
+                                icon: 'adminlib-check',
+                                onClick: (rowData) => handleSingleAction('approve_vendor', rowData.id!),
+                                hover: true,
+                            },
+                            {
+                                label: __('Reject', 'multivendorx'),
+                                icon: 'adminlib-close',
+                                onClick: (rowData) => handleSingleAction('reject_vendor', rowData.id!),
+                                hover: true,
                             },
                         ],
                     }}
                 />
             ),
         },
+
     ];
 
     return (
@@ -200,6 +215,7 @@ const StoreTable: React.FC = () => {
                     handlePagination={requestApiForData}
                     perPageOption={[10, 25, 50]}
                     typeCounts={[]}
+                    totalCounts={totalRows}
                 />
             </div>
         </>

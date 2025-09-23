@@ -36,7 +36,7 @@ const Coupons: React.FC = () => {
         setPageCount(Math.ceil(totalRows / rowsPerPage));
     }, [pagination]);
 
-    // ✅ Approve coupon (publish it)
+    // Approve coupon (publish it)
     const handleSingleAction = (action: string, couponId: number) => {
         if (action === 'approve_coupon') {
             axios.put(
@@ -53,7 +53,7 @@ const Coupons: React.FC = () => {
         }
     };
 
-    // ✅ Fetch coupons with store_id filter and only "pending"
+    // Fetch coupons with store_id filter and only "pending"
     function requestData(rowsPerPage = 10, currentPage = 1) {
         setData(null);
         axios({
@@ -64,7 +64,7 @@ const Coupons: React.FC = () => {
                 page: currentPage,
                 per_page: rowsPerPage,
                 meta_key: 'multivendorx_store_id',
-                status: 'pending', // ✅ only pending coupons
+                status: 'pending', //only pending coupons
             },
         })
             .then((response) => {
@@ -72,7 +72,7 @@ const Coupons: React.FC = () => {
                 setTotalRows(totalCount);
                 setPageCount(Math.ceil(totalCount / pagination.pageSize));
 
-                // ✅ keep only coupons that have multivendorx_store_id in meta
+                //keep only coupons that have multivendorx_store_id in meta
                 const filtered = (response.data || []).filter((coupon: any) =>
                     coupon.meta_data?.some(
                         (meta: any) => meta.key === 'multivendorx_store_id'
@@ -90,7 +90,7 @@ const Coupons: React.FC = () => {
         requestData(rowsPerPage, currentPage);
     };
 
-    // ✅ Columns
+    //Columns
     const columns: ColumnDef<CouponRow>[] = [
         {
             id: 'select',
