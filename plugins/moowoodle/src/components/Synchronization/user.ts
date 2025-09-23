@@ -135,7 +135,7 @@ export default {
                 },
             ],
             look: 'toggle',
-            proSetting:true
+            proSetting: true,
         },
         {
             key: 'sync_user_btn',
