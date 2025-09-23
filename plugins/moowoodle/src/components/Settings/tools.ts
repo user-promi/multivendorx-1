@@ -52,7 +52,7 @@ export default {
                 'moowoodle'
             ),
             size: '8rem',
-            postInsideText: __( 'min', 'multivendorx' ),
+            postInsideText: __( 'min', 'moowoodle' ),
             parameter: __( 'Minutes', 'moowoodle' ),
             label: __( 'Automatic synchronization frequency', 'moowoodle' ),
         },

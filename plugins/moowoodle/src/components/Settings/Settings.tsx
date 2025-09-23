@@ -12,7 +12,6 @@ import {
     SettingContent,
     Support,
     AdminForm,
-    Banner,
     Tabs,
     useModules,
     useSetting,

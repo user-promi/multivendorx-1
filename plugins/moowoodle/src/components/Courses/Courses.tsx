@@ -50,15 +50,6 @@ type Category = {
 };
 
 const Course: React.FC = () => {
-    const [ showDropdown, setShowDropdown ] = useState( false );
-
-    const toggleDropdown = ( id: any ) => {
-        if ( showDropdown === id ) {
-            setShowDropdown( false );
-            return;
-        }
-        setShowDropdown( id );
-    };
     const [ data, setData ] = useState< CourseRow[] | null >( null );
     const [ category, setCategory ] = useState< Category >( {} );
     const [ rowSelection, setRowSelection ] = useState< RowSelectionState >(
