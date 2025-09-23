@@ -34,6 +34,7 @@ class Rest {
         add_filter('woocommerce_rest_check_permissions', array($this,'give_permission'), 10, 4);
         add_filter('woocommerce_rest_shop_order_object_query', array($this, 'filter_orders_by_store_id'), 10, 2);
         add_filter('woocommerce_rest_product_object_query', array($this, 'filter_products_by_meta_exists'), 10, 2);
+        add_filter('woocommerce_rest_coupon_object_query', array($this, 'filter_coupons_by_meta_exists'), 10, 2);
     }
      /**
      * Filter orders by store_id in line items
@@ -72,6 +73,28 @@ class Rest {
         if ( isset( $request['meta_key'] ) && $request['meta_key'] === 'multivendorx_store_id' ) {
 
             // Only include products where this meta key exists
+            $meta_query = array(
+                'key'     => 'multivendorx_store_id',
+                'compare' => 'EXISTS',
+            );
+
+            // Merge with existing meta_query if present
+            if ( isset( $args['meta_query'] ) ) {
+                $args['meta_query']['relation'] = 'AND';
+                $args['meta_query'][] = $meta_query;
+            } else {
+                $args['meta_query'] = array( $meta_query );
+            }
+        }
+
+        return $args;
+    }
+
+    public function filter_coupons_by_meta_exists( $args, $request ) {
+        // Check if the request has our specific meta_key parameter
+        if ( isset( $request['meta_key'] ) && $request['meta_key'] === 'multivendorx_store_id' ) {
+
+            // Only include coupons where this meta key exists
             $meta_query = array(
                 'key'     => 'multivendorx_store_id',
                 'compare' => 'EXISTS',

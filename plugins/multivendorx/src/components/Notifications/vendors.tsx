@@ -51,15 +51,27 @@ const Vendors: React.FC = () => {
         requestData(rowsPerPage, currentPage);
         setPageCount(Math.ceil(totalRows / rowsPerPage));
     }, [pagination]);
-    const [ showDropdown, setShowDropdown ] = useState( false );
-    
-        const toggleDropdown = ( id: any ) => {
-            if ( showDropdown === id ) {
-                setShowDropdown( false );
-                return;
-            }
-            setShowDropdown( id );
-        };
+
+    const handleSingleAction = (action: string, vendorId: number) => {
+        if (action === 'approve_vendor') {
+            axios.put(
+                `${appLocalizer.apiUrl}/mvx/v1/store/${vendorId}`, // replace with your API
+                { status: 'approved' },
+                { headers: { 'X-WP-Nonce': appLocalizer.nonce } }
+            )
+                .then(() => requestData(pagination.pageSize, pagination.pageIndex + 1))
+                .catch((err) => console.error('Failed to approve vendor', err));
+        } else if (action === 'reject_vendor') {
+            axios.put(
+                `${appLocalizer.apiUrl}/mvx/v1/store/${vendorId}`, // replace with your API
+                { status: 'rejected' },
+                { headers: { 'X-WP-Nonce': appLocalizer.nonce } }
+            )
+                .then(() => requestData(pagination.pageSize, pagination.pageIndex + 1))
+                .catch((err) => console.error('Failed to reject vendor', err));
+        }
+    };
+
     // Fetch data from backend.
     function requestData(
         rowsPerPage = 10,
@@ -143,45 +155,33 @@ const Vendors: React.FC = () => {
         {
             header: __('Action', 'multivendorx'),
             cell: ({ row }) => (
-                <TableCell title="Action">
-                    <div className="action-section">
-                        <div className="action-icons">
-                            <i
-                                className="adminlib-more-vertical"
-                                onClick={() =>
-                                    toggleDropdown(row.original.order_id)
-                                }
-                            ></i>
-                            <div
-                                className={`action-dropdown ${showDropdown === row.original.order_id
-                                        ? 'show'
-                                        : ''
-                                    }`}
-                            >
-                        <ul>
-                            <li
-                                onClick={() =>
-                                    (window.location.href = `?page=multivendorx#&tab=stores&view&id=${row.original.id}`)
-                                }
-                            >
-                                <i className="adminlib-eye"></i>
-                                { __( 'View Store', 'multivendorx' ) }
-                            </li>
-                            <li
-                                onClick={() =>
-                                    (window.location.href = `?page=multivendorx#&tab=stores&edit/${row.original.id}`)
-                                }
-                            >
-                                <i className="adminlib-create"></i>
-                                { __( 'Edit Store', 'multivendorx' ) }
-                            </li>
-                        </ul>
-                        </div>
-                        </div>
-                    </div>
-                </TableCell>
+                <TableCell
+                    type="action-dropdown"
+                    rowData={row.original}
+                    header={{
+                        actions: [
+                            {
+                                label: __('Approve', 'multivendorx'),
+                                icon: 'adminlib-check',
+                                onClick: (rowData) => {
+                                    handleSingleAction('approve_vendor', rowData.id!);
+                                },
+                                hover: true,
+                            },
+                            {
+                                label: __('Reject', 'multivendorx'),
+                                icon: 'adminlib-close',
+                                onClick: (rowData) => {
+                                    handleSingleAction('reject_vendor', rowData.id!);
+                                },
+                                hover: true,
+                            },
+                        ],
+                    }}
+                />
             ),
-        }
+        },
+
     ];
 
     return (
@@ -199,6 +199,7 @@ const Vendors: React.FC = () => {
                     handlePagination={requestApiForData}
                     perPageOption={[10, 25, 50]}
                     typeCounts={[]}
+                    totalCounts={totalRows}
                 />
             </div>
         </>

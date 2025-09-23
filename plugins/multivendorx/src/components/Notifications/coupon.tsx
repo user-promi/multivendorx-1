@@ -1,25 +1,26 @@
 /* global appLocalizer */
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
-import { Table, getApiLink, TableCell } from 'zyra';
+import { Table, TableCell } from 'zyra';
 import {
     ColumnDef,
     RowSelectionState,
     PaginationState,
 } from '@tanstack/react-table';
 
-type StoreRow = {
+type CouponRow = {
     id?: number;
-    store_name?: string;
-    store_slug?: string;
+    code?: string;
+    amount?: string;
+    description?: string;
     status?: string;
+    date_created?: string;
+    meta_data?: Array<{ key: string; value: any }>;
 };
 
 const Coupons: React.FC = () => {
-
-    const [data, setData] = useState<StoreRow[] | null>(null);
-
+    const [data, setData] = useState<CouponRow[] | null>(null);
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
     const [totalRows, setTotalRows] = useState<number>(0);
     const [pagination, setPagination] = useState<PaginationState>({
@@ -28,76 +29,69 @@ const Coupons: React.FC = () => {
     });
     const [pageCount, setPageCount] = useState(0);
 
-    // Fetch total rows on mount
-    useEffect(() => {
-        axios({
-            method: 'GET',
-            url: getApiLink(appLocalizer, 'coupons'),
-            headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            params: { count: true },
-        })
-            .then((response) => {
-                setTotalRows(response.data || 0);
-                setPageCount(Math.ceil(response.data / pagination.pageSize));
-            })
-            .catch(() => {
-                setError(__('Failed to load total rows', 'multivendorx'));
-            });
-    }, []);
-
     useEffect(() => {
         const currentPage = pagination.pageIndex + 1;
         const rowsPerPage = pagination.pageSize;
         requestData(rowsPerPage, currentPage);
         setPageCount(Math.ceil(totalRows / rowsPerPage));
     }, [pagination]);
-    const [ showDropdown, setShowDropdown ] = useState( false );
-    
-        const toggleDropdown = ( id: any ) => {
-            if ( showDropdown === id ) {
-                setShowDropdown( false );
-                return;
-            }
-            setShowDropdown( id );
-        };
-    // Fetch data from backend.
-    function requestData(
-        rowsPerPage = 10,
-        currentPage = 1,
-    ) {
+
+    // ✅ Approve coupon (publish it)
+    const handleSingleAction = (action: string, couponId: number) => {
+        if (action === 'approve_coupon') {
+            axios.put(
+                `${appLocalizer.apiUrl}/wc/v3/coupons/${couponId}`,
+                { status: 'publish' },
+                { headers: { 'X-WP-Nonce': appLocalizer.nonce } }
+            )
+                .then(() => {
+                    requestData(pagination.pageSize, pagination.pageIndex + 1);
+                })
+                .catch((err) => {
+                    console.error('Failed to approve coupon', err);
+                });
+        }
+    };
+
+    // ✅ Fetch coupons with store_id filter and only "pending"
+    function requestData(rowsPerPage = 10, currentPage = 1) {
         setData(null);
         axios({
             method: 'GET',
-            url: getApiLink(appLocalizer, 'coupons'),
+            url: `${appLocalizer.apiUrl}/wc/v3/coupons`,
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
             params: {
                 page: currentPage,
-                row: rowsPerPage,
+                per_page: rowsPerPage,
+                meta_key: 'multivendorx_store_id',
+                status: 'pending', // ✅ only pending coupons
             },
         })
             .then((response) => {
-                setData(response.data || []);
+                const totalCount = parseInt(response.headers['x-wp-total'], 10) || 0;
+                setTotalRows(totalCount);
+                setPageCount(Math.ceil(totalCount / pagination.pageSize));
+
+                // ✅ keep only coupons that have multivendorx_store_id in meta
+                const filtered = (response.data || []).filter((coupon: any) =>
+                    coupon.meta_data?.some(
+                        (meta: any) => meta.key === 'multivendorx_store_id'
+                    )
+                );
+                setData(filtered);
             })
             .catch(() => {
-                setError(__('Failed to load stores', 'multivendorx'));
                 setData([]);
             });
     }
 
-    // Handle pagination and filter changes
-    const requestApiForData = (
-        rowsPerPage: number,
-        currentPage: number,
-    ) => {
+    const requestApiForData = (rowsPerPage: number, currentPage: number) => {
         setData(null);
-        requestData(
-            rowsPerPage,
-            currentPage,
-        );
+        requestData(rowsPerPage, currentPage);
     };
 
-    // Column definitions
-    const columns: ColumnDef<StoreRow>[] = [
+    // ✅ Columns
+    const columns: ColumnDef<CouponRow>[] = [
         {
             id: 'select',
             header: ({ table }) => (
@@ -116,100 +110,77 @@ const Coupons: React.FC = () => {
             ),
         },
         {
-            header: __('Title', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.title || ''}>
-                    {row.original.title || '-'}
-                </TableCell>
-            ),
-        },
-        {
             header: __('Code', 'multivendorx'),
             cell: ({ row }) => (
-                <TableCell title={row.original.code || ''}>
-                    {row.original.code || '-'}
+                <TableCell title={row.original?.code ?? '-'}>
+                    {row.original?.code ?? '-'}
                 </TableCell>
             ),
         },
         {
             header: __('Amount', 'multivendorx'),
             cell: ({ row }) => (
-                <TableCell title={row.original.amount || ''}>
-                    {row.original.amount || '-'}
+                <TableCell title={row.original?.amount ?? '-'}>
+                    {row.original?.amount ?? '-'}
+                </TableCell>
+            ),
+        },
+        {
+            header: __('Description', 'multivendorx'),
+            cell: ({ row }) => (
+                <TableCell title={row.original?.description ?? '-'}>
+                    {row.original?.description ?? '-'}
                 </TableCell>
             ),
         },
         {
             header: __('Status', 'multivendorx'),
             cell: ({ row }) => (
-                <TableCell title={row.original.status || ''}>
-                    {row.original.status || '-'}
+                <TableCell title={row.original?.status ?? '-'}>
+                    {row.original?.status ?? '-'}
                 </TableCell>
             ),
         },
-        
         {
             header: __('Action', 'multivendorx'),
             cell: ({ row }) => (
-                <TableCell title="Action">
-                    <div className="action-section">
-                        <div className="action-icons">
-                            <i
-                                className="adminlib-more-vertical"
-                                onClick={() =>
-                                    toggleDropdown(row.original.order_id)
-                                }
-                            ></i>
-                            <div
-                                className={`action-dropdown ${showDropdown === row.original.order_id
-                                        ? 'show'
-                                        : ''
-                                    }`}
-                            >
-                        <ul>
-                            <li
-                                onClick={() =>
-                                    (window.location.href = `?page=multivendorx#&tab=stores&view&id=${row.original.id}`)
-                                }
-                            >
-                                <i className="adminlib-eye"></i>
-                                { __( 'View Store', 'multivendorx' ) }
-                            </li>
-                            <li
-                                onClick={() =>
-                                    (window.location.href = `?page=multivendorx#&tab=stores&edit/${row.original.id}`)
-                                }
-                            >
-                                <i className="adminlib-create"></i>
-                                { __( 'Edit Store', 'multivendorx' ) }
-                            </li>
-                        </ul>
-                        </div>
-                        </div>
-                    </div>
-                </TableCell>
+                <TableCell
+                    type="action-dropdown"
+                    rowData={row.original}
+                    header={{
+                        actions: [
+                            {
+                                label: __('Approve Coupon', 'multivendorx'),
+                                icon: 'adminlib-check',
+                                onClick: (rowData) => {
+                                    handleSingleAction('approve_coupon', rowData.id!);
+                                },
+                                hover: true,
+                            },
+                        ],
+                    }}
+                />
             ),
-        }
+        },
     ];
 
     return (
-        <>
-            <div className="admin-table-wrapper">
-                <Table
-                    data={data}
-                    columns={columns as ColumnDef<Record<string, any>, any>[]}
-                    rowSelection={rowSelection}
-                    onRowSelectionChange={setRowSelection}
-                    defaultRowsPerPage={10}
-                    pageCount={pageCount}
-                    pagination={pagination}
-                    onPaginationChange={setPagination}
-                    handlePagination={requestApiForData}
-                    perPageOption={[10, 25, 50]}
-                    typeCounts={[]}
-                />
-            </div>
-        </>
+        <div className="admin-table-wrapper">
+            <Table
+                data={data}
+                columns={columns as ColumnDef<Record<string, any>, any>[]}
+                rowSelection={rowSelection}
+                onRowSelectionChange={setRowSelection}
+                defaultRowsPerPage={10}
+                pageCount={pageCount}
+                pagination={pagination}
+                onPaginationChange={setPagination}
+                handlePagination={requestApiForData}
+                perPageOption={[10, 25, 50]}
+                typeCounts={[]}
+                totalCounts={totalRows}
+            />
+        </div>
     );
 };
 
