@@ -39,6 +39,7 @@ declare global {
         ajaxurl: string;
         gateway_list: any;
         facilitators_list: any;
+        user_id:any;
     }
     interface Color{
         color: any;

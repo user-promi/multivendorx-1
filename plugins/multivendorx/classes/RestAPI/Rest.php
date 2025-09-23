@@ -33,6 +33,7 @@ class Rest {
         add_action( 'rest_api_init', array( $this, 'register_rest_routes' ), 10 );
         add_filter('woocommerce_rest_check_permissions', array($this,'give_permission'), 10, 4);
         add_filter('woocommerce_rest_shop_order_object_query', array($this, 'filter_orders_by_store_id'), 10, 2);
+        add_filter('woocommerce_rest_product_object_query', array($this, 'filter_products_by_meta_exists'), 10, 2);
     }
      /**
      * Filter orders by store_id in line items
@@ -58,7 +59,36 @@ class Rest {
         }
         return $args;
     }
-    
+
+    /**
+     * Filter WooCommerce products by meta key existence.
+     *
+     * @param array           $args    WP_Query arguments.
+     * @param WP_REST_Request $request REST API request object.
+     * @return array Modified WP_Query arguments.
+     */
+    public function filter_products_by_meta_exists( $args, $request ) {
+        // Check if the request has our specific meta_key parameter
+        if ( isset( $request['meta_key'] ) && $request['meta_key'] === 'multivendorx_store_id' ) {
+
+            // Only include products where this meta key exists
+            $meta_query = array(
+                'key'     => 'multivendorx_store_id',
+                'compare' => 'EXISTS',
+            );
+
+            // Merge with existing meta_query if present
+            if ( isset( $args['meta_query'] ) ) {
+                $args['meta_query']['relation'] = 'AND';
+                $args['meta_query'][] = $meta_query;
+            } else {
+                $args['meta_query'] = array( $meta_query );
+            }
+        }
+
+        return $args;
+    }
+
     public function give_permission($permission, $context, $object_id, $post_type) {
         $current_user = wp_get_current_user();
         $user_id      = $current_user->ID;
@@ -101,6 +131,21 @@ class Rest {
      * Register REST API routes.
      */
     public function register_rest_routes() {
+
+        register_meta('user', 'multivendorx_dashboard_tasks', [
+            'type' => 'array',
+            'single' => true,
+            'show_in_rest' => [
+                'schema' => [
+                    'type' => 'array',
+                    'items' => ['type' => 'string'],
+                ],
+                'auth_callback' => function() {
+                    return current_user_can('edit_users');
+                }
+            ]
+        ]);
+
         foreach ( $this->container as $controller ) {
             if ( method_exists( $controller, 'register_routes' ) ) {
                 $controller->register_routes();

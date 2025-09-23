@@ -13,71 +13,97 @@ const Notification = () => {
     const [storeCount, setStoreCount] = useState<number>(0);
 
     const [activeTab, setActiveTab] = useState("products");
+    const [tasks, setTasks] = useState<string[]>([]);
 
-
-    const tabs = [
-        { id: "products", label: "Products", content: <Products /> },
-        { id: "stores", label: "Stores", content: <Vendors /> },
-        { id: "coupons", label: "Coupons", content: <Coupons /> },
-        { id: "transactions", label: "Transaction", content: <Transactions /> },
-    ];
-    // Fetch total rows on mount
     useEffect(() => {
+        if (!appLocalizer.user_id) return;
+
+        const userEndpoint = `${appLocalizer.apiUrl}/wp/v2/users/${appLocalizer.user_id}`;
+
+        axios.get(userEndpoint, {
+            headers: { 'X-WP-Nonce': appLocalizer.nonce }
+        }).then(res => {
+            setTasks(res.data.meta?.multivendorx_dashboard_tasks || []);
+        }).catch(err => console.error(err));
+    }, [appLocalizer.user_id]);
+
+
+    const saveTasks = (updatedTasks: string[]) => {
+        const userEndpoint = `${appLocalizer.apiUrl}/wp/v2/users/${appLocalizer.user_id}`;
+
+        axios.patch(userEndpoint,
+            { meta: { multivendorx_dashboard_tasks: updatedTasks } },
+            { headers: { 'X-WP-Nonce': appLocalizer.nonce } }
+        ).then(res => {
+            setTasks(res.data.meta.multivendorx_dashboard_tasks);
+        }).catch(err => console.error(err));
+    };
+
+
+    const handleConfirm = () => {
+        if (!task.trim()) return;
+        const updatedTasks = [...tasks, task];
+        saveTasks(updatedTasks);
+        setTask("");
+        setShowInput(false);
+    };
+
+    const handleDelete = (index: number) => {
+        const updatedTasks = tasks.filter((_, idx) => idx !== index);
+        saveTasks(updatedTasks);
+    };
+
+
+    
+    // In Notification.tsx
+    const refreshCounts = () => {
         axios({
             method: 'GET',
-            url: getApiLink(appLocalizer, 'products'),
+            url: `${appLocalizer.apiUrl}/wc/v3/products`,
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            params: { count: true },
+            params: { per_page: 1, meta_key: 'multivendorx_store_id', status: 'pending' }
         })
             .then((response) => {
-                setProductCount(response.data || 0);
-            })
+                const totalCount = parseInt(response.headers['x-wp-total'], 10) || 0;
+                setProductCount(totalCount);
+            });
 
         axios({
             method: 'GET',
             url: getApiLink(appLocalizer, 'coupons'),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
             params: { count: true },
-        })
-            .then((response) => {
-                setCouponCount(response.data || 0);
-            })
+        }).then((response) => setCouponCount(response.data || 0));
+
         axios({
             method: 'GET',
             url: getApiLink(appLocalizer, 'store'),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
             params: { count: true, status: 'pending' },
-        })
-            .then((response) => {
-                setStoreCount(response.data || 0);
-            })
+        }).then((response) => setStoreCount(response.data || 0));
+
         axios({
             method: 'GET',
             url: getApiLink(appLocalizer, 'transaction'),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
             params: { count: true, status: 'Pending' },
-        })
-            .then((response) => {
-                setTransactionCount(response.data || 0);
-            })
+        }).then((response) => setTransactionCount(response.data || 0));
+    };
+    
+    const tabs = [
+        { id: "products", label: "Products", content: <Products onUpdated={refreshCounts} /> },
+        { id: "stores", label: "Stores", content: <Vendors onUpdated={refreshCounts} /> },
+        { id: "coupons", label: "Coupons", content: <Coupons onUpdated={refreshCounts} /> },
+        { id: "transactions", label: "Transaction", content: <Transactions onUpdated={refreshCounts} /> },
+    ];
+    // run once on mount
+    useEffect(() => {
+        refreshCounts();
     }, []);
-    const [tasks, setTasks] = useState<string[]>([]);
+
     const [showInput, setShowInput] = useState(false);
     const [task, setTask] = useState("");
 
-    const handleAddClick = () => setShowInput(true);
-
-    const handleConfirm = () => {
-        if (!task.trim()) return;
-        setTasks([...tasks, task]);
-        setTask("");
-        setShowInput(false);
-    };
-
-    const handleCancel = () => {
-        setTask("");
-        setShowInput(false);
-    };
     return (
         <>
             <AdminBreadcrumbs
@@ -163,7 +189,10 @@ const Notification = () => {
                                     <li key={idx} className="task-item">
                                         <input type="checkbox" />
                                         <span>{t}</span>
-                                        <i className="adminlib-delete delete-icon"></i>
+                                        <i
+                                            className="adminlib-delete delete-icon"
+                                            onClick={() => handleDelete(idx)}
+                                        ></i>
                                     </li>
                                 ))}
                             </ul>
@@ -178,9 +207,8 @@ const Notification = () => {
                                         className="basic-input"
                                         autoFocus
                                     />
-
                                     <div className="buttons-wrapper">
-                                        <button className="admin-btn btn-red" onClick={handleCancel}>
+                                        <button className="admin-btn btn-red" onClick={() => setShowInput(false)}>
                                             <i className="adminlib-close"></i> Cancel
                                         </button>
                                         <button className="admin-btn btn-purple" onClick={handleConfirm}>
@@ -190,10 +218,11 @@ const Notification = () => {
                                 </span>
                             )}
                             {!showInput && (
-                                <button className="admin-btn btn-purple" onClick={handleAddClick}>
+                                <button className="admin-btn btn-purple" onClick={() => setShowInput(true)}>
                                     + Add Task
                                 </button>
                             )}
+
                         </div>
                     </div>
 

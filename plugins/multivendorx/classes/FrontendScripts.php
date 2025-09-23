@@ -441,6 +441,7 @@ class FrontendScripts {
                         'marketplace_site'         => get_bloginfo(),
                         'site_url'                 => site_url(),
                         'woocommerce_currency'     => get_woocommerce_currency(),
+                        'user_id'                  => get_current_user_id(),
 					) ),
                 ),
                 'multivendorx-product-tab-script' => array(

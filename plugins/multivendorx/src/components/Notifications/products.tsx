@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
-import { Table, getApiLink, TableCell } from 'zyra';
+import { Table, TableCell } from 'zyra';
 import {
     ColumnDef,
     RowSelectionState,
@@ -16,7 +16,7 @@ type StoreRow = {
     status?: string;
 };
 
-const Products: React.FC = () => {
+const Products: React.FC = ({ onUpdated }) => {
 
     const [data, setData] = useState<StoreRow[] | null>(null);
 
@@ -28,38 +28,29 @@ const Products: React.FC = () => {
     });
     const [pageCount, setPageCount] = useState(0);
 
-    // Fetch total rows on mount
-    useEffect(() => {
-        axios({
-            method: 'GET',
-            url: getApiLink(appLocalizer, 'products'),
-            headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            params: { count: true },
-        })
-            .then((response) => {
-                setTotalRows(response.data || 0);
-                setPageCount(Math.ceil(response.data / pagination.pageSize));
-            })
-            .catch(() => {
-                setError(__('Failed to load total rows', 'multivendorx'));
-            });
-    }, []);
-
     useEffect(() => {
         const currentPage = pagination.pageIndex + 1;
         const rowsPerPage = pagination.pageSize;
         requestData(rowsPerPage, currentPage);
         setPageCount(Math.ceil(totalRows / rowsPerPage));
     }, [pagination]);
-    const [ showDropdown, setShowDropdown ] = useState( false );
-    
-        const toggleDropdown = ( id: any ) => {
-            if ( showDropdown === id ) {
-                setShowDropdown( false );
-                return;
-            }
-            setShowDropdown( id );
-        };
+    const handleSingleAction = (action: string, productId: number, status?: string) => {
+        if (action === 'approve_product') {
+            axios.post(
+                `${appLocalizer.apiUrl}/wc/v3/products/${productId}`,
+                { status: 'publish' },
+                { headers: { 'X-WP-Nonce': appLocalizer.nonce } }
+            )
+                .then(() => {
+                    onUpdated()
+                    requestData(pagination.pageSize, pagination.pageIndex + 1);
+                })
+                .catch((err) => {
+                    console.error('Failed to approve product', err);
+                });
+        }
+    };
+
     // Fetch data from backend.
     function requestData(
         rowsPerPage = 10,
@@ -68,18 +59,22 @@ const Products: React.FC = () => {
         setData(null);
         axios({
             method: 'GET',
-            url: getApiLink(appLocalizer, 'products'),
+            url: `${appLocalizer.apiUrl}/wc/v3/products`,
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
             params: {
-                page: currentPage,
-                row: rowsPerPage,
+                page: currentPage,      // WooCommerce page param
+                per_page: rowsPerPage,  // WC uses per_page instead of row
+                meta_key: 'multivendorx_store_id',
+                status: 'pending'
             },
         })
             .then((response) => {
+                const totalCount = parseInt(response.headers['x-wp-total'], 10) || 0;
+                setTotalRows(totalCount);
+                setPageCount(Math.ceil(totalCount / pagination.pageSize));
                 setData(response.data || []);
             })
             .catch(() => {
-                setError(__('Failed to load stores', 'multivendorx'));
                 setData([]);
             });
     }
@@ -116,12 +111,47 @@ const Products: React.FC = () => {
             ),
         },
         {
-            header: __('Product Name', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.name || ''}>
-                    {row.original.name || '-'}
-                </TableCell>
-            ),
+            header: __('Product', 'multivendorx'),
+            cell: ({ row }) => {
+                const product = row.original;
+                const image =
+                    product.images && product.images.length > 0
+                        ? product.images[0].src
+                        : 'https://via.placeholder.com/50'; // fallback image
+
+                return (
+                    <TableCell title={product.name || ''}>
+                        <a
+                            href={product.permalink}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="flex items-center gap-2"
+                        >
+                            <img
+                                src={image}
+                                alt={product.name}
+                                style={{ width: 40, height: 40, objectFit: 'cover' }}
+                            />
+                            <span>{product.name || '-'}</span>
+                        </a>
+                    </TableCell>
+                );
+            },
+        },
+        {
+            header: __('Category', 'multivendorx'),
+            cell: ({ row }) => {
+                const categories = row.original.categories || [];
+                return (
+                    <TableCell
+                        title={categories.map((c) => c.name).join(', ') || '-'}
+                    >
+                        {categories.length > 0
+                            ? categories.map((c) => c.name).join(', ')
+                            : '-'}
+                    </TableCell>
+                );
+            },
         },
         {
             header: __('SKU', 'multivendorx'),
@@ -133,11 +163,20 @@ const Products: React.FC = () => {
         },
         {
             header: __('Price', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.price || ''}>
-                    {row.original.price ? `${row.original.price}` : '-'}
-                </TableCell>
-            ),
+            cell: ({ row }) => {
+                const priceHtml = row.original.price_html || '';
+                return (
+                    <TableCell title={row.original.price || ''}>
+                        {priceHtml ? (
+                            <span
+                                dangerouslySetInnerHTML={{ __html: priceHtml }}
+                            />
+                        ) : (
+                            '-'
+                        )}
+                    </TableCell>
+                );
+            },
         },
         {
             header: __('Status', 'multivendorx'),
@@ -147,49 +186,33 @@ const Products: React.FC = () => {
                 </TableCell>
             ),
         },
-        
         {
             header: __('Action', 'multivendorx'),
             cell: ({ row }) => (
-                <TableCell title="Action">
-                    <div className="action-section">
-                        <div className="action-icons">
-                            <i
-                                className="adminlib-more-vertical"
-                                onClick={() =>
-                                    toggleDropdown(row.original.order_id)
-                                }
-                            ></i>
-                            <div
-                                className={`action-dropdown ${showDropdown === row.original.order_id
-                                        ? 'show'
-                                        : ''
-                                    }`}
-                            >
-                        <ul>
-                            <li
-                                onClick={() =>
-                                    (window.location.href = `?page=multivendorx#&tab=stores&view&id=${row.original.id}`)
-                                }
-                            >
-                                <i className="adminlib-eye"></i>
-                                { __( 'View Store', 'multivendorx' ) }
-                            </li>
-                            <li
-                                onClick={() =>
-                                    (window.location.href = `?page=multivendorx#&tab=stores&edit/${row.original.id}`)
-                                }
-                            >
-                                <i className="adminlib-create"></i>
-                                { __( 'Edit Store', 'multivendorx' ) }
-                            </li>
-                        </ul>
-                        </div>
-                        </div>
-                    </div>
-                </TableCell>
+                <TableCell
+                    type="action-dropdown"
+                    rowData={row.original}
+                    header={{
+                        actions: [
+                            {
+                                label: __('Approve Product', 'multivendorx'),
+                                icon: 'adminlib-check', // pick any icon you like
+                                onClick: (rowData) => {
+                                    // Call your approve handler here
+                                    handleSingleAction(
+                                        'approve_product',
+                                        rowData.id!,
+                                        rowData.status
+                                    );
+                                },
+                                hover: true,
+                            },
+                        ],
+                    }}
+                />
             ),
         }
+
     ];
 
     return (
@@ -207,6 +230,7 @@ const Products: React.FC = () => {
                     handlePagination={requestApiForData}
                     perPageOption={[10, 25, 50]}
                     typeCounts={[]}
+                    totalCounts={totalRows}
                 />
             </div>
         </>
