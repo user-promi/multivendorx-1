@@ -1071,7 +1071,74 @@ input[type="checkbox"]:focus {
     }
   }
 
+
+  .adminlib-update-data {
+    font-size: 1rem;
+  }
+
+  .hover-icon {
+    position: absolute;
+    margin: 0;
+    left: -3.5rem;
+    display: none;
+  }
+
+  &:hover {
+    .hover-icon {
+      display: flex;
+    }
+  }
+}
+
+.action-icons {
+
+  &:has(i:hover),
+  &:has(.action-dropdown:hover) {
+    .action-dropdown.hover {
+      display: block;
+      top: 45%;
+      left: -40%;
+      transform: translate(-75%, -40%);
+
+      ul {
+        display: flex;
+        gap: 0.125rem;
+        margin: 0;
+
+        li {
+          position: relative;
+          // display: none;
+
+          span {
+            position: absolute;
+            top: -1.125rem;
+            left: -100%;
+            width: 8rem;
+            text-align: center;
+            display: none;
+            transition: all 0.4s ease;
+          }
+
+          &:hover {
+            span {
+              display: block;
+            }
+          }
+
+          &.hover {
+            li {
+              display: block;
+            }
+          }
+        }
+      }
+    }
+  }
+
   .action-dropdown {
+    display: none;
+    position: relative;
+
     &.show {
       display: block;
       overflow: hidden;
@@ -1115,23 +1182,6 @@ input[type="checkbox"]:focus {
 
         }
       }
-    }
-  }
-
-  .adminlib-update-data {
-    font-size: 1rem;
-  }
-
-  .hover-icon {
-    position: absolute;
-    margin: 0;
-    left: -3.5rem;
-    display: none;
-  }
-
-  &:hover {
-    .hover-icon {
-      display: flex;
     }
   }
 }
@@ -1180,6 +1230,7 @@ input[type="checkbox"]:focus {
 
     option {
       background: #fff;
+
     }
 
     &:focus {
