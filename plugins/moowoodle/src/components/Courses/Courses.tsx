@@ -665,7 +665,7 @@ const Course: React.FC = () => {
                     perPageOption={[10, 25, 50]}
                     typeCounts={[]}
                     bulkActionComp={() => <BulkAction />}
-                    totalRows={totalRows}
+                    totalCounts={totalRows}
                 />
             </div>
         </>
