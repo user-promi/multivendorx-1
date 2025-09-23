@@ -157,7 +157,7 @@ const Banner: React.FC<BannerProps> = ({
                                     {/* <i className="adminlib-support"></i> */}
                                     <span className="title">{product.title}: </span>
                                     <span className="description">{product.description} </span>
-                                    <a href={proUrl}>Upgrade Now</a>
+                                    <a href={proUrl} target="_blank" rel="noopener noreferrer">Upgrade Now</a>
                                 </li>
                             );
                         })}
