@@ -19,7 +19,7 @@ const COLORS = ["#5007aa", "#00c49f", "#ff7300", "#d400ffff"];
 const overview = [
   {
     id: 'sales',
-    label: 'Products Sold',
+    label: 'Total Products',
     count: 15,
     icon: 'adminlib-star red',
   },

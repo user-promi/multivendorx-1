@@ -20,7 +20,7 @@ import Knowledgebase from './components/Knowledgebase/knowledgebase';
 import Blogs from './components/Blogs/blogs';
 import Commission from './components/Commission/commission';
 import TransactionHistory from './components/TransactionHistory/transactionHistory';
-import Analytics from './components/Analytics/Analytics';
+import Analytics from './components/Reports/Reports';
 import Advertisement from './components/Advertisement/Advertisement';
 import HelpSupport from './components/HelpSupport/HelpSupport';
 
@@ -62,7 +62,7 @@ const Route = () => {
       {tab === 'transaction-history' && <TransactionHistory />}
       {tab === 'blogs' && <Blogs />}
       {tab === 'setup' && <SetupWizard />}
-      {tab === 'analytics' && <Analytics />}
+      {tab === 'reports' && <Analytics />}
       {tab === 'advertisement' && <Advertisement />}
       {tab === 'help-support' && <HelpSupport />}
     </>
@@ -160,7 +160,7 @@ const App = () => {
         free={appLocalizer.freeVersion}
         showDropdown={true} 
         dropdownOptions={[
-          { value: 'all', label: 'All' },
+          { value: 'all', label: 'Modules & Settings' },
           { value: 'modules', label: 'Modules' },
           { value: 'settings', label: 'Settings' },
         ]}

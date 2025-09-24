@@ -133,8 +133,8 @@ class Admin {
                     'name'   => __( 'Advertisement', 'multivendorx' ),
                     'subtab' => '',
                 ),
-                'analytics' => array(
-                    'name'   => __( 'Analytics', 'multivendorx' ),
+                'reports' => array(
+                    'name'   => __( 'Reports', 'multivendorx' ),
                     'subtab' => '',
                 ),
                 'memberships' => array(

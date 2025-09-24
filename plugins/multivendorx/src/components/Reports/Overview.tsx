@@ -18,6 +18,7 @@ import {
 } from "recharts";
 import { Table, TableCell } from "zyra";
 import axios from "axios";
+import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 
 type Stat = {
   id: string | number;
@@ -181,7 +182,17 @@ const Overview: React.FC<OverviewProps> = ({
   COLORS = ["#5007aa", "#00c49f", "#ff7300", "#d400ffff", "#004ec4ff"],
 }) => {
   const [topSellingProducts, setTopSellingProducts] = useState<any[]>([]);
-
+const salesByLocations = [
+  { name: "USA", coordinates: [40, -100], sales: 12000 },
+  { name: "India", coordinates: [22, 78], sales: 8500 },
+  { name: "UK", coordinates: [54, -2], sales: 6700 },
+  { name: "Germany", coordinates: [51, 10], sales: 5400 },
+  { name: "Australia", coordinates: [-25, 133], sales: 4300 },
+];
+const salesIcon = new L.DivIcon({
+  className: "custom-marker",
+  html: `<div style="background:#5007aa;color:#fff;border-radius:50%;padding:6px 10px;font-size:12px;">$</div>`,
+});
   function requestTopSellingProducts() {
     axios({
       method: "GET",
@@ -270,7 +281,7 @@ const Overview: React.FC<OverviewProps> = ({
         </div>
       </div>
       <div className="row">
-        <div className="column">
+        <div className="column width-65">
           <div className="card-header">
             <div className="left">
               <div className="title">
@@ -290,6 +301,38 @@ const Overview: React.FC<OverviewProps> = ({
               <Line type="monotone" dataKey="admin_amount" stroke="#00c49f" strokeWidth={3} name="Top Store" />
             </LineChart>
           </ResponsiveContainer>
+        </div>
+        <div className="column width-35">
+          <div className="card-header">
+            <div className="left">
+              <div className="title">
+                Sales by Locations
+              </div>
+            </div>
+          </div>
+          <MapContainer
+            center={[20, 0]}
+            zoom={2}
+            style={{ height: "300px", width: "100%" }}
+          >
+            <TileLayer
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            />
+            {salesByLocations.map(({ name, coordinates, sales }) => (
+              <Marker
+                key={name}
+                position={coordinates as [number, number]}
+                icon={salesIcon}
+              >
+                <Popup>
+                  <strong>{name}</strong>
+                  <br />
+                  Sales: ${sales}
+                </Popup>
+              </Marker>
+            ))}
+          </MapContainer>
         </div>
       </div>
       <div className="row">
