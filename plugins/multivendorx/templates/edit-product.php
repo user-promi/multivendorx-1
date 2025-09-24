@@ -346,20 +346,22 @@ if ($default_types && !empty($default_types)) {
                     </div>
                 </div>
             </div> <!-- right section end -->
-            <?php
-            $primary_action = __( 'Submit', 'multivendorx' );    //default value
-            if ( current_user_can( 'publish_products' ) ) {
-                if ( ! empty( $product_object->get_id() ) && get_post_status( $product_object->get_id() ) === 'publish' ) {
-                    $primary_action = __( 'Update', 'multivendorx' );
-                } else {
-                    $primary_action = __( 'Publish', 'multivendorx' );
+            <div class="mvx-action-container">
+                <?php
+                $primary_action = __( 'Submit', 'multivendorx' );    //default value
+                if ( current_user_can( 'publish_products' ) ) {
+                    if ( ! empty( $product_object->get_id() ) && get_post_status( $product_object->get_id() ) === 'publish' ) {
+                        $primary_action = __( 'Update', 'multivendorx' );
+                    } else {
+                        $primary_action = __( 'Publish', 'multivendorx' );
+                    }
                 }
-            }
-            ?>
-            <input type="submit"  name="submit-data" value="<?php echo esc_attr( $primary_action ); ?>" id="mvx_frontend_dashboard_product_submit" />
-            <input type="submit"  name="draft-data" value="<?php esc_attr_e( 'Draft', 'multivendorx' ); ?>" id="mvx_frontend_dashboard_product_draft" />
-            <input type="hidden" name="status" value="<?php echo esc_attr( get_post_status( $post ) ); ?>">
-            <?php wp_nonce_field( 'mvx-product', 'mvx_product_nonce' ); ?>
+                ?>
+                <input type="submit" class="btn btn-default" name="submit-data" value="<?php echo esc_attr( $primary_action ); ?>" id="mvx_frontend_dashboard_product_submit" />
+                <input type="submit" class="btn btn-default" name="draft-data" value="<?php esc_attr_e( 'Draft', 'multivendorx' ); ?>" id="mvx_frontend_dashboard_product_draft" />
+                <input type="hidden" name="status" value="<?php echo esc_attr( get_post_status( $post ) ); ?>">
+                <?php wp_nonce_field( 'mvx-product', 'mvx_product_nonce' ); ?>
+            </div>
         </form>
     </div>
 </div>

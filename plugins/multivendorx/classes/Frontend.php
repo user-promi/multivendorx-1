@@ -3,6 +3,7 @@
 namespace MultiVendorX;
 
 use MultiVendorX\Store\StoreUtil;
+use MultiVendorX\Store\Products;
 
 /**
  * MultiVendorX Frontend class
@@ -19,9 +20,9 @@ class Frontend {
         add_filter('template_include', array($this, 'vendor_dashboard_template'));
 
         if ( current_user_can( 'edit_products' ) ) {
-            // add_action( 'template_redirect', array( &$this, 'save_product' ), 90 );
+            add_action( 'template_redirect', array( &$this, 'save_product' ), 90 );
 
-            // add_action( 'mvx_process_product_object', array( $this, 'mvx_save_generated_sku') );
+            add_action( 'mvx_process_product_object', array( $this, 'mvx_save_generated_sku') );
 
         }
 
@@ -388,7 +389,7 @@ class Frontend {
                 //get the correct class
                 $classname = \WC_Product_Factory::get_product_classname( $post_id, $product_type ? $product_type : 'simple' );
                 $product = new $classname( $post_id );
-                $attributes = isset( $_POST['wc_attributes'] ) ? mvx_woo()->prepare_attributes( $_POST['wc_attributes'] ) : array();
+                $attributes = isset( $_POST['wc_attributes'] ) ? Products::prepare_attributes( $_POST['wc_attributes'] ) : array();
                 $stock = null;
                 // Handle stock changes.
                 if ( isset( $_POST['_stock'] ) ) {
