@@ -283,7 +283,7 @@ class Products {
         ) ;
     }
 
-    public function prepare_attributes( $attributes ) {
+    public static function prepare_attributes( $attributes ) {
         // Attributes
         $product_attributes = array();
         if ( ! empty( $attributes ) ) {

@@ -394,7 +394,7 @@ class Ajax {
 
         $attr_data = isset($data['wc_attributes']) ? $data['wc_attributes'] : array();
 
-        $attributes = MultiVendorX()->store->products->prepare_attributes($attr_data);
+        $attributes = Products::prepare_attributes($attr_data);
         $product_id = isset($_POST['post_id']) ? absint($_POST['post_id']) : 0;
         $product_type = !empty($_POST['product_type']) ? wc_clean($_POST['product_type']) : 'simple';
         $classname = \WC_Product_Factory::get_product_classname($product_id, $product_type);
