@@ -618,7 +618,7 @@
 
 //  free vs pro tabel start
 .features-wrapper {
-    width: 60%;
+    // width: 60%;
     margin-top: 1.125rem;
 
     .table-title {
@@ -675,10 +675,13 @@
 
 // pricing section start
 .pricing-wrapper {
-    width: 60%;
+    width: 40%;
+    padding: 1.313rem;
+    margin-top: 2rem;
+    background: #ece2f9f1;
 
     .heading {
-        font-size: 1.25rem;
+        font-size: 1.5rem;
         color: #000;
         font-weight: 500;
         line-height: 2rem;
@@ -693,7 +696,84 @@
         font-size: 2.313rem;
         line-height: 3rem;
         padding: 0.813rem 0;
+        font-weight: 600;
+        color: $theme-color;
+    }
+
+    .select-wrapper {
+        font-size: 1.125rem;
+        margin-bottom: 1.5rem;
+
+        select,
+        select:focus {
+            border: none;
+            background-image: #ece2f9f1 url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'><path fill='%23fff' d='M5 7l5 5 5-5z'/></svg>");
+            ;
+        }
+    }
+
+    .admin-btn {
+        background: #fff;
     }
 }
 
 // pricing section end
+
+
+// review start
+.review-wrapper {
+    display: flex;
+    gap: 1.5rem;
+    // width: 70%;
+    margin-top: 1.5rem;
+
+    .review-box {
+        padding: 1rem;
+        border: $border-light-small;
+        border-radius: 0.313rem;
+
+        .start-wrapper {
+            color: #ffc800;
+            display: flex;
+            font-size: 1.063rem;
+            gap: 0.125rem;
+        }
+
+        .body {
+            .review {
+                padding-top: 1.5rem;
+                font-size: 1.063rem;
+                line-height: 1.5rem;
+            }
+        }
+
+        .footer {
+            border-top: $border-light-small;
+            margin-top: 2rem;
+            display: flex;
+            padding-top: 1rem;
+            align-items: center;
+            gap: 0.5rem;
+
+            img {
+                width: 2.5rem;
+                height: 2.5rem;
+            }
+
+            .details {
+                .name {
+                    font-size: 1.125rem;
+                    color: #000;
+                    margin-bottom: 0.313rem;
+                }
+
+                .role {
+                    color: #868585;
+                }
+            }
+
+        }
+    }
+}
+
+// review end

@@ -130,6 +130,7 @@
         .requires {
           display: flex;
           gap: 0.125rem;
+          flex-wrap: wrap;
 
           .requires-title {
             font-size: 0.9rem;

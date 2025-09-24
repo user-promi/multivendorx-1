@@ -14,6 +14,7 @@ import {
 
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
+import reviewImage from "../../assets/images/moodle.png";
 interface Payment {
   id: number;
   customer: string;
@@ -158,7 +159,7 @@ const AdminDashboard = () => {
       ],
     },
   ];
-  const [activeTab, setActiveTab] = useState("pricing");
+  const [activeTab, setActiveTab] = useState("testimonials");
   const [openSection, setOpenSection] = useState<string>(sections[0].title);
   const toggleSection = (title: string) => {
     setOpenSection((prev) => (prev === title ? "" : title));
@@ -220,30 +221,101 @@ const AdminDashboard = () => {
           })}
         </>
     },
-    { id: "revefeaturesnue", label: "Features", content: "features" },
     {
       id: "pricing", label: "Pricing", content:
         <>
           <div className="pricing-wrapper">
-              <div className="heading">Your students will love this!</div>
-              <div className="description">Better courses, bigger profits</div>
-              <div className="price">$299</div>
-              <div className="select-wrapper">
-                For website with
-                <select name="" id="">
-                  <option value="">1</option>
-                  <option value="">3</option>
-                  <option value="">10</option>
-                </select>
-                site license
-              </div>
-              <a className="admin-btn btn-purple">
-                Yes, Upgrade Me! <i className="adminlib-arrow-right arrow-icon"></i>
-              </a>
+            <div className="heading">Your students will love this!</div>
+            <div className="description">Better courses, bigger profits</div>
+            <div className="price">$299</div>
+            <div className="select-wrapper">
+              For website with
+              <select name="" id="">
+                <option value="">1</option>
+                <option value="">3</option>
+                <option value="">10</option>
+              </select>
+              site license
+            </div>
+            <a className="admin-btn btn-purple">
+              Yes, Upgrade Me! <i className="adminlib-arrow-right arrow-icon"></i>
+            </a>
           </div>
         </>
     },
-    { id: "testimonials", label: "Testimonials", content: "testimonials" },
+    {
+      id: "testimonials", label: "Testimonials", content:
+        <>
+          <div className="review-wrapper">
+            <div className="review-box">
+              <div className="start-wrapper">
+                <div className="adminlib-star"></div>
+                <div className="adminlib-star"></div>
+                <div className="adminlib-star"></div>
+                <div className="adminlib-star"></div>
+                <div className="adminlib-star"></div>
+              </div>
+              <div className="body">
+                <div className="review">
+                  "The Pro version transformed my workflow. The advanced features are worth every penny!"
+                </div>
+              </div>
+              <div className="footer">
+                <img src={reviewImage} alt="" />
+                <div className="details">
+                  <div className="name">Sarah Johnson</div>
+                  <div className="role">Web Developer</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="review-box">
+              <div className="start-wrapper">
+                <div className="adminlib-star"></div>
+                <div className="adminlib-star"></div>
+                <div className="adminlib-star"></div>
+                <div className="adminlib-star"></div>
+                <div className="adminlib-star"></div>
+              </div>
+              <div className="body">
+                <div className="review">
+                  "The Pro version transformed my workflow. The advanced features are worth every penny!"
+                </div>
+              </div>
+              <div className="footer">
+                <img src={reviewImage} alt="" />
+                <div className="details">
+                  <div className="name">Sarah Johnson</div>
+                  <div className="role">Web Developer</div>
+                </div>
+              </div>
+            </div>
+
+
+            <div className="review-box">
+              <div className="start-wrapper">
+                <div className="adminlib-star"></div>
+                <div className="adminlib-star"></div>
+                <div className="adminlib-star"></div>
+                <div className="adminlib-star"></div>
+                <div className="adminlib-star"></div>
+              </div>
+              <div className="body">
+                <div className="review">
+                  "The Pro version transformed my workflow. The advanced features are worth every penny!"
+                </div>
+              </div>
+              <div className="footer">
+                <img src={reviewImage} alt="" />
+                <div className="details">
+                  <div className="name">Sarah Johnson</div>
+                  <div className="role">Web Developer</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </>
+    },
   ];
   return (
     <>
@@ -433,7 +505,10 @@ const AdminDashboard = () => {
           </div>
         </div>
         <div className="row">
-          <div className="column">
+          <div className="column width-35">
+            
+          </div>
+          <div className="column width-65">
             <div className="tab-titles dashboard-tabs">
               {tabs.map((tab) => (
                 <div
