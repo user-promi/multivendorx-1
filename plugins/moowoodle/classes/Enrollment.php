@@ -494,7 +494,7 @@ class Enrollment {
 			// Restrict quantity to 1
 			if ( $cart_item['quantity'] > 1 ) {
 				WC()->cart->set_quantity( $cart_item_key, 1 );
-				wc_add_notice( __( 'You can only purchase one unit of this Moodle product.', 'moowoodle' ), 'error' );
+				wc_add_notice( __( 'You can only purchase one unit of this MooWoodle product.', 'moowoodle' ), 'error' );
 			}
 		}
 	}
