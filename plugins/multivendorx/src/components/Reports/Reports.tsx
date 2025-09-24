@@ -43,7 +43,7 @@ import RevenueOld from './RevenueOld';
 import RefundedOrderOld from './RefundedOrderOld';
 import axios from 'axios';
 
-const Analytics = () => {
+const Reports = () => {
 
   function requestOrders() {
     axios({
@@ -107,7 +107,7 @@ const Analytics = () => {
   const overview = [
     {
       id: 'earnings',
-      label: 'Net Product',
+      label: 'No. of orders',
       count: "7896",
       icon: 'adminlib-support green',
     },
@@ -146,13 +146,11 @@ const Analytics = () => {
   ];
   const [activeTab, setActiveTab] = useState("overview");
   const tabs = [
-    { id: "overview", label: "Marketplace Report", content: <Overview overview={overview} data={data} overviewData={overviewData} pieData={pieData} /> },
-    { id: "revenue", label: "Product Report", content: <Revenue /> },
-    { id: "payout", label: "Store Report", content: <Transactions /> },
-    // { id: "refundedOrders", label: "Traffic & Conversion", content: <RefundedOrders /> },
-    // { id: "RevenueOld", label: "Revenue", content: <RevenueOld /> },
+    { id: "overview", label: "Marketplace", content: <Overview overview={overview} data={data} overviewData={overviewData} pieData={pieData} /> },
+    { id: "revenue", label: "Products", content: <Revenue /> },
+    { id: "payout", label: "Stores", content: <Transactions /> },
     { id: "StoreOrders", label: "Store Orders", content: <StoreOrders /> },
-    { id: "RefundedOrderOld", label: "Refunded Order", content: <RefundedOrderOld /> },
+    { id: "RefundedOrderOld", label: "Refunded Orders", content: <RefundedOrderOld /> },
   ];
 
   const COLORS = ["#5007aa", "#00c49f", "#ff7300", "#d400ffff", "#004ec4ff"];
@@ -175,7 +173,7 @@ const Analytics = () => {
     <>
       <AdminBreadcrumbs
         activeTabIcon="adminlib-analytics"
-        tabTitle="Analytics"
+        tabTitle="Reports"
         description={'Manage all pending administrative actions including approvals, payouts, and notifications.'}
 
       />
@@ -214,4 +212,4 @@ const Analytics = () => {
   );
 };
 
-export default Analytics;
+export default Reports;
