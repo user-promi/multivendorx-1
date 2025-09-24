@@ -10,13 +10,13 @@ export default {
             name: __('Booking', 'multivendorx'),
             desc: "Allow customers to reserve appointments, equipment, or services.",
             icon: 'adminlib-booking',
-            doc_link: 'https://multivendorx.com/docs/knowledgebase/booking-product',
-            //settings_link: appLocalizer.site_url,
+            doc_link: 'https://multivendorx.com/docs/knowledgebase/booking-product',            
+            settings_link: "#",
             req_pluging: [
                 { name: 'WooCommerce Booking', link: 'https://woocommerce.com/products/woocommerce-bookings/' }
             ],
             pro_module: true,
-            category: 'marketplace_types'
+            category: ['marketplace_types', 'product_type'],
         },
         {
             id: 'appointment',
@@ -27,7 +27,7 @@ export default {
             //settings_link: appLocalizer.site_url,
             pro_module: true,
             req_pluging: [{ name: 'WooCommerce Appointment', link: 'https://bookingwp.com/plugins/woocommerce-appointments/' }],
-            category: 'marketplace_types'
+            // category: 'marketplace_types'
         },
         {
             id: 'subscription',
