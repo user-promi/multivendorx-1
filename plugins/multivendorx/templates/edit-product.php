@@ -214,6 +214,7 @@ if ($default_types && !empty($default_types)) {
                                 MultiVendorX()->util->get_template('views/html-product-data-inventory.php', array( 'self' => $self, 'product_object' => $product_object, 'post' => $post ) );
                                 MultiVendorX()->util->get_template('views/html-product-data-linked-products.php', array( 'self' => $self, 'product_object' => $product_object, 'post' => $post ) );
                                 MultiVendorX()->util->get_template('views/html-product-data-attributes.php', array( 'self' => $self, 'product_object' => $product_object, 'post' => $post ) );
+                                MultiVendorX()->util->get_template('views/html-product-data-advanced.php', array( 'self' => $self, 'product_object' => $product_object, 'post' => $post ) );
                                 ?>
                                 <?php do_action( 'mvx_product_tabs_content', $self, $product_object, $post ); ?>
                             </div>

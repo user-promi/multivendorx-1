@@ -10,6 +10,10 @@
  * @version   3.3.0
  */
 defined( 'ABSPATH' ) || exit;
+
+$self = $args['self'];
+$product_object = $args['product_object'];
+$post = $args['post'];
 ?>
 <div role="tabpanel" class="tab-pane fade" id="advanced_product_data">
     <div class="row-padding"> 
