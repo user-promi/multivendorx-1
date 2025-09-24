@@ -437,7 +437,7 @@ export default {
             desc: "Reports on sales, orders, and revenue, with integration for Google Analytics.",
             icon: 'adminlib-rules',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/store-analytics',
-            settings_link: "/wp-admin/admin.php?page=multivendorx#&tab=analytics",
+            settings_link: "/admin.php?page=multivendorx#&tab=analytics",
             pro_module: true,
             category: ['analytics_tools','store_management'],
         },
