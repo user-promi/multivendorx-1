@@ -34,22 +34,41 @@ const Products: React.FC = ({ onUpdated }) => {
         requestData(rowsPerPage, currentPage);
         setPageCount(Math.ceil(totalRows / rowsPerPage));
     }, [pagination]);
-    const handleSingleAction = (action: string, productId: number, status?: string) => {
-        if (action === 'approve_product') {
+    const handleSingleAction = (action: string, productId: number) => {
+        if (!productId) return;
+
+        let statusUpdate: string | null = null;
+
+        switch (action) {
+            case 'approve_product':
+                statusUpdate = 'publish';
+                break;
+            case 'reject_product':
+                statusUpdate = 'trash';
+                break;
+            default:
+                statusUpdate = null;
+                break;
+        }
+
+        // Only call API if statusUpdate is set
+        if (statusUpdate) {
             axios.post(
                 `${appLocalizer.apiUrl}/wc/v3/products/${productId}`,
-                { status: 'publish' },
+                { status: statusUpdate },
                 { headers: { 'X-WP-Nonce': appLocalizer.nonce } }
             )
                 .then(() => {
-                    onUpdated()
+                    console.log(`Product ${productId} status updated to ${statusUpdate}`);
+                    onUpdated?.();
                     requestData(pagination.pageSize, pagination.pageIndex + 1);
                 })
                 .catch((err) => {
-                    console.error('Failed to approve product', err);
+                    console.error('Failed to update product', err);
                 });
         }
     };
+
 
     // Fetch data from backend.
     function requestData(
@@ -122,7 +141,7 @@ const Products: React.FC = ({ onUpdated }) => {
                 return (
                     <TableCell title={product.name || ''}>
                         <a
-                            href={product.permalink}
+                            href={`${appLocalizer.site_url}/wp-admin/post.php?post=${product.id}&action=edit`}
                             target="_blank"
                             rel="noreferrer"
                             className="flex items-center gap-2"
@@ -135,6 +154,7 @@ const Products: React.FC = ({ onUpdated }) => {
                             <span>{product.name || '-'}</span>
                         </a>
                     </TableCell>
+
                 );
             },
         },
@@ -177,7 +197,7 @@ const Products: React.FC = ({ onUpdated }) => {
                     </TableCell>
                 );
             },
-        },
+        },        
         {
             header: __('Status', 'multivendorx'),
             cell: ({ row }) => (
@@ -196,15 +216,14 @@ const Products: React.FC = ({ onUpdated }) => {
                         actions: [
                             {
                                 label: __('Approve Product', 'multivendorx'),
-                                icon: 'adminlib-check', // pick any icon you like
-                                onClick: (rowData) => {
-                                    // Call your approve handler here
-                                    handleSingleAction(
-                                        'approve_product',
-                                        rowData.id!,
-                                        rowData.status
-                                    );
-                                },
+                                icon: 'adminlib-check',
+                                onClick: (rowData) => handleSingleAction('approve_product', rowData.id!),
+                                hover: true,
+                            },
+                            {
+                                label: __('Reject Product', 'multivendorx'),
+                                icon: 'adminlib-close',
+                                onClick: (rowData) => handleSingleAction('reject_product', rowData.id!),
                                 hover: true,
                             },
                         ],
@@ -212,7 +231,6 @@ const Products: React.FC = ({ onUpdated }) => {
                 />
             ),
         }
-
     ];
 
     return (

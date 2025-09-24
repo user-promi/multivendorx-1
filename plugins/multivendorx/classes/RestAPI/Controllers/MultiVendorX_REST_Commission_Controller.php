@@ -161,7 +161,6 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
     
         // Fetch raw commission data (stdClass)
         $commission = \MultiVendorX\Commission\CommissionUtil::get_commission_db( $id );
-    
         if ( ! $commission || empty( $commission->ID ) ) {
             return new \WP_Error(
                 'not_found',
@@ -209,16 +208,17 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
         $response = [
             'commission_id' => absint( $commission->ID ),
             'order_id'      => $order_id,
-            'vendor_id'     => absint( $commission->store_id ),
+            'store_id'      => absint( $commission->store_id ),
             'status'        => $commission->status,
-            'amount'        => wc_price( $commission->commission_amount ),
-            'shipping'      => wc_price( $commission->shipping_amount ),
-            'tax'           => wc_price( $commission->tax_amount ),
-            'total'         => wc_price( $commission->commission_total ),
+            'amount'        => wc_format_decimal( $commission->commission_amount, 2 ),
+            'shipping'      => wc_format_decimal( $commission->shipping_amount, 2 ),
+            'tax'           => wc_format_decimal( $commission->tax_amount, 2 ),
+            'total'         => wc_format_decimal( $commission->commission_total, 2 ),
             'note'          => $commission->commission_note,
             'created'       => $commission->created_at,
             'items'         => $items,
         ];
+        
     
         return rest_ensure_response( $response );
     }

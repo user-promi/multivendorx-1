@@ -143,7 +143,7 @@ class Admin {
                 ),
                 'status-tools' => array(
                     'name'   => __( 'Status & Tools', 'multivendorx' ),
-                    'subtab' => 'version-control',
+                    'subtab' => 'system-status',
                 ),
                 'announcement' => array(
                     'name'   => __( 'Announcement', 'multivendorx' ),

@@ -52,25 +52,28 @@ const Vendors: React.FC = () => {
         setPageCount(Math.ceil(totalRows / rowsPerPage));
     }, [pagination]);
 
-    const handleSingleAction = (action: string, vendorId: number) => {
-        if (action === 'approve_vendor') {
-            axios.put(
-                `${appLocalizer.apiUrl}/mvx/v1/store/${vendorId}`, // replace with your API
-                { status: 'approved' },
-                { headers: { 'X-WP-Nonce': appLocalizer.nonce } }
-            )
-                .then(() => requestData(pagination.pageSize, pagination.pageIndex + 1))
-                .catch((err) => console.error('Failed to approve vendor', err));
-        } else if (action === 'reject_vendor') {
-            axios.put(
-                `${appLocalizer.apiUrl}/mvx/v1/store/${vendorId}`, // replace with your API
-                { status: 'rejected' },
-                { headers: { 'X-WP-Nonce': appLocalizer.nonce } }
-            )
-                .then(() => requestData(pagination.pageSize, pagination.pageIndex + 1))
-                .catch((err) => console.error('Failed to reject vendor', err));
+    const handleSingleAction = (action: string, storeId: number) => {
+        let statusValue = '';
+        if (action === 'active') {
+            statusValue = 'active';
+        } else if (action === 'reject') {
+            statusValue = 'rejected';
+        } else {
+            return;
         }
+
+        axios({
+            method: 'PUT',
+            url: getApiLink(appLocalizer, `store/${storeId}`), // same API structure as EditStore
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            data: { status: statusValue },
+        })
+            .then(() => {
+                requestData(pagination.pageSize, pagination.pageIndex + 1);
+            })
+            .catch((err) => console.error(`Failed to update store ${storeId}`, err));
     };
+
 
     // Fetch data from backend.
     function requestData(
@@ -137,12 +140,28 @@ const Vendors: React.FC = () => {
             ),
         },
         {
-            header: __('Slug', 'multivendorx'),
+            header: __('Email', 'multivendorx'),
             cell: ({ row }) => (
-                <TableCell title={row.original.store_slug || ''}>
-                    {row.original.store_slug || '-'}
+                <TableCell title={row.original.email || ''}>
+                    {row.original.email || '-'}
                 </TableCell>
             ),
+        },
+        {
+            header: __('Applied On', 'multivendorx'),
+            cell: ({ row }) => {
+                const rawDate = row.original.applied_on;
+                let formattedDate = '-';
+                if (rawDate) {
+                    const dateObj = new Date(rawDate);
+                    formattedDate = new Intl.DateTimeFormat('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric',
+                    }).format(dateObj);
+                }
+                return <TableCell title={formattedDate}>{formattedDate}</TableCell>;
+            },
         },
         {
             header: __('Status', 'multivendorx'),
@@ -164,7 +183,7 @@ const Vendors: React.FC = () => {
                                 label: __('Approve', 'multivendorx'),
                                 icon: 'adminlib-check',
                                 onClick: (rowData) => {
-                                    handleSingleAction('approve_vendor', rowData.id!);
+                                    handleSingleAction('active', rowData.id!);
                                 },
                                 hover: true,
                             },
@@ -172,7 +191,7 @@ const Vendors: React.FC = () => {
                                 label: __('Reject', 'multivendorx'),
                                 icon: 'adminlib-close',
                                 onClick: (rowData) => {
-                                    handleSingleAction('reject_vendor', rowData.id!);
+                                    handleSingleAction('reject', rowData.id!);
                                 },
                                 hover: true,
                             },

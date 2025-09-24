@@ -89,29 +89,6 @@ const Commission: React.FC = () => {
                 setError(__('Failed to load total rows', 'multivendorx'));
             });
     }, []);
-    const handleSingleAction = (action: string, commissionId: number) => {
-        if (action === 'delete_commission') {
-            // Confirm before deleting
-            if (!window.confirm(__('Are you sure you want to delete this commission?', 'multivendorx'))) {
-                return;
-            }
-
-            axios({
-                method: 'DELETE',
-                url: getApiLink(appLocalizer, `commission/${commissionId}`),
-                headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            })
-                .then(() => {
-                    // Refresh the table after deletion
-                    requestData(pagination.pageSize, pagination.pageIndex + 1);
-                })
-                .catch((err) => {
-                    console.error('Failed to delete commission', err);
-                    setModalDetails(__('Failed to delete commission', 'multivendorx'));
-                    setOpenModal(true);
-                });
-        }
-    };
 
     useEffect(() => {
         const currentPage = pagination.pageIndex + 1;
@@ -237,36 +214,36 @@ const Commission: React.FC = () => {
         },
         {
             header: __('Order Amount', 'multivendorx'),
-            cell: ({ row }) => <TableCell title={row.original.totalOrderAmount || '-'}>{row.original.totalOrderAmount || '-'}</TableCell>,
+            cell: ({ row }) => <TableCell title={row.original.totalOrderAmount ? `${appLocalizer.currency_symbol}${row.original.totalOrderAmount}` : '-'}>{row.original.totalOrderAmount ? `${appLocalizer.currency_symbol}${row.original.totalOrderAmount}` : '-'}</TableCell>,
         },
         {
             header: __('Commission Earned', 'multivendorx'),
-            cell: ({ row }) => <TableCell title={row.original.commissionAmount || '-'}>{row.original.commissionAmount || '-'}</TableCell>,
+            cell: ({ row }) => <TableCell title={row.original.commissionAmount ? `${appLocalizer.currency_symbol}${row.original.commissionAmount}` : '-'}>{row.original.commissionAmount ? `${appLocalizer.currency_symbol}${row.original.commissionAmount}` : '-'}</TableCell>,
         },
         {
             header: __('Facilitator Fee', 'multivendorx'),
-            cell: ({ row }) => <TableCell title={row.original.facilitatorFee || '-'}>{row.original.facilitatorFee || '-'}</TableCell>,
+            cell: ({ row }) => <TableCell title={row.original.facilitatorFee ? `${appLocalizer.currency_symbol}${row.original.facilitatorFee}` : '-'}>{row.original.facilitatorFee ? `${appLocalizer.currency_symbol}${row.original.facilitatorFee}` : '-'}</TableCell>,
         },
         {
             header: __('Gateway Fee', 'multivendorx'),
-            cell: ({ row }) => <TableCell title={row.original.gatewayFee || '-'}>{row.original.gatewayFee || '-'}</TableCell>,
+            cell: ({ row }) => <TableCell title={row.original.gatewayFee ? `${appLocalizer.currency_symbol}${row.original.gatewayFee}` : '-'}>{row.original.gatewayFee ? `${appLocalizer.currency_symbol}${row.original.gatewayFee}` : '-'}</TableCell>,
         },
         {
             header: __('Shipping Amount', 'multivendorx'),
-            cell: ({ row }) => <TableCell title={row.original.shippingAmount || '-'}>{row.original.shippingAmount || '-'}</TableCell>,
+            cell: ({ row }) => <TableCell title={row.original.shippingAmount ? `${appLocalizer.currency_symbol}${row.original.shippingAmount}` : '-'}>{row.original.shippingAmount ? `${appLocalizer.currency_symbol}${row.original.shippingAmount}` : '-'}</TableCell>,
         },
         {
             header: __('Tax Amount', 'multivendorx'),
-            cell: ({ row }) => <TableCell title={row.original.taxAmount || '-'}>{row.original.taxAmount || '-'}</TableCell>,
+            cell: ({ row }) => <TableCell title={row.original.taxAmount ? `${appLocalizer.currency_symbol}${row.original.taxAmount}` : '-'}>{row.original.taxAmount ? `${appLocalizer.currency_symbol}${row.original.taxAmount}` : '-'}</TableCell>,
         },
         {
             header: __('Discount Amount', 'multivendorx'),
-            cell: ({ row }) => <TableCell title={row.original.discountAmount || '-'}>{row.original.discountAmount || '-'}</TableCell>,
+            cell: ({ row }) => <TableCell title={row.original.discountAmount ? `${appLocalizer.currency_symbol}${row.original.discountAmount}` : '-'}>{row.original.discountAmount ? `${appLocalizer.currency_symbol}${row.original.discountAmount}` : '-'}</TableCell>,
         },
         {
             header: __('Commission Total', 'multivendorx'),
-            cell: ({ row }) => <TableCell title={row.original.commissionTotal || '-'}>{row.original.commissionTotal || '-'}</TableCell>,
-        },
+            cell: ({ row }) => <TableCell title={row.original.commissionTotal ? `${appLocalizer.currency_symbol}${row.original.commissionTotal}` : '-'}>{row.original.commissionTotal ? `${appLocalizer.currency_symbol}${row.original.commissionTotal}` : '-'}</TableCell>,
+        },        
         {
             header: __('Paid Status', 'multivendorx'),
             cell: ({ row }) => (
@@ -286,7 +263,7 @@ const Commission: React.FC = () => {
                     header={{
                         actions: [
                             {
-                                label: __('View', 'multivendorx'),
+                                label: __('View Commission', 'multivendorx'),
                                 icon: 'adminlib-eye',
                                 onClick: (rowData) => {
                                     setSelectedCommissionId(rowData.id ?? null);
@@ -295,16 +272,29 @@ const Commission: React.FC = () => {
                                 hover: true,
                             },
                             {
-                                label: __('Delete', 'multivendorx'),
-                                icon: 'adminlib-create',
-                                onClick: (rowData) => handleSingleAction('delete_commission', rowData.id!),
+                                label: __('Regenerate Commission', 'multivendorx'),
+                                icon: 'adminlib-refresh',
+                                onClick: (rowData) => {
+                                    console.log(rowData);
+                                    console.log(appLocalizer);
+                                
+                                    if (rowData?.orderId) {
+                                        const url = `${appLocalizer.site_url.replace(/\/$/, '')}/wp-admin/admin.php?page=wc-orders&action=edit&id=${rowData.orderId}`;
+                                        window.open(url, '_blank');
+                                    } else {
+                                        alert(__('Order ID missing for this commission.', 'multivendorx'));
+                                    }
+                                },
+                                
                                 hover: true,
                             },
                         ],
                     }}
                 />
             ),
-        },
+        }
+
+
 
     ];
 
@@ -350,22 +340,6 @@ const Commission: React.FC = () => {
                 </div>
             ),
         },
-        // {
-        //     name: 'bulk-action',
-        //     render: () => (
-        //         <div className=" bulk-action">
-        //             <select name="action" className="basic-select" ref={bulkSelectRef}>
-        //                 <option value="">{__('Bulk actions')}</option>
-        //                 <option value="mark_paid">{__('Mark Paid')}</option>
-        //                 <option value="delete">{__('Delete')}</option>
-        //                 <option value="restore">{__('Restore')}</option>
-        //             </select>
-        //             {/* <button name="bulk-action-apply" className="admin-btn btn-purple" onClick={handleBulkAction}>
-        //                 {__('Apply')}
-        //             </button> */}
-        //         </div>
-        //     ),
-        // },
         {
             name: 'date',
             render: (updateFilter) => (
@@ -436,7 +410,6 @@ const Commission: React.FC = () => {
             </button>
         </div>
     );
-    // 👉 Demo data for commissions
     // Type for an order line
     interface OrderItem {
         id: number;

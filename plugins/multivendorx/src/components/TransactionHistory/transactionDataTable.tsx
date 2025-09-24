@@ -16,7 +16,7 @@ type StoreRow = {
     status?: string;
 };
 
-const TransactionDataTable: React.FC = ({storeId}) => {
+const TransactionDataTable: React.FC = ({ storeId }) => {
     const [data, setData] = useState<StoreRow[] | null>(null);
 
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
@@ -35,15 +35,15 @@ const TransactionDataTable: React.FC = ({storeId}) => {
         requestData(rowsPerPage, currentPage);
         setPageCount(Math.ceil(totalRows / rowsPerPage));
     }, [pagination]);
-    const [ showDropdown, setShowDropdown ] = useState( false );
-    
-        const toggleDropdown = ( id: any ) => {
-            if ( showDropdown === id ) {
-                setShowDropdown( false );
-                return;
-            }
-            setShowDropdown( id );
-        };
+    const [showDropdown, setShowDropdown] = useState(false);
+
+    const toggleDropdown = (id: any) => {
+        if (showDropdown === id) {
+            setShowDropdown(false);
+            return;
+        }
+        setShowDropdown(id);
+    };
     // Fetch data from backend.
     function requestData(
         rowsPerPage = 10,
@@ -119,7 +119,10 @@ const TransactionDataTable: React.FC = ({storeId}) => {
             header: __('Price', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell title={row.original.price || ''}>
-                    {row.original.price ? `${row.original.price}` : '-'}
+                    {row.original.price
+                        ? `${appLocalizer.currency_symbol}${Number(row.original.price).toLocaleString()}`
+                        : '-'}
+
                 </TableCell>
             ),
         },
@@ -131,49 +134,6 @@ const TransactionDataTable: React.FC = ({storeId}) => {
                 </TableCell>
             ),
         },
-        
-        {
-            header: __('Action', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title="Action">
-                    <div className="action-section">
-                        <div className="action-icons">
-                            <i
-                                className="adminlib-more-vertical"
-                                onClick={() =>
-                                    toggleDropdown(row.original.order_id)
-                                }
-                            ></i>
-                            <div
-                                className={`action-dropdown ${showDropdown === row.original.order_id
-                                        ? 'show'
-                                        : ''
-                                    }`}
-                            >
-                        <ul>
-                            <li
-                                onClick={() =>
-                                    (window.location.href = `?page=multivendorx#&tab=stores&view&id=${row.original.id}`)
-                                }
-                            >
-                                <i className="adminlib-eye"></i>
-                                { __( 'View Store', 'multivendorx' ) }
-                            </li>
-                            <li
-                                onClick={() =>
-                                    (window.location.href = `?page=multivendorx#&tab=stores&edit/${row.original.id}`)
-                                }
-                            >
-                                <i className="adminlib-create"></i>
-                                { __( 'Edit Store', 'multivendorx' ) }
-                            </li>
-                        </ul>
-                        </div>
-                        </div>
-                    </div>
-                </TableCell>
-            ),
-        }
     ];
 
     return (
@@ -191,6 +151,7 @@ const TransactionDataTable: React.FC = ({storeId}) => {
                     handlePagination={requestApiForData}
                     perPageOption={[10, 25, 50]}
                     typeCounts={[]}
+                    totalCounts={totalRows}
                 />
             </div>
         </>

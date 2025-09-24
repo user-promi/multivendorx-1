@@ -114,12 +114,28 @@ const StoreTable: React.FC = () => {
             ),
         },
         {
-            header: __('Slug', 'multivendorx'),
+            header: __('Email', 'multivendorx'),
             cell: ({ row }) => (
-                <TableCell title={row.original.store_slug || ''}>
-                    {row.original.store_slug || '-'}
+                <TableCell title={row.original.email || ''}>
+                    {row.original.email || '-'}
                 </TableCell>
             ),
+        },
+        {
+            header: __('Applied On', 'multivendorx'),
+            cell: ({ row }) => {
+                const rawDate = row.original.applied_on;
+                let formattedDate = '-';
+                if (rawDate) {
+                    const dateObj = new Date(rawDate);
+                    formattedDate = new Intl.DateTimeFormat('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric',
+                    }).format(dateObj);
+                }
+                return <TableCell title={formattedDate}>{formattedDate}</TableCell>;
+            },
         },
         {
             header: __('Status', 'multivendorx'),
@@ -157,14 +173,6 @@ const StoreTable: React.FC = () => {
                                 hover: true,
                             },
                             {
-                                label: __('View Public Store', 'multivendorx'),
-                                icon: 'adminlib-eye',
-                                onClick: (rowData) => {
-                                    window.open(`${appLocalizer.site_url}/store/${rowData.store_slug}`, '_blank');
-                                },
-                                hover: true,
-                            },
-                            {
                                 label: __('Edit Store', 'multivendorx'),
                                 icon: 'adminlib-create',
                                 onClick: (rowData) => {
@@ -178,18 +186,6 @@ const StoreTable: React.FC = () => {
                                 onClick: (rowData) => {
                                     window.location.href = `?page=multivendorx#&tab=stores&edit/${rowData.id}`;
                                 },
-                                hover: true,
-                            },
-                            {
-                                label: __('Approve', 'multivendorx'),
-                                icon: 'adminlib-check',
-                                onClick: (rowData) => handleSingleAction('approve_vendor', rowData.id!),
-                                hover: true,
-                            },
-                            {
-                                label: __('Reject', 'multivendorx'),
-                                icon: 'adminlib-close',
-                                onClick: (rowData) => handleSingleAction('reject_vendor', rowData.id!),
                                 hover: true,
                             },
                         ],

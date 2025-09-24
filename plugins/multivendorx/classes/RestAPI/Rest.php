@@ -36,6 +36,7 @@ class Rest {
         add_filter('woocommerce_rest_product_object_query', array($this, 'filter_products_by_meta_exists'), 10, 2);
         add_filter('woocommerce_rest_coupon_object_query', array($this, 'filter_coupons_by_meta_exists'), 10, 2);
     }
+
      /**
      * Filter orders by store_id in line items
      */
