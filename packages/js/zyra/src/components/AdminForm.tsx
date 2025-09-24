@@ -1926,14 +1926,14 @@ const AdminForm: React.FC<AdminFormProps> = ({
                         <div className="admin-notice-wrapper notice-error">
                             <i className="admin-font adminlib-info"></i>
                             <div className="notice-details">
-                                <div className="title">Sorry</div>
+                                <div className="title">Sorry!</div>
                                 <div className="desc">{successMsg}</div>
                             </div>
                         </div>
                         <div className="admin-notice-wrapper">
                             <i className="admin-font adminlib-icon-yes"></i>
                             <div className="notice-details">
-                                <div className="title">Settings Save</div>
+                                <div className="title">Settings Saved!</div>
                                 <div className="desc">{successMsg}</div>
                             </div>
                         </div>
