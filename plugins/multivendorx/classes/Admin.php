@@ -100,14 +100,6 @@ class Admin {
                     'name'   => __( 'Dashboard', 'multivendorx' ),
                     'subtab' => '',
                 ),
-                'actions-items' => array(
-                    'name'   => __( 'Actions Items', 'multivendorx' ),
-                    'subtab' => '',
-                ),
-                'customer-support' => array(
-                    'name'   => __( 'Customer Support', 'multivendorx' ),
-                    'subtab' => '',
-                ),
                 'stores' => array(
                     'name'   => __( 'Stores', 'multivendorx' ),
                     'subtab' => '',
@@ -121,6 +113,26 @@ class Admin {
                     'name'   => __( 'Transaction History', 'multivendorx' ),
                     'subtab' => '',
                 ),
+                'actions-items' => array(
+                    'name'   => __( 'Actions Items', 'multivendorx' ),
+                    'subtab' => '',
+                ),
+                'customer-support' => array(
+                    'name'   => __( 'Customer Support', 'multivendorx' ),
+                    'subtab' => '',
+                ),
+                'announcement' => array(
+                    'name'   => __( 'Announcement', 'multivendorx' ),
+                    'subtab' => '',
+                ),
+                'knowledgebase' => array(
+                    'name'   => __( 'Knowledgebase', 'multivendorx' ),
+                    'subtab' => '',
+                ),
+                'advertisement' => array(
+                    'name'   => __( 'Advertisement', 'multivendorx' ),
+                    'subtab' => '',
+                ),
                 'analytics' => array(
                     'name'   => __( 'Analytics', 'multivendorx' ),
                     'subtab' => '',
@@ -129,10 +141,7 @@ class Admin {
                     'name'   => __( 'Memberships', 'multivendorx' ),
                     'subtab' => 'payment-membership-message',
                 ),
-                'advertisement' => array(
-                    'name'   => __( 'Advertisement', 'multivendorx' ),
-                    'subtab' => '',
-                ),
+                
                 'settings' => array(
                     'name'   => __( 'Settings', 'multivendorx' ),
                     'subtab' => 'marketplace-settings',
@@ -144,15 +153,8 @@ class Admin {
                 'status-tools' => array(
                     'name'   => __( 'Status & Tools', 'multivendorx' ),
                     'subtab' => 'version-control',
-                ),
-                'announcement' => array(
-                    'name'   => __( 'Announcement', 'multivendorx' ),
-                    'subtab' => '',
-                ),
-                'knowledgebase' => array(
-                    'name'   => __( 'Knowledgebase', 'multivendorx' ),
-                    'subtab' => '',
-                ),
+                ),                
+                
                 // 'blogs' => array(
                 //     'name'   => __( 'Blogs', 'multivendorx' ),
                 //     'subtab' => '',
