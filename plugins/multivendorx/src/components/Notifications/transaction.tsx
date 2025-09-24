@@ -35,11 +35,27 @@ const Transactions: React.FC = () => {
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
             params: { count: true, status: 'Completed' },
         })
-        .then((response) => {
-            setTotalRows(response.data || 0);
-            setPageCount(Math.ceil(response.data / pagination.pageSize));
-        });
+            .then((response) => {
+                setTotalRows(response.data || 0);
+                setPageCount(Math.ceil(response.data / pagination.pageSize));
+            });
     }, []);
+    const handleTransactionAction = (action: 'approve' | 'reject', transactionId: number) => {
+        let newStatus = action === 'approve' ? 'Completed' : 'Rejected';
+
+        axios.put(
+            `${appLocalizer.apiUrl}/transactions/${transactionId}`, // replace with your actual endpoint
+            { status: newStatus },
+            { headers: { 'X-WP-Nonce': appLocalizer.nonce } }
+        )
+            .then(() => {
+                console.log(`Transaction ${action}d successfully`);
+                requestData(pagination.pageSize, pagination.pageIndex + 1); // refresh table
+            })
+            .catch((error) => {
+                console.error(`Failed to ${action} transaction`, error.response || error.message);
+            });
+    };
 
     // Fetch paginated transactions
     useEffect(() => {
@@ -60,8 +76,8 @@ const Transactions: React.FC = () => {
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
             params: { row: rowsPerPage, page: currentPage, status: 'Completed' },
         })
-        .then((response) => setData(response.data || []))
-        .catch(() => setData([]));
+            .then((response) => setData(response.data || []))
+            .catch(() => setData([]));
     };
 
     const columns: ColumnDef<TransactionRow>[] = [
@@ -83,54 +99,29 @@ const Transactions: React.FC = () => {
             ),
         },
         {
-            header: __('Date', 'multivendorx'),
-            cell: ({ row }) => {
-                const rawDate = row.original.date;
-                let formattedDate = '-';
-                if (rawDate) {
-                    const dateObj = new Date(rawDate);
-                    formattedDate = new Intl.DateTimeFormat('en-US', {
-                        month: 'short',
-                        day: 'numeric',
-                        year: 'numeric',
-                    }).format(dateObj);
-                }
-                return <TableCell title={formattedDate}>{formattedDate}</TableCell>;
-            },
-        },
-        {
             header: __('Store', 'multivendorx'),
             cell: ({ row }) => <TableCell>{row.original.store_name || '-'}</TableCell>,
         },
         {
-            header: __('Order Details', 'multivendorx'),
-            cell: ({ row }) => <TableCell>{row.original.order_details}</TableCell>,
-        },
-        {
-            header: __('Credit', 'multivendorx'),
+            header: __('Amount', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell>
-                    {(Number(row.original.credit) || 0).toFixed(2)}
+                    {`${appLocalizer.currency_symbol}${Number(row.original.amount).toFixed(2)}`}
                 </TableCell>
             ),
         },
         {
-            header: __('Debit', 'multivendorx'),
+            header: __('Requested Amount', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell>
-                    {(Number(row.original.debit) || 0).toFixed(2)}
+                    {`${appLocalizer.currency_symbol}${Number(row.original.balance).toFixed(2)}`}
                 </TableCell>
             ),
         },
         {
-            header: __('Balance', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell>
-                    {(Number(row.original.balance) || 0).toFixed(2)}
-                </TableCell>
-            ),
+            header: __('Payment Method', 'multivendorx'),
+            cell: ({ row }) => <TableCell>{row.original.payment_method || '-'}</TableCell>,
         },
-        
         {
             header: __('Status', 'multivendorx'),
             cell: ({ row }) => (
@@ -144,21 +135,35 @@ const Transactions: React.FC = () => {
         {
             header: __('Action', 'multivendorx'),
             cell: ({ row }) => (
-                <TableCell>
-                    <div className="action-section">
-                        <i className="adminlib-more-vertical" onClick={() => toggleDropdown(row.original.id)}></i>
-                        <div className={`action-dropdown ${showDropdown === row.original.id ? 'show' : ''}`}>
-                            <ul>
-                                <li onClick={() => setModalTransaction(row.original)}>
-                                    <i className="adminlib-eye"></i> {__('View', 'multivendorx')}
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </TableCell>
+                <TableCell
+                    type="action-dropdown"
+                    rowData={row.original}
+                    header={{
+                        actions: [
+                            {
+                                label: __('Approve', 'multivendorx'),
+                                icon: 'adminlib-check',
+                                onClick: (rowData) => {
+                                    handleTransactionAction('approve', rowData.id!);
+                                },
+                                hover: true,
+                            },
+                            {
+                                label: __('Reject', 'multivendorx'),
+                                icon: 'adminlib-close',
+                                onClick: (rowData) => {
+                                    handleTransactionAction('reject', rowData.id!);
+                                },
+                                hover: true,
+                            },
+                        ],
+                    }}
+                />
             ),
-        },
+        }
+        
     ];
+
 
     return (
         <>
@@ -175,6 +180,7 @@ const Transactions: React.FC = () => {
                     handlePagination={requestData}
                     perPageOption={[10, 25, 50]}
                     typeCounts={[]}
+                    totalCounts={totalRows}
                 />
             </div>
 

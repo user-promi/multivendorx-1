@@ -214,36 +214,36 @@ const Commission: React.FC = () => {
         },
         {
             header: __('Order Amount', 'multivendorx'),
-            cell: ({ row }) => <TableCell title={row.original.totalOrderAmount || '-'}>{row.original.totalOrderAmount || '-'}</TableCell>,
+            cell: ({ row }) => <TableCell title={row.original.totalOrderAmount ? `${appLocalizer.currency_symbol}${row.original.totalOrderAmount}` : '-'}>{row.original.totalOrderAmount ? `${appLocalizer.currency_symbol}${row.original.totalOrderAmount}` : '-'}</TableCell>,
         },
         {
             header: __('Commission Earned', 'multivendorx'),
-            cell: ({ row }) => <TableCell title={row.original.commissionAmount || '-'}>{row.original.commissionAmount || '-'}</TableCell>,
+            cell: ({ row }) => <TableCell title={row.original.commissionAmount ? `${appLocalizer.currency_symbol}${row.original.commissionAmount}` : '-'}>{row.original.commissionAmount ? `${appLocalizer.currency_symbol}${row.original.commissionAmount}` : '-'}</TableCell>,
         },
         {
             header: __('Facilitator Fee', 'multivendorx'),
-            cell: ({ row }) => <TableCell title={row.original.facilitatorFee || '-'}>{row.original.facilitatorFee || '-'}</TableCell>,
+            cell: ({ row }) => <TableCell title={row.original.facilitatorFee ? `${appLocalizer.currency_symbol}${row.original.facilitatorFee}` : '-'}>{row.original.facilitatorFee ? `${appLocalizer.currency_symbol}${row.original.facilitatorFee}` : '-'}</TableCell>,
         },
         {
             header: __('Gateway Fee', 'multivendorx'),
-            cell: ({ row }) => <TableCell title={row.original.gatewayFee || '-'}>{row.original.gatewayFee || '-'}</TableCell>,
+            cell: ({ row }) => <TableCell title={row.original.gatewayFee ? `${appLocalizer.currency_symbol}${row.original.gatewayFee}` : '-'}>{row.original.gatewayFee ? `${appLocalizer.currency_symbol}${row.original.gatewayFee}` : '-'}</TableCell>,
         },
         {
             header: __('Shipping Amount', 'multivendorx'),
-            cell: ({ row }) => <TableCell title={row.original.shippingAmount || '-'}>{row.original.shippingAmount || '-'}</TableCell>,
+            cell: ({ row }) => <TableCell title={row.original.shippingAmount ? `${appLocalizer.currency_symbol}${row.original.shippingAmount}` : '-'}>{row.original.shippingAmount ? `${appLocalizer.currency_symbol}${row.original.shippingAmount}` : '-'}</TableCell>,
         },
         {
             header: __('Tax Amount', 'multivendorx'),
-            cell: ({ row }) => <TableCell title={row.original.taxAmount || '-'}>{row.original.taxAmount || '-'}</TableCell>,
+            cell: ({ row }) => <TableCell title={row.original.taxAmount ? `${appLocalizer.currency_symbol}${row.original.taxAmount}` : '-'}>{row.original.taxAmount ? `${appLocalizer.currency_symbol}${row.original.taxAmount}` : '-'}</TableCell>,
         },
         {
             header: __('Discount Amount', 'multivendorx'),
-            cell: ({ row }) => <TableCell title={row.original.discountAmount || '-'}>{row.original.discountAmount || '-'}</TableCell>,
+            cell: ({ row }) => <TableCell title={row.original.discountAmount ? `${appLocalizer.currency_symbol}${row.original.discountAmount}` : '-'}>{row.original.discountAmount ? `${appLocalizer.currency_symbol}${row.original.discountAmount}` : '-'}</TableCell>,
         },
         {
             header: __('Commission Total', 'multivendorx'),
-            cell: ({ row }) => <TableCell title={row.original.commissionTotal || '-'}>{row.original.commissionTotal || '-'}</TableCell>,
-        },
+            cell: ({ row }) => <TableCell title={row.original.commissionTotal ? `${appLocalizer.currency_symbol}${row.original.commissionTotal}` : '-'}>{row.original.commissionTotal ? `${appLocalizer.currency_symbol}${row.original.commissionTotal}` : '-'}</TableCell>,
+        },        
         {
             header: __('Paid Status', 'multivendorx'),
             cell: ({ row }) => (
@@ -257,34 +257,45 @@ const Commission: React.FC = () => {
         {
             header: __('Action', 'multivendorx'),
             cell: ({ row }) => (
-                <TableCell title="Action">
-                    <div className="action-section">
-                        <div className="action-icons">
-                            <i className="adminlib-more-vertical" onClick={() => toggleDropdown(row.original.id)}></i>
-                            <div className={`action-dropdown ${showDropdown === row.original.id ? 'show' : ''}`}>
-                                <ul>
-                                    <li
-                                        onClick={() => {
-                                            setSelectedCommissionId(row.original.id ?? null);
-                                            setViewCommission(true);
-                                        }}
-                                    >
-                                        <i className="adminlib-eye"></i> {__('View', 'multivendorx')}
-                                    </li>
-                                    <li
-                                        onClick={() =>
-                                            (window.location.href = `?page=multivendorx#&tab=stores&edit/${row.original.id}`)
-                                        }
-                                    >
-                                        <i className="adminlib-create"></i> {__('Delete', 'multivendorx')}
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </TableCell>
+                <TableCell
+                    type="action-dropdown"
+                    rowData={row.original}
+                    header={{
+                        actions: [
+                            {
+                                label: __('View Commission', 'multivendorx'),
+                                icon: 'adminlib-eye',
+                                onClick: (rowData) => {
+                                    setSelectedCommissionId(rowData.id ?? null);
+                                    setViewCommission(true);
+                                },
+                                hover: true,
+                            },
+                            {
+                                label: __('Regenerate Commission', 'multivendorx'),
+                                icon: 'adminlib-refresh',
+                                onClick: (rowData) => {
+                                    console.log(rowData);
+                                    console.log(appLocalizer);
+                                
+                                    if (rowData?.orderId) {
+                                        const url = `${appLocalizer.site_url.replace(/\/$/, '')}/wp-admin/admin.php?page=wc-orders&action=edit&id=${rowData.orderId}`;
+                                        window.open(url, '_blank');
+                                    } else {
+                                        alert(__('Order ID missing for this commission.', 'multivendorx'));
+                                    }
+                                },
+                                
+                                hover: true,
+                            },
+                        ],
+                    }}
+                />
             ),
-        },
+        }
+
+
+
     ];
 
     const realtimeFilter: RealtimeFilter[] = [
@@ -329,22 +340,6 @@ const Commission: React.FC = () => {
                 </div>
             ),
         },
-        // {
-        //     name: 'bulk-action',
-        //     render: () => (
-        //         <div className=" bulk-action">
-        //             <select name="action" className="basic-select" ref={bulkSelectRef}>
-        //                 <option value="">{__('Bulk actions')}</option>
-        //                 <option value="mark_paid">{__('Mark Paid')}</option>
-        //                 <option value="delete">{__('Delete')}</option>
-        //                 <option value="restore">{__('Restore')}</option>
-        //             </select>
-        //             {/* <button name="bulk-action-apply" className="admin-btn btn-purple" onClick={handleBulkAction}>
-        //                 {__('Apply')}
-        //             </button> */}
-        //         </div>
-        //     ),
-        // },
         {
             name: 'date',
             render: (updateFilter) => (
@@ -415,7 +410,6 @@ const Commission: React.FC = () => {
             </button>
         </div>
     );
-    // 👉 Demo data for commissions
     // Type for an order line
     interface OrderItem {
         id: number;
@@ -449,6 +443,7 @@ const Commission: React.FC = () => {
                     perPageOption={[10, 25, 50]}
                     typeCounts={commissionStatus as CommissionStatus}
                     bulkActionComp={() => <BulkAction />}
+                    totalCounts={totalRows}
                 />
             </div>
 

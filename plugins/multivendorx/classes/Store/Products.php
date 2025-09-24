@@ -182,6 +182,8 @@ class Products {
            
         
             MultiVendorX()->util->get_template('add-product.php', ['self' => $this] );
+        } else {
+            
         }
 
         if ( ! $this->no_cap ) {
@@ -196,58 +198,138 @@ class Products {
                     );
                 }
             }
-            // $edit_product_params = apply_filters( 'mvx_advance_product_script_params', array(
-            //     'ajax_url'                            => admin_url( 'admin-ajax.php' ),
-            //     'product_id'                          => $this->product_id,
-            //     'search_products_nonce'               => wp_create_nonce( 'search-products' ),
-            //     'add_attribute_nonce'                 => wp_create_nonce( 'add-attribute' ),
-            //     'save_attributes_nonce'               => wp_create_nonce( 'save-attributes' ),
-            //     'add_variation_nonce'                 => wp_create_nonce( 'add-variation' ),
-            //     'link_variation_nonce'                => wp_create_nonce( 'link-variations' ),
-            //     'delete_variations_nonce'             => wp_create_nonce( 'delete-variations' ),
-            //     'load_variations_nonce'               => wp_create_nonce( 'load-variations' ),
-            //     'save_variations_nonce'               => wp_create_nonce( 'save-variations' ),
-            //     'bulk_edit_variations_nonce'          => wp_create_nonce( 'bulk-edit-variations' ),
-            //     'save_product_nonce'                  => wp_create_nonce( 'save-product' ),
-            //     'product_data_tabs'                   => json_encode( $this->get_product_data_tabs() ),
-            //     'default_product_types'               => json_encode( mvx_default_product_types() ),
-            //     'product_types'                       => json_encode( mvx_get_product_types() ),
-            //     'product_type'                        => $this->product_object->get_type(),
-            //     'downloadable_files'                  => json_encode( $downloadable_contents ),
-            //     'attributes'                          => $this->product_object->get_attributes( 'edit' ),
-            //     'custom_attribute'                    => apply_filters( 'vendor_can_add_custom_attribute', true ),
-            //     'new_attribute_prompt'                => esc_js( __( 'Enter a name for the new attribute term:', 'multivendorx' ) ),
-            //     'remove_attribute'                    => esc_js( __( 'Remove this attribute?', 'multivendorx' ) ),
-            //     'woocommerce_placeholder_img_src'     => wc_placeholder_img_src(),
-            //     'i18n_link_all_variations'            => esc_js( sprintf( __( 'Are you sure you want to link all variations? This will create a new variation for each and every possible combination of variation attributes (max %d per run).', 'multivendorx' ), defined( 'WC_MAX_LINKED_VARIATIONS' ) ? WC_MAX_LINKED_VARIATIONS : 50 ) ),
-            //     'i18n_enter_a_value'                  => esc_js( __( 'Enter a value', 'multivendorx' ) ),
-            //     'i18n_enter_menu_order'               => esc_js( __( 'Variation menu order (determines position in the list of variations)', 'multivendorx' ) ),
-            //     'i18n_enter_a_value_fixed_or_percent' => esc_js( __( 'Enter a value (fixed or %)', 'multivendorx' ) ),
-            //     'i18n_delete_all_variations'          => esc_js( __( 'Are you sure you want to delete all variations? This cannot be undone.', 'multivendorx' ) ),
-            //     'i18n_last_warning'                   => esc_js( __( 'Last warning, are you sure?', 'multivendorx' ) ),
-            //     'i18n_choose_image'                   => esc_js( __( 'Choose an image', 'multivendorx' ) ),
-            //     'i18n_set_image'                      => esc_js( __( 'Set variation image', 'multivendorx' ) ),
-            //     'i18n_variation_added'                => esc_js( __( "variation added", 'multivendorx' ) ),
-            //     'i18n_variations_added'               => esc_js( __( "variations added", 'multivendorx' ) ),
-            //     'i18n_no_variations_added'            => esc_js( __( "No variations added", 'multivendorx' ) ),
-            //     'i18n_remove_variation'               => esc_js( __( 'Are you sure you want to remove this variation?', 'multivendorx' ) ),
-            //     'i18n_scheduled_sale_start'           => esc_js( __( 'Sale start date (YYYY-MM-DD format or leave blank)', 'multivendorx' ) ),
-            //     'i18n_scheduled_sale_end'             => esc_js( __( 'Sale end date (YYYY-MM-DD format or leave blank)', 'multivendorx' ) ),
-            //     'i18n_edited_variations'              => esc_js( __( 'Save changes before changing page?', 'multivendorx' ) ),
-            //     'i18n_variation_count_single'         => esc_js( __( '%qty% variation', 'multivendorx' ) ),
-            //     'i18n_variation_count_plural'         => esc_js( __( '%qty% variations', 'multivendorx' ) ),
-            //     'variations_per_page'                 => absint( apply_filters( 'woocommerce_admin_meta_boxes_variations_per_page', 15 ) ),
-            //     'mon_decimal_point'                   => wc_get_price_decimal_separator(),
-            //     'add_tags'                            => apply_filters( 'mvx_vendor_can_add_product_tag', true, get_current_vendor_id() ),
-            //     'dashboard_nonce'                     => wp_create_nonce('mvx-dashboard'),
-            //     ) );
-            // wp_localize_script( 'mvx-advance-product', 'mvx_advance_product_params', $edit_product_params );
-            // wp_enqueue_script( 'mvx-advance-product' );
+
+            $edit_product_params = apply_filters( 'mvx_advance_product_script_params', array(
+                'ajax_url'                            => admin_url( 'admin-ajax.php' ),
+                'product_id'                          => $this->product_id,
+                'search_products_nonce'               => wp_create_nonce( 'search-products' ),
+                'add_attribute_nonce'                 => wp_create_nonce( 'add-attribute' ),
+                'save_attributes_nonce'               => wp_create_nonce( 'save-attributes' ),
+                'add_variation_nonce'                 => wp_create_nonce( 'add-variation' ),
+                'link_variation_nonce'                => wp_create_nonce( 'link-variations' ),
+                'delete_variations_nonce'             => wp_create_nonce( 'delete-variations' ),
+                'load_variations_nonce'               => wp_create_nonce( 'load-variations' ),
+                'save_variations_nonce'               => wp_create_nonce( 'save-variations' ),
+                'bulk_edit_variations_nonce'          => wp_create_nonce( 'bulk-edit-variations' ),
+                'save_product_nonce'                  => wp_create_nonce( 'save-product' ),
+                'product_data_tabs'                   => json_encode( $this->get_product_data_tabs() ),
+                'default_product_types'               => json_encode( $this->mvx_default_product_types() ),
+                'product_types'                       => json_encode( wc_get_product_types() ),
+                'product_type'                        => $this->product_object->get_type(),
+                'downloadable_files'                  => json_encode( $downloadable_contents ),
+                'attributes'                          => $this->product_object->get_attributes( 'edit' ),
+                'custom_attribute'                    => apply_filters( 'vendor_can_add_custom_attribute', true ),
+                'new_attribute_prompt'                => esc_js( __( 'Enter a name for the new attribute term:', 'multivendorx' ) ),
+                'remove_attribute'                    => esc_js( __( 'Remove this attribute?', 'multivendorx' ) ),
+                'woocommerce_placeholder_img_src'     => wc_placeholder_img_src(),
+                'i18n_link_all_variations'            => esc_js( sprintf( __( 'Are you sure you want to link all variations? This will create a new variation for each and every possible combination of variation attributes (max %d per run).', 'multivendorx' ), defined( 'WC_MAX_LINKED_VARIATIONS' ) ? WC_MAX_LINKED_VARIATIONS : 50 ) ),
+                'i18n_enter_a_value'                  => esc_js( __( 'Enter a value', 'multivendorx' ) ),
+                'i18n_enter_menu_order'               => esc_js( __( 'Variation menu order (determines position in the list of variations)', 'multivendorx' ) ),
+                'i18n_enter_a_value_fixed_or_percent' => esc_js( __( 'Enter a value (fixed or %)', 'multivendorx' ) ),
+                'i18n_delete_all_variations'          => esc_js( __( 'Are you sure you want to delete all variations? This cannot be undone.', 'multivendorx' ) ),
+                'i18n_last_warning'                   => esc_js( __( 'Last warning, are you sure?', 'multivendorx' ) ),
+                'i18n_choose_image'                   => esc_js( __( 'Choose an image', 'multivendorx' ) ),
+                'i18n_set_image'                      => esc_js( __( 'Set variation image', 'multivendorx' ) ),
+                'i18n_variation_added'                => esc_js( __( "variation added", 'multivendorx' ) ),
+                'i18n_variations_added'               => esc_js( __( "variations added", 'multivendorx' ) ),
+                'i18n_no_variations_added'            => esc_js( __( "No variations added", 'multivendorx' ) ),
+                'i18n_remove_variation'               => esc_js( __( 'Are you sure you want to remove this variation?', 'multivendorx' ) ),
+                'i18n_scheduled_sale_start'           => esc_js( __( 'Sale start date (YYYY-MM-DD format or leave blank)', 'multivendorx' ) ),
+                'i18n_scheduled_sale_end'             => esc_js( __( 'Sale end date (YYYY-MM-DD format or leave blank)', 'multivendorx' ) ),
+                'i18n_edited_variations'              => esc_js( __( 'Save changes before changing page?', 'multivendorx' ) ),
+                'i18n_variation_count_single'         => esc_js( __( '%qty% variation', 'multivendorx' ) ),
+                'i18n_variation_count_plural'         => esc_js( __( '%qty% variations', 'multivendorx' ) ),
+                'variations_per_page'                 => absint( apply_filters( 'woocommerce_admin_meta_boxes_variations_per_page', 15 ) ),
+                'mon_decimal_point'                   => wc_get_price_decimal_separator(),
+                'add_tags'                            => apply_filters( 'mvx_vendor_can_add_product_tag', true, get_current_user_id() ),
+                'dashboard_nonce'                     => wp_create_nonce('mvx-dashboard'),
+                ) );
+            
+            wp_enqueue_editor();
+            // Support for media
+            wp_enqueue_media();
+            FrontendScripts::enqueue_script( 'multivendorx-store-products-script' );
+            wp_localize_script( 'multivendorx-store-products-script', 'mvx_advance_product_params', $edit_product_params );
+
+            wp_enqueue_script( 'selectWoo' );
             // do_action( 'mvx_edit_product_template_load', $this->product_id, $this->product_object, $this->post_object );
             MultiVendorX()->util->get_template('edit-product.php', array( 'self' => $this, 'product_object' => $this->product_object, 'post' => $this->post_object, 'is_update' => $this->is_update ) );
         } else {
             $this->product_no_caps_notice();
         }
+    }
+
+    function mvx_is_allowed_product_type() {
+        $product_types = $this->mvx_get_product_types();
+        foreach ( func_get_args() as $arg ) {
+            //typecast normal string params to array
+            $a_arg = (array) $arg;
+            foreach ( $a_arg as $key ) {
+                if ( apply_filters( 'mvx_is_allowed_product_type_check', array_key_exists( $key, $product_types ), $key, $product_types ) ) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    function mvx_get_product_types() {
+        return apply_filters( 'mvx_product_type_selector', $this->mvx_default_product_types() );
+    }
+
+    public function mvx_default_product_types() {
+        return array(
+            'simple'   => __( 'Simple product', 'multivendorx' ),
+        ) ;
+    }
+
+    public static function prepare_attributes( $attributes ) {
+        // Attributes
+        $product_attributes = array();
+        if ( ! empty( $attributes ) ) {
+            foreach ( $attributes as $attribute ) {
+                if ( ! empty( $attribute['name'] ) ) {
+                    $attribute_id = 0;
+                    $attribute_name = wc_clean( $attribute['name'] );
+                    $attribute_position = wc_clean( $attribute['position'] );
+                    $attribute_visible = isset( $attribute['visibility'] );
+                    $attribute_variation = isset( $attribute['variation'] );
+
+                    if ( isset( $attribute['tax_name'] ) ) {
+                        $attribute_id = wc_attribute_taxonomy_id_by_name( $attribute['tax_name'] );
+                    }
+
+                    if( isset($attribute['value']) ) {
+                        $options = is_array( $attribute['value'] ) ? $attribute['value'] : stripslashes( $attribute['value'] );
+                    } else {
+                        $options ='';
+                    }
+
+                    if ( is_array( $options ) ) {
+                        // Term ids sent as array.
+                        $options = wp_parse_id_list( $options );
+                    } else {
+                        // Terms or text sent in textarea.
+                        $options = 0 < $attribute_id ? wc_sanitize_textarea( wc_sanitize_term_text_based( $options ) ) : wc_sanitize_textarea( $options );
+                        $options = wc_get_text_attributes( $options );
+                    }
+
+                    if ( empty( $options ) ) {
+                        continue;
+                    }
+
+                    $attribute = new \WC_Product_Attribute();
+                    $attribute->set_id( $attribute_id );
+                    $attribute->set_name( $attribute_name );
+                    $attribute->set_options( $options );
+                    $attribute->set_position( $attribute_position );
+                    $attribute->set_visible( $attribute_visible );
+                    $attribute->set_variation( $attribute_variation );
+                    $product_attributes[] = $attribute;
+                }
+            }
+        }
+        return $product_attributes;
     }
 
     public function get_product_type_options() {
@@ -425,7 +507,7 @@ class Products {
         return $tax_html;
     }
 
-    function mvx_list_categories($args = array()) {
+    public static function mvx_list_categories($args = array()) {
         global $wp_version;
         $defaults = array(
             'orderby' => 'name',

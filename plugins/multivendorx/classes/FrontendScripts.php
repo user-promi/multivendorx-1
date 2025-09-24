@@ -181,7 +181,7 @@ class FrontendScripts {
 				),
                 'multivendorx-store-products-script' => array(
 					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'js/' . MULTIVENDORX_PLUGIN_SLUG . '-store-products.min.js',
-					'deps'    => array( 'jquery', 'jquery-blockui', 'wp-element', 'wp-i18n', 'react-jsx-runtime' ),
+					'deps'    => array( 'jquery', 'jquery-blockui', 'wp-element', 'wp-i18n', 'react-jsx-runtime', 'jquery-ui-datepicker' ),
 					'version' => $version,
 				),
                 'multivendorx-product-classify-script' => array(
@@ -441,6 +441,9 @@ class FrontendScripts {
                         'marketplace_site'         => get_bloginfo(),
                         'site_url'                 => site_url(),
                         'woocommerce_currency'     => get_woocommerce_currency(),
+                        'user_id'                  => get_current_user_id(),
+                        'currency'                 => get_woocommerce_currency(),       // e.g., USD
+                        'currency_symbol'          => get_woocommerce_currency_symbol()
 					) ),
                 ),
                 'multivendorx-product-tab-script' => array(
@@ -491,7 +494,9 @@ class FrontendScripts {
                         'color'                    => MultiVendorX()->setting->get_setting( 'store_color_settings' ),
                         'store_payment_settings'    => MultiVendorX()->payments->get_all_store_payment_settings(),
                         'store_id'                  => get_user_meta(wp_get_current_user()->ID, 'multivendorx_active_store', true),
-                        'ajaxurl'     => admin_url( 'admin-ajax.php' ),
+                        'ajaxurl'                   => admin_url( 'admin-ajax.php' ),
+                        'currency'                 => get_woocommerce_currency(),       // e.g., USD
+                        'currency_symbol'          => get_woocommerce_currency_symbol()
                     ),
                 ),
                 'multivendorx-registration-form-script'          => array(

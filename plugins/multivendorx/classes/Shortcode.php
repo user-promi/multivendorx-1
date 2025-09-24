@@ -21,9 +21,7 @@ class Shortcode {
 
     public function frontend_scripts() {
         wp_enqueue_script( 'wp-element' );
-        wp_enqueue_editor();
-        // Support for media
-        wp_enqueue_media();
+        
         FrontendScripts::load_scripts();
         FrontendScripts::enqueue_script( 'multivendorx-dashboard-components-script' );
         FrontendScripts::enqueue_script( 'multivendorx-dashboard-script' );
@@ -37,7 +35,6 @@ class Shortcode {
         FrontendScripts::enqueue_script( 'multivendorx-store-dashboard-script' );
         FrontendScripts::localize_scripts( 'multivendorx-store-dashboard-script' );
 
-        FrontendScripts::enqueue_script( 'multivendorx-store-products-script' );
     }
 
     public function display_store_dashboard() {
