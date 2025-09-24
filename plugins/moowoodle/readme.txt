@@ -234,7 +234,7 @@ This project might have bugs and may be lacking certain features. If you'd like 
 == Changelog ==
 
 = 3.3.6 - 2025-09-24 =
-*Fixed      - Issue occurring when a customer purchases a product that isn’t linked to a course.
+* Fixed      - Issue occurring when a customer purchases a product that isn’t linked to a course.
 
 = 3.3.5 - 2025-09-23 =
 * Added     - Compatibility of WooCommerce 10.2.1.
