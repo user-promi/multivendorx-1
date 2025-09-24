@@ -15,6 +15,19 @@ defined('ABSPATH') || exit;
 class Ajax {
     public function __construct() {
         add_action('wp_ajax_switch_store', array($this, 'multivendorx_switch_store'));
+
+        add_action('wp_ajax_mvx_product_classify_next_level_list_categories', array($this, 'mvx_product_classify_next_level_list_categories'));
+        add_action('wp_ajax_mvx_product_classify_search_category_level', array($this, 'mvx_product_classify_search_category_level'));
+        add_action('wp_ajax_show_product_classify_next_level_from_searched_term', array($this, 'show_product_classify_next_level_from_searched_term'));
+        add_action('wp_ajax_mvx_list_a_product_by_name_or_gtin', array($this, 'mvx_list_a_product_by_name_or_gtin'));
+        add_action('wp_ajax_mvx_set_classified_product_terms', array($this, 'mvx_set_classified_product_terms'));
+
+        add_action('wp_ajax_mvx_create_duplicate_product', array(&$this, 'mvx_create_duplicate_product'));
+        add_action('wp_ajax_mvx_show_all_products', array(&$this, 'mvx_show_all_products'));
+
+        add_action('wp_ajax_mvx_edit_product_attribute', array($this, 'edit_product_attribute_callback'));
+        add_action('wp_ajax_mvx_product_save_attributes', array($this, 'save_product_attributes_callback'));
+        
     }
 
     public function multivendorx_switch_store() {
@@ -30,4 +43,366 @@ class Ajax {
         }
     }
 
+    public function mvx_product_classify_next_level_list_categories() {
+        $term_id = isset($_POST['term_id']) ? (int) $_POST['term_id'] : 0;
+        $taxonomy = isset($_POST['taxonomy']) ? wc_clean($_POST['taxonomy']) : '';
+        $cat_level = isset($_POST['cat_level']) ? wc_clean($_POST['cat_level']) : 0;
+        $term = get_term($term_id, $taxonomy);
+        $child_terms = get_term_children($term_id, $taxonomy);
+        $html_level = '';
+        $level = $cat_level + 1;
+        $final = false;
+        $hierarchy = get_ancestors($term_id, $taxonomy);
+        $crumb = array();
+        foreach (array_reverse($hierarchy) as $id) {
+            $h_term = get_term($id, $taxonomy);
+            $crumb[] = $h_term->name;
+        }
+        $crumb[] = $term->name;
+        $html_hierarchy = implode(' <i class="mvx-font ico-right-arrow-icon"></i> ', $crumb);
+        if ($child_terms) {
+            $html_level .= '<ul class="mvx-product-categories ' . $level . '-level" data-cat-level="' . $level . '">';
+            $html_level .= Products::mvx_list_categories(apply_filters("mvx_vendor_product_classify_{$level}_level_categories", array(
+                'taxonomy' => 'product_cat',
+                'hide_empty' => false,
+                'html_list' => true,
+                'parent' => $term_id,
+                'cat_link' => '#',
+                    )));
+            $html_level .= '</ul>';
+        } else {
+            $final = true;
+            //$level = 'final';
+            $html_level .= '<div class="final-cat-button">'
+                    . '<p>' . $term->name . '<p>'
+                    . '<button class="classified-pro-cat-btn btn btn-default" data-term-id="' . $term->term_id . '" data-taxonomy="' . $taxonomy . '">' . strtoupper(__('Select', 'multivendorx')) . '</button>'
+                    . '</div>';
+        }
+        wp_send_json(array('html_level' => $html_level, 'level' => $level, 'is_final' => $final, 'hierarchy' => $html_hierarchy));
+        die;
+    }
+
+    public function mvx_product_classify_search_category_level() {
+        global $MVX, $wpdb;
+        $keyword = isset($_POST['keyword']) ? wc_clean( wp_unslash( $_POST['keyword'] ) ) : '';
+        if (!empty($keyword)) {
+            $query = apply_filters("mvx_product_classify_search_category_level_args", array(
+                'taxonomy' => 'product_cat',
+                'search' => $keyword,
+                'hide_empty' => false,
+                'parent' => '',
+                'fields' => 'ids',
+                    ));
+            $search_terms = Products::mvx_list_categories($query);
+            $html_search_result = '';
+            if ($search_terms) {
+                foreach ($search_terms as $term_id) {
+                    $term = get_term($term_id, $query['taxonomy']);
+                    $hierarchy = get_ancestors($term_id, $query['taxonomy']);
+                    $hierarchy = array_reverse($hierarchy);
+                    $hierarchy[] = $term_id;
+                    $html_search_result .= '<li class="list-group-item" data-term-id="' . $term->term_id . '" data-taxonomy="' . $query['taxonomy'] . '">'
+                            . '<p><strong>' . $term->name . '</strong></p>'
+                            . '<ul class="breadcrumb">';
+                    foreach ($hierarchy as $id) {
+                        $h_term = get_term($id, $query['taxonomy']);
+                        $html_search_result .= '<li>' . $h_term->name . '</li>';
+                    }
+                    $html_search_result .= '</ul></li>';
+                }
+            } else {
+                $html_search_result .= '<li class="list-group-item"><p>' . __('No results found', 'multivendorx') . '</p></li>';
+            }
+            wp_send_json(array('results' => $html_search_result));
+            die;
+        }
+    }
+
+    public function mvx_list_a_product_by_name_or_gtin() {
+        global $MVX, $wpdb;
+        $keyword = isset($_POST['keyword']) ? wc_clean( wp_unslash( $_POST['keyword'] ) ) : '';
+        $html = '';
+        if (!empty($keyword)) {
+            $ids = array();
+            $posts = $wpdb->get_col($wpdb->prepare("SELECT post_id FROM $wpdb->postmeta WHERE meta_key='_mvx_gtin_code' AND meta_value LIKE %s;", esc_sql('%' . $keyword . '%')));
+            if (!$posts) {
+                $data_store = \WC_Data_Store::load('product');
+                $ids = $data_store->search_products($keyword, '', false);
+                $include = array();
+                foreach ($ids as $id) {
+                    $product = wc_get_product($id);
+                    $product_map_id = get_post_meta($id, '_mvx_spmv_map_id', true);
+                    if ($product && $product_map_id) {
+                        $results = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$wpdb->prefix}mvx_products_map WHERE product_map_id=%d", $product_map_id));
+                        $product_ids = wp_list_pluck($results, 'product_id');
+                        if($product_ids){
+                            $include[] = min($product_ids);
+                        }
+                    } elseif ($product) {
+                        $include[] = $id;
+                    }
+                }
+
+                if ($include) {
+                    $ids = array_slice(array_intersect($ids, $include), 0, apply_filters('mvx_spmv_list_product_search_number', 10));
+                } else {
+                    $ids = array();
+                }
+            } else {
+                $unique_gtin_arr = array();
+                foreach ($posts as $post_id) {
+                    $unique_gtin_arr[$post_id] = get_post_meta($post_id, '_mvx_gtin_code', true);
+                }
+                $ids = array_keys(array_unique($unique_gtin_arr));
+            }
+
+            $product_objects = apply_filters('mvx_list_a_products_objects', array_map('wc_get_product', $ids));
+            $user_id = get_current_user_id();
+
+            if (count($product_objects) > 0) {
+                foreach ($product_objects as $product_object) {
+                    if ($product_object) {
+                        $gtin_code = get_post_meta($product_object->get_id(), '_mvx_gtin_code', true);
+                        // if (is_user_mvx_vendor($user_id) && mvx_is_product_type_avaliable($product_object->get_type())) {
+                            // product cat
+                            $product_cats = '';
+                            $termlist = array();
+                            //$terms = wp_get_post_terms( $product_object->get_id(), 'product_cat', array( 'fields' => 'ids' ) );
+                            $terms = get_the_terms($product_object->get_id(), 'product_cat');
+                            if (!$terms) {
+                                $product_cats = '<span class="na">&ndash;</span>';
+                            } else {
+                                $terms_arr = array();
+                                $terms = apply_filters('mvx_vendor_product_list_row_product_categories', $terms, $product_object);
+                                foreach ($terms as $term) {
+                                    //$h_term = get_term_by('term_id', $term_id, 'product_cat');
+                                    $terms_arr[] = $term->name;
+                                }
+                                $product_cats = implode(' | ', $terms_arr);
+                            }
+
+                            $html .= '<div class="search-result-clm">'
+                                    . $product_object->get_image(apply_filters('mvx_searched_name_gtin_product_list_image_size', array(98, 98)))
+                                    . '<div class="result-content">'
+                                    . '<p><strong><a href="' . esc_url( $product_object->get_permalink() ) . '" target="_blank">' . wp_kses_post( rawurldecode( $product_object->get_formatted_name() ) ) .'</a></strong></p>'
+                                    . '<p>' . $product_object->get_price_html() . '</p>'
+                                    . '<p>' . $product_cats . '</p>'
+                                    . '</div>'
+                                    . '<a href="javascript:void(0)" data-product_id="' . $product_object->get_id() . '" class="mvx-create-pro-duplicate-btn btn btn-default item-sell">' . __('Sell yours', 'multivendorx') . '</a>'
+                                    . '</div>';
+                        // } else {
+                            
+                        // }
+                    }
+                }
+            } else {
+                $html .= '<div class="search-result-clm"><div class="result-content">' . __('No Suggestions found', 'multivendorx') . "</div></div>";
+            }
+        } else {
+            $html .= '<div class="search-result-clm"><div class="result-content">' . __('Empty search field! Enter a text to search.', 'multivendorx') . "</div></div>";
+        }
+        wp_send_json(array('results' => $html));
+        die;
+    }
+
+    public function mvx_set_classified_product_terms() {
+        $term_id = isset($_POST['term_id']) ? absint($_POST['term_id']) : 0;
+        $taxonomy = isset($_POST['taxonomy']) ? wc_clean($_POST['taxonomy']) : '';
+        $user_id = get_current_user_id();
+        $url = '';
+        file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":term_id:  : " . var_export($term_id, true) . "\n", FILE_APPEND);
+        file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":taxonomy:  : " . var_export($taxonomy, true) . "\n", FILE_APPEND);
+        // if (is_user_mvx_vendor($user_id)) {
+            $data = array(
+                'term_id' => $term_id,
+                'taxonomy' => $taxonomy,
+            );
+            set_transient('classified_product_terms_vendor' . $user_id, $data, HOUR_IN_SECONDS);
+            $url = esc_url(StoreUtil::get_endpoint_url('products', 'edit-product'));
+        // }
+        wp_send_json(array('url' => $url));
+        die;
+    }
+
+    public function show_product_classify_next_level_from_searched_term() {
+        $term_id = isset($_POST['term_id']) ? absint($_POST['term_id']) : 0;
+        $taxonomy = isset($_POST['taxonomy']) ? wc_clean($_POST['taxonomy']) : '';
+        $hierarchy = get_ancestors($term_id, $taxonomy);
+        $html_level = $html_hierarchy = '';
+        $level = 1;
+        $parent = 0;
+        if ($hierarchy) {
+            foreach (array_reverse($hierarchy) as $id) {
+                $html_level .= '<div class="mvx-product-cat-level ' . $level . '-level-cat cat-column" data-level="' . $level . '">'
+                        . '<ul class="mvx-product-categories ' . $level . '-level" data-cat-level="' . $level . '">';
+                $html_level .= Products::mvx_list_categories(apply_filters('mvx_vendor_product_classify_' . $level . '_level_categories', array(
+                    'taxonomy' => 'product_cat',
+                    'hide_empty' => false,
+                    'html_list' => true,
+                    'parent' => $parent,
+                    'cat_link' => '#',
+                    'selected' => $id,
+                        )));
+                $html_level .= '</ul></div>';
+                $level++;
+                $parent = $id;
+            }
+        }
+        $html_level .= '<div class="mvx-product-cat-level ' . $level . '-level-cat cat-column" data-level="' . $level . '">'
+                . '<ul class="mvx-product-categories ' . $level . '-level" data-cat-level="' . $level . '">';
+        $html_level .= Products::mvx_list_categories(apply_filters('mvx_vendor_product_classify_first_level_categories', array(
+            'taxonomy' => 'product_cat',
+            'hide_empty' => false,
+            'html_list' => true,
+            'parent' => $parent,
+            'cat_link' => '#',
+            'selected' => $term_id,
+                )));
+        $html_level .= '</ul></div>';
+        // add final level step
+        $level = $level + 1;
+        $h_term = get_term($term_id, $taxonomy);
+        $html_level .= '<div class="mvx-product-cat-level ' . $level . '-level-cat cat-column select-cat-button-holder" data-level="' . $level . '">'
+                . '<div class="final-cat-button">'
+                . '<p>' . $h_term->name . '<p>'
+                . '<button class="classified-pro-cat-btn btn btn-default" data-term-id="' . $h_term->term_id . '" data-taxonomy="' . $taxonomy . '">' . strtoupper(__('Select', 'multivendorx')) . '</button>'
+                . '</div></div>';
+
+        wp_send_json(array('html_level' => $html_level));
+        die;
+    }
+
+    public function mvx_create_duplicate_product() {
+        global $MVX;
+        if (!current_user_can('edit_products') ) {
+            wp_die(-1);
+        }
+        check_ajax_referer('mvx-types', 'security');
+        $product_id = isset($_POST['product_id']) ? absint($_POST['product_id']) : 0;
+        $parent_post = get_post($product_id);
+        $redirect_url = isset($_POST['redirect_url']) ? esc_url($_POST['redirect_url']) : esc_url(StoreUtil::get_endpoint_url('products', 'edit-product'));
+        $product = wc_get_product($product_id);
+        if (!function_exists('duplicate_post_plugin_activation')) {
+            include_once( WC_ABSPATH . 'includes/admin/class-wc-admin-duplicate-product.php' );
+        }
+        $duplicate_product_class = new \WC_Admin_Duplicate_Product();
+        $duplicate_product = $duplicate_product_class->product_duplicate($product);
+        $response = array('status' => false);
+        if ($duplicate_product && is_user_mvx_vendor(get_current_user_id())) {
+            // if Product title have Copy string
+            $title = str_replace(" (Copy)", "", $parent_post->post_title);
+            wp_update_post(array('ID' => $duplicate_product->get_id(), 'post_author' => get_current_vendor_id(), 'post_title' => $title));
+            wp_set_object_terms($duplicate_product->get_id(), absint(get_current_vendor()->term_id), $MVX->taxonomy->taxonomy_name);
+
+            // Add GTIN, if exists
+            $gtin_data = wp_get_post_terms($product->get_id(), $MVX->taxonomy->mvx_gtin_taxonomy);
+            if ($gtin_data) {
+                $gtin_type = isset($gtin_data[0]->term_id) ? $gtin_data[0]->term_id : '';
+                wp_set_object_terms($duplicate_product->get_id(), $gtin_type, $MVX->taxonomy->mvx_gtin_taxonomy, true);
+            }
+            $gtin_code = get_post_meta($product->get_id(), '_mvx_gtin_code', true);
+            if ($gtin_code)
+                update_post_meta($duplicate_product->get_id(), '_mvx_gtin_code', wc_clean($gtin_code));
+
+            $has_mvx_spmv_map_id = get_post_meta($product->get_id(), '_mvx_spmv_map_id', true);
+            if ($has_mvx_spmv_map_id) {
+                $data = array('product_id' => $duplicate_product->get_id(), 'product_map_id' => $has_mvx_spmv_map_id);
+                update_post_meta($duplicate_product->get_id(), '_mvx_spmv_map_id', $has_mvx_spmv_map_id);
+                mvx_spmv_products_map($data, 'insert');
+            } else {
+                $data = array('product_id' => $duplicate_product->get_id());
+                $map_id = mvx_spmv_products_map($data, 'insert');
+
+                if ($map_id) {
+                    update_post_meta($duplicate_product->get_id(), '_mvx_spmv_map_id', $map_id);
+                    // Enroll in SPMV parent product too 
+                    $data = array('product_id' => $product->get_id(), 'product_map_id' => $map_id);
+                    mvx_spmv_products_map($data, 'insert');
+                    update_post_meta($product->get_id(), '_mvx_spmv_map_id', $map_id);
+                }
+                update_post_meta($product->get_id(), '_mvx_spmv_product', true);
+            }
+            update_post_meta($duplicate_product->get_id(), '_mvx_spmv_product', true);
+            $duplicate_product->save();
+            do_action('mvx_create_duplicate_product', $duplicate_product);
+            $permalink_structure = get_option('permalink_structure');
+            if (!empty($permalink_structure)) {
+                $redirect_url .= $duplicate_product->get_id();
+            } else {
+                $redirect_url .= '=' . $duplicate_product->get_id();
+            }
+            $response['status'] = true;
+            $response['redirect_url'] = htmlspecialchars_decode($redirect_url);
+        }
+        wp_send_json($response);
+    }
+
+    public function mvx_show_all_products() {
+        global $MVX;
+        $vendor_id = get_current_user_id() ? absint(get_current_user_id()) : 0;
+        $default = array(
+            'posts_per_page'   => -1,
+            'post_type'        => 'product',
+            'post_status' => 'publish',
+            'author__not_in' => $vendor_id,
+        );
+        $query = new \WP_Query( $default ); 
+        // $MVX->template->get_template( 'vendor-dashboard/product-manager/show_products.php', array('query' => $query) );	
+        die;
+    }
+
+    public function edit_product_attribute_callback() {
+        global $MVX;
+        ob_start();
+
+        check_ajax_referer('add-attribute', 'security');
+
+        if (!current_user_can('edit_products') || (!apply_filters('mvx_vendor_can_add_custom_attribute', true) && empty(sanitize_text_field($_POST['taxonomy'])) )) {
+            wp_die(-1);
+        }
+
+        $i = isset($_POST['i']) ? absint($_POST['i']) : 0;
+        $metabox_class = array();
+        $attribute = new \WC_Product_Attribute();
+
+        $attribute->set_id(wc_attribute_taxonomy_id_by_name(sanitize_text_field($_POST['taxonomy'])));
+        $attribute->set_name(sanitize_text_field($_POST['taxonomy']));
+        $attribute->set_visible(apply_filters('woocommerce_attribute_default_visibility', 1));
+        $attribute->set_variation(apply_filters('woocommerce_attribute_default_is_variation', 0));
+
+        if ($attribute->is_taxonomy()) {
+            $metabox_class[] = 'taxonomy';
+            $metabox_class[] = $attribute->get_name();
+        }
+
+        MultiVendorX()->util->get_template('views/html-product-attribute.php', ['attribute' => $attribute, 'metabox_class' => $metabox_class, 'i' => $i] );
+
+        wp_die();
+    }
+
+    /**
+     * Save attributes
+     */
+    public function save_product_attributes_callback() {
+        check_ajax_referer('save-attributes', 'security');
+
+        if (!current_user_can('edit_products')) {
+            wp_die(-1);
+        }
+
+        parse_str($_POST['data'], $data);
+
+        $attr_data = isset($data['wc_attributes']) ? $data['wc_attributes'] : array();
+
+        $attributes = MultiVendorX()->store->products->prepare_attributes($attr_data);
+        $product_id = isset($_POST['post_id']) ? absint($_POST['post_id']) : 0;
+        $product_type = !empty($_POST['product_type']) ? wc_clean($_POST['product_type']) : 'simple';
+        $classname = \WC_Product_Factory::get_product_classname($product_id, $product_type);
+        $product = new $classname($product_id);
+
+        $product->set_attributes($attributes);
+        $product->save();
+        wp_die();
+    }
 }
+

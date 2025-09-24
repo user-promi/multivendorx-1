@@ -38,6 +38,7 @@ class Store {
             'rewrites'  => new Rewrites(),
             'storeutil' => new StoreUtil(),
             'ajax'      => new Ajax(),
+            'products'  => new Products(),
         );
     }
 
