@@ -24,7 +24,7 @@ interface Module {
     req_plugin?: { name: string; link: string }[];
     settings_link: string;
     pro_module?: boolean;
-    category?: string; // Optional to support no separators
+    category?: string | string[]; // Optional to support no separators
     type?: undefined; // Prevents conflict with Separator
 }
 
@@ -77,7 +77,10 @@ const Modules: React.FC<ModuleProps> = ({
             .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
             .join(' ');
     };
-
+    const getCategories = (category?: string | string[]): string[] => {
+        if (!category) return [];
+        return Array.isArray(category) ? category : [category];
+    };
     // Get unique categories from separators, if any
     const categories = [
         { id: 'All', label: 'All' },
@@ -99,7 +102,7 @@ const Modules: React.FC<ModuleProps> = ({
             const hasModulesInCategory = modulesArray.modules.some(module => {
                 if ('type' in module) return false;
                 const mod = module as Module;
-                if (mod.category !== separatorCategory) return false;
+                if (!mod.category?.includes(separatorCategory)) return false;
                 if (selectedFilter === 'Active' && !modules.includes(mod.id)) return false;
                 if (selectedFilter === 'Inactive' && modules.includes(mod.id)) return false;
                 if (searchQuery && !mod.name.toLowerCase().includes(searchQuery.toLowerCase())) return false;
@@ -112,7 +115,7 @@ const Modules: React.FC<ModuleProps> = ({
         // If no category, include only if 'All' is selected
         if (!module.category && selectedCategory !== 'All') return false;
         // Apply category filter
-        if (selectedCategory !== 'All' && module.category !== selectedCategory) {
+        if (selectedCategory !== 'All' && !getCategories(module.category).includes(selectedCategory)) {
             return false;
         }
         // Apply status filter
@@ -304,7 +307,12 @@ const Modules: React.FC<ModuleProps> = ({
                                     <div className="module-details">
 
                                         <div className="meta-name">{module.name}
-                                            {module.category && (<span className="admin-badge blue">{formatCategory(module.category)}</span>)}
+                                            {getCategories(module.category).map((cat, idx) => (
+                                                <span key={idx} className="admin-badge blue">
+                                                    {formatCategory(cat)}
+                                                </span>
+                                            ))}
+
                                         </div>
 
                                         <p
@@ -331,6 +339,7 @@ const Modules: React.FC<ModuleProps> = ({
                                         <div className="buttons">
                                             {module.doc_link && (<a href={module.doc_link}><i className="adminlib-book"></i></a>)}
                                             {module.video_link && (<a href={module.video_link}><i className="adminlib-button-appearance"></i></a>)}
+                                            {module.settings_link && (<a href={module.settings_link}><i className="adminlib-setting"></i></a>)}
                                         </div>
                                         <div
                                             className="toggle-checkbox"

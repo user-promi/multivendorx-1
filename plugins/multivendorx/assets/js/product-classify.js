@@ -2,9 +2,9 @@
 (function ($) {
     
     // mvx_product_classify is required to continue, ensure the object exists
-    if ( typeof mvx_product_classify === 'undefined' ) {
-        return false;
-    }
+    // if ( typeof mvx_product_classify === 'undefined' ) {
+    //     return false;
+    // }
     
     var block = function( $node ) {
         if ( ! is_blocked( $node ) ) {
@@ -35,7 +35,7 @@
         //}
     };
     
-    var mvx_product_classify = {
+    var mvx_product_classify_data = {
         $search_by_name_gtin_form: $( 'form.search-pro-by-name-gtin' ),
         $searched_products_name_gtin_panel: $( '.searched-products-name-gtin-panel' ),
         $categories_search_wrapper: $( '.categories-search-wrapper' ),
@@ -167,12 +167,12 @@
 
                         if(response.is_final){
                             $wrapper.append('<div class="mvx-product-cat-level '+response.level+'-level-cat cat-column select-cat-button-holder" data-level="'+response.level+'" style="width: '+ get_cat_width +'px">'+ response.html_level +'</div>'); 
-                            $(".mvx-product-cat-level").mCustomScrollbar();
+                            // $(".mvx-product-cat-level").mCustomScrollbar();
                             checkCategoryScroller();
                             
                         }else{
                             $wrapper.append('<div class="mvx-product-cat-level '+response.level+'-level-cat cat-column" data-level="'+response.level+'" style="width: '+ get_cat_width +'px">'+ response.html_level +'</div>'); 
-                            $(".mvx-product-cat-level").mCustomScrollbar();
+                            // $(".mvx-product-cat-level").mCustomScrollbar();
                             checkCategoryScroller();
                         }
                     }
@@ -208,7 +208,7 @@
                     if(response.html_level){
                         $wrapper.html('');
                         $wrapper.append(response.html_level);
-                        $(".mvx-product-cat-level").mCustomScrollbar();
+                        // $(".mvx-product-cat-level").mCustomScrollbar();
                         checkCategoryScroller();
                         var getAllCatColumn = $('.mvx-product-categories-wrap .cat-column');
                         getAllCatColumn.css("width", get_cat_width);
@@ -305,7 +305,7 @@
         }
     };
     
-    mvx_product_classify.init();
+    mvx_product_classify_data.init();
 
 
     var catWrapper = $( '.mvx-product-categories-wrap' );

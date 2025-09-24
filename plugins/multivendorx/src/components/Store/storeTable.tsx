@@ -178,7 +178,7 @@ const StoreTable: React.FC = () => {
                                 onClick: (rowData) => {
                                     window.location.href = `?page=multivendorx#&tab=stores&edit/${rowData.id}`;
                                 },
-                                hover: true,
+                                hover: true
                             },
                             {
                                 label: __('Delete', 'multivendorx'),
@@ -186,8 +186,9 @@ const StoreTable: React.FC = () => {
                                 onClick: (rowData) => {
                                     window.location.href = `?page=multivendorx#&tab=stores&edit/${rowData.id}`;
                                 },
-                                hover: true,
+                                hover: true
                             },
+
                         ],
                     }}
                 />
