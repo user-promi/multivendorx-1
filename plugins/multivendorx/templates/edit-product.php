@@ -64,43 +64,44 @@ if ($default_types && !empty($default_types)) {
                     </div>
 
                     <div class="pull-right full-1080">
-                        <?php
-                        $current_visibility = $product_object->get_catalog_visibility();
-                        $current_featured   = wc_bool_to_string( $product_object->get_featured() );
-                        $visibility_options = wc_get_product_visibility_options();
-                        ?>
-                        <p class="cat-visiblity"><?php esc_html_e( 'Catalog visibility:', 'multivendorx' ); ?> 
-                            <strong id="catalog-visibility-display" class="primary-color">
-                                <?php
+                    <?php
+                    $current_visibility = $product_object->get_catalog_visibility();
+                    $current_featured   = wc_bool_to_string( $product_object->get_featured() );
+                    $visibility_options = wc_get_product_visibility_options();
+                    ?>
+                    <p class="cat-visiblity"><?php esc_html_e( 'Catalog visibility:', 'multivendorx' ); ?> 
+                        <strong id="catalog-visibility-display" class="primary-color">
+                            <?php
 
-                                echo isset( $visibility_options[ $current_visibility ] ) ? esc_html( $visibility_options[ $current_visibility ] ) : esc_html( $current_visibility );
+                            echo isset( $visibility_options[ $current_visibility ] ) ? esc_html( $visibility_options[ $current_visibility ] ) : esc_html( $current_visibility );
 
-                                if ( 'yes' === $current_featured ) {
-                                        echo ', ' . esc_html__( 'Featured', 'multivendorx' );
-                                }
-                                ?>
-                            </strong>
-                            <button type="button" class="editabble-button" data-toggle="collapse" data-target="#product_visiblity"><i class="mvx-font ico-downarrow-2-icon" title="<?php _e('Edit', 'multivendorx'); ?>"></i> <!--span>edit</span--></button>
-                        </p> 
-                        <div id="product_visiblity" class="mvx-clps collapse dropdown-panel">
-                            <input type="hidden" name="current_visibility" id="current_visibility" value="<?php echo esc_attr( $current_visibility ); ?>" />
-                            <input type="hidden" name="current_featured" id="current_featured" value="<?php echo esc_attr( $current_featured ); ?>" />
-                            <div class="product-visibility-toggle-inner">
-                                <?php 
-                                foreach ( $visibility_options as $name => $label ) {
-                                    echo '<div class="form-group"><label><input type="radio" name="_visibility" id="_visibility_' . esc_attr( $name ) . '" value="' . esc_attr( $name ) . '" ' . checked( $current_visibility, $name, false ) . ' data-label="' . esc_attr( $label ) . '" /> <span for="_visibility_' . esc_attr( $name ) . '" class="selectit">' . esc_html( $label ) . '</span></label></div>';
-                                }
-                                if( apply_filters( 'mvx_feature_product_is_enable', true ) ) {
-                                    echo '<hr><div class="form-group"><label><input type="checkbox" name="_featured" class="mt-0" id="_featured" ' . checked( $current_featured, 'yes', false ) . ' data-label="' . __( 'Featured', 'multivendorx' ) . '" /> <span for="_featured">' . esc_html__( 'This is a featured product', 'multivendorx' ) . '</label></label></div>';
-                                }
-                                ?>
-                                <div class="form-group mt-15">
-                                    <button type="button" class="btn btn-default btn-sm catalog-visiblity-btn"><?php esc_html_e('Ok', 'multivendorx'); ?></button>
-                                    <a href="javascript:void(0)" class="btn btn-default btn-sm" data-toggle="collapse" data-target="#product_visiblity"><?php esc_html_e('Cancel', 'multivendorx'); ?></a>
-                                </div>
+                            if ( 'yes' === $current_featured ) {
+                                    echo ', ' . esc_html__( 'Featured', 'multivendorx' );
+                            }
+                            ?>
+                        </strong>
+                        <button type="button" class="editabble-button" data-toggle="collapse" data-target="#product_visiblity"><i class="mvx-font ico-downarrow-2-icon" title="<?php _e('Edit', 'multivendorx'); ?>"></i> <!--span>edit</span--></button>
+                    </p> 
+                    <div id="product_visiblity" class="mvx-clps collapse dropdown-panel">
+                        <input type="hidden" name="current_visibility" id="current_visibility" value="<?php echo esc_attr( $current_visibility ); ?>" />
+                        <input type="hidden" name="current_featured" id="current_featured" value="<?php echo esc_attr( $current_featured ); ?>" />
+                        <div class="product-visibility-toggle-inner">
+                            <?php 
+                            foreach ( $visibility_options as $name => $label ) {
+                                echo '<div class="form-group"><label><input type="radio" name="_visibility" id="_visibility_' . esc_attr( $name ) . '" value="' . esc_attr( $name ) . '" ' . checked( $current_visibility, $name, false ) . ' data-label="' . esc_attr( $label ) . '" /> <span for="_visibility_' . esc_attr( $name ) . '" class="selectit">' . esc_html( $label ) . '</span></label></div>';
+                            }
+                            if( apply_filters( 'mvx_feature_product_is_enable', true ) ) {
+                                echo '<hr><div class="form-group"><label><input type="checkbox" name="_featured" class="mt-0" id="_featured" ' . checked( $current_featured, 'yes', false ) . ' data-label="' . __( 'Featured', 'multivendorx' ) . '" /> <span for="_featured">' . esc_html__( 'This is a featured product', 'multivendorx' ) . '</label></label></div>';
+                            }
+                            ?>
+                            <div class="form-group mt-15">
+                                <button type="button" class="btn btn-default btn-sm catalog-visiblity-btn"><?php esc_html_e('Ok', 'multivendorx'); ?></button>
+                                <a href="javascript:void(0)" class="btn btn-default btn-sm" data-toggle="collapse" data-target="#product_visiblity"><?php esc_html_e('Cancel', 'multivendorx'); ?></a>
                             </div>
                         </div>
                     </div>
+                </div>
+        
                 </div>
                 <div class="card-content">
                     <div class="card-title">Product short description</div>
@@ -149,17 +150,18 @@ if ($default_types && !empty($default_types)) {
                     </div>
                 </div>
                 <div class="card-content">
-                    <div class="right-form-wrapper">
-                        <div class="form-group">
-                            <label for="product-type">Product Type: </label>
-                            <select class="basic-select" id="product-type" name="product-type">
-                                <?php foreach ( wc_get_product_types() as $value => $label ) : ?>
+                    <div id="woocommerce-product-data" class="add-product-info-holder">   
+
+                        <div class="add-product-info-header row-padding">
+                            <div class="select-group">
+                                <label for="product-type"><?php esc_html_e( 'Product Type', 'multivendorx' ); ?></label>
+                                <select class="form-control inline-select" id="product-type" name="product-type">
+                                    <?php foreach ( wc_get_product_types() as $value => $label ) : ?>
                                         <option value="<?php echo esc_attr( $value ); ?>" <?php echo selected( $product_object->get_type(), $value, false ); ?>><?php echo esc_html( $label ); ?></option>
                                     <?php endforeach; ?>
-                            </select>
-                        </div>
-
-                        <?php
+                                </select>
+                            </div>
+                            <?php
                             $product_type_options = $self->get_product_type_options();
                             $required_types = array();
                             foreach ( $product_type_options as $type ) {
@@ -170,47 +172,56 @@ if ($default_types && !empty($default_types)) {
                                     }
                                 }
                             }
-
                             ?>
-                            
-                            <div class="pull-right">
-                                <?php foreach ( $self->get_product_type_options() as $key => $option ) : ?>
-                                    <?php
-                                    if ( ! empty( $post->ID ) && metadata_exists( 'post', $post->ID, '_' . $key ) ) {
-                                        $selected_value = isset($_POST['_'.$key]) && $_POST['_'.$key] == 'on' ? true : ( is_callable( array( $product_object, "is_$key" ) ) ? $product_object->{"is_$key"}() : 'yes' === get_post_meta( $post->ID, '_' . $key, true ));
-                                    } else {
-                                        $selected_value = 'yes' === ( isset($_POST['_'.$key]) && $_POST['_'.$key] == 'on' ? 'yes' : ( isset( $option['default'] ) ? $option['default'] : 'no' ) );                                    }
-                                    ?>
-                                    <label for="<?php echo esc_attr( $option['id'] ); ?>" class="<?php echo esc_attr( $option['wrapper_class'] ); ?> tips" data-tip="<?php echo esc_attr( $option['description'] ); ?>"><input type="checkbox" name="<?php echo esc_attr( $option['id'] ); ?>" id="<?php echo esc_attr( $option['id'] ); ?>" <?php echo checked( $selected_value, true, false ); ?> /> <?php echo esc_html( $option['label'] ); ?></label>
-                                <?php endforeach; ?>
+                            <?php if ( $self->mvx_is_allowed_product_type( array_keys( $required_types ) ) ) :
+                                ?>
+                                <div class="pull-right">
+                                    <?php foreach ( $self->get_product_type_options() as $key => $option ) : ?>
+                                        <?php
+                                        if ( ! empty( $post->ID ) && metadata_exists( 'post', $post->ID, '_' . $key ) ) {
+                                            $selected_value = isset($_POST['_'.$key]) && $_POST['_'.$key] == 'on' ? true : ( is_callable( array( $product_object, "is_$key" ) ) ? $product_object->{"is_$key"}() : 'yes' === get_post_meta( $post->ID, '_' . $key, true ));
+                                        } else {
+                                            $selected_value = 'yes' === ( isset($_POST['_'.$key]) && $_POST['_'.$key] == 'on' ? 'yes' : ( isset( $option['default'] ) ? $option['default'] : 'no' ) );                                    }
+                                        ?>
+                                        <label for="<?php echo esc_attr( $option['id'] ); ?>" class="<?php echo esc_attr( $option['wrapper_class'] ); ?> tips" data-tip="<?php echo esc_attr( $option['description'] ); ?>"><input type="checkbox" name="<?php echo esc_attr( $option['id'] ); ?>" id="<?php echo esc_attr( $option['id'] ); ?>" <?php echo checked( $selected_value, true, false ); ?> /> <?php echo esc_html( $option['label'] ); ?></label>
+                                    <?php endforeach; ?>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+
+                        <!-- product Info Tab start -->
+                        <div class="product-info-tab-wrapper" role="tabpanel">
+                            <!-- Nav tabs start -->
+                            <div>
+                                <div class="tab-nav-direction-wrapper"></div>
+                                <ul class="nav nav-tabs" role="tablist" id="product_data_tabs">
+                                    <?php foreach ( $get_product_data_tabs as $key => $tab ) : ?>
+                                        <?php if ( apply_filters( 'mvx_frontend_dashboard_product_data_tabs_filter', ( ! isset( $tab['p_type'] ) || array_key_exists( $tab['p_type'], $self->mvx_get_product_types() ) ), $key, $tab ) ) : ?>
+                                            <li role="presentation" class="nav-item <?php echo esc_attr( $key ); ?>_options <?php echo esc_attr( $key ); ?>_tab <?php echo esc_attr( isset( $tab['class'] ) ? implode( ' ', (array) $tab['class'] ) : ''  ); ?>">
+                                                <a class="nav-link" href="#<?php echo esc_attr( $tab['target'] ); ?>" aria-controls="<?php echo $tab['target']; ?>" role="tab" data-toggle="tab"><span><?php echo esc_html( $tab['label'] ); ?></span></a>
+                                            </li>
+                                        <?php endif; ?>
+                                    <?php endforeach; ?>
+                                    <?php do_action( 'mvx_product_write_panel_tabs', $post->ID ); ?>
+                                </ul>
                             </div>
-                        
+                            <!-- Nav tabs End -->
+
+                            <!-- Tab content start -->
+                            <div class="tab-content">
+                                <?php
+                                MultiVendorX()->util->get_template('views/html-product-data-general.php', array( 'self' => $self, 'product_object' => $product_object, 'post' => $post ) );
+                                MultiVendorX()->util->get_template('views/html-product-data-inventory.php', array( 'self' => $self, 'product_object' => $product_object, 'post' => $post ) );
+                                MultiVendorX()->util->get_template('views/html-product-data-linked-products.php', array( 'self' => $self, 'product_object' => $product_object, 'post' => $post ) );
+                                MultiVendorX()->util->get_template('views/html-product-data-attributes.php', array( 'self' => $self, 'product_object' => $product_object, 'post' => $post ) );
+                                MultiVendorX()->util->get_template('views/html-product-data-advanced.php', array( 'self' => $self, 'product_object' => $product_object, 'post' => $post ) );
+                                ?>
+                                <?php do_action( 'mvx_product_tabs_content', $self, $product_object, $post ); ?>
+                            </div>
+                            <!-- Tab content End -->
+                        </div>        
+                        <!-- product Info Tab End -->
                     </div>
-
-                    <!-- Product Type tabs start -->
-                    <div class="content">
-                        <div class="tab-titles">
-                            <ul class="nav nav-tabs" role="tablist" id="product_data_tabs">
-                                <?php foreach ( $get_product_data_tabs as $key => $tab ) : ?>
-                                    <?php if ( apply_filters( 'mvx_frontend_dashboard_product_data_tabs_filter', ( ! isset( $tab['p_type'] ) || array_key_exists( $tab['p_type'], wc_get_product_types() ) ), $key, $tab ) ) : ?>
-                                        <li role="presentation" class="nav-item <?php echo esc_attr( $key ); ?>_options <?php echo esc_attr( $key ); ?>_tab <?php echo esc_attr( isset( $tab['class'] ) ? implode( ' ', (array) $tab['class'] ) : ''  ); ?>">
-                                            <a class="nav-link" href="#<?php echo esc_attr( $tab['target'] ); ?>" aria-controls="<?php echo $tab['target']; ?>" role="tab" data-toggle="tab"><span><?php echo esc_html( $tab['label'] ); ?></span></a>
-                                        </li>
-                                    <?php endif; ?>
-                                <?php endforeach; ?>
-                                <?php do_action( 'mvx_product_write_panel_tabs', $post->ID ); ?>
-                            </ul>
-                        </div>
-
-                        <div class="tab-content">
-                            <?php
-                            MultiVendorX()->util->get_template('views/html-product-data-general.php', array( 'self' => $self, 'product_object' => $product_object, 'post' => $post ) );
-                            ?>
-                            
-                        </div>
-
-                    </div> <!-- Product Type tabs start -->
-
                 </div>
             </div>
 
@@ -281,22 +292,6 @@ if ($default_types && !empty($default_types)) {
                         </div>
                         <?php do_action('mvx_product_manager_right_panel_after', $post->ID); ?>
                     </div>
-                    <!-- <div class="form-group-wrapper">
-                        <div class="form-group"><label for="product-name">Product gallery</label>
-                            <div class="file-uploader   "
-                                style="background-image: url(&quot;http://localhost:8889/wp-content/plugins/multivendorx/release/assets/js/../images/banner-placeholder0fce5a9d0b5ce3a49dba.jpg&quot;);">
-                                <i class="adminlib-cloud-upload"></i><input class="form-input" type="hidden"
-                                    name="banner"><span class="title">Drag and drop your file
-                                    here</span><span>Or</span><button class="admin-btn btn-purple admin-btn"
-                                    type="button">Upload Image</button>
-                                <div class="overlay">
-                                    <div class="button-wrapper"><button class="admin-btn btn-red"
-                                            type="button">Remove</button><button class="admin-btn btn-purple"
-                                            type="button">Replace</button></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
                 </div>
                 <div class="card-content">
                     <div class="card-title">Product categories</div>
@@ -351,20 +346,22 @@ if ($default_types && !empty($default_types)) {
                     </div>
                 </div>
             </div> <!-- right section end -->
-            <?php
-            $primary_action = __( 'Submit', 'multivendorx' );    //default value
-            if ( current_user_can( 'publish_products' ) ) {
-                if ( ! empty( $product_object->get_id() ) && get_post_status( $product_object->get_id() ) === 'publish' ) {
-                    $primary_action = __( 'Update', 'multivendorx' );
-                } else {
-                    $primary_action = __( 'Publish', 'multivendorx' );
+            <div class="mvx-action-container">
+                <?php
+                $primary_action = __( 'Submit', 'multivendorx' );    //default value
+                if ( current_user_can( 'publish_products' ) ) {
+                    if ( ! empty( $product_object->get_id() ) && get_post_status( $product_object->get_id() ) === 'publish' ) {
+                        $primary_action = __( 'Update', 'multivendorx' );
+                    } else {
+                        $primary_action = __( 'Publish', 'multivendorx' );
+                    }
                 }
-            }
-            ?>
-            <input type="submit"  name="submit-data" value="<?php echo esc_attr( $primary_action ); ?>" id="mvx_frontend_dashboard_product_submit" />
-            <input type="submit"  name="draft-data" value="<?php esc_attr_e( 'Draft', 'multivendorx' ); ?>" id="mvx_frontend_dashboard_product_draft" />
-            <input type="hidden" name="status" value="<?php echo esc_attr( get_post_status( $post ) ); ?>">
-            <?php wp_nonce_field( 'mvx-product', 'mvx_product_nonce' ); ?>
+                ?>
+                <input type="submit" class="btn btn-default" name="submit-data" value="<?php echo esc_attr( $primary_action ); ?>" id="mvx_frontend_dashboard_product_submit" />
+                <input type="submit" class="btn btn-default" name="draft-data" value="<?php esc_attr_e( 'Draft', 'multivendorx' ); ?>" id="mvx_frontend_dashboard_product_draft" />
+                <input type="hidden" name="status" value="<?php echo esc_attr( get_post_status( $post ) ); ?>">
+                <?php wp_nonce_field( 'mvx-product', 'mvx_product_nonce' ); ?>
+            </div>
         </form>
     </div>
 </div>

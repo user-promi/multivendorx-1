@@ -103,7 +103,7 @@ export default {
             ),
         },
         {
-            key: 'sku_generator_simple',
+            key: 'sku_generator',
             type: 'setting-toggle',
             label: __(
                 'SKU management for products',
