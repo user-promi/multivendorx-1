@@ -268,7 +268,7 @@ export default {
             key: 'separator_content',
             type: 'section',
             hint: __("What's excluded along with store commission", 'multivendorx'),
-            desc: __('Choose which order components are factored into commission calculations.', 'multivendorx')
+            desc: __('Determine which fees to deduct from the commission amount.', 'multivendorx')
         },
         {
             key: 'gateway_fees',
