@@ -111,7 +111,6 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                 $total_count = $wpdb->get_var( "SELECT COUNT(*) FROM $table_name" );
                 return rest_ensure_response( (int) $total_count );
             }
-
             $formatted_stores = array();
             foreach ( $stores as $store ) {
                 $formatted_stores[] = apply_filters(
@@ -121,6 +120,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                         'store_name' => $store['name'],
                         'store_slug' => $store['slug'],
                         'status'     => $store['status'],
+                        'applied_on' => $store['create_time'],
                     )
                 );
             }
@@ -154,13 +154,13 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             $total_count = $wpdb->get_var("SELECT COUNT(*) FROM $table_name WHERE status = 'pending'");
             return rest_ensure_response( (int) $total_count );
         }
-
         $formatted_stores = array();
         foreach ( $stores as $store ) {
             $store_id       = (int) $store['ID'];
             $store_name     = $store['name'];
             $store_slug     = $store['slug'];
             $status         = $store['status'];
+            $applied_on     = $store['create_time'];
             $formatted_stores[] = apply_filters(
                 'multivendorx_stores',
                 array(
@@ -168,6 +168,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
 					'store_name'        => $store_name,
 					'store_slug'        => $store_slug,
 					'status'      => $status,
+                    'applied_on'        => $applied_on,
 				)
             );
         }
