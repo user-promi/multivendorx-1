@@ -95,7 +95,7 @@ $self = $args['self'];
                 </tr>
                 <?php
                 $enable_variation = apply_filters( 'attribute_tab_enable_variation_checkbox', array( 'variable' ) );
-                if ( MultiVendorX()->store->products->mvx_is_allowed_product_type( ...$enable_variation ) ) :
+                if ( $self->mvx_is_allowed_product_type( ...$enable_variation ) ) :
                 $show_classes = implode( ' ', preg_filter( '/^/', 'show_if_', $enable_variation ) );
                 ?>
                 <tr>
