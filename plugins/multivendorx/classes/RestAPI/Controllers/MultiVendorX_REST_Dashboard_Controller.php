@@ -268,6 +268,12 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
                         'slug' => 'customer-questions',
                         'capability' => ['read_shop_coupons', 'edit_shop_coupons']
                     ),
+                    array(
+                        'key'  => 'store-follower',
+                        'name' => 'Store Follower',
+                        'slug' => 'store-follower',
+                        'capability' => ['read_products', 'edit_products', 'delete_products']
+                    ),
                 ),
                 'capability' => ['manage_users']
             ),

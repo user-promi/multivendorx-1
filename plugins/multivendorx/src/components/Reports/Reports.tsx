@@ -37,9 +37,7 @@ import "../../dashboard/dashboardCommon.scss";
 import Overview from './Overview';
 import Transactions from './Payout';
 import Revenue from './Revenue';
-import RefundedOrders from './RefundedOrders';
 import StoreOrders from './StoreOrders';
-import RevenueOld from './RevenueOld';
 import RefundedOrderOld from './RefundedOrderOld';
 import axios from 'axios';
 
@@ -48,39 +46,74 @@ const Reports = () => {
   function requestOrders() {
     axios({
       method: "GET",
-      url: `${appLocalizer.apiUrl}/wc-analytics`,
-      headers: { "X-WP-Nonce": appLocalizer.nonce },
-    }).then(response => {
-      console.log("ana->", response.data)
-    });
-
-    axios({
-      method: "GET",
-      url: `${appLocalizer.apiUrl}/wc/v3/reports`,
+      url: `${appLocalizer.apiUrl}/wc-analytics/`,
       headers: { "X-WP-Nonce": appLocalizer.nonce },
     })
-    .then(response => console.log("rep",response.data))
-    .catch(error => console.error(error));
+      .then(response => console.log("analytics", response.data))
+      .catch(error => console.error(error));
+
+    // 1. GET TOTAL PUBLISHED PRODUCTS COUNT
+    axios({
+      method: 'GET',
+      url: `${appLocalizer.apiUrl}/wc/v3/products`,
+      headers: { 'X-WP-Nonce': appLocalizer.nonce },
+      params: {
+        per_page: 1, // Minimize payload, only need the count
+        meta_key: 'multivendorx_store_id'
+      },
+    })
+      .then(response => {
+        // The total count is in the 'X-WP-Total' header
+        const totalProducts = response.headers['x-wp-total'];
+        console.log(`Total Published Products: ${totalProducts}`);
+      })
+      .catch(error => {
+        console.error('Error fetching total products:', error);
+      });
+
+    // 2. GET OUT-OF-STOCK PRODUCTS COUNT
+    axios({
+      method: 'GET',
+      url: `${appLocalizer.apiUrl}/wc/v3/products`,
+      headers: { 'X-WP-Nonce': appLocalizer.nonce },
+      params: {
+        per_page: 1, // Minimize payload
+        stock_status: 'outofstock', // Filter by stock status
+        meta_key: 'multivendorx_store_id'
+      },
+    })
+      .then(response => {
+        const outOfStockCount = response.headers['x-wp-total'];
+        console.log(`Out-of-Stock Products: ${outOfStockCount}`);
+      })
+      .catch(error => {
+        console.error('Error fetching out-of-stock products:', error);
+      });
+
+    // 3. GET LOW-STOCK PRODUCTS COUNT for ALL STORES with the Vendor Key (Using Custom Hook)
 
     axios({
-      method: "GET",
-      url: `${appLocalizer.apiUrl}/wc-analytics/leaderboards/categories`,
-      headers: { "X-WP-Nonce": appLocalizer.nonce },
-      // params: {
-      //   per_page: 10, // limit categories
-      //   orderby: "sales", // sort by sales
-      //   order: "desc"
-      // }
+      method: 'GET',
+      // Use the specific low-in-stock products endpoint
+      url: `${appLocalizer.apiUrl}/wc-analytics/products/count-low-in-stock`,
+      headers: { 'X-WP-Nonce': appLocalizer.nonce },
+      params: {
+        per_page: 1, // Minimize payload
+        meta_key: 'multivendorx_store_id'
+      },
     })
-    .then(response => console.log(response.data))
-    .catch(error => console.error(error));
-    
-    
+      .then(response => {
+        console.log(`Low Stock Products with Vendor Key (All Stores):`,response);
+      })
+      .catch(error => {
+        console.error('Error fetching low stock products with vendor key:', error);
+      });
+
   }
 
   useEffect(() => {
     requestOrders();
-  }, []);
+  });
 
   // Dummy chart data
   const data = [

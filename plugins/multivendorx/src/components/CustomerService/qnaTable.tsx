@@ -259,6 +259,7 @@ const Qna: React.FC = () => {
                     onPaginationChange={setPagination}
                     handlePagination={requestData}
                     perPageOption={[10, 25, 50]}
+                    totalCounts={totalRows}
                 />
             </div>
 
