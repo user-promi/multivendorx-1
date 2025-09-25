@@ -476,11 +476,22 @@ class Enrollment {
 		}
 	}
 
+
 	/**
-	 * Enforce quantity restriction based on plugin version and settings.
+	 * Restrict quantity to 1 for Moodle products only.
 	 */
 	public function restrict_cart_quantity_on_update() {
 		foreach ( WC()->cart->get_cart() as $cart_item_key => $cart_item ) {
+
+			$product_id = $cart_item['product_id'];
+
+			// Check if product has Moodle course ID
+			$moodle_course_id = get_post_meta( $product_id, 'moodle_course_id', true );
+			if ( empty( $moodle_course_id ) ) {
+				continue; // Skip non-Moodle products
+			}
+
+			// Restrict quantity to 1
 			if ( $cart_item['quantity'] > 1 ) {
 				WC()->cart->set_quantity( $cart_item_key, 1 );
 				wc_add_notice( __( 'You can only purchase one unit of this product.', 'moowoodle' ), 'error' );

@@ -430,6 +430,7 @@ const Course: React.FC = () => {
                                         rowData.moodle_course_id!
                                     );
                                 },
+                                hover: true,
                             },
                         ],
                     } }
