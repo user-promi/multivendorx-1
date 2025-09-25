@@ -116,6 +116,11 @@ class Modules {
 						'module_file'  => MultiVendorX()->plugin_path . 'modules/QuestionsAnswers/Module.php',
 						'module_class' => 'MultiVendorX\QuestionsAnswers\Module',
 					),
+                    'marketplace-refund' => array(
+                        'id'           => 'marketplace-refund',
+						'module_file'  => MultiVendorX()->plugin_path . 'modules/Refund/Module.php',
+						'module_class' => 'MultiVendorX\Refund\Module',
+					),
 
 				)
             );
