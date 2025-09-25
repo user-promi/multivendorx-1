@@ -136,4 +136,28 @@ class Util {
 		return true; // success, even if 0 rows (no change)
 	}
 	
+	public static function delete_question( $id ) {
+		global $wpdb;
+	
+		$table = $wpdb->prefix . Utill::TABLES['product_qna'];
+	
+		$id = intval( $id );
+		if ( ! $id ) {
+			return false;
+		}
+	
+		$deleted = $wpdb->delete(
+			$table,
+			[ 'id' => $id ],
+			[ '%d' ]
+		);
+	
+		// $wpdb->delete returns number of rows deleted, or false on error
+		if ( $deleted === false ) {
+			return false; // DB error
+		}
+	
+		return true; // success, even if 0 rows (no row existed)
+	}
+	
 }

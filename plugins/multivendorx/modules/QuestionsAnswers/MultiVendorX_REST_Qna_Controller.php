@@ -46,6 +46,14 @@ class MultiVendorX_REST_Qna_Controller extends \WP_REST_Controller {
                 'callback'            => [$this, 'update_item'],
                 'permission_callback' => [$this, 'update_item_permissions_check'],
             ],
+            [
+                'methods'             => \WP_REST_Server::DELETABLE,
+                'callback'            => [$this, 'delete_item'],
+                'permission_callback' => [$this, 'update_item_permissions_check'],
+                'args'                => [
+                    'id' => ['required' => true],
+                ],
+            ],
         ]);
     }
 
@@ -181,8 +189,6 @@ class MultiVendorX_REST_Qna_Controller extends \WP_REST_Controller {
     
         return rest_ensure_response( $data );
     }
-    
-    
     
     public function update_item( $request ) {
         // Verify nonce
@@ -333,6 +339,50 @@ class MultiVendorX_REST_Qna_Controller extends \WP_REST_Controller {
         }, $qna_entries );
     
         return rest_ensure_response( $formatted );
+    }
+    public function delete_item( $request ) {
+        // Verify nonce
+        $nonce = $request->get_header( 'X-WP-Nonce' );
+        if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
+            return new \WP_Error(
+                'invalid_nonce',
+                __( 'Invalid nonce', 'multivendorx' ),
+                [ 'status' => 403 ]
+            );
+        }
+    
+        // Get question ID
+        $id = absint( $request->get_param( 'id' ) );
+        if ( ! $id ) {
+            return new \WP_Error(
+                'invalid_id',
+                __( 'Invalid question ID', 'multivendorx' ),
+                [ 'status' => 400 ]
+            );
+        }
+    
+        // Fetch the question
+        $q = reset( Util::get_question_information( [ 'id' => $id ] ) );
+        if ( ! $q ) {
+            return new \WP_Error(
+                'not_found',
+                __( 'Question not found', 'multivendorx' ),
+                [ 'status' => 404 ]
+            );
+        }
+    
+        // Delete via Util helper (implement delete_question in Util)
+        $deleted = Util::delete_question( $id );
+    
+        if ( ! $deleted ) {
+            return new \WP_Error(
+                'delete_failed',
+                __( 'Failed to delete question', 'multivendorx' ),
+                [ 'status' => 500 ]
+            );
+        }
+    
+        return rest_ensure_response( [ 'success' => true ] );
     }
     
     

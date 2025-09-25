@@ -211,38 +211,48 @@ const Qna: React.FC = () => {
         {
             header: __('Action', 'multivendorx'),
             cell: ({ row }) => (
-                <TableCell title="Action">
-                    <div className="action-section">
-                        <div className="action-icons">
-                            <i
-                                className="adminlib-more-vertical"
-                                onClick={() =>
-                                    setShowDropdown(showDropdown === row.original.id ? false : row.original.id)
-                                }
-                            ></i>
-                            <div
-                                className={`action-dropdown ${showDropdown === row.original.id
-                                    ? 'show'
-                                    : ''
-                                    }`}
-                            >
-                                <ul>
-                                    <li
-                                        onClick={() => {
-                                            setSelectedQnaId(row.original.id ?? null);
-                                            setViewQna(true);
-                                        }}
-                                    >
-                                        <i className="adminlib-eye"></i>
-                                        {__('Edit', 'multivendorx')}
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </TableCell>
+                <TableCell
+                    type="action-dropdown"
+                    rowData={row.original}
+                    header={{
+                        actions: [
+                            {
+                                label: __('Edit', 'multivendorx'),
+                                icon: 'adminlib-eye',
+                                onClick: (rowData) => {
+                                    setSelectedQnaId(rowData.id ?? null);
+                                    setViewQna(true);
+                                },
+                                hover: true,
+                            },
+                            {
+                                label: __('Delete', 'multivendorx'),
+                                icon: 'adminlib-trash',
+                                onClick: (rowData) => {
+                                    if (
+                                        confirm(__('Are you sure you want to delete this question?', 'multivendorx'))
+                                    ) {
+                                        axios({
+                                            method: 'DELETE',
+                                            url: getApiLink(appLocalizer, `qna/${rowData.id}`),
+                                            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+                                        })
+                                            .then(() => {
+                                                // Refresh table after delete
+                                                requestData(pagination.pageSize, pagination.pageIndex + 1);
+                                            })
+                                            .catch(() => {
+                                                alert(__('Failed to delete question', 'multivendorx'));
+                                            });
+                                    }
+                                },
+                                hover: true,
+                            },
+                        ],
+                    }}
+                />
             ),
-        }
+        },
     ];
 
     return (
@@ -268,7 +278,7 @@ const Qna: React.FC = () => {
                     open={viewQna}
                     onClose={() => setViewQna(false)}
                     qnaId={selectedQnaId}
-                    onUpdated={handleUpdated}  
+                    onUpdated={handleUpdated}
                 />
             )}
         </>
