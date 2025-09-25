@@ -150,6 +150,11 @@
             display: flex;
             gap: 0.5rem;
 
+            a{
+              display: flex;
+              align-items: center;
+            }
+
             i {
               font-size: 1.125rem;
               color: $theme-color;
