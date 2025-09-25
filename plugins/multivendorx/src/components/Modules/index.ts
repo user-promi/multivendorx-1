@@ -57,7 +57,6 @@ export default {
             desc: "Offer product bundles, bulk discounts, or assembled kits.",
             icon: 'adminlib-rules',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/bundle-product',
-            //settings_link: appLocalizer.site_url,
             pro_module: true,
             req_pluging: [{ name: 'Product Bundle', link: 'https://woocommerce.com/products/product-bundles/' }],
             category: 'product_types'
@@ -68,7 +67,6 @@ export default {
             desc: "Enable an auction-style selling system similar to eBay.",
             icon: 'adminlib-rules',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/auction-product',
-            //settings_link: appLocalizer.site_url,
             pro_module: true,
             req_pluging: [{ name: 'WooCommerce Simple Auction', link: 'https://codecanyon.net/item/woocommerce-simple-auctions-wordpress-auctions/6811382' }
                 , { name: 'YITH WooCommerce Auction', link: 'https://yithemes.com/themes/plugins/yith-woocommerce-auctions/' }],
@@ -144,7 +142,7 @@ export default {
             desc: "Confirms store owner identity using documents, address proof, or social profiles.",
             icon: 'adminlib-rules',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/identity-verification/',
-            settings_link: "/admin.php?page=multivendorx#&tab=settings&subtab=identity-verification",
+            settings_link: `${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=identity-verification`,
             pro_module: true,
             category: 'store_management'
         },
@@ -154,7 +152,7 @@ export default {
             desc: "Allows more than one store to sell the same product with their own price and stock.",
             icon: 'adminlib-rules',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/single-product-multiple-vendors-spmv',
-            settings_link: "/admin.php?page=multivendorx#&tab=settings&subtab=single-product-multiple-store",
+            settings_link: '${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=single-product-multiple-store',
             pro_module: false,
             category: 'store_management'
         },
@@ -173,7 +171,7 @@ export default {
             desc: "Each store publishes its own return, refund, and shipping policies.",
             icon: 'adminlib-rules',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/store-policy',
-            settings_link: "/admin.php?page=multivendorx#&tab=settings&subtab=policy",
+            settings_link: '${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=policy',
             pro_module: false,
             category: 'store_management'
         },
@@ -192,7 +190,7 @@ export default {
             desc: "Customers leave ratings and written reviews on store pages.",
             icon: 'adminlib-rules',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/store-review',
-            settings_link: "/admin.php?page=multivendorx#&tab=settings&subtab=review-management",
+            settings_link: '${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=review-management',
             pro_module: false,
             category: ['store_management','customer_experience'],
         },
@@ -220,7 +218,7 @@ export default {
             desc: "Store owners add staff accounts with role-based access to manage orders, products, or support.",
             icon: 'adminlib-rules',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/staff-manager',
-            settings_link: "/admin.php?page=multivendorx#&tab=settings&subtab=user-capability",
+            settings_link: '${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=user-capability',
             pro_module: true,
             category: 'store_management'
         },
@@ -230,7 +228,7 @@ export default {
             desc: "Hide sensitive store information from customers, including contact details, location, or other specified data.",
             icon: 'adminlib-dynamic-pricing',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/privacy',
-            settings_link: "/admin.php?page=multivendorx#&tab=settings&subtab=privacy-settings",
+            settings_link: '${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=privacy-settings',
             pro_module: false,
             category: 'store_management'
 
@@ -376,7 +374,7 @@ export default {
             desc: "Generates invoices and packing slips that can be printed or emailed to customers.",
             icon: 'adminlib-rules',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/invoice-packing-slip',
-            settings_link: "/admin.php?page=multivendorx#&tab=settings&subtab=store-invoice",
+            settings_link: '${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=store-invoice',
             pro_module: true,
             category: 'customer_experience'
         },
@@ -386,7 +384,7 @@ export default {
             desc: "Customers send real-time messages to stores about products or orders.",
             icon: 'adminlib-rules',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/live-chat',
-            settings_link: "/admin.php?page=multivendorx#&tab=settings&subtab=live-chat",
+            settings_link: '${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=live-chat',
             pro_module: true,
             category: 'customer_experience'
         },
@@ -396,7 +394,7 @@ export default {
             desc: "Built-in ticketing system for customers to raise and track support requests.",
             icon: 'adminlib-rules',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/store-support/',
-            settings_link: "/admin.php?page=multivendorx#&tab=customer-support",
+            settings_link: '${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=customer-support',
             pro_module: true,
             category: 'customer_experience'
         },
@@ -406,7 +404,7 @@ export default {
             desc: "Customers can publicly ask product questions.",
             icon: 'adminlib-rules',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/shipstation/',
-            settings_link: "/admin.php?page=multivendorx#&tab=customer-support",
+            settings_link: '${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=customer-support',
             pro_module: false,
             category: 'customer_experience'
         },
@@ -426,7 +424,7 @@ export default {
             desc: "Customers submit refund requests, and stores review and process them directly.",
             icon: 'adminlib-rules',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/marketplace-refund',
-            settings_link: "/admin.php?page=multivendorx#&tab=customer-support",
+            settings_link: '${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=customer-support',
             pro_module: false,
             category: ['store_management','customer_experience'],
         },
@@ -437,7 +435,7 @@ export default {
             desc: "Reports on sales, orders, and revenue, with integration for Google Analytics.",
             icon: 'adminlib-rules',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/store-analytics',
-            settings_link: "/wp-admin/admin.php?page=multivendorx#&tab=analytics",
+            settings_link: '${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=analytics',
             pro_module: true,
             category: ['analytics_tools','store_management'],
         },
@@ -447,7 +445,7 @@ export default {
             desc: "SEO settings for store pages and products using Rank Math or Yoast SEO.",
             icon: 'adminlib-rules',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/store-seo',
-            settings_link: "/admin.php?page=multivendorx#&tab=settings&subtab=seo",
+            settings_link: '${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=seo',
             pro_module: true,
             category: ['analytics_tools','store_management'],
         },
@@ -458,7 +456,7 @@ export default {
             desc: "Admin defines membership levels with specific capabilities for different stores.",
             icon: 'adminlib-rules',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/marketplace-memberhsip',
-            settings_link: "/admin.php?page=multivendorx#&tab=memberships&subtab=payment-membership-message",
+            settings_link: '${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=memberships&subtab=payment-membership-message',
             pro_module: true,
             category: 'marketplace_boosters'
         },
@@ -478,7 +476,7 @@ export default {
             desc: "Payment gateway fees are deducted from vendor commissions by the admin, ensuring platform costs are covered automatically.",
             icon: 'adminlib-rules',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/',
-            settings_link: "/admin.php?page=multivendorx#&tab=customer-support",
+            settings_link: '${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=customer-support',
             pro_module: false,
             category: ['store_management','payment_management'],
         },
@@ -488,7 +486,7 @@ export default {
             desc: "Paid promotion for products within the marketplace, boosting visibility.",
             icon: 'adminlib-rules',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/advertise-product/',
-            settings_link: "/admin.php?page=multivendorx#&tab=settings&subtab=advertising",
+            settings_link: '${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=advertising',
             pro_module: true,
             category: 'marketplace_boosters'
         },
@@ -507,7 +505,7 @@ export default {
             desc: "Manages stock levels, sends low-stock alerts, and maintains a waitlist for out-of-stock products.",
             icon: 'adminlib-rules',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/store-inventory',
-            settings_link: "/admin.php?page=multivendorx#&tab=settings&subtab=wholesale",
+            settings_link: '${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=wholesale',
             pro_module: true,
             category: 'marketplace_boosters'
         },
@@ -517,7 +515,7 @@ export default {
             desc: "Defines the minimum or maximum number of items a customer can purchase in a single order.",
             icon: 'adminlib-rules',
             doc_link: 'https://multivendorx.com/docs/non-knowledgebase/min-max-quantities/',
-            settings_link: "/admin.php?page=multivendorx#&tab=settings&subtab=min-max",
+            settings_link: '${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=min-max',
             pro_module: false,
             category: 'marketplace_boosters'
         },
@@ -528,7 +526,7 @@ export default {
             desc: "Marketplace-wide notices or updates sent from admin to all stores.",
             icon: 'adminlib-rules',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/announcement/',
-            settings_link: "/wp-admin/admin.php?page=multivendorx#&tab=announcement",
+            settings_link: '${appLocalizer.site_url}/wp-admin/wp-admin/admin.php?page=multivendorx#&tab=announcement',
             pro_module: false,
             category: ['notification','marketplace_boosters'],
         },
@@ -538,7 +536,7 @@ export default {
             desc: "Customers flag products they believe are fake, misleading, or inappropriate.",
             icon: 'adminlib-rules',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/report-abuse',
-            settings_link: "/admin.php?page=multivendorx#&tab=customer-support",
+            settings_link: '${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=customer-support',
             pro_module: false,
             category: 'notification'
         },
@@ -548,7 +546,7 @@ export default {
             desc: "Guides, tutorials, and FAQs shared with stores by the admin.",
             icon: 'adminlib-rules',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/knowledgebase/',
-            settings_link: "/admin.php?page=multivendorx#&tab=knowledgebase",
+            settings_link: '${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=knowledgebase',
             pro_module: false,
             category: 'notification'
         },
@@ -612,7 +610,7 @@ export default {
             desc: "Affiliate program that tracks referrals and commissions for marketplace products.",
             icon: 'adminlib-rules',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/affiliate-product/',
-            settings_link: "/admin.php?page=multivendorx#&tab=settings&subtab=%20affiliate",
+            settings_link: '${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=%20affiliate',
             pro_module: true,
             req_pluging: [{ name: 'Affiliate WP', link: 'https://affiliatewp.com/' }],
             category: 'integration'
