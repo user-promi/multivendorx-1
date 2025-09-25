@@ -586,7 +586,7 @@ var mvxAfmProductEditor = ( function ( $ ) {
 
             this.updateTabsDisplay();
 
-            // $( 'ul#product_data_tabs li:visible' ).eq( 0 ).find( 'a' ).tab( 'show' );
+            $( 'ul#product_data_tabs li:visible' ).eq( 0 ).find( 'a' ).tab( 'show' );
         },
         updateTabsDisplay: function ( ) {
             var productType = this.getState( 'productType' );

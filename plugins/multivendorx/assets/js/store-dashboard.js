@@ -71,16 +71,47 @@ jQuery(document).ready(function ($) {
         }
     }); // my acoount start
 
-
+    $(".tab-pane").hide();
+    $('.nav.nav-tabs li:first-child').addClass('active');
+    $('.tab-pane:first').show();
     // Product Type tabs start
-    $(".tab-titles .title").on("click", function () {
-        const targetId = this.id.replace("-tab", "");
-        $(".tab-titles .title").removeClass("active");
-        $(this).addClass("active");
+    // $(".nav-tabs .nav-item").on("click", function () {
+    //     const targetId = this.id.replace("-tab", "");
+    //     $(".nav-tabs .nav-item").removeClass("active");
+    //     $(this).addClass("active");
 
-        $(".tab-content .tab-panel").hide();
-        $("#" + targetId).show();
+    //     $(".tab-pane").hide();
+    //     $("#" + targetId).show();
+    // });  // Product Type tabs end
 
-    });  // Product Type tabs end
+    $('.nav.nav-tabs li').click(function () {
+        $('.nav.nav-tabs li').removeClass('active');
+        $(this).addClass('active');
+        $('.tab-pane.fade').hide();
+
+        var activeTab = $(this).find('a').attr('href');
+        $(activeTab).fadeIn();
+        return false;
+    });
+    // Hide empty panels/tabs after display.
+    $('.tab-pane').each(function () {
+        //var $children = $( this ).children( '.row-padding' ).children( '.form-group-row' );
+        var $children = $(this).find('.row-padding > div');
+
+        if (0 === $children.length) {
+            return;
+        }
+
+        var $invisble = $children.filter(function () {
+            return 'none' === $(this).css('display');
+        });
+
+        // Hide panel.
+        if ($invisble.length === $children.length) {
+            var $id = $(this).prop('id');
+            $('#product_data_tabs').find('li a[href="#' + $id + '"]').parent().hide();
+        }
+    });
+    $('#product_data_tabs').trigger('tab-display-updated');
 
 });
