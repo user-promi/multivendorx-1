@@ -16,7 +16,7 @@ $product_object = $args['product_object'];
 $post = $args['post'];
 ?>
 <div role="tabpanel" class="tab-pane fade" id="linked_product_data">
-    <div class="row-padding">
+    <div class="row-padding linked-products">
         <?php if ( $self->mvx_is_allowed_product_type( 'grouped' ) ) : ?>
             <div class="show_if_grouped"> 
                 <div class="form-group">

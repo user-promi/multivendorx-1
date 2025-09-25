@@ -1,12 +1,12 @@
  @import url("https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css");
 
-// Variables
+ // Variables
 
  $primary: #5007aa;
  $text-dark: #222;
  $text-light: #777;
  $border: #e0e0e0;
-
+ $border-light-small: 0.063rem solid #e0e4e9;
 
  // input style
  input[type="checkbox"] {
@@ -259,7 +259,7 @@
  #general_product_data {
      .form-group {
          position: relative;
-        //  display: flex;
+         //  display: flex;
          width: 49%;
 
 
@@ -294,37 +294,87 @@
                  height: 1.125rem;
              }
          }
-         &.stock_fields{
-            flex-wrap: nowrap;
 
-            .form-group{
-                height: 1.125rem;
-            }
+         &.stock_fields {
+             flex-wrap: nowrap;
+
+             .form-group {
+                 height: 1.125rem;
+             }
          }
+
          &.show_if_variable {
-            margin-top: 2.813rem;
+
              .form-group {
                  width: 80%;
              }
          }
+         &.stock_fields,
+         &.stock_status_field{
+            margin-bottom: 2.5rem;
+         }
      }
  }
 
- #advanced_product_data{
-    .form-group:last-child{
-        margin-top: 0.313rem;
-    }
+ #advanced_product_data {
+     .form-group:last-child {
+         margin-top: 0.313rem;
+     }
  }
 
 
+ // attributes
+ .add-attribute {
+     justify-content: space-between;
 
+     .add-variation-wrapper {
+         display: flex;
+         gap: 0.625rem;
+     }
+ }
 
-// select
-.select2{
-    width: 50% !important;
+ .add-attribute-data {
+     width: 100%;
+ }
 
-    input{
-        margin: 0;
-        height: 1rem;
+ .product_attributes {
+     .mvx-metabox-title {
+         display: flex;
+         justify-content: space-between;
+         padding: 0.5rem;
+         border: $border-light-small;
+
+         .remove_row{
+            color: rgba(187, 14, 14, 0.767);
+         }
+     }
+     .mvx-metabox-content{
+        border: $border-light-small;
+        border-top: none;
+        margin-bottom: 1rem;
+
+        table {
+         width: 100%;
+     }
+
+     table,
+     table td {
+         border: none;
+     }
+     }
+     .button-group{
+        display: flex;
+        gap: 0.625rem;
+        justify-content: space-between;
+        padding-top: 0.813rem;
+     }
+ }
+
+//  linked-products
+
+.linked-products{
+    .select2{
+        width: 60%;
+        
     }
 }
