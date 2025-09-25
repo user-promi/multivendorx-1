@@ -221,6 +221,11 @@ class FrontendScripts {
 					'deps'    => array(),
 					'version' => $version,
 				),
+                'multivendorx-store-product-style' => array(
+					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'styles/' . MULTIVENDORX_PLUGIN_SLUG . '-store-products.min.css',
+					'deps'    => array(),
+					'version' => $version,
+				),
 			)
         );
         foreach ( $register_styles as $name => $props ) {

@@ -142,7 +142,7 @@ export default {
             desc: "Confirms store owner identity using documents, address proof, or social profiles.",
             icon: 'adminlib-rules',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/identity-verification/',
-            settings_link: "/admin.php?page=multivendorx#&tab=settings&subtab=identity-verification",
+            settings_link: `${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=identity-verification`,
             pro_module: true,
             category: 'store_management'
         },

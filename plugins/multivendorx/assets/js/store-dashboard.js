@@ -72,15 +72,52 @@ jQuery(document).ready(function ($) {
     }); // my acoount start
 
 
-    // Product Type tabs start
-    $(".tab-titles .title").on("click", function () {
-        const targetId = this.id.replace("-tab", "");
-        $(".tab-titles .title").removeClass("active");
-        $(this).addClass("active");
+    // all tab
+    $(".tab-pane").hide();
+    $('.nav.nav-tabs li:first-child').addClass('active');
+    $('.tab-pane:first').show();
+    $('.nav.nav-tabs li').click(function () {
+        $('.nav.nav-tabs li').removeClass('active');
+        $(this).addClass('active');
+        $('.tab-pane.fade').hide();
 
-        $(".tab-content .tab-panel").hide();
-        $("#" + targetId).show();
+        var activeTab = $(this).find('a').attr('href');
+        $(activeTab).fadeIn();
+        return false;
+    });
 
-    });  // Product Type tabs end
 
+    // General tab
+    $('.sale_price_dates_fields').hide();
+    $(document).on('click', '.sale_schedule', function (e) {
+        e.preventDefault();
+        $('.sale_price_dates_fields').slideDown();
+        $('.sale_schedule').hide();
+    });
+
+    $(document).on('click', '.cancel_sale_schedule', function (e) {
+        e.preventDefault();
+        $('.sale_price_dates_fields').slideUp();
+        $('.sale_schedule').show();
+    });
+
+
+    // Inventory tab
+    function toggleStockFields() {
+        if ($('#_manage_stock').is(':checked')) {
+            $('.stock_fields').slideDown();
+            $('.stock_status_field').slideUp();
+        } else {
+            $('.stock_fields').slideUp();
+            $('.stock_status_field').slideDown();
+        }
+    }
+    toggleStockFields();
+    $(document).on('change', '#_manage_stock', function () {
+        toggleStockFields();
+    });
+
+    // select 
+mvxAfmLibrary.wcEnhancedSelectInit();
+    
 });
