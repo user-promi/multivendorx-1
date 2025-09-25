@@ -530,24 +530,6 @@ var mvxAfmProductEditor = ( function ( $ ) {
                 var saleScheduleSet = false;
                 var $wrap = $theseSaleDates.closest( 'div.form-group-row' ); //, table
 
-                //Initialize datepicker on text input
-                /*$theseSaleDates.find( 'input' ).datepicker( {
-                    defaultDate: '',
-                    dateFormat: 'yy-mm-dd',
-                    numberOfMonths: 1,
-                    showButtonPanel: true,
-                    onSelect: function () {
-                        mvxAfmLibrary.datePickerSelect( $( this ) );
-                    }
-                } ).on( 'change', function () {
-                    if ( !$( this ).datepicker( 'getDate' ) ) {
-                        var option = $( this ).is( '.sale_price_dates_from' ) ? 'minDate' : 'maxDate',
-                            $otherDateField = 'minDate' === option ? $( this ).closest( '.sale_price_dates_fields' ).find( '.sale_price_dates_to' ) : $( this ).closest( '.sale_price_dates_fields' ).find( '.sale_price_dates_from' );
-                        $( $otherDateField ).datepicker( 'option', option, null );
-                    }
-                    return false;
-                } );*/
-
                 $theseSaleDates.find( 'input' ).each( function () {
                     if ( '' !== $( this ).val() ) {
                         saleScheduleSet = true;
@@ -586,7 +568,25 @@ var mvxAfmProductEditor = ( function ( $ ) {
 
             this.updateTabsDisplay();
 
-            $( 'ul#product_data_tabs li:visible' ).eq( 0 ).find( 'a' ).tab( 'show' );
+            // $( 'ul#product_data_tabs li:visible' ).eq( 0 ).find( 'a' ).tab( 'show' );
+
+            // $('ul#product_data_tabs li:visible').eq(0).find('a').each(function () {
+            //     var target = $(this).attr('href'); // e.g. "#general_product_data"
+
+            //     // Deactivate all tabs & panels
+            //     $('#product_data_tabs li a').removeClass('active');
+            //     $('.panel, .tab-pane').removeClass('active show');
+
+            //     // Activate this tab
+            //     $(this).addClass('active');
+
+            //     // Activate target content panel
+            //     if (target) {
+            //         $(target).addClass('active show');
+            //     }
+            // });
+
+
         },
         updateTabsDisplay: function ( ) {
             var productType = this.getState( 'productType' );
@@ -871,9 +871,9 @@ var mvxAfmProductEditor = ( function ( $ ) {
                         $wrapper.unblock();
                         $wrapper.trigger('mvx_after_save_attribute_triggered');
                         // Load variations panel.
-//                        $( '#variable_product_options' ).load( this_page + ' #variable_product_options_inner', function () {
-//                            $( '#variable_product_options' ).trigger( 'reload' );
-//                        } );
+                       $( '#variable_product_options' ).load( this_page + ' #variable_product_options_inner', function () {
+                           $( '#variable_product_options' ).trigger( 'reload' );
+                       } );
                     } );
                 },
                 expandAllAttributes: function ( ) {
@@ -1888,6 +1888,8 @@ var mvxAfmProductEditor = ( function ( $ ) {
             }
         },
         saveProduct: function ( e ) { 
+            alert('hit save product');
+
             $( 'form#mvx-edit-product-form' ).trigger( 'before_product_save' );
             var status = ( e.target.id === 'mvx_frontend_dashboard_product_submit' ) ? 'publish' : ( e.target.id === 'mvx_frontend_dashboard_product_draft' ) ? 'draft' : '';
             $( 'input:hidden[name="status"]' ).val( status );

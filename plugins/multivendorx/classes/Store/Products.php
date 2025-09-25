@@ -248,10 +248,10 @@ class Products {
             wp_enqueue_editor();
             // Support for media
             wp_enqueue_media();
+            wp_enqueue_script( 'selectWoo' );
             FrontendScripts::enqueue_script( 'multivendorx-store-products-script' );
             wp_localize_script( 'multivendorx-store-products-script', 'mvx_advance_product_params', $edit_product_params );
 
-            wp_enqueue_script( 'selectWoo' );
             // do_action( 'mvx_edit_product_template_load', $this->product_id, $this->product_object, $this->post_object );
             MultiVendorX()->util->get_template('edit-product.php', array( 'self' => $this, 'product_object' => $this->product_object, 'post' => $this->post_object, 'is_update' => $this->is_update ) );
         } else {
@@ -280,6 +280,7 @@ class Products {
     public function mvx_default_product_types() {
         return array(
             'simple'   => __( 'Simple product', 'multivendorx' ),
+            'variable'   => __( 'Variable product', 'multivendorx' ),
         ) ;
     }
 

@@ -117,7 +117,7 @@ jQuery(document).ready(function ($) {
         toggleStockFields();
     });
 
-    // select 
-mvxAfmLibrary.wcEnhancedSelectInit();
+//     // select 
+// mvxAfmLibrary.wcEnhancedSelectInit();
     
 });

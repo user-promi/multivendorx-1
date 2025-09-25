@@ -27,6 +27,7 @@ class Ajax {
 
         add_action('wp_ajax_mvx_edit_product_attribute', array($this, 'edit_product_attribute_callback'));
         add_action('wp_ajax_mvx_product_save_attributes', array($this, 'save_product_attributes_callback'));
+        add_action('wp_ajax_mvx_product_tag_add', array($this, 'mvx_product_tag_add'));
         
     }
 
@@ -364,6 +365,7 @@ class Ajax {
         $i = isset($_POST['i']) ? absint($_POST['i']) : 0;
         $metabox_class = array();
         $attribute = new \WC_Product_Attribute();
+        $self = new Products();
 
         $attribute->set_id(wc_attribute_taxonomy_id_by_name(sanitize_text_field($_POST['taxonomy'])));
         $attribute->set_name(sanitize_text_field($_POST['taxonomy']));
@@ -375,7 +377,7 @@ class Ajax {
             $metabox_class[] = $attribute->get_name();
         }
 
-        MultiVendorX()->util->get_template('views/html-product-attribute.php', ['attribute' => $attribute, 'metabox_class' => $metabox_class, 'i' => $i] );
+        MultiVendorX()->util->get_template('views/html-product-attribute.php', ['attribute' => $attribute, 'metabox_class' => $metabox_class, 'i' => $i, 'self' => $self] );
 
         wp_die();
     }
@@ -404,5 +406,32 @@ class Ajax {
         $product->save();
         wp_die();
     }
-}
 
+    function mvx_product_tag_add() {
+        check_ajax_referer('add-attribute', 'security');
+        $taxonomy = apply_filters('mvx_product_tag_add_taxonomy', 'product_tag');
+        $tax = get_taxonomy($taxonomy);
+        $tag_name = '';
+        $message = '';
+        $status = false;
+        if (!apply_filters('mvx_vendor_can_add_product_tag', true, get_current_user_id())) {
+            $message = __("You don't have permission to add product tags", 'multivendorx');
+            wp_send_json(array('status' => $status, 'tag_name' => $tag_name, 'message' => $message));
+            die;
+        }
+        $new_tag = isset($_POST['new_tag']) ? wc_clean($_POST['new_tag']) : '';
+        $tag = wp_insert_term($_POST['new_tag'], $taxonomy, array());
+
+        if (!$tag || is_wp_error($tag) || (!$tag = get_term($tag['term_id'], $taxonomy))) {
+            $message = __('An error has occurred. Please reload the page and try again.', 'multivendorx');
+            if (is_wp_error($tag) && $tag->get_error_message())
+                $message = $tag->get_error_message();
+        }else {
+            $tag_name = $tag->name;
+            $status = true;
+        }
+        wp_send_json(array('status' => $status, 'tag' => $tag, 'tag_name' => $tag_name, 'message' => $message));
+        die;
+    }
+
+}

@@ -137,7 +137,9 @@ a {
     }
   }
 }
-
+.icon-pro-btn{
+  transform: rotate(-45deg);
+}
 .admin-icon {
   padding: 0.313rem 1rem;
   border-radius: 0.313rem;
@@ -917,6 +919,10 @@ input[type="checkbox"]:focus {
   align-items: end;
   gap: 0.625rem;
   padding-top: 0.5rem;
+
+  &.center{
+    justify-content: center;
+  }
 }
 
 // footer button style end
