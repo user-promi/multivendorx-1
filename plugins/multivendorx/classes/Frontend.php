@@ -235,8 +235,7 @@ class Frontend {
 
     public function save_product() {
         global $wp;
-        file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":request:  : " . var_export($_POST, true) . "\n", FILE_APPEND);
-
+      
         if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) { 
 
             if ( $wp->query_vars['subtab'] != 'edit-product' || ! isset( $_POST['mvx_product_nonce'] ) ) {
