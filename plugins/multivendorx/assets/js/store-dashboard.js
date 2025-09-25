@@ -71,19 +71,11 @@ jQuery(document).ready(function ($) {
         }
     }); // my acoount start
 
+
+    // all tab
     $(".tab-pane").hide();
     $('.nav.nav-tabs li:first-child').addClass('active');
     $('.tab-pane:first').show();
-    // Product Type tabs start
-    // $(".nav-tabs .nav-item").on("click", function () {
-    //     const targetId = this.id.replace("-tab", "");
-    //     $(".nav-tabs .nav-item").removeClass("active");
-    //     $(this).addClass("active");
-
-    //     $(".tab-pane").hide();
-    //     $("#" + targetId).show();
-    // });  // Product Type tabs end
-
     $('.nav.nav-tabs li').click(function () {
         $('.nav.nav-tabs li').removeClass('active');
         $(this).addClass('active');
@@ -93,25 +85,39 @@ jQuery(document).ready(function ($) {
         $(activeTab).fadeIn();
         return false;
     });
-    // Hide empty panels/tabs after display.
-    $('.tab-pane').each(function () {
-        //var $children = $( this ).children( '.row-padding' ).children( '.form-group-row' );
-        var $children = $(this).find('.row-padding > div');
 
-        if (0 === $children.length) {
-            return;
-        }
 
-        var $invisble = $children.filter(function () {
-            return 'none' === $(this).css('display');
-        });
-
-        // Hide panel.
-        if ($invisble.length === $children.length) {
-            var $id = $(this).prop('id');
-            $('#product_data_tabs').find('li a[href="#' + $id + '"]').parent().hide();
-        }
+    // General tab
+    $('.sale_price_dates_fields').hide();
+    $(document).on('click', '.sale_schedule', function (e) {
+        e.preventDefault();
+        $('.sale_price_dates_fields').slideDown();
+        $('.sale_schedule').hide();
     });
-    $('#product_data_tabs').trigger('tab-display-updated');
 
+    $(document).on('click', '.cancel_sale_schedule', function (e) {
+        e.preventDefault();
+        $('.sale_price_dates_fields').slideUp();
+        $('.sale_schedule').show();
+    });
+
+
+    // Inventory tab
+    function toggleStockFields() {
+        if ($('#_manage_stock').is(':checked')) {
+            $('.stock_fields').slideDown();
+            $('.stock_status_field').slideUp();
+        } else {
+            $('.stock_fields').slideUp();
+            $('.stock_status_field').slideDown();
+        }
+    }
+    toggleStockFields();
+    $(document).on('change', '#_manage_stock', function () {
+        toggleStockFields();
+    });
+
+    // select 
+mvxAfmLibrary.wcEnhancedSelectInit();
+    
 });
