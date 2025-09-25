@@ -1100,6 +1100,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             name={inputField.key}
                             description={inputField.desc}// optional description displayed below the select input
                             inputClass={inputField.className}
+                            size={inputField.size}
                             options={
                                 Array.isArray(inputField.options)
                                     ? inputField.options.map((opt) => ({

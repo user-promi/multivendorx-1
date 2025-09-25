@@ -102,14 +102,44 @@ const AdminDashboard = () => {
       href: "#",
     },
   ];
+  const featuresList = [
+    {
+      title: "booking marketplace",
+      desc: "Recurring revenue with subscription products",
+      iconClass: "adminlib-book",
+      linkText: "Explore Docs",
+      href: "#",
+    },
+    {
+      title: "Subscriptions marketplace",
+      desc: "Recurring revenue with subscription products",
+      iconClass: "adminlib-book",
+      linkText: "Explore Docs",
+      href: "#",
+    },
+    {
+      title: "Auctions & bidding",
+      desc: "Enable auction-style selling",
+      iconClass: "adminlib-preview",
+      linkText: "Book Consultation",
+      href: "#",
+    },
+    {
+      title: "Rental & booking products",
+      desc: "Time-based product bookings",
+      iconClass: "adminlib-global-community",
+      linkText: "Join Discord",
+      href: "#",
+    },
+  ];
 
   const quickLinks = [
     { text: "Stores", iconClass: "adminlib-cart", href: "#" },
-    { text: "Commissions", iconClass: "adminlib-cart", href: "#" },
+    { text: "Commissions", iconClass: "adminlib-exclude", href: "#" },
     { text: "Products", iconClass: "adminlib-cart", href: "#" },
-    { text: "Payouts", iconClass: "adminlib-cart", href: "#" },
-    { text: "Disbursements", iconClass: "adminlib-cart", href: "#" },
-    { text: "Customer Support", iconClass: "adminlib-cart", href: "#" },
+    { text: "Payouts", iconClass: "adminlib-appointments", href: "#" },
+    { text: "Disbursements", iconClass: "adminlib-folder-open", href: "#" },
+    { text: "Customer Support", iconClass: "adminlib-multi-product", href: "#" },
   ];
 
 
@@ -159,7 +189,7 @@ const AdminDashboard = () => {
       ],
     },
   ];
-  const [activeTab, setActiveTab] = useState("testimonials");
+  const [activeTab, setActiveTab] = useState("overview");
   const [openSection, setOpenSection] = useState<string>(sections[0].title);
   const toggleSection = (title: string) => {
     setOpenSection((prev) => (prev === title ? "" : title));
@@ -171,7 +201,7 @@ const AdminDashboard = () => {
           {sections.map((section) => {
             const isOpen = openSection === section.title;
             return (
-              <div key={section.title} className="features-wrapper">
+              <div key={section.title} id="free-vs-pro" className="features-wrapper">
                 <div
                   className='table-title'
                   onClick={() => toggleSection(section.title)}
@@ -331,19 +361,19 @@ const AdminDashboard = () => {
         <div className="container-wrapper">
           <div className="card-wrapper width-65">
             <div className="row">
-              <div className="column">
+              <div className="column pro-banner">
                 <div className="pro-banner-wrapper">
                   <div className="content">
-                    <div className="heading">Free vs Pro</div>
+                    <div className="heading">Start free, upgrade when you're ready</div>
                     <div className="description">Start free, upgrade when you're ready to unlock the full potential</div>
 
                     <div className="button-wrapper">
                       <div className="admin-btn btn-purple">
                         Upgrade Now <i className="adminlib-arrow-right"></i>
                       </div>
-                      <div className="admin-btn btn-blue">
+                      <a href="#free-vs-pro" className="admin-btn btn-light-blue">
                         Free VS Pro
-                      </div>
+                      </a>
                     </div>
                   </div>
                   <div className="image">
@@ -354,8 +384,179 @@ const AdminDashboard = () => {
               </div>
 
             </div>
+            <div className="row">
+              <div className="column">
+                <div className="card-header">
+                  <div className="left">
+                    <div className="title">
+                      Quick Setup Checklist
+                    </div>
+                  </div>
+                </div>
+
+                <div className="activity-wrapper">
+                  {items.map((item, index) => (
+                    <div className={`activity ${item.active ? "" : "inactive"}`} key={index}>
+                      <span className="icon">
+                        <i className={item.active ? "adminlib-check" : "adminlib-close"}></i>
+                      </span>
+                      <div className={`details ${item.active ? "" : "inactive"}`}>
+                        {item.text}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="column">
+                <div className="card-header">
+                  <div className="left">
+                    <div className="title">
+                      Unlock Pro Features
+                    </div>
+                  </div>
+                </div>
+                <div className="features-wrapper">
+                  {featuresList.map((res, index) => (
+                    <div className="feature" key={index}>
+                      <i className={res.iconClass}></i>
+                      <h3>{res.title}</h3>
+                      <p>{res.desc}</p>
+                    </div>
+                  ))}
+                </div>
+                <div className="admin-btn btn-red">Upgrade to pro</div>
+              </div>
+            </div>
+            <div className="row">
+              <div className="column">
+                <div className="card-header">
+                  <div className="left">
+                    <div className="title">
+                      Marketplace Tools
+                    </div>
+                  </div>
+                </div>
+                <div className="tools-wrapper">
+                  <div className="tool">
+                    <div className="name">
+                      Vendor Dashboard
+                      <span className="admin-badge blue">free</span>
+                    </div>
+                    <div className="button-wrapper">
+                      <div className="admin-badge green">Demo</div>
+                      <div className="admin-badge btn-purple">Setup</div>
+                    </div>
+                  </div>
+
+                  <div className="tool">
+                    <div className="name">
+                      Vendor Dashboard
+                      <span className="admin-badge blue">Free</span>
+                    </div>
+                    <div className="button-wrapper">
+                      <div className="admin-badge green">Demo</div>
+                      <div className="admin-badge btn-purple">Setup</div>
+                    </div>
+                  </div>
+
+                  <div className="tool">
+                    <div className="name">
+                      Vendor Dashboard
+                      <span className="admin-badge blue">Free</span>
+                    </div>
+                    <div className="button-wrapper">
+                      <div className="admin-badge green">Demo</div>
+                      <div className="admin-badge btn-purple">Setup</div>
+                    </div>
+                  </div>
+
+                  <div className="tool">
+                    <div className="name">
+                      Vendor Dashboard
+                      <span className="admin-badge blue">Free</span>
+                    </div>
+                    <div className="button-wrapper">
+                      <div className="admin-badge green">Demo</div>
+                      <div className="admin-badge btn-purple">Setup</div>
+                    </div>
+                  </div>
+                  <div className="tool">
+                    <div className="name">
+                      Vendor Dashboard
+                      <span className="admin-badge red">Pro</span>
+                    </div>
+                    <div className="button-wrapper">
+                      <div className="admin-badge green">Demo</div>
+                      <div className="admin-badge btn-purple">Setup</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="row">
+              <div className="column">
+                <div className="card-header">
+                  <div className="left">
+                    <div className="title">
+                      Free vs Pro
+                    </div>
+                  </div>
+                </div>
+                <div className="tab-titles dashboard-tabs">
+                  {tabs.map((tab) => (
+                    <div
+                      key={tab.id}
+                      className={`title ${activeTab === tab.id ? "active" : ""}`}
+                      onClick={() => setActiveTab(tab.id)}
+                    >
+                      <p>{tab.label}</p>
+                    </div>
+                  ))}
+                </div>
+
+                {tabs.map(
+                  (tab) =>
+                    activeTab === tab.id && (
+                      <div key={tab.id} className="tab-panel">
+                        {tab.content}
+                      </div>
+                    )
+                )}
+              </div>
+            </div>
           </div>
+
           <div className="card-wrapper width-35">
+            <div className="row">
+              <div className="column">
+                <div className="card-header">
+                  <div className="left">
+                    <div className="title">
+                      Extend Your Website
+                    </div>
+                  </div>
+                </div>
+                <div className="cards-wrapper">
+                  <div className="cards" >
+                    <i className="adminlib-catalog"></i>
+                    <h3>CatalogX</h3>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+                    <a href="" target="blank">
+                      Install
+                    </a>
+                  </div>
+                  <div className="cards" >
+                    <i className="adminlib-contact-form"></i>
+                    <h3>Notifima</h3>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit</p>
+                    <a href="" target="blank">
+                      Install
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
             <div className="row">
               <div className="column">
                 <div className="card-header">
@@ -374,12 +575,71 @@ const AdminDashboard = () => {
                 </div>
               </div>
             </div>
+            <div className="row">
+              <div className="column">
+                <div className="card-header">
+                  <div className="left">
+                    <div className="title">
+                      Things to Do Next
+                    </div>
+                  </div>
+                </div>
+                <div className="activity-wrapper">
+                  <div className="activity">
+                    <span className="icon">
+                      <i className="adminlib-cart"></i>
+                    </span>
+                    <div className="details">
+                      View reports & track commissions
+                    </div>
+                  </div>
+                  <div className="activity">
+                    <span className="icon">
+                      <i className="adminlib-cart"></i>
+                    </span>
+                    <div className="details">
+                      Customize vendor dashboards & store pages
+                    </div>
+                  </div>
+                  <div className="activity">
+                    <span className="icon">
+                      <i className="adminlib-cart"></i>
+                    </span>
+                    <div className="details">
+                      Promote your marketplace with coupons & campaigns
+                    </div>
+                  </div>
+                  <div className="activity">
+                    <span className="icon">
+                      <i className="adminlib-cart"></i>
+                    </span>
+                    <div className="details">
+                      Enable reviews and ratings for vendors
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="row">
+              <div className="column">
+                <div className="cards-wrapper doc">
+                  {resources.map((res, index) => (
+                    <div className="cards" key={index}>
+                      <i className={res.iconClass}></i>
+                      <h3>{res.title}</h3>
+                      <p>{res.desc}</p>
+                      <a href={res.href} target="blank">
+                        {res.linkText}
+                      </a>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
-
-
-        <div className="row">
+        {/* <div className="row">
           <div className="column">
             <div className="card-header">
               <div className="left">
@@ -467,7 +727,7 @@ const AdminDashboard = () => {
 
               <div className="activitie-wrapper">
                 <div className="details">
-                  <div className="heading">New vendor application received <span className="admin-badge yellow">Pending Review</span></div>
+                  <div className="heading">vendor application received <span className="admin-badge yellow">Pending Review</span></div>
                   <div className="text">"SportZone Equipment" applied to join your marketplace</div>
                 </div>
                 <div className="right-section">
@@ -525,9 +785,9 @@ const AdminDashboard = () => {
                   <div className="admin-btn btn-purple">
                     Upgrade Now <i className="adminlib-arrow-right"></i>
                   </div>
-                  <div className="admin-btn btn-blue">
+                  <a href="" className="admin-btn btn-blue">
                     Free VS Pro
-                  </div>
+                  </a>
                 </div>
               </div>
               <div className="image">
@@ -578,7 +838,7 @@ const AdminDashboard = () => {
                 )
             )}
           </div>
-        </div>
+        </div> */}
       </div>
     </>
   );

@@ -35,6 +35,7 @@ interface SelectInputProps {
     descClass?: string;
     preText?: string;
     postText?: string;
+    size?: string;
 }
 
 const SelectInput: React.FC<SelectInputProps> = ({
@@ -54,6 +55,7 @@ const SelectInput: React.FC<SelectInputProps> = ({
     descClass,
     preText,
     postText,
+    size,
 }) => {
     const customStyles = {
         control: (provided: any, state: any) => ({
@@ -118,7 +120,7 @@ const SelectInput: React.FC<SelectInputProps> = ({
         : optionsData.find((opt) => opt.value === value) || null;
 
     return (
-        <div className={wrapperClass}>
+        <div className={wrapperClass} style={{ width: size || '100%' }}>
             {selectDeselect && (
                 <button
                     className={selectDeselectClass}
