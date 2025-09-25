@@ -19,12 +19,12 @@ $self = $args['self'];
 <div data-taxonomy="<?php echo esc_attr($attribute->get_taxonomy()); ?>" class="mvx-metabox-wrapper woocommerce_attribute wc-metabox closed <?php echo esc_attr(implode(' ', $metabox_class)); ?>" rel="<?php echo esc_attr($attribute->get_position()); ?>">
     <div class="mvx-metabox-title variation-title" data-toggle="collapse" data-target="#attribute_<?php echo esc_attr( $i ); ?>"  aria-expanded="false" aria-controls="collapseExample">
         <div class="variation-select-group">
-            <span class="sortable-icon"></span>
+            <span class="adminlib-drag"></span>
             <strong class="attribute_name"><?php echo esc_html(wc_attribute_label($attribute->get_name())); ?></strong>
         </div>
         <div class="mvx-metabox-action variation-action">
             <i class="mvx-font ico-up-arrow-icon"></i>
-            <a href="#" class="remove_row delete remove-attribute"><?php esc_html_e('Remove', 'multivendorx'); ?></a>
+            <a href="#" class="remove_row delete remove-attribute"><i class="adminlib-delete"></i><?php esc_html_e('Remove', 'multivendorx'); ?></a>
         </div>
     </div>
     
@@ -74,8 +74,8 @@ $self = $args['self'];
                                     ?>
                                 </select>
                                 <div class="button-group">
-                                    <button class="btn btn-default plus select_all_attributes"><?php esc_html_e('Select all', 'multivendorx'); ?></button>
-                                    <button class="btn btn-default minus select_no_attributes"><?php esc_html_e('Select none', 'multivendorx'); ?></button>
+                                    <button class="admin-btn btn-purple"><?php esc_html_e('Select all', 'multivendorx'); ?></button>
+                                    <button class="admin-btn btn-red"><?php esc_html_e('Select none', 'multivendorx'); ?></button>
                                 </div>
                                 <?php
                             }

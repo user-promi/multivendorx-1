@@ -16,7 +16,7 @@ $post = $args['post'];
 ?>
 <div role="tabpanel" class="tab-pane fade collapsable-component-wrapper" id="product_attributes_data">
     <div class="row-padding">
-        <div class="row">
+        <div class="row add-attribute">
             <div class="col-md-6">
                 <div class="add-variation-wrapper">
                     <select name="attribute_taxonomy" class="attribute_taxonomy form-control inline-select">
@@ -36,7 +36,7 @@ $post = $args['post'];
                         }
                         ?>
                     </select>
-                    <button type="button" class="btn btn-default add_attribute"><?php esc_html_e( 'Add', 'multivendorx' ); ?></button>
+                    <button type="button" class="admin-btn btn-purple add_attribute"><i class="adminlib-plus"></i><?php esc_html_e( 'Add', 'multivendorx' ); ?></button>
                 </div>
             </div>
             <div class="col-md-6">
@@ -48,7 +48,7 @@ $post = $args['post'];
             </div>
         </div>
         <hr>
-        <div class="row">
+        <div class="row add-attribute-data">
             <div class="col-md-12">
                 <div class="product_attributes wc-metaboxes product-variations-wrapper">  
                     <?php
@@ -71,12 +71,12 @@ $post = $args['post'];
             </div>
         </div> 
         <div class="button-group">
-            <button type="button" class="btn btn-default save_attributes button-primary"><?php esc_html_e( 'Save attributes', 'multivendorx' ); ?></button>
-            <div class="toolbar float-right">
+            <button type="button" class="admin-btn btn-purple"><?php esc_html_e( 'Save attributes', 'multivendorx' ); ?></button>
+            <!-- <div class="toolbar float-right">
                 <span class="expand-close">
                     <a href="#" class="expand_all"><?php esc_html_e( 'Expand', 'multivendorx' ); ?></a> / <a href="#" class="close_all"><?php esc_html_e( 'Close', 'multivendorx' ); ?></a>
                 </span>
-            </div>
+            </div> -->
         </div>
     </div>
     <?php do_action( 'mvx_frontend_dashboard_product_options_attribute', $post->ID, $product_object, $post ); ?>

@@ -13,6 +13,9 @@
         .title {
             font-size: 1.25rem;
             font-weight: 500;
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
         }
 
         .des {
@@ -165,8 +168,13 @@
 .width-65 {
     width: 65%;
 }
-.container-wrapper:has(.column){
+
+.container-wrapper:has(.column) {
     padding: 0;
+
+    .row {
+        padding: 0;
+    }
 }
 
 .container-wrapper {
@@ -450,21 +458,25 @@
                 margin-top: 1rem;
                 border: 0;
             }
-            input{
+
+            input {
                 margin: 0;
             }
-            &:has(input:checked) span{
+
+            &:has(input:checked) span {
                 text-decoration: line-through;
                 color: #00000075;
             }
-            .delete-icon{
+
+            .delete-icon {
                 display: none;
                 font-size: 1.25rem;
                 color: #e35047;
                 cursor: pointer;
             }
+
             &:hover {
-                .delete-icon{
+                .delete-icon {
                     display: block;
                 }
             }

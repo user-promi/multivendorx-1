@@ -35,6 +35,27 @@ class Rest {
         add_filter('woocommerce_rest_shop_order_object_query', array($this, 'filter_orders_by_store_id'), 10, 2);
         add_filter('woocommerce_rest_product_object_query', array($this, 'filter_products_by_meta_exists'), 10, 2);
         add_filter('woocommerce_rest_coupon_object_query', array($this, 'filter_coupons_by_meta_exists'), 10, 2);
+        add_filter('woocommerce_analytics_products_query_args', array($this, 'filter_low_stock_by_meta_exists'), 10, 1);
+    }
+
+    public function filter_low_stock_by_meta_exists( $args ) {
+        file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":orders:args : " . var_export($args, true) . "\n", FILE_APPEND);
+        if ( isset( $request['meta_key'] ) && $request['meta_key'] === 'multivendorx_store_id' ) {
+            
+            // Build the meta query to check for the existence of the MultiVendorX key
+            $meta_query = array(
+                'key'     => 'multivendorx_store_id',
+                'compare' => 'EXISTS',
+            );
+    
+            if ( ! isset( $args['meta_query'] ) ) {
+                $args['meta_query'] = array();
+            }
+            $args['meta_query'][] = $meta_query;
+        }
+        file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":orders:args : " . var_export($args, true) . "\n", FILE_APPEND);
+
+        return $args;
     }
 
      /**

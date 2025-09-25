@@ -181,53 +181,45 @@ const Overview: React.FC<OverviewProps> = ({
   pieData,
   COLORS = ["#5007aa", "#00c49f", "#ff7300", "#d400ffff", "#004ec4ff"],
 }) => {
-  const [topSellingProducts, setTopSellingProducts] = useState<any[]>([]);
-const salesByLocations = [
-  { name: "USA", coordinates: [40, -100], sales: 12000 },
-  { name: "India", coordinates: [22, 78], sales: 8500 },
-  { name: "UK", coordinates: [54, -2], sales: 6700 },
-  { name: "Germany", coordinates: [51, 10], sales: 5400 },
-  { name: "Australia", coordinates: [-25, 133], sales: 4300 },
-];
-const salesIcon = new L.DivIcon({
-  className: "custom-marker",
-  html: `<div style="background:#5007aa;color:#fff;border-radius:50%;padding:6px 10px;font-size:12px;">$</div>`,
-});
-  function requestTopSellingProducts() {
-    axios({
-      method: "GET",
-      url: `${appLocalizer.apiUrl}/wc-analytics/products`,
-      headers: { "X-WP-Nonce": appLocalizer.nonce },
-      params: {
-        orderby: "sales",
-        order: "desc",
-        per_page: 5,
-      },
-    })
-      .then((response) => {
-        setTopSellingProducts(response.data);
-      })
-  }
+  const salesByLocations = [
+    { name: "USA", coordinates: [40, -100], sales: 12000 },
+    { name: "India", coordinates: [22, 78], sales: 8500 },
+    { name: "UK", coordinates: [54, -2], sales: 6700 },
+    { name: "Germany", coordinates: [51, 10], sales: 5400 },
+    { name: "Australia", coordinates: [-25, 133], sales: 4300 },
+  ];
+  const salesIcon = new L.DivIcon({
+    className: "custom-marker",
+    html: `<div style="background:#5007aa;color:#fff;border-radius:50%;padding:6px 10px;font-size:12px;">$</div>`,
+  });
+
+  const [leaderboard, setLeaderboard] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchLeaderboards = async () => {
+    try {
+      setLoading(true);
+      const response = await axios({
+        method: "GET",
+        url: `${appLocalizer.apiUrl}/wc-analytics/leaderboards`,
+        headers: { "X-WP-Nonce": appLocalizer.nonce },
+      });
+      setLeaderboard(response.data || []);
+    } catch (err: any) {
+      setError("Failed to fetch leaderboard data");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    requestTopSellingProducts();
+    fetchLeaderboards();
   }, []);
+
 
   return (
     <div className="dashboard-overview">
-      {/* Top Stats */}
-      {/* <div className="row">
-        <div className="overview-card-wrapper">
-          {overview.map((stat) => (
-            <div className="action" key={stat.id}>
-              <div className="title">
-                {stat.count}
-                <i className={stat.icon}></i>
-              </div>
-              <div className="description">{stat.label}</div>
-            </div>
-          ))}
-        </div>
-      </div> */}
       <div className="row">
         <div className="column width-65">
           <div className="card-header">
@@ -336,7 +328,7 @@ const salesIcon = new L.DivIcon({
         </div>
       </div>
       <div className="row">
-        <div className="column">
+        {/* <div className="column">
           <div className="card-header">
             <div className="left">
               <div className="title">
@@ -374,56 +366,63 @@ const salesIcon = new L.DivIcon({
               </div>
             </div>
           </div>
-        </div>
-
-        <div className="column">
-          <div className="card-header">
-            <div className="left">
-              <div className="title">
-                Top sold Product
+        </div> */}
+        {leaderboard.map((section: any, sectionIndex: number) => (
+          <div className="column" key={sectionIndex}>
+            <div className="card-header">
+              <div className="left">
+                <div className="title">{section.label}</div>
               </div>
             </div>
-          </div>
 
-          <div className="top-items">
-            {topSellingProducts && topSellingProducts.length > 0 ? (
-              topSellingProducts.map((product, index) => (
-                <div className="items" key={product.id}>
-                  <div className="left-side">
-                    <div className="icon">
-                      <i className={`adminlib-pro-tag admin-icon ${index % 2 === 0 ? "red" : "green"}`}></i>
+            <div className="top-items">
+              {section.rows?.length ? (
+                section.rows.map((row: any, rowIndex: number) => (
+                  <div className="items" key={rowIndex}>
+                    <div className="left-side">
+                      <div className="icon">
+                        <i
+                          className={`adminlib-pro-tag admin-icon ${rowIndex % 2 === 0 ? "red" : "green"
+                            }`}
+                        ></i>
+                      </div>
+                      <div className="details">
+                        <div
+                          className="item-title"
+                          dangerouslySetInnerHTML={{
+                            __html: row[0].display.trim()
+                              ? row[0].display
+                              : `<a href="#">Customer</a>`, // fallback text
+                          }}
+                        />
+                        <div className="sub-text">
+                          {row[1].value} {row[1].label || "orders"}
+                        </div>
+                      </div>
                     </div>
-                    <div className="details">
-                      <div className="item-title">
-                        {/* Clickable product name */}
-                        <a
-                          href={product.permalink || `/product/${product.slug}/`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          style={{ textDecoration: "underline", color: "#0073aa" }}
-                        >
-                          {product.name}
-                        </a>
-                      </div>
-                      <div className="sub-text">
-                        {product.total_sales ? `${product.total_sales} orders` : "0 orders"}
-                      </div>
+                    <div className="right-side">
+                      <div
+                        className="price"
+                        dangerouslySetInnerHTML={{ __html: row[2].display }}
+                      />
                     </div>
                   </div>
-                  <div className="right-side">
-                    <div className="price">
-                      {product.price
-                        ? `$${(parseFloat(product.price) * product.total_sales).toFixed(2)}`
-                        : "$0"}
+                ))
+              ) : (
+                <div className="items">
+                  <div className="left-side">
+                    <div className="details">
+                      <div className="item-title">No data</div>
+                      <div className="sub-text">0 orders</div>
                     </div>
                   </div>
                 </div>
-              ))
-            ) : (
-              <div>No top-selling products available.</div>
-            )}
+              )}
+
+            </div>
           </div>
-        </div>
+        ))}
+
 
         <div className="column">
           <div className="card-header">

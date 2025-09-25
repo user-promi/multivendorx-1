@@ -24,6 +24,7 @@ if ($default_types && !empty($default_types)) {
 ?>
 
 <div class="content-wrapper">
+    <form id="mvx-edit-product-form" class="woocommerce form-horizontal" method="post">
     <div class="page-title-wrapper">
         <div class="page-title">
             <div class="title">Edit Product</div>
@@ -33,18 +34,26 @@ if ($default_types && !empty($default_types)) {
             </div>
         </div>
 
-        <!-- <div class="buttons-wrapper">
-            <div class="admin-btn btn-purple">
-                Save draft
-            </div>
-            <div class="admin-btn btn-purple">
-                Publish product
-            </div>
-        </div> -->
+        <div class="buttons-wrapper">
+                <?php
+                $primary_action = __( 'Submit', 'multivendorx' );    //default value
+                if ( current_user_can( 'publish_products' ) ) {
+                    if ( ! empty( $product_object->get_id() ) && get_post_status( $product_object->get_id() ) === 'publish' ) {
+                        $primary_action = __( 'Update', 'multivendorx' );
+                    } else {
+                        $primary_action = __( 'Publish', 'multivendorx' );
+                    }
+                }
+                ?>
+                <input type="submit" class="admin-btn btn-purple" name="submit-data" value="<?php echo esc_attr( $primary_action ); ?>" id="mvx_frontend_dashboard_product_submit" />
+                <input type="submit" class="admin-btn btn-purple" name="draft-data" value="<?php esc_attr_e( 'Draft', 'multivendorx' ); ?>" id="mvx_frontend_dashboard_product_draft" />
+                <input type="hidden" name="status" value="<?php echo esc_attr( get_post_status( $post ) ); ?>">
+                <?php wp_nonce_field( 'mvx-product', 'mvx_product_nonce' ); ?>
+        </div>
     </div>
 
     <div class="container-wrapper">
-        <form id="mvx-edit-product-form" class="woocommerce form-horizontal" method="post">
+        
             <div class="card-wrapper width-65">
                 <div class="card-content">
                     <div class="card-title">Product information</div>
@@ -346,23 +355,9 @@ if ($default_types && !empty($default_types)) {
                     </div>
                 </div>
             </div> <!-- right section end -->
-            <div class="mvx-action-container">
-                <?php
-                $primary_action = __( 'Submit', 'multivendorx' );    //default value
-                if ( current_user_can( 'publish_products' ) ) {
-                    if ( ! empty( $product_object->get_id() ) && get_post_status( $product_object->get_id() ) === 'publish' ) {
-                        $primary_action = __( 'Update', 'multivendorx' );
-                    } else {
-                        $primary_action = __( 'Publish', 'multivendorx' );
-                    }
-                }
-                ?>
-                <input type="submit" class="btn btn-default" name="submit-data" value="<?php echo esc_attr( $primary_action ); ?>" id="mvx_frontend_dashboard_product_submit" />
-                <input type="submit" class="btn btn-default" name="draft-data" value="<?php esc_attr_e( 'Draft', 'multivendorx' ); ?>" id="mvx_frontend_dashboard_product_draft" />
-                <input type="hidden" name="status" value="<?php echo esc_attr( get_post_status( $post ) ); ?>">
-                <?php wp_nonce_field( 'mvx-product', 'mvx_product_nonce' ); ?>
-            </div>
-        </form>
+            
+       
     </div>
+     </form>
 </div>
 </div>

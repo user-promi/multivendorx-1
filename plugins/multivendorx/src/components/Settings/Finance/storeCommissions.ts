@@ -287,6 +287,7 @@ export default {
             label: __( 'Facilitators', 'multivendorx' ),
            settingDescription: __('Assign a user as a facilitator who will receive the facilitator fee', 'multivendorx'),
            className:"select-class",
+           size: "40%",
             options: appLocalizer.facilitators_list,
         },
         {
