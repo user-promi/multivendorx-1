@@ -39,6 +39,9 @@ declare global {
         ajaxurl: string;
         gateway_list: any;
         facilitators_list: any;
+        user_id:any;
+        currency:any;
+        currency_symbol:any;
     }
     interface Color{
         color: any;

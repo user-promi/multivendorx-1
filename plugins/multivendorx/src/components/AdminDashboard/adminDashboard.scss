@@ -28,10 +28,11 @@
             gap: 0.5rem;
             margin: 0;
             transition: all 0.5s ease;
-            
-            &:hover{
+
+            &:hover {
                 background: #f3f3f3;
             }
+
             .icon-wrapper {
                 margin-top: 0.625rem;
 
@@ -106,6 +107,10 @@
                 color: $theme-color;
             }
         }
+    }
+
+    &.dashboard-tabs {
+        justify-content: center;
     }
 }
 
@@ -340,10 +345,14 @@
 }
 
 .quick-links-wrapper {
-    display: flex;
-    gap: 0.85rem;
-    flex-wrap: wrap;
     padding-bottom: 2rem;
+
+    a {
+        display: block;
+        padding: 0.625rem 0;
+        font-size: 1.063rem;
+        border-bottom: $border-light-small;
+    }
 }
 
 
@@ -511,3 +520,180 @@
 }
 
 // support end
+
+
+// recent-activities start
+.recent-activities {
+    .activitie-wrapper {
+        display: flex;
+        justify-content: space-between;
+        padding: 0 0 1.5rem 1.5rem;
+        position: relative;
+        border-left: $border-theme-small;
+
+        .details {
+            width: 75%;
+
+            .heading {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                font-size: 1rem;
+                color: #000000f5;
+
+                .admin-badge {
+                    padding: 0.313rem 0.5rem;
+                    font-size: 0.8rem;
+                }
+            }
+
+            .text {
+                font-size: 0.9rem;
+                color: #2b2a2a9c;
+                padding-top: 0.313rem;
+            }
+        }
+
+        .right-section {
+            width: 25%;
+            display: flex;
+            justify-content: end;
+
+            .date {
+                color: #2b2a2a9c;
+            }
+        }
+
+        &::before {
+            position: absolute;
+            content: "";
+            width: 0.813rem;
+            height: 0.813rem;
+            border-radius: 50%;
+            background: $theme-color;
+            left: -0.7rem;
+            top: 0;
+            border: 0.313rem solid #f0e8fb;
+        }
+
+        &:last-child {
+            border: none;
+        }
+    }
+}
+
+// recent-activities end
+
+// pro banner start
+.pro-banner-wrapper {
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+
+    .heading {
+        font-size: 2rem;
+        line-height: 2.313rem;
+        font-weight: 600;
+        color: $theme-color;
+    }
+
+    .description {
+        font-size: 1.125rem;
+        padding: 0.5rem 0;
+        margin-bottom: 3rem;
+    }
+
+    .button-wrapper {
+        display: flex;
+
+        .admin-btn {
+            i {
+                transform: rotate(-45deg);
+            }
+        }
+    }
+}
+
+// pro banner end
+
+//  free vs pro tabel start
+.features-wrapper {
+    width: 60%;
+    margin-top: 1.125rem;
+
+    .table-title {
+        font-size: 1.063rem;
+        justify-content: space-between;
+        display: flex;
+        border: $border-light-small;
+        padding: 0.813rem;
+        margin-top: 0.5rem;
+        cursor: pointer;
+        ;
+        color: #000;
+        border-radius: 0.313rem;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+
+    table {
+        width: 100%;
+        padding: 1rem;
+        border: $border-light-small;
+        border-top: 0;
+        border-radius: 0.313rem;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+
+        thead {
+            tr {
+                background: $theme-background-color;
+                color: $theme-color;
+                font-size: 1.25rem;
+            }
+        }
+
+        tr {
+            td {
+                padding: 0.625rem;
+                font-size: 1rem;
+
+                .close-icon {
+                    color: #f06b4f;
+                }
+
+                .check-icon {
+                    color: #06be9f;
+                }
+            }
+        }
+
+    }
+}
+
+// free vs pro tabel end
+
+// pricing section start
+.pricing-wrapper {
+    width: 60%;
+
+    .heading {
+        font-size: 1.25rem;
+        color: #000;
+        font-weight: 500;
+        line-height: 2rem;
+    }
+
+    .description {
+        font-size: 1rem;
+        padding: 0.5rem 0;
+    }
+
+    .price {
+        font-size: 2.313rem;
+        line-height: 3rem;
+        padding: 0.813rem 0;
+    }
+}
+
+// pricing section end

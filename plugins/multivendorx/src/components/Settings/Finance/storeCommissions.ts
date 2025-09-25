@@ -268,12 +268,13 @@ export default {
             key: 'separator_content',
             type: 'section',
             hint: __("What's excluded along with store commission", 'multivendorx'),
-            desc: __('Choose which order components are factored into commission calculations.', 'multivendorx')
+            desc: __('Determine which fees to deduct from the commission amount.', 'multivendorx')
         },
         {
             key: 'gateway_fees',
             type: 'nested',
             label: __('Gateway Fees', 'multivendorx'),
+			settingDescription: __('Define the default fee that will be deducted from the store commission. If you want to charge different fees for each payment method, set the amounts here for gateways, bank transfers, or cash on delivery.', 'multivendorx'),
             rowClass: 'single-line',            
             single: true,
             desc: __('', 'multivendorx'),
@@ -284,11 +285,8 @@ export default {
             key: 'facilitator',
             type: 'select',
             label: __( 'Facilitators', 'multivendorx' ),
-            desc: __(
-                '',
-                'multivendorx'
-            ),
-            className:"select-class",
+           settingDescription: __('Assign a user as a facilitator who will receive the facilitator fee', 'multivendorx'),
+           className:"select-class",
             options: appLocalizer.facilitators_list,
         },
         {
@@ -296,10 +294,7 @@ export default {
             type: 'nested',
             label: 'Facilitator Fees',
             single: true,
-            desc: __(
-                '',
-                'multivendorx'
-            ),
+            settingDescription: __('Set the facilitator fee as a fixed amount, a percentage, or both, deducted from the store commission. Store-wise fees can also be configured from the store edit page.', 'multivendorx'),
             nestedFields: [
                 {
                     key: 'facilitator_fixed',

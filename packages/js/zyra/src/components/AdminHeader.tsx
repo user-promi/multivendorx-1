@@ -142,7 +142,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
             <div className="search-section">
               <input
                 type="text"
-                placeholder="Search Here"
+                placeholder="Search Settings"
                 value={query}
                 onChange={(e) => onSearchChange(e.target.value)}
               />
@@ -301,7 +301,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
                   <div className="dropdown-body">
                     <ul>
                       <li>
-                        <a href={managePlanUrl}>
+                      <a href={managePlanUrl} target="_blank" rel="noopener noreferrer">
                           <i className="adminlib-person"></i>
                           Manage Plan
                         </a>

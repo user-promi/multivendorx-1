@@ -51,15 +51,30 @@ const Vendors: React.FC = () => {
         requestData(rowsPerPage, currentPage);
         setPageCount(Math.ceil(totalRows / rowsPerPage));
     }, [pagination]);
-    const [ showDropdown, setShowDropdown ] = useState( false );
-    
-        const toggleDropdown = ( id: any ) => {
-            if ( showDropdown === id ) {
-                setShowDropdown( false );
-                return;
-            }
-            setShowDropdown( id );
-        };
+
+    const handleSingleAction = (action: string, storeId: number) => {
+        let statusValue = '';
+        if (action === 'active') {
+            statusValue = 'active';
+        } else if (action === 'reject') {
+            statusValue = 'rejected';
+        } else {
+            return;
+        }
+
+        axios({
+            method: 'PUT',
+            url: getApiLink(appLocalizer, `store/${storeId}`), // same API structure as EditStore
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            data: { status: statusValue },
+        })
+            .then(() => {
+                requestData(pagination.pageSize, pagination.pageIndex + 1);
+            })
+            .catch((err) => console.error(`Failed to update store ${storeId}`, err));
+    };
+
+
     // Fetch data from backend.
     function requestData(
         rowsPerPage = 10,
@@ -125,12 +140,28 @@ const Vendors: React.FC = () => {
             ),
         },
         {
-            header: __('Slug', 'multivendorx'),
+            header: __('Email', 'multivendorx'),
             cell: ({ row }) => (
-                <TableCell title={row.original.store_slug || ''}>
-                    {row.original.store_slug || '-'}
+                <TableCell title={row.original.email || ''}>
+                    {row.original.email || '-'}
                 </TableCell>
             ),
+        },
+        {
+            header: __('Applied On', 'multivendorx'),
+            cell: ({ row }) => {
+                const rawDate = row.original.applied_on;
+                let formattedDate = '-';
+                if (rawDate) {
+                    const dateObj = new Date(rawDate);
+                    formattedDate = new Intl.DateTimeFormat('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric',
+                    }).format(dateObj);
+                }
+                return <TableCell title={formattedDate}>{formattedDate}</TableCell>;
+            },
         },
         {
             header: __('Status', 'multivendorx'),
@@ -143,45 +174,33 @@ const Vendors: React.FC = () => {
         {
             header: __('Action', 'multivendorx'),
             cell: ({ row }) => (
-                <TableCell title="Action">
-                    <div className="action-section">
-                        <div className="action-icons">
-                            <i
-                                className="adminlib-more-vertical"
-                                onClick={() =>
-                                    toggleDropdown(row.original.order_id)
-                                }
-                            ></i>
-                            <div
-                                className={`action-dropdown ${showDropdown === row.original.order_id
-                                        ? 'show'
-                                        : ''
-                                    }`}
-                            >
-                        <ul>
-                            <li
-                                onClick={() =>
-                                    (window.location.href = `?page=multivendorx#&tab=stores&view&id=${row.original.id}`)
-                                }
-                            >
-                                <i className="adminlib-eye"></i>
-                                { __( 'View Store', 'multivendorx' ) }
-                            </li>
-                            <li
-                                onClick={() =>
-                                    (window.location.href = `?page=multivendorx#&tab=stores&edit/${row.original.id}`)
-                                }
-                            >
-                                <i className="adminlib-create"></i>
-                                { __( 'Edit Store', 'multivendorx' ) }
-                            </li>
-                        </ul>
-                        </div>
-                        </div>
-                    </div>
-                </TableCell>
+                <TableCell
+                    type="action-dropdown"
+                    rowData={row.original}
+                    header={{
+                        actions: [
+                            {
+                                label: __('Approve', 'multivendorx'),
+                                icon: 'adminlib-check',
+                                onClick: (rowData) => {
+                                    handleSingleAction('active', rowData.id!);
+                                },
+                                hover: true,
+                            },
+                            {
+                                label: __('Reject', 'multivendorx'),
+                                icon: 'adminlib-close',
+                                onClick: (rowData) => {
+                                    handleSingleAction('reject', rowData.id!);
+                                },
+                                hover: true,
+                            },
+                        ],
+                    }}
+                />
             ),
-        }
+        },
+
     ];
 
     return (
@@ -199,6 +218,7 @@ const Vendors: React.FC = () => {
                     handlePagination={requestApiForData}
                     perPageOption={[10, 25, 50]}
                     typeCounts={[]}
+                    totalCounts={totalRows}
                 />
             </div>
         </>

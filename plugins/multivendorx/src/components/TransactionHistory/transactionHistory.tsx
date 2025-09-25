@@ -102,14 +102,14 @@ export const TransactionHistory: React.FC = () => {
                 tabTitle="Storewise Transaction History"
                 description={"Build your knowledge base: add new guides or manage existing ones in one place."}
                 customContent={
-                        <SelectInput
-                            name="store"
-                            value={selectedStore?.value || ""}
-                            options={filteredStores}
-                            type="single-select"
-                            onChange={(newValue: any) => setSelectedStore(newValue)}
-                            onInputChange={(inputValue: string) => handleSearch(inputValue)}
-                        />
+                    <SelectInput
+                        name="store"
+                        value={selectedStore?.value || ""}
+                        options={filteredStores}
+                        type="single-select"
+                        onChange={(newValue: any) => setSelectedStore(newValue)}
+                        onInputChange={(inputValue: string) => handleSearch(inputValue)}
+                    />
                 }
             />
 
@@ -124,17 +124,18 @@ export const TransactionHistory: React.FC = () => {
                 </div>
 
                 <div className="row">
+
                     <div className="overview-card-wrapper">
                         {overview.map((stat) => (
                             <div className="action" key={stat.id}>
                                 <div className="title">
-                                    {stat.count}
-                                    <i className={stat.icon}></i>
+                                    {appLocalizer.currency_symbol}{stat.count} <i className={stat.icon}></i>
                                 </div>
                                 <div className="description">{stat.label}</div>
                             </div>
                         ))}
                     </div>
+
                 </div>
 
                 <div className="row">
