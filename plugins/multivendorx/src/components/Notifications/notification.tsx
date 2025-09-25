@@ -14,6 +14,9 @@ const Notification = () => {
 
     const [activeTab, setActiveTab] = useState("products");
     const [tasks, setTasks] = useState<string[]>([]);
+    const [showInput, setShowInput] = useState(false);
+    const [task, setTask] = useState("");
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         if (!appLocalizer.user_id) return;
@@ -40,21 +43,28 @@ const Notification = () => {
     };
 
 
-    const handleConfirm = () => {
+    const handleConfirm = async () => {
         if (!task.trim()) return;
-        const updatedTasks = [...tasks, task];
-        saveTasks(updatedTasks);
-        setTask("");
-        setShowInput(false);
+    
+        setLoading(true);
+        try {
+            await saveTasks([...tasks, task]);
+            setTask("");
+            setShowInput(false);
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
     };
-
+    
     const handleDelete = (index: number) => {
         const updatedTasks = tasks.filter((_, idx) => idx !== index);
         saveTasks(updatedTasks);
     };
 
 
-    
+
     // In Notification.tsx
     const refreshCounts = () => {
         axios({
@@ -89,7 +99,7 @@ const Notification = () => {
             params: { count: true, status: 'Pending' },
         }).then((response) => setTransactionCount(response.data || 0));
     };
-    
+
     const tabs = [
         { id: "products", label: "Products", content: <Products onUpdated={refreshCounts} /> },
         { id: "stores", label: "Stores", content: <Vendors onUpdated={refreshCounts} /> },
@@ -100,10 +110,6 @@ const Notification = () => {
     useEffect(() => {
         refreshCounts();
     }, []);
-
-    const [showInput, setShowInput] = useState(false);
-    const [task, setTask] = useState("");
-
     return (
         <>
             <AdminBreadcrumbs
@@ -206,17 +212,27 @@ const Notification = () => {
                                         placeholder="Enter task"
                                         className="basic-input"
                                         autoFocus
+                                        disabled={loading} // disable input while saving
                                     />
                                     <div className="buttons-wrapper">
-                                        <button className="admin-btn btn-red" onClick={() => setShowInput(false)}>
+                                        <button
+                                            className="admin-btn btn-red"
+                                            onClick={() => setShowInput(false)}
+                                            disabled={loading} // disable cancel while saving
+                                        >
                                             <i className="adminlib-close"></i> Cancel
                                         </button>
-                                        <button className="admin-btn btn-purple" onClick={handleConfirm}>
-                                            <i className="adminlib-plus-circle-o"></i> Add
+                                        <button
+                                            className="admin-btn btn-purple"
+                                            onClick={handleConfirm}
+                                            disabled={!task.trim() || loading} // disable add button if empty or loading
+                                        >
+                                            {loading ? <i className="adminlib-spinner spinning"></i> : <i className="adminlib-plus-circle-o"></i>} Add
                                         </button>
                                     </div>
                                 </span>
                             )}
+
                             {!showInput && (
                                 <button className="admin-btn btn-purple" onClick={() => setShowInput(true)}>
                                     + Add Task

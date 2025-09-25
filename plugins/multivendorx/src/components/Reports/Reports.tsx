@@ -51,7 +51,7 @@ const Reports = () => {
       url: `${appLocalizer.apiUrl}/wc-analytics`,
       headers: { "X-WP-Nonce": appLocalizer.nonce },
     }).then(response => {
-      console.log("data->", response.data)
+      console.log("ana->", response.data)
     });
 
     axios({
@@ -59,7 +59,7 @@ const Reports = () => {
       url: `${appLocalizer.apiUrl}/wc/v3/reports`,
       headers: { "X-WP-Nonce": appLocalizer.nonce },
     })
-    .then(response => console.log(response.data))
+    .then(response => console.log("rep",response.data))
     .catch(error => console.error(error));
 
     axios({
