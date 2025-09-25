@@ -40,42 +40,54 @@ class Util {
 
 	public static function get_question_information( $args ) {
 		global $wpdb;
-
+	
 		$where = array();
-
+	
+		// Filter by specific question IDs
 		if ( isset( $args['id'] ) ) {
 			$ids     = is_array( $args['id'] ) ? $args['id'] : array( $args['id'] );
 			$ids     = implode( ',', array_map( 'intval', $ids ) );
 			$where[] = "id IN ($ids)";
 		}
-
+	
+		// Filter by product IDs
+		if ( isset( $args['product_ids'] ) && is_array( $args['product_ids'] ) && ! empty( $args['product_ids'] ) ) {
+			$product_ids = implode( ',', array_map( 'intval', $args['product_ids'] ) );
+			$where[]     = "product_id IN ($product_ids)";
+		}
+	
 		$table = $wpdb->prefix . Utill::TABLES['product_qna'];
-
+	
+		// Select query
 		if ( isset( $args['count'] ) ) {
 			$query = "SELECT COUNT(*) FROM $table";
 		} else {
 			$query = "SELECT * FROM $table";
 		}
-
+	
+		// Add WHERE conditions
 		if ( ! empty( $where ) ) {
 			$condition = $args['condition'] ?? ' AND ';
 			$query    .= ' WHERE ' . implode( $condition, $where );
 		}
-
-		if ( isset( $args['limit'] ) && isset( $args['offset'] ) ) {
+	
+		// Limit & offset
+		if ( isset( $args['limit'] ) && isset( $args['offset'] ) && ! isset( $args['count'] ) ) {
 			$limit  = esc_sql( intval( $args['limit'] ) );
 			$offset = esc_sql( intval( $args['offset'] ) );
 			$query .= " LIMIT $limit OFFSET $offset";
 		}
-
+	
+		// Execute
 		if ( isset( $args['count'] ) ) {
-			$results = $wpdb->get_var( $query ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
+			$results = $wpdb->get_var( $query );
 			return $results ?? 0;
 		} else {
-			$results = $wpdb->get_results( $query, ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
+			$results = $wpdb->get_results( $query, ARRAY_A );
 			return $results ?? array();
 		}
 	}
+	
 	
 	public static function update_question( $id, $data ) {
 		global $wpdb;
@@ -122,6 +134,30 @@ class Util {
 		}
 	
 		return true; // success, even if 0 rows (no change)
+	}
+	
+	public static function delete_question( $id ) {
+		global $wpdb;
+	
+		$table = $wpdb->prefix . Utill::TABLES['product_qna'];
+	
+		$id = intval( $id );
+		if ( ! $id ) {
+			return false;
+		}
+	
+		$deleted = $wpdb->delete(
+			$table,
+			[ 'id' => $id ],
+			[ '%d' ]
+		);
+	
+		// $wpdb->delete returns number of rows deleted, or false on error
+		if ( $deleted === false ) {
+			return false; // DB error
+		}
+	
+		return true; // success, even if 0 rows (no row existed)
 	}
 	
 }

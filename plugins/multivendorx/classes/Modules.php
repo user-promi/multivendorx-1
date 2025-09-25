@@ -116,7 +116,11 @@ class Modules {
 						'module_file'  => MultiVendorX()->plugin_path . 'modules/QuestionsAnswers/Module.php',
 						'module_class' => 'MultiVendorX\QuestionsAnswers\Module',
 					),
-
+                    'follow-store' => array(
+                        'id'           => 'follow-store',
+						'module_file'  => MultiVendorX()->plugin_path . 'modules/FollowStore/Module.php',
+						'module_class' => 'MultiVendorX\FollowStore\Module',
+					),
 				)
             );
         }

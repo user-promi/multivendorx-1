@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Tooltip } from "react-leaflet";
 import { Cell, Legend, PieChart, ResponsiveContainer, Pie, BarChart, CartesianGrid, XAxis, YAxis, Bar, LineChart, Line } from "recharts";
 import { __ } from '@wordpress/i18n';
 import { Table, TableCell } from "zyra";
+import axios from "axios";
 
 type Product = {
   id: number;
@@ -199,22 +200,9 @@ const columns: ColumnDef<StoreRow>[] = [
 ];
 
 const Revenue: React.FC = () => {
+
   return (
     <div className="dashboard-overview">
-      {/* <div className="row">
-        <div className="overview-card-wrapper">
-          {overview.map((stat) => (
-            <div className="action" key={stat.id}>
-              <div className="title">
-                {stat.count}
-                <i className={stat.icon}></i>
-              </div>
-              <div className="description">{stat.label}</div>
-            </div>
-          ))}
-        </div>
-      </div> */}
-
       <div className="row">
         <div className="column">
           <div className="card-header">
