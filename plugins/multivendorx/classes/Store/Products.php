@@ -89,7 +89,7 @@ class Products {
     }
 
     public function mvx_set_product_type_options( $option ) {
-        $product_type_option = MultiVendorX()->setting->get_setting('type_options');
+        $product_type_option = MultiVendorX()->setting->get_setting('type_options', []);
         foreach ($option as $key => $val) {
             if (!in_array($key, $product_type_option)) {
                 unset($option[$key]);

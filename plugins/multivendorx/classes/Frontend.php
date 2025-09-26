@@ -223,9 +223,9 @@ class Frontend {
 
     public function vendor_dashboard_template($template) {
         //checking change later when all function ready
-        if (  is_user_logged_in() && is_page() && has_shortcode(get_post()->post_content, 'multivendorx_store_dashboard') ) {
-            return MultiVendorX()->plugin_path . 'templates/store-dashboard.php';
-        }
+        // if (  is_user_logged_in() && is_page() && has_shortcode(get_post()->post_content, 'multivendorx_store_dashboard') ) {
+        //     return MultiVendorX()->plugin_path . 'templates/store-dashboard.php';
+        // }
         return $template;
     }
 
