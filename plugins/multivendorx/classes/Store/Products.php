@@ -280,7 +280,6 @@ class Products {
     public function mvx_default_product_types() {
         return array(
             'simple'   => __( 'Simple product', 'multivendorx' ),
-            'variable'   => __( 'Variable product', 'multivendorx' ),
         ) ;
     }
 
