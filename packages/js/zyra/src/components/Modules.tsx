@@ -307,20 +307,19 @@ const Modules: React.FC<ModuleProps> = ({
                                     <div className="module-details">
 
                                         <div className="meta-name">{module.name}</div>
-                                        <p
-                                            className="meta-description"
-                                            dangerouslySetInnerHTML={{ __html: module.desc }}
-                                        ></p>
-                                        <div className="tag-wrapper">
+                                        <div className="tag-wrapper">                                        
                                             {getCategories(module.category).map((cat, idx) => (
                                                 <span key={idx} className="admin-badge blue">
                                                     {formatCategory(cat)}
                                                 </span>
                                             ))}
                                         </div>
+                                        <p
+                                            className="meta-description"
+                                            dangerouslySetInnerHTML={{ __html: module.desc }}
+                                        ></p>
                                     </div>
                                 </div>
-
                                 <div className="footer-wrapper">
                                     {requiredPlugins.length > 0 && (
                                         <div className="requires">
