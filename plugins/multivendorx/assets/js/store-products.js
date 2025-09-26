@@ -1890,8 +1890,6 @@ var mvxAfmProductEditor = ( function ( $ ) {
             }
         },
         saveProduct: function ( e ) { 
-            alert('hit save product');
-
             $( 'form#mvx-edit-product-form' ).trigger( 'before_product_save' );
             var status = ( e.target.id === 'mvx_frontend_dashboard_product_submit' ) ? 'publish' : ( e.target.id === 'mvx_frontend_dashboard_product_draft' ) ? 'draft' : '';
             $( 'input:hidden[name="status"]' ).val( status );
