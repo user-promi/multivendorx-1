@@ -122,7 +122,7 @@ a {
 
 .admin-badge {
   font-size: 13px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 0.7rem;
   padding: 0.5rem;
   border-radius: $border-radius-small;
@@ -152,7 +152,36 @@ a {
     }
   }
 }
+.in-stock{
+  padding-left: 0.5rem;
+  position: relative;
+  padding-left: 1rem;
+  color: #06be9f;
 
+  &:before{
+    position: absolute;
+    content: "";
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: #06be9f;
+  }
+}
+.out-of-stock{
+  padding-left: 0.5rem;
+  position: relative;
+  padding-left: 1rem;
+  color: #f06b4f;
+
+  &:before{
+    position: absolute;
+    content: "";
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: #f06b4f;
+  }
+}
 .text-green {
   color: #00bd9d;
 }
