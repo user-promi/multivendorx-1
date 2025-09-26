@@ -30,7 +30,6 @@ class Products {
 
         $this->product_id = $wp->query_vars['value'];
         $this->product_object = new \WC_Product();
-
         if ( $this->product_id && $this->product_capablity_check( 'edit', $this->product_id ) ) {
             $this->product_object = wc_get_product( $this->product_id );
             $this->post_object = get_post( $this->product_id );
@@ -176,7 +175,7 @@ class Products {
     public function output() {
         global $wp;
 
-        if (! $wp->query_vars['value'] && MultiVendorX()->setting->get_setting('category_pyramid_guide') == 'yes' ) {
+        if (! $wp->query_vars['value'] && MultiVendorX()->setting->get_setting('category_pyramid_guide') == 'yes' ) {        
 
             FrontendScripts::load_scripts();
             FrontendScripts::enqueue_script( 'multivendorx-product-classify-script' );

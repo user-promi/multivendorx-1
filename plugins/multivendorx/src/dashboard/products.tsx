@@ -382,46 +382,97 @@ const AllProduct: React.FC = () => {
         {
             header: __('Action', 'multivendorx'),
             cell: ({ row }) => (
-                <TableCell title="Action">
-                    <div className="action-section">
-                        <div className="action-icons">
-                            <i
-                                className="adminlib-more-vertical"
-                                onClick={() =>
-                                    toggleDropdown(row.original.id)
-                                }
-                            ></i>
-                            <div
-                                className={`action-dropdown ${showDropdown === row.original.id
-                                    ? 'show'
-                                    : ''
-                                    }`}
-                            >
+                <TableCell
+                    type="action-dropdown"
+                    rowData={row.original}
+                    header={{
+                        actions: [
+                            {
+                                label: __('Edit', 'multivendorx'),
+                                icon: 'adminlib-create',
+                                onClick: (rowData) => {
+                                    window.location.href = `?page=multivendorx#&tab=stores&edit/${rowData.id}`;
+                                },
+                                hover: true
+                            },
+                            {
+                                label: __('View', 'multivendorx'),
+                                icon: 'adminlib-eye',
+                                onClick: (rowData) => {
+                                    window.location.href = `?page=multivendorx#&tab=stores&edit/${rowData.id}`;
+                                },
+                            },
+                            {
+                                label: __('Copy URL', 'multivendorx'),
+                                icon: 'adminlib-vendor-form-copy',
+                                onClick: (rowData) => {
+                                    window.location.href = `?page=multivendorx#&tab=stores&edit/${rowData.id}`;
+                                },
+                            },
+                            {
+                                label: __('Clone', 'multivendorx'),
+                                icon: 'adminlib-vendor-form-copy',
+                                onClick: (rowData) => {
+                                    window.location.href = `?page=multivendorx#&tab=stores&edit/${rowData.id}`;
+                                },
+                            },
+                            {
+                                label: __('Delete', 'multivendorx'),
+                                icon: 'adminlib-vendor-form-delete',
+                                onClick: (rowData) => {
+                                    window.location.href = `?page=multivendorx#&tab=stores&edit/${rowData.id}`;
+                                },
+                                hover: true
+                            },
 
-                                <ul>
-                                    <li
-                                        onClick={() =>
-                                            (window.location.href = `?page=multivendorx#&tab=stores&view&id=${row.original.id}`)
-                                        }
-                                    >
-                                        <i className="adminlib-eye"></i>
-                                        {__('View', 'multivendorx')}
-                                    </li>
-                                    <li
-                                        onClick={() =>
-                                            (window.location.href = `?page=multivendorx#&tab=stores&edit/${row.original.id}`)
-                                        }
-                                    >
-                                        <i className="adminlib-create"></i>
-                                        {__('Edi', 'multivendorx')}
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </TableCell>
+                        ],
+                    }}
+                />
             ),
         },
+        // {
+        //     header: __('Action', 'multivendorx'),
+        //     cell: ({ row }) => (
+        //         <TableCell title="Action">
+        //             <div className="action-section">
+        //                 <div className="action-icons">
+        //                     <i
+        //                         className="adminlib-more-vertical"
+        //                         onClick={() =>
+        //                             toggleDropdown(row.original.id)
+        //                         }
+        //                     ></i>
+        //                     <div
+        //                         className={`action-dropdown ${showDropdown === row.original.id
+        //                             ? 'show'
+        //                             : ''
+        //                             }`}
+        //                     >
+
+        //                         <ul>
+        //                             <li
+        //                                 onClick={() =>
+        //                                     (window.location.href = `?page=multivendorx#&tab=stores&view&id=${row.original.id}`)
+        //                                 }
+        //                             >
+        //                                 <i className="adminlib-eye"></i>
+        //                                 {__('View', 'multivendorx')}
+        //                             </li>
+        //                             <li
+        //                                 onClick={() =>
+        //                                     (window.location.href = `?page=multivendorx#&tab=stores&edit/${row.original.id}`)
+        //                                 }
+        //                             >
+        //                                 <i className="adminlib-create"></i>
+        //                                 {__('Edi', 'multivendorx')}
+        //                             </li>
+        //                         </ul>
+        //                     </div>
+        //                 </div>
+        //             </div>
+        //         </TableCell>
+        //     ),
+        // },
     ];
 
     return (
@@ -540,6 +591,12 @@ const AllProduct: React.FC = () => {
                     {/* {error && <p className="error-text">{error}</p>} */}
                 </CommonPopup>
             )}
+            <div className="page-title-wrapper">
+                <div className="page-title">
+                    <div className="title">All Product</div>
+                    <div className="des">Manage your store information and preferences</div>
+                </div>  
+            </div>
             <div className="admin-table-wrapper">
                 <Table
                     data={data}
@@ -552,7 +609,7 @@ const AllProduct: React.FC = () => {
                     onPaginationChange={setPagination}
                     perPageOption={[10, 25, 50]}
                     typeCounts={[]}
-                    // realtimeFilter={[]}
+                // realtimeFilter={[]}
                 />
             </div>
         </>

@@ -562,57 +562,93 @@ const AllCoupon: React.FC = () => {
         {
             header: __('Action', 'multivendorx'),
             cell: ({ row }) => (
-                <TableCell title="Action">
-                    <div className="action-section">
-                        <div className="action-icons">
-                            <i
-                                className="adminlib-more-vertical"
-                                onClick={() =>
-                                    toggleDropdown(row.original.order_id)
-                                }
-                            ></i>
-                            <div
-                                className={`action-dropdown ${showDropdown === row.original.order_id
-                                    ? 'show'
-                                    : ''
-                                    }`}
-                            >
+                <TableCell
+                    type="action-dropdown"
+                    rowData={row.original}
+                    header={{
+                        actions: [
+                            {
+                                label: __('Edit', 'multivendorx'),
+                                icon: 'adminlib-create',
+                                onClick: (rowData) => {
+                                    window.location.href = `?page=multivendorx#&tab=stores&edit/${rowData.id}`;
+                                },
+                                hover: true
+                            },
+                            {
+                                label: __('Delete', 'multivendorx'),
+                                icon: 'adminlib-vendor-form-delete',
+                                onClick: (rowData) => {
+                                    window.location.href = `?page=multivendorx#&tab=stores&edit/${rowData.id}`;
+                                },
+                                hover: true
+                            },
 
-                                <ul>
-                                    <li
-                                        onClick={() =>
-                                            (window.location.href = `?page=multivendorx#&tab=stores&view&id=${row.original.id}`)
-                                        }
-                                    >
-                                        <i className="adminlib-eye"></i>
-                                        {__('View Store', 'multivendorx')}
-                                    </li>
-                                    <li
-                                        onClick={() =>
-                                            (window.location.href = `?page=multivendorx#&tab=stores&edit/${row.original.id}`)
-                                        }
-                                    >
-                                        <i className="adminlib-create"></i>
-                                        {__('Edit Store', 'multivendorx')}
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </TableCell>
+                        ],
+                    }}
+                />
             ),
         },
+        // {
+        //     header: __('Action', 'multivendorx'),
+        //     cell: ({ row }) => (
+        //         <TableCell title="Action">
+        //             <div className="action-section">
+        //                 <div className="action-icons">
+        //                     <i
+        //                         className="adminlib-more-vertical"
+        //                         onClick={() =>
+        //                             toggleDropdown(row.original.order_id)
+        //                         }
+        //                     ></i>
+        //                     <div
+        //                         className={`action-dropdown ${showDropdown === row.original.order_id
+        //                             ? 'show'
+        //                             : ''
+        //                             }`}
+        //                     >
+
+        //                         <ul>
+        //                             <li
+        //                                 onClick={() =>
+        //                                     (window.location.href = `?page=multivendorx#&tab=stores&view&id=${row.original.id}`)
+        //                                 }
+        //                             >
+        //                                 <i className="adminlib-eye"></i>
+        //                                 {__('View Store', 'multivendorx')}
+        //                             </li>
+        //                             <li
+        //                                 onClick={() =>
+        //                                     (window.location.href = `?page=multivendorx#&tab=stores&edit/${row.original.id}`)
+        //                                 }
+        //                             >
+        //                                 <i className="adminlib-create"></i>
+        //                                 {__('Edit Store', 'multivendorx')}
+        //                             </li>
+        //                         </ul>
+        //                     </div>
+        //                 </div>
+        //             </div>
+        //         </TableCell>
+        //     ),
+        // },
     ];
 
     return (
         <>
-            <div className="header-wrapper">
-                <div
-                    className="admin-btn btn-purple"
-                    onClick={() => setAddCoupon(true)}
-                >
-                    <i className="adminlib-plus-circle-o"></i>
-                    Add New
+            <div className="page-title-wrapper">
+                <div className="page-title">
+                    <div className="title">Coupons</div>
+                    <div className="des">Manage your store information and preferences</div>
+                </div>
+                <div className="button-wrapper">
+                    <div
+                        className="admin-btn btn-purple"
+                        onClick={() => setAddCoupon(true)}
+                    >
+                        <i className="adminlib-plus-circle-o"></i>
+                        Add New
+                    </div>
                 </div>
             </div>
 

@@ -52,6 +52,11 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
                         'name' => 'All Products',
                         'slug' => 'products',
                         'capability' => ['read_shop_orders', 'edit_shop_orders', 'delete_shop_orders']
+                    ), array(
+                        'key'  => 'edit',
+                        'name' => 'Edit Product',
+                        'slug' => 'edit',
+                        'capability' => ['read_shop_orders', 'edit_shop_orders', 'delete_shop_orders']
                     ),
                 ),
                 'capability' => ['manage_products']
@@ -71,6 +76,12 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
                         'key'  => 'refund',
                         'name' => 'Refund',
                         'slug' => 'refund',
+                        'capability' => ['read_shop_coupons', 'edit_shop_coupons']
+                    ),
+                    array(
+                        'key'  => 'order-details',
+                        'name' => 'Order Details',
+                        'slug' => 'order-details',
                         'capability' => ['read_shop_coupons', 'edit_shop_coupons']
                     )
                 ),
