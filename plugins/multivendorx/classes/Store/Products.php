@@ -280,9 +280,136 @@ class Products {
     public function mvx_default_product_types() {
         return array(
             'simple'   => __( 'Simple product', 'multivendorx' ),
-            'variable'   => __( 'Variable product', 'multivendorx' ),
         ) ;
     }
+
+    public function filter_variation_attributes( $attribute ) {
+        return true === $attribute->get_variation();
+    }
+
+    public static function prepare_set_attributes( $all_attributes, $key_prefix = 'attribute_', $data = '', $index = null ) {
+        $attributes = array();
+
+        if ( $all_attributes ) {
+            foreach ( $all_attributes as $attribute ) {
+                if ( $attribute->get_variation() ) {
+                    $attribute_key = sanitize_title( $attribute->get_name() );
+
+                    if ( ! is_null( $index ) ) {
+                        $value = isset( $data[$key_prefix . $attribute_key][$index] ) ? wp_unslash( $data[$key_prefix . $attribute_key][$index] ) : '';
+                    } else {
+                        $value = isset( $data[$key_prefix . $attribute_key] ) ? wp_unslash( $data[$key_prefix . $attribute_key] ) : '';
+                    }
+
+                    if ( $attribute->is_taxonomy() ) {
+                        // Don't use wc_clean as it destroys sanitized characters.
+                        $value = sanitize_title( $value );
+                    } else {
+                        $value = html_entity_decode( wc_clean( $value ), ENT_QUOTES, get_bloginfo( 'charset' ) ); // WPCS: sanitization ok.
+                    }
+
+                    $attributes[$attribute_key] = $value;
+                }
+            }
+        }
+
+        return $attributes;
+    }
+
+    public static function save_product_variations( $post_id, $data ) {
+        $errors = array();
+        if ( isset( $data['variable_post_id'] ) ) {
+            $parent = wc_get_product( $post_id );
+            $parent->set_default_attributes( self::prepare_set_attributes( $parent->get_attributes(), 'default_attribute_', $data ) );
+            $parent->save();
+
+            $max_loop = max( array_keys( $data['variable_post_id'] ) );
+            $data_store = $parent->get_data_store();
+            $data_store->sort_all_product_variations( $parent->get_id() );
+
+            for ( $i = 0; $i <= $max_loop; $i ++ ) {
+
+                if ( ! isset( $data['variable_post_id'][$i] ) ) {
+                    continue;
+                }
+                $variation_id = absint( $data['variable_post_id'][$i] );
+                $variation = new \WC_Product_Variation( $variation_id );
+                $stock = null;
+
+                // Handle stock changes.
+                if ( isset( $data['variable_stock'], $data['variable_stock'][$i] ) ) {
+                    if ( isset( $data['variable_original_stock'], $data['variable_original_stock'][$i] ) && wc_stock_amount( $variation->get_stock_quantity( 'edit' ) ) !== wc_stock_amount( $data['variable_original_stock'][$i] ) ) {
+                        /* translators: 1: product ID 2: quantity in stock */
+                        $errors[] = sprintf( __( 'The stock has not been updated because the value has changed since editing. Product %1$d has %2$d units in stock.', 'woocommerce' ), $variation->get_id(), $variation->get_stock_quantity( 'edit' ) );
+                    } else {
+                        $stock = wc_stock_amount( $data['variable_stock'][$i] );
+                    }
+                }
+
+                $error = $variation->set_props(
+                    array(
+                        'status'            => isset( $data['variable_enabled'][$i] ) ? 'publish' : 'private',
+                        'menu_order'        => wc_clean( $data['variation_menu_order'][$i] ),
+                        'regular_price'     => wc_clean( $data['variable_regular_price'][$i] ),
+                        'sale_price'        => wc_clean( $data['variable_sale_price'][$i] ),
+                        'virtual'           => isset( $data['variable_is_virtual'][$i] ),
+                        'downloadable'      => isset( $data['variable_is_downloadable'][$i] ),
+                        'date_on_sale_from' => wc_clean( $data['variable_sale_price_dates_from'][$i] ),
+                        'date_on_sale_to'   => wc_clean( $data['variable_sale_price_dates_to'][$i] ),
+                        'description'       => wp_kses_post( $data['variable_description'][$i] ),
+                        'download_limit'    => wc_clean( $data['variable_download_limit'][$i] ),
+                        'download_expiry'   => wc_clean( $data['variable_download_expiry'][$i] ),
+                        'downloads'         => self::prepare_downloads(
+                            isset( $data['_wc_variation_file_names'][$variation_id] ) ? $data['_wc_variation_file_names'][$variation_id] : array(), isset( $data['_wc_variation_file_urls'][$variation_id] ) ? $data['_wc_variation_file_urls'][$variation_id] : array(), isset( $data['_wc_variation_file_hashes'][$variation_id] ) ? $data['_wc_variation_file_hashes'][$variation_id] : array()
+                        ),
+                        'manage_stock'      => isset( $data['variable_manage_stock'][$i] ),
+                        'stock_quantity'    => $stock,
+                        'backorders'        => isset( $data['variable_backorders'], $data['variable_backorders'][$i] ) ? wc_clean( $data['variable_backorders'][$i] ) : null,
+                        'stock_status'      => wc_clean( $data['variable_stock_status'][$i] ),
+                        'image_id'          => wc_clean( $data['upload_image_id'][$i] ),
+                        'attributes'        => self::prepare_set_attributes( $parent->get_attributes(), 'attribute_', $data, $i ),
+                        'sku'               => isset( $data['variable_sku'][$i] ) ? wc_clean( $data['variable_sku'][$i] ) : '',
+                        'global_unique_id'  => isset( $data['variable_global_unique_id'][ $i ] ) ? wc_clean( wp_unslash( $data['variable_global_unique_id'][ $i ] ) ) : '',
+                        'weight'            => isset( $data['variable_weight'][$i] ) ? wc_clean( $data['variable_weight'][$i] ) : '',
+                        'length'            => isset( $data['variable_length'][$i] ) ? wc_clean( $data['variable_length'][$i] ) : '',
+                        'width'             => isset( $data['variable_width'][$i] ) ? wc_clean( $data['variable_width'][$i] ) : '',
+                        'height'            => isset( $data['variable_height'][$i] ) ? wc_clean( $data['variable_height'][$i] ) : '',
+                        'shipping_class_id' => wc_clean( $data['variable_shipping_class'][$i] ),
+                        'tax_class'         => isset( $data['variable_tax_class'][$i] ) ? wc_clean( $data['variable_tax_class'][$i] ) : null,
+                    )
+                );
+
+                if ( is_wp_error( $error ) ) {
+                    $errors[] = $error->get_error_message();
+                }
+
+                $variation->save();
+
+                do_action( 'woocommerce_save_product_variation', $variation_id, $i );
+            }
+        }
+        return $errors;
+    }
+
+    public static function prepare_downloads( $file_names, $file_urls, $file_hashes ) {
+        $downloads = array();
+
+        if ( ! empty( $file_urls ) ) {
+            $file_url_size = sizeof( $file_urls );
+
+            for ( $i = 0; $i < $file_url_size; $i ++ ) {
+                if ( ! empty( $file_urls[$i] ) ) {
+                    $downloads[] = array(
+                        'name'        => wc_clean( $file_names[$i] ),
+                        'file'        => wp_unslash( trim( $file_urls[$i] ) ),
+                        'download_id' => wc_clean( $file_hashes[$i] ),
+                    );
+                }
+            }
+        }
+        return $downloads;
+    }
+
 
     public static function prepare_attributes( $attributes ) {
         // Attributes

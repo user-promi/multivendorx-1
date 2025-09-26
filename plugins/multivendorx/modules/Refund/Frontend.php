@@ -6,7 +6,6 @@
  */
 
 namespace MultiVendorX\Refund;
-use MultiVendorX\Store\StoreUtil;
 
 /**
  * MultiVendorX Refund Frontend class
