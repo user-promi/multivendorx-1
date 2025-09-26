@@ -199,6 +199,11 @@ class FrontendScripts {
 					'deps'    => array( 'jquery' ),
 					'version' => $version,
 				),
+                'multivendorx-report-abuse-frontend-script' => array(
+					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'modules/ReportAbuse/js/' . MULTIVENDORX_PLUGIN_SLUG . '-frontend.min.js',
+					'deps'    => array( 'jquery' ),
+					'version' => $version,
+				),
                 'multivendorx-review-frontend-script' => array(
 					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'modules/StoreReview/js/' . MULTIVENDORX_PLUGIN_SLUG . '-frontend.min.js',
 					'deps'    => array( 'jquery' ),
@@ -491,6 +496,13 @@ class FrontendScripts {
 					'data'        => array(
 						'ajaxurl'     => admin_url( 'admin-ajax.php' ),
                         'nonce'    => wp_create_nonce('follow_store_ajax_nonce'),
+					),
+				),
+                'multivendorx-report-abuse-frontend-script' => array(
+					'object_name' => 'reportAbuseFrontend',
+					'data'        => array(
+						'ajaxurl'     => admin_url( 'admin-ajax.php' ),
+                        'nonce'    => wp_create_nonce('report_abuse_ajax_nonce'),
 					),
 				),
                 'multivendorx-review-frontend-script' => array(

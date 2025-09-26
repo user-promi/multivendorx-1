@@ -211,8 +211,6 @@ class Ajax {
         $taxonomy = isset($_POST['taxonomy']) ? wc_clean($_POST['taxonomy']) : '';
         $user_id = get_current_user_id();
         $url = '';
-        file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":term_id:  : " . var_export($term_id, true) . "\n", FILE_APPEND);
-        file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":taxonomy:  : " . var_export($taxonomy, true) . "\n", FILE_APPEND);
         // if (is_user_mvx_vendor($user_id)) {
             $data = array(
                 'term_id' => $term_id,
