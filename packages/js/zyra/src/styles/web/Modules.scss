@@ -104,9 +104,16 @@
           line-height: 1.375rem;
           color: #000;
           margin-bottom: 0.625rem;
+        }
+
+        .tag-wrapper {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.313rem;
+          margin-bottom: 0.625rem;
 
           .admin-badge {
-            padding: 0.125rem 0.5rem;
+            padding: 0.313rem 0.5rem;
             margin-left: 0.125rem;
             font-size: 0.75rem;
             display: inline-block;
@@ -131,6 +138,7 @@
           display: flex;
           gap: 0.125rem;
           flex-wrap: wrap;
+          padding-top: 0.625rem;
 
           .requires-title {
             font-size: 0.9rem;
@@ -150,7 +158,7 @@
             display: flex;
             gap: 0.5rem;
 
-            a{
+            a {
               display: flex;
               align-items: center;
             }

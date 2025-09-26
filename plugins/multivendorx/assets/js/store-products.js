@@ -171,13 +171,20 @@ var mvxAfmProductEditor = ( function ( $ ) {
             return false;
         },
         init: function ( ) {
-            $( '#woocommerce-product-data' )
-                .on( 'change', 'select#product-type', this.productTypeChanged.bind( this ) )
-                .on( 'change', 'input#_downloadable, input#_virtual', this.updateTabsDisplay.bind( this ) )
-                .on( 'click', '.sale_schedule', this.showSalePriceDates )
-                .on( 'click', '.cancel_sale_schedule', this.hideSalePriceDates )
-                .on( 'change', 'input#_manage_stock', this.stockManagementPreferenceChanged.bind( this ) )
-                ;
+            // .on( 'change', 'select#product-type', this.productTypeChanged.bind( this ) )
+            // .on( 'change', 'input#_downloadable, input#_virtual', this.updateTabsDisplay.bind( this ) )
+            // .on( 'click', '.sale_schedule', this.showSalePriceDates )
+            // .on( 'click', '.cancel_sale_schedule', this.hideSalePriceDates )
+            // .on( 'change', 'input#_manage_stock', this.stockManagementPreferenceChanged.bind( this ) )
+            // ;
+           $( '#woocommerce-product-data' )
+            .on( 'change', 'select#product-type', this.productTypeChanged.bind( this ) )
+            .on( 'change', 'input#_downloadable, input#_virtual', this.updateTabsDisplay.bind( this ) )
+            .on( 'click', '.sale_schedule', this.showSalePriceDates )
+            .on( 'click', '.cancel_sale_schedule', this.hideSalePriceDates )
+            .on( 'change', 'input#_manage_stock', this.stockManagementPreferenceChanged.bind( this ) )
+            .bind( 'mvx_after_save_attribute_triggered', this.afterSaveAttributeTrigger );
+
             $( '.add-product-single' )
                 .on( 'click', '.notice-wrapper button.notice-dismiss', this.dismissNotice );
             //save
@@ -190,7 +197,7 @@ var mvxAfmProductEditor = ( function ( $ ) {
             media = this.mediaController();
             downloads = this.downloadsController();
             attributes = this.attributeController();
-            //variations = this.variationController();
+            variations = this.variationController();
             this.setupEnvironment();
         },
         mediaController: function ( ) {
@@ -482,7 +489,7 @@ var mvxAfmProductEditor = ( function ( $ ) {
             media.init();
             downloads.init();
             attributes.init();
-            //variations.init();
+            variations.init();
 
             this.salePriceDateFieldInit( $( '#woocommerce-product-data' ) );
             //Make download files sortable
@@ -569,24 +576,6 @@ var mvxAfmProductEditor = ( function ( $ ) {
             this.updateTabsDisplay();
 
             // $( 'ul#product_data_tabs li:visible' ).eq( 0 ).find( 'a' ).tab( 'show' );
-
-            // $('ul#product_data_tabs li:visible').eq(0).find('a').each(function () {
-            //     var target = $(this).attr('href'); // e.g. "#general_product_data"
-
-            //     // Deactivate all tabs & panels
-            //     $('#product_data_tabs li a').removeClass('active');
-            //     $('.panel, .tab-pane').removeClass('active show');
-
-            //     // Activate this tab
-            //     $(this).addClass('active');
-
-            //     // Activate target content panel
-            //     if (target) {
-            //         $(target).addClass('active show');
-            //     }
-            // });
-
-
         },
         updateTabsDisplay: function ( ) {
             var productType = this.getState( 'productType' );
@@ -784,7 +773,7 @@ var mvxAfmProductEditor = ( function ( $ ) {
                         var $attributes = $wrapper.find( '.product_attributes' );
                         var product_type = self.getState( 'productType' );
                         var data = {
-                            action: 'mvx_edit_product_attribute',
+                            action: 'mvx_frontend_dashboard_add_product_attribute',
                             taxonomy: attribute,
                             i: size,
                             security: mvx_advance_product_params.add_attribute_nonce
@@ -860,7 +849,7 @@ var mvxAfmProductEditor = ( function ( $ ) {
                         post_id: mvx_advance_product_params.product_id,
                         product_type: self.getState( 'productType' ),
                         data: $( '.product_attributes' ).find( 'input, select, textarea' ).serialize(),
-                        action: 'mvx_product_save_attributes',
+                        action: 'mvx_frontend_dashboard_save_attributes',
                         security: mvx_advance_product_params.save_attributes_nonce
                     };
 
@@ -869,11 +858,10 @@ var mvxAfmProductEditor = ( function ( $ ) {
                         var this_page = window.location.toString();
                         this_page = this_page.replace( /(?:\/#?|\/\d+\/?)?$/, '/' + mvx_advance_product_params.product_id + '/' );
                         $wrapper.unblock();
-                        $wrapper.trigger('mvx_after_save_attribute_triggered');
                         // Load variations panel.
-                       $( '#variable_product_options' ).load( this_page + ' #variable_product_options_inner', function () {
-                           $( '#variable_product_options' ).trigger( 'reload' );
-                       } );
+                        $( '#variable_product_options' ).load( this_page + ' #variable_product_options_inner', function () {
+                            $( '#variable_product_options' ).trigger( 'reload' );
+                        } );
                     } );
                 },
                 expandAllAttributes: function ( ) {
@@ -885,6 +873,14 @@ var mvxAfmProductEditor = ( function ( $ ) {
                     return false;
                 }
             };
+        },
+        afterSaveAttributeTrigger: function( ) { 
+            var this_page = window.location.toString();
+            this_page = this_page.replace( /(?:\/#?|\/\d+\/?)?$/, '/' + mvx_advance_product_params.product_id + '/' );
+            // Load variations panel.
+            $( '#variable_product_options' ).load( this_page + ' #variable_product_options_inner', function () {
+                $( '#variable_product_options' ).trigger( 'reload' );
+            } );
         },
         variationController: function ( ) {
             var self = this;
@@ -1088,7 +1084,7 @@ var mvxAfmProductEditor = ( function ( $ ) {
                                 .on( 'change', '#variable_product_options .woocommerce_variations :input', this.inputChanged )
                                 .on( 'change', '.variations-defaults select', this.defaultsChanged );
 
-                            $( 'form#mvx-frontend-dashboard-add-product' ).on( 'submit', this.saveOnSubmit );
+                            $( 'form#mvx-afm-add-product' ).on( 'submit', this.saveOnSubmit );
                             $( '.collapsable-component-wrapper' ).on( 'click', 'a.do_variation_action', this.doVariationAction );
                         },
                         /**
@@ -1182,13 +1178,19 @@ var mvxAfmProductEditor = ( function ( $ ) {
                          *
                          * @return {Object}
                          */
-                        getVariationsFields: function ( fields ) {
-                            var data = $( ':input', fields ).serializeJSON();
+                        getVariationsFields: function (fields) {
+                            var data = {};
 
-                            $( '.variations-defaults select' ).each( function ( index, element ) {
-                                var select = $( element );
-                                data[ select.attr( 'name' ) ] = select.val();
-                            } );
+                            // Collect inputs and serialize into key/value
+                            $.each($(':input', fields).serializeArray(), function (_, field) {
+                                data[field.name] = field.value;
+                            });
+
+                            // Add variation defaults
+                            $('.variations-defaults select').each(function (index, element) {
+                                var select = $(element);
+                                data[select.attr('name')] = select.val();
+                            });
 
                             return data;
                         },
@@ -1888,8 +1890,6 @@ var mvxAfmProductEditor = ( function ( $ ) {
             }
         },
         saveProduct: function ( e ) { 
-            alert('hit save product');
-
             $( 'form#mvx-edit-product-form' ).trigger( 'before_product_save' );
             var status = ( e.target.id === 'mvx_frontend_dashboard_product_submit' ) ? 'publish' : ( e.target.id === 'mvx_frontend_dashboard_product_draft' ) ? 'draft' : '';
             $( 'input:hidden[name="status"]' ).val( status );

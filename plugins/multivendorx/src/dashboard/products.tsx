@@ -443,7 +443,7 @@ const AllProduct: React.FC = () => {
                 </div>
                 <div
                     className="admin-btn btn-purple"
-                    onClick={() => setAddProduct(true)}
+                    onClick={() => window.location.href = appLocalizer.add_product_link}
                 >
                     <i className="adminlib-plus-circle-o"></i>
                     Add New

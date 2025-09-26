@@ -380,8 +380,8 @@ export const Announcements: React.FC = () => {
                 //     )}
                 // </div>
                 <CalendarInput
-                    wrapperClass="my-calendar-wrapper"
-                    inputClass="my-input"
+                    wrapperClass=""
+                    inputClass=""
                     onChange={(range) => {
                         console.log('Selected Range:', range);
                         updateFilter('date', {
