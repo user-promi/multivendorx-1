@@ -121,6 +121,11 @@ class Modules {
 						'module_file'  => MultiVendorX()->plugin_path . 'modules/FollowStore/Module.php',
 						'module_class' => 'MultiVendorX\FollowStore\Module',
 					),
+                    'report-abuse' => array(
+                        'id'           => 'report-abuse',
+						'module_file'  => MultiVendorX()->plugin_path . 'modules/ReportAbuse/Module.php',
+						'module_class' => 'MultiVendorX\ReportAbuse\Module',
+					),
 				)
             );
         }
