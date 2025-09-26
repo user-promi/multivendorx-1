@@ -1,70 +1,47 @@
 <?php
-/**
- * MultiVendorX Ajax class file
- *
- * @package MultiVendorX
- */
-
 namespace MultiVendorX\ReportAbuse;
 
-/**
- * MultiVendorX Questions Answers Ajax class
- *
- * @class       Ajax class
- * @version     6.0.0
- * @author      MultiVendorX
- */
+use MultiVendorX\ReportAbuse\Util;
+
 class Ajax {
-    public function __construct(){
-        add_action('wp_ajax_mvx_follow_store', [$this, 'handle_follow_store']);
+    public function __construct() {
+        add_action('wp_ajax_mvx_submit_report_abuse', [$this, 'handle_report_abuse']);
+        add_action('wp_ajax_nopriv_mvx_submit_report_abuse', [$this, 'handle_report_abuse']);
     }
-    /**
-     * Handle follow/unfollow via AJAX
-     */
-    public function handle_follow_store() {
+
+    public function handle_report_abuse() {
         // Verify nonce
-        check_ajax_referer('follow_store_ajax_nonce', 'nonce');
-    
-        // Get and sanitize input using filter_input
-        $store_id = filter_input(INPUT_POST, 'store_id', FILTER_VALIDATE_INT);
-        $user_id  = filter_input(INPUT_POST, 'user_id', FILTER_VALIDATE_INT);
-    
-        if (!$store_id || !$user_id) {
-            wp_send_json_error(['message' => 'Invalid data.']);
+        check_ajax_referer('report_abuse_ajax_nonce', 'nonce');
+
+        // Get and sanitize inputs
+        $name       = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $email      = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
+        $message    = filter_input(INPUT_POST, 'message', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $product_id = filter_input(INPUT_POST, 'product_id', FILTER_VALIDATE_INT);
+
+        if ( empty($name) || empty($email) || empty($message) || !$product_id ) {
+            wp_send_json_error("All fields are required.");
         }
-    
-        // Get the current user's following stores
-        $following = get_user_meta($user_id, 'mvx_following_stores', true);
-        if (!is_array($following)) {
-            $following = [];
+
+        // Get store_id from product meta
+        $store_id = get_post_meta($product_id, 'multivendorx_store_id', true);
+        if ( empty($store_id) ) {
+            wp_send_json_error("Invalid product/store.");
         }
-    
-        // Get store object
-        $store = new \MultiVendorX\Store\Store($store_id);
-    
-        // Directly fetch followers from meta_data
-        $followers_raw = $store->meta_data['followers'] ?? '[]';
-        $followers = json_decode($followers_raw, true);
-        if (!is_array($followers)) $followers = [];
-    
-        // Determine if the user is already following
-        if (in_array($store_id, $following)) {
-            // Unfollow
-            $following = array_diff($following, [$store_id]);
-            $followers = array_diff($followers, [$user_id]);
-            $new_status = 'Follow';
-        } else {
-            // Follow
-            $following[] = $store_id;
-            $followers[] = $user_id;
-            $new_status = 'Unfollow';
+
+        // Save the report using Util function
+        $report_id = Util::create_report_abuse([
+            'store_id'   => $store_id,
+            'product_id' => $product_id,
+            'name'       => $name,
+            'email'      => $email,
+            'message'    => $message
+        ]);
+
+        if (!$report_id) {
+            wp_send_json_error("Something went wrong, please try again.");
         }
-    
-        // Save updated data
-        update_user_meta($user_id, 'mvx_following_stores', $following);
-        $store->update_meta('followers', json_encode($followers));
-    
-        wp_send_json_success(['new_status' => $new_status]);
+
+        wp_send_json_success("Your report has been submitted. Thank you!");
     }
-    
 }

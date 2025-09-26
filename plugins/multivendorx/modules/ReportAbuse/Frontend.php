@@ -28,45 +28,39 @@ class Frontend {
 
     public function load_scripts() {
         FrontendScripts::load_scripts();
-        FrontendScripts::enqueue_script( 'multivendorx-follow-store-frontend-script' );
-        FrontendScripts::localize_scripts( 'multivendorx-follow-store-frontend-script' );
+        FrontendScripts::enqueue_script( 'multivendorx-report-abuse-frontend-script' );
+        FrontendScripts::localize_scripts( 'multivendorx-report-abuse-frontend-script' );
     }
 
     /**
      * Store report abuse option
      */
-    function add_report_abuse_link( $product_id = 0 ) {
-        if ( ! $product_id && function_exists('get_the_ID') ) {
+    public function add_report_abuse_link($product_id = 0) {
+        if (!$product_id && function_exists('get_the_ID')) {
             $product_id = get_the_ID();
         }
-        $product = wc_get_product( $product_id );
-        if ( ! $product ) {
-            return;
-        }
-    
-        if ( apply_filters('mvx_show_report_abuse_link', true, $product) ) {
+        $product = wc_get_product($product_id);
+        if (!$product) return;
+
+        if (apply_filters('mvx_show_report_abuse_link', true, $product)) {
             $report_abuse_text = apply_filters('mvx_report_abuse_text', __('Report Abuse', 'multivendorx'), $product);
-            $show_in_popup = apply_filters('mvx_show_report_abuse_form_popup', true, $product);
             ?>
             <div class="mvx-report-abuse-wrapper">
                 <a href="javascript:void(0);" class="open-report-abuse"><?php echo esc_html($report_abuse_text); ?></a>
-    
+
                 <div class="report-abuse-form" style="display:none;">
                     <h3><?php echo sprintf(esc_html__('Report abuse for "%s"', 'multivendorx'), $product->get_name()); ?></h3>
                     <p><input type="text" class="report_abuse_name" placeholder="<?php esc_attr_e('Name', 'multivendorx'); ?>"></p>
                     <p><input type="email" class="report_abuse_email" placeholder="<?php esc_attr_e('Email', 'multivendorx'); ?>"></p>
                     <p><textarea class="report_abuse_msg" placeholder="<?php esc_attr_e('Message', 'multivendorx'); ?>"></textarea></p>
                     <input type="hidden" class="report_abuse_product_id" value="<?php echo esc_attr($product->get_id()); ?>">
-                    <button type="button" class="submit-report-abuse"><?php esc_html_e('Report', 'multivendorx'); ?></button>
+                    <button type="button" class="submit-report-abuse">
+                        <span class="btn-text"><?php esc_html_e('Report', 'multivendorx'); ?></span>
+                    </button>
+                    <div class="report-abuse-msg-box"></div>
                 </div>
             </div>
             <?php
         }
     }
-    
-    
-    
-    
-    
-    
 }
