@@ -126,9 +126,74 @@ const CalendarInput: React.FC<CalendarInputProps> = (props) => {
         });
     };
 
+    const getLabel = () => {
+  const start = selectedRange[0].startDate!;
+  const end = selectedRange[0].endDate!;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  // Today
+  if (start.toDateString() === today.toDateString() && end.toDateString() === today.toDateString()) {
+    return "Today";
+  }
+
+  // Yesterday
+  const yesterday = new Date(today);
+  yesterday.setDate(today.getDate() - 1);
+  if (start.toDateString() === yesterday.toDateString() && end.toDateString() === yesterday.toDateString()) {
+    return "Yesterday";
+  }
+
+  // ---- This Week (Monday - Sunday) ----
+  const dayOfWeek = today.getDay(); // Sun=0, Mon=1, ... Sat=6
+  const mondayThisWeek = new Date(today);
+  mondayThisWeek.setDate(today.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1)); // shift to Monday
+  mondayThisWeek.setHours(0, 0, 0, 0);
+
+  const sundayThisWeek = new Date(mondayThisWeek);
+  sundayThisWeek.setDate(mondayThisWeek.getDate() + 6);
+  sundayThisWeek.setHours(23, 59, 59, 999);
+
+  if (start.toDateString() === mondayThisWeek.toDateString() && end.toDateString() === sundayThisWeek.toDateString()) {
+    return "This Week";
+  }
+
+  // ---- Last Week (previous Monday - Sunday) ----
+  const mondayLastWeek = new Date(mondayThisWeek);
+  mondayLastWeek.setDate(mondayThisWeek.getDate() - 7);
+
+  const sundayLastWeek = new Date(mondayLastWeek);
+  sundayLastWeek.setDate(mondayLastWeek.getDate() + 6);
+
+  if (start.toDateString() === mondayLastWeek.toDateString() && end.toDateString() === sundayLastWeek.toDateString()) {
+    return "Last Week";
+  }
+
+  // This Month
+  const firstOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+  const lastOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+
+  if (start.toDateString() === firstOfMonth.toDateString() && end.toDateString() === lastOfMonth.toDateString()) {
+    return "This Month";
+  }
+
+  // Last Month
+  const firstOfLastMonth = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+  const lastOfLastMonth = new Date(today.getFullYear(), today.getMonth(), 0);
+
+  if (start.toDateString() === firstOfLastMonth.toDateString() && end.toDateString() === lastOfLastMonth.toDateString()) {
+    return "Last Month";
+  }
+
+  // Default fallback
+  return "Custom";
+};
+
     return (
         <div className={props.wrapperClass}>
             <div className="date-picker-section-wrapper" ref={dateRef}>
+                <div className="date-label">{getLabel()}</div>
+
                 <input
                     value={`${selectedRange[0].startDate?.toLocaleDateString('en-US', {
                         month: 'short',
@@ -140,16 +205,15 @@ const CalendarInput: React.FC<CalendarInputProps> = (props) => {
                         year: 'numeric',
                     })}`}
                     onClick={handleDateOpen}
-                    className={props.inputClass || 'basic-input'}
+                    className={props.inputClass || 'basic-input date'}
                     type="text"
                     readOnly
                     placeholder="DD/MM/YYYY"
                 />
                 {openDatePicker && (
                     <div
-                        className={`date-picker ${
-                            pickerPosition === 'top' ? 'open-top' : 'open-bottom'
-                        }`}
+                        className={`date-picker ${pickerPosition === 'top' ? 'open-top' : 'open-bottom'
+                            }`}
                         id="date-picker-wrapper"
                     >
                         <DateRangePicker

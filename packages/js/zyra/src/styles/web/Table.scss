@@ -548,30 +548,6 @@
 .table-action-column {
   position: relative;
 }
-
-.date-picker-section-wrapper {
-  position: relative;
-  input{
-    width: 14rem;
-  }
-}
-
-.date-picker {
-  position: absolute;
-  right: 0;
-  z-index: 100;
-  border: $border-light-small;
-}
-
-.date-picker.open-bottom {
-  top: calc(100% + 4px);
-  /* 4px gap */
-}
-
-.date-picker.open-top {
-  bottom: calc(100% + 4px);
-}
-
 @keyframes shine-lines {
   0% {
     background-position: -1rem;
