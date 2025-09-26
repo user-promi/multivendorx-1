@@ -305,6 +305,7 @@
     border-bottom: $border-light-small;
     display: flex;
     justify-content: space-between;
+    align-items: center;
   }
 
   .tab-wrapper {
@@ -333,6 +334,7 @@
     display: flex;
     align-items: center;
     gap: 0.813rem;
+    width: 50%;
 
     span {
       font-size: 1rem;
@@ -341,6 +343,7 @@
 
     .admin-btn {
       margin-top: 0.313rem;
+      width: 100%;
     }
   }
 }
