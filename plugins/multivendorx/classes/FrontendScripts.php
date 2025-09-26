@@ -199,6 +199,11 @@ class FrontendScripts {
 					'deps'    => array( 'jquery' ),
 					'version' => $version,
 				),
+                'multivendorx-report-abuse-frontend-script' => array(
+					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'modules/ReportAbuse/js/' . MULTIVENDORX_PLUGIN_SLUG . '-frontend.min.js',
+					'deps'    => array( 'jquery' ),
+					'version' => $version,
+				),
                 'multivendorx-review-frontend-script' => array(
 					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'modules/StoreReview/js/' . MULTIVENDORX_PLUGIN_SLUG . '-frontend.min.js',
 					'deps'    => array( 'jquery' ),
@@ -493,6 +498,13 @@ class FrontendScripts {
                         'nonce'    => wp_create_nonce('follow_store_ajax_nonce'),
 					),
 				),
+                'multivendorx-report-abuse-frontend-script' => array(
+					'object_name' => 'reportAbuseFrontend',
+					'data'        => array(
+						'ajaxurl'     => admin_url( 'admin-ajax.php' ),
+                        'nonce'    => wp_create_nonce('report_abuse_ajax_nonce'),
+					),
+				),
                 'multivendorx-review-frontend-script' => array(
 					'object_name' => 'review',
 					'data'        => array(
@@ -513,7 +525,8 @@ class FrontendScripts {
                         'store_id'                  => get_user_meta(wp_get_current_user()->ID, 'multivendorx_active_store', true),
                         'ajaxurl'                   => admin_url( 'admin-ajax.php' ),
                         'currency'                 => get_woocommerce_currency(),       // e.g., USD
-                        'currency_symbol'          => get_woocommerce_currency_symbol()
+                        'currency_symbol'          => get_woocommerce_currency_symbol(),
+                        'add_product_link'         => StoreUtil::get_endpoint_url('products', 'edit')
                     ),
                 ),
                 'multivendorx-registration-form-script'          => array(

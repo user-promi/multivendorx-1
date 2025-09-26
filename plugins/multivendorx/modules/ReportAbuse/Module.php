@@ -1,14 +1,14 @@
 <?php
 /**
- * MultiVendorX module Module class file
+ * MultiVendorX Module class file
  *
  * @package MultiVendorX
  */
 
-namespace MultiVendorX\Variable;
+namespace MultiVendorX\ReportAbuse;
 
 /**
- * MultiVendorX Variable Module class
+ * MultiVendorX Report Abuse Module class
  *
  * @class       Module class
  * @version     6.0.0
@@ -30,12 +30,11 @@ class Module {
     private static $instance = null;
 
     /**
-     * Variable class constructor function
+     * Simple class constructor function
      */
     public function __construct() {
         // Init helper classes.
         $this->init_classes();
-
     }
 
     /**
@@ -46,7 +45,8 @@ class Module {
     public function init_classes() {
         $this->container['frontend'] = new Frontend();
         $this->container['ajax'] = new Ajax();
-
+        $this->container['util'] = new Util();
+        $this->container['rest'] = new MultiVendorX_REST_Report_Abuse_Controller();
     }
 
     /**
@@ -75,7 +75,7 @@ class Module {
     }
 
     /**
-     * Initializes Variable class.
+     * Initializes Simple class.
      * Checks for an existing instance
      * And if it doesn't find one, create it.
      *

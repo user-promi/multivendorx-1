@@ -42,6 +42,7 @@ declare global {
         user_id:any;
         currency:any;
         currency_symbol:any;
+        add_product_link:any;
     }
     interface Color{
         color: any;
