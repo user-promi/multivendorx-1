@@ -471,7 +471,7 @@ export default {
         },
         
         {
-            id: 'marketplace-refund',
+            id: 'marketplace-gateway',
             name: __('Payment Gateway Charge', 'multivendorx'),
             desc: "Payment gateway fees are deducted from vendor commissions by the admin, ensuring platform costs are covered automatically.",
             icon: 'adminlib-rules',
