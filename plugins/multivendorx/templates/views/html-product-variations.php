@@ -18,6 +18,13 @@
  * @version     3.0.0
  */
 defined( 'ABSPATH' ) || exit;
+
+$variation_object = $args['variation_object'];
+$variation_id = $args['variation_id'];
+$variation_data = $args['variation_data'];
+$variation = $args['variation'];
+$product_object = $args['product_object'];
+
 ?>
 <div class="mvx-metabox-wrapper woocommerce_variation wc-metabox closed">
     <div class="mvx-metabox-title variation-title" data-toggle="collapse" data-target="#variation_no<?php echo esc_attr( $variation_id ); ?>"  aria-expanded="false" aria-controls="collapseExample">
@@ -78,18 +85,18 @@ defined( 'ABSPATH' ) || exit;
                             <div class="form-group">
                                 <label for="variable_enabled[<?php echo esc_attr( $loop ); ?>]"><input type="checkbox" class="form-control" id="variable_enabled[<?php echo esc_attr( $loop ); ?>]" name="variable_enabled[<?php echo esc_attr( $loop ); ?>]" <?php checked( in_array( $variation_object->get_status( 'edit' ), array( 'publish', false ), true ), true ); ?> /> <?php esc_html_e( 'Enabled', 'mvx-pro' ); ?></label>
                             </div>
-                            <?php if ( afm_is_allowed_downloadable() ) : ?>
+                            <?php if ( MultiVendorX()->setting->get_setting('type_options') == 'downloadable' ) : ?>
                             <div class="form-group">
                                 <label for="variable_is_downloadable[<?php echo esc_attr( $loop ); ?>]"><input type="checkbox" class="form-control variable_is_downloadable" id="variable_is_downloadable[<?php echo esc_attr( $loop ); ?>]" name="variable_is_downloadable[<?php echo esc_attr( $loop ); ?>]" <?php checked( $variation_object->get_downloadable( 'edit' ), true ); ?> /> <?php esc_html_e( 'Downloadable', 'mvx-pro' ); ?></label>
                             </div>
                             <?php endif; ?>
 
-                            <?php if ( afm_is_allowed_virtual() ) : ?>
+                            <?php if ( MultiVendorX()->setting->get_setting('type_options') == 'virtual' ) : ?>
                                 <div class="form-group">
                                     <label for="variable_is_virtual[<?php echo esc_attr( $loop ); ?>]"><input type="checkbox" class="form-control variable_is_virtual" id="variable_is_virtual[<?php echo esc_attr( $loop ); ?>]" name="variable_is_virtual[<?php echo esc_attr( $loop ); ?>]" <?php checked( $variation_object->get_virtual( 'edit' ), true ); ?> /> <?php esc_html_e( 'Virtual', 'mvx-pro' ); ?></label>
                                 </div>
                             <?php endif; ?>
-                            <?php if ( afm_is_allowed_vendor_manage_stock() ) : ?>
+                            <?php if ( 'yes' === get_option( 'woocommerce_manage_stock' ) ) : ?>
                                 <div class="form-group">
                                     <label for="variable_manage_stock[<?php echo esc_attr( $loop ); ?>]"><input type="checkbox" class="form-control variable_manage_stock" id="variable_manage_stock[<?php echo esc_attr( $loop ); ?>]" name="variable_manage_stock[<?php echo esc_attr( $loop ); ?>]" <?php checked( $variation_object->get_manage_stock( 'edit' ), true ); ?> /> <?php esc_html_e( 'Manage stock?', 'mvx-pro' ); ?></label>
                                 </div>
@@ -178,7 +185,7 @@ defined( 'ABSPATH' ) || exit;
                 </div>
             </div>
 
-            <?php if ( afm_is_allowed_vendor_manage_stock() ) : ?>
+            <?php if ( 'yes' === get_option( 'woocommerce_manage_stock' ) ) : ?>
                 <div class="row show_if_variation_manage_stock">
                     <div class="col-md-6">
                         <div class="form-group">
@@ -230,7 +237,8 @@ defined( 'ABSPATH' ) || exit;
                 </div>
             <?php endif; ?>
             <div class="row">
-                <?php if ( afm_is_allowed_vendor_shipping() ) : ?>
+                <?php 
+                // if ( afm_is_allowed_vendor_shipping() ) : ?>
                     <?php if ( wc_product_weight_enabled() ) : ?>
                         <div class="col-md-6 hide_if_variation_virtual">
                             <div class="form-group">
@@ -271,15 +279,18 @@ defined( 'ABSPATH' ) || exit;
                             <div class="col-md-6">
                                 <select name="variable_shipping_class[<?php esc_attr_e( $loop ); ?>]" class="form-control regular-select">
                                     <option value="-1"><?php esc_html_e( 'Same as parent', 'mvx-pro' ); ?></option>
-                                    <?php foreach ( get_current_vendor_shipping_classes() as $key => $value ) : ?>
+                                    <?php 
+                                    // foreach ( get_current_vendor_shipping_classes() as $key => $value ) : ?>
                                         <option value="<?php esc_attr_e( $key ); ?>" <?php selected( $variation_object->get_shipping_class_id( 'edit' ), $key ); ?>><?php esc_html_e( $value ); ?></option>
-                                    <?php endforeach; ?>
+                                    <?php 
+                                // endforeach; ?>
                                 </select>
                             </div>    
                         </div>
                     </div>
-                <?php endif; ?>
-                <?php if ( afm_is_enabled_vendor_tax() ) : ?>
+                <?php 
+            // endif; ?>
+                <?php if ( wc_tax_enabled() ) : ?>
                     <div class="col-md-6">
                         <div class="form-group">
                             <label class="control-label col-md-6"><?php esc_html_e( 'Tax class', 'mvx-pro' ); ?></label>

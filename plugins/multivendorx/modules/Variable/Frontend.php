@@ -26,7 +26,7 @@ class Frontend {
 
     }
 
-    public function afm_set_default_product_types( $product_types ) {
+    public function set_product_types( $product_types ) {
         $afm_types = array();
         $afm_types['variable'] = __( 'Variable product', 'mvx-pro' );
     

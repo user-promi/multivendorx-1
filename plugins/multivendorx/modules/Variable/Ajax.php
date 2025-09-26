@@ -52,8 +52,9 @@ class Ajax {
             $metabox_class[] = 'taxonomy';
             $metabox_class[] = $attribute->get_name();
         }
+        $self = new Products();
 
-        MultiVendorX()->util->get_template('views/html-product-attribute.php' );        
+        MultiVendorX()->util->get_template('views/html-product-attribute.php', ['attribute' => $attribute, 'metabox_class' => $metabox_class, 'i' => $i, 'self' => $self] );        
 
         wp_die();
     }

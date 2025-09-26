@@ -400,26 +400,26 @@ class Frontend {
                     }
                 }
                 // Group Products
-                // $grouped_products = isset( $_POST['grouped_products'] ) ? array_filter( array_map( 'intval', (array) $_POST['grouped_products'] ) ) : array();
+                $grouped_products = isset( $_POST['grouped_products'] ) ? array_filter( array_map( 'intval', (array) $_POST['grouped_products'] ) ) : array();
 
-                // // file paths will be stored in an array keyed off md5(file path)
-                // $downloads = array();
-                // if ( isset( $_POST['_downloadable'] ) && isset( $_POST['_wc_file_urls'] ) ) {
-                //     $file_urls = isset($_POST['_wc_file_urls']) ? wp_unslash($_POST['_wc_file_urls']) : '';
-                //     $file_names = isset( $_POST['_wc_file_names'] ) ? wp_unslash($_POST['_wc_file_names']) : array();
-                //     $file_hashes = isset( $_POST['_wc_file_hashes'] ) ? wp_unslash($_POST['_wc_file_hashes']) : array();
+                // file paths will be stored in an array keyed off md5(file path)
+                $downloads = array();
+                if ( isset( $_POST['_downloadable'] ) && isset( $_POST['_wc_file_urls'] ) ) {
+                    $file_urls = isset($_POST['_wc_file_urls']) ? wp_unslash($_POST['_wc_file_urls']) : '';
+                    $file_names = isset( $_POST['_wc_file_names'] ) ? wp_unslash($_POST['_wc_file_names']) : array();
+                    $file_hashes = isset( $_POST['_wc_file_hashes'] ) ? wp_unslash($_POST['_wc_file_hashes']) : array();
 
-                //     $file_url_size = sizeof( $file_urls );
-                //     for ( $i = 0; $i < $file_url_size; $i ++ ) {
-                //         if ( ! empty( $file_urls[$i] ) ) {
-                //             $downloads[] = array(
-                //                 'name'        => wc_clean( $file_names[$i] ),
-                //                 'file'        => wp_unslash( trim( $file_urls[$i] ) ),
-                //                 'download_id' => wc_clean( $file_hashes[$i] ),
-                //             );
-                //         }
-                //     }
-                // }
+                    $file_url_size = sizeof( $file_urls );
+                    for ( $i = 0; $i < $file_url_size; $i ++ ) {
+                        if ( ! empty( $file_urls[$i] ) ) {
+                            $downloads[] = array(
+                                'name'        => wc_clean( $file_names[$i] ),
+                                'file'        => wp_unslash( trim( $file_urls[$i] ) ),
+                                'download_id' => wc_clean( $file_hashes[$i] ),
+                            );
+                        }
+                    }
+                }
 
                 $error = $product->set_props(
                     array(
@@ -457,7 +457,7 @@ class Frontend {
                         'menu_order'         => isset( $_POST['menu_order'] ) ? wc_clean( $_POST['menu_order'] ) : null,
                         'reviews_allowed'    => ! empty( $_POST['comment_status'] ) && 'open' === $_POST['comment_status'],
                         'attributes'         => $attributes,
-                        // 'default_attributes' => mvx_woo()->prepare_set_attributes( $attributes, 'default_attribute_', $_POST ),
+                        'default_attributes' => Products::prepare_set_attributes( $attributes, 'default_attribute_', $_POST ),
                     )
                 );
 
@@ -469,11 +469,11 @@ class Frontend {
 
                 $product->save();
 
-                // if ( $product->is_type( 'variable' ) ) {
-                //     $product->get_data_store()->sync_variation_names( $product, wc_clean( $_POST['original_post_title'] ), wc_clean( $_POST['post_title'] ) );
-                //     $error = mvx_woo()->save_product_variations( $post_id, $_POST );
-                //     $errors = array_merge( $errors, $error );
-                // }
+                if ( $product->is_type( 'variable' ) ) {
+                    $product->get_data_store()->sync_variation_names( $product, wc_clean( $_POST['original_post_title'] ), wc_clean( $_POST['post_title'] ) );
+                    $error = Products::save_product_variations( $post_id, $_POST );
+                    $errors = array_merge( $errors, $error );
+                }
 
 
                 do_action( 'mvx_process_product_meta_' . $product_type, $post_id, $_POST );

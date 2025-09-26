@@ -71,7 +71,9 @@ $post = $args['post'];
             </div>
         </div> 
         <div class="button-group">
-            <button type="button" class="admin-btn btn-purple"><?php esc_html_e( 'Save attributes', 'multivendorx' ); ?></button>
+            <button type="button" class="btn btn-default save_attributes button-primary"><?php esc_html_e( 'Save attributes', 'multivendorx' ); ?></button>
+
+            <!-- <button type="button" class="admin-btn btn-purple save_attributes"><?php esc_html_e( 'Save attributes', 'multivendorx' ); ?></button> -->
             <!-- <div class="toolbar float-right">
                 <span class="expand-close">
                     <a href="#" class="expand_all"><?php esc_html_e( 'Expand', 'multivendorx' ); ?></a> / <a href="#" class="close_all"><?php esc_html_e( 'Close', 'multivendorx' ); ?></a>

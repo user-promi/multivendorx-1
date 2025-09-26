@@ -171,21 +171,20 @@ var mvxAfmProductEditor = ( function ( $ ) {
             return false;
         },
         init: function ( ) {
-            $( '#woocommerce-product-data' )
-                // .on( 'change', 'select#product-type', this.productTypeChanged.bind( this ) )
-                // .on( 'change', 'input#_downloadable, input#_virtual', this.updateTabsDisplay.bind( this ) )
-                // .on( 'click', '.sale_schedule', this.showSalePriceDates )
-                // .on( 'click', '.cancel_sale_schedule', this.hideSalePriceDates )
-                // .on( 'change', 'input#_manage_stock', this.stockManagementPreferenceChanged.bind( this ) )
-                // ;
+            // .on( 'change', 'select#product-type', this.productTypeChanged.bind( this ) )
+            // .on( 'change', 'input#_downloadable, input#_virtual', this.updateTabsDisplay.bind( this ) )
+            // .on( 'click', '.sale_schedule', this.showSalePriceDates )
+            // .on( 'click', '.cancel_sale_schedule', this.hideSalePriceDates )
+            // .on( 'change', 'input#_manage_stock', this.stockManagementPreferenceChanged.bind( this ) )
+            // ;
+           $( '#woocommerce-product-data' )
+            .on( 'change', 'select#product-type', this.productTypeChanged.bind( this ) )
+            .on( 'change', 'input#_downloadable, input#_virtual', this.updateTabsDisplay.bind( this ) )
+            .on( 'click', '.sale_schedule', this.showSalePriceDates )
+            .on( 'click', '.cancel_sale_schedule', this.hideSalePriceDates )
+            .on( 'change', 'input#_manage_stock', this.stockManagementPreferenceChanged.bind( this ) )
+            .bind( 'mvx_after_save_attribute_triggered', this.afterSaveAttributeTrigger );
 
-                on( 'change', 'select#product-type', this.productTypeChanged.bind( this ) )
-                .on( 'change', 'input#_downloadable, input#_virtual', this.updateTabsDisplay.bind( this ) )
-                .on( 'click', '.sale_schedule', this.showSalePriceDates )
-                .on( 'click', '.cancel_sale_schedule', this.hideSalePriceDates )
-                .on( 'change', 'input#_manage_stock', this.stockManagementPreferenceChanged.bind( this ) )
-                .bind( 'mvx_after_save_attribute_triggered', this.afterSaveAttributeTrigger )
-                ;
             $( '.add-product-single' )
                 .on( 'click', '.notice-wrapper button.notice-dismiss', this.dismissNotice );
             //save
@@ -490,7 +489,7 @@ var mvxAfmProductEditor = ( function ( $ ) {
             media.init();
             downloads.init();
             attributes.init();
-            //variations.init();
+            variations.init();
 
             this.salePriceDateFieldInit( $( '#woocommerce-product-data' ) );
             //Make download files sortable
@@ -576,7 +575,7 @@ var mvxAfmProductEditor = ( function ( $ ) {
 
             this.updateTabsDisplay();
 
-            $( 'ul#product_data_tabs li:visible' ).eq( 0 ).find( 'a' ).tab( 'show' );
+            // $( 'ul#product_data_tabs li:visible' ).eq( 0 ).find( 'a' ).tab( 'show' );
         },
         updateTabsDisplay: function ( ) {
             var productType = this.getState( 'productType' );
@@ -797,7 +796,7 @@ var mvxAfmProductEditor = ( function ( $ ) {
                                 }
 
                                 mvxAfmLibrary.wcEnhancedSelectInit();
-                                mvxAfmLibrary.qtip();
+                                // mvxAfmLibrary.qtip();
                                 ref.updateRowIndices();
                                 //open the added attribute in expanded view
                                 $attributes.find( '.woocommerce_attribute' ).last().find( '.variation-title' ).click();
@@ -858,6 +857,7 @@ var mvxAfmProductEditor = ( function ( $ ) {
                         // Reload variations panel.
                         var this_page = window.location.toString();
                         this_page = this_page.replace( /(?:\/#?|\/\d+\/?)?$/, '/' + mvx_advance_product_params.product_id + '/' );
+                        $wrapper.unblock();
                         // Load variations panel.
                         $( '#variable_product_options' ).load( this_page + ' #variable_product_options_inner', function () {
                             $( '#variable_product_options' ).trigger( 'reload' );
@@ -1084,7 +1084,7 @@ var mvxAfmProductEditor = ( function ( $ ) {
                                 .on( 'change', '#variable_product_options .woocommerce_variations :input', this.inputChanged )
                                 .on( 'change', '.variations-defaults select', this.defaultsChanged );
 
-                            $( 'form#mvx-frontend-dashboard-add-product' ).on( 'submit', this.saveOnSubmit );
+                            $( 'form#mvx-afm-add-product' ).on( 'submit', this.saveOnSubmit );
                             $( '.collapsable-component-wrapper' ).on( 'click', 'a.do_variation_action', this.doVariationAction );
                         },
                         /**
@@ -1178,13 +1178,19 @@ var mvxAfmProductEditor = ( function ( $ ) {
                          *
                          * @return {Object}
                          */
-                        getVariationsFields: function ( fields ) {
-                            var data = $( ':input', fields ).serializeJSON();
+                        getVariationsFields: function (fields) {
+                            var data = {};
 
-                            $( '.variations-defaults select' ).each( function ( index, element ) {
-                                var select = $( element );
-                                data[ select.attr( 'name' ) ] = select.val();
-                            } );
+                            // Collect inputs and serialize into key/value
+                            $.each($(':input', fields).serializeArray(), function (_, field) {
+                                data[field.name] = field.value;
+                            });
+
+                            // Add variation defaults
+                            $('.variations-defaults select').each(function (index, element) {
+                                var select = $(element);
+                                data[select.attr('name')] = select.val();
+                            });
 
                             return data;
                         },
