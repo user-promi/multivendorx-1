@@ -177,6 +177,18 @@ class Install {
             question_visibility VARCHAR(50) DEFAULT 'public'
         ) $collate;";
 
+        $sql_report_abuse = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}" . Utill::TABLES['report_abuse'] . "` (
+            `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+            `store_id` bigint(20) NOT NULL,
+            `product_id` bigint(20) NOT NULL,
+            `name` VARCHAR(255) DEFAULT NULL,
+            `email` VARCHAR(255) DEFAULT NULL,
+            `message` LONGTEXT DEFAULT NULL,
+            `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            PRIMARY KEY (`ID`)
+        ) $collate;";
+        
         // Include upgrade functions if not loaded.
         if ( ! function_exists( 'dbDelta' ) ) {
             require_once ABSPATH . 'wp-admin/includes/upgrade.php';
@@ -189,6 +201,7 @@ class Install {
         dbDelta( $sql_transaction );
         dbDelta( $sql_real_time_transaction );
         dbDelta( $sql_qna );
+        dbDelta( $sql_report_abuse );
     }
 
     public function create_database_triggers() {

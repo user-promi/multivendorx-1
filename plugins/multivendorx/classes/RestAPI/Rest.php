@@ -39,7 +39,6 @@ class Rest {
     }
 
     public function filter_low_stock_by_meta_exists( $args ) {
-        file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":orders:args : " . var_export($args, true) . "\n", FILE_APPEND);
         if ( isset( $request['meta_key'] ) && $request['meta_key'] === 'multivendorx_store_id' ) {
             
             // Build the meta query to check for the existence of the MultiVendorX key
@@ -53,7 +52,6 @@ class Rest {
             }
             $args['meta_query'][] = $meta_query;
         }
-        file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":orders:args : " . var_export($args, true) . "\n", FILE_APPEND);
 
         return $args;
     }
