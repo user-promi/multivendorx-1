@@ -38,34 +38,16 @@ class Frontend {
         }
     
         $current_user_id = get_current_user_id();
-        $login_url = wc_get_page_permalink('myaccount');
     
-        // Not logged in — redirect on button click
-        if ( ! $current_user_id ) {
-            echo '<button class="mvx-follow-btn" 
-                        data-store-id="'. esc_attr($store_id) .'" 
-                        onclick="window.location.href=\''. esc_url($login_url) .'\'">
-                    Login to Follow
-                </button>';
-            return;
-        }
-    
-        // Check if user already follows this store
-        $following = get_user_meta( $current_user_id, 'mvx_following_stores', true );
-        if ( ! is_array( $following ) ) $following = array();
-        $is_following = in_array( $store_id, $following );
-    
-        $button_text = $is_following ? 'Unfollow' : 'Follow';
-    
+        // Render single button with placeholders
         echo '<button class="mvx-follow-btn" 
-                    data-store-id="'. esc_attr($store_id) .'" 
-                    data-user-id="'. esc_attr($current_user_id) .'">
-                '. esc_html($button_text) .'
+                    data-store-id="' . esc_attr($store_id) . '" 
+                    data-user-id="' . esc_attr($current_user_id) . '">
+                Loading...
             </button>';
+    
+        // Follower count placeholder
+        echo ' <span class="mvx-follower-count" id="followers-count-' . esc_attr($store_id) . '">...</span>';
     }
-    
-    
-    
-    
     
 }

@@ -1,15 +1,36 @@
-/* global mvx_follow_obj */
 jQuery(document).ready(function($){
 
-    // Handle follow/unfollow button click
+    // Initialize buttons
+    $('.mvx-follow-btn').each(function(){
+        var btn = $(this);
+        var store_id = btn.data('store-id');
+
+        $.post(followStoreFrontend.ajaxurl, {
+            action: 'mvx_get_follow_data',
+            store_id: store_id,
+            nonce: followStoreFrontend.nonce
+        }, function(res){
+            if(res.success){
+                btn.text(res.data.button_text);
+
+                if(res.data.button_text === 'Login to Follow'){
+                    btn.off('click').on('click', function(){
+                        window.location.href = res.data.login_url;
+                    });
+                }
+
+                $('#followers-count-' + store_id).text(res.data.follower_count + ' Followers');
+            }
+        });
+    });
+
+    // Handle follow/unfollow click
     $(document).on('click', '.mvx-follow-btn', function(){
         var btn = $(this);
         var store_id = btn.data('store-id');
         var user_id  = btn.data('user-id');
-        // If user is not logged in, do nothing
-        if(!user_id || btn.text().trim() === 'Login to Follow') {
-            return;
-        }
+
+        if(!user_id || btn.text().trim() === 'Login to Follow') return;
 
         $.post(followStoreFrontend.ajaxurl, {
             action: 'mvx_follow_store',
@@ -18,10 +39,18 @@ jQuery(document).ready(function($){
             nonce: followStoreFrontend.nonce
         }, function(res){
             if(res.success){
-                // Update button text dynamically
                 btn.text(res.data.new_status);
-            } else if(res.data && res.data.message){
-                alert(res.data.message);
+
+                // Update follower count
+                $.post(followStoreFrontend.ajaxurl, {
+                    action: 'mvx_get_follow_data',
+                    store_id: store_id,
+                    nonce: followStoreFrontend.nonce
+                }, function(resp){
+                    if(resp.success){
+                        $('#followers-count-' + store_id).text(resp.data.follower_count + ' Followers');
+                    }
+                });
             }
         });
     });
