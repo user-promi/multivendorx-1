@@ -238,7 +238,7 @@ class Frontend {
       
         if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) { 
 
-            if ( $wp->query_vars['subtab'] != 'edit-product' || ! isset( $_POST['mvx_product_nonce'] ) ) {
+            if ( $wp->query_vars['subtab'] != 'edit' || ! isset( $_POST['mvx_product_nonce'] ) ) {
                 return;
             }
             
@@ -491,7 +491,7 @@ class Frontend {
                         break;
                 }
                 wc_add_notice( $status_msg, 'success' );
-                wp_safe_redirect(StoreUtil::get_endpoint_url('products', 'edit-product', $post_id));
+                wp_safe_redirect(StoreUtil::get_endpoint_url('products', 'edit', $post_id));
                 exit;
             } else {
                 $error_msg = ( $post_id->get_error_code() === 'empty_content' ) ? __( 'Content, title, and excerpt are empty.', 'multivendorx' ) : $post_id->get_error_message();

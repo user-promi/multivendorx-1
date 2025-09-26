@@ -261,8 +261,7 @@ if ($current_page && empty($current_sub)) {
                         if ($allowed) {
                             $template_file = plugin_dir_path(__FILE__) . $div_id . '.php';
                             if (file_exists($template_file)) {
-                                if ($div_id == 'edit-product') {
-
+                                if ($div_id == 'edit') {
                                     $edit_product = new Products();
                                     $edit_product->output();
                                 }

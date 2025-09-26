@@ -45,6 +45,7 @@ if (is_user_logged_in() && !current_user_can('edit_products')) {
                         <div class="product-search-wrapper categories-search-wrapper">
                             <div class="form-text"><?php _e('Search category', 'multivendorx'); ?></div>
                             <div class="form-input">
+                                <input type="hidden" id="mvx_product_id" value="<?php echo esc_attr($self->get_the_id()); ?>">
                                 <input id="search-categories-keyword" type="text" placeholder="<?php esc_attr_e('Example: tshirt, music, album etc...', 'multivendorx'); ?>">
                                 <ul id="searched-categories-results" class="list-group">
                                     
@@ -93,11 +94,10 @@ if (is_user_logged_in() && !current_user_can('edit_products')) {
                          if (get_option('permalink_structure')) {
                             $category_url = '?new_listing=1&cats_hier=1';
                         } else {
-                            $category_url = StoreUtil::get_endpoint_url('products', 'edit-product' ) . '&new_listing=1&cats_hier=1';
+                            $category_url = StoreUtil::get_endpoint_url('products', 'edit' ) . '&new_listing=1&cats_hier=1';
                         }
 
-                        
-                        $url = ( MultiVendorX()->setting->get_setting('category_pyramid_guide') == 'no' ) ? esc_url(StoreUtil::get_endpoint_url( 'products', 'edit-product')) : $category_url; ?>
+                        $url = ( MultiVendorX()->setting->get_setting('category_pyramid_guide') == 'no' ) ? esc_url(StoreUtil::get_endpoint_url( 'products', 'edit')) : $category_url; ?>
                         <p><?php _e('Not in the catalog?', 'multivendorx'); ?> <a href="<?php echo $url; ?>" class="cat-step-btn"><?php _e('Create a new product', 'multivendorx'); ?> <i class="mvx-font ico-right-arrow-icon"></i></a></p>
                     </div>
                 </div>

@@ -525,7 +525,8 @@ class FrontendScripts {
                         'store_id'                  => get_user_meta(wp_get_current_user()->ID, 'multivendorx_active_store', true),
                         'ajaxurl'                   => admin_url( 'admin-ajax.php' ),
                         'currency'                 => get_woocommerce_currency(),       // e.g., USD
-                        'currency_symbol'          => get_woocommerce_currency_symbol()
+                        'currency_symbol'          => get_woocommerce_currency_symbol(),
+                        'add_product_link'         => StoreUtil::get_endpoint_url('products', 'edit')
                     ),
                 ),
                 'multivendorx-registration-form-script'          => array(

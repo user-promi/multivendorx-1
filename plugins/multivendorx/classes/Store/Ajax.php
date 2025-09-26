@@ -207,6 +207,7 @@ class Ajax {
     }
 
     public function mvx_set_classified_product_terms() {
+        $product_id = isset($_POST['productId']) ? absint($_POST['productId']) : 0;
         $term_id = isset($_POST['term_id']) ? absint($_POST['term_id']) : 0;
         $taxonomy = isset($_POST['taxonomy']) ? wc_clean($_POST['taxonomy']) : '';
         $user_id = get_current_user_id();
@@ -217,7 +218,7 @@ class Ajax {
                 'taxonomy' => $taxonomy,
             );
             set_transient('classified_product_terms_vendor' . $user_id, $data, HOUR_IN_SECONDS);
-            $url = esc_url(StoreUtil::get_endpoint_url('products', 'edit-product'));
+            $url = esc_url(StoreUtil::get_endpoint_url('products', 'edit', $product_id));
         // }
         wp_send_json(array('url' => $url));
         die;
@@ -279,7 +280,7 @@ class Ajax {
         check_ajax_referer('mvx-types', 'security');
         $product_id = isset($_POST['product_id']) ? absint($_POST['product_id']) : 0;
         $parent_post = get_post($product_id);
-        $redirect_url = isset($_POST['redirect_url']) ? esc_url($_POST['redirect_url']) : esc_url(StoreUtil::get_endpoint_url('products', 'edit-product'));
+        $redirect_url = isset($_POST['redirect_url']) ? esc_url($_POST['redirect_url']) : esc_url(StoreUtil::get_endpoint_url('products', 'edit'));
         $product = wc_get_product($product_id);
         if (!function_exists('duplicate_post_plugin_activation')) {
             include_once( WC_ABSPATH . 'includes/admin/class-wc-admin-duplicate-product.php' );
