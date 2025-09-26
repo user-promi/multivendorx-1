@@ -108,23 +108,25 @@
         }
     }
 }
-.admin-tab{
-    .card-header{
+
+.admin-tab {
+    .card-header {
         margin: 0;
         padding: 0;
         border: none;
     }
 
-    .tab-titles{
+    .tab-titles {
         padding: 0;
     }
 }
+
 .row {
     display: flex;
     gap: 1.25rem;
     padding: 0.625rem 0;
 
-    .header{
+    .header {
         margin-top: 0.5rem;
         width: 100%;
     }
@@ -342,7 +344,8 @@
             gap: 0.813rem;
 
             .admin-badge {
-                padding: 0.313rem 0.5rem;
+                background: #d9f5f0a3;
+                color: #06be9fb3;
             }
         }
     }
@@ -691,34 +694,38 @@
         font-weight: 600;
         margin-top: 0.5rem;
     }
-    .des{
+
+    .des {
         font-size: 0.9rem;
         padding-top: 0.5rem;
     }
-    .image-wrapper{
+
+    .image-wrapper {
         text-align: center;
         margin: 1rem;
     }
-    ul{
-       margin: 2rem 0; 
+
+    ul {
+        margin: 2rem 0;
         display: flex;
         flex-wrap: wrap;
-        
-        li{
+
+        li {
             width: 48%;
             // font-size: 0.9rem;
             color: #000;
             line-height: 1rem;
             margin-bottom: 0.625rem;
 
-            i{
+            i {
                 color: $theme-color;
                 font-size: 1.063rem;
                 padding-right: 0.5rem;
             }
         }
     }
-    .button-wrapper{
+
+    .button-wrapper {
         display: flex;
     }
 }
@@ -784,11 +791,13 @@
                 ;
             }
         }
-        td:first-child{
+
+        td:first-child {
             width: 70%;
         }
+
         td:nth-child(2),
-        td:nth-child(3){
+        td:nth-child(3) {
             width: 15%;
         }
     }
@@ -928,6 +937,7 @@
 
         h3 {
             font-size: 1rem;
+            padding-bottom: 0.313rem ;
         }
 
     }
@@ -1006,6 +1016,8 @@
                 position: relative;
                 transform: translateY(0);
                 font-size: 0.75rem;
+                display: flex;
+                align-items: center;
 
                 i {
                     font-size: 0.813rem;

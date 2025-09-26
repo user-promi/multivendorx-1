@@ -477,29 +477,6 @@ const AllProduct: React.FC = () => {
 
     return (
         <>
-            <div className="header-wrapper">
-                <div
-                    className="admin-btn btn-purple"
-                    onClick={() => setAddProduct(true)}
-                >
-                    <i className="adminlib-import"></i>
-                    import
-                </div>
-                <div
-                    className="admin-btn btn-purple"
-                    onClick={() => setAddProduct(true)}
-                >
-                    <i className="adminlib-export"></i>
-                    Export
-                </div>
-                <div
-                    className="admin-btn btn-purple"
-                    onClick={() => window.location.href = appLocalizer.add_product_link}
-                >
-                    <i className="adminlib-plus-circle-o"></i>
-                    Add New
-                </div>
-            </div>
 
             {AddProduct && (
                 <CommonPopup
@@ -595,7 +572,30 @@ const AllProduct: React.FC = () => {
                 <div className="page-title">
                     <div className="title">All Product</div>
                     <div className="des">Manage your store information and preferences</div>
-                </div>  
+                </div>
+                <div className="buttons-wrapper">
+                    <div
+                        className="admin-btn btn-purple"
+                        onClick={() => setAddProduct(true)}
+                    >
+                        <i className="adminlib-import"></i>
+                        import
+                    </div>
+                    <div
+                        className="admin-btn btn-purple"
+                        onClick={() => setAddProduct(true)}
+                    >
+                        <i className="adminlib-export"></i>
+                        Export
+                    </div>
+                    <div
+                        className="admin-btn btn-purple"
+                        onClick={() => window.location.href = appLocalizer.add_product_link}
+                    >
+                        <i className="adminlib-plus-circle-o"></i>
+                        Add New
+                    </div>
+                </div>
             </div>
             <div className="admin-table-wrapper">
                 <Table
