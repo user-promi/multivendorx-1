@@ -48,19 +48,20 @@ const Appearance = () => {
                                 name="stores"
                                 type="single-select"
                                 options={storeOptions}
-                            // value={formData.stores ? formData.stores.split(',') : []}
-                            // onChange={(newValue: any) => {
-                            //     const selectedValues = Array.isArray(newValue)
-                            //         ? newValue.map((opt) => opt.value)
-                            //         : [];
-                            //     setFormData((prev) => ({
-                            //         ...prev,
-                            //         stores: selectedValues.join(','),
-                            //     }));
-                            // }}
+                            value={formData.stores ? formData.stores.split(',') : []}
+                            onChange={(newValue: any) => {
+                                const selectedValues = Array.isArray(newValue)
+                                    ? newValue.map((opt) => opt.value)
+                                    : [];
+                                setFormData((prev) => ({
+                                    ...prev,
+                                    stores: selectedValues.join(','),
+                                }));
+                            }}
                             />
                         </div>
                     </div>
+
                 </div>
             </div>
         </>

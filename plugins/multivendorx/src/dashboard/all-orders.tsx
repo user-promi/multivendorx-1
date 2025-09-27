@@ -44,17 +44,34 @@ const Orders: React.FC = () => {
 
     const columns: ColumnDef<OrderRow>[] = [
         {
-            header: __("ID", "multivendorx"),
-            cell: ({ row }) => <TableCell>#{row.original.number}</TableCell>,
-        },
-        {
-            header: __("Customer", "multivendorx"),
+            id: 'select',
+            header: ({ table }) => (
+                <input
+                    type="checkbox"
+                    checked={table.getIsAllRowsSelected()}
+                    onChange={table.getToggleAllRowsSelectedHandler()}
+                />
+            ),
             cell: ({ row }) => (
-                <TableCell>
-                    {row.original.billing.first_name} {row.original.billing.last_name}
-                </TableCell>
+                <input
+                    type="checkbox"
+                    checked={row.getIsSelected()}
+                    onChange={row.getToggleSelectedHandler()}
+                />
             ),
         },
+        {
+            header: __("ID", "multivendorx"),
+            cell: ({ row }) => <TableCell>#{row.original.number}  Deva johnson</TableCell>,
+        },
+        // {
+        //     header: __("Customer", "multivendorx"),
+        //     cell: ({ row }) => (
+        //         <TableCell>
+        //             {row.original.billing.first_name} {row.original.billing.last_name}
+        //         </TableCell>
+        //     ),
+        // },
         {
             header: __("Total", "multivendorx"),
             cell: ({ row }) => <TableCell>{row.original.total} {row.original.currency}</TableCell>,
@@ -69,6 +86,18 @@ const Orders: React.FC = () => {
                 });
                 return <TableCell>{earning.toFixed(2)} {row.original.currency}</TableCell>;
             },
+        },
+        {
+            header: __("Date", "multivendorx"),
+            cell: ({ row }) => <TableCell>20-12-2025</TableCell>,
+        },
+        {
+            header: __('Status', 'multivendorx'),
+            cell: ({ row }) => (
+                <TableCell title={row.original.stock || ''}>
+                    <span className="admin-badge green">Completed</span>
+                </TableCell>
+            ),
         },
         {
             header: __('Action', 'multivendorx'),
@@ -125,34 +154,34 @@ const Orders: React.FC = () => {
 
     return (
         <>
-        <div className="page-title-wrapper">
+            <div className="page-title-wrapper">
                 <div className="page-title">
                     <div className="title">All Orders</div>
                     <div className="des">Manage your store information and preferences</div>
                 </div>
             </div>
-        <div className="admin-table-wrapper">
-            <Table
-                data={data}
-                columns={columns as ColumnDef<Record<string, any>, any>[]}
-                rowSelection={{}}
-                onRowSelectionChange={() => { }}
-                defaultRowsPerPage={10}
-                pageCount={Math.ceil(data.length / pagination.pageSize)}
-                pagination={pagination}
-                onPaginationChange={setPagination}
-                handlePagination={requestOrders}
-                perPageOption={[10, 25, 50]}
-            />
-
-            {/* Render your custom modal component */}
-            {modalOrder && (
-                <OrderDetailsModal
-                    order={modalOrder}
-                    onClose={() => setModalOrder(null)}
+            <div className="admin-table-wrapper">
+                <Table
+                    data={data}
+                    columns={columns as ColumnDef<Record<string, any>, any>[]}
+                    rowSelection={{}}
+                    onRowSelectionChange={() => { }}
+                    defaultRowsPerPage={10}
+                    pageCount={Math.ceil(data.length / pagination.pageSize)}
+                    pagination={pagination}
+                    onPaginationChange={setPagination}
+                    handlePagination={requestOrders}
+                    perPageOption={[10, 25, 50]}
                 />
-            )}
-        </div>
+
+                {/* Render your custom modal component */}
+                {modalOrder && (
+                    <OrderDetailsModal
+                        order={modalOrder}
+                        onClose={() => setModalOrder(null)}
+                    />
+                )}
+            </div>
         </>
     );
 };
