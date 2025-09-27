@@ -2,6 +2,7 @@
 
 namespace MultiVendorX\RestAPI\Controllers;
 use MultiVendorX\Store\StoreUtil;
+use MultiVendorX\Store\Store;
 use MultiVendorX\Utill;
 
 defined('ABSPATH') || exit;
@@ -118,6 +119,8 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             }
             $formatted_stores = array();
             foreach ( $stores as $store ) {
+                $store_meta = Store::get_store_by_id( (int) $store['ID'] );
+
                 $formatted_stores[] = apply_filters(
                     'multivendorx_stores',
                     array(
@@ -125,6 +128,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                         'store_name' => $store['name'],
                         'store_slug' => $store['slug'],
                         'status'     => $store['status'],
+                        'email'      => $store_meta->meta_data['email'] ?? '',
                         'applied_on' => $store['create_time'],
                     )
                 );
