@@ -67,30 +67,38 @@ class Rest {
         return $args;
     }
 
-     /**
-     * Filter orders by store_id in line items
+    /**
+     * Filter orders dynamically by meta key and optionally by value
      */
     public function filter_orders_by_store_id( $args, $request ) {
-        if ( ! isset( $request['store_id'] ) ) {
+
+        // If no key is provided, return args unchanged
+        if ( empty( $request['key'] ) ) {
             return $args;
         }
-    
-        $store_id = absint( $request['store_id'] );
+
+        $meta_key   = sanitize_key( $request['key'] );
+        $meta_value = isset( $request['store_id'] ) ? absint( $request['store_id'] ) : null;
 
         $store_meta_query = array(
-            'key'   => 'multivendorx_store_id',
-            'value' => $store_id,
-            'compare' => '='
+            'key'     => $meta_key,
+            'compare' => $meta_value !== null ? '=' : 'EXISTS',
         );
-    
+
+        if ( $meta_value !== null ) {
+            $store_meta_query['value'] = $meta_value;
+        }
+
         if ( isset( $args['meta_query'] ) ) {
             $args['meta_query']['relation'] = 'AND';
             $args['meta_query'][] = $store_meta_query;
         } else {
             $args['meta_query'] = array( $store_meta_query );
         }
+
         return $args;
     }
+
 
     /**
      * Filter WooCommerce products by meta key existence.
