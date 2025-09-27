@@ -64,7 +64,13 @@ const StoreInformation = () => {
             }
         })
     };
-
+    const [activeTab, setActiveTab] = useState("General");
+    const settingTabs = [
+        { id: "general", label: "General", content: <>General</> },
+        { id: "appearance", label: "Appearance", content: <>dddd</> },
+        { id: "business-address", label: "Business Address", content: <>dddd</> },
+        { id: "overview", label: "Marketplace", content: <>dddd</> },
+    ];
     return (
         <>
             {successMsg && (
@@ -79,6 +85,24 @@ const StoreInformation = () => {
                 </>
             )}
 
+            {settingTabs.map((tab) => (
+                <div
+                    key={tab.id}
+                    className={`title ${activeTab === tab.id ? "active" : ""}`}
+                    onClick={() => setActiveTab(tab.id)}
+                >
+                    <p>{tab.label}</p>
+                </div>
+            ))}
+            {settingTabs.map(
+                (tab) =>
+                    activeTab === tab.id && (
+                        <div key={tab.id} className="tab-panel">
+                            {tab.content}
+                        </div>
+                    )
+            )}
+
             <div className="page-title-wrapper">
                 <div className="page-title">
                     <div className="title">Store Information</div>
@@ -87,62 +111,6 @@ const StoreInformation = () => {
             </div>
             <div className="container-wrapper">
                 <div className="card-wrapper width-65">
-                    {/* <div className="card-content">
-                        <div className="card-title">
-                            Basic information
-                        </div>
-                        
-                        <div className="form-group-wrapper">
-                            <div className="form-group">
-                                <label htmlFor="product-name">Phone</label>
-                                <BasicInput name="phone" value={formData.phone} wrapperClass="setting-form-input" descClass="settings-metabox-description" onChange={handleChange} />
-                            </div>
-                        </div>
-
-                        <div className="form-group-wrapper">
-                            <div className="form-group">
-                                <label htmlFor="product-name">Address</label>
-                                <BasicInput name="address_1" value={formData.address_1} wrapperClass="setting-form-input" descClass="settings-metabox-description" onChange={handleChange} />
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="product-name"></label>
-                                <BasicInput name="address_2" value={formData.address_2} wrapperClass="setting-form-input" descClass="settings-metabox-description" onChange={handleChange} />
-                            </div>
-                        </div>
-                        <div className="form-group-wrapper">
-                            <div className="form-group">
-                                <label htmlFor="product-name">Country</label>
-                                <SelectInput
-                                    name="country"
-                                    value={formData.country}
-                                    options={appLocalizer.country_list || []}
-                                    type="single-select"
-                                    onChange={(newValue:any) => {
-                                        if (!newValue || Array.isArray(newValue)) return;
-                                        const updated = { ...formData, country: newValue.value, state: '' }; // reset state
-                                        setFormData(updated);
-                                        autoSave(updated);
-                                        fetchStatesByCountry(newValue.value);
-                                    }}
-                                />
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="product-name">State</label>
-                                <SelectInput
-                                    name="state"
-                                    value={formData.state}
-                                    options={stateOptions}
-                                    type="single-select"
-                                    onChange={(newValue:any) => {
-                                        if (!newValue || Array.isArray(newValue)) return;
-                                        const updated = { ...formData, state: newValue.value };
-                                        setFormData(updated);
-                                        autoSave(updated);
-                                    }}
-                                />
-                            </div>
-                        </div>
-                    </div> */}
                     <div className="card-content">
                         <div className="card-title">
                             Basic information
