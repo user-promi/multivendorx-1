@@ -61,17 +61,37 @@ const Orders: React.FC = () => {
             ),
         },
         {
-            header: __("ID", "multivendorx"),
-            cell: ({ row }) => <TableCell>#{row.original.number}  Deva johnson</TableCell>,
+            header: __("Order ID", "multivendorx"),
+            cell: ({ row }) => <TableCell>#{row.original.number} </TableCell>,
         },
-        // {
-        //     header: __("Customer", "multivendorx"),
-        //     cell: ({ row }) => (
-        //         <TableCell>
-        //             {row.original.billing.first_name} {row.original.billing.last_name}
-        //         </TableCell>
-        //     ),
-        // },
+        {
+            header: __("Customer", "multivendorx"),
+            cell: ({ row }) => (
+                <TableCell>
+                    Deva johnson {row.original.billing.first_name} {row.original.billing.last_name}
+                </TableCell>
+            ),
+        },
+        {
+            header: __("Purchased", "multivendorx"),
+            cell: ({ row }) => (
+                <TableCell>
+                    Item 1, Item 2
+                </TableCell>
+            ),
+        },
+        {
+            header: __("Date", "multivendorx"),
+            cell: ({ row }) => <TableCell>20-12-2025</TableCell>,
+        },
+        {
+            header: __('Status', 'multivendorx'),
+            cell: ({ row }) => (
+                <TableCell title={row.original.stock || ''}>
+                    <span className="admin-badge green">Completed</span>
+                </TableCell>
+            ),
+        },
         {
             header: __("Total", "multivendorx"),
             cell: ({ row }) => <TableCell>{row.original.total} {row.original.currency}</TableCell>,
@@ -86,18 +106,6 @@ const Orders: React.FC = () => {
                 });
                 return <TableCell>{earning.toFixed(2)} {row.original.currency}</TableCell>;
             },
-        },
-        {
-            header: __("Date", "multivendorx"),
-            cell: ({ row }) => <TableCell>20-12-2025</TableCell>,
-        },
-        {
-            header: __('Status', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.stock || ''}>
-                    <span className="admin-badge green">Completed</span>
-                </TableCell>
-            ),
         },
         {
             header: __('Action', 'multivendorx'),

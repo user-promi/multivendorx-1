@@ -633,7 +633,91 @@ const AllCoupon: React.FC = () => {
         //     ),
         // },
     ];
-
+    const realtimeFilter: RealtimeFilter[] = [
+        {
+            name: 'category',
+            render: (updateFilter: (key: string, value: string) => void, filterValue: string | undefined) => (
+                <div className="   course-field">
+                    <select
+                        name="commissionStatus"
+                        onChange={(e) => updateFilter(e.target.name, e.target.value)}
+                        value={filterValue || ''}
+                        className="basic-select"
+                    >
+                        <option value="">Category</option>
+                        {/* { Object.entries( courses ).map( ( [ courseId, courseName ] ) => (
+                                <option key={ courseId } value={ courseId }>
+                                    { courseName }
+                                </option>
+                            ) ) } */}
+                    </select>
+                </div>
+            ),
+        },
+        {
+            name: 'product-type',
+            render: (updateFilter: (key: string, value: string) => void, filterValue: string | undefined) => (
+                <div className="   group-field">
+                    <select
+                        name="product-type"
+                        onChange={(e) => updateFilter(e.target.name, e.target.value)}
+                        value={filterValue || ''}
+                        className="basic-select"
+                    >
+                        <option value="">Product Type</option>
+                        {/* { Object.entries( groups ).map( ( [ groupId, groupName ] ) => (
+                                <option key={ groupId } value={ groupId }>
+                                    { ' ' }
+                                    { groupName }{ ' ' }
+                                </option>
+                            ) ) } */}
+                    </select>
+                </div>
+            ),
+        },
+        {
+            name: 'stock-status',
+            render: (updateFilter: (key: string, value: string) => void, filterValue: string | undefined) => (
+                <div className="   group-field">
+                    <select
+                        name="product-type"
+                        onChange={(e) => updateFilter(e.target.name, e.target.value)}
+                        value={filterValue || ''}
+                        className="basic-select"
+                    >
+                        <option value="">Stock Status</option>
+                        {/* { Object.entries( groups ).map( ( [ groupId, groupName ] ) => (
+                                <option key={ groupId } value={ groupId }>
+                                    { ' ' }
+                                    { groupName }{ ' ' }
+                                </option>
+                            ) ) } */}
+                    </select>
+                </div>
+            ),
+        },
+        {
+            name: 'brand',
+            render: (updateFilter: (key: string, value: string) => void, filterValue: string | undefined) => (
+                <div className="   group-field">
+                    <select
+                        name="product-type"
+                        onChange={(e) => updateFilter(e.target.name, e.target.value)}
+                        value={filterValue || ''}
+                        className="basic-select"
+                    >
+                        <option value="">Brand</option>
+                        {/* { Object.entries( groups ).map( ( [ groupId, groupName ] ) => (
+                                <option key={ groupId } value={ groupId }>
+                                    { ' ' }
+                                    { groupName }{ ' ' }
+                                </option>
+                            ) ) } */}
+                    </select>
+                </div>
+            ),
+        },
+    ];
     return (
         <>
             <div className="page-title-wrapper">
@@ -760,6 +844,7 @@ const AllCoupon: React.FC = () => {
                     pageCount={pageCount}
                     pagination={pagination}
                     onPaginationChange={setPagination}
+                    realtimeFilter={realtimeFilter}
                     perPageOption={[10, 25, 50]}
                     typeCounts={[]}
                     realtimeFilter={[]}
