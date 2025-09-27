@@ -232,22 +232,33 @@ if ($current_page && empty($current_sub)) {
                                     }
                                 }
                             }
-
-                            if ($current_sub && !empty($section['submenu'])) {
-                                foreach ($section['submenu'] as $submenu) {
-                                    if ($submenu['slug'] === $current_sub) {
-                                        if (!empty($submenu['capability'])) {
-                                            $allowed = false;
-
-                                            foreach ($submenu['capability'] as $cap) {
-                                                if (current_user_can($cap) && in_array($cap, $capability_settings, true)) {
-                                                    $allowed = true;
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                        $div_id = $submenu['key'];
-                                        break;
+                            if ($current_sub) {
+                            	if(empty($section['submenu'])) {
+                                    if (!empty($section['capability-'. $current_sub])) {
+                                		$allowed = false;
+                                		foreach ($section['capability-'. $current_sub] as $cap) {
+                                    		if (current_user_can($cap) && in_array($cap, $capability_settings, true)) {
+                                        		$allowed = true;
+                                        		break;
+                                    		}
+                                		}
+                            		}
+                                	$div_id = $current_sub;
+                                } else {
+                                	foreach ($section['submenu'] as $submenu) {
+                                    	if ($submenu['slug'] === $current_sub) {
+                                        	if (!empty($submenu['capability'])) {
+                                            	$allowed = false;
+                                            	foreach ($submenu['capability'] as $cap) {
+                                                	if (current_user_can($cap) && in_array($cap, $capability_settings, true)) {
+                                                    	$allowed = true;
+                                                    	break;
+                                                	}
+                                            	}
+                                        	}
+                                        	$div_id = $submenu['key'];
+                                        	break;
+                                    	}
                                     }
                                 }
                             } else {
