@@ -428,3 +428,73 @@ $border-radius-button: 8rem;
 }
 
 // notification style end
+
+// settings tab start
+.settings-tab-wrapper {
+    display: flex;
+    gap: 1.5rem;
+
+    .left-side {
+        width: 25%;
+
+        .title {
+            padding: 0.75rem;
+            transition: all 0.5s ease;
+            border-radius: 0.313rem;
+            margin-bottom: 0.313rem;
+            cursor: pointer;
+
+            i {
+                padding-right: 0.5rem;
+            }
+
+            p {
+                margin: 0;
+            }
+
+            &:hover {
+                background: #fff;
+            }
+
+            &.active,
+            &.active:hover {
+                background: $theme-background-color;
+                color: $theme-color;
+            }
+        }
+    }
+
+    .content {
+        width: 75%;
+    }
+}
+
+// settings tab end
+
+// information notice start
+.information-notioce {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    margin: 0.625rem 0;
+    background: #fff0e1e3;
+    color: #ff9f43;
+    border-radius: 0.313rem;
+
+    i {
+        font-size: 1.063rem;
+        padding: 0.25rem;
+        color: #fff;
+        background: #ff9f43;
+        border-radius: 0.313rem;
+    }
+
+    p {
+        margin: 0;
+        font-size: 1.063rem;
+        line-height: 1.125rem;
+    }
+}
+
+// information notice end

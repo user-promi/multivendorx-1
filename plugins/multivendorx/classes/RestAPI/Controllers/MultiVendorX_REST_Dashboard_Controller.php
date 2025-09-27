@@ -164,82 +164,83 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
                 'capability' => ['manage_users']
             ),
                        
-            'store-settings' => array(
+            'settings' => array(
                 'name'    => 'Settings',
-                'slug'    => 'store-settings',
+                'slug'    => 'settings',
                 'icon'    => 'adminlib-storefront',
-                'submenu' => array(
-                    array(
-                        'key'  => 'general',
-                        'name' => 'General',
-                        'slug' => 'general',
-                        'icon'    => 'adminlib-cart',
-                        'capability' => ['read_products', 'edit_products', 'delete_products']
-                    ),
-                    array(
-                        'key'  => 'appearance',
-                        'name' => 'Appearance',
-                        'slug' => 'appearance',
-                        'icon'    => 'adminlib-cart',
-                        'capability' => ['read_products', 'edit_products', 'delete_products']
-                    ),
-                    array(
-                        'key'  => 'store-address-location',
-                        'name' => 'Business Address & Location',
-                        'slug' => 'store-address-location',
-                        'icon'    => 'adminlib-cart',
-                        'capability' => ['read_products', 'edit_products', 'upload_files']
-                    ),
-                     array(
-                        'key'  => 'contact-information',
-                        'name' => 'Contact Information',
-                        'slug' => 'contact-information',
-                        'icon'    => 'adminlib-cart',
-                        'capability' => ['read_products', 'edit_products', 'upload_files']
-                    ),
-                    array(
-                        'key'  => 'social-media',
-                        'name' => 'Social Media',
-                        'slug' => 'social-media',
-                        'icon'    => 'adminlib-cart',
-                        'capability' => ['read_products', 'edit_products', 'upload_files']
-                    ),                    
-                    array(
-                        'key'  => 'payment-configuration',
-                        'name' => 'Payment',
-                        'slug' => 'payment-configuration',
-                        'icon'    => 'adminlib-cart',
-                        'capability' => ['read_products', 'edit_products', 'upload_files']
-                    ),
-                    array(
-                        'key'  => 'shop-policies',
-                        'name' => 'Policies',
-                        'slug' => 'shop-policies',
-                        'icon'    => 'adminlib-cart',
-                        'capability' => ['read_products', 'edit_products', 'upload_files']
-                    ),
-                    array(
-                        'key'  => 'privacy',
-                        'name' => 'Privacy',
-                        'slug' => 'privacy',
-                        'icon'    => 'adminlib-cart',
-                        'capability' => ['read_products', 'edit_products', 'upload_files']
-                    ),
-                    array(
-                        'key'  => 'seo_visibility',
-                        'name' => 'SEO & visibility',
-                        'slug' => 'seo_visibility',
-                        'icon'    => 'adminlib-cart',
-                        'capability' => ['read_products', 'edit_products', 'upload_files']
-                    ),
-                    array(
-                        'key'  => 'shipping',
-                        'name' => 'Shipping',
-                        'slug' => 'shipping',
-                        'icon'    => 'adminlib-cart',
-                        'capability' => ['read_products', 'edit_products', 'upload_files']
-                    ), 
-                    ),
+                'capability' => ['read_products'],
+                // 'submenu' => array(
+                //     array(
+                //         'key'  => 'general',
+                //         'name' => 'General',
+                //         'slug' => 'general',
+                //         'icon'    => 'adminlib-cart',
+                //         'capability' => ['read_products', 'edit_products', 'delete_products']
+                //     ),
+                //     array(
+                //         'key'  => 'appearance',
+                //         'name' => 'Appearance',
+                //         'slug' => 'appearance',
+                //         'icon'    => 'adminlib-cart',
+                //         'capability' => ['read_products', 'edit_products', 'delete_products']
+                //     ),
+                //     array(
+                //         'key'  => 'store-address-location',
+                //         'name' => 'Business Address & Location',
+                //         'slug' => 'store-address-location',
+                //         'icon'    => 'adminlib-cart',
+                //         'capability' => ['read_products', 'edit_products', 'upload_files']
+                //     ),
+                //      array(
+                //         'key'  => 'contact-information',
+                //         'name' => 'Contact Information',
+                //         'slug' => 'contact-information',
+                //         'icon'    => 'adminlib-cart',
+                //         'capability' => ['read_products', 'edit_products', 'upload_files']
+                //     ),
+                //     array(
+                //         'key'  => 'social-media',
+                //         'name' => 'Social Media',
+                //         'slug' => 'social-media',
+                //         'icon'    => 'adminlib-cart',
+                //         'capability' => ['read_products', 'edit_products', 'upload_files']
+                //     ),                    
+                //     array(
+                //         'key'  => 'payment-configuration',
+                //         'name' => 'Payment',
+                //         'slug' => 'payment-configuration',
+                //         'icon'    => 'adminlib-cart',
+                //         'capability' => ['read_products', 'edit_products', 'upload_files']
+                //     ),
+                //     array(
+                //         'key'  => 'shop-policies',
+                //         'name' => 'Policies',
+                //         'slug' => 'shop-policies',
+                //         'icon'    => 'adminlib-cart',
+                //         'capability' => ['read_products', 'edit_products', 'upload_files']
+                //     ),
+                //     array(
+                //         'key'  => 'privacy',
+                //         'name' => 'Privacy',
+                //         'slug' => 'privacy',
+                //         'icon'    => 'adminlib-cart',
+                //         'capability' => ['read_products', 'edit_products', 'upload_files']
+                //     ),
+                //     array(
+                //         'key'  => 'seo_visibility',
+                //         'name' => 'SEO & visibility',
+                //         'slug' => 'seo_visibility',
+                //         'icon'    => 'adminlib-cart',
+                //         'capability' => ['read_products', 'edit_products', 'upload_files']
+                //     ),
+                //     array(
+                //         'key'  => 'shipping',
+                //         'name' => 'Shipping',
+                //         'slug' => 'shipping',
+                //         'icon'    => 'adminlib-cart',
+                //         'capability' => ['read_products', 'edit_products', 'upload_files']
+                //     ), 
+                //     ),
                 'capability' => ['manage_products']
             ),
 			 'knowledgebase' => array(
