@@ -30,7 +30,6 @@ class Products {
 
         $this->product_id = $wp->query_vars['value'];
         $this->product_object = new \WC_Product();
-
         if ( $this->product_id && $this->product_capablity_check( 'edit', $this->product_id ) ) {
             $this->product_object = wc_get_product( $this->product_id );
             $this->post_object = get_post( $this->product_id );
@@ -176,7 +175,7 @@ class Products {
     public function output() {
         global $wp;
 
-        if (! $wp->query_vars['value'] && MultiVendorX()->setting->get_setting('category_pyramid_guide') == 'yes' ) {
+        if (! $wp->query_vars['value'] && MultiVendorX()->setting->get_setting('category_pyramid_guide') == 'yes' ) {        
 
             FrontendScripts::load_scripts();
             FrontendScripts::enqueue_script( 'multivendorx-product-classify-script' );
@@ -342,7 +341,7 @@ class Products {
                 if ( isset( $data['variable_stock'], $data['variable_stock'][$i] ) ) {
                     if ( isset( $data['variable_original_stock'], $data['variable_original_stock'][$i] ) && wc_stock_amount( $variation->get_stock_quantity( 'edit' ) ) !== wc_stock_amount( $data['variable_original_stock'][$i] ) ) {
                         /* translators: 1: product ID 2: quantity in stock */
-                        $errors[] = sprintf( __( 'The stock has not been updated because the value has changed since editing. Product %1$d has %2$d units in stock.', 'woocommerce' ), $variation->get_id(), $variation->get_stock_quantity( 'edit' ) );
+                        $errors[] = sprintf( __( 'The stock has not been updated because the value has changed since editing. Product %1$d has %2$d units in stock.', 'multivendorx' ), $variation->get_id(), $variation->get_stock_quantity( 'edit' ) );
                     } else {
                         $stock = wc_stock_amount( $data['variable_stock'][$i] );
                     }

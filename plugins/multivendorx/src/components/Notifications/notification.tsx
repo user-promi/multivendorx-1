@@ -45,7 +45,7 @@ const Notification = () => {
 
     const handleConfirm = async () => {
         if (!task.trim()) return;
-    
+
         setLoading(true);
         try {
             await saveTasks([...tasks, task]);
@@ -57,7 +57,7 @@ const Notification = () => {
             setLoading(false);
         }
     };
-    
+
     const handleDelete = (index: number) => {
         const updatedTasks = tasks.filter((_, idx) => idx !== index);
         saveTasks(updatedTasks);
@@ -104,7 +104,7 @@ const Notification = () => {
         { id: "products", label: "Products", content: <Products onUpdated={refreshCounts} /> },
         { id: "stores", label: "Stores", content: <Vendors onUpdated={refreshCounts} /> },
         { id: "coupons", label: "Coupons", content: <Coupons onUpdated={refreshCounts} /> },
-        { id: "transactions", label: "Transaction", content: <Transactions onUpdated={refreshCounts} /> },
+        { id: "transactions", label: "Withdrawl", content: <Transactions onUpdated={refreshCounts} /> },
     ];
     // run once on mount
     useEffect(() => {
@@ -169,7 +169,7 @@ const Notification = () => {
                                     <i className="adminlib-module"></i>
                                 </div>
                                 <div className="description">
-                                    Pending Transaction
+                                    Pending Withdrawl
                                 </div>
                             </div>
                         </div>
@@ -250,7 +250,10 @@ const Notification = () => {
                                 </div>
                             </div>
                             <div className="right">
-                                <span>Updated 1 month ago</span>
+                                <div className="admin-btn btn-purple">
+                                    <i className="adminlib-eye"></i>
+                                    Show all notification
+                                </div>
                             </div>
                         </div>
                         <div className="notification-wrapper">
@@ -286,24 +289,7 @@ const Notification = () => {
                                         <span>34min ago</span>
                                     </div>
                                 </li>
-                                <li>
-                                    <div className="icon-wrapper">
-                                        <i className="adminlib-calendar red"></i>
-                                    </div>
-                                    <div className="details">
-                                        <div className="notification-title">Lorem ipsum dolor sit amet.</div>
-                                        <div className="des">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</div>
-                                        <span>34min ago</span>
-                                    </div>
-                                </li>
                             </ul>
-
-                            <div className="buttons-wrapper">
-                                <div className="admin-btn btn-purple">
-                                    <i className="adminlib-eye"></i>
-                                    Show all notification
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
