@@ -77,7 +77,8 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
         $offset  = ( $page - 1 ) * $limit;
         $count   = $request->get_param( 'count' );
         $storeId = $request->get_param( 'store_id' );
-    
+        $status = $request->get_param( 'status' );
+
         // Prepare filter for CommissionUtil
         $filter = array(
             'perpage' => $limit,
@@ -87,7 +88,11 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
         if ( ! empty( $storeId ) ) {
             $filter['store_id'] = intval( $storeId );
         }
-    
+
+        if ( ! empty( $status ) ) {
+            $filter['status'] = $status;
+        }
+
         // Fetch commissions
         $commissions = CommissionUtil::get_commissions(
             $filter,
@@ -141,8 +146,20 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
                 )
             );
         }
-    
-        return rest_ensure_response( $formatted_commissions );
+
+        $all    = CommissionUtil::get_commissions([], true, true);
+        $paid   = CommissionUtil::get_commissions(['status' => 'paid'], true, true);
+        $refund = CommissionUtil::get_commissions(['status' => 'refund'], true, true);
+        $trash  = CommissionUtil::get_commissions(['status' => 'trash'], true, true);
+        $response = [
+            'commissions' => $formatted_commissions,
+            'all'    => $all,
+            'paid'   => $paid,
+            'refund' => $refund,
+            'trash'  => $trash,
+        ];
+
+        return rest_ensure_response( $response );
     }
     
     public function get_item( $request ) {

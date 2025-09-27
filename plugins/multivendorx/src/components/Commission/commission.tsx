@@ -40,6 +40,7 @@ type FilterData = {
     searchAction?: string;
     searchField?: string;
     typeCount?: any;
+    store?:string;
 };
 
 const Commission: React.FC = () => {
@@ -48,6 +49,7 @@ const Commission: React.FC = () => {
     const [modalDetails, setModalDetails] = useState<string>('');
     const [error, setError] = useState<String>();
     const [data, setData] = useState<CommissionRow[] | null>(null);
+    const [store, setStore] = useState<any[] | null>(null);
     const bulkSelectRef = useRef<HTMLSelectElement>(null);
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
     const [totalRows, setTotalRows] = useState<number>(0);
@@ -77,6 +79,19 @@ const Commission: React.FC = () => {
     useEffect(() => {
         axios({
             method: 'GET',
+            url: getApiLink(appLocalizer, 'store'),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+        })
+            .then((response) => {
+                setStore(response.data.stores);
+            })
+            .catch(() => {
+                setError(__('Failed to load stores', 'multivendorx'));
+                setStore([]);
+            });
+
+        axios({
+            method: 'GET',
             url: getApiLink(appLocalizer, 'commission'),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
             params: { count: true },
@@ -95,9 +110,7 @@ const Commission: React.FC = () => {
         const rowsPerPage = pagination.pageSize;
         requestData(rowsPerPage, currentPage);
         setPageCount(Math.ceil(totalRows / rowsPerPage));
-
     }, [pagination]);
-    const [showDropdown, setShowDropdown] = useState(false);
     const handleBulkAction = () => {
         if (appLocalizer.khali_dabba) {
             if (!Object.keys(rowSelection).length) {
@@ -114,18 +127,13 @@ const Commission: React.FC = () => {
         }
     };
 
-    const toggleDropdown = (id: any) => {
-        if (showDropdown === id) {
-            setShowDropdown(false);
-            return;
-        }
-        setShowDropdown(id);
-    };
+
     // Fetch data from backend.
     function requestData(
         rowsPerPage = 10,
         currentPage = 1,
         typeCount = '',
+        store = '',
     ) {
         setData(null);
         axios({
@@ -136,10 +144,11 @@ const Commission: React.FC = () => {
                 page: currentPage,
                 row: rowsPerPage,
                 status: typeCount === 'all' ? '' : typeCount,
+                store_id:store
             },
         })
             .then((response) => {
-                setData(response.data || []);
+                setData(response.data.commissions || []);
                 setCommissionStatus([
                     {
                         key: 'all',
@@ -150,11 +159,6 @@ const Commission: React.FC = () => {
                         key: 'paid',
                         name: 'Paid',
                         count: response.data.paid || 0,
-                    },
-                    {
-                        key: 'unpaid',
-                        name: 'Unpaid',
-                        count: response.data.unpaid || 0,
                     },
                     {
                         key: 'refund',
@@ -186,6 +190,7 @@ const Commission: React.FC = () => {
             rowsPerPage,
             currentPage,
             filterData?.typeCount,
+            filterData?.store
         );
     };
 
@@ -212,6 +217,14 @@ const Commission: React.FC = () => {
             header: __('Store Name', 'multivendorx'),
             cell: ({ row }) => <TableCell title={row.original.storeName || '-'}>{row.original.storeName || '-'}</TableCell>,
         },
+        {
+            header: __('Order ID', 'multivendorx'),
+            cell: ({ row }) => (
+                <TableCell title={row.original.orderId ? `#${row.original.orderId}` : '-'}>
+                    {row.original.orderId ? `#${row.original.orderId}` : '-'}
+                </TableCell>
+            ),
+        },        
         {
             header: __('Order Amount', 'multivendorx'),
             cell: ({ row }) => <TableCell title={row.original.totalOrderAmount ? `${appLocalizer.currency_symbol}${row.original.totalOrderAmount}` : '-'}>{row.original.totalOrderAmount ? `${appLocalizer.currency_symbol}${row.original.totalOrderAmount}` : '-'}</TableCell>,
@@ -243,13 +256,16 @@ const Commission: React.FC = () => {
         {
             header: __('Commission Total', 'multivendorx'),
             cell: ({ row }) => <TableCell title={row.original.commissionTotal ? `${appLocalizer.currency_symbol}${row.original.commissionTotal}` : '-'}>{row.original.commissionTotal ? `${appLocalizer.currency_symbol}${row.original.commissionTotal}` : '-'}</TableCell>,
-        },        
+        },
         {
             header: __('Paid Status', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell title={row.original.status || '-'}>
                     <span className={`admin-badge ${row.original.status === 'paid' ? 'green' : 'red'}`}>
-                        {row.original.status || '-'}
+                        {row.original.status
+                            ? row.original.status.charAt(0).toLocaleUpperCase() + row.original.status.slice(1)
+                            : '-'}
+
                     </span>
                 </TableCell>
             ),
@@ -277,7 +293,7 @@ const Commission: React.FC = () => {
                                 onClick: (rowData) => {
                                     console.log(rowData);
                                     console.log(appLocalizer);
-                                
+
                                     if (rowData?.orderId) {
                                         const url = `${appLocalizer.site_url.replace(/\/$/, '')}/wp-admin/admin.php?page=wc-orders&action=edit&id=${rowData.orderId}`;
                                         window.open(url, '_blank');
@@ -285,7 +301,7 @@ const Commission: React.FC = () => {
                                         alert(__('Order ID missing for this commission.', 'multivendorx'));
                                     }
                                 },
-                                
+
                                 hover: true,
                             },
                         ],
@@ -293,105 +309,81 @@ const Commission: React.FC = () => {
                 />
             ),
         }
-
-
-
     ];
 
     const realtimeFilter: RealtimeFilter[] = [
         {
-            name: 'commissionStatus',
-            render: (updateFilter: (key: string, value: string) => void, filterValue: string | undefined) => (
-                <div className="   course-field">
-                    <select
-                        name="commissionStatus"
-                        onChange={(e) => updateFilter(e.target.name, e.target.value)}
-                        value={filterValue || ''}
-                        className="basic-select"
-                    >
-                        <option value="">Commission Status</option>
-                        {/* { Object.entries( courses ).map( ( [ courseId, courseName ] ) => (
-                            <option key={ courseId } value={ courseId }>
-                                { courseName }
-                            </option>
-                        ) ) } */}
-                    </select>
-                </div>
-            ),
-        },
-        {
-            name: 'vendor',
+            name: 'store',
             render: (updateFilter: (key: string, value: string) => void, filterValue: string | undefined) => (
                 <div className="   group-field">
                     <select
-                        name="vendor"
+                        name="store"
                         onChange={(e) => updateFilter(e.target.name, e.target.value)}
                         value={filterValue || ''}
                         className="basic-select"
                     >
-                        <option value="">All Vendors</option>
-                        {/* { Object.entries( groups ).map( ( [ groupId, groupName ] ) => (
-                            <option key={ groupId } value={ groupId }>
-                                { ' ' }
-                                { groupName }{ ' ' }
+                        <option value="">All Store</option>
+                        {store?.map((s: any) => (
+                            <option key={s.id} value={s.id}>
+                                {s.store_name.charAt(0).toUpperCase() + s.store_name.slice(1)}
                             </option>
-                        ) ) } */}
+                        ))}
                     </select>
+
                 </div>
             ),
         },
-        {
-            name: 'date',
-            render: (updateFilter) => (
-                <div ref={dateRef}>
-                    <div className="  ">
-                        <input
-                            value={`${selectedRange[0].startDate.toLocaleDateString()} - ${selectedRange[0].endDate.toLocaleDateString()}`}
-                            onClick={() => handleDateOpen()}
-                            className="basic-input"
-                            type="text"
-                            placeholder={'DD/MM/YYYY'}
-                        />
-                    </div>
-                    {openDatePicker && (
-                        <div className="date-picker-section-wrapper" id="date-picker-wrapper">
-                            <DateRangePicker
-                                ranges={selectedRange}
-                                months={1}
-                                direction="vertical"
-                                scroll={{ enabled: true }}
-                                maxDate={new Date()}
-                                onChange={(ranges: RangeKeyDict) => {
-                                    const selection: Range = ranges.selection;
+        // {
+        //     name: 'date',
+        //     render: (updateFilter) => (
+        //         <div ref={dateRef}>
+        //             <div className="  ">
+        //                 <input
+        //                     value={`${selectedRange[0].startDate.toLocaleDateString()} - ${selectedRange[0].endDate.toLocaleDateString()}`}
+        //                     onClick={() => handleDateOpen()}
+        //                     className="basic-input"
+        //                     type="text"
+        //                     placeholder={'DD/MM/YYYY'}
+        //                 />
+        //             </div>
+        //             {openDatePicker && (
+        //                 <div className="date-picker-section-wrapper" id="date-picker-wrapper">
+        //                     <DateRangePicker
+        //                         ranges={selectedRange}
+        //                         months={1}
+        //                         direction="vertical"
+        //                         scroll={{ enabled: true }}
+        //                         maxDate={new Date()}
+        //                         onChange={(ranges: RangeKeyDict) => {
+        //                             const selection: Range = ranges.selection;
 
-                                    if (selection?.endDate instanceof Date) {
-                                        // Set end of day to endDate
-                                        selection.endDate.setHours(23, 59, 59, 999);
-                                    }
+        //                             if (selection?.endDate instanceof Date) {
+        //                                 // Set end of day to endDate
+        //                                 selection.endDate.setHours(23, 59, 59, 999);
+        //                             }
 
-                                    // Update local range state
-                                    setSelectedRange([
-                                        {
-                                            startDate: selection.startDate || new Date(),
-                                            endDate: selection.endDate || new Date(),
-                                            key: selection.key || 'selection',
-                                        },
-                                    ]);
+        //                             // Update local range state
+        //                             setSelectedRange([
+        //                                 {
+        //                                     startDate: selection.startDate || new Date(),
+        //                                     endDate: selection.endDate || new Date(),
+        //                                     key: selection.key || 'selection',
+        //                                 },
+        //                             ]);
 
-                                    // Update external filters (could be used by table or search logic)
-                                    updateFilter('date', {
-                                        start_date: selection.startDate,
-                                        end_date: selection.endDate,
-                                    });
-                                }}
-                            />
-                        </div>
-                    )}
-                </div>
-            ),
-        },
+        //                             // Update external filters (could be used by table or search logic)
+        //                             updateFilter('date', {
+        //                                 start_date: selection.startDate,
+        //                                 end_date: selection.endDate,
+        //                             });
+        //                         }}
+        //                     />
+        //                 </div>
+        //             )}
+        //         </div>
+        //     ),
+        // },
     ];
-
     const BulkAction: React.FC = () => (
         <div className="bulk-actiondddddddd">
             <select name="action" className="basic-select" ref={bulkSelectRef}>

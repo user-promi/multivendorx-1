@@ -1,5 +1,4 @@
 import { AdminBreadcrumbs } from 'zyra';
-import StoreSupport from './storeSupport';
 import RefundRequest from './refundRequest';
 import AbuseReports from './abuseReports';
 import StoreReviews from './storeReviews ';
