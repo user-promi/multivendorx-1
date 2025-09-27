@@ -41,7 +41,6 @@ const RefundRequest: React.FC = () => {
                 setPageCount(Math.ceil(response.data / pagination.pageSize));
             })
             .catch(() => {
-                setError(__('Failed to load total rows', 'multivendorx'));
             });
     }, []);
 
@@ -68,10 +67,9 @@ const RefundRequest: React.FC = () => {
             },
         })
             .then((response) => {
-                setData(response.data || []);
+                setData(response.data.stores || []);
             })
             .catch(() => {
-                setError(__('Failed to load stores', 'multivendorx'));
                 setData([]);
             });
     }
