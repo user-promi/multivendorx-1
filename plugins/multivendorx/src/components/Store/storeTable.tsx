@@ -73,11 +73,11 @@ const StoreTable: React.FC = () => {
             params: {
                 page: currentPage,
                 row: rowsPerPage,
-                status: typeCount === 'all' ? '' : typeCount,
+                filter_status: typeCount === 'all' ? '' : typeCount,
             },
         })
             .then((response) => {
-                setData(response.data || []);
+                setData(response.data.stores || []);
                 setStoreStatus( [
                     {
                         key: 'all',
