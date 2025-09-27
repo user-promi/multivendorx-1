@@ -81,6 +81,7 @@ a {
                 padding: 0.625rem;
                 border-radius: 0.375rem;
                 gap: 0.5rem;
+                text-decoration: none;
 
                 .tab-name {
                     display: flex;
@@ -604,6 +605,7 @@ a {
     padding-bottom: 1rem;
     margin-bottom: 1rem;
     border-bottom: $border-light-small;
+    align-items: center;
 
     .page-title {
         display: flex;

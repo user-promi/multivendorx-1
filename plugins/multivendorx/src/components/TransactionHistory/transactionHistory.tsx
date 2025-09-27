@@ -4,8 +4,9 @@ import { __ } from '@wordpress/i18n';
 import "../Announcements/announcements.scss";
 import TransactionHistoryTable from './transactionHistoryTable';
 import TransactionDataTable from './transactionDataTable';
-import { AdminBreadcrumbs, getApiLink, SelectInput } from 'zyra';
+import { AdminBreadcrumbs, CalendarInput, getApiLink, SelectInput } from 'zyra';
 import axios from 'axios';
+import storeImage from "../../assets/images/default.png";
 
 export const TransactionHistory: React.FC = () => {
     const [overview, setOverview] = useState<any[]>([]);
@@ -50,12 +51,12 @@ export const TransactionHistory: React.FC = () => {
             .then((response) => {
                 const data = response?.data || {};
                 const dynamicOverview = [
-                    { id: 'total_balance', label: 'Total Balance', count: data.balance ?? 0, icon: 'adminlib-wallet' },
-                    { id: 'pending', label: 'Pending', count: data.pending ?? 0, icon: 'adminlib-clock' },
-                    { id: 'locked', label: 'Locked', count: data.locking_balance ?? 0, icon: 'adminlib-lock' },
-                    { id: 'withdrawable', label: 'Withdrawable', count: data.withdrawable ?? 0, icon: 'adminlib-cash' },
-                    { id: 'commission', label: 'Commission', count: data.commission ?? 0, icon: 'adminlib-star' },
-                    { id: 'gateway_fees', label: 'Gateway Fees', count: data.gateway_fees ?? 0, icon: 'adminlib-credit-card' },
+                    { id: 'commission', label: 'Commission', count: data.commission ?? 0, icon: 'adminlib-star green' },
+                    { id: 'pending', label: 'Shipping Tax', count: data.pending ?? 0, icon: 'adminlib-clock blue' },
+                    { id: 'withdrawable', label: 'Fasilator Free', count: data.withdrawable ?? 0, icon: 'adminlib-star yellow' },
+                    { id: 'gateway_fees', label: 'Gateway Fees', count: data.gateway_fees ?? 0, icon: 'adminlib-credit-card red' },
+                    { id: 'total_balance', label: 'Total Balance', count: data.balance ?? 0, icon: 'adminlib-star green' },
+                    { id: 'gateway_fees', label: 'Gateway Fees', count: data.gateway_fees ?? 0, icon: 'adminlib-credit-card red' },
                 ];
                 setOverview(dynamicOverview);
             })
@@ -114,43 +115,70 @@ export const TransactionHistory: React.FC = () => {
             />
 
             <div className="admin-dashboard">
-                <div className="header">
-                    <div className="title-wrapper">
-                        <div className="title">
-                            {selectedStore ? `You are viewing ${selectedStore.label}` : "Select a store"}
-                        </div>
-                        <div className="des">Here's what's happening with your marketplace today</div>
-                    </div>
-                </div>
-
                 <div className="row">
-
-                    <div className="overview-card-wrapper">
-                        {overview.map((stat) => (
-                            <div className="action" key={stat.id}>
-                                <div className="title">
-                                    {appLocalizer.currency_symbol}{stat.count} <i className={stat.icon}></i>
-                                </div>
-                                <div className="description">{stat.label}</div>
+                    <div className="header">
+                        <div className="title-wrapper">
+                            <div className="title">
+                                <img src={storeImage} alt="" />
+                                {selectedStore ? ` ${selectedStore.label}` : "Select a store"}
                             </div>
-                        ))}
+                            <div className="des">Here's what's happening with your marketplace today</div>
+                        </div>
+                        <div className="right">
+                            <div className="analytics-container">
+                                <div className="analytics-item">
+                                    <div className="analytics-icon">
+                                        <i className="adminlib-cart green"></i>
+                                    </div>
+                                    <div className="details">
+                                        <div className="number">$5002</div>
+                                        <div className="text">Wallet Balance</div>
+                                    </div>
+                                </div>
+                                <div className="analytics-item">
+                                    <div className="analytics-icon">
+                                        <i className="adminlib-cart red"></i>
+                                    </div>
+                                    <div className="details">
+                                        <div className="number">$5002</div>
+                                        <div className="text">Upcoming Balance </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-
                 </div>
-
                 <div className="row">
                     <div className="column">
-                        <div className="tab-titles">
-                            {tabs.map((tab) => (
-                                <div
-                                    key={tab.id}
-                                    className={`title ${activeTab === tab.id ? "active" : ""}`}
-                                    onClick={() => setActiveTab(tab.id)}
-                                >
-                                    <p><i className="adminlib-cart"></i>{tab.label}</p>
+                        <div className="card-header">
+                            <div className="left">
+                                <div className="tab-titles">
+                                    {tabs.map((tab) => (
+                                        <div
+                                            key={tab.id}
+                                            className={`title ${activeTab === tab.id ? "active" : ""}`}
+                                            onClick={() => setActiveTab(tab.id)}
+                                        >
+                                            <p><i className="adminlib-cart"></i>{tab.label}</p>
+                                        </div>
+                                    ))}
                                 </div>
-                            ))}
+                            </div>
+                            <div className="right">
+                                <CalendarInput
+                                    wrapperClass=""
+                                    inputClass=""
+                                // onChange={(range) => {
+                                //     console.log('Selected Range:', range);
+                                //     updateFilter('date', {
+                                //         start_date: range.startDate,
+                                //         end_date: range.endDate,
+                                //     });
+                                // }}
+                                />
+                            </div>
                         </div>
+
 
                         <div className="tab-content">
                             {tabs.map(

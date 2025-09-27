@@ -41,104 +41,27 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
                 'slug'    => 'dashboard',
                 'submenu' => array(),
                 'capability' => ['edit_products']
-            ),            
-            'store-settings' => array(
-                'name'    => 'Store Settings',
-                'slug'    => 'store-settings',
-                'icon'    => 'adminlib-storefront',
-                'submenu' => array(
-                    array(
-                        'key'  => 'general',
-                        'name' => 'General',
-                        'slug' => 'general',
-                        'icon'    => 'adminlib-cart',
-                        'capability' => ['read_products', 'edit_products', 'delete_products']
-                    ),
-                    array(
-                        'key'  => 'appearance',
-                        'name' => 'Appearance',
-                        'slug' => 'appearance',
-                        'icon'    => 'adminlib-cart',
-                        'capability' => ['read_products', 'edit_products', 'delete_products']
-                    ),
-                    array(
-                        'key'  => 'store-address-location',
-                        'name' => 'Business Address & Location',
-                        'slug' => 'store-address-location',
-                        'icon'    => 'adminlib-cart',
-                        'capability' => ['read_products', 'edit_products', 'upload_files']
-                    ),
-                     array(
-                        'key'  => 'contact-information',
-                        'name' => 'Contact Information',
-                        'slug' => 'contact-information',
-                        'icon'    => 'adminlib-cart',
-                        'capability' => ['read_products', 'edit_products', 'upload_files']
-                    ),
-                    array(
-                        'key'  => 'social-media',
-                        'name' => 'Social Media',
-                        'slug' => 'social-media',
-                        'icon'    => 'adminlib-cart',
-                        'capability' => ['read_products', 'edit_products', 'upload_files']
-                    ),                    
-                    array(
-                        'key'  => 'payout-configuration',
-                        'name' => 'Payout',
-                        'slug' => 'payout-configuration',
-                        'icon'    => 'adminlib-cart',
-                        'capability' => ['read_products', 'edit_products', 'upload_files']
-                    ),
-                    array(
-                        'key'  => 'shop-policies',
-                        'name' => 'Policies',
-                        'slug' => 'shop-policies',
-                        'icon'    => 'adminlib-cart',
-                        'capability' => ['read_products', 'edit_products', 'upload_files']
-                    ),
-                    array(
-                        'key'  => 'privacy',
-                        'name' => 'Privacy',
-                        'slug' => 'privacy',
-                        'icon'    => 'adminlib-cart',
-                        'capability' => ['read_products', 'edit_products', 'upload_files']
-                    ),
-                    array(
-                        'key'  => 'seo_visibility',
-                        'name' => 'SEO & visibility',
-                        'slug' => 'seo_visibility',
-                        'icon'    => 'adminlib-cart',
-                        'capability' => ['read_products', 'edit_products', 'upload_files']
-                    ),
-                    array(
-                        'key'  => 'shipping',
-                        'name' => 'Shipping',
-                        'slug' => 'shipping',
-                        'icon'    => 'adminlib-cart',
-                        'capability' => ['read_products', 'edit_products', 'upload_files']
-                    ), 
-                    ),
-                'capability' => ['manage_products']
-            ),
+            ), 
             'products' => array(
                 'name'    => 'Products',
                 'slug'    => 'products',
                 'icon'    => 'adminlib-single-product',
-                'submenu' => array(
+            	'submenu' => array(),
+                /*'submenu' => array(
                     array(
                         'key'  => 'products',
                         'name' => 'All Products',
                         'slug' => 'products',
                         'capability' => ['read_shop_orders', 'edit_shop_orders', 'delete_shop_orders']
-                    ),
-                    array(
-                        'key'  => 'edit-product',
+                    ), array(
+                        'key'  => 'edit',
                         'name' => 'Edit Product',
-                        'slug' => 'edit-product',
+                        'slug' => 'edit',
                         'capability' => ['read_shop_orders', 'edit_shop_orders', 'delete_shop_orders']
                     ),
-                ),
-                'capability' => ['manage_products']
+                ),*/
+                'capability' => ['manage_products'],
+            	'capability-edit' => ['manage_products']
             ),
             'orders' => array(
                 'name'    => 'Orders',
@@ -150,13 +73,19 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
                         'name' => 'All Orders',
                         'slug' => 'all-orders',
                         'capability' => ['read_shop_orders', 'edit_shop_orders', 'delete_shop_orders']
+                    ),                    
+                    array(
+                        'key'  => 'refund',
+                        'name' => 'Refund',
+                        'slug' => 'refund',
+                        'capability' => ['read_shop_coupons', 'edit_shop_coupons']
                     ),
                     array(
-                        'key'  => 'refund-requests',
-                        'name' => 'Refund Requests',
-                        'slug' => 'refund-requests',
-                        'capability' => ['read_shop_orders', 'edit_shop_orders', 'delete_shop_orders']
-                    ),
+                        'key'  => 'order-details',
+                        'name' => 'Order Details',
+                        'slug' => 'order-details',
+                        'capability' => ['read_shop_coupons', 'edit_shop_coupons']
+                    )
                 ),
                 'capability' => ['read_shop_orders']
 
@@ -178,38 +107,6 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
                         'slug' => 'overview',
                         'capability' => ['read_shop_coupons', 'edit_shop_coupons', 'delete_shop_coupons']
                     ),
-                    array(
-                        'key'  => 'banking overview',
-                        'name' => 'Banking Overview',
-                        'slug' => 'banking overview',
-                        'capability' => ['read_shop_coupons', 'edit_shop_coupons']
-                    )
-                ),
-                'capability' => ['read_shop_coupons']
-            ),
-			'payments' => array(
-                'name'    => 'Payments',
-                'slug'    => 'payments',
-                'icon'    => 'adminlib-payment',
-                'submenu' => array(
-                    array(
-                        'key'  => 'withdrawl',
-                        'name' => 'Withdrawal',
-                        'slug' => 'withdrawl',
-                        'capability' => ['read_shop_coupons', 'edit_shop_coupons', 'delete_shop_coupons']
-                    ),
-                    array(
-                        'key'  => 'history',
-                        'name' => 'History',
-                        'slug' => 'history',
-                        'capability' => ['read_shop_coupons', 'edit_shop_coupons']
-                    ),
-                    array(
-                        'key'  => 'refund',
-                        'name' => 'Refund',
-                        'slug' => 'refund',
-                        'capability' => ['read_shop_coupons', 'edit_shop_coupons']
-                    )
                 ),
                 'capability' => ['read_shop_coupons']
             ),
@@ -218,6 +115,13 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
                 'slug'    => 'finance',
                 'icon'    => 'adminlib-finance',
                 'submenu' => array(
+                    
+                    array(
+                        'key'  => 'payouts',
+                        'name' => 'Payout',
+                        'slug' => 'payouts',
+                        'capability' => ['read_shop_coupons', 'edit_shop_coupons']
+                    ),
                     array(
                         'key'  => 'transactions',
                         'name' => 'Transactions',
@@ -230,24 +134,6 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
                         'slug' => 'commissions',
                         'capability' => ['read_shop_coupons', 'edit_shop_coupons']
                     ),
-                    array(
-                        'key'  => 'invoices',
-                        'name' => 'Invoices',
-                        'slug' => 'invoices',
-                        'capability' => ['read_shop_coupons', 'edit_shop_coupons']
-                    ),
-                    array(
-                        'key'  => 'taxes',
-                        'name' => 'Taxes',
-                        'slug' => 'taxes',
-                        'capability' => ['read_shop_coupons', 'edit_shop_coupons']
-                    ),
-                    array(
-                        'key'  => 'withdrawals',
-                        'name' => 'Withdrawals',
-                        'slug' => 'withdrawals',
-                        'capability' => ['read_shop_coupons', 'edit_shop_coupons']
-                    )
                 ),
                 'capability' => ['read_shop_coupons']
             ),
@@ -277,10 +163,90 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
                 ),
                 'capability' => ['manage_users']
             ),
+                       
+            'settings' => array(
+                'name'    => 'Settings',
+                'slug'    => 'settings',
+                'icon'    => 'adminlib-storefront',
+                'capability' => ['read_products'],
+                // 'submenu' => array(
+                //     array(
+                //         'key'  => 'general',
+                //         'name' => 'General',
+                //         'slug' => 'general',
+                //         'icon'    => 'adminlib-cart',
+                //         'capability' => ['read_products', 'edit_products', 'delete_products']
+                //     ),
+                //     array(
+                //         'key'  => 'appearance',
+                //         'name' => 'Appearance',
+                //         'slug' => 'appearance',
+                //         'icon'    => 'adminlib-cart',
+                //         'capability' => ['read_products', 'edit_products', 'delete_products']
+                //     ),
+                //     array(
+                //         'key'  => 'store-address-location',
+                //         'name' => 'Business Address & Location',
+                //         'slug' => 'store-address-location',
+                //         'icon'    => 'adminlib-cart',
+                //         'capability' => ['read_products', 'edit_products', 'upload_files']
+                //     ),
+                //      array(
+                //         'key'  => 'contact-information',
+                //         'name' => 'Contact Information',
+                //         'slug' => 'contact-information',
+                //         'icon'    => 'adminlib-cart',
+                //         'capability' => ['read_products', 'edit_products', 'upload_files']
+                //     ),
+                //     array(
+                //         'key'  => 'social-media',
+                //         'name' => 'Social Media',
+                //         'slug' => 'social-media',
+                //         'icon'    => 'adminlib-cart',
+                //         'capability' => ['read_products', 'edit_products', 'upload_files']
+                //     ),                    
+                //     array(
+                //         'key'  => 'payment-configuration',
+                //         'name' => 'Payment',
+                //         'slug' => 'payment-configuration',
+                //         'icon'    => 'adminlib-cart',
+                //         'capability' => ['read_products', 'edit_products', 'upload_files']
+                //     ),
+                //     array(
+                //         'key'  => 'shop-policies',
+                //         'name' => 'Policies',
+                //         'slug' => 'shop-policies',
+                //         'icon'    => 'adminlib-cart',
+                //         'capability' => ['read_products', 'edit_products', 'upload_files']
+                //     ),
+                //     array(
+                //         'key'  => 'privacy',
+                //         'name' => 'Privacy',
+                //         'slug' => 'privacy',
+                //         'icon'    => 'adminlib-cart',
+                //         'capability' => ['read_products', 'edit_products', 'upload_files']
+                //     ),
+                //     array(
+                //         'key'  => 'seo_visibility',
+                //         'name' => 'SEO & visibility',
+                //         'slug' => 'seo_visibility',
+                //         'icon'    => 'adminlib-cart',
+                //         'capability' => ['read_products', 'edit_products', 'upload_files']
+                //     ),
+                //     array(
+                //         'key'  => 'shipping',
+                //         'name' => 'Shipping',
+                //         'slug' => 'shipping',
+                //         'icon'    => 'adminlib-cart',
+                //         'capability' => ['read_products', 'edit_products', 'upload_files']
+                //     ), 
+                //     ),
+                'capability' => ['manage_products']
+            ),
 			 'knowledgebase' => array(
-                'name'    => 'Reviews',
+                'name'    => 'Knowledgebase',
                 'icon'    => 'adminlib-cart',
-                'slug'    => 'reviews',
+                'slug'    => 'knowledgebase',
                 'capability' => ['manage_users']
             ),
         );

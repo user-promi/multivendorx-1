@@ -36,10 +36,20 @@ class Rest {
         add_filter('woocommerce_rest_product_object_query', array($this, 'filter_products_by_meta_exists'), 10, 2);
         add_filter('woocommerce_rest_coupon_object_query', array($this, 'filter_coupons_by_meta_exists'), 10, 2);
         add_filter('woocommerce_analytics_products_query_args', array($this, 'filter_low_stock_by_meta_exists'), 10, 1);
+        add_filter('comments_open', array($this, 'give_permmission_to_page') , 10, 2);
+
     }
 
+    public function give_permmission_to_page($open, $post_id) {
+        $post = get_post($post_id);
+
+        if ($post && $post->post_type === 'page') { 
+            return true;
+        }
+        return $open;
+    }
+    
     public function filter_low_stock_by_meta_exists( $args ) {
-        file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":orders:args : " . var_export($args, true) . "\n", FILE_APPEND);
         if ( isset( $request['meta_key'] ) && $request['meta_key'] === 'multivendorx_store_id' ) {
             
             // Build the meta query to check for the existence of the MultiVendorX key
@@ -53,35 +63,42 @@ class Rest {
             }
             $args['meta_query'][] = $meta_query;
         }
-        file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":orders:args : " . var_export($args, true) . "\n", FILE_APPEND);
 
         return $args;
     }
 
-     /**
-     * Filter orders by store_id in line items
+    /**
+     * Filter orders dynamically by meta key and optionally by value
      */
     public function filter_orders_by_store_id( $args, $request ) {
-        if ( ! isset( $request['store_id'] ) ) {
+
+        // If no key is provided, return args unchanged
+        if ( empty( $request['key'] ) ) {
             return $args;
         }
-    
-        $store_id = absint( $request['store_id'] );
+
+        $meta_key   = sanitize_key( $request['key'] );
+        $meta_value = isset( $request['store_id'] ) ? absint( $request['store_id'] ) : null;
 
         $store_meta_query = array(
-            'key'   => 'multivendorx_store_id',
-            'value' => $store_id,
-            'compare' => '='
+            'key'     => $meta_key,
+            'compare' => $meta_value !== null ? '=' : 'EXISTS',
         );
-    
+
+        if ( $meta_value !== null ) {
+            $store_meta_query['value'] = $meta_value;
+        }
+
         if ( isset( $args['meta_query'] ) ) {
             $args['meta_query']['relation'] = 'AND';
             $args['meta_query'][] = $store_meta_query;
         } else {
             $args['meta_query'] = array( $store_meta_query );
         }
+
         return $args;
     }
+
 
     /**
      * Filter WooCommerce products by meta key existence.
@@ -176,6 +193,21 @@ class Rest {
      * Register REST API routes.
      */
     public function register_rest_routes() {
+        
+        register_meta('comment', 'store_rating', [
+            'type' => 'number',
+            'single' => true,
+            'show_in_rest' => true, // important to show in REST API
+            'description' => 'Customer rating for the store',
+        ]);
+    
+        // Register store_rating_id meta
+        register_meta('comment', 'store_rating_id', [
+            'type' => 'number',
+            'single' => true,
+            'show_in_rest' => true,
+            'description' => 'Store ID associated with the rating',
+        ]);
 
         register_meta('user', 'multivendorx_dashboard_tasks', [
             'type' => 'array',

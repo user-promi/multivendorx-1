@@ -1,22 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Tooltip } from "react-leaflet";
 import { Cell, Legend, PieChart, ResponsiveContainer, Pie, BarChart, CartesianGrid, XAxis, YAxis, Bar, LineChart, Line } from "recharts";
 import { __ } from '@wordpress/i18n';
 import { Table, TableCell } from "zyra";
 import axios from "axios";
+import { PaginationState, RowSelectionState } from "@tanstack/react-table";
 
-type Product = {
-  id: number;
-  title: string;
-  price: string;
-};
-const pieData = [
-  { name: "Admin", value: 1200 },
-  { name: "Vendor", value: 2400 },
-  { name: "Shipping", value: 800 },
-  { name: "Free", value: 200 },
-];
-const COLORS = ["#5007aa", "#00c49f", "#ff7300", "#d400ffff"];
 const overview = [
   {
     id: 'sales',
@@ -43,43 +32,7 @@ const overview = [
     icon: 'adminlib-global-community blue',
   },
 ];
-const products: Product[] = [
-  {
-    id: 1,
-    title: "Total Admin Net Earning",
-    price: "$5,072.31",
-  },
-  {
-    id: 1,
-    title: "Total Vendor Commission",
-    price: "$1,713.85",
-  },
-  {
-    id: 1,
-    title: "Total Vendor Net Commission",
-    price: "$75",
-  },
-  {
-    id: 1,
-    title: "Total Sub Total",
-    price: "$1,713.85",
-  },
-  {
-    id: 1,
-    title: "Shipping",
-    price: "$0",
-  },
-];
-const overviewData = [
-  { name: "Jan", orders: 120, sold_out: 30 },
-  { name: "Feb", orders: 90, sold_out: 20 },
-  { name: "Mar", orders: 150, sold_out: 40 },
-  { name: "Apr", orders: 170, sold_out: 35 },
-  { name: "May", orders: 140, sold_out: 25 },
-  { name: "Jun", orders: 180, sold_out: 50 },
-  { name: "Jul", orders: 200, sold_out: 45 },
-  { name: "Aug", orders: 160, sold_out: 30 },
-];
+
 const demoData: StoreRow[] = [
   { id: 54211, vendor: "John's Electronics", amount: "$1200", commission: "$120", date: "2025-09-01", status: "Paid" },
   { id: 84211, vendor: "Jane's Apparel", amount: "$850", commission: "$85", date: "2025-09-02", status: "Unpaid" },
@@ -102,104 +55,147 @@ const data = [
   { month: "Jul", revenue: 5200, net_sale: 3400, admin_amount: 1700 },
   { month: "Aug", revenue: 4700, net_sale: 2900, admin_amount: 1500 },
 ];
-const columns: ColumnDef<StoreRow>[] = [
-  {
-    id: 'select',
-    header: ({ table }) => (
-      <input
-        type="checkbox"
-        checked={table.getIsAllRowsSelected()}
-        onChange={table.getToggleAllRowsSelectedHandler()}
-      />
-    ),
-    cell: ({ row }) => (
-      <input
-        type="checkbox"
-        checked={row.getIsSelected()}
-        onChange={row.getToggleSelectedHandler()}
-      />
-    ),
-  },
-  {
-    header: __('Product title', 'multivendorx'),
-    cell: ({ row }) => (
-      <TableCell title={row.original.store_name || ''}>
-        #{row.original.id || '-'}
-      </TableCell>
-    ),
-  },
-  {
-    header: __('SKU', 'multivendorx'),
-    cell: ({ row }) => (
-      <TableCell title={row.original.status || ''}>
-        {row.original.status === "Paid" && (
-          <span className="admin-badge green">Paid</span>
-        )}
-        {row.original.status === "Unpaid" && (
-          <span className="admin-badge red">Unpaid</span>
-        )}
-      </TableCell>
-    ),
-  },
-  {
-    header: __('Items sold', 'multivendorx'),
-    cell: ({ row }) => (
-      <TableCell title={row.original.store_slug || ''}>
-        {row.original.date || '-'}
-      </TableCell>
-    ),
-  },
-  {
-    header: __('Net sales', 'multivendorx'),
-    cell: ({ row }) => (
-      <TableCell title={row.original.store_name || ''}>
-        {row.original.vendor || '-'}
-      </TableCell>
-    ),
-  },
-  {
-    header: __('Orders', 'multivendorx'),
-    cell: ({ row }) => (
-      <TableCell title={row.original.store_slug || ''}>
-        {row.original.amount || '-'}
-      </TableCell>
-    ),
-  },
-  {
-    header: __('Category', 'multivendorx'),
-    cell: ({ row }) => (
-      <TableCell title={row.original.store_slug || ''}>
-        {row.original.commission || '-'}
-      </TableCell>
-    ),
-  },
-  {
-    header: __('Variations', 'multivendorx'),
-    cell: ({ row }) => (
-      <TableCell title={row.original.store_slug || ''}>
-        {row.original.amount || '-'}
-      </TableCell>
-    ),
-  },
-  {
-    header: __('Status', 'multivendorx'),
-    cell: ({ row }) => (
-      <TableCell title={row.original.store_slug || ''}>
-        {row.original.commission || '-'}
-      </TableCell>
-    ),
-  },
-  {
-    header: __('Stock', 'multivendorx'),
-    cell: ({ row }) => (
-      <TableCell title={row.original.store_slug || ''}>
-        {row.original.commission || '-'}
-      </TableCell>
-    ),
-  },
-];
+type ProductRow = {
+  id: number;
+  title: string;
+  sku: string;
+  itemsSold: number;
+  netSales: string;
+  orders: number;
+  category: string;
+  stock: string;
+};
 
 const Revenue: React.FC = () => {
+  const [demoData, setDemoData] = useState<ProductRow[]>([]);
+  const [pagination, setPagination] = useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 10,
+  });
+  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+  const [totalRows, setTotalRows] = useState<number>(0);
+
+  const requestApiForData = async (rowsPerPage: number, currentPage: number) => {
+    try {
+      // 1. Fetch products filtered by your custom key
+      const productResponse = await axios.get(`${appLocalizer.apiUrl}/wc/v3/products`, {
+        headers: { "X-WP-Nonce": appLocalizer.nonce },
+        params: {
+          per_page: rowsPerPage,
+          page: currentPage + 1,
+          meta_key: "multivendorx_store_id",   // your custom key
+        },
+      });
+
+      const productCount = parseInt(productResponse.headers['x-wp-total'] || '0', 10);
+      setTotalRows(productCount);
+      const products = productResponse.data;
+
+      // 2. Map products to table rows
+      const tableData: ProductRow[] = await Promise.all(
+        products.map(async (product: any) => {
+          // Fetch **only 1 order** to get total count from headers
+          const ordersResponse = await axios.get(`${appLocalizer.apiUrl}/wc/v3/orders`, {
+            headers: { "X-WP-Nonce": appLocalizer.nonce },
+            params: {
+              per_page: 1,         // fetch only 1 order
+              product: product.id, // filter by product
+            },
+          });
+
+          // Total orders for this product from header
+          const orderCount = parseInt(ordersResponse.headers['x-wp-total'] || '0', 10);
+
+          // Calculate net sales for this product
+          let netSales = 0;
+          const orders = ordersResponse.data;
+          orders.forEach((order: any) => {
+            order.line_items.forEach((item: any) => {
+              if (item.product_id === product.id) netSales += parseFloat(item.total);
+            });
+          });
+
+          return {
+            id: product.id,
+            title: product.name,
+            sku: product.sku || "-",
+            itemsSold: product.total_sales || 0,
+            netSales: `${appLocalizer.currency_symbol}${netSales.toFixed(2)}`,
+            orders: orderCount,
+            category: product.categories?.map((c: any) => c.name).join(", ") || "-",
+            stock: product.stock_status,
+          };
+        })
+      );
+
+      setDemoData(tableData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+
+
+  useEffect(() => {
+    requestApiForData(pagination.pageSize, pagination.pageIndex);
+  }, [pagination.pageSize, pagination.pageIndex]);
+
+  const columns: ColumnDef<ProductRow>[] = [
+    {
+      id: 'select',
+      header: ({ table }) => (
+        <input
+          type="checkbox"
+          checked={table.getIsAllRowsSelected()}
+          onChange={table.getToggleAllRowsSelectedHandler()}
+        />
+      ),
+      cell: ({ row }) => (
+        <input
+          type="checkbox"
+          checked={row.getIsSelected()}
+          onChange={row.getToggleSelectedHandler()}
+        />
+      ),
+    },
+    {
+      header: __('Product title', 'multivendorx'),
+      cell: ({ row }) => {
+        const editLink = `${appLocalizer.siteUrl}/wp-admin/post.php?post=${row.original.id}&action=edit`;
+        return (
+          <TableCell>
+            <a href={editLink} target="_blank" rel="noopener noreferrer">
+              {row.original.title}
+            </a>
+          </TableCell>
+        );
+      },
+    },
+    {
+      header: __('SKU', 'multivendorx'),
+      cell: ({ row }) => <TableCell>{row.original.sku}</TableCell>,
+    },
+    {
+      header: __('Items sold', 'multivendorx'),
+      cell: ({ row }) => <TableCell>{row.original.itemsSold}</TableCell>,
+    },
+    {
+      header: __('Net sales', 'multivendorx'),
+      cell: ({ row }) => <TableCell>{row.original.netSales}</TableCell>,
+    },
+    {
+      header: __('Orders', 'multivendorx'),
+      cell: ({ row }) => <TableCell>{row.original.orders}</TableCell>,
+    },
+    {
+      header: __('Category', 'multivendorx'),
+      cell: ({ row }) => <TableCell>{row.original.category}</TableCell>,
+    },
+    {
+      header: __('Stock', 'multivendorx'),
+      cell: ({ row }) => <TableCell>{row.original.stock}</TableCell>,
+    },
+  ];
 
   return (
     <div className="dashboard-overview">
@@ -254,50 +250,6 @@ const Revenue: React.FC = () => {
         </div>
 
       </div>
-
-      {/* <div className="row">
-        <div className="column">
-          <div className="card-header">
-            <div className="left">
-              <div className="title">
-                Category Performance
-              </div>
-            </div>
-          </div>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={overviewData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="orders" fill="#5007aa" barSize={40} name="Orders" />
-              <Bar dataKey="sold_out" fill="#00c49f" barSize={40} name="Sold Out" />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-        <div className="column">
-          <div className="card-header">
-            <div className="left">
-              <div className="title">
-                Stock Status Overview
-              </div>
-            </div>
-          </div>
-          <ResponsiveContainer width="100%" height={300}>
-            <PieChart>
-              <Pie data={pieData} cx="50%" cy="50%" outerRadius={100} dataKey="value" label>
-                {pieData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                ))}
-              </Pie>
-              <Tooltip />
-              <Legend />
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
-
-      </div> */}
       <div className="row">
         <div className="column">
           <div className="card-header">
@@ -746,19 +698,20 @@ const Revenue: React.FC = () => {
               </div>
             </div>
           </div>
-          {/* <Table
+          <Table
             data={demoData}
             columns={columns as ColumnDef<Record<string, any>, any>[]}
-            // rowSelection={rowSelection}
-            // onRowSelectionChange={setRowSelection}
+            rowSelection={rowSelection}
+            onRowSelectionChange={setRowSelection}
             defaultRowsPerPage={10}
-            // pageCount={pageCount}
-            // pagination={pagination}
-            // onPaginationChange={setPagination}
-            // handlePagination={requestApiForData}
+            pageCount={1}
+            pagination={pagination}
+            onPaginationChange={setPagination}
+            handlePagination={requestApiForData}
             perPageOption={[10, 25, 50]}
             typeCounts={[]}
-          /> */}
+            totalCounts={totalRows}
+          />
         </div>
       </div>
     </div>

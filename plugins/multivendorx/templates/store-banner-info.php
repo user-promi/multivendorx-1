@@ -62,32 +62,47 @@ $description = $store->get('description');
             </div>
         </div>
 
-        <div class='mvx-banner-below'>
-            <div class='mvx-profile-area'>
-                <img src='<?php echo esc_attr($profile); ?>' class='mvx-profile-imgcls' />
-            </div>
-            <div>
-                <div class="mvx-banner-middle">
-                    <div class="mvx-heading"><?php echo esc_html($store->get('name')) ?></div>
+            <div class='mvx-banner-below'>
+                <div class='mvx-profile-area'>
+                    <img src='<?php echo esc_attr($profile); ?>' class='mvx-profile-imgcls' />
                 </div>
-                <div class="mvx-contact-deatil">
-                            
-
-                    <?php do_action('mvx_after_vendor_information',$store_id);?>   
-                </div>
-
-                <?php if (!empty($description)) { ?>                
-                    <div class="description_data"> 
-                        <?php echo $description; ?>
+                <div>
+                    <div class="mvx-banner-middle">
+                        <div class="mvx-heading"><?php echo esc_html($store->get('name')); ?></div>
                     </div>
-                <?php } ?>
+                    <div class="mvx-contact-detail">
+                        <?php 
+                        // Show email if not hidden
+                        if (!empty($meta_data['email']) && ($meta_data['hideEmail'] ?? 'no') === 'no') {
+                            echo '<div class="store-email"><strong>Email:</strong> ' . esc_html($meta_data['email']) . '</div>';
+                        }
+
+                        // Show phone if not hidden
+                        if (!empty($meta_data['phone']) && ($meta_data['hidePhone'] ?? 'no') === 'no') {
+                            echo '<div class="store-phone"><strong>Phone:</strong> ' . esc_html($meta_data['phone']) . '</div>';
+                        }
+
+                        // Show full address
+                        $address = trim(($meta_data['address_1'] ?? '') . ' ' . ($meta_data['address_2'] ?? ''));
+                        if (!empty($address)) {
+                            echo '<div class="store-address"><strong>Address:</strong> ' . esc_html($address) . '</div>';
+                        }
+
+                        do_action('mvx_after_vendor_information', $store_id);
+                        ?>
+                    </div>
+
+                    <?php if (!empty($description)) { ?>                
+                        <div class="description_data"> 
+                            <?php echo wp_kses_post($description); ?>
+                        </div>
+                    <?php } ?>
+                </div>
+
+                <div class="mvx_vendor_rating">
+                    <!-- You can insert vendor rating stars here -->
+                </div>  
             </div>
-
-            <div class="mvx_vendor_rating">
-                  
-            </div>  
-
-        </div>
 
     </div>
 </div>

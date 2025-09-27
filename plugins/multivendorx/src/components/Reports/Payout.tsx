@@ -58,6 +58,13 @@ const Transactions: React.FC = () => {
     pageSize: 10,
   });
   const [pageCount, setPageCount] = useState(0);
+    // Handle pagination and filter changes
+    const requestApiForData = (
+      rowsPerPage: number,
+      currentPage: number,
+    ) => {
+  
+    };
   type StoreRow = {
     id: number;
     vendor: string;
@@ -260,19 +267,19 @@ const Transactions: React.FC = () => {
               <span>Updated 1 month ago</span>
             </div>
           </div>
-          {/* <Table
+          <Table
             data={demoData}
             columns={columns as ColumnDef<Record<string, any>, any>[]}
             rowSelection={rowSelection}
             onRowSelectionChange={setRowSelection}
             defaultRowsPerPage={10}
-            // pageCount={pageCount}
-            // pagination={pagination}
+            pageCount={1}
+            pagination={pagination}
             onPaginationChange={setPagination}
-            // handlePagination={requestApiForData}
+            handlePagination={requestApiForData}
             perPageOption={[10, 25, 50]}
             typeCounts={[]}
-          /> */}
+          />
         </div>
       </div>
     </>

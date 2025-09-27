@@ -48,7 +48,7 @@ export default {
             //settings_link: appLocalizer.site_url,
             pro_module: true,
             req_pluging: [{ name: 'WooCommerce Booking', link: 'https://woocommerce.com/products/woocommerce-bookings/' }
-            ],
+                , { name: 'WooCommerce Accommodation Booking', link: 'https://woocommerce.com/products/woocommerce-accommodation-bookings/' }],
             category: ['marketplace_types', 'product_type'],
         },
         {
@@ -471,7 +471,7 @@ export default {
         },
         
         {
-            id: 'marketplace-refund',
+            id: 'marketplace-gateway',
             name: __('Payment Gateway Charge', 'multivendorx'),
             desc: "Payment gateway fees are deducted from vendor commissions by the admin, ensuring platform costs are covered automatically.",
             icon: 'adminlib-rules',
@@ -569,7 +569,7 @@ export default {
             icon: 'adminlib-rules',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/mvx-buddypress',
             pro_module: false,
-            req_pluging: [{ name: 'BuddyPress', link: 'href="https://wordpress.org/plugins/buddypress/' }],
+            req_pluging: [{ name: 'BuddyPress', link: 'https://wordpress.org/plugins/buddypress/' }],
             category: 'integration'
         },
         {

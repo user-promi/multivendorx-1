@@ -52,61 +52,21 @@ const Reports = () => {
       .then(response => console.log("analytics", response.data))
       .catch(error => console.error(error));
 
-    // 1. GET TOTAL PUBLISHED PRODUCTS COUNT
-    axios({
-      method: 'GET',
-      url: `${appLocalizer.apiUrl}/wc/v3/products`,
-      headers: { 'X-WP-Nonce': appLocalizer.nonce },
-      params: {
-        per_page: 1, // Minimize payload, only need the count
-        meta_key: 'multivendorx_store_id'
-      },
-    })
+      axios({
+        method: 'GET',
+        url: `${appLocalizer.apiUrl}/wc/v3/products`,
+        headers: { 'X-WP-Nonce': appLocalizer.nonce },
+        params: {
+          per_page: 100,                  // Number of orders to fetch
+          meta_key: 'multivendorx_store_id', // The meta key you want to check
+        },
+      })
       .then(response => {
-        // The total count is in the 'X-WP-Total' header
-        const totalProducts = response.headers['x-wp-total'];
-        console.log(`Total Published Products: ${totalProducts}`);
+        const ordersWithMeta = response.data;
+        console.log('prodyct with the meta key:', ordersWithMeta);
       })
       .catch(error => {
-        console.error('Error fetching total products:', error);
-      });
-
-    // 2. GET OUT-OF-STOCK PRODUCTS COUNT
-    axios({
-      method: 'GET',
-      url: `${appLocalizer.apiUrl}/wc/v3/products`,
-      headers: { 'X-WP-Nonce': appLocalizer.nonce },
-      params: {
-        per_page: 1, // Minimize payload
-        stock_status: 'outofstock', // Filter by stock status
-        meta_key: 'multivendorx_store_id'
-      },
-    })
-      .then(response => {
-        const outOfStockCount = response.headers['x-wp-total'];
-        console.log(`Out-of-Stock Products: ${outOfStockCount}`);
-      })
-      .catch(error => {
-        console.error('Error fetching out-of-stock products:', error);
-      });
-
-    // 3. GET LOW-STOCK PRODUCTS COUNT for ALL STORES with the Vendor Key (Using Custom Hook)
-
-    axios({
-      method: 'GET',
-      // Use the specific low-in-stock products endpoint
-      url: `${appLocalizer.apiUrl}/wc-analytics/products/count-low-in-stock`,
-      headers: { 'X-WP-Nonce': appLocalizer.nonce },
-      params: {
-        per_page: 1, // Minimize payload
-        meta_key: 'multivendorx_store_id'
-      },
-    })
-      .then(response => {
-        console.log(`Low Stock Products with Vendor Key (All Stores):`,response);
-      })
-      .catch(error => {
-        console.error('Error fetching low stock products with vendor key:', error);
+        console.error('Error fetching orders:', error);
       });
 
   }

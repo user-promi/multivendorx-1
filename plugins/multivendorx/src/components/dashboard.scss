@@ -11,7 +11,7 @@
 
     .left {
         .title {
-            font-size: 1.25rem;
+            font-size: 1.125rem;
             font-weight: 500;
             display: flex;
             gap: 0.5rem;
@@ -26,6 +26,8 @@
     }
 
     .right {
+        display: flex;
+        gap: 0.5rem;
         span {
             font-size: 0.875rem;
             color: #0000009e;
@@ -44,7 +46,7 @@
         }
 
         .admin-btn {
-            padding: 0.313rem 0.5rem;
+            // padding: 0.313rem 0.5rem;
 
             i {
                 padding: 0;
@@ -84,8 +86,6 @@
         .product-name {
             font-size: 1.063rem;
         }
-
-        .price {}
 
         .items {
             padding: 0.313rem;

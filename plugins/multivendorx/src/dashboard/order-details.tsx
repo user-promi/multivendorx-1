@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { __ } from '@wordpress/i18n';
 import { ColumnDef } from "@tanstack/react-table";
 import productImage from "../assets/images/default.png";
-import { Table } from "zyra";
+import { BasicInput, SelectInput, Table } from "zyra";
 
 type StoreRow = {
     id: number;
@@ -334,6 +334,40 @@ const Reviews: React.FC = () => {
                         <div> UK</div>
                     </div> {/* Shipping start */}
 
+                     <div className="card-content">
+                        <div className="card-title">Shipping Traking</div>
+                        <div className="form-group-wrapper">
+							<div className="form-group">
+								<label htmlFor="product-name">Create Shipping</label>
+								<SelectInput
+									name="country"
+									// value={formData.country}
+									options={ []}
+									type="single-select"
+									// onChange={(newValue:any) => {
+									// 	if (!newValue || Array.isArray(newValue)) return;
+									// 	const updated = { ...formData, country: newValue.value, state: '' }; // reset state
+									// 	setFormData(updated);
+									// 	autoSave(updated);
+									// 	fetchStatesByCountry(newValue.value);
+									// }}
+								/>
+							</div>
+						</div>
+                        <div className="form-group-wrapper">
+							<div className="form-group">
+								<label htmlFor="product-name">Traking Number</label>
+								<BasicInput name="name" wrapperClass="setting-form-input" descClass="settings-metabox-description" />
+							</div>
+						</div>
+
+                        <div className="buttons-wrapper">
+                            <div className="admin-btn btn-purple">
+                                Create Shipment
+                            </div>
+                        </div>
+                    </div>
+                    
                     <div className="card-content">
                         <div className="card-title">Order notes</div>
                         <div className="notification-wrapper">

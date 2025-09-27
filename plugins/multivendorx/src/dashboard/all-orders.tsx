@@ -44,7 +44,7 @@ const Orders: React.FC = () => {
 
     const columns: ColumnDef<OrderRow>[] = [
         {
-            header: __("Order ID", "multivendorx"),
+            header: __("ID", "multivendorx"),
             cell: ({ row }) => <TableCell>#{row.original.number}</TableCell>,
         },
         {
@@ -71,27 +71,72 @@ const Orders: React.FC = () => {
             },
         },
         {
-            header: __("Action", "multivendorx"),
+            header: __('Action', 'multivendorx'),
             cell: ({ row }) => (
-                <TableCell>
-                    <button
-                        className="button button-primary"
-                        onClick={() => setModalOrder(row.original)} // Open your custom component
-                    >
-                        {__("View", "multivendorx")}
-                    </button>
-                </TableCell>
+                <TableCell
+                    type="action-dropdown"
+                    rowData={row.original}
+                    header={{
+                        actions: [
+                            {
+                                label: __('View', 'multivendorx'),
+                                icon: 'adminlib-eye',
+                                onClick: (rowData) => {
+                                    setModalOrder(rowData); // or row.original if using React Table
+                                },
+                                hover: true
+                            },
+                            {
+                                label: __('Download', 'multivendorx'),
+                                icon: 'adminlib-import',
+                                onClick: (rowData) => {
+                                    window.location.href = `?page=multivendorx#&tab=stores&edit/${rowData.id}`;
+                                },
+                            },
+                            {
+                                label: __('Copy URL', 'multivendorx'),
+                                icon: 'adminlib-vendor-form-copy',
+                                onClick: (rowData) => {
+                                    window.location.href = `?page=multivendorx#&tab=stores&edit/${rowData.id}`;
+                                },
+                            },
+                            {
+                                label: __('Shiping', 'multivendorx'),
+                                icon: 'adminlib-vendor-form-copy',
+                                onClick: (rowData) => {
+                                    window.location.href = `?page=multivendorx#&tab=stores&edit/${rowData.id}`;
+                                },
+                            },
+                            {
+                                label: __('Pdf', 'multivendorx'),
+                                icon: 'adminlib-vendor-form-delete',
+                                onClick: (rowData) => {
+                                    window.location.href = `?page=multivendorx#&tab=stores&edit/${rowData.id}`;
+                                },
+                                hover: true
+                            },
+
+                        ],
+                    }}
+                />
             ),
         },
     ];
 
     return (
+        <>
+        <div className="page-title-wrapper">
+                <div className="page-title">
+                    <div className="title">All Orders</div>
+                    <div className="des">Manage your store information and preferences</div>
+                </div>
+            </div>
         <div className="admin-table-wrapper">
             <Table
                 data={data}
                 columns={columns as ColumnDef<Record<string, any>, any>[]}
                 rowSelection={{}}
-                onRowSelectionChange={() => {}}
+                onRowSelectionChange={() => { }}
                 defaultRowsPerPage={10}
                 pageCount={Math.ceil(data.length / pagination.pageSize)}
                 pagination={pagination}
@@ -108,6 +153,7 @@ const Orders: React.FC = () => {
                 />
             )}
         </div>
+        </>
     );
 };
 
