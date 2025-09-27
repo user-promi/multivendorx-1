@@ -115,16 +115,17 @@ export const TransactionHistory: React.FC = () => {
             />
 
             <div className="admin-dashboard">
-                <div className="header">
-                    <div className="title-wrapper">
-                        <div className="title">
-                            <img src={storeImage} alt="" />
-                            {selectedStore ? ` ${selectedStore.label}` : "Select a store"}
+                <div className="row">
+                    <div className="header">
+                        <div className="title-wrapper">
+                            <div className="title">
+                                <img src={storeImage} alt="" />
+                                {selectedStore ? ` ${selectedStore.label}` : "Select a store"}
+                            </div>
+                            <div className="des">Here's what's happening with your marketplace today</div>
                         </div>
-                        <div className="des">Here's what's happening with your marketplace today</div>
-                    </div>
-                    <div className="right">
-                        <div className="analytics-container">
+                        <div className="right">
+                            <div className="analytics-container">
                                 <div className="analytics-item">
                                     <div className="analytics-icon">
                                         <i className="adminlib-cart green"></i>
@@ -143,12 +144,10 @@ export const TransactionHistory: React.FC = () => {
                                         <div className="text">Upcoming Balance </div>
                                     </div>
                                 </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-
-
-
                 <div className="row">
                     <div className="column">
                         <div className="card-header">

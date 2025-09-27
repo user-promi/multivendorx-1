@@ -39,8 +39,8 @@ $variations_total_pages = ceil( $variations_count / $variations_per_page );
         <div class="row">
             <div class="col-md-12">
                 <div id="message" class="inline notice woocommerce-message">
-                    <p><?php echo wp_kses_post( __( 'Before you can add a variation you need to add some variation attributes on the <strong>Attributes</strong> tab.', 'mvx-pro' ) ); ?></p>
-                    <p><a class="button-primary" href="<?php echo esc_url( apply_filters( 'woocommerce_docs_url', 'https://docs.woocommerce.com/document/variable-product/', 'product-variations' ) ); ?>" target="_blank"><?php esc_html_e( 'Learn more', 'mvx-pro' ); ?></a></p>
+                    <p><?php echo wp_kses_post( __( 'Before you can add a variation you need to add some variation attributes on the <strong>Attributes</strong> tab.', 'multivendorx' ) ); ?></p>
+                    <p><a class="button-primary" href="<?php echo esc_url( apply_filters( 'woocommerce_docs_url', 'https://docs.woocommerce.com/document/variable-product/', 'product-variations' ) ); ?>" target="_blank"><?php esc_html_e( 'Learn more', 'multivendorx' ); ?></a></p>
                 </div>
             </div>
         </div>
@@ -48,14 +48,14 @@ $variations_total_pages = ceil( $variations_count / $variations_per_page );
         <div class="row">
             <div class="col-md-12">
                 <div class="toolbar variations-defaults">
-                    <strong><?php esc_html_e( 'Default Form Values', 'mvx-pro' ); ?>: </strong>
+                    <strong><?php esc_html_e( 'Default Form Values', 'multivendorx' ); ?>: </strong>
                     <?php
                     foreach ( $variation_attributes as $attribute ) {
                         $selected_value = isset( $default_attributes[sanitize_title( $attribute->get_name() )] ) ? $default_attributes[sanitize_title( $attribute->get_name() )] : '';
                         ?>
                         <select name="default_attribute_<?php echo esc_attr( sanitize_title( $attribute->get_name() ) ); ?>" data-current="<?php echo esc_attr( $selected_value ); ?>" class="form-control inline-select">
                             <?php /* translators: WooCommerce attribute label */ ?>
-                            <option value=""><?php esc_html( printf( __( 'No default %s&hellip;', 'mvx-pro' ), wc_attribute_label( $attribute->get_name() ) ) ); ?></option>
+                            <option value=""><?php esc_html( printf( __( 'No default %s&hellip;', 'multivendorx' ), wc_attribute_label( $attribute->get_name() ) ) ); ?></option>
                             <?php if ( $attribute->is_taxonomy() ) : ?>
                                 <?php foreach ( $attribute->get_terms() as $option ) : ?>
                                     <option <?php selected( $selected_value, $option->slug ); ?> value="<?php echo esc_attr( $option->slug ); ?>"><?php echo esc_html( apply_filters( 'woocommerce_variation_option_name', $option->name ) ); ?></option>
@@ -77,63 +77,63 @@ $variations_total_pages = ceil( $variations_count / $variations_per_page );
             <div class="col-md-12">
                 <div class="toolbar toolbar-top">
                     <select id="field_to_edit" class="variation_actions inline-select form-control">
-                        <option data-global="true" value="add_variation"><?php esc_html_e( 'Add variation', 'mvx-pro' ); ?></option>
-                        <option data-global="true" value="link_all_variations"><?php esc_html_e( 'Create variations from all attributes', 'mvx-pro' ); ?></option>
-                        <option value="delete_all"><?php esc_html_e( 'Delete all variations', 'mvx-pro' ); ?></option>
-                        <optgroup label="<?php esc_attr_e( 'Status', 'mvx-pro' ); ?>">
-                            <option value="toggle_enabled"><?php esc_html_e( 'Toggle &quot;Enabled&quot;', 'mvx-pro' ); ?></option>
-                            <option value="toggle_downloadable"><?php esc_html_e( 'Toggle &quot;Downloadable&quot;', 'mvx-pro' ); ?></option>
-                            <option value="toggle_virtual"><?php esc_html_e( 'Toggle &quot;Virtual&quot;', 'mvx-pro' ); ?></option>
+                        <option data-global="true" value="add_variation"><?php esc_html_e( 'Add variation', 'multivendorx' ); ?></option>
+                        <option data-global="true" value="link_all_variations"><?php esc_html_e( 'Create variations from all attributes', 'multivendorx' ); ?></option>
+                        <option value="delete_all"><?php esc_html_e( 'Delete all variations', 'multivendorx' ); ?></option>
+                        <optgroup label="<?php esc_attr_e( 'Status', 'multivendorx' ); ?>">
+                            <option value="toggle_enabled"><?php esc_html_e( 'Toggle &quot;Enabled&quot;', 'multivendorx' ); ?></option>
+                            <option value="toggle_downloadable"><?php esc_html_e( 'Toggle &quot;Downloadable&quot;', 'multivendorx' ); ?></option>
+                            <option value="toggle_virtual"><?php esc_html_e( 'Toggle &quot;Virtual&quot;', 'multivendorx' ); ?></option>
                         </optgroup>
-                        <optgroup label="<?php esc_attr_e( 'Pricing', 'mvx-pro' ); ?>">
-                            <option value="variable_regular_price"><?php esc_html_e( 'Set regular prices', 'mvx-pro' ); ?></option>
-                            <option value="variable_regular_price_increase"><?php esc_html_e( 'Increase regular prices (fixed amount or percentage)', 'mvx-pro' ); ?></option>
-                            <option value="variable_regular_price_decrease"><?php esc_html_e( 'Decrease regular prices (fixed amount or percentage)', 'mvx-pro' ); ?></option>
-                            <option value="variable_sale_price"><?php esc_html_e( 'Set sale prices', 'mvx-pro' ); ?></option>
-                            <option value="variable_sale_price_increase"><?php esc_html_e( 'Increase sale prices (fixed amount or percentage)', 'mvx-pro' ); ?></option>
-                            <option value="variable_sale_price_decrease"><?php esc_html_e( 'Decrease sale prices (fixed amount or percentage)', 'mvx-pro' ); ?></option>
-                            <option value="variable_sale_schedule"><?php esc_html_e( 'Set scheduled sale dates', 'mvx-pro' ); ?></option>
+                        <optgroup label="<?php esc_attr_e( 'Pricing', 'multivendorx' ); ?>">
+                            <option value="variable_regular_price"><?php esc_html_e( 'Set regular prices', 'multivendorx' ); ?></option>
+                            <option value="variable_regular_price_increase"><?php esc_html_e( 'Increase regular prices (fixed amount or percentage)', 'multivendorx' ); ?></option>
+                            <option value="variable_regular_price_decrease"><?php esc_html_e( 'Decrease regular prices (fixed amount or percentage)', 'multivendorx' ); ?></option>
+                            <option value="variable_sale_price"><?php esc_html_e( 'Set sale prices', 'multivendorx' ); ?></option>
+                            <option value="variable_sale_price_increase"><?php esc_html_e( 'Increase sale prices (fixed amount or percentage)', 'multivendorx' ); ?></option>
+                            <option value="variable_sale_price_decrease"><?php esc_html_e( 'Decrease sale prices (fixed amount or percentage)', 'multivendorx' ); ?></option>
+                            <option value="variable_sale_schedule"><?php esc_html_e( 'Set scheduled sale dates', 'multivendorx' ); ?></option>
                         </optgroup>
-                        <optgroup label="<?php esc_attr_e( 'Inventory', 'mvx-pro' ); ?>">
-                            <option value="toggle_manage_stock"><?php esc_html_e( 'Toggle &quot;Manage stock&quot;', 'mvx-pro' ); ?></option>
-                            <option value="variable_stock"><?php esc_html_e( 'Stock', 'mvx-pro' ); ?></option>
-                            <option value="variable_stock_status_instock"><?php esc_html_e( 'Set Status - In stock', 'mvx-pro' ); ?></option>
-                            <option value="variable_stock_status_outofstock"><?php esc_html_e( 'Set Status - Out of stock', 'mvx-pro' ); ?></option>
-                            <option value="variable_stock_status_onbackorder"><?php esc_html_e( 'Set Status - On backorder', 'mvx-pro' ); ?></option>
+                        <optgroup label="<?php esc_attr_e( 'Inventory', 'multivendorx' ); ?>">
+                            <option value="toggle_manage_stock"><?php esc_html_e( 'Toggle &quot;Manage stock&quot;', 'multivendorx' ); ?></option>
+                            <option value="variable_stock"><?php esc_html_e( 'Stock', 'multivendorx' ); ?></option>
+                            <option value="variable_stock_status_instock"><?php esc_html_e( 'Set Status - In stock', 'multivendorx' ); ?></option>
+                            <option value="variable_stock_status_outofstock"><?php esc_html_e( 'Set Status - Out of stock', 'multivendorx' ); ?></option>
+                            <option value="variable_stock_status_onbackorder"><?php esc_html_e( 'Set Status - On backorder', 'multivendorx' ); ?></option>
                         </optgroup>
-                        <optgroup label="<?php esc_attr_e( 'Shipping', 'mvx-pro' ); ?>">
-                            <option value="variable_length"><?php esc_html_e( 'Length', 'mvx-pro' ); ?></option>
-                            <option value="variable_width"><?php esc_html_e( 'Width', 'mvx-pro' ); ?></option>
-                            <option value="variable_height"><?php esc_html_e( 'Height', 'mvx-pro' ); ?></option>
-                            <option value="variable_weight"><?php esc_html_e( 'Weight', 'mvx-pro' ); ?></option>
+                        <optgroup label="<?php esc_attr_e( 'Shipping', 'multivendorx' ); ?>">
+                            <option value="variable_length"><?php esc_html_e( 'Length', 'multivendorx' ); ?></option>
+                            <option value="variable_width"><?php esc_html_e( 'Width', 'multivendorx' ); ?></option>
+                            <option value="variable_height"><?php esc_html_e( 'Height', 'multivendorx' ); ?></option>
+                            <option value="variable_weight"><?php esc_html_e( 'Weight', 'multivendorx' ); ?></option>
                         </optgroup>
-                        <optgroup label="<?php esc_attr_e( 'Downloadable products', 'mvx-pro' ); ?>">
-                            <option value="variable_download_limit"><?php esc_html_e( 'Download limit', 'mvx-pro' ); ?></option>
-                            <option value="variable_download_expiry"><?php esc_html_e( 'Download expiry', 'mvx-pro' ); ?></option>
+                        <optgroup label="<?php esc_attr_e( 'Downloadable products', 'multivendorx' ); ?>">
+                            <option value="variable_download_limit"><?php esc_html_e( 'Download limit', 'multivendorx' ); ?></option>
+                            <option value="variable_download_expiry"><?php esc_html_e( 'Download expiry', 'multivendorx' ); ?></option>
                         </optgroup>
                         <?php do_action( 'woocommerce_variable_product_bulk_edit_actions' ); ?>
                     </select>
-                    <a class="btn btn-default bulk_edit do_variation_action"><?php esc_html_e( 'Go', 'mvx-pro' ); ?></a>
+                    <a class="btn btn-default bulk_edit do_variation_action"><?php esc_html_e( 'Go', 'multivendorx' ); ?></a>
                     <div class="variations-pagenav">
                         <?php /* translators: variations count */ ?>
-                        <span class="displaying-num"><?php echo esc_html( sprintf( _n( '%s item', '%s items', $variations_count, 'mvx-pro' ), $variations_count ) ); ?></span>
+                        <span class="displaying-num"><?php echo esc_html( sprintf( _n( '%s item', '%s items', $variations_count, 'multivendorx' ), $variations_count ) ); ?></span>
                         <span class="expand-close">
-                            (<a href="#" class="expand_all"><?php esc_html_e( 'Expand', 'mvx-pro' ); ?></a> / <a href="#" class="close_all"><?php esc_html_e( 'Close', 'mvx-pro' ); ?></a>)
+                            (<a href="#" class="expand_all"><?php esc_html_e( 'Expand', 'multivendorx' ); ?></a> / <a href="#" class="close_all"><?php esc_html_e( 'Close', 'multivendorx' ); ?></a>)
                         </span>
                         <span class="pagination-links">
-                            <a class="first-page disabled" title="<?php esc_attr_e( 'Go to the first page', 'mvx-pro' ); ?>" href="#">&laquo;</a>
-                            <a class="prev-page disabled" title="<?php esc_attr_e( 'Go to the previous page', 'mvx-pro' ); ?>" href="#">&lsaquo;</a>
+                            <a class="first-page disabled" title="<?php esc_attr_e( 'Go to the first page', 'multivendorx' ); ?>" href="#">&laquo;</a>
+                            <a class="prev-page disabled" title="<?php esc_attr_e( 'Go to the previous page', 'multivendorx' ); ?>" href="#">&lsaquo;</a>
                             <span class="paging-select">
-                                <label for="current-page-selector-1" class="screen-reader-text"><?php esc_html_e( 'Select Page', 'mvx-pro' ); ?></label>
-                                <select class="page-selector" id="current-page-selector-1" title="<?php esc_attr_e( 'Current page', 'mvx-pro' ); ?>">
+                                <label for="current-page-selector-1" class="screen-reader-text"><?php esc_html_e( 'Select Page', 'multivendorx' ); ?></label>
+                                <select class="page-selector" id="current-page-selector-1" title="<?php esc_attr_e( 'Current page', 'multivendorx' ); ?>">
                                     <?php for ( $i = 1; $i <= $variations_total_pages; $i++ ) : ?>
                                         <option value="<?php echo $i; // WPCS: XSS ok. ?>"><?php echo $i; // WPCS: XSS ok. ?></option>
                                     <?php endfor; ?>
                                 </select>
-                                <?php echo esc_html_x( 'of', 'number of pages', 'mvx-pro' ); ?> <span class="total-pages"><?php echo esc_html( $variations_total_pages ); ?></span>
+                                <?php echo esc_html_x( 'of', 'number of pages', 'multivendorx' ); ?> <span class="total-pages"><?php echo esc_html( $variations_total_pages ); ?></span>
                             </span>
-                            <a class="next-page" title="<?php esc_attr_e( 'Go to the next page', 'mvx-pro' ); ?>" href="#">&rsaquo;</a>
-                            <a class="last-page" title="<?php esc_attr_e( 'Go to the last page', 'mvx-pro' ); ?>" href="#">&raquo;</a>
+                            <a class="next-page" title="<?php esc_attr_e( 'Go to the next page', 'multivendorx' ); ?>" href="#">&rsaquo;</a>
+                            <a class="last-page" title="<?php esc_attr_e( 'Go to the last page', 'multivendorx' ); ?>" href="#">&raquo;</a>
                         </span>
                     </div>
                 </div>
@@ -153,29 +153,29 @@ $variations_total_pages = ceil( $variations_count / $variations_per_page );
         <div class="row">
             <div class="col-md-12">
                 <div class="toolbar button-group">
-                    <button type="button" class="btn btn-default save-variation-changes" disabled="disabled"><?php esc_html_e( 'Save changes', 'mvx-pro' ); ?></button>
-                    <button type="button" class="btn btn-default cancel-variation-changes" disabled="disabled"><?php esc_html_e( 'Cancel', 'mvx-pro' ); ?></button>
+                    <button type="button" class="btn btn-default save-variation-changes" disabled="disabled"><?php esc_html_e( 'Save changes', 'multivendorx' ); ?></button>
+                    <button type="button" class="btn btn-default cancel-variation-changes" disabled="disabled"><?php esc_html_e( 'Cancel', 'multivendorx' ); ?></button>
 
                     <div class="variations-pagenav">
                         <?php /* translators: variations count */ ?>
-                        <span class="displaying-num"><?php echo esc_html( sprintf( _n( '%s item', '%s items', $variations_count, 'mvx-pro' ), $variations_count ) ); ?></span>
+                        <span class="displaying-num"><?php echo esc_html( sprintf( _n( '%s item', '%s items', $variations_count, 'multivendorx' ), $variations_count ) ); ?></span>
                         <span class="expand-close">
-                            (<a href="#" class="expand_all"><?php esc_html_e( 'Expand', 'mvx-pro' ); ?></a> / <a href="#" class="close_all"><?php esc_html_e( 'Close', 'mvx-pro' ); ?></a>)
+                            (<a href="#" class="expand_all"><?php esc_html_e( 'Expand', 'multivendorx' ); ?></a> / <a href="#" class="close_all"><?php esc_html_e( 'Close', 'multivendorx' ); ?></a>)
                         </span>
                         <span class="pagination-links">
-                            <a class="first-page disabled" title="<?php esc_attr_e( 'Go to the first page', 'mvx-pro' ); ?>" href="#">&laquo;</a>
-                            <a class="prev-page disabled" title="<?php esc_attr_e( 'Go to the previous page', 'mvx-pro' ); ?>" href="#">&lsaquo;</a>
+                            <a class="first-page disabled" title="<?php esc_attr_e( 'Go to the first page', 'multivendorx' ); ?>" href="#">&laquo;</a>
+                            <a class="prev-page disabled" title="<?php esc_attr_e( 'Go to the previous page', 'multivendorx' ); ?>" href="#">&lsaquo;</a>
                             <span class="paging-select">
-                                <label for="current-page-selector-1" class="screen-reader-text"><?php esc_html_e( 'Select Page', 'mvx-pro' ); ?></label>
-                                <select class="page-selector" id="current-page-selector-1" title="<?php esc_attr_e( 'Current page', 'mvx-pro' ); ?>">
+                                <label for="current-page-selector-1" class="screen-reader-text"><?php esc_html_e( 'Select Page', 'multivendorx' ); ?></label>
+                                <select class="page-selector" id="current-page-selector-1" title="<?php esc_attr_e( 'Current page', 'multivendorx' ); ?>">
                                     <?php for ( $i = 1; $i <= $variations_total_pages; $i ++ ) : ?>
                                         <option value="<?php echo $i; // WPCS: XSS ok.  ?>"><?php echo $i; // WPCS: XSS ok.  ?></option>
                                     <?php endfor; ?>
                                 </select>
-                                <?php echo esc_html_x( 'of', 'number of pages', 'mvx-pro' ); ?> <span class="total-pages"><?php echo esc_html( $variations_total_pages ); ?></span>
+                                <?php echo esc_html_x( 'of', 'number of pages', 'multivendorx' ); ?> <span class="total-pages"><?php echo esc_html( $variations_total_pages ); ?></span>
                             </span>
-                            <a class="next-page" title="<?php esc_attr_e( 'Go to the next page', 'mvx-pro' ); ?>" href="#">&rsaquo;</a>
-                            <a class="last-page" title="<?php esc_attr_e( 'Go to the last page', 'mvx-pro' ); ?>" href="#">&raquo;</a>
+                            <a class="next-page" title="<?php esc_attr_e( 'Go to the next page', 'multivendorx' ); ?>" href="#">&rsaquo;</a>
+                            <a class="last-page" title="<?php esc_attr_e( 'Go to the last page', 'multivendorx' ); ?>" href="#">&raquo;</a>
                         </span>
                     </div>
                 </div>

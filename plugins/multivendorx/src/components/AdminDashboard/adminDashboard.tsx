@@ -328,7 +328,7 @@ const AdminDashboard = () => {
                     Join 50,000+ successful marketplace owners
                   </div>
                   <div className="des">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa ullam harum, rerum vel fuga mollitia.</div>
-                  <div className="admin-btn btn-red">
+                  <div className="admin-btn btn-purple">
                     Upgrade Now - 30 Day Guarantee
                     <i className="adminlib-arrow-right icon-pro-btn"></i>
                   </div>

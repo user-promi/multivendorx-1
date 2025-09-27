@@ -197,6 +197,7 @@
   .admin-table {
     width: 100%;
     position: relative;
+    border: none;
 
     input[type="checkbox"] {
       min-height: 0.8rem;
@@ -222,6 +223,7 @@
         display: flex;
         flex: 1 0 0;
         width: 100%;
+        border: none;
       }
 
       // .header-col:nth-of-type(2) {
@@ -285,6 +287,7 @@
           font-size: 0.9rem;
           display: flex;
           flex: 1 0 0;
+          border: none;
 
           .table-row-custom {
             display: flex;

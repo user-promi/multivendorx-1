@@ -28,7 +28,7 @@ class Frontend {
 
     public function set_product_types( $product_types ) {
         $afm_types = array();
-        $afm_types['variable'] = __( 'Variable product', 'mvx-pro' );
+        $afm_types['variable'] = __( 'Variable product', 'multivendorx' );
     
         return array_merge( $product_types, $afm_types );
     }

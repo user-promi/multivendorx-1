@@ -60,7 +60,6 @@ export default {
             size:"8rem",
             preText: appLocalizer.site_url + '/',
             postText: "/sample-store-slug/",
-            proSetting:true,
         },
         {
             key: 'section',

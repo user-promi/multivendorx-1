@@ -256,7 +256,6 @@ if ($current_page && empty($current_sub)) {
                             break;
                         }
                     }
-
                     if ($div_id) {
                         if ($allowed) {
                             $template_file = plugin_dir_path(__FILE__) . $div_id . '.php';
