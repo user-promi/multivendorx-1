@@ -5,6 +5,8 @@ import GeneralSettings from './settings/general';
 import Appearance from './settings/Appearance';
 import SocialMedia from './settings/SocialMedia';
 import ContactInformation from './settings/ContactInformation';
+import BusinessAddress from './settings/BusinessAddress';
+import Withdrawl from './withdrawl';
 
 const settings = () => {
     const id = appLocalizer.store_id;
@@ -72,13 +74,80 @@ const settings = () => {
     const settingTabs = [
         { id: "general", label: "General", icon: "tools", content: <GeneralSettings /> },
         { id: "appearance", label: "Appearance", icon: "appearance", content: <Appearance /> },
-        { id: "business-address", label: "Business Address", icon: "form-address", content: <Appearance /> },
-        { id: "contact-information", label: "Contact Information", icon: "form-phone", content: <ContactInformation/> },
+        { id: "business-address", label: "Business Address", icon: "form-address", content: <BusinessAddress /> },
+        { id: "contact-information", label: "Contact Information", icon: "form-phone", content: <ContactInformation /> },
         { id: "social-media", label: "Social Media", icon: "cohort", content: <SocialMedia /> },
-        { id: "payout", label: "Payout", icon: "tools", content: <Appearance /> },
+        { id: "payout", label: "Payout", icon: "tools", content: <Withdrawl/> },
         { id: "privacy", label: "Privacy", icon: "security", content: <Appearance /> },
-        { id: "seo-visibility", label: "SEO & visibility", icon: "bulk-action", content: <Appearance /> },
-        { id: "Shipping", label: "Shipping", icon: "cart", content: <Appearance /> },
+        {
+            id: "seo-visibility", label: "SEO & visibility", icon: "bulk-action", content:
+                <>
+                    <div className="card-wrapper">
+                        <div className="card-content">
+                            <div className="card-title">SEO & Visibility</div>
+                            <div className="form-group-wrapper">
+                                <div className="form-group">
+                                    <label htmlFor="product-name">Meta Title</label>
+                                    <BasicInput name="phone" value={formData.phone} wrapperClass="setting-form-input" descClass="settings-metabox-description" onChange={handleChange} />
+                                </div>
+                            </div>
+
+                            <div className="form-group-wrapper">
+                                <div className="form-group">
+                                    <label htmlFor="product-name">Description</label>
+                                    <TextArea
+                                        name="content"
+                                        inputClass="textarea-input"
+                                        // value={formData.content}
+                                        // onChange={handleChange}
+                                    />
+                                </div>
+                            </div>
+                            <div className="form-group-wrapper">
+                                <div className="form-group">
+                                    <label htmlFor="product-name">Keywords</label>
+                                    <BasicInput name="phone" wrapperClass="setting-form-input" descClass="settings-metabox-description" />
+                                </div>
+                            </div>
+                            <div className="form-group-wrapper">
+                                <div className="form-group">
+                                    <label htmlFor="product-name">Tracking ID</label>
+                                    <BasicInput name="phone" wrapperClass="setting-form-input" descClass="settings-metabox-description" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </>
+        },
+        {
+            id: "Shipping", label: "Shipping", icon: "cart", content:
+                <>
+                    <div className="card-wrapper">
+                        <div className="card-content">
+                            <div className="card-title">Shipping & Delivery</div>
+                            <div className="form-group-wrapper">
+                                <div className="form-group">
+                                    <label htmlFor="product-name">Shipping Zones</label>
+                                    <BasicInput name="phone" value={formData.phone} wrapperClass="setting-form-input" descClass="settings-metabox-description" onChange={handleChange} />
+                                </div>
+                            </div>
+
+                            <div className="form-group-wrapper">
+                                <div className="form-group">
+                                    <label htmlFor="product-name">Shipping Methods</label>
+                                    <BasicInput name="phone" wrapperClass="setting-form-input" descClass="settings-metabox-description" />
+                                </div>
+                            </div>
+                            <div className="form-group-wrapper">
+                                <div className="form-group">
+                                    <label htmlFor="product-name">Delivery Preferences</label>
+                                    <BasicInput name="phone" wrapperClass="setting-form-input" descClass="settings-metabox-description" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </>
+        },
     ];
     return (
         <>

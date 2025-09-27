@@ -158,6 +158,8 @@ const App = () => {
         onSelectChange={handleSelectChange}
         selectValue={selectValue}
         free={appLocalizer.freeVersion}
+        chatUrl= "https://tawk.to/chat/6504346eb1aaa13b7a77026c/1hac6pkpm"
+        showProfile={ true }
         showDropdown={true} 
         dropdownOptions={[
           { value: 'all', label: 'Modules & Settings' },

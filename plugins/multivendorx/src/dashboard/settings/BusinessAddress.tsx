@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { BasicInput, TextArea, FileInput, SelectInput, getApiLink } from 'zyra';
 
-const GeneralSettings = () => {
+const BusinessAddress = () => {
     const id = appLocalizer.store_id;
     const [formData, setFormData] = useState<{ [key: string]: string }>({});
     const [successMsg, setSuccessMsg] = useState<string | null>(null);
@@ -68,42 +68,45 @@ const GeneralSettings = () => {
         <>
             <div className="card-wrapper">
                 <div className="card-content">
-                    <div className="settings-metabox-note">
-                        <i className="adminlib-info"></i>
-                        <p>Confirm that you have access to johndoe@gmail.com in sender email settings.</p>
-                    </div>
-                    <div className="card-title">
-                        Basic information
+                    <div className="card-title">Business Address & Location</div>
+                    <div className="form-group-wrapper">
+                        <div className="form-group">
+                            <label htmlFor="product-name">Address</label>
+                            <BasicInput name="phone" value={formData.phone} wrapperClass="setting-form-input" descClass="settings-metabox-description" onChange={handleChange} />
+                        </div>
                     </div>
 
                     <div className="form-group-wrapper">
                         <div className="form-group">
-                            <label htmlFor="product-name">Name</label>
+                            <label htmlFor="product-name">City</label>
+                            <BasicInput name="phone" wrapperClass="setting-form-input" descClass="settings-metabox-description" />
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="product-name">State </label>
+                            <BasicInput name="phone" wrapperClass="setting-form-input" descClass="settings-metabox-description" />
+                        </div>
+                    </div>
+
+                    <div className="form-group-wrapper">
+                        <div className="form-group">
+                            <label htmlFor="product-name">Country</label>
+                            <BasicInput name="phone" wrapperClass="setting-form-input" descClass="settings-metabox-description" />
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="product-name">Zip </label>
+                            <BasicInput name="phone" wrapperClass="setting-form-input" descClass="settings-metabox-description" />
+                        </div>
+                    </div>
+
+                    <div className="form-group-wrapper">
+                        <div className="form-group">
+                            <label htmlFor="product-name">Timezone</label>
                             <BasicInput name="phone" wrapperClass="setting-form-input" descClass="settings-metabox-description" />
                         </div>
                     </div>
                     <div className="form-group-wrapper">
                         <div className="form-group">
-                            <label htmlFor="product-name">Slug</label>
-                            <BasicInput name="phone" wrapperClass="setting-form-input" descClass="settings-metabox-description" />
-                        </div>
-                    </div>
-
-                    <div className="form-group-wrapper">
-                        <div className="form-group">
-                            <label htmlFor="product-name">Description</label>
-                            <TextArea
-                                name="content"
-                                inputClass="textarea-input"
-                            // value={formData.content}
-                            // onChange={handleChange}
-                            />
-                        </div>
-                    </div>
-
-                    <div className="form-group-wrapper">
-                        <div className="form-group">
-                            <label htmlFor="product-name">Message to Buyers</label>
+                            <label htmlFor="product-name">Map Location</label>
                             <BasicInput name="phone" wrapperClass="setting-form-input" descClass="settings-metabox-description" />
                         </div>
                     </div>
@@ -113,4 +116,4 @@ const GeneralSettings = () => {
     );
 };
 
-export default GeneralSettings;
+export default BusinessAddress;
