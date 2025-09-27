@@ -5,6 +5,7 @@ import GeneralSettings from './settings/general';
 import Appearance from './settings/Appearance';
 import SocialMedia from './settings/SocialMedia';
 import ContactInformation from './settings/ContactInformation';
+import Withdrawl from './withdrawl';
 
 const settings = () => {
     const id = appLocalizer.store_id;
@@ -75,7 +76,7 @@ const settings = () => {
         { id: "business-address", label: "Business Address", icon: "form-address", content: <Appearance /> },
         { id: "contact-information", label: "Contact Information", icon: "form-phone", content: <ContactInformation/> },
         { id: "social-media", label: "Social Media", icon: "cohort", content: <SocialMedia /> },
-        { id: "payout", label: "Payout", icon: "tools", content: <Appearance /> },
+        { id: "payout", label: "Payout", icon: "tools", content: <Withdrawl /> },
         { id: "privacy", label: "Privacy", icon: "security", content: <Appearance /> },
         { id: "seo-visibility", label: "SEO & visibility", icon: "bulk-action", content: <Appearance /> },
         { id: "Shipping", label: "Shipping", icon: "cart", content: <Appearance /> },
