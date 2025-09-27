@@ -46,7 +46,8 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
                 'name'    => 'Products',
                 'slug'    => 'products',
                 'icon'    => 'adminlib-single-product',
-                'submenu' => array(
+            	'submenu' => array(),
+                /*'submenu' => array(
                     array(
                         'key'  => 'products',
                         'name' => 'All Products',
@@ -58,8 +59,9 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
                         'slug' => 'edit',
                         'capability' => ['read_shop_orders', 'edit_shop_orders', 'delete_shop_orders']
                     ),
-                ),
-                'capability' => ['manage_products']
+                ),*/
+                'capability' => ['manage_products'],
+            	'capability-edit' => ['manage_products']
             ),
             'orders' => array(
                 'name'    => 'Orders',

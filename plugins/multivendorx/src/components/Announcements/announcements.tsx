@@ -4,7 +4,7 @@ import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
-import { Table, getApiLink, TableCell, AdminBreadcrumbs, BasicInput, TextArea, CommonPopup, SelectInput, CalendarInput } from 'zyra';
+import { Table, getApiLink, TableCell, AdminBreadcrumbs, BasicInput, TextArea, CommonPopup, SelectInput, CalendarInput, ToggleSetting } from 'zyra';
 
 import {
     ColumnDef,
@@ -40,6 +40,7 @@ type AnnouncementForm = {
     url: string;
     content: string;
     stores: string;
+    status: 'draft' | 'pending' | 'publish';
 };
 
 export interface RealtimeFilter {
@@ -81,13 +82,19 @@ export const Announcements: React.FC = () => {
         url: '',
         content: '',
         stores: '',
+        status: 'draft', // default
     });
+
+    const handleToggleChange = (value: string) => {
+        setFormData((prev) => ({ ...prev, status: value as 'draft' | 'pending' | 'publish' }));
+    };
+
     const [announcementStatus, setAnnouncementStatus] = useState<AnnouncementStatus[] | null>(null);
     const [storeOptions, setStoreOptions] = useState<{ value: string; label: string }[]>([]);
-   
+
     const handleCloseForm = () => {
         setAddAnnouncements(false);
-        setFormData({ title: '', url: '', content: '', stores: '' }); // reset form
+        setFormData({ title: '', url: '', content: '', stores: '', status:'draft' }); // reset form
         setEditId(null); // reset edit mode
         setError(null); // clear any error
     };
@@ -152,6 +159,7 @@ export const Announcements: React.FC = () => {
                     stores: response.data.stores
                         ? response.data.stores.map((s: any) => s.id).join(',')
                         : '',
+                    status: response.data.status || '',
                 });
                 setEditId(id);
                 setAddAnnouncements(true);
@@ -162,8 +170,8 @@ export const Announcements: React.FC = () => {
         }
     };
 
-    const handleSubmit = async (status: 'publish' | 'pending') => {
-        if (submitting) return; // prevent double-click
+    const handleSubmit = async () => {
+        if (submitting) return;
         setSubmitting(true);
 
         try {
@@ -174,7 +182,6 @@ export const Announcements: React.FC = () => {
 
             const payload = {
                 ...formData,
-                status,
                 stores: formData.stores ? formData.stores.split(',') : [],
             };
 
@@ -187,7 +194,7 @@ export const Announcements: React.FC = () => {
 
             if (response.data.success) {
                 setAddAnnouncements(false);
-                setFormData({ title: '', url: '', content: '', stores: 'pending' });
+                setFormData({ title: '', url: '', content: '', stores: '', status: 'draft' });
                 setEditId(null);
                 requestData(pagination.pageSize, pagination.pageIndex + 1, page);
             } else {
@@ -199,6 +206,7 @@ export const Announcements: React.FC = () => {
             setSubmitting(false);
         }
     };
+
 
 
     const requestApiForData = (rowsPerPage: number, currentPage: number, filterData: FilterData) => {
@@ -251,6 +259,7 @@ export const Announcements: React.FC = () => {
             const res = response.data;
             setData(res.items);
             setPageCount(Math.ceil((res.total || 0) / rowsPerPage));
+            setTotalRows(res.total || 0)
             setAnnouncementStatus([
                 { key: 'all', name: 'All', count: res.all || 0 },
                 { key: 'publish', name: 'Published', count: res.publish || 0 },
@@ -262,138 +271,7 @@ export const Announcements: React.FC = () => {
                 setError(__('Failed to load announcements', 'multivendorx'));
             });
     }
-    const realtimeFilter: RealtimeFilter[] = [
-        {
-            name: 'courseField',
-            render: (updateFilter: (key: string, value: string) => void, filterValue: string | undefined) => (
-                <div className="   course-field">
-                    <select
-                        name="courseField"
-                        onChange={(e) => updateFilter(e.target.name, e.target.value)}
-                        value={filterValue || ''}
-                        className="basic-select"
-                    >
-                        <option value="">Courses</option>
-                        {/* {Object.entries(courses).map(([courseId, courseName]) => (
-                            <option key={courseId} value={courseId}>
-                                {courseName}
-                            </option>
-                        ))} */}
-                    </select>
-                </div>
-            ),
-        },
-        {
-            name: 'groupField',
-            render: (updateFilter: (key: string, value: string) => void, filterValue: string | undefined) => (
-                <div className="   group-field">
-                    <select
-                        name="groupField"
-                        onChange={(e) => updateFilter(e.target.name, e.target.value)}
-                        value={filterValue || ''}
-                        className="basic-select"
-                    >
-                        <option value="">Groups</option>
-                        {/* {Object.entries(groups).map(([groupId, groupName]) => (
-                            <option key={groupId} value={groupId}>
-                                {' '}
-                                {groupName}{' '}
-                            </option>
-                        ))} */}
-                    </select>
-                </div>
-            ),
-        },
-        {
-            name: 'cohortField',
-            render: (updateFilter: (key: string, value: string) => void, filterValue: string | undefined) => (
-                <div className="   cohort-field">
-                    <select
-                        name="cohortField"
-                        onChange={(e) => updateFilter(e.target.name, e.target.value)}
-                        value={filterValue || ''}
-                        className="basic-select"
-                    >
-                        <option value="">Cohorts</option>
-                        {/* {Object.entries(cohorts).map(([cohortId, cohortName]) => (
-                            <option key={cohortId} value={cohortId}>
-                                {cohortName}
-                            </option>
-                        ))} */}
-                    </select>
-                </div>
-            ),
-        },
-        {
-            name: 'date',
-            render: (updateFilter) => (
-                // <div className="date-picker-section-wrapper" ref={dateRef}>
-                //     <input
-                //         value={`${selectedRange[0].startDate.toLocaleDateString("en-US", {
-                //             month: "short",
-                //             day: "2-digit",
-                //             year: "numeric",
-                //         })} - ${selectedRange[0].endDate.toLocaleDateString("en-US", {
-                //             month: "short",
-                //             day: "2-digit",
-                //             year: "numeric",
-                //         })}`}
-                //         onClick={handleDateOpen}
-                //         className="basic-input"
-                //         type="text"
-                //         placeholder="DD/MM/YYYY"
-                //     />
-                //     {openDatePicker && (
-                //         <div className={`date-picker ${pickerPosition === "top" ? "open-top" : "open-bottom"
-                //             }`} id="date-picker-wrapper">
-                //             <DateRangePicker
-                //                 ranges={selectedRange}
-                //                 months={1}
-                //                 direction="vertical"
-                //                 scroll={{ enabled: true }}
-                //                 maxDate={new Date()}
-                //                 onChange={(ranges: RangeKeyDict) => {
-                //                     const selection: Range = ranges.selection;
 
-                //                     if (selection?.endDate instanceof Date) {
-                //                         // Set end of day to endDate
-                //                         selection.endDate.setHours(23, 59, 59, 999);
-                //                     }
-
-                //                     // Update local range state
-                //                     setSelectedRange([
-                //                         {
-                //                             startDate: selection.startDate || new Date(),
-                //                             endDate: selection.endDate || new Date(),
-                //                             key: selection.key || 'selection',
-                //                         },
-                //                     ]);
-
-                //                     // Update external filters (could be used by table or search logic)
-                //                     updateFilter('date', {
-                //                         start_date: selection.startDate,
-                //                         end_date: selection.endDate,
-                //                     });
-                //                 }}
-                //             />
-                //         </div>
-                //     )}
-                // </div>
-                <CalendarInput
-                    wrapperClass=""
-                    inputClass=""
-                    onChange={(range) => {
-                        console.log('Selected Range:', range);
-                        updateFilter('date', {
-                            start_date: range.startDate,
-                            end_date: range.endDate,
-                        });
-                    }}
-                />
-
-            ),
-        },
-    ];
     const searchFilter: RealtimeFilter[] = [
         {
             name: 'searchAction',
@@ -487,7 +365,6 @@ export const Announcements: React.FC = () => {
             header: __('Sent To', 'multivendorx'),
             cell: ({ row }) => {
                 const stores = Array.isArray(row.original.stores) ? row.original.stores : [];
-                console.log(stores)
                 let displayStores = stores;
 
                 if (stores.length > 2) {
@@ -574,22 +451,15 @@ export const Announcements: React.FC = () => {
                             </div>
                             <button
                                 type="button"
-                                onClick={() => handleSubmit('publish')}
+                                onClick={() => handleSubmit()}
                                 className="admin-btn btn-purple"
                                 disabled={submitting}
                             >
-                                {submitting ? 'Saving...' : 'Publish'}
-                            </button>
-                            <button
-                                type="button"
-                                onClick={() => handleSubmit('pending')}
-                                className="admin-btn btn-yellow"
-                                disabled={submitting}
-                            >
-                                {submitting ? 'Saving...' : 'Pending'}
+                                {submitting ? 'Saving...' : 'Save'}
                             </button>
                         </>
                     }
+
                 >
 
                     <div className="content">
@@ -631,6 +501,22 @@ export const Announcements: React.FC = () => {
                                     }}
                                 />
                             </div>
+                            <div className="form-group">
+                                <label htmlFor="status">Status</label>
+                                <ToggleSetting
+                                    wrapperClass="setting-form-input"
+                                    descClass="settings-metabox-description"
+                                    description="Select the status of the announcement."
+                                    options={[
+                                        { key: 'draft', value: 'draft', label: 'Draft' },
+                                        { key: 'pending', value: 'pending', label: 'Pending' },
+                                        { key: 'publish', value: 'publish', label: 'Publish' },
+                                    ]}
+                                    value={formData.status}
+                                    onChange={handleToggleChange}
+                                />
+                            </div>
+
                             <span className="space"></span>
                         </div>
                     </div>
@@ -646,7 +532,7 @@ export const Announcements: React.FC = () => {
                     rowSelection={rowSelection}
                     onRowSelectionChange={setRowSelection}
                     defaultRowsPerPage={10}
-                    realtimeFilter={realtimeFilter}
+                    realtimeFilter={[]}
                     searchFilter={searchFilter}
                     pageCount={pageCount}
                     pagination={pagination}
@@ -658,6 +544,7 @@ export const Announcements: React.FC = () => {
                         handleEdit(row.id);
                     }}
                     bulkActionComp={() => <BulkAction />}
+                    totalCounts={totalRows}
                 />
             </div>
         </>

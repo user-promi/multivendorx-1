@@ -66,7 +66,7 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
      */
     public static function get_announcement_items( $args ) {
         $defaults = [
-            'post_status'    => [ 'publish', 'pending' ],
+            'post_status'    => [ 'publish', 'pending','draft' ],
             'posts_per_page' => 10,
             's'              => '',
         ];
@@ -181,7 +181,7 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
             'post_title'   => $request->get_param('title'),
             'post_content' => $request->get_param('content'),
             'post_type'    => 'multivendorx_an',
-            'post_status'  => $request->get_param('status') === 'publish'  ? 'publish' : 'pending',
+            'post_status'  => $request->get_param('status') ?? 'draft',
         ], true);
     
         if ( is_wp_error( $post_id ) ) {
@@ -245,18 +245,22 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
     
         // Normal single update
         $post = get_post( absint( $request->get_param( 'id' ) ) );
-    
         if ( ! $post || $post->post_type !== 'multivendorx_an' ) {
             return new \WP_Error( 'not_found', __( 'Announcement not found', 'multivendorx' ), [ 'status' => 404 ] );
         }
     
+        $post_id = absint( $request->get_param( 'id' ) );
+        $post    = get_post( $post_id );
+        
         $updated_id = wp_update_post([
-            'id'           => absint( $request->get_param( 'id' ) ),
-            'post_title'   => $post->post_title,
-            'post_content' => $post->post_content,
-            'post_status'  => $data['status'] === 'publish' ? 'publish' : 'pending',
+            'ID'           => $post_id,
+            'post_title'   => $post ? $post->post_title : '',
+            'post_content' => $post ? $post->post_content : '',
+            'post_status'  => isset( $data['status'] ) && in_array( $data['status'], ['publish','pending','draft'], true )
+                ? $data['status']
+                : 'draft',
         ], true );
-    
+        
         if ( is_wp_error( $updated_id ) ) {
             return rest_ensure_response([
                 'success' => false,
@@ -326,6 +330,7 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
             'id'      => $id,
             'title'   => $post->post_title,
             'content' => $post->post_content,
+            'status'  => $post->post_status,
             'url'     => get_post_meta( $id, 'multivendorx_announcement_url', true ),
             'stores'  => get_post_meta( $id, 'multivendorx_announcement_stores', true ),
             'date'    => get_post_time( 'Y-m-d H:i:s', true, $post ),
