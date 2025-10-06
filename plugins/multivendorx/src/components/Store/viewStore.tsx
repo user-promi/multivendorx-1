@@ -1,168 +1,112 @@
 import { Link, useLocation } from 'react-router-dom';
 import {
-  BarChart,
-  Bar,
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  PieChart, Pie, Cell, Legend
+  PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer,
 } from 'recharts';
 import "./viewStore.scss";
 import "../AdminDashboard/adminDashboard.scss";
-import BannerImg from '../../assets/images/banner-placeholder.jpg';
-import { AdminBreadcrumbs, BasicInput, CommonPopup, getApiLink, SelectInput, TextArea } from 'zyra';
+import { AdminBreadcrumbs, getApiLink } from 'zyra';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 
-type Transaction = {
+interface StoreData {
+  id?: string | number;
+  name?: string;
+  description?: string;
+  image?: string;
+  banner?: string;
+  phone?: string;
+  email?: string;
+  slug?: string;
+}
+
+interface Transaction {
   balance: string;
   locking_balance: string;
-};
+  lifetime_earning: string;
+}
 
-type AnnouncementForm = {
-  title: string;
-  url: string;
-  content: string;
-  stores: string;
-};
+interface ProductCount {
+  name: string;
+  value: number;
+}
+
 const ViewStore = () => {
-  const [data, setData] = useState({});
-  const [transaction, setTransaction] = useState<Transaction>({
-    balance: '0.00',
-    locking_balance: '0.00',
-  });  
-  const [submitting, setSubmitting] = useState(false);
-  const [storeOptions, setStoreOptions] = useState<{ value: string; label: string }[]>([]);
-  const [productCounts, setProductCounts] = useState<{ status: string, value: number }[]>([]);
-  const [addAnnouncements, setAddAnnouncements] = useState(false);
+  const [data, setData] = useState<StoreData>({});
+  const [transaction, setTransaction] = useState<Transaction>();
+  const [productCounts, setProductCounts] = useState<ProductCount[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const [formData, setFormData] = useState<AnnouncementForm>({
-    title: '',
-    url: '',
-    content: '',
-    stores: '',
-  });
+
   const location = useLocation();
   const hash = location.hash.replace(/^#/, '');
-
-  // Turn hash into a URLSearchParams object
   const params = new URLSearchParams(hash);
-
-  // Extract `id`
   const viewId = params.get('id');
-  // Handle form input change
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-  const handleCloseForm = () => {
-    setAddAnnouncements(false);
-    setFormData({ title: '', url: '', content: '', stores: '' }); // reset form
-    setError(null); // clear any error
-  };
-  const handleSubmit = async () => {
-    if (submitting) return; // prevent double-click
 
+
+  const getAverageRatingFromAPI = async (storeId: string) => {
+    const apiUrl = `${appLocalizer.apiUrl}/wp/v2/comments`;
+  
     try {
-      setSubmitting(true);
-
-      const endpoint = getApiLink(appLocalizer, 'announcement');
-      const method = 'POST';
-
-      const payload = {
-        ...formData,
-        stores: viewId ? [viewId] : [],
-      };
-
-      const response = await axios({
-        method,
-        url: endpoint,
-        headers: { 'X-WP-Nonce': appLocalizer.nonce },
-        data: payload,
+      const response = await axios.get(apiUrl, {
+        headers: { "X-WP-Nonce": appLocalizer.nonce },
+        params: {
+          meta_key: 'store_rating_id',
+          meta_value: storeId,
+          comment_type: 'multivendorx_review',
+          per_page: 100, // fetch up to 100 comments; adjust if needed
+        },
       });
-
-      if (response.data.success) {
-        setAddAnnouncements(false);
-        setFormData({ title: '', url: '', content: '', stores: '' });
-      } else {
-        setError(__('Failed to save announcement', 'multivendorx'));
-      }
-    } catch (err) {
-      setError(__('Failed to save announcement', 'multivendorx'));
-    } finally {
-      setSubmitting(false);
+  
+      const comments = response.data;
+      if (!comments.length) return { averageRating: 0, totalReviews: 0 };
+  
+      // Calculate average
+      const totalReviews = comments.length;
+      const ratingSum = comments.reduce((sum: number, comment: any) => {
+        const rating = parseFloat(comment.meta?.store_rating || 0);
+        return sum + rating;
+      }, 0);
+  
+      return {
+        averageRating: Math.round((ratingSum / totalReviews) * 10) / 10,
+        totalReviews,
+      };
+    } catch (error) {
+      console.error("Error fetching rating:", error);
+      return { averageRating: 0, totalReviews: 0 };
     }
   };
-
 
   useEffect(() => {
     if (!viewId) return;
 
-    axios({
-      method: 'GET',
-      url: getApiLink(appLocalizer, `store/${viewId}`),
-      headers: { 'X-WP-Nonce': appLocalizer.nonce },
-    })
-      .then((res: any) => {
-        const data = res.data || {};
-        setData(data);
-      })
+    const headers = { 'X-WP-Nonce': appLocalizer.nonce };
 
-    axios({
-      method: 'GET',
-      url: getApiLink(appLocalizer, `products/${viewId}`),
-      headers: { 'X-WP-Nonce': appLocalizer.nonce },
-    })
-      .then((res: any) => {
-        const data = res.data || {};
-        const formatted = [
-          { name: 'Pending', value: data.pending || 0 },
-          { name: 'Draft', value: data.draft || 0 },
-          { name: 'Published', value: data.publish || 0 },
-        ];
-        setProductCounts(formatted);
-      })
-      .catch(() => {
-        setError(__('Failed to load product counts', 'multivendorx'));
-      });
-      axios({
-        method: 'GET',
-        url: getApiLink(appLocalizer, `transaction/${viewId}`),
-        headers: { 'X-WP-Nonce': appLocalizer.nonce },
-    })
-        .then((response) => {
-            const data = response?.data || {};
-            console.log(data)
-            setTransaction(data)
-        })
-        .catch((error) => {
-           
-        });
-    axios({
-      method: 'GET',
-      url: getApiLink(appLocalizer, 'store'),
-      headers: { 'X-WP-Nonce': appLocalizer.nonce },
-    })
-      .then((response) => {
-        if (response.data && Array.isArray(response.data)) {
-          const options = response.data.map((store: any) => ({
-            value: store.id.toString(),
-            label: store.store_name,
-          }));
-          setStoreOptions(options);
-        }
+    const fetchData = async () => {
+      try {
+        // Fetch store info
+        const storeRes = await axios.get(getApiLink(appLocalizer, `store/${viewId}`), { headers });
+        setData(storeRes.data || {});
 
-      })
-      .catch(() => {
-        setError(__('Failed to load stores', 'multivendorx'));
-      });
+        // Fetch product counts
+        const productRes = await axios.get(getApiLink(appLocalizer, `products/${viewId}`), { headers });
+        const p = productRes.data || {};
+        setProductCounts([
+          { name: 'Pending', value: p.pending || 0 },
+          { name: 'Draft', value: p.draft || 0 },
+          { name: 'Published', value: p.publish || 0 },
+        ]);
+
+        // Fetch transaction data
+        const transactionRes = await axios.get(getApiLink(appLocalizer, `transaction/${viewId}`), { headers });
+        setTransaction(transactionRes.data || { balance: '0.00', locking_balance: '0.00',lifetime_earning:'0.00' });
+      } catch (err) {
+        setError(__('Failed to load store data', 'multivendorx'));
+      }
+    };
+
+    fetchData();
+    getAverageRatingFromAPI(viewId);
   }, [viewId]);
 
   const COLORS = ['#4CAF50', '#FF9800', '#F44336', '#2196F3'];
@@ -170,247 +114,115 @@ const ViewStore = () => {
     <>
       <AdminBreadcrumbs
         activeTabIcon="adminlib-storefront"
-        tabTitle={'Viewing ' + data.name}
-        description={data.description}
+        tabTitle={`Viewing ${data.name || ''}`}
+        description={data.description || ''}
         buttons={[
           {
             label: 'Back',
             onClick: () => window.location.assign('?page=multivendorx#&tab=stores'),
-            className: 'admin-btn btn-purple'
+            className: 'admin-btn btn-purple',
           },
           {
             label: 'View Public Store',
-            onClick: () => window.open(
-              `${appLocalizer.site_url}/store/${data.slug}/`,
-              '_blank'
-            ),
-            className: 'admin-btn btn-purple'
-          }
-        ]}
-      />
+            onClick: () => {
+              if (data.slug)
+                window.open(`${appLocalizer.site_url}/store/${data.slug}/`, '_blank');
+            },
+            className: 'admin-btn btn-purple',
+          },
+        ] as any} renderBreadcrumb={undefined} renderMenuItems={undefined} goPremiumLink={undefined} customContent={undefined}      />
 
       <div className="store-view-wrapper">
         <div className="store-header row">
           <div className="column profile-section">
-            <span className="avater"><img src={data.image} /></span>
-            <div className="name">{data.name}</div>
-            <div className="des">{data.description}</div>
-            <div className="details">
-              <i className="adminlib-form-phone"></i>
-              {data.phone}
-            </div>
-            <div className="details">
-              <i className="adminlib-mail"></i>
-              {data.email}
-            </div>
+            <span className="avater">
+              <img src={data.image || ''} alt={data.name || 'Store'} />
+            </span>
+            <div className="name">{data.name || 'Unnamed Store'}</div>
+            <div className="des">{data.description || ''}</div>
+
+            {data.phone && (
+              <div className="details">
+                <i className="adminlib-form-phone"></i>
+                {data.phone}
+              </div>
+            )}
+            {data.email && (
+              <div className="details">
+                <i className="adminlib-mail"></i>
+                {data.email}
+              </div>
+            )}
             <div className="review">
-              <i className="adminlib-star"></i>
-              <i className="adminlib-star"></i>
-              <i className="adminlib-star"></i>
-              <i className="adminlib-star"></i>
-              <i className="adminlib-star"></i>
+              {[...Array(4)].map((_, i) => (
+                <i key={i} className="adminlib-star"></i>
+              ))}
             </div>
             <div className="buttons">
-              <a onClick={() => setAddAnnouncements(true)} className="admin-btn btn-purple"><i className="adminlib-mail"></i> Send Mail</a>
-              {addAnnouncements && (
-                <CommonPopup
-                  open={addAnnouncements}
-                  onClose={handleCloseForm}
-                  width="500px"
-                  header={
-                    <>
-                      <div className="title">
-                        <i className="adminlib-cart"></i>
-                        {__('Add Announcement', 'multivendorx')}
-                      </div>
-                      <p>{__('Publish important news, updates, or alerts that appear directly in store dashboards, ensuring sellers never miss critical information.', 'multivendorx')}</p>
-                      <i
-                        onClick={handleCloseForm}
-                        className="icon adminlib-close"
-                      ></i>
-                    </>
-                  }
-                  footer={
-                    <>
-                      <div
-                        onClick={handleCloseForm}
-                        className="admin-btn btn-red"
-                      >
-                        Cancel
-                      </div>
-                      <div
-                        onClick={!submitting ? handleSubmit : undefined}
-                        className={`admin-btn btn-purple ${submitting ? 'disabled' : ''}`}
-                        style={{ opacity: submitting ? 0.6 : 1, pointerEvents: submitting ? 'none' : 'auto' }}
-                      >
-                        {submitting ? 'Submitting...' : 'Submit'}
-                      </div>
-
-                    </>
-                  }
-                >
-
-                  <div className="content">
-                    <div className="form-group-wrapper">
-                      <div className="form-group">
-                        <label htmlFor="title">Title</label>
-                        <BasicInput
-                          type="text"
-                          name="title"
-                          value={formData.title}
-                          onChange={handleChange}
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label htmlFor="content">Enter Content</label>
-                        <TextArea
-                          name="content"
-                          inputClass="textarea-input"
-                          value={formData.content}
-                          onChange={handleChange}
-                        />
-                      </div>
-
-                    </div>
-                  </div>
-
-                  {error && <p className="error-text">{error}</p>}
-                </CommonPopup>
+              {data.email && (
+                <a href={`mailto:${data.email}`} className="admin-btn btn-purple">
+                  <i className="adminlib-mail"></i> Send Mail
+                </a>
               )}
             </div>
           </div>
 
           <div
             className="column store-image"
-            style={{ backgroundImage: `url(${data.banner})` }}
-          >
-            {/* <img src="https://res.cloudinary.com/walden-global-services/image/upload/v1544584558/dandelion/29.jpg" alt="" /> */}
-          </div>
+            style={{ backgroundImage: `url(${data.banner || ''})` }}
+          />
+        </div>
 
+        {/* Cards Row */}
+        <div className="row">
+          {[
+            { title: 'Lifetime Earnings', value: `${appLocalizer.currency_symbol}${transaction?.lifetime_earning || '0.00'}`, link: '#', trend: '+16.24%', color: 'text-green' },
+            { title: 'Settled Payments', value: '(static)184', link: '?page=multivendorx#&tab=payouts', trend: '+16.24%', color: 'text-green' },
+            { title: 'Awaiting Payout', value: `${appLocalizer.currency_symbol}${transaction?.locking_balance || '0.00'}`, link: '?page=multivendorx#&tab=payouts', trend: '-8.54%', color: 'text-red' },
+            { title: 'Requested Payout', value: '(static)3892', link: '?page=multivendorx#&tab=transactions-history', trend: '+0.00%', color: '' },
+          ].map((card, index) => (
+            <div key={index} className="column">
+              <div className="cards">
+                <div className="title-wrapper">
+                  <div>{card.title}</div>
+                  <span className={card.color}>{card.trend}</span>
+                </div>
+                <div className="card-body">
+                  <div className="value">
+                    <span>{card.value}</span>
+                    <a href={card.link}>View Details</a>
+                  </div>
+                  <span className="icon">
+                    <i className="adminlib-rules"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
 
         <div className="row">
-          <div className="column">
-            <div className="cards">
-              <div className="title-wrapper">
-                <div>Lifetime Earnings</div>
-                <span className="text-green">+16.24%</span>
-              </div>
-              <div className="card-body">
-                <div className="value">
-                  <span>47,892</span>
-                  <a href="#">View Full Earnings</a>
-                </div>
-                <span className="icon">
-                  <i className="adminlib-rules"></i>
-                </span>
-              </div>
-            </div>
-          </div>
-
-          <div className="column">
-            <div className="cards">
-              <div className="title-wrapper">
-                <div>Settled Payments</div>
-                <span className="text-green">+16.24%</span>
-              </div>
-              <div className="card-body">
-                <div className="value">
-                  <span>$184</span>
-                  <a href="?page=multivendorx#&tab=payouts">Check Paid History</a>
-                </div>
-                <span className="icon">
-                  <i className="adminlib-rules"></i>
-                </span>
-              </div>
-            </div>
-          </div>
-
-          <div className="column">
-            <div className="cards">
-              <div className="title-wrapper">
-                <div>Awaiting Payout</div>
-                <span className="text-red">-8.54%</span>
-              </div>
-              <div className="card-body">
-                <div className="value">
-                  <span>{transaction.locking_balance}</span>
-                  <a href="?page=multivendorx#&tab=payouts">See What’s Due</a>
-                </div>
-                <span className="icon">
-                  <i className="adminlib-rules"></i>
-                </span>
-              </div>
-            </div>
-          </div>
-
-          <div className="column">
-            <div className="cards">
-              <div className="title-wrapper">
-                <div>Requested Payout</div>
-                <span className="">+0.00%</span>
-              </div>
-              <div className="card-body">
-                <div className="value">
-                  <span>$3892</span>
-                  <a href="?page=multivendorx#&tab=transactions-history">Track Withdrawal Request</a>
-                </div>
-                <span className="icon">
-                  <i className="adminlib-rules"></i>
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="row">
-
           <div className="column">
             <h3>Recent Activity</h3>
-
             <div className="activity-wrapper">
-              <div className="activity">
-                <span className="icon">
-                  <i className="adminlib-cart"></i>
-                </span>
-                <div className="details">
-                  New product "Wireless Gaming Headset" added by TechWorld
-                  <span>2 minutes ago</span>
+              {[
+                { icon: 'adminlib-cart', text: 'New product "Wireless Gaming Headset" added by TechWorld' },
+                { icon: 'adminlib-star', text: '5-star review received for "Smartphone Case" by MobileGear' },
+                { icon: 'adminlib-global-community', text: 'New vendor "Fashion Forward" completed registration' },
+                { icon: 'adminlib-cart', text: 'Commission payment of $2,847 processed for ElectroHub' },
+              ].map((activity, idx) => (
+                <div key={idx} className="activity">
+                  <span className="icon"><i className={activity.icon}></i></span>
+                  <div className="details">
+                    {activity.text}
+                    <span>2 minutes ago</span>
+                  </div>
                 </div>
-              </div>
-              <div className="activity">
-                <span className="icon">
-                  <i className="adminlib-star"></i>
-                </span>
-                <div className="details">
-                  5-star review received for "Smartphone Case" by MobileGear
-                  <span>2 minutes ago</span>
-                </div>
-              </div>
-              <div className="activity">
-                <span className="icon">
-                  <i className="adminlib-global-community"></i>
-                </span>
-                <div className="details">
-
-                  New vendor "Fashion Forward" completed registration
-                  <span>2 minutes ago</span>
-                </div>
-              </div>
-              <div className="activity">
-                <span className="icon">
-                  <i className="adminlib-cart"></i>
-                </span>
-                <div className="details">
-                  Commission payment of $2,847 processed for ElectroHub
-                  <span>2 minutes ago</span>
-                </div>
-              </div>
+              ))}
             </div>
-
           </div>
 
-          <div className="column ">
+          <div className="column">
             <div className="chart-box">
               <h3>Products</h3>
               <ResponsiveContainer width="100%" height={250}>
@@ -433,9 +245,9 @@ const ViewStore = () => {
               </ResponsiveContainer>
             </div>
           </div>
-
         </div>
 
+        {error && <div className="error-message">{error}</div>}
       </div>
     </>
   );

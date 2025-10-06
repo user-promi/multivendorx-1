@@ -36,19 +36,34 @@ class Rest {
         add_filter('woocommerce_rest_product_object_query', array($this, 'filter_products_by_meta_exists'), 10, 2);
         add_filter('woocommerce_rest_coupon_object_query', array($this, 'filter_coupons_by_meta_exists'), 10, 2);
         add_filter('woocommerce_analytics_products_query_args', array($this, 'filter_low_stock_by_meta_exists'), 10, 1);
-        add_filter('comments_open', array($this, 'give_permmission_to_page') , 10, 2);
-
-    }
-
-    public function give_permmission_to_page($open, $post_id) {
-        $post = get_post($post_id);
-
-        if ($post && $post->post_type === 'page') { 
-            return true;
-        }
-        return $open;
-    }
+        add_filter( 'rest_comment_query', array($this, 'mvx_filter_comments_by_store'), 10, 2 );
     
+
+    }
+
+    public function mvx_filter_comments_by_store($args, $request) {
+        // Get query parameters from REST request
+        $store_id = $request->get_param('meta_value');
+        $meta_key = $request->get_param('meta_key');
+    
+        // Only modify if the meta_key is store_rating_id and store_id is provided
+        if ($meta_key === 'store_rating_id' && !empty($store_id)) {
+            // $args['meta_query'] = [
+            //     [
+            //         'key'     => 'store_rating_id',
+            //         'value'   => $store_id,
+            //         'compare' => '=',
+            //     ]
+            // ];
+            $args['comment_type'] = 'multivendorx_review';
+            // $args['status'] = 'approve';
+            // $args['orderby'] = 'comment_date';
+            // $args['order'] = 'DESC';
+        }
+        file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":orders: : " . var_export($args, true) . "\n", FILE_APPEND);
+        return $args; // Always return $args, never WP_REST_Response here
+    }
+
     public function filter_low_stock_by_meta_exists( $args ) {
         if ( isset( $request['meta_key'] ) && $request['meta_key'] === 'multivendorx_store_id' ) {
             
@@ -98,7 +113,6 @@ class Rest {
 
         return $args;
     }
-
 
     /**
      * Filter WooCommerce products by meta key existence.
