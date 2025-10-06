@@ -86,69 +86,69 @@ const AdminDashboard = () => {
       desc: "Step-by-step guides to set up and manage your marketplace.",
       iconClass: "adminlib-book",
       linkText: "Explore Docs",
-      href: "#",
+      href: "https://multivendorx.com/docs/knowledgebase/",
     },
     {
       title: "Expert Consultation",
       desc: "Get tailored advice from our marketplace specialists.",
       iconClass: "adminlib-preview",
       linkText: "Book Consultation",
-      href: "#",
+      href: "https://multivendorx.com/custom-development/",
     },
     {
       title: "Developer Community",
       desc: "Connect with our team and fellow builders on Discord.",
       iconClass: "adminlib-global-community",
       linkText: "Join Discord",
-      href: "#",
+      href: "https://discord.com/channels/1376811097134469191/1376811102020829258",
     },
     {
       title: "Facebook Group",
       desc: "Share experiences and tips with other marketplace owners.",
       iconClass: "adminlib-user-circle",
       linkText: "Join Group",
-      href: "#",
+      href: "https://www.facebook.com/groups/226246620006065/",
     },
   ];
   const featuresList = [
     {
-      title: "Advanced Analytics",
-      desc: "Recurring revenue with subscription products",
+      title: "Advanced Selling Options",
+      desc: "Offer bookings and appointments, subscription products for recurring revenue, and auction-style sales to maximize engagement and earnings.",
       iconClass: "adminlib-book",
       linkText: "Explore Docs",
       href: "#",
     },
     {
-      title: "Multi-Payment Gateway",
-      desc: "Recurring revenue with subscription products",
+      title: "Vacation & Store Availability Management",
+      desc: "Allow vendors to pause orders during holidays or stock breaks with custom notifications for buyers.",
       iconClass: "adminlib-book",
       linkText: "Explore Docs",
       href: "#",
     },
     {
-      title: "Custom Storefronts",
-      desc: "Enable auction-style selling",
+      title: "Inventory & Stock Management",
+      desc: "Low stock alerts, bulk updates, and vendor-specific inventory controls.",
       iconClass: "adminlib-preview",
       linkText: "Book Consultation",
       href: "#",
     },
     {
-      title: "Mobile App Ready",
-      desc: "Time-based product bookings",
-      iconClass: "adminlib-global-community",
-      linkText: "Join Discord",
-      href: "#",
-    },
-    {
-      title: "Rental & booking products",
-      desc: "Time-based product bookings",
-      iconClass: "adminlib-global-community",
-      linkText: "Join Discord",
-      href: "#",
-    },
-    {
       title: "Smart Notifications",
-      desc: "Time-based product bookings",
+      desc: "Advanced automated notifications for orders, refunds, payouts, and vendor alerts.",
+      iconClass: "adminlib-global-community",
+      linkText: "Join Discord",
+      href: "#",
+    },
+    {
+      title: "Vendor Verification & KYC",
+      desc: "Build trust in your marketplace by verifying vendors with documents, KYC checks, and approval workflows.",
+      iconClass: "adminlib-global-community",
+      linkText: "Join Discord",
+      href: "#",
+    },
+    {
+      title: "Membership & Subscriptions",
+      desc: "Enable vendors to sell membership plans or recurring subscription products, generating steady recurring revenue.",
       iconClass: "adminlib-global-community",
       linkText: "Join Discord",
       href: "#",
@@ -327,7 +327,7 @@ const AdminDashboard = () => {
                   <div className="text">
                     Join 50,000+ successful marketplace owners
                   </div>
-                  <div className="des">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa ullam harum, rerum vel fuga mollitia.</div>
+                  <div className="des">Create, manage, and grow your marketplace with confidence. Trusted by thousands of entrepreneurs worldwide.</div>
                   <div className="admin-btn btn-purple">
                     Upgrade Now - 30 Day Guarantee
                     <i className="adminlib-arrow-right icon-pro-btn"></i>
