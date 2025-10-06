@@ -305,7 +305,7 @@ class Install {
         ];
     
         // 5. Set default abuse report reasons
-        $order_settings['abuse_report_reasons'] = [
+        $abuse_settings['abuse_report_reasons'] = [
             'Product not received',
             'Product not as described',
             'Product damaged/defective',
@@ -317,6 +317,8 @@ class Install {
         update_option('multivendorx_identity_verification_settings', $settings);
         update_option('multivendorx_review_management_settings', $review_settings);
         update_option('multivendorx_order_actions_refunds_settings', $order_settings);
+        update_option('multivendorx_product_report_abuse_settings', $abuse_settings);
+        
     }
     
 
