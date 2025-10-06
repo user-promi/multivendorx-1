@@ -395,26 +395,26 @@ const AdminDashboard = () => {
                       <img src={catalogx} alt="" />
                       <div className="tag">
                         <span className="admin-badge green">Free</span>
-                        <a href="" target="blank">
+                        <a href="https://catalogx.com/" target="blank">
                           Install
                         </a>
                       </div>
                     </div>
                     <h3>CatalogX</h3>
-                    <p>Lorem ipsum dolor sit amet, elit.consectetur adipisicing elit.</p>
+                    <p>Turn your store into a product catalog with enquiry-based sales</p>
                   </div>
                   <div className="cards" >
                     <div className="header">
                       <img src={notifima} alt="" />
                       <div className="tag">
                         <span className="admin-badge green">Free</span>
-                        <a href="" target="blank">
+                        <a href="http://notifima.com/" target="blank">
                           Install
                         </a>
                       </div>
                     </div>
                     <h3>Notifima</h3>
-                    <p>Lorem ipsum dolor sit amet elit. consectetur adipisicing elit</p>
+                    <p>Advanced stock alerts and wishlist features for WooCommerce</p>
 
                   </div>
                 </div>
