@@ -42,7 +42,7 @@ const importAll = (
             .replace(/\s+/g, ' ')                       // collapse multiple spaces
             .trim();                                    // clean up edges
     };
-    
+
     // Step 2: Build folder/file structure
     inpContext.keys().forEach((key) => {
         const path = key.substring(2); // remove leading './'
@@ -83,16 +83,24 @@ const importAll = (
         }
     });
 
-    // Step 4: Sort recursively: files first, then folders by folderPriority
+    // Step 4: FIXED - Sort both files and folders by priority
     const sortStructure = (nodes: SettingNode[]): SettingNode[] => {
-        return nodes
+        const sorted = nodes
             .sort((a, b) => {
-                if (a.type === 'file' && b.type === 'folder') return -1;
-                if (a.type === 'folder' && b.type === 'file') return 1;
+                // Get priority for any node type
+                const getPriority = (node: SettingNode): number => {
+                    if (node.type === 'file') {
+                        const priority = node.content?.priority ?? Infinity;
+                        return priority;
+                    } else {
+                        const priority = node.folderPriority ?? Infinity;
+                        return priority;
+                    }
+                };
 
-                const aPriority = a.folderPriority ?? Infinity;
-                const bPriority = b.folderPriority ?? Infinity;
-
+                const aPriority = getPriority(a);
+                const bPriority = getPriority(b);
+                // Sort purely by priority number (lowest first)
                 return aPriority - bPriority;
             })
             .map((node) => {
@@ -104,6 +112,7 @@ const importAll = (
                 }
                 return node;
             });
+        return sorted;
     };
 
     return sortStructure(folderStructure);
