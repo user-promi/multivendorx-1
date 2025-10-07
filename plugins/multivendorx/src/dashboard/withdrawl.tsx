@@ -221,9 +221,22 @@ const Withdrawl: React.FC = () => {
                           });
                       }}
                     >
-                      {field.label}
+                      {field.label} 
                     </button>
                   </div>
+                );
+              }
+              
+              if (field.type === "store-toggle") {
+                return (
+                  <ToggleSetting
+									wrapperClass="setting-form-input"
+									descClass="settings-metabox-description"
+									description="Choose your preferred payment method."
+									options={paymentOptions}
+									value={formData.payment_method || ""}
+									onChange={(value) => handleToggleChange(value, 'payment_method')}
+								/>
                 );
               }
 
