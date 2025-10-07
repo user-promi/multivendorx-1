@@ -68,6 +68,16 @@ const ColorSettingInput: React.FC<ColorSettingProps> = (props) => {
         }
     }, [selectedPalette, props.predefinedOptions]);
 
+    useEffect(() => {
+        const selectedPaletteValue = props.value?.selectedPalette;
+        if (selectedPaletteValue && props.images) {
+            const matchedImage = props.images.find(img => img.value === selectedPaletteValue);
+            if (matchedImage?.img) {
+                setSelectedImage(matchedImage.img);
+            }
+        }
+    }, [props.value, props.images]);
+
     const handlePaletteChange = (e: ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         setSelectedPalette(value);

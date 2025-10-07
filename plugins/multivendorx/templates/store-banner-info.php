@@ -13,10 +13,12 @@ $meta_data = $store->get_all_meta();
 $banner = $meta_data['banner'] ?? MultiVendorX()->plugin_url . 'assets/images/banner-placeholder.jpg';
 $profile = $meta_data['image'] ?? MultiVendorX()->plugin_url . 'assets/images/default-store.jpg';
 $description = $store->get('description');
+$template = MultiVendorX()->setting->get_setting('store_banner_template', array());
+$selectedTemplate = isset($template['selectedPalette']) ? $template['selectedPalette'] : 'template1';
 
 ?>
 
-<div class="multivendorx-banner theme01">
+<div class="multivendorx-banner <?php echo esc_attr($selectedTemplate); ?>">
     <img src="<?php echo esc_url($banner); ?>" class="banner-img" />
     <div class='banner-right'>
         <div class="social-profile">
