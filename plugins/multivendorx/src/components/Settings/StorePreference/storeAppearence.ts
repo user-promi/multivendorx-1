@@ -31,7 +31,7 @@ export default {
             desc: __("Control how your store looks and feels. Set the banner style, logo placement, and customize the dashboard color scheme to match your brand identity.",'multivendorx'),
         },
         {
-            key: 'store_color_settings',
+            key: 'store_banner_template',
             type: 'color-setting',
             label: 'Shop banner section',
             settingDescription: 'Choose how the store’s shop page appears, including banner, logo, and description.',
@@ -54,19 +54,6 @@ export default {
                 img: template3,
                 value: 'template3',
                 }
-                // {
-                //     key: 'template3',
-                //     label: 'Classic Vibe',
-                //     img: template3,
-                //     value: 'template3',
-                // },
-                
-                // {
-                //     key: 'template3',
-                //     label: 'Modern Glow',
-                //     img: template3,
-                //     value: 'template3',
-                // },
             ],
         },
         {
