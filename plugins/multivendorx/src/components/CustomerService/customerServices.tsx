@@ -72,7 +72,7 @@ const CustomerServices = () => {
                                 <div className="title">
                                     Store Reviews
                                 </div>
-                                <div className="des">Lorem ipsum dolor sit amet.</div>
+                                <div className="des">View and manage all customer reviews for stores.</div>
                             </div>
                             <div className="right">
                                 <i className="adminlib-more-vertical"></i>
@@ -89,7 +89,7 @@ const CustomerServices = () => {
                                 <div className="title">
                                     Refund Requests
                                 </div>
-                                <div className="des">Lorem ipsum dolor sit amet.</div>
+                                <div className="des">Track and handle customer refund requests.</div>
                             </div>
                             <div className="right">
                                 <i className="adminlib-more-vertical"></i>
@@ -103,7 +103,7 @@ const CustomerServices = () => {
                                 <div className="title">
                                     Abuse Reports
                                 </div>
-                                <div className="des">Lorem ipsum dolor sit amet.</div>
+                                <div className="des">Monitor reported issues or complaints about products or stores.</div>
                             </div>
                             <div className="right">
                                 <i className="adminlib-more-vertical"></i>
