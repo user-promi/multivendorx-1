@@ -67,12 +67,12 @@ class Frontend {
             }
 
             // Reuse same HTML pattern
-            $html  = '<button class="mvx-follow-btn" 
+            $html  = '<div class="follow-wrapper"> <button class="follow-btn" 
                         data-store-id="' . esc_attr($store_id) . '" 
                         data-user-id="' . esc_attr($user_id) . '">
                         Loading...
                       </button>';
-            $html .= ' <span class="mvx-follower-count" id="followers-count-' . esc_attr($store_id) . '">...</span>';
+            $html .= ' <span class="follower-count" id="followers-count-' . esc_attr($store_id) . '">...</span> </div>';
 
             return $html;
         }, 10, 3);
