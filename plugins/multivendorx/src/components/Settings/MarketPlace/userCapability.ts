@@ -9,7 +9,7 @@ const columns = appLocalizer?.custom_roles
 
 export default {
     id: 'user-capability',
-    priority: 2,
+    priority: 3,
     name: __('User Capabilities', 'multivendorx'),
     desc: __('Define what each store role can access and manage within the marketplace.', 'multivendorx'),
     icon: 'adminlib-wholesale',
