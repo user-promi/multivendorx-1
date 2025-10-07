@@ -38,16 +38,18 @@ class Frontend {
         }
     
         $current_user_id = get_current_user_id();
-    
+        
+        echo '<div class="follow-wrapper">';
         // Render single button with placeholders
-        echo '<button class="mvx-follow-btn" 
+        echo '<button class="follow-btn admin-btn btn-purple" 
                     data-store-id="' . esc_attr($store_id) . '" 
                     data-user-id="' . esc_attr($current_user_id) . '">
                 Loading...
             </button>';
     
         // Follower count placeholder
-        echo ' <span class="mvx-follower-count" id="followers-count-' . esc_attr($store_id) . '">...</span>';
+        echo ' <span class="follower-count" id="followers-count-' . esc_attr($store_id) . '">...</span>';
+        echo '</div>';
     }
     
 }
