@@ -1,7 +1,7 @@
 jQuery(document).ready(function($){
 
     // Initialize buttons
-    $('.mvx-follow-btn').each(function(){
+    $('.follow-btn').each(function(){
         var btn = $(this);
         var store_id = btn.data('store-id');
 
@@ -25,7 +25,7 @@ jQuery(document).ready(function($){
     });
 
     // Handle follow/unfollow click
-    $(document).on('click', '.mvx-follow-btn', function(){
+    $(document).on('click', '.follow-btn', function(){
         var btn = $(this);
         var store_id = btn.data('store-id');
         var user_id  = btn.data('user-id');

@@ -20,6 +20,7 @@ import Datepicker from './DatePicker';
 import TimePicker from './TimePicker';
 import TemplateSection from './TemplateSection';
 import DisplayButton from './DisplayButton';
+import BlockLayout from './BlockLayout';
 
 // Types
 export interface Option {
@@ -63,6 +64,11 @@ const DEFAULT_FORM_TITLE = 'Demo Form';
 
 // Select options list
 const selectOptions: SelectOption[] = [
+    {
+        icon: 'adminlib-t-letter-bold icon-form-textbox',
+        value: 'block-layout',
+        label: 'Block Layout',
+    },
     {
         icon: 'adminlib-t-letter-bold icon-form-textbox',
         value: 'text',
@@ -865,6 +871,9 @@ const CustomFrom: React.FC<CustomFormProps> = ({
                                                             )
                                                         }
                                                     />
+                                                )}
+                                                {formField.type === 'block-layout' && (
+                                                    <BlockLayout/>
                                                 )}
                                                 {formField.type ===
                                                     'attachment' && (
