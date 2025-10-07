@@ -43,27 +43,46 @@ class Frontend {
     
     }
     public function show_store_info($product_id) {
-        
-        $store_details = MultiVendorX()->setting->get_setting( 'store_branding_details', [] );
-        if (in_array( 'show_store_name', $store_details )) {
+        $store_details = MultiVendorX()->setting->get_setting('store_branding_details', []);
+    
+        if (in_array('show_store_name', $store_details)) {
             $store = StoreUtil::get_products_vendor($product_id);
             if (!$store) return;
-            $name = $store->get('name');
-
-             $logo_html = '';
-            if ( in_array( 'show_store_logo_next_to_products', $store_details ) ) {
-                $logo_url  = $store->get( 'image' ) ?: MultiVendorX()->plugin_url . 'assets/images/default-store.jpg';
-                $logo_html = '<img src="' . esc_url( $logo_url ) . '" alt="' . esc_attr( $name ) . '" />';
+    
+            $store_user_ids = StoreUtil::get_store_users($store->get_id());
+            $store_owner_id = null;
+            $store_owner_name = '';
+    
+            // Loop through store users and find the owner
+            if (!empty($store_user_ids) && is_array($store_user_ids)) {
+                foreach ($store_user_ids as $user_id) {
+                    $user = get_userdata($user_id);
+                    if ($user && in_array('store_owner', (array) $user->roles, true)) {
+                        $store_owner_id = $user->ID;
+                        $store_owner_name = $user->display_name;
+                        break;
+                    }
+                }
             }
-
+    
+            $name = $store->get('name');
+    
+            $logo_html = '';
+            if (in_array('show_store_logo_next_to_products', $store_details)) {
+                $logo_url  = $store->get('image') ?: MultiVendorX()->plugin_url . 'assets/images/default-store.jpg';
+                $logo_html = '<img src="' . esc_url($logo_url) . '" alt="' . esc_attr($name) . '" />';
+            }
+    
             return [
-                'id'  => $store->get_id(),
-                'name'  => $name,
-                'logo_html'  => $logo_html,
+                'id'               => $store->get_id(),
+                'name'             => $name,
+                'logo_html'        => $logo_html,
+                'owner_id'         => $store_owner_id,
+                'owner_name'       => $store_owner_name,
             ];
-            
         }
     }
+    
 
     public function add_text_in_shop_and_single_product_page() {
         global $post;

@@ -7,6 +7,8 @@ class Ajax {
     public function __construct() {
         add_action('wp_ajax_mvx_submit_report_abuse', [$this, 'handle_report_abuse']);
         add_action('wp_ajax_nopriv_mvx_submit_report_abuse', [$this, 'handle_report_abuse']);
+        add_action('wp_ajax_get_report_reasons', [$this, 'get_report_reasons']);
+        add_action('wp_ajax_nopriv_get_report_reasons', [$this, 'get_report_reasons']);
     }
 
     public function handle_report_abuse() {
@@ -43,5 +45,13 @@ class Ajax {
         }
 
         wp_send_json_success("Your report has been submitted. Thank you!");
+    }
+
+    public function get_report_reasons() {
+        // Fetch saved reasons from settings
+        $reasons = MultiVendorX()->setting->get_setting( 'abuse_report_reasons', [] );
+        $reasons[] = 'Other';
+        // Return JSON response
+        wp_send_json_success($reasons);
     }
 }
