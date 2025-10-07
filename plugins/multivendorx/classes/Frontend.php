@@ -46,14 +46,14 @@ class Frontend {
         $store_details = MultiVendorX()->setting->get_setting('store_branding_details', []);
     
         if (in_array('show_store_name', $store_details)) {
-            $store = StoreUtil::get_products_vendor($product_id);
+            $store = StoreUtil::get_products_vendor($product_id);    
             if (!$store) return;
     
             $store_user_ids = StoreUtil::get_store_users($store->get_id());
             $store_owner_id = null;
             $store_owner_name = '';
     
-            // Loop through store users and find the owner
+            // Find store owner
             if (!empty($store_user_ids) && is_array($store_user_ids)) {
                 foreach ($store_user_ids as $user_id) {
                     $user = get_userdata($user_id);
@@ -65,7 +65,11 @@ class Frontend {
                 }
             }
     
-            $name = $store->get('name');
+            $name        = $store->get('name');
+            $description = $store->get('description');
+            $phone       = $store->get_meta('phone')?? '';
+            $email       = $store->get_meta('email')??'';
+            $address_1   = $store->get_meta('address_1')??'';
     
             $logo_html = '';
             if (in_array('show_store_logo_next_to_products', $store_details)) {
@@ -74,14 +78,19 @@ class Frontend {
             }
     
             return [
-                'id'               => $store->get_id(),
-                'name'             => $name,
-                'logo_html'        => $logo_html,
-                'owner_id'         => $store_owner_id,
-                'owner_name'       => $store_owner_name,
+                'id'            => $store->get_id(),
+                'name'          => $name,
+                'description'   => $description,
+                'logo_html'     => $logo_html,
+                'owner_id'      => $store_owner_id,
+                'owner_name'    => $store_owner_name,
+                'phone'         => $phone,
+                'email'         => $email,
+                'address'       => $address_1,
             ];
         }
     }
+    
     
 
     public function add_text_in_shop_and_single_product_page() {
