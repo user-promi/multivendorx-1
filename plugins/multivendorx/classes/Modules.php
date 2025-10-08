@@ -131,6 +131,11 @@ class Modules {
 						'module_file'  => MultiVendorX()->plugin_path . 'modules/ReportAbuse/Module.php',
 						'module_class' => 'MultiVendorX\ReportAbuse\Module',
 					),
+                    'geo-location'=> array(
+                        'id'=> 'geo-location',
+                        'module_file'=> MultiVendorX()->plugin_path . 'modules/Geolocation/Module.php',
+                        'module_class' => 'MultiVendorX\Geolocation\Module',
+                    ),
 				)
             );
         }

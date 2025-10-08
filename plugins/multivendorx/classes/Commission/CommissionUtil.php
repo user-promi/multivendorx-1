@@ -39,6 +39,14 @@ class CommissionUtil {
         return new Commission( $id );
     }
 
+    public static function get_commission_by_store_and_order_id( $store_id, $order_id ) {
+        global $wpdb;
+        $commission = $wpdb->get_row(
+            $wpdb->prepare( "SELECT * FROM `" . $wpdb->prefix . Utill::TABLES['commission'] . "` WHERE store_id = %d AND order_id = %d", $store_id, $order_id )
+        );
+        return $commission ?? new \stdClass();
+    }
+
     /**
      * Get array of commission object or count based on filter.
      * 

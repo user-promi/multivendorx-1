@@ -76,14 +76,14 @@ class Ajax {
                 ?>
                 <li data-qna="<?php echo esc_attr($row->id); ?>">
                     <p><strong>Q:</strong> <?php echo esc_html($row->question_text); ?></p>
-                    <button class="qna-vote" data-type="question">
-                        👍 <span><?php echo intval($row->question_votes); ?></span>
+                    <button class="qna-vote adminlib-thumbs-ok admin-badge green" data-type="question">
+                        <span><?php echo intval($row->question_votes); ?></span>
                     </button>
 
                     <?php if ($row->answer_text) : ?>
                         <p><strong>A:</strong> <?php echo esc_html($row->answer_text); ?></p>
-                        <button class="qna-vote" data-type="answer">
-                            👍 <span><?php echo intval($row->answer_vote_count); ?></span>
+                        <button class="qna-vote adminlib-thumbs-ok admin-badge green" data-type="answer">
+                            <span><?php echo intval($row->answer_vote_count); ?></span>
                         </button>
                     <?php else : ?>
                         <em>No answer yet</em>

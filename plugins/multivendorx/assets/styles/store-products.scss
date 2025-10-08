@@ -387,9 +387,10 @@
  .multivendorx-banner {
      position: relative;
 
-     .banner-img{
-        width: 100%;
+     .banner-img {
+         width: 100%;
      }
+
      .banner-right {
          .social-profile {
              position: absolute;
@@ -410,8 +411,10 @@
          }
      }
 
-     .contact-detail {
+     .container {
          padding-top: 0.5rem;
+         display: flex;
+         justify-content: space-between;
 
          i {
              padding-right: 0.5rem;
@@ -436,29 +439,30 @@
              height: auto;
          }
      }
-     .follow-wrapper{
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-        gap: 0.5rem;
-        padding-top: 0.313rem;
 
-        .follower-count{
-            font-size: 0.9rem;
-        }
+     .follow-wrapper {
+         display: flex;
+         justify-content: center;
+         align-items: center;
+         flex-direction: column;
+         gap: 0.5rem;
+         padding-top: 0.313rem;
+
+         .follower-count {
+             font-size: 0.9rem;
+         }
      }
-      &.template1 {
-          .store-details {
+
+     &.template1 {
+         .store-details {
              position: absolute;
              top: 15%;
              left: 4%;
              width: 92%;
-          }
-          .follow-wrapper{
+         }
 
-          }
-      }
+         .follow-wrapper {}
+     }
 
      &.template2 {
          .store-details {
@@ -468,6 +472,10 @@
              .row {
                  justify-content: center;
              }
+
+             .container {
+                 flex-direction: column;
+             }
          }
      }
 
@@ -475,15 +483,83 @@
          .store-details {
              display: flex;
              gap: 1.5rem;
-             align-items: end;
-             margin-top: -2%;
              padding: 0 4rem;
+             margin-top: 1rem;
 
-             .contact-detail{
-                padding: 0;
+             .contact-detail {
+                 padding: 0;
+             }
+         }
+     }
+ }
+
+ //  store tab start
+ .multivendorx-store-tabs {
+     display: flex;
+     padding: 0;
+     margin: 2rem 0;
+     gap: 1.5rem;
+     border-bottom: $border-light-small;
+
+     li {
+         list-style-type: none;
+         padding: 0.625rem 0;
+
+         &.active {
+             border-bottom: 0.126rem solid $primary;
+
+             a {
+                 color: $primary;
              }
          }
      }
  }
 
  // store template end
+
+
+ //  single product qna start
+ #product-qna {
+    .header{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+     #qna-list {
+         margin: 0;
+         padding: 0;
+
+         li {
+             list-style-type: none;
+             padding: 1rem;
+             border: $border-light-small;
+             border-radius: 0.313rem;
+             margin-bottom: 0.813rem;
+
+             .qna-question {
+                 font-weight: 600;
+             }
+
+             .qna-answer {
+                 font-size: 0.95rem;
+             }
+
+             .qna-votes {
+                 display: flex;
+                 align-items: start;
+                 gap: 0.625rem;
+                 justify-content: end;
+
+                 span{
+                    font-size: 1.25rem;
+                    padding: 0.5rem;
+                 }
+                 p{
+                    margin: 0;
+                 }
+             }
+         }
+     }
+ }
+
+ //  single product qna end

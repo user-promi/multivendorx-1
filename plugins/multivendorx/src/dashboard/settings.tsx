@@ -77,7 +77,8 @@ const settings = () => {
         { id: "business-address", label: "Business Address", icon: "form-address", content: <BusinessAddress /> },
         { id: "contact-information", label: "Contact Information", icon: "form-phone", content: <ContactInformation /> },
         { id: "social-media", label: "Social Media", icon: "cohort", content: <SocialMedia /> },
-        { id: "payout", label: "Payout", icon: "tools", content: <Withdrawl/> },
+        { id: "payout", label: "Payout", icon: "tools", content: <Withdrawl /> },
+
         { id: "privacy", label: "Privacy", icon: "security", content: <Appearance /> },
         {
             id: "seo-visibility", label: "SEO & visibility", icon: "bulk-action", content:
