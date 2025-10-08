@@ -104,7 +104,7 @@ const Notification = () => {
         { id: "products", label: "Products", content: <Products onUpdated={refreshCounts} /> },
         { id: "stores", label: "Stores", content: <Vendors onUpdated={refreshCounts} /> },
         { id: "coupons", label: "Coupons", content: <Coupons onUpdated={refreshCounts} /> },
-        { id: "transactions", label: "Withdrawl", content: <Transactions onUpdated={refreshCounts} /> },
+        { id: "transactions", label: "Withdrawal", content: <Transactions onUpdated={refreshCounts} /> },
     ];
     // run once on mount
     useEffect(() => {
@@ -169,7 +169,7 @@ const Notification = () => {
                                     <i className="adminlib-module"></i>
                                 </div>
                                 <div className="description">
-                                    Pending Withdrawl
+                                    Pending Withdrawal
                                 </div>
                             </div>
                         </div>

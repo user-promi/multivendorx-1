@@ -25,7 +25,6 @@ const Transactions: React.FC = () => {
     const [pagination, setPagination] = useState<PaginationState>({ pageIndex: 0, pageSize: 10 });
     const [pageCount, setPageCount] = useState(0);
     const [showDropdown, setShowDropdown] = useState<number | false>(false);
-    const [modalTransaction, setModalTransaction] = useState<TransactionRow | null>(null);
 
     // Fetch total pending transactions
     useEffect(() => {

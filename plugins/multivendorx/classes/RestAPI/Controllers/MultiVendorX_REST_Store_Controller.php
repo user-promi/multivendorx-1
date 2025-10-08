@@ -102,21 +102,27 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             if( $follower ){
                 return $this->get_store_follower( $request );
             }
+            $count          = $request->get_param( 'count' );
+
+            if ( $count ) {
+                return StoreUtil::get_store_information(['count' => true]);
+            }
 
             $limit          = max( intval( $request->get_param( 'row' ) ), 10 );
             $page           = max( intval( $request->get_param( 'page' ) ), 1 );
             $offset         = ( $page - 1 ) * $limit;
-            $count          = $request->get_param( 'count' );
-
-            $stores = StoreUtil::get_store();
-
-            if ( $count ) {
-                global $wpdb;
-                $table_name = "{$wpdb->prefix}" . Utill::TABLES['store'];
-
-                $total_count = $wpdb->get_var( "SELECT COUNT(*) FROM $table_name" );
-                return rest_ensure_response( (int) $total_count );
+            $filter_status          = $request->get_param( 'filter_status' );
+            $args = [
+                'limit'  => $limit,
+                'offset' => $offset,
+            ];
+            
+            if ( ! empty( $filter_status ) ) {
+                $args['status'] = $filter_status;
             }
+
+            $stores = StoreUtil::get_store_information( $args );
+
             $formatted_stores = array();
             foreach ( $stores as $store ) {
                 $store_meta = Store::get_store_by_id( (int) $store['ID'] );
@@ -133,8 +139,17 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                     )
                 );
             }
+            $all = StoreUtil::get_store_information(['count' => true]);
+            $active = StoreUtil::get_store_information(['status' => 'active','count' => true]);
+            $pending = StoreUtil::get_store_information(['status' => 'pending','count' => true]);
 
-            return rest_ensure_response( $formatted_stores );
+            $response = [
+                'stores'  => $formatted_stores,
+                'all'     => $all,
+                'active'  => $active,
+                'pending' => $pending,
+            ];
+            return rest_ensure_response( $response);
 
         } catch ( \Exception $e ) {
             MultiVendorX()->util->log(

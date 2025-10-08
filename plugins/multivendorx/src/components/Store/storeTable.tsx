@@ -15,10 +15,19 @@ type StoreRow = {
     status?: string;
 };
 
+type StoreStatus = {
+    key: string;
+    name: string;
+    count: number;
+};
+type FilterData = {
+    typeCount?: any;
+};
+
 const StoreTable: React.FC = () => {
 
     const [data, setData] = useState<StoreRow[] | null>(null);
-
+    const [ storeStatus, setStoreStatus ] = useState< StoreStatus[] | null >( null );
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
     const [totalRows, setTotalRows] = useState<number>(0);
     const [pagination, setPagination] = useState<PaginationState>({
@@ -54,6 +63,7 @@ const StoreTable: React.FC = () => {
     function requestData(
         rowsPerPage = 10,
         currentPage = 1,
+        typeCount = '',
     ) {
         setData(null);
         axios({
@@ -63,10 +73,28 @@ const StoreTable: React.FC = () => {
             params: {
                 page: currentPage,
                 row: rowsPerPage,
+                filter_status: typeCount === 'all' ? '' : typeCount,
             },
         })
             .then((response) => {
-                setData(response.data || []);
+                setData(response.data.stores || []);
+                setStoreStatus( [
+                    {
+                        key: 'all',
+                        name: 'All',
+                        count: response.data.all || 0,
+                    },
+                    {
+                        key: 'active',
+                        name: 'Active',
+                        count: response.data.active || 0,
+                    },
+                    {
+                        key: 'pending',
+                        name: 'Pending',
+                        count: response.data.pending || 0,
+                    },
+                ] );
             })
             .catch(() => {
                 setError(__('Failed to load stores', 'multivendorx'));
@@ -78,11 +106,15 @@ const StoreTable: React.FC = () => {
     const requestApiForData = (
         rowsPerPage: number,
         currentPage: number,
+        filterData: FilterData
+        
     ) => {
+        console.log(filterData)
         setData(null);
         requestData(
             rowsPerPage,
             currentPage,
+            filterData?.typeCount,
         );
     };
 
@@ -211,7 +243,7 @@ const StoreTable: React.FC = () => {
                     onPaginationChange={setPagination}
                     handlePagination={requestApiForData}
                     perPageOption={[10, 25, 50]}
-                    typeCounts={[]}
+                    typeCounts={ storeStatus as StoreStatus[] }
                     totalCounts={totalRows}
                 />
             </div>

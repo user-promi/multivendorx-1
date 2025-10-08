@@ -198,8 +198,9 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
     
         if ( ! $store_id ) {
             return rest_ensure_response( [
-                'balance' => 0,
-                'locking_balance' => 0
+                'balance'         => 0,
+                'locking_balance' => 0,
+                'lifetime_earning'=> 0,
             ] );
         }
     
@@ -219,13 +220,32 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
             ARRAY_A
         );
     
+        $balance = isset($last_transaction['balance']) ? $last_transaction['balance'] : 0;
+        $locking_balance = isset($last_transaction['locking_balance']) ? $last_transaction['locking_balance'] : 0;
+    
+        // Calculate total lifetime earnings (sum of all amounts)
+        $total_earning = $wpdb->get_var(
+            $wpdb->prepare(
+                "SELECT SUM(amount) 
+                 FROM $table_name 
+                 WHERE store_id = %d",
+                $store_id
+            )
+        );
+    
+        $total_earning = $total_earning ? $total_earning : 0;
+    
+        // Lifetime earning minus locking balance
+        $lifetime_earning = $total_earning - $locking_balance;
+    
         return rest_ensure_response([
-            'balance'      => isset($last_transaction['balance']) ? $last_transaction['balance'] : 0,
-            'locking_balance' => isset($last_transaction['locking_balance']) ? $last_transaction['locking_balance'] : 0,
+            'balance'          => $balance,
+            'locking_balance'  => $locking_balance,
+            'lifetime_earning' => $lifetime_earning,
         ]);
     }
     
-
+    
     public function update_item( $request ) {
         
     }

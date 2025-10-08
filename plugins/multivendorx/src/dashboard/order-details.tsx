@@ -58,8 +58,6 @@ const Reviews: React.FC = () => {
                 </div>
             </div > {/* page title end */}
 
-
-
             <div className="container-wrapper">
                 <div className="card-wrapper width-65">
                     <div className="card-content">
@@ -69,7 +67,6 @@ const Reviews: React.FC = () => {
                                     <tr className="header-row">
                                         <td className="header-col">Item</td>
                                         <td className="header-col">Cost</td>
-                                        <td className="header-col">Discount</td>
                                         <td className="header-col">Qty</td>
                                         <td className="header-col">Total</td>
                                         <td className="header-col">Commission</td>
@@ -106,7 +103,7 @@ const Reviews: React.FC = () => {
                                         </td>
 
                                         {/* Discount */}
-                                        <td className="admin-column">
+                                        {/* <td className="admin-column">
                                             {!isRefund ? (
                                                 `$${row.discount}`
                                             ) : (
@@ -119,7 +116,7 @@ const Reviews: React.FC = () => {
                                                     className="basic-input"
                                                 />
                                             )}
-                                        </td>
+                                        </td> */}
 
                                         {/* Qty */}
                                         <td className="admin-column">
@@ -285,7 +282,6 @@ const Reviews: React.FC = () => {
                     </div>
 
                 </div>
-
 
                 <div className="card-wrapper width-35">
                     {/* customer details start */}

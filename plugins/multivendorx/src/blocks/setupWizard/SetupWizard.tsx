@@ -1,55 +1,114 @@
 import React, { useState } from 'react';
-import { __ } from "@wordpress/i18n";
-import Intro from './steps/Intro';
-import Modules from './steps/Module';
-import Enquiry from './steps/Enquiry';
-import Quote from './steps/Quote';
 import './SetupWizard.scss';
-// import Logo from '../../assets/images/Brand.png';
 
 interface Step {
-    component: React.ReactNode;
     title: string;
+    description?: string;
+    completed: boolean;
+    actionText: string;
 }
 
+interface Section {
+    title: string;
+    steps: Step[];
+}
+
+// Initial sections data
+const sectionsData: Section[] = [
+    {
+        title: 'Set Up The Basics',
+        steps: [
+            { title: 'Set Site Title & Tagline', description: 'Give your site a name and tagline.', completed: true, actionText: 'Set Up' },
+            { title: 'Review Admin Email', description: 'Ensure your admin email is correct.', completed: false, actionText: 'Review' },
+            { title: 'Choose Page Links', description: 'Decide how page links appear.', completed: false, actionText: 'Set Up' },
+            { title: 'Search Engine Visibility', description: 'Control search engine indexing.', completed: false, actionText: 'Review' },
+        ],
+    },
+    {
+        title: 'Design, Style & Theme',
+        steps: [
+            { title: 'Pick a Color Scheme', completed: false, actionText: 'Set Up' },
+            { title: 'Choose Typography', completed: false, actionText: 'Set Up' },
+        ],
+    },
+    {
+        title: 'Design, Style & Theme',
+        steps: [
+            { title: 'Color Scheme', completed: false, actionText: 'Set Up' },
+            { title: 'Choose Typography', completed: false, actionText: 'Set Up' },
+        ],
+    },
+];
+
 const SetupWizard: React.FC = () => {
-    const [currentStep, setCurrentStep] = useState<number>(0);
+    const [sections, setSections] = useState<Section[]>(sectionsData);
+    const [expandedSection, setExpandedSection] = useState<number | null>(0);
 
-    const onPrev = () => {
-        setCurrentStep(prev => Math.max(0, prev - 1));
+    // Toggle section open/close
+    const toggleSection = (index: number) => {
+        setExpandedSection(expandedSection === index ? null : index);
     };
 
-    const onNext = () => {
-        setCurrentStep(prev => prev + 1);
+    // Toggle step completion
+    const toggleStepCompletion = (sectionIdx: number, stepIdx: number) => {
+        const newSections = [...sections];
+        newSections[sectionIdx].steps[stepIdx].completed = !newSections[sectionIdx].steps[stepIdx].completed;
+        setSections(newSections);
     };
-
-    const onFinish = () => {
-        window.location.href = (window as any).appLocalizer?.redirect_url;
-    };
-
-    const steps: Step[] = [
-        { component: <Intro onNext={onNext} />, title: 'Intro' },
-        { component: <Modules onPrev={onPrev} onNext={onNext} />, title: 'Modules' },
-        { component: <Enquiry onPrev={onPrev} onNext={onNext} />, title: 'Enquiry' },
-        { component: <Quote onPrev={onPrev} onFinish={onFinish} />, title: 'Quote' },
-    ];
 
     return (
-        <main className='catalogx-setup-wizard-main-wrapper'>
-            {/* <img src={Logo} alt="Logo" /> */}
-            <nav className='step-count'>
-                <ul>
-                    {steps.map((step, index) => (
-                        <li key={index} className={currentStep >= index ? 'active' : ''}>
-                            {step.title}
-                        </li>
-                    ))}
-                </ul>
-            </nav>
-            <div className='setup-container'>
-                {steps[currentStep].component}
-            </div>
-        </main>
+        <div className="wizard-container">
+            <h5>Set Up The Basics</h5>
+            {sections.map((section, sIdx) => {
+                const totalSteps = section.steps.length;
+                const completedSteps = section.steps.filter(step => step.completed).length;
+
+                return (
+                    <div key={sIdx} className={`wizard-section ${expandedSection === sIdx ? 'expanded' : ''}`}>
+                        {/* Section Header */}
+                        <div className="wizard-header" onClick={() => toggleSection(sIdx)}>
+                            <div className="wizard-title">
+                                <span className={`adminlib-pagination-right-arrow ${expandedSection === sIdx ? 'rotate' : ''}`}></span>
+                                {section.title}
+                            </div>
+                            <div className={`admin-badge ${completedSteps === totalSteps ? 'green' : 'blue'}`}>
+                                {completedSteps === totalSteps && <i className="adminlib-check"></i>}
+                                {completedSteps}/{totalSteps}
+                            </div>
+                        </div>
+
+                        {/* Steps */}
+                        {expandedSection === sIdx && (
+                            <div className="wizard-steps">
+                                {section.steps.map((step, stepIdx) => (
+                                    <div key={stepIdx} className="wizard-step">
+                                        <div className="step-info">
+                                            <div className="default-checkbox">
+                                                <input
+                                                    type="checkbox"
+                                                    className="mvx-toggle-checkbox"
+                                                    id={`step-checkbox-${sIdx}-${stepIdx}`}
+                                                    checked={step.completed}
+                                                    onChange={() => toggleStepCompletion(sIdx, stepIdx)}
+                                                />
+                                                <label htmlFor={`step-checkbox-${sIdx}-${stepIdx}`}></label>
+                                            </div>
+
+                                            <div className="step-text">
+                                                <span className="step-title">{step.title}</span>
+                                                {step.description && <span className="step-desc">{step.description}</span>}
+                                            </div>
+                                        </div>
+
+                                        <button className="admin-btn btn-purple">{step.actionText} <i className="adminlib-arrow-right"></i> </button>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                );
+            })}
+        </div>
     );
 };
 

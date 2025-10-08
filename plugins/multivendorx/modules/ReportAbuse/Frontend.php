@@ -50,13 +50,29 @@ class Frontend {
 
                 <div class="report-abuse-form" style="display:none;">
                     <h3><?php echo sprintf(esc_html__('Report abuse for "%s"', 'multivendorx'), $product->get_name()); ?></h3>
+
+                    <!-- Name & Email -->
                     <p><input type="text" class="report_abuse_name" placeholder="<?php esc_attr_e('Name', 'multivendorx'); ?>"></p>
                     <p><input type="email" class="report_abuse_email" placeholder="<?php esc_attr_e('Email', 'multivendorx'); ?>"></p>
-                    <p><textarea class="report_abuse_msg" placeholder="<?php esc_attr_e('Message', 'multivendorx'); ?>"></textarea></p>
+
+                    <!-- Radio buttons for reasons -->
+                    <div class="report_abuse_reasons_wrapper">
+                        <!-- Dynamic radio buttons will be appended here via jQuery -->
+                    </div>
+
+                    <!-- Custom message textarea (hidden initially) -->
+                    <p class="report-abuse-custom-msg" style="display:none;">
+                        <textarea class="report_abuse_msg" placeholder="<?php esc_attr_e('Message', 'multivendorx'); ?>"></textarea>
+                    </p>
+
                     <input type="hidden" class="report_abuse_product_id" value="<?php echo esc_attr($product->get_id()); ?>">
+
+                    <!-- Submit button -->
                     <button type="button" class="submit-report-abuse">
                         <span class="btn-text"><?php esc_html_e('Report', 'multivendorx'); ?></span>
+                        <span class="btn-spinner" style="display:none;">⏳</span>
                     </button>
+
                     <div class="report-abuse-msg-box"></div>
                 </div>
             </div>
