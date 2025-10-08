@@ -50,11 +50,11 @@ const Withdrawl: React.FC = () => {
   const selectedProvider = storePayment[formData.payment_method];
 
   // useEffect(() => {
-	// 	if (successMsg) {
-	// 		const timer = setTimeout(() => setSuccessMsg(null), 3000);
-	// 		return () => clearTimeout(timer);
-	// 	}
-	// }, [successMsg]);
+  // 	if (successMsg) {
+  // 		const timer = setTimeout(() => setSuccessMsg(null), 3000);
+  // 		return () => clearTimeout(timer);
+  // 	}
+  // }, [successMsg]);
 
   useEffect(() => {
     if (!appLocalizer.store_id) return;
@@ -72,24 +72,24 @@ const Withdrawl: React.FC = () => {
   const [stripeConnectInstance, setStripeConnectInstance] = useState<any>(null);
 
   useEffect(() => {
-	if (!containerRef.current) return;
-  
-	const field = selectedProvider?.fields?.find(f => f.type === 'embedded');
-	if (!field) return;
-  
-	const clientSecret = field.client_secret;
-	const publishableKey = field.publish;
-  
-	if (clientSecret && publishableKey) {
-	  (async () => {
-		const instance = await loadConnectAndInitialize({
-		  publishableKey,
-		  fetchClientSecret: async () => clientSecret,
-		});
-		setStripeConnectInstance(instance);
-	  })();
-	}
-  }, [selectedProvider]);  
+    if (!containerRef.current) return;
+
+    const field = selectedProvider?.fields?.find(f => f.type === 'embedded');
+    if (!field) return;
+
+    const clientSecret = field.client_secret;
+    const publishableKey = field.publish;
+
+    if (clientSecret && publishableKey) {
+      (async () => {
+        const instance = await loadConnectAndInitialize({
+          publishableKey,
+          fetchClientSecret: async () => clientSecret,
+        });
+        setStripeConnectInstance(instance);
+      })();
+    }
+  }, [selectedProvider]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -100,9 +100,12 @@ const Withdrawl: React.FC = () => {
     });
   };
 
-  const handleToggleChange = (value: string) => {
+  const handleToggleChange = (value: string, name?: string) => {
     setFormData((prev) => {
-      const updated = { ...(prev || {}), payment_method: value };
+      const updated = {
+        ...(prev || {}),
+        [name || 'payment_method']: value,
+      };
       autoSave(updated);
       return updated;
     });
@@ -138,7 +141,7 @@ const Withdrawl: React.FC = () => {
                 description="Choose your preferred payment method."
                 options={paymentOptions}
                 value={formData.payment_method || ""}
-                onChange={handleToggleChange}
+                onChange={(value) => handleToggleChange(value)}
               />
             </div>
           </div>
@@ -158,38 +161,38 @@ const Withdrawl: React.FC = () => {
 
               if (field.type === "embedded") {
                 return (
-					<div ref={containerRef} key={`embedded-${index}`}>
-					{stripeConnectInstance && (
-					  <ConnectComponentsProvider connectInstance={stripeConnectInstance}>
-						<ConnectAccountOnboarding
-						  onExit={() => console.log("Onboarding exited")}
-						  onStepChange={({ step }) => {
-							console.log("Current step:", step);
-							if (step === "complete") {
-							  // Call WP backend to save status
-							  axios.post(appLocalizer.ajaxurl, new URLSearchParams({
-								action: 'mark_stripe_onboarding_complete',
-								_ajax_nonce: appLocalizer.nonce,
-								vendor_id: appLocalizer.store_id,
-							  }))
-							  .then((res) => {
-								if (res.data.success) {
-								  console.log('Stripe onboarding marked complete!');
-								  window.location.reload();
-								} else {
-								  console.error('Failed to update onboarding status', res.data);
-								}
-							  });
-							}
-						  }}
-						  collectionOptions={{
-							fields: "eventually_due",
-							futureRequirements: "include",
-						  }}
-						/>
-					  </ConnectComponentsProvider>
-					)}
-				  </div>
+                  <div ref={containerRef} key={`embedded-${index}`}>
+                    {stripeConnectInstance && (
+                      <ConnectComponentsProvider connectInstance={stripeConnectInstance}>
+                        <ConnectAccountOnboarding
+                          onExit={() => console.log("Onboarding exited")}
+                          onStepChange={({ step }) => {
+                            console.log("Current step:", step);
+                            if (step === "complete") {
+                              // Call WP backend to save status
+                              axios.post(appLocalizer.ajaxurl, new URLSearchParams({
+                                action: 'mark_stripe_onboarding_complete',
+                                _ajax_nonce: appLocalizer.nonce,
+                                vendor_id: appLocalizer.store_id,
+                              }))
+                                .then((res) => {
+                                  if (res.data.success) {
+                                    console.log('Stripe onboarding marked complete!');
+                                    window.location.reload();
+                                  } else {
+                                    console.error('Failed to update onboarding status', res.data);
+                                  }
+                                });
+                            }
+                          }}
+                          collectionOptions={{
+                            fields: "eventually_due",
+                            futureRequirements: "include",
+                          }}
+                        />
+                      </ConnectComponentsProvider>
+                    )}
+                  </div>
                 );
               }
 
@@ -221,22 +224,28 @@ const Withdrawl: React.FC = () => {
                           });
                       }}
                     >
-                      {field.label} 
+                      {field.label}
                     </button>
                   </div>
                 );
               }
-              
+
               if (field.type === "store-toggle") {
                 return (
                   <ToggleSetting
-									wrapperClass="setting-form-input"
-									descClass="settings-metabox-description"
-									description="Choose your preferred payment method."
-									options={paymentOptions}
-									value={formData.payment_method || ""}
-									onChange={(value) => handleToggleChange(value, 'payment_method')}
-								/>
+                    key={field.key}
+                    description={field.desc}
+                    options={
+                      Array.isArray(field.options)
+                        ? field.options.map((opt) => ({
+                          ...opt,
+                          value: String(opt.value),
+                        }))
+                        : []
+                    }
+                    value={formData[field.key || ""] || ""}
+                    onChange={(value) => handleToggleChange(value, field.key)}
+                  />
                 );
               }
 
