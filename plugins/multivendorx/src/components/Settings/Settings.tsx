@@ -18,6 +18,7 @@ import {
 } from 'zyra';
 import ShowProPopup from '../Popup/popup';
 import { useLocation, Link } from 'react-router-dom';
+import Notifications from './Notifications';
 
 // Types
 type SettingItem = Record< string, any >;
@@ -226,6 +227,11 @@ const Settings: React.FC< SettingsProps > = () => {
                     url="https://www.youtube.com/embed/cgfeZH5z2dM?si=3zjG13RDOSiX2m1b"
                     faqData={ faqs }
                 />
+            );
+        }
+        if ( currentTab === 'notifications' ) {
+            return (
+                <Notifications />
             );
         }
 
