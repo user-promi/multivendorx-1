@@ -65,27 +65,31 @@ $selectedTemplate = isset($template['selectedPalette']) ? $template['selectedPal
         </div>
         <div class="details">
             <div class="heading"><?php echo esc_html($store->get('name')); ?></div>
-            <div class="contact-detail">
-                
-                <div class="row">
-                <?php
-                // Show email if not hidden
-                if (!empty($meta_data['email']) && ($meta_data['hideEmail'] ?? 'no') === 'no') {
-                    echo '<div class="store-email"><i class="adminlib-mail"></i> ' . esc_html($meta_data['email']) . '</div>';
-                }
+            <div class="container">
 
-                // Show phone if not hidden
-                if (!empty($meta_data['phone']) && ($meta_data['hidePhone'] ?? 'no') === 'no') {
-                    echo '<div class="store-phone"> <i class="adminlib-form-phone"></i>' . esc_html($meta_data['phone']) . '</div>';
-                }
-                ?>
+                <div class="contact-details">
+                    <div class="row">
+                        <?php
+                        // Show email if not hidden
+                        if (!empty($meta_data['email']) && ($meta_data['hideEmail'] ?? 'no') === 'no') {
+                            echo '<div class="store-email"><i class="adminlib-mail"></i> ' . esc_html($meta_data['email']) . '</div>';
+                        }
+
+                        // Show phone if not hidden
+                        if (!empty($meta_data['phone']) && ($meta_data['hidePhone'] ?? 'no') === 'no') {
+                            echo '<div class="store-phone"> <i class="adminlib-form-phone"></i>' . esc_html($meta_data['phone']) . '</div>';
+                        }
+                        ?>
+                    </div>
+                    <?php
+                    // Show full address
+                    $address = trim(($meta_data['address_1'] ?? '') . ' ' . ($meta_data['address_2'] ?? ''));
+                    if (!empty($address)) {
+                        echo '<div class="store-address"> <i class="adminlib-location"></i>' . esc_html($address) . '</div>';
+                    }
+                    ?>
                 </div>
                 <?php
-                // Show full address
-                $address = trim(($meta_data['address_1'] ?? '') . ' ' . ($meta_data['address_2'] ?? ''));
-                if (!empty($address)) {
-                    echo '<div class="store-address"> <i class="adminlib-location"></i>' . esc_html($address) . '</div>';
-                }
 
                 do_action('mvx_after_vendor_information', $store_id);
                 ?>

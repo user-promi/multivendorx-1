@@ -27,10 +27,10 @@ foreach ( $store_tabs as $key => $tab ) {
 }
 
 ?>
-<ul class="mvx-store-tabs">
+<ul class="multivendorx-store-tabs">
     <?php foreach ( $store_tabs as $key => $tab ) : ?>
         <?php if ( ! empty( $tab['url'] ) ) : ?>
-            <li class="mvx-store-tab <?php echo esc_attr( $key ); ?>">
+            <li class="multivendorx-store-tab <?php echo esc_attr( $key ); ?>">
                 <a href="<?php echo esc_url( $tab['url'] ); ?>">
                     <?php echo esc_html( $tab['title'] ); ?>
                 </a>
@@ -40,7 +40,7 @@ foreach ( $store_tabs as $key => $tab ) {
 </ul>
 
 
-<div class="mvx-store-tab-content">
+<div class="multivendorx-store-tab-content">
 <?php
 switch ( $current_tab ) {
     case 'reviews':
