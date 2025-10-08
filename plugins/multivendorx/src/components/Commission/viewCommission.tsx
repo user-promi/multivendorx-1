@@ -105,7 +105,7 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({ open, onClose, commissi
                     : undefined;
 
                   return {
-                    id: item.id,
+                    id: item.product_id,
                     name: item.name,
                     sku: item.sku || "-",
                     cost: `${appLocalizer.currency_symbol}${item.price}`,
@@ -133,11 +133,6 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({ open, onClose, commissi
       });
   }, [commissionId]);
 
-
-  console.log('Commission:', commissionData);
-  console.log('Store:', storeData);
-  console.log('Order:', orderData);
-  console.log('orderitem', orderItems)
   const popupColumns: ColumnDef<OrderItem>[] = [
     {
       id: "select",
@@ -158,13 +153,31 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({ open, onClose, commissi
     },
     {
       header: __("Product", "multivendorx"),
-      cell: ({ row }) => (
-        <TableCell title={row.original.name}>
-          <div className="name">{row.original.name ?? "-"}</div>
-          <div className="sub-text"> Sku: {row.original.sku ?? "-"} </div>
-        </TableCell>
-      ),
-    },
+      cell: ({ row }) => {
+        const productId = row.original.id; // make sure this is the WooCommerce product ID
+        const productName = row.original.name ?? "-";
+    
+        return (
+          <TableCell title={productName}>
+            <div className="name">
+              {productId ? (
+                <a
+                  href={`${appLocalizer.site_url.replace(/\/$/, '')}/wp-admin/post.php?post=${productId}&action=edit`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="product-link"
+                >
+                  {productName}
+                </a>
+              ) : (
+                productName
+              )}
+            </div>
+            <div className="sub-text">Sku: {row.original.sku ?? "-"}</div>
+          </TableCell>
+        );
+      },
+    },    
     {
       header: __("Cost", "multivendorx"),
       cell: ({ row }) => (
@@ -219,16 +232,29 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({ open, onClose, commissi
         {/* your existing code untouched */}
         <div className="section left">
           <div className="vendor-details">
-            <div className="name">{storeData?.name}</div>
+            <div className="name">
+              {storeData?.id ? (
+                <a
+                  href={`${appLocalizer.site_url.replace(/\/$/, '')}/wp-admin/admin.php?page=multivendorx#&tab=stores&view&id=${storeData.id}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="store-link"
+                >
+                  {storeData.name}
+                </a>
+              ) : (
+                storeData?.name ?? "-"
+              )}
+            </div>
             <div className="details">
               <div className="email">
                 <i className="adminlib-mail"></i>
-                <b>Email:</b> test_vendor@test.com
+                <b>Email:</b> {storeData?.email}
               </div>
               <div className="method">
                 <i className="adminlib-form-paypal-email"></i>
                 <b>Payment Method:</b>{" "}
-                <span className="admin-badge blue">{orderData?.payment_method}</span>
+                <span className="admin-badge blue">{orderData?.payment_method_title}</span>
               </div>
             </div>
           </div>
@@ -239,16 +265,6 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({ open, onClose, commissi
           <Table
             data={orderItems}
             columns={popupColumns as ColumnDef<Record<string, any>, any>[]}
-            rowSelection={''}
-            onRowSelectionChange={''}
-            defaultRowsPerPage={10}
-            pageCount={''}
-            pagination={pagination}
-            onPaginationChange={setPagination}
-            handlePagination={''}
-            perPageOption={[10, 25, 50]}
-            typeCounts={[]}
-            // totalCounts={totalRows}
           />
 
           <div className="heading">{__("Shipping", "multivendorx")}</div>
@@ -268,18 +284,46 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({ open, onClose, commissi
           <div className="commission-details">
             <div className="items">
               <div className="text">Associated Order</div>
-              <div className="value">#{commissionData?.order_id}</div>
+              <div className="value">
+                {commissionData?.order_id ? (
+                  <a
+                    href={`${appLocalizer.site_url.replace(/\/$/, '')}/wp-admin/post.php?post=${commissionData.order_id}&action=edit`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="order-link"
+                  >
+                    #{commissionData.order_id}
+                  </a>
+                ) : (
+                  '-'
+                )}
+              </div>
             </div>
             <div className="items">
               <div className="text">Order Status</div>
               <div className="value">
-                <span className="admin-badge yellow">{orderData?.status}</span>
+                <span className="admin-badge yellow">
+                  {orderData?.status
+                    ? orderData.status
+                      .replace(/^wc-/, '')          // remove 'wc-' prefix if exists
+                      .replace(/_/g, ' ')           // replace underscores with spaces
+                      .replace(/\b\w/g, (c) => c.toUpperCase()) // capitalize first letter of each word
+                    : ''}
+                </span>
+
               </div>
             </div>
             <div className="items">
               <div className="text">Commission Status</div>
               <div className="value">
-                <span className="admin-badge red">{commissionData?.status}</span>
+                <span className={`admin-badge ${commissionData?.status === 'paid' ? 'green' : 'red'}`}>
+                  {commissionData?.status
+                    ? commissionData.status
+                      .replace(/^wc-/, '') // remove any prefix like 'wc-'
+                      .replace(/_/g, ' ')  // replace underscores with spaces
+                      .replace(/\b\w/g, (c) => c.toUpperCase()) // capitalize each word
+                    : ''}
+                </span>
               </div>
             </div>
             <div className="items">

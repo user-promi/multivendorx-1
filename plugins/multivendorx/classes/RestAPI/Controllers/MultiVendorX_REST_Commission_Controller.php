@@ -147,14 +147,16 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
             );
         }
 
-        $all    = CommissionUtil::get_commissions([], true, true);
-        $paid   = CommissionUtil::get_commissions(['status' => 'paid'], true, true);
-        $refund = CommissionUtil::get_commissions(['status' => 'refund'], true, true);
-        $trash  = CommissionUtil::get_commissions(['status' => 'trash'], true, true);
+        $all        = CommissionUtil::get_commissions([], true, true);
+        $paid       = CommissionUtil::get_commissions(['status' => 'paid'], true, true);
+        $refund     = CommissionUtil::get_commissions(['status' => 'refund'], true, true);
+        $trash      = CommissionUtil::get_commissions(['status' => 'trash'], true, true);
+        $cancelled  = CommissionUtil::get_commissions(['status' => 'cancelled'], true, true);
         $response = [
             'commissions' => $formatted_commissions,
             'all'    => $all,
             'paid'   => $paid,
+            'cancelled'=> $cancelled,
             'refund' => $refund,
             'trash'  => $trash,
         ];
