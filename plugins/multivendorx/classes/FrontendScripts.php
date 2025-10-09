@@ -355,7 +355,8 @@ class FrontendScripts {
                 'order-actions-refunds',
                 'advertising',
                 'product-preferencess',
-                'product-store-category-control'
+                'product-store-category-control',
+                'geolocation'
             )
 		);
 
