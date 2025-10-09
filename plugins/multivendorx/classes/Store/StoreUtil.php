@@ -274,8 +274,6 @@ class StoreUtil {
         return $stores ?: [];
     }
     
-
-
     public static function set_primary_owner( $user_id, $store_id ) {
         global $wpdb;
 

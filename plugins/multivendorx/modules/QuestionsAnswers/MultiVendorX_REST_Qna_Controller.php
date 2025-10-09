@@ -71,7 +71,9 @@ class MultiVendorX_REST_Qna_Controller extends \WP_REST_Controller {
     }
 
 
-    // GET 
+    /**
+     * Get QnA items with optional pagination and date filter
+     */
     public function get_items( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
@@ -81,27 +83,41 @@ class MultiVendorX_REST_Qna_Controller extends \WP_REST_Controller {
                 [ 'status' => 403 ]
             );
         }
-        $store_id = $request->get_param( 'store_id' );
-        
-        if( $store_id ){
-            return $this->get_store_wise_qna( $request );
-        }
-        $limit  = max( intval( $request->get_param( 'row' ) ), 10 );
-        $page   = max( intval( $request->get_param( 'page' ) ), 1 );
-        $offset = ( $page - 1 ) * $limit;
-    
+
+        $store_id   = $request->get_param( 'store_id' );
+        $limit      = max( intval( $request->get_param( 'row' ) ), 10 );
+        $page       = max( intval( $request->get_param( 'page' ) ), 1 );
+        $offset     = ( $page - 1 ) * $limit;
+        $start_date = $request->get_param('startDate');
+        $end_date   = $request->get_param('endDate');
+
         // Count only
         if ( $request->get_param( 'count' ) ) {
             $total_count = Util::get_question_information( [ 'count' => true ] );
             return rest_ensure_response( (int) $total_count );
         }
-    
-        $questions = Util::get_question_information( [
+
+        // Prepare args
+        $args = [
             'limit'  => $limit,
             'offset' => $offset,
-        ] );
-    
-        // Format response with product details
+        ];
+
+        if ( $start_date ) {
+            $args['start_date'] = sanitize_text_field( $start_date );
+        }
+        if ( $end_date ) {
+            $args['end_date'] = sanitize_text_field( $end_date );
+        }
+
+        // Store-wise filter (optional)
+        if ( $store_id ) {
+            $args['store_id'] = intval( $store_id );
+        }
+
+        $questions = Util::get_question_information( $args );
+
+        // Format response
         $formatted = array_map( function( $q ) {
             $product = wc_get_product( $q['product_id'] );
             return [
@@ -119,9 +135,10 @@ class MultiVendorX_REST_Qna_Controller extends \WP_REST_Controller {
                 'question_visibility' => $q['question_visibility'],
             ];
         }, $questions );
-    
+
         return rest_ensure_response( $formatted );
     }
+
     
     public function create_item( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );

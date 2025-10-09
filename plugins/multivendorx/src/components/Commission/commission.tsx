@@ -44,7 +44,6 @@ type FilterData = {
 };
 
 const Commission: React.FC = () => {
-    const dateRef = useRef<HTMLDivElement | null>(null);
     const [openModal, setOpenModal] = useState(false);
     const [modalDetails, setModalDetails] = useState<string>('');
     const [error, setError] = useState<String>();
@@ -53,7 +52,6 @@ const Commission: React.FC = () => {
     const bulkSelectRef = useRef<HTMLSelectElement>(null);
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
     const [totalRows, setTotalRows] = useState<number>(0);
-    const [openDatePicker, setOpenDatePicker] = useState(false);
     const [viewCommission, setViewCommission] = useState(false);
     const [selectedCommissionId, setSelectedCommissionId] = useState<number | null>(null);
 
@@ -61,16 +59,6 @@ const Commission: React.FC = () => {
         pageIndex: 0,
         pageSize: 10,
     });
-    const [selectedRange, setSelectedRange] = useState([
-        {
-            startDate: new Date(new Date().getTime() - 30 * 24 * 60 * 60 * 1000),
-            endDate: new Date(),
-            key: 'selection',
-        },
-    ]);
-    const handleDateOpen = () => {
-        setOpenDatePicker(!openDatePicker);
-    };
 
     const [commissionStatus, setCommissionStatus] = useState<CommissionStatus[] | null>(null);
     const [pageCount, setPageCount] = useState(0);
@@ -111,22 +99,6 @@ const Commission: React.FC = () => {
         requestData(rowsPerPage, currentPage);
         setPageCount(Math.ceil(totalRows / rowsPerPage));
     }, [pagination]);
-    const handleBulkAction = () => {
-        if (appLocalizer.khali_dabba) {
-            if (!Object.keys(rowSelection).length) {
-                setModalDetails('Select rows.');
-                setOpenModal(true);
-                return;
-            }
-            if (!bulkSelectRef.current?.value) {
-                setModalDetails('Please select a action.');
-                setOpenModal(true);
-                return;
-            }
-            setData(null);
-        }
-    };
-
 
     // Fetch data from backend.
     function requestData(
@@ -403,7 +375,6 @@ const Commission: React.FC = () => {
                         wrapperClass=""
                         inputClass=""
                         onChange={(range:any) => {
-                            console.log('Selected Range:', range);
                             updateFilter('date', {
                                 start_date: range.startDate,
                                 end_date: range.endDate,
