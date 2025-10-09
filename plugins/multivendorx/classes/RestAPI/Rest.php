@@ -117,26 +117,38 @@ class Rest {
      * @return array Modified WP_Query arguments.
      */
     public function filter_products_by_meta_exists( $args, $request ) {
-        // Check if the request has our specific meta_key parameter
         if ( isset( $request['meta_key'] ) && $request['meta_key'] === 'multivendorx_store_id' ) {
-
-            // Only include products where this meta key exists
-            $meta_query = array(
-                'key'     => 'multivendorx_store_id',
-                'compare' => 'EXISTS',
-            );
-
+    
+            // Check if a value (store_id) was passed
+            $meta_query = [];
+    
+            if ( isset( $request['value'] ) && ! empty( $request['value'] ) ) {
+                //Filter for exact match
+                $meta_query[] = [
+                    'key'     => 'multivendorx_store_id',
+                    'value'   => sanitize_text_field( $request['value'] ),
+                    'compare' => '=',
+                ];
+            } else {
+                //If no value, just check that the key exists
+                $meta_query[] = [
+                    'key'     => 'multivendorx_store_id',
+                    'compare' => 'EXISTS',
+                ];
+            }
+    
             // Merge with existing meta_query if present
             if ( isset( $args['meta_query'] ) ) {
                 $args['meta_query']['relation'] = 'AND';
                 $args['meta_query'][] = $meta_query;
             } else {
-                $args['meta_query'] = array( $meta_query );
+                $args['meta_query'] = $meta_query;
             }
         }
-
+    
         return $args;
     }
+    
 
     public function filter_coupons_by_meta_exists( $args, $request ) {
         // Check if the request has our specific meta_key parameter
