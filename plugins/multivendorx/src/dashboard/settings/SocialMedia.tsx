@@ -72,7 +72,7 @@ const SocialMedia = () => {
                     {/* Facebook */}
                     <div className="form-group-wrapper">
                         <div className="form-group">
-                            <label htmlFor="facebook"><i className="adminlib-supervised-user-circle"></i> Facebook</label>
+                            <label htmlFor="facebook"><i className="adminlib-facebook-fill"></i> Facebook</label>
                             <BasicInput
                                 name="facebook"
                                 wrapperClass="setting-form-input"
@@ -86,7 +86,7 @@ const SocialMedia = () => {
                     {/* x */}
                     <div className="form-group-wrapper">
                         <div className="form-group">
-                            <label htmlFor="twitter"><i className="adminlib-supervised-user-circle"></i> X</label>
+                            <label htmlFor="twitter"><i className="adminlib-twitter"></i> X</label>
                             <BasicInput
                                 name="twitter"
                                 wrapperClass="setting-form-input"
@@ -100,7 +100,7 @@ const SocialMedia = () => {
                     {/* LinkedIn */}
                     <div className="form-group-wrapper">
                         <div className="form-group">
-                            <label htmlFor="linkedin"><i className="adminlib-supervised-user-circle"></i> LinkedIn</label>
+                            <label htmlFor="linkedin"><i className="adminlib-linkedin-border"></i> LinkedIn</label>
                             <BasicInput
                                 name="linkedin"
                                 wrapperClass="setting-form-input"
@@ -114,7 +114,7 @@ const SocialMedia = () => {
                     {/* YouTube */}
                     <div className="form-group-wrapper">
                         <div className="form-group">
-                            <label htmlFor="youtube"><i className="adminlib-supervised-user-circle"></i> YouTube</label>
+                            <label htmlFor="youtube"><i className="adminlib-youtube"></i> YouTube</label>
                             <BasicInput
                                 name="youtube"
                                 wrapperClass="setting-form-input"
@@ -128,7 +128,7 @@ const SocialMedia = () => {
                     {/* Instagram */}
                     <div className="form-group-wrapper">
                         <div className="form-group">
-                            <label htmlFor="instagram"><i className="adminlib-supervised-user-circle"></i> Instagram</label>
+                            <label htmlFor="instagram"><i className="adminlib-mail"></i> Instagram</label>
                             <BasicInput
                                 name="instagram"
                                 wrapperClass="setting-form-input"

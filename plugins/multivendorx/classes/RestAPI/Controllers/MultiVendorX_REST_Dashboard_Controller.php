@@ -172,7 +172,7 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller
             'settings' => array(
                 'name' => 'Settings',
                 'slug' => 'settings',
-                'icon' => 'adminlib-storefront',
+                'icon' => 'adminlib-setting',
                 'capability' => ['read_products'],
                 // 'submenu' => array(
                 //     array(
