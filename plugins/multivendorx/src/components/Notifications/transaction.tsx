@@ -24,7 +24,6 @@ const Transactions: React.FC = () => {
     const [totalRows, setTotalRows] = useState<number>(0);
     const [pagination, setPagination] = useState<PaginationState>({ pageIndex: 0, pageSize: 10 });
     const [pageCount, setPageCount] = useState(0);
-    const [showDropdown, setShowDropdown] = useState<number | false>(false);
 
     // Fetch total pending transactions
     useEffect(() => {
@@ -62,10 +61,6 @@ const Transactions: React.FC = () => {
         requestData(pagination.pageSize, currentPage);
         setPageCount(Math.ceil(totalRows / pagination.pageSize));
     }, [pagination]);
-
-    const toggleDropdown = (id: number) => {
-        setShowDropdown(showDropdown === id ? false : id);
-    };
 
     const requestData = (rowsPerPage = 10, currentPage = 1) => {
         setData(null);
@@ -182,13 +177,6 @@ const Transactions: React.FC = () => {
                     totalCounts={totalRows}
                 />
             </div>
-
-            {/* {modalTransaction && (
-                <TransactionDetailsModal
-                    transaction={modalTransaction}
-                    onClose={() => setModalTransaction(null)}
-                />
-            )} */}
         </>
     );
 };
