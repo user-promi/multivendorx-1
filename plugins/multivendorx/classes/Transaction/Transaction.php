@@ -216,13 +216,13 @@ class Transaction {
             $where[] = " ( status = '" . esc_sql( $args['status'] ) . "' ) ";
         }
     
-        // Filter by date range (available_at)
+        // 🔹 Filter by date range on created_at
         if ( isset( $args['start_date'] ) ) {
-            $where[] = ' ( available_at >= ' . esc_sql( $args['start_date'] ) . ' ) ';
+            $where[] = " ( created_at >= '" . esc_sql( $args['start_date'] ) . "' ) ";
         }
     
         if ( isset( $args['end_date'] ) ) {
-            $where[] = ' ( available_at <= ' . esc_sql( $args['end_date'] ) . ' ) ';
+            $where[] = " ( created_at <= '" . esc_sql( $args['end_date'] ) . "' ) ";
         }
     
         $table = $wpdb->prefix . Utill::TABLES['transaction'];
@@ -256,5 +256,4 @@ class Transaction {
             return $results ?? array();
         }
     }
-    
 }

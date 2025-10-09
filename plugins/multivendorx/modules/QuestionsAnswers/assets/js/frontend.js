@@ -20,13 +20,6 @@ jQuery(document).ready(function($) {
         }, function(res) {
             if (res.success) {
                 let q = res.data;
-                // $('#qna-list').append(
-                //     `<li data-qna="${q.id}">
-                //         <p><strong>Q:</strong> ${q.question}</p>
-                //         <button class="qna-vote" data-type="question">👍 <span>0</span></button>
-                //         <em>No answer yet</em>
-                //     </li>`
-                // );
                 $('#qna-question').val('');
                 $('#qna-form').slideUp();
                 $('#qna-show-form').show();

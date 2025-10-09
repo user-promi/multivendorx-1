@@ -78,7 +78,9 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
         $count   = $request->get_param( 'count' );
         $storeId = $request->get_param( 'store_id' );
         $status = $request->get_param( 'status' );
-
+        $start_date = date('Y-m-d 00:00:00', strtotime(sanitize_text_field($request->get_param('startDate'))));
+        $end_date   = date('Y-m-d 23:59:59', strtotime(sanitize_text_field($request->get_param('endDate'))));
+        
         // Prepare filter for CommissionUtil
         $filter = array(
             'perpage' => $limit,
@@ -93,12 +95,12 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
             $filter['status'] = $status;
         }
 
-        // Fetch commissions
-        $commissions = CommissionUtil::get_commissions(
-            $filter,
-            false // return stdClass instead of Commission object
-        );
-    
+        if ( ! empty( $start_date ) && ! empty( $end_date ) ) {
+            $filter['created_at'] = array(
+                'compare' => 'BETWEEN',
+                'value'   => array( $start_date, $end_date ),
+            );
+        }
         if ( $count ) {
             global $wpdb;
             $table_name  = "{$wpdb->prefix}" . Utill::TABLES['commission'];
@@ -114,6 +116,11 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
     
             return rest_ensure_response( (int) $total_count );
         }
+        // Fetch commissions
+        $commissions = CommissionUtil::get_commissions(
+            $filter,
+            false // return stdClass instead of Commission object
+        );
     
         $formatted_commissions = array();
     
@@ -147,14 +154,16 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
             );
         }
 
-        $all    = CommissionUtil::get_commissions([], true, true);
-        $paid   = CommissionUtil::get_commissions(['status' => 'paid'], true, true);
-        $refund = CommissionUtil::get_commissions(['status' => 'refund'], true, true);
-        $trash  = CommissionUtil::get_commissions(['status' => 'trash'], true, true);
+        $all        = CommissionUtil::get_commissions([], true, true);
+        $paid       = CommissionUtil::get_commissions(['status' => 'paid'], true, true);
+        $refund     = CommissionUtil::get_commissions(['status' => 'refund'], true, true);
+        $trash      = CommissionUtil::get_commissions(['status' => 'trash'], true, true);
+        $cancelled  = CommissionUtil::get_commissions(['status' => 'cancelled'], true, true);
         $response = [
             'commissions' => $formatted_commissions,
             'all'    => $all,
             'paid'   => $paid,
+            'cancelled'=> $cancelled,
             'refund' => $refund,
             'trash'  => $trash,
         ];

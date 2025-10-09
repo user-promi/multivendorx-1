@@ -138,6 +138,9 @@ const StoreTable: React.FC = () => {
             ),
         },
         {
+            id: 'store_name',
+            accessorKey: 'store_name',
+            enableSorting: true,
             header: __('Store', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell title={row.original.store_name || ''}>
@@ -154,6 +157,9 @@ const StoreTable: React.FC = () => {
             ),
         },
         {
+            id: 'applied_on',
+            accessorKey: 'applied_on',
+            enableSorting: true,
             header: __('Applied On', 'multivendorx'),
             cell: ({ row }) => {
                 const rawDate = row.original.applied_on;
