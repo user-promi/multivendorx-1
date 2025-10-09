@@ -248,7 +248,6 @@ const History: React.FC = () => {
                                 <div className="title">
                                     Available for Payout
                                 </div>
-                                <div className="des">Lorem ipsum dolor sit amet.</div>
                             </div>
                         </div>
                         <div className="payout-wrapper">
@@ -270,7 +269,6 @@ const History: React.FC = () => {
                                 <div className="title">
                                     Payout Account
                                 </div>
-                                <div className="des">Lorem ipsum dolor sit amet.</div>
                             </div>
                         </div>
                         <div className="notification-wrapper">
