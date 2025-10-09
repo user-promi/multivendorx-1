@@ -38,7 +38,29 @@ const Appearance = () => {
                     <div className="form-group-wrapper">
                         <div className="form-group">
                             <label htmlFor="product-name">Logo</label>
-                            <BasicInput name="phone" wrapperClass="setting-form-input" descClass="settings-metabox-description" />
+                            <FileInput
+                                // value={formData.image}
+                                inputClass="form-input"
+                                name="image"
+                                type="hidden"
+                                // onButtonClick={() => runUploader('image')}
+                                imageWidth={75}
+                                imageHeight={75}
+                                openUploader="Upload Image"
+                                // imageSrc={imagePreviews.image}
+                                buttonClass="admin-btn btn-purple"
+                                descClass="settings-metabox-description"
+                                size="small"
+                                // ✅ NEW: Handle Remove
+                                // onRemove={() => {
+                                //     const updated = { ...formData, image: '' };
+                                //     setFormData(updated);
+                                //     setImagePreviews((prev) => ({ ...prev, image: '' }));
+                                //     autoSave(updated);
+                                // }}
+                                //NEW: Handle Replace (reopen media uploader)
+                                // onReplace={() => runUploader('image')}
+                            />
                         </div>
                     </div>
                     <div className="form-group-wrapper">
@@ -48,16 +70,16 @@ const Appearance = () => {
                                 name="stores"
                                 type="single-select"
                                 options={storeOptions}
-                            value={formData.stores ? formData.stores.split(',') : []}
-                            onChange={(newValue: any) => {
-                                const selectedValues = Array.isArray(newValue)
-                                    ? newValue.map((opt) => opt.value)
-                                    : [];
-                                setFormData((prev) => ({
-                                    ...prev,
-                                    stores: selectedValues.join(','),
-                                }));
-                            }}
+                                value={formData.stores ? formData.stores.split(',') : []}
+                                onChange={(newValue: any) => {
+                                    const selectedValues = Array.isArray(newValue)
+                                        ? newValue.map((opt) => opt.value)
+                                        : [];
+                                    setFormData((prev) => ({
+                                        ...prev,
+                                        stores: selectedValues.join(','),
+                                    }));
+                                }}
                             />
                         </div>
                     </div>
