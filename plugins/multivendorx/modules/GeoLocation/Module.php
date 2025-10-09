@@ -5,9 +5,9 @@
  * @package MultiVendorX
  */
 
-namespace MultiVendorX\PaypalPayout;
+namespace MultiVendorX\GeoLocation;
 
-use MultiVendorX\Geolocation\GooglePlaces;
+use MultiVendorX\GeoLocation\GooglePlaces;
 
 /**
  * MultiVendorX Module class

@@ -8,6 +8,7 @@ export {};
 
 declare global {
     interface AppLocalizer {
+        google_maps_api_key: any;
         apiUrl: string;
         restUrl: string;
         nonce: string;
