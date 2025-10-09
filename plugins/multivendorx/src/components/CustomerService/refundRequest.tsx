@@ -160,7 +160,6 @@ const RefundRequest: React.FC = () => {
 
     return (
         <>
-            <div className="admin-table-wrapper">
                 <Table
                     data={data}
                     columns={columns as ColumnDef<Record<string, any>, any>[]}
@@ -174,7 +173,6 @@ const RefundRequest: React.FC = () => {
                     perPageOption={[10, 25, 50]}
                     typeCounts={[]}
                 />
-            </div>
         </>
     );
 };
