@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 import { DateRangePicker, RangeKeyDict, Range } from 'react-date-range';
-import { Table, getApiLink, TableCell, AdminBreadcrumbs, CommonPopup } from 'zyra';
+import { Table, getApiLink, TableCell, AdminBreadcrumbs, CommonPopup, CalendarInput } from 'zyra';
 import {
     ColumnDef,
     RowSelectionState,
@@ -40,7 +40,7 @@ type FilterData = {
     searchAction?: string;
     searchField?: string;
     typeCount?: any;
-    store?:string;
+    store?: string;
 };
 
 const Commission: React.FC = () => {
@@ -134,6 +134,8 @@ const Commission: React.FC = () => {
         currentPage = 1,
         typeCount = '',
         store = '',
+        startDate =new Date(0),
+        endDate = new Date(),
     ) {
         setData(null);
         axios({
@@ -144,7 +146,9 @@ const Commission: React.FC = () => {
                 page: currentPage,
                 row: rowsPerPage,
                 status: typeCount === 'all' ? '' : typeCount,
-                store_id:store
+                store_id: store,
+                startDate ,
+                endDate
             },
         })
             .then((response) => {
@@ -195,7 +199,9 @@ const Commission: React.FC = () => {
             rowsPerPage,
             currentPage,
             filterData?.typeCount,
-            filterData?.store
+            filterData?.store,
+            filterData?.date?.start_date,
+            filterData?.date?.end_date
         );
     };
 
@@ -219,14 +225,14 @@ const Commission: React.FC = () => {
             ),
         },
         {
-            id:'storeName',
+            id: 'storeName',
             accessorKey: 'storeName',
             enableSorting: true,
             header: __('Store Name', 'multivendorx'),
             cell: ({ row }) => <TableCell title={row.original.storeName || '-'}>{row.original.storeName || '-'}</TableCell>,
         },
         {
-            id:'orderId',
+            id: 'orderId',
             accessorKey: 'orderId',
             enableSorting: true,
             header: __('Order ID', 'multivendorx'),
@@ -235,7 +241,7 @@ const Commission: React.FC = () => {
                 const url = orderId
                     ? `${appLocalizer.site_url.replace(/\/$/, '')}/wp-admin/post.php?post=${orderId}&action=edit`
                     : '#';
-        
+
                 return (
                     <TableCell title={orderId ? `#${orderId}` : '-'}>
                         {orderId ? (
@@ -248,9 +254,9 @@ const Commission: React.FC = () => {
                     </TableCell>
                 );
             },
-        },              
+        },
         {
-            id:'totalOrderAmount',
+            id: 'totalOrderAmount',
             accessorKey: 'totalOrderAmount',
             accessorFn: row => parseFloat(row.totalOrderAmount || '0'),
             enableSorting: true,
@@ -258,7 +264,7 @@ const Commission: React.FC = () => {
             cell: ({ row }) => <TableCell title={row.original.totalOrderAmount ? `${appLocalizer.currency_symbol}${row.original.totalOrderAmount}` : '-'}>{row.original.totalOrderAmount ? `${appLocalizer.currency_symbol}${row.original.totalOrderAmount}` : '-'}</TableCell>,
         },
         {
-            id:'commissionAmount',
+            id: 'commissionAmount',
             accessorKey: 'commissionAmount',
             accessorFn: row => parseFloat(row.commissionAmount || '0'),
             enableSorting: true,
@@ -266,7 +272,7 @@ const Commission: React.FC = () => {
             cell: ({ row }) => <TableCell title={row.original.commissionAmount ? `${appLocalizer.currency_symbol}${row.original.commissionAmount}` : '-'}>{row.original.commissionAmount ? `${appLocalizer.currency_symbol}${row.original.commissionAmount}` : '-'}</TableCell>,
         },
         {
-            id:'facilitatorFee',
+            id: 'facilitatorFee',
             accessorKey: 'facilitatorFee',
             accessorFn: row => parseFloat(row.facilitatorFee || '0'),
             enableSorting: true,
@@ -274,7 +280,7 @@ const Commission: React.FC = () => {
             cell: ({ row }) => <TableCell title={row.original.facilitatorFee ? `${appLocalizer.currency_symbol}${row.original.facilitatorFee}` : '-'}>{row.original.facilitatorFee ? `${appLocalizer.currency_symbol}${row.original.facilitatorFee}` : '-'}</TableCell>,
         },
         {
-            id:'gatewayFee',
+            id: 'gatewayFee',
             accessorKey: 'gatewayFee',
             accessorFn: row => parseFloat(row.gatewayFee || '0'),
             enableSorting: true,
@@ -282,7 +288,7 @@ const Commission: React.FC = () => {
             cell: ({ row }) => <TableCell title={row.original.gatewayFee ? `${appLocalizer.currency_symbol}${row.original.gatewayFee}` : '-'}>{row.original.gatewayFee ? `${appLocalizer.currency_symbol}${row.original.gatewayFee}` : '-'}</TableCell>,
         },
         {
-            id:'shippingAmount',
+            id: 'shippingAmount',
             accessorKey: 'shippingAmount',
             accessorFn: row => parseFloat(row.shippingAmount || '0'),
             enableSorting: true,
@@ -290,7 +296,7 @@ const Commission: React.FC = () => {
             cell: ({ row }) => <TableCell title={row.original.shippingAmount ? `${appLocalizer.currency_symbol}${row.original.shippingAmount}` : '-'}>{row.original.shippingAmount ? `${appLocalizer.currency_symbol}${row.original.shippingAmount}` : '-'}</TableCell>,
         },
         {
-            id:'taxAmount',
+            id: 'taxAmount',
             accessorKey: 'taxAmount',
             accessorFn: row => parseFloat(row.taxAmount || '0'),
             enableSorting: true,
@@ -298,7 +304,7 @@ const Commission: React.FC = () => {
             cell: ({ row }) => <TableCell title={row.original.taxAmount ? `${appLocalizer.currency_symbol}${row.original.taxAmount}` : '-'}>{row.original.taxAmount ? `${appLocalizer.currency_symbol}${row.original.taxAmount}` : '-'}</TableCell>,
         },
         {
-            id:'discountAmount',
+            id: 'discountAmount',
             accessorKey: 'discountAmount',
             accessorFn: row => parseFloat(row.discountAmount || '0'),
             enableSorting: true,
@@ -306,7 +312,7 @@ const Commission: React.FC = () => {
             cell: ({ row }) => <TableCell title={row.original.discountAmount ? `${appLocalizer.currency_symbol}${row.original.discountAmount}` : '-'}>{row.original.discountAmount ? `${appLocalizer.currency_symbol}${row.original.discountAmount}` : '-'}</TableCell>,
         },
         {
-            id:'commissionTotal',
+            id: 'commissionTotal',
             accessorKey: 'commissionTotal',
             accessorFn: row => parseFloat(row.commissionTotal || '0'),
             enableSorting: true,
@@ -389,26 +395,25 @@ const Commission: React.FC = () => {
                 </div>
             ),
         },
+        {
+            name: 'date',
+            render: (updateFilter) => (
+                <div className="right">
+                    <CalendarInput
+                        wrapperClass=""
+                        inputClass=""
+                        onChange={(range:any) => {
+                            console.log('Selected Range:', range);
+                            updateFilter('date', {
+                                start_date: range.startDate,
+                                end_date: range.endDate,
+                            });
+                        }}
+                    />
+                </div>
+            ),
+        },
     ];
-
-    // const BulkAction: React.FC = () => (
-    //     <div className="bulk-actiondddddddd">
-    //         <select name="action" className="basic-select" ref={bulkSelectRef}>
-    //             <option value="">{__("Bulk actions", "multivendorx")}</option>
-    //             <option value="mark_paid">{__("Mark Paid", "multivendorx")}</option>
-    //             <option value="delete">{__("Delete", "multivendorx")}</option>
-    //             <option value="restore">{__("Restore", "multivendorx")}</option>
-    //         </select>
-
-    //         <button
-    //             name="bulk-action-apply"
-    //             className="admin-btn btn-purple"
-    //             onClick={handleBulkAction}
-    //         >
-    //             {__("Apply", "multivendorx")}
-    //         </button>
-    //     </div>
-    // );
 
     // Type for an order line
     interface OrderItem {

@@ -136,43 +136,56 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
         $store_id = intval( $request->get_param( 'store_id' ) );
         $status   = $request->get_param( 'status' );
     
+        // 🔹 Handle date range from request
+        $start_date = $request->get_param('start_date');
+        $end_date   = $request->get_param('end_date');
+    
+        if ( $start_date ) {
+            $start_date = date('Y-m-d H:i:s', strtotime($start_date));
+        }
+        if ( $end_date ) {
+            $end_date = date('Y-m-d H:i:s', strtotime($end_date));
+        }
+    
         $args = array();
         if ( $count ) $args['count'] = true;
         if ( $status ) $args['status'] = $status;
         if ( $store_id ) $args['store_id'] = $store_id;
+    
+        // Add date filters
+        if ( $start_date ) $args['start_date'] = $start_date;
+        if ( $end_date )   $args['end_date']   = $end_date;
     
         if ( $count ) {
             $transactions = Transaction::get_transaction_information( $args );
             return rest_ensure_response( (int) $transactions );
         }
     
-        $args['limit'] = $limit;
+        $args['limit']  = $limit;
         $args['offset'] = $offset;
     
         $transactions = Transaction::get_transaction_information( $args );
     
         $formatted = array_map(function($row) {
-            // Get store details
             $store = new \MultiVendorX\Store\Store($row['store_id']);
-        
+    
             return [
                 'store_name'     => $store ? $store->get('name') : '-',
                 'amount'         => $row['amount'],
                 'balance'        => $row['balance'],
                 'status'         => $row['status'],
                 'payment_method' => $store->meta_data['payment_method'] ?? 'Not Saved',
-                'credit'           => $row['entry_type'] === 'Cr' ? $row['amount'] : 0,
-                'debit'            => $row['entry_type'] === 'Dr' ? $row['amount'] : 0,
-                'date'             => $row['created_at'],
-                'order_details'    => $row['order_id'],
+                'credit'         => $row['entry_type'] === 'Cr' ? $row['amount'] : 0,
+                'debit'          => $row['entry_type'] === 'Dr' ? $row['amount'] : 0,
+                'date'           => $row['created_at'],
+                'order_details'  => $row['order_id'],
                 'transaction_type' => $row['transaction_type'],
-
             ];
         }, $transactions);
-        
     
         return rest_ensure_response( $formatted );
     }
+    
     
     
     
@@ -237,14 +250,26 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
     
         // Lifetime earning minus locking balance
         $lifetime_earning = $total_earning - $locking_balance;
-    
+
+        $payout_threshold = MultiVendorX()->setting->get_setting('payout_threshold_amount', 0);
+
+        // If it’s an array, take first value, else use as is
+        if (is_array($payout_threshold)) {
+            $payout_threshold = reset($payout_threshold) ?: 0;
+        }
+        
+        $payout_threshold = floatval($payout_threshold);
+        
         return rest_ensure_response([
+            'wallet_balance'   => $balance + $locking_balance,
+            'reserve_balance'  => $payout_threshold,
+            'available_balance'=> max(0, $balance - $payout_threshold),
             'balance'          => $balance,
             'locking_balance'  => $locking_balance,
             'lifetime_earning' => $lifetime_earning,
         ]);
+                
     }
-    
     
     public function update_item( $request ) {
         

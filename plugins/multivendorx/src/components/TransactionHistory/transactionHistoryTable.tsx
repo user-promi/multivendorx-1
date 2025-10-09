@@ -1,5 +1,5 @@
 /* global appLocalizer */
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 import { Table, getApiLink, TableCell, CalendarInput } from 'zyra';
@@ -16,9 +16,13 @@ type StoreRow = {
     status?: string;
 };
 
-const TransactionHistoryTable: React.FC = ({ storeId }) => {
-    const [data, setData] = useState<StoreRow[] | null>(null);
+interface TransactionHistoryTableProps {
+    storeId: number | null;
+    dateRange: { startDate: Date | null; endDate: Date | null };
+}
 
+const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ storeId, dateRange }) => {
+    const [data, setData] = useState<StoreRow[] | null>(null);
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
     const [totalRows, setTotalRows] = useState<number>(0);
     const [pagination, setPagination] = useState<PaginationState>({
@@ -32,48 +36,47 @@ const TransactionHistoryTable: React.FC = ({ storeId }) => {
     const [selectedStore, setSelectedStore] = useState<any>(null);
     const [overview, setOverview] = useState<any[]>([]);
 
-    // Fetch total rows on mount
+    // 🔹 Helper: get effective date range
+    const getEffectiveDateRange = () => {
+        if (dateRange.startDate && dateRange.endDate) return dateRange;
+        const now = new Date();
+        const start = new Date(now.getFullYear(), now.getMonth(), 1); // first day of current month
+        const end = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59); // last day of current month
+        return { startDate: start, endDate: end };
+    };
+
+    // 🔹 Fetch total rows on mount or date change
     useEffect(() => {
         if (!storeId) return;
+
+        const { startDate, endDate } = getEffectiveDateRange();
 
         axios({
             method: 'GET',
             url: getApiLink(appLocalizer, 'transaction'),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            params: { count: true, store_id: storeId },
+            params: { 
+                count: true, 
+                store_id: storeId,
+                start_date: startDate.toISOString().split('T')[0],
+                end_date: endDate.toISOString().split('T')[0],
+            },
         })
             .then((response) => {
                 setTotalRows(response.data || 0);
-                setPageCount(Math.ceil(response.data / pagination.pageSize));
+                setPageCount(Math.ceil((response.data || 0) / pagination.pageSize));
             })
-            .catch(() => {
-                setError(__('Failed to load total rows', 'multivendorx'));
-            });
-    }, [storeId]);
+            .catch(() => setData([]));
+    }, [storeId, dateRange, pagination.pageSize]);
 
-    useEffect(() => {
-        const currentPage = pagination.pageIndex + 1;
-        const rowsPerPage = pagination.pageSize;
-        requestData(rowsPerPage, currentPage);
-        setPageCount(Math.ceil(totalRows / rowsPerPage));
-    }, [pagination, storeId]);
-    const [showDropdown, setShowDropdown] = useState(false);
-
-    const toggleDropdown = (id: any) => {
-        if (showDropdown === id) {
-            setShowDropdown(false);
-            return;
-        }
-        setShowDropdown(id);
-    };
-    // Fetch data from backend.
-    function requestData(
-        rowsPerPage = 10,
-        currentPage = 1,
-    ) {
+    // 🔹 Fetch data from backend
+    function requestData(rowsPerPage = 10, currentPage = 1) {
         if (!storeId) return;
 
         setData(null);
+
+        const { startDate, endDate } = getEffectiveDateRange();
+
         axios({
             method: 'GET',
             url: getApiLink(appLocalizer, 'transaction'),
@@ -82,30 +85,26 @@ const TransactionHistoryTable: React.FC = ({ storeId }) => {
                 page: currentPage,
                 row: rowsPerPage,
                 store_id: storeId,
+                start_date: startDate.toISOString().split('T')[0],
+                end_date: endDate.toISOString().split('T')[0],
             },
         })
-            .then((response) => {
-                setData(response.data || []);
-            })
-            .catch(() => {
-                setError(__('Failed to load stores', 'multivendorx'));
-                setData([]);
-            });
+            .then((response) => setData(response.data || []))
+            .catch(() => setData([]));
     }
 
-    // Handle pagination and filter changes
-    const requestApiForData = (
-        rowsPerPage: number,
-        currentPage: number,
-    ) => {
-        setData(null);
-        requestData(
-            rowsPerPage,
-            currentPage,
-        );
+    // 🔹 Handle pagination & date changes
+    useEffect(() => {
+        const currentPage = pagination.pageIndex + 1;
+        requestData(pagination.pageSize, currentPage);
+        setPageCount(Math.ceil(totalRows / pagination.pageSize));
+    }, [pagination, storeId, dateRange, totalRows]);
+
+    const requestApiForData = (rowsPerPage: number, currentPage: number) => {
+        requestData(rowsPerPage, currentPage);
     };
 
-    // Column definitions
+    // 🔹 Column definitions
     const columns: ColumnDef<StoreRow>[] = [
         {
             id: 'select',
@@ -125,6 +124,9 @@ const TransactionHistoryTable: React.FC = ({ storeId }) => {
             ),
         },
         {
+            id: 'date',
+            accessorKey: 'date',
+            enableSorting: true,
             header: __('Date', 'multivendorx'),
             cell: ({ row }) => {
                 const rawDate = row.original.date;
@@ -141,12 +143,26 @@ const TransactionHistoryTable: React.FC = ({ storeId }) => {
             },
         },
         {
+            id: 'order_details',
+            accessorKey: 'order_details',
+            enableSorting: true,
+            accessorFn: row => parseInt(row.order_details || '0'),
             header: __('Order ID', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.order_details || ''}>
-                    #{row.original.order_details || '-'}
-                </TableCell>
-            ),
+            cell: ({ row }) => {
+                const orderId = row.original.order_details;
+                const editLink = orderId
+                    ? `${window.location.origin}/wp-admin/post.php?post=${orderId}&action=edit`
+                    : '#';
+                return (
+                    <TableCell title={orderId || ''}>
+                        {orderId ? (
+                            <a href={editLink} target="_blank" rel="noopener noreferrer">
+                                #{orderId}
+                            </a>
+                        ) : '-'}
+                    </TableCell>
+                );
+            },
         },
         {
             header: __('Transaction Type', 'multivendorx'),
@@ -165,6 +181,10 @@ const TransactionHistoryTable: React.FC = ({ storeId }) => {
             ),
         },
         {
+            id: 'credit',
+            accessorKey: 'credit',
+            enableSorting: true,
+            accessorFn: row => parseFloat(row.credit || '0'),
             header: __('Credit', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell title={row.original.credit || ''}>
@@ -173,6 +193,10 @@ const TransactionHistoryTable: React.FC = ({ storeId }) => {
             ),
         },
         {
+            id: 'debit',
+            accessorKey: 'debit',
+            enableSorting: true,
+            accessorFn: row => parseFloat(row.debit || '0'),
             header: __('Debit', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell title={row.original.debit || ''}>
@@ -181,6 +205,10 @@ const TransactionHistoryTable: React.FC = ({ storeId }) => {
             ),
         },
         {
+            id: 'balance',
+            accessorKey: 'balance',
+            enableSorting: true,
+            accessorFn: row => parseFloat(row.balance || '0'),
             header: __('Balance', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell title={row.original.balance || ''}>
@@ -199,6 +227,7 @@ const TransactionHistoryTable: React.FC = ({ storeId }) => {
             ),
         },
     ];
+
     // 🔹 Fetch stores on mount
     useEffect(() => {
         axios({
@@ -218,9 +247,7 @@ const TransactionHistoryTable: React.FC = ({ storeId }) => {
                     setSelectedStore(mappedStores[0]);
                 }
             })
-            .catch((error) => {
-                console.error("Error fetching stores:", error);
-            });
+            .catch((error) => console.error("Error fetching stores:", error));
     }, []);
 
     // 🔹 Fetch wallet/transaction overview whenever store changes
@@ -235,16 +262,15 @@ const TransactionHistoryTable: React.FC = ({ storeId }) => {
             .then((response) => {
                 const data = response?.data || {};
                 const dynamicOverview = [
-                    { id: 'commission', label: 'Commission', count: data.commission ?? 0, icon: 'adminlib-star green' },
-                    { id: 'pending', label: 'Shipping Tax', count: data.pending ?? 0, icon: 'adminlib-clock blue' },
-                    { id: 'withdrawable', label: 'Fasilator Free', count: data.withdrawable ?? 0, icon: 'adminlib-star yellow' },
-                    { id: 'gateway_fees', label: 'Gateway Fees', count: data.gateway_fees ?? 0, icon: 'adminlib-credit-card red' },
+                    { id: 'commission', label: 'Commission', count: data.commission ?? 'static', icon: 'adminlib-star green' },
+                    { id: 'pending', label: 'Shipping Tax', count: data.pending ?? 'static', icon: 'adminlib-clock blue' },
+                    { id: 'withdrawable', label: 'Facilitator Fee', count: data.withdrawable ?? 'static', icon: 'adminlib-star yellow' },
+                    { id: 'gateway_fees', label: 'Gateway Fees', count: data.gateway_fees ?? 'static', icon: 'adminlib-credit-card red' },
                     { id: 'total_balance', label: 'Total Balance', count: data.balance ?? 0, icon: 'adminlib-star green' },
-                    { id: 'gateway_fees', label: 'Gateway Fees', count: data.gateway_fees ?? 0, icon: 'adminlib-credit-card red' },
                 ];
                 setOverview(dynamicOverview);
             })
-            .catch((error) => {
+            .catch(() => {
                 setOverview([
                     { id: 'total_balance', label: 'Total Balance', count: 0, icon: 'adminlib-wallet' },
                     { id: 'pending', label: 'Pending', count: 0, icon: 'adminlib-clock' },
@@ -255,7 +281,6 @@ const TransactionHistoryTable: React.FC = ({ storeId }) => {
                 ]);
             });
     }, [selectedStore]);
-
 
     return (
         <>

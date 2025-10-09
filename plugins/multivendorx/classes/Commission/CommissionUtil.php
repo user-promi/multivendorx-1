@@ -115,7 +115,6 @@ class CommissionUtil {
         if ( $count ) {
             return (int) $wpdb->get_var( $query ) ?? 0;
         }
-    
         // Database query for commissions
         $commissions = $wpdb->get_results( $query );
     

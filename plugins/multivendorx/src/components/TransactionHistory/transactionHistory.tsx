@@ -6,14 +6,18 @@ import TransactionHistoryTable from './transactionHistoryTable';
 import TransactionDataTable from './transactionDataTable';
 import { AdminBreadcrumbs, CalendarInput, getApiLink, SelectInput } from 'zyra';
 import axios from 'axios';
-import storeImage from "../../assets/images/default.png";
+
 
 export const TransactionHistory: React.FC = () => {
-    const [overview, setOverview] = useState<any[]>([]);
+    const [data, setData] = useState<any[]>([]);
     const [activeTab, setActiveTab] = useState("products");
     const [allStores, setAllStores] = useState<any[]>([]);
     const [filteredStores, setFilteredStores] = useState<any[]>([]);
     const [selectedStore, setSelectedStore] = useState<any>(null);
+    const [dateRange, setDateRange] = useState<{ startDate: Date | null; endDate: Date | null }>({
+        startDate: null,
+        endDate: null,
+    });
 
     // 🔹 Fetch stores on mount
     useEffect(() => {
@@ -49,26 +53,9 @@ export const TransactionHistory: React.FC = () => {
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
         })
             .then((response) => {
-                const data = response?.data || {};
-                const dynamicOverview = [
-                    { id: 'commission', label: 'Commission', count: data.commission ?? 0, icon: 'adminlib-star green' },
-                    { id: 'pending', label: 'Shipping Tax', count: data.pending ?? 0, icon: 'adminlib-clock blue' },
-                    { id: 'withdrawable', label: 'Fasilator Free', count: data.withdrawable ?? 0, icon: 'adminlib-star yellow' },
-                    { id: 'gateway_fees', label: 'Gateway Fees', count: data.gateway_fees ?? 0, icon: 'adminlib-credit-card red' },
-                    { id: 'total_balance', label: 'Total Balance', count: data.balance ?? 0, icon: 'adminlib-star green' },
-                    { id: 'gateway_fees', label: 'Gateway Fees', count: data.gateway_fees ?? 0, icon: 'adminlib-credit-card red' },
-                ];
-                setOverview(dynamicOverview);
+                setData(response?.data || {});
             })
             .catch((error) => {
-                setOverview([
-                    { id: 'total_balance', label: 'Total Balance', count: 0, icon: 'adminlib-wallet' },
-                    { id: 'pending', label: 'Pending', count: 0, icon: 'adminlib-clock' },
-                    { id: 'locked', label: 'Locked', count: 0, icon: 'adminlib-lock' },
-                    { id: 'withdrawable', label: 'Withdrawable', count: 0, icon: 'adminlib-cash' },
-                    { id: 'commission', label: 'Commission', count: 0, icon: 'adminlib-star' },
-                    { id: 'gateway_fees', label: 'Gateway Fees', count: 0, icon: 'adminlib-credit-card' },
-                ]);
             });
     }, [selectedStore]);
 
@@ -87,30 +74,42 @@ export const TransactionHistory: React.FC = () => {
         {
             id: "products",
             label: "Wallet Transaction",
-            content: <TransactionHistoryTable storeId={selectedStore?.value} />
+            content: <TransactionHistoryTable storeId={selectedStore?.value} dateRange={dateRange} />
         },
         {
             id: "stores",
             label: "Direct Transaction",
-            content: <TransactionDataTable storeId={selectedStore?.value} />
+            content: <TransactionDataTable storeId={selectedStore?.value} dateRange={dateRange} />
         },
     ];
+
 
     return (
         <>
             <AdminBreadcrumbs
                 activeTabIcon="adminlib-book"
-                tabTitle="Storewise Transaction History"
-                description={"Build your knowledge base: add new guides or manage existing ones in one place."}
+                tabTitle={
+                    selectedStore
+                        ? `Storewise Transaction History - ${selectedStore.label}`
+                        : "Storewise Transaction History"
+                }
+                description={
+                    selectedStore
+                        ? `View and manage transactions for ${selectedStore.label} store`
+                        : "View and manage storewise transactions"
+                }
                 customContent={
-                    <SelectInput
-                        name="store"
-                        value={selectedStore?.value || ""}
-                        options={filteredStores}
-                        type="single-select"
-                        onChange={(newValue: any) => setSelectedStore(newValue)}
-                        onInputChange={(inputValue: string) => handleSearch(inputValue)}
-                    />
+                    <>
+                        <div>Switch Store</div>
+                        <SelectInput
+                            name="store"
+                            value={selectedStore?.value || ""}
+                            options={filteredStores}
+                            type="single-select"
+                            onChange={(newValue: any) => setSelectedStore(newValue)}
+                            onInputChange={(inputValue: string) => handleSearch(inputValue)}
+                        />
+                    </>
                 }
             />
 
@@ -118,34 +117,65 @@ export const TransactionHistory: React.FC = () => {
                 <div className="row">
                     <div className="header">
                         <div className="title-wrapper">
-                            <div className="title">
-                                <img src={storeImage} alt="" />
-                                {selectedStore ? ` ${selectedStore.label}` : "Select a store"}
-                            </div>
-                            <div className="des">Here's what's happening with your marketplace today</div>
+
                         </div>
                         <div className="right">
                             <div className="analytics-container">
+                                {/* Wallet Balance */}
                                 <div className="analytics-item">
                                     <div className="analytics-icon">
                                         <i className="adminlib-cart green"></i>
                                     </div>
                                     <div className="details">
-                                        <div className="number">$5002</div>
+                                        <div className="number">
+                                            {appLocalizer.currency_symbol}{Number(data.wallet_balance ?? 0).toFixed(2)}
+                                        </div>
                                         <div className="text">Wallet Balance</div>
                                     </div>
                                 </div>
+
+                                {/* Reserve Balance */}
                                 <div className="analytics-item">
                                     <div className="analytics-icon">
-                                        <i className="adminlib-cart red"></i>
+                                        <i className="adminlib-star yellow"></i>
                                     </div>
                                     <div className="details">
-                                        <div className="number">$5002</div>
-                                        <div className="text">Upcoming Balance </div>
+                                        <div className="number">
+                                            {appLocalizer.currency_symbol}{Number(data.reserve_balance ?? 0).toFixed(2)}
+                                        </div>
+                                        <div className="text">Reserve Balance</div>
+                                    </div>
+                                </div>
+
+                                {/* Locked Balance */}
+                                <div className="analytics-item">
+                                    <div className="analytics-icon">
+                                        <i className="adminlib-lock red"></i>
+                                    </div>
+                                    <div className="details">
+                                        <div className="number">
+                                            {appLocalizer.currency_symbol}{Number(data.locking_balance ?? 0).toFixed(2)}
+                                        </div>
+                                        <div className="text">Locked Balance</div>
+                                    </div>
+                                </div>
+
+                                {/* Available Balance */}
+                                <div className="analytics-item">
+                                    <div className="analytics-icon">
+                                        <i className="adminlib-cash blue"></i>
+                                    </div>
+                                    <div className="details">
+                                        <div className="number">
+                                            {appLocalizer.currency_symbol}{Number(data.available_balance ?? 0).toFixed(2)}
+                                        </div>
+                                        <div className="text">Available Balance</div>
                                     </div>
                                 </div>
                             </div>
+
                         </div>
+
                     </div>
                 </div>
                 <div className="row">
@@ -168,17 +198,14 @@ export const TransactionHistory: React.FC = () => {
                                 <CalendarInput
                                     wrapperClass=""
                                     inputClass=""
-                                // onChange={(range) => {
-                                //     console.log('Selected Range:', range);
-                                //     updateFilter('date', {
-                                //         start_date: range.startDate,
-                                //         end_date: range.endDate,
-                                //     });
-                                // }}
+                                    showLabel={true}
+                                    onChange={(range:any) => {
+                                        setDateRange({ startDate: range.startDate, endDate: range.endDate });
+                                    }}
                                 />
+
                             </div>
                         </div>
-
 
                         <div className="tab-content">
                             {tabs.map(
