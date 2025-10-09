@@ -64,40 +64,50 @@ class Ajax {
 
     public function multivendorx_qna_search() {
         check_ajax_referer('qna_ajax_nonce', 'nonce');
-
+    
         $product_id = intval($_POST['product_id']);
         $search     = sanitize_text_field($_POST['search']);
-
-        $rows =  Util::get_questions($product_id, $search);;
-
+    
+        // Get filtered questions (you may update Util::get_questions to handle $search)
+        $rows = Util::get_questions($product_id, $search);
+    
+        // Filter only answered
+        $answered_rows = array_filter($rows, function ($q) {
+            return !empty($q->answer_text);
+        });
+    
         ob_start();
-        if ($rows) {
-            foreach ($rows as $row) {
+    
+        if (!empty($answered_rows)) {
+            foreach ($answered_rows as $row) {
                 ?>
-                <li data-qna="<?php echo esc_attr($row->id); ?>">
-                    <p><strong>Q:</strong> <?php echo esc_html($row->question_text); ?></p>
-                    <button class="qna-vote adminlib-thumbs-ok admin-badge green" data-type="question">
-                        <span><?php echo intval($row->question_votes); ?></span>
-                    </button>
-
-                    <?php if ($row->answer_text) : ?>
-                        <p><strong>A:</strong> <?php echo esc_html($row->answer_text); ?></p>
-                        <button class="qna-vote adminlib-thumbs-ok admin-badge green" data-type="answer">
-                            <span><?php echo intval($row->answer_vote_count); ?></span>
-                        </button>
-                    <?php else : ?>
-                        <em>No answer yet</em>
-                    <?php endif; ?>
+                <li data-qna="<?php echo esc_attr($row->id); ?>" class="qna-item">
+                    <p class="qna-question"><strong>Q:</strong> <?php echo esc_html($row->question_text); ?></p>
+                    <small class="qna-meta">
+                        By <?php echo esc_html(get_the_author_meta('display_name', $row->question_by)); ?>,
+                        <?php echo esc_html(human_time_diff(strtotime($row->question_date), current_time('timestamp'))) . ' ago'; ?>
+                    </small>
+    
+                    <p class="qna-answer"><strong>A:</strong> <?php echo esc_html($row->answer_text); ?></p>
+    
+                    <!-- Voting buttons -->
+                    <div class="qna-votes">
+                        <span class="qna-vote adminlib-thumbs-ok admin-badge green" data-type="up"></span>
+                        <span class="qna-vote adminlib-thumbs-ok admin-badge red" data-type="down"></span>
+                        <p><?php echo intval($row->total_votes); ?></p>
+                    </div>
                 </li>
                 <?php
             }
         } else {
             echo '<li>No matching questions found.</li>';
         }
+    
         $html = ob_get_clean();
-
+    
         wp_send_json_success(['html' => $html]);
     }
+    
 
     // Voting
     public function multivendorx_qna_vote() {
@@ -111,7 +121,7 @@ class Ajax {
         $table = $wpdb->prefix . Utill::TABLES['product_qna'];
         $user_id = get_current_user_id();
         $qna_id  = intval($_POST['qna_id']);
-        $type    = $_POST['type'] === 'up' ? 1 : -1; // 1 = upvote, -1 = downvote
+        $type    = $_POST['type'] === 'up' ? 1 : -1;
 
         // Get current voters and total_votes
         $row = $wpdb->get_row($wpdb->prepare("SELECT voters, total_votes FROM $table WHERE id = %d", $qna_id));

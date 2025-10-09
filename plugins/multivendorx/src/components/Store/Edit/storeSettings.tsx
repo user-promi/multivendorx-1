@@ -179,7 +179,7 @@ const StoreSettings = ({ id }: { id: string | null }) => {
 									value={formData.country}
 									options={appLocalizer.country_list || []}
 									type="single-select"
-									onChange={(newValue:any) => {
+									onChange={(newValue: any) => {
 										if (!newValue || Array.isArray(newValue)) return;
 										const updated = { ...formData, country: newValue.value, state: '' }; // reset state
 										setFormData(updated);
@@ -205,81 +205,6 @@ const StoreSettings = ({ id }: { id: string | null }) => {
 							</div>
 						</div>
 					</div>
-					{/* <div className="card-content">
-						<div className="card-title">
-							Status
-						</div>
-						<div className="form-group-wrapper">
-							<div className="form-group">
-								<label htmlFor="product-name">Status 1</label>
-								<SelectInput
-									name="status"
-									value={formData.status}
-									options={statusOptions}
-									type="single-select"
-									onChange={(newValue) => {
-										if (!newValue || Array.isArray(newValue)) return;
-
-										const updated = { ...formData, status: newValue.value };
-										setFormData(updated);
-										autoSave(updated); // if you want autosave on change
-									}}
-								/>
-							</div>
-							<div className="form-group">
-								<label htmlFor="product-name">Status 2</label>
-								<SelectInput
-									name="status"
-									value={formData.status}
-									options={statusOptions}
-									type="single-select"
-									onChange={(newValue) => {
-										if (!newValue || Array.isArray(newValue)) return;
-
-										const updated = { ...formData, status: newValue.value };
-										setFormData(updated);
-										autoSave(updated); // if you want autosave on change
-									}}
-								/>
-
-							</div>
-						</div>
-						<div className="form-group-wrapper">
-							<div className="form-group">
-								<label htmlFor="product-name">Status 3</label>
-								<SelectInput
-									name="status"
-									value={formData.status}
-									options={statusOptions}
-									type="single-select"
-									onChange={(newValue) => {
-										if (!newValue || Array.isArray(newValue)) return;
-
-										const updated = { ...formData, status: newValue.value };
-										setFormData(updated);
-										autoSave(updated); // if you want autosave on change
-									}}
-								/>
-							</div>
-							<div className="form-group">
-								<label htmlFor="product-name">Status 4</label>
-								<SelectInput
-									name="status"
-									value={formData.status}
-									options={statusOptions}
-									type="single-select"
-									onChange={(newValue) => {
-										if (!newValue || Array.isArray(newValue)) return;
-
-										const updated = { ...formData, status: newValue.value };
-										setFormData(updated);
-										autoSave(updated); // if you want autosave on change
-									}}
-								/>
-
-							</div>
-						</div>
-					</div> */}
 				</div>
 
 				<div className="card-wrapper width-35">
@@ -303,6 +228,15 @@ const StoreSettings = ({ id }: { id: string | null }) => {
 									imageSrc={imagePreviews.image}
 									buttonClass="admin-btn btn-purple"
 									descClass="settings-metabox-description"
+									// ✅ NEW: Handle Remove
+									onRemove={() => {
+										const updated = { ...formData, image: '' };
+										setFormData(updated);
+										setImagePreviews((prev) => ({ ...prev, image: '' }));
+										autoSave(updated);
+									}}
+									//NEW: Handle Replace (reopen media uploader)
+									onReplace={() => runUploader('image')}
 								/>
 							</div>
 						</div>
@@ -322,10 +256,18 @@ const StoreSettings = ({ id }: { id: string | null }) => {
 									imageSrc={imagePreviews.banner}
 									buttonClass="admin-btn btn-purple"
 									descClass="settings-metabox-description"
+									//NEW: Handle Remove
+									onRemove={() => {
+										const updated = { ...formData, banner: '' };
+										setFormData(updated);
+										setImagePreviews((prev) => ({ ...prev, banner: '' }));
+										autoSave(updated);
+									}}
+									//NEW: Handle Replace (reopen media uploader)
+									onReplace={() => runUploader('banner')}
 								/>
 							</div>
 						</div>
-
 					</div>
 
 					<div className="card-content">
