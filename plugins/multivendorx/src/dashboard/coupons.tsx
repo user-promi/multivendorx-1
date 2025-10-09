@@ -23,9 +23,7 @@ const discountOptions = [
     { label: "Fixed cart discount", value: "fixed_cart" },
     { label: "Fixed product discount", value: "fixed_product" },
 ];
-const handleToggleChange = (value: string) => {
 
-};
 const AllCoupon: React.FC = () => {
     const [id, setId] = useState<string | null>(null);
     const [formData, setFormData] = useState<any>({
