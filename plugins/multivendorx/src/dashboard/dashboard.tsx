@@ -79,7 +79,6 @@ const Dashboard: React.FC = () => {
     <>
       <div className="row">
         <div className="column width-65">
-
           <div className="card">
             <div className="card-header">
               <div className="left">
@@ -109,7 +108,6 @@ const Dashboard: React.FC = () => {
               </div>
             </div>
           </div>
-
         </div>
       </div>
 
