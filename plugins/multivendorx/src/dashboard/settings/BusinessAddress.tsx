@@ -20,7 +20,22 @@ const BusinessAddress = () => {
     const [marker, setMarker] = useState<any>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [googleLoaded, setGoogleLoaded] = useState<boolean>(false);
+    const [mapboxLoaded, setMapboxLoaded] = useState<boolean>(false);
     const autocompleteInputRef = useRef<HTMLInputElement>(null);
+    const [mapProvider, setMapProvider] = useState('');
+    const [apiKey, setApiKey] = useState('');
+
+    useEffect(() => {
+        const geolocationSettings = (window as any).appLocalizer?.settings_databases_value?.geolocation;
+        if (geolocationSettings) {
+            setMapProvider(geolocationSettings.choose_map_api);
+            if (geolocationSettings.choose_map_api === 'google_map_set') {
+                setApiKey(geolocationSettings.google_api_key);
+            } else {
+                setApiKey(geolocationSettings.mapbox_api_key);
+            }
+        }
+    }, []);
 
     // Log function
     const log = (message: string, data?: any) => {
@@ -118,18 +133,52 @@ const BusinessAddress = () => {
             });
     }, [id]);
 
-    // Load Google Maps script immediately (don't wait for store data)
+    // Load map scripts based on provider
     useEffect(() => {
-        if (!googleLoaded) {
+        if (mapProvider === 'google_map_set' && !googleLoaded) {
             log('Loading Google Maps script...');
             loadGoogleMapsScript();
+        } else if (mapProvider === 'mapbox_api_set' && !mapboxLoaded) {
+            log('Loading Mapbox script...');
+            loadMapboxScript();
         }
-    }, [googleLoaded]);
+    }, [mapProvider, googleLoaded, mapboxLoaded]);
 
-    // Initialize map when Google is loaded
-    useEffect(() => {
-        initializeMap();
-    }, [googleLoaded, loading, formData]);
+    const loadMapboxScript = () => {
+        // Add Mapbox GL JS
+        const mapboxGlScript = document.createElement('script');
+        mapboxGlScript.src = 'https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.js';
+        mapboxGlScript.async = true;
+        document.head.appendChild(mapboxGlScript);
+
+        // Add Mapbox GL CSS
+        const mapboxGlCss = document.createElement('link');
+        mapboxGlCss.href = 'https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css';
+        mapboxGlCss.rel = 'stylesheet';
+        document.head.appendChild(mapboxGlCss);
+
+        // Add Mapbox Geocoder JS
+        const mapboxGeocoderScript = document.createElement('script');
+        mapboxGeocoderScript.src = 'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.min.js';
+        mapboxGeocoderScript.async = true;
+        document.head.appendChild(mapboxGeocoderScript);
+
+        // Add Mapbox Geocoder CSS
+        const mapboxGeocoderCss = document.createElement('link');
+        mapboxGeocoderCss.href = 'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.css';
+        mapboxGeocoderCss.rel = 'stylesheet';
+        document.head.appendChild(mapboxGeocoderCss);
+
+        mapboxGlScript.onload = () => {
+            log('Mapbox script loaded successfully');
+            setMapboxLoaded(true);
+        };
+
+        mapboxGlScript.onerror = (error) => {
+            log('Error loading Mapbox script:', error);
+            setErrorMsg('Failed to load Mapbox. Please check your internet connection.');
+        };
+    };
 
     const loadGoogleMapsScript = () => {
         if (window.google) {
@@ -138,9 +187,8 @@ const BusinessAddress = () => {
             return;
         }
 
-        const api_key = 'AIzaSyAEUy5ZtNn9Q8EmTp09h_MP7te3_IRkKwc';
         const script = document.createElement('script');
-        script.src = `https://maps.googleapis.com/maps/api/js?key=${api_key}&libraries=places&loading=async`;
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&loading=async`;
         script.async = true;
         script.defer = true;
         
@@ -157,180 +205,205 @@ const BusinessAddress = () => {
         document.head.appendChild(script);
     };
 
-    const initializeMap = () => {
-        log('Initializing map and autocomplete...');
-
-        if (!window.google) {
-            log('Google Maps API not available');
-            return;
-        }
-
-        // Initialize Autocomplete
-        if (autocompleteInputRef.current) {
-            log('Initializing autocomplete');
-            try {
-                const autocomplete = new window.google.maps.places.Autocomplete(
-                    autocompleteInputRef.current, 
-                    { 
-                        types: ['establishment', 'geocode'],
-                        fields: ['address_components', 'formatted_address', 'geometry']
-                    }
-                );
-
-                autocomplete.addListener('place_changed', () => {
-                    log('Place changed in autocomplete');
-                    const place = autocomplete.getPlace();
-                    log('Selected place:', place);
-                    
-                    if (place.geometry) {
-                        handlePlaceSelect(place);
-                    } else {
-                        log('Place has no geometry');
-                        setErrorMsg('Selected place has no location data');
-                    }
-                });
-                
-                log('Autocomplete initialized successfully');
-            } catch (error) {
-                log('Error initializing autocomplete:', error);
-                setErrorMsg('Failed to initialize address search');
+    useEffect(() => {
+        if (!loading && mapProvider) {
+            if (mapProvider === 'google_map_set' && googleLoaded) {
+                initializeGoogleMap();
+            } else if (mapProvider === 'mapbox_api_set' && mapboxLoaded) {
+                initializeMapboxMap();
             }
         }
+    }, [loading, mapProvider, googleLoaded, mapboxLoaded]);
 
-        // Initialize Map
-        const mapElement = document.getElementById('location-map');
-        if (mapElement) {
-            log('Initializing map');
-            try {
-                const initialLat = parseFloat(formData.location_lat) || 40.7128;
-                const initialLng = parseFloat(formData.location_lng) || -74.0060;
-                
-                log(`Map center: ${initialLat}, ${initialLng}`);
-                
-                const mapInstance = new window.google.maps.Map(mapElement, {
-                    center: { lat: initialLat, lng: initialLng },
-                    zoom: formData.location_lat ? 15 : 10,
-                });
+    const initializeGoogleMap = () => {
+        log('Initializing Google Map...');
+        if (!window.google || !autocompleteInputRef.current) return;
 
-                const markerInstance = new window.google.maps.Marker({
-                    map: mapInstance,
-                    draggable: true,
-                    position: { lat: initialLat, lng: initialLng }
-                });
+        const initialLat = parseFloat(formData.location_lat) || 40.7128;
+        const initialLng = parseFloat(formData.location_lng) || -74.0060;
 
-                markerInstance.addListener('dragend', () => {
-                    const position = markerInstance.getPosition();
-                    log('Marker dragged to:', { lat: position.lat(), lng: position.lng() });
-                    reverseGeocode(position.lat(), position.lng());
-                });
+        const mapInstance = new window.google.maps.Map(document.getElementById('location-map'), {
+            center: { lat: initialLat, lng: initialLng },
+            zoom: formData.location_lat ? 15 : 10,
+        });
 
-                // Add click listener to map
-                mapInstance.addListener('click', (event: any) => {
-                    log('Map clicked at:', event.latLng);
-                    reverseGeocode(event.latLng.lat(), event.latLng.lng());
-                });
+        const markerInstance = new window.google.maps.Marker({
+            map: mapInstance,
+            draggable: true,
+            position: { lat: initialLat, lng: initialLng },
+        });
 
-                setMap(mapInstance);
-                setMarker(markerInstance);
-                log('Map and marker initialized successfully');
-            } catch (error) {
-                log('Error initializing map:', error);
-                setErrorMsg('Failed to initialize map');
+        markerInstance.addListener('dragend', () => {
+            const position = markerInstance.getPosition();
+            reverseGeocode('google', position.lat(), position.lng());
+        });
+
+        mapInstance.addListener('click', (event: any) => {
+            reverseGeocode('google', event.latLng.lat(), event.latLng.lng());
+        });
+
+        const autocomplete = new window.google.maps.places.Autocomplete(autocompleteInputRef.current, {
+            types: ['establishment', 'geocode'],
+            fields: ['address_components', 'formatted_address', 'geometry'],
+        });
+
+        autocomplete.addListener('place_changed', () => {
+            const place = autocomplete.getPlace();
+            if (place.geometry) {
+                handlePlaceSelect(place, 'google');
             }
-        }
+        });
+
+        setMap(mapInstance);
+        setMarker(markerInstance);
     };
 
-    const handlePlaceSelect = (place: any) => {
-        log('Handling place select:', place);
-        
-        const location = place.geometry.location;
-        const lat = location.lat();
-        const lng = location.lng();
+    const initializeMapboxMap = () => {
+        log('Initializing Mapbox Map...');
+        if (!(window as any).mapboxgl || !autocompleteInputRef.current) return;
 
-        log(`Selected location: ${lat}, ${lng}`);
+        (window as any).mapboxgl.accessToken = apiKey;
 
-        // Update map
-        if (map && marker) {
-            map.setCenter({ lat, lng });
-            map.setZoom(17);
-            marker.setPosition({ lat, lng });
-            log('Map and marker updated');
+        const initialLat = parseFloat(formData.location_lat) || 40.7128;
+        const initialLng = parseFloat(formData.location_lng) || -74.0060;
+
+        const mapInstance = new (window as any).mapboxgl.Map({
+            container: 'location-map',
+            style: 'mapbox://styles/mapbox/streets-v11',
+            center: [initialLng, initialLat],
+            zoom: formData.location_lat ? 15 : 10,
+        });
+
+        const markerInstance = new (window as any).mapboxgl.Marker({ draggable: true })
+            .setLngLat([initialLng, initialLat])
+            .addTo(mapInstance);
+
+        markerInstance.on('dragend', () => {
+            const lngLat = markerInstance.getLngLat();
+            reverseGeocode('mapbox', lngLat.lat, lngLat.lng);
+        });
+
+        mapInstance.on('click', (event: any) => {
+            reverseGeocode('mapbox', event.lngLat.lat, event.lngLat.lng);
+        });
+
+        const geocoder = new (window as any).MapboxGeocoder({
+            accessToken: apiKey,
+            mapboxgl: (window as any).mapboxgl,
+            marker: false,
+        });
+
+        geocoder.on('result', (e: any) => {
+            handlePlaceSelect(e.result, 'mapbox');
+        });
+
+        // Replace the input with the geocoder
+        const geocoderContainer = document.getElementById('location-autocomplete-container');
+        if (geocoderContainer) {
+            geocoderContainer.appendChild(geocoder.onAdd(mapInstance));
+            // Hide the original input
+            if (autocompleteInputRef.current) {
+                autocompleteInputRef.current.style.display = 'none';
+            }
         }
 
-        // Update form data
-        const addressComponents = extractAddressComponents(place);
-        log('Extracted address components:', addressComponents);
-        
-        const updated = { 
-            ...formData, 
-            location_address: place.formatted_address,
+
+        setMap(mapInstance);
+        setMarker(markerInstance);
+    };
+
+    const handlePlaceSelect = (place: any, provider: 'google' | 'mapbox') => {
+        let lat, lng, formatted_address, addressComponents;
+
+        if (provider === 'google') {
+            const location = place.geometry.location;
+            lat = location.lat();
+            lng = location.lng();
+            formatted_address = place.formatted_address;
+            addressComponents = extractAddressComponents(place, 'google');
+        } else { // mapbox
+            lng = place.center[0];
+            lat = place.center[1];
+            formatted_address = place.place_name;
+            addressComponents = extractAddressComponents(place, 'mapbox');
+        }
+
+        if (map && marker) {
+            if (provider === 'google') {
+                map.setCenter({ lat, lng });
+                marker.setPosition({ lat, lng });
+            } else {
+                map.setCenter([lng, lat]);
+                marker.setLngLat([lng, lat]);
+            }
+            map.setZoom(17);
+        }
+
+        const updated = {
+            ...formData,
+            location_address: formatted_address,
             location_lat: lat.toString(),
             location_lng: lng.toString(),
-            ...addressComponents
+            ...addressComponents,
         };
-        
-        log('Updated form data:', updated);
+
         setFormData(updated);
         autoSave(updated);
     };
 
-    const reverseGeocode = (lat: number, lng: number) => {
-        log(`Reverse geocoding: ${lat}, ${lng}`);
-        
-        if (!window.google) {
-            log('Google Maps not available for reverse geocoding');
-            return;
-        }
-
-        const geocoder = new window.google.maps.Geocoder();
-        geocoder.geocode({ location: { lat, lng } }, (results: any[], status: string) => {
-            log(`Reverse geocode status: ${status}`);
-            
-            if (status === 'OK' && results[0]) {
-                log('Reverse geocode successful:', results[0]);
-                const addressComponents = extractAddressComponents(results[0]);
-                const updated = {
-                    ...formData,
-                    location_address: results[0].formatted_address,
-                    location_lat: lat.toString(),
-                    location_lng: lng.toString(),
-                    ...addressComponents
-                };
-                log('Updated data from reverse geocode:', updated);
-                setFormData(updated);
-                autoSave(updated);
-                setErrorMsg(null);
-            } else {
-                log('Reverse geocode failed with status:', status);
-                setErrorMsg('Failed to get address for this location');
-            }
-        });
-    };
-
-    const extractAddressComponents = (place: any) => {
-        log('Extracting address components from:', place);
-        const components: FormData = {};
-        
-        if (place.address_components) {
-            place.address_components.forEach((component: any) => {
-                const types = component.types;
-                if (types.includes('street_number')) {
-                    components.address = component.long_name;
-                } else if (types.includes('route')) {
-                    components.address = (components.address || '') + ' ' + component.long_name;
-                } else if (types.includes('locality')) {
-                    components.city = component.long_name;
-                } else if (types.includes('administrative_area_level_1')) {
-                    components.state = component.long_name;
-                } else if (types.includes('country')) {
-                    components.country = component.long_name;
-                } else if (types.includes('postal_code')) {
-                    components.zip = component.long_name;
+    const reverseGeocode = (provider: 'google' | 'mapbox', lat: number, lng: number) => {
+        if (provider === 'google') {
+            const geocoder = new window.google.maps.Geocoder();
+            geocoder.geocode({ location: { lat, lng } }, (results: any[], status: string) => {
+                if (status === 'OK' && results[0]) {
+                    handlePlaceSelect(results[0], 'google');
+                } else {
+                    setErrorMsg('Failed to get address for this location');
                 }
             });
+        } else { // mapbox
+            fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?access_token=${apiKey}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.features && data.features.length > 0) {
+                        handlePlaceSelect(data.features[0], 'mapbox');
+                    } else {
+                        setErrorMsg('Failed to get address for this location');
+                    }
+                })
+                .catch(() => setErrorMsg('Reverse geocoding request failed'));
         }
+    };
 
-        log('Extracted components:', components);
+    const extractAddressComponents = (place: any, provider: 'google' | 'mapbox'): FormData => {
+        const components: FormData = {};
+
+        if (provider === 'google') {
+            if (place.address_components) {
+                place.address_components.forEach((component: any) => {
+                    const types = component.types;
+                    if (types.includes('street_number')) components.address = component.long_name;
+                    else if (types.includes('route')) components.address = (components.address || '') + ' ' + component.long_name;
+                    else if (types.includes('locality')) components.city = component.long_name;
+                    else if (types.includes('administrative_area_level_1')) components.state = component.long_name;
+                    else if (types.includes('country')) components.country = component.long_name;
+                    else if (types.includes('postal_code')) components.zip = component.long_name;
+                });
+            }
+        } else { // mapbox
+            if (place.context) {
+                place.context.forEach((component: any) => {
+                    const types = component.id.split('.');
+                    if (types.includes('postcode')) components.zip = component.text;
+                    else if (types.includes('place')) components.city = component.text;
+                    else if (types.includes('region')) components.state = component.text;
+                    else if (types.includes('country')) components.country = component.text;
+                });
+            }
+            if (place.properties) {
+                components.address = place.properties.address || '';
+            }
+        }
         return components;
     };
 
@@ -423,14 +496,16 @@ const BusinessAddress = () => {
                 <div className="form-group-wrapper">
                     <div className="form-group">
                         <label htmlFor="location-autocomplete">Search Location *</label>
-                        <input
-                            ref={autocompleteInputRef}
-                            id="location-autocomplete"
-                            type="text"
-                            className="setting-form-input"
-                            placeholder="Start typing your business address..."
-                            defaultValue={formData.location_address}
-                        />
+                        <div id="location-autocomplete-container">
+                            <input
+                                ref={autocompleteInputRef}
+                                id="location-autocomplete"
+                                type="text"
+                                className="setting-form-input"
+                                placeholder="Start typing your business address..."
+                                defaultValue={formData.location_address}
+                            />
+                        </div>
                         <small style={{color: '#666', marginTop: '5px', display: 'block'}}>
                             Type your business name or address and select from suggestions
                         </small>
