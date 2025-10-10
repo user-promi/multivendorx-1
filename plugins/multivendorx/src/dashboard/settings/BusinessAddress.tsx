@@ -39,28 +39,6 @@ const BusinessAddress = () => {
         }
     }, []);
 
-    // Fetch total count separately
-    const fetchTotalCount = async () => {
-        try {
-            const res = await axios.get(getApiLink(appLocalizer, "geolocation"), {
-                params: { store_id: appLocalizer.store_id, count: true },
-                headers: { "X-WP-Nonce": appLocalizer.nonce },
-            });
-            console.log("Total count response:", res.data);
-        } catch (err) {
-            console.error("Failed to fetch total count:", err);
-        }
-    };
-    
-    useEffect(() => {
-        fetchTotalCount();
-    }, []);
-
-    // Log function
-    const log = (message: string, data?: any) => {
-        console.log(`[BusinessAddress] ${message}`, data || '');
-    };
-
     // Load initial data
     useEffect(() => {
         if (!id) {
@@ -88,7 +66,6 @@ const BusinessAddress = () => {
                     location_address: data.location_address || '',
                     location_lat: data.location_lat || '',
                     location_lng: data.location_lng || '',
-                    address: data.address || '',
                     city: data.city || '',
                     state: data.state || '',
                     country: data.country || '',
@@ -100,24 +77,12 @@ const BusinessAddress = () => {
                 setLoading(false);
             } catch (error: any) {
                 console.error('Error loading store data:', error);
-
-                let errorMessage = 'Failed to load store data';
-                if (error.response?.status === 404) {
-                    errorMessage = `Geolocation endpoint not found (404). Please ensure the geolocation feature is properly installed.`;
-                } else if (error.code === 'ECONNABORTED') {
-                    errorMessage = 'Request timeout. Please try again.';
-                } else {
-                    errorMessage = `Failed to load store data: ${error.message}`;
-                }
-
-                setErrorMsg(errorMessage);
+                setErrorMsg('Failed to load store data');
                 setLoading(false);
-
                 setFormData({
                     location_address: '',
                     location_lat: '',
                     location_lng: '',
-                    address: '',
                     city: '',
                     state: '',
                     country: '',
@@ -133,10 +98,8 @@ const BusinessAddress = () => {
     // Load map scripts based on provider
     useEffect(() => {
         if (mapProvider === 'google_map_set' && !googleLoaded) {
-            console.log('Loading Google Maps script...');
             loadGoogleMapsScript();
         } else if (mapProvider === 'mapbox_api_set' && !mapboxLoaded) {
-            console.log('Loading Mapbox script...');
             loadMapboxScript();
         }
     }, [mapProvider, googleLoaded, mapboxLoaded]);
@@ -163,19 +126,16 @@ const BusinessAddress = () => {
         document.head.appendChild(mapboxGeocoderCss);
 
         mapboxGlScript.onload = () => {
-            log('Mapbox script loaded successfully');
             setMapboxLoaded(true);
         };
 
         mapboxGlScript.onerror = (error) => {
-            log('Error loading Mapbox script:', error);
             setErrorMsg('Failed to load Mapbox. Please check your internet connection.');
         };
     };
 
     const loadGoogleMapsScript = () => {
         if (window.google) {
-            log('Google Maps already loaded');
             setGoogleLoaded(true);
             return;
         }
@@ -186,12 +146,10 @@ const BusinessAddress = () => {
         script.defer = true;
 
         script.onload = () => {
-            log('Google Maps script loaded successfully');
             setGoogleLoaded(true);
         };
 
         script.onerror = (error) => {
-            log('Error loading Google Maps script:', error);
             setErrorMsg('Failed to load Google Maps. Please check your internet connection.');
         };
 
@@ -209,7 +167,6 @@ const BusinessAddress = () => {
     }, [loading, mapProvider, googleLoaded, mapboxLoaded, formData]);
 
     const initializeGoogleMap = () => {
-        log('Initializing Google Map...');
         if (!window.google || !autocompleteInputRef.current) return;
 
         const initialLat = parseFloat(formData.location_lat) || 40.7128;
@@ -252,7 +209,6 @@ const BusinessAddress = () => {
     };
 
     const initializeMapboxMap = () => {
-        log('Initializing Mapbox Map...');
         if (!(window as any).mapboxgl || !autocompleteInputRef.current) return;
     
         const geocoderContainer = document.getElementById('location-autocomplete-container');
@@ -334,17 +290,11 @@ const BusinessAddress = () => {
 
         const updated = {
             ...formData,
-            location_address: formatted_address,
+            location_address: formatted_address, // Use location_address consistently
             location_lat: lat.toString(),
             location_lng: lng.toString(),
             ...addressComponents,
         };
-
-        // Ensure address field is never empty
-        if (!updated.address || updated.address.trim() === '') {
-            // Use the formatted address as fallback
-            updated.address = formatted_address;
-        }
 
         setFormData(updated);
         autoSave(updated);
@@ -469,21 +419,30 @@ const BusinessAddress = () => {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        console.log(`Input change: ${name} = ${value}`);
-
         const updated = { ...formData, [name]: value };
         setFormData(updated);
         autoSave(updated);
     };
 
-    const autoSave = (updatedData: FormData) => {
-        console.log('Auto-saving data:', updatedData);
-
-        // Ensure address field is never empty before saving
-        if (!updatedData.address || updatedData.address.trim() === '') {
-            updatedData.address = updatedData.location_address || 'Address not specified';
+    // Add this function near the top of your BusinessAddress component
+    const synchronizeAddressData = (formData: { [x: string]: string; location_address?: any; location_lat?: any; location_lng?: any; }) => {
+        const synchronized = { ...formData };
+        
+        // Ensure address is always populated from location_address if empty
+        if ((!synchronized.address || synchronized.address.trim() === '') && synchronized.location_address) {
+            synchronized.address = synchronized.location_address;
         }
+        
+        // Ensure location_address is set if we have coordinates but no location_address
+        if ((synchronized.location_lat && synchronized.location_lng) && !synchronized.location_address) {
+            synchronized.location_address = synchronized.address || 'Location set';
+        }
+        
+        return synchronized;
+    };
 
+    // Update your autoSave function:
+    const autoSave = (updatedData: any) => {
         const endpoint = getApiLink(appLocalizer, `geolocation/store/${id}`);
 
         axios.put(endpoint, updatedData, {
@@ -493,33 +452,16 @@ const BusinessAddress = () => {
             },
             timeout: 10000
         })
-            .then((res) => {
-                console.log('Auto-save successful:', res.data);
-                if (res.data.success) {
-                    setSuccessMsg('Store saved successfully!');
-                    setErrorMsg(null);
-                    setTimeout(() => {
-                        setSuccessMsg(null);
-                        console.log('Success message cleared');
-                    }, 3000);
-                }
-            })
-            .catch((error) => {
-                console.error('Auto-save error:', error);
-
-                let errorMessage = 'Failed to save store data';
-                if (error.response?.status === 404) {
-                    errorMessage = 'Save endpoint not found. Data saved locally but not on server.';
-                } else if (error.response?.status === 405) {
-                    errorMessage = 'Save method not allowed. Please contact administrator.';
-                } else if (error.code === 'ECONNABORTED') {
-                    errorMessage = 'Save request timeout. Data saved locally but may not be on server.';
-                } else {
-                    errorMessage = `Failed to save: ${error.message}`;
-                }
-
-                setErrorMsg(errorMessage);
-            });
+        .then((res) => {
+            if (res.data.success) {
+                setSuccessMsg('Store saved successfully!');
+                setErrorMsg(null);
+            }
+        })
+        .catch((error) => {
+            console.error('Save error:', error);
+            setErrorMsg('Failed to save store data');
+        });
     };
 
     if (loading) {
@@ -548,18 +490,6 @@ const BusinessAddress = () => {
                         {errorMsg}
                     </div>
                 )}
-
-                {/* Debug Info */}
-                <div style={{ background: '#f5f5f5', padding: '10px', marginBottom: '15px', borderRadius: '4px', fontSize: '12px' }}>
-                    <div>Debug Info:</div>
-                    <div>Store ID: {id}</div>
-                    <div>API Endpoint: {getApiLink(appLocalizer, `geolocation/store/${id}`)}</div>
-                    <div>Lat: {formData.location_lat || 'N/A'}</div>
-                    <div>Lng: {formData.location_lng || 'N/A'}</div>
-                    <div>Address: {formData.address || 'N/A'}</div>
-                    <div>Google Maps: {googleLoaded ? 'Loaded' : 'Loading...'}</div>
-                    <div>Map: {map ? 'Initialized' : 'Not initialized'}</div>
-                </div>
 
                 <div className="form-group-wrapper">
                     <div className="form-group">
@@ -601,17 +531,17 @@ const BusinessAddress = () => {
 
                 <div className="form-group-wrapper">
                     <div className="form-group">
-                        <label htmlFor="address">Address *</label>
+                        <label htmlFor="location_address">Address *</label>
                         <input
                             type="text"
-                            name="address"
-                            value={formData.address || ''}
+                            name="location_address"
+                            value={formData.location_address || ''}
                             className="setting-form-input"
                             onChange={handleChange}
                             placeholder="Street address"
                             required
                         />
-                        {!formData.address && (
+                        {!formData.location_address && (
                             <small style={{ color: 'orange', marginTop: '5px', display: 'block' }}>
                                 Address is required. Please select a location from the map or search.
                             </small>

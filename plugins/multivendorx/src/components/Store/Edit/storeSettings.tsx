@@ -484,23 +484,39 @@ const StoreSettings = ({ id }: { id: string | null }) => {
         frame.open();
     };
 
-    const autoSave = (updatedData: FormData) => {
-        // Ensure address field is never empty before saving
-        if (!updatedData.address || updatedData.address.trim() === '') {
-            updatedData.address = updatedData.location_address || 'Address not specified';
-        }
+    // Add this function near the top of your StoreSettings component
+	const synchronizeAddressData = (formData: any) => {
+		const synchronized = { ...formData };
+		
+		// Ensure address is always populated from location_address if empty
+		if ((!synchronized.address || synchronized.address.trim() === '') && synchronized.location_address) {
+			synchronized.address = synchronized.location_address;
+		}
+		
+		// Ensure location_address is set if we have coordinates but no location_address
+		if ((synchronized.location_lat && synchronized.location_lng) && !synchronized.location_address) {
+			synchronized.location_address = synchronized.address || 'Location set';
+		}
+		
+		return synchronized;
+	};
 
-        axios({
-            method: 'PUT',
-            url: getApiLink(appLocalizer, `store/${id}`),
-            headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            data: updatedData,
-        }).then((res) => {
-            if (res.data.success) {
-                setSuccessMsg('Store saved successfully!');
-            }
-        })
-    };
+	// Then update your autoSave function:
+	const autoSave = (updatedData: any) => {
+		axios({
+			method: 'PUT',
+			url: getApiLink(appLocalizer, `store/${id}`),
+			headers: { 'X-WP-Nonce': appLocalizer.nonce },
+			data: updatedData,
+		}).then((res) => {
+			if (res.data.success) {
+				setSuccessMsg('Store saved successfully!');
+			}
+		}).catch((error) => {
+			console.error('Save error:', error);
+			setErrorMsg('Failed to save store data');
+		});
+	};
 
     if (loading) {
         return (
@@ -642,22 +658,22 @@ const StoreSettings = ({ id }: { id: string | null }) => {
                         </div>
 
                         <div className="form-group-wrapper">
-                            <div className="form-group">
-                                <label htmlFor="product-name">Address *</label>
-                                <BasicInput 
-                                    name="address" 
-                                    value={formData.address} 
-                                    wrapperClass="setting-form-input" 
-                                    descClass="settings-metabox-description" 
-                                    onChange={handleChange} 
-                                />
-                                {!formData.address && (
-                                    <small style={{ color: 'orange', marginTop: '5px', display: 'block' }}>
-                                        Address is required. Please select a location from the map or search.
-                                    </small>
-                                )}
-                            </div>
-                        </div>
+							<div className="form-group">
+								<label htmlFor="product-name">Address *</label>
+								<BasicInput 
+									name="location_address"  // Change from "address" to "location_address"
+									value={formData.location_address} 
+									wrapperClass="setting-form-input" 
+									descClass="settings-metabox-description" 
+									onChange={handleChange} 
+								/>
+								{!formData.location_address && (
+									<small style={{ color: 'orange', marginTop: '5px', display: 'block' }}>
+										Address is required. Please select a location from the map or search.
+									</small>
+								)}
+							</div>
+						</div>
                         <div className="form-group-wrapper">
                             <div className="form-group">
                                 <label htmlFor="product-name">City</label>
@@ -692,7 +708,7 @@ const StoreSettings = ({ id }: { id: string | null }) => {
                                     value={formData.state}
                                     options={stateOptions}
                                     type="single-select"
-                                    onChange={(newValue) => {
+                                    onChange={(newValue: { value: any; }) => {
                                         if (!newValue || Array.isArray(newValue)) return;
                                         const updated = { ...formData, state: newValue.value };
                                         setFormData(updated);
@@ -842,3 +858,7 @@ const StoreSettings = ({ id }: { id: string | null }) => {
 };
 
 export default StoreSettings;
+
+function setErrorMsg(arg0: string) {
+	throw new Error('Function not implemented.');
+}

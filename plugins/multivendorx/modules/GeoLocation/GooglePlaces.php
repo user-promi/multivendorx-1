@@ -10,8 +10,6 @@ class GooglePlaces {
      * @var string
      */
     protected $rest_base = 'geolocation';
-
-    private $api_key = 'AIzaSyAEUy5ZtNn9Q8EmTp09h_MP7te3_IRkKwc';
     
     public function __construct() {
         add_action('rest_api_init', array($this, 'register_routes'), 10);
@@ -100,120 +98,50 @@ class GooglePlaces {
         return $has_permission;
     }
     
-    private function test_routes_registered() {
-        $this->log('Testing if routes are properly registered...');
-        
-        $routes = rest_get_server()->get_routes();
-        $multivendorx_routes = [];
-        
-        foreach ($routes as $route => $handlers) {
-            if (strpos($route, '/multivendorx/') !== false) {
-                $multivendorx_routes[] = $route;
-            }
-        }
-        
-        $this->log('Found multivendorx routes: ' . implode(', ', $multivendorx_routes));
-        
-        // Check specifically for our geolocation routes
-        $geolocation_routes = array_filter($multivendorx_routes, function($route) {
-            return strpos($route, 'geolocation') !== false;
-        });
-        
-        if (empty($geolocation_routes)) {
-            $this->log('ERROR: No geolocation routes found!');
-        } else {
-            $this->log('SUCCESS: Geolocation routes found: ' . implode(', ', $geolocation_routes));
-        }
-    }
-    
     public function get_store_data($request) {
         $store_id = $request->get_param('id');
         $this->log("GET Store Data - Store ID: " . $store_id);
         
-        // Verify store exists
-        $store = get_userdata($store_id);
-        if (!$store) {
-            $this->log("Store not found for ID: " . $store_id);
-            return new \WP_Error('store_not_found', 'Store not found', ['status' => 404]);
+        try {
+            $store_geo = new StoreGeolocation($store_id);
+            $data = $store_geo->get_data();
+            
+            $this->log("Retrieved store data: " . json_encode($data));
+            
+            return rest_ensure_response($data);
+            
+        } catch (\Exception $e) {
+            $this->log("Error getting store data: " . $e->getMessage());
+            return new \WP_Error('data_retrieval_error', 'Failed to retrieve store data', ['status' => 500]);
         }
-        
-        $meta_fields = [
-            'location_address',
-            'location_lat', 
-            'location_lng',
-            'address',
-            'city',
-            'state',
-            'country',
-            'zip',
-            'timezone'
-        ];
-        
-        $data = [];
-        foreach ($meta_fields as $field) {
-            $meta_key = '_mvx_' . $field;
-            $value = get_user_meta($store_id, $meta_key, true);
-            $data[$field] = $value;
-            $this->log("Meta field {$field} ({$meta_key}): " . ($value ? $value : 'empty'));
-        }
-        
-        $this->log("Returning store data for store {$store_id}: " . json_encode($data));
-        
-        return rest_ensure_response($data);
     }
     
     public function update_store_data($request) {
         $store_id = $request->get_param('id');
         $this->log("UPDATE Store Data - Store ID: " . $store_id);
-        $this->log("PUT Request headers: " . json_encode($request->get_headers()));
-        $this->log("PUT Request params: " . json_encode($request->get_params()));
-        
-        // Verify store exists
-        $store = get_userdata($store_id);
-        if (!$store) {
-            $this->log("Store not found for ID: " . $store_id);
-            return new \WP_Error('store_not_found', 'Store not found', ['status' => 404]);
-        }
         
         $data = $request->get_json_params();
-        $this->log("Received raw data: " . print_r($data, true));
         
         if (empty($data)) {
-            $this->log("No data received in request body");
             return new \WP_Error('no_data', 'No data received', ['status' => 400]);
         }
         
-        $allowed_fields = [
-            'location_address',
-            'location_lat', 
-            'location_lng',
-            'address',
-            'city',
-            'state',
-            'country',
-            'zip',
-            'timezone'
-        ];
-        
-        $updated_count = 0;
-        foreach ($allowed_fields as $field) {
-            if (isset($data[$field])) {
-                $meta_key = '_mvx_' . $field;
-                $value = sanitize_text_field($data[$field]);
-                $old_value = get_user_meta($store_id, $meta_key, true);
-                
-                update_user_meta($store_id, $meta_key, $value);
-                $this->log("Updated field {$field}: '{$old_value}' -> '{$value}'");
-                $updated_count++;
-            }
+        try {
+            $store_geo = new StoreGeolocation($store_id);
+            $store_geo->update_data($data);
+            
+            $this->log("Successfully updated store data for ID: " . $store_id);
+            
+            return rest_ensure_response([
+                'success' => true, 
+                'message' => 'Store data updated successfully',
+                'updated_fields' => count($data)
+            ]);
+            
+        } catch (\Exception $e) {
+            $this->log("Error updating store data: " . $e->getMessage());
+            return new \WP_Error('update_failed', 'Failed to update store data', ['status' => 500]);
         }
-        
-        $this->log("Store data updated successfully. {$updated_count} fields updated.");
-        return rest_ensure_response([
-            'success' => true, 
-            'message' => 'Store data updated successfully',
-            'updated_fields' => $updated_count
-        ]);
     }
     
     public function geocode_address($request) {
@@ -305,9 +233,9 @@ class GooglePlaces {
             $types = $component['types'];
             
             if (in_array('street_number', $types)) {
-                $components['address'] = $component['long_name'];
+                $components['location_address'] = $component['long_name']; // Use location_address
             } elseif (in_array('route', $types)) {
-                $components['address'] = ($components['address'] ?? '') . ' ' . $component['long_name'];
+                $components['location_address'] = ($components['location_address'] ?? '') . ' ' . $component['long_name']; // Use location_address
             } elseif (in_array('locality', $types)) {
                 $components['city'] = $component['long_name'];
             } elseif (in_array('administrative_area_level_1', $types)) {
@@ -328,7 +256,7 @@ class GooglePlaces {
         
         $this->log("Formatted response with coordinates: " . $response['latitude'] . ", " . $response['longitude']);
         return $response;
-    }
+    }    
     
     private function log($message) {
         $log_file = plugin_dir_path(__FILE__) . "/geolocation-debug.log";
