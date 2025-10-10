@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { __ } from '@wordpress/i18n';
-import { BasicInput, CommonPopup, MultiCheckBox, Table, TableCell, TextArea } from 'zyra';
+import { BasicInput, CalendarInput, CommonPopup, getApiLink, MultiCheckBox, Table, TableCell, TextArea } from 'zyra';
 import {
     ColumnDef,
     RowSelectionState,
@@ -22,10 +22,12 @@ type ProductRow = {
 type FilterData = {
     searchAction?: string;
     searchField?: string;
-    typeCount?: any;
-    store?: string;
+    categoryId?: string;
 };
-
+export interface RealtimeFilter {
+    name: string;
+    render: (updateFilter: (key: string, value: any) => void, filterValue: any) => ReactNode;
+}
 const formatWooDate = (dateString: string) => {
     if (!dateString) return '-';
     const date = new Date(dateString);
@@ -186,6 +188,7 @@ const AllProduct: React.FC = () => {
             ),
         },
     ];
+
     const fetchCategories = async () => {
         try {
             const response = await axios.get(`${appLocalizer.apiUrl}/wc/v3/products/categories`, {
@@ -200,49 +203,6 @@ const AllProduct: React.FC = () => {
     useEffect(() => {
         fetchCategories();
     }, []);
-    
-    const requestApiForData = async (rowsPerPage: number, currentPage: number,filterData: FilterData) => {
-        console.log("fd",filterData)
-        try {
-            const response = await axios.get(`${appLocalizer.apiUrl}/wc/v3/products`, {
-                headers: { 'X-WP-Nonce': appLocalizer.nonce },
-                params: {
-                    per_page: rowsPerPage,
-                    page: currentPage + 1,
-                    meta_key: 'multivendorx_store_id',
-                    value: appLocalizer.store_id,
-                },
-            });
-
-            setTotalRows(parseInt(response.headers['x-wp-total'] || '0', 10));
-
-            const formattedProducts = response.data.map((p: any) => ({
-                id: p.id,
-                name: p.name,
-                sku: p.sku || '-',
-                price: p.price ? `${p.price}` : '-',
-                stock_status: p.stock_status,
-                categories: p.categories,
-                date_created: p.date_created,
-                status: p.status,
-                permalink: p.permalink,
-            }));
-
-            setData(formattedProducts);
-        } catch (error) {
-            console.error('Error fetching WooCommerce products:', error);
-        }
-    };
-
-    useEffect(() => {
-        requestApiForData(pagination.pageSize, pagination.pageIndex);
-    }, [pagination.pageSize, pagination.pageIndex]);
-
-    // 🔹 Update page count when pagination or totalRows changes
-    useEffect(() => {
-        const rowsPerPage = pagination.pageSize;
-        setPageCount(Math.ceil(totalRows / rowsPerPage));
-    }, [pagination, totalRows]);
 
     const columns: ColumnDef<ProductRow>[] = [
         {
@@ -340,10 +300,10 @@ const AllProduct: React.FC = () => {
     const realtimeFilter: RealtimeFilter[] = [
         {
             name: 'category',
-            render: (updateFilter: (key: string, value: string) => void, filterValue: string | undefined) => (
+            render: (updateFilter: (key: string, value: string) => void, filterValue: any | undefined) => (
                 <div className="course-field">
                     <select
-                        name="category"
+                        name="categoryId"
                         onChange={(e) => updateFilter(e.target.name, e.target.value)}
                         value={filterValue || ''}
                         className="basic-select"
@@ -357,7 +317,7 @@ const AllProduct: React.FC = () => {
                     </select>
                 </div>
             ),
-        },        
+        },
         {
             name: 'product-type',
             render: (updateFilter: (key: string, value: string) => void, filterValue: string | undefined) => (
@@ -421,11 +381,99 @@ const AllProduct: React.FC = () => {
                 </div>
             ),
         },
+        {
+            name: 'date',
+            render: (updateFilter) => (
+                <div className="right">
+                    <CalendarInput
+                        wrapperClass=""
+                        inputClass=""
+                        onChange={(range: any) => {
+                            updateFilter('date', {
+                                start_date: range.startDate,
+                                end_date: range.endDate,
+                            });
+                        }}
+                    />
+                </div>
+            ),
+        },
     ];
+
+    useEffect(() => {
+        const currentPage = pagination.pageIndex + 1;
+        const rowsPerPage = pagination.pageSize;
+        requestData(rowsPerPage, currentPage);
+    }, [pagination]);
+
+    // Fetch data from backend.
+    function requestData(
+        rowsPerPage = 10,
+        currentPage = 1,
+        categoryId = '',
+        startDate = new Date(0),
+        endDate = new Date(),
+    ) {
+        setData([]);
+        axios({
+            method: 'GET',
+            url: `${appLocalizer.apiUrl}/wc/v3/products`,
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            params: {
+                page: currentPage,
+                row: rowsPerPage,
+                category: categoryId,
+                after: startDate,
+                before: endDate,
+                meta_key: 'multivendorx_store_id',
+                value: appLocalizer.store_id,
+            },
+        })
+            .then((response) => {
+                const formattedProducts = response.data.map((p: any) => ({
+                    id: p.id,
+                    name: p.name,
+                    sku: p.sku || '-',
+                    price: p.price ? `${p.price}` : '-',
+                    stock_status: p.stock_status,
+                    categories: p.categories,
+                    date_created: p.date_created,
+                    status: p.status,
+                    permalink: p.permalink,
+                }));
+                setData(formattedProducts);
+
+                const total = parseInt(response.headers['x-wp-total']);
+                setTotalRows(total);
+
+                // Calculate pageCount AFTER totalRows is available
+                setPageCount(Math.ceil(total / rowsPerPage));
+            })
+            .catch(() => {
+                setData([]);
+                setTotalRows(0);
+                setPageCount(0);
+            });
+    }
+
+    // Handle pagination and filter changes
+    const requestApiForData = (
+        rowsPerPage: number,
+        currentPage: number,
+        filterData: FilterData
+    ) => {
+        setData([]);
+        requestData(
+            rowsPerPage,
+            currentPage,
+            filterData?.categoryId,
+            filterData?.date?.start_date,
+            filterData?.date?.end_date
+        );
+    };
 
     return (
         <>
-
             {AddProduct && (
                 <CommonPopup
                     open={AddProduct}
