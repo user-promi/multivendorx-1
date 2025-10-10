@@ -115,7 +115,7 @@ const Products: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
 
         axios.post(
             `${appLocalizer.apiUrl}/wc/v3/products/${rejectProductId}`,
-            { 
+            {
                 status: 'draft',
                 meta_data: [
                     { key: '_reject_note', value: rejectReason || '' } // allow empty string
@@ -123,15 +123,15 @@ const Products: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
             },
             { headers: { 'X-WP-Nonce': appLocalizer.nonce } }
         )
-        .then(() => {
-            setRejectPopupOpen(false);
-            setRejectReason('');
-            setRejectProductId(null);
-            requestData(pagination.pageSize, pagination.pageIndex + 1);
-            onUpdated?.();
-        })
-        .catch(console.error)
-        .finally(() => setIsSubmitting(false)); // enable button again
+            .then(() => {
+                setRejectPopupOpen(false);
+                setRejectReason('');
+                setRejectProductId(null);
+                requestData(pagination.pageSize, pagination.pageIndex + 1);
+                onUpdated?.();
+            })
+            .catch(console.error)
+            .finally(() => setIsSubmitting(false)); // enable button again
     };
 
     const requestApiForData = (rowsPerPage: number, currentPage: number, filterData: FilterData) => {
@@ -193,7 +193,14 @@ const Products: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
         },
         {
             header: __('Status', 'multivendorx'),
-            cell: ({ row }) => <TableCell title={row.original.status || ''}>{row.original.status || '-'}</TableCell>,
+            cell: ({ row }) => <TableCell title={row.original.status || ''}>
+                {row.original.status === "active" && (
+                    <span className="admin-badge green">Active</span>
+                )}
+                {row.original.status === "pending" && (
+                    <span className="admin-badge yellow">Pending</span>
+                )}
+            </TableCell>,
         },
         {
             id: 'action',
