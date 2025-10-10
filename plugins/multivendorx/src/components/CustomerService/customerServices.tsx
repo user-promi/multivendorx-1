@@ -118,7 +118,7 @@ const CustomerServices = () => {
                         <div className="card-header">
                             <div className="left">
                                 <div className="title">
-                                QnA Management
+                                Customer Questions
                                 </div>
                                 <div className="des">View, manage, and respond to customer questions about products.</div>
                             </div>
