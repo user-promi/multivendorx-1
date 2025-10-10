@@ -26,6 +26,7 @@ const BusinessAddress = () => {
     const [mapProvider, setMapProvider] = useState('');
     const [apiKey, setApiKey] = useState('');
     const appLocalizer = (window as any).appLocalizer;
+
     // Get REST API base URL
     useEffect(() => {
         if (appLocalizer) {
@@ -37,6 +38,7 @@ const BusinessAddress = () => {
             }
         }
     }, []);
+
     // Fetch total count separately
     const fetchTotalCount = async () => {
         try {
@@ -47,12 +49,11 @@ const BusinessAddress = () => {
             console.log("Total count response:", res.data);
         } catch (err) {
             console.error("Failed to fetch total count:", err);
-            // This is not critical, so don't show error to user
         }
     };
     
     useEffect(() => {
-        fetchTotalCount(); // separate API for count
+        fetchTotalCount();
     }, []);
 
     // Log function
@@ -69,12 +70,8 @@ const BusinessAddress = () => {
             return;
         }
 
-        console.log('Loading store data for ID:', id);
-
-        // Load store data using the same pattern as Q&A
         const loadStoreData = async () => {
             try {
-                // Use the same pattern as Q&A: getApiLink(appLocalizer, "endpoint")
                 const endpoint = getApiLink(appLocalizer, `geolocation/store/${id}`);
                 console.log('Fetching from endpoint:', endpoint);
 
@@ -87,7 +84,6 @@ const BusinessAddress = () => {
                 console.log('Store data loaded successfully:', res.data);
                 const data = res.data || {};
 
-                // Ensure we have proper data structure
                 const formattedData = {
                     location_address: data.location_address || '',
                     location_lat: data.location_lat || '',
@@ -117,7 +113,6 @@ const BusinessAddress = () => {
                 setErrorMsg(errorMessage);
                 setLoading(false);
 
-                // Set empty form data to allow map initialization
                 setFormData({
                     location_address: '',
                     location_lat: '',
@@ -147,25 +142,21 @@ const BusinessAddress = () => {
     }, [mapProvider, googleLoaded, mapboxLoaded]);
 
     const loadMapboxScript = () => {
-        // Add Mapbox GL JS
         const mapboxGlScript = document.createElement('script');
         mapboxGlScript.src = 'https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.js';
         mapboxGlScript.async = true;
         document.head.appendChild(mapboxGlScript);
 
-        // Add Mapbox GL CSS
         const mapboxGlCss = document.createElement('link');
         mapboxGlCss.href = 'https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css';
         mapboxGlCss.rel = 'stylesheet';
         document.head.appendChild(mapboxGlCss);
 
-        // Add Mapbox Geocoder JS
         const mapboxGeocoderScript = document.createElement('script');
         mapboxGeocoderScript.src = 'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.min.js';
         mapboxGeocoderScript.async = true;
         document.head.appendChild(mapboxGeocoderScript);
 
-        // Add Mapbox Geocoder CSS
         const mapboxGeocoderCss = document.createElement('link');
         mapboxGeocoderCss.href = 'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.css';
         mapboxGeocoderCss.rel = 'stylesheet';
@@ -246,7 +237,7 @@ const BusinessAddress = () => {
 
         const autocomplete = new window.google.maps.places.Autocomplete(autocompleteInputRef.current, {
             types: ['establishment', 'geocode'],
-            fields: ['address_components', 'formatted_address', 'geometry'],
+            fields: ['address_components', 'formatted_address', 'geometry', 'name'],
         });
 
         autocomplete.addListener('place_changed', () => {
@@ -264,10 +255,9 @@ const BusinessAddress = () => {
         log('Initializing Mapbox Map...');
         if (!(window as any).mapboxgl || !autocompleteInputRef.current) return;
     
-        // Clear any existing geocoder first
         const geocoderContainer = document.getElementById('location-autocomplete-container');
         if (geocoderContainer) {
-            geocoderContainer.innerHTML = ''; // Clear previous geocoder
+            geocoderContainer.innerHTML = '';
         }
         (window as any).mapboxgl.accessToken = apiKey;
 
@@ -304,10 +294,8 @@ const BusinessAddress = () => {
             handlePlaceSelect(e.result, 'mapbox');
         });
 
-        // Add the geocoder to the container
         if (geocoderContainer) {
             geocoderContainer.appendChild(geocoder.onAdd(mapInstance));
-            // Hide the original input
             if (autocompleteInputRef.current) {
                 autocompleteInputRef.current.style.display = 'none';
             }
@@ -326,7 +314,7 @@ const BusinessAddress = () => {
             lng = location.lng();
             formatted_address = place.formatted_address;
             addressComponents = extractAddressComponents(place, 'google');
-        } else { // mapbox
+        } else {
             lng = place.center[0];
             lat = place.center[1];
             formatted_address = place.place_name;
@@ -352,6 +340,12 @@ const BusinessAddress = () => {
             ...addressComponents,
         };
 
+        // Ensure address field is never empty
+        if (!updated.address || updated.address.trim() === '') {
+            // Use the formatted address as fallback
+            updated.address = formatted_address;
+        }
+
         setFormData(updated);
         autoSave(updated);
     };
@@ -366,7 +360,7 @@ const BusinessAddress = () => {
                     setErrorMsg('Failed to get address for this location');
                 }
             });
-        } else { // mapbox
+        } else {
             fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?access_token=${apiKey}`)
                 .then(response => response.json())
                 .then(data => {
@@ -385,30 +379,91 @@ const BusinessAddress = () => {
 
         if (provider === 'google') {
             if (place.address_components) {
+                let streetNumber = '';
+                let route = '';
+                let address = '';
+
                 place.address_components.forEach((component: any) => {
                     const types = component.types;
-                    if (types.includes('street_number')) components.address = component.long_name;
-                    else if (types.includes('route')) components.address = (components.address || '') + ' ' + component.long_name;
-                    else if (types.includes('locality')) components.city = component.long_name;
-                    else if (types.includes('administrative_area_level_1')) components.state = component.long_name;
-                    else if (types.includes('country')) components.country = component.long_name;
-                    else if (types.includes('postal_code')) components.zip = component.long_name;
+                    
+                    if (types.includes('street_number')) {
+                        streetNumber = component.long_name;
+                    } else if (types.includes('route')) {
+                        route = component.long_name;
+                    } else if (types.includes('locality')) {
+                        components.city = component.long_name;
+                    } else if (types.includes('administrative_area_level_1')) {
+                        components.state = component.short_name || component.long_name;
+                    } else if (types.includes('country')) {
+                        components.country = component.long_name;
+                    } else if (types.includes('postal_code')) {
+                        components.zip = component.long_name;
+                    } else if (types.includes('postal_code_suffix')) {
+                        if (components.zip) {
+                            components.zip += '-' + component.long_name;
+                        }
+                    }
                 });
+
+                // Build complete address
+                if (streetNumber && route) {
+                    address = `${streetNumber} ${route}`;
+                } else if (route) {
+                    address = route;
+                } else if (streetNumber) {
+                    address = streetNumber;
+                } else {
+                    // If no street address found, use the formatted address
+                    address = place.formatted_address || '';
+                }
+
+                components.address = address.trim();
+
+                // If still no address, try to extract from name for establishments
+                if (!components.address && place.name && place.formatted_address) {
+                    const nameIndex = place.formatted_address.indexOf(place.name);
+                    if (nameIndex !== -1) {
+                        components.address = place.formatted_address.substring(nameIndex + place.name.length).trim().replace(/^,\s*/, '');
+                    } else {
+                        components.address = place.formatted_address;
+                    }
+                }
             }
-        } else { // mapbox
-            if (place.context) {
-                place.context.forEach((component: any) => {
-                    const types = component.id.split('.');
-                    if (types.includes('postcode')) components.zip = component.text;
-                    else if (types.includes('place')) components.city = component.text;
-                    else if (types.includes('region')) components.state = component.text;
-                    else if (types.includes('country')) components.country = component.text;
-                });
-            }
+        } else {
+            // Mapbox address extraction
             if (place.properties) {
                 components.address = place.properties.address || '';
             }
+            
+            if (place.context) {
+                place.context.forEach((component: any) => {
+                    const idParts = component.id.split('.');
+                    const type = idParts[0];
+                    
+                    if (type === 'postcode') {
+                        components.zip = component.text;
+                    } else if (type === 'place') {
+                        components.city = component.text;
+                    } else if (type === 'region') {
+                        components.state = component.text;
+                    } else if (type === 'country') {
+                        components.country = component.text;
+                    }
+                });
+            }
+
+            // If address is still empty, try to construct it from available data
+            if (!components.address && place.text && place.properties) {
+                components.address = `${place.text}${place.properties.address ? ', ' + place.properties.address : ''}`;
+            }
+
+            // Final fallback - use the first part of the place name
+            if (!components.address && place.place_name) {
+                const parts = place.place_name.split(',');
+                components.address = parts[0]?.trim() || place.place_name;
+            }
         }
+
         return components;
     };
 
@@ -424,7 +479,11 @@ const BusinessAddress = () => {
     const autoSave = (updatedData: FormData) => {
         console.log('Auto-saving data:', updatedData);
 
-        // Use the same pattern as Q&A: getApiLink(appLocalizer, "endpoint")
+        // Ensure address field is never empty before saving
+        if (!updatedData.address || updatedData.address.trim() === '') {
+            updatedData.address = updatedData.location_address || 'Address not specified';
+        }
+
         const endpoint = getApiLink(appLocalizer, `geolocation/store/${id}`);
 
         axios.put(endpoint, updatedData, {
@@ -497,11 +556,11 @@ const BusinessAddress = () => {
                     <div>API Endpoint: {getApiLink(appLocalizer, `geolocation/store/${id}`)}</div>
                     <div>Lat: {formData.location_lat || 'N/A'}</div>
                     <div>Lng: {formData.location_lng || 'N/A'}</div>
+                    <div>Address: {formData.address || 'N/A'}</div>
                     <div>Google Maps: {googleLoaded ? 'Loaded' : 'Loading...'}</div>
                     <div>Map: {map ? 'Initialized' : 'Not initialized'}</div>
                 </div>
 
-                {/* Your existing JSX remains the same... */}
                 <div className="form-group-wrapper">
                     <div className="form-group">
                         <label htmlFor="location-autocomplete">Search Location *</label>
@@ -521,7 +580,6 @@ const BusinessAddress = () => {
                     </div>
                 </div>
 
-                {/* Map Display and other form fields remain the same... */}
                 <div className="form-group-wrapper">
                     <div className="form-group">
                         <label>Location Map *</label>
@@ -541,10 +599,9 @@ const BusinessAddress = () => {
                     </div>
                 </div>
 
-                {/* Address fields remain the same... */}
                 <div className="form-group-wrapper">
                     <div className="form-group">
-                        <label htmlFor="address">Address</label>
+                        <label htmlFor="address">Address *</label>
                         <input
                             type="text"
                             name="address"
@@ -552,7 +609,13 @@ const BusinessAddress = () => {
                             className="setting-form-input"
                             onChange={handleChange}
                             placeholder="Street address"
+                            required
                         />
+                        {!formData.address && (
+                            <small style={{ color: 'orange', marginTop: '5px', display: 'block' }}>
+                                Address is required. Please select a location from the map or search.
+                            </small>
+                        )}
                     </div>
                 </div>
 
@@ -620,7 +683,6 @@ const BusinessAddress = () => {
                     </div>
                 </div>
 
-                {/* Hidden coordinates */}
                 <input type="hidden" name="location_lat" value={formData.location_lat || ''} />
                 <input type="hidden" name="location_lng" value={formData.location_lng || ''} />
             </div>

@@ -10,8 +10,12 @@ declare global {
     }
 }
 
+interface FormData {
+    [key: string]: string;
+}
+
 const StoreSettings = ({ id }: { id: string | null }) => {
-    const [formData, setFormData] = useState<{ [key: string]: string }>({});
+    const [formData, setFormData] = useState<FormData>({});
     const statusOptions = [
         { label: "Active", value: "active" },
         { label: "Inactive", value: "inactive" },
@@ -212,7 +216,7 @@ const StoreSettings = ({ id }: { id: string | null }) => {
 
             const autocomplete = new window.google.maps.places.Autocomplete(autocompleteInputRef.current, {
                 types: ['establishment', 'geocode'],
-                fields: ['address_components', 'formatted_address', 'geometry'],
+                fields: ['address_components', 'formatted_address', 'geometry', 'name'],
             });
 
             autocomplete.addListener('place_changed', () => {
@@ -287,7 +291,6 @@ const StoreSettings = ({ id }: { id: string | null }) => {
         setMarker(markerInstance);
     };
 
-    // Rest of your methods (handlePlaceSelect, reverseGeocode, extractAddressComponents, etc.) remain the same
     const handlePlaceSelect = (place: any, provider: 'google' | 'mapbox') => {
         let lat, lng, formatted_address, addressComponents;
 
@@ -323,6 +326,12 @@ const StoreSettings = ({ id }: { id: string | null }) => {
             ...addressComponents,
         };
 
+        // Ensure address field is never empty
+        if (!updated.address || updated.address.trim() === '') {
+            // Use the formatted address as fallback
+            updated.address = formatted_address;
+        }
+
         setFormData(updated);
         autoSave(updated);
     };
@@ -346,35 +355,96 @@ const StoreSettings = ({ id }: { id: string | null }) => {
         }
     };
 
-    const extractAddressComponents = (place: any, provider: 'google' | 'mapbox') => {
-        const components: { [key: string]: string } = {};
+    const extractAddressComponents = (place: any, provider: 'google' | 'mapbox'): FormData => {
+        const components: FormData = {};
 
         if (provider === 'google') {
             if (place.address_components) {
+                let streetNumber = '';
+                let route = '';
+                let address = '';
+
                 place.address_components.forEach((component: any) => {
                     const types = component.types;
-                    if (types.includes('street_number')) components.address_1 = component.long_name;
-                    else if (types.includes('route')) components.address_1 = (components.address_1 || '') + ' ' + component.long_name;
-                    else if (types.includes('locality')) components.city = component.long_name;
-                    else if (types.includes('administrative_area_level_1')) components.state = component.long_name;
-                    else if (types.includes('country')) components.country = component.long_name;
-                    else if (types.includes('postal_code')) components.zip = component.long_name;
+                    
+                    if (types.includes('street_number')) {
+                        streetNumber = component.long_name;
+                    } else if (types.includes('route')) {
+                        route = component.long_name;
+                    } else if (types.includes('locality')) {
+                        components.city = component.long_name;
+                    } else if (types.includes('administrative_area_level_1')) {
+                        components.state = component.short_name || component.long_name;
+                    } else if (types.includes('country')) {
+                        components.country = component.long_name;
+                    } else if (types.includes('postal_code')) {
+                        components.zip = component.long_name;
+                    } else if (types.includes('postal_code_suffix')) {
+                        if (components.zip) {
+                            components.zip += '-' + component.long_name;
+                        }
+                    }
                 });
+
+                // Build complete address
+                if (streetNumber && route) {
+                    address = `${streetNumber} ${route}`;
+                } else if (route) {
+                    address = route;
+                } else if (streetNumber) {
+                    address = streetNumber;
+                } else {
+                    // If no street address found, use the formatted address
+                    address = place.formatted_address || '';
+                }
+
+                components.address = address.trim();
+
+                // If still no address, try to extract from name for establishments
+                if (!components.address && place.name && place.formatted_address) {
+                    const nameIndex = place.formatted_address.indexOf(place.name);
+                    if (nameIndex !== -1) {
+                        components.address = place.formatted_address.substring(nameIndex + place.name.length).trim().replace(/^,\s*/, '');
+                    } else {
+                        components.address = place.formatted_address;
+                    }
+                }
             }
         } else {
+            // Mapbox address extraction
+            if (place.properties) {
+                components.address = place.properties.address || '';
+            }
+            
             if (place.context) {
                 place.context.forEach((component: any) => {
-                    const types = component.id.split('.');
-                    if (types.includes('postcode')) components.zip = component.text;
-                    else if (types.includes('place')) components.city = component.text;
-                    else if (types.includes('region')) components.state = component.text;
-                    else if (types.includes('country')) components.country = component.text;
+                    const idParts = component.id.split('.');
+                    const type = idParts[0];
+                    
+                    if (type === 'postcode') {
+                        components.zip = component.text;
+                    } else if (type === 'place') {
+                        components.city = component.text;
+                    } else if (type === 'region') {
+                        components.state = component.text;
+                    } else if (type === 'country') {
+                        components.country = component.text;
+                    }
                 });
             }
-            if (place.properties) {
-                components.address_1 = place.properties.address || '';
+
+            // If address is still empty, try to construct it from available data
+            if (!components.address && place.text && place.properties) {
+                components.address = `${place.text}${place.properties.address ? ', ' + place.properties.address : ''}`;
+            }
+
+            // Final fallback - use the first part of the place name
+            if (!components.address && place.place_name) {
+                const parts = place.place_name.split(',');
+                components.address = parts[0]?.trim() || place.place_name;
             }
         }
+
         return components;
     };
 
@@ -414,7 +484,12 @@ const StoreSettings = ({ id }: { id: string | null }) => {
         frame.open();
     };
 
-    const autoSave = (updatedData: { [key: string]: string }) => {
+    const autoSave = (updatedData: FormData) => {
+        // Ensure address field is never empty before saving
+        if (!updatedData.address || updatedData.address.trim() === '') {
+            updatedData.address = updatedData.location_address || 'Address not specified';
+        }
+
         axios({
             method: 'PUT',
             url: getApiLink(appLocalizer, `store/${id}`),
@@ -459,6 +534,7 @@ const StoreSettings = ({ id }: { id: string | null }) => {
                 <div>Google Maps: {googleLoaded ? 'Loaded' : 'Loading...'}</div>
                 <div>Mapbox: {mapboxLoaded ? 'Loaded' : 'Loading...'}</div>
                 <div>Map: {map ? 'Initialized' : 'Not initialized'}</div>
+                <div>Address: {formData.address || 'N/A'}</div>
             </div>
             <div className="container-wrapper">
                 <div className="card-wrapper width-65">
@@ -567,12 +643,19 @@ const StoreSettings = ({ id }: { id: string | null }) => {
 
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <label htmlFor="product-name">Address Line 1</label>
-                                <BasicInput name="address_1" value={formData.address_1} wrapperClass="setting-form-input" descClass="settings-metabox-description" onChange={handleChange} />
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="product-name">Address Line 2</label>
-                                <BasicInput name="address_2" value={formData.address_2} wrapperClass="setting-form-input" descClass="settings-metabox-description" onChange={handleChange} />
+                                <label htmlFor="product-name">Address *</label>
+                                <BasicInput 
+                                    name="address" 
+                                    value={formData.address} 
+                                    wrapperClass="setting-form-input" 
+                                    descClass="settings-metabox-description" 
+                                    onChange={handleChange} 
+                                />
+                                {!formData.address && (
+                                    <small style={{ color: 'orange', marginTop: '5px', display: 'block' }}>
+                                        Address is required. Please select a location from the map or search.
+                                    </small>
+                                )}
                             </div>
                         </div>
                         <div className="form-group-wrapper">
