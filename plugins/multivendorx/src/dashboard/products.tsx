@@ -254,10 +254,10 @@ const AllProduct: React.FC = () => {
             cell: ({ row }) => (
                 <TableCell>
                     {row.original.stock_status === 'instock' && (
-                        <span className="admin-badge green">In Stock</span>
+                        <span className="admin-badge in-stock">In Stock</span>
                     )}
                     {row.original.stock_status === 'outofstock' && (
-                        <span className="admin-badge red">Out of Stock</span>
+                        <span className="admin-badge out-of-stock">Out of Stock</span>
                     )}
                     {!row.original.stock_status && '-'}
                 </TableCell>
