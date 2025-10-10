@@ -276,11 +276,11 @@ const AdminDashboard = () => {
 
                     <div className="button-wrapper">
 
-                      <div className="admin-btn btn-purple">
+                      <a href='https://multivendorx.com/pricing/' className="admin-btn btn-purple">
                         <i className="adminlib-pro-tag"></i>
                         Upgrade Now
                         <i className="adminlib-arrow-right icon-pro-btn"></i>
-                      </div>
+                      </a>
                       <a href="#free-vs-pro" className="admin-btn">
                         Launch Setup Wizard
                         <i className="adminlib-import"></i>
@@ -328,7 +328,7 @@ const AdminDashboard = () => {
                     Join 50,000+ successful marketplace owners
                   </div>
                   <div className="des">Create, manage, and grow your marketplace with confidence. Trusted by thousands of entrepreneurs worldwide.</div>
-                  <div className="admin-btn btn-purple">
+                  <a href='https://multivendorx.com/pricing/' className="admin-btn btn-purple">
                     Upgrade Now - 15 Day Guarantee
                     <i className="adminlib-arrow-right icon-pro-btn"></i>
                   </div>
@@ -530,11 +530,11 @@ const AdminDashboard = () => {
 
                   <div className="button-wrapper">
 
-                    <div className="admin-btn btn-purple">
-                      <i className="adminlib-pro-tag"></i>
+                    <a href='https://multivendorx.com/pricing/' className="admin-btn btn-purple">
+                      <i  className="adminlib-pro-tag"></i>
                       Upgrade Now
                       <i className="adminlib-arrow-right icon-pro-btn"></i>
-                    </div>
+                    </a>
                     <a href="#free-vs-pro" className="admin-btn">
                       Launch Setup Wizard
                       <i className="adminlib-import"></i>
@@ -565,11 +565,11 @@ const AdminDashboard = () => {
                 ))}
               </div>
               <div className="right">
-                <div className="admin-btn btn-purple">
+              <a href='https://multivendorx.com/pricing/' className="admin-btn btn-purple">
                   <i className="adminlib-pro-tag"></i>
                   Upgrade Now
                   <i className="adminlib-arrow-right icon-pro-btn"></i>
-                </div>
+                </a>
               </div>
             </div>
 
