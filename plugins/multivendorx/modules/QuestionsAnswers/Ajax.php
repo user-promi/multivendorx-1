@@ -39,17 +39,19 @@ class Ajax {
         $table = $wpdb->prefix . Utill::TABLES['product_qna'];
         $user_id = get_current_user_id();
         $question = sanitize_textarea_field($_POST['question']);
-        $product_id = intval($_POST['product_id']);
+        $product_id = filter_input(INPUT_POST, 'product_id', FILTER_VALIDATE_INT) ?: 0;
+        $store_id = intval(get_post_meta($product_id, 'multivendorx_store_id', true) ?: 0);
 
         $wpdb->insert(
             $table,
             [
                 'product_id'    => $product_id,
+                'store_id'      => $store_id,
                 'question_text' => $question,
                 'question_by'   => $user_id,
                 'question_date' => current_time('mysql'),
             ],
-            [ '%d', '%s', '%d', '%s' ]
+            [ '%d', '%d', '%s', '%d', '%s' ]
         );
 
         $insert_id = $wpdb->insert_id;

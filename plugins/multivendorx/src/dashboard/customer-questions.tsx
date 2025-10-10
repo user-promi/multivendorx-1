@@ -1,8 +1,10 @@
 /* global appLocalizer */
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Table, TableCell, CommonPopup, getApiLink } from "zyra";
+import { Table, TableCell, CommonPopup, getApiLink, CalendarInput } from "zyra";
 import { ColumnDef, PaginationState } from "@tanstack/react-table";
+import { __ } from '@wordpress/i18n';
+import { store } from "@wordpress/blocks";
 
 type StoreQnaRow = {
   id: number;
@@ -14,7 +16,10 @@ type StoreQnaRow = {
   question_date?: string;
   time_ago?: string;
 };
-
+export interface RealtimeFilter {
+  name: string;
+  render: (updateFilter: (key: string, value: any) => void, filterValue: any) => React.ReactNode;
+}
 const StoreQna: React.FC = () => {
   const [data, setData] = useState<StoreQnaRow[]>([]);
   const [pagination, setPagination] = useState<PaginationState>({
@@ -25,40 +30,78 @@ const StoreQna: React.FC = () => {
   const [selectedQna, setSelectedQna] = useState<StoreQnaRow | null>(null);
   const [answer, setAnswer] = useState("");
   const [saving, setSaving] = useState(false);
+  const [totalRows, setTotalRows] = useState<number>(0);
+  const [pageCount, setPageCount] = useState(0);
+  const [error, setError] = useState<string>();
 
-  // Fetch total count separately
-  const fetchTotalCount = async () => {
-    try {
-      const res = await axios.get(getApiLink(appLocalizer, "qna"), {
-        params: { store_id: appLocalizer.store_id, count: true },
-        headers: { "X-WP-Nonce": appLocalizer.nonce },
-      });
-      setTotalCount(res.data || 0);
-    } catch (err) {
-      console.error("Failed to fetch total count:", err);
-    }
-  };
-
-  // Fetch paginated data
-  const fetchData = async (page = 1, perPage = 10) => {
-    try {
-      const res = await axios.get(getApiLink(appLocalizer, "qna"), {
-        params: { store_id: appLocalizer.store_id, page, row: perPage },
-        headers: { "X-WP-Nonce": appLocalizer.nonce },
-      });
-      setData(res.data || []);
-    } catch (err) {
-      console.error("Failed to fetch Q&A:", err);
-    }
-  };
-
+  // Fetch total rows on mount
   useEffect(() => {
-    fetchTotalCount(); // separate API for count
+    axios({
+      method: 'GET',
+      url: getApiLink(appLocalizer, 'qna'),
+      headers: { 'X-WP-Nonce': appLocalizer.nonce },
+      params: { count: true, store_id: appLocalizer.store_id },
+    })
+      .then((response) => {
+        setTotalRows(response.data || 0);
+        setPageCount(Math.ceil(response.data / pagination.pageSize));
+      })
+      .catch(() => {
+        setError(__('Failed to load total rows', 'multivendorx'));
+      });
   }, []);
 
   useEffect(() => {
-    fetchData(pagination.pageIndex + 1, pagination.pageSize);
-  }, [pagination.pageIndex, pagination.pageSize]);
+    const currentPage = pagination.pageIndex + 1;
+    const rowsPerPage = pagination.pageSize;
+    requestData(rowsPerPage, currentPage);
+    setPageCount(Math.ceil(totalRows / rowsPerPage));
+  }, [pagination]);
+
+  // Fetch data from backend.
+  function requestData(
+    rowsPerPage = 10,
+    currentPage = 1,
+    startDate = new Date(0),
+    endDate = new Date(),
+  ) {
+    setData([]);
+    axios({
+      method: 'GET',
+      url: getApiLink(appLocalizer, 'qna'),
+      headers: { 'X-WP-Nonce': appLocalizer.nonce },
+      params: {
+        store_id:appLocalizer.store_id,
+        page: currentPage,
+        row: rowsPerPage,
+        startDate,
+        endDate
+      },
+    })
+      .then((response) => {
+        setData(response.data || []);
+      })
+      .catch(() => {
+        setError(__('Failed to load Q&A', 'multivendorx'));
+        setData([]);
+      });
+  }
+
+  // Handle pagination and filter changes
+  const requestApiForData = (
+    rowsPerPage: number,
+    currentPage: number,
+    filterData: FilterData
+  ) => {
+    setData([]);
+    requestData(
+      rowsPerPage,
+      currentPage,
+      filterData?.date?.start_date,
+      filterData?.date?.end_date
+    );
+  };
+
 
   // Save answer
   const handleSaveAnswer = async () => {
@@ -85,32 +128,125 @@ const StoreQna: React.FC = () => {
     }
   };
 
+
   const columns: ColumnDef<StoreQnaRow>[] = [
-    { header: "Product", cell: ({ row }) => <TableCell>{row.original.product_name}</TableCell> },
-    { header: "Question", cell: ({ row }) => <TableCell>{row.original.question_text}</TableCell> },
-    { header: "Answer", cell: ({ row }) => <TableCell>{row.original.answer_text || "-"}</TableCell> },
-    { header: "Asked By", cell: ({ row }) => <TableCell>{row.original.author_name || "-"}</TableCell> },
     {
-      header: "Date",
-      cell: ({ row }) => {
-        const date = row.original.question_date ? new Date(row.original.question_date) : null;
-        return (
-          <TableCell>
-            {date
-              ? date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
-              : "-"}
-          </TableCell>
-        );
-      },
+      id: 'select',
+      header: ({ table }) => <input type="checkbox" checked={table.getIsAllRowsSelected()} onChange={table.getToggleAllRowsSelectedHandler()} />,
+      cell: ({ row }) => <input type="checkbox" checked={row.getIsSelected()} onChange={row.getToggleSelectedHandler()} />
     },
     {
-      header: "Action",
+      header: __('Product Name', 'multivendorx'),
       cell: ({ row }) => (
-        <TableCell>
-          <button onClick={() => { setSelectedQna(row.original); setAnswer(row.original.answer_text || ""); }}>
-            Answer
-          </button>
+        <TableCell title={row.original.product_name || ''}>
+          {row.original.product_name ? (
+            <a href={row.original.product_link} target="_blank" rel="noreferrer">{row.original.product_name}</a>
+          ) : '-'}
         </TableCell>
+      )
+    },
+    {
+      header: __('Question', 'multivendorx'),
+      cell: ({ row }) => {
+        const text = row.original.question_text ?? '-';
+        const displayText = text.length > 50 ? text.slice(0, 50) + '…' : text;
+        return <TableCell title={text}>{displayText}</TableCell>;
+      }
+    },
+    {
+      header: __('Answer', 'multivendorx'),
+      cell: ({ row }) => {
+        const text = row.original.answer_text ?? '-';
+        const displayText = text.length > 50 ? text.slice(0, 50) + '…' : text;
+        return <TableCell title={text}>{displayText}</TableCell>;
+      }
+    },
+    {
+      header: __('Asked By', 'multivendorx'),
+      cell: ({ row }) => <TableCell title={row.original.author_name || ''}>{row.original.author_name ?? '-'}</TableCell>
+    },
+    {
+      header: __('Date', 'multivendorx'),
+      accessorFn: row => row.question_date ? new Date(row.question_date).getTime() : 0, // numeric timestamp for sorting
+      enableSorting: true,
+      cell: ({ row }) => {
+        const rawDate = row.original.question_date;
+        const formattedDate = rawDate ? new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).format(new Date(rawDate)) : '-';
+        return <TableCell title={formattedDate}>{formattedDate}</TableCell>;
+      }
+    },
+    {
+      header: __('Time Ago', 'multivendorx'),
+      accessorFn: row => {
+        // Parse "2 weeks ago", "3 days ago", etc., to approximate days
+        const str = row.time_ago || '';
+        const parts = str.split(' ');
+        if (parts.length < 2) return 0;
+        const value = parseInt(parts[0]) || 0;
+        const unit = parts[1].toLowerCase();
+        switch (unit) {
+          case 'minute':
+          case 'minutes': return value / 60; // fraction of hour
+          case 'hour':
+          case 'hours': return value; // in hours
+          case 'day':
+          case 'days': return value * 24; // in hours
+          case 'week':
+          case 'weeks': return value * 24 * 7;
+          case 'month':
+          case 'months': return value * 24 * 30;
+          case 'year':
+          case 'years': return value * 24 * 365;
+          default: return 0;
+        }
+      },
+      enableSorting: true,
+      cell: ({ row }) => <TableCell title={row.original.time_ago || ''}>{row.original.time_ago ?? '-'}</TableCell>
+    },
+    {
+      header: __('Votes', 'multivendorx'),
+      cell: ({ row }) => <TableCell title={String(row.original.total_votes) || ''}>{row.original.total_votes ?? 0}</TableCell>
+    },
+    {
+      header: __('Visibility', 'multivendorx'),
+      cell: ({ row }) => <TableCell title={row.original.question_visibility || ''}>{row.original.question_visibility ?? '-'}</TableCell>
+    },
+    {
+      header: __('Action', 'multivendorx'),
+      cell: ({ row }) => (
+        <TableCell
+          type="action-dropdown"
+          rowData={row.original}
+          header={{
+            actions: [
+              {
+                label: __('Answer', 'multivendorx'),
+                icon: 'adminlib-eye', // you can change the icon
+                onClick: (rowData) => {
+                  setSelectedQna(rowData);
+                  setAnswer(rowData.answer_text || '');
+                },
+                hover: true,
+              },
+            ],
+          }}
+        />
+      ),
+    }
+    
+  ];
+
+  const realtimeFilter: RealtimeFilter[] = [
+    {
+      name: 'date',
+      render: (updateFilter) => (
+        <div className="right">
+          <CalendarInput
+            wrapperClass=""
+            inputClass=""
+            onChange={(range: any) => updateFilter('date', { start_date: range.startDate, end_date: range.endDate })}
+          />
+        </div>
       ),
     },
   ];
@@ -122,13 +258,15 @@ const StoreQna: React.FC = () => {
           data={data}
           columns={columns as ColumnDef<Record<string, any>, any>[]}
           rowSelection={{}}
-          onRowSelectionChange={() => {}}
-          defaultRowsPerPage={pagination.pageSize}
-          pageCount={Math.ceil(totalCount / pagination.pageSize)}
+          onRowSelectionChange={() => { }}
+          defaultRowsPerPage={10}
+          pageCount={pageCount}
           pagination={pagination}
           onPaginationChange={setPagination}
           perPageOption={[10, 25, 50]}
-          totalCounts={totalCount} // from separate count API
+          realtimeFilter={realtimeFilter}
+          handlePagination={requestApiForData}
+          totalCounts={totalRows}
         />
       </div>
 

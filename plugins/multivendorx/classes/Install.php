@@ -164,19 +164,23 @@ class Install {
         ) $collate;";
 
         $sql_qna = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}" . Utill::TABLES['product_qna'] . "` (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            product_id INT NOT NULL,
-            question_text TEXT NOT NULL,
-            question_by INT NOT NULL,
-            question_date DATETIME NOT NULL,
-            answer_text TEXT,
-            answer_by INT,
-            answer_date DATETIME,
-            total_votes INT DEFAULT 0,
-            voters TEXT,
-            question_visibility VARCHAR(50) DEFAULT 'public'
+            `id` INT NOT NULL AUTO_INCREMENT,
+            `product_id` INT NOT NULL,
+            `store_id` INT NOT NULL,
+            `question_text` TEXT NOT NULL,
+            `question_by` INT NOT NULL,
+            `question_date` DATETIME NOT NULL,
+            `answer_text` TEXT,
+            `answer_by` INT,
+            `answer_date` DATETIME,
+            `total_votes` INT DEFAULT 0,
+            `voters` TEXT,
+            `question_visibility` VARCHAR(50) DEFAULT 'public',
+            `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            PRIMARY KEY (`id`)
         ) $collate;";
-
+        
         $sql_report_abuse = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}" . Utill::TABLES['report_abuse'] . "` (
             `ID` bigint(20) NOT NULL AUTO_INCREMENT,
             `store_id` bigint(20) NOT NULL,
