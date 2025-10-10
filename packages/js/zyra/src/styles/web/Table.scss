@@ -236,10 +236,10 @@
         padding-right: 0;
       }
 
-      .header-col:last-child {
-        flex-grow: 0;
-        min-width: 5rem;
-      }
+      // .header-col:last-child {
+      //   flex-grow: 0;
+      //   min-width: 5rem;
+      // }
     }
 
     .admin-table-body {
@@ -317,11 +317,11 @@
           flex-grow: 1;
         }
 
-        .admin-column:last-child {
-          flex-grow: 0;
-          min-width: 5rem;
-          // justify-content: end;
-        }
+        // .admin-column:last-child {
+        //   flex-grow: 0;
+        //   min-width: 5rem;
+        //   // justify-content: end;
+        // }
 
         .admin-column:nth-of-type(2) {
           .product-image {

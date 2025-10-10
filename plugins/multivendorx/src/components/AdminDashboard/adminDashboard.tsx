@@ -1,20 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
-import {
-  BarChart,
-  Bar,
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  PieChart, Pie, Cell, Legend
-} from 'recharts';
 import notifima from "../../assets/images/brand-icon.png";
 import catalogx from "../../assets/images/catalogx.png";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import L from "leaflet";
 interface Payment {
   id: number;
   customer: string;
