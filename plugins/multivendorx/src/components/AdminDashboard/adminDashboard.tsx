@@ -267,10 +267,10 @@ const AdminDashboard = () => {
                         Upgrade Now
                         <i className="adminlib-arrow-right icon-pro-btn"></i>
                       </a>
-                      <a href="#free-vs-pro" className="admin-btn">
+                      <div onClick={() => window.location.href = `?page=multivendorx#&tab=setup`} href="#free-vs-pro" className="admin-btn">
                         Launch Setup Wizard
                         <i className="adminlib-import"></i>
-                      </a>
+                      </div>
                     </div>
                   </div>
                   <div className="image">
@@ -317,7 +317,7 @@ const AdminDashboard = () => {
                   <a href='https://multivendorx.com/pricing/' className="admin-btn btn-purple">
                     Upgrade Now - 15 Day Guarantee
                     <i className="adminlib-arrow-right icon-pro-btn"></i>
-                  </div>
+                  </a>
                 </div>
               </div>
             </div>
@@ -331,7 +331,12 @@ const AdminDashboard = () => {
                     </div>
                   </div>
                   <div className="right">
-                    <div className="admin-btn btn-purple"><i className="adminlib-eye"></i> View All</div>
+                    <div
+                      className="admin-btn btn-purple"
+                      onClick={() => window.location.href = `?page=multivendorx#&tab=modules`}
+                    ><i className="adminlib-eye"></i>
+                      View All
+                    </div>
                   </div>
                 </div>
                 <div className="mini-module">
@@ -517,14 +522,14 @@ const AdminDashboard = () => {
                   <div className="button-wrapper">
 
                     <a href='https://multivendorx.com/pricing/' className="admin-btn btn-purple">
-                      <i  className="adminlib-pro-tag"></i>
+                      <i className="adminlib-pro-tag"></i>
                       Upgrade Now
                       <i className="adminlib-arrow-right icon-pro-btn"></i>
                     </a>
-                    <a href="#free-vs-pro" className="admin-btn">
+                    <div onClick={() => window.location.href = `?page=multivendorx#&tab=setup`} className="admin-btn">
                       Launch Setup Wizard
                       <i className="adminlib-import"></i>
-                    </a>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -551,7 +556,7 @@ const AdminDashboard = () => {
                 ))}
               </div>
               <div className="right">
-              <a href='https://multivendorx.com/pricing/' className="admin-btn btn-purple">
+                <a href='https://multivendorx.com/pricing/' className="admin-btn btn-purple">
                   <i className="adminlib-pro-tag"></i>
                   Upgrade Now
                   <i className="adminlib-arrow-right icon-pro-btn"></i>
@@ -572,9 +577,6 @@ const AdminDashboard = () => {
               )
           )}
         </div>
-
-
-
       </div>
     </>
   );

@@ -1144,6 +1144,7 @@ input[type="checkbox"]:focus {
       left: -50%;
       transform: translate(-75%, 0);
       height: 1rem;
+      position: absolute;
 
       ul {
         display: flex;
