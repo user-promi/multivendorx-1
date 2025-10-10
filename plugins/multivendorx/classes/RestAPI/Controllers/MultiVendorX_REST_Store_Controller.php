@@ -516,42 +516,66 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
         if ( ! $store_id ) {
             return rest_ensure_response( ['error' => 'Invalid store ID'] );
         }
-
+    
         // Check if count param is requested
         $count = $request->get_param( 'count' );
-
+    
         // Get store object
         $store = new \MultiVendorX\Store\Store( $store_id );
-
-        // Directly fetch followers from meta_data
+    
+        // Fetch followers from meta_data
         $followers_raw = $store->meta_data['followers'] ?? '[]';
-        $followers = json_decode( $followers_raw, true ); // convert JSON string to array
-        if (!is_array($followers)) $followers = [];
-
+        $followers = json_decode( $followers_raw, true );
+        if ( ! is_array( $followers ) ) {
+            $followers = [];
+        }
+    
+        // ✅ Handle old format (plain array of user IDs)
+        // Convert to new format with id + empty date
+        if ( isset( $followers[0] ) && is_int( $followers[0] ) ) {
+            $followers = array_map( fn( $uid ) => ['id' => $uid, 'date' => '' ], $followers );
+        }
+    
         if ( $count ) {
             return rest_ensure_response( count( $followers ) );
         }
-
+    
         // Pagination
         $page   = max( intval( $request->get_param( 'page' ) ), 1 );
         $limit  = max( intval( $request->get_param( 'row' ) ), 10 );
         $offset = ( $page - 1 ) * $limit;
-
-        // Slice for pagination
+    
+        // Paginate followers
         $followers_page = array_slice( $followers, $offset, $limit );
-
+    
         $formatted_followers = [];
-        foreach ( $followers_page as $user_id ) {
+        foreach ( $followers_page as $follower ) {
+            $user_id = $follower['id'] ?? 0;
+            $follow_date = $follower['date'] ?? '';
+    
             $user = get_userdata( $user_id );
             if ( $user ) {
+                // Get first + last name
+                $first_name = get_user_meta( $user_id, 'first_name', true );
+                $last_name  = get_user_meta( $user_id, 'last_name', true );
+    
+                // Combine names, fallback to display_name if empty
+                $full_name = trim( "$first_name $last_name" );
+                if ( empty( $full_name ) ) {
+                    $full_name = $user->display_name;
+                }
+    
                 $formatted_followers[] = [
                     'id'    => $user_id,
-                    'name'  => $user->display_name,
+                    'name'  => $full_name,
                     'email' => $user->user_email,
+                    'date'  => $follow_date, // ✅ Include follow date
                 ];
             }
         }
-
+    
         return rest_ensure_response( $formatted_followers );
     }
+    
+    
 }

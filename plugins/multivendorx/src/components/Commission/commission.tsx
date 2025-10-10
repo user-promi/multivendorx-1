@@ -152,7 +152,6 @@ const Commission: React.FC = () => {
                         count: response.data.trash || 0,
                     },
                 ]);
-
             })
             .catch(() => {
                 setError(__('Failed to load stores', 'multivendorx'));
@@ -385,17 +384,6 @@ const Commission: React.FC = () => {
             ),
         },
     ];
-
-    // Type for an order line
-    interface OrderItem {
-        id: number;
-        name: string;
-        sku: string;
-        cost: string;
-        discount?: string;
-        qty: number;
-        total: string;
-    }
 
     return (
         <>

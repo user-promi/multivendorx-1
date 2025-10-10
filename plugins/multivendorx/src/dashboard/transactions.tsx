@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { __ } from "@wordpress/i18n";
-import { getApiLink, Table, TableCell } from "zyra";
+import { CalendarInput, getApiLink, Table, TableCell } from "zyra";
 import { ColumnDef, PaginationState } from "@tanstack/react-table";
 import TransactionDetailsModal from "./TransactionDetailsModal";
 
@@ -17,32 +17,103 @@ type TransactionRow = {
     status: string;
 };
 
+export interface RealtimeFilter {
+    name: string;
+    render: (updateFilter: (key: string, value: any) => void, filterValue: any) => ReactNode;
+}
+
 const Transactions: React.FC = () => {
     const [data, setData] = useState<TransactionRow[]>([]);
     const [pagination, setPagination] = useState<PaginationState>({ pageIndex: 0, pageSize: 10 });
     const [modalTransaction, setModalTransaction] = useState<TransactionRow | null>(null);
+    const [totalRows, setTotalRows] = useState<number>(0);
+    const [pageCount, setPageCount] = useState(0);
 
-    function requestTransactions(rowsPerPage = 10, currentPage = 1) {
+    // 🔹 Fetch total rows on mount or date change
+    useEffect(() => {
         axios({
-            method: "GET",
+            method: 'GET',
             url: getApiLink(appLocalizer, 'transaction'),
-            headers: { "X-WP-Nonce": appLocalizer.nonce },
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
             params: {
-                row: rowsPerPage,
-                page: currentPage,
+                count: true,
                 store_id: appLocalizer.store_id,
             },
-        }).then(response => {
-            setData(response.data || []);
-        });
-    }
+        })
+            .then((response) => {
+                setTotalRows(response.data || 0);
+                setPageCount(Math.ceil((response.data || 0) / pagination.pageSize));
+            })
+            .catch(() => setData([]));
+    }, []);
 
     useEffect(() => {
-        requestTransactions(pagination.pageSize, pagination.pageIndex + 1);
+        const currentPage = pagination.pageIndex + 1;
+        const rowsPerPage = pagination.pageSize;
+        requestData(rowsPerPage, currentPage);
+        setPageCount(Math.ceil(totalRows / rowsPerPage));
     }, [pagination]);
+
+    // 🔹 Fetch data from backend
+    function requestData(
+        rowsPerPage = 10,
+        currentPage = 1,
+        startDate = new Date(0),
+        endDate = new Date(),
+    ) {
+        setData([]);
+
+        axios({
+            method: 'GET',
+            url: getApiLink(appLocalizer, 'transaction'),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            params: {
+                page: currentPage,
+                row: rowsPerPage,
+                store_id: appLocalizer.store_id,
+                start_date: startDate,
+                end_date: endDate,
+            },
+        })
+            .then((response) => setData(response.data || []))
+            .catch(() => setData([]));
+    }
+
+    const requestApiForData = (
+        rowsPerPage: number,
+        currentPage: number,
+        filterData: FilterData
+    ) => {
+        requestData(
+            rowsPerPage,
+            currentPage,
+            filterData?.date?.start_date,
+            filterData?.date?.end_date
+        );
+    };
 
     const columns: ColumnDef<TransactionRow>[] = [
         {
+            id: 'select',
+            header: ({ table }) => (
+                <input
+                    type="checkbox"
+                    checked={table.getIsAllRowsSelected()}
+                    onChange={table.getToggleAllRowsSelectedHandler()}
+                />
+            ),
+            cell: ({ row }) => (
+                <input
+                    type="checkbox"
+                    checked={row.getIsSelected()}
+                    onChange={row.getToggleSelectedHandler()}
+                />
+            ),
+        },
+        {
+            id: 'date',
+            accessorKey: 'date',
+            enableSorting: true,
             header: __('Date', 'multivendorx'),
             cell: ({ row }) => {
                 const rawDate = row.original.date;
@@ -59,8 +130,26 @@ const Transactions: React.FC = () => {
             },
         },
         {
-            header: __("Order Details", "multivendorx"),
-            cell: ({ row }) => <TableCell>{row.original.order_details}</TableCell>,
+            id: 'order_details',
+            accessorKey: 'order_details',
+            enableSorting: true,
+            accessorFn: row => parseInt(row.order_details || '0'),
+            header: __('Order ID', 'multivendorx'),
+            cell: ({ row }) => {
+                const orderId = row.original.order_details;
+                const editLink = orderId
+                    ? `${window.location.origin}/wp-admin/post.php?post=${orderId}&action=edit`
+                    : '#';
+                return (
+                    <TableCell title={orderId || ''}>
+                        {orderId ? (
+                            <a href={'#'} target="_blank" rel="noopener noreferrer">
+                                #{orderId}
+                            </a>
+                        ) : '-'}
+                    </TableCell>
+                );
+            },
         },
         {
             header: __("Transaction Type", "multivendorx"),
@@ -71,21 +160,39 @@ const Transactions: React.FC = () => {
             cell: ({ row }) => <TableCell>{row.original.payment_mode}</TableCell>,
         },
         {
-            header: __("Credit", "multivendorx"),
+            id: 'credit',
+            accessorKey: 'credit',
+            enableSorting: true,
+            accessorFn: row => parseFloat(row.credit || '0'),
+            header: __('Credit', 'multivendorx'),
             cell: ({ row }) => (
-                <TableCell>{Number(row.original.credit || 0).toFixed(2)}</TableCell>
+                <TableCell title={row.original.credit || ''}>
+                    {row.original.credit ? `${appLocalizer.currency_symbol}${row.original.credit}` : '-'}
+                </TableCell>
             ),
         },
         {
-            header: __("Debit", "multivendorx"),
+            id: 'debit',
+            accessorKey: 'debit',
+            enableSorting: true,
+            accessorFn: row => parseFloat(row.debit || '0'),
+            header: __('Debit', 'multivendorx'),
             cell: ({ row }) => (
-                <TableCell>{Number(row.original.debit || 0).toFixed(2)}</TableCell>
+                <TableCell title={row.original.debit || ''}>
+                    {row.original.debit ? `${appLocalizer.currency_symbol}${row.original.debit}` : '0'}
+                </TableCell>
             ),
         },
         {
-            header: __("Balance", "multivendorx"),
+            id: 'balance',
+            accessorKey: 'balance',
+            enableSorting: true,
+            accessorFn: row => parseFloat(row.balance || '0'),
+            header: __('Balance', 'multivendorx'),
             cell: ({ row }) => (
-                <TableCell>{Number(row.original.balance || 0).toFixed(2)}</TableCell>
+                <TableCell title={row.original.balance || ''}>
+                    {row.original.balance ? `${appLocalizer.currency_symbol}${row.original.balance}` : '-'}
+                </TableCell>
             ),
         },
         {
@@ -95,18 +202,45 @@ const Transactions: React.FC = () => {
         {
             header: __("Action", "multivendorx"),
             cell: ({ row }) => (
-                <TableCell>
-                    <button
-                        className="button button-primary"
-                        onClick={() => setModalTransaction(row.original)}
-                    >
-                        {__("View", "multivendorx")}
-                    </button>
-                </TableCell>
+                <TableCell
+                    type="action-dropdown"
+                    rowData={row.original}
+                    header={{
+                        actions: [
+                            {
+                                label: __("View", "multivendorx"),
+                                icon: "adminlib-eye",
+                                onClick: (rowData) => {
+                                    setModalTransaction(rowData);
+                                },
+                                hover: true,
+                            },
+                        ],
+                    }}
+                />
+            ),
+        },
+        
+    ];
+    const realtimeFilter: RealtimeFilter[] = [
+        {
+            name: 'date',
+            render: (updateFilter) => (
+                <div className="right">
+                    <CalendarInput
+                        wrapperClass=""
+                        inputClass=""
+                        onChange={(range:any) => {
+                            updateFilter('date', {
+                                start_date: range.startDate,
+                                end_date: range.endDate,
+                            });
+                        }}
+                    />
+                </div>
             ),
         },
     ];
-
     return (
         <div className="admin-table-wrapper">
             <Table
@@ -115,11 +249,13 @@ const Transactions: React.FC = () => {
                 rowSelection={{}}
                 onRowSelectionChange={() => { }}
                 defaultRowsPerPage={10}
-                pageCount={Math.ceil(data.length / pagination.pageSize)}
+                pageCount={pageCount}
                 pagination={pagination}
+                realtimeFilter={realtimeFilter}
                 onPaginationChange={setPagination}
-                handlePagination={requestTransactions}
+                handlePagination={requestApiForData}
                 perPageOption={[10, 25, 50]}
+                totalCounts={totalRows}
             />
 
             {modalTransaction && (

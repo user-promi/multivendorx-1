@@ -154,18 +154,26 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
             );
         }
 
-        $all        = CommissionUtil::get_commissions([], true, true);
-        $paid       = CommissionUtil::get_commissions(['status' => 'paid'], true, true);
-        $refund     = CommissionUtil::get_commissions(['status' => 'refund'], true, true);
-        $trash      = CommissionUtil::get_commissions(['status' => 'trash'], true, true);
-        $cancelled  = CommissionUtil::get_commissions(['status' => 'cancelled'], true, true);
+        // Prepare base filter (for store-specific counts)
+        $base_filter = [];
+        if ( ! empty( $storeId ) ) {
+            $base_filter['store_id'] = intval( $storeId );
+        }
+
+        // Status-wise counts with store/date filters applied
+        $all       = CommissionUtil::get_commissions( $base_filter, true, true );
+        $paid      = CommissionUtil::get_commissions( array_merge( $base_filter, ['status' => 'paid'] ), true, true );
+        $refund    = CommissionUtil::get_commissions( array_merge( $base_filter, ['status' => 'refund'] ), true, true );
+        $trash     = CommissionUtil::get_commissions( array_merge( $base_filter, ['status' => 'trash'] ), true, true );
+        $cancelled = CommissionUtil::get_commissions( array_merge( $base_filter, ['status' => 'cancelled'] ), true, true );
+
         $response = [
             'commissions' => $formatted_commissions,
-            'all'    => $all,
-            'paid'   => $paid,
-            'cancelled'=> $cancelled,
-            'refund' => $refund,
-            'trash'  => $trash,
+            'all'         => $all,
+            'paid'        => $paid,
+            'cancelled'   => $cancelled,
+            'refund'      => $refund,
+            'trash'       => $trash,
         ];
 
         return rest_ensure_response( $response );
@@ -248,9 +256,4 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
     
         return rest_ensure_response( $response );
     }
-    
-    
-    
-    
-    
 }
