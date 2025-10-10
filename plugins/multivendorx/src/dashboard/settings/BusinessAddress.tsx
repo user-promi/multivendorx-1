@@ -1,14 +1,15 @@
 import { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
+import { getApiLink } from 'zyra';
 
 declare global {
-  interface Window {
-    google: any;
-  }
+    interface Window {
+        google: any;
+    }
 }
 
 interface FormData {
-  [key: string]: string;
+    [key: string]: string;
 }
 
 const BusinessAddress = () => {
@@ -24,17 +25,34 @@ const BusinessAddress = () => {
     const autocompleteInputRef = useRef<HTMLInputElement>(null);
     const [mapProvider, setMapProvider] = useState('');
     const [apiKey, setApiKey] = useState('');
-
+    const appLocalizer = (window as any).appLocalizer;
+    // Get REST API base URL
     useEffect(() => {
-        const geolocationSettings = (window as any).appLocalizer?.settings_databases_value?.geolocation;
-        if (geolocationSettings) {
-            setMapProvider(geolocationSettings.choose_map_api);
-            if (geolocationSettings.choose_map_api === 'google_map_set') {
-                setApiKey(geolocationSettings.google_api_key);
+        if (appLocalizer) {
+            setMapProvider(appLocalizer.map_providor);
+            if (appLocalizer.map_providor === 'google_map_set') {
+                setApiKey(appLocalizer.google_api_key);
             } else {
-                setApiKey(geolocationSettings.mapbox_api_key);
+                setApiKey(appLocalizer.mapbox_api_key);
             }
         }
+    }, []);
+    // Fetch total count separately
+    const fetchTotalCount = async () => {
+        try {
+            const res = await axios.get(getApiLink(appLocalizer, "geolocation"), {
+                params: { store_id: appLocalizer.store_id, count: true },
+                headers: { "X-WP-Nonce": appLocalizer.nonce },
+            });
+            console.log("Total count response:", res.data);
+        } catch (err) {
+            console.error("Failed to fetch total count:", err);
+            // This is not critical, so don't show error to user
+        }
+    };
+    
+    useEffect(() => {
+        fetchTotalCount(); // separate API for count
     }, []);
 
     // Log function
@@ -45,48 +63,30 @@ const BusinessAddress = () => {
     // Load initial data
     useEffect(() => {
         if (!id) {
-            log('No store ID found');
+            console.error('No store ID found');
             setErrorMsg('No store ID available');
             setLoading(false);
             return;
         }
 
-        log('Loading store data for ID:', id);
-        
-        // Test if REST API is working
-        const testAPI = async () => {
+        console.log('Loading store data for ID:', id);
+
+        // Load store data using the same pattern as Q&A
+        const loadStoreData = async () => {
             try {
-                log('Testing if REST API is available...');
-                // Try the main REST API endpoint
-                const response = await axios.get('/?wp-json/');
-                log('REST API is available');
-                
-                // Check if our specific endpoint exists
-                const routes = response.data.routes || {};
-                const ourRoute = Object.keys(routes).find(route => 
-                    route.includes('/multivendorx/store/')
-                );
-                
-                if (ourRoute) {
-                    log('Our route found:', ourRoute);
-                } else {
-                    log('Our route not found in REST API');
-                    setErrorMsg('Geolocation API endpoint not registered. Please contact administrator.');
-                }
-            } catch (error) {
-                log('REST API test failed:', error);
-                setErrorMsg('WordPress REST API is not accessible. Please check your permalink settings.');
-            }
-        };
+                // Use the same pattern as Q&A: getApiLink(appLocalizer, "endpoint")
+                const endpoint = getApiLink(appLocalizer, `geolocation/store/${id}`);
+                console.log('Fetching from endpoint:', endpoint);
 
-        testAPI();
-
-        // Load store data with proper error handling
-        axios.get(`/?wp-json/multivendorx/store/${id}`)
-            .then((res) => {
-                log('Store data loaded successfully:', res.data);
+                const res = await axios.get(endpoint, {
+                    headers: {
+                        'X-WP-Nonce': appLocalizer.nonce
+                    }
+                });
+                
+                console.log('Store data loaded successfully:', res.data);
                 const data = res.data || {};
-                
+
                 // Ensure we have proper data structure
                 const formattedData = {
                     location_address: data.location_address || '',
@@ -99,25 +99,24 @@ const BusinessAddress = () => {
                     zip: data.zip || '',
                     timezone: data.timezone || ''
                 };
-                
+
                 setFormData(formattedData);
                 setLoading(false);
-            })
-            .catch((error) => {
-                log('Error loading store data:', error);
-                
+            } catch (error: any) {
+                console.error('Error loading store data:', error);
+
                 let errorMessage = 'Failed to load store data';
                 if (error.response?.status === 404) {
-                    errorMessage = `Store data endpoint not found (404). Please ensure the geolocation feature is properly installed.`;
+                    errorMessage = `Geolocation endpoint not found (404). Please ensure the geolocation feature is properly installed.`;
                 } else if (error.code === 'ECONNABORTED') {
                     errorMessage = 'Request timeout. Please try again.';
                 } else {
                     errorMessage = `Failed to load store data: ${error.message}`;
                 }
-                
+
                 setErrorMsg(errorMessage);
                 setLoading(false);
-                
+
                 // Set empty form data to allow map initialization
                 setFormData({
                     location_address: '',
@@ -130,16 +129,19 @@ const BusinessAddress = () => {
                     zip: '',
                     timezone: ''
                 });
-            });
+            }
+        };
+
+        loadStoreData();
     }, [id]);
 
     // Load map scripts based on provider
     useEffect(() => {
         if (mapProvider === 'google_map_set' && !googleLoaded) {
-            log('Loading Google Maps script...');
+            console.log('Loading Google Maps script...');
             loadGoogleMapsScript();
         } else if (mapProvider === 'mapbox_api_set' && !mapboxLoaded) {
-            log('Loading Mapbox script...');
+            console.log('Loading Mapbox script...');
             loadMapboxScript();
         }
     }, [mapProvider, googleLoaded, mapboxLoaded]);
@@ -191,17 +193,17 @@ const BusinessAddress = () => {
         script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&loading=async`;
         script.async = true;
         script.defer = true;
-        
+
         script.onload = () => {
             log('Google Maps script loaded successfully');
             setGoogleLoaded(true);
         };
-        
+
         script.onerror = (error) => {
             log('Error loading Google Maps script:', error);
             setErrorMsg('Failed to load Google Maps. Please check your internet connection.');
         };
-        
+
         document.head.appendChild(script);
     };
 
@@ -307,7 +309,6 @@ const BusinessAddress = () => {
             }
         }
 
-
         setMap(mapInstance);
         setMarker(markerInstance);
     };
@@ -409,49 +410,53 @@ const BusinessAddress = () => {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        log(`Input change: ${name} = ${value}`);
-        
+        console.log(`Input change: ${name} = ${value}`);
+
         const updated = { ...formData, [name]: value };
         setFormData(updated);
         autoSave(updated);
     };
 
     const autoSave = (updatedData: FormData) => {
-        log('Auto-saving data:', updatedData);
-        
-        axios.put(`/?wp-json/multivendorx/store/${id}`, updatedData, {
+        console.log('Auto-saving data:', updatedData);
+
+        // Use the same pattern as Q&A: getApiLink(appLocalizer, "endpoint")
+        const endpoint = getApiLink(appLocalizer, `geolocation/store/${id}`);
+
+        axios.put(endpoint, updatedData, {
             headers: {
                 'Content-Type': 'application/json',
+                'X-WP-Nonce': appLocalizer.nonce
             },
-            timeout: 10000 // 10 second timeout
+            timeout: 10000
         })
-        .then((res) => {
-            log('Auto-save successful:', res.data);
-            if (res.data.success) {
-                setSuccessMsg('Store saved successfully!');
-                setErrorMsg(null);
-                setTimeout(() => {
-                    setSuccessMsg(null);
-                    log('Success message cleared');
-                }, 3000);
-            }
-        })
-        .catch((error) => {
-            log('Auto-save error:', error);
-            
-            let errorMessage = 'Failed to save store data';
-            if (error.response?.status === 404) {
-                errorMessage = 'Save endpoint not found. Data saved locally but not on server.';
-            } else if (error.response?.status === 405) {
-                errorMessage = 'Save method not allowed. Please contact administrator.';
-            } else if (error.code === 'ECONNABORTED') {
-                errorMessage = 'Save request timeout. Data saved locally but may not be on server.';
-            } else {
-                errorMessage = `Failed to save: ${error.message}`;
-            }
-            
-            setErrorMsg(errorMessage);
-        });
+            .then((res) => {
+                console.log('Auto-save successful:', res.data);
+                if (res.data.success) {
+                    setSuccessMsg('Store saved successfully!');
+                    setErrorMsg(null);
+                    setTimeout(() => {
+                        setSuccessMsg(null);
+                        console.log('Success message cleared');
+                    }, 3000);
+                }
+            })
+            .catch((error) => {
+                console.error('Auto-save error:', error);
+
+                let errorMessage = 'Failed to save store data';
+                if (error.response?.status === 404) {
+                    errorMessage = 'Save endpoint not found. Data saved locally but not on server.';
+                } else if (error.response?.status === 405) {
+                    errorMessage = 'Save method not allowed. Please contact administrator.';
+                } else if (error.code === 'ECONNABORTED') {
+                    errorMessage = 'Save request timeout. Data saved locally but may not be on server.';
+                } else {
+                    errorMessage = `Failed to save: ${error.message}`;
+                }
+
+                setErrorMsg(errorMessage);
+            });
     };
 
     if (loading) {
@@ -468,31 +473,31 @@ const BusinessAddress = () => {
         <div className="card-wrapper">
             <div className="card-content">
                 <div className="card-title">Business Address & Location</div>
-                
+
                 {successMsg && (
-                    <div className="success-message" style={{color: 'green', marginBottom: '15px', padding: '10px', background: '#f0fff0', border: '1px solid green' }}>
+                    <div className="success-message" style={{ color: 'green', marginBottom: '15px', padding: '10px', background: '#f0fff0', border: '1px solid green' }}>
                         {successMsg}
                     </div>
                 )}
-                
+
                 {errorMsg && (
-                    <div className="error-message" style={{color: 'red', marginBottom: '15px', padding: '10px', background: '#fff0f0', border: '1px solid red' }}>
+                    <div className="error-message" style={{ color: 'red', marginBottom: '15px', padding: '10px', background: '#fff0f0', border: '1px solid red' }}>
                         {errorMsg}
                     </div>
                 )}
-                
+
                 {/* Debug Info */}
                 <div style={{ background: '#f5f5f5', padding: '10px', marginBottom: '15px', borderRadius: '4px', fontSize: '12px' }}>
                     <div>Debug Info:</div>
                     <div>Store ID: {id}</div>
+                    <div>API Endpoint: {getApiLink(appLocalizer, `geolocation/store/${id}`)}</div>
                     <div>Lat: {formData.location_lat || 'N/A'}</div>
                     <div>Lng: {formData.location_lng || 'N/A'}</div>
                     <div>Google Maps: {googleLoaded ? 'Loaded' : 'Loading...'}</div>
                     <div>Map: {map ? 'Initialized' : 'Not initialized'}</div>
-                    <div>API Endpoint: /?wp-json/multivendorx/store/{id}</div>
                 </div>
 
-                {/* Location Search */}
+                {/* Your existing JSX remains the same... */}
                 <div className="form-group-wrapper">
                     <div className="form-group">
                         <label htmlFor="location-autocomplete">Search Location *</label>
@@ -506,33 +511,33 @@ const BusinessAddress = () => {
                                 defaultValue={formData.location_address}
                             />
                         </div>
-                        <small style={{color: '#666', marginTop: '5px', display: 'block'}}>
+                        <small style={{ color: '#666', marginTop: '5px', display: 'block' }}>
                             Type your business name or address and select from suggestions
                         </small>
                     </div>
                 </div>
 
-                {/* Map Display */}
+                {/* Map Display and other form fields remain the same... */}
                 <div className="form-group-wrapper">
                     <div className="form-group">
                         <label>Location Map *</label>
-                        <div 
-                            id="location-map" 
-                            style={{ 
-                                height: '300px', 
-                                width: '100%', 
+                        <div
+                            id="location-map"
+                            style={{
+                                height: '300px',
+                                width: '100%',
                                 borderRadius: '8px',
                                 border: '1px solid #ddd',
                                 marginTop: '8px'
                             }}
                         ></div>
-                        <small style={{color: '#666', marginTop: '5px', display: 'block'}}>
+                        <small style={{ color: '#666', marginTop: '5px', display: 'block' }}>
                             Click on the map or drag the marker to set your exact location
                         </small>
                     </div>
                 </div>
 
-                {/* Address Fields */}
+                {/* Address fields remain the same... */}
                 <div className="form-group-wrapper">
                     <div className="form-group">
                         <label htmlFor="address">Address</label>
@@ -610,7 +615,7 @@ const BusinessAddress = () => {
                         />
                     </div>
                 </div>
-                
+
                 {/* Hidden coordinates */}
                 <input type="hidden" name="location_lat" value={formData.location_lat || ''} />
                 <input type="hidden" name="location_lng" value={formData.location_lng || ''} />

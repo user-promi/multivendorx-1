@@ -3,69 +3,106 @@
 namespace MultiVendorX\Geolocation;
 
 class GooglePlaces {
-    
+
+    /**
+     * Route base.
+     *
+     * @var string
+     */
+    protected $rest_base = 'geolocation';
+
     private $api_key = 'AIzaSyAEUy5ZtNn9Q8EmTp09h_MP7te3_IRkKwc';
     
     public function __construct() {
-        $this->log('GooglePlaces class constructor called');
-        add_action('rest_api_init', [$this, 'register_routes']);
+        add_action('rest_api_init', array($this, 'register_routes'), 10);
     }
     
     public function register_routes() {
         $this->log('register_routes() method called - Starting route registration');
         
-        // Test if REST API is available
         if (!function_exists('register_rest_route')) {
             $this->log('ERROR: register_rest_route function does not exist!');
             return;
         }
-        
+
         $this->log('REST API functions are available');
-        
-        // Register store endpoint
-        $result1 = register_rest_route('multivendorx', '/store/(?P<id>\d+)', [
+
+        // Register main geolocation endpoint (for count)
+        register_rest_route(MultiVendorX()->rest_namespace, '/' . $this->rest_base, [
+            'methods' => \WP_REST_Server::READABLE,
+            'callback' => [$this, 'get_geolocation_count'],
+            'permission_callback' => [$this, 'get_items_permissions_check'],
+        ]);
+
+        // Register store endpoint - matches Q&A pattern
+        register_rest_route(MultiVendorX()->rest_namespace, '/' . $this->rest_base . '/store/(?P<id>\d+)', [
             [
                 'methods' => \WP_REST_Server::READABLE,
                 'callback' => [$this, 'get_store_data'],
-                'permission_callback' => [$this, 'check_permission'],
+                'permission_callback' => [$this, 'get_items_permissions_check'],
             ],
             [
                 'methods' => \WP_REST_Server::EDITABLE,
                 'callback' => [$this, 'update_store_data'],
-                'permission_callback' => [$this, 'check_permission'],
+                'permission_callback' => [$this, 'update_item_permissions_check'],
             ]
         ]);
-        
-        $this->log('Store route registered: ' . ($result1 ? 'SUCCESS' : 'FAILED'));
-        
+
+        $this->log('Store route registered for: ' . MultiVendorX()->rest_namespace . '/' . $this->rest_base . '/store/(?P<id>\d+)');
+
         // Register geocode endpoint
-        $result2 = register_rest_route('multivendorx', '/geocode', [
+        register_rest_route(MultiVendorX()->rest_namespace, '/' . $this->rest_base . '/geocode', [
             'methods' => \WP_REST_Server::READABLE,
             'callback' => [$this, 'geocode_address'],
-            'permission_callback' => [$this, 'check_permission'],
+            'permission_callback' => [$this, 'get_items_permissions_check'],
         ]);
-        
-        $this->log('Geocode route registered: ' . ($result2 ? 'SUCCESS' : 'FAILED'));
-        
+
+        $this->log('Geocode route registered');
+
         // Register reverse geocode endpoint
-        $result3 = register_rest_route('multivendorx', '/reverse-geocode', [
+        register_rest_route(MultiVendorX()->rest_namespace, '/' . $this->rest_base . '/reverse-geocode', [
             'methods' => \WP_REST_Server::READABLE,
             'callback' => [$this, 'reverse_geocode'],
-            'permission_callback' => [$this, 'check_permission'],
+            'permission_callback' => [$this, 'get_items_permissions_check'],
         ]);
-        
-        $this->log('Reverse geocode route registered: ' . ($result3 ? 'SUCCESS' : 'FAILED'));
-        
+
         $this->log('All routes registration completed');
+    }
+
+    public function get_geolocation_count($request) {
+        $store_id = $request->get_param('store_id');
+        $count_only = $request->get_param('count');
         
-        // Test if routes are actually registered
-        $this->test_routes_registered();
+        $this->log("GET Geolocation Count - Store ID: " . $store_id . ", Count Only: " . $count_only);
+
+        if ($count_only) {
+            // Return count logic here
+            // For now, just return a simple response
+            return rest_ensure_response([
+                'count' => 1,
+                'success' => true
+            ]);
+        }
+
+        return rest_ensure_response([
+            'success' => true,
+            'message' => 'Geolocation endpoint working'
+        ]);
+    }
+
+    public function get_items_permissions_check($request) {
+        $has_permission = current_user_can('read') || current_user_can('edit_stores');
+        return $has_permission;
+    }
+
+    public function update_item_permissions_check($request) {
+        $has_permission = current_user_can('edit_stores');
+        return $has_permission;
     }
     
     private function test_routes_registered() {
         $this->log('Testing if routes are properly registered...');
         
-        // Get all registered routes
         $routes = rest_get_server()->get_routes();
         $multivendorx_routes = [];
         
@@ -77,27 +114,21 @@ class GooglePlaces {
         
         $this->log('Found multivendorx routes: ' . implode(', ', $multivendorx_routes));
         
-        if (empty($multivendorx_routes)) {
-            $this->log('ERROR: No multivendorx routes found!');
+        // Check specifically for our geolocation routes
+        $geolocation_routes = array_filter($multivendorx_routes, function($route) {
+            return strpos($route, 'geolocation') !== false;
+        });
+        
+        if (empty($geolocation_routes)) {
+            $this->log('ERROR: No geolocation routes found!');
         } else {
-            $this->log('SUCCESS: Multivendorx routes found in REST API');
+            $this->log('SUCCESS: Geolocation routes found: ' . implode(', ', $geolocation_routes));
         }
-    }
-    
-    public function check_permission($request) {
-        $user_id = get_current_user_id();
-        $has_permission = current_user_can('manage_options');
-        
-        $this->log("Permission check - User ID: {$user_id}, Has Permission: " . ($has_permission ? 'Yes' : 'No'));
-        
-        return $has_permission;
     }
     
     public function get_store_data($request) {
         $store_id = $request->get_param('id');
         $this->log("GET Store Data - Store ID: " . $store_id);
-        $this->log("GET Request headers: " . json_encode($request->get_headers()));
-        $this->log("GET Request params: " . json_encode($request->get_params()));
         
         // Verify store exists
         $store = get_userdata($store_id);
@@ -306,7 +337,4 @@ class GooglePlaces {
     }
 }
 
-// // Test if the class is being loaded
-// file_put_contents(plugin_dir_path(__FILE__) . "/geolocation-debug.log", date("d/m/Y H:i:s", time()) . ": GooglePlaces file loaded\n", FILE_APPEND);
-
-// new GooglePlaces();
+new GooglePlaces();

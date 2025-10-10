@@ -44,6 +44,9 @@ declare global {
         currency:any;
         currency_symbol:any;
         add_product_link:any;
+        map_providor:any;
+        google_api_key:any;
+        mapbox_api_key:any;
     }
     interface Color{
         color: any;
