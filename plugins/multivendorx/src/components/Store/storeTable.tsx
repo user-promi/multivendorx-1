@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
-import { Table, getApiLink, TableCell } from 'zyra';
+import { Table, getApiLink, TableCell, CalendarInput } from 'zyra';
 import {
     ColumnDef,
     RowSelectionState,
@@ -22,8 +22,12 @@ type StoreStatus = {
 };
 type FilterData = {
     typeCount?: any;
+    searchField?:any;
 };
-
+export interface RealtimeFilter {
+    name: string;
+    render: (updateFilter: (key: string, value: any) => void, filterValue: any) => ReactNode;
+}
 const StoreTable: React.FC = () => {
 
     const [data, setData] = useState<StoreRow[] | null>(null);
@@ -64,6 +68,9 @@ const StoreTable: React.FC = () => {
         rowsPerPage = 10,
         currentPage = 1,
         typeCount = '',
+        searchField = '',
+        startDate = new Date(new Date().getFullYear(), new Date().getMonth() - 1, 1),
+        endDate = new Date()
     ) {
         setData(null);
         axios({
@@ -74,6 +81,9 @@ const StoreTable: React.FC = () => {
                 page: currentPage,
                 row: rowsPerPage,
                 filter_status: typeCount === 'all' ? '' : typeCount,
+                searchField,
+                startDate,
+                endDate
             },
         })
             .then((response) => {
@@ -109,12 +119,14 @@ const StoreTable: React.FC = () => {
         filterData: FilterData
         
     ) => {
-        console.log(filterData)
         setData(null);
         requestData(
             rowsPerPage,
             currentPage,
             filterData?.typeCount,
+            filterData?.searchField,
+            filterData?.date?.start_date,
+            filterData?.date?.end_date,
         );
     };
 
@@ -236,6 +248,48 @@ const StoreTable: React.FC = () => {
 
     ];
 
+    const searchFilter: RealtimeFilter[] = [
+        {
+            name: 'searchField',
+            render: (updateFilter, filterValue) => (
+                <>
+                    <div className="search-section">
+                        <input
+                            name="searchField"
+                            type="text"
+                            placeholder={__('Search', 'multivendorx')}
+                            onChange={(e) => {
+                                updateFilter(e.target.name, e.target.value);
+                            }}
+                            value={filterValue || ''}
+                        />
+                        <i className="adminlib-search"></i>
+                    </div>
+                </>
+            ),
+        },
+    ];
+
+    const realtimeFilter: RealtimeFilter[] = [
+        {
+            name: 'date',
+            render: (updateFilter) => (
+                <div className="right">
+                    <CalendarInput
+                        wrapperClass=""
+                        inputClass=""
+                        onChange={(range: any) => {
+                            updateFilter('date', {
+                                start_date: range.startDate,
+                                end_date: range.endDate,
+                            });
+                        }}
+                    />
+                </div>
+            ),
+        },
+    ];
+
     return (
         <>
             <div className="admin-table-wrapper">
@@ -252,6 +306,8 @@ const StoreTable: React.FC = () => {
                     perPageOption={[10, 25, 50]}
                     typeCounts={ storeStatus as StoreStatus[] }
                     totalCounts={totalRows}
+                    searchFilter={searchFilter}
+                    realtimeFilter={realtimeFilter}
                 />
             </div>
         </>

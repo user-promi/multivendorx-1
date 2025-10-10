@@ -95,10 +95,20 @@ const ReportAbuseTable: React.FC = () => {
             header: __('Store Name', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell title={row.original.store_name || '-'}>
-                    {row.original.store_name ?? '-'}
+                    {row.original.store_name ? (
+                        <a
+                            href={`${window.location.origin}/wp-admin/admin.php?page=multivendorx#&tab=stores&edit/${row.original.store_id}`}
+                            target="_blank"
+                            rel="noreferrer"
+                        >
+                            {row.original.store_name}
+                        </a>
+                    ) : (
+                        '-'
+                    )}
                 </TableCell>
             ),
-        },
+        },        
         {
             header: __('Product Name', 'multivendorx'),
             cell: ({ row }) => (
@@ -130,6 +140,7 @@ const ReportAbuseTable: React.FC = () => {
             ),
         },
         {
+            id:'action',
             header: __('Action', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell
