@@ -464,6 +464,7 @@ const Table: React.FC<TableProps> = ({
     const end = totalRows === 0 ? 0 : Math.min(start + pageSize - 1, totalRows);
     return (
         <>
+            {(typeCounts?.length > 0 || searchFilter) && (
             <div className="admin-top-filter">
                 {typeCounts && typeCounts.length > 0 && (
                     <div className="admin-table-wrapper-filter">
@@ -498,6 +499,7 @@ const Table: React.FC<TableProps> = ({
                     </div>
                 )}
             </div>
+            )}
             {loading ? (
                 <LoadingTable />
             ) : (

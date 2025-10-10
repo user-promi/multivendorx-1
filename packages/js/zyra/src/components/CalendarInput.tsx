@@ -3,6 +3,8 @@
  */
 import React, { useState, useRef, useEffect } from 'react';
 import { DateRangePicker, Range, RangeKeyDict } from 'react-date-range';
+import 'react-date-range/dist/styles.css'; // main style file
+import 'react-date-range/dist/theme/default.css'; // theme css file
 
 interface CalendarInputProps {
     wrapperClass?: string;
