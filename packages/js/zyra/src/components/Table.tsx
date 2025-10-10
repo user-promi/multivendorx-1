@@ -196,7 +196,6 @@ export const TableCell: React.FC<TableCellProps> = ({
                                 }
                             }}
                         />
-                        { /* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
                         <label htmlFor={title}>&nbsp;</label>
                     </div>
                 </div>
@@ -536,19 +535,21 @@ const Table: React.FC<TableProps> = ({
                                                     .map((header) => (
                                                         <th
                                                             key={header.id}
-                                                            className={`header-col ${header.column.getCanSort() ? 'sortable' : ''}`}
                                                             onClick={header.column.getCanSort() ? header.column.getToggleSortingHandler() : undefined}
+                                                            className={[
+                                                                'header-col',
+                                                                header.column.getCanSort() ? 'sortable' : null,
+                                                                header.column.id ? `${header.column.id}` : null
+                                                            ].filter(Boolean).join(' ')}
                                                         >
-                                                            <div className="flex items-center gap-1">
-                                                                {flexRender(header.column.columnDef.header, header.getContext())}
-                                                                {header.column.getCanSort() && (
-                                                                    <span className="sort-icon">
-                                                                        {header.column.getIsSorted() === 'asc' && '▲'}
-                                                                        {header.column.getIsSorted() === 'desc' && '▼'}
-                                                                        {!header.column.getIsSorted() && '⇅'}
-                                                                    </span>
-                                                                )}
-                                                            </div>
+                                                            {flexRender(header.column.columnDef.header, header.getContext())}
+                                                            {header.column.getCanSort() && (
+                                                                <span className="sort-icon">
+                                                                    {header.column.getIsSorted() === 'asc' && '▲'}
+                                                                    {header.column.getIsSorted() === 'desc' && '▼'}
+                                                                    {!header.column.getIsSorted() && '⇅'}
+                                                                </span>
+                                                            )}
                                                         </th>
 
                                                     ))}
@@ -573,7 +574,7 @@ const Table: React.FC<TableProps> = ({
                                         return (
                                             <tr
                                                 key={productId}
-                                                className={`admin-row ${isVariation ? 'variation-row' : ''} ${product.type === 'Variable' ? 'variable' : 'simple'} ${expandElement?.[productId] ? 'active' : ''}`}
+                                                className={`admin-row ${isVariation ? 'variation-row' : ''} ${product.type === 'Variable' ? 'variable' : 'simple'} ${expandElement?.[productId] ? 'active' : ''} ${productId ? `row-${productId}` : ''}`}
                                                 onClick={() => onRowClick?.(row.original)}
                                                 style={{ cursor: onRowClick ? 'pointer' : 'default' }}
                                             >
@@ -588,7 +589,10 @@ const Table: React.FC<TableProps> = ({
                                                     .map((cell) => (
                                                         <td
                                                             key={cell.id}
-                                                            className="admin-column"
+                                                            className={[
+                                                                'admin-column',
+                                                                cell.column.id ? `${cell.column.id}` : null, 
+                                                            ].filter(Boolean).join(' ')}
                                                             onClick={(e) => {
                                                                 const target = e.target as HTMLElement;
                                                                 // Prevent row click if clicking on an interactive element
