@@ -150,7 +150,7 @@ export const TransactionHistory: React.FC = () => {
                                 {/* Locked Balance */}
                                 <div className="analytics-item">
                                     <div className="analytics-icon">
-                                        <i className="adminlib-lock red"></i>
+                                        <i className="adminlib-star red"></i>
                                     </div>
                                     <div className="details">
                                         <div className="number">
@@ -163,7 +163,7 @@ export const TransactionHistory: React.FC = () => {
                                 {/* Available Balance */}
                                 <div className="analytics-item">
                                     <div className="analytics-icon">
-                                        <i className="adminlib-cash blue"></i>
+                                        <i className="adminlib-star blue"></i>
                                     </div>
                                     <div className="details">
                                         <div className="number">
@@ -178,6 +178,36 @@ export const TransactionHistory: React.FC = () => {
 
                     </div>
                 </div>
+
+                {/* <div className="row">
+                    <div className="column">
+                        <div className="card">
+                            <div className="card-header">
+                                <div className="left">
+                                    <div className="title">
+                                        Payout Settings
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="card-body">
+                                <div className="analytics-container">
+
+                                        <div className="analytics-item">
+                                            <div className="analytics-icon">
+                                                <i className=""></i>
+                                            </div>
+                                            <div className="details">
+                                                <div className="number"></div>
+                                                <div className="text"></div>
+                                            </div>
+                                        </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> */}
+
                 <div className="row">
                     <div className="column">
                         <div className="card-header">
@@ -199,7 +229,7 @@ export const TransactionHistory: React.FC = () => {
                                     wrapperClass=""
                                     inputClass=""
                                     showLabel={true}
-                                    onChange={(range:any) => {
+                                    onChange={(range: any) => {
                                         setDateRange({ startDate: range.startDate, endDate: range.endDate });
                                     }}
                                 />

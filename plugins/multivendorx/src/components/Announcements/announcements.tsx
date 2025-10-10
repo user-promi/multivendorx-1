@@ -2,8 +2,6 @@
 import React, { useState, useEffect, useRef, ReactNode } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
-import 'react-date-range/dist/styles.css'; // main style file
-import 'react-date-range/dist/theme/default.css'; // theme css file
 import { Table, getApiLink, TableCell, AdminBreadcrumbs, BasicInput, TextArea, CommonPopup, SelectInput, CalendarInput, ToggleSetting } from 'zyra';
 
 import {
@@ -426,6 +424,7 @@ export const Announcements: React.FC = () => {
             },
         },
         {
+            id: 'action',
             header: __('Action', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell
@@ -434,7 +433,7 @@ export const Announcements: React.FC = () => {
                     header={{
                         actions: [
                             {
-                                label: __('Edit Announcement', 'multivendorx'),
+                                label: __('Edit', 'multivendorx'),
                                 icon: 'adminlib-create',
                                 onClick: (rowData) => {
                                     handleEdit(rowData.id); // opens edit popup
@@ -442,7 +441,7 @@ export const Announcements: React.FC = () => {
                                 hover: true,
                             },
                             {
-                                label: __('Delete Announcement', 'multivendorx'),
+                                label: __('Delete', 'multivendorx'),
                                 icon: 'adminlib-delete',
                                 onClick: async (rowData) => {
                                     if (!rowData.id) return;
