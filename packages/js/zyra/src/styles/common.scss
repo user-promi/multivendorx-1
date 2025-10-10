@@ -1137,14 +1137,13 @@ input[type="checkbox"]:focus {
 }
 
 .action-icons {
-
-  &:has(i:hover),
+  &:hover,
   &:has(.action-dropdown:hover) {
     .action-dropdown.hover {
       display: block;
-      top: 45%;
       left: -50%;
-      transform: translate(-75%, -42%);
+      transform: translate(-75%, 0);
+      height: 1rem;
 
       ul {
         display: flex;

@@ -275,14 +275,6 @@ const Commission: React.FC = () => {
             cell: ({ row }) => <TableCell title={row.original.taxAmount ? `${appLocalizer.currency_symbol}${row.original.taxAmount}` : '-'}>{row.original.taxAmount ? `${appLocalizer.currency_symbol}${row.original.taxAmount}` : '-'}</TableCell>,
         },
         {
-            id: 'discountAmount',
-            accessorKey: 'discountAmount',
-            accessorFn: row => parseFloat(row.discountAmount || '0'),
-            enableSorting: true,
-            header: __('Discount Amount', 'multivendorx'),
-            cell: ({ row }) => <TableCell title={row.original.discountAmount ? `${appLocalizer.currency_symbol}${row.original.discountAmount}` : '-'}>{row.original.discountAmount ? `${appLocalizer.currency_symbol}${row.original.discountAmount}` : '-'}</TableCell>,
-        },
-        {
             id: 'commissionTotal',
             accessorKey: 'commissionTotal',
             accessorFn: row => parseFloat(row.commissionTotal || '0'),
@@ -304,6 +296,7 @@ const Commission: React.FC = () => {
             ),
         },
         {
+            id: 'action',
             header: __('Action', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell
