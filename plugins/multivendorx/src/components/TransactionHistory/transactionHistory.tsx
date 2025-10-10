@@ -115,98 +115,66 @@ export const TransactionHistory: React.FC = () => {
 
             <div className="admin-dashboard">
                 <div className="row">
-                    <div className="header">
-                        <div className="title-wrapper">
-
+                     <div className="column">
+                        <div className="card-header">
+                            <div className="left">
+                                <div className="title">
+                                    Available for Payout
+                                </div>
+                            </div>
                         </div>
-                        <div className="right">
+                        <div className="payout-wrapper">
+                            <div className="price">
+                                {appLocalizer.currency_symbol}{Number(data.available_balance ?? 0).toFixed(2)}
+                            </div>
+                            <div className="des">Current available balance ready for withdrawal</div>
+                            <div className="admin-btn btn-purple" onClick={() => setRequestWithdrawal(true)}>
+                                Disburse payment
+                            </div>
+                        </div>
+                    </div>
+                    <div className="column">
+                        <div className="card-header">
+                            <div className="left">
+                                <div className="title">
+                                    Balance Breakdown
+                                </div>
+                            </div>
+                        </div>
+                        <div className="card-body">
                             <div className="analytics-container">
-                                {/* Wallet Balance */}
+
+                                <div className="analytics-item">
+                                    <div className="analytics-icon">
+                                        <i className="adminlib-cart red"></i>
+                                    </div>
+                                    <div className="details">
+                                        <div className="number">{appLocalizer.currency_symbol}{Number(data.wallet_balance ?? 0).toFixed(2)}</div>
+                                        <div className="text">Wallet Balance</div>
+                                    </div>
+                                </div>
                                 <div className="analytics-item">
                                     <div className="analytics-icon">
                                         <i className="adminlib-cart green"></i>
                                     </div>
                                     <div className="details">
-                                        <div className="number">
-                                            {appLocalizer.currency_symbol}{Number(data.wallet_balance ?? 0).toFixed(2)}
-                                        </div>
-                                        <div className="text">Wallet Balance</div>
-                                    </div>
-                                </div>
-
-                                {/* Reserve Balance */}
-                                <div className="analytics-item">
-                                    <div className="analytics-icon">
-                                        <i className="adminlib-star yellow"></i>
-                                    </div>
-                                    <div className="details">
-                                        <div className="number">
-                                            {appLocalizer.currency_symbol}{Number(data.reserve_balance ?? 0).toFixed(2)}
-                                        </div>
+                                        <div className="number">{appLocalizer.currency_symbol}{Number(data.reserve_balance ?? 0).toFixed(2)}</div>
                                         <div className="text">Reserve Balance</div>
                                     </div>
                                 </div>
-
-                                {/* Locked Balance */}
                                 <div className="analytics-item">
                                     <div className="analytics-icon">
-                                        <i className="adminlib-star red"></i>
+                                        <i className="adminlib-cart yellow"></i>
                                     </div>
                                     <div className="details">
-                                        <div className="number">
-                                            {appLocalizer.currency_symbol}{Number(data.locking_balance ?? 0).toFixed(2)}
-                                        </div>
+                                        <div className="number">{appLocalizer.currency_symbol}{Number(data.locking_balance ?? 0).toFixed(2)}</div>
                                         <div className="text">Locked Balance</div>
                                     </div>
                                 </div>
-
-                                {/* Available Balance */}
-                                <div className="analytics-item">
-                                    <div className="analytics-icon">
-                                        <i className="adminlib-star blue"></i>
-                                    </div>
-                                    <div className="details">
-                                        <div className="number">
-                                            {appLocalizer.currency_symbol}{Number(data.available_balance ?? 0).toFixed(2)}
-                                        </div>
-                                        <div className="text">Available Balance</div>
-                                    </div>
-                                </div>
                             </div>
-
                         </div>
-
                     </div>
                 </div>
-
-                {/* <div className="row">
-                    <div className="column">
-                        <div className="card">
-                            <div className="card-header">
-                                <div className="left">
-                                    <div className="title">
-                                        Payout Settings
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="card-body">
-                                <div className="analytics-container">
-
-                                        <div className="analytics-item">
-                                            <div className="analytics-icon">
-                                                <i className=""></i>
-                                            </div>
-                                            <div className="details">
-                                                <div className="number"></div>
-                                                <div className="text"></div>
-                                            </div>
-                                        </div>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div> */}
 
                 <div className="row">
                     <div className="column">
@@ -233,7 +201,6 @@ export const TransactionHistory: React.FC = () => {
                                         setDateRange({ startDate: range.startDate, endDate: range.endDate });
                                     }}
                                 />
-
                             </div>
                         </div>
 
