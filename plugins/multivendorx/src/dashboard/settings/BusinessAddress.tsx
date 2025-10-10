@@ -215,7 +215,7 @@ const BusinessAddress = () => {
                 initializeMapboxMap();
             }
         }
-    }, [loading, mapProvider, googleLoaded, mapboxLoaded]);
+    }, [loading, mapProvider, googleLoaded, mapboxLoaded, formData]);
 
     const initializeGoogleMap = () => {
         log('Initializing Google Map...');
@@ -263,7 +263,12 @@ const BusinessAddress = () => {
     const initializeMapboxMap = () => {
         log('Initializing Mapbox Map...');
         if (!(window as any).mapboxgl || !autocompleteInputRef.current) return;
-
+    
+        // Clear any existing geocoder first
+        const geocoderContainer = document.getElementById('location-autocomplete-container');
+        if (geocoderContainer) {
+            geocoderContainer.innerHTML = ''; // Clear previous geocoder
+        }
         (window as any).mapboxgl.accessToken = apiKey;
 
         const initialLat = parseFloat(formData.location_lat) || 40.7128;
@@ -299,8 +304,7 @@ const BusinessAddress = () => {
             handlePlaceSelect(e.result, 'mapbox');
         });
 
-        // Replace the input with the geocoder
-        const geocoderContainer = document.getElementById('location-autocomplete-container');
+        // Add the geocoder to the container
         if (geocoderContainer) {
             geocoderContainer.appendChild(geocoder.onAdd(mapInstance));
             // Hide the original input

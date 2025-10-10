@@ -459,7 +459,10 @@ class FrontendScripts {
                         'woocommerce_currency'     => get_woocommerce_currency(),
                         'user_id'                  => get_current_user_id(),
                         'currency'                 => get_woocommerce_currency(),       // e.g., USD
-                        'currency_symbol'          => get_woocommerce_currency_symbol()
+                        'currency_symbol'          => get_woocommerce_currency_symbol(),
+                        'map_providor'             => MultiVendorX()->setting->get_setting( 'choose_map_api' ),
+                        'google_api_key'             => MultiVendorX()->setting->get_setting( 'google_api_key' ),
+                        'mapbox_api_key'             => MultiVendorX()->setting->get_setting( 'mapbox_api_key' ),
 					) ),
                 ),
                 'multivendorx-product-tab-script' => array(
