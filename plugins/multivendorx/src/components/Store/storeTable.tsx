@@ -195,6 +195,7 @@ const StoreTable: React.FC = () => {
             ),
         },
         {
+            id: 'action',
             header: __('Action', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell

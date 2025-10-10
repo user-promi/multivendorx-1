@@ -263,9 +263,15 @@ export const KnowledgeBase: React.FC = () => {
             header: __('Status', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell title={row.original.status || ''}>
-                    {row.original.status
-                        ? row.original.status.charAt(0).toUpperCase() + row.original.status.slice(1)
-                        : '-'}
+                    {row.original.status ? (
+                        <>
+                            {row.original.status === 'publish' && <span className="admin-badge green">Publish</span>}
+                            {row.original.status === 'pending' && <span className="admin-badge yellow">Pending</span>}
+                            {row.original.status === 'draft' && <span className="admin-badge blue">Draft</span>}
+                        </>
+                    ) : (
+                        '-'
+                    )}
                 </TableCell>
             ),
         },
