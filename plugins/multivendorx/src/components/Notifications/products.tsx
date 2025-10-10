@@ -147,6 +147,7 @@ const Products: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
             cell: ({ row }) => <input type="checkbox" checked={row.getIsSelected()} onChange={row.getToggleSelectedHandler()} />,
         },
         {
+            id: 'product',
             header: __('Product', 'multivendorx'),
             cell: ({ row }) => {
                 const product = row.original;
@@ -157,7 +158,7 @@ const Products: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
                             href={`${appLocalizer.site_url}/wp-admin/post.php?post=${product.id}&action=edit`}
                             target="_blank"
                             rel="noreferrer"
-                            className="flex items-center gap-2"
+                            className="product-wrapper"
                         >
                             <img src={image} alt={product.name} style={{ width: 40, height: 40, objectFit: 'cover' }} />
                             <span>{product.name || '-'}</span>
@@ -195,6 +196,7 @@ const Products: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
             cell: ({ row }) => <TableCell title={row.original.status || ''}>{row.original.status || '-'}</TableCell>,
         },
         {
+            id: 'action',
             header: __('Action', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell
@@ -202,8 +204,8 @@ const Products: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
                     rowData={row.original}
                     header={{
                         actions: [
-                            { label: __('Approve Product', 'multivendorx'), icon: 'adminlib-check', onClick: (rowData) => handleSingleAction('approve_product', rowData.id!), hover: true },
-                            { label: __('Reject Product', 'multivendorx'), icon: 'adminlib-close', onClick: (rowData) => handleSingleAction('reject_product', rowData.id!), hover: true },
+                            { label: __('Approve', 'multivendorx'), icon: 'adminlib-check', onClick: (rowData) => handleSingleAction('approve_product', rowData.id!), hover: true },
+                            { label: __('Reject', 'multivendorx'), icon: 'adminlib-close', onClick: (rowData) => handleSingleAction('reject_product', rowData.id!), hover: true },
                         ],
                     }}
                 />

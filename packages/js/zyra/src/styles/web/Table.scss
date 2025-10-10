@@ -235,10 +235,11 @@
                     flex-grow: 0;
                     min-width: 5rem;
                 }
-                &.sortable{
+
+                &.sortable {
                     cursor: pointer;
 
-                    span{
+                    span {
                         margin-left: 0.313rem;
                         color: #000;
                     }
@@ -327,6 +328,13 @@
                         flex-grow: 0;
                         min-width: 5rem;
                         // justify-content: end;
+                    }
+
+                    &.product {
+                        .product-wrapper {
+                            display: flex;
+                            gap: 0.625rem;
+                        }
                     }
                 }
 
