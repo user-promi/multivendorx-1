@@ -113,28 +113,28 @@ const AdminDashboard = () => {
     },
     {
       title: "Inventory & Stock Management",
-      desc: "Track stock, send low-stock alerts, and manage vendor inventory efficiently.",
+      desc: "Track stock, send low-stock alerts, and manage store inventory efficiently.",
       iconClass: "adminlib-preview",
       linkText: "Book Consultation",
       href: "#",
     },
     {
       title: "Smart Notifications",
-      desc: "Automate alerts for orders, refunds, payouts, and vendor activities.",
+      desc: "Automate alerts for orders, refunds, payouts, and store activities.",
       iconClass: "adminlib-global-community",
       linkText: "Join Discord",
       href: "#",
     },
     {
-      title: "Vendor Verification & KYC",
-      desc: "Verify vendors with documents and approval workflows to build trust.",
+      title: "Seller Verification & KYC",
+      desc: "Verify sellers with documents and approval workflows to build trust.",
       iconClass: "adminlib-global-community",
       linkText: "Join Discord",
       href: "#",
     },
     {
       title: "Membership & Subscriptions",
-      desc: "Let vendors sell memberships or recurring products for steady revenue.",
+      desc: "Let sellers offer subscription products for steady revenue, while admins earn by providing membership plans to stores.",
       iconClass: "adminlib-global-community",
       linkText: "Join Discord",
       href: "#",
@@ -258,7 +258,7 @@ const AdminDashboard = () => {
                 <div className="pro-banner-wrapper">
                   <div className="content">
                     <div className="heading">Welcome to MultiVendorX</div>
-                    <div className="description">Transform your WooCommerce store into a thriving marketplace. Start building your vendor ecosystem today.</div>
+                    <div className="description">Expand your WooCommerce store by creating a marketplace for multiple stores. Manage, grow, and scale seamlessly.</div>
 
                     <div className="button-wrapper">
 
