@@ -111,6 +111,21 @@ const Qna: React.FC = () => {
                 setData([]);
             });
     }
+    
+    // Handle pagination and filter changes
+    const requestApiForData = (
+        rowsPerPage: number,
+        currentPage: number,
+        filterData: FilterData
+    ) => {
+        setData(null);
+        requestData(
+            rowsPerPage,
+            currentPage,
+            filterData?.date?.start_date,
+            filterData?.date?.end_date
+        );
+    };
 
     // Refresh table when child updates
     const handleUpdated = () => {
@@ -230,20 +245,7 @@ const Qna: React.FC = () => {
             ),
         },
     ];
-    // Handle pagination and filter changes
-    const requestApiForData = (
-        rowsPerPage: number,
-        currentPage: number,
-        filterData: FilterData
-    ) => {
-        setData(null);
-        requestData(
-            rowsPerPage,
-            currentPage,
-            filterData?.date?.start_date,
-            filterData?.date?.end_date
-        );
-    };
+
 
     return (
         <>

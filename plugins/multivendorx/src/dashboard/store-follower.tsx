@@ -80,6 +80,9 @@ const StoreFollower: React.FC = () => {
             cell: ({ row }) => <TableCell>{row.original.email}</TableCell>,
         },
         {
+            id: 'date',
+            accessorKey: 'date',
+            enableSorting: true,
             header: __("Followed On", "multivendorx"),
             cell: ({ row }) => {
                 if (!row.original.date) return <TableCell>—</TableCell>;
