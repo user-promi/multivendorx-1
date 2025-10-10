@@ -112,14 +112,35 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             $page           = max( intval( $request->get_param( 'page' ) ), 1 );
             $offset         = ( $page - 1 ) * $limit;
             $filter_status          = $request->get_param( 'filter_status' );
+            $searchField  = sanitize_text_field( $request->get_param( 'searchField' ) );
+            $start_date_raw = sanitize_text_field( $request->get_param( 'startDate' ) );
+            $end_date_raw   = sanitize_text_field( $request->get_param( 'endDate' ) );
+
+            // Convert to proper timestamps
+            $start_timestamp = ! empty( $start_date_raw ) ? strtotime( str_replace('T', ' ', preg_replace('/\.\d+Z?$/', '', $start_date_raw)) ) : false;
+            $end_timestamp   = ! empty( $end_date_raw )   ? strtotime( str_replace('T', ' ', preg_replace('/\.\d+Z?$/', '', $end_date_raw)) )   : false;
+
+            $start_date = $start_timestamp ? date( 'Y-m-d 00:00:00', $start_timestamp ) : '';
+            $end_date   = $end_timestamp   ? date( 'Y-m-d 23:59:59', $end_timestamp )   : '';
+
             $args = [
                 'limit'  => $limit,
                 'offset' => $offset,
             ];
             
+            // Pass search to StoreUtil
+            if ( $searchField ) {
+                $args['searchField'] = $searchField;
+            } elseif ( $start_date && $end_date ) {
+                // Only apply date filter if no search
+                $args['start_date'] = $start_date;
+                $args['end_date']   = $end_date;
+            }
+            
             if ( ! empty( $filter_status ) ) {
                 $args['status'] = $filter_status;
             }
+            
 
             $stores = StoreUtil::get_store_information( $args );
 

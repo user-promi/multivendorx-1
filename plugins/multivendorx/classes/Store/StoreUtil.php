@@ -482,6 +482,15 @@ class StoreUtil {
             $where[] = "slug = '" . esc_sql( $args['slug'] ) . "'";
         }
 
+        if ( isset( $args['searchField'] ) ) {
+            $search = esc_sql( $args['searchField'] );
+            $where[] = "(name LIKE '%$search%')";
+        }
+        
+        if ( isset( $args['start_date'] ) && isset( $args['end_date'] ) ) {
+            $where[] = "create_time BETWEEN '" . esc_sql( $args['start_date'] ) . "' AND '" . esc_sql( $args['end_date'] ) . "'";
+        }
+        
         $table = $wpdb->prefix . Utill::TABLES['store'];
 
         if ( isset( $args['count'] ) ) {
@@ -500,7 +509,6 @@ class StoreUtil {
             $offset = intval( $args['offset'] );
             $query .= " LIMIT $limit OFFSET $offset";
         }
-
         if ( isset( $args['count'] ) ) {
             $results = $wpdb->get_var( $query ); // phpcs:ignore WordPress.DB.*
             return $results ?? 0;
