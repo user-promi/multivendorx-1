@@ -498,3 +498,18 @@ $border-radius-button: 8rem;
 }
 
 // information notice end
+
+
+// payout page price section start 
+.payout-wrapper {
+    .price {
+        font-size: 2rem;
+        font-weight: 600;
+        line-height: 2rem;
+        margin-bottom: 0.813rem;
+    }
+    .des{
+        font-size: 0.95rem;
+        margin-bottom: 1rem;
+    }
+}
