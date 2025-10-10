@@ -40,10 +40,16 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
             ],
             [
                 'methods'             => \WP_REST_Server::EDITABLE,
-                'callback'            => [ $this, 'update_item' ],
-                'permission_callback' => [ $this, 'update_item_permissions_check' ],
+                'callback'            => [$this, 'update_item'],
+                'permission_callback' => [$this, 'update_item_permissions_check'],
+            ],
+            [
+                'methods'             => \WP_REST_Server::DELETABLE,
+                'callback'            => [$this, 'delete_item'],
+                'permission_callback' => [$this, 'update_item_permissions_check'],
             ],
         ]);
+        
     }
 
     public function get_items_permissions_check($request) {
@@ -58,91 +64,112 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
         return current_user_can('manage_options');
     }
 
-    /**
-     * Get knowledge base items using WP functions only
-     */
-    public static function get_knowledge_items( $args ) {
-        $defaults = [
-            'post_status'    => [ 'publish', 'pending','draft' ],
-            'posts_per_page' => 10,
-            's'              => '',
-        ];
-
-        if ( $args['count'] ) {
-            $count_posts = wp_count_posts( 'multivendorx_kb' );
-            if ( $count_posts ) return ['total' => array_sum( (array) $count_posts ), 'publish' => (int) $count_posts->publish, 'pending' => (int) $count_posts->pending];
-            else [];
-        }
-
-        $query_args = wp_parse_args( $args, $defaults );
-
-        if ( $args['status'] && $args['status'] !== 'all' ) {
-            $query_args['post_status'] = $args['status'];
-        }
-
-        $posts = get_posts( $query_args );
-        $items = [];
-
-        foreach ( $posts as $post ) {
-            $items[] = [
-                'id'      => $post->ID,
-                'title'   => $post->post_title,
-                'content' => $post->post_content,
-                'status'  => $post->post_status,
-                'date'    => get_post_time( 'Y-m-d H:i:s', true, $post ),
-            ];
-        }
-
-        return $items;
-    }
-
     public function get_items( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
-            return new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), [ 'status' => 403 ] );
+            return new \WP_Error(
+                'invalid_nonce',
+                __( 'Invalid nonce', 'multivendorx' ),
+                [ 'status' => 403 ]
+            );
         }
     
-        $limit  = max( intval( $request->get_param( 'row' ) ), 10 );
-        $page   = max( intval( $request->get_param( 'page' ) ), 1 );
-        $offset = ( $page - 1 ) * $limit;
+        $limit        = max( intval( $request->get_param( 'row' ) ), 10 );
+        $page         = max( intval( $request->get_param( 'page' ) ), 1 );
+        $offset       = ( $page - 1 ) * $limit;
+        $count_param  = $request->get_param( 'count' );
         $status_param = $request->get_param( 'status' );
+        $searchField  = sanitize_text_field( $request->get_param( 'searchField' ) );
     
-        $args = [
+        $start_date_raw = sanitize_text_field( $request->get_param( 'startDate' ) );
+        $end_date_raw   = sanitize_text_field( $request->get_param( 'endDate' ) );
+        
+        $start_timestamp = ! empty( $start_date_raw ) ? strtotime( str_replace('T', ' ', preg_replace('/\.\d+Z?$/', '', $start_date_raw)) ) : false;
+        $end_timestamp   = ! empty( $end_date_raw )   ? strtotime( str_replace('T', ' ', preg_replace('/\.\d+Z?$/', '', $end_date_raw)) )   : false;
+        
+        $start_date = $start_timestamp ? date( 'Y-m-d 00:00:00', $start_timestamp ) : '';
+        $end_date   = $end_timestamp   ? date( 'Y-m-d 23:59:59', $end_timestamp )   : '';
+    
+        // Existing count logic
+        if ( $count_param ) {
+            $posts = get_posts([
+                'post_type'      => 'multivendorx_kb',
+                'posts_per_page' => -1,
+                'fields'         => 'ids',
+                'post_status'    => 'any',
+            ]);
+            return rest_ensure_response( count( $posts ) );
+        }
+    
+        // Base query args
+        $query_args = [
             'post_type'      => 'multivendorx_kb',
-            'status'         => $status_param ?: 'all',
-            's'              => $request->get_param( 's' ) ?: '',
             'posts_per_page' => $limit,
             'offset'         => $offset,
+            'post_status'    => $status_param ? $status_param : 'any',
+            'orderby'        => 'date',
+            'order'          => 'DESC',
         ];
     
-        // Data
-        $items = self::get_knowledge_items( $args );
-    
-        // Counts
-        $totalcounts = self::get_knowledge_items( [ 'count' => true ] );
-    
-        // Fix: treat $status_param as string, not array
-        switch ( $status_param ) {
-            case 'publish':
-                $total = $totalcounts['publish'];
-                break;
-            case 'pending':
-                $total = $totalcounts['pending'];
-                break;
-            default:
-                $total = $totalcounts['total'];
+        // Add date filter if provided
+        if ( $start_date && $end_date ) {
+            $query_args['date_query'] = [
+                [
+                    'after'     => $start_date,
+                    'before'    => $end_date,
+                    'inclusive' => true,
+                ],
+            ];
         }
     
-        return rest_ensure_response( [
+        // Add title search only if searchField has value
+        if ( ! empty( $searchField ) ) {
+            $query_args['s'] = $searchField; // WP_Query searches post_title + content
+        }
+    
+        $posts = get_posts( $query_args );
+        $items = [];
+    
+        foreach ( $posts as $post ) {
+
+            $items[] = [
+                'id'         => $post->ID,
+                'title'      => $post->post_title,
+                'content'    => $post->post_content,
+                'date'       => get_the_date( 'Y-m-d H:i:s', $post->ID ),
+                'status'     => $post->post_status,
+            ];
+        }
+    
+        // Counts (no date or search filter applied)
+        $counter = function( $status ) {
+            $args = [
+                'post_type'      => 'multivendorx_kb',
+                'post_status'    => $status,
+                'posts_per_page' => 1,
+                'fields'         => 'ids',
+                'no_found_rows'  => false,
+            ];
+    
+            $q = new \WP_Query( $args );
+            $count = isset( $q->found_posts ) ? intval( $q->found_posts ) : 0;
+            wp_reset_postdata();
+            return $count;
+        };
+    
+        $publish_count = $counter( 'publish' );
+        $pending_count = $counter( 'pending' );
+        $draft_count   = $counter( 'draft' );
+        $all_count     = $counter( 'any' );
+    
+        return rest_ensure_response([
             'items'   => $items,
-            'total'   => $total,
-            'page'    => $page,
-            'limit'   => $limit,
-            'all'     => $totalcounts['total'],
-            'publish' => $totalcounts['publish'],
-            'pending' => $totalcounts['pending'],
-        ] );
-    }    
+            'all'     => $all_count,
+            'publish' => $publish_count,
+            'pending' => $pending_count,
+            'draft'   => $draft_count,
+        ]);
+    }  
 
     public function create_item( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
@@ -212,14 +239,15 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
             return new \WP_Error( 'not_found', __( 'Knowledge Base article not found', 'multivendorx' ), [ 'status' => 404 ] );
         }
 
-        $updated_id = wp_update_post( [
+        $updated_id = wp_update_post([
             'ID'           => $post_id,
-            'post_title'   => $post->post_title,
-            'post_content' => $post->post_content,
-            'post_status'  => isset( $data['status'] ) && in_array( $data['status'], [ 'publish', 'pending', 'draft' ], true )
-                ? $data['status']
-                : 'draft',
-        ], true );
+            'post_title'   => isset($data['title']) ? sanitize_text_field($data['title']) : $post->post_title,
+            'post_content' => isset($data['content']) ? wp_kses_post($data['content']) : $post->post_content,
+            'post_status'  => isset($data['status']) && in_array($data['status'], ['publish','pending','draft'], true)
+                                ? $data['status']
+                                : $post->post_status,
+        ], true);
+        
 
     
         if ( is_wp_error( $updated_id ) ) {
@@ -231,11 +259,11 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
     
         return rest_ensure_response([
             'success' => true,
-            'id'      => $id,
-            'title'   => $post->post_title,
-            'content' => $post->post_content,
-            'status'  => $data['status'] ?? 'draft',
-        ]);
+            'id'      => $post_id,
+            'title'   => $data['title'] ?? $post->post_title,
+            'content' => $data['content'] ?? $post->post_content,
+            'status'  => $data['status'] ?? $post->post_status,
+        ]);        
     }    
 
     public function get_item( $request ) {
@@ -258,5 +286,33 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
             'date'    => get_post_time( 'Y-m-d H:i:s', true, $post ),
         ]);
     }
-
+    public function delete_item( $request ) {
+        $nonce = $request->get_header( 'X-WP-Nonce' );
+        if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
+            return new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), [ 'status' => 403 ] );
+        }
+    
+        $post_id = absint( $request->get_param( 'id' ) );
+        $post = get_post( $post_id );
+    
+        if ( ! $post || $post->post_type !== 'multivendorx_kb' ) {
+            return new \WP_Error( 'not_found', __( 'Knowledge Base article not found', 'multivendorx' ), [ 'status' => 404 ] );
+        }
+    
+        $deleted = wp_delete_post( $post_id, true );
+    
+        if ( ! $deleted ) {
+            return rest_ensure_response([
+                'success' => false,
+                'message' => __( 'Failed to delete the Knowledge Base article', 'multivendorx' ),
+            ]);
+        }
+    
+        return rest_ensure_response([
+            'success' => true,
+            'id'      => $post_id,
+            'message' => __( 'Knowledge Base article deleted successfully', 'multivendorx' ),
+        ]);
+    }
+    
 }

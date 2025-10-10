@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef, ReactNode } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
-import { Table, getApiLink, TableCell, AdminBreadcrumbs, BasicInput, TextArea, CommonPopup, ToggleSetting } from 'zyra';
+import { Table, getApiLink, TableCell, AdminBreadcrumbs, BasicInput, TextArea, CommonPopup, ToggleSetting, CalendarInput } from 'zyra';
 import { ColumnDef, RowSelectionState, PaginationState } from '@tanstack/react-table';
 import "../Announcements/announcements.scss";
 
@@ -27,6 +27,7 @@ type AnnouncementStatus = {
 };
 type FilterData = {
     typeCount?: any;
+    searchField?: any;
 };
 export interface RealtimeFilter {
     name: string;
@@ -42,12 +43,10 @@ export const KnowledgeBase: React.FC = () => {
         pageIndex: 0,
         pageSize: 10,
     });
-    const [announcementStatus, setStatus] = useState<AnnouncementStatus[] | null>(null);
+    const [announcementStatus, setAnnouncementStatus] = useState<AnnouncementStatus[] | null>(null);
     const [pageCount, setPageCount] = useState(0);
-    const [page, setPage] = useState('');
     const [editId, setEditId] = useState<number | null>(null);
     const [error, setError] = useState<string | null>(null);
-    const [showDropdown, setShowDropdown] = useState(false);
     const [formData, setFormData] = useState<KBForm>({
         title: '',
         content: '',
@@ -56,6 +55,10 @@ export const KnowledgeBase: React.FC = () => {
     const bulkSelectRef = useRef<HTMLSelectElement>(null);
     const [modalDetails, setModalDetails] = useState<string>('');
     const [openModal, setOpenModal] = useState(false);
+    const [totalRows, setTotalRows] = useState<number>(0);
+
+
+
     const handleCloseForm = () => {
         setAddEntry(false);
         setFormData({ title: '', content: '', status: 'pending' }); // reset form
@@ -67,6 +70,7 @@ export const KnowledgeBase: React.FC = () => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
     };
+
     const handleBulkAction = async () => {
         const action = bulkSelectRef.current?.value;
         const selectedIds = Object.keys(rowSelection).map((key) => {
@@ -96,20 +100,13 @@ export const KnowledgeBase: React.FC = () => {
                 data: { bulk: true, action, ids: selectedIds },
             });
 
-            requestData(pagination.pageSize, pagination.pageIndex + 1, page);
+            requestData(pagination.pageSize, pagination.pageIndex + 1);
             setRowSelection({});
         } catch (err) {
             setError(__('Failed to perform bulk action', 'multivendorx'));
         }
     };
 
-    const toggleDropdown = (id: any) => {
-        if (showDropdown === id) {
-            setShowDropdown(false);
-            return;
-        }
-        setShowDropdown(id);
-    };
     // Open edit modal
     const handleEdit = async (id: number) => {
         try {
@@ -152,7 +149,7 @@ export const KnowledgeBase: React.FC = () => {
 
             if (response.data.success) {
                 handleCloseForm();
-                requestData(pagination.pageSize, pagination.pageIndex + 1, page);
+                requestData(pagination.pageSize, pagination.pageIndex + 1);
             } else {
                 setError(__('Failed to save entry', 'multivendorx'));
             }
@@ -165,48 +162,122 @@ export const KnowledgeBase: React.FC = () => {
 
 
 
-    const requestApiForData = (rowsPerPage: number, currentPage: number, filterData: FilterData) => {
-        setData(null);
-        requestData(
-            rowsPerPage,
-            currentPage,
-            filterData?.typeCount,
-        );
-    };
+    // Fetch total rows on mount
+    useEffect(() => {
 
-    // Fetch data
-    function requestData(
-        rowsPerPage: number = 10,
-        currentPage: number = 1,
-        typeCount: string = ''
-    ) {
         axios({
-            method: 'get',
+            method: 'GET',
+            url: getApiLink(appLocalizer, 'knowledge'),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            params: { count: true },
+        })
+            .then((response) => {
+                setTotalRows(response.data || 0);
+                setPageCount(Math.ceil(response.data / pagination.pageSize));
+            })
+            .catch(() => {
+                setError(__('Failed to load total rows', 'multivendorx'));
+            });
+    }, []);
+
+    useEffect(() => {
+        const currentPage = pagination.pageIndex + 1;
+        const rowsPerPage = pagination.pageSize;
+        requestData(rowsPerPage, currentPage);
+        setPageCount(Math.ceil(totalRows / rowsPerPage));
+    }, [pagination]);
+
+    // Fetch data from backend.
+    function requestData(
+        rowsPerPage = 10,
+        currentPage = 1,
+        typeCount = '',
+        searchField = '',
+        startDate = new Date(0),
+        endDate = new Date(),
+    ) {
+        setData(null);
+        axios({
+            method: 'GET',
             url: getApiLink(appLocalizer, 'knowledge'),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
             params: {
                 page: currentPage,
                 row: rowsPerPage,
                 status: typeCount === 'all' ? '' : typeCount,
+                startDate,
+                endDate,
+                searchField
             },
-        }).then((response) => {
-            const res = response.data;
-            setData(res.items);
-            setPageCount(Math.ceil((res.total || 0) / rowsPerPage));
-            setStatus([
-                { key: 'all', name: 'All', count: res.all ?? res.total ?? 0 },
-                { key: 'publish', name: 'Published', count: res.publish ?? 0 },
-                { key: 'pending', name: 'Pending', count: res.pending ?? 0 },
-            ]);
-            setPage(typeCount == 'all' ? '' : typeCount);
         })
-            .catch(() => setError(__('Failed to load entries', 'multivendorx')));
+            .then((response) => {
+                setData(response.data.items || []);
+                setAnnouncementStatus([
+                    {
+                        key: 'all',
+                        name: 'All',
+                        count: response.data.all || 0,
+                    },
+                    {
+                        key: 'publish',
+                        name: 'Publish',
+                        count: response.data.publish || 0,
+                    },
+                    {
+                        key: 'pending',
+                        name: 'Pending',
+                        count: response.data.pending || 0,
+                    },
+                    {
+                        key: 'draft',
+                        name: 'Draft',
+                        count: response.data.draft || 0,
+                    },
+                ]);
+            })
+            .catch(() => {
+                setError(__('Failed to load stores', 'multivendorx'));
+                setData([]);
+            });
+    }
+
+    // Handle pagination and filter changes
+    const requestApiForData = (
+        rowsPerPage: number,
+        currentPage: number,
+        filterData: FilterData
+    ) => {
+        setData(null);
+        requestData(
+            rowsPerPage,
+            currentPage,
+            filterData?.typeCount,
+            filterData?.searchField,
+            filterData?.date?.start_date,
+            filterData?.date?.end_date,
+
+        );
     };
 
-    useEffect(() => {
-        const currentPage = pagination.pageIndex + 1;
-        requestData(pagination.pageSize, currentPage, page);
-    }, [pagination]);
+    const realtimeFilter: RealtimeFilter[] = [
+        {
+            name: 'date',
+            render: (updateFilter) => (
+                <div className="right">
+                    <CalendarInput
+                        wrapperClass=""
+                        inputClass=""
+                        onChange={(range: any) => {
+                            updateFilter('date', {
+                                start_date: range.startDate,
+                                end_date: range.endDate,
+                            });
+                        }}
+                    />
+                </div>
+            ),
+        },
+    ];
 
     // Columns
     const columns: ColumnDef<KBRow>[] = [
@@ -244,6 +315,9 @@ export const KnowledgeBase: React.FC = () => {
             ),
         },
         {
+            id: 'date',
+            accessorKey: 'date',
+            enableSorting: true,
             header: __('Date', 'multivendorx'),
             cell: ({ row }) => {
                 const rawDate = row.original.date;
@@ -273,6 +347,68 @@ export const KnowledgeBase: React.FC = () => {
                         '-'
                     )}
                 </TableCell>
+            ),
+        },
+        {
+            id:'action',
+            header: __('Action', 'multivendorx'),
+            cell: ({ row }) => (
+                <TableCell
+                    type="action-dropdown"
+                    rowData={row.original}
+                    header={{
+                        actions: [
+                            {
+                                label: __('Edit', 'multivendorx'),
+                                icon: 'adminlib-create',
+                                onClick: (rowData) => handleEdit(rowData.id),
+                                hover: true,
+                            },
+                            {
+                                label: __('Delete', 'multivendorx'),
+                                icon: 'adminlib-delete',
+                                onClick: async (rowData) => {
+                                    if (!rowData.id) return;
+                                    if (!confirm(__('Are you sure you want to delete this entry?', 'multivendorx'))) return;
+
+                                    try {
+                                        await axios({
+                                            method: 'DELETE',
+                                            url: getApiLink(appLocalizer, `knowledge/${rowData.id}`),
+                                            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+                                        });
+                                        requestData(pagination.pageSize, pagination.pageIndex + 1);
+                                    } catch {
+                                        setError(__('Failed to delete entry', 'multivendorx'));
+                                    }
+                                },
+                                hover: true,
+                            },
+                        ],
+                    }}
+                />
+            ),
+        },
+    ];
+
+    const searchFilter: RealtimeFilter[] = [
+        {
+            name: 'searchField',
+            render: (updateFilter, filterValue) => (
+                <>
+                    <div className="search-section">
+                        <input
+                            name="searchField"
+                            type="text"
+                            placeholder={__('Search', 'multivendorx')}
+                            onChange={(e) => {
+                                updateFilter(e.target.name, e.target.value);
+                            }}
+                            value={filterValue || ''}
+                        />
+                        <i className="adminlib-search"></i>
+                    </div>
+                </>
             ),
         },
     ];
@@ -385,11 +521,11 @@ export const KnowledgeBase: React.FC = () => {
                     onPaginationChange={setPagination}
                     handlePagination={requestApiForData}
                     perPageOption={[10, 25, 50]}
-                    onRowClick={(row: any) => {
-                        handleEdit(row.id);
-                    }}
                     typeCounts={announcementStatus as AnnouncementStatus[]}
                     bulkActionComp={() => <BulkAction />}
+                    totalCounts={totalRows}
+                    realtimeFilter={realtimeFilter}
+                    searchFilter={searchFilter}
                 />
             </div>
         </>
