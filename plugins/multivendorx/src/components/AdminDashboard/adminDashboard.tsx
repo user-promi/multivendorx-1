@@ -113,42 +113,42 @@ const AdminDashboard = () => {
   const featuresList = [
     {
       title: "Advanced Selling Options",
-      desc: "Offer bookings and appointments, subscription products for recurring revenue, and auction-style sales to maximize engagement and earnings.",
+      desc: "Enable bookings, subscriptions, and auctions to boost sales and engagement.",
       iconClass: "adminlib-book",
       linkText: "Explore Docs",
       href: "#",
     },
     {
-      title: "Vacation & Store Availability Management",
-      desc: "Allow vendors to pause orders during holidays or stock breaks with custom notifications for buyers.",
+      title: "Vacation & Store Availability",
+      desc: "Pause orders with custom buyer notifications during holidays or breaks.",
       iconClass: "adminlib-book",
       linkText: "Explore Docs",
       href: "#",
     },
     {
       title: "Inventory & Stock Management",
-      desc: "Low stock alerts, bulk updates, and vendor-specific inventory controls.",
+      desc: "Track stock, send low-stock alerts, and manage vendor inventory efficiently.",
       iconClass: "adminlib-preview",
       linkText: "Book Consultation",
       href: "#",
     },
     {
       title: "Smart Notifications",
-      desc: "Advanced automated notifications for orders, refunds, payouts, and vendor alerts.",
+      desc: "Automate alerts for orders, refunds, payouts, and vendor activities.",
       iconClass: "adminlib-global-community",
       linkText: "Join Discord",
       href: "#",
     },
     {
       title: "Vendor Verification & KYC",
-      desc: "Build trust in your marketplace by verifying vendors with documents, KYC checks, and approval workflows.",
+      desc: "Verify vendors with documents and approval workflows to build trust.",
       iconClass: "adminlib-global-community",
       linkText: "Join Discord",
       href: "#",
     },
     {
       title: "Membership & Subscriptions",
-      desc: "Enable vendors to sell membership plans or recurring subscription products, generating steady recurring revenue.",
+      desc: "Let vendors sell memberships or recurring products for steady revenue.",
       iconClass: "adminlib-global-community",
       linkText: "Join Discord",
       href: "#",
@@ -245,18 +245,18 @@ const AdminDashboard = () => {
     return value; // text like "Basic" or "Advanced"
   };
   const demoModules: Module[] = [
-    { id: 1, name: 'Appointments', iconClass: 'adminlib-booking', hasToggle: true },
-    { id: 2, name: 'Bookings', iconClass: 'adminlib-booking', pro: true },
-    { id: 3, name: 'Reports', iconClass: 'adminlib-report', hasToggle: true },
-    { id: 4, name: 'Analytics', iconClass: 'adminlib-analytics', pro: true },
-    { id: 5, name: 'Payments', iconClass: 'adminlib-analytics', hasToggle: true },
-    { id: 6, name: 'Inventory', iconClass: 'adminlib-analytics', pro: true },
-    { id: 7, name: 'Customers', iconClass: 'adminlib-analytics', hasToggle: true },
-    { id: 8, name: 'Marketing', iconClass: 'adminlib-analytics', pro: true },
-    { id: 9, name: 'Shipping', iconClass: 'adminlib-booking', hasToggle: true },
-    { id: 10, name: 'Discounts', iconClass: 'adminlib-booking', pro: true },
+    { id: 1, name: 'Identity Verification', iconClass: 'adminlib-booking', hasToggle: true },
+    { id: 2, name: 'Staff Manager', iconClass: 'adminlib-booking', pro: true },
+    { id: 3, name: 'Vacation Mode', iconClass: 'adminlib-report', hasToggle: true },
+    { id: 4, name: 'Business Hours', iconClass: 'adminlib-analytics', pro: true },
+    { id: 5, name: 'Store Inventory', iconClass: 'adminlib-analytics', hasToggle: true },
+    { id: 6, name: 'Min/Max Quantities', iconClass: 'adminlib-analytics', pro: true },
+    { id: 7, name: 'Wholesale', iconClass: 'adminlib-analytics', hasToggle: true },
+    { id: 8, name: 'PayPal Marketplace (Real-time Split)', iconClass: 'adminlib-analytics', pro: true },
+    { id: 9, name: 'Stripe Marketplace (Real-time Split)', iconClass: 'adminlib-booking', hasToggle: true },
+    { id: 10, name: 'Facilitator', iconClass: 'adminlib-booking', pro: true },
     { id: 11, name: 'Notifications', iconClass: 'adminlib-booking', hasToggle: true },
-    { id: 12, name: 'Settings', iconClass: 'adminlib-setting', pro: true },
+    { id: 12, name: 'Invoice & Packing Slip', iconClass: 'adminlib-setting', pro: true },
   ];
 
   const [activeTab, setActiveTab] = useState("dashboard");
@@ -303,7 +303,7 @@ const AdminDashboard = () => {
                     <div className="title">
                       Build a Professional Marketplace
                       <span className="admin-badge blue">
-                        Starting at $99/year
+                        Starting at $299/year
                       </span>
                     </div>
                     <div className="des">
@@ -329,7 +329,7 @@ const AdminDashboard = () => {
                   </div>
                   <div className="des">Create, manage, and grow your marketplace with confidence. Trusted by thousands of entrepreneurs worldwide.</div>
                   <div className="admin-btn btn-purple">
-                    Upgrade Now - 30 Day Guarantee
+                    Upgrade Now - 15 Day Guarantee
                     <i className="adminlib-arrow-right icon-pro-btn"></i>
                   </div>
                 </div>
