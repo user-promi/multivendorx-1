@@ -508,8 +508,37 @@ $border-radius-button: 8rem;
         line-height: 2rem;
         margin-bottom: 0.813rem;
     }
-    .des{
+
+    .des {
         font-size: 0.95rem;
         margin-bottom: 1rem;
+    }
+}
+
+
+// varification-wrapper start
+.varification-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 50%;
+    padding: 0.625rem;
+    border: $border-light-small;
+    border-radius: 0.313rem;
+    margin-bottom: 0.5rem;
+
+    .left {
+        display: flex;
+        gap: 0.313rem;
+        align-items: center;
+
+        i{
+            padding: 0.313rem;
+        }
+    }
+
+    .name {
+        font-size: 1.063rem;
+        color: #000;
     }
 }
