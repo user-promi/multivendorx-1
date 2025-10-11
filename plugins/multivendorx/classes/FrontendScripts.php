@@ -355,7 +355,8 @@ class FrontendScripts {
                 'order-actions-refunds',
                 'advertising',
                 'product-preferencess',
-                'product-store-category-control'
+                'product-store-category-control',
+                'geolocation'
             )
 		);
 
@@ -458,7 +459,10 @@ class FrontendScripts {
                         'woocommerce_currency'     => get_woocommerce_currency(),
                         'user_id'                  => get_current_user_id(),
                         'currency'                 => get_woocommerce_currency(),       // e.g., USD
-                        'currency_symbol'          => get_woocommerce_currency_symbol()
+                        'currency_symbol'          => get_woocommerce_currency_symbol(),
+                        'map_providor'             => MultiVendorX()->setting->get_setting( 'choose_map_api' ),
+                        'google_api_key'             => MultiVendorX()->setting->get_setting( 'google_api_key' ),
+                        'mapbox_api_key'             => MultiVendorX()->setting->get_setting( 'mapbox_api_key' ),
 					) ),
                 ),
                 'multivendorx-product-tab-script' => array(
@@ -521,6 +525,9 @@ class FrontendScripts {
                         'woo_nonce'                => wp_create_nonce( 'wc_store_api' ),
                         'country_list'             => $country_list,
                         'color'                    => MultiVendorX()->setting->get_setting( 'store_color_settings' ),
+                        'map_providor'             => MultiVendorX()->setting->get_setting( 'choose_map_api' ),
+                        'google_api_key'             => MultiVendorX()->setting->get_setting( 'google_api_key' ),
+                        'mapbox_api_key'             => MultiVendorX()->setting->get_setting( 'mapbox_api_key' ),
                         'store_payment_settings'    => MultiVendorX()->payments->get_all_store_payment_settings(),
                         'store_id'                  => get_user_meta(wp_get_current_user()->ID, 'multivendorx_active_store', true),
                         'ajaxurl'                   => admin_url( 'admin-ajax.php' ),

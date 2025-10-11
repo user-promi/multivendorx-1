@@ -133,8 +133,8 @@ class Modules {
 					),
                     'geo-location'=> array(
                         'id'=> 'geo-location',
-                        'module_file'=> MultiVendorX()->plugin_path . 'modules/Geolocation/Module.php',
-                        'module_class' => 'MultiVendorX\Geolocation\Module',
+                        'module_file'=> MultiVendorX()->plugin_path . 'modules/GeoLocation/Module.php',
+                        'module_class' => 'MultiVendorX\GeoLocation\Module',
                     ),
 				)
             );
