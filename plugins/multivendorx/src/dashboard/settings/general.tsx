@@ -4,7 +4,7 @@ import { BasicInput, TextArea, FileInput, SelectInput, getApiLink } from 'zyra';
 
 const GeneralSettings = () => {
     const id = appLocalizer.store_id;
-    const [formData, setFormData] = useState<{ [key: string]: string }>({});
+    const [formData, setFormData] = useState<{ [key: string]: any }>({});
     const [successMsg, setSuccessMsg] = useState<string | null>(null);
     const [stateOptions, setStateOptions] = useState<{ label: string; value: string }[]>([]);
 
@@ -19,7 +19,7 @@ const GeneralSettings = () => {
             .then((res) => {
                 const data = res.data || {};
                 setFormData((prev) => ({ ...prev, ...data }));
-            })
+            });
     }, [id]);
 
     useEffect(() => {
@@ -28,12 +28,12 @@ const GeneralSettings = () => {
             return () => clearTimeout(timer);
         }
     }, [successMsg]);
+
     useEffect(() => {
         if (formData.country) {
             fetchStatesByCountry(formData.country);
         }
     }, [formData.country]);
-
 
     const fetchStatesByCountry = (countryCode: string) => {
         axios({
@@ -42,9 +42,10 @@ const GeneralSettings = () => {
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
         }).then((res) => {
             setStateOptions(res.data || []);
-        })
+        });
     };
 
+    // ✅ Fixed: Corrected name and dynamic binding
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         const updated = { ...formData, [name]: value };
@@ -52,18 +53,19 @@ const GeneralSettings = () => {
         autoSave(updated);
     };
 
-    const autoSave = (updatedData: { [key: string]: string }) => {
+    const autoSave = (updatedData: { [key: string]: any }) => {
         axios({
             method: 'PUT',
             url: getApiLink(appLocalizer, `store/${id}`),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
             data: updatedData,
         }).then((res) => {
-            if (res.data.success) {
+            if (res.data?.success) {
                 setSuccessMsg('Store saved successfully!');
             }
-        })
+        });
     };
+
     return (
         <>
             <div className="card-wrapper">
@@ -78,35 +80,69 @@ const GeneralSettings = () => {
 
                     <div className="form-group-wrapper">
                         <div className="form-group">
-                            <label htmlFor="product-name">Name</label>
-                            <BasicInput name="phone" wrapperClass="setting-form-input" descClass="settings-metabox-description" />
-                        </div>
-                    </div>
-                    <div className="form-group-wrapper">
-                        <div className="form-group">
-                            <label htmlFor="product-name">Slug</label>
-                            <BasicInput name="phone" wrapperClass="setting-form-input" descClass="settings-metabox-description" />
-                        </div>
-                    </div>
-
-                    <div className="form-group-wrapper">
-                        <div className="form-group">
-                            <label htmlFor="product-name">Description</label>
-                            <TextArea
-                                name="content"
-                                inputClass="textarea-input"
-                            // value={formData.content}
-                            // onChange={handleChange}
+                            <label htmlFor="store-name">Name</label>
+                            {/* ✅ Fixed: Correct field name */}
+                            <BasicInput
+                                name="name"
+                                wrapperClass="setting-form-input"
+                                descClass="settings-metabox-description"
+                                value={formData.name || ''}
+                                onChange={handleChange}
                             />
                         </div>
                     </div>
 
                     <div className="form-group-wrapper">
                         <div className="form-group">
-                            <label htmlFor="product-name">Message to Buyers</label>
-                            <BasicInput name="phone" wrapperClass="setting-form-input" descClass="settings-metabox-description" />
+                            <label htmlFor="store-slug">Slug</label>
+                            {/* ✅ Fixed: Correct field name */}
+                            <BasicInput
+                                name="slug"
+                                wrapperClass="setting-form-input"
+                                descClass="settings-metabox-description"
+                                value={formData.slug || ''}
+                                onChange={handleChange}
+                            />
                         </div>
                     </div>
+
+                    <div className="form-group-wrapper">
+                        <div className="form-group">
+                            <label htmlFor="store-description">Description</label>
+                            <TextArea
+                                name="description"
+                                inputClass="textarea-input"
+                                value={formData.description || ''}
+                                onChange={handleChange}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="form-group-wrapper">
+                        <div className="form-group">
+                            <label htmlFor="message-to-buyer">Message to Buyers</label>
+                            {/* ✅ Fixed: Correct field name */}
+                            <BasicInput
+                                name="messageToBuyer"
+                                wrapperClass="setting-form-input"
+                                descClass="settings-metabox-description"
+                                value={formData.messageToBuyer || ''}
+                                onChange={handleChange}
+                            />
+                        </div>
+                    </div>
+
+                    {successMsg && (
+                        <>
+                            <div className="admin-notice-wrapper">
+                                <i className="admin-font adminlib-icon-yes"></i>
+                                <div className="notice-details">
+                                    <div className="title">Great!</div>
+                                    <div className="desc">{successMsg}</div>
+                                </div>
+                            </div>
+                        </>
+                    )}
                 </div>
             </div>
         </>
