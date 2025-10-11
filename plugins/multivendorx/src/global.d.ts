@@ -47,6 +47,7 @@ declare global {
         map_providor:any;
         google_api_key:any;
         mapbox_api_key:any;
+        all_verification_methods:any;
     }
     interface Color{
         color: any;

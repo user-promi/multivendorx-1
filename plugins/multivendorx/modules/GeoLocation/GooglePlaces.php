@@ -25,30 +25,7 @@ class GooglePlaces {
 
         $this->log('REST API functions are available');
 
-        // Register main geolocation endpoint (for count)
-        register_rest_route(MultiVendorX()->rest_namespace, '/' . $this->rest_base, [
-            'methods' => \WP_REST_Server::READABLE,
-            'callback' => [$this, 'get_geolocation_count'],
-            'permission_callback' => [$this, 'get_items_permissions_check'],
-        ]);
-
-        // Register store endpoint - matches Q&A pattern
-        register_rest_route(MultiVendorX()->rest_namespace, '/' . $this->rest_base . '/store/(?P<id>\d+)', [
-            [
-                'methods' => \WP_REST_Server::READABLE,
-                'callback' => [$this, 'get_store_data'],
-                'permission_callback' => [$this, 'get_items_permissions_check'],
-            ],
-            [
-                'methods' => \WP_REST_Server::EDITABLE,
-                'callback' => [$this, 'update_store_data'],
-                'permission_callback' => [$this, 'update_item_permissions_check'],
-            ]
-        ]);
-
-        $this->log('Store route registered for: ' . MultiVendorX()->rest_namespace . '/' . $this->rest_base . '/store/(?P<id>\d+)');
-
-        // Register geocode endpoint
+        // Register geocode endpoint only - remove store-specific routes
         register_rest_route(MultiVendorX()->rest_namespace, '/' . $this->rest_base . '/geocode', [
             'methods' => \WP_REST_Server::READABLE,
             'callback' => [$this, 'geocode_address'],
@@ -67,27 +44,6 @@ class GooglePlaces {
         $this->log('All routes registration completed');
     }
 
-    public function get_geolocation_count($request) {
-        $store_id = $request->get_param('store_id');
-        $count_only = $request->get_param('count');
-        
-        $this->log("GET Geolocation Count - Store ID: " . $store_id . ", Count Only: " . $count_only);
-
-        if ($count_only) {
-            // Return count logic here
-            // For now, just return a simple response
-            return rest_ensure_response([
-                'count' => 1,
-                'success' => true
-            ]);
-        }
-
-        return rest_ensure_response([
-            'success' => true,
-            'message' => 'Geolocation endpoint working'
-        ]);
-    }
-
     public function get_items_permissions_check($request) {
         $has_permission = current_user_can('read') || current_user_can('edit_stores');
         return $has_permission;
@@ -98,51 +54,7 @@ class GooglePlaces {
         return $has_permission;
     }
     
-    public function get_store_data($request) {
-        $store_id = $request->get_param('id');
-        $this->log("GET Store Data - Store ID: " . $store_id);
-        
-        try {
-            $store_geo = new StoreGeolocation($store_id);
-            $data = $store_geo->get_data();
-            
-            $this->log("Retrieved store data: " . json_encode($data));
-            
-            return rest_ensure_response($data);
-            
-        } catch (\Exception $e) {
-            $this->log("Error getting store data: " . $e->getMessage());
-            return new \WP_Error('data_retrieval_error', 'Failed to retrieve store data', ['status' => 500]);
-        }
-    }
-    
-    public function update_store_data($request) {
-        $store_id = $request->get_param('id');
-        $this->log("UPDATE Store Data - Store ID: " . $store_id);
-        
-        $data = $request->get_json_params();
-        
-        if (empty($data)) {
-            return new \WP_Error('no_data', 'No data received', ['status' => 400]);
-        }
-        
-        try {
-            $store_geo = new StoreGeolocation($store_id);
-            $store_geo->update_data($data);
-            
-            $this->log("Successfully updated store data for ID: " . $store_id);
-            
-            return rest_ensure_response([
-                'success' => true, 
-                'message' => 'Store data updated successfully',
-                'updated_fields' => count($data)
-            ]);
-            
-        } catch (\Exception $e) {
-            $this->log("Error updating store data: " . $e->getMessage());
-            return new \WP_Error('update_failed', 'Failed to update store data', ['status' => 500]);
-        }
-    }
+    // Remove get_store_data and update_store_data methods since they're handled by main store controller
     
     public function geocode_address($request) {
         $address = $request->get_param('address');
@@ -233,9 +145,9 @@ class GooglePlaces {
             $types = $component['types'];
             
             if (in_array('street_number', $types)) {
-                $components['location_address'] = $component['long_name']; // Use location_address
+                $components['location_address'] = $component['long_name'];
             } elseif (in_array('route', $types)) {
-                $components['location_address'] = ($components['location_address'] ?? '') . ' ' . $component['long_name']; // Use location_address
+                $components['location_address'] = ($components['location_address'] ?? '') . ' ' . $component['long_name'];
             } elseif (in_array('locality', $types)) {
                 $components['city'] = $component['long_name'];
             } elseif (in_array('administrative_area_level_1', $types)) {
