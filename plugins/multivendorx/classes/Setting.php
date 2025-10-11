@@ -117,7 +117,8 @@ class Setting {
                 'multivendorx_product_report_abuse_settings',
                 'multivendorx_store_commissions_settings', 
                 'multivendorx_order_actions_refunds_settings', 
-                'multivendorx_menu_manager_settings', 
+                'multivendorx_menu_manager_settings',
+                'multivendorx_geolocation_settings',
 			)
         );
 

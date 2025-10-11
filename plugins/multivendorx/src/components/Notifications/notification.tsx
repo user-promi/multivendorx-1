@@ -182,12 +182,6 @@ const Notification = () => {
                                     Tasks
                                 </div>
                             </div>
-                            <div className="right">
-                                <div className="admin-btn btn-purple">
-                                    <i className="adminlib-plus-circle-o"></i>
-                                    Add task
-                                </div>
-                            </div>
                         </div>
                         <div className="task-list-wrapper">
                             <ul className="task-list">
@@ -235,7 +229,7 @@ const Notification = () => {
 
                             {!showInput && (
                                 <button className="admin-btn btn-purple" onClick={() => setShowInput(true)}>
-                                    + Add Task
+                                    <i className="adminlib-plus-circle-o"></i> Add Task
                                 </button>
                             )}
 

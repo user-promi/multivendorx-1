@@ -8,6 +8,7 @@ import ContactInformation from './settings/ContactInformation';
 import BusinessAddress from './settings/BusinessAddress';
 import Withdrawl from './withdrawl';
 import Privacy from './settings/Privacy';
+import Verification from './settings/Verification';
 
 const settings = () => {
     const id = appLocalizer.store_id;
@@ -150,6 +151,8 @@ const settings = () => {
                     </div>
                 </>
         },
+        { id: "verification", label: "Verification", icon: "tools", content: <Verification /> },
+
     ];
     return (
         <>

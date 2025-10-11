@@ -95,7 +95,7 @@ const Coupons: React.FC = () => {
                 setTotalRows(totalCount);
                 setPageCount(Math.ceil(totalCount / pagination.pageSize));
 
-                const filtered = (response.data || []).filter(coupon => 
+                const filtered = (response.data || []).filter(coupon =>
                     coupon.meta_data?.some(meta => meta.key === 'multivendorx_store_id')
                 );
                 setData(filtered);
@@ -139,57 +139,67 @@ const Coupons: React.FC = () => {
     ];
 
     const columns: ColumnDef<CouponRow>[] = [
-        { 
-            id: 'select', 
-            header: ({ table }) => <input type="checkbox" checked={table.getIsAllRowsSelected()} onChange={table.getToggleAllRowsSelectedHandler()} />, 
-            cell: ({ row }) => <input type="checkbox" checked={row.getIsSelected()} onChange={row.getToggleSelectedHandler()} /> 
+        {
+            id: 'select',
+            header: ({ table }) => <input type="checkbox" checked={table.getIsAllRowsSelected()} onChange={table.getToggleAllRowsSelectedHandler()} />,
+            cell: ({ row }) => <input type="checkbox" checked={row.getIsSelected()} onChange={row.getToggleSelectedHandler()} />
         },
-        { 
-            header: __('Name', 'multivendorx'), 
-            cell: ({ row }) => <TableCell title={row.original?.code ?? '-'}>{row.original?.id ? <a href={`${appLocalizer.site_url}/wp-admin/post.php?post=${row.original.id}&action=edit`} target="_blank" rel="noreferrer">{row.original.code}</a> : row.original?.code ?? '-'}</TableCell> 
+        {
+            header: __('Name', 'multivendorx'),
+            cell: ({ row }) => <TableCell title={row.original?.code ?? '-'}>{row.original?.id ? <a href={`${appLocalizer.site_url}/wp-admin/post.php?post=${row.original.id}&action=edit`} target="_blank" rel="noreferrer">{row.original.code}</a> : row.original?.code ?? '-'}</TableCell>
         },
-        { 
-            header: __('Coupon Type', 'multivendorx'), 
-            cell: ({ row }) => <TableCell title={row.original?.discount_type ?? '-'}>{row.original?.discount_type ?? '-'}</TableCell> 
+        {
+            header: __('Coupon Type', 'multivendorx'),
+            cell: ({ row }) => <TableCell title={row.original?.discount_type ?? '-'}>{row.original?.discount_type ?? '-'}</TableCell>
         },
-        { 
-            header: __('Coupon Amount', 'multivendorx'), 
+        {
+            header: __('Coupon Amount', 'multivendorx'),
             accessorFn: (row) => parseFloat(row.amount || '0'), // sorting numeric
             enableSorting: true,
-            cell: ({ row }) => <TableCell title={row.original?.amount ?? '-'}>{appLocalizer.currency_symbol}{row.original?.amount ?? '-'}</TableCell> 
+            cell: ({ row }) => <TableCell title={row.original?.amount ?? '-'}>{appLocalizer.currency_symbol}{row.original?.amount ?? '-'}</TableCell>
         },
-        { 
-            header: __('Duration', 'multivendorx'), 
+        {
+            header: __('Duration', 'multivendorx'),
             accessorFn: (row) => row.date_created ? new Date(row.date_created).getTime() : 0, // sorting date
             enableSorting: true,
             cell: ({ row }) => {
                 const rawDate = row.original.date_created;
                 const formattedDate = rawDate ? new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).format(new Date(rawDate)) : '-';
                 return <TableCell title={formattedDate}>{formattedDate}</TableCell>;
-            } 
+            }
         },
-        { 
-            header: __('Store', 'multivendorx'), 
+        {
+            header: __('Store', 'multivendorx'),
             cell: ({ row }) => {
                 const store = getStoreData(row.original?.meta_data ?? []);
                 return <TableCell title={store?.name ?? '-'}>{store?.name ?? '-'}</TableCell>;
-            } 
+            }
         },
-        { 
-            header: __('Status', 'multivendorx'), 
-            cell: ({ row }) => <TableCell title={row.original?.status ?? '-'}>{row.original?.status ?? '-'}</TableCell> 
+        {
+            header: __('Status', 'multivendorx'),
+            cell: ({ row }) => <TableCell title={row.original?.status ?? '-'}>
+                {row.original.status === "active" && (
+                    <span className="admin-badge green">Active</span>
+                )}
+                {row.original.status === "pending" && (
+                    <span className="admin-badge yellow">Pending</span>
+                )}
+            </TableCell>
         },
-        { 
-            header: __('Action', 'multivendorx'), 
+        {
+            id: 'action',
+            header: __('Action', 'multivendorx'),
             cell: ({ row }) => (
-                <TableCell type="action-dropdown" rowData={row.original} header={{ actions: [
-                    { label: __('Approve Coupon', 'multivendorx'), icon: 'adminlib-check', onClick: (rowData) => handleSingleAction('approve_coupon', rowData.id!), hover: true },
-                    { label: __('Reject Coupon', 'multivendorx'), icon: 'adminlib-close', onClick: (rowData) => handleSingleAction('reject_coupon', rowData.id!), hover: true },
-                ]}} />
-            ) 
+                <TableCell type="action-dropdown" rowData={row.original} header={{
+                    actions: [
+                        { label: __('Approve Coupon', 'multivendorx'), icon: 'adminlib-check', onClick: (rowData) => handleSingleAction('approve_coupon', rowData.id!), hover: true },
+                        { label: __('Reject Coupon', 'multivendorx'), icon: 'adminlib-close', onClick: (rowData) => handleSingleAction('reject_coupon', rowData.id!), hover: true },
+                    ]
+                }} />
+            )
         }
     ];
-    
+
 
     return (
         <div className="admin-table-wrapper">
