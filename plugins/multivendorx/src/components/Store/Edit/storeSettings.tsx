@@ -36,6 +36,18 @@ const StoreSettings = ({ id }: { id: string | null }) => {
     const [apiKey, setApiKey] = useState('');
     const appLocalizer = (window as any).appLocalizer;
 
+    const [addressData, setAddressData] = useState({
+        location_address: '',
+        location_lat: '',
+        location_lng: '',
+        address: '',
+        city: '',
+        state: '',
+        country: '',
+        zip: '',
+        timezone: ''
+    });
+
     // Log function for debugging
     const log = (message: string, data?: any) => {
         console.log(`[StoreSettings] ${message}`, data || '');
@@ -62,12 +74,28 @@ const StoreSettings = ({ id }: { id: string | null }) => {
 
         axios({
             method: 'GET',
-            url: getApiLink(appLocalizer, `store/${id}`),
+            url: getApiLink(appLocalizer, `geolocation/store/${id}`),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
         })
             .then((res) => {
                 const data = res.data || {};
+                
+                // Set all form data
                 setFormData((prev) => ({ ...prev, ...data }));
+                
+                // Set address-specific data
+                setAddressData({
+                    location_address: data.location_address || data.address || '',
+                    location_lat: data.location_lat || '',
+                    location_lng: data.location_lng || '',
+                    address: data.address || data.location_address || '',
+                    city: data.city || '',
+                    state: data.state || '',
+                    country: data.country || '',
+                    zip: data.zip || '',
+                    timezone: data.timezone || ''
+                });
+                
                 setImagePreviews({
                     image: data.image || '',
                     banner: data.banner || '',
@@ -318,22 +346,29 @@ const StoreSettings = ({ id }: { id: string | null }) => {
             map.setZoom(17);
         }
 
-        const updated = {
-            ...formData,
+        // Update both address data and form data
+        const newAddressData = {
             location_address: formatted_address,
             location_lat: lat.toString(),
             location_lng: lng.toString(),
             ...addressComponents,
         };
 
-        // Ensure address field is never empty
-        if (!updated.address || updated.address.trim() === '') {
-            // Use the formatted address as fallback
-            updated.address = formatted_address;
+        // Ensure both address fields are populated
+        if (!newAddressData.address && formatted_address) {
+            newAddressData.address = formatted_address;
         }
 
-        setFormData(updated);
-        autoSave(updated);
+        setAddressData(newAddressData);
+        
+        // Merge with existing form data
+        const updatedFormData = {
+            ...formData,
+            ...newAddressData
+        };
+        
+        setFormData(updatedFormData);
+        autoSave(updatedFormData);
     };
 
     const reverseGeocode = (provider: 'google' | 'mapbox', lat: number, lng: number) => {
@@ -355,14 +390,14 @@ const StoreSettings = ({ id }: { id: string | null }) => {
         }
     };
 
-    const extractAddressComponents = (place: any, provider: 'google' | 'mapbox'): FormData => {
-        const components: FormData = {};
+    const extractAddressComponents = (place: any, provider: 'google' | 'mapbox') => {
+        const components: any = {};
 
         if (provider === 'google') {
             if (place.address_components) {
                 let streetNumber = '';
                 let route = '';
-                let address = '';
+                let streetAddress = '';
 
                 place.address_components.forEach((component: any) => {
                     const types = component.types;
@@ -379,36 +414,19 @@ const StoreSettings = ({ id }: { id: string | null }) => {
                         components.country = component.long_name;
                     } else if (types.includes('postal_code')) {
                         components.zip = component.long_name;
-                    } else if (types.includes('postal_code_suffix')) {
-                        if (components.zip) {
-                            components.zip += '-' + component.long_name;
-                        }
                     }
                 });
 
-                // Build complete address
+                // Build street address
                 if (streetNumber && route) {
-                    address = `${streetNumber} ${route}`;
+                    streetAddress = `${streetNumber} ${route}`;
                 } else if (route) {
-                    address = route;
+                    streetAddress = route;
                 } else if (streetNumber) {
-                    address = streetNumber;
-                } else {
-                    // If no street address found, use the formatted address
-                    address = place.formatted_address || '';
+                    streetAddress = streetNumber;
                 }
 
-                components.address = address.trim();
-
-                // If still no address, try to extract from name for establishments
-                if (!components.address && place.name && place.formatted_address) {
-                    const nameIndex = place.formatted_address.indexOf(place.name);
-                    if (nameIndex !== -1) {
-                        components.address = place.formatted_address.substring(nameIndex + place.name.length).trim().replace(/^,\s*/, '');
-                    } else {
-                        components.address = place.formatted_address;
-                    }
-                }
+                components.address = streetAddress.trim();
             }
         } else {
             // Mapbox address extraction
@@ -432,20 +450,29 @@ const StoreSettings = ({ id }: { id: string | null }) => {
                     }
                 });
             }
-
-            // If address is still empty, try to construct it from available data
-            if (!components.address && place.text && place.properties) {
-                components.address = `${place.text}${place.properties.address ? ', ' + place.properties.address : ''}`;
-            }
-
-            // Final fallback - use the first part of the place name
-            if (!components.address && place.place_name) {
-                const parts = place.place_name.split(',');
-                components.address = parts[0]?.trim() || place.place_name;
-            }
         }
 
         return components;
+    };
+
+    const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const { name, value } = e.target;
+        
+        const newAddressData = {
+            ...addressData,
+            [name]: value
+        };
+        
+        setAddressData(newAddressData);
+        
+        // Also update formData to maintain consistency
+        const updatedFormData = {
+            ...formData,
+            [name]: value
+        };
+        
+        setFormData(updatedFormData);
+        autoSave(updatedFormData);
     };
 
     const fetchStatesByCountry = (countryCode: string) => {
@@ -484,39 +511,31 @@ const StoreSettings = ({ id }: { id: string | null }) => {
         frame.open();
     };
 
-    // Add this function near the top of your StoreSettings component
-	const synchronizeAddressData = (formData: any) => {
-		const synchronized = { ...formData };
-		
-		// Ensure address is always populated from location_address if empty
-		if ((!synchronized.address || synchronized.address.trim() === '') && synchronized.location_address) {
-			synchronized.address = synchronized.location_address;
-		}
-		
-		// Ensure location_address is set if we have coordinates but no location_address
-		if ((synchronized.location_lat && synchronized.location_lng) && !synchronized.location_address) {
-			synchronized.location_address = synchronized.address || 'Location set';
-		}
-		
-		return synchronized;
-	};
-
 	// Then update your autoSave function:
 	const autoSave = (updatedData: any) => {
-		axios({
-			method: 'PUT',
-			url: getApiLink(appLocalizer, `store/${id}`),
-			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-			data: updatedData,
-		}).then((res) => {
-			if (res.data.success) {
-				setSuccessMsg('Store saved successfully!');
-			}
-		}).catch((error) => {
-			console.error('Save error:', error);
-			setErrorMsg('Failed to save store data');
-		});
-	};
+        // Ensure both address fields are consistent
+        const saveData = {
+            ...updatedData,
+            // If location_address is empty but address exists, copy it
+            location_address: updatedData.location_address || updatedData.address || '',
+            // If address is empty but location_address exists, copy it  
+            address: updatedData.address || updatedData.location_address || ''
+        };
+
+        axios({
+            method: 'PUT',
+            url: getApiLink(appLocalizer, `store/${id}`),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            data: saveData,
+        }).then((res) => {
+            if (res.data.success) {
+                setSuccessMsg('Store saved successfully!');
+            }
+        }).catch((error) => {
+            console.error('Save error:', error);
+            setErrorMsg('Failed to save store data');
+        });
+    };
 
     if (loading) {
         return (
@@ -610,12 +629,9 @@ const StoreSettings = ({ id }: { id: string | null }) => {
                                         type="text"
                                         className="setting-form-input"
                                         placeholder="Start typing your store address..."
-                                        defaultValue={formData.location_address}
+                                        defaultValue={addressData.location_address}
                                     />
                                 </div>
-                                <small style={{ color: '#666', marginTop: '5px', display: 'block' }}>
-                                    Type your store name or address and select from suggestions
-                                </small>
                             </div>
                         </div>
 
@@ -640,9 +656,8 @@ const StoreSettings = ({ id }: { id: string | null }) => {
 						</div>
 
                         {/* Hidden coordinates */}
-                        <input type="hidden" name="location_lat" value={formData.location_lat || ''} />
-                        <input type="hidden" name="location_lng" value={formData.location_lng || ''} />
-                        <input type="hidden" name="location_address" value={formData.location_address || ''} />
+                        <input type="hidden" name="location_lat" value={addressData.location_lat} />
+                        <input type="hidden" name="location_lng" value={addressData.location_lng} />
                     </div>
 
                     <div className="card-content">
@@ -658,62 +673,60 @@ const StoreSettings = ({ id }: { id: string | null }) => {
                         </div>
 
                         <div className="form-group-wrapper">
-							<div className="form-group">
-								<label htmlFor="product-name">Address *</label>
-								<BasicInput 
-									name="location_address"  // Change from "address" to "location_address"
-									value={formData.location_address} 
-									wrapperClass="setting-form-input" 
-									descClass="settings-metabox-description" 
-									onChange={handleChange} 
-								/>
-								{!formData.location_address && (
-									<small style={{ color: 'orange', marginTop: '5px', display: 'block' }}>
-										Address is required. Please select a location from the map or search.
-									</small>
-								)}
-							</div>
-						</div>
-                        <div className="form-group-wrapper">
                             <div className="form-group">
-                                <label htmlFor="product-name">City</label>
-                                <BasicInput name="city" value={formData.city} wrapperClass="setting-form-input" descClass="settings-metabox-description" onChange={handleChange} />
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="product-name">Zip Code</label>
-                                <BasicInput name="zip" value={formData.zip} wrapperClass="setting-form-input" descClass="settings-metabox-description" onChange={handleChange} />
+                                <label htmlFor="location_address">Address *</label>
+                                <BasicInput 
+                                    name="location_address"
+                                    value={addressData.location_address} 
+                                    wrapperClass="setting-form-input" 
+                                    descClass="settings-metabox-description" 
+                                    onChange={handleAddressChange} 
+                                />
                             </div>
                         </div>
+
+                        <div className="form-group-wrapper">
+                            <div className="form-group">
+                                <label htmlFor="city">City</label>
+                                <BasicInput 
+                                    name="city" 
+                                    value={addressData.city} 
+                                    wrapperClass="setting-form-input" 
+                                    descClass="settings-metabox-description" 
+                                    onChange={handleAddressChange} 
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="zip">Zip Code</label>
+                                <BasicInput 
+                                    name="zip" 
+                                    value={addressData.zip} 
+                                    wrapperClass="setting-form-input" 
+                                    descClass="settings-metabox-description" 
+                                    onChange={handleAddressChange} 
+                                />
+                            </div>
+                        </div>
+
                         <div className="form-group-wrapper">
                             <div className="form-group">
                                 <label htmlFor="product-name">Country</label>
-                                <SelectInput
+                                <BasicInput
                                     name="country"
                                     value={formData.country}
                                     options={appLocalizer.country_list || []}
                                     type="single-select"
-                                    onChange={(newValue: any) => {
-                                        if (!newValue || Array.isArray(newValue)) return;
-                                        const updated = { ...formData, country: newValue.value, state: '' };
-                                        setFormData(updated);
-                                        autoSave(updated);
-                                        fetchStatesByCountry(newValue.value);
-                                    }}
+                                    onChange={handleAddressChange} 
                                 />
                             </div>
                             <div className="form-group">
                                 <label htmlFor="product-name">State</label>
-                                <SelectInput
+                                <BasicInput
                                     name="state"
                                     value={formData.state}
                                     options={stateOptions}
                                     type="single-select"
-                                    onChange={(newValue: { value: any; }) => {
-                                        if (!newValue || Array.isArray(newValue)) return;
-                                        const updated = { ...formData, state: newValue.value };
-                                        setFormData(updated);
-                                        autoSave(updated);
-                                    }}
+                                    onChange={handleAddressChange} 
                                 />
                             </div>
                         </div>

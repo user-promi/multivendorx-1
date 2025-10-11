@@ -27,6 +27,18 @@ const BusinessAddress = () => {
     const [apiKey, setApiKey] = useState('');
     const appLocalizer = (window as any).appLocalizer;
 
+    const [addressData, setAddressData] = useState({
+        location_address: '',
+        location_lat: '',
+        location_lng: '',
+        address: '',
+        city: '',
+        state: '',
+        country: '',
+        zip: '',
+        timezone: ''
+    });
+
     // Get REST API base URL
     useEffect(() => {
         if (appLocalizer) {
@@ -62,10 +74,12 @@ const BusinessAddress = () => {
                 console.log('Store data loaded successfully:', res.data);
                 const data = res.data || {};
 
+                // Use the same structure as admin side
                 const formattedData = {
-                    location_address: data.location_address || '',
+                    location_address: data.location_address || data.address || '',
                     location_lat: data.location_lat || '',
                     location_lng: data.location_lng || '',
+                    address: data.address || data.location_address || '',
                     city: data.city || '',
                     state: data.state || '',
                     country: data.country || '',
@@ -73,16 +87,18 @@ const BusinessAddress = () => {
                     timezone: data.timezone || ''
                 };
 
-                setFormData(formattedData);
+                setAddressData(formattedData);
                 setLoading(false);
             } catch (error: any) {
                 console.error('Error loading store data:', error);
                 setErrorMsg('Failed to load store data');
                 setLoading(false);
-                setFormData({
+                // Initialize with empty structure
+                setAddressData({
                     location_address: '',
                     location_lat: '',
                     location_lng: '',
+                    address: '',
                     city: '',
                     state: '',
                     country: '',
@@ -288,16 +304,20 @@ const BusinessAddress = () => {
             map.setZoom(17);
         }
 
-        const updated = {
-            ...formData,
-            location_address: formatted_address, // Use location_address consistently
+        const newAddressData = {
+            location_address: formatted_address,
             location_lat: lat.toString(),
             location_lng: lng.toString(),
             ...addressComponents,
         };
 
-        setFormData(updated);
-        autoSave(updated);
+        // Ensure both address fields are populated
+        if (!newAddressData.address && formatted_address) {
+            newAddressData.address = formatted_address;
+        }
+
+        setAddressData(newAddressData);
+        autoSave(newAddressData);
     };
 
     const reverseGeocode = (provider: 'google' | 'mapbox', lat: number, lng: number) => {
@@ -324,14 +344,14 @@ const BusinessAddress = () => {
         }
     };
 
-    const extractAddressComponents = (place: any, provider: 'google' | 'mapbox'): FormData => {
-        const components: FormData = {};
+    const extractAddressComponents = (place: any, provider: 'google' | 'mapbox') => {
+        const components: any = {};
 
         if (provider === 'google') {
             if (place.address_components) {
                 let streetNumber = '';
                 let route = '';
-                let address = '';
+                let streetAddress = '';
 
                 place.address_components.forEach((component: any) => {
                     const types = component.types;
@@ -348,39 +368,22 @@ const BusinessAddress = () => {
                         components.country = component.long_name;
                     } else if (types.includes('postal_code')) {
                         components.zip = component.long_name;
-                    } else if (types.includes('postal_code_suffix')) {
-                        if (components.zip) {
-                            components.zip += '-' + component.long_name;
-                        }
                     }
                 });
 
-                // Build complete address
+                // Build street address (same logic as admin side)
                 if (streetNumber && route) {
-                    address = `${streetNumber} ${route}`;
+                    streetAddress = `${streetNumber} ${route}`;
                 } else if (route) {
-                    address = route;
+                    streetAddress = route;
                 } else if (streetNumber) {
-                    address = streetNumber;
-                } else {
-                    // If no street address found, use the formatted address
-                    address = place.formatted_address || '';
+                    streetAddress = streetNumber;
                 }
 
-                components.address = address.trim();
-
-                // If still no address, try to extract from name for establishments
-                if (!components.address && place.name && place.formatted_address) {
-                    const nameIndex = place.formatted_address.indexOf(place.name);
-                    if (nameIndex !== -1) {
-                        components.address = place.formatted_address.substring(nameIndex + place.name.length).trim().replace(/^,\s*/, '');
-                    } else {
-                        components.address = place.formatted_address;
-                    }
-                }
+                components.address = streetAddress.trim();
             }
         } else {
-            // Mapbox address extraction
+            // Mapbox address extraction (same logic as admin side)
             if (place.properties) {
                 components.address = place.properties.address || '';
             }
@@ -401,17 +404,6 @@ const BusinessAddress = () => {
                     }
                 });
             }
-
-            // If address is still empty, try to construct it from available data
-            if (!components.address && place.text && place.properties) {
-                components.address = `${place.text}${place.properties.address ? ', ' + place.properties.address : ''}`;
-            }
-
-            // Final fallback - use the first part of the place name
-            if (!components.address && place.place_name) {
-                const parts = place.place_name.split(',');
-                components.address = parts[0]?.trim() || place.place_name;
-            }
         }
 
         return components;
@@ -419,46 +411,33 @@ const BusinessAddress = () => {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        const updated = { ...formData, [name]: value };
-        setFormData(updated);
-        autoSave(updated);
-    };
-
-    // Add this function near the top of your BusinessAddress component
-    const synchronizeAddressData = (formData: { [x: string]: string; location_address?: any; location_lat?: any; location_lng?: any; }) => {
-        const synchronized = { ...formData };
-        
-        // Ensure address is always populated from location_address if empty
-        if ((!synchronized.address || synchronized.address.trim() === '') && synchronized.location_address) {
-            synchronized.address = synchronized.location_address;
-        }
-        
-        // Ensure location_address is set if we have coordinates but no location_address
-        if ((synchronized.location_lat && synchronized.location_lng) && !synchronized.location_address) {
-            synchronized.location_address = synchronized.address || 'Location set';
-        }
-        
-        return synchronized;
+        const newAddressData = {
+            ...addressData,
+            [name]: value
+        };
+        setAddressData(newAddressData);
+        autoSave(newAddressData);
     };
 
     // Update your autoSave function:
     const autoSave = (updatedData: any) => {
-        const endpoint = getApiLink(appLocalizer, `geolocation/store/${id}`);
+        // Ensure both address fields are consistent (same as admin side)
+        const saveData = {
+            ...updatedData,
+            location_address: updatedData.location_address || updatedData.address || '',
+            address: updatedData.address || updatedData.location_address || ''
+        };
 
-        axios.put(endpoint, updatedData, {
-            headers: {
-                'Content-Type': 'application/json',
-                'X-WP-Nonce': appLocalizer.nonce
-            },
-            timeout: 10000
-        })
-        .then((res) => {
+        axios({
+            method: 'PUT',
+            url: getApiLink(appLocalizer, `store/${id}`),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            data: saveData,
+        }).then((res) => {
             if (res.data.success) {
                 setSuccessMsg('Store saved successfully!');
-                setErrorMsg(null);
             }
-        })
-        .catch((error) => {
+        }).catch((error) => {
             console.error('Save error:', error);
             setErrorMsg('Failed to save store data');
         });
@@ -501,61 +480,36 @@ const BusinessAddress = () => {
                                 type="text"
                                 className="setting-form-input"
                                 placeholder="Start typing your business address..."
-                                defaultValue={formData.location_address}
+                                defaultValue={addressData.location_address}
                             />
                         </div>
-                        <small style={{ color: '#666', marginTop: '5px', display: 'block' }}>
-                            Type your business name or address and select from suggestions
-                        </small>
                     </div>
                 </div>
 
-                <div className="form-group-wrapper">
-                    <div className="form-group">
-                        <label>Location Map *</label>
-                        <div
-                            id="location-map"
-                            style={{
-                                height: '300px',
-                                width: '100%',
-                                borderRadius: '8px',
-                                border: '1px solid #ddd',
-                                marginTop: '8px'
-                            }}
-                        ></div>
-                        <small style={{ color: '#666', marginTop: '5px', display: 'block' }}>
-                            Click on the map or drag the marker to set your exact location
-                        </small>
-                    </div>
-                </div>
-
+                {/* Address Field */}
                 <div className="form-group-wrapper">
                     <div className="form-group">
                         <label htmlFor="location_address">Address *</label>
                         <input
                             type="text"
                             name="location_address"
-                            value={formData.location_address || ''}
+                            value={addressData.location_address || ''}
                             className="setting-form-input"
                             onChange={handleChange}
                             placeholder="Street address"
                             required
                         />
-                        {!formData.location_address && (
-                            <small style={{ color: 'orange', marginTop: '5px', display: 'block' }}>
-                                Address is required. Please select a location from the map or search.
-                            </small>
-                        )}
                     </div>
                 </div>
 
+                {/* Address Components */}
                 <div className="form-group-wrapper">
                     <div className="form-group">
                         <label htmlFor="city">City</label>
                         <input
                             type="text"
                             name="city"
-                            value={formData.city || ''}
+                            value={addressData.city || ''}
                             className="setting-form-input"
                             onChange={handleChange}
                             placeholder="City"
@@ -566,7 +520,7 @@ const BusinessAddress = () => {
                         <input
                             type="text"
                             name="state"
-                            value={formData.state || ''}
+                            value={addressData.state || ''}
                             className="setting-form-input"
                             onChange={handleChange}
                             placeholder="State"
@@ -580,7 +534,7 @@ const BusinessAddress = () => {
                         <input
                             type="text"
                             name="country"
-                            value={formData.country || ''}
+                            value={addressData.country || ''}
                             className="setting-form-input"
                             onChange={handleChange}
                             placeholder="Country"
@@ -591,7 +545,7 @@ const BusinessAddress = () => {
                         <input
                             type="text"
                             name="zip"
-                            value={formData.zip || ''}
+                            value={addressData.zip || ''}
                             className="setting-form-input"
                             onChange={handleChange}
                             placeholder="Zip code"
@@ -599,22 +553,9 @@ const BusinessAddress = () => {
                     </div>
                 </div>
 
-                <div className="form-group-wrapper">
-                    <div className="form-group">
-                        <label htmlFor="timezone">Timezone</label>
-                        <input
-                            type="text"
-                            name="timezone"
-                            value={formData.timezone || ''}
-                            className="setting-form-input"
-                            onChange={handleChange}
-                            placeholder="Timezone"
-                        />
-                    </div>
-                </div>
-
-                <input type="hidden" name="location_lat" value={formData.location_lat || ''} />
-                <input type="hidden" name="location_lng" value={formData.location_lng || ''} />
+                {/* Hidden coordinates */}
+                <input type="hidden" name="location_lat" value={addressData.location_lat} />
+                <input type="hidden" name="location_lng" value={addressData.location_lng} />
             </div>
         </div>
     );

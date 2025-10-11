@@ -12,9 +12,10 @@ class StoreGeolocation {
         $this->store = new \MultiVendorX\Store\Store($store_id);
     }
     
-    // Use only location_address - remove the address field
+    // Standardized meta fields - both location_address and address for compatibility
     private $meta_fields = [
         'location_address' => 'store_location_address',
+        'address' => 'store_address', // Keep both for compatibility
         'location_lat' => 'store_location_lat', 
         'location_lng' => 'store_location_lng',
         'city' => 'store_city',
@@ -29,11 +30,28 @@ class StoreGeolocation {
         foreach ($this->meta_fields as $field => $meta_key) {
             $data[$field] = $this->store->get_meta($meta_key) ?? '';
         }
+        
+        // Ensure both address fields are populated
+        if (empty($data['location_address']) && !empty($data['address'])) {
+            $data['location_address'] = $data['address'];
+        }
+        if (empty($data['address']) && !empty($data['location_address'])) {
+            $data['address'] = $data['location_address'];
+        }
+        
         return $data;
     }
     
     public function update_data($data) {
         $validated_data = $this->validate_geolocation_data($data);
+        
+        // Ensure both address fields stay in sync
+        if (isset($validated_data['location_address']) && !isset($validated_data['address'])) {
+            $validated_data['address'] = $validated_data['location_address'];
+        }
+        if (isset($validated_data['address']) && !isset($validated_data['location_address'])) {
+            $validated_data['location_address'] = $validated_data['address'];
+        }
         
         foreach ($validated_data as $field => $value) {
             if (isset($this->meta_fields[$field])) {
@@ -62,7 +80,8 @@ class StoreGeolocation {
                     break;
                     
                 case 'location_address':
-                    // Ensure location_address is never empty if coordinates are set
+                case 'address':
+                    // Ensure addresses are never empty if coordinates are set
                     if (!empty($data['location_lat']) && empty($value)) {
                         $validated[$key] = 'Address required';
                     } else {
