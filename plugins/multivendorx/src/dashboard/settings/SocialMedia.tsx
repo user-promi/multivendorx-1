@@ -27,22 +27,6 @@ const SocialMedia = () => {
             return () => clearTimeout(timer);
         }
     }, [successMsg]);
-    useEffect(() => {
-        if (formData.country) {
-            fetchStatesByCountry(formData.country);
-        }
-    }, [formData.country]);
-
-
-    const fetchStatesByCountry = (countryCode: string) => {
-        axios({
-            method: 'GET',
-            url: getApiLink(appLocalizer, `states/${countryCode}`),
-            headers: { 'X-WP-Nonce': appLocalizer.nonce },
-        }).then((res) => {
-            setStateOptions(res.data || []);
-        })
-    };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
@@ -139,6 +123,17 @@ const SocialMedia = () => {
                         </div>
                     </div>
                 </div>
+                {successMsg && (
+                    <>
+                        <div className="admin-notice-wrapper">
+                            <i className="admin-font adminlib-icon-yes"></i>
+                            <div className="notice-details">
+                                <div className="title">Great!</div>
+                                <div className="desc">{successMsg}</div>
+                            </div>
+                        </div>
+                    </>
+                )}
             </div>
         </>
     );
