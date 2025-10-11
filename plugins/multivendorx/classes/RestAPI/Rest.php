@@ -81,31 +81,29 @@ class Rest {
      * Filter orders dynamically by meta key and optionally by value
      */
     public function filter_orders_by_store_id( $args, $request ) {
-
-        // If no key is provided, return args unchanged
-        if ( empty( $request['key'] ) ) {
+        $meta_key   = $request->get_param('meta_key');
+        $meta_value = $request->get_param('value');
+    
+        if ( empty( $meta_key ) ) {
             return $args;
         }
-
-        $meta_key   = sanitize_key( $request['key'] );
-        $meta_value = isset( $request['store_id'] ) ? absint( $request['store_id'] ) : null;
-
-        $store_meta_query = array(
-            'key'     => $meta_key,
-            'compare' => $meta_value !== null ? '=' : 'EXISTS',
-        );
-
-        if ( $meta_value !== null ) {
-            $store_meta_query['value'] = $meta_value;
+    
+        $store_meta_query = [
+            'key'     => sanitize_key( $meta_key ),
+            'compare' => $meta_value ? '=' : 'EXISTS',
+        ];
+    
+        if ( $meta_value ) {
+            $store_meta_query['value'] = sanitize_text_field( $meta_value );
         }
-
+    
         if ( isset( $args['meta_query'] ) ) {
             $args['meta_query']['relation'] = 'AND';
             $args['meta_query'][] = $store_meta_query;
         } else {
-            $args['meta_query'] = array( $store_meta_query );
+            $args['meta_query'] = [ $store_meta_query ];
         }
-
+    
         return $args;
     }
 

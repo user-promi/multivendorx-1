@@ -102,22 +102,6 @@ const Reviews: React.FC = () => {
                                             )}
                                         </td>
 
-                                        {/* Discount */}
-                                        {/* <td className="admin-column">
-                                            {!isRefund ? (
-                                                `$${row.discount}`
-                                            ) : (
-                                                <input
-                                                    type="number"
-                                                    value={row.discount}
-                                                    onChange={(e) =>
-                                                        setRow({ ...row, discount: +e.target.value })
-                                                    }
-                                                    className="basic-input"
-                                                />
-                                            )}
-                                        </td> */}
-
                                         {/* Qty */}
                                         <td className="admin-column">
                                             {!isRefund ? (

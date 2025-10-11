@@ -22,7 +22,9 @@ type ProductRow = {
 type FilterData = {
     searchAction?: string;
     searchField?: string;
-    categoryId?: string;
+    category?: any;
+    stock_status?: string;
+    productType?: string;
 };
 export interface RealtimeFilter {
     name: string;
@@ -37,7 +39,20 @@ const formatWooDate = (dateString: string) => {
         day: 'numeric',
     });
 };
-
+// Add these status options inside AllProduct component
+const stockStatusOptions = [
+    { key: '', name: 'Stock Status' },
+    { key: 'instock', name: 'In Stock' },
+    { key: 'outofstock', name: 'Out of Stock' },
+    { key: 'onbackorder', name: 'On Backorder' },
+];
+const productTypeOptions = [
+    { key: '', name: 'Product Type' },
+    { key: 'simple', name: 'Simple Product' },
+    { key: 'variable', name: 'Variable Product' },
+    { key: 'grouped', name: 'Grouped Product' },
+    { key: 'external', name: 'External/Affiliate Product' },
+];
 const AllProduct: React.FC = () => {
     const [data, setData] = useState<ProductRow[]>([]);
 
@@ -238,10 +253,17 @@ const AllProduct: React.FC = () => {
             ),
         },
         {
+            id: 'sku',
+            accessorKey: 'sku',
+            enableSorting: true,
             header: __('SKU', 'multivendorx'),
             cell: ({ row }) => <TableCell>{row.original.sku || '-'}</TableCell>,
         },
         {
+            id: 'price',
+            accessorKey: 'price',
+            accessorFn: row => parseFloat(row.price || '0'),
+            enableSorting: true,
             header: __('Price', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell>
@@ -274,6 +296,9 @@ const AllProduct: React.FC = () => {
             ),
         },
         {
+            id: 'date_created',
+            accessorKey: 'date_created',
+            enableSorting: true,
             header: __('Date', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell>{formatWooDate(row.original.date_created)}</TableCell>
@@ -295,67 +320,117 @@ const AllProduct: React.FC = () => {
                 </TableCell>
             ),
         },
+        {
+            id: 'action',
+            header: __('Action', 'multivendorx'),
+            cell: ({ row }) => (
+                <TableCell
+                    type="action-dropdown"
+                    rowData={row.original}
+                    header={{
+                        actions: [
+                            {
+                                label: __('Edit', 'multivendorx'),
+                                icon: 'adminlib-create',
+                                onClick: (rowData) => {
+                                    window.location.href = `?page=multivendorx#&tab=stores&edit/${rowData.id}`;
+                                },
+                                hover: true
+                            },
+                            {
+                                label: __('View', 'multivendorx'),
+                                icon: 'adminlib-eye',
+                                onClick: (rowData) => {
+                                    window.location.href = `?page=multivendorx#&tab=stores&edit/${rowData.id}`;
+                                },
+                            },
+                            {
+                                label: __('Copy URL', 'multivendorx'),
+                                icon: 'adminlib-vendor-form-copy',
+                                onClick: (rowData) => {
+                                    window.location.href = `?page=multivendorx#&tab=stores&edit/${rowData.id}`;
+                                },
+                            },
+                            {
+                                label: __('Clone', 'multivendorx'),
+                                icon: 'adminlib-vendor-form-copy',
+                                onClick: (rowData) => {
+                                    window.location.href = `?page=multivendorx#&tab=stores&edit/${rowData.id}`;
+                                },
+                            },
+                            {
+                                label: __('Delete', 'multivendorx'),
+                                icon: 'adminlib-vendor-form-delete',
+                                onClick: (rowData) => {
+                                    window.location.href = `?page=multivendorx#&tab=stores&edit/${rowData.id}`;
+                                },
+                                hover: true
+                            },
+
+                        ],
+                    }}
+                />
+            ),
+        },
     ];
 
     const realtimeFilter: RealtimeFilter[] = [
         {
             name: 'category',
-            render: (updateFilter: (key: string, value: string) => void, filterValue: any | undefined) => (
-                <div className="course-field">
+            render: (updateFilter: (key: string, value: string) => void, filterValue: string | undefined) => (
+                <div className="   group-field">
                     <select
-                        name="categoryId"
+                        name="category"
                         onChange={(e) => updateFilter(e.target.name, e.target.value)}
                         value={filterValue || ''}
                         className="basic-select"
                     >
                         <option value="">Category</option>
-                        {categoriesList.map((cat) => (
-                            <option key={cat.id} value={cat.id}>
-                                {cat.name}
+                        {categoriesList?.map((s: any) => (
+                            <option key={s.id} value={s.id}>
+                                {s.name}
                             </option>
                         ))}
                     </select>
+
                 </div>
             ),
         },
         {
-            name: 'product-type',
+            name: 'productType',
             render: (updateFilter: (key: string, value: string) => void, filterValue: string | undefined) => (
                 <div className="   group-field">
                     <select
-                        name="product-type"
+                        name="productType"
                         onChange={(e) => updateFilter(e.target.name, e.target.value)}
                         value={filterValue || ''}
                         className="basic-select"
                     >
-                        <option value="">Product Type</option>
-                        {/* { Object.entries( groups ).map( ( [ groupId, groupName ] ) => (
-                                <option key={ groupId } value={ groupId }>
-                                    { ' ' }
-                                    { groupName }{ ' ' }
-                                </option>
-                            ) ) } */}
+                        {productTypeOptions?.map((s: any) => (
+                            <option key={s.key} value={s.key}>
+                                {s.name}
+                            </option>
+                        ))}
                     </select>
+
                 </div>
             ),
         },
         {
-            name: 'stock-status',
+            name: 'stock_status',
             render: (updateFilter: (key: string, value: string) => void, filterValue: string | undefined) => (
                 <div className="   group-field">
                     <select
-                        name="product-type"
+                        name="stock_status"
                         onChange={(e) => updateFilter(e.target.name, e.target.value)}
                         value={filterValue || ''}
                         className="basic-select"
                     >
-                        <option value="">Stock Status</option>
-                        {/* { Object.entries( groups ).map( ( [ groupId, groupName ] ) => (
-                                <option key={ groupId } value={ groupId }>
-                                    { ' ' }
-                                    { groupName }{ ' ' }
-                                </option>
-                            ) ) } */}
+                        {stockStatusOptions?.map((s: any) => (
+                            <option key={s.key} value={s.key}>
+                                {s.name}
+                            </option>
+                        ))}
                     </select>
                 </div>
             ),
@@ -400,6 +475,28 @@ const AllProduct: React.FC = () => {
         },
     ];
 
+    const searchFilter: RealtimeFilter[] = [
+        {
+            name: 'searchField',
+            render: (updateFilter, filterValue) => (
+                <>
+                    <div className="search-section">
+                        <input
+                            name="searchField"
+                            type="text"
+                            placeholder={__('Search', 'multivendorx')}
+                            onChange={(e) => {
+                                updateFilter(e.target.name, e.target.value);
+                            }}
+                            value={filterValue || ''}
+                        />
+                        <i className="adminlib-search"></i>
+                    </div>
+                </>
+            ),
+        },
+    ];
+
     useEffect(() => {
         const currentPage = pagination.pageIndex + 1;
         const rowsPerPage = pagination.pageSize;
@@ -410,24 +507,41 @@ const AllProduct: React.FC = () => {
     function requestData(
         rowsPerPage = 10,
         currentPage = 1,
-        categoryId = '',
+        category = '',
+        stockStatus = '',    // <-- Positional Argument 4
+        searchField = '',    // <-- Positional Argument 5
+        productType = '',    // <-- Positional Argument 6
         startDate = new Date(0),
         endDate = new Date(),
     ) {
         setData([]);
+
+        // Build the base parameters object
+        const params: any = {
+            page: currentPage,
+            row: rowsPerPage,
+            category: category,
+            after: startDate,
+            before: endDate,
+            meta_key: 'multivendorx_store_id',
+            value: appLocalizer.store_id,
+        };
+
+        if (stockStatus) {
+            params.stock_status = stockStatus;
+        }
+
+        if (searchField) {
+            params.search = searchField;
+        }
+        if (productType) {
+            params.type = productType;
+        }
         axios({
             method: 'GET',
             url: `${appLocalizer.apiUrl}/wc/v3/products`,
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            params: {
-                page: currentPage,
-                row: rowsPerPage,
-                category: categoryId,
-                after: startDate,
-                before: endDate,
-                meta_key: 'multivendorx_store_id',
-                value: appLocalizer.store_id,
-            },
+            params: params, // Use the dynamically built params object
         })
             .then((response) => {
                 const formattedProducts = response.data.map((p: any) => ({
@@ -457,18 +571,23 @@ const AllProduct: React.FC = () => {
     }
 
     // Handle pagination and filter changes
+    // Handle pagination and filter changes
     const requestApiForData = (
         rowsPerPage: number,
         currentPage: number,
         filterData: FilterData
     ) => {
         setData([]);
+        // Arguments must be passed in the exact order requestData expects them.
         requestData(
-            rowsPerPage,
-            currentPage,
-            filterData?.categoryId,
-            filterData?.date?.start_date,
-            filterData?.date?.end_date
+            rowsPerPage,                            // 1: rowsPerPage
+            currentPage,                            // 2: currentPage
+            filterData?.category,                   // 3: category
+            filterData?.stock_status,               // 4: stockStatus
+            filterData?.searchField,                // 5: searchField (Assuming filterData uses searchField for the search box value)
+            filterData?.productType,                // 6: productType
+            filterData?.date?.start_date,           // 7: startDate
+            filterData?.date?.end_date,             // 8: endDate
         );
     };
 
@@ -608,6 +727,7 @@ const AllProduct: React.FC = () => {
                     realtimeFilter={realtimeFilter}
                     handlePagination={requestApiForData}
                     totalCounts={totalRows}
+                    searchFilter={searchFilter}
                 />
             </div>
         </>
