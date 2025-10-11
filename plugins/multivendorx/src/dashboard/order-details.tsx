@@ -195,9 +195,6 @@ const Reviews: React.FC = () => {
                                         <td className="admin-column">
                                             $95
                                         </td>
-                                        <td className="admin-column">
-
-                                        </td>
                                     </tr> {/* shipping row start */}
                                 </tbody>
                             </table>

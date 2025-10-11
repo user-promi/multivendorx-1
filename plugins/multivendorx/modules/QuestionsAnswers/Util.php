@@ -38,55 +38,69 @@ class Util {
         return $wpdb->get_results( $wpdb->prepare( $query, ...$params ) );
     }
 
-	public static function get_question_information( $args ) {
-		global $wpdb;
-	
-		$where = array();
-	
-		// Filter by specific question IDs
-		if ( isset( $args['id'] ) ) {
-			$ids     = is_array( $args['id'] ) ? $args['id'] : array( $args['id'] );
-			$ids     = implode( ',', array_map( 'intval', $ids ) );
-			$where[] = "id IN ($ids)";
-		}
-	
-		// Filter by product IDs
-		if ( isset( $args['product_ids'] ) && is_array( $args['product_ids'] ) && ! empty( $args['product_ids'] ) ) {
-			$product_ids = implode( ',', array_map( 'intval', $args['product_ids'] ) );
-			$where[]     = "product_id IN ($product_ids)";
-		}
-	
-		$table = $wpdb->prefix . Utill::TABLES['product_qna'];
-	
-		// Select query
-		if ( isset( $args['count'] ) ) {
-			$query = "SELECT COUNT(*) FROM $table";
-		} else {
-			$query = "SELECT * FROM $table";
-		}
-	
-		// Add WHERE conditions
-		if ( ! empty( $where ) ) {
-			$condition = $args['condition'] ?? ' AND ';
-			$query    .= ' WHERE ' . implode( $condition, $where );
-		}
-	
-		// Limit & offset
-		if ( isset( $args['limit'] ) && isset( $args['offset'] ) && ! isset( $args['count'] ) ) {
-			$limit  = esc_sql( intval( $args['limit'] ) );
-			$offset = esc_sql( intval( $args['offset'] ) );
-			$query .= " LIMIT $limit OFFSET $offset";
-		}
-	
-		// Execute
-		if ( isset( $args['count'] ) ) {
-			$results = $wpdb->get_var( $query );
-			return $results ?? 0;
-		} else {
-			$results = $wpdb->get_results( $query, ARRAY_A );
-			return $results ?? array();
-		}
-	}
+    /**
+     * Fetch question information from database
+     * Supports filtering by ID, product, date, pagination, and count
+     */
+    public static function get_question_information( $args ) {
+        global $wpdb;
+        $where = [];
+
+        // Filter by question IDs
+        if ( isset( $args['id'] ) ) {
+            $ids = is_array( $args['id'] ) ? $args['id'] : [$args['id']];
+            $ids = implode(',', array_map('intval', $ids));
+            $where[] = "id IN ($ids)";
+        }
+
+        // Filter by product IDs
+        if ( isset( $args['product_ids'] ) && is_array($args['product_ids']) && !empty($args['product_ids']) ) {
+            $product_ids = implode(',', array_map('intval', $args['product_ids']));
+            $where[] = "product_id IN ($product_ids)";
+        }
+
+        // Filter by store_id (optional)
+        if ( isset( $args['store_id'] ) ) {
+            $where[] = "store_id = " . intval($args['store_id']);
+        }
+
+        // Filter by start_date
+        if ( !empty($args['start_date']) ) {
+            $where[] = "question_date >= '" . esc_sql($args['start_date']) . "'";
+        }
+
+        // Filter by end_date
+        if ( !empty($args['end_date']) ) {
+            $where[] = "question_date <= '" . esc_sql($args['end_date']) . "'";
+        }
+
+        $table = $wpdb->prefix . Utill::TABLES['product_qna'];
+
+        // Count query
+        if ( isset( $args['count'] ) ) {
+            $query = "SELECT COUNT(*) FROM $table";
+        } else {
+            $query = "SELECT * FROM $table";
+        }
+
+        // Add WHERE conditions
+        if ( !empty($where) ) {
+            $condition = $args['condition'] ?? ' AND ';
+            $query .= ' WHERE ' . implode( $condition, $where );
+        }
+
+        // Limit & offset
+        if ( isset( $args['limit'] ) && isset( $args['offset'] ) && !isset($args['count']) ) {
+            $query .= " LIMIT " . intval($args['limit']) . " OFFSET " . intval($args['offset']);
+        }
+
+        // Execute query
+        if ( isset( $args['count'] ) ) {
+            return $wpdb->get_var( $query ) ?? 0;
+        } else {
+            return $wpdb->get_results( $query, ARRAY_A ) ?? [];
+        }
+    }
 	
 	
 	public static function update_question( $id, $data ) {

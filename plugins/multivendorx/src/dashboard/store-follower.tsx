@@ -32,6 +32,7 @@ const StoreFollower: React.FC = () => {
                 console.log(__('Failed to load total rows', 'multivendorx'));
             });
     }, []);
+
     const requestFollowers = (rowsPerPage = 10, currentPage = 1) => {
         axios({
             method: "GET",
@@ -54,8 +55,21 @@ const StoreFollower: React.FC = () => {
 
     const columns: ColumnDef<FollowerRow>[] = [
         {
-            header: __("ID", "multivendorx"),
-            cell: ({ row }) => <TableCell>{row.original.id}</TableCell>,
+            id: 'select',
+            header: ({ table }) => (
+                <input
+                    type="checkbox"
+                    checked={table.getIsAllRowsSelected()}
+                    onChange={table.getToggleAllRowsSelectedHandler()}
+                />
+            ),
+            cell: ({ row }) => (
+                <input
+                    type="checkbox"
+                    checked={row.getIsSelected()}
+                    onChange={row.getToggleSelectedHandler()}
+                />
+            ),
         },
         {
             header: __("Name", "multivendorx"),
@@ -64,6 +78,37 @@ const StoreFollower: React.FC = () => {
         {
             header: __("Email", "multivendorx"),
             cell: ({ row }) => <TableCell>{row.original.email}</TableCell>,
+        },
+        {
+            id: 'date',
+            accessorKey: 'date',
+            enableSorting: true,
+            header: __("Followed On", "multivendorx"),
+            cell: ({ row }) => {
+                if (!row.original.date) return <TableCell>—</TableCell>;
+        
+                const now = new Date();
+                const followed = new Date(row.original.date);
+                const diff = Math.floor((now - followed) / 1000); // difference in seconds
+        
+                let display = '';
+        
+                if (diff < 60) {
+                    display = `${diff} sec ago`;
+                } else if (diff < 3600) {
+                    display = `${Math.floor(diff / 60)} min ago`;
+                } else if (diff < 86400) {
+                    display = `${Math.floor(diff / 3600)} hr ago`;
+                } else if (diff < 2592000) {
+                    display = `${Math.floor(diff / 86400)} day${Math.floor(diff / 86400) > 1 ? 's' : ''} ago`;
+                } else if (diff < 31536000) {
+                    display = `${Math.floor(diff / 2592000)} month${Math.floor(diff / 2592000) > 1 ? 's' : ''} ago`;
+                } else {
+                    display = `${Math.floor(diff / 31536000)} year${Math.floor(diff / 31536000) > 1 ? 's' : ''} ago`;
+                }
+        
+                return <TableCell>{display}</TableCell>;
+            },
         },
     ];
 

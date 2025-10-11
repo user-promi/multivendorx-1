@@ -112,10 +112,23 @@ const CustomerServices = () => {
                         <AbuseReports />
                     </div>
                 </div>
-                <div className="title">
-                    QNA Table
+
+                <div className="row">
+                    <div className="column">
+                        <div className="card-header">
+                            <div className="left">
+                                <div className="title">
+                                Customer Questions
+                                </div>
+                                <div className="des">View, manage, and respond to customer questions about products.</div>
+                            </div>
+                            <div className="right">
+                                <i className="adminlib-more-vertical"></i>
+                            </div>
+                        </div>
+                        <Qna />
+                    </div>
                 </div>
-                <Qna />
             </div>
         </>
     );

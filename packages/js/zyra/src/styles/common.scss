@@ -158,41 +158,39 @@ a {
 }
 
 .in-stock {
-  padding-left: 0.5rem;
   position: relative;
-  padding-left: 0.625rem;
+  // padding-left: 0.625rem;
   color: #06be9f;
 
-  &:before {
-    position: absolute;
-    content: "";
-    width: 0.5rem;
-    height: 0.5rem;
-    border-radius: 50%;
-    background: #06be9f;
-    top: 50%;
-    left: 0;
-    transform: translate(-50%, -50%);
-  }
+  // &:before {
+  //   position: absolute;
+  //   content: "";
+  //   width: 0.5rem;
+  //   height: 0.5rem;
+  //   border-radius: 50%;
+  //   background: #06be9f;
+  //   top: 50%;
+  //   left: 0;
+  //   transform: translate(-50%, -50%);
+  // }
 }
 
 .out-of-stock {
-  padding-left: 0.5rem;
   position: relative;
-  padding-left: 0.625rem;
   color: #f06b4f;
+  // padding-left: 0.625rem;
 
-  &:before {
-    position: absolute;
-    content: "";
-    width: 0.5rem;
-    height: 0.5rem;
-    border-radius: 50%;
-    background: #f06b4f;
-    top: 50%;
-    left: 0;
-    transform: translate(-50%, -50%);
-  }
+  // &:before {
+  //   position: absolute;
+  //   content: "";
+  //   width: 0.5rem;
+  //   height: 0.5rem;
+  //   border-radius: 50%;
+  //   background: #f06b4f;
+  //   top: 50%;
+  //   left: 0;
+  //   transform: translate(-50%, -50%);
+  // }
 }
 
 .text-green {
@@ -207,7 +205,6 @@ a {
 .copy-btn {
   width: 2.2rem;
   height: 2.2rem;
-  // box-shadow: 0 0 1rem rgb(0 0 0 / 16.4%);
   padding: 0;
   border-radius: 0.25rem;
   background: #fff;
@@ -262,9 +259,10 @@ a {
   border: 0.063rem solid #dbdfea !important; // for overwrite wordpress style
   border-radius: 0.25rem;
   padding: 0.313rem 0.5rem;
-  background: transparent;
+  background: transparent !important; // for overwrite theme style
   font-size: 0.875rem;
   line-height: 1.5;
+  box-shadow: none;
 
   &:focus {
     outline: none;
@@ -1139,14 +1137,14 @@ input[type="checkbox"]:focus {
 }
 
 .action-icons {
-
-  &:has(i:hover),
+  &:hover,
   &:has(.action-dropdown:hover) {
     .action-dropdown.hover {
       display: block;
-      top: 45%;
       left: -50%;
-      transform: translate(-75%, -42%);
+      transform: translate(-75%, 0);
+      height: 1rem;
+      position: absolute;
 
       ul {
         display: flex;

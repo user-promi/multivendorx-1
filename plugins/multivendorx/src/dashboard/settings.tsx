@@ -7,6 +7,7 @@ import SocialMedia from './settings/SocialMedia';
 import ContactInformation from './settings/ContactInformation';
 import BusinessAddress from './settings/BusinessAddress';
 import Withdrawl from './withdrawl';
+import Privacy from './settings/Privacy';
 
 const settings = () => {
     const id = appLocalizer.store_id;
@@ -79,7 +80,7 @@ const settings = () => {
         { id: "social-media", label: "Social Media", icon: "cohort", content: <SocialMedia /> },
         { id: "payout", label: "Payout", icon: "tools", content: <Withdrawl /> },
 
-        { id: "privacy", label: "Privacy", icon: "security", content: <Appearance /> },
+        { id: "privacy", label: "Privacy", icon: "security", content: <Privacy /> },
         {
             id: "seo-visibility", label: "SEO & visibility", icon: "bulk-action", content:
                 <>

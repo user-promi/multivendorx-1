@@ -24,30 +24,6 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-.adminlib-filter:before {
-  content: "\e900";
-}
-.adminlib-bulk-action:before {
-  content: "\e901";
-}
-.adminlib-review:before {
-  content: "\e904";
-}
-.adminlib-report:before {
-  content: "\e905";
-}
-.adminlib-payment:before {
-  content: "\e906";
-}
-.adminlib-finance:before {
-  content: "\e907";
-}
-.adminlib-google:before {
-  content: "\e908";
-}
-.adminlib-cohort:before {
-  content: "\e909";
-}
 .adminlib-cart:before {
   content: "\8907";
 }
@@ -120,17 +96,41 @@
 .adminlib-plus-circle-o:before {
   content: "\e8f7";
 }
-.adminlib-youtube:before {
+.adminlib-filter:before {
   content: "\e900";
 }
-.adminlib-verification9:before {
+.adminlib-bulk-action:before {
   content: "\e901";
 }
-.adminlib-verification8:before {
+.adminlib-youtube:before {
   content: "\e902";
 }
-.adminlib-verification7:before {
+.adminlib-verification9:before {
   content: "\e903";
+}
+.adminlib-verification8:before {
+  content: "\e904";
+}
+.adminlib-verification7:before {
+  content: "\e905";
+}
+.adminlib-review:before {
+  content: "\e906";
+}
+.adminlib-report:before {
+  content: "\e907";
+}
+.adminlib-payment:before {
+  content: "\e908";
+}
+.adminlib-finance:before {
+  content: "\e909";
+}
+.adminlib-google:before {
+  content: "\e90a";
+}
+.adminlib-cohort:before {
+  content: "\e90b";
 }
 .adminlib-verification5:before {
   content: "\e90c";

@@ -104,7 +104,7 @@ const Notification = () => {
         { id: "products", label: "Products", content: <Products onUpdated={refreshCounts} /> },
         { id: "stores", label: "Stores", content: <Vendors onUpdated={refreshCounts} /> },
         { id: "coupons", label: "Coupons", content: <Coupons onUpdated={refreshCounts} /> },
-        { id: "transactions", label: "Withdrawal", content: <Transactions onUpdated={refreshCounts} /> },
+        { id: "transactions", label: "Withdrawal(static)", content: <Transactions onUpdated={refreshCounts} /> },
     ];
     // run once on mount
     useEffect(() => {
@@ -129,9 +129,9 @@ const Notification = () => {
                                     Account Overview
                                 </div>
                             </div>
-                            <div className="right">
+                            {/* <div className="right">
                                 <span>Updated 1 month ago</span>
-                            </div>
+                            </div> */}
                         </div>
                         <div className="overview-card-wrapper">
                             <div className="action">
@@ -169,7 +169,7 @@ const Notification = () => {
                                     <i className="adminlib-module"></i>
                                 </div>
                                 <div className="description">
-                                    Pending Withdrawal
+                                    Pending Withdrawal(static)
                                 </div>
                             </div>
                         </div>
@@ -180,12 +180,6 @@ const Notification = () => {
                             <div className="left">
                                 <div className="title">
                                     Tasks
-                                </div>
-                            </div>
-                            <div className="right">
-                                <div className="admin-btn btn-purple">
-                                    <i className="adminlib-plus-circle-o"></i>
-                                    Add task
                                 </div>
                             </div>
                         </div>
@@ -235,7 +229,7 @@ const Notification = () => {
 
                             {!showInput && (
                                 <button className="admin-btn btn-purple" onClick={() => setShowInput(true)}>
-                                    + Add Task
+                                    <i className="adminlib-plus-circle-o"></i> Add Task
                                 </button>
                             )}
 

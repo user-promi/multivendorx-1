@@ -24,7 +24,7 @@ const History: React.FC = () => {
     });
     const [pageCount, setPageCount] = useState(0);
     const [totalRows, setTotalRows] = useState<number>(0);
-
+    const [requestWithdrawal, setRequestWithdrawal] = useState(false);
 
     useEffect(() => {
         const demoData: ProductRow[] = [
@@ -102,7 +102,16 @@ const History: React.FC = () => {
         setData(demoData);
         setTotalRows(demoData.length);
     }, []);
-
+    const analyticsData = [
+        { icon: "adminlib-tools red", number: "$10.00", text: "Minimum Threshold" },
+        { icon: "adminlib-book green", number: "2 Day", text: "Lock Period" },
+        { icon: "adminlib-global-community yellow", number: "$5", text: "Wallet Reserve" },
+    ];
+    const balanceBreakdown = [
+        { icon: "adminlib-tools green", number: "$525.00", text: "Pending" },
+        { icon: "adminlib-book red", number: "$8524.00", text: "Available" },
+        { icon: "adminlib-global-community yellow", number: "$5.00", text: "Reserved" },
+    ];
     const columns: ColumnDef<StoreRow>[] = [
         {
             id: 'select',
@@ -153,6 +162,14 @@ const History: React.FC = () => {
                 </TableCell>
             ),
         },
+        {
+            header: __('Status', 'multivendorx'),
+            cell: ({ row }) => (
+                <TableCell title={row.original.notes || ''}>
+                    <span className="admin-badge green">Completed</span>
+                </TableCell>
+            ),
+        },
     ];
     return (
         <>
@@ -162,14 +179,125 @@ const History: React.FC = () => {
                     <div className="des">View and keep track of your payouts.</div>
                 </div>
             </div>
-            <div className="settings-metabox-note notice">
-                <div className="title">
-                    <i className="adminlib-info"></i><h3>Commission Details</h3>
-                </div>
-                <p>A commission of 10% + £5 has been applied to your earnings. Any product- or category-wise commission will be applied dynamically during the commission calculation at runtime</p>
-            </div>
-            <div className="container-wrapper">
 
+
+            <div className="row">
+                <div className="column">
+                    <div className="card">
+                        <div className="card-header">
+                            <div className="left">
+                                <div className="title">
+                                    Payout Settings
+                                </div>
+                            </div>
+                        </div>
+                        <div className="card-body">
+                            <div className="analytics-container">
+
+                                {analyticsData.map((item, idx) => (
+                                    <div key={idx} className="analytics-item">
+                                        <div className="analytics-icon">
+                                            <i className={item.icon}></i>
+                                        </div>
+                                        <div className="details">
+                                            <div className="number">{item.number}</div>
+                                            <div className="text">{item.text}</div>
+                                        </div>
+                                    </div>
+                                ))}
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="column">
+                    <div className="card">
+                        <div className="card-header">
+                            <div className="left">
+                                <div className="title">
+                                    Balance Breakdown
+                                </div>
+                            </div>
+                        </div>
+                        <div className="card-body">
+                            <div className="analytics-container">
+
+                                {balanceBreakdown.map((item, idx) => (
+                                    <div key={idx} className="analytics-item">
+                                        <div className="analytics-icon">
+                                            <i className={item.icon}></i>
+                                        </div>
+                                        <div className="details">
+                                            <div className="number">{item.number}</div>
+                                            <div className="text">{item.text}</div>
+                                        </div>
+                                    </div>
+                                ))}
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div className="row">
+                <div className="column">
+                    <div className="card">
+                        <div className="card-header">
+                            <div className="left">
+                                <div className="title">
+                                    Available for Payout
+                                </div>
+                            </div>
+                        </div>
+                        <div className="payout-wrapper">
+                            <div className="price">
+                                $635.16
+                            </div>
+                            <div className="des">Current available balance ready for withdrawal</div>
+                            <div className="admin-btn btn-purple" onClick={() => setRequestWithdrawal(true)}>
+                                Request Withdrawal
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div className="column">
+                    <div className="card">
+                        <div className="card-header">
+                            <div className="left">
+                                <div className="title">
+                                    Payout Account
+                                </div>
+                            </div>
+                        </div>
+                        <div className="notification-wrapper">
+                            <ul>
+                                <li>
+                                    <div className="icon-wrapper">
+                                        <i className="adminlib-form-paypal-email blue"></i>
+                                    </div>
+                                    <div className="details">
+                                        <div className="notification-title">PayPal</div>
+                                        <div className="des">Withdrawal request pending</div>
+                                        <span><a href="">Change</a></span>
+                                    </div>
+
+                                </li>
+                                <li>
+                                    <div className="icon-wrapper">
+                                        <i className="adminlib-mail orange"></i>
+                                    </div>
+                                    <div className="details">
+                                        <div className="notification-title">PayPal</div>
+                                        <div className="des">Withdrawal request pending</div>
+                                        <span><a href="">Change</a></span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div className="row">

@@ -2,8 +2,6 @@
 import React, { useState, useEffect, useRef, ReactNode } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
-import 'react-date-range/dist/styles.css'; // main style file
-import 'react-date-range/dist/theme/default.css'; // theme css file
 import { Table, getApiLink, TableCell, AdminBreadcrumbs, BasicInput, TextArea, CommonPopup, SelectInput, CalendarInput, ToggleSetting } from 'zyra';
 
 import {
@@ -39,7 +37,7 @@ type AnnouncementForm = {
     title: string;
     url: string;
     content: string;
-    stores: string;
+    stores: number[]; // This should be number[] to match your API
     status: 'draft' | 'pending' | 'publish';
 };
 
@@ -67,13 +65,7 @@ export const Announcements: React.FC = () => {
     const bulkSelectRef = useRef<HTMLSelectElement>(null);
     const [openModal, setOpenModal] = useState(false);
     const [modalDetails, setModalDetails] = useState<string>('');
-    const [selectedRange, setSelectedRange] = useState([
-        {
-            startDate: new Date(new Date().getTime() - 30 * 24 * 60 * 60 * 1000),
-            endDate: new Date(),
-            key: 'selection',
-        },
-    ]);
+
     const [editId, setEditId] = useState<number | null>(null);
 
     // Form state
@@ -81,9 +73,25 @@ export const Announcements: React.FC = () => {
         title: '',
         url: '',
         content: '',
-        stores: '',
-        status: 'draft', // default
+        stores: [], // Initialize as empty array
+        status: 'draft',
     });
+
+    const fetchStoreOptions = async () => {
+        try {
+            const response = await axios.get(getApiLink(appLocalizer, 'store'), {
+                headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            });
+            const stores = response.data?.stores || [];
+            const options = stores.map((store: any) => ({
+                value: store.id.toString(), // <-- convert to string
+                label: store.store_name,
+            }));
+            setStoreOptions(options);
+        } catch {
+            setError(__('Failed to load stores', 'multivendorx'));
+        }
+    };
 
     const handleToggleChange = (value: string) => {
         setFormData((prev) => ({ ...prev, status: value as 'draft' | 'pending' | 'publish' }));
@@ -94,9 +102,15 @@ export const Announcements: React.FC = () => {
 
     const handleCloseForm = () => {
         setAddAnnouncements(false);
-        setFormData({ title: '', url: '', content: '', stores: '', status:'draft' }); // reset form
-        setEditId(null); // reset edit mode
-        setError(null); // clear any error
+        setFormData({
+            title: '',
+            url: '',
+            content: '',
+            stores: [], // Reset to empty array
+            status: 'draft'
+        });
+        setEditId(null);
+        setError(null);
     };
 
     // Handle form input change
@@ -152,19 +166,20 @@ export const Announcements: React.FC = () => {
             );
 
             if (response.data) {
+                await fetchStoreOptions();
+
                 setFormData({
                     title: response.data.title || '',
                     url: response.data.url || '',
                     content: response.data.content || '',
                     stores: response.data.stores
-                        ? response.data.stores.map((s: any) => s.id).join(',')
-                        : '',
-                    status: response.data.status || '',
+                        ? response.data.stores.map((s: any) => Number(s)) // ensure numbers
+                        : [],
+                    status: response.data.status || 'draft',
                 });
                 setEditId(id);
                 setAddAnnouncements(true);
             }
-
         } catch (err) {
             setError(__('Failed to load announcement', 'multivendorx'));
         }
@@ -182,7 +197,7 @@ export const Announcements: React.FC = () => {
 
             const payload = {
                 ...formData,
-                stores: formData.stores ? formData.stores.split(',') : [],
+                stores: formData.stores, // already an array of numbers
             };
 
             const response = await axios({
@@ -207,44 +222,41 @@ export const Announcements: React.FC = () => {
         }
     };
 
+    // Fetch total rows on mount
+    useEffect(() => {
 
+        axios({
+            method: 'GET',
+            url: getApiLink(appLocalizer, 'announcement'),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            params: { count: true },
+        })
+            .then((response) => {
+                setTotalRows(response.data || 0);
+                setPageCount(Math.ceil(response.data / pagination.pageSize));
+            })
+            .catch(() => {
+                setError(__('Failed to load total rows', 'multivendorx'));
+            });
+    }, []);
 
-    const requestApiForData = (rowsPerPage: number, currentPage: number, filterData: FilterData) => {
-        setData(null);
-        requestData(
-            rowsPerPage,
-            currentPage,
-            filterData?.typeCount,
-            filterData?.searchField,
-        );
-    };
+    useEffect(() => {
+        const currentPage = pagination.pageIndex + 1;
+        const rowsPerPage = pagination.pageSize;
+        requestData(rowsPerPage, currentPage);
+        setPageCount(Math.ceil(totalRows / rowsPerPage));
+    }, [pagination]);
 
-    // Fetch data from backend
+    // Fetch data from backend.
     function requestData(
         rowsPerPage = 10,
         currentPage = 1,
-        typeCount: string = '',
-        searchField: string = ''
+        typeCount = '',
+        searchField = '',
+        startDate = new Date(0),
+        endDate = new Date(),
     ) {
         setData(null);
-        axios({
-            method: 'GET',
-            url: getApiLink(appLocalizer, 'store'),
-            headers: { 'X-WP-Nonce': appLocalizer.nonce },
-        })
-            .then((response) => {
-                if (response.data && Array.isArray(response.data)) {
-                    const options = response.data.map((store: any) => ({
-                        value: store.id.toString(),
-                        label: store.store_name,
-                    }));
-                    setStoreOptions(options);
-                }
-
-            })
-            .catch(() => {
-                setError(__('Failed to load stores', 'multivendorx'));
-            });
         axios({
             method: 'GET',
             url: getApiLink(appLocalizer, 'announcement'),
@@ -253,46 +265,62 @@ export const Announcements: React.FC = () => {
                 page: currentPage,
                 row: rowsPerPage,
                 status: typeCount === 'all' ? '' : typeCount,
-                s: searchField,
+                startDate,
+                endDate,
+                searchField
             },
-        }).then((response) => {
-            const res = response.data;
-            setData(res.items);
-            setPageCount(Math.ceil((res.total || 0) / rowsPerPage));
-            setTotalRows(res.total || 0)
-            setAnnouncementStatus([
-                { key: 'all', name: 'All', count: res.all || 0 },
-                { key: 'publish', name: 'Published', count: res.publish || 0 },
-                { key: 'pending', name: 'Pending', count: res.pending || 0 },
-            ]);
-            setPage(typeCount == 'all' ? '' : typeCount);
         })
+            .then((response) => {
+                setData(response.data.items || []);
+                setAnnouncementStatus([
+                    {
+                        key: 'all',
+                        name: 'All',
+                        count: response.data.all || 0,
+                    },
+                    {
+                        key: 'publish',
+                        name: 'Publish',
+                        count: response.data.publish || 0,
+                    },
+                    {
+                        key: 'pending',
+                        name: 'Pending',
+                        count: response.data.pending || 0,
+                    },
+                    {
+                        key: 'draft',
+                        name: 'Draft',
+                        count: response.data.draft || 0,
+                    },
+                ]);
+            })
             .catch(() => {
-                setError(__('Failed to load announcements', 'multivendorx'));
+                setError(__('Failed to load stores', 'multivendorx'));
+                setData([]);
             });
     }
 
+    // Handle pagination and filter changes
+    const requestApiForData = (
+        rowsPerPage: number,
+        currentPage: number,
+        filterData: FilterData
+    ) => {
+        setData(null);
+        requestData(
+            rowsPerPage,
+            currentPage,
+            filterData?.typeCount,
+            filterData?.searchField,
+            filterData?.date?.start_date,
+            filterData?.date?.end_date,
+
+        );
+    };
+
+
     const searchFilter: RealtimeFilter[] = [
-        {
-            name: 'searchAction',
-            render: (updateFilter, filterValue) => (
-                <>
-                    <div className="   search-action">
-                        <select
-                            name="searchAction"
-                            onChange={(e) => {
-                                updateFilter(e.target.name, e.target.value);
-                            }}
-                            value={filterValue || ''}
-                        >
-                            <option value="">Select</option>
-                            <option value="name">Name</option>
-                            <option value="email">Email</option>
-                        </select>
-                    </div>
-                </>
-            ),
-        },
         {
             name: 'searchField',
             render: (updateFilter, filterValue) => (
@@ -313,10 +341,6 @@ export const Announcements: React.FC = () => {
             ),
         },
     ];
-    useEffect(() => {
-        const currentPage = pagination.pageIndex + 1;
-        requestData(pagination.pageSize, currentPage, page);
-    }, [pagination]);
 
     // Columns
     const columns: ColumnDef<StoreRow>[] = [
@@ -364,7 +388,8 @@ export const Announcements: React.FC = () => {
         {
             header: __('Sent To', 'multivendorx'),
             cell: ({ row }) => {
-                const stores = Array.isArray(row.original.stores) ? row.original.stores : [];
+                const storeString = row.original.store_name || '';
+                const stores = storeString.split(',').map(s => s.trim()); // Split string into array and trim spaces
                 let displayStores = stores;
 
                 if (stores.length > 2) {
@@ -378,7 +403,11 @@ export const Announcements: React.FC = () => {
                 );
             },
         },
+
         {
+            id: 'date',
+            accessorKey: 'date',
+            enableSorting: true,
             header: __('Date', 'multivendorx'),
             cell: ({ row }) => {
                 const rawDate = row.original.date;
@@ -394,7 +423,54 @@ export const Announcements: React.FC = () => {
                 return <TableCell title={formattedDate}>{formattedDate}</TableCell>;
             },
         },
+        {
+            id: 'action',
+            header: __('Action', 'multivendorx'),
+            cell: ({ row }) => (
+                <TableCell
+                    type="action-dropdown"
+                    rowData={row.original}
+                    header={{
+                        actions: [
+                            {
+                                label: __('Edit', 'multivendorx'),
+                                icon: 'adminlib-create',
+                                onClick: (rowData) => {
+                                    handleEdit(rowData.id); // opens edit popup
+                                },
+                                hover: true,
+                            },
+                            {
+                                label: __('Delete', 'multivendorx'),
+                                icon: 'adminlib-delete',
+                                onClick: async (rowData) => {
+                                    if (!rowData.id) return;
+                                    if (!confirm(__('Are you sure you want to delete this announcement?', 'multivendorx'))) return;
+
+                                    try {
+                                        await axios({
+                                            method: 'DELETE',
+                                            url: getApiLink(appLocalizer, `announcement/${rowData.id}`),
+                                            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+                                        });
+
+                                        // Refresh data after deletion
+                                        requestData(pagination.pageSize, pagination.pageIndex + 1, '', '');
+                                    } catch (err) {
+                                        setError(__('Failed to delete announcement', 'multivendorx'));
+                                    }
+                                },
+                                hover: true,
+                            },
+                        ],
+                    }}
+                />
+            ),
+        },
+
+
     ];
+
     const BulkAction: React.FC = () => (
         <div className=" bulk-action">
             <select name="action" className="basic-select" ref={bulkSelectRef} onChange={handleBulkAction}>
@@ -406,6 +482,26 @@ export const Announcements: React.FC = () => {
         </div>
     );
 
+    const realtimeFilter: RealtimeFilter[] = [
+        {
+            name: 'date',
+            render: (updateFilter) => (
+                <div className="right">
+                    <CalendarInput
+                        wrapperClass=""
+                        inputClass=""
+                        onChange={(range: any) => {
+                            updateFilter('date', {
+                                start_date: range.startDate,
+                                end_date: range.endDate,
+                            });
+                        }}
+                    />
+                </div>
+            ),
+        },
+    ];
+
     return (
         <>
             <AdminBreadcrumbs
@@ -415,7 +511,10 @@ export const Announcements: React.FC = () => {
                 buttons={[
                     <div
                         className="admin-btn btn-purple"
-                        onClick={() => setAddAnnouncements(true)}
+                        onClick={async () => {
+                            await fetchStoreOptions(); // fetch stores when Add form opens
+                            setAddAnnouncements(true);
+                        }}
                     >
                         <i className="adminlib-plus-circle-o"></i>
                         Add New
@@ -483,24 +582,28 @@ export const Announcements: React.FC = () => {
                                 />
                             </div>
 
-                            <div className="form-group ">
+                            <div className="form-group">
                                 <label htmlFor="stores">Stores</label>
                                 <SelectInput
                                     name="stores"
                                     type="multi-select"
-                                    options={storeOptions}
-                                    value={formData.stores ? formData.stores.split(',') : []}
+                                    options={storeOptions} // already string values
+                                    value={formData.stores.map(storeId => storeId.toString()) || []} // convert numbers to strings
                                     onChange={(newValue: any) => {
+                                        // Convert strings back to numbers for your formData
                                         const selectedValues = Array.isArray(newValue)
-                                            ? newValue.map((opt) => opt.value)
+                                            ? newValue.map((opt: any) => Number(opt.value))
                                             : [];
                                         setFormData((prev) => ({
                                             ...prev,
-                                            stores: selectedValues.join(','),
+                                            stores: selectedValues,
                                         }));
                                     }}
                                 />
+
+
                             </div>
+
                             <div className="form-group">
                                 <label htmlFor="status">Status</label>
                                 <ToggleSetting
@@ -532,7 +635,6 @@ export const Announcements: React.FC = () => {
                     rowSelection={rowSelection}
                     onRowSelectionChange={setRowSelection}
                     defaultRowsPerPage={10}
-                    realtimeFilter={[]}
                     searchFilter={searchFilter}
                     pageCount={pageCount}
                     pagination={pagination}
@@ -540,11 +642,9 @@ export const Announcements: React.FC = () => {
                     handlePagination={requestApiForData}
                     perPageOption={[10, 25, 50]}
                     typeCounts={announcementStatus as AnnouncementStatus[]}
-                    onRowClick={(row: any) => {
-                        handleEdit(row.id);
-                    }}
                     bulkActionComp={() => <BulkAction />}
                     totalCounts={totalRows}
+                    realtimeFilter={realtimeFilter}
                 />
             </div>
         </>

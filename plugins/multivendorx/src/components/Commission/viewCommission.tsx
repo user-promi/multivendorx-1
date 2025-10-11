@@ -156,7 +156,7 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({ open, onClose, commissi
       cell: ({ row }) => {
         const productId = row.original.id; // make sure this is the WooCommerce product ID
         const productName = row.original.name ?? "-";
-    
+
         return (
           <TableCell title={productName}>
             <div className="name">
@@ -177,7 +177,7 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({ open, onClose, commissi
           </TableCell>
         );
       },
-    },    
+    },
     {
       header: __("Cost", "multivendorx"),
       cell: ({ row }) => (
@@ -347,11 +347,16 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({ open, onClose, commissi
 
           <div className="popup-divider"></div>
 
-          <div className="heading">{__("Commission Notes", "multivendorx")}</div>
-          <div className="settings-metabox-note">
-            <i className="adminlib-info"></i>
-            <p>{commissionData?.note}</p>
-          </div>
+          {commissionData?.note && (
+            <>
+              <div className="heading">{__("Commission Notes", "multivendorx")}</div>
+              <div className="settings-metabox-note">
+                <i className="adminlib-info"></i>
+                <p>{commissionData?.note}</p>
+              </div>
+            </>
+          )}
+
         </div>
 
       </div>

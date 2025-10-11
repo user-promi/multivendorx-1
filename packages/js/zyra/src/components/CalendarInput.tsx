@@ -3,6 +3,8 @@
  */
 import React, { useState, useRef, useEffect } from 'react';
 import { DateRangePicker, Range, RangeKeyDict } from 'react-date-range';
+import 'react-date-range/dist/styles.css'; // main style file
+import 'react-date-range/dist/theme/default.css'; // theme css file
 
 interface CalendarInputProps {
     wrapperClass?: string;
@@ -96,24 +98,20 @@ const CalendarInput: React.FC<CalendarInputProps> = (props) => {
             return "Yesterday";
         }
 
-        // ---- This Week (Monday - Sunday) ----
-        const dayOfWeek = today.getDay(); // Sun=0, Mon=1, ... Sat=6
+        // This Week
+        const dayOfWeek = today.getDay();
         const mondayThisWeek = new Date(today);
-        mondayThisWeek.setDate(today.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1)); // shift to Monday
-        mondayThisWeek.setHours(0, 0, 0, 0);
-
+        mondayThisWeek.setDate(today.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1));
         const sundayThisWeek = new Date(mondayThisWeek);
         sundayThisWeek.setDate(mondayThisWeek.getDate() + 6);
-        sundayThisWeek.setHours(23, 59, 59, 999);
 
         if (start.toDateString() === mondayThisWeek.toDateString() && end.toDateString() === sundayThisWeek.toDateString()) {
             return "This Week";
         }
 
-        // ---- Last Week (previous Monday - Sunday) ----
+        // Last Week
         const mondayLastWeek = new Date(mondayThisWeek);
         mondayLastWeek.setDate(mondayThisWeek.getDate() - 7);
-
         const sundayLastWeek = new Date(mondayLastWeek);
         sundayLastWeek.setDate(mondayLastWeek.getDate() + 6);
 
@@ -137,14 +135,18 @@ const CalendarInput: React.FC<CalendarInputProps> = (props) => {
             return "Last Month";
         }
 
-        // Default fallback
-        return "Today";
+        // If no match, show nothing
+        return "";
     };
+
+
 
     return (
         <div className={props.wrapperClass}>
             <div className="date-picker-section-wrapper" ref={dateRef}>
-                {props.showLabel && <div className="date-label">{getLabel()}</div>}
+                {props.showLabel && getLabel() && (
+                    <div className="date-label">{getLabel()}</div>
+                )}
 
                 <input
                     value={`${selectedRange[0].startDate?.toLocaleDateString('en-US', {

@@ -104,7 +104,9 @@ class Frontend {
     
                 echo '<a class="by-store-name-link" style="display:block;" target="_blank" href="' 
                     . esc_url( MultiVendorX()->store->storeutil->get_store_url( $details['id'] ) ) . '">'
-                    . esc_html( $sold_by_text ) . ' ' . $details['logo_html'] . esc_html( $details['name'] ) 
+                    . esc_html( $sold_by_text ) . ' ' 
+                    // . $details['logo_html'] 
+                    . esc_html( $details['name'] ) 
                     . '</a>';
             }
         }

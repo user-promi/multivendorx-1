@@ -130,6 +130,7 @@
         .commission-details {
             .items {
                 display: flex;
+                align-items: start;
                 margin-bottom: 1rem;
 
                 .text {
@@ -162,10 +163,9 @@
                 }
 
                 &.right {
-                    right: 30%;
+                    width: 30%;
                 }
             }
-
         }
 
         .popup-divider {

@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { __ } from '@wordpress/i18n';
-import { BasicInput, CommonPopup, MultiCheckBox, Table, TableCell, TextArea } from 'zyra';
+import { BasicInput, CalendarInput, CommonPopup, getApiLink, MultiCheckBox, Table, TableCell, TextArea } from 'zyra';
 import {
     ColumnDef,
     RowSelectionState,
     PaginationState,
 } from '@tanstack/react-table';
+import axios from 'axios';
 
 type ProductRow = {
     id: number;
@@ -18,6 +19,25 @@ type ProductRow = {
     status?: string;
 };
 
+type FilterData = {
+    searchAction?: string;
+    searchField?: string;
+    categoryId?: string;
+};
+export interface RealtimeFilter {
+    name: string;
+    render: (updateFilter: (key: string, value: any) => void, filterValue: any) => ReactNode;
+}
+const formatWooDate = (dateString: string) => {
+    if (!dateString) return '-';
+    const date = new Date(dateString);
+    return date.toLocaleString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+    });
+};
+
 const AllProduct: React.FC = () => {
     const [data, setData] = useState<ProductRow[]>([]);
 
@@ -28,16 +48,8 @@ const AllProduct: React.FC = () => {
         pageSize: 10,
     });
 
-    const [showDropdown, setShowDropdown] = useState(false);
     const [AddProduct, setAddProduct] = useState(false);
-
-    const toggleDropdown = (id: any) => {
-        if (showDropdown === id) {
-            setShowDropdown(false);
-            return;
-        }
-        setShowDropdown(id);
-    };
+    const [categoriesList, setCategoriesList] = useState<{ id: number; name: string }[]>([]);
     const [pageCount, setPageCount] = useState(0);
     const [activeTab, setActiveTab] = useState("general");
 
@@ -177,122 +189,21 @@ const AllProduct: React.FC = () => {
         },
     ];
 
+    const fetchCategories = async () => {
+        try {
+            const response = await axios.get(`${appLocalizer.apiUrl}/wc/v3/products/categories`, {
+                headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            });
+            setCategoriesList(response.data);
+        } catch (error) {
+            console.error('Error fetching categories:', error);
+        }
+    };
 
-    // 🔹 Add demo data on mount
     useEffect(() => {
-        const demoData: ProductRow[] = [
-            {
-                id: 101,
-                product_name: "Wireless Mouse",
-                product_sku: "WM-101",
-                price: "$25.99",
-                stock: "In Stock",
-                categories: "Accessories",
-                date: "June 18, 2025",
-                status: "Published",
-            },
-            {
-                id: 102,
-                product_name: "Mechanical Keyboard",
-                product_sku: "MK-203",
-                price: "$79.00",
-                stock: "Out of Stock",
-                categories: "Accessories",
-                date: "June 18, 2025",
-                status: "Draft",
-            },
-            {
-                id: 103,
-                product_name: "Gaming Headset",
-                product_sku: "GH-332",
-                price: "$59.50",
-                stock: "In Stock",
-                categories: "Audio",
-                date: "June 18, 2025",
-                status: "Published",
-            },
-            {
-                id: 104,
-                product_name: "4K Monitor",
-                product_sku: "MON-4K24",
-                price: "$329.99",
-                stock: "Out of Stock",
-                categories: "Monitors",
-                date: "June 18, 2025",
-                status: "Draft",
-            },
-            {
-                id: 105,
-                product_name: "USB-C Hub",
-                product_sku: "HUB-C72",
-                price: "$34.25",
-                stock: "In Stock",
-                categories: "Accessories",
-                date: "June 18, 2025",
-                status: "Published",
-            },
-            {
-                id: 106,
-                product_name: "Portable SSD 1TB",
-                product_sku: "SSD-1T",
-                price: "$109.99",
-                stock: "In Stock",
-                categories: "Storage",
-                date: "June 18, 2025",
-                status: "Draft",
-            },
-            {
-                id: 107,
-                product_name: "Smartphone Stand",
-                product_sku: "STAND-20",
-                price: "$12.49",
-                stock: "Out of Stock",
-                categories: "Accessories",
-                date: "June 18, 2025",
-                status: "Published",
-            },
-            {
-                id: 108,
-                product_name: "Bluetooth Speaker",
-                product_sku: "BS-77",
-                price: "$45.00",
-                stock: "In Stock",
-                categories: "Audio",
-                date: "June 18, 2025",
-                status: "Draft",
-            },
-            {
-                id: 109,
-                product_name: "Ergonomic Chair",
-                product_sku: "CHAIR-300",
-                price: "$189.00",
-                stock: "Out of Stock",
-                categories: "Furniture",
-                date: "June 18, 2025",
-                status: "Published",
-            },
-            {
-                id: 110,
-                product_name: "Webcam 1080p",
-                product_sku: "CAM-1080",
-                price: "$39.99",
-                stock: "In Stock",
-                categories: "Cameras",
-                date: "June 18, 2025",
-                status: "Draft",
-            },
-        ];
-        setData(demoData);
-        setTotalRows(demoData.length);
+        fetchCategories();
     }, []);
 
-    // 🔹 Update page count when pagination or totalRows changes
-    useEffect(() => {
-        const rowsPerPage = pagination.pageSize;
-        setPageCount(Math.ceil(totalRows / rowsPerPage));
-    }, [pagination, totalRows]);
-
-    // Column definitions
     const columns: ColumnDef<ProductRow>[] = [
         {
             id: 'select',
@@ -314,184 +225,95 @@ const AllProduct: React.FC = () => {
         {
             header: __('Product Name', 'multivendorx'),
             cell: ({ row }) => (
-                <TableCell title={row.original.product_name || ''}>
-                    {row.original.product_name || '-'}
+                <TableCell title={row.original.name}>
+                    <a
+                        href={row.original.permalink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-purple-600 hover:underline"
+                    >
+                        {row.original.name}
+                    </a>
                 </TableCell>
             ),
         },
         {
-            header: __('Sku', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.product_sku || ''}>
-                    {row.original.product_sku || '-'}
-                </TableCell>
-            ),
+            header: __('SKU', 'multivendorx'),
+            cell: ({ row }) => <TableCell>{row.original.sku || '-'}</TableCell>,
         },
         {
             header: __('Price', 'multivendorx'),
             cell: ({ row }) => (
-                <TableCell title={row.original.price || ''}>
-                    {row.original.price || '-'}
+                <TableCell>
+                    {row.original.price !== '-' ? `${appLocalizer.currency_symbol}${row.original.price}` : '-'}
                 </TableCell>
             ),
         },
         {
             header: __('Stock', 'multivendorx'),
             cell: ({ row }) => (
-                <TableCell title={row.original.stock || ''}>
-                    {row.original.stock === "In Stock" && (
-                        <span className="in-stock">In Stock</span>
+                <TableCell>
+                    {row.original.stock_status === 'instock' && (
+                        <span className="admin-badge in-stock">In Stock</span>
                     )}
-                    {row.original.stock === "Out of Stock" && (
-                        <span className="out-of-stock">Out of Stock</span>
+                    {row.original.stock_status === 'outofstock' && (
+                        <span className="admin-badge out-of-stock">Out of Stock</span>
                     )}
+                    {!row.original.stock_status && '-'}
                 </TableCell>
             ),
         },
         {
             header: __('Categories', 'multivendorx'),
             cell: ({ row }) => (
-                <TableCell title={row.original.categories || ''}>
-                    {row.original.categories || '-'}
+                <TableCell>
+                    {row.original.categories?.length
+                        ? row.original.categories.map((c) => c.name).join(', ')
+                        : '-'}
                 </TableCell>
             ),
         },
         {
             header: __('Date', 'multivendorx'),
             cell: ({ row }) => (
-                <TableCell title={row.original.date || ''}>
-                    {row.original.date || '-'}
-                </TableCell>
+                <TableCell>{formatWooDate(row.original.date_created)}</TableCell>
             ),
         },
         {
             header: __('Status', 'multivendorx'),
             cell: ({ row }) => (
-                <TableCell title={row.original.status || ""}>
-                    {row.original.status === "Draft" && (
-                        <span className="admin-badge yellow">Draft</span>
-                    )}
-                    {row.original.status === "Published" && (
+                <TableCell>
+                    {row.original.status === 'publish' && (
                         <span className="admin-badge green">Published</span>
                     )}
+                    {row.original.status === 'pending' && (
+                        <span className="admin-badge yellow">Pending</span>
+                    )}
+                    {row.original.status === 'draft' && (
+                        <span className="admin-badge gray">Draft</span>
+                    )}
                 </TableCell>
-
-
             ),
         },
-        {
-            header: __('Action', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell
-                    type="action-dropdown"
-                    rowData={row.original}
-                    header={{
-                        actions: [
-                            {
-                                label: __('Edit', 'multivendorx'),
-                                icon: 'adminlib-create',
-                                onClick: (rowData) => {
-                                    window.location.href = `?page=multivendorx#&tab=stores&edit/${rowData.id}`;
-                                },
-                                hover: true
-                            },
-                            {
-                                label: __('View', 'multivendorx'),
-                                icon: 'adminlib-eye',
-                                onClick: (rowData) => {
-                                    window.location.href = `?page=multivendorx#&tab=stores&edit/${rowData.id}`;
-                                },
-                            },
-                            {
-                                label: __('Copy URL', 'multivendorx'),
-                                icon: 'adminlib-vendor-form-copy',
-                                onClick: (rowData) => {
-                                    window.location.href = `?page=multivendorx#&tab=stores&edit/${rowData.id}`;
-                                },
-                            },
-                            {
-                                label: __('Clone', 'multivendorx'),
-                                icon: 'adminlib-vendor-form-copy',
-                                onClick: (rowData) => {
-                                    window.location.href = `?page=multivendorx#&tab=stores&edit/${rowData.id}`;
-                                },
-                            },
-                            {
-                                label: __('Delete', 'multivendorx'),
-                                icon: 'adminlib-vendor-form-delete',
-                                onClick: (rowData) => {
-                                    window.location.href = `?page=multivendorx#&tab=stores&edit/${rowData.id}`;
-                                },
-                                hover: true
-                            },
-
-                        ],
-                    }}
-                />
-            ),
-        },
-        // {
-        //     header: __('Action', 'multivendorx'),
-        //     cell: ({ row }) => (
-        //         <TableCell title="Action">
-        //             <div className="action-section">
-        //                 <div className="action-icons">
-        //                     <i
-        //                         className="adminlib-more-vertical"
-        //                         onClick={() =>
-        //                             toggleDropdown(row.original.id)
-        //                         }
-        //                     ></i>
-        //                     <div
-        //                         className={`action-dropdown ${showDropdown === row.original.id
-        //                             ? 'show'
-        //                             : ''
-        //                             }`}
-        //                     >
-
-        //                         <ul>
-        //                             <li
-        //                                 onClick={() =>
-        //                                     (window.location.href = `?page=multivendorx#&tab=stores&view&id=${row.original.id}`)
-        //                                 }
-        //                             >
-        //                                 <i className="adminlib-eye"></i>
-        //                                 {__('View', 'multivendorx')}
-        //                             </li>
-        //                             <li
-        //                                 onClick={() =>
-        //                                     (window.location.href = `?page=multivendorx#&tab=stores&edit/${row.original.id}`)
-        //                                 }
-        //                             >
-        //                                 <i className="adminlib-create"></i>
-        //                                 {__('Edi', 'multivendorx')}
-        //                             </li>
-        //                         </ul>
-        //                     </div>
-        //                 </div>
-        //             </div>
-        //         </TableCell>
-        //     ),
-        // },
     ];
 
     const realtimeFilter: RealtimeFilter[] = [
         {
             name: 'category',
-            render: (updateFilter: (key: string, value: string) => void, filterValue: string | undefined) => (
-                <div className="   course-field">
+            render: (updateFilter: (key: string, value: string) => void, filterValue: any | undefined) => (
+                <div className="course-field">
                     <select
-                        name="commissionStatus"
+                        name="categoryId"
                         onChange={(e) => updateFilter(e.target.name, e.target.value)}
                         value={filterValue || ''}
                         className="basic-select"
                     >
                         <option value="">Category</option>
-                        {/* { Object.entries( courses ).map( ( [ courseId, courseName ] ) => (
-                                <option key={ courseId } value={ courseId }>
-                                    { courseName }
-                                </option>
-                            ) ) } */}
+                        {categoriesList.map((cat) => (
+                            <option key={cat.id} value={cat.id}>
+                                {cat.name}
+                            </option>
+                        ))}
                     </select>
                 </div>
             ),
@@ -559,11 +381,99 @@ const AllProduct: React.FC = () => {
                 </div>
             ),
         },
+        {
+            name: 'date',
+            render: (updateFilter) => (
+                <div className="right">
+                    <CalendarInput
+                        wrapperClass=""
+                        inputClass=""
+                        onChange={(range: any) => {
+                            updateFilter('date', {
+                                start_date: range.startDate,
+                                end_date: range.endDate,
+                            });
+                        }}
+                    />
+                </div>
+            ),
+        },
     ];
+
+    useEffect(() => {
+        const currentPage = pagination.pageIndex + 1;
+        const rowsPerPage = pagination.pageSize;
+        requestData(rowsPerPage, currentPage);
+    }, [pagination]);
+
+    // Fetch data from backend.
+    function requestData(
+        rowsPerPage = 10,
+        currentPage = 1,
+        categoryId = '',
+        startDate = new Date(0),
+        endDate = new Date(),
+    ) {
+        setData([]);
+        axios({
+            method: 'GET',
+            url: `${appLocalizer.apiUrl}/wc/v3/products`,
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            params: {
+                page: currentPage,
+                row: rowsPerPage,
+                category: categoryId,
+                after: startDate,
+                before: endDate,
+                meta_key: 'multivendorx_store_id',
+                value: appLocalizer.store_id,
+            },
+        })
+            .then((response) => {
+                const formattedProducts = response.data.map((p: any) => ({
+                    id: p.id,
+                    name: p.name,
+                    sku: p.sku || '-',
+                    price: p.price ? `${p.price}` : '-',
+                    stock_status: p.stock_status,
+                    categories: p.categories,
+                    date_created: p.date_created,
+                    status: p.status,
+                    permalink: p.permalink,
+                }));
+                setData(formattedProducts);
+
+                const total = parseInt(response.headers['x-wp-total']);
+                setTotalRows(total);
+
+                // Calculate pageCount AFTER totalRows is available
+                setPageCount(Math.ceil(total / rowsPerPage));
+            })
+            .catch(() => {
+                setData([]);
+                setTotalRows(0);
+                setPageCount(0);
+            });
+    }
+
+    // Handle pagination and filter changes
+    const requestApiForData = (
+        rowsPerPage: number,
+        currentPage: number,
+        filterData: FilterData
+    ) => {
+        setData([]);
+        requestData(
+            rowsPerPage,
+            currentPage,
+            filterData?.categoryId,
+            filterData?.date?.start_date,
+            filterData?.date?.end_date
+        );
+    };
 
     return (
         <>
-
             {AddProduct && (
                 <CommonPopup
                     open={AddProduct}
@@ -696,7 +606,8 @@ const AllProduct: React.FC = () => {
                     perPageOption={[10, 25, 50]}
                     typeCounts={[]}
                     realtimeFilter={realtimeFilter}
-                // realtimeFilter={[]}
+                    handlePagination={requestApiForData}
+                    totalCounts={totalRows}
                 />
             </div>
         </>

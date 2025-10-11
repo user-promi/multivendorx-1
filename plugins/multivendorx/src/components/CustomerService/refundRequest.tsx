@@ -125,7 +125,12 @@ const RefundRequest: React.FC = () => {
             header: __('Status', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell title={row.original.status || ''}>
-                    {row.original.status || '-'}
+                    {row.original.status === "active" && (
+                        <span className="admin-badge green">Active</span>
+                    )}
+                    {row.original.status === "pending" && (
+                        <span className="admin-badge yellow">Pending</span>
+                    )}
                 </TableCell>
             ),
         },
@@ -160,21 +165,19 @@ const RefundRequest: React.FC = () => {
 
     return (
         <>
-            <div className="admin-table-wrapper">
-                <Table
-                    data={data}
-                    columns={columns as ColumnDef<Record<string, any>, any>[]}
-                    rowSelection={rowSelection}
-                    onRowSelectionChange={setRowSelection}
-                    defaultRowsPerPage={10}
-                    pageCount={pageCount}
-                    pagination={pagination}
-                    onPaginationChange={setPagination}
-                    handlePagination={requestApiForData}
-                    perPageOption={[10, 25, 50]}
-                    typeCounts={[]}
-                />
-            </div>
+            <Table
+                data={data}
+                columns={columns as ColumnDef<Record<string, any>, any>[]}
+                rowSelection={rowSelection}
+                onRowSelectionChange={setRowSelection}
+                defaultRowsPerPage={10}
+                pageCount={pageCount}
+                pagination={pagination}
+                onPaginationChange={setPagination}
+                handlePagination={requestApiForData}
+                perPageOption={[10, 25, 50]}
+                typeCounts={[]}
+            />
         </>
     );
 };

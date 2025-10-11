@@ -112,14 +112,35 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             $page           = max( intval( $request->get_param( 'page' ) ), 1 );
             $offset         = ( $page - 1 ) * $limit;
             $filter_status          = $request->get_param( 'filter_status' );
+            $searchField  = sanitize_text_field( $request->get_param( 'searchField' ) );
+            $start_date_raw = sanitize_text_field( $request->get_param( 'startDate' ) );
+            $end_date_raw   = sanitize_text_field( $request->get_param( 'endDate' ) );
+
+            // Convert to proper timestamps
+            $start_timestamp = ! empty( $start_date_raw ) ? strtotime( str_replace('T', ' ', preg_replace('/\.\d+Z?$/', '', $start_date_raw)) ) : false;
+            $end_timestamp   = ! empty( $end_date_raw )   ? strtotime( str_replace('T', ' ', preg_replace('/\.\d+Z?$/', '', $end_date_raw)) )   : false;
+
+            $start_date = $start_timestamp ? date( 'Y-m-d 00:00:00', $start_timestamp ) : '';
+            $end_date   = $end_timestamp   ? date( 'Y-m-d 23:59:59', $end_timestamp )   : '';
+
             $args = [
                 'limit'  => $limit,
                 'offset' => $offset,
             ];
             
+            // Pass search to StoreUtil
+            if ( $searchField ) {
+                $args['searchField'] = $searchField;
+            } elseif ( $start_date && $end_date ) {
+                // Only apply date filter if no search
+                $args['start_date'] = $start_date;
+                $args['end_date']   = $end_date;
+            }
+            
             if ( ! empty( $filter_status ) ) {
                 $args['status'] = $filter_status;
             }
+            
 
             $stores = StoreUtil::get_store_information( $args );
 
@@ -163,40 +184,70 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
         }
     }
 
-    public function get_pending_stores( $request ){
-        $limit          = max( intval( $request->get_param( 'row' ) ), 10 );
-        $page           = max( intval( $request->get_param( 'page' ) ), 1 );
-        $offset         = ( $page - 1 ) * $limit;
-        $count          = $request->get_param( 'count' );
-
-        $stores = StoreUtil::get_stores_by_status('pending');
+    public function get_pending_stores( $request ) {
+        global $wpdb;
+    
+        $limit      = max( intval( $request->get_param( 'row' ) ), 10 );
+        $page       = max( intval( $request->get_param( 'page' ) ), 1 );
+        $offset     = ( $page - 1 ) * $limit;
+        $count      = $request->get_param( 'count' );
+    
+        $start_date = $request->get_param( 'start_date' ); // ISO8601 string
+        $end_date   = $request->get_param( 'end_date' );   // ISO8601 string
+    
+        $table_name = "{$wpdb->prefix}" . Utill::TABLES['store'];
+    
         if ( $count ) {
-            global $wpdb;
-            $table_name = "{$wpdb->prefix}" . Utill::TABLES['store'];
-
-            // Get total count
-            $total_count = $wpdb->get_var("SELECT COUNT(*) FROM $table_name WHERE status = 'pending'");
+            // Get total count with optional date filter
+            $sql = "SELECT COUNT(*) FROM $table_name WHERE status = 'pending'";
+            $params = [];
+    
+            if ( $start_date && $end_date ) {
+                $sql .= " AND create_time BETWEEN %s AND %s";
+                $params[] = $start_date;
+                $params[] = $end_date;
+            }
+    
+            $total_count = $params ? $wpdb->get_var( $wpdb->prepare( $sql, ...$params ) ) : $wpdb->get_var( $sql );
             return rest_ensure_response( (int) $total_count );
         }
+    
+        // Get pending stores
+        $sql = "SELECT * FROM $table_name WHERE status = 'pending'";
+        $params = [];
+    
+        if ( $start_date && $end_date ) {
+            $sql .= " AND create_time BETWEEN %s AND %s";
+            $params[] = $start_date;
+            $params[] = $end_date;
+        }
+    
+        $sql .= " ORDER BY create_time DESC LIMIT %d OFFSET %d";
+        $params[] = $limit;
+        $params[] = $offset;
+    
+        $stores = $params ? $wpdb->get_results( $wpdb->prepare( $sql, ...$params ), ARRAY_A ) : $wpdb->get_results( $sql, ARRAY_A );
+    
         $formatted_stores = array();
         foreach ( $stores as $store ) {
-            $store_id       = (int) $store['ID'];
-            $store_name     = $store['name'];
-            $store_slug     = $store['slug'];
-            $status         = $store['status'];
-            $applied_on     = $store['create_time'];
+            $store_id    = (int) $store['ID'];
+            $store_name  = $store['name'];
+            $store_slug  = $store['slug'];
+            $status      = $store['status'];
+            $applied_on  = $store['create_time'];
+    
             $formatted_stores[] = apply_filters(
                 'multivendorx_stores',
                 array(
-					'id'                => $store_id,
-					'store_name'        => $store_name,
-					'store_slug'        => $store_slug,
-					'status'      => $status,
-                    'applied_on'        => $applied_on,
-				)
+                    'id'         => $store_id,
+                    'store_name' => $store_name,
+                    'store_slug' => $store_slug,
+                    'status'     => $status,
+                    'applied_on' => $applied_on,
+                )
             );
         }
-
+    
         return rest_ensure_response( $formatted_stores );
     }
     
@@ -343,65 +394,68 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
     public function update_item( $request ) {
         $id   = absint( $request->get_param( 'id' ) );
         $data = $request->get_json_params();
-
+    
         $store = new \MultiVendorX\Store\Store( $id );
-
+    
+        // Handle registration & core data
         if (!empty($data['registration_data']) && !empty($data['core_data'])) {
-            if ($data['status'] == 'approve') {
+            if (isset($data['status']) && $data['status'] === 'approve') {
                 $users = StoreUtil::get_store_users($id);
                 $user = get_userdata( reset($users) );
                 if ( $user ) {
                     $user->set_role( 'store_owner' ); 
                     StoreUtil::set_primary_owner($user->ID, $id);
-                    return rest_ensure_response( [
-                            'success' => true
-                        ] );
+                    return rest_ensure_response([ 'success' => true ]);
+                }
+            } elseif (isset($data['status']) && $data['status'] === 'rejected') {
+                $store->set('status', 'rejected');
+    
+                // Save _reject_note if provided
+                if (!empty($data['_reject_note'])) {
+                    $store->update_meta('_reject_note', sanitize_text_field($data['_reject_note']));
                 }
     
-            } elseif ($data['status'] == 'rejected') {
-                $store->set( 'status', 'rejected' );
-                $store->update_meta('store_application_note', $data['store_application_note'] ?? '');
-    
                 $store->save();
-                return rest_ensure_response( [
-                            'success' => true
-                        ] );
+                return rest_ensure_response([ 'success' => true ]);
             }
             return;
         }
-
-        if ( $data['store_owners'] ) {
+    
+        // Handle adding store owners
+        if (!empty($data['store_owners'])) {
             StoreUtil::add_store_users([
                 'store_id' => $data['id'],
-                'users' => $data['store_owners'],
-                'role_id' => 'store_owner',
+                'users'    => $data['store_owners'],
+                'role_id'  => 'store_owner',
             ]);
-
-            return rest_ensure_response( [
-                'success' => true
-            ] );
+    
+            return rest_ensure_response([ 'success' => true ]);
         }
-        $store->set( 'name',        $data['name'] ?? $store->get('name') );
-        $store->set( 'slug',        $data['slug'] ?? $store->get('slug') );
-        $store->set( 'description', $data['description'] ?? $store->get('description') );
-        $store->set( 'who_created', 'admin' );
-        $store->set( 'status',      $data['status'] ?? $store->get('status') );
-
-        if ( is_array( $data ) ) {
-            foreach ( $data as $key => $value ) {
-                if ( ! in_array( $key, [ 'id', 'name', 'slug', 'description', 'who_created', 'status' ], true ) ) {
-                    $store->update_meta( $key, $value );
+    
+        // Update basic store info
+        $store->set('name',        $data['name'] ?? $store->get('name'));
+        $store->set('slug',        $data['slug'] ?? $store->get('slug'));
+        $store->set('description', $data['description'] ?? $store->get('description'));
+        $store->set('who_created', 'admin');
+        $store->set('status',      $data['status'] ?? $store->get('status'));
+    
+        // Save all other meta dynamically
+        if (is_array($data)) {
+            foreach ($data as $key => $value) {
+                if (!in_array($key, ['id','name','slug','description','who_created','status'], true)) {
+                    $store->update_meta($key, $value);
                 }
             }
         }
-
+    
         $store->save();
-
-        return rest_ensure_response( [
+    
+        return rest_ensure_response([
             'success' => true,
             'id'      => $store->get_id(),
-        ] );
+        ]);
     }
+    
 
     public function get_states_by_country($request) {
         $country_code = $request->get_param('country');
@@ -483,42 +537,66 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
         if ( ! $store_id ) {
             return rest_ensure_response( ['error' => 'Invalid store ID'] );
         }
-
+    
         // Check if count param is requested
         $count = $request->get_param( 'count' );
-
+    
         // Get store object
         $store = new \MultiVendorX\Store\Store( $store_id );
-
-        // Directly fetch followers from meta_data
+    
+        // Fetch followers from meta_data
         $followers_raw = $store->meta_data['followers'] ?? '[]';
-        $followers = json_decode( $followers_raw, true ); // convert JSON string to array
-        if (!is_array($followers)) $followers = [];
-
+        $followers = json_decode( $followers_raw, true );
+        if ( ! is_array( $followers ) ) {
+            $followers = [];
+        }
+    
+        // ✅ Handle old format (plain array of user IDs)
+        // Convert to new format with id + empty date
+        if ( isset( $followers[0] ) && is_int( $followers[0] ) ) {
+            $followers = array_map( fn( $uid ) => ['id' => $uid, 'date' => '' ], $followers );
+        }
+    
         if ( $count ) {
             return rest_ensure_response( count( $followers ) );
         }
-
+    
         // Pagination
         $page   = max( intval( $request->get_param( 'page' ) ), 1 );
         $limit  = max( intval( $request->get_param( 'row' ) ), 10 );
         $offset = ( $page - 1 ) * $limit;
-
-        // Slice for pagination
+    
+        // Paginate followers
         $followers_page = array_slice( $followers, $offset, $limit );
-
+    
         $formatted_followers = [];
-        foreach ( $followers_page as $user_id ) {
+        foreach ( $followers_page as $follower ) {
+            $user_id = $follower['id'] ?? 0;
+            $follow_date = $follower['date'] ?? '';
+    
             $user = get_userdata( $user_id );
             if ( $user ) {
+                // Get first + last name
+                $first_name = get_user_meta( $user_id, 'first_name', true );
+                $last_name  = get_user_meta( $user_id, 'last_name', true );
+    
+                // Combine names, fallback to display_name if empty
+                $full_name = trim( "$first_name $last_name" );
+                if ( empty( $full_name ) ) {
+                    $full_name = $user->display_name;
+                }
+    
                 $formatted_followers[] = [
                     'id'    => $user_id,
-                    'name'  => $user->display_name,
+                    'name'  => $full_name,
                     'email' => $user->user_email,
+                    'date'  => $follow_date, // ✅ Include follow date
                 ];
             }
         }
-
+    
         return rest_ensure_response( $formatted_followers );
     }
+    
+    
 }
