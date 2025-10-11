@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
-import { getApiLink } from 'zyra';
+import { BasicInput, getApiLink } from 'zyra';
 
 declare global {
     interface Window {
@@ -180,17 +180,17 @@ const BusinessAddress = () => {
                 initializeMapboxMap();
             }
         }
-    }, [loading, mapProvider, googleLoaded, mapboxLoaded, formData]);
+    }, [loading, mapProvider, googleLoaded, mapboxLoaded, addressData]);
 
     const initializeGoogleMap = () => {
         if (!window.google || !autocompleteInputRef.current) return;
 
-        const initialLat = parseFloat(formData.location_lat) || 40.7128;
-        const initialLng = parseFloat(formData.location_lng) || -74.0060;
+        const initialLat = parseFloat(addressData.location_lat) || 40.7128;
+        const initialLng = parseFloat(addressData.location_lng) || -74.0060;
 
         const mapInstance = new window.google.maps.Map(document.getElementById('location-map'), {
             center: { lat: initialLat, lng: initialLng },
-            zoom: formData.location_lat ? 15 : 10,
+            zoom: addressData.location_lat ? 15 : 10,
         });
 
         const markerInstance = new window.google.maps.Marker({
@@ -233,14 +233,14 @@ const BusinessAddress = () => {
         }
         (window as any).mapboxgl.accessToken = apiKey;
 
-        const initialLat = parseFloat(formData.location_lat) || 40.7128;
-        const initialLng = parseFloat(formData.location_lng) || -74.0060;
+        const initialLat = parseFloat(addressData.location_lat) || 40.7128;
+        const initialLng = parseFloat(addressData.location_lng) || -74.0060;
 
         const mapInstance = new (window as any).mapboxgl.Map({
             container: 'location-map',
             style: 'mapbox://styles/mapbox/streets-v11',
             center: [initialLng, initialLat],
-            zoom: formData.location_lat ? 15 : 10,
+            zoom: addressData.location_lat ? 15 : 10,
         });
 
         const markerInstance = new (window as any).mapboxgl.Marker({ draggable: true })
@@ -409,8 +409,7 @@ const BusinessAddress = () => {
         return components;
     };
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
+    const handleChange = (name: string, value: string) => {
         const newAddressData = {
             ...addressData,
             [name]: value
@@ -483,6 +482,29 @@ const BusinessAddress = () => {
                                 defaultValue={addressData.location_address}
                             />
                         </div>
+                        <small style={{ color: '#666', marginTop: '5px', display: 'block' }}>
+                            Type your business name or address and select from suggestions
+                        </small>
+                    </div>
+                </div>
+
+                {/* Map Display */}
+                <div className="form-group-wrapper">
+                    <div className="form-group">
+                        <label>Location Map *</label>
+                        <div
+                            id="location-map"
+                            style={{
+                                height: '300px',
+                                width: '100%',
+                                borderRadius: '8px',
+                                border: '1px solid #ddd',
+                                marginTop: '8px'
+                            }}
+                        ></div>
+                        <small style={{ color: '#666', marginTop: '5px', display: 'block' }}>
+                            Click on the map or drag the marker to set your exact location
+                        </small>
                     </div>
                 </div>
 
@@ -490,15 +512,18 @@ const BusinessAddress = () => {
                 <div className="form-group-wrapper">
                     <div className="form-group">
                         <label htmlFor="location_address">Address *</label>
-                        <input
-                            type="text"
+                        <BasicInput 
                             name="location_address"
-                            value={addressData.location_address || ''}
-                            className="setting-form-input"
-                            onChange={handleChange}
-                            placeholder="Street address"
-                            required
+                            value={addressData.location_address} 
+                            wrapperClass="setting-form-input" 
+                            descClass="settings-metabox-description" 
+                            onChange={(e) => handleChange('location_address', e.target.value)} 
                         />
+                        {!addressData.location_address && (
+                            <small style={{ color: 'orange', marginTop: '5px', display: 'block' }}>
+                                Address is required. Please select a location from the map or search.
+                            </small>
+                        )}
                     </div>
                 </div>
 
@@ -506,24 +531,22 @@ const BusinessAddress = () => {
                 <div className="form-group-wrapper">
                     <div className="form-group">
                         <label htmlFor="city">City</label>
-                        <input
-                            type="text"
+                        <BasicInput 
                             name="city"
-                            value={addressData.city || ''}
-                            className="setting-form-input"
-                            onChange={handleChange}
-                            placeholder="City"
+                            value={addressData.city} 
+                            wrapperClass="setting-form-input" 
+                            descClass="settings-metabox-description" 
+                            onChange={(e) => handleChange('city', e.target.value)} 
                         />
                     </div>
                     <div className="form-group">
                         <label htmlFor="state">State</label>
-                        <input
-                            type="text"
+                        <BasicInput 
                             name="state"
-                            value={addressData.state || ''}
-                            className="setting-form-input"
-                            onChange={handleChange}
-                            placeholder="State"
+                            value={addressData.state} 
+                            wrapperClass="setting-form-input" 
+                            descClass="settings-metabox-description" 
+                            onChange={(e) => handleChange('state', e.target.value)} 
                         />
                     </div>
                 </div>
@@ -531,24 +554,35 @@ const BusinessAddress = () => {
                 <div className="form-group-wrapper">
                     <div className="form-group">
                         <label htmlFor="country">Country</label>
-                        <input
-                            type="text"
+                        <BasicInput 
                             name="country"
-                            value={addressData.country || ''}
-                            className="setting-form-input"
-                            onChange={handleChange}
-                            placeholder="Country"
+                            value={addressData.country} 
+                            wrapperClass="setting-form-input" 
+                            descClass="settings-metabox-description" 
+                            onChange={(e) => handleChange('country', e.target.value)} 
                         />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="zip">Zip</label>
-                        <input
-                            type="text"
+                        <label htmlFor="zip">Zip Code</label>
+                        <BasicInput 
                             name="zip"
-                            value={addressData.zip || ''}
-                            className="setting-form-input"
-                            onChange={handleChange}
-                            placeholder="Zip code"
+                            value={addressData.zip} 
+                            wrapperClass="setting-form-input" 
+                            descClass="settings-metabox-description" 
+                            onChange={(e) => handleChange('zip', e.target.value)} 
+                        />
+                    </div>
+                </div>
+
+                <div className="form-group-wrapper">
+                    <div className="form-group">
+                        <label htmlFor="timezone">Timezone</label>
+                        <BasicInput 
+                            name="timezone"
+                            value={addressData.timezone} 
+                            wrapperClass="setting-form-input" 
+                            descClass="settings-metabox-description" 
+                            onChange={(e) => handleChange('timezone', e.target.value)} 
                         />
                     </div>
                 </div>
