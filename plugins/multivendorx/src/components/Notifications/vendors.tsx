@@ -45,11 +45,11 @@ const Vendors: React.FC = () => {
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
             params: { count: true, status: 'pending' },
         })
-        .then((response) => {
-            setTotalRows(response.data || 0);
-            setPageCount(Math.ceil(response.data / pagination.pageSize));
-        })
-        .catch(() => console.error(__('Failed to load total rows', 'multivendorx')));
+            .then((response) => {
+                setTotalRows(response.data || 0);
+                setPageCount(Math.ceil(response.data / pagination.pageSize));
+            })
+            .catch(() => console.error(__('Failed to load total rows', 'multivendorx')));
     }, []);
 
     useEffect(() => {
@@ -80,8 +80,8 @@ const Vendors: React.FC = () => {
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
             params,
         })
-        .then((response) => setData(response.data || []))
-        .catch(() => setData([]));
+            .then((response) => setData(response.data || []))
+            .catch(() => setData([]));
     };
 
     const requestApiForData = (rowsPerPage: number, currentPage: number, filterData?: FilterData) => {
@@ -107,8 +107,8 @@ const Vendors: React.FC = () => {
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
             data: { status: statusValue },
         })
-        .then(() => requestData(pagination.pageSize, pagination.pageIndex + 1))
-        .catch(console.error);
+            .then(() => requestData(pagination.pageSize, pagination.pageIndex + 1))
+            .catch(console.error);
     };
 
     const submitReject = () => {
@@ -125,14 +125,14 @@ const Vendors: React.FC = () => {
                 _reject_note: rejectReason || '' // allow empty reason
             }
         })
-        .then(() => {
-            setRejectPopupOpen(false);
-            setRejectReason('');
-            setRejectStoreId(null);
-            requestData(pagination.pageSize, pagination.pageIndex + 1);
-        })
-        .catch(console.error)
-        .finally(() => setIsSubmitting(false));
+            .then(() => {
+                setRejectPopupOpen(false);
+                setRejectReason('');
+                setRejectStoreId(null);
+                requestData(pagination.pageSize, pagination.pageIndex + 1);
+            })
+            .catch(console.error)
+            .finally(() => setIsSubmitting(false));
     };
 
     // Columns
@@ -167,9 +167,18 @@ const Vendors: React.FC = () => {
         },
         {
             header: __('Status', 'multivendorx'),
-            cell: ({ row }) => <TableCell title={row.original.status || ''}>{row.original.status || '-'}</TableCell>,
+            cell: ({ row }) => 
+            <TableCell title={row.original.status || ''}>
+                {row.original.status === "active" && (
+                    <span className="admin-badge green">Active</span>
+                )}
+                {row.original.status === "pending" && (
+                    <span className="admin-badge yellow">Pending</span>
+                )}
+            </TableCell>,
         },
         {
+            id: 'action',
             header: __('Action', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell
