@@ -2,10 +2,18 @@
  * External dependencies
  */
 import React, { useState, useEffect } from 'react';
+import { ReactSortable } from 'react-sortablejs';
 
 import '../styles/web/SettingMetaBox.scss';
 
 // Types
+interface Option {
+    id: string;
+    label: string;
+    value: string;
+    isdefault?: boolean;
+}
+
 interface FormField {
     type: string;
     name: string;
@@ -18,17 +26,12 @@ interface FormField {
     required?: boolean;
     disabled?: boolean;
     readonly?: boolean;
+    options?: Option[];
 }
 
 interface InputType {
     value: string;
     label: string;
-}
-
-interface Option {
-    label: string;
-    value: string;
-    isdefault?: boolean;
 }
 
 interface SettingMetaBoxProps {
@@ -134,7 +137,7 @@ const SettingMetaBox: React.FC<SettingMetaBoxProps> = ({
         }
     }, [isSiteKeyEmpty, formField?.type, onChange]);
 
-    // Conditional fields
+    // ---------------- Conditional fields ----------------
     const renderConditionalFields = () => {
         const commonFields = (
             <>
@@ -178,12 +181,7 @@ const SettingMetaBox: React.FC<SettingMetaBoxProps> = ({
                         )}
                     </>
                 );
-            case 'multiselect':
-                return(
-                    <>
-                    
-                    </>
-                );
+
             case 'recaptcha':
                 return (
                     <>
@@ -204,6 +202,75 @@ const SettingMetaBox: React.FC<SettingMetaBoxProps> = ({
                         </p>
                     </>
                 );
+
+            case 'multiselect':
+            case 'dropdown':
+            case 'checkboxes':
+            case 'radio':
+                return (
+                    <div className="multioption-wrapper">
+                        <label htmlFor="">Set option</label>
+                        <ReactSortable
+                            list={formField.options || []}
+                            setList={(newList: Option[]) => onChange('options', newList)}
+                            handle=".drag-handle-option"
+                        >
+                            {(formField.options || []).map((opt, index) => (
+                                <div
+                                    className="option-list-wrapper drag-handle-option"
+                                    key={opt.id || index}
+                                >
+                                    <div className="option-label">
+                                        <input
+                                            type="text"
+                                            className="basic-input"
+                                            value={opt.label}
+                                            onChange={(e) => {
+                                                const newOptions = [...(formField.options || [])];
+                                                newOptions[index] = { ...newOptions[index], label: e.target.value };
+                                                onChange('options', newOptions);
+                                            }}
+                                        />
+                                    </div>
+                                    <div className="option-control-section">
+                                        <div
+                                            role="button"
+                                            className="delete-btn"
+                                            tabIndex={0}
+                                            onClick={() => {
+                                                const newOptions = (formField.options || []).filter(
+                                                    (_, i) => i !== index
+                                                );
+                                                onChange('options', newOptions);
+                                            }}
+                                        >
+                                            Delete
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </ReactSortable>
+
+                        <div
+                            className="add-more-option-section admin-btn btn-purple"
+                            role="button"
+                            tabIndex={0}
+                            onClick={() => {
+                                const newOptions = [
+                                    ...(formField.options || []),
+                                    { id: crypto.randomUUID(), label: 'Option value', value: 'value' },
+                                ];
+                                onChange('options', newOptions);
+                            }}
+                        >
+                            Add new options{' '}
+                            <span>
+                                <i className="admin-font adminlib-plus-circle-o"></i>
+                            </span>
+                        </div>
+                    </div>
+                );
+
             case 'attachment':
                 return (
                     <InputField
@@ -213,6 +280,7 @@ const SettingMetaBox: React.FC<SettingMetaBoxProps> = ({
                         onChange={(value) => onChange('filesize', Number(value))}
                     />
                 );
+
             default:
                 return null;
         }
