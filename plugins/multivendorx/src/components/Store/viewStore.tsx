@@ -176,7 +176,30 @@ const ViewStore = () => {
             </div>
           </div>
         </div>
+          <div className="row">
+            <div className="column">
+              <div className="no-data-found">
+                <i className="adminlib-info icon red"></i>
+                <div className="title">No Transaction Data Yet</div>
+                <div className="des">The Handmade store hasn't processed any transactions yet. Once sales start coming in, you'll see detailed analytics here.</div>
+                <div className="buttons-wrapper center">
 
+                  <div className="admin-btn btn-purple">
+                    <i className="adminlib-eye"></i>
+                    View Store Settings
+                  </div>
+
+                  <div className="admin-btn">
+                    <i className="adminlib-eye"></i>
+                    Learn More
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="column">
+
+            </div>
+          </div>
         {error && <div className="error-message">{error}</div>}
       </div>
     </>

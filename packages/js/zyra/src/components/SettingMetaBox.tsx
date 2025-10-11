@@ -249,14 +249,14 @@ const SettingMetaBox: React.FC<SettingMetaBoxProps> = ({
                 <>
                     {/* <Draggable> */}
                     {/* <button
-                            className="wrapper-close"
-                            onClick={ ( event ) => {
-                                event.stopPropagation();
-                                setHasOpened( false );
-                            } }
-                        >
-                            <i className="admin-font adminlib-cross"></i>
-                        </button> */}
+                        className="wrapper-close"
+                        onClick={(event) => {
+                            event.stopPropagation();
+                            setHasOpened(false);
+                        }}
+                    >
+                        <i className="admin-font adminlib-cross"></i>
+                    </button> */}
                     <main className="meta-setting-modal-content">
                         <h3>Input Field Settings</h3>
 
