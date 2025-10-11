@@ -3,7 +3,7 @@ import axios from "axios";
 import { __ } from "@wordpress/i18n";
 import { CalendarInput, Table, TableCell } from "zyra";
 import { ColumnDef, RowSelectionState, PaginationState } from "@tanstack/react-table";
-import OrderDetailsModal from "./OrderDetailsModal";
+import OrderDetails from "./order-details";
 
 // Type declarations
 type OrderStatus = {
@@ -27,7 +27,7 @@ export interface RealtimeFilter {
 const Orders: React.FC = () => {
     const [data, setData] = useState<any[]>([]);
     const [pagination, setPagination] = useState<PaginationState>({ pageIndex: 0, pageSize: 10 });
-    const [modalOrder, setModalOrder] = useState<any | null>(null); // Track selected order
+    const [selectedOrder, setSelectedOrder] = useState<any | null>(null);
     const [totalRows, setTotalRows] = useState<number>(0);
     const [pageCount, setPageCount] = useState(0);
     const [orderStatus, setOrderStatus] = useState<OrderStatus[]>([]);
@@ -236,8 +236,17 @@ const Orders: React.FC = () => {
             accessorFn: row => parseFloat(row.number || '0'),
             enableSorting: true,
             header: __("Order ID", "multivendorx"),
-            cell: ({ row }) => <TableCell>#{row.original.number}</TableCell>,
-        },
+            cell: ({ row }) => (
+                <TableCell>
+                    <button
+                        className="link-button" // You can style it as a link
+                        onClick={() => setSelectedOrder(row.original)}
+                    >
+                        #{row.original.number}
+                    </button>
+                </TableCell>
+            ),
+        },        
         {
             header: __("Customer", "multivendorx"),
             cell: ({ row }) => {
@@ -316,7 +325,7 @@ const Orders: React.FC = () => {
                             {
                                 label: __('View', 'multivendorx'),
                                 icon: 'adminlib-eye',
-                                onClick: (rowData) => setModalOrder(rowData),
+                                onClick: (rowData) => setSelectedOrder(rowData),
                                 hover: true
                             },
                             {
@@ -436,30 +445,31 @@ const Orders: React.FC = () => {
                 </div>
             </div>
             <div className="admin-table-wrapper">
-                <Table
-                    data={data}
-                    columns={columns as ColumnDef<Record<string, any>, any>[]}
-                    rowSelection={rowSelection}
-                    onRowSelectionChange={setRowSelection}
-                    defaultRowsPerPage={10}
-                    pageCount={pageCount}
-                    pagination={pagination}
-                    onPaginationChange={setPagination}
-                    perPageOption={[10, 25, 50]}
-                    handlePagination={requestApiForData}
-                    totalCounts={totalRows}
-                    searchFilter={searchFilter}
-                    realtimeFilter={realtimeFilter}
-                    typeCounts={orderStatus}
-                    bulkActionComp={() => <BulkAction />}
-                />
-
-                {modalOrder && (
-                    <OrderDetailsModal
-                        order={modalOrder}
-                        onClose={() => setModalOrder(null)}
+                {!selectedOrder ? (
+                    <Table
+                        data={data}
+                        columns={columns as ColumnDef<Record<string, any>, any>[]}
+                        rowSelection={rowSelection}
+                        onRowSelectionChange={setRowSelection}
+                        defaultRowsPerPage={10}
+                        pageCount={pageCount}
+                        pagination={pagination}
+                        onPaginationChange={setPagination}
+                        perPageOption={[10, 25, 50]}
+                        handlePagination={requestApiForData}
+                        totalCounts={totalRows}
+                        searchFilter={searchFilter}
+                        realtimeFilter={realtimeFilter}
+                        typeCounts={orderStatus}
+                        bulkActionComp={() => <BulkAction />}
+                    />
+                ) : (
+                    <OrderDetails
+                        order={selectedOrder}
+                        onBack={() => setSelectedOrder(null)} // Step 4
                     />
                 )}
+
             </div>
         </>
     );
