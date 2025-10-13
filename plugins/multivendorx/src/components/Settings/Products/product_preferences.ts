@@ -14,7 +14,7 @@ export default {
         {
             key: 'type_options',
             type: 'checkbox',
-            label: __( 'Allowed product type', 'multivendorx' ),
+            label: __( 'Allowed product options', 'multivendorx' ),
 			settingDescription: __( 'Select the product fields stores can configure when adding or managing their products.', 'multivendorx' ),
             class: 'mvx-toggle-checkbox',
             desc: __(
