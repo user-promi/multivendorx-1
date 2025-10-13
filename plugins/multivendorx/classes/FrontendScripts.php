@@ -39,7 +39,7 @@ class FrontendScripts {
      */
     public function __construct() {
         add_action( 'wp_enqueue_scripts', array( $this, 'load_scripts' ) );
-        add_action( 'admin_enqueue_scripts', array( $this, 'admin_load_scripts' ) );
+        add_action( 'admin_enqueue_scripts', array( $this, 'admin_load_scripts' )  , 55);
     }
 
     /**
