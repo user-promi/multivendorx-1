@@ -295,7 +295,7 @@ const Orders: React.FC = () => {
                 const status = row.original.status || "pending";
                 const colorClass =
                     status === 'completed' ? 'green' :
-                        status === 'pending' ? 'yellow' : 'gray';
+                        status === 'pending' ? 'blue' : 'yellow';
                 return (
                     <TableCell title={status}>
                         <span className={`admin-badge ${colorClass}`}>
@@ -443,7 +443,7 @@ const Orders: React.FC = () => {
         <>
             <div className="page-title-wrapper">
                 <div className="page-title">
-                    <div className="title">All Orders</div>
+                    <div className="title">Orders</div>
                     <div className="des">Manage your store information and preferences</div>
                 </div>
             </div>

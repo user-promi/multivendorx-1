@@ -69,14 +69,14 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller
                 'capability-edit' => ['manage_products']
             ),
             'orders' => array(
-                'name' => 'Orders',
-                'slug' => 'orders',
+                'name' => 'Sales',
+                'slug' => 'sales',
                 'icon' => 'adminlib-order',
                 'submenu' => array(
                     array(
-                        'key' => 'all-orders',
-                        'name' => 'All Orders',
-                        'slug' => 'all-orders',
+                        'key' => 'orders',
+                        'name' => 'Orders',
+                        'slug' => 'orders',
                         'capability' => ['read_shop_orders', 'edit_shop_orders', 'delete_shop_orders']
                     ),
                     array(
