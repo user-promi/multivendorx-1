@@ -5,6 +5,7 @@ import React, { useState, useEffect } from 'react';
 import { ReactSortable } from 'react-sortablejs';
 
 import '../styles/web/SettingMetaBox.scss';
+import ToggleSetting from './ToggleSetting';
 
 // Types
 interface Option {
@@ -332,6 +333,17 @@ const SettingMetaBox: React.FC<SettingMetaBoxProps> = ({
                     <div className="setting-modal-content-section">
                         {metaType === 'setting-meta' && (
                             <FieldWrapper label="Visibility">
+                                {/* <ToggleSetting
+                                    wrapperClass="setting-form-input"
+                                    descClass="settings-metabox-description"
+                                    description="Select the status of the announcement."
+                                    options={[
+                                        { key: 'visible', value: 'Visible', label: 'Visible' },
+                                        { key: 'hidden', value: 'Hidden', label: 'Hidden' },
+                                    ]}
+                                    // value={formData.status}
+                                    // onChange={handleToggleChange}
+                                /> */}
                                 <div className="visibility-control-container">
                                     <div className="tabs">
                                         <input
