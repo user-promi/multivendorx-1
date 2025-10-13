@@ -47,7 +47,7 @@ const Orders: React.FC = () => {
         const rowsPerPage = pagination.pageSize;
         requestData(rowsPerPage, currentPage);
     }, [pagination]);
-    
+
     const fetchOrderStatusCounts = async () => {
         try {
             const statuses = ["all", "pending", "processing", "on-hold", "completed", "cancelled", "refunded", "failed", "trash"];
@@ -239,15 +239,12 @@ const Orders: React.FC = () => {
             header: __("Order ID", "multivendorx"),
             cell: ({ row }) => (
                 <TableCell>
-                    <button
-                        className="link-button" // You can style it as a link
-                        onClick={() => setSelectedOrder(row.original)}
-                    >
-                        #{row.original.number}
-                    </button>
+                        <span className="link" onClick={() => setSelectedOrder(row.original)}>
+                            #{row.original.number}
+                        </span>
                 </TableCell>
             ),
-        },        
+        },
         {
             header: __("Customer", "multivendorx"),
             cell: ({ row }) => {
@@ -293,7 +290,7 @@ const Orders: React.FC = () => {
                 const status = row.original.status || "pending";
                 const colorClass =
                     status === 'completed' ? 'green' :
-                        status === 'pending' ? 'yellow' : 'gray';
+                        status === 'pending' ? 'blue' : 'yellow';
                 return (
                     <TableCell title={status}>
                         <span className={`admin-badge ${colorClass}`}>
@@ -316,6 +313,7 @@ const Orders: React.FC = () => {
             ),
         },
         {
+            id: 'action',
             header: __('Action', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell
@@ -441,7 +439,7 @@ const Orders: React.FC = () => {
         <>
             <div className="page-title-wrapper">
                 <div className="page-title">
-                    <div className="title">All Orders</div>
+                    <div className="title">Orders</div>
                     <div className="des">Manage your store information and preferences</div>
                 </div>
             </div>

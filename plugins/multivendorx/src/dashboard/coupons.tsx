@@ -743,18 +743,19 @@ const AllCoupon: React.FC = () => {
                         <span className="admin-badge green">Publish</span>
                     )}
                     {row.original.status === 'draft' && (
-                        <span className="admin-badge">Draft</span>
+                        <span className="admin-badge blue">Draft</span>
                     )}
                     {row.original.status === 'trash' && (
                         <span className="admin-badge red">Trash</span>
                     )}
                     {row.original.status === 'pending' && (
-                        <span className="admin-badge red">Pending</span>
+                        <span className="admin-badge yellow">Pending</span>
                     )}
                 </TableCell>
             ),
         },
         {
+            id: 'action',
             header: __('Action', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell

@@ -9,6 +9,7 @@ import BusinessAddress from './settings/BusinessAddress';
 import Withdrawl from './withdrawl';
 import Privacy from './settings/Privacy';
 import Verification from './settings/Verification';
+import ShippingDelivery from './settings/ShippingDelivery';
 
 const settings = () => {
     const id = appLocalizer.store_id;
@@ -72,7 +73,7 @@ const settings = () => {
             }
         })
     };
-    const [activeTab, setActiveTab] = useState("general");
+    const [activeTab, setActiveTab] = useState("shipping");
     const settingTabs = [
         { id: "general", label: "General", icon: "tools", content: <GeneralSettings /> },
         { id: "appearance", label: "Appearance", icon: "appearance", content: <Appearance /> },
@@ -150,8 +151,8 @@ const settings = () => {
                     </div>
                 </>
         },
+        // { id: "shipping", label: "Shipping & Delivery", icon: "tools", content: <ShippingDelivery /> },
         { id: "verification", label: "Verification", icon: "tools", content: <Verification /> },
-
     ];
     return (
         <>

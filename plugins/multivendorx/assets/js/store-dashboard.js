@@ -59,6 +59,9 @@ jQuery(document).ready(function ($) {
     // my acoount start
     const $dropdown = $(".login-user .dropdown-menu");
     const $avatar = $(".login-user .avatar-wrapper");
+    const $notificationList = $(".dropdown-menu.notification");
+    const $notificationIcon = $(".adminlib-icon.notification");
+
 
     $dropdown.hide();
     $avatar.on("click", function (e) {
@@ -69,7 +72,30 @@ jQuery(document).ready(function ($) {
         if (!$(e.target).closest(".login-user").length) {
             $dropdown.hide();
         }
-    }); // my acoount start
+    }); 
+    
+    $notificationList.hide();
+    $notificationIcon.on("click", function (e) {
+        e.stopPropagation();
+        $notificationList.toggle();
+    });
+    $(document).on("click", function (e) {
+        if (!$(e.target).closest(".login-user").length) {
+            $notificationList.hide();
+        }
+    }); 
+    // my acoount start
+
+    // top header full screen icon strat
+    $('#fullscreenToggle').on('click', function() {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen().catch(err => {
+                console.warn(`Error attempting fullscreen: ${err.message}`);
+            });
+        } else {
+            document.exitFullscreen();
+        }
+    }); // top header full screen icon end
 
 
     // all tab
