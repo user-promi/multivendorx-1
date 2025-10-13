@@ -71,14 +71,14 @@ const StoreSettings = ({ id }: { id: string | null }) => {
             setLoading(false);
             return;
         }
-
+    
         axios({
             method: 'GET',
-            url: getApiLink(appLocalizer, `geolocation/store/${id}`),
+            url: getApiLink(appLocalizer, `store/${id}`), // Use main store endpoint
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
         })
-            .then((res) => {
-                const data = res.data || {};
+        .then((res) => {
+            const data = res.data || {};   
                 
                 // Set all form data
                 setFormData((prev) => ({ ...prev, ...data }));
@@ -513,20 +513,11 @@ const StoreSettings = ({ id }: { id: string | null }) => {
 
 	// Then update your autoSave function:
 	const autoSave = (updatedData: any) => {
-        // Ensure both address fields are consistent
-        const saveData = {
-            ...updatedData,
-            // If location_address is empty but address exists, copy it
-            location_address: updatedData.location_address || updatedData.address || '',
-            // If address is empty but location_address exists, copy it  
-            address: updatedData.address || updatedData.location_address || ''
-        };
-
         axios({
             method: 'PUT',
-            url: getApiLink(appLocalizer, `store/${id}`),
+            url: getApiLink(appLocalizer, `store/${id}`), // Use main store endpoint
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            data: saveData,
+            data: updatedData,
         }).then((res) => {
             if (res.data.success) {
                 setSuccessMsg('Store saved successfully!');
@@ -535,7 +526,7 @@ const StoreSettings = ({ id }: { id: string | null }) => {
             console.error('Save error:', error);
             setErrorMsg('Failed to save store data');
         });
-    };
+    };    
 
     if (loading) {
         return (
