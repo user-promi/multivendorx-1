@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 export default {
     id: 'marketplace-settings',
     priority: 1,
-    name: __( 'Marketplace', 'multivendorx' ),
+    name: __( 'General', 'multivendorx' ),
     desc: __(
         'Controls how stores are onboarded and what access they get.',
         'multivendorx'
