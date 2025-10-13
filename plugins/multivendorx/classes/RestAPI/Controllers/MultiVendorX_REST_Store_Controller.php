@@ -4,6 +4,7 @@ namespace MultiVendorX\RestAPI\Controllers;
 use MultiVendorX\Store\StoreUtil;
 use MultiVendorX\Store\Store;
 use MultiVendorX\Utill;
+use MultiVendorX\Store\SocialVerification;
 
 defined('ABSPATH') || exit;
 
@@ -46,14 +47,116 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             ],
         ]);
 
-        register_rest_route(MultiVendorX()->rest_namespace, '/states/(?P<country>[A-Z]{2})', [
-            'methods'               => \WP_REST_Server::READABLE,
-            'callback'              => [$this, 'get_states_by_country'],
-            'permission_callback'   => [$this, 'get_items_permissions_check'],
+        register_rest_route(MultiVendorX()->rest_namespace, '/' . $this->rest_base . '/social-profiles', [
+            [
+                'methods'             => \WP_REST_Server::READABLE,
+                'callback'            => [$this, 'get_social_profiles'],
+                'permission_callback' => [$this, 'get_items_permissions_check'],
+            ],
         ]);
+    
+        register_rest_route(MultiVendorX()->rest_namespace, '/' . $this->rest_base . '/connect-social', [
+            [
+                'methods'             => \WP_REST_Server::CREATABLE,
+                'callback'            => [$this, 'connect_social_profile'],
+                'permission_callback' => [$this, 'get_items_permissions_check'],
+            ],
+        ]);
+    
+        register_rest_route(MultiVendorX()->rest_namespace, '/' . $this->rest_base . '/disconnect-social', [
+            [
+                'methods'             => \WP_REST_Server::CREATABLE,
+                'callback'            => [$this, 'disconnect_social_profile'],
+                'permission_callback' => [$this, 'get_items_permissions_check'],
+            ],
+        ]);
+
+        // register_rest_route(MultiVendorX()->rest_namespace, '/states/(?P<country>[A-Z]{2})', [
+        //     'methods'               => \WP_REST_Server::READABLE,
+        //     'callback'              => [$this, 'get_states_by_country'],
+        //     'permission_callback'   => [$this, 'get_items_permissions_check'],
+        // ]);
 
     }
 
+    function get_social_verification() {
+        static $instance = null;
+        
+        if (is_null($instance)) {
+            $instance = new SocialVerification();
+        }
+        
+        return $instance;
+    }
+
+    public function get_social_profiles($request) {
+        try {
+            $user_id = get_current_user_id();
+            $social_verification = $this->get_social_verification();
+            $profiles = $social_verification->get_social_profiles($user_id);
+    
+            return rest_ensure_response([
+                'success' => true,
+                'data' => $profiles
+            ]);
+        } catch (\Exception $e) {
+            return new \WP_Error('server_error', __('Failed to fetch social profiles', 'multivendorx'), ['status' => 500]);
+        }
+    }
+    
+    public function connect_social_profile($request) {
+        try {
+            $params = $request->get_json_params();
+            $provider = sanitize_text_field($params['provider'] ?? '');
+    
+            if (empty($provider)) {
+                return new \WP_Error('missing_provider', __('Provider is required', 'multivendorx'), ['status' => 400]);
+            }
+    
+            $social_verification = $this->get_social_verification();
+            $auth_url = $social_verification->get_auth_url($provider);
+    
+            if (!$auth_url) {
+                return new \WP_Error('invalid_provider', __('Invalid provider or provider not configured', 'multivendorx'), ['status' => 400]);
+            }
+    
+            return rest_ensure_response([
+                'success' => true,
+                'data' => [
+                    'redirect_url' => $auth_url
+                ]
+            ]);
+        } catch (\Exception $e) {
+            return new \WP_Error('server_error', __('Failed to connect social profile', 'multivendorx'), ['status' => 500]);
+        }
+    }
+    
+    public function disconnect_social_profile($request) {
+        try {
+            $params = $request->get_json_params();
+            $provider = sanitize_text_field($params['provider'] ?? '');
+    
+            if (empty($provider)) {
+                return new \WP_Error('missing_provider', __('Provider is required', 'multivendorx'), ['status' => 400]);
+            }
+    
+            $user_id = get_current_user_id();
+            $social_verification = $this->get_social_verification();
+            $success = $social_verification->disconnect_social_profile($user_id, $provider);
+    
+            if ($success) {
+                return rest_ensure_response([
+                    'success' => true,
+                    'message' => __('Social profile disconnected successfully', 'multivendorx')
+                ]);
+            } else {
+                return new \WP_Error('disconnect_failed', __('Failed to disconnect social profile', 'multivendorx'), ['status' => 400]);
+            }
+        } catch (\Exception $e) {
+            return new \WP_Error('server_error', __('Failed to disconnect social profile', 'multivendorx'), ['status' => 500]);
+        }
+    }
+    
     public function get_items_permissions_check($request) {
         return current_user_can( 'read' ) || current_user_can('edit_stores');
     }

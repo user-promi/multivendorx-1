@@ -4,6 +4,8 @@
  * Handles OAuth integration with Facebook, Google, Twitter, and LinkedIn
  */
 
+namespace MultiVendorX\Store;
+
 // Prevent direct access
 if (!defined('ABSPATH')) {
     exit;
@@ -224,7 +226,8 @@ class FacebookVerification {
         
         $this->app_id = $fb_settings['app_id'] ?? '';
         $this->app_secret = $fb_settings['app_secret'] ?? '';
-        $this->redirect_uri = home_url('/vendor/v1/verification/oauth-callback?provider=facebook');
+        
+        $this->redirect_uri = admin_url('admin-post.php?action=multivendorx_stripe_connect_onboard_callback&vendor_id=' . intval($vendor_id) . '&store_id=' . $store_id . '&account_type=new');;
     }
     
     public function get_auth_url() {
@@ -314,7 +317,8 @@ class GoogleVerification {
         
         $this->client_id = $google_settings['client_id'] ?? '';
         $this->client_secret = $google_settings['client_secret'] ?? '';
-        $this->redirect_uri = home_url('/vendor/v1/verification/oauth-callback?provider=google');
+        $this->redirect_uri = $google_settings['redirect_uri'] ?? '';
+        file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":orders: : " . var_export($settings['social-verification']['social_verification_methods']['google-connect'], true) . "\n", FILE_APPEND);
     }
     
     public function get_auth_url() {
@@ -409,7 +413,7 @@ class TwitterVerification {
         $this->api_key = $twitter_settings['api_key'] ?? '';
         $this->api_secret_key = $twitter_settings['api_secret_key'] ?? '';
         $this->bearer_token = $twitter_settings['bearer_token'] ?? '';
-        $this->redirect_uri = home_url('/vendor/v1/verification/oauth-callback?provider=twitter');
+        $this->redirect_uri = $twitter_settings['redirect_uri'] ??'';
     }
     
     public function get_auth_url() {
@@ -536,7 +540,7 @@ class LinkedInVerification {
         
         $this->client_id = $linkedin_settings['client_id'] ?? '';
         $this->client_secret = $linkedin_settings['client_secret'] ?? '';
-        $this->redirect_uri = home_url('/vendor/v1/verification/oauth-callback?provider=linkedin');
+        $this->redirect_uri = $linkedin_settings['redirect_uri'] ??'';
     }
     
     public function get_auth_url() {
@@ -639,19 +643,8 @@ class LinkedInVerification {
     }
 }
 
-// Initialize the social verification system
-new SocialVerification();
-
-// Helper functions
-function get_social_verification() {
-    static $instance = null;
-    
-    if (is_null($instance)) {
-        $instance = new SocialVerification();
-    }
-    
-    return $instance;
-}
+// // Initialize the social verification system
+// new SocialVerification();
 
 function get_social_auth_url($provider) {
     $social_verification = get_social_verification();
