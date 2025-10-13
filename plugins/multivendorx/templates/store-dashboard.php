@@ -287,7 +287,14 @@ if ($current_page && empty($current_sub)) {
                                 <?php
                             }
                         } else {
-                            echo '<div>You do not have permission to access this section.</div>';
+                            echo '<div class="content-wrapper"> 
+                                    <div class="permission-wrapper">
+                                        <i class="adminlib-info red"></i>
+                                        <div class="title"> You do not have permission to access this section.</div>
+                                        <div class="des">Manage your store information and preferences Manage your store information and preferences </div>
+                                        <div class="admin-btn btn-purple">Contact Admin</div>
+                                    </div>
+                                </div>';
                         }
                     }
                 }
