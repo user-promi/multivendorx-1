@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
-import { BasicInput, TextArea, FileInput, SelectInput, getApiLink } from 'zyra';
+import { BasicInput, TextArea, FileInput, getApiLink, SuccessNotice } from 'zyra';
 
 declare global {
     interface Window {
@@ -540,7 +540,8 @@ const StoreSettings = ({ id }: { id: string | null }) => {
 
     return (
         <>
-            {successMsg && (
+            <SuccessNotice message={successMsg} />
+            {/* {successMsg && (
                 <>
                     <div className="admin-notice-wrapper">
                         <i className="admin-font adminlib-icon-yes"></i>
@@ -550,7 +551,7 @@ const StoreSettings = ({ id }: { id: string | null }) => {
                         </div>
                     </div>
                 </>
-            )}
+            )} */}
             
             {/* Debug Info - You can remove this in production */}
             <div style={{ background: '#f5f5f5', padding: '10px', marginBottom: '15px', borderRadius: '4px', fontSize: '12px' }}>

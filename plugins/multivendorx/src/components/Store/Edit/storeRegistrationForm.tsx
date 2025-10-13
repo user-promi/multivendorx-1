@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { TextArea, getApiLink } from 'zyra';
+import { TextArea, getApiLink, SuccessNotice } from 'zyra';
 
 const StoreRegistration = ({ id }: { id: string|null }) => {
 	const [formData, setFormData] = useState<{ [key: string]: string }>({});
@@ -71,15 +71,7 @@ const StoreRegistration = ({ id }: { id: string|null }) => {
 	};
 	return (
 		<>
-			{successMsg && (
-				<div className="admin-notice-wrapper">
-					<i className="admin-font adminlib-icon-yes"></i>
-					<div className="notice-details">
-						<div className="title">Great!</div>
-						<div className="desc">{successMsg}</div>
-					</div>
-				</div>
-			)}
+			<SuccessNotice message={successMsg} />
 
 			<div className="container-wrapper">
 				<div className="card-wrapper width-65">
