@@ -47,9 +47,39 @@ export interface RealtimeFilter {
     name: string;
     render: (updateFilter: (key: string, value: any) => void, filterValue: any) => ReactNode;
 }
+const formatDateForInput = (dateString?: string | null) => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+};
 
 const AllCoupon: React.FC = () => {
     const [id, setId] = useState<string | null>(null);
+    const defaultFormData = {
+        title: "",
+        content: "",
+        discount_type: "",
+        coupon_amount: "",
+        free_shipping: "no",
+        expiry_date: "",
+        usage_limit: "",
+        limit_usage_to_x_items: "",
+        usage_limit_per_user: "",
+        minimum_amount: "",
+        maximum_amount: "",
+        individual_use: "no",
+        exclude_sale_items: "no",
+        product_ids: [],
+        exclude_product_ids: [],
+        product_categories: [],
+        exclude_product_categories: [],
+        customer_email: "",
+        id: undefined
+    };
+
     const [formData, setFormData] = useState<any>({
         title: "",
         content: "",
@@ -70,6 +100,7 @@ const AllCoupon: React.FC = () => {
         exclude_product_categories: [],
         customer_email: "",
     });
+
 
     useEffect(() => {
         const searchParams = new URLSearchParams(window.location.search);
@@ -92,32 +123,45 @@ const AllCoupon: React.FC = () => {
     const [activeTab, setActiveTab] = useState("general");
 
     const [couponTypeCounts, setCouponTypeCounts] = useState<{ key: string; name: string; count: number }[]>([]);
-    const handleEditCoupon = (coupon: CouponRow) => {
-        setFormData({
-            title: coupon.code,
-            content: coupon.description || '',
-            discount_type: coupon.discount_type,
-            coupon_amount: coupon.amount,
-            free_shipping: coupon.free_shipping ? "yes" : "no",
-            expiry_date: coupon.date_expires || '',
-            usage_limit: coupon.usage_limit || '',
-            limit_usage_to_x_items: coupon.limit_usage_to_x_items || '',
-            usage_limit_per_user: coupon.usage_limit_per_user || '',
-            minimum_amount: coupon.minimum_amount || '',
-            maximum_amount: coupon.maximum_amount || '',
-            individual_use: coupon.individual_use ? 'yes' : 'no',
-            exclude_sale_items: coupon.exclude_sale_items ? 'yes' : 'no',
-            product_ids: coupon.product_ids || [],
-            exclude_product_ids: coupon.excluded_product_ids || [],
-            product_categories: coupon.product_categories || [],
-            exclude_product_categories: coupon.excluded_product_categories || [],
-            customer_email: (coupon.email_restrictions || []).join(','),
-            id: coupon.id // important for update
-        });
+    const handleEditCoupon = async (couponId: number) => {
+        try {
+            const res = await axios.get(`${appLocalizer.apiUrl}/wc/v3/coupons/${couponId}`, {
+                headers: { 'X-WP-Nonce': appLocalizer.nonce }
+            });
 
-        setAddCoupon(true);       // open popup
-        setActiveTab("general");  // optional: start with general tab
+            const coupon = res.data;
+
+            setFormData({
+                title: coupon.code,
+                content: coupon.description || '',
+                discount_type: coupon.discount_type,
+                coupon_amount: coupon.amount,
+                free_shipping: coupon.free_shipping ? "yes" : "no",
+                expiry_date: formatDateForInput(coupon.date_expires), // <-- fix date
+                usage_limit: coupon.usage_limit || '',
+                limit_usage_to_x_items: coupon.limit_usage_to_x_items || '',
+                usage_limit_per_user: coupon.usage_limit_per_user || '',
+                minimum_amount: coupon.minimum_amount || '',
+                maximum_amount: coupon.maximum_amount || '',
+                individual_use: coupon.individual_use ? 'yes' : 'no',
+                exclude_sale_items: coupon.exclude_sale_items ? 'yes' : 'no',
+                product_ids: coupon.product_ids || [],
+                exclude_product_ids: coupon.excluded_product_ids || [],
+                product_categories: coupon.product_categories || [],
+                exclude_product_categories: coupon.excluded_product_categories || [],
+                customer_email: (coupon.email_restrictions || []).join(','),
+                id: coupon.id
+            });
+            
+
+            setAddCoupon(true);       // open popup
+            setActiveTab("general");  // optional: start with general tab
+        } catch (err) {
+            console.error("Failed to fetch coupon details:", err);
+            alert("Failed to fetch coupon details. Please try again.");
+        }
     };
+
 
     const fetchCouponStatusCounts = async () => {
         const statuses = ['all', 'publish', 'draft', 'pending', 'trash'];
@@ -491,62 +535,37 @@ const AllCoupon: React.FC = () => {
                     <div className="form-group-wrapper">
                         <div className="form-group">
                             <label>Individual use only</label>
-                            <MultiCheckBox
-                                khali_dabba={appLocalizer?.khali_dabba ?? false}
-                                wrapperClass="toggle-btn"
-                                descClass="settings-metabox-description"
-                                inputWrapperClass="toggle-checkbox-header"
-                                inputInnerWrapperClass="toggle-checkbox"
-                                inputClass="basic-input"
-                                idPrefix="toggle-switch"
+                            <ToggleSetting
+                                wrapperClass="setting-form-input"
                                 options={[
-                                    { key: "yes", value: "yes" },
-                                    { key: "no", value: "no" },
+                                    { key: "yes", value: "yes", label: "Yes" },
+                                    { key: "no", value: "no", label: "No" },
                                 ]}
-                                value={
-                                    formData.individual_use === "yes"
-                                        ? ["yes"]
-                                        : ["no"]
-                                }
-                                onChange={(selected: any) =>
-                                    setFormData({
-                                        ...formData,
-                                        individual_use: selected.includes("yes") ? "yes" : "no",
-                                    })
+                                value={formData.individual_use}
+                                onChange={(val: any) =>
+                                    setFormData({ ...formData, individual_use: val })
                                 }
                             />
-
                         </div>
                     </div>
 
                     <div className="form-group-wrapper">
                         <div className="form-group">
                             <label>Exclude sale items</label>
-                            <MultiCheckBox
-                                khali_dabba={appLocalizer?.khali_dabba ?? false}
-                                wrapperClass="toggle-btn"
-                                descClass="settings-metabox-description"
-                                inputWrapperClass="toggle-checkbox-header"
-                                inputInnerWrapperClass="toggle-checkbox"
-                                inputClass="basic-input"
-                                idPrefix="toggle-switch"
-                                options={[{ key: "exclude_sale_items", value: "yes" }]}
-                                value={
-                                    formData.exclude_sale_items === "yes"
-                                        ? ["exclude_sale_items"]
-                                        : []
-                                }
-                                onChange={(selected: any) =>
-                                    setFormData({
-                                        ...formData,
-                                        exclude_sale_items: selected.includes("exclude_sale_items")
-                                            ? "yes"
-                                            : "no",
-                                    })
+                            <ToggleSetting
+                                wrapperClass="setting-form-input"
+                                options={[
+                                    { key: "yes", value: "yes", label: "Yes" },
+                                    { key: "no", value: "no", label: "No" },
+                                ]}
+                                value={formData.exclude_sale_items}
+                                onChange={(val: any) =>
+                                    setFormData({ ...formData, exclude_sale_items: val })
                                 }
                             />
                         </div>
                     </div>
+
 
                     <div className="form-group-wrapper">
                         <div className="form-group">
@@ -747,13 +766,13 @@ const AllCoupon: React.FC = () => {
                                 label: __('Edit', 'multivendorx'),
                                 icon: 'adminlib-create',
                                 onClick: (rowData: any) => {
-                                    handleEditCoupon(rowData);
+                                    handleEditCoupon(rowData.id);
                                 },
                             },
                             {
                                 label: __('Delete', 'multivendorx'),
                                 icon: 'adminlib-vendor-form-delete',
-                                onClick: async (rowData) => {
+                                onClick: async (rowData: any) => {
                                     if (
                                         confirm(
                                             `Are you sure you want to delete coupon "${rowData.code}"?`
@@ -815,6 +834,7 @@ const AllCoupon: React.FC = () => {
             ),
         },
     ];
+
     const searchFilter: RealtimeFilter[] = [
         {
             name: 'searchField',
@@ -843,7 +863,11 @@ const AllCoupon: React.FC = () => {
                 <div className="button-wrapper">
                     <div
                         className="admin-btn btn-purple"
-                        onClick={() => setAddCoupon(true)}
+                        onClick={() => {
+                            setFormData({ ...defaultFormData }); // <-- reset form
+                            setActiveTab("general");             // start with General tab
+                            setAddCoupon(true);                  // open popup
+                        }}
                     >
                         <i className="adminlib-plus-circle-o"></i>
                         Add New
