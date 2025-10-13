@@ -86,6 +86,17 @@ jQuery(document).ready(function ($) {
     }); 
     // my acoount start
 
+    // top header full screen icon strat
+    $('#fullscreenToggle').on('click', function() {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen().catch(err => {
+                console.warn(`Error attempting fullscreen: ${err.message}`);
+            });
+        } else {
+            document.exitFullscreen();
+        }
+    }); // top header full screen icon end
+
 
     // all tab
     $(".tab-pane").hide();

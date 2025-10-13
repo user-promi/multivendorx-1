@@ -336,6 +336,14 @@
                             gap: 0.625rem;
                         }
                     }
+                    .link{
+                        cursor: pointer;
+                        font-weight: 600;
+
+                        &:hover{
+                            color: $theme-color;
+                        }
+                    }
                 }
 
                 .admin-column:nth-of-type(2) {

@@ -239,14 +239,9 @@ const Orders: React.FC = () => {
             header: __("Order ID", "multivendorx"),
             cell: ({ row }) => (
                 <TableCell>
-                    {/* <button
-                        className="link-button" // You can style it as a link
-                        onClick={() => setSelectedOrder(row.original)}
-                    > */}
-                        <span onClick={() => setSelectedOrder(row.original)}>
+                        <span className="link" onClick={() => setSelectedOrder(row.original)}>
                             #{row.original.number}
                         </span>
-                    {/* </button> */}
                 </TableCell>
             ),
         },
@@ -318,6 +313,7 @@ const Orders: React.FC = () => {
             ),
         },
         {
+            id: 'action',
             header: __('Action', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell

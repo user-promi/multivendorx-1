@@ -465,12 +465,15 @@ $border-radius-button: 8rem;
 
     .left-side {
         width: 25%;
+        border-left: 0.25rem solid #fff;
 
         .title {
             padding: 0.75rem;
             transition: all 0.5s ease;
             border-radius: 0.313rem;
             margin-bottom: 0.313rem;
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
             cursor: pointer;
 
             i {
@@ -487,7 +490,7 @@ $border-radius-button: 8rem;
 
             &.active,
             &.active:hover {
-                background: $theme-background-color;
+                background: #fff;
                 color: $theme-color;
             }
         }
@@ -575,14 +578,35 @@ $border-radius-button: 8rem;
 
 // documentation start
 .documentation-wrapper {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+
     .document {
         padding: 1rem;
         border: $border-light-small;
-        margin: 0.5rem 0;
         border-radius: 0.313rem;
+        width: 32.6%;
+
+        .document-icon {
+            align-items: center;
+            background: rgba(82, 44, 129, .071);
+            border-radius: .4rem;
+            display: flex;
+            height: 2.5rem;
+            justify-content: center;
+            padding: .5rem;
+            width: 2.5rem;
+
+            i {
+                color: $theme-color;
+                font-size: 1.313rem;
+            }
+        }
 
         .title {
-            font-size: 1.313rem;
+            font-size: 1.063rem;
             font-weight: 500;
             line-height: 2rem;
             color: #000;
@@ -592,8 +616,19 @@ $border-radius-button: 8rem;
         .description {
             font-size: 0.95rem;
             line-height: 1.313rem;
+
+            .read-more {
+                font-weight: 500;
+                color: $theme-color;
+                cursor: pointer;
+            }
         }
     }
+}
+
+.document-popup-wrapper {
+    line-height: 1.45rem;
+    font-size: 1.063rem;
 }
 
 // documentation end
