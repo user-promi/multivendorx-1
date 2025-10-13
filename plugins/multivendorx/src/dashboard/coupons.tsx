@@ -25,7 +25,7 @@ type FilterData = {
     searchField?: string;
     stock_status?: string;
     couponType?: string;
-    typeCount?:string;
+    typeCount?: string;
 };
 
 const discountOptions = [
@@ -86,7 +86,38 @@ const AllCoupon: React.FC = () => {
         pageIndex: 0,
         pageSize: 10,
     });
+    const [AddCoupon, setAddCoupon] = useState(false);
+
+    const [pageCount, setPageCount] = useState(0);
+    const [activeTab, setActiveTab] = useState("general");
+
     const [couponTypeCounts, setCouponTypeCounts] = useState<{ key: string; name: string; count: number }[]>([]);
+    const handleEditCoupon = (coupon: CouponRow) => {
+        setFormData({
+            title: coupon.code,
+            content: coupon.description || '',
+            discount_type: coupon.discount_type,
+            coupon_amount: coupon.amount,
+            free_shipping: coupon.free_shipping ? "yes" : "no",
+            expiry_date: coupon.date_expires || '',
+            usage_limit: coupon.usage_limit || '',
+            limit_usage_to_x_items: coupon.limit_usage_to_x_items || '',
+            usage_limit_per_user: coupon.usage_limit_per_user || '',
+            minimum_amount: coupon.minimum_amount || '',
+            maximum_amount: coupon.maximum_amount || '',
+            individual_use: coupon.individual_use ? 'yes' : 'no',
+            exclude_sale_items: coupon.exclude_sale_items ? 'yes' : 'no',
+            product_ids: coupon.product_ids || [],
+            exclude_product_ids: coupon.excluded_product_ids || [],
+            product_categories: coupon.product_categories || [],
+            exclude_product_categories: coupon.excluded_product_categories || [],
+            customer_email: (coupon.email_restrictions || []).join(','),
+            id: coupon.id // important for update
+        });
+
+        setAddCoupon(true);       // open popup
+        setActiveTab("general");  // optional: start with general tab
+    };
 
     const fetchCouponStatusCounts = async () => {
         const statuses = ['all', 'publish', 'draft', 'pending', 'trash'];
@@ -125,10 +156,10 @@ const AllCoupon: React.FC = () => {
     function requestData(
         rowsPerPage = 10,
         currentPage = 1,
-        stockStatus = '',   
-        searchField = '',    
+        stockStatus = '',
+        searchField = '',
         couponType = '',
-        typeCount ='any',   
+        typeCount = 'any',
         startDate = new Date(0),
         endDate = new Date(),
     ) {
@@ -230,29 +261,53 @@ const AllCoupon: React.FC = () => {
         });
     }, [id]);
 
-    const [AddCoupon, setAddCoupon] = useState(false);
-
-    const [pageCount, setPageCount] = useState(0);
-    const [activeTab, setActiveTab] = useState("general");
 
     const handleSave = async (status: "draft" | "publish") => {
         try {
-            const payload = {
-                ...formData,
+            const payload: any = {
+                code: formData.title,
+                description: formData.content,
+                discount_type: formData.discount_type,
+                amount: formData.coupon_amount,
+                individual_use: formData.individual_use === "yes",
+                exclude_sale_items: formData.exclude_sale_items === "yes",
+                free_shipping: formData.free_shipping === "yes",
+                minimum_amount: formData.minimum_amount || undefined,
+                maximum_amount: formData.maximum_amount || undefined,
+                usage_limit: formData.usage_limit || undefined,
+                limit_usage_to_x_items: formData.limit_usage_to_x_items || undefined,
+                usage_limit_per_user: formData.usage_limit_per_user || undefined,
+                date_expires: formData.expiry_date || undefined,
+                email_restrictions: formData.customer_email ? formData.customer_email.split(",") : [],
+                product_ids: formData.product_ids || [],
+                excluded_product_ids: formData.exclude_product_ids || [],
+                product_categories: formData.product_categories || [],
+                excluded_product_categories: formData.exclude_product_categories || [],
                 status: status,
-                store_id: id, // attach store id if needed
+                meta_data: [
+                    { key: "multivendorx_store_id", value: id }
+                ]
             };
-            console.log(payload)
 
-            await axios.post(
-                getApiLink(appLocalizer, "coupons"),
-                payload,
-                { headers: { "X-WP-Nonce": appLocalizer.nonce } }
-            );
-            // Close popup
+            if (formData.id) {
+                // Update existing coupon
+                await axios.put(
+                    `${appLocalizer.apiUrl}/wc/v3/coupons/${formData.id}`,
+                    payload,
+                    { headers: { "X-WP-Nonce": appLocalizer.nonce } }
+                );
+            } else {
+                // Create new coupon
+                await axios.post(
+                    `${appLocalizer.apiUrl}/wc/v3/coupons`,
+                    payload,
+                    { headers: { "X-WP-Nonce": appLocalizer.nonce } }
+                );
+            }
+
+
+            // Close popup & reset form
             setAddCoupon(false);
-
-            // Optionally: reset form
             setFormData({
                 title: "",
                 content: "",
@@ -272,16 +327,17 @@ const AllCoupon: React.FC = () => {
                 product_categories: [],
                 exclude_product_categories: [],
                 customer_email: "",
+                id: undefined
             });
 
-            // Optionally reload coupons list
-            // fetchCoupons();
-
+            // Reload list
+            requestData(pagination.pageSize, pagination.pageIndex + 1);
         } catch (err) {
             console.error("Error saving coupon:", err);
             alert("Failed to save coupon");
         }
     };
+
 
     const tabs = [
         {
@@ -690,8 +746,8 @@ const AllCoupon: React.FC = () => {
                             {
                                 label: __('Edit', 'multivendorx'),
                                 icon: 'adminlib-create',
-                                onClick: (rowData) => {
-                                    window.location.href = `?page=multivendorx#&tab=coupons&edit/${rowData.id}`;
+                                onClick: (rowData: any) => {
+                                    handleEditCoupon(rowData);
                                 },
                             },
                             {
