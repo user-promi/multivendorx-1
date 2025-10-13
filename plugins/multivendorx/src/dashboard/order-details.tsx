@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { __ } from '@wordpress/i18n';
 import productImage from "../assets/images/default.png";
 import { BasicInput, SelectInput } from "zyra";
+import axios from "axios";
 
 interface OrderDetailsProps {
     order?: any; // optionally pass order data
@@ -9,6 +10,10 @@ interface OrderDetailsProps {
 }
 
 const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
+    const [orderData, setOrderData] = useState<any>(order || null);
+    const orderId = order?.id;
+
+
     const [isRefund, setIsRefund] = useState(false);
     const [values, setValues] = useState({
         commission: 50,
@@ -24,6 +29,23 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
         total: 95,
         commission: 20,
     });
+    useEffect(() => {
+        if (!orderId) return;
+
+        const fetchOrder = async () => {
+            try {
+                const res = await axios.get(`${appLocalizer.apiUrl}/wc/v3/orders/${orderId}`, {
+                    headers: { 'X-WP-Nonce': appLocalizer.nonce },
+                });
+                setOrderData(res.data);
+                console.log(res.data)
+            } catch (error) {
+                console.error("Error fetching order:", error);
+            }
+        };
+
+        fetchOrder();
+    }, [orderId]);
 
     const handleChange = (field: keyof typeof values, val: number) => {
         const newVals = { ...values, [field]: val };
@@ -31,6 +53,25 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
         newVals.total = baseTotal - newVals.discount + newVals.shipping;
         newVals.earned = newVals.commission;
         setValues(newVals);
+    };
+    const formatDateTime = (iso?: string | null) => {
+        if (!iso) return '-';
+        try {
+            const d = new Date(iso);
+            return d.toLocaleString(); // adjust locale/options if you want specific format
+        } catch {
+            return iso;
+        }
+    };
+
+    const statusBadgeClass = (status?: string) => {
+        switch ((status || '').toLowerCase()) {
+            case 'completed': return 'admin-badge green';
+            case 'on-hold': return 'admin-badge orange';
+            case 'processing': return 'admin-badge blue';
+            case 'cancelled': return 'admin-badge red';
+            default: return 'admin-badge';
+        }
     };
 
     return (
@@ -42,15 +83,22 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
                             &larr; Back to Orders
                         </button>
                     )}
-                    <div className="title">Order #{order?.number || "8456"}
-                        <div className="admin-badge green">
-                            <i className="adminlib-check"></i>
-                            Completed
+
+                    <div className="title">
+                        Order #{orderData?.number ?? orderId ?? "—"}
+                        <div className={statusBadgeClass(orderData?.status)}>
+                            {/* choose icon and label dynamically */}
+                            {orderData?.status === 'completed' ? <i className="adminlib-check"></i> : <i className="adminlib-info"></i>}
+                            {` ${(orderData?.status || 'Unknown').replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}`}
                         </div>
                     </div>
-                    <div className="des">{order?.date_created || "September 10, 2025 8:06 am"}</div>
+
+                    <div className="des">
+                        {formatDateTime(orderData?.date_created)}
+                    </div>
                 </div>
             </div>
+
 
             <div className="container-wrapper">
                 <div className="card-wrapper width-65">
@@ -63,10 +111,49 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
                                         <td className="header-col">Cost</td>
                                         <td className="header-col">Qty</td>
                                         <td className="header-col">Total</td>
-                                        <td className="header-col">Commission</td>
+                                        {/* <td className="header-col">Commission</td> */}
                                     </tr>
                                 </thead>
                                 <tbody className="admin-table-body">
+                                    {orderData?.line_items?.length > 0 ? (
+                                        orderData.line_items.map((item: any) => (
+                                            <tr key={item.id} className="admin-row simple">
+                                                <td className="admin-column">
+                                                    <div className="item-details">
+                                                        <div className="image">
+                                                            <img
+                                                                src={item?.image?.src || productImage}
+                                                                alt={item?.name || "product"}
+                                                            />
+                                                        </div>
+                                                        <div className="detail">
+                                                            <div className="name">{item?.name}</div>
+                                                            {item?.sku && <div className="sku">SKU: {item.sku}</div>}
+                                                        </div>
+                                                    </div>
+                                                </td>
+
+                                                <td className="admin-column">
+                                                    {appLocalizer.currency_symbol}{parseFloat(item?.price || 0).toFixed(2)}
+                                                </td>
+
+                                                <td className="admin-column">x {item?.quantity}</td>
+
+                                                <td className="admin-column">
+                                                    ${parseFloat(item?.total || 0).toFixed(2)}
+                                                </td>
+                                            </tr>
+                                        ))
+                                    ) : (
+                                        <tr>
+                                            <td colSpan={4} className="text-center">
+                                                No items found.
+                                            </td>
+                                        </tr>
+                                    )}
+                                </tbody>
+
+                                {/* <tbody className="admin-table-body">
                                     <tr className="admin-row simple">
                                         <td className="admin-column">
                                             <div className="item-details">
@@ -144,7 +231,7 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
                                         <td className="admin-column"></td>
                                         <td className="admin-column">$95</td>
                                     </tr>
-                                </tbody>
+                                </tbody> */}
                             </table>
                         </div>
 
@@ -194,32 +281,84 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
                 <div className="card-wrapper width-35">
                     <div className="card-content">
                         <div className="card-title">Customer details</div>
+
                         <div className="details">
                             <div className="icon">
-                                <img src="https://demos.pixinvent.com/vuexy-html-admin-template/assets/img/avatars/1.png" alt="" />
+                                <img
+                                    src={
+                                        orderData?.customer_avatar ||
+                                        "https://demos.pixinvent.com/vuexy-html-admin-template/assets/img/avatars/1.png"
+                                    }
+                                    alt={`${orderData?.billing?.first_name || "Customer"} avatar`}
+                                />
                             </div>
+
                             <div className="content">
-                                <div className="title">Shamus Tuttle</div>
-                                <div className="des">Customer id: #5003546</div>
+                                <div className="title">
+                                    {orderData?.billing?.first_name || orderData?.billing?.last_name
+                                        ? `${orderData?.billing?.first_name ?? ""} ${orderData?.billing?.last_name ?? ""}`
+                                        : "Guest Customer"}
+                                </div>
+
+                                <div className="des">
+                                    Customer ID: #{orderData?.customer_id && orderData.customer_id !== 0 ? orderData.customer_id : "—"}
+                                </div>
+
+                                {orderData?.billing?.email && (
+                                    <div className="des">
+                                        <i className="adminlib-mail" /> {orderData.billing.email}
+                                    </div>
+                                )}
+
+                                {orderData?.billing?.phone && (
+                                    <div className="des">
+                                        <i className="adminlib-phone" /> {orderData.billing.phone}
+                                    </div>
+                                )}
                             </div>
                         </div>
-                        <div className="details">
+
+                        {/* <div className="details">
                             <div className="icon "><i className="adminlib-cart green"></i></div>
                             <div className="content"><div className="title">4 Orders</div></div>
-                        </div>
+                        </div> */}
                     </div>
 
                     <div className="card-content">
                         <div className="card-title">Billing address</div>
-                        <div className="address">
-                            <div>45 Roker Terrace</div>
-                            <div>Latheronwheel</div>
-                            <div>KW5 8NW, London</div>
-                            <div>UK</div>
-                        </div>
+
+                        {orderData?.billing?.address_1 ||
+                            orderData?.billing?.city ||
+                            orderData?.billing?.postcode ||
+                            orderData?.billing?.country ? (
+                            <div className="address">
+                                {orderData.billing.first_name || orderData.billing.last_name ? (
+                                    <div>
+                                        {orderData.billing.first_name} {orderData.billing.last_name}
+                                    </div>
+                                ) : null}
+                                {orderData.billing.company && <div>{orderData.billing.company}</div>}
+                                {orderData.billing.address_1 && <div>{orderData.billing.address_1}</div>}
+                                {orderData.billing.address_2 && <div>{orderData.billing.address_2}</div>}
+                                {orderData.billing.city && (
+                                    <div>
+                                        {orderData.billing.city}
+                                        {orderData.billing.state ? `, ${orderData.billing.state}` : ""}
+                                    </div>
+                                )}
+                                {orderData.billing.postcode && <div>{orderData.billing.postcode}</div>}
+                                {orderData.billing.country && <div>{orderData.billing.country}</div>}
+                            </div>
+                        ) : (
+                            <div className="address">No billing address provided</div>
+                        )}
+
                         <div className="card-title">Payment method</div>
-                        <div className="admin-badge blue">Direct bank transfer</div>
+                        <div className="admin-badge blue">
+                            {orderData?.payment_method_title || "Not specified"}
+                        </div>
                     </div>
+
 
                     <div className="card-content">
                         <div className="card-title">Shipping address</div>
@@ -250,35 +389,42 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 
                     <div className="card-content">
                         <div className="card-title">Order notes</div>
-                        <div className="notification-wrapper">
-                            <ul>
-                                <li>
-                                    <div className="icon-wrapper"><i className="adminlib-form-paypal-email blue"></i></div>
-                                    <div className="details">
-                                        <div className="notification-title">Lorem ipsum dolor sit amet.</div>
-                                        <div className="des">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</div>
-                                        <span>1d ago</span>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="icon-wrapper"><i className="adminlib-mail orange"></i></div>
-                                    <div className="details">
-                                        <div className="notification-title">Lorem ipsum dolor sit amet.</div>
-                                        <div className="des">Lorem ipsum dolor sit amet, consectetur adipisicing elit</div>
-                                        <span>34min ago</span>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="icon-wrapper"><i className="adminlib-calendar red"></i></div>
-                                    <div className="details">
-                                        <div className="notification-title">Lorem ipsum dolor sit amet.</div>
-                                        <div className="des">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</div>
-                                        <span>34min ago</span>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
+
+                        {orderData?.order_notes && orderData.order_notes.length > 0 ? (
+                            <div className="notification-wrapper">
+                                <ul>
+                                    {orderData.order_notes.map((note: any, index: number) => (
+                                        <li key={index}>
+                                            <div className="icon-wrapper">
+                                                <i
+                                                    className={
+                                                        note.is_customer_note
+                                                            ? "adminlib-mail orange"
+                                                            : "adminlib-form-paypal-email blue"
+                                                    }
+                                                ></i>
+                                            </div>
+                                            <div className="details">
+                                                <div className="notification-title">
+                                                    {note.author || "System Note"}
+                                                </div>
+                                                <div
+                                                    className="des"
+                                                    dangerouslySetInnerHTML={{ __html: note.note || "" }}
+                                                ></div>
+                                                <span>{new Date(note.date_created).toLocaleString()}</span>
+                                            </div>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        ) : (
+                            <div className="notification-wrapper">
+                                <div className="empty">No order notes found.</div>
+                            </div>
+                        )}
                     </div>
+
                 </div>
             </div>
         </>
