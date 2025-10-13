@@ -135,7 +135,7 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
         $count    = $request->get_param( 'count' );
         $store_id = intval( $request->get_param( 'store_id' ) );
         $status   = $request->get_param( 'status' );
-    
+        $filter_status   = $request->get_param( 'filter_status' );
         // 🔹 Handle date range from request
         $start_date = $request->get_param('start_date');
         $end_date   = $request->get_param('end_date');
@@ -155,6 +155,7 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
         // Add date filters
         if ( $start_date ) $args['start_date'] = $start_date;
         if ( $end_date )   $args['end_date']   = $end_date;
+        if ( $filter_status )   $args['entry_type']   = $filter_status;
     
         if ( $count ) {
             $transactions = Transaction::get_transaction_information( $args );
@@ -170,6 +171,7 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
             $store = new \MultiVendorX\Store\Store($row['store_id']);
     
             return [
+                'id'             => $row['id'],
                 'store_name'     => $store ? $store->get('name') : '-',
                 'amount'         => $row['amount'],
                 'balance'        => $row['balance'],
@@ -182,8 +184,25 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
                 'transaction_type' => $row['transaction_type'],
             ];
         }, $transactions);
-    
-        return rest_ensure_response( $formatted );
+        $countArgs = [
+            'count' => true,
+        ];
+        
+        if ( $store_id ) {
+            $countArgs['store_id'] = $store_id;
+        }
+        
+        $all    = Transaction::get_transaction_information( $countArgs );
+        $credit = Transaction::get_transaction_information( array_merge( $countArgs, ['entry_type' => 'Cr'] ) );
+        $debit  = Transaction::get_transaction_information( array_merge( $countArgs, ['entry_type' => 'Dr'] ) );
+        
+        $response = [
+            'transaction' => $formatted,
+            'all'         => $all,
+            'credit'      => $credit,
+            'debit'      =>  $debit,
+        ];
+        return rest_ensure_response( $response );
     }
     
     

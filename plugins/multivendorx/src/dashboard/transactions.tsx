@@ -21,13 +21,18 @@ export interface RealtimeFilter {
     name: string;
     render: (updateFilter: (key: string, value: any) => void, filterValue: any) => ReactNode;
 }
-
+type TransactionStatus = {
+    key: string;
+    name: string;
+    count: number;
+};
 const Transactions: React.FC = () => {
     const [data, setData] = useState<TransactionRow[]>([]);
     const [pagination, setPagination] = useState<PaginationState>({ pageIndex: 0, pageSize: 10 });
     const [modalTransaction, setModalTransaction] = useState<TransactionRow | null>(null);
     const [totalRows, setTotalRows] = useState<number>(0);
     const [pageCount, setPageCount] = useState(0);
+    const [transactionStatus, setTransactionStatus] = useState<TransactionStatus[] | null>(null);
 
     // 🔹 Fetch total rows on mount or date change
     useEffect(() => {
@@ -58,6 +63,7 @@ const Transactions: React.FC = () => {
     function requestData(
         rowsPerPage = 10,
         currentPage = 1,
+        typeCount ='',
         startDate = new Date(0),
         endDate = new Date(),
     ) {
@@ -72,10 +78,29 @@ const Transactions: React.FC = () => {
                 row: rowsPerPage,
                 store_id: appLocalizer.store_id,
                 start_date: startDate,
+                filter_status:typeCount == 'all'? '':typeCount,
                 end_date: endDate,
             },
+        }).then((response) => {
+            setData(response.data.transaction || []);
+            setTransactionStatus([
+                {
+                    key: 'all',
+                    name: 'All',
+                    count: response.data.all || 0,
+                },
+                {
+                    key: 'Cr',
+                    name: 'Credit',
+                    count: response.data.credit || 0,
+                },
+                {
+                    key: 'Dr',
+                    name: 'Debit',
+                    count: response.data.debit || 0,
+                },
+            ]);
         })
-            .then((response) => setData(response.data || []))
             .catch(() => setData([]));
     }
 
@@ -87,6 +112,7 @@ const Transactions: React.FC = () => {
         requestData(
             rowsPerPage,
             currentPage,
+            filterData?.typeCount,
             filterData?.date?.start_date,
             filterData?.date?.end_date
         );
@@ -130,6 +156,10 @@ const Transactions: React.FC = () => {
             },
         },
         {
+            header: __("Transaction ID", "multivendorx"),
+            cell: ({ row }) => <TableCell>#{row.original.id}</TableCell>,
+        },
+        {
             id: 'order_details',
             accessorKey: 'order_details',
             enableSorting: true,
@@ -156,10 +186,6 @@ const Transactions: React.FC = () => {
             cell: ({ row }) => <TableCell>{row.original.transaction_type}</TableCell>,
         },
         {
-            header: __("Payment Mode", "multivendorx"),
-            cell: ({ row }) => <TableCell>{row.original.payment_mode}</TableCell>,
-        },
-        {
             id: 'credit',
             accessorKey: 'credit',
             enableSorting: true,
@@ -179,7 +205,7 @@ const Transactions: React.FC = () => {
             header: __('Debit', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell title={row.original.debit || ''}>
-                    {row.original.debit ? `${appLocalizer.currency_symbol}${row.original.debit}` : '0'}
+                    {row.original.debit ? `${appLocalizer.currency_symbol}${row.original.debit}` : '-'}
                 </TableCell>
             ),
         },
@@ -189,15 +215,41 @@ const Transactions: React.FC = () => {
             enableSorting: true,
             accessorFn: row => parseFloat(row.balance || '0'),
             header: __('Balance', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.balance || ''}>
-                    {row.original.balance ? `${appLocalizer.currency_symbol}${row.original.balance}` : '-'}
-                </TableCell>
-            ),
-        },
+            cell: ({ row }) => {
+                const balance = row.original.balance || '';
+                const status = row.original.status || '';
+        
+                // Determine icon class based on status
+                let iconClass = '';
+                switch(status) {
+                    case 'pending':
+                        iconClass = 'adminlib-clock';   // example class for pending
+                        break;
+                    case 'Completed':
+                        iconClass = 'adminlib-check';   // example class for completed
+                        break;
+                    case 'failed':
+                        iconClass = 'adminlib-cross';   // example class for failed
+                        break;
+                    default:
+                        iconClass = '';
+                }
+        
+                return (
+                    <TableCell>
+                        {iconClass && <i className={iconClass} style={{ marginRight: '4px' }}></i>}
+                        {balance ? `${appLocalizer.currency_symbol}${balance}` : '-'}
+                    </TableCell>
+                );
+            },
+        },        
         {
             header: __("Status", "multivendorx"),
             cell: ({ row }) => <TableCell>{row.original.status}</TableCell>,
+        },
+        {
+            header: __("Payment Mode", "multivendorx"),
+            cell: ({ row }) => <TableCell>{row.original.payment_mode}</TableCell>,
         },
         {
             header: __("Action", "multivendorx"),
@@ -220,7 +272,7 @@ const Transactions: React.FC = () => {
                 />
             ),
         },
-        
+
     ];
     const realtimeFilter: RealtimeFilter[] = [
         {
@@ -230,7 +282,7 @@ const Transactions: React.FC = () => {
                     <CalendarInput
                         wrapperClass=""
                         inputClass=""
-                        onChange={(range:any) => {
+                        onChange={(range: any) => {
                             updateFilter('date', {
                                 start_date: range.startDate,
                                 end_date: range.endDate,
@@ -256,6 +308,7 @@ const Transactions: React.FC = () => {
                 handlePagination={requestApiForData}
                 perPageOption={[10, 25, 50]}
                 totalCounts={totalRows}
+                typeCounts={transactionStatus as TransactionStatus[]}
             />
 
             {modalTransaction && (
