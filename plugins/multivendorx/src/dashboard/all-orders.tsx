@@ -47,6 +47,7 @@ const Orders: React.FC = () => {
         const rowsPerPage = pagination.pageSize;
         requestData(rowsPerPage, currentPage);
     }, [pagination]);
+    
     const fetchOrderStatusCounts = async () => {
         try {
             const statuses = ["all", "pending", "processing", "on-hold", "completed", "cancelled", "refunded", "failed", "trash"];
@@ -199,7 +200,7 @@ const Orders: React.FC = () => {
                 ref={bulkSelectRef}
                 onChange={handleBulkAction}
             >
-                <option value="">{__('Bulk actions')}</option>
+                <option value="">{__('Change order status')}</option>
                 <option value="completed">{__('Completed', 'multivendorx')}</option>
                 <option value="processing">{__('Processing', 'multivendorx')}</option>
                 <option value="pending">{__('Pending', 'multivendorx')}</option>

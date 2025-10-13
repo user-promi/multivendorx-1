@@ -126,7 +126,7 @@ const AdminDashboard = () => {
       href: "#",
     },
     {
-      title: "Verified Stores Only,
+      title: "Verified Stores Only",
       desc: "Screen stores with document verification and approval – build a trusted marketplace from day one.",
       iconClass: "adminlib-global-community",
       linkText: "Join Discord",
@@ -267,10 +267,14 @@ const AdminDashboard = () => {
                         Upgrade Now
                         <i className="adminlib-arrow-right icon-pro-btn"></i>
                       </a>
-                      <div onClick={() => window.location.href = `?page=multivendorx#&tab=setup`} href="#free-vs-pro" className="admin-btn">
+                      <div
+                        className="admin-btn"
+                        onClick={() => (window.location.href = '?page=multivendorx#&tab=setup')}
+                      >
                         Launch Setup Wizard
                         <i className="adminlib-import"></i>
                       </div>
+
                     </div>
                   </div>
                   <div className="image">

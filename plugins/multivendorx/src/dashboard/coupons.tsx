@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { __ } from '@wordpress/i18n';
-import { BasicInput, CommonPopup, getApiLink, MultiCheckBox, SelectInput, Table, TableCell, TextArea, ToggleSetting } from 'zyra';
+import { BasicInput, CalendarInput, CommonPopup, getApiLink, MultiCheckBox, SelectInput, Table, TableCell, TextArea, ToggleSetting } from 'zyra';
 import {
     ColumnDef,
     RowSelectionState,
@@ -8,24 +8,78 @@ import {
 } from '@tanstack/react-table';
 import axios from 'axios';
 
-type StoreRow = {
+type CouponRow = {
     id: number;
-    store_name?: string;   // Coupon Name
-    store_slug?: string;   // Reused but we'll map different fields into it
-    type?: string;         // Coupon Type
-    amount?: string;       // Coupon Amount
-    usage?: string;        // Usage / Limit
-    expiry?: string;       // Expiry Date
+    code: string;
+    discount_type: string;
+    amount: string;
+    usage_count: number;
+    usage_limit?: number | null;
+    date_expires?: string | null;
+    description?: string;
     status?: string;
 };
+
+type FilterData = {
+    searchAction?: string;
+    searchField?: string;
+    stock_status?: string;
+    couponType?: string;
+    typeCount?: string;
+};
+
 const discountOptions = [
     { label: "Percentage discount", value: "percent" },
     { label: "Fixed cart discount", value: "fixed_cart" },
     { label: "Fixed product discount", value: "fixed_product" },
 ];
+const formatWooDate = (dateString: string) => {
+    if (!dateString) return '-';
+    const date = new Date(dateString);
+    return date.toLocaleString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+    });
+};
+
+export interface RealtimeFilter {
+    name: string;
+    render: (updateFilter: (key: string, value: any) => void, filterValue: any) => ReactNode;
+}
+const formatDateForInput = (dateString?: string | null) => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+};
 
 const AllCoupon: React.FC = () => {
     const [id, setId] = useState<string | null>(null);
+    const defaultFormData = {
+        title: "",
+        content: "",
+        discount_type: "",
+        coupon_amount: "",
+        free_shipping: "no",
+        expiry_date: "",
+        usage_limit: "",
+        limit_usage_to_x_items: "",
+        usage_limit_per_user: "",
+        minimum_amount: "",
+        maximum_amount: "",
+        individual_use: "no",
+        exclude_sale_items: "no",
+        product_ids: [],
+        exclude_product_ids: [],
+        product_categories: [],
+        exclude_product_categories: [],
+        customer_email: "",
+        id: undefined
+    };
+
     const [formData, setFormData] = useState<any>({
         title: "",
         content: "",
@@ -47,13 +101,14 @@ const AllCoupon: React.FC = () => {
         customer_email: "",
     });
 
+
     useEffect(() => {
         const searchParams = new URLSearchParams(window.location.search);
         const dashboardId = searchParams.get("dashboard");
         setId(dashboardId);
     }, []);
 
-    const [data, setData] = useState<StoreRow[]>([]);
+    const [data, setData] = useState<CouponRow[]>([]);
     const [storeProducts, setStoreProducts] = useState<{ value: string; label: string }[]>([]);
     const [categories, setCategories] = useState<{ value: string; label: string }[]>([]);
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
@@ -62,6 +117,179 @@ const AllCoupon: React.FC = () => {
         pageIndex: 0,
         pageSize: 10,
     });
+    const [AddCoupon, setAddCoupon] = useState(false);
+
+    const [pageCount, setPageCount] = useState(0);
+    const [activeTab, setActiveTab] = useState("general");
+
+    const [couponTypeCounts, setCouponTypeCounts] = useState<{ key: string; name: string; count: number }[]>([]);
+    const handleEditCoupon = async (couponId: number) => {
+        try {
+            const res = await axios.get(`${appLocalizer.apiUrl}/wc/v3/coupons/${couponId}`, {
+                headers: { 'X-WP-Nonce': appLocalizer.nonce }
+            });
+
+            const coupon = res.data;
+
+            setFormData({
+                title: coupon.code,
+                content: coupon.description || '',
+                discount_type: coupon.discount_type,
+                coupon_amount: coupon.amount,
+                free_shipping: coupon.free_shipping ? "yes" : "no",
+                expiry_date: formatDateForInput(coupon.date_expires), // <-- fix date
+                usage_limit: coupon.usage_limit || '',
+                limit_usage_to_x_items: coupon.limit_usage_to_x_items || '',
+                usage_limit_per_user: coupon.usage_limit_per_user || '',
+                minimum_amount: coupon.minimum_amount || '',
+                maximum_amount: coupon.maximum_amount || '',
+                individual_use: coupon.individual_use ? 'yes' : 'no',
+                exclude_sale_items: coupon.exclude_sale_items ? 'yes' : 'no',
+                product_ids: coupon.product_ids || [],
+                exclude_product_ids: coupon.excluded_product_ids || [],
+                product_categories: coupon.product_categories || [],
+                exclude_product_categories: coupon.excluded_product_categories || [],
+                customer_email: (coupon.email_restrictions || []).join(','),
+                id: coupon.id
+            });
+            
+
+            setAddCoupon(true);       // open popup
+            setActiveTab("general");  // optional: start with general tab
+        } catch (err) {
+            console.error("Failed to fetch coupon details:", err);
+            alert("Failed to fetch coupon details. Please try again.");
+        }
+    };
+
+
+    const fetchCouponStatusCounts = async () => {
+        const statuses = ['all', 'publish', 'draft', 'pending', 'trash'];
+        const counts = await Promise.all(
+            statuses.map(async (status) => {
+                const params: any = {
+                    meta_key: 'multivendorx_store_id',
+                    value: appLocalizer.store_id,
+                };
+
+                if (status !== 'all') {
+                    params.status = status;
+                } else {
+                    params.status = 'any'; // WooCommerce: all statuses
+                }
+
+                const res = await axios.get(`${appLocalizer.apiUrl}/wc/v3/coupons`, {
+                    headers: { 'X-WP-Nonce': appLocalizer.nonce },
+                    params,
+                });
+
+                const total = parseInt(res.headers['x-wp-total'] || '0');
+
+                return {
+                    key: status,
+                    name: status === 'all' ? __('All', 'multivendorx') : status.charAt(0).toUpperCase() + status.slice(1),
+                    count: total,
+                };
+            })
+        );
+        setCouponTypeCounts(counts.filter(c => c.key === 'all' || c.count > 0));
+    };
+
+
+    // Fetch data from backend.
+    function requestData(
+        rowsPerPage = 10,
+        currentPage = 1,
+        stockStatus = '',
+        searchField = '',
+        couponType = '',
+        typeCount = 'any',
+        startDate = new Date(0),
+        endDate = new Date(),
+    ) {
+        setData([]);
+
+        // Build the base parameters object
+        const params: any = {
+            status: typeCount,
+            page: currentPage,
+            row: rowsPerPage,
+            after: startDate,
+            before: endDate,
+            meta_key: 'multivendorx_store_id',
+            value: appLocalizer.store_id,
+        };
+
+        if (stockStatus) {
+            params.stock_status = stockStatus;
+        }
+
+        if (searchField) {
+            params.search = searchField;
+        }
+        if (couponType) {
+            params.discount_type = couponType;
+        }
+        axios({
+            method: 'GET',
+            url: `${appLocalizer.apiUrl}/wc/v3/coupons`,
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            params: params, // Use the dynamically built params object
+        })
+            .then((response) => {
+                const total = parseInt(response.headers['x-wp-total']);
+                setTotalRows(total);
+                setPageCount(Math.ceil(total / rowsPerPage));
+
+                // Map WooCommerce coupon data to our table rows
+                const formatted = response.data.map((coupon: any) => ({
+                    id: coupon.id,
+                    code: coupon.code,
+                    discount_type: coupon.discount_type,
+                    amount: coupon.amount,
+                    usage_count: coupon.usage_count,
+                    usage_limit: coupon.usage_limit,
+                    date_expires: coupon.date_expires,
+                    description: coupon.description,
+                    status: coupon.status, // usually 'publish', 'draft', or 'trash'
+                }));
+                setData(formatted);
+            })
+
+            .catch(() => {
+                setData([]);
+                setTotalRows(0);
+                setPageCount(0);
+            });
+    }
+
+    // Handle pagination and filter changes
+    const requestApiForData = (
+        rowsPerPage: number,
+        currentPage: number,
+        filterData: FilterData
+    ) => {
+        setData([]);
+        // Arguments must be passed in the exact order requestData expects them.
+        requestData(
+            rowsPerPage,                            // 1: rowsPerPage
+            currentPage,                            // 2: currentPage
+            filterData?.stock_status,               // 4: stockStatus
+            filterData?.searchField,                // 5: searchField (Assuming filterData uses searchField for the search box value)
+            filterData?.couponType,
+            filterData?.typeCount,                // 6: couponType
+            filterData?.date?.start_date,           // 7: startDate
+            filterData?.date?.end_date,             // 8: endDate
+        );
+    };
+
+    useEffect(() => {
+        fetchCouponStatusCounts();
+        const currentPage = pagination.pageIndex + 1;
+        const rowsPerPage = pagination.pageSize;
+        requestData(rowsPerPage, currentPage);
+    }, [pagination]);
+
     useEffect(() => {
         if (!id) return;
 
@@ -77,37 +305,53 @@ const AllCoupon: React.FC = () => {
         });
     }, [id]);
 
-    const [showDropdown, setShowDropdown] = useState(false);
-    const [AddCoupon, setAddCoupon] = useState(false);
-
-    const toggleDropdown = (id: any) => {
-        if (showDropdown === id) {
-            setShowDropdown(false);
-            return;
-        }
-        setShowDropdown(id);
-    };
-    const [pageCount, setPageCount] = useState(0);
-    const [activeTab, setActiveTab] = useState("general");
 
     const handleSave = async (status: "draft" | "publish") => {
         try {
-            const payload = {
-                ...formData,
+            const payload: any = {
+                code: formData.title,
+                description: formData.content,
+                discount_type: formData.discount_type,
+                amount: formData.coupon_amount,
+                individual_use: formData.individual_use === "yes",
+                exclude_sale_items: formData.exclude_sale_items === "yes",
+                free_shipping: formData.free_shipping === "yes",
+                minimum_amount: formData.minimum_amount || undefined,
+                maximum_amount: formData.maximum_amount || undefined,
+                usage_limit: formData.usage_limit || undefined,
+                limit_usage_to_x_items: formData.limit_usage_to_x_items || undefined,
+                usage_limit_per_user: formData.usage_limit_per_user || undefined,
+                date_expires: formData.expiry_date || undefined,
+                email_restrictions: formData.customer_email ? formData.customer_email.split(",") : [],
+                product_ids: formData.product_ids || [],
+                excluded_product_ids: formData.exclude_product_ids || [],
+                product_categories: formData.product_categories || [],
+                excluded_product_categories: formData.exclude_product_categories || [],
                 status: status,
-                store_id: id, // attach store id if needed
+                meta_data: [
+                    { key: "multivendorx_store_id", value: id }
+                ]
             };
-            console.log(payload)
 
-            await axios.post(
-                getApiLink(appLocalizer, "coupons"),
-                payload,
-                { headers: { "X-WP-Nonce": appLocalizer.nonce } }
-            );
-            // Close popup
+            if (formData.id) {
+                // Update existing coupon
+                await axios.put(
+                    `${appLocalizer.apiUrl}/wc/v3/coupons/${formData.id}`,
+                    payload,
+                    { headers: { "X-WP-Nonce": appLocalizer.nonce } }
+                );
+            } else {
+                // Create new coupon
+                await axios.post(
+                    `${appLocalizer.apiUrl}/wc/v3/coupons`,
+                    payload,
+                    { headers: { "X-WP-Nonce": appLocalizer.nonce } }
+                );
+            }
+
+
+            // Close popup & reset form
             setAddCoupon(false);
-
-            // Optionally: reset form
             setFormData({
                 title: "",
                 content: "",
@@ -127,16 +371,17 @@ const AllCoupon: React.FC = () => {
                 product_categories: [],
                 exclude_product_categories: [],
                 customer_email: "",
+                id: undefined
             });
 
-            // Optionally reload coupons list
-            // fetchCoupons();
-
+            // Reload list
+            requestData(pagination.pageSize, pagination.pageIndex + 1);
         } catch (err) {
             console.error("Error saving coupon:", err);
             alert("Failed to save coupon");
         }
     };
+
 
     const tabs = [
         {
@@ -290,62 +535,37 @@ const AllCoupon: React.FC = () => {
                     <div className="form-group-wrapper">
                         <div className="form-group">
                             <label>Individual use only</label>
-                            <MultiCheckBox
-                                khali_dabba={appLocalizer?.khali_dabba ?? false}
-                                wrapperClass="toggle-btn"
-                                descClass="settings-metabox-description"
-                                inputWrapperClass="toggle-checkbox-header"
-                                inputInnerWrapperClass="toggle-checkbox"
-                                inputClass="basic-input"
-                                idPrefix="toggle-switch"
+                            <ToggleSetting
+                                wrapperClass="setting-form-input"
                                 options={[
-                                    { key: "yes", value: "yes" },
-                                    { key: "no", value: "no" },
+                                    { key: "yes", value: "yes", label: "Yes" },
+                                    { key: "no", value: "no", label: "No" },
                                 ]}
-                                value={
-                                    formData.individual_use === "yes"
-                                        ? ["yes"]
-                                        : ["no"]
-                                }
-                                onChange={(selected: any) =>
-                                    setFormData({
-                                        ...formData,
-                                        individual_use: selected.includes("yes") ? "yes" : "no",
-                                    })
+                                value={formData.individual_use}
+                                onChange={(val: any) =>
+                                    setFormData({ ...formData, individual_use: val })
                                 }
                             />
-
                         </div>
                     </div>
 
                     <div className="form-group-wrapper">
                         <div className="form-group">
                             <label>Exclude sale items</label>
-                            <MultiCheckBox
-                                khali_dabba={appLocalizer?.khali_dabba ?? false}
-                                wrapperClass="toggle-btn"
-                                descClass="settings-metabox-description"
-                                inputWrapperClass="toggle-checkbox-header"
-                                inputInnerWrapperClass="toggle-checkbox"
-                                inputClass="basic-input"
-                                idPrefix="toggle-switch"
-                                options={[{ key: "exclude_sale_items", value: "yes" }]}
-                                value={
-                                    formData.exclude_sale_items === "yes"
-                                        ? ["exclude_sale_items"]
-                                        : []
-                                }
-                                onChange={(selected: any) =>
-                                    setFormData({
-                                        ...formData,
-                                        exclude_sale_items: selected.includes("exclude_sale_items")
-                                            ? "yes"
-                                            : "no",
-                                    })
+                            <ToggleSetting
+                                wrapperClass="setting-form-input"
+                                options={[
+                                    { key: "yes", value: "yes", label: "Yes" },
+                                    { key: "no", value: "no", label: "No" },
+                                ]}
+                                value={formData.exclude_sale_items}
+                                onChange={(val: any) =>
+                                    setFormData({ ...formData, exclude_sale_items: val })
                                 }
                             />
                         </div>
                     </div>
+
 
                     <div className="form-group-wrapper">
                         <div className="form-group">
@@ -439,49 +659,7 @@ const AllCoupon: React.FC = () => {
         }
     ];
 
-    // 🔹 Add demo data on mount
-    useEffect(() => {
-        const demoData: StoreRow[] = [
-            {
-                id: 25831,
-                store_name: "EAA2US8Z",
-                type: "Fixed Cart Discount",
-                amount: "10.6",
-                usage: "0 / 200",
-                expiry: "2025-12-31",
-                status: "Active",
-            },
-            {
-                id: 25832,
-                store_name: "WELCOME10",
-                type: "Percentage",
-                amount: "10%",
-                usage: "12 / 100",
-                expiry: "2026-01-15",
-                status: "Active",
-            },
-            {
-                id: 25833,
-                store_name: "FREESHIP",
-                type: "Free Shipping",
-                amount: "—",
-                usage: "5 / ∞",
-                expiry: "2025-10-01",
-                status: "Expired",
-            },
-        ];
-        setData(demoData);
-        setTotalRows(demoData.length);
-    }, []);
-
-    // 🔹 Update page count when pagination or totalRows changes
-    useEffect(() => {
-        const rowsPerPage = pagination.pageSize;
-        setPageCount(Math.ceil(totalRows / rowsPerPage));
-    }, [pagination, totalRows]);
-
-    // Column definitions
-    const columns: ColumnDef<StoreRow>[] = [
+    const columns: ColumnDef<CouponRow>[] = [
         {
             id: 'select',
             header: ({ table }) => (
@@ -500,61 +678,80 @@ const AllCoupon: React.FC = () => {
             ),
         },
         {
-            header: __('Coupon Name', 'multivendorx'),
+            header: __('Coupon Code', 'multivendorx'),
             cell: ({ row }) => (
-                <TableCell title={row.original.store_name || ''}>
-                    {row.original.store_name || '-'}
+                <TableCell title={row.original.code}>
+                    {row.original.code}
                 </TableCell>
             ),
         },
         {
-            header: __('Coupon type', 'multivendorx'),
+            header: __('Coupon Type', 'multivendorx'),
             cell: ({ row }) => (
-                <TableCell title={row.original.type || ''}>
-                    {row.original.type || '-'}
+                <TableCell title={row.original.discount_type}>
+                    {row.original.discount_type.replace('_', ' ')}
                 </TableCell>
             ),
         },
         {
-            header: __('Coupon Amount', 'multivendorx'),
+            id: 'amount',
+            accessorKey: 'amount',
+            accessorFn: row => parseFloat(row.amount || '0'),
+            enableSorting: true,
+            header: __('Amount', 'multivendorx'),
             cell: ({ row }) => (
-                <TableCell title={row.original.amount || ''}>
-                    {row.original.amount || '-'}
+                <TableCell title={row.original.amount}>
+                    {appLocalizer.currency_symbol}{row.original.amount}
                 </TableCell>
             ),
         },
         {
             header: __('Usage / Limit', 'multivendorx'),
+            cell: ({ row }) => {
+                const usageCount = row.original.usage_count ?? 0;
+                const usageLimit =
+                    row.original.usage_limit && row.original.usage_limit > 0
+                        ? row.original.usage_limit
+                        : '∞';
+                return (
+                    <TableCell>{`${usageCount} / ${usageLimit}`}</TableCell>
+                );
+            },
+        },
+        {
+            id: 'date_expires',
+            accessorKey: 'date_expires',
+            enableSorting: true,
+            header: __('Expiry Date', 'multivendorx'),
             cell: ({ row }) => (
-                <TableCell title={row.original.usage || ''}>
-                    {row.original.usage || '-'}
-                </TableCell>
+                <TableCell>{formatWooDate(row.original.date_expires)}</TableCell>
             ),
         },
         {
-            header: __('Expiry Date', 'multivendorx'),
+            header: __('Description', 'multivendorx'),
             cell: ({ row }) => (
-                <TableCell title={row.original.expiry || ''}>
-                    {row.original.expiry || '-'}
+                <TableCell title={row.original.description || '-'}>
+                    {row.original.description || '-'}
                 </TableCell>
             ),
         },
         {
             header: __('Status', 'multivendorx'),
             cell: ({ row }) => (
-                <TableCell title={row.original.status || ""}>
-                    {row.original.status === "Active" && (
-                        <span className="admin-badge green">Active</span>
+                <TableCell>
+                    {row.original.status === 'publish' && (
+                        <span className="admin-badge green">Publish</span>
                     )}
-                    {row.original.status === "Inactive" && (
-                        <span className="admin-badge ">Inactive</span>
+                    {row.original.status === 'draft' && (
+                        <span className="admin-badge">Draft</span>
                     )}
-                    {row.original.status === "Expired" && (
-                        <span className="admin-badge red">Expired</span>
+                    {row.original.status === 'trash' && (
+                        <span className="admin-badge red">Trash</span>
+                    )}
+                    {row.original.status === 'pending' && (
+                        <span className="admin-badge red">Pending</span>
                     )}
                 </TableCell>
-
-
             ),
         },
         {
@@ -568,154 +765,94 @@ const AllCoupon: React.FC = () => {
                             {
                                 label: __('Edit', 'multivendorx'),
                                 icon: 'adminlib-create',
-                                onClick: (rowData) => {
-                                    window.location.href = `?page=multivendorx#&tab=stores&edit/${rowData.id}`;
+                                onClick: (rowData: any) => {
+                                    handleEditCoupon(rowData.id);
                                 },
-                                hover: true
                             },
                             {
                                 label: __('Delete', 'multivendorx'),
                                 icon: 'adminlib-vendor-form-delete',
-                                onClick: (rowData) => {
-                                    window.location.href = `?page=multivendorx#&tab=stores&edit/${rowData.id}`;
+                                onClick: async (rowData: any) => {
+                                    if (
+                                        confirm(
+                                            `Are you sure you want to delete coupon "${rowData.code}"?`
+                                        )
+                                    ) {
+                                        await axios.delete(
+                                            `${appLocalizer.apiUrl}/wc/v3/coupons/${rowData.id}`,
+                                            {
+                                                headers: {
+                                                    'X-WP-Nonce': appLocalizer.nonce,
+                                                },
+                                            }
+                                        );
+                                        requestData(pagination.pageSize, pagination.pageIndex + 1);
+                                    }
                                 },
-                                hover: true
                             },
-
                         ],
                     }}
                 />
             ),
         },
-        // {
-        //     header: __('Action', 'multivendorx'),
-        //     cell: ({ row }) => (
-        //         <TableCell title="Action">
-        //             <div className="action-section">
-        //                 <div className="action-icons">
-        //                     <i
-        //                         className="adminlib-more-vertical"
-        //                         onClick={() =>
-        //                             toggleDropdown(row.original.order_id)
-        //                         }
-        //                     ></i>
-        //                     <div
-        //                         className={`action-dropdown ${showDropdown === row.original.order_id
-        //                             ? 'show'
-        //                             : ''
-        //                             }`}
-        //                     >
-
-        //                         <ul>
-        //                             <li
-        //                                 onClick={() =>
-        //                                     (window.location.href = `?page=multivendorx#&tab=stores&view&id=${row.original.id}`)
-        //                                 }
-        //                             >
-        //                                 <i className="adminlib-eye"></i>
-        //                                 {__('View Store', 'multivendorx')}
-        //                             </li>
-        //                             <li
-        //                                 onClick={() =>
-        //                                     (window.location.href = `?page=multivendorx#&tab=stores&edit/${row.original.id}`)
-        //                                 }
-        //                             >
-        //                                 <i className="adminlib-create"></i>
-        //                                 {__('Edit Store', 'multivendorx')}
-        //                             </li>
-        //                         </ul>
-        //                     </div>
-        //                 </div>
-        //             </div>
-        //         </TableCell>
-        //     ),
-        // },
     ];
+
     const realtimeFilter: RealtimeFilter[] = [
         {
-            name: 'category',
+            name: 'couponType',
             render: (updateFilter: (key: string, value: string) => void, filterValue: string | undefined) => (
-                <div className="   course-field">
+                <div className="   group-field">
                     <select
-                        name="commissionStatus"
+                        name="couponType"
                         onChange={(e) => updateFilter(e.target.name, e.target.value)}
                         value={filterValue || ''}
                         className="basic-select"
                     >
-                        <option value="">Category</option>
-                        {/* { Object.entries( courses ).map( ( [ courseId, courseName ] ) => (
-                                <option key={ courseId } value={ courseId }>
-                                    { courseName }
-                                </option>
-                            ) ) } */}
+                        <option value="">{__('All Types', 'multivendorx')}</option>
+                        <option value="percent">{__('Percentage Discount', 'multivendorx')}</option>
+                        <option value="fixed_cart">{__('Fixed Cart Discount', 'multivendorx')}</option>
+                        <option value="fixed_product">{__('Fixed Product Discount', 'multivendorx')}</option>
                     </select>
                 </div>
             ),
         },
         {
-            name: 'product-type',
-            render: (updateFilter: (key: string, value: string) => void, filterValue: string | undefined) => (
-                <div className="   group-field">
-                    <select
-                        name="product-type"
-                        onChange={(e) => updateFilter(e.target.name, e.target.value)}
-                        value={filterValue || ''}
-                        className="basic-select"
-                    >
-                        <option value="">Product Type</option>
-                        {/* { Object.entries( groups ).map( ( [ groupId, groupName ] ) => (
-                                <option key={ groupId } value={ groupId }>
-                                    { ' ' }
-                                    { groupName }{ ' ' }
-                                </option>
-                            ) ) } */}
-                    </select>
-                </div>
-            ),
-        },
-        {
-            name: 'stock-status',
-            render: (updateFilter: (key: string, value: string) => void, filterValue: string | undefined) => (
-                <div className="   group-field">
-                    <select
-                        name="product-type"
-                        onChange={(e) => updateFilter(e.target.name, e.target.value)}
-                        value={filterValue || ''}
-                        className="basic-select"
-                    >
-                        <option value="">Stock Status</option>
-                        {/* { Object.entries( groups ).map( ( [ groupId, groupName ] ) => (
-                                <option key={ groupId } value={ groupId }>
-                                    { ' ' }
-                                    { groupName }{ ' ' }
-                                </option>
-                            ) ) } */}
-                    </select>
-                </div>
-            ),
-        },
-        {
-            name: 'brand',
-            render: (updateFilter: (key: string, value: string) => void, filterValue: string | undefined) => (
-                <div className="   group-field">
-                    <select
-                        name="product-type"
-                        onChange={(e) => updateFilter(e.target.name, e.target.value)}
-                        value={filterValue || ''}
-                        className="basic-select"
-                    >
-                        <option value="">Brand</option>
-                        {/* { Object.entries( groups ).map( ( [ groupId, groupName ] ) => (
-                                <option key={ groupId } value={ groupId }>
-                                    { ' ' }
-                                    { groupName }{ ' ' }
-                                </option>
-                            ) ) } */}
-                    </select>
+            name: 'date',
+            render: (updateFilter) => (
+                <div className="right">
+                    <CalendarInput
+                        wrapperClass=""
+                        inputClass=""
+                        onChange={(range: any) => {
+                            updateFilter('date', {
+                                start_date: range.startDate,
+                                end_date: range.endDate,
+                            });
+                        }}
+                    />
                 </div>
             ),
         },
     ];
+
+    const searchFilter: RealtimeFilter[] = [
+        {
+            name: 'searchField',
+            render: (updateFilter, filterValue) => (
+                <div className="search-section">
+                    <input
+                        type="text"
+                        name="searchField"
+                        placeholder={__('Search', 'multivendorx')}
+                        value={filterValue || ''}
+                        onChange={(e) => updateFilter(e.target.name, e.target.value)}
+                    />
+                    <i className="adminlib-search"></i>
+                </div>
+            ),
+        },
+    ];
+
     return (
         <>
             <div className="page-title-wrapper">
@@ -726,7 +863,11 @@ const AllCoupon: React.FC = () => {
                 <div className="button-wrapper">
                     <div
                         className="admin-btn btn-purple"
-                        onClick={() => setAddCoupon(true)}
+                        onClick={() => {
+                            setFormData({ ...defaultFormData }); // <-- reset form
+                            setActiveTab("general");             // start with General tab
+                            setAddCoupon(true);                  // open popup
+                        }}
                     >
                         <i className="adminlib-plus-circle-o"></i>
                         Add New
@@ -844,8 +985,10 @@ const AllCoupon: React.FC = () => {
                     onPaginationChange={setPagination}
                     realtimeFilter={realtimeFilter}
                     perPageOption={[10, 25, 50]}
-                    typeCounts={[]}
-                    realtimeFilter={[]}
+                    handlePagination={requestApiForData}
+                    totalCounts={totalRows}
+                    typeCounts={couponTypeCounts}
+                    searchFilter={searchFilter}
                 />
             </div>
         </>
