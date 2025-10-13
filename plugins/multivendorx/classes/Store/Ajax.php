@@ -207,7 +207,7 @@ class Ajax {
     }
 
     public function mvx_set_classified_product_terms() {
-        $product_id = isset($_POST['productId']) ? absint($_POST['productId']) : 0;
+        // $product_id = isset($_POST['productId']) ? absint($_POST['productId']) : 0;
         $term_id = isset($_POST['term_id']) ? absint($_POST['term_id']) : 0;
         $taxonomy = isset($_POST['taxonomy']) ? wc_clean($_POST['taxonomy']) : '';
         $user_id = get_current_user_id();
@@ -218,6 +218,8 @@ class Ajax {
                 'taxonomy' => $taxonomy,
             );
             set_transient('classified_product_terms_vendor' . $user_id, $data, HOUR_IN_SECONDS);
+
+            $product_id = MultiVendorX()->store->products->create_product_draft('product');
             $url = esc_url(StoreUtil::get_endpoint_url('products', 'edit', $product_id));
         // }
         wp_send_json(array('url' => $url));

@@ -226,7 +226,7 @@
         },
         set_classified_product_terms: function () {
             block( $(this).parents('.mvx-product-cat-level') );
-            var productId = $('#mvx_product_id').val();
+            // var productId = $('#mvx_product_id').val();
             var $term_id = $( this ).data( 'term-id' );
             var $taxonomy = $( this ).data( 'taxonomy' );
             var $_this = $( this );
@@ -234,7 +234,7 @@
                 action: 'mvx_set_classified_product_terms',
                 term_id: $term_id,
                 taxonomy: $taxonomy,
-                productId: productId
+                // productId: productId
             };
             // Make ajax call.
             $.ajax( {
