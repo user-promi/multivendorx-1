@@ -149,35 +149,48 @@ class Rest {
     
 
     public function filter_coupons_by_meta_exists( $args, $request ) {
-        // Check if the request has our specific meta_key parameter
 
+        $meta_query = array();
+    
+        //Handle filtering by store ID (existing logic)
         if ( isset( $request['meta_key'] ) && $request['meta_key'] === 'multivendorx_store_id' ) {
     
-            // If a 'value' is provided, filter by key + value
             if ( isset( $request['value'] ) && $request['value'] !== '' ) {
-                $meta_query = array(
+                $meta_query[] = array(
                     'key'     => 'multivendorx_store_id',
                     'value'   => sanitize_text_field( $request['value'] ),
-                    'compare' => '=', // match store_id
+                    'compare' => '=',
                 );
             } else {
-                // Otherwise, just ensure the key exists (old behavior)
-                $meta_query = array(
+                $meta_query[] = array(
                     'key'     => 'multivendorx_store_id',
                     'compare' => 'EXISTS',
                 );
             }
+        }
     
-            // Merge with existing meta_query if present
+        //Handle filtering by discount_type (new addition)
+        if ( isset( $request['discount_type'] ) && ! empty( $request['discount_type'] ) ) {
+            $meta_query[] = array(
+                'key'     => 'discount_type',
+                'value'   => sanitize_text_field( $request['discount_type'] ),
+                'compare' => '=',
+            );
+        }
+    
+        // 3️⃣ Merge with existing meta_query if present
+        if ( ! empty( $meta_query ) ) {
             if ( isset( $args['meta_query'] ) ) {
                 $args['meta_query']['relation'] = 'AND';
-                $args['meta_query'][] = $meta_query;
+                $args['meta_query'] = array_merge( $args['meta_query'], $meta_query );
             } else {
-                $args['meta_query'] = array( $meta_query );
+                $args['meta_query'] = $meta_query;
             }
         }
+    
         return $args;
     }
+    
     
 
     public function give_permission($permission, $context, $object_id, $post_type) {
