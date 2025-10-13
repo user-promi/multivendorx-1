@@ -106,6 +106,7 @@ const History: React.FC = () => {
         { icon: "adminlib-tools red", number: "$10.00", text: "Minimum Threshold" },
         { icon: "adminlib-book green", number: "2 Day", text: "Lock Period" },
         { icon: "adminlib-global-community yellow", number: "$5", text: "Wallet Reserve" },
+        { icon: "adminlib-global-community yellow", number: "$525", text: "Pending" },
     ];
     const balanceBreakdown = [
         { icon: "adminlib-tools green", number: "$525.00", text: "Pending" },
@@ -181,7 +182,7 @@ const History: React.FC = () => {
             </div>
 
 
-            <div className="row">
+            {/* <div className="row">
                 <div className="column">
                     <div className="card">
                         <div className="card-header">
@@ -238,8 +239,19 @@ const History: React.FC = () => {
                         </div>
                     </div>
                 </div>
+            </div> */}
+            <div className="settings-metabox-note green">
+                <i className="adminlib-info"></i>
+                <p>You have $635.16 available for payout. Request withdrawal now or wait for the next scheduled payout on Oct 15, 2025 .</p>
             </div>
-
+            <div className="settings-metabox-note">
+                <i className="adminlib-info"></i>
+                <p>Confirm that you have access to johndoe@gmail.com in sender email settings$420.00 is currently pending. It will be available for payout on Oct 15, 2025.</p>
+            </div>
+            <div className="settings-metabox-note yellow">
+                <i className="adminlib-info"></i>
+                <p>Confirm that you have access to johndoe@gmail.com in sender email settings.</p>
+            </div>
             <div className="row">
                 <div className="column">
                     <div className="card">
@@ -257,6 +269,23 @@ const History: React.FC = () => {
                             <div className="des">Current available balance ready for withdrawal</div>
                             <div className="admin-btn btn-purple" onClick={() => setRequestWithdrawal(true)}>
                                 Request Withdrawal
+                            </div>
+                        </div>
+                        <div className="card-body">
+                            <div className="analytics-container">
+
+                                {analyticsData.map((item, idx) => (
+                                    <div key={idx} className="analytics-item">
+                                        <div className="analytics-icon">
+                                            <i className={item.icon}></i>
+                                        </div>
+                                        <div className="details">
+                                            <div className="number">{item.number}</div>
+                                            <div className="text">{item.text}</div>
+                                        </div>
+                                    </div>
+                                ))}
+
                             </div>
                         </div>
 
@@ -297,10 +326,27 @@ const History: React.FC = () => {
                             </ul>
                         </div>
                     </div>
+                    <div className="no-data-found">
+                        <i className="adminlib-info icon red"></i>
+                        <div className="title">No Transaction Data Yet</div>
+                        <div className="des">The Handmade store hasn't processed any transactions yet. Once sales start coming in, you'll see detailed analytics here.</div>
+                        <div className="buttons-wrapper center">
+
+                            <div className="admin-btn btn-purple">
+                                <i className="adminlib-eye"></i>
+                                View Store Settings
+                            </div>
+
+                            <div className="admin-btn">
+                                <i className="adminlib-eye"></i>
+                                Learn More
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div className="row">
+            {/* <div className="row">
                 <div className="column">
                     <Table
                         data={data}
@@ -317,7 +363,7 @@ const History: React.FC = () => {
                         totalCounts={totalRows}
                     />
                 </div>
-            </div>
+            </div> */}
         </>
     );
 };

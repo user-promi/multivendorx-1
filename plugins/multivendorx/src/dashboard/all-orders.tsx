@@ -47,7 +47,7 @@ const Orders: React.FC = () => {
         const rowsPerPage = pagination.pageSize;
         requestData(rowsPerPage, currentPage);
     }, [pagination]);
-    
+
     const fetchOrderStatusCounts = async () => {
         try {
             const statuses = ["all", "pending", "processing", "on-hold", "completed", "cancelled", "refunded", "failed", "trash"];
@@ -239,15 +239,17 @@ const Orders: React.FC = () => {
             header: __("Order ID", "multivendorx"),
             cell: ({ row }) => (
                 <TableCell>
-                    <button
+                    {/* <button
                         className="link-button" // You can style it as a link
                         onClick={() => setSelectedOrder(row.original)}
-                    >
-                        #{row.original.number}
-                    </button>
+                    > */}
+                        <span onClick={() => setSelectedOrder(row.original)}>
+                            #{row.original.number}
+                        </span>
+                    {/* </button> */}
                 </TableCell>
             ),
-        },        
+        },
         {
             header: __("Customer", "multivendorx"),
             cell: ({ row }) => {

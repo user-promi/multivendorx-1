@@ -103,15 +103,13 @@ if ($current_page && empty($current_sub)) {
                                 <div class="adminlib-icon adminlib-vendor-form-add"></div>
                             </li>
                             <li>
-                                <div class="adminlib-icon adminlib-alarm"></div>
+                                <div class="adminlib-icon notification adminlib-notification"></div>
+
+                                <div class="dropdown-menu notification"><div class="title">Notifications <span class="admin-badge green">2 New</span></div><div class="notification"><ul><li><a href="/orders"><div class="icon admin-badge blue"><i class="adminlib-cart-icon"></i></div><div class="details"><span class="heading">New Order Received</span><span class="message">Order #1024 has been placed</span><span class="time">1 hour ago</span></div></a></li><li><a href="/reviews"><div class="icon admin-badge yellow"><i class="adminlib-star-icon"></i></div><div class="details"><span class="heading">New Review</span><span class="message">John left a 5-star review</span><span class="time">30 mins ago</span></div></a></li></ul></div><div class="footer"><a href="/notifications" class="admin-btn btn-purple"><i class="adminlib-eye"></i> View all notifications</a></div></div>
                             </li>
                             <li>
                                 <div class="adminlib-icon adminlib-crop-free"></div>
                             </li>
-                            <li>
-                                <div class="adminlib-icon adminlib-contact-form"></div>
-                            </li>
-
 
                             <li class="dropdown login-user">
                                 <div class="avatar-wrapper">
@@ -136,28 +134,14 @@ if ($current_page && empty($current_sub)) {
                                             <li>
                                                 <a href="#">
                                                     <i class="adminlib-person"></i>
-                                                    View Profile
+                                                    My Profile
                                                 </a>
                                             </li>
 
                                             <li>
                                                 <a href="#">
-                                                    <i class="adminlib-user-network-icon"></i>
+                                                    <i class="adminlib-setting"></i>
                                                     Account Setting
-                                                </a>
-                                            </li>
-
-                                            <li>
-                                                <a href="#">
-                                                    <i class="adminlib-user-network-icon"></i>
-                                                    WordPress backend
-                                                </a>
-                                            </li>
-
-                                            <li>
-                                                <a href="#">
-                                                    <i class="adminlib-setting-1"></i>
-                                                    Storefront
                                                 </a>
                                             </li>
                                         </ul>
