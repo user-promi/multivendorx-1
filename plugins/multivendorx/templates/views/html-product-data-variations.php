@@ -55,7 +55,7 @@ $variations_total_pages = ceil( $variations_count / $variations_per_page );
                         ?>
                         <select name="default_attribute_<?php echo esc_attr( sanitize_title( $attribute->get_name() ) ); ?>" data-current="<?php echo esc_attr( $selected_value ); ?>" class="form-control inline-select">
                             <?php /* translators: WooCommerce attribute label */ ?>
-                            <option value=""><?php esc_html( printf( __( 'No default %s&hellip;', 'multivendorx' ), wc_attribute_label( $attribute->get_name() ) ) ); ?></option>
+                            <option value=""><?php echo esc_html( sprintf( __( 'No default %s…', 'multivendorx' ), wc_attribute_label( $attribute->get_name() ) ) ); ?></option>
                             <?php if ( $attribute->is_taxonomy() ) : ?>
                                 <?php foreach ( $attribute->get_terms() as $option ) : ?>
                                     <option <?php selected( $selected_value, $option->slug ); ?> value="<?php echo esc_attr( $option->slug ); ?>"><?php echo esc_html( apply_filters( 'woocommerce_variation_option_name', $option->name ) ); ?></option>
