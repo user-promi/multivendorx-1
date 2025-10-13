@@ -2,11 +2,18 @@
  * External dependencies
  */
 import React, { useState, useEffect } from 'react';
-import Draggable from 'react-draggable';
+import { ReactSortable } from 'react-sortablejs';
 
 import '../styles/web/SettingMetaBox.scss';
 
 // Types
+interface Option {
+    id: string;
+    label: string;
+    value: string;
+    isdefault?: boolean;
+}
+
 interface FormField {
     type: string;
     name: string;
@@ -19,6 +26,7 @@ interface FormField {
     required?: boolean;
     disabled?: boolean;
     readonly?: boolean;
+    options?: Option[];
 }
 
 interface InputType {
@@ -26,29 +34,15 @@ interface InputType {
     label: string;
 }
 
-interface Option {
-    label: string;
-    value: string;
-    isdefault?: boolean;
-}
-
 interface SettingMetaBoxProps {
-    // For setting meta
     formField?: FormField;
     inputTypeList?: InputType[];
     onChange: (field: string, value: any) => void;
     onTypeChange?: (value: string) => void;
     opened: { click: boolean };
-    // For optino meta
     metaType?: string;
     option?: Option;
     setDefaultValue?: () => void;
-}
-
-interface FormFieldSelectProps {
-    inputTypeList: InputType[];
-    formField: FormField;
-    onTypeChange: (value: string) => void;
 }
 
 interface FieldWrapperProps {
@@ -61,19 +55,47 @@ interface InputFieldProps {
     label: string;
     type?: string;
     value: any;
-    onChange: (value: string | React.ChangeEvent<HTMLInputElement>) => void;
+    onChange: (value: string) => void;
     className?: string;
     readonly?: boolean;
 }
 
-const FormFieldSelect: React.FC<FormFieldSelectProps> = ({
-    inputTypeList,
-    formField,
-    onTypeChange,
-}) => (
+interface FormFieldSelectProps {
+    inputTypeList: InputType[];
+    formField: FormField;
+    onTypeChange: (value: string) => void;
+}
+
+// ---------------- Components ----------------
+
+const FieldWrapper: React.FC<FieldWrapperProps> = ({ label, children, className }) => (
+    <div
+        className={`edit-field-wrapper ${className || ''}`}
+        role="button"
+        tabIndex={0}
+        onClick={(e) => e.stopPropagation()}
+    >
+        <label>{label}</label>
+        {children}
+    </div>
+);
+
+const InputField: React.FC<InputFieldProps> = ({ label, type = 'text', value, onChange, className, readonly = false }) => (
+    <FieldWrapper label={label} className={className}>
+        <input
+            type={type}
+            value={value || ''}
+            className="basic-input"
+            onChange={(e) => onChange(e.target.value)}
+            readOnly={readonly}
+        />
+    </FieldWrapper>
+);
+
+const FormFieldSelect: React.FC<FormFieldSelectProps> = ({ inputTypeList, formField, onTypeChange }) => (
     <FieldWrapper label="Type">
         <select
-            onChange={(event) => onTypeChange?.(event.target.value)}
+            onChange={(e) => onTypeChange(e.target.value)}
             value={formField.type}
             className="basic-select"
         >
@@ -86,44 +108,11 @@ const FormFieldSelect: React.FC<FormFieldSelectProps> = ({
     </FieldWrapper>
 );
 
-const FieldWrapper: React.FC<FieldWrapperProps> = ({
-    label,
-    children,
-    className,
-}) => (
-    <div
-        className={`edit-field-wrapper ${className || ''}`}
-        role="button"
-        tabIndex={0}
-        onClick={(e) => e.stopPropagation()}
-    >
-        <label>{label}</label>
-        {children}
-    </div>
-);
-
-const InputField: React.FC<InputFieldProps> = ({
-    label,
-    type = 'text',
-    value,
-    onChange,
-    className,
-    readonly = false,
-}) => (
-    <FieldWrapper label={label} className={className}>
-        <input
-            type={type}
-            value={value || ''}
-            className="basic-input"
-            onChange={(e) => onChange(e.target.value)}
-            readOnly={readonly}
-        />
-    </FieldWrapper>
-);
+// ---------------- Main Component ----------------
 
 const SettingMetaBox: React.FC<SettingMetaBoxProps> = ({
     formField,
-    inputTypeList,
+    inputTypeList = [],
     onChange,
     onTypeChange,
     opened,
@@ -132,12 +121,15 @@ const SettingMetaBox: React.FC<SettingMetaBoxProps> = ({
     setDefaultValue,
 }) => {
     const [hasOpened, setHasOpened] = useState(opened.click);
-    const isValidSiteKey = (key: string) =>
-        /^6[0-9A-Za-z_-]{39}$/.test(key);
+
+    const isValidSiteKey = (key: string) => /^6[0-9A-Za-z_-]{39}$/.test(key);
     const [isSiteKeyEmpty, setIsSiteKeyEmpty] = useState(
-        formField?.type === 'recaptcha' &&
-        !isValidSiteKey(formField.sitekey || '')
+        formField?.type === 'recaptcha' && !isValidSiteKey(formField.sitekey || '')
     );
+
+    useEffect(() => {
+        setHasOpened(opened.click);
+    }, [opened]);
 
     useEffect(() => {
         if (formField?.type === 'recaptcha') {
@@ -145,24 +137,20 @@ const SettingMetaBox: React.FC<SettingMetaBoxProps> = ({
         }
     }, [isSiteKeyEmpty, formField?.type, onChange]);
 
-    useEffect(() => {
-        setHasOpened(opened.click);
-    }, [opened]);
-
-    // Renders conditional fields based on `formField.type`.
+    // ---------------- Conditional fields ----------------
     const renderConditionalFields = () => {
         const commonFields = (
             <>
                 <InputField
                     label="Placeholder"
-                    value={formField?.placeholder}
+                    value={formField?.placeholder || ''}
                     onChange={(value) => onChange('placeholder', value)}
                 />
                 <InputField
                     label="Character Limit"
                     type="number"
-                    value={formField?.charlimit}
-                    onChange={(value) => onChange('charlimit', value)}
+                    value={formField?.charlimit?.toString() || ''}
+                    onChange={(value) => onChange('charlimit', Number(value))}
                 />
             </>
         );
@@ -180,233 +168,217 @@ const SettingMetaBox: React.FC<SettingMetaBoxProps> = ({
                                 <InputField
                                     label="Row"
                                     type="number"
-                                    value={formField.row}
-                                    onChange={(value) =>
-                                        onChange('row', value)
-                                    }
+                                    value={formField.row?.toString() || ''}
+                                    onChange={(value) => onChange('row', Number(value))}
                                 />
                                 <InputField
                                     label="Column"
                                     type="number"
-                                    value={formField.column}
-                                    onChange={(value) =>
-                                        onChange('column', value)
-                                    }
+                                    value={formField.column?.toString() || ''}
+                                    onChange={(value) => onChange('column', Number(value))}
                                 />
                             </>
                         )}
                     </>
                 );
+
             case 'recaptcha':
                 return (
                     <>
                         <InputField
                             label="Site Key"
-                            value={formField.sitekey}
+                            value={formField.sitekey || ''}
                             className={isSiteKeyEmpty ? 'highlight' : ''}
                             onChange={(value) => {
                                 onChange('sitekey', value);
-                                setIsSiteKeyEmpty(
-                                    !isValidSiteKey(value as string)
-                                );
+                                setIsSiteKeyEmpty(!isValidSiteKey(value));
                             }}
                         />
                         <p>
-                            Register your site with your Google account to
-                            obtain the{' '}
-                            <a
-                                href="https://www.google.com/recaptcha"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
+                            Register your site with your Google account to obtain the{' '}
+                            <a href="https://www.google.com/recaptcha" target="_blank" rel="noopener noreferrer">
                                 reCAPTCHA script
-                            </a>
-                            .
+                            </a>.
                         </p>
                     </>
                 );
+
+            case 'multiselect':
+            case 'dropdown':
+            case 'checkboxes':
+            case 'radio':
+                return (
+                    <div className="multioption-wrapper">
+                        <label htmlFor="">Set option</label>
+                        <ReactSortable
+                            list={formField.options || []}
+                            setList={(newList: Option[]) => onChange('options', newList)}
+                            handle=".drag-handle-option"
+                        >
+                            {(formField.options || []).map((opt, index) => (
+                                <div
+                                    className="option-list-wrapper drag-handle-option"
+                                    key={opt.id || index}
+                                >
+                                    <div className="option-label">
+                                        <input
+                                            type="text"
+                                            className="basic-input"
+                                            value={opt.label}
+                                            onChange={(e) => {
+                                                const newOptions = [...(formField.options || [])];
+                                                newOptions[index] = { ...newOptions[index], label: e.target.value };
+                                                onChange('options', newOptions);
+                                            }}
+                                        />
+                                    </div>
+                                    <div className="option-control-section">
+                                        <div
+                                            role="button"
+                                            className="delete-btn"
+                                            tabIndex={0}
+                                            onClick={() => {
+                                                const newOptions = (formField.options || []).filter(
+                                                    (_, i) => i !== index
+                                                );
+                                                onChange('options', newOptions);
+                                            }}
+                                        >
+                                            Delete
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </ReactSortable>
+
+                        <div
+                            className="add-more-option-section admin-btn btn-purple"
+                            role="button"
+                            tabIndex={0}
+                            onClick={() => {
+                                const newOptions = [
+                                    ...(formField.options || []),
+                                    { id: crypto.randomUUID(), label: 'Option value', value: 'value' },
+                                ];
+                                onChange('options', newOptions);
+                            }}
+                        >
+                            Add new options{' '}
+                            <span>
+                                <i className="admin-font adminlib-plus-circle-o"></i>
+                            </span>
+                        </div>
+                    </div>
+                );
+
             case 'attachment':
                 return (
                     <InputField
                         label="Maximum File Size"
                         type="number"
-                        value={formField.filesize}
-                        onChange={(value) => onChange('filesize', value)}
+                        value={formField.filesize?.toString() || ''}
+                        onChange={(value) => onChange('filesize', Number(value))}
                     />
                 );
+
             default:
                 return null;
         }
     };
 
     return (
-        <div
-            role="button"
-            tabIndex={0}
-            onClick={() => setHasOpened((prevState) => !prevState)}
-        >
+        <div role="button" tabIndex={0} onClick={() => setHasOpened((prev) => !prev)}>
             {hasOpened && (
-                <>
-                    {/* <Draggable> */}
-                    {/* <button
-                        className="wrapper-close"
-                        onClick={(event) => {
-                            event.stopPropagation();
-                            setHasOpened(false);
-                        }}
-                    >
-                        <i className="admin-font adminlib-cross"></i>
-                    </button> */}
-                    <main className="meta-setting-modal-content">
-                        <h3>Input Field Settings</h3>
+                <main className="meta-setting-modal-content">
+                    <h3>Input Field Settings</h3>
 
-                        <div className="setting-modal-content-section">
-                            <div className="edit-field-wrapper " role="button" >
-                                <label>Field label</label>
-                                <input type="text" className="basic-input" value="Enter Your name" />
-                            </div>
+                    <div className="setting-modal-content-section">
+                        <InputField
+                            label="Field Label"
+                            value={formField?.name || ''}
+                            onChange={(value) => onChange('name', value)}
+                        />
 
-                            {metaType === 'setting-meta' ? (
-                                <FormFieldSelect
-                                    inputTypeList={
-                                        inputTypeList as InputFieldProps[]
-                                    }
-                                    formField={formField as FormField}
-                                    onTypeChange={
-                                        onTypeChange as () => void
-                                    }
-                                />
-                            ) : (
-                                <InputField
-                                    label="Value"
-                                    value={option?.value}
-                                    onChange={(e) =>
-                                        onChange(
-                                            'value',
-                                            (
-                                                e as React.ChangeEvent<HTMLInputElement>
-                                            ).target?.value
-                                        )
-                                    }
-                                />
-                            )}
+                        {metaType === 'setting-meta' ? (
+                            <FormFieldSelect
+                                inputTypeList={inputTypeList}
+                                formField={formField as FormField}
+                                onTypeChange={(type) => onTypeChange?.(type)}
+                            />
+                        ) : (
                             <InputField
-                                label={
-                                    metaType === 'setting-meta'
-                                        ? 'Name'
-                                        : 'Label'
+                                label="Value"
+                                value={option?.value || ''}
+                                onChange={(value) => onChange('value', value)}
+                            />
+                        )}
+
+                        <InputField
+                            label={metaType === 'setting-meta' ? 'Name' : 'Label'}
+                            value={metaType === 'setting-meta' ? formField?.name || '' : option?.label || ''}
+                            readonly={metaType === 'setting-meta' && formField?.readonly}
+                            onChange={(value) => {
+                                if (metaType === 'setting-meta') {
+                                    onChange('name', value);
+                                } else {
+                                    onChange('label', value);
                                 }
-                                value={
-                                    metaType === 'setting-meta'
-                                        ? formField?.name
-                                        : option?.label
-                                }
-                                readonly={metaType === 'setting-meta' && formField?.readonly}
-                                onChange={(value) => {
+                            }}
+                        />
+
+                        {metaType === 'setting-meta' && renderConditionalFields()}
+                    </div>
+
+                    <div className="setting-modal-content-section">
+                        {metaType === 'setting-meta' && (
+                            <FieldWrapper label="Visibility">
+                                <div className="visibility-control-container">
+                                    <div className="tabs">
+                                        <input
+                                            checked={
+                                                formField?.type === 'recaptcha' ? !isSiteKeyEmpty : !formField?.disabled
+                                            }
+                                            onChange={(e) => onChange('disabled', !e.target.checked)}
+                                            type="radio"
+                                            id="visible"
+                                            name="tabs"
+                                        />
+                                        <label className="tab" htmlFor="visible">
+                                            Visible
+                                        </label>
+
+                                        <input
+                                            checked={formField?.type === 'recaptcha' ? isSiteKeyEmpty : formField?.disabled}
+                                            onChange={(e) => onChange('disabled', e.target.checked)}
+                                            type="radio"
+                                            id="hidden"
+                                            name="tabs"
+                                        />
+                                        <label className="tab" htmlFor="hidden">
+                                            Hidden
+                                        </label>
+
+                                        <span className="glider" />
+                                    </div>
+                                </div>
+                            </FieldWrapper>
+                        )}
+
+                        <FieldWrapper label={metaType === 'setting-meta' ? 'Required' : 'Set default'}>
+                            <input
+                                type="checkbox"
+                                checked={metaType === 'setting-meta' ? formField?.required : option?.isdefault}
+                                onChange={(e) => {
                                     if (metaType === 'setting-meta') {
-                                        onChange('name', value as string);
-                                    } else {
-                                        onChange(
-                                            'label',
-                                            (
-                                                value as React.ChangeEvent<HTMLInputElement>
-                                            ).target.value
-                                        );
+                                        onChange('required', e.target.checked);
+                                    } else if (setDefaultValue) {
+                                        setDefaultValue();
                                     }
                                 }}
                             />
-                            {metaType === 'setting-meta' &&
-                                renderConditionalFields()}
-                        </div>
-                        <div className="setting-modal-content-section">
-                            {metaType === 'setting-meta' && (
-                                <FieldWrapper label="Visibility">
-                                    <div className="visibility-control-container">
-                                        <div className="tabs">
-                                            <input
-                                                checked={
-                                                    formField?.type ===
-                                                        'recaptcha'
-                                                        ? !isSiteKeyEmpty
-                                                        : !formField?.disabled
-                                                }
-                                                onChange={(e) =>
-                                                    onChange(
-                                                        'disabled',
-                                                        !e.target.checked
-                                                    )
-                                                }
-                                                type="radio"
-                                                id="visible"
-                                                name="tabs"
-                                            />
-                                            <label
-                                                className="tab"
-                                                htmlFor="visible"
-                                            >
-                                                Visible
-                                            </label>
-
-                                            <input
-                                                checked={
-                                                    formField?.type ===
-                                                        'recaptcha'
-                                                        ? isSiteKeyEmpty
-                                                        : formField?.disabled
-                                                }
-                                                onChange={(e) =>
-                                                    onChange(
-                                                        'disabled',
-                                                        e.target.checked
-                                                    )
-                                                }
-                                                type="radio"
-                                                id="hidden"
-                                                name="tabs"
-                                            />
-                                            <label
-                                                className="tab"
-                                                htmlFor="hidden"
-                                            >
-                                                Hidden
-                                            </label>
-
-                                            <span className="glider" />
-                                        </div>
-                                    </div>
-                                </FieldWrapper>
-                            )}
-                            <FieldWrapper
-                                label={
-                                    metaType === 'setting-meta'
-                                        ? 'Required'
-                                        : 'Set default'
-                                }
-                            >
-                                <input
-                                    type="checkbox"
-                                    checked={
-                                        metaType === 'setting-meta'
-                                            ? formField?.required
-                                            : option?.isdefault
-                                    }
-                                    onChange={(e) => {
-                                        if (metaType === 'setting-meta') {
-                                            onChange(
-                                                'required',
-                                                e.target.checked
-                                            );
-                                        } else if (setDefaultValue) {
-                                            setDefaultValue();
-                                        }
-                                    }}
-                                />
-                            </FieldWrapper>
-                        </div>
-                    </main>
-
-                    {/*  </Draggable> */}
-                </>
+                        </FieldWrapper>
+                    </div>
+                </main>
             )}
         </div>
     );
