@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { BasicInput, TextArea, FileInput, SelectInput, getApiLink } from 'zyra';
+import { BasicInput, SuccessNotice, getApiLink } from 'zyra';
 
 const SocialMedia = () => {
     const id = appLocalizer.store_id;
@@ -123,17 +123,7 @@ const SocialMedia = () => {
                         </div>
                     </div>
                 </div>
-                {successMsg && (
-                    <>
-                        <div className="admin-notice-wrapper">
-                            <i className="admin-font adminlib-icon-yes"></i>
-                            <div className="notice-details">
-                                <div className="title">Great!</div>
-                                <div className="desc">{successMsg}</div>
-                            </div>
-                        </div>
-                    </>
-                )}
+                <SuccessNotice message={successMsg} />
             </div>
         </>
     );

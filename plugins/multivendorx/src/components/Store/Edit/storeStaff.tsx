@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { BasicInput, SelectInput, getApiLink } from 'zyra';
+import { SuccessNotice, SelectInput, getApiLink } from 'zyra';
 
 const StoreSquad = ({ id }: { id: string|null }) => {
     const [formData, setFormData] = useState<{ [key: string]: any }>({});
@@ -41,17 +41,8 @@ const StoreSquad = ({ id }: { id: string|null }) => {
 return (
         <>
 
-            {successMsg && (
-                <>
-                    <div className="admin-notice-wrapper">
-                        <i className="admin-font adminlib-icon-yes"></i>
-                        <div className="notice-details">
-                            <div className="title">Great!</div>
-                            <div className="desc">{successMsg}</div>
-                        </div>
-                    </div>
-                </>
-            )}
+            <SuccessNotice message={successMsg} />
+
             <div className="container-wrapper">
                 <div className="card-wrapper width-65">
                     <div className="card-content">

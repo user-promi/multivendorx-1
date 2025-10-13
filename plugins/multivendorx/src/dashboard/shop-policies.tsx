@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { BasicInput, TextArea, FileInput, SelectInput, getApiLink } from 'zyra';
+import { TextArea, SuccessNotice, getApiLink } from 'zyra';
 
 const Policy = () => {
     const id = appLocalizer.store_id;
@@ -67,17 +67,7 @@ const Policy = () => {
 
     return (
         <>
-            {successMsg && (
-                <>
-                    <div className="admin-notice-wrapper">
-                        <i className="admin-font adminlib-icon-yes"></i>
-                        <div className="notice-details">
-                            <div className="title">Great!</div>
-                            <div className="desc">{successMsg}</div>
-                        </div>
-                    </div>
-                </>
-            )}
+            <SuccessNotice message={successMsg} />
 
             <div className="page-title-wrapper">
                 <div className="page-title">

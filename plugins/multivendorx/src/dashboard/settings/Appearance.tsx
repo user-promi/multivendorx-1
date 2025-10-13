@@ -30,6 +30,24 @@ const Appearance = () => {
             setSliderPreviews(previews);
         }
     };
+
+    const runUploader = (key: string): void => {
+    const frame: any = (window as any).wp.media({
+      title: 'Select or Upload Image',
+      button: {
+        text: 'Use this image',
+      },
+      multiple: false,
+    });
+
+    frame.on('select', function () {
+      const attachment = frame.state().get('selection').first().toJSON();
+      setFormData((prev) => ({ ...prev, [key]: attachment.url }));
+    //   setImagePreviews((prev) => ({ ...prev, [key]: attachment.url }));
+    });
+
+    frame.open();
+  };
     return (
         <>
             <div className="card-wrapper">
@@ -43,7 +61,7 @@ const Appearance = () => {
                                 inputClass="form-input"
                                 name="image"
                                 type="hidden"
-                                // onButtonClick={() => runUploader('image')}
+                                onButtonClick={() => runUploader('image')}
                                 imageWidth={75}
                                 imageHeight={75}
                                 openUploader="Upload Image"
