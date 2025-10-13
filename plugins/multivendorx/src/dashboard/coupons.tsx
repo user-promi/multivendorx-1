@@ -62,6 +62,88 @@ const AllCoupon: React.FC = () => {
         pageIndex: 0,
         pageSize: 10,
     });
+
+    // Fetch data from backend.
+    function requestData(
+        rowsPerPage = 10,
+        currentPage = 1,
+        category = '',
+        stockStatus = '',    // <-- Positional Argument 4
+        searchField = '',    // <-- Positional Argument 5
+        productType = '',    // <-- Positional Argument 6
+        startDate = new Date(0),
+        endDate = new Date(),
+    ) {
+        setData([]);
+
+        // Build the base parameters object
+        const params: any = {
+            status:'any',
+            page: currentPage,
+            row: rowsPerPage,
+            category: category,
+            after: startDate,
+            before: endDate,
+            meta_key: 'multivendorx_store_id',
+            value: appLocalizer.store_id,
+        };
+
+        if (stockStatus) {
+            params.stock_status = stockStatus;
+        }
+
+        if (searchField) {
+            params.search = searchField;
+        }
+        if (productType) {
+            params.type = productType;
+        }
+        axios({
+            method: 'GET',
+            url: `${appLocalizer.apiUrl}/wc/v3/coupons`,
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            params: params, // Use the dynamically built params object
+        })
+            .then((response) => {
+                const total = parseInt(response.headers['x-wp-total']);
+                setTotalRows(total);
+
+                // Calculate pageCount AFTER totalRows is available
+                setPageCount(Math.ceil(total / rowsPerPage));
+            })
+            .catch(() => {
+                setData([]);
+                setTotalRows(0);
+                setPageCount(0);
+            });
+    }
+
+    // Handle pagination and filter changes
+    const requestApiForData = (
+        rowsPerPage: number,
+        currentPage: number,
+        filterData: FilterData
+    ) => {
+        setData([]);
+        // Arguments must be passed in the exact order requestData expects them.
+        requestData(
+            rowsPerPage,                            // 1: rowsPerPage
+            currentPage,                            // 2: currentPage
+            filterData?.category,                   // 3: category
+            filterData?.stock_status,               // 4: stockStatus
+            filterData?.searchField,                // 5: searchField (Assuming filterData uses searchField for the search box value)
+            filterData?.productType,                // 6: productType
+            filterData?.date?.start_date,           // 7: startDate
+            filterData?.date?.end_date,             // 8: endDate
+        );
+    };
+
+    useEffect(() => {
+        const currentPage = pagination.pageIndex + 1;
+        const rowsPerPage = pagination.pageSize;
+        requestData(rowsPerPage, currentPage);
+    }, [pagination]);
+
     useEffect(() => {
         if (!id) return;
 
@@ -77,16 +159,8 @@ const AllCoupon: React.FC = () => {
         });
     }, [id]);
 
-    const [showDropdown, setShowDropdown] = useState(false);
     const [AddCoupon, setAddCoupon] = useState(false);
 
-    const toggleDropdown = (id: any) => {
-        if (showDropdown === id) {
-            setShowDropdown(false);
-            return;
-        }
-        setShowDropdown(id);
-    };
     const [pageCount, setPageCount] = useState(0);
     const [activeTab, setActiveTab] = useState("general");
 
@@ -439,46 +513,6 @@ const AllCoupon: React.FC = () => {
         }
     ];
 
-    // 🔹 Add demo data on mount
-    useEffect(() => {
-        const demoData: StoreRow[] = [
-            {
-                id: 25831,
-                store_name: "EAA2US8Z",
-                type: "Fixed Cart Discount",
-                amount: "10.6",
-                usage: "0 / 200",
-                expiry: "2025-12-31",
-                status: "Active",
-            },
-            {
-                id: 25832,
-                store_name: "WELCOME10",
-                type: "Percentage",
-                amount: "10%",
-                usage: "12 / 100",
-                expiry: "2026-01-15",
-                status: "Active",
-            },
-            {
-                id: 25833,
-                store_name: "FREESHIP",
-                type: "Free Shipping",
-                amount: "—",
-                usage: "5 / ∞",
-                expiry: "2025-10-01",
-                status: "Expired",
-            },
-        ];
-        setData(demoData);
-        setTotalRows(demoData.length);
-    }, []);
-
-    // 🔹 Update page count when pagination or totalRows changes
-    useEffect(() => {
-        const rowsPerPage = pagination.pageSize;
-        setPageCount(Math.ceil(totalRows / rowsPerPage));
-    }, [pagination, totalRows]);
 
     // Column definitions
     const columns: ColumnDef<StoreRow>[] = [
@@ -716,6 +750,7 @@ const AllCoupon: React.FC = () => {
             ),
         },
     ];
+
     return (
         <>
             <div className="page-title-wrapper">
@@ -844,8 +879,8 @@ const AllCoupon: React.FC = () => {
                     onPaginationChange={setPagination}
                     realtimeFilter={realtimeFilter}
                     perPageOption={[10, 25, 50]}
-                    typeCounts={[]}
-                    realtimeFilter={[]}
+                    handlePagination={requestApiForData}
+                    totalCounts={totalRows}
                 />
             </div>
         </>

@@ -34,7 +34,7 @@ class Rest {
         add_filter('woocommerce_rest_check_permissions', array($this,'give_permission'), 10, 4);
         add_filter('woocommerce_rest_shop_order_object_query', array($this, 'filter_orders_by_store_id'), 10, 2);
         add_filter('woocommerce_rest_product_object_query', array($this, 'filter_products_by_meta_exists'), 10, 2);
-        add_filter('woocommerce_rest_coupon_object_query', array($this, 'filter_coupons_by_meta_exists'), 10, 2);
+        add_filter('woocommerce_rest_shop_coupon_object_query', array($this, 'filter_coupons_by_meta_exists'), 10, 2);
         add_filter('woocommerce_analytics_products_query_args', array($this, 'filter_low_stock_by_meta_exists'), 10, 1);
         add_filter( 'rest_comment_query', array($this, 'mvx_filter_comments_by_store'), 10, 2 );
 
@@ -150,14 +150,24 @@ class Rest {
 
     public function filter_coupons_by_meta_exists( $args, $request ) {
         // Check if the request has our specific meta_key parameter
+
         if ( isset( $request['meta_key'] ) && $request['meta_key'] === 'multivendorx_store_id' ) {
-
-            // Only include coupons where this meta key exists
-            $meta_query = array(
-                'key'     => 'multivendorx_store_id',
-                'compare' => 'EXISTS',
-            );
-
+    
+            // If a 'value' is provided, filter by key + value
+            if ( isset( $request['value'] ) && $request['value'] !== '' ) {
+                $meta_query = array(
+                    'key'     => 'multivendorx_store_id',
+                    'value'   => sanitize_text_field( $request['value'] ),
+                    'compare' => '=', // match store_id
+                );
+            } else {
+                // Otherwise, just ensure the key exists (old behavior)
+                $meta_query = array(
+                    'key'     => 'multivendorx_store_id',
+                    'compare' => 'EXISTS',
+                );
+            }
+    
             // Merge with existing meta_query if present
             if ( isset( $args['meta_query'] ) ) {
                 $args['meta_query']['relation'] = 'AND';
@@ -166,9 +176,9 @@ class Rest {
                 $args['meta_query'] = array( $meta_query );
             }
         }
-
         return $args;
     }
+    
 
     public function give_permission($permission, $context, $object_id, $post_type) {
         $current_user = wp_get_current_user();
@@ -193,7 +203,6 @@ class Rest {
      */
     public function init_classes() {
         $this->container = array(
-            'orders'    => new MultiVendorX_REST_Orders_Controller(),
             'settings'  => new MultiVendorX_REST_Settings_Controller(),
             'dashboard' => new MultiVendorX_REST_Dashboard_Controller(),
             'store'     => new MultiVendorX_REST_Store_Controller(),
@@ -201,8 +210,6 @@ class Rest {
             'status'    => new MultiVendorX_REST_Status_Controller(),
             'announcement' => new MultiVendorX_REST_Announcement_Controller(),
             'knowledge' => new MultiVendorX_REST_Knowledge_Controller(),
-            'products'  => new MultiVendorX_REST_Products_Controller(),
-            'coupons'   => new MultiVendorX_REST_Coupons_Controller(),
             'payouts'   => new MultiVendorX_REST_Payouts_Controller(),
             'transaction'=> new MultiVendorX_REST_Transaction_Controller(),
         );
