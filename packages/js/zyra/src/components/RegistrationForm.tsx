@@ -341,7 +341,7 @@ const CustomForm: React.FC<CustomFormProps> = ({
                                     </section>
                                 )}
                                 <section className={`form-field-container-wrapper`}>
-                                    {['text', 'email', 'textarea'].includes(formField.type) && (
+                                    {['text', 'email', 'number'].includes(formField.type) && (
                                         <SimpleInput
                                             formField={formField}
                                             onChange={(key, value) => handleFormFieldChange(index, key, value)}
@@ -367,27 +367,91 @@ const CustomForm: React.FC<CustomFormProps> = ({
                                     {formField.type === 'section' && (
                                         <TemplateSection formField={formField} onChange={(key, value) => handleFormFieldChange(index, key, value)} />
                                     )}
+                                    {formField.type === 'block-layout' && (
+                                        <BlockLayout />
+                                    )}
+                                    {formField.type === 'textarea' && (
+                                        <TemplateTextArea
+                                            formField={formField}
+                                            onChange={(key, value) =>
+                                                handleFormFieldChange(
+                                                    index,
+                                                    key,
+                                                    value
+                                                )
+                                            }
+                                        />
+                                    )}
+                                    {formField.type ===
+                                        'recaptcha' && (
+                                            <Recaptcha
+                                                formField={formField}
+                                                onChange={(key, value) =>
+                                                    handleFormFieldChange(
+                                                        index,
+                                                        key,
+                                                        value
+                                                    )
+                                                }
+                                            />
+                                        )}
                                 </section>
                             </main>
                         );
                     })}
                 </ReactSortable>
+
+                <section className="settings-input-content">
+                    <ButtonCustomizer
+                        text={
+                            (buttonSetting.button_text &&
+                                buttonSetting.button_text) ||
+                            'Submit'
+                        }
+                        setting={buttonSetting}
+                        onChange={(
+                            key,
+                            value,
+                            isRestoreDefaults = false
+                        ) => {
+                            if (proSettingChange()) return;
+                            settingHasChanged.current = true;
+                            const previousSetting = buttonSetting || {};
+                            if (isRestoreDefaults) {
+                                setButtonSetting(value);
+                            } else {
+                                setButtonSetting({
+                                    ...previousSetting,
+                                    [key]: value,
+                                });
+                            }
+                        }}
+                    />
+                </section>
             </div>
 
             {/* Meta Setting Modal outside registration-form-main-section */}
             <div className="registration-edit-form">
-                {opendInput && !opendInput.readonly && (
+                {opendInput && !opendInput.readonly && (           
                     <>
                         <SettingMetaBox
                             formField={opendInput}
                             opened={{ click: true }}
                             onChange={(key, value) => {
                                 const index = formFieldList.findIndex(f => f.id === opendInput.id);
-                                if (index >= 0) handleFormFieldChange(index, key, value);
+                                if (index >= 0) {
+                                    handleFormFieldChange(index, key, value);
+                                    // Update the local open input so the UI updates immediately
+                                    setOpendInput({ ...formFieldList[index], [key]: value });
+                                }
                             }}
                             onTypeChange={(newType) => {
                                 const index = formFieldList.findIndex(f => f.id === opendInput.id);
-                                if (index >= 0) handleFormFieldTypeChange(index, newType);
+                                if (index >= 0) {
+                                    handleFormFieldTypeChange(index, newType);
+                                    // Update the local open input type
+                                    setOpendInput({ ...formFieldList[index], type: newType });
+                                }
                             }}
                             inputTypeList={selectOptions}
                         />

@@ -461,8 +461,9 @@ class FrontendScripts {
                         'currency'                 => get_woocommerce_currency(),       // e.g., USD
                         'currency_symbol'          => get_woocommerce_currency_symbol(),
                         'map_providor'             => MultiVendorX()->setting->get_setting( 'choose_map_api' ),
-                        'google_api_key'             => MultiVendorX()->setting->get_setting( 'google_api_key' ),
-                        'mapbox_api_key'             => MultiVendorX()->setting->get_setting( 'mapbox_api_key' ),
+                        'google_api_key'           => MultiVendorX()->setting->get_setting( 'google_api_key' ),
+                        'mapbox_api_key'           => MultiVendorX()->setting->get_setting( 'mapbox_api_key' ),
+                        'all_verification_methods' => MultiVendorX()->setting->get_setting( 'all_verification_methods' ),
 					) ),
                 ),
                 'multivendorx-product-tab-script' => array(
@@ -533,7 +534,8 @@ class FrontendScripts {
                         'ajaxurl'                   => admin_url( 'admin-ajax.php' ),
                         'currency'                 => get_woocommerce_currency(),       // e.g., USD
                         'currency_symbol'          => get_woocommerce_currency_symbol(),
-                        'add_product_link'         => StoreUtil::get_endpoint_url('products', 'edit')
+                        'add_product_link'         => StoreUtil::get_endpoint_url('products', 'edit'),
+                        'all_verification_methods' => MultiVendorX()->setting->get_setting( 'all_verification_methods' ),
                     ),
                 ),
                 'multivendorx-registration-form-script'          => array(

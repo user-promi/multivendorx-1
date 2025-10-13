@@ -59,12 +59,12 @@ const BusinessAddress = () => {
             setLoading(false);
             return;
         }
-
+    
         const loadStoreData = async () => {
             try {
-                const endpoint = getApiLink(appLocalizer, `geolocation/store/${id}`);
+                const endpoint = getApiLink(appLocalizer, `store/${id}`); // Use main store endpoint
                 console.log('Fetching from endpoint:', endpoint);
-
+    
                 const res = await axios.get(endpoint, {
                     headers: {
                         'X-WP-Nonce': appLocalizer.nonce
@@ -420,16 +420,15 @@ const BusinessAddress = () => {
 
     // Update your autoSave function:
     const autoSave = (updatedData: any) => {
-        // Ensure both address fields are consistent (same as admin side)
         const saveData = {
             ...updatedData,
             location_address: updatedData.location_address || updatedData.address || '',
             address: updatedData.address || updatedData.location_address || ''
         };
-
+    
         axios({
             method: 'PUT',
-            url: getApiLink(appLocalizer, `store/${id}`),
+            url: getApiLink(appLocalizer, `store/${id}`), // Use main store endpoint
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
             data: saveData,
         }).then((res) => {
@@ -440,7 +439,7 @@ const BusinessAddress = () => {
             console.error('Save error:', error);
             setErrorMsg('Failed to save store data');
         });
-    };
+    };    
 
     if (loading) {
         return (
