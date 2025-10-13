@@ -66,7 +66,7 @@ if ($default_types && !empty($default_types)) {
                             <span class="editing-content">
                                 <input type="text" class="form-control" name="post_title" id="post_title" value="<?php echo htmlspecialchars($product_object->get_title( 'edit' )); ?>"?>
                                 <input type="hidden" name="original_post_title" value="<?php echo htmlspecialchars($product_object->get_title( 'edit' )); ?>">
-                                <input type="hidden" name="post_ID" value="<?php echo $self->get_the_id(); ?>">
+                                <input type="hidden" name="post_ID" value="<?php echo $product_object->get_id(); ?>">
                                 <input type="hidden" name="original_post_status" value="<?php echo esc_attr( get_post_status( $post ) ); ?>">
                             </span> 
                         </p>

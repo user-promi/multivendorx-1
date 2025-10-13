@@ -269,12 +269,11 @@ if ($current_page && empty($current_sub)) {
                     }
                     if ($div_id) {
                         if ($allowed) {
-                            $template_file = plugin_dir_path(__FILE__) . $div_id . '.php';
-                            if (file_exists($template_file)) {
-                                if ($div_id == 'edit') {
-                                    $edit_product = new Products();
-                                    $edit_product->output();
-                                }
+                            if ($div_id == 'edit') {
+                                MultiVendorX()->util->get_template('edit-product.php', [] );
+                                // $edit_product = new Products();
+                                // $edit_product->output();
+                                
                             } else {
                                 ?>
                                 <div class="content-wrapper" id="<?php echo esc_attr($div_id) ?>">     
