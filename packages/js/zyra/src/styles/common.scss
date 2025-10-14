@@ -515,44 +515,45 @@ input[type="checkbox"]:focus {
 //     border-color: #8c8c8c;
 //   }
 
-  .multioption-wrapper {
-    padding: 1rem 0;
+.multioption-wrapper {
+  padding: 1rem 0;
 
-    label{
-      font-size: 1rem;
-      font-weight: 500;
-    }
+  label {
+    font-size: 1rem;
+    font-weight: 500;
+  }
 
-    .option-list-wrapper {
+  .option-list-wrapper {
+    display: flex;
+    align-items: center;
+    // justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.5rem 0;
+
+    .option-control-section {
       display: flex;
       align-items: center;
-      // justify-content: space-between;
-      gap: 0.75rem;
-      padding: 0.5rem 0;
+      justify-content: flex-start;
+      gap: 0.5rem;
 
-      .option-control-section {
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-        gap: 0.5rem;
+      .delete-btn {
+        color: rgb(255 0 0 / 78.1%);
+        font-size: 0.875rem;
+      }
 
-        .delete-btn {
-          color: rgb(255 0 0 / 78.1%);
-          font-size: 0.875rem;
-        }
-
-        div {
-          cursor: pointer;
-        }
+      div {
+        cursor: pointer;
       }
     }
-
   }
 
-  .recaptcha {
-    border: 0.063rem solid red;
-    padding: 0.5rem;
-  }
+}
+
+.recaptcha {
+  border: 0.063rem solid red;
+  padding: 0.5rem;
+}
+
 // }
 
 // page title start
@@ -881,6 +882,15 @@ input[type="checkbox"]:focus {
   }
 
   // multi input style end  
+  
+  // add new btn start
+  .add-new-option {
+    margin-top: 1rem;
+    display: flex;
+    width: 50%;
+    gap: 0.5rem;
+  }
+  // add new btn end
 }
 
 .settings-input-content:has(.grid-table),
@@ -1115,6 +1125,7 @@ input[type="checkbox"]:focus {
 }
 
 .action-icons {
+
   &:hover,
   &:has(.action-dropdown:hover) {
     .action-dropdown.hover {
@@ -1259,7 +1270,7 @@ input[type="checkbox"]:focus {
 
   select {
     background: #ece2f9f1 url("data:image/svg+xml,%3Csvg%20width='20'%20height='20'%20xmlns='http://www.w3.org/2000/svg'%3E%3Cpath%20d='M5%206l5%205%205-5%202%201-7%207-7-7%202-1z'%20fill='%235007aa'/%3E%3C/svg%3E") no-repeat right 5px top 55% !important;
-    color: #5007aa ; 
+    color: #5007aa;
     margin: 0;
     border: 0.125rem solid #ece2f9f1;
     min-width: 6rem;

@@ -14,7 +14,6 @@ interface MultiStringProps {
     buttonClass?: string;
     listClass?: string;
     itemClass?: string;
-    deleteBtnClass?: string;
     onStringChange?: (e: { target: { name?: string; value: string[] } }) => void;
     onFocus?: (e: FocusEvent<HTMLInputElement>) => void;
     onBlur?: (e: FocusEvent<HTMLInputElement>) => void;
@@ -26,43 +25,67 @@ interface CommonProps {
     proSetting?: boolean;
     description?: string;
     descClass?: string;
+    iconEnable?: boolean;
 }
 
 type MultiInputProps = MultiStringProps & CommonProps;
 
 const MultiInput: React.FC<MultiInputProps> = (props) => {
-    const { 
-        values = [], 
-        placeholder, 
-        wrapperClass, 
-        inputClass, 
-        buttonClass, 
-        listClass, 
-        itemClass, 
-        deleteBtnClass, 
-        onStringChange, 
-        onFocus, 
-        onBlur, 
-        id, 
-        name, 
-        proSetting, 
-        description, 
-        descClass 
+    const {
+        values = [],
+        placeholder,
+        wrapperClass,
+        inputClass,
+        buttonClass,
+        listClass,
+        itemClass,
+        onStringChange,
+        onFocus,
+        onBlur,
+        id,
+        name,
+        proSetting,
+        iconEnable,
+        description,
+        descClass
     } = props;
 
     const [inputValue, setInputValue] = useState("");
+    const [editIndex, setEditIndex] = useState<number | null>(null);
 
-    const handleAdd = () => {
-        if (inputValue.trim()) {
-            const updatedValues = [...(Array.isArray(values) ? values : []), inputValue.trim()];
-            onStringChange?.({ target: { name, value: updatedValues } });
-            setInputValue("");
+    // Add or update item
+    const handleAddOrUpdate = () => {
+        const trimmedValue = inputValue.trim();
+        if (!trimmedValue) return;
+
+        let updatedValues = [...(Array.isArray(values) ? values : [])];
+
+        if (editIndex !== null) {
+            // Update existing item
+            updatedValues[editIndex] = trimmedValue;
+            setEditIndex(null);
+        } else {
+            // Add new item
+            updatedValues.push(trimmedValue);
         }
+
+        onStringChange?.({ target: { name, value: updatedValues } });
+        setInputValue("");
     };
 
     const handleDelete = (val: string) => {
         const updatedValues = (Array.isArray(values) ? values : []).filter(item => item !== val);
         onStringChange?.({ target: { name, value: updatedValues } });
+
+        if (editIndex !== null && values[editIndex] === val) {
+            setEditIndex(null);
+            setInputValue("");
+        }
+    };
+
+    const handleEdit = (val: string, index: number) => {
+        setEditIndex(index);
+        setInputValue(val);
     };
 
     return (
@@ -71,13 +94,21 @@ const MultiInput: React.FC<MultiInputProps> = (props) => {
                 <ul className={listClass || "multi-string-list"}>
                     {Array.isArray(values) && values.map((val, index) => (
                         <li key={index} className={itemClass}>
-                            <div>{val}</div>
-                            <span 
-                                className={deleteBtnClass || "admin-btn btn-red"} 
-                                onClick={() => handleDelete(val)}
-                            >
-                                <i className="adminlib-delete"></i>Remove
-                            </span>
+                            <div className="details">
+                                {iconEnable && <i className="adminlib-cart"></i>}
+                                <div className="title">{val}</div>
+                            </div>
+
+                            <div className="action-wrapper">
+                                <span
+                                    className="icon adminlib-create"
+                                    onClick={() => handleEdit(val, index)}
+                                ></span>
+                                <span
+                                    className="icon adminlib-delete"
+                                    onClick={() => handleDelete(val)}
+                                ></span>
+                            </div>
                         </li>
                     ))}
                     <li>
@@ -92,13 +123,24 @@ const MultiInput: React.FC<MultiInputProps> = (props) => {
                             onFocus={onFocus}
                             onBlur={onBlur}
                         />
-                        <span 
-                            className={buttonClass || "admin-btn btn-purple"} 
-                            onClick={handleAdd}
+                        <span
+                            className={
+                                editIndex !== null
+                                    ? `${buttonClass || "admin-btn"}  btn-green`
+                                    : `${buttonClass || "admin-btn"} btn-purple`
+                            }
+                            onClick={handleAddOrUpdate}
                         >
-                            <i className="adminlib-vendor-form-add"></i>
-                            Add
+                            <i
+                                className={
+                                    editIndex !== null
+                                        ? "adminlib-create" 
+                                        : "adminlib-plus-circle-o" 
+                                }
+                            ></i>
+                            {editIndex !== null ? "Update" : "Add"}
                         </span>
+
                     </li>
                 </ul>
             </div>

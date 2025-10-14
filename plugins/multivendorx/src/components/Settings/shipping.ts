@@ -1,4 +1,7 @@
 import { __ } from '@wordpress/i18n';
+const methods = appLocalizer?.all_payments
+    ? Object.entries(appLocalizer.all_payments).map(([_, value]) => value)
+    : [];
 
 export default {
     id: 'shipping',
@@ -52,6 +55,33 @@ export default {
             ],
         },
         {
+            key: 'zone-wisehipping Selection',
+            type: 'setting-toggle',
+            label: __('Zone-wise Shipping Selection', 'multivendorx'),
+            settingDescription: __("Choose the primary logic your marketplace uses to calculate and display shipping costs.", 'multivendorx'),
+            desc: __(
+                '<ul><li>Shipping rules based on pre-defined zones created from regions</li><li>Shipping rates determined by the customer\'s country.</li><li>Shipping costs calculated based on delivery distance between vendor and customer.</li></ul>',
+                'multivendorx'
+            ),
+            options: [
+                {
+                    key: 'zone_wise',
+                    label: __('Zone Wise', 'multivendorx'),
+                    value: 'zone_wise',
+                },
+                {
+                    key: 'country_wise',
+                    label: __('Country Wise', 'multivendorx'),
+                    value: 'country_wise',
+                },
+                {
+                    key: 'distance_wise',
+                    label: __('Distance Wise', 'multivendorx'),
+                    value: 'distance_wise',
+                },
+            ],
+        },
+        {
             key: 'enable_tracking',
             label: __('Region Restrictions', 'multivendorx'),
             desc: __("Limit vendor shipping areas", 'multivendorx'),
@@ -80,11 +110,19 @@ export default {
             look: 'toggle',
         },
         {
+            key: 'payment_methods',
+            type: 'payment-tabs',
+            buttonEnable: true,
+            toggleType: 'icon',
+            modal: methods
+        },
+        {
             key: 'disbursement_order_status',
             type: 'checkbox',
             label: __(' ', 'multivendorx'),
             settingDescription: __(" ", 'multivendorx'),
             class: 'mvx-toggle-checkbox',
+            addNewBtn: 'Add Custom Provider',
             options: [
                 {
                     key: 'completed',
@@ -131,7 +169,7 @@ export default {
             dependent: {
                 key: 'allow_store_regions',
                 set: true,
-                value: 'allow_store_regions', 
+                value: 'allow_store_regions',
             },
         },
         // {
@@ -165,11 +203,20 @@ export default {
             type: 'multi-string',
             label: __('Add stage', 'multivendorx'),
             placeholder: __('Enter Shipping stage', 'multivendorx'),
+            iconEnable : true,
             settingDescription: __(
                 'Add one or more reasons that stores can select when handling refund requests.',
                 'multivendorx'
             ),
             name: 'abuse_report_reasons',
+        },
+        {
+            key: 'ratings_parameters',
+            type: 'multi-string',
+            label: __( 'Rating parameters', 'multivendorx' ),
+            placeholder: __( 'Enter a parameter and click +', 'multivendorx' ),
+            desc: __( 'Define rating parameters such as packaging, delivery, behaviour, policies, etc.', 'multivendorx' ),
+            name: 'ratings_parameters',
         },
 
         {

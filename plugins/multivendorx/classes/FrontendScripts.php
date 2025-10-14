@@ -356,7 +356,8 @@ class FrontendScripts {
                 'advertising',
                 'product-preferencess',
                 'product-store-category-control',
-                'geolocation'
+                'geolocation',
+                'shipping'
             )
 		);
 

@@ -12,6 +12,10 @@ import '../styles/web/ShortCodeTable.scss';
 interface Option {
     label?: string;
     desc?: string;
+    vendor?: string;
+    orderby?: string;
+    colums?: string;
+    order?: string;
 }
 
 interface ShortCodeTableProps {
@@ -55,11 +59,15 @@ const ShortCodeTable: React.FC<ShortCodeTableProps> = (props) => {
                                     )}
                                 </td>
                                 <td>{option.desc}</td>
+                                <td>{option.vendor}</td>
+                                <td>{option.orderby}</td>
+                                <td>{option.colums}</td>
+                                <td>{option.order}</td>
                             </tr>
                         ))
                     ) : (
                         <tr>
-                            <td colSpan={2}>No Options Available</td>
+                            <td colSpan={5}>No Options Available</td>
                         </tr>
                     )}
                 </tbody>
