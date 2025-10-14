@@ -34,6 +34,12 @@ const Orders: React.FC = () => {
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
     const bulkSelectRef = React.useRef<HTMLSelectElement>(null);
 
+    // const hash = window.location.hash || '';
+    // const isViewOrder = hash.includes('view');
+
+    const path = window.location.pathname;
+    const isViewOrder = path.includes('/view/');
+
     const selectedOrderIds = Object.keys(rowSelection)
         .map((key) => {
             const index = Number(key);
@@ -321,12 +327,22 @@ const Orders: React.FC = () => {
                     rowData={row.original}
                     header={{
                         actions: [
-                            {
-                                label: __('View', 'multivendorx'),
-                                icon: 'adminlib-eye',
-                                onClick: (rowData) => setSelectedOrder(rowData),
-                                hover: true
-                            },
+                            // Conditionally include the "View" button
+                            ...(appLocalizer.edit_order_capability
+                                ? [
+                                    {
+                                    label: __('View', 'multivendorx'),
+                                    icon: 'adminlib-eye',
+                                    onClick: (rowData) => {
+                                        setSelectedOrder(rowData);
+                                        const currentPath = window.location.pathname.replace(/\/$/, '');
+                                        const newPath = `${currentPath}/view/${rowData.id}`;
+                                        window.history.pushState({}, '', newPath);
+                                    },
+                                    hover: true,
+                                    },
+                                ]
+                            : []),
                             {
                                 label: __('Download', 'multivendorx'),
                                 icon: 'adminlib-import',
@@ -437,6 +453,7 @@ const Orders: React.FC = () => {
 
     return (
         <>
+        {console.log(appLocalizer.edit_order_capability)}
             <div className="page-title-wrapper">
                 <div className="page-title">
                     <div className="title">Orders</div>
@@ -444,7 +461,7 @@ const Orders: React.FC = () => {
                 </div>
             </div>
             <div className="admin-table-wrapper">
-                {!selectedOrder ? (
+                {!isViewOrder && !selectedOrder && (
                     <Table
                         data={data}
                         columns={columns as ColumnDef<Record<string, any>, any>[]}
@@ -462,12 +479,17 @@ const Orders: React.FC = () => {
                         typeCounts={orderStatus}
                         bulkActionComp={() => <BulkAction />}
                     />
-                ) : (
-                    <OrderDetails
-                        order={selectedOrder}
-                        onBack={() => setSelectedOrder(null)} // Step 4
-                    />
                 )}
+                
+                {isViewOrder && <OrderDetails
+                    order={selectedOrder}
+                    onBack={() => {
+                        setSelectedOrder(null);
+                        const currentPath = window.location.pathname;
+                        const newPath = currentPath.replace(/\/view\/\d+$/, '');
+                        window.history.pushState({}, '', newPath);
+                    }}
+                />}
 
             </div>
         </>
