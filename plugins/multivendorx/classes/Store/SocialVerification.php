@@ -227,7 +227,10 @@ class FacebookVerification {
         $this->app_id = $fb_settings['app_id'] ?? '';
         $this->app_secret = $fb_settings['app_secret'] ?? '';
         
-        $this->redirect_uri = admin_url('admin-post.php?action=multivendorx_stripe_connect_onboard_callback&vendor_id=' . intval($vendor_id) . '&store_id=' . $store_id . '&account_type=new');;
+        $this->redirect_uri = $fb_settings['redirect_uri'] ?? '';
+        if (empty($this->redirect_uri)) {
+            $this->redirect_uri = add_query_arg( [ 'social_verification_callback' => '1', 'provider' => 'facebook' ], home_url( '/' ) );
+        }
     }
     
     public function get_auth_url() {
@@ -317,8 +320,11 @@ class GoogleVerification {
         
         $this->client_id = $google_settings['client_id'] ?? '';
         $this->client_secret = $google_settings['client_secret'] ?? '';
+
         $this->redirect_uri = $google_settings['redirect_uri'] ?? '';
-        file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":orders: : " . var_export($settings['social-verification']['social_verification_methods']['google-connect'], true) . "\n", FILE_APPEND);
+        if (empty($this->redirect_uri)) {
+            $this->redirect_uri = add_query_arg( [ 'social_verification_callback' => '1', 'provider' => 'google' ], home_url( '/' ) );
+        }
     }
     
     public function get_auth_url() {
@@ -413,7 +419,11 @@ class TwitterVerification {
         $this->api_key = $twitter_settings['api_key'] ?? '';
         $this->api_secret_key = $twitter_settings['api_secret_key'] ?? '';
         $this->bearer_token = $twitter_settings['bearer_token'] ?? '';
-        $this->redirect_uri = $twitter_settings['redirect_uri'] ??'';
+
+        $this->redirect_uri = $twitter_settings['redirect_uri'] ?? '';
+        if (empty($this->redirect_uri)) {
+            $this->redirect_uri = add_query_arg( [ 'social_verification_callback' => '1', 'provider' => 'twitter' ], home_url( '/' ) );
+        }
     }
     
     public function get_auth_url() {
@@ -540,7 +550,11 @@ class LinkedInVerification {
         
         $this->client_id = $linkedin_settings['client_id'] ?? '';
         $this->client_secret = $linkedin_settings['client_secret'] ?? '';
-        $this->redirect_uri = $linkedin_settings['redirect_uri'] ??'';
+
+        $this->redirect_uri = $linkedin_settings['redirect_uri'] ?? '';
+        if (empty($this->redirect_uri)) {
+            $this->redirect_uri = add_query_arg( [ 'social_verification_callback' => '1', 'provider' => 'linkedin' ], home_url( '/' ) );
+        }
     }
     
     public function get_auth_url() {
