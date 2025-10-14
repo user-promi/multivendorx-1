@@ -103,16 +103,18 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
             return rest_ensure_response( count( $posts ) );
         }
     
-        // Base query args
+        // Base query args — always show latest first
         $query_args = [
-            'post_type'      => 'multivendorx_an',
-            'posts_per_page' => $limit,
-            'offset'         => $offset,
-            'post_status'    => $status_param ? $status_param : 'any',
-            'orderby'        => 'date',
-            'order'          => 'DESC',
+            'post_type'        => 'multivendorx_an',
+            'posts_per_page'   => $limit,
+            'offset'           => $offset,
+            'post_status'      => $status_param ? $status_param : 'any',
+            'orderby'          => 'date',          // sort by post_date
+            'order'            => 'DESC',          // latest first
+            'suppress_filters' => false,           // ensure no filters override sorting
+            'no_found_rows'    => false,           // enables pagination count
         ];
-    
+
         // Add date filter if provided
         if ( $start_date && $end_date ) {
             $query_args['date_query'] = [
@@ -182,7 +184,6 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
             'draft'   => $draft_count,
         ]);
     }
-    
     
     public function create_item( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );

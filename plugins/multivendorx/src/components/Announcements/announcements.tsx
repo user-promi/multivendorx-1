@@ -120,6 +120,7 @@ export const Announcements: React.FC = () => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
+
     const handleBulkAction = async () => {
         const action = bulkSelectRef.current?.value;
         const selectedIds = Object.keys(rowSelection).map((key) => {
@@ -148,7 +149,7 @@ export const Announcements: React.FC = () => {
                 headers: { 'X-WP-Nonce': appLocalizer.nonce },
                 data: { bulk: true, action, ids: selectedIds },
             });
-
+            await fetchTotalRows();
             requestData(pagination.pageSize, pagination.pageIndex + 1, page);
             setRowSelection({});
         } catch (err) {
@@ -209,8 +210,9 @@ export const Announcements: React.FC = () => {
 
             if (response.data.success) {
                 setAddAnnouncements(false);
-                setFormData({ title: '', url: '', content: '', stores: '', status: 'draft' });
+                setFormData({ title: '', url: '', content: '', stores: [], status: 'draft' });
                 setEditId(null);
+                await fetchTotalRows();
                 requestData(pagination.pageSize, pagination.pageIndex + 1, page);
             } else {
                 setError(__('Failed to save announcement', 'multivendorx'));
@@ -222,23 +224,25 @@ export const Announcements: React.FC = () => {
         }
     };
 
+    const fetchTotalRows = async () => {
+        try {
+            const response = await axios.get(getApiLink(appLocalizer, 'announcement'), {
+                headers: { 'X-WP-Nonce': appLocalizer.nonce },
+                params: { count: true },
+            });
+            const total = response.data || 0;
+            setTotalRows(total);
+            setPageCount(Math.ceil(total / pagination.pageSize));
+        } catch {
+            setError(__('Failed to load total rows', 'multivendorx'));
+        }
+    };
+
     // Fetch total rows on mount
     useEffect(() => {
-
-        axios({
-            method: 'GET',
-            url: getApiLink(appLocalizer, 'announcement'),
-            headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            params: { count: true },
-        })
-            .then((response) => {
-                setTotalRows(response.data || 0);
-                setPageCount(Math.ceil(response.data / pagination.pageSize));
-            })
-            .catch(() => {
-                setError(__('Failed to load total rows', 'multivendorx'));
-            });
+        fetchTotalRows();
     }, []);
+
 
     useEffect(() => {
         const currentPage = pagination.pageIndex + 1;
@@ -341,7 +345,10 @@ export const Announcements: React.FC = () => {
             ),
         },
     ];
-
+    const truncateText = (text: string, maxLength: number) => {
+        if (!text) return '-';
+        return text.length > maxLength ? text.slice(0, maxLength) + '...' : text;
+    };
     // Columns
     const columns: ColumnDef<StoreRow>[] = [
         {
@@ -365,7 +372,7 @@ export const Announcements: React.FC = () => {
             header: __('Title', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell title={row.original.title || ''}>
-                    {row.original.title || '-'}
+                    {truncateText(row.original.title || '', 30)} {/* truncate to 30 chars */}
                 </TableCell>
             ),
         },
@@ -373,7 +380,7 @@ export const Announcements: React.FC = () => {
             header: __('Content', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell title={row.original.content || ''}>
-                    {row.original.content || '-'}
+                    {truncateText(row.original.content || '', 50)} {/* truncate to 50 chars */}
                 </TableCell>
             ),
         },
@@ -455,6 +462,7 @@ export const Announcements: React.FC = () => {
                                         });
 
                                         // Refresh data after deletion
+                                        await fetchTotalRows();
                                         requestData(pagination.pageSize, pagination.pageIndex + 1, '', '');
                                     } catch (err) {
                                         setError(__('Failed to delete announcement', 'multivendorx'));

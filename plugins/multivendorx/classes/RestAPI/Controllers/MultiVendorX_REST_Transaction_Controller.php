@@ -139,6 +139,8 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
         // 🔹 Handle date range from request
         $start_date = $request->get_param('start_date');
         $end_date   = $request->get_param('end_date');
+        $transaction_type   = $request->get_param('transaction_type');
+        $transaction_status   = $request->get_param('transaction_status');
     
         if ( $start_date ) {
             $start_date = date('Y-m-d H:i:s', strtotime($start_date));
@@ -161,7 +163,8 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
             $transactions = Transaction::get_transaction_information( $args );
             return rest_ensure_response( (int) $transactions );
         }
-    
+        if ( $transaction_status )   $args['status']   = $transaction_status;
+        if ( $transaction_type )   $args['transaction_type']   = $transaction_type;
         $args['limit']  = $limit;
         $args['offset'] = $offset;
     
