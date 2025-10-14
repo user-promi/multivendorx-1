@@ -322,11 +322,105 @@ class Install {
             'Order arrived late'
         ];
         $legal_settings = [
-            'seller_agreement'         => 'Default Seller Agreement text goes here.',
-            'terms_conditions'         => 'Default Terms & Conditions text goes here.',
-            'privacy_policy'           => 'Default Privacy Policy content goes here.',
-            'refund_return_policy'     => 'Default Refund & Return Policy details go here.',
-            'anti_counterfeit_policy'  => 'Default Anti-Counterfeit / Copyright Declaration text goes here.',
+            'seller_agreement'         => 'This Seller Agreement (“Agreement”) is entered into between Marketplace (“Platform”) and the Seller (“You” or “Seller”) upon registration on the Platform. By submitting this agreement and uploading the required documents, you agree to comply with all rules, policies, and guidelines of the Platform.
+
+1. Eligibility and Registration
+   - Seller must be at least 18 years old and legally eligible to operate a business.
+   - All business registration documents must be submitted and verified.
+
+2. Product Listing Rules
+   - Only products allowed under prohibited/restricted categories may be listed.
+   - Product descriptions, images, and certifications must be accurate and truthful.
+   - Counterfeit or illegal products are prohibited.
+
+3. Order Fulfillment
+   - Orders must be fulfilled on time.
+   - Inventory must be accurately maintained.
+
+4. Payments & Commissions
+   - Commissions deducted as per agreed rates.
+   - Payouts only for verified sellers.
+
+5. Legal Compliance
+   - Compliance with tax, consumer protection, and intellectual property laws.
+   - Anti-counterfeit and copyright regulations must be followed.
+
+6. Refunds & Returns
+   - Must follow platform policies.
+
+7. Termination
+   - Platform may suspend or terminate accounts for violations.
+
+8. Amendments
+   - Platform may update this agreement. Sellers will be notified.
+
+By signing and submitting, the Seller accepts all terms above.
+',
+            'terms_conditions'         => '1. General
+   - Use of the Platform constitutes agreement to these Terms & Conditions.
+   - Sellers must act with honesty, transparency, and integrity.
+
+2. Account Responsibility
+   - Keep account credentials secure.
+   - No falsification of information.
+
+3. Product Guidelines
+   - Products must be legal, safe, and comply with guidelines.
+   - Prohibited or counterfeit products are forbidden.
+
+4. Fees & Payments
+   - Commission and transaction fees apply.
+   - Payouts require verification of bank and tax details.
+
+5. Dispute Resolution
+   - Platform mediates disputes; sellers must comply with resolutions.
+
+6. Modification of Terms
+   - Terms may be updated; sellers will be notified via dashboard.
+',
+            'privacy_policy'           => '1. Data Collection
+   - Platform collects personal and business info for order processing and compliance.
+
+2. Data Usage
+   - Information used for communication, compliance, and service improvement.
+   - Data not shared with third parties without consent or legal obligation.
+
+3. Data Security
+   - Secure storage with encryption and access controls.
+   - Sellers must keep passwords confidential.
+
+4. Consent
+   - By accepting, sellers consent to collection, storage, and processing.
+   - Withdrawal of consent may limit Platform access.
+',
+            'refund_return_policy'     => '1. Eligibility
+   - Products must meet condition and timeline requirements.
+   - Requests must be submitted within 14 days.
+
+2. Return Process
+   - Buyers submit requests through the Platform.
+   - Sellers must acknowledge requests within 48 hours.
+
+3. Refund Process
+   - Refunds issued within 7 business days after verification.
+   - Refunds processed via original payment method.
+
+4. Seller Obligations
+   - Provide accurate descriptions and images.
+   - Follow Platform refund rules.
+',
+            'anti_counterfeit_policy'  => '1. Product Authenticity
+   - All products must be authentic; certificates must be provided for branded items.
+
+2. Copyright Compliance
+   - All images, descriptions, and logos must be original or licensed.
+
+3. Violations
+   - Non-compliance may result in account suspension or termination.
+
+4. Certification Upload
+   - Sellers must upload supporting documents for regulated products.
+',
         ];
         $product_compliance_settings = [
             'prohibited_product_categories' => [
