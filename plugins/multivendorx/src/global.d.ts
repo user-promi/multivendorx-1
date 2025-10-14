@@ -43,6 +43,7 @@ declare global {
         user_id:any;
         currency:any;
         currency_symbol:any;
+        edit_order_capability:any;
         add_product_link:any;
         map_providor:any;
         google_api_key:any;

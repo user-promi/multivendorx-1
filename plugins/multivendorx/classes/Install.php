@@ -321,14 +321,30 @@ class Install {
             'Wrong item received',
             'Order arrived late'
         ];
-    
+        $legal_settings = [
+            'seller_agreement'         => 'Default Seller Agreement text goes here.',
+            'terms_conditions'         => 'Default Terms & Conditions text goes here.',
+            'privacy_policy'           => 'Default Privacy Policy content goes here.',
+            'refund_return_policy'     => 'Default Refund & Return Policy details go here.',
+            'anti_counterfeit_policy'  => 'Default Anti-Counterfeit / Copyright Declaration text goes here.',
+        ];
+        $product_compliance_settings = [
+            'prohibited_product_categories' => [
+                'Weapons & Ammunition',
+                'Illegal Drugs & Substances',
+                'Counterfeit Products',
+                'Stolen Goods',
+            ],
+            // You can add other keys here if needed, e.g. 'required_store_uploads' => [...]
+        ];
         // 6. Save back to DB
         update_option('multivendorx_identity_verification_settings', $settings);
         update_option('multivendorx_review_management_settings', $review_settings);
         update_option('multivendorx_order_actions_refunds_settings', $order_settings);
         update_option('multivendorx_product_report_abuse_settings', $abuse_settings);
         update_option('multivendorx_shipping_settings', $abuse_report);
-        
+        update_option('multivendorx_legal_compliance_settings', $legal_settings);
+        update_option('multivendorx_product_compliance_settings', $product_compliance_settings);        
     }
     
 

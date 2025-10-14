@@ -99,7 +99,7 @@ export const KnowledgeBase: React.FC = () => {
                 headers: { 'X-WP-Nonce': appLocalizer.nonce },
                 data: { bulk: true, action, ids: selectedIds },
             });
-
+            await fetchTotalRows();
             requestData(pagination.pageSize, pagination.pageIndex + 1);
             setRowSelection({});
         } catch (err) {
@@ -149,6 +149,7 @@ export const KnowledgeBase: React.FC = () => {
 
             if (response.data.success) {
                 handleCloseForm();
+                await fetchTotalRows();
                 requestData(pagination.pageSize, pagination.pageIndex + 1);
             } else {
                 setError(__('Failed to save entry', 'multivendorx'));
@@ -161,24 +162,25 @@ export const KnowledgeBase: React.FC = () => {
     };
 
 
-
+    const fetchTotalRows = async () => {
+        try {
+            const response = await axios.get(getApiLink(appLocalizer, 'knowledge'), {
+                headers: { 'X-WP-Nonce': appLocalizer.nonce },
+                params: { count: true },
+            });
+            const total = response.data || 0;
+            setTotalRows(total);
+            setPageCount(Math.ceil(total / pagination.pageSize));
+        } catch {
+            setError(__('Failed to load total rows', 'multivendorx'));
+        }
+    };
+    
     // Fetch total rows on mount
     useEffect(() => {
-
-        axios({
-            method: 'GET',
-            url: getApiLink(appLocalizer, 'knowledge'),
-            headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            params: { count: true },
-        })
-            .then((response) => {
-                setTotalRows(response.data || 0);
-                setPageCount(Math.ceil(response.data / pagination.pageSize));
-            })
-            .catch(() => {
-                setError(__('Failed to load total rows', 'multivendorx'));
-            });
+        fetchTotalRows();
     }, []);
+    
 
     useEffect(() => {
         const currentPage = pagination.pageIndex + 1;
@@ -278,7 +280,11 @@ export const KnowledgeBase: React.FC = () => {
             ),
         },
     ];
-
+    
+    const truncateText = (text: string, maxLength: number) => {
+        if (!text) return '-';
+        return text.length > maxLength ? text.slice(0, maxLength) + '...' : text;
+    };
     // Columns
     const columns: ColumnDef<KBRow>[] = [
         {
@@ -302,7 +308,7 @@ export const KnowledgeBase: React.FC = () => {
             header: __('Title', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell title={row.original.title || ''}>
-                    {row.original.title || '-'}
+                    {truncateText(row.original.title || '', 30)} {/* truncate to 30 chars */}
                 </TableCell>
             ),
         },
@@ -310,7 +316,7 @@ export const KnowledgeBase: React.FC = () => {
             header: __('Content', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell title={row.original.content || ''}>
-                    {row.original.content || '-'}
+                    {truncateText(row.original.content || '', 50)} {/* truncate to 50 chars */}
                 </TableCell>
             ),
         },
@@ -377,6 +383,7 @@ export const KnowledgeBase: React.FC = () => {
                                             url: getApiLink(appLocalizer, `knowledge/${rowData.id}`),
                                             headers: { 'X-WP-Nonce': appLocalizer.nonce },
                                         });
+                                        await fetchTotalRows();
                                         requestData(pagination.pageSize, pagination.pageIndex + 1);
                                     } catch {
                                         setError(__('Failed to delete entry', 'multivendorx'));

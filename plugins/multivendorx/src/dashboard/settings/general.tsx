@@ -45,7 +45,7 @@ const GeneralSettings = () => {
         });
     };
 
-    // ✅ Fixed: Corrected name and dynamic binding
+    //Fixed: Corrected name and dynamic binding
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         const updated = { ...formData, [name]: value };

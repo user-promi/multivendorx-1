@@ -120,6 +120,9 @@ class Setting {
                 'multivendorx_menu_manager_settings',
                 'multivendorx_geolocation_settings',
                 'multivendorx_shipping_settings',
+                'multivendorx_legal-compliance_settings',
+                'multivendorx_product-compliance_settings',
+                'multivendorx_tax-compliance_settings',
 			)
         );
 

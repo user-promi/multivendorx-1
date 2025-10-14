@@ -63,7 +63,9 @@ const Transactions: React.FC = () => {
     function requestData(
         rowsPerPage = 10,
         currentPage = 1,
-        typeCount ='',
+        typeCount = '',
+        transactionType='',
+        transactionStatus='',
         startDate = new Date(0),
         endDate = new Date(),
     ) {
@@ -78,8 +80,10 @@ const Transactions: React.FC = () => {
                 row: rowsPerPage,
                 store_id: appLocalizer.store_id,
                 start_date: startDate,
-                filter_status:typeCount == 'all'? '':typeCount,
                 end_date: endDate,
+                filter_status: typeCount == 'all' ? '' : typeCount,
+                transaction_status:transactionStatus,
+                transaction_type:transactionType
             },
         }).then((response) => {
             setData(response.data.transaction || []);
@@ -113,6 +117,8 @@ const Transactions: React.FC = () => {
             rowsPerPage,
             currentPage,
             filterData?.typeCount,
+            filterData?.transactionType,
+            filterData?.transactionStatus,
             filterData?.date?.start_date,
             filterData?.date?.end_date
         );
@@ -191,11 +197,38 @@ const Transactions: React.FC = () => {
             enableSorting: true,
             accessorFn: row => parseFloat(row.credit || '0'),
             header: __('Credit', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.credit || ''}>
-                    {row.original.credit ? `${appLocalizer.currency_symbol}${row.original.credit}` : '-'}
-                </TableCell>
-            ),
+            cell: ({ row }) => {
+                const credit = row.original.credit;
+                const status = row.original.status || '';
+
+                let iconClass = '';
+                if (credit) {
+                    switch (status) {
+                        case 'pending':
+                            iconClass = 'adminlib-clock';
+                            break;
+                        case 'Completed':
+                            iconClass = 'adminlib-check';
+                            break;
+                        case 'failed':
+                            iconClass = 'adminlib-cross';
+                            break;
+                    }
+                }
+
+                return (
+                    <TableCell>
+                        {credit ? (
+                            <>
+                                {iconClass && <i className={iconClass} style={{ marginRight: '4px' }}></i>}
+                                {`${appLocalizer.currency_symbol}${credit}`}
+                            </>
+                        ) : (
+                            '-'
+                        )}
+                    </TableCell>
+                );
+            },
         },
         {
             id: 'debit',
@@ -203,11 +236,38 @@ const Transactions: React.FC = () => {
             enableSorting: true,
             accessorFn: row => parseFloat(row.debit || '0'),
             header: __('Debit', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.debit || ''}>
-                    {row.original.debit ? `${appLocalizer.currency_symbol}${row.original.debit}` : '-'}
-                </TableCell>
-            ),
+            cell: ({ row }) => {
+                const debit = row.original.debit;
+                const status = row.original.status || '';
+
+                let iconClass = '';
+                if (debit) {
+                    switch (status) {
+                        case 'pending':
+                            iconClass = 'adminlib-clock';
+                            break;
+                        case 'Completed':
+                            iconClass = 'adminlib-check';
+                            break;
+                        case 'failed':
+                            iconClass = 'adminlib-cross';
+                            break;
+                    }
+                }
+
+                return (
+                    <TableCell>
+                        {debit ? (
+                            <>
+                                {iconClass && <i className={iconClass} style={{ marginRight: '4px' }}></i>}
+                                {`${appLocalizer.currency_symbol}${debit}`}
+                            </>
+                        ) : (
+                            '-'
+                        )}
+                    </TableCell>
+                );
+            },
         },
         {
             id: 'balance',
@@ -216,33 +276,39 @@ const Transactions: React.FC = () => {
             accessorFn: row => parseFloat(row.balance || '0'),
             header: __('Balance', 'multivendorx'),
             cell: ({ row }) => {
-                const balance = row.original.balance || '';
+                const balance = row.original.balance;
                 const status = row.original.status || '';
-        
-                // Determine icon class based on status
+
                 let iconClass = '';
-                switch(status) {
-                    case 'pending':
-                        iconClass = 'adminlib-clock';   // example class for pending
-                        break;
-                    case 'Completed':
-                        iconClass = 'adminlib-check';   // example class for completed
-                        break;
-                    case 'failed':
-                        iconClass = 'adminlib-cross';   // example class for failed
-                        break;
-                    default:
-                        iconClass = '';
+                if (balance) {
+                    switch (status) {
+                        case 'pending':
+                            iconClass = 'adminlib-clock';
+                            break;
+                        case 'Completed':
+                            iconClass = 'adminlib-check';
+                            break;
+                        case 'failed':
+                            iconClass = 'adminlib-cross';
+                            break;
+                    }
                 }
-        
+
                 return (
                     <TableCell>
-                        {iconClass && <i className={iconClass} style={{ marginRight: '4px' }}></i>}
-                        {balance ? `${appLocalizer.currency_symbol}${balance}` : '-'}
+                        {balance ? (
+                            <>
+                                {iconClass && <i className={iconClass} style={{ marginRight: '4px' }}></i>}
+                                {`${appLocalizer.currency_symbol}${balance}`}
+                            </>
+                        ) : (
+                            '-'
+                        )}
                     </TableCell>
                 );
             },
-        },        
+        },
+
         {
             header: __("Status", "multivendorx"),
             cell: ({ row }) => <TableCell>{row.original.status}</TableCell>,
@@ -274,7 +340,47 @@ const Transactions: React.FC = () => {
         },
 
     ];
+
     const realtimeFilter: RealtimeFilter[] = [
+        {
+            name: 'transactionType',
+            render: (updateFilter: (key: string, value: string) => void, filterValue: string | undefined) => (
+                <div className="   group-field">
+                    <select
+                        name="transactionType"
+                        onChange={(e) => updateFilter(e.target.name, e.target.value)}
+                        value={filterValue || ''}
+                        className="basic-select"
+                    >
+                        <option value="">{__('Transaction Type', 'multivendorx')}</option>
+                        <option value="Commission">{__('Commission', 'multivendorx')}</option>
+                        <option value="Withdrawal">{__('Withdrawal', 'multivendorx')}</option>
+                        <option value="Refund">{__('Refund', 'multivendorx')}</option>
+                        <option value="Reversed">{__('Reversed', 'multivendorx')}</option>
+                        <option value="COD received">{__('COD received', 'multivendorx')}</option>
+                    </select>
+                </div>
+            ),
+        },
+        {
+            name: 'transactionStatus',
+            render: (updateFilter: (key: string, value: string) => void, filterValue: string | undefined) => (
+                <div className="   group-field">
+                    <select
+                        name="transactionStatus"
+                        onChange={(e) => updateFilter(e.target.name, e.target.value)}
+                        value={filterValue || ''}
+                        className="basic-select"
+                    >
+                        <option value="">{__('Select Status', 'multivendorx')}</option>
+                        <option value="Pending">{__('Pending', 'multivendorx')}</option>
+                        <option value="Processed">{__('Processed', 'multivendorx')}</option>
+                        <option value="Completed">{__('Completed', 'multivendorx')}</option>
+                        <option value="Failed">{__('Failed', 'multivendorx')}</option>
+                    </select>
+                </div>
+            ),
+        },
         {
             name: 'date',
             render: (updateFilter) => (

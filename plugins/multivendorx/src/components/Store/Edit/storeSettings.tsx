@@ -67,7 +67,8 @@ const StoreSettings = ({ id }: { id: string | null }) => {
 
     // Load store data
     useEffect(() => {
-        if (!id) {
+        if (!id || !appLocalizer) {
+            console.error('Missing store ID or appLocalizer');
             setLoading(false);
             return;
         }
@@ -524,7 +525,6 @@ const StoreSettings = ({ id }: { id: string | null }) => {
             }
         }).catch((error) => {
             console.error('Save error:', error);
-            setErrorMsg('Failed to save store data');
         });
     };    
 
@@ -864,6 +864,4 @@ const StoreSettings = ({ id }: { id: string | null }) => {
 
 export default StoreSettings;
 
-function setErrorMsg(arg0: string) {
-	throw new Error('Function not implemented.');
-}
+
