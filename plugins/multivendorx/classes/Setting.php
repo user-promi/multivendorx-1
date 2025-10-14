@@ -119,6 +119,9 @@ class Setting {
                 'multivendorx_order_actions_refunds_settings', 
                 'multivendorx_menu_manager_settings',
                 'multivendorx_geolocation_settings',
+                'multivendorx_legal-compliance_settings',
+                'multivendorx_product-compliance_settings',
+                'multivendorx_tax-compliance_settings',
 			)
         );
 

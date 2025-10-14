@@ -356,7 +356,10 @@ class FrontendScripts {
                 'advertising',
                 'product-preferencess',
                 'product-store-category-control',
-                'geolocation'
+                'geolocation',
+                'legal-compliance',
+                'product-compliance',
+                'tax-compliance',
             )
 		);
 
