@@ -175,6 +175,7 @@ interface InputField {
     hint?: string;
     addNewBtn?: string;
     blocktext?: string;
+    title?: string;
     rows?: {
         key: string;
         label: string;
@@ -1410,6 +1411,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                         <BlockText
                             key={inputField.blocktext}
                             blockTextClass="settings-metabox-note"
+                            title= {inputField.title}
                             value={String(inputField.blocktext)}// Text or HTML content to display inside the block (safe HTML injected).
                         />
                     );
