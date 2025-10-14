@@ -528,15 +528,15 @@ const StoreSettings = ({ id }: { id: string | null }) => {
         });
     };    
 
-    if (loading) {
-        return (
-            <div className="card-wrapper">
-                <div className="card-content">
-                    <div>Loading store data...</div>
-                </div>
-            </div>
-        );
-    }
+    // if (loading) {
+    //     return (
+    //         <div className="card-wrapper">
+    //             <div className="card-content">
+    //                 <div>Loading store data...</div>
+    //             </div>
+    //         </div>
+    //     );
+    // }
 
     return (
         <>

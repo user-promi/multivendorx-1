@@ -51,7 +51,7 @@
   background: #ece2f991;
   padding: 0.5rem 0.8rem;
   display: flex;
-  align-items: center;
+  align-items: start;
   gap: 0.5rem;
   border: 0.063rem solid $theme-color;
   border-radius: 0.313rem;
@@ -62,39 +62,52 @@
     color: $theme-color;
   }
 
+  ul,
+  li {
+    margin: 0;
+  }
+
+  .title {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: $theme-color;
+    line-height: 1.5rem;
+  }
+
   p {
     font-size: 0.875rem;
     margin: 0;
   }
 
-  &.notice{
+  &.notice {
     flex-direction: column;
     align-items: start;
     width: 100%;
 
-    .title{
+    .title {
       display: flex;
       gap: 0.5rem;
 
-      h3{
+      h3 {
         margin: 0;
       }
     }
   }
 
-  &.green{
+  &.green {
     background: #d9f5f0d8;
     border-color: #06be9f;
 
-    i{
+    i {
       color: #06be9f;
     }
   }
-  &.yellow{
+
+  &.yellow {
     background: #fff0e1e3;
     border-color: #ff9f43;
 
-    i{
+    i {
       color: #ff9f43;
     }
   }
@@ -333,7 +346,9 @@
       }
     }
   }
-} // radio input end
+}
+
+// radio input end
 
 @media screen and (width <=61.488rem) {
   .dynamic-fields-wrapper {

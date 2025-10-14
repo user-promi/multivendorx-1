@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { BasicInput, TextArea, SuccessNotice, getApiLink } from 'zyra';
+import { BasicInput, TextArea, FileInput, SelectInput, SuccessNotice, getApiLink } from 'zyra';
 import GeneralSettings from './settings/general';
 import Appearance from './settings/Appearance';
 import SocialMedia from './settings/SocialMedia';
@@ -10,6 +10,7 @@ import Withdrawl from './withdrawl';
 import Privacy from './settings/Privacy';
 import Verification from './settings/Verification';
 import ShippingDelivery from './settings/ShippingDelivery';
+import Livechat from './settings/Livechat';
 
 const settings = () => {
     const id = appLocalizer.store_id;
@@ -81,6 +82,7 @@ const settings = () => {
         { id: "contact-information", label: "Contact Information", icon: "form-phone", content: <ContactInformation /> },
         { id: "social-media", label: "Social Media", icon: "cohort", content: <SocialMedia /> },
         { id: "payout", label: "Payout", icon: "tools", content: <Withdrawl /> },
+
         { id: "privacy", label: "Privacy", icon: "security", content: <Privacy /> },
         {
             id: "seo-visibility", label: "SEO & visibility", icon: "bulk-action", content:
@@ -153,10 +155,21 @@ const settings = () => {
         },
         // { id: "shipping", label: "Shipping & Delivery", icon: "tools", content: <ShippingDelivery /> },
         { id: "verification", label: "Verification", icon: "tools", content: <Verification /> },
+        { id: "livechat", label: "Livechat", icon: "tools", content: <Livechat /> },
     ];
     return (
         <>
-            <SuccessNotice message={successMsg} />
+            {successMsg && (
+                <>
+                    <div className="admin-notice-wrapper">
+                        <i className="admin-font adminlib-icon-yes"></i>
+                        <div className="notice-details">
+                            <div className="title">Great!</div>
+                            <div className="desc">{successMsg}</div>
+                        </div>
+                    </div>
+                </>
+            )}
 
             <div className="settings-tab-wrapper">
                 <div className="left-side">

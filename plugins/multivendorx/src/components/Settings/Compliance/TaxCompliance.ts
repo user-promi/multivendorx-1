@@ -2,8 +2,8 @@ import { __ } from '@wordpress/i18n';
 
 export default {
     id: 'tax-compliance',
-    priority: 4,
-    name: __('Financial & Tax Compliance', 'mvx-pro'),
+    priority: 5,
+    name: __('Tax Compliance', 'mvx-pro'),
     desc: __('Stores must provide valid bank account details and tax documents (PAN, GST, VAT, TIN) to receive payouts. Payment processor verification may be required. Non-compliant stores may be restricted from payouts.', 'mvx-pro'),
     icon: 'adminlib-wholesale',
     submitUrl: 'settings',

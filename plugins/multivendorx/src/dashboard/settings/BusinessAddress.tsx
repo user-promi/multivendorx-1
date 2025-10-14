@@ -439,17 +439,7 @@ const BusinessAddress = () => {
             console.error('Save error:', error);
             setErrorMsg('Failed to save store data');
         });
-    };    
-
-    if (loading) {
-        return (
-            <div className="card-wrapper">
-                <div className="card-content">
-                    <div>Loading store data...</div>
-                </div>
-            </div>
-        );
-    }
+    };
 
     return (
         <div className="card-wrapper">
