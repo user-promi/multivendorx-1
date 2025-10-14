@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { BasicInput, TextArea, FileInput, SelectInput, getApiLink } from 'zyra';
+import { BasicInput, TextArea, FileInput, SelectInput, getApiLink, SuccessNotice } from 'zyra';
 
 const Storefront = () => {
     const id = appLocalizer.store_id;
@@ -100,15 +100,7 @@ const Storefront = () => {
     console.log(formData)
     return (
         <>
-            {successMsg && (
-                <div className="admin-notice-wrapper">
-                    <i className="admin-font adminlib-icon-yes"></i>
-                    <div className="notice-details">
-                        <div className="title">Great!</div>
-                        <div className="desc">{successMsg}</div>
-                    </div>
-                </div>
-            )}
+            <SuccessNotice message={successMsg} />
 
             <div className="page-title-wrapper">
                 <div className="page-title">

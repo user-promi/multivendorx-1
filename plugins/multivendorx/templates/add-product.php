@@ -45,7 +45,6 @@ if (is_user_logged_in() && !current_user_can('edit_products')) {
                         <div class="product-search-wrapper categories-search-wrapper">
                             <div class="form-text"><?php _e('Search category', 'multivendorx'); ?></div>
                             <div class="form-input">
-                                <input type="hidden" id="mvx_product_id" value="<?php echo esc_attr($self->get_the_id()); ?>">
                                 <input id="search-categories-keyword" type="text" placeholder="<?php esc_attr_e('Example: tshirt, music, album etc...', 'multivendorx'); ?>">
                                 <ul id="searched-categories-results" class="list-group">
                                     

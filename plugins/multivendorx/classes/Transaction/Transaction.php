@@ -212,10 +212,14 @@ class Transaction {
         }
     
         // Filter by status
+        if ( isset( $args['entry_type'] ) ) {
+            $where[] = " ( entry_type = '" . esc_sql( $args['entry_type'] ) . "' ) ";
+        }
+        
+        // Filter by status
         if ( isset( $args['status'] ) ) {
             $where[] = " ( status = '" . esc_sql( $args['status'] ) . "' ) ";
         }
-    
         // 🔹 Filter by date range on created_at
         if ( isset( $args['start_date'] ) ) {
             $where[] = " ( created_at >= '" . esc_sql( $args['start_date'] ) . "' ) ";

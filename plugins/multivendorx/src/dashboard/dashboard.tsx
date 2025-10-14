@@ -77,6 +77,13 @@ const Dashboard: React.FC = () => {
   const items = tabData[activeTab];
   return (
     <>
+      <div className="page-title-wrapper">
+        <div className="page-title">
+          <div className="title">Dashboard</div>
+          <div className="des">Manage your store information and preferences</div>
+        </div>
+      </div>
+
       <div className="row">
         <div className="column width-65">
           <div className="card">
@@ -322,25 +329,25 @@ const Dashboard: React.FC = () => {
                 ))}
               </div>
               <div className="top-items">
-              {items.map((item) => (
-                <div className="items" key={item.id}>
-                  <div className="left-side">
-                    <div className="icon">
-                      <i
-                        className={`adminlib-pro-tag admin-icon ${item.color}`}
-                        aria-hidden="true"
-                      />
+                {items.map((item) => (
+                  <div className="items" key={item.id}>
+                    <div className="left-side">
+                      <div className="icon">
+                        <i
+                          className={`adminlib-pro-tag admin-icon ${item.color}`}
+                          aria-hidden="true"
+                        />
+                      </div>
+                      <div className="details">
+                        <div className="item-title">{item.name}</div>
+                        <div className="sub-text">{item.orders} orders</div>
+                      </div>
                     </div>
-                    <div className="details">
-                      <div className="item-title">{item.name}</div>
-                      <div className="sub-text">{item.orders} orders</div>
+                    <div className="right-side">
+                      <div className="price">${item.amount}</div>
                     </div>
                   </div>
-                  <div className="right-side">
-                    <div className="price">${item.amount}</div>
-                  </div>
-                </div>
-              ))}
+                ))}
               </div>
             </div>
           </div>

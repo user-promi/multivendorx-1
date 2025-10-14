@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { BasicInput, TextArea, FileInput, SelectInput, getApiLink } from 'zyra';
+import { BasicInput, TextArea, SuccessNotice, getApiLink } from 'zyra';
 
 const GeneralSettings = () => {
     const id = appLocalizer.store_id;
@@ -45,7 +45,7 @@ const GeneralSettings = () => {
         });
     };
 
-    // ✅ Fixed: Corrected name and dynamic binding
+    //Fixed: Corrected name and dynamic binding
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         const updated = { ...formData, [name]: value };
@@ -132,17 +132,7 @@ const GeneralSettings = () => {
                         </div>
                     </div>
 
-                    {successMsg && (
-                        <>
-                            <div className="admin-notice-wrapper">
-                                <i className="admin-font adminlib-icon-yes"></i>
-                                <div className="notice-details">
-                                    <div className="title">Great!</div>
-                                    <div className="desc">{successMsg}</div>
-                                </div>
-                            </div>
-                        </>
-                    )}
+                    <SuccessNotice message={successMsg} />
                 </div>
             </div>
         </>

@@ -20,7 +20,15 @@ interface TransactionHistoryTableProps {
     storeId: number | null;
     dateRange: { startDate: Date | null; endDate: Date | null };
 }
-
+export interface RealtimeFilter {
+    name: string;
+    render: (updateFilter: (key: string, value: any) => void, filterValue: any) => ReactNode;
+}
+type TransactionStatus = {
+    key: string;
+    name: string;
+    count: number;
+};
 const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ storeId, dateRange }) => {
     const [data, setData] = useState<StoreRow[] | null>(null);
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
@@ -35,6 +43,7 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
     const [filteredStores, setFilteredStores] = useState<any[]>([]);
     const [selectedStore, setSelectedStore] = useState<any>(null);
     const [overview, setOverview] = useState<any[]>([]);
+    const [transactionStatus, setTransactionStatus] = useState<TransactionStatus[] | null>(null);
 
     // 🔹 Helper: get effective date range
     const getEffectiveDateRange = () => {
@@ -55,8 +64,8 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
             method: 'GET',
             url: getApiLink(appLocalizer, 'transaction'),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            params: { 
-                count: true, 
+            params: {
+                count: true,
                 store_id: storeId,
                 start_date: startDate.toISOString().split('T')[0],
                 end_date: endDate.toISOString().split('T')[0],
@@ -70,7 +79,13 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
     }, [storeId, dateRange, pagination.pageSize]);
 
     // 🔹 Fetch data from backend
-    function requestData(rowsPerPage = 10, currentPage = 1) {
+    function requestData(
+        rowsPerPage = 10,
+        currentPage = 1,
+        typeCount = '',
+        transactionType = '',
+        transactionStatus = '',
+    ) {
         if (!storeId) return;
 
         setData(null);
@@ -87,9 +102,30 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                 store_id: storeId,
                 start_date: startDate.toISOString().split('T')[0],
                 end_date: endDate.toISOString().split('T')[0],
+                filter_status: typeCount == 'all' ? '' : typeCount,
+                transaction_status: transactionStatus,
+                transaction_type: transactionType
             },
+        }).then((response) => {
+            setData(response.data.transaction || []);
+            setTransactionStatus([
+                {
+                    key: 'all',
+                    name: 'All',
+                    count: response.data.all || 0,
+                },
+                {
+                    key: 'Cr',
+                    name: 'Credit',
+                    count: response.data.credit || 0,
+                },
+                {
+                    key: 'Dr',
+                    name: 'Debit',
+                    count: response.data.debit || 0,
+                },
+            ]);
         })
-            .then((response) => setData(response.data || []))
             .catch(() => setData([]));
     }
 
@@ -100,8 +136,14 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
         setPageCount(Math.ceil(totalRows / pagination.pageSize));
     }, [pagination, storeId, dateRange, totalRows]);
 
-    const requestApiForData = (rowsPerPage: number, currentPage: number) => {
-        requestData(rowsPerPage, currentPage);
+    const requestApiForData = (rowsPerPage: number, currentPage: number, filterData: FilterData) => {
+        requestData(
+            rowsPerPage,
+            currentPage,
+            filterData?.typeCount,
+            filterData?.transactionType,
+            filterData?.transactionStatus,
+        );
     };
 
     // 🔹 Column definitions
@@ -143,6 +185,10 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
             },
         },
         {
+            header: __("Transaction ID", "multivendorx"),
+            cell: ({ row }) => <TableCell>#{row.original.id}</TableCell>,
+        },
+        {
             id: 'order_details',
             accessorKey: 'order_details',
             enableSorting: true,
@@ -165,10 +211,138 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
             },
         },
         {
+            id: 'credit',
+            accessorKey: 'credit',
+            enableSorting: true,
+            accessorFn: row => parseFloat(row.credit || '0'),
+            header: __('Credit', 'multivendorx'),
+            cell: ({ row }) => {
+                const credit = row.original.credit;
+                const status = row.original.status || '';
+
+                let iconClass = '';
+                if (credit) {
+                    switch (status) {
+                        case 'pending':
+                            iconClass = 'adminlib-clock';
+                            break;
+                        case 'Completed':
+                            iconClass = 'adminlib-check';
+                            break;
+                        case 'failed':
+                            iconClass = 'adminlib-cross';
+                            break;
+                    }
+                }
+
+                return (
+                    <TableCell>
+                        {credit ? (
+                            <>
+                                {iconClass && <i className={iconClass} style={{ marginRight: '4px' }}></i>}
+                                {`${appLocalizer.currency_symbol}${credit}`}
+                            </>
+                        ) : (
+                            '-'
+                        )}
+                    </TableCell>
+                );
+            },
+        },
+        {
+            id: 'debit',
+            accessorKey: 'debit',
+            enableSorting: true,
+            accessorFn: row => parseFloat(row.debit || '0'),
+            header: __('Debit', 'multivendorx'),
+            cell: ({ row }) => {
+                const debit = row.original.debit;
+                const status = row.original.status || '';
+
+                let iconClass = '';
+                if (debit) {
+                    switch (status) {
+                        case 'pending':
+                            iconClass = 'adminlib-clock';
+                            break;
+                        case 'Completed':
+                            iconClass = 'adminlib-check';
+                            break;
+                        case 'failed':
+                            iconClass = 'adminlib-cross';
+                            break;
+                    }
+                }
+
+                return (
+                    <TableCell>
+                        {debit ? (
+                            <>
+                                {iconClass && <i className={iconClass} style={{ marginRight: '4px' }}></i>}
+                                {`${appLocalizer.currency_symbol}${debit}`}
+                            </>
+                        ) : (
+                            '-'
+                        )}
+                    </TableCell>
+                );
+            },
+        },
+        {
+            id: 'balance',
+            accessorKey: 'balance',
+            enableSorting: true,
+            accessorFn: row => parseFloat(row.balance || '0'),
+            header: __('Balance', 'multivendorx'),
+            cell: ({ row }) => {
+                const balance = row.original.balance;
+                const status = row.original.status || '';
+
+                let iconClass = '';
+                if (balance) {
+                    switch (status) {
+                        case 'pending':
+                            iconClass = 'adminlib-clock';
+                            break;
+                        case 'Completed':
+                            iconClass = 'adminlib-check';
+                            break;
+                        case 'failed':
+                            iconClass = 'adminlib-cross';
+                            break;
+                    }
+                }
+
+                return (
+                    <TableCell>
+                        {balance ? (
+                            <>
+                                {iconClass && <i className={iconClass} style={{ marginRight: '4px' }}></i>}
+                                {`${appLocalizer.currency_symbol}${balance}`}
+                            </>
+                        ) : (
+                            '-'
+                        )}
+                    </TableCell>
+                );
+            },
+        },
+        {
             header: __('Transaction Type', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell title={row.original.transaction_type || ''}>
                     {row.original.transaction_type || '-'}
+                </TableCell>
+            ),
+        },
+
+        {
+            header: __('Status', 'multivendorx'),
+            cell: ({ row }) => (
+                <TableCell title={row.original.status || ''}>
+                    <span className={`status-badge status-${row.original.status?.toLowerCase()}`}>
+                        {row.original.status || '-'}
+                    </span>
                 </TableCell>
             ),
         },
@@ -180,54 +354,49 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                 </TableCell>
             ),
         },
+    ];
+
+    const realtimeFilter: RealtimeFilter[] = [
         {
-            id: 'credit',
-            accessorKey: 'credit',
-            enableSorting: true,
-            accessorFn: row => parseFloat(row.credit || '0'),
-            header: __('Credit', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.credit || ''}>
-                    {row.original.credit ? `${appLocalizer.currency_symbol}${row.original.credit}` : '-'}
-                </TableCell>
+            name: 'transactionType',
+            render: (updateFilter: (key: string, value: string) => void, filterValue: string | undefined) => (
+                <div className="   group-field">
+                    <select
+                        name="transactionType"
+                        onChange={(e) => updateFilter(e.target.name, e.target.value)}
+                        value={filterValue || ''}
+                        className="basic-select"
+                    >
+                        <option value="">{__('Transaction Type', 'multivendorx')}</option>
+                        <option value="Commission">{__('Commission', 'multivendorx')}</option>
+                        <option value="Withdrawal">{__('Withdrawal', 'multivendorx')}</option>
+                        <option value="Refund">{__('Refund', 'multivendorx')}</option>
+                        <option value="Reversed">{__('Reversed', 'multivendorx')}</option>
+                        <option value="COD received">{__('COD received', 'multivendorx')}</option>
+                    </select>
+                </div>
             ),
         },
         {
-            id: 'debit',
-            accessorKey: 'debit',
-            enableSorting: true,
-            accessorFn: row => parseFloat(row.debit || '0'),
-            header: __('Debit', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.debit || ''}>
-                    {row.original.debit ? `${appLocalizer.currency_symbol}${row.original.debit}` : '-'}
-                </TableCell>
-            ),
-        },
-        {
-            id: 'balance',
-            accessorKey: 'balance',
-            enableSorting: true,
-            accessorFn: row => parseFloat(row.balance || '0'),
-            header: __('Balance', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.balance || ''}>
-                    {row.original.balance ? `${appLocalizer.currency_symbol}${row.original.balance}` : '-'}
-                </TableCell>
-            ),
-        },
-        {
-            header: __('Status', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.status || ''}>
-                    <span className={`status-badge status-${row.original.status?.toLowerCase()}`}>
-                        {row.original.status || '-'}
-                    </span>
-                </TableCell>
+            name: 'transactionStatus',
+            render: (updateFilter: (key: string, value: string) => void, filterValue: string | undefined) => (
+                <div className="   group-field">
+                    <select
+                        name="transactionStatus"
+                        onChange={(e) => updateFilter(e.target.name, e.target.value)}
+                        value={filterValue || ''}
+                        className="basic-select"
+                    >
+                        <option value="">{__('Select Status', 'multivendorx')}</option>
+                        <option value="Pending">{__('Pending', 'multivendorx')}</option>
+                        <option value="Processed">{__('Processed', 'multivendorx')}</option>
+                        <option value="Completed">{__('Completed', 'multivendorx')}</option>
+                        <option value="Failed">{__('Failed', 'multivendorx')}</option>
+                    </select>
+                </div>
             ),
         },
     ];
-
     // 🔹 Fetch stores on mount
     useEffect(() => {
         axios({
@@ -309,8 +478,9 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                     onPaginationChange={setPagination}
                     handlePagination={requestApiForData}
                     perPageOption={[10, 25, 50]}
-                    typeCounts={[]}
+                    typeCounts={transactionStatus as TransactionStatus[]}
                     totalCounts={totalRows}
+                    realtimeFilter={realtimeFilter}
                 />
             </div>
         </>

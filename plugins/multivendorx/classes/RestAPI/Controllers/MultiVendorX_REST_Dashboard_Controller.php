@@ -68,15 +68,21 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller
                 'capability' => ['manage_products'],
                 'capability-edit' => ['manage_products']
             ),
-            'orders' => array(
-                'name' => 'Orders',
-                'slug' => 'orders',
+            'coupons' => array(
+                'name' => 'Coupons',
+                'slug' => 'coupons',
+                'icon' => 'adminlib-contact-form',
+                'capability' => ['read_shop_coupons']
+            ),
+            'sales' => array(
+                'name' => 'Sales',
+                'slug' => 'sales',
                 'icon' => 'adminlib-order',
                 'submenu' => array(
                     array(
-                        'key' => 'all-orders',
-                        'name' => 'All Orders',
-                        'slug' => 'all-orders',
+                        'key' => 'orders',
+                        'name' => 'Orders',
+                        'slug' => 'orders',
                         'capability' => ['read_shop_orders', 'edit_shop_orders', 'delete_shop_orders']
                     ),
                     array(
@@ -86,63 +92,30 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller
                         'capability' => ['read_shop_coupons', 'edit_shop_coupons']
                     ),
                     array(
-                        'key' => 'order-details',
-                        'name' => 'Order Details',
-                        'slug' => 'order-details',
-                        'capability' => ['read_shop_coupons', 'edit_shop_coupons']
-                    )
-                ),
-                'capability' => ['read_shop_orders']
-
-            ),
-            'coupons' => array(
-                'name' => 'Coupons',
-                'slug' => 'coupons',
-                'icon' => 'adminlib-contact-form',
-                'capability' => ['read_shop_coupons']
-            ),
-            'reports' => array(
-                'name' => 'Stats / Report',
-                'slug' => 'reports',
-                'icon' => 'adminlib-report',
-                'submenu' => array(
-                    array(
-                        'key' => 'overview',
-                        'name' => 'Overview',
-                        'slug' => 'overview',
-                        'capability' => ['read_shop_coupons', 'edit_shop_coupons', 'delete_shop_coupons']
-                    ),
-                ),
-                'capability' => ['read_shop_coupons']
-            ),
-            'finance' => array(
-                'name' => 'Finance',
-                'slug' => 'finance',
-                'icon' => 'adminlib-finance',
-                'submenu' => array(
-
-                    array(
-                        'key' => 'payouts',
-                        'name' => 'Payout',
-                        'slug' => 'payouts',
-                        'capability' => ['read_shop_coupons', 'edit_shop_coupons']
-                    ),
-                    array(
-                        'key' => 'transactions',
-                        'name' => 'Transactions',
-                        'slug' => 'transactions',
-                        'capability' => ['read_shop_coupons', 'edit_shop_coupons', 'delete_shop_coupons']
-                    ),
-                    array(
                         'key' => 'commissions',
                         'name' => 'Commissions',
                         'slug' => 'commissions',
                         'capability' => ['read_shop_coupons', 'edit_shop_coupons']
                     ),
                 ),
-                'capability' => ['read_shop_coupons']
+                'capability' => ['read_shop_orders']
+
             ),
-            'store_support' => array(
+            'transactions' => array(
+                'key' => 'transactions',
+                'name' => 'Transactions',
+                'slug' => 'transactions',
+                'icon' => 'adminlib-contact-form',
+                'capability' => ['read_shop_coupons', 'edit_shop_coupons', 'delete_shop_coupons']
+            ),
+            'payouts' => array(
+                'key' => 'payouts',
+                'name' => 'Payouts',
+                'slug' => 'payouts',
+                'icon' => 'adminlib-contact-form',
+                'capability' => ['read_shop_coupons', 'edit_shop_coupons']
+            ),
+             'store_support' => array(
                 'name' => 'Store Support',
                 'icon' => 'adminlib-customer-service',
                 'slug' => 'store-support',
@@ -168,7 +141,40 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller
                 ),
                 'capability' => ['manage_users']
             ),
-
+             'reports' => array(
+                'name' => 'Stats / Report',
+                'slug' => 'reports',
+                'icon' => 'adminlib-report',
+                'submenu' => array(
+                    array(
+                        'key' => 'overview',
+                        'name' => 'Overview',
+                        'slug' => 'overview',
+                        'capability' => ['read_shop_coupons', 'edit_shop_coupons', 'delete_shop_coupons']
+                    ),
+                ),
+                'capability' => ['read_shop_coupons']
+            ),
+            'resources' => array(
+                'name' => 'Resources',
+                'icon' => 'adminlib-cart',
+                'slug' => 'resources',
+                'submenu' => array(
+                    array(
+                        'key' => 'documentation',
+                        'name' => 'Documentation',
+                        'slug' => 'documentation',
+                        'capability' => ['read_shop_coupons', 'edit_shop_coupons']
+                    ),
+                    array(
+                        'key' => 'tools',
+                        'name' => 'Tools',
+                        'slug' => 'tools',
+                        'capability' => ['read_shop_coupons', 'edit_shop_coupons', 'delete_shop_coupons']
+                    ),
+                ),
+                'capability' => ['manage_users']
+            ),
             'settings' => array(
                 'name' => 'Settings',
                 'slug' => 'settings',
@@ -247,26 +253,6 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller
                 //     ), 
                 //     ),
                 'capability' => ['manage_products']
-            ),
-            'resources' => array(
-                'name' => 'Resources',
-                'icon' => 'adminlib-cart',
-                'slug' => 'resources',
-                'submenu' => array(
-                    array(
-                        'key' => 'documentation',
-                        'name' => 'Documentation',
-                        'slug' => 'documentation',
-                        'capability' => ['read_shop_coupons', 'edit_shop_coupons']
-                    ),
-                    array(
-                        'key' => 'tools',
-                        'name' => 'Tools',
-                        'slug' => 'tools',
-                        'capability' => ['read_shop_coupons', 'edit_shop_coupons', 'delete_shop_coupons']
-                    ),
-                ),
-                'capability' => ['manage_users']
             ),
         );
 

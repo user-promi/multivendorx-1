@@ -34,6 +34,12 @@ const Orders: React.FC = () => {
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
     const bulkSelectRef = React.useRef<HTMLSelectElement>(null);
 
+    // const hash = window.location.hash || '';
+    // const isViewOrder = hash.includes('view');
+
+    const path = window.location.pathname;
+    const isViewOrder = path.includes('/view/');
+
     const selectedOrderIds = Object.keys(rowSelection)
         .map((key) => {
             const index = Number(key);
@@ -47,6 +53,7 @@ const Orders: React.FC = () => {
         const rowsPerPage = pagination.pageSize;
         requestData(rowsPerPage, currentPage);
     }, [pagination]);
+
     const fetchOrderStatusCounts = async () => {
         try {
             const statuses = ["all", "pending", "processing", "on-hold", "completed", "cancelled", "refunded", "failed", "trash"];
@@ -199,7 +206,7 @@ const Orders: React.FC = () => {
                 ref={bulkSelectRef}
                 onChange={handleBulkAction}
             >
-                <option value="">{__('Bulk actions')}</option>
+                <option value="">{__('Change order status')}</option>
                 <option value="completed">{__('Completed', 'multivendorx')}</option>
                 <option value="processing">{__('Processing', 'multivendorx')}</option>
                 <option value="pending">{__('Pending', 'multivendorx')}</option>
@@ -238,15 +245,12 @@ const Orders: React.FC = () => {
             header: __("Order ID", "multivendorx"),
             cell: ({ row }) => (
                 <TableCell>
-                    <button
-                        className="link-button" // You can style it as a link
-                        onClick={() => setSelectedOrder(row.original)}
-                    >
-                        #{row.original.number}
-                    </button>
+                        <span className="link" onClick={() => setSelectedOrder(row.original)}>
+                            #{row.original.number}
+                        </span>
                 </TableCell>
             ),
-        },        
+        },
         {
             header: __("Customer", "multivendorx"),
             cell: ({ row }) => {
@@ -292,7 +296,7 @@ const Orders: React.FC = () => {
                 const status = row.original.status || "pending";
                 const colorClass =
                     status === 'completed' ? 'green' :
-                        status === 'pending' ? 'yellow' : 'gray';
+                        status === 'pending' ? 'blue' : 'yellow';
                 return (
                     <TableCell title={status}>
                         <span className={`admin-badge ${colorClass}`}>
@@ -315,6 +319,7 @@ const Orders: React.FC = () => {
             ),
         },
         {
+            id: 'action',
             header: __('Action', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell
@@ -322,12 +327,22 @@ const Orders: React.FC = () => {
                     rowData={row.original}
                     header={{
                         actions: [
-                            {
-                                label: __('View', 'multivendorx'),
-                                icon: 'adminlib-eye',
-                                onClick: (rowData) => setSelectedOrder(rowData),
-                                hover: true
-                            },
+                            // Conditionally include the "View" button
+                            ...(appLocalizer.edit_order_capability
+                                ? [
+                                    {
+                                    label: __('View', 'multivendorx'),
+                                    icon: 'adminlib-eye',
+                                    onClick: (rowData) => {
+                                        setSelectedOrder(rowData);
+                                        const currentPath = window.location.pathname.replace(/\/$/, '');
+                                        const newPath = `${currentPath}/view/${rowData.id}`;
+                                        window.history.pushState({}, '', newPath);
+                                    },
+                                    hover: true,
+                                    },
+                                ]
+                            : []),
                             {
                                 label: __('Download', 'multivendorx'),
                                 icon: 'adminlib-import',
@@ -438,14 +453,15 @@ const Orders: React.FC = () => {
 
     return (
         <>
+        {console.log(appLocalizer.edit_order_capability)}
             <div className="page-title-wrapper">
                 <div className="page-title">
-                    <div className="title">All Orders</div>
+                    <div className="title">Orders</div>
                     <div className="des">Manage your store information and preferences</div>
                 </div>
             </div>
             <div className="admin-table-wrapper">
-                {!selectedOrder ? (
+                {!isViewOrder && !selectedOrder && (
                     <Table
                         data={data}
                         columns={columns as ColumnDef<Record<string, any>, any>[]}
@@ -463,12 +479,17 @@ const Orders: React.FC = () => {
                         typeCounts={orderStatus}
                         bulkActionComp={() => <BulkAction />}
                     />
-                ) : (
-                    <OrderDetails
-                        order={selectedOrder}
-                        onBack={() => setSelectedOrder(null)} // Step 4
-                    />
                 )}
+                
+                {isViewOrder && <OrderDetails
+                    order={selectedOrder}
+                    onBack={() => {
+                        setSelectedOrder(null);
+                        const currentPath = window.location.pathname;
+                        const newPath = currentPath.replace(/\/view\/\d+$/, '');
+                        window.history.pushState({}, '', newPath);
+                    }}
+                />}
 
             </div>
         </>

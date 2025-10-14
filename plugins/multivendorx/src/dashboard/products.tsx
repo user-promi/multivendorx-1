@@ -571,7 +571,6 @@ const AllProduct: React.FC = () => {
     }
 
     // Handle pagination and filter changes
-    // Handle pagination and filter changes
     const requestApiForData = (
         rowsPerPage: number,
         currentPage: number,

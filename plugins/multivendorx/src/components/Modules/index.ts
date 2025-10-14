@@ -86,7 +86,7 @@ export default {
         { type: 'separator', id: 'product_type', label: 'Product Types' },
         {
             id: 'simple',
-            name: __('Simple (Downloadable & Virtual)', 'multivendorx'),
+            name: __('Simple', 'multivendorx'),
             desc: "Covers basic products such as physical goods (books, clothing) or digital items (PDFs, music, software).",
             icon: 'adminlib-rules',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/simple-product',

@@ -196,6 +196,14 @@ const Commission: React.FC = () => {
             ),
         },
         {
+            id: 'id',
+            accessorKey: 'id',
+            accessorFn: row => parseFloat(row.id || '0'),
+            enableSorting: true,
+            header: __('Comm ID', 'multivendorx'),
+            cell: ({ row }) => <TableCell >#{row.original.id}</TableCell>,
+        },
+        {
             id: 'storeName',
             accessorKey: 'storeName',
             enableSorting: true,
@@ -239,7 +247,7 @@ const Commission: React.FC = () => {
             accessorKey: 'commissionAmount',
             accessorFn: row => parseFloat(row.commissionAmount || '0'),
             enableSorting: true,
-            header: __('Commission Earned', 'multivendorx'),
+            header: __('Commi.. Earned', 'multivendorx'),
             cell: ({ row }) => <TableCell title={row.original.commissionAmount ? `${appLocalizer.currency_symbol}${row.original.commissionAmount}` : '-'}>{row.original.commissionAmount ? `${appLocalizer.currency_symbol}${row.original.commissionAmount}` : '-'}</TableCell>,
         },
         {
@@ -279,7 +287,7 @@ const Commission: React.FC = () => {
             accessorKey: 'commissionTotal',
             accessorFn: row => parseFloat(row.commissionTotal || '0'),
             enableSorting: true,
-            header: __('Commission Total', 'multivendorx'),
+            header: __('Commi.. Total', 'multivendorx'),
             cell: ({ row }) => <TableCell title={row.original.commissionTotal ? `${appLocalizer.currency_symbol}${row.original.commissionTotal}` : '-'}>{row.original.commissionTotal ? `${appLocalizer.currency_symbol}${row.original.commissionTotal}` : '-'}</TableCell>,
         },
         {
@@ -307,7 +315,7 @@ const Commission: React.FC = () => {
                             {
                                 label: __('View Commission', 'multivendorx'),
                                 icon: 'adminlib-eye',
-                                onClick: (rowData) => {
+                                onClick: (rowData:any) => {
                                     setSelectedCommissionId(rowData.id ?? null);
                                     setViewCommission(true);
                                 },
@@ -316,10 +324,7 @@ const Commission: React.FC = () => {
                             {
                                 label: __('Regenerate Commission', 'multivendorx'),
                                 icon: 'adminlib-refresh',
-                                onClick: (rowData) => {
-                                    console.log(rowData);
-                                    console.log(appLocalizer);
-
+                                onClick: (rowData:any) => {
                                     if (rowData?.orderId) {
                                         const url = `${appLocalizer.site_url.replace(/\/$/, '')}/wp-admin/admin.php?page=wc-orders&action=edit&id=${rowData.orderId}`;
                                         window.open(url, '_blank');

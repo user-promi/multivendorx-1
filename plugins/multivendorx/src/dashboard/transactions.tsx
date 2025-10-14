@@ -21,13 +21,18 @@ export interface RealtimeFilter {
     name: string;
     render: (updateFilter: (key: string, value: any) => void, filterValue: any) => ReactNode;
 }
-
+type TransactionStatus = {
+    key: string;
+    name: string;
+    count: number;
+};
 const Transactions: React.FC = () => {
     const [data, setData] = useState<TransactionRow[]>([]);
     const [pagination, setPagination] = useState<PaginationState>({ pageIndex: 0, pageSize: 10 });
     const [modalTransaction, setModalTransaction] = useState<TransactionRow | null>(null);
     const [totalRows, setTotalRows] = useState<number>(0);
     const [pageCount, setPageCount] = useState(0);
+    const [transactionStatus, setTransactionStatus] = useState<TransactionStatus[] | null>(null);
 
     // 🔹 Fetch total rows on mount or date change
     useEffect(() => {
@@ -58,6 +63,9 @@ const Transactions: React.FC = () => {
     function requestData(
         rowsPerPage = 10,
         currentPage = 1,
+        typeCount = '',
+        transactionType='',
+        transactionStatus='',
         startDate = new Date(0),
         endDate = new Date(),
     ) {
@@ -73,9 +81,30 @@ const Transactions: React.FC = () => {
                 store_id: appLocalizer.store_id,
                 start_date: startDate,
                 end_date: endDate,
+                filter_status: typeCount == 'all' ? '' : typeCount,
+                transaction_status:transactionStatus,
+                transaction_type:transactionType
             },
+        }).then((response) => {
+            setData(response.data.transaction || []);
+            setTransactionStatus([
+                {
+                    key: 'all',
+                    name: 'All',
+                    count: response.data.all || 0,
+                },
+                {
+                    key: 'Cr',
+                    name: 'Credit',
+                    count: response.data.credit || 0,
+                },
+                {
+                    key: 'Dr',
+                    name: 'Debit',
+                    count: response.data.debit || 0,
+                },
+            ]);
         })
-            .then((response) => setData(response.data || []))
             .catch(() => setData([]));
     }
 
@@ -87,6 +116,9 @@ const Transactions: React.FC = () => {
         requestData(
             rowsPerPage,
             currentPage,
+            filterData?.typeCount,
+            filterData?.transactionType,
+            filterData?.transactionStatus,
             filterData?.date?.start_date,
             filterData?.date?.end_date
         );
@@ -130,6 +162,10 @@ const Transactions: React.FC = () => {
             },
         },
         {
+            header: __("Transaction ID", "multivendorx"),
+            cell: ({ row }) => <TableCell>#{row.original.id}</TableCell>,
+        },
+        {
             id: 'order_details',
             accessorKey: 'order_details',
             enableSorting: true,
@@ -156,20 +192,43 @@ const Transactions: React.FC = () => {
             cell: ({ row }) => <TableCell>{row.original.transaction_type}</TableCell>,
         },
         {
-            header: __("Payment Mode", "multivendorx"),
-            cell: ({ row }) => <TableCell>{row.original.payment_mode}</TableCell>,
-        },
-        {
             id: 'credit',
             accessorKey: 'credit',
             enableSorting: true,
             accessorFn: row => parseFloat(row.credit || '0'),
             header: __('Credit', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.credit || ''}>
-                    {row.original.credit ? `${appLocalizer.currency_symbol}${row.original.credit}` : '-'}
-                </TableCell>
-            ),
+            cell: ({ row }) => {
+                const credit = row.original.credit;
+                const status = row.original.status || '';
+
+                let iconClass = '';
+                if (credit) {
+                    switch (status) {
+                        case 'pending':
+                            iconClass = 'adminlib-clock';
+                            break;
+                        case 'Completed':
+                            iconClass = 'adminlib-check';
+                            break;
+                        case 'failed':
+                            iconClass = 'adminlib-cross';
+                            break;
+                    }
+                }
+
+                return (
+                    <TableCell>
+                        {credit ? (
+                            <>
+                                {iconClass && <i className={iconClass} style={{ marginRight: '4px' }}></i>}
+                                {`${appLocalizer.currency_symbol}${credit}`}
+                            </>
+                        ) : (
+                            '-'
+                        )}
+                    </TableCell>
+                );
+            },
         },
         {
             id: 'debit',
@@ -177,11 +236,38 @@ const Transactions: React.FC = () => {
             enableSorting: true,
             accessorFn: row => parseFloat(row.debit || '0'),
             header: __('Debit', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.debit || ''}>
-                    {row.original.debit ? `${appLocalizer.currency_symbol}${row.original.debit}` : '0'}
-                </TableCell>
-            ),
+            cell: ({ row }) => {
+                const debit = row.original.debit;
+                const status = row.original.status || '';
+
+                let iconClass = '';
+                if (debit) {
+                    switch (status) {
+                        case 'pending':
+                            iconClass = 'adminlib-clock';
+                            break;
+                        case 'Completed':
+                            iconClass = 'adminlib-check';
+                            break;
+                        case 'failed':
+                            iconClass = 'adminlib-cross';
+                            break;
+                    }
+                }
+
+                return (
+                    <TableCell>
+                        {debit ? (
+                            <>
+                                {iconClass && <i className={iconClass} style={{ marginRight: '4px' }}></i>}
+                                {`${appLocalizer.currency_symbol}${debit}`}
+                            </>
+                        ) : (
+                            '-'
+                        )}
+                    </TableCell>
+                );
+            },
         },
         {
             id: 'balance',
@@ -189,15 +275,47 @@ const Transactions: React.FC = () => {
             enableSorting: true,
             accessorFn: row => parseFloat(row.balance || '0'),
             header: __('Balance', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.balance || ''}>
-                    {row.original.balance ? `${appLocalizer.currency_symbol}${row.original.balance}` : '-'}
-                </TableCell>
-            ),
+            cell: ({ row }) => {
+                const balance = row.original.balance;
+                const status = row.original.status || '';
+
+                let iconClass = '';
+                if (balance) {
+                    switch (status) {
+                        case 'pending':
+                            iconClass = 'adminlib-clock';
+                            break;
+                        case 'Completed':
+                            iconClass = 'adminlib-check';
+                            break;
+                        case 'failed':
+                            iconClass = 'adminlib-cross';
+                            break;
+                    }
+                }
+
+                return (
+                    <TableCell>
+                        {balance ? (
+                            <>
+                                {iconClass && <i className={iconClass} style={{ marginRight: '4px' }}></i>}
+                                {`${appLocalizer.currency_symbol}${balance}`}
+                            </>
+                        ) : (
+                            '-'
+                        )}
+                    </TableCell>
+                );
+            },
         },
+
         {
             header: __("Status", "multivendorx"),
             cell: ({ row }) => <TableCell>{row.original.status}</TableCell>,
+        },
+        {
+            header: __("Payment Mode", "multivendorx"),
+            cell: ({ row }) => <TableCell>{row.original.payment_mode}</TableCell>,
         },
         {
             header: __("Action", "multivendorx"),
@@ -220,9 +338,49 @@ const Transactions: React.FC = () => {
                 />
             ),
         },
-        
+
     ];
+
     const realtimeFilter: RealtimeFilter[] = [
+        {
+            name: 'transactionType',
+            render: (updateFilter: (key: string, value: string) => void, filterValue: string | undefined) => (
+                <div className="   group-field">
+                    <select
+                        name="transactionType"
+                        onChange={(e) => updateFilter(e.target.name, e.target.value)}
+                        value={filterValue || ''}
+                        className="basic-select"
+                    >
+                        <option value="">{__('Transaction Type', 'multivendorx')}</option>
+                        <option value="Commission">{__('Commission', 'multivendorx')}</option>
+                        <option value="Withdrawal">{__('Withdrawal', 'multivendorx')}</option>
+                        <option value="Refund">{__('Refund', 'multivendorx')}</option>
+                        <option value="Reversed">{__('Reversed', 'multivendorx')}</option>
+                        <option value="COD received">{__('COD received', 'multivendorx')}</option>
+                    </select>
+                </div>
+            ),
+        },
+        {
+            name: 'transactionStatus',
+            render: (updateFilter: (key: string, value: string) => void, filterValue: string | undefined) => (
+                <div className="   group-field">
+                    <select
+                        name="transactionStatus"
+                        onChange={(e) => updateFilter(e.target.name, e.target.value)}
+                        value={filterValue || ''}
+                        className="basic-select"
+                    >
+                        <option value="">{__('Select Status', 'multivendorx')}</option>
+                        <option value="Pending">{__('Pending', 'multivendorx')}</option>
+                        <option value="Processed">{__('Processed', 'multivendorx')}</option>
+                        <option value="Completed">{__('Completed', 'multivendorx')}</option>
+                        <option value="Failed">{__('Failed', 'multivendorx')}</option>
+                    </select>
+                </div>
+            ),
+        },
         {
             name: 'date',
             render: (updateFilter) => (
@@ -230,7 +388,7 @@ const Transactions: React.FC = () => {
                     <CalendarInput
                         wrapperClass=""
                         inputClass=""
-                        onChange={(range:any) => {
+                        onChange={(range: any) => {
                             updateFilter('date', {
                                 start_date: range.startDate,
                                 end_date: range.endDate,
@@ -256,6 +414,7 @@ const Transactions: React.FC = () => {
                 handlePagination={requestApiForData}
                 perPageOption={[10, 25, 50]}
                 totalCounts={totalRows}
+                typeCounts={transactionStatus as TransactionStatus[]}
             />
 
             {modalTransaction && (

@@ -147,7 +147,7 @@ class Payment
 
     public function get_settings() {
         return [
-            'icon'      => 'ST',
+            'icon'      => 'adminlib-form-url',
             'id'        => $this->get_id(),
             'label'     => 'Stripe Connect',
             'enableOption' => true,

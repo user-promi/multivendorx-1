@@ -159,6 +159,7 @@ const Refund: React.FC = () => {
             <div className="page-title-wrapper">
                 <div className="page-title">
                     <div className="title">Refund</div>
+                    <div className="des">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Debitis, perferendis.</div>
                 </div>
             </div>
 

@@ -135,10 +135,12 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
         $count    = $request->get_param( 'count' );
         $store_id = intval( $request->get_param( 'store_id' ) );
         $status   = $request->get_param( 'status' );
-    
+        $filter_status   = $request->get_param( 'filter_status' );
         // 🔹 Handle date range from request
         $start_date = $request->get_param('start_date');
         $end_date   = $request->get_param('end_date');
+        $transaction_type   = $request->get_param('transaction_type');
+        $transaction_status   = $request->get_param('transaction_status');
     
         if ( $start_date ) {
             $start_date = date('Y-m-d H:i:s', strtotime($start_date));
@@ -155,12 +157,14 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
         // Add date filters
         if ( $start_date ) $args['start_date'] = $start_date;
         if ( $end_date )   $args['end_date']   = $end_date;
+        if ( $filter_status )   $args['entry_type']   = $filter_status;
     
         if ( $count ) {
             $transactions = Transaction::get_transaction_information( $args );
             return rest_ensure_response( (int) $transactions );
         }
-    
+        if ( $transaction_status )   $args['status']   = $transaction_status;
+        if ( $transaction_type )   $args['transaction_type']   = $transaction_type;
         $args['limit']  = $limit;
         $args['offset'] = $offset;
     
@@ -170,6 +174,7 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
             $store = new \MultiVendorX\Store\Store($row['store_id']);
     
             return [
+                'id'             => $row['id'],
                 'store_name'     => $store ? $store->get('name') : '-',
                 'amount'         => $row['amount'],
                 'balance'        => $row['balance'],
@@ -182,8 +187,25 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
                 'transaction_type' => $row['transaction_type'],
             ];
         }, $transactions);
-    
-        return rest_ensure_response( $formatted );
+        $countArgs = [
+            'count' => true,
+        ];
+        
+        if ( $store_id ) {
+            $countArgs['store_id'] = $store_id;
+        }
+        
+        $all    = Transaction::get_transaction_information( $countArgs );
+        $credit = Transaction::get_transaction_information( array_merge( $countArgs, ['entry_type' => 'Cr'] ) );
+        $debit  = Transaction::get_transaction_information( array_merge( $countArgs, ['entry_type' => 'Dr'] ) );
+        
+        $response = [
+            'transaction' => $formatted,
+            'all'         => $all,
+            'credit'      => $credit,
+            'debit'      =>  $debit,
+        ];
+        return rest_ensure_response( $response );
     }
     
     
@@ -259,12 +281,16 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
         }
         
         $payout_threshold = floatval($payout_threshold);
-        
+        $minimum_wallet_amount = MultiVendorX()->setting->get_setting( 'wallet_threshold_amount', 0 );
+        $locking_day = MultiVendorX()->setting->get_setting( 'commission_lock_period', 0 );
+
         return rest_ensure_response([
-            'wallet_balance'   => $balance + $locking_balance,
-            'reserve_balance'  => $payout_threshold,
-            'available_balance'=> max(0, $balance - $payout_threshold),
+            'wallet_balance'   => $balance,
+            'reserve_balance'  => $minimum_wallet_amount,
+            'thresold'         => $payout_threshold,
+            'available_balance'=> max(0, $balance - $minimum_wallet_amount),
             'balance'          => $balance,
+            'locking_day'      => $locking_day,
             'locking_balance'  => $locking_balance,
             'lifetime_earning' => $lifetime_earning,
         ]);
@@ -272,7 +298,32 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
     }
     
     public function update_item( $request ) {
+        $nonce = $request->get_header( 'X-WP-Nonce' );
+        if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
+            return new \WP_Error(
+                'invalid_nonce',
+                __( 'Invalid nonce', 'multivendorx' ),
+                array( 'status' => 403 )
+            );
+        }
+    
+        $store_id = absint( $request->get_param( 'store_id' ) );
+        $amount = (float) $request->get_param( 'amount' );
+
+        $store = new \MultiVendorX\Store\Store( $store_id );
+        $store->update_meta('request_withdrawal_amount', $amount);
         
+        
+        // $threshold_amount = MultiVendorX()->setting->get_setting('payout_threshold_amount', 0);
+
+        // if ($threshold_amount < $amount) {
+        //     MultiVendorX()->payments->processor->process_payment( $store_id, $amount);
+        // }
+
+        return rest_ensure_response([
+            'success' => true,
+            'id'      => $store_id,
+        ]);
     }
 
 }

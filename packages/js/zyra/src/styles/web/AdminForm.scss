@@ -81,6 +81,23 @@
       }
     }
   }
+
+  &.green{
+    background: #d9f5f0d8;
+    border-color: #06be9f;
+
+    i{
+      color: #06be9f;
+    }
+  }
+  &.yellow{
+    background: #fff0e1e3;
+    border-color: #ff9f43;
+
+    i{
+      color: #ff9f43;
+    }
+  }
 }
 
 .settings-metabox-description {

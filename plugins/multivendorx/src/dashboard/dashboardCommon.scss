@@ -29,6 +29,35 @@ $border-radius-button: 8rem;
     min-height: 1.5rem !important;
 }
 
+// no permission section start
+.permission-wrapper {
+    height: 80vh;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    i {
+        padding: 0.5rem;
+        font-size: 1.45rem;
+        border-radius: 0.313rem;
+    }
+
+    .title {
+        font-size: 1.625rem;
+        margin: 1rem;
+        margin-top: 1.5rem;
+    }
+
+    .des {
+        margin-bottom: 1rem;
+    }
+}
+
+// no permission section end
+
+
 // .btn-purple{
 //     color: var(--buttonText) !important;
 //     background: var(--buttonBg) !important;
@@ -363,7 +392,7 @@ $border-radius-button: 8rem;
             margin-bottom: 1rem;
 
             .icon-wrapper {
-                width: 10%;
+                width: 6%;
                 padding-top: 0.313rem;
 
                 i {
@@ -436,12 +465,15 @@ $border-radius-button: 8rem;
 
     .left-side {
         width: 25%;
+        border-left: 0.25rem solid #fff;
 
         .title {
             padding: 0.75rem;
             transition: all 0.5s ease;
             border-radius: 0.313rem;
             margin-bottom: 0.313rem;
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
             cursor: pointer;
 
             i {
@@ -458,7 +490,7 @@ $border-radius-button: 8rem;
 
             &.active,
             &.active:hover {
-                background: $theme-background-color;
+                background: #fff;
                 color: $theme-color;
             }
         }
@@ -532,7 +564,7 @@ $border-radius-button: 8rem;
         gap: 0.313rem;
         align-items: center;
 
-        i{
+        i {
             padding: 0.313rem;
         }
     }
@@ -542,3 +574,90 @@ $border-radius-button: 8rem;
         color: #000;
     }
 }
+
+
+// documentation start
+.documentation-wrapper {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+
+    .document {
+        padding: 1rem;
+        border: $border-light-small;
+        border-radius: 0.313rem;
+        width: 32.6%;
+
+        .document-icon {
+            align-items: center;
+            background: rgba(82, 44, 129, .071);
+            border-radius: .4rem;
+            display: flex;
+            height: 2.5rem;
+            justify-content: center;
+            padding: .5rem;
+            width: 2.5rem;
+
+            i {
+                color: $theme-color;
+                font-size: 1.313rem;
+            }
+        }
+
+        .title {
+            font-size: 1.063rem;
+            font-weight: 500;
+            line-height: 2rem;
+            color: #000;
+            margin-bottom: 0.125rem;
+        }
+
+        .description {
+            font-size: 0.95rem;
+            line-height: 1.313rem;
+
+            .read-more {
+                font-weight: 500;
+                color: $theme-color;
+                cursor: pointer;
+            }
+        }
+    }
+}
+
+.document-popup-wrapper {
+    line-height: 1.45rem;
+    font-size: 1.063rem;
+}
+
+// documentation end
+
+
+// no data found start
+.no-data-found {
+    text-align: center;
+    width: 70%;
+    margin: auto;
+
+    .icon {
+        padding: 0.5rem;
+        font-size: 1.625rem;
+        border-radius: 0.313rem;
+    }
+
+    .title {
+        font-size: 1.313rem;
+        color: #000;
+        font-weight: 600;
+        line-height: 1.5rem;
+        margin-top: 1rem;
+    }
+
+    .des {
+        font-size: 1rem;
+        padding: 0.75rem;
+    }
+}
+
+// no data found end

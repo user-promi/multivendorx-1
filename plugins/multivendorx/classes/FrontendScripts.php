@@ -39,7 +39,7 @@ class FrontendScripts {
      */
     public function __construct() {
         add_action( 'wp_enqueue_scripts', array( $this, 'load_scripts' ) );
-        add_action( 'admin_enqueue_scripts', array( $this, 'admin_load_scripts' ) );
+        add_action( 'admin_enqueue_scripts', array( $this, 'admin_load_scripts' )  , 55);
     }
 
     /**
@@ -356,7 +356,11 @@ class FrontendScripts {
                 'advertising',
                 'product-preferencess',
                 'product-store-category-control',
-                'geolocation'
+                'geolocation',
+                'shipping'
+                'legal-compliance',
+                'product-compliance',
+                'tax-compliance',
             )
 		);
 
@@ -534,6 +538,7 @@ class FrontendScripts {
                         'ajaxurl'                   => admin_url( 'admin-ajax.php' ),
                         'currency'                 => get_woocommerce_currency(),       // e.g., USD
                         'currency_symbol'          => get_woocommerce_currency_symbol(),
+                        'edit_order_capability'    => current_user_can('edit_shop_orders'),
                         'add_product_link'         => StoreUtil::get_endpoint_url('products', 'edit'),
                         'all_verification_methods' => MultiVendorX()->setting->get_setting( 'all_verification_methods' ),
                     ),

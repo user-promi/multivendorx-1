@@ -136,6 +136,11 @@ class Modules {
                         'module_file'=> MultiVendorX()->plugin_path . 'modules/GeoLocation/Module.php',
                         'module_class' => 'MultiVendorX\GeoLocation\Module',
                     ),
+                    'zone-shipping'=> array(
+                        'id'=> 'zone-shipping',
+                        'module_file'=> MultiVendorX()->plugin_path . 'modules/ZoneShipping/Module.php',
+                        'module_class' => 'MultiVendorX\ZoneShipping\Module',
+                    ),
 				)
             );
         }

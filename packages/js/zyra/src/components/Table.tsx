@@ -634,110 +634,115 @@ const Table: React.FC<TableProps> = ({
 
                             { /* Pagination Controls */}
                             {pagination && pageCount && perPageOption && (
-                                <div className="table-pagination">
-                                    <div className="pagination-number-wrapper">
+                                <>                                
+                                    <div className="table-pagination">
+                                        <div className="pagination-number-wrapper">
 
-                                        Rows per page:
-                                        <select
-                                            className='basic-select'
-                                            value={
-                                                table.getState().pagination.pageSize
-                                            }
-                                            onChange={(e) =>
-                                                table.setPageSize(
-                                                    Number(e.target.value)
-                                                )
-                                            }
-                                        >
-                                            {perPageOption.map((size) => (
-                                                <option key={size} value={size}>
-                                                    {size}
-                                                </option>
-                                            ))}
-                                        </select>
+                                            Rows per page:
+                                            <select
+                                                className='basic-select'
+                                                value={
+                                                    table.getState().pagination.pageSize
+                                                }
+                                                onChange={(e) =>
+                                                    table.setPageSize(
+                                                        Number(e.target.value)
+                                                    )
+                                                }
+                                            >
+                                                {perPageOption.map((size) => (
+                                                    <option key={size} value={size}>
+                                                        {size}
+                                                    </option>
+                                                ))}
+                                            </select>
 
-                                        {`Showing ${pagination.pageIndex * pagination.pageSize + 1} to ${Math.min(
-                                            (pagination.pageIndex + 1) * pagination.pageSize,
-                                            totalCounts
-                                        )} of ${totalCounts} entries`}
-                                    </div>
-                                    <div className="pagination-arrow">
-                                        <span
-                                            tabIndex={0}
-                                            className={`${!table.getCanPreviousPage()
-                                                ? 'pagination-button-disabled'
-                                                : ''
-                                                }`}
-                                            onClick={() => {
-                                                if (!table.getCanPreviousPage())
-                                                    return;
-                                                table.setPageIndex(0);
-                                            }}
-                                        >
-                                            <i className="admin-font adminlib-pagination-prev-arrow"></i>
-                                        </span>
-                                        <span
-                                            tabIndex={0}
-                                            className={`${!table.getCanPreviousPage()
-                                                ? 'pagination-button-disabled'
-                                                : ''
-                                                }`}
-                                            onClick={() => {
-                                                if (!table.getCanPreviousPage())
-                                                    return;
-                                                table.previousPage();
-                                            }}
-                                        >
-                                            <i className="admin-font adminlib-pagination-left-arrow"></i>
-                                        </span>
-                                        {/* <span>
-                                    Page{ ' ' }
-                                    { table.getState().pagination
-                                        .pageIndex + 1 }{ ' ' }
-                                    of { pageCount }
-                                </span> */}
-                                        <div className="pagination">
-                                            {Array.from({ length: pageCount }, (_, i) => (
-                                                <button
-                                                    key={i}
-                                                    className={`number-btn ${table.getState().pagination.pageIndex === i ? "active" : ""}`}
-                                                    onClick={() => table.setPageIndex(i)}
-                                                >
-                                                    {i + 1}
-                                                </button>
-                                            ))}
+                                            {`Showing ${pagination.pageIndex * pagination.pageSize + 1} to ${Math.min(
+                                                (pagination.pageIndex + 1) * pagination.pageSize,
+                                                totalCounts
+                                            )} of ${totalCounts} entries`}
                                         </div>
+                                        
+                                        {totalCounts > pagination.pageSize && (
+                                            <div className="pagination-arrow">
+                                                <span
+                                                    tabIndex={0}
+                                                    className={`${!table.getCanPreviousPage()
+                                                        ? 'pagination-button-disabled'
+                                                        : ''
+                                                        }`}
+                                                    onClick={() => {
+                                                        if (!table.getCanPreviousPage())
+                                                            return;
+                                                        table.setPageIndex(0);
+                                                    }}
+                                                >
+                                                    <i className="admin-font adminlib-pagination-prev-arrow"></i>
+                                                </span>
+                                                <span
+                                                    tabIndex={0}
+                                                    className={`${!table.getCanPreviousPage()
+                                                        ? 'pagination-button-disabled'
+                                                        : ''
+                                                        }`}
+                                                    onClick={() => {
+                                                        if (!table.getCanPreviousPage())
+                                                            return;
+                                                        table.previousPage();
+                                                    }}
+                                                >
+                                                    <i className="admin-font adminlib-pagination-left-arrow"></i>
+                                                </span>
+                                                {/* <span>
+                                            Page{ ' ' }
+                                            { table.getState().pagination
+                                                .pageIndex + 1 }{ ' ' }
+                                            of { pageCount }
+                                        </span> */}
+                                                <div className="pagination">
+                                                    {Array.from({ length: pageCount }, (_, i) => (
+                                                        <button
+                                                            key={i}
+                                                            className={`number-btn ${table.getState().pagination.pageIndex === i ? "active" : ""}`}
+                                                            onClick={() => table.setPageIndex(i)}
+                                                        >
+                                                            {i + 1}
+                                                        </button>
+                                                    ))}
+                                                </div>
 
-                                        <span
-                                            tabIndex={0}
-                                            className={`${!table.getCanNextPage()
-                                                ? 'pagination-button-disabled'
-                                                : ''
-                                                }`}
-                                            onClick={() => {
-                                                if (!table.getCanNextPage())
-                                                    return;
-                                                table.nextPage();
-                                            }}
-                                        >
-                                            <i className="admin-font adminlib-pagination-right-arrow"></i>
-                                        </span>
-                                        <span
-                                            tabIndex={0}
-                                            className={`${!table.getCanNextPage()
-                                                ? 'pagination-button-disabled'
-                                                : ''
-                                                }`}
-                                            onClick={() => {
-                                                if (!table.getCanNextPage())
-                                                    return;
-                                                table.setPageIndex(pageCount - 1);
-                                            }}
-                                        >
-                                            <i className="admin-font adminlib-pagination-next-arrow"></i>
-                                        </span>
+                                                <span
+                                                    tabIndex={0}
+                                                    className={`${!table.getCanNextPage()
+                                                        ? 'pagination-button-disabled'
+                                                        : ''
+                                                        }`}
+                                                    onClick={() => {
+                                                        if (!table.getCanNextPage())
+                                                            return;
+                                                        table.nextPage();
+                                                    }}
+                                                >
+                                                    <i className="admin-font adminlib-pagination-right-arrow"></i>
+                                                </span>
+                                                <span
+                                                    tabIndex={0}
+                                                    className={`${!table.getCanNextPage()
+                                                        ? 'pagination-button-disabled'
+                                                        : ''
+                                                        }`}
+                                                    onClick={() => {
+                                                        if (!table.getCanNextPage())
+                                                            return;
+                                                        table.setPageIndex(pageCount - 1);
+                                                    }}
+                                                >
+                                                    <i className="admin-font adminlib-pagination-next-arrow"></i>
+                                                </span>
+                                            </div>
+                                        )}
                                     </div>
-                                </div>
+                                </>
                             )}
 
 

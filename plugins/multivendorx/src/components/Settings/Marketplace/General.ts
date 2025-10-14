@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 export default {
     id: 'marketplace-settings',
     priority: 1,
-    name: __( 'Marketplace', 'multivendorx' ),
+    name: __( 'General', 'multivendorx' ),
     desc: __(
         'Controls how stores are onboarded and what access they get.',
         'multivendorx'
@@ -91,7 +91,7 @@ export default {
             type: 'shortcode-table',
             label: __( 'Available shortcodes', 'multivendorx' ),
             desc: __( '', 'multivendorx' ),
-            optionLabel: [ 'Shortcodes', 'Description' ],
+            optionLabel: [ 'Shortcodes', 'Description', 'Vendor', 'Columns' , 'Orderby' , 'Order' ],
             icon: 'adminlib-general-tab',
             options: [
                 {
@@ -101,6 +101,10 @@ export default {
                         'Enables you to create a store dashboard.',
                         'multivendorx'
                     ),
+                    vendor: '2',
+                    colums: '3',
+                    orderby : '4',
+                    order: '6'
                 },
                 {
                     key: '',
@@ -109,6 +113,9 @@ export default {
                         'Creates a page where the store registration form is available.',
                         'multivendorx'
                     ),
+                    vendor: '2',
+                    colums: '3',
+                    orderby : '4'
                 },
                 {
                     key: '',
@@ -117,6 +124,9 @@ export default {
                         'Lets you view a brief summary of the coupons created by the store and the number of times they have been used by customers.',
                         'multivendorx'
                     ),
+                    vendor: '2',
+                    colums: '3',
+                    orderby : '4'
                 },
                 {
                     key: '',
@@ -125,6 +135,9 @@ export default {
                         'Allows you to view recent products added by the store.',
                         'multivendorx'
                     ),
+                    vendor: '2',
+                    colums: '3',
+                    orderby : '4'
                 },
                 {
                     key: '',
@@ -133,6 +146,9 @@ export default {
                         'Displays the products added by the store.',
                         'multivendorx'
                     ),
+                    vendor: '2',
+                    colums: '3',
+                    orderby : '4'
                 },
                 {
                     key: '',
@@ -141,6 +157,9 @@ export default {
                         'Shows featured products added by the store.',
                         'multivendorx'
                     ),
+                    vendor: '2',
+                    colums: '3',
+                    orderby : '4'
                 },
                 {
                     key: '',
@@ -149,6 +168,9 @@ export default {
                         'Allows you to see products put on sale by the store.',
                         'multivendorx'
                     ),
+                    vendor: '2',
+                    colums: '3',
+                    orderby : '4'
                 },
                 {
                     key: '',
@@ -157,6 +179,9 @@ export default {
                         'Displays the top-rated products of the store.',
                         'multivendorx'
                     ),
+                    vendor: '2',
+                    colums: '3',
+                    orderby : '4'
                 },
                 {
                     key: '',

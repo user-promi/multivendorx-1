@@ -98,43 +98,43 @@ const AdminDashboard = () => {
   ];
   const featuresList = [
     {
-      title: "Advanced Selling Options",
+      title: "Diversified Marketplace",
       desc: "Enable bookings, subscriptions, and auctions to boost sales and engagement.",
       iconClass: "adminlib-book",
       linkText: "Explore Docs",
       href: "#",
     },
     {
-      title: "Vacation & Store Availability",
-      desc: "Pause orders with custom buyer notifications during holidays or breaks.",
+      title: "Vacation Mode for Stores",
+      desc: "Stores can pause their stores temporarily with automatic buyer notifications – no missed messages.",
       iconClass: "adminlib-book",
       linkText: "Explore Docs",
       href: "#",
     },
     {
-      title: "Inventory & Stock Management",
-      desc: "Track stock, send low-stock alerts, and manage store inventory efficiently.",
+      title: "Never Run Out of Stock",
+      desc: "Real-time inventory tracking with automatic low-stock alerts keeps sellers prepared and buyers happy.",
       iconClass: "adminlib-preview",
       linkText: "Book Consultation",
       href: "#",
     },
     {
-      title: "Smart Notifications",
-      desc: "Automate alerts for orders, refunds, payouts, and store activities.",
+      title: "Autopilot Notifications",
+      desc: "Automatic emails and alerts for every order, refund, and payout – everyone stays in the loop.",
       iconClass: "adminlib-global-community",
       linkText: "Join Discord",
       href: "#",
     },
     {
-      title: "Seller Verification & KYC",
-      desc: "Verify sellers with documents and approval workflows to build trust.",
+      title: "Verified Stores Only",
+      desc: "Screen stores with document verification and approval – build a trusted marketplace from day one.",
       iconClass: "adminlib-global-community",
       linkText: "Join Discord",
       href: "#",
     },
     {
-      title: "Membership & Subscriptions",
-      desc: "Let sellers offer subscription products for steady revenue, while admins earn by providing membership plans to stores.",
+      title: "Earn Steady Monthly Income",
+      desc: "Charge your sellers a monthly or yearly membership fee to sell on your marketplace – predictable revenue every month.",
       iconClass: "adminlib-global-community",
       linkText: "Join Discord",
       href: "#",
@@ -267,10 +267,14 @@ const AdminDashboard = () => {
                         Upgrade Now
                         <i className="adminlib-arrow-right icon-pro-btn"></i>
                       </a>
-                      <div onClick={() => window.location.href = `?page=multivendorx#&tab=setup`} href="#free-vs-pro" className="admin-btn">
+                      <div
+                        className="admin-btn"
+                        onClick={() => (window.location.href = '?page=multivendorx#&tab=setup')}
+                      >
                         Launch Setup Wizard
                         <i className="adminlib-import"></i>
                       </div>
+
                     </div>
                   </div>
                   <div className="image">

@@ -419,54 +419,56 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             return new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
         }
+    
         $registrations = $request->get_header( 'registrations' );
-        $store_data = $request->get_param('formData');
-
+        $store_data    = $request->get_param('formData');
+    
         $current_user = wp_get_current_user();
-
+    
         // Create store object
         $store = new \MultiVendorX\Store\Store();
-        
         $core_fields = [ 'name', 'slug', 'description', 'who_created', 'status' ];
         $store_data['who_created'] = $current_user->ID;
-
+    
         if ( MultiVendorX()->setting->get_setting( 'approve_store' ) == 'automatically' ) {
             $store_data['status'] = 'active';
         } else {
             $store_data['status'] = 'pending';
         }
-
+    
+        // Set core fields
         foreach ( $core_fields as $field ) {
             if ( isset( $store_data[ $field ] ) ) {
                 $store->set( $field, $store_data[ $field ] );
             }
         }
-
+    
+        // Save store
         $insert_id = $store->save();
-
+    
+        // Save other meta if not registration
         if ( $insert_id && ! $registrations ) {
             foreach ( $store_data as $key => $value ) {
-                if ( ! in_array( $key, $core_fields, true ) ) {
+                if ( ! in_array( $key, $core_fields, true ) && $key !== 'store_owners' ) {
                     $store->update_meta( $key, $value );
                 }
             }
         }
-
+    
+        // Handle registrations
         if ( $registrations ) {
-            // Collect all non-core fields into one array
             $non_core_fields = [];
             foreach ( $store_data as $key => $value ) {
-                if ( ! in_array( $key, $core_fields, true ) ) {
+                if ( ! in_array( $key, $core_fields, true ) && $key !== 'store_owners' ) {
                     $non_core_fields[$key] = $value;
                 }
             }
-
-            // Save them under one key
+    
             if ( ! empty( $non_core_fields ) ) {
                 $store->update_meta( 'multivendorx_registration_data', serialize($non_core_fields) );
             }
-
-
+    
+            // Assign current user as primary owner if automatic approval
             if ( MultiVendorX()->setting->get_setting( 'approve_store' ) == 'automatically' ) {
                 $current_user->set_role( 'store_owner' );
             } else {
@@ -475,27 +477,27 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                     $current_user->set_role( $role );
                 }
             }
-
+    
             StoreUtil::set_primary_owner($current_user->ID, $insert_id);
-
             update_user_meta($current_user->ID, 'multivendorx_active_store', $insert_id);
-
-            // wp_set_current_user( $current_user->ID );
-            // wp_set_auth_cookie( $current_user->ID );
-            // do_action( 'wp_login', $current_user->user_login, $current_user );
-
-            return rest_ensure_response( [
-                'success' => true,
-                'id'      => $insert_id,
-                'redirect'  => get_permalink( MultiVendorX()->setting->get_setting( 'store_dashboard_page' ) ),
-            ] );
         }
-
+    
+        // ✅ New: Handle store_owners array if provided
+        if ( ! empty( $store_data['store_owners'] ) && is_array( $store_data['store_owners'] ) ) {
+            StoreUtil::add_store_users([
+                'store_id' => $insert_id,
+                'users'    => $store_data['store_owners'],
+                'role_id'  => 'store_owner',
+            ]);
+        }
+    
         return rest_ensure_response( [
             'success' => true,
-            'id'      => $insert_id
+            'id'      => $insert_id,
+            'redirect'=> $registrations ? get_permalink( MultiVendorX()->setting->get_setting( 'store_dashboard_page' ) ) : null,
         ] );
     }
+    
 
     public function get_item( $request ) {
         $id = absint( $request->get_param( 'id' ) );
