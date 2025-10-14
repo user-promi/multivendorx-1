@@ -714,6 +714,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             proSetting={isProSetting(
                                 inputField.proSetting ?? false
                             )}
+                            tinymceApiKey={appLocalizer.tinymceApiKey?appLocalizer.tinymceApiKey:''}
                             onChange={(e) => {
                                 if (
                                     hasAccess(
