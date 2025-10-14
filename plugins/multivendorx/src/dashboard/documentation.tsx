@@ -1,80 +1,48 @@
-import React, { useState } from 'react';
-import { CommonPopup } from 'zyra';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { CommonPopup, getApiLink } from 'zyra';
+import { __ } from '@wordpress/i18n';
 
 type DocumentItem = {
     id: number;
     title: string;
-    icon: string;
-    description: string;
+    content?: string;
+    description?: string;
+    icon?: string;
+    date?: string;
+    status?: string;
 };
 
-const documentsData: DocumentItem[] = [
-    {
-        id: 1,
-        title: 'Store Opening Procedures',
-        icon: 'adminlib-contact-form',
-        description: `Complete guide for opening the store including checklist, security protocols, and system startup procedures.`,
-    },
-    {
-        id: 2,
-        title: 'Data Protection Guidelines',
-        icon: 'adminlib-contact-form',
-        description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam vehicula, massa in blandit suscipit, purus leo ultricies urna, a pretium mauris lectus at sapien.`,
-    },
-    {
-        id: 3,
-        title: 'Customer Return Policy',
-        icon: 'adminlib-contact-form',
-        description: `Detailed information about handling customer returns, exchanges, and refund processes. Ensure all staff are aware of the policy and procedures.`,
-    },
-    {
-        id: 4,
-        title: 'Inventory Management Guidelines',
-        icon: 'adminlib-contact-form',
-        description: `Best practices for stock counting, replenishment, and inventory tracking in the system. Maintain accuracy for reporting and operational efficiency.`,
-    },
-    {
-        id: 5,
-        title: 'POS System Troubleshooting',
-        icon: 'adminlib-contact-form',
-        description: `Common issues with the point of sale system and step-by-step solutions for resolving them. Includes login errors, payment issues, and network problems.`,
-    },
-    {
-        id: 6,
-        title: 'Safety and Emergency Protocols',
-        icon: 'adminlib-contact-form',
-        description: `Emergency procedures, evacuation plans, and safety guidelines for store staff. Important for ensuring employee safety and regulatory compliance.`,
-    },
-    {
-        id: 7,
-        title: 'Handling Customer Complaints',
-        icon: 'adminlib-contact-form',
-        description: `Step-by-step guide to de-escalate situations and resolve customer complaints effectively. Focus on maintaining customer satisfaction and loyalty.`,
-    },
-    {
-        id: 8,
-        title: 'Cash Register Procedures',
-        icon: 'adminlib-contact-form',
-        description: `Daily cash handling, opening and closing registers, and cash reconciliation processes. Ensures accountability and prevents discrepancies.`,
-    },
-    {
-        id: 9,
-        title: 'Product Display Standards',
-        icon: 'adminlib-contact-form',
-        description: `Guidelines for merchandising, product placement, and maintaining visual standards. Helps in creating an attractive shopping environment.`,
-    },
-    {
-        id: 10,
-        title: 'Staff Training Manuals',
-        icon: 'adminlib-contact-form',
-        description: `Comprehensive manuals for training staff on operations, customer service, and safety procedures. Ensures consistent performance across employees.`,
-    },
-];
-
 const Documentation: React.FC = () => {
+    const [data, setData] = useState<DocumentItem[]>([]);
     const [popupOpen, setPopupOpen] = useState(false);
     const [activeDocument, setActiveDocument] = useState<DocumentItem | null>(null);
     const [searchText, setSearchText] = useState('');
+
+    function requestData() {
+        setData([]);
+        axios({
+            method: 'GET',
+            url: getApiLink(appLocalizer, 'knowledge'),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            params: {
+                status: 'publish'
+            }
+        })
+            .then((response) => {
+                // response.data.items = array of docs from API
+                const apiData = response.data.items || [];
+                setData(apiData);
+            })
+            .catch(() => {
+                console.error(__('Failed to load documents', 'multivendorx'));
+                setData([]);
+            });
+    }
+
+    useEffect(() => {
+        requestData();
+    }, []);
 
     const handleReadMore = (doc: DocumentItem) => {
         setActiveDocument(doc);
@@ -87,11 +55,39 @@ const Documentation: React.FC = () => {
         return words.slice(0, wordCount).join(' ') + '...';
     };
 
-    const filteredDocuments = documentsData.filter(
-        (doc) =>
-            doc.title.toLowerCase().includes(searchText.toLowerCase()) ||
-            doc.description.toLowerCase().includes(searchText.toLowerCase())
-    );
+    //Filter logic — works for API data
+    const filteredDocuments = data.filter((doc) => {
+        const title = doc.title?.toLowerCase() || '';
+        const content = doc.content?.toLowerCase() || '';
+        return (
+            title.includes(searchText.toLowerCase()) ||
+            content.includes(searchText.toLowerCase())
+        );
+    });
+    const handlePrint = (doc: DocumentItem) => {
+        const printWindow = window.open('', '_blank', 'width=800,height=600');
+        if (printWindow) {
+            printWindow.document.write(`
+                <html>
+                    <head>
+                        <title>${doc.title}</title>
+                        <style>
+                            body { font-family: Arial, sans-serif; padding: 20px; }
+                            h2 { color: #333; }
+                            p { line-height: 1.5; }
+                        </style>
+                    </head>
+                    <body>
+                        <h2>${doc.title}</h2>
+                        <p>${doc.content}</p>
+                    </body>
+                </html>
+            `);
+            printWindow.document.close();
+            printWindow.focus();
+            printWindow.print();
+        }
+    };
 
     return (
         <>
@@ -121,14 +117,15 @@ const Documentation: React.FC = () => {
 
                         {filteredDocuments.map((doc) => (
                             <div key={doc.id} className="document">
+                                {/* 🟣 static icon for all */}
                                 <div className="document-icon">
-                                    <i className={doc.icon}></i>
+                                    <i className="adminlib-contact-form"></i>
                                 </div>
                                 <div className="document-content">
                                     <div className="title">{doc.title}</div>
                                     <div className="description">
-                                        {truncateText(doc.description, 10)}
-                                        {doc.description.split(' ').length > 10 && (
+                                        {truncateText(doc.content || '', 10)}
+                                        {(doc.content || '').split(' ').length > 10 && (
                                             <a
                                                 className="read-more"
                                                 onClick={() => handleReadMore(doc)}
@@ -145,40 +142,48 @@ const Documentation: React.FC = () => {
             </div>
 
             {activeDocument && (
-                <CommonPopup
-                    open={popupOpen}
-                    // onClose= setAddCoupon(true)
-                    width="500px"
-                    height="50%"
-                    header={
-                        <>
-                            <div className="title">
-                                 <i className={activeDocument.icon}></i>
-                                {activeDocument.title}
+                <>
+                    <CommonPopup
+                        open={popupOpen}
+                        width="500px"
+                        header={
+                            <>
+                                <div className="title">
+                                    <i className="adminlib-contact-form"></i>
+                                    {activeDocument.title}
+                                </div>
+                                <i
+                                    className="icon adminlib-close"
+                                    onClick={() => setPopupOpen(false)}
+                                ></i>
+                            </>
+                        }
+                        footer={
+                            <div className="footer-buttons">
+                                <div className="buttons-wrapper">
+                                    <div className="admin-btn btn-purple" onClick={() => setPopupOpen(false)}>
+                                        Close
+                                    </div>
+                                    <div
+                                        className="admin-btn btn-green"
+                                        onClick={() => handlePrint(activeDocument)}
+                                    >
+                                        Print
+                                    </div>
+                                </div>
                             </div>
-                            
-                            <i
-                                className="icon adminlib-close"
-                                 onClick={() => setPopupOpen(false)}
-                            ></i>
-                        </>
-                    }
-                    footer={
-                        <div className="admin-btn btn-purple" onClick={() => setPopupOpen(false)}>
-                            Close
+                        }
+                    >
+                        <div className="content">
+                            <div className="document-popup-wrapper" id="printable-content">
+                                <h2>{activeDocument.title}</h2>
+                                <p>{activeDocument.content}</p>
+                            </div>
                         </div>
-                    }
-                >
-
-                    <div className="content">
-                        <div className="document-popup-wrapper">
-                        {activeDocument.description}
-                        </div>
-                    </div>
-
-                    {/* {error && <p className="error-text">{error}</p>} */}
-                </CommonPopup>
+                    </CommonPopup>
+                </>
             )}
+
         </>
     );
 };

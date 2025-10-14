@@ -132,6 +132,14 @@ const StoreCommission: React.FC = () => {
     };
     const columns: ColumnDef<CommissionRow>[] = [
         {
+            id: 'id',
+            accessorKey: 'id',
+            accessorFn: row => parseFloat(row.id || '0'),
+            enableSorting: true,
+            header: __('Comm ID', 'multivendorx'),
+            cell: ({ row }) => <TableCell >#{row.original.id}</TableCell>,
+        },
+        {
             id: 'orderId',
             accessorKey: 'orderId',
             enableSorting: true,
@@ -218,7 +226,7 @@ const StoreCommission: React.FC = () => {
                 />
             ),
         },
-        
+
     ];
     const realtimeFilter: RealtimeFilter[] = [
         {
@@ -228,7 +236,7 @@ const StoreCommission: React.FC = () => {
                     <CalendarInput
                         wrapperClass=""
                         inputClass=""
-                        onChange={(range:any) => {
+                        onChange={(range: any) => {
                             updateFilter('date', {
                                 start_date: range.startDate,
                                 end_date: range.endDate,
