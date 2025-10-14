@@ -124,36 +124,36 @@ const settings = () => {
                     </div>
                 </>
         },
-        {
-            id: "Shipping", label: "Shipping", icon: "cart", content:
-                <>
-                    <div className="card-wrapper">
-                        <div className="card-content">
-                            <div className="card-title">Shipping & Delivery</div>
-                            <div className="form-group-wrapper">
-                                <div className="form-group">
-                                    <label htmlFor="product-name">Shipping Zones</label>
-                                    <BasicInput name="phone" value={formData.phone} wrapperClass="setting-form-input" descClass="settings-metabox-description" onChange={handleChange} />
-                                </div>
-                            </div>
+        // {
+        //     id: "Shipping", label: "Shipping", icon: "cart", content:
+        //         <>
+        //             <div className="card-wrapper">
+        //                 <div className="card-content">
+        //                     <div className="card-title">Shipping & Delivery</div>
+        //                     <div className="form-group-wrapper">
+        //                         <div className="form-group">
+        //                             <label htmlFor="product-name">Shipping Zones</label>
+        //                             <BasicInput name="phone" value={formData.phone} wrapperClass="setting-form-input" descClass="settings-metabox-description" onChange={handleChange} />
+        //                         </div>
+        //                     </div>
 
-                            <div className="form-group-wrapper">
-                                <div className="form-group">
-                                    <label htmlFor="product-name">Shipping Methods</label>
-                                    <BasicInput name="phone" wrapperClass="setting-form-input" descClass="settings-metabox-description" />
-                                </div>
-                            </div>
-                            <div className="form-group-wrapper">
-                                <div className="form-group">
-                                    <label htmlFor="product-name">Delivery Preferences</label>
-                                    <BasicInput name="phone" wrapperClass="setting-form-input" descClass="settings-metabox-description" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </>
-        },
-        // { id: "shipping", label: "Shipping & Delivery", icon: "tools", content: <ShippingDelivery /> },
+        //                     <div className="form-group-wrapper">
+        //                         <div className="form-group">
+        //                             <label htmlFor="product-name">Shipping Methods</label>
+        //                             <BasicInput name="phone" wrapperClass="setting-form-input" descClass="settings-metabox-description" />
+        //                         </div>
+        //                     </div>
+        //                     <div className="form-group-wrapper">
+        //                         <div className="form-group">
+        //                             <label htmlFor="product-name">Delivery Preferences</label>
+        //                             <BasicInput name="phone" wrapperClass="setting-form-input" descClass="settings-metabox-description" />
+        //                         </div>
+        //                     </div>
+        //                 </div>
+        //             </div>
+        //         </>
+        // },
+        { id: "shipping", label: "Shipping & Delivery", icon: "tools", content: <ShippingDelivery /> },
         { id: "verification", label: "Verification", icon: "tools", content: <Verification /> },
         { id: "livechat", label: "Livechat", icon: "tools", content: <Livechat /> },
     ];

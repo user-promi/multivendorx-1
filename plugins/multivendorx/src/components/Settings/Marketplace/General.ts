@@ -91,122 +91,59 @@ export default {
             type: 'shortcode-table',
             label: __( 'Available shortcodes', 'multivendorx' ),
             desc: __( '', 'multivendorx' ),
-            optionLabel: [ 'Shortcodes', 'Description', 'Vendor', 'Columns' , 'Orderby' , 'Order' ],
+            optionLabel: [ 'Shortcodes', 'Description', 'Arguments' ],
             icon: 'adminlib-general-tab',
             options: [
                 {
                     key: '',
                     label: '[mvx_store]',
+                    name: 'MVX Best Selling Products',
                     desc: __(
                         'Enables you to create a store dashboard.',
                         'multivendorx'
                     ),
-                    vendor: '2',
-                    colums: '3',
-                    orderby : '4',
-                    order: '6'
+                    arguments: '<ul><li><b>vendor</b> - Vendor ID, slug, email, or username (optional)</li> <li><b>vendor</b> - Vendor ID, slug, email, or username (optional)</li>  <li><b>vendor</b> - Vendor ID, slug, email, or username (optional)</li>  <li><b>vendor</b> - Vendor ID, slug, email, or username (optional)</li></ul>',
                 },
                 {
                     key: '',
-                    label: '[store_registration]',
+                    label: '[mvx_store]',
+                    name: 'MVX Best Selling Products',
                     desc: __(
-                        'Creates a page where the store registration form is available.',
+                        'Enables you to create a store dashboard.',
                         'multivendorx'
                     ),
-                    vendor: '2',
-                    colums: '3',
-                    orderby : '4'
+                    arguments: '<ul><li><b>vendor</b> - Vendor ID, slug, email, or username (optional)</li> <li><b>vendor</b> - Vendor ID, slug, email, or username (optional)</li>  <li><b>vendor</b> - Vendor ID, slug, email, or username (optional)</li>  <li><b>vendor</b> - Vendor ID, slug, email, or username (optional)</li></ul>',
                 },
                 {
                     key: '',
-                    label: '[store_coupons]',
+                    label: '[mvx_store]',
+                    name: 'MVX Best Selling Products',
                     desc: __(
-                        'Lets you view a brief summary of the coupons created by the store and the number of times they have been used by customers.',
+                        'Enables you to create a store dashboard.',
                         'multivendorx'
                     ),
-                    vendor: '2',
-                    colums: '3',
-                    orderby : '4'
+                    arguments: '<ul><li><b>vendor</b> - Vendor ID, slug, email, or username (optional)</li> <li><b>vendor</b> - Vendor ID, slug, email, or username (optional)</li>  <li><b>vendor</b> - Vendor ID, slug, email, or username (optional)</li>  <li><b>vendor</b> - Vendor ID, slug, email, or username (optional)</li></ul>',
                 },
                 {
                     key: '',
-                    label: '[mvx_recent_products]',
+                    label: '[mvx_store]',
+                    name: 'MVX Best Selling Products',
                     desc: __(
-                        'Allows you to view recent products added by the store.',
+                        'Enables you to create a store dashboard.',
                         'multivendorx'
                     ),
-                    vendor: '2',
-                    colums: '3',
-                    orderby : '4'
+                    arguments: '<ul><li><b>vendor</b> - Vendor ID, slug, email, or username (optional)</li> <li><b>vendor</b> - Vendor ID, slug, email, or username (optional)</li>  <li><b>vendor</b> - Vendor ID, slug, email, or username (optional)</li>  <li><b>vendor</b> - Vendor ID, slug, email, or username (optional)</li></ul>',
                 },
                 {
                     key: '',
-                    label: '[mvx_products]',
+                    label: '[mvx_store]',
+                    name: 'MVX Best Selling Products',
                     desc: __(
-                        'Displays the products added by the store.',
+                        'Enables you to create a store dashboard.',
                         'multivendorx'
                     ),
-                    vendor: '2',
-                    colums: '3',
-                    orderby : '4'
-                },
-                {
-                    key: '',
-                    label: '[mvx_featured_products]',
-                    desc: __(
-                        'Shows featured products added by the store.',
-                        'multivendorx'
-                    ),
-                    vendor: '2',
-                    colums: '3',
-                    orderby : '4'
-                },
-                {
-                    key: '',
-                    label: '[mvx_sale_products]',
-                    desc: __(
-                        'Allows you to see products put on sale by the store.',
-                        'multivendorx'
-                    ),
-                    vendor: '2',
-                    colums: '3',
-                    orderby : '4'
-                },
-                {
-                    key: '',
-                    label: '[mvx_top_rated_products]',
-                    desc: __(
-                        'Displays the top-rated products of the store.',
-                        'multivendorx'
-                    ),
-                    vendor: '2',
-                    colums: '3',
-                    orderby : '4'
-                },
-                {
-                    key: '',
-                    label: '[mvx_best_selling_products]',
-                    desc: __(
-                        'Allows you to view the best-selling products of the vendor.',
-                        'multivendorx'
-                    ),
-                },
-                {
-                    key: '',
-                    label: '[mvx_product_category]',
-                    desc: __(
-                        'Shows the product categories used by the vendor.',
-                        'multivendorx'
-                    ),
-                },
-                {
-                    key: '',
-                    label: '[mvx_vendorslist]',
-                    desc: __(
-                        'Shows customers a list of available stores.',
-                        'multivendorx'
-                    ),
-                },
+                    arguments: '<ul><li><b>vendor</b> - Vendor ID, slug, email, or username (optional)</li> <li><b>vendor</b> - Vendor ID, slug, email, or username (optional)</li>  <li><b>vendor</b> - Vendor ID, slug, email, or username (optional)</li>  <li><b>vendor</b> - Vendor ID, slug, email, or username (optional)</li></ul>',
+                },                
             ],
         },
     ],
