@@ -2,7 +2,7 @@ import { __ } from '@wordpress/i18n';
 
 export default {
     id: 'privacy-settings',
-    priority: 6,
+    priority: 8,
     name: __( 'Privacy', 'multivendorx' ),
     desc: __('Manage how store details are shared with customers, from branding and contact info to policies and profile visibility.','multivendorx'),
     icon: 'adminlib-privacy',
