@@ -13,114 +13,148 @@ export default {
     icon: 'adminlib-general-tab',
     submitUrl: 'settings',
     modal: [
-        {
-            key: 'taxable_shipping',
-            label: __('Enable Taxable Shipping', 'multivendorx'),
-            settingDescription: __('If enabled, shipping charges will be treated as taxable items during checkout. Disable this to keep shipping costs tax-free.', 'multivendorx'),
-            desc: __('', 'multivendorx'),
-            type: 'checkbox',
-            options: [
-                {
-                    key: 'taxable_shipping',
-                    value: 'taxable_shipping',
-                },
-            ],
-            look: 'toggle',
-        },
-        {
-            key: 'shipping_method_type',
-            type: 'setting-toggle',
-            label: __('Shipping Method Type', 'multivendorx'),
-            settingDescription: __("Choose the primary logic your marketplace uses to calculate and display shipping costs.", 'multivendorx'),
-            desc: __(
-                '<ul><li>Shipping rules based on pre-defined zones created from regions</li><li>Shipping rates determined by the customer\'s country.</li><li>Shipping costs calculated based on delivery distance between vendor and customer.</li></ul>',
-                'multivendorx'
-            ),
-            options: [
-                {
-                    key: 'zone_wise',
-                    label: __('Zone Wise', 'multivendorx'),
-                    value: 'zone_wise',
-                },
-                {
-                    key: 'country_wise',
-                    label: __('Country Wise', 'multivendorx'),
-                    value: 'country_wise',
-                },
-                {
-                    key: 'distance_wise',
-                    label: __('Distance Wise', 'multivendorx'),
-                    value: 'distance_wise',
-                },
-            ],
-        },
-        {
-            key: 'zone-wisehipping Selection',
-            type: 'setting-toggle',
-            label: __('Zone-wise Shipping Selection', 'multivendorx'),
-            settingDescription: __("Choose the primary logic your marketplace uses to calculate and display shipping costs.", 'multivendorx'),
-            desc: __(
-                '<ul><li>Shipping rules based on pre-defined zones created from regions</li><li>Shipping rates determined by the customer\'s country.</li><li>Shipping costs calculated based on delivery distance between vendor and customer.</li></ul>',
-                'multivendorx'
-            ),
-            options: [
-                {
-                    key: 'zone_wise',
-                    label: __('Zone Wise', 'multivendorx'),
-                    value: 'zone_wise',
-                },
-                {
-                    key: 'country_wise',
-                    label: __('Country Wise', 'multivendorx'),
-                    value: 'country_wise',
-                },
-                {
-                    key: 'distance_wise',
-                    label: __('Distance Wise', 'multivendorx'),
-                    value: 'distance_wise',
-                },
-            ],
-        },
-        {
-            key: 'enable_tracking',
-            label: __('Region Restrictions', 'multivendorx'),
-            desc: __("Limit vendor shipping areas", 'multivendorx'),
-            // desc: __('', 'multivendorx'),
-            type: 'checkbox',
-            options: [
-                {
-                    key: 'enable_tracking',
-                    value: 'enable_tracking',
-                },
-            ],
-            look: 'toggle',
-        },
-        {
-            key: 'allow_store_regions',
-            label: __('Allow Store Shipping Regions', 'multivendorx'),
-            settingDescription: __("Admin can set which countries or states a store can deliver to. Vendors will only be able to ship within these selected regions.", 'multivendorx'),
-            desc: __('', 'multivendorx'),
-            type: 'checkbox',
-            options: [
-                {
-                    key: 'allow_store_regions',
-                    value: 'allow_store_regions',
-                },
-            ],
-            look: 'toggle',
-        },
+        // {
+        //     key: 'taxable_shipping',
+        //     label: __('Enable Taxable Shipping', 'multivendorx'),
+        //     settingDescription: __('If enabled, shipping charges will be treated as taxable items during checkout. Disable this to keep shipping costs tax-free.', 'multivendorx'),
+        //     desc: __('', 'multivendorx'),
+        //     type: 'checkbox',
+        //     options: [
+        //         {
+        //             key: 'taxable_shipping',
+        //             value: 'taxable_shipping',
+        //         },
+        //     ],
+        //     look: 'toggle',
+        // },
+        // {
+        //     key: 'shipping_method_type',
+        //     type: 'setting-toggle',
+        //     label: __('Shipping Method Type', 'multivendorx'),
+        //     settingDescription: __("Choose the primary logic your marketplace uses to calculate and display shipping costs.", 'multivendorx'),
+        //     desc: __(
+        //         '<ul><li>Shipping rules based on pre-defined zones created from regions</li><li>Shipping rates determined by the customer\'s country.</li><li>Shipping costs calculated based on delivery distance between vendor and customer.</li></ul>',
+        //         'multivendorx'
+        //     ),
+        //     options: [
+        //         {
+        //             key: 'zone_wise',
+        //             label: __('Zone Wise', 'multivendorx'),
+        //             value: 'zone_wise',
+        //         },
+        //         {
+        //             key: 'country_wise',
+        //             label: __('Country Wise', 'multivendorx'),
+        //             value: 'country_wise',
+        //         },
+        //         {
+        //             key: 'distance_wise',
+        //             label: __('Distance Wise', 'multivendorx'),
+        //             value: 'distance_wise',
+        //         },
+        //     ],
+        // },
+        // {
+        //     key: 'zone-wisehipping Selection',
+        //     type: 'setting-toggle',
+        //     label: __('Zone-wise Shipping Selection', 'multivendorx'),
+        //     settingDescription: __("Choose the primary logic your marketplace uses to calculate and display shipping costs.", 'multivendorx'),
+        //     desc: __(
+        //         '<ul><li>Shipping rules based on pre-defined zones created from regions</li><li>Shipping rates determined by the customer\'s country.</li><li>Shipping costs calculated based on delivery distance between vendor and customer.</li></ul>',
+        //         'multivendorx'
+        //     ),
+        //     options: [
+        //         {
+        //             key: 'zone_wise',
+        //             label: __('Zone Wise', 'multivendorx'),
+        //             value: 'zone_wise',
+        //         },
+        //         {
+        //             key: 'country_wise',
+        //             label: __('Country Wise', 'multivendorx'),
+        //             value: 'country_wise',
+        //         },
+        //         {
+        //             key: 'distance_wise',
+        //             label: __('Distance Wise', 'multivendorx'),
+        //             value: 'distance_wise',
+        //         },
+        //     ],
+        // },
+        // {
+        //     key: 'enable_tracking',
+        //     label: __('Region Restrictions', 'multivendorx'),
+        //     desc: __("Limit vendor shipping areas", 'multivendorx'),
+        //     // desc: __('', 'multivendorx'),
+        //     type: 'checkbox',
+        //     options: [
+        //         {
+        //             key: 'enable_tracking',
+        //             value: 'enable_tracking',
+        //         },
+        //     ],
+        //     look: 'toggle',
+        // },
+        // {
+        //     key: 'allow_store_regions',
+        //     label: __('Allow Store Shipping Regions', 'multivendorx'),
+        //     settingDescription: __("Admin can set which countries or states a store can deliver to. Vendors will only be able to ship within these selected regions.", 'multivendorx'),
+        //     desc: __('', 'multivendorx'),
+        //     type: 'checkbox',
+        //     options: [
+        //         {
+        //             key: 'allow_store_regions',
+        //             value: 'allow_store_regions',
+        //         },
+        //     ],
+        //     look: 'toggle',
+        // },
         {
             key: 'payment_methods',
             type: 'payment-tabs',
+            label: __('Shipping Modules Overview', 'multivendorx'),
+            desc: __( 'View-only - Available shipping modules for stores', 'multivendorx' ),
             buttonEnable: true,
             toggleType: 'icon',
             modal: methods
         },
         {
+            key: 'zone-wisehipping Selection',
+            type: 'setting-toggle',
+            label: __('Zone-wise Shipping Selection', 'multivendorx'),
+            // settingDescription: __("Choose the primary logic your marketplace uses to calculate and display shipping costs.", 'multivendorx'),
+            desc: __(
+                'Allow vendors to select delivery zones0',
+                'multivendorx'
+            ),
+            options: [
+                {
+                    key: 'north_america',
+                    label: __('North America', 'multivendorx'),
+                    value: 'zone_wise',
+                },
+                {
+                    key: 'country_wise',
+                    label: __('Europe', 'multivendorx'),
+                    value: 'country_wise',
+                },
+                {
+                    key: 'distance_wise',
+                    label: __('Asia-Pacific', 'multivendorx'),
+                    value: 'distance_wise',
+                },
+                {
+                    key: 'Middle',
+                    label: __('Middle East', 'multivendorx'),
+                    value: 'Middle',
+                },
+            ],
+        },
+        {
             key: 'disbursement_order_status',
             type: 'checkbox',
-            label: __(' ', 'multivendorx'),
-            settingDescription: __(" ", 'multivendorx'),
+            label: __(' Shipping Providers', 'multivendorx'),
+            settingDescription: __(" Select which providers vendors can use (multiple selections allowed)", 'multivendorx'),
             class: 'mvx-toggle-checkbox',
             addNewBtn: 'Add Custom Provider',
             options: [
@@ -166,11 +200,6 @@ export default {
                 },
             ],
             selectDeselect: true,
-            dependent: {
-                key: 'allow_store_regions',
-                set: true,
-                value: 'allow_store_regions',
-            },
         },
         // {
         //     key: 'enable_tracking',
@@ -197,7 +226,16 @@ export default {
         //     ),
         //     name: 'abuse_report_reasons',
         // },
-
+        {
+            key: 'registration page',
+            type: 'blocktext',
+            label: __('no_label', 'multivendorx'),
+            title: 'Important Notes',
+            blocktext: __(
+                '<ul><li><b>Delivered </b>status will automatically mark sub-orders as Completed</li><li><b>Delivered </b>status will automatically mark sub-orders as Completed</li></ul>',
+                'multivendorx'
+            ),
+        },
         {
             key: 'shipping_stage',
             type: 'multi-string',
@@ -210,15 +248,6 @@ export default {
             ),
             name: 'abuse_report_reasons',
         },
-        {
-            key: 'ratings_parameters',
-            type: 'multi-string',
-            label: __( 'Rating parameters', 'multivendorx' ),
-            placeholder: __( 'Enter a parameter and click +', 'multivendorx' ),
-            desc: __( 'Define rating parameters such as packaging, delivery, behaviour, policies, etc.', 'multivendorx' ),
-            name: 'ratings_parameters',
-        },
-
         {
             key: 'enable_shipment_rule',
             label: __('Enable Shipment Completion Rule', 'multivendorx'),
