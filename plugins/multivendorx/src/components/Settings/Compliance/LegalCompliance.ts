@@ -21,18 +21,6 @@ export default {
             desc: __('Specify general terms and conditions that govern participation and transactions.', 'multivendorx'),
         },
         {
-            key: 'privacy_policy',
-            type: 'textarea',
-            label: __('Privacy Policy', 'multivendorx'),
-            desc: __('Describe how customer and vendor data is collected, used, and protected.', 'multivendorx'),
-        },
-        {
-            key: 'refund_return_policy',
-            type: 'textarea',
-            label: __('Refund & Return Policy', 'multivendorx'),
-            desc: __('Outline the rules for product returns, replacements, and refunds for your store.', 'multivendorx'),
-        },
-        {
             key: 'anti_counterfeit_policy',
             type: 'textarea',
             label: __('Anti-Counterfeit / Copyright Declaration', 'multivendorx'),
