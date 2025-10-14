@@ -1,91 +1,49 @@
 import { useState, useEffect } from 'react';
 import { BasicInput, TextArea, FileInput, SelectInput, getApiLink } from 'zyra';
-import axios from 'axios';
 
 const Verification = () => {
     const appLocalizer = (window as any).appLocalizer;
     const allVerificationMethods = appLocalizer.all_verification_methods;
     const [connectedProfiles, setConnectedProfiles] = useState<any>({});
     const [loading, setLoading] = useState<string>('');
-    const [profileLoading, setProfileLoading] = useState<boolean>(true);
-    const [statusMessage, setStatusMessage] = useState<{type: string, text: string} | null>(null);
 
     useEffect(() => {
         fetchConnectedProfiles();
-        checkUrlStatus();
     }, []);
-
-    const checkUrlStatus = () => {
-        const urlParams = new URLSearchParams(window.location.search);
-        const verificationStatus = urlParams.get('social_verification');
-        const provider = urlParams.get('provider');
-        const message = urlParams.get('message');
-
-        if (verificationStatus && message) {
-            setStatusMessage({
-                type: verificationStatus,
-                text: decodeURIComponent(message)
-            });
-
-            // Clean URL
-            const cleanUrl = window.location.pathname + '?tab=verification';
-            window.history.replaceState({}, document.title, cleanUrl);
-
-            // Auto-hide success messages after 5 seconds
-            if (verificationStatus === 'success') {
-                setTimeout(() => {
-                    setStatusMessage(null);
-                }, 5000);
-            }
-        }
-    };
 
     const fetchConnectedProfiles = async () => {
         try {
-            setProfileLoading(true);
-            const response = await axios({
-                method: 'GET',
-                url: getApiLink(appLocalizer, 'store/social-profiles'),
-                headers: { 
-                    'X-WP-Nonce': appLocalizer.nonce,
-                    'Content-Type': 'application/json'
-                }
-            });
-            
-            const data = response.data;
+            const response = await fetch(getApiLink('vendor/v1/verification/social-profiles'));
+            const data = await response.json();
             if (data.success) {
                 setConnectedProfiles(data.data || {});
             }
         } catch (error) {
             console.error('Error fetching connected profiles:', error);
-        } finally {
-            setProfileLoading(false);
         }
     };
 
     const connectSocialProfile = async (provider: string) => {
         setLoading(provider);
         try {
-            const response = await axios({
+            const response = await fetch(getApiLink('vendor/v1/verification/connect-social'), {
                 method: 'POST',
-                url: getApiLink(appLocalizer, 'store/connect-social'),
-                headers: { 
-                    'X-WP-Nonce': appLocalizer.nonce,
-                    'Content-Type': 'application/json'
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-WP-Nonce': appLocalizer.nonce
                 },
-                data: { provider }
+                body: JSON.stringify({ provider })
             });
             
-            const data = response.data;
+            const data = await response.json();
             if (data.success && data.data.redirect_url) {
                 window.location.href = data.data.redirect_url;
             } else {
                 alert('Failed to connect: ' + (data.message || 'Unknown error'));
             }
-        } catch (error: any) {
+        } catch (error) {
             console.error('Error connecting social profile:', error);
-            const errorMessage = error.response?.data?.message || 'Failed to connect social profile';
-            alert(errorMessage);
+            alert('Failed to connect social profile');
         } finally {
             setLoading('');
         }
@@ -95,17 +53,16 @@ const Verification = () => {
         if (!confirm('Are you sure you want to disconnect this social profile?')) return;
 
         try {
-            const response = await axios({
+            const response = await fetch(getApiLink('vendor/v1/verification/disconnect-social'), {
                 method: 'POST',
-                url: getApiLink(appLocalizer, 'store/disconnect-social'),
-                headers: { 
-                    'X-WP-Nonce': appLocalizer.nonce,
-                    'Content-Type': 'application/json'
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-WP-Nonce': appLocalizer.nonce
                 },
-                data: { provider }
+                body: JSON.stringify({ provider })
             });
             
-            const data = response.data;
+            const data = await response.json();
             if (data.success) {
                 setConnectedProfiles((prev: any) => {
                     const updated = { ...prev };
@@ -116,10 +73,9 @@ const Verification = () => {
             } else {
                 alert('Failed to disconnect: ' + (data.message || 'Unknown error'));
             }
-        } catch (error: any) {
+        } catch (error) {
             console.error('Error disconnecting social profile:', error);
-            const errorMessage = error.response?.data?.message || 'Failed to disconnect social profile';
-            alert(errorMessage);
+            alert('Failed to disconnect social profile');
         }
     };
 
@@ -183,16 +139,6 @@ const Verification = () => {
             }
         ];
 
-        // if (profileLoading) {
-        //     return (
-        //         <div className="varification-wrapper">
-        //             <div className="left">
-        //                 <div className="name">Loading social profiles...</div>
-        //             </div>
-        //         </div>
-        //     );
-        // }
-
         return socialConfigs.map((social) => {
             if (!social.enabled) return null;
             
@@ -220,19 +166,6 @@ const Verification = () => {
 
     return (
         <>
-            {/* Status Messages */}
-            {statusMessage && (
-                <div className={`alert alert-${statusMessage.type === 'success' ? 'success' : 'error'}`}>
-                    {statusMessage.text}
-                    <button 
-                        className="alert-close" 
-                        onClick={() => setStatusMessage(null)}
-                    >
-                        ×
-                    </button>
-                </div>
-            )}
-            
             <div className="card-wrapper">
                 <div className="card-content">
                     <div className="card-title">Identity Documents</div>
