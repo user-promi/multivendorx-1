@@ -4,6 +4,7 @@ import ToggleSetting from "./ToggleSetting";
 import BasicInput from "./BasicInput";
 import SelectInput from "./SelectInput";
 import MultiCheckBox from "./MultiCheckbox";
+import TextArea from "./TextArea";
 
 interface NestedFieldOption {
   key?: string;
@@ -15,7 +16,7 @@ interface NestedFieldOption {
 interface NestedField {
   look?: string;
   key: string;
-  type: "number" | "select" | "text" | "url" | "dropdown" | "time" | "checkbox" | "devider";
+  type: "number" | "select" | "text" | "url" | "dropdown" | "time" | "checkbox" | "textarea" | "devider";
   label?: string;
   placeholder?: string;
   options?: NestedFieldOption[];
@@ -27,8 +28,8 @@ interface NestedField {
   preInsideText?: string;
   preText?: string;
   postText?: string;
-  preTextFirstRow?:string;
-  postTextFirstRow?:string;
+  preTextFirstRow?: string;
+  postTextFirstRow?: string;
   desc?: string;
   size?: string;
   min?: number;
@@ -94,7 +95,6 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
     const lastRowIndex = rows.length - 1;
     const lastRow = rows[lastRowIndex] || {};
 
-    // ✅ Skip validation for row 0
     if (lastRowIndex === 0) return true;
 
     return fields.every((f) => {
@@ -119,7 +119,6 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
     });
   }
 
-
   function addRow() {
     if (single) return;
     if (!isLastRowComplete()) return;
@@ -136,7 +135,7 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
 
     const val = row[field.key] ?? "";
 
-    // dependency check (works for single & multi-row, checkboxes included)
+    // dependency check
     if (field.dependent) {
       const depVal = row[field.dependent.key];
       const depActive = Array.isArray(depVal)
@@ -159,7 +158,7 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
               value={val}
               onChange={(newVal) => handleChange(rowIndex, field.key, newVal)}
               preText={field.preText}
-              postText={field.postText}  
+              postText={field.postText}
             />
           </div>
         );
@@ -179,22 +178,32 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
               value={val}
               preInsideText={field.preInsideText}
               postInsideText={field.postInsideText}
-              preText={
-                rowIndex === 0
-                  ? field.preTextFirstRow ?? field.preText
-                  : field.preText
-              }
-              postText={
-                rowIndex === 0
-                  ? field.postTextFirstRow ?? field.postText
-                  : field.postText
-              }
+              preText={rowIndex === 0 ? field.preTextFirstRow ?? field.preText : field.preText}
+              postText={rowIndex === 0 ? field.postTextFirstRow ?? field.postText : field.postText}
               min={field.min ?? 0}
               description={field.desc}
               size={field.size}
               placeholder={field.placeholder}
               onChange={(e) => handleChange(rowIndex, field.key, e.target.value)}
               wrapperClass="setting-form-input"
+            />
+          </div>
+        );
+
+      case "textarea":
+        return (
+          <div className="settings-input-content" key={field.key}>
+            {!(rowIndex === 0 && field.skipLabel) && field.label && <label>{field.label}</label>}
+            <TextArea
+              id={`${field.key}-${rowIndex}`}
+              name={field.key}
+              value={val}
+              placeholder={field.placeholder}
+              rowNumber={4}
+              colNumber={50}
+              description={field.desc}
+              descClass="settings-metabox-description"
+              onChange={(e) => handleChange(rowIndex, field.key, e.target.value)}
             />
           </div>
         );
@@ -214,9 +223,9 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
               options={
                 Array.isArray(field.options)
                   ? field.options.map((opt) => ({
-                    value: String(opt.value),
-                    label: opt.label ?? String(opt.value),
-                  }))
+                      value: String(opt.value),
+                      label: opt.label ?? String(opt.value),
+                    }))
                   : []
               }
               value={typeof val === "object" ? val.value : val}
@@ -255,8 +264,8 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
                 look === "toggle"
                   ? "toggle-btn"
                   : field.selectDeselect === true
-                    ? "checkbox-list-side-by-side"
-                    : "simple-checkbox"
+                  ? "checkbox-list-side-by-side"
+                  : "simple-checkbox"
               }
               descClass="settings-metabox-description"
               description={field.desc}
@@ -300,11 +309,10 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
           </div>
         );
       }
-      case "devider": {
-        return (
-          <span className="devider"></span>
-        )
-      }
+
+      case "devider":
+        return <span className="devider" key={field.key}></span>;
+
       default:
         return null;
     }
@@ -313,7 +321,6 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
   return (
     <div className="nested-wrapper" id={id}>
       {rows.map((row, rowIndex) => (
-        <>
         <div key={`nested-row-${rowIndex}`} className={`nested-row ${single ? "" : "multiple"} ${wrapperClass}`}>
           {fields.map((field) => renderField(field, row, rowIndex))}
           {!single && (
@@ -340,16 +347,13 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
                   <i className="adminlib-delete"></i> {deleteButtonLabel}
                 </button>
               )}
-
             </div>
           )}
-
         </div>
-        </>
       ))}
       {description && (
         <p
-          className={`settings-metabox-description`}
+          className="settings-metabox-description"
           dangerouslySetInnerHTML={{ __html: description }}
         />
       )}
