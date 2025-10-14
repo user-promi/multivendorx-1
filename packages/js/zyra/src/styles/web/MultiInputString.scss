@@ -1,3 +1,5 @@
+@use '../../global.scss' as *;
+
 .setting-form-multi-input {
     .multi-input-row {
         display: flex;
@@ -19,25 +21,48 @@
             gap: .5rem;
             line-height: 1.2;
             margin: 0;
-            padding: .5rem 0;
             align-items: start;
+            border-radius: 0.313rem;
 
-            div{
-                width: 100%;
-                border: 0.063rem solid #e0e4e9;
-                padding: 0.5rem;
-                border-radius: 0.313rem;
+            .details {
+                display: flex;
+                gap: 0.5rem;
+
+                i {
+                    font-size: 1.125rem;
+                    color: #5007aa;
+                }
+
+                .title {
+                    font-size: 0.95rem;
+                }
             }
 
-            i {
-                font-size: 1rem;
-                cursor: pointer;
+            .action-wrapper {
+                gap: 0.5rem;
+                display: none;
+
+                .adminlib-delete{
+                    color: #f06b4f;
+                }
+                i{
+                    cursor: pointer;
+                }
             }
 
-            .admin-btn{
-                min-width: 3rem;
-                max-width: 3rem;
+            &:hover {
+                .action-wrapper {
+                    display: flex;
+                }
             }
+            &:last-child{
+                margin-top: 0.5rem;
+            }
+        }
+        .multi-item{
+            border: $border-light-small;
+            margin-bottom: 0.5rem;
+            padding: .625rem;
         }
     }
 }

@@ -357,6 +357,7 @@ class FrontendScripts {
                 'product-preferencess',
                 'product-store-category-control',
                 'geolocation',
+                'shipping'
                 'legal-compliance',
                 'product-compliance',
                 'tax-compliance',

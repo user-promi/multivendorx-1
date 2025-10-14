@@ -173,6 +173,7 @@ interface InputField {
     defaultValue?: string;
     valuename?: string;
     hint?: string;
+    addNewBtn?: string;
     blocktext?: string;
     rows?: {
         key: string;
@@ -958,16 +959,15 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             inputType="multi-string"
                             wrapperClass="setting-form-multi-input"
                             inputClass="basic-input"
-                            buttonClass="admin-btn btn-purple"
                             listClass="multi-list"
                             itemClass="multi-item"
-                            deleteBtnClass="admin-btn btn-red"
                             placeholder={inputField.placeholder}// placeholder text inside the input
                             values={value}
                             name={inputField.key}
                             proSetting={isProSetting(inputField.proSetting ?? false)}
                             description={inputField.desc}// optional description shown below the input
                             descClass="settings-metabox-description"
+                            iconEnable= {inputField.iconEnable}
                             onStringChange={(e) => {
                                 if (
                                     hasAccess(
@@ -1204,6 +1204,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             selectDeselectValue="Select / Deselect All"// text for select/deselect all
                             rightContentClass="settings-metabox-description"
                             rightContent={inputField.rightContent} // for place checkbox right
+                            addNewBtn ={inputField.addNewBtn}
                             options={
                                 Array.isArray(inputField.options)
                                     ? inputField.options.map((opt) => ({

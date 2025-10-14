@@ -22,7 +22,7 @@ class Payment {
 
     public function get_settings() {
         return [
-            'icon'      => 'PP',
+            'icon'      => 'adminlib-form-paypal-email',
             'id'        => $this->get_id(),
             'label'     => 'Paypal Payout',
             'enableOption' => true,

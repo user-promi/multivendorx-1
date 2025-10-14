@@ -296,13 +296,18 @@ class Install {
             ],
         ];
     
-        // 3. Set default review ratings parameters
+        // 3. Set default review ratings & abuse report reasons parameters
         $review_settings['ratings_parameters'] = [
             'Shipping',
             'Product quality',
             'Reliability',
         ];
-    
+        $abuse_report['shipping_stage'] = [
+            'Delivered',
+            'Cancelled',
+            'Processing',
+        ];
+        
         // 4. Set default product review sync
         $review_settings['product_review_sync'] = [
             'product_review_sync',
@@ -337,10 +342,9 @@ class Install {
         update_option('multivendorx_review_management_settings', $review_settings);
         update_option('multivendorx_order_actions_refunds_settings', $order_settings);
         update_option('multivendorx_product_report_abuse_settings', $abuse_settings);
+        update_option('multivendorx_shipping_settings', $abuse_report);
         update_option('multivendorx_legal_compliance_settings', $legal_settings);
-        update_option('multivendorx_product_compliance_settings', $product_compliance_settings);
-
-        
+        update_option('multivendorx_product_compliance_settings', $product_compliance_settings);        
     }
     
 
