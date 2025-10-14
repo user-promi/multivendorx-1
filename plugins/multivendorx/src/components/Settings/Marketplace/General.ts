@@ -70,7 +70,7 @@ export default {
             ),
         },
         {
-            key: 'mvx_tinymce_api_section',
+            key: 'tinymce_api_section',
             type: 'text',
             label: __( 'Tinymce API', 'multivendorx' ),
             desc: __(

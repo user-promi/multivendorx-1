@@ -158,9 +158,9 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
             colNumber={field.colNumber}
             value={fieldValue || ""}
             proSetting={false}
-            onChange={(e) =>
-              handleInputChange(methodId, field.key, e.target.value)
-            }
+            // onChange={(e) =>
+            //   handleInputChange(methodId, field.key, e.target.value)
+            // }
           />
         );
 

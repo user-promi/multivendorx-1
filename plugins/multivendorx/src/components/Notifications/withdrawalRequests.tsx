@@ -65,7 +65,7 @@ const WithdrawalRequests: React.FC = () => {
         rowsPerPage = 10,
         currentPage = 1,
     ) {
-        setData(null);
+        setData([]);
         axios({
             method: 'GET',
             url: getApiLink(appLocalizer, 'store'),
@@ -76,10 +76,10 @@ const WithdrawalRequests: React.FC = () => {
             },
         })
             .then((response) => {
-                setData(response.data || []);
+                console.log(response.data)
+                setData(response.data.transaction || []);
             })
             .catch(() => {
-                setError(__('Failed to load stores', 'multivendorx'));
                 setData([]);
             });
     }

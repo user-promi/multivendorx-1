@@ -49,6 +49,7 @@ declare global {
         google_api_key:any;
         mapbox_api_key:any;
         all_verification_methods:any;
+        tinymceApiKey:any;
     }
     interface Color{
         color: any;

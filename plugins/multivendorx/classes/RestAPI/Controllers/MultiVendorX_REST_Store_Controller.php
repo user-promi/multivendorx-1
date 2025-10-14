@@ -219,6 +219,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
     // GET 
     public function get_items( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
+
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
             
@@ -236,6 +237,11 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
         }
 
         try {
+            
+            if ( $request->get_param( 'pending_withdraw' ) ) {
+                return rest_ensure_response( $this->get_stores_with_pending_withdraw() );
+            }
+            
             $options = $request->get_param( 'options' );
             if( $options ){
                 return $this->get_stores_dropdown( $request );
@@ -498,7 +504,6 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
         ] );
     }
     
-
     public function get_item( $request ) {
         $id = absint( $request->get_param( 'id' ) );
         $store = $request->get_param( 'store' );
@@ -748,5 +753,33 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
         return rest_ensure_response( $formatted_followers );
     }
     
-    
+    /**
+     * Get stores with pending withdrawal requests
+     *
+     * @return array
+     */
+    private function get_stores_with_pending_withdraw() {
+        $all_stores = StoreUtil::get_store_information(); // get all stores
+        $stores_with_withdraw = [];
+
+        foreach ( $all_stores as $store ) {
+            $store_meta = Store::get_store_by_id( (int) $store['ID'] );
+
+            // Check if request_withdrawal_amount exists and is non-zero
+            if ( ! empty( $store_meta->meta_data['request_withdrawal_amount'] ) ) {
+                $stores_with_withdraw[] = [
+                    'id'              => (int) $store['ID'],
+                    'store_name'      => $store['name'],
+                    'store_slug'      => $store['slug'],
+                    'status'          => $store['status'],
+                    'email'           => $store_meta->meta_data['email'] ?? '',
+                    'withdraw_amount' => $store_meta->meta_data['request_withdrawal_amount'],
+                    'applied_on'      => $store['create_time'],
+                ];
+            }
+        }
+
+        return $stores_with_withdraw;
+    }
+
 }
