@@ -66,11 +66,14 @@ const Transactions: React.FC = () => {
         setData(null);
         axios({
             method: 'GET',
-            url: getApiLink(appLocalizer, 'transaction'),
+            url: getApiLink(appLocalizer, 'store'),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            params: { row: rowsPerPage, page: currentPage, status: 'Completed' },
+            // params: { row: rowsPerPage, page: currentPage, status: 'Completed' },
+            params:{pending_withdraw:true}
         })
-            .then((response) => setData(response.data || []))
+            .then((response) =>{
+                setData(response.data || [])
+            } )
             .catch(() => setData([]));
     };
 
@@ -96,36 +99,36 @@ const Transactions: React.FC = () => {
             header: __('Store', 'multivendorx'),
             cell: ({ row }) => <TableCell>{row.original.store_name || '-'}</TableCell>,
         },
-        {
-            header: __('Amount', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell>
-                    {`${appLocalizer.currency_symbol}${Number(row.original.amount).toFixed(2)}`}
-                </TableCell>
-            ),
-        },
+        // {
+        //     header: __('Amount', 'multivendorx'),
+        //     cell: ({ row }) => (
+        //         <TableCell>
+        //             {`${appLocalizer.currency_symbol}${Number(row.original.amount).toFixed(2)}`}
+        //         </TableCell>
+        //     ),
+        // },
         {
             header: __('Requested Amount', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell>
-                    {`${appLocalizer.currency_symbol}${Number(row.original.balance).toFixed(2)}`}
+                    {`${appLocalizer.currency_symbol}${Number(row.original.withdraw_amount).toFixed(2)}`}
                 </TableCell>
             ),
         },
-        {
-            header: __('Payment Method', 'multivendorx'),
-            cell: ({ row }) => <TableCell>{row.original.payment_method || '-'}</TableCell>,
-        },
-        {
-            header: __('Status', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell>
-                    <span className={`admin-badge ${row.original.status === 'pending' ? 'red' : 'green'}`}>
-                        {row.original.status}
-                    </span>
-                </TableCell>
-            ),
-        },
+        // {
+        //     header: __('Payment Method', 'multivendorx'),
+        //     cell: ({ row }) => <TableCell>{row.original.payment_method || '-'}</TableCell>,
+        // },
+        // {
+        //     header: __('Status', 'multivendorx'),
+        //     cell: ({ row }) => (
+        //         <TableCell>
+        //             <span className={`admin-badge ${row.original.status === 'pending' ? 'red' : 'green'}`}>
+        //                 {row.original.status}
+        //             </span>
+        //         </TableCell>
+        //     ),
+        // },
         {
             header: __('Action', 'multivendorx'),
             cell: ({ row }) => (
