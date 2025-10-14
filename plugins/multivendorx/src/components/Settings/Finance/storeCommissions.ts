@@ -229,12 +229,26 @@ export default {
             label: __('Shipping amount', 'multivendorx'),
             settingDescription: __('This option determines whether shipping charges are included when calculating commission.', 'multivendorx'),
             desc: __(
-                'If enabled, vendor’s net earning will include both commission and shipping fees.', 'multivendorx'),
+                'If enabled, store’s net earning will include both commission and shipping fees.', 'multivendorx'),
             type: 'checkbox',
             options: [
                 {
                     key: 'give_shipping',
                     value: 'give_shipping',
+                },
+            ],
+            look: 'toggle',
+        },
+         {
+            key: 'taxable_shipping',
+            label: __('Enable Taxable Shipping', 'multivendorx'),
+            settingDescription: __('Shipping charges will be treated as taxable items during checkout. Otherwise shipping costs will be tax-free.', 'multivendorx'),
+            desc: __('', 'multivendorx'),
+            type: 'checkbox',
+            options: [
+                {
+                    key: 'taxable_shipping',
+                    value: 'taxable_shipping',
                 },
             ],
             look: 'toggle',
