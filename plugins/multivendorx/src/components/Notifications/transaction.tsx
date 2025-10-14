@@ -38,21 +38,29 @@ const Transactions: React.FC = () => {
                 setPageCount(Math.ceil(response.data / pagination.pageSize));
             });
     }, []);
-    const handleTransactionAction = (rowData:any) => {
-        console.log(rowData)
-        // axios.put(
-        //     `${appLocalizer.apiUrl}/transactions/${transactionId}`, // replace with your actual endpoint
-        //     { status: newStatus },
-        //     { headers: { 'X-WP-Nonce': appLocalizer.nonce } }
-        // )
-        //     .then(() => {
-        //         console.log(`Transaction ${action}d successfully`);
-        //         requestData(pagination.pageSize, pagination.pageIndex + 1); // refresh table
-        //     })
-        //     .catch((error) => {
-        //         console.error(`Failed to ${action} transaction`, error.response || error.message);
-        //     });
+
+    const handleTransactionAction = (rowData: any) => {
+        axios({
+            method: 'PUT',
+            url: getApiLink(appLocalizer, `transaction/${rowData.id}`), // fix template literal
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            data: { // use data for PUT payload
+                withdraw: true,
+                store_id: rowData.id,
+                amount: rowData.withdraw_amount
+            }
+        })
+        .then((response) => {
+            console.log("success", response.data);
+            requestData(pagination.pageSize, pagination.pageIndex + 1);
+        })
+        .catch((error) => {
+            console.error(error);
+            setData([]);
+        });
     };
+    
+    
 
     // Fetch paginated transactions
     useEffect(() => {
