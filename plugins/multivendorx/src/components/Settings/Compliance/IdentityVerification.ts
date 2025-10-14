@@ -2,8 +2,8 @@ import { __ } from '@wordpress/i18n';
 
 export default {
     id: 'identity-verification',
-    priority: 3,
-    name: __('Verification', 'mvx-pro'),
+    priority: 2,
+    name: __('Identity Verification', 'mvx-pro'),
     desc: __(
         'Seller verification confirms a store identity with address, contact, and social profiles-building trust and boosting buyer confidence.','mvx-pro'),
     icon: 'adminlib-verification',

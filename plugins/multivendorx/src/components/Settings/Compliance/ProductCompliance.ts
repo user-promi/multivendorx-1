@@ -2,8 +2,8 @@ import { __ } from '@wordpress/i18n';
 
 export default {
     id: 'product-compliance',
-    priority: 3,
-    name: __('Product & Listing Compliance', 'mvx-pro'),
+    priority: 4,
+    name: __('Product Compliance', 'mvx-pro'),
     desc: __('All product listings must follow platform content guidelines and avoid prohibited categories. Branded or regulated products must include authenticity certificates. Optional safety certifications may be uploaded for regulated items.', 'mvx-pro'),
     icon: 'adminlib-wholesale',
     submitUrl: 'settings',
