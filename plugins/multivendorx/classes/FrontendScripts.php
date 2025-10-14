@@ -534,6 +534,7 @@ class FrontendScripts {
                         'ajaxurl'                   => admin_url( 'admin-ajax.php' ),
                         'currency'                 => get_woocommerce_currency(),       // e.g., USD
                         'currency_symbol'          => get_woocommerce_currency_symbol(),
+                        'edit_order_capability'    => current_user_can('edit_shop_orders'),
                         'add_product_link'         => StoreUtil::get_endpoint_url('products', 'edit'),
                         'all_verification_methods' => MultiVendorX()->setting->get_setting( 'all_verification_methods' ),
                     ),
