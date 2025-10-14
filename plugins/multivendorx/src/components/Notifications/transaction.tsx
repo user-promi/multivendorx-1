@@ -38,21 +38,20 @@ const Transactions: React.FC = () => {
                 setPageCount(Math.ceil(response.data / pagination.pageSize));
             });
     }, []);
-    const handleTransactionAction = (action: 'approve' | 'reject', transactionId: number) => {
-        let newStatus = action === 'approve' ? 'Completed' : 'Rejected';
-
-        axios.put(
-            `${appLocalizer.apiUrl}/transactions/${transactionId}`, // replace with your actual endpoint
-            { status: newStatus },
-            { headers: { 'X-WP-Nonce': appLocalizer.nonce } }
-        )
-            .then(() => {
-                console.log(`Transaction ${action}d successfully`);
-                requestData(pagination.pageSize, pagination.pageIndex + 1); // refresh table
-            })
-            .catch((error) => {
-                console.error(`Failed to ${action} transaction`, error.response || error.message);
-            });
+    const handleTransactionAction = (rowData:any) => {
+        console.log(rowData)
+        // axios.put(
+        //     `${appLocalizer.apiUrl}/transactions/${transactionId}`, // replace with your actual endpoint
+        //     { status: newStatus },
+        //     { headers: { 'X-WP-Nonce': appLocalizer.nonce } }
+        // )
+        //     .then(() => {
+        //         console.log(`Transaction ${action}d successfully`);
+        //         requestData(pagination.pageSize, pagination.pageIndex + 1); // refresh table
+        //     })
+        //     .catch((error) => {
+        //         console.error(`Failed to ${action} transaction`, error.response || error.message);
+        //     });
     };
 
     // Fetch paginated transactions
@@ -141,7 +140,7 @@ const Transactions: React.FC = () => {
                                 label: __('Approve', 'multivendorx'),
                                 icon: 'adminlib-check',
                                 onClick: (rowData) => {
-                                    handleTransactionAction('approve', rowData.id!);
+                                    handleTransactionAction(rowData);
                                 },
                                 hover: true,
                             },
