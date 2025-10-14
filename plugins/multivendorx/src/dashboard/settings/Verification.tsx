@@ -8,10 +8,37 @@ const Verification = () => {
     const [connectedProfiles, setConnectedProfiles] = useState<any>({});
     const [loading, setLoading] = useState<string>('');
     const [profileLoading, setProfileLoading] = useState<boolean>(true);
+    const [statusMessage, setStatusMessage] = useState<{type: string, text: string} | null>(null);
 
     useEffect(() => {
         fetchConnectedProfiles();
+        checkUrlStatus();
     }, []);
+
+    const checkUrlStatus = () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const verificationStatus = urlParams.get('social_verification');
+        const provider = urlParams.get('provider');
+        const message = urlParams.get('message');
+
+        if (verificationStatus && message) {
+            setStatusMessage({
+                type: verificationStatus,
+                text: decodeURIComponent(message)
+            });
+
+            // Clean URL
+            const cleanUrl = window.location.pathname + '?tab=verification';
+            window.history.replaceState({}, document.title, cleanUrl);
+
+            // Auto-hide success messages after 5 seconds
+            if (verificationStatus === 'success') {
+                setTimeout(() => {
+                    setStatusMessage(null);
+                }, 5000);
+            }
+        }
+    };
 
     const fetchConnectedProfiles = async () => {
         try {
@@ -156,15 +183,15 @@ const Verification = () => {
             }
         ];
 
-        if (profileLoading) {
-            return (
-                <div className="varification-wrapper">
-                    <div className="left">
-                        <div className="name">Loading social profiles...</div>
-                    </div>
-                </div>
-            );
-        }
+        // if (profileLoading) {
+        //     return (
+        //         <div className="varification-wrapper">
+        //             <div className="left">
+        //                 <div className="name">Loading social profiles...</div>
+        //             </div>
+        //         </div>
+        //     );
+        // }
 
         return socialConfigs.map((social) => {
             if (!social.enabled) return null;
@@ -193,6 +220,19 @@ const Verification = () => {
 
     return (
         <>
+            {/* Status Messages */}
+            {statusMessage && (
+                <div className={`alert alert-${statusMessage.type === 'success' ? 'success' : 'error'}`}>
+                    {statusMessage.text}
+                    <button 
+                        className="alert-close" 
+                        onClick={() => setStatusMessage(null)}
+                    >
+                        ×
+                    </button>
+                </div>
+            )}
+            
             <div className="card-wrapper">
                 <div className="card-content">
                     <div className="card-title">Identity Documents</div>

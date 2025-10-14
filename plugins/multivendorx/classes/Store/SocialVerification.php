@@ -118,51 +118,12 @@ class SocialVerification {
     }
 
     /**
-     * Handle OAuth callbacks
-     */
-    public function handle_oauth_callbacks() {
-        if (isset($_GET['social_verification_callback'])) {
-            $this->process_legacy_oauth_callback();
-        }
-    }
-    
-    /**
-     * Process legacy OAuth callback (for direct links)
-     */
-    private function process_legacy_oauth_callback() {
-        $provider = sanitize_text_field($_GET['provider'] ?? '');
-        $code = sanitize_text_field($_GET['code'] ?? '');
-        $state = sanitize_text_field($_GET['state'] ?? '');
-        
-        if (!$provider || !$code) {
-            wp_die('Invalid callback parameters');
-        }
-        
-        // Verify nonce
-        if (!wp_verify_nonce($state, 'social_verification_' . $provider)) {
-            wp_die('Security verification failed');
-        }
-        
-        $user_data = $this->process_oauth_callback($provider, $code, $_GET);
-        
-        if ($user_data) {
-            $this->save_social_connection(get_current_user_id(), $provider, $user_data);
-            
-            // Redirect back to verification page with success message
-            wp_redirect($this->get_redirect_url('success', $provider));
-            exit;
-        } else {
-            wp_redirect($this->get_redirect_url('error', $provider, 'Failed to verify social profile'));
-            exit;
-        }
-    }
-
-    /**
      * Get redirect URL
      */
     private function get_redirect_url($status, $provider = '', $message = '') {
-        $redirect_url = wc_get_account_endpoint_url('verification');
-        $args = ['verification' => $status];
+        // Redirect to the verification settings page in dashboard
+        $redirect_url = home_url('/?dashboard=1&tab=settings&subtab=verification');
+        $args = ['social_status' => $status];
         
         if ($provider) {
             $args['provider'] = $provider;
@@ -173,6 +134,114 @@ class SocialVerification {
         }
         
         return add_query_arg($args, $redirect_url);
+    }
+
+    /**
+     * Handle OAuth callbacks
+     */
+    public function handle_oauth_callbacks() {
+        // Check if this is a social verification callback
+        if (!isset($_GET['social_verification']) || !isset($_GET['provider'])) {
+            return;
+        }
+    
+        $provider = sanitize_text_field($_GET['provider']);
+        
+        $this->log("OAuth callback received for provider: " . $provider . " - GET params: " . json_encode($_GET));
+    
+        // For Twitter, we don't need nonce verification in callback as it comes from external service
+        if ($provider !== 'twitter') {
+            if (!wp_verify_nonce($_GET['_wpnonce'] ?? '', 'social_verification_' . $provider)) {
+                wp_die('Security verification failed');
+            }
+        }
+    
+        $user_id = get_current_user_id();
+        if (!$user_id) {
+            $this->log("User not logged in, storing callback data temporarily");
+            // Store the data in session/temporary storage and redirect to login
+            $temp_key = 'social_verification_pending_' . wp_generate_password(12, false);
+            set_transient($temp_key, [
+                'provider' => $provider,
+                'code' => $_GET['code'] ?? '',
+                'state' => $_GET['state'] ?? '',
+                'oauth_token' => $_GET['oauth_token'] ?? '',
+                'oauth_verifier' => $_GET['oauth_verifier'] ?? ''
+            ], 15 * MINUTE_IN_SECONDS);
+            
+            wp_redirect(wp_login_url(add_query_arg($_GET, home_url($_SERVER['REQUEST_URI']))));
+            exit;
+        }
+    
+        try {
+            $success = false;
+            $message = '';
+            
+            switch ($provider) {
+                case 'facebook':
+                case 'google':
+                case 'linkedin':
+                    if (isset($_GET['code'])) {
+                        $user_data = $this->process_oauth_callback($provider, $_GET['code'], $_GET);
+                        if ($user_data) {
+                            $this->save_social_connection($user_id, $provider, $user_data);
+                            $success = true;
+                            $message = ucfirst($provider) . ' account connected successfully!';
+                        } else {
+                            $message = 'Failed to connect ' . $provider . ' account.';
+                        }
+                    }
+                    break;
+                    
+                case 'twitter':
+                    $this->log("Processing Twitter callback");
+                    if (isset($_GET['oauth_token']) && isset($_GET['oauth_verifier'])) {
+                        $user_data = $this->process_oauth_callback($provider, $_GET['oauth_token'], $_GET);
+                        if ($user_data) {
+                            $this->save_social_connection($user_id, $provider, $user_data);
+                            $success = true;
+                            $message = 'Twitter account connected successfully!';
+                            $this->log("Twitter connection successful for user $user_id");
+                        } else {
+                            $message = 'Failed to connect Twitter account.';
+                            $this->log("Twitter connection failed for user $user_id");
+                        }
+                    } else {
+                        $message = 'Missing Twitter callback parameters.';
+                        $this->log("Twitter callback missing parameters");
+                    }
+                    break;
+            }
+    
+            // Redirect back to verification page with status
+            $redirect_url = $this->get_redirect_url(
+                $success ? 'success' : 'error',
+                $provider,
+                $message
+            );
+            
+            $this->log("Redirecting to: " . $redirect_url);
+            wp_redirect($redirect_url);
+            exit;
+    
+        } catch (Exception $e) {
+            $this->log("Social verification error: " . $e->getMessage());
+            
+            $redirect_url = $this->get_redirect_url(
+                'error',
+                $provider,
+                'An error occurred during verification.'
+            );
+            
+            wp_redirect($redirect_url);
+            exit;
+        }
+    }
+    
+    private function log($message) {
+        $log_file = plugin_dir_path(__FILE__) . '/social_verification.log';
+        $timestamp = date("d/m/Y H:i:s", time());
+        file_put_contents($log_file, $timestamp . ": " . $message . "\n", FILE_APPEND);
     }
 
     /**
@@ -226,11 +295,7 @@ class FacebookVerification {
         
         $this->app_id = $fb_settings['app_id'] ?? '';
         $this->app_secret = $fb_settings['app_secret'] ?? '';
-        
         $this->redirect_uri = $fb_settings['redirect_uri'] ?? '';
-        if (empty($this->redirect_uri)) {
-            $this->redirect_uri = add_query_arg( [ 'social_verification_callback' => '1', 'provider' => 'facebook' ], home_url( '/' ) );
-        }
     }
     
     public function get_auth_url() {
@@ -322,9 +387,6 @@ class GoogleVerification {
         $this->client_secret = $google_settings['client_secret'] ?? '';
 
         $this->redirect_uri = $google_settings['redirect_uri'] ?? '';
-        if (empty($this->redirect_uri)) {
-            $this->redirect_uri = add_query_arg( [ 'social_verification_callback' => '1', 'provider' => 'google' ], home_url( '/' ) );
-        }
     }
     
     public function get_auth_url() {
@@ -332,11 +394,14 @@ class GoogleVerification {
             return false;
         }
         
+        $callback_url = home_url('/?social_verification=1&provider=google');
+        $nonce = wp_create_nonce('social_verification_google');
+        
         $params = [
             'client_id' => $this->client_id,
-            'redirect_uri' => $this->redirect_uri,
+            'redirect_uri' => $callback_url,
             'scope' => 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email',
-            'state' => wp_create_nonce('social_verification_google'),
+            'state' => $nonce,
             'response_type' => 'code',
             'access_type' => 'online',
             'prompt' => 'consent'
@@ -409,7 +474,6 @@ class GoogleVerification {
 class TwitterVerification {
     private $api_key;
     private $api_secret_key;
-    private $bearer_token;
     private $redirect_uri;
     
     public function __construct() {
@@ -418,101 +482,178 @@ class TwitterVerification {
         
         $this->api_key = $twitter_settings['api_key'] ?? '';
         $this->api_secret_key = $twitter_settings['api_secret_key'] ?? '';
-        $this->bearer_token = $twitter_settings['bearer_token'] ?? '';
-
+        
+        // Set proper redirect URI for callback
         $this->redirect_uri = $twitter_settings['redirect_uri'] ?? '';
-        if (empty($this->redirect_uri)) {
-            $this->redirect_uri = add_query_arg( [ 'social_verification_callback' => '1', 'provider' => 'twitter' ], home_url( '/' ) );
-        }
+        
+        // Log configuration status
+        $this->log("Twitter Verification initialized - API Key: " . (!empty($this->api_key) ? 'Set' : 'Missing'));
     }
     
     public function get_auth_url() {
         if (!$this->is_configured()) {
+            $this->log("Twitter not configured properly");
             return false;
         }
         
-        // Note: Twitter OAuth 1.0a is complex - consider using a library
-        // This is a simplified implementation
         $temp_credentials = $this->get_request_token();
         
         if ($temp_credentials && isset($temp_credentials['oauth_token'])) {
-            return 'https://api.twitter.com/oauth/authenticate?oauth_token=' . $temp_credentials['oauth_token'];
+            // Store the token secret for later use
+            set_transient('twitter_oauth_token_secret_' . $temp_credentials['oauth_token'], 
+                         $temp_credentials['oauth_token_secret'], 15 * MINUTE_IN_SECONDS);
+            
+            $auth_url = 'https://api.twitter.com/oauth/authenticate?oauth_token=' . $temp_credentials['oauth_token'];
+            $this->log("Twitter auth URL generated: " . $auth_url);
+            return $auth_url;
         }
         
+        $this->log("Failed to get Twitter request token");
         return false;
     }
     
     private function get_request_token() {
-        // Simplified implementation - in production, use twitteroauth library
-        $args = [
-            'headers' => [
-                'Authorization' => $this->build_oauth_header([
-                    'oauth_callback' => $this->redirect_uri
-                ], 'https://api.twitter.com/oauth/request_token')
-            ]
+        $url = 'https://api.twitter.com/oauth/request_token';
+        
+        $params = [
+            'oauth_callback' => $this->redirect_uri
         ];
         
-        $response = wp_remote_post('https://api.twitter.com/oauth/request_token', $args);
+        $headers = [
+            'Authorization' => $this->build_oauth_header($params, $url, 'POST')
+        ];
         
-        if (!is_wp_error($response)) {
-            parse_str(wp_remote_retrieve_body($response), $credentials);
+        $this->log("Requesting Twitter token with callback: " . $this->redirect_uri);
+        
+        $response = wp_remote_post($url, [
+            'headers' => $headers,
+            'timeout' => 30
+        ]);
+        
+        if (is_wp_error($response)) {
+            $this->log("Twitter request token error: " . $response->get_error_message());
+            return false;
+        }
+        
+        $body = wp_remote_retrieve_body($response);
+        $status = wp_remote_retrieve_response_code($response);
+        
+        $this->log("Twitter request token response - Status: $status, Body: $body");
+        
+        if ($status === 200) {
+            parse_str($body, $credentials);
             return $credentials;
         }
         
-        error_log('Twitter request token error: ' . $response->get_error_message());
         return false;
     }
     
     public function verify_callback($oauth_token, $request_data) {
         if (!$this->is_configured()) {
+            $this->log("Twitter not configured in callback");
             return false;
         }
         
         $oauth_verifier = $request_data['oauth_verifier'] ?? '';
         
+        $this->log("Twitter callback received - Token: $oauth_token, Verifier: $oauth_verifier");
+        
         if (!$oauth_token || !$oauth_verifier) {
+            $this->log("Missing Twitter callback parameters");
+            return false;
+        }
+        
+        // Retrieve the token secret we stored earlier
+        $oauth_token_secret = get_transient('twitter_oauth_token_secret_' . $oauth_token);
+        delete_transient('twitter_oauth_token_secret_' . $oauth_token);
+        
+        if (!$oauth_token_secret) {
+            $this->log("No token secret found for token: $oauth_token");
             return false;
         }
         
         // Exchange for access token
-        $access_token = $this->get_access_token($oauth_token, $oauth_verifier);
+        $access_token = $this->get_access_token($oauth_token, $oauth_token_secret, $oauth_verifier);
         
         if ($access_token && isset($access_token['user_id'])) {
+            $this->log("Twitter access token successful for user: " . $access_token['user_id']);
+            
+            // Get user profile information
+            $user_profile = $this->get_user_profile($access_token);
+            
             return [
                 'social_id' => $access_token['user_id'],
                 'screen_name' => $access_token['screen_name'] ?? '',
-                'name' => $access_token['screen_name'] ?? '', // Would need additional API call
-                'profile_url' => 'https://twitter.com/' . ($access_token['screen_name'] ?? '')
+                'name' => $user_profile['name'] ?? $access_token['screen_name'] ?? '',
+                'profile_url' => 'https://twitter.com/' . ($access_token['screen_name'] ?? ''),
+                'access_token' => $access_token['oauth_token'] ?? '',
+                'access_token_secret' => $access_token['oauth_token_secret'] ?? ''
             ];
         }
         
+        $this->log("Twitter access token exchange failed");
         return false;
     }
     
-    private function get_access_token($oauth_token, $oauth_verifier) {
-        $args = [
-            'headers' => [
-                'Authorization' => $this->build_oauth_header([
-                    'oauth_token' => $oauth_token,
-                    'oauth_verifier' => $oauth_verifier
-                ], 'https://api.twitter.com/oauth/access_token')
-            ]
+    private function get_access_token($oauth_token, $oauth_token_secret, $oauth_verifier) {
+        $url = 'https://api.twitter.com/oauth/access_token';
+        
+        $params = [
+            'oauth_token' => $oauth_token,
+            'oauth_verifier' => $oauth_verifier
         ];
         
-        $response = wp_remote_post('https://api.twitter.com/oauth/access_token', $args);
+        $headers = [
+            'Authorization' => $this->build_oauth_header($params, $url, 'POST', $oauth_token_secret)
+        ];
         
-        if (!is_wp_error($response)) {
-            parse_str(wp_remote_retrieve_body($response), $access_token);
+        $this->log("Exchanging for access token");
+        
+        $response = wp_remote_post($url, [
+            'headers' => $headers,
+            'timeout' => 30
+        ]);
+        
+        if (is_wp_error($response)) {
+            $this->log("Twitter access token error: " . $response->get_error_message());
+            return false;
+        }
+        
+        $body = wp_remote_retrieve_body($response);
+        $status = wp_remote_retrieve_response_code($response);
+        
+        $this->log("Twitter access token response - Status: $status, Body: $body");
+        
+        if ($status === 200) {
+            parse_str($body, $access_token);
             return $access_token;
         }
         
-        error_log('Twitter access token error: ' . $response->get_error_message());
         return false;
     }
     
-    private function build_oauth_header($params, $url) {
-        // Simplified OAuth 1.0 header builder
-        // In production, use a proper OAuth 1.0 library like twitteroauth
+    private function get_user_profile($access_token) {
+        $url = 'https://api.twitter.com/1.1/account/verify_credentials.json';
+        
+        $headers = [
+            'Authorization' => $this->build_oauth_header([], $url, 'GET', 
+                                $access_token['oauth_token_secret'] ?? '', 
+                                $access_token['oauth_token'] ?? '')
+        ];
+        
+        $response = wp_remote_get($url, [
+            'headers' => $headers,
+            'timeout' => 30
+        ]);
+        
+        if (!is_wp_error($response) && wp_remote_retrieve_response_code($response) === 200) {
+            return json_decode(wp_remote_retrieve_body($response), true);
+        }
+        
+        return [];
+    }
+    
+    private function build_oauth_header($params, $url, $method = 'POST', $token_secret = '', $oauth_token = '') {
         $defaults = [
             'oauth_consumer_key' => $this->api_key,
             'oauth_nonce' => wp_generate_password(32, false),
@@ -521,21 +662,61 @@ class TwitterVerification {
             'oauth_version' => '1.0'
         ];
         
+        if ($oauth_token) {
+            $defaults['oauth_token'] = $oauth_token;
+        }
+        
         $params = array_merge($defaults, $params);
         
-        // Note: This is simplified and may not work without proper signature
-        $header = 'OAuth ';
-        $header_parts = [];
+        // Create signature base string
+        $base_string = $method . '&' . rawurlencode($url) . '&';
+        $base_params = [];
         
+        foreach ($params as $key => $value) {
+            $base_params[rawurlencode($key)] = rawurlencode($value);
+        }
+        
+        ksort($base_params);
+        $base_string .= rawurlencode($this->build_http_query($base_params));
+        
+        // Create signing key
+        $signing_key = rawurlencode($this->api_secret_key) . '&' . rawurlencode($token_secret);
+        
+        // Generate signature
+        $signature = base64_encode(hash_hmac('sha1', $base_string, $signing_key, true));
+        $params['oauth_signature'] = $signature;
+        
+        // Build header
+        ksort($params);
+        $header_parts = [];
         foreach ($params as $key => $value) {
             $header_parts[] = $key . '="' . rawurlencode($value) . '"';
         }
         
-        return $header . implode(', ', $header_parts);
+        return 'OAuth ' . implode(', ', $header_parts);
+    }
+    
+    private function build_http_query($params) {
+        $pairs = [];
+        foreach ($params as $key => $value) {
+            $pairs[] = $key . '=' . $value;
+        }
+        return implode('&', $pairs);
     }
     
     private function is_configured() {
-        return !empty($this->api_key) && !empty($this->api_secret_key);
+        $configured = !empty($this->api_key) && !empty($this->api_secret_key);
+        if (!$configured) {
+            $this->log("Twitter not configured - API Key: " . ($this->api_key ? 'Set' : 'Empty') . 
+                      ", API Secret: " . ($this->api_secret_key ? 'Set' : 'Empty'));
+        }
+        return $configured;
+    }
+    
+    private function log($message) {
+        $log_file = plugin_dir_path(__FILE__) . '/twitter_oauth.log';
+        $timestamp = date("d/m/Y H:i:s", time());
+        file_put_contents($log_file, $timestamp . ": " . $message . "\n", FILE_APPEND);
     }
 }
 
@@ -550,11 +731,7 @@ class LinkedInVerification {
         
         $this->client_id = $linkedin_settings['client_id'] ?? '';
         $this->client_secret = $linkedin_settings['client_secret'] ?? '';
-
         $this->redirect_uri = $linkedin_settings['redirect_uri'] ?? '';
-        if (empty($this->redirect_uri)) {
-            $this->redirect_uri = add_query_arg( [ 'social_verification_callback' => '1', 'provider' => 'linkedin' ], home_url( '/' ) );
-        }
     }
     
     public function get_auth_url() {

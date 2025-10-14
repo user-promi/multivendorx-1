@@ -71,6 +71,14 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             ],
         ]);
 
+        register_rest_route(MultiVendorX()->rest_namespace, '/' . $this->rest_base . '/social-callback', [
+            [
+                'methods'             => \WP_REST_Server::CREATABLE,
+                'callback'            => [$this, 'handle_social_callback'],
+                'permission_callback' => [$this, 'get_items_permissions_check'],
+            ],
+        ]);
+
         // register_rest_route(MultiVendorX()->rest_namespace, '/states/(?P<country>[A-Z]{2})', [
         //     'methods'               => \WP_REST_Server::READABLE,
         //     'callback'              => [$this, 'get_states_by_country'],
@@ -79,6 +87,43 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
 
     }
 
+    /**
+     * Handle social verification callback
+     */
+    public function handle_social_callback($request) {
+        try {
+            $params = $request->get_params();
+            $provider = sanitize_text_field($params['provider'] ?? '');
+            $code = sanitize_text_field($params['code'] ?? '');
+            $state = sanitize_text_field($params['state'] ?? '');
+            
+            if (empty($provider) || empty($code)) {
+                return new \WP_Error('invalid_params', __('Missing required parameters', 'multivendorx'), ['status' => 400]);
+            }
+
+            $user_id = get_current_user_id();
+            if (!$user_id) {
+                return new \WP_Error('unauthorized', __('You must be logged in', 'multivendorx'), ['status' => 401]);
+            }
+
+            $social_verification = $this->get_social_verification();
+            $user_data = $social_verification->process_oauth_callback($provider, $code, $params);
+
+            if ($user_data) {
+                $social_verification->save_social_connection($user_id, $provider, $user_data);
+                
+                return rest_ensure_response([
+                    'success' => true,
+                    'message' => ucfirst($provider) . ' account connected successfully!',
+                    'data' => $user_data
+                ]);
+            } else {
+                return new \WP_Error('verification_failed', __('Failed to verify social account', 'multivendorx'), ['status' => 400]);
+            }
+        } catch (\Exception $e) {
+            return new \WP_Error('server_error', __('Failed to process social verification', 'multivendorx'), ['status' => 500]);
+        }
+    }
     function get_social_verification() {
         static $instance = null;
         

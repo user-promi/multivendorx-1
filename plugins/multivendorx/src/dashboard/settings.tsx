@@ -9,6 +9,7 @@ import BusinessAddress from './settings/BusinessAddress';
 import Withdrawl from './withdrawl';
 import Privacy from './settings/Privacy';
 import Verification from './settings/Verification';
+import Livechat from './settings/Livechat';
 
 const settings = () => {
     const id = appLocalizer.store_id;
@@ -152,6 +153,7 @@ const settings = () => {
                 </>
         },
         { id: "verification", label: "Verification", icon: "tools", content: <Verification /> },
+        { id: "livechat", label: "Livechat", icon: "tools", content: <Livechat /> },
 
     ];
     return (
