@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
-import { Table, getApiLink, TableCell, CalendarInput } from 'zyra';
+import { Table, getApiLink, TableCell, CommonPopup, BasicInput } from 'zyra';
 import {
     ColumnDef,
     RowSelectionState,
@@ -16,6 +16,8 @@ type StoreRow = {
 };
 
 const History: React.FC = () => {
+    const [existing, setExisting] = useState<any[]>([]);
+    const [amount, setAmount] = useState<number | "">("");
     const [data, setData] = useState<StoreRow[] | null>(null);
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
     const [pagination, setPagination] = useState<PaginationState>({
@@ -102,12 +104,44 @@ const History: React.FC = () => {
         setData(demoData);
         setTotalRows(demoData.length);
     }, []);
+
+    useEffect(() => {
+        axios({
+            method: 'GET',
+            url: getApiLink(appLocalizer, `transaction/${appLocalizer.store_id}`),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+        })
+            .then((response) => {
+                setExisting(response?.data || {});
+            })
+            .catch((error) => {
+            });
+    }, []);
+
+
     const analyticsData = [
-        { icon: "adminlib-tools red", number: "$10.00", text: "Minimum Threshold" },
-        { icon: "adminlib-book green", number: "2 Day", text: "Lock Period" },
-        { icon: "adminlib-global-community yellow", number: "$5", text: "Wallet Reserve" },
-        { icon: "adminlib-global-community yellow", number: "$525", text: "Pending" },
+        { 
+            icon: "adminlib-tools red", 
+            number: `${appLocalizer.currency_symbol}${Number(existing.thresold ?? 0).toFixed(2)}`,
+            text: "Minimum Threshold" 
+        },
+        { 
+            icon: "adminlib-book green", 
+            number: `${existing.locking_day} Day`, 
+            text: "Lock Period" 
+        },
+        { 
+            icon: "adminlib-global-community yellow", 
+            number: `${appLocalizer.currency_symbol}${Number(existing.reserve_balance ?? 0).toFixed(2)}`,
+            text: "Wallet Reserve" 
+        },
+        { 
+            icon: "adminlib-global-community yellow", 
+            number: `${appLocalizer.currency_symbol}${Number(existing.available_balance ?? 0).toFixed(2)}`,
+            text: "Pending" 
+        },
     ];
+
     const balanceBreakdown = [
         { icon: "adminlib-tools green", number: "$525.00", text: "Pending" },
         { icon: "adminlib-book red", number: "$8524.00", text: "Available" },
@@ -172,6 +206,23 @@ const History: React.FC = () => {
             ),
         },
     ];
+
+    const handleWithdrawal = () => {
+        axios({
+            method: 'PUT',
+            url: getApiLink(appLocalizer, `transaction/${appLocalizer.store_id}`),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            data: {
+                amount: amount,
+                store_id: appLocalizer.store_id
+            },
+        }).then((res) => {
+            if (res.data.success) {
+                setRequestWithdrawal(false);
+            }
+        });
+    };    
+
     return (
         <>
             <div className="page-title-wrapper">
@@ -264,7 +315,7 @@ const History: React.FC = () => {
                         </div>
                         <div className="payout-wrapper">
                             <div className="price">
-                                $635.16
+                                {appLocalizer.currency_symbol}{Number(existing.available_balance ?? 0).toFixed(2)}
                             </div>
                             <div className="des">Current available balance ready for withdrawal</div>
                             <div className="admin-btn btn-purple" onClick={() => setRequestWithdrawal(true)}>
@@ -346,6 +397,55 @@ const History: React.FC = () => {
                 </div>
             </div>
 
+            {requestWithdrawal && (
+                <CommonPopup
+                    open={requestWithdrawal}
+                    width="300px"
+                    height="50%"
+                    header={
+                        <>
+                            <div className="title">
+                                <i className="adminlib-cart"></i>
+                                Request Withdrawal
+                            </div>
+                            <i
+                                className="icon adminlib-close"
+                                onClick={() => setRequestWithdrawal(false)}
+                            ></i>
+                        </>
+                    }
+                    footer={
+                        <>
+                            <div
+                                className="admin-btn btn-purple"
+                                onClick={() => handleWithdrawal()}
+                            >
+                                Publish
+                                <i className="adminlib-check"></i>
+                            </div>
+
+                        </>
+                    }
+                >
+
+                    <div className="content">
+                        {/* start left section */}
+                        <div className="form-group-wrapper">
+                            <div className="form-group">
+                                <label htmlFor="amount">Amount</label>
+                                <BasicInput
+                                    type="number"
+                                    name="amount"
+                                    value={amount}
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                        setAmount(Number(e.target.value))
+                                    }
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </CommonPopup>
+            )}
             {/* <div className="row">
                 <div className="column">
                     <Table
