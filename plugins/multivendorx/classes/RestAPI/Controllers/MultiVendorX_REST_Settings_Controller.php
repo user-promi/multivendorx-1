@@ -68,7 +68,7 @@ class MultiVendorX_REST_Settings_Controller extends \WP_REST_Controller {
 
         $all_details['error'] = __( 'Settings Saved', 'multivendorx' );
 
-        if ($settingsname == 'store_capability') {
+        if ($settingsname == 'store_capability' || $settingsname == 'user_capability') {
             $store_cap = MultiVendorX()->setting->get_option('multivendorx_store_capability_settings');
             $user_cap = MultiVendorX()->setting->get_option('multivendorx_user_capability_settings');
         

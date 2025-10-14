@@ -92,12 +92,6 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller
                         'capability' => ['read_shop_coupons', 'edit_shop_coupons']
                     ),
                     array(
-                        'key' => 'order-details',
-                        'name' => 'Order Details',
-                        'slug' => 'order-details',
-                        'capability' => ['read_shop_coupons', 'edit_shop_coupons']
-                    ),
-                    array(
                         'key' => 'commissions',
                         'name' => 'Commissions',
                         'slug' => 'commissions',
