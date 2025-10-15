@@ -33,7 +33,7 @@ const COLORS = ['#4CAF50', '#FF9800', '#F44336', '#2196F3'];
 
 const ViewStore = () => {
   const [data, setData] = useState<StoreData>({});
-  const [transaction, setTransaction] = useState<Transaction>({ balance: '0.00', locking_balance: '0.00', lifetime_earning: '0.00' });
+  const [transaction, setTransaction] = useState<any>();
   const [productCounts, setProductCounts] = useState<ProductCount[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [averageRating, setAverageRating] = useState(0);
@@ -75,13 +75,12 @@ const ViewStore = () => {
     if (!viewId) return;
 
     const fetchData = async () => {
-      const [store, products, transactions] = await Promise.all([
+      const [store, products] = await Promise.all([
         fetchAPI(`store/${viewId}`),
         fetchAPI(`products/${viewId}`),
-        fetchAPI(`transaction/${viewId}`),
       ]);
 
-      if (!store || !products || !transactions) {
+      if (!store || !products ) {
         setError(__('Failed to load store data', 'multivendorx'));
         return;
       }
@@ -92,24 +91,59 @@ const ViewStore = () => {
         { name: 'Draft', value: products.draft || 0 },
         { name: 'Published', value: products.publish || 0 },
       ]);
-      setTransaction(transactions);
     };
 
     fetchData();
     getAverageRatingFromAPI(viewId);
   }, [viewId]);
 
+  useEffect(() => {
+
+    axios({
+      method: 'GET',
+      url: getApiLink(appLocalizer, `reports/${viewId}`),
+      headers: { 'X-WP-Nonce': appLocalizer.nonce },
+    }).then((res) => {
+      setTransaction(res.data);
+    });
+  }, [viewId]);
+  console.log(transaction)
   const renderStars = (rating: number) =>
     Array.from({ length: 5 }, (_, i) => (
       <i key={i} className={i < Math.floor(rating) ? "adminlib-star" : i < rating ? "adminlib-star half" : "adminlib-star-o"}></i>
     ));
 
-  const cards = [
-    { title: 'Lifetime Earnings', value: `${appLocalizer.currency_symbol}${transaction.lifetime_earning}`, link: '#', trend: '+16.24%', color: 'text-green' },
-    { title: 'Settled Payments', value: '(static)184', link: '?page=multivendorx#&tab=payouts', trend: '+16.24%', color: 'text-green' },
-    { title: 'Awaiting Payout', value: `${appLocalizer.currency_symbol}${transaction.locking_balance}`, link: '?page=multivendorx#&tab=payouts', trend: '-8.54%', color: 'text-red' },
-    { title: 'Requested Payout', value: '(static)3892', link: '?page=multivendorx#&tab=transactions-history', trend: '+0.00%', color: '' },
-  ];
+    const cards = [
+      {
+        title: 'Lifetime Earnings',
+        value: `${appLocalizer.currency_symbol}${transaction?.total_order_amount ?? '0'}`,
+        link: '#',
+        trend: '+16.24%',
+        color: 'text-green',
+      },
+      {
+        title: 'Settled Payments',
+        value: `${appLocalizer.currency_symbol}${transaction?.settled_balance ?? '0'}`,
+        link: '?page=multivendorx#&tab=payouts',
+        trend: '+16.24%',
+        color: 'text-green',
+      },
+      {
+        title: 'Awaiting Payout',
+        value: `${appLocalizer.currency_symbol}${transaction?.locking_balance ?? '0'}`,
+        link: '?page=multivendorx#&tab=payouts',
+        trend: '-8.54%',
+        color: 'text-red',
+      },
+      {
+        title: 'Requested Payout',
+        value: `${appLocalizer.currency_symbol}${transaction?.withdraw_amount ?? '0'}`,
+        link: '?page=multivendorx#&tab=transactions-history',
+        trend: '+0.00%',
+        color: '',
+      },
+    ];
+    
 
   const activities = [
     { icon: 'adminlib-cart', text: 'New product "Wireless Gaming Headset" added by TechWorld' },
@@ -127,8 +161,8 @@ const ViewStore = () => {
         buttons={[
           { label: 'Back', onClick: () => window.location.assign('?page=multivendorx#&tab=stores'), className: 'admin-btn btn-purple' },
           { label: 'View Public Store', onClick: () => data.slug && window.open(`${appLocalizer.site_url}/store/${data.slug}/`, '_blank'), className: 'admin-btn btn-purple' },
-        ] as any} 
-        />
+        ] as any}
+      />
 
       <div className="store-view-wrapper">
         <div className="store-header row">
@@ -176,30 +210,30 @@ const ViewStore = () => {
             </div>
           </div>
         </div>
-          <div className="row">
-            <div className="column">
-              <div className="no-data-found">
-                <i className="adminlib-info icon red"></i>
-                <div className="title">No Transaction Data Yet</div>
-                <div className="des">The Handmade store hasn't processed any transactions yet. Once sales start coming in, you'll see detailed analytics here.</div>
-                <div className="buttons-wrapper center">
+        <div className="row">
+          <div className="column">
+            <div className="no-data-found">
+              <i className="adminlib-info icon red"></i>
+              <div className="title">No Transaction Data Yet</div>
+              <div className="des">The Handmade store hasn't processed any transactions yet. Once sales start coming in, you'll see detailed analytics here.</div>
+              <div className="buttons-wrapper center">
 
-                  <div className="admin-btn btn-purple">
-                    <i className="adminlib-eye"></i>
-                    View Store Settings
-                  </div>
+                <div className="admin-btn btn-purple">
+                  <i className="adminlib-eye"></i>
+                  View Store Settings
+                </div>
 
-                  <div className="admin-btn">
-                    <i className="adminlib-eye"></i>
-                    Learn More
-                  </div>
+                <div className="admin-btn">
+                  <i className="adminlib-eye"></i>
+                  Learn More
                 </div>
               </div>
             </div>
-            <div className="column">
-
-            </div>
           </div>
+          <div className="column">
+
+          </div>
+        </div>
         {error && <div className="error-message">{error}</div>}
       </div>
     </>
