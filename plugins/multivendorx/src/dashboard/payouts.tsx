@@ -28,9 +28,9 @@ const History: React.FC = () => {
             url: getApiLink(appLocalizer, `transaction/${appLocalizer.store_id}`),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
         })
-        .then((response) => {
-            setExisting(response?.data || {});
-        })
+            .then((response) => {
+                setExisting(response?.data || {});
+            })
     }, []);
 
     useEffect(() => {
@@ -39,35 +39,37 @@ const History: React.FC = () => {
             url: getApiLink(appLocalizer, `reports/${appLocalizer.store_id}`),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
         })
-        .then((response) => {
-            setData(response.data || [])
-        }).catch(()=>{
-            setData([]);
-        })
+            .then((response) => {
+                setData(response.data || [])
+            }).catch(() => {
+                setData([]);
+            })
     }, []);
 
     const analyticsData = [
-        { 
-            icon: "adminlib-tools red", 
+        {
+            icon: "adminlib-tools red",
             number: `${appLocalizer.currency_symbol}${Number(data.threshold_amount ?? 0).toFixed(2)}`,
-            text: "Minimum Threshold" 
+            text: "Minimum Threshold"
         },
-        { 
-            icon: "adminlib-book green", 
-            number: `${data.lock_period} Day`, 
-            text: "Lock Period" 
+        {
+            icon: "adminlib-book green",
+            number: `${data.lock_period} Day`,
+            text: "Lock Period"
         },
+    ];
+    const analyticsData2 = [
         {
             icon: "adminlib-global-community yellow",
             number: `${appLocalizer.currency_symbol}${(
                 Number(data.locking_balance ?? 0) + Number(data.balance ?? 0)
             ).toFixed(2)}`,
             text: "Wallet Reserve"
-        },        
-        { 
-            icon: "adminlib-global-community yellow", 
+        },
+        {
+            icon: "adminlib-global-community yellow",
             number: `${appLocalizer.currency_symbol}${Number(data.locking_balance ?? 0).toFixed(2)}`,
-            text: "Pending" 
+            text: "Pending"
         },
     ];
 
@@ -85,7 +87,7 @@ const History: React.FC = () => {
                 setRequestWithdrawal(false);
             }
         });
-    };    
+    };
 
     return (
         <>
@@ -96,20 +98,8 @@ const History: React.FC = () => {
                 </div>
             </div>
 
-            <div className="settings-metabox-note green">
-                <i className="adminlib-info"></i>
-                <p>You have $635.16 available for payout. Request withdrawal now or wait for the next scheduled payout on Oct 15, 2025 .</p>
-            </div>
-            <div className="settings-metabox-note">
-                <i className="adminlib-info"></i>
-                <p>Confirm that you have access to johndoe@gmail.com in sender email settings$420.00 is currently pending. It will be available for payout on Oct 15, 2025.</p>
-            </div>
-            <div className="settings-metabox-note yellow">
-                <i className="adminlib-info"></i>
-                <p>Confirm that you have access to johndoe@gmail.com in sender email settings.</p>
-            </div>
             <div className="row">
-                <div className="column">
+                <div className="column theme-bg width-65">
                     <div className="card">
                         <div className="card-header">
                             <div className="left">
@@ -120,42 +110,88 @@ const History: React.FC = () => {
                         </div>
                         <div className="payout-wrapper">
                             <div className="price">
-                                {appLocalizer.currency_symbol}{Number(data.balance ?? 0).toFixed(2)}
+                                {appLocalizer.currency_symbol}652 {Number(data.balance ?? 0).toFixed(2)}
                             </div>
                             <div className="des">Current available balance ready for withdrawal</div>
+
+                            <div className="notice"></div>
+                            <div className="settings-metabox-note"><i className="adminlib-info"></i><p>Confirm that you have access to johndoe@gmail.com in sender email settings.</p></div>
                             <div className="admin-btn btn-purple" onClick={() => setRequestWithdrawal(true)}>
                                 Request Withdrawal
                             </div>
                         </div>
-                        <div className="card-body">
-                            <div className="analytics-container">
-
-                                {analyticsData.map((item, idx) => (
-                                    <div key={idx} className="analytics-item">
-                                        <div className="analytics-icon">
-                                            <i className={item.icon}></i>
-                                        </div>
-                                        <div className="details">
-                                            <div className="number">{item.number}</div>
-                                            <div className="text">{item.text}</div>
-                                        </div>
-                                    </div>
-                                ))}
-
-                            </div>
-                        </div>
-
                     </div>
                 </div>
+                <div className="column width-35">
+                    <div className="card-header">
+                        <div className="left">
+                            <div className="title">
+                                Available for Payout
+                            </div>
+                        </div>
+                    </div>
+                    <div className="card-body">
+                        <div className="analytics-container">
+
+                            {analyticsData.map((item, idx) => (
+                                <div key={idx} className="analytics-item">
+                                    <div className="analytics-icon">
+                                        <i className={item.icon}></i>
+                                    </div>
+                                    <div className="details">
+                                        <div className="number">{item.number}</div>
+                                        <div className="text">{item.text}</div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                        <div className="analytics-container">
+                         {analyticsData2.map((item, idx) => (
+                                <div key={idx} className="analytics-item">
+                                    <div className="analytics-icon">
+                                        <i className={item.icon}></i>
+                                    </div>
+                                    <div className="details">
+                                        <div className="number">{item.number}</div>
+                                        <div className="text">{item.text}</div>
+                                    </div>
+                                </div>
+                            ))}
+                            </div>
+                    </div>
+                </div>
+            </div>
+
+            <div className="row">
                 <div className="column">
                     <div className="card">
                         <div className="card-header">
                             <div className="left">
                                 <div className="title">
-                                    Payout Account
+                                    Withdrawal Schedule
+                                </div>
+
+                            </div>
+                        </div>
+                        <div className="withdrawal-wrapper">
+                            <div className="des">
+                                Frequency
+                            </div>
+                            <div className="title">
+                                Quarterly
+                            </div>
+                            <div className="withdrawl-notice">
+                                <i className="adminlib-info"></i> Withdrawal occurs only when your balance reaches $1,000.00 or more. View payment calendar
+                            </div>
+                        </div>
+                        <div className="card-header">
+                            <div className="left">
+                                <div className="title">
+                                    Withdrawal Methods
                                 </div>
                             </div>
                         </div>
+
                         <div className="notification-wrapper">
                             <ul>
                                 <li>
@@ -169,20 +205,10 @@ const History: React.FC = () => {
                                     </div>
 
                                 </li>
-                                <li>
-                                    <div className="icon-wrapper">
-                                        <i className="adminlib-mail orange"></i>
-                                    </div>
-                                    <div className="details">
-                                        <div className="notification-title">PayPal</div>
-                                        <div className="des">Withdrawal request pending</div>
-                                        <span><a href="">Change</a></span>
-                                    </div>
-                                </li>
                             </ul>
                         </div>
                     </div>
-                    <div className="no-data-found">
+                    {/* <div className="no-data-found">
                         <i className="adminlib-info icon red"></i>
                         <div className="title">No Transaction Data Yet</div>
                         <div className="des">The Handmade store hasn't processed any transactions yet. Once sales start coming in, you'll see detailed analytics here.</div>
@@ -197,6 +223,48 @@ const History: React.FC = () => {
                                 <i className="adminlib-eye"></i>
                                 Learn More
                             </div>
+                        </div>
+                    </div> */}
+                </div>
+                <div className="column">
+                    <div className="card-header">
+                        <div className="left">
+                            <div className="title">
+                                Last Withdrawal
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="last-withdradal-wrapper">
+                        <div className="left">
+                            <div className="price">$625.65</div>
+                            <div className="des">Direct to Local Bank (INR)
+                                Account ending in 4352</div>
+                        </div>
+                        <div className="right">
+                            <div className="date">
+                                April 17, 2021
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="last-withdradal-wrapper">
+                        <div className="left">
+                            <div className="price">$965.65</div>
+                            <div className="des">Direct to Local Bank (INR)
+                                Account ending in 4352</div>
+                        </div>
+                        <div className="right">
+                            <div className="date">
+                                April 17, 2021
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="buttons-wrapper">
+                        <div className="admin-btn btn-purple">
+                            <i className="adminlib-eye"></i>
+                            View transaction history
                         </div>
                     </div>
                 </div>

@@ -96,13 +96,13 @@ const Dashboard: React.FC = () => {
       </div>
 
       <div className="row">
-        <div className="column width-35">
+        <div className="column width-35 theme-bg">
           <div className="dashboard-view-section">
             <div className="title">
               Good Morning, Anna!
             </div>
             <div className="des">
-              Here's what's happening with your store today.
+              Here's what's happening with your store today <b>$84521 <i className="adminlib-arrow"></i></b>
             </div>
 
             <div className="price-wrapper">

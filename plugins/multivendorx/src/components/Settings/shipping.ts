@@ -26,48 +26,7 @@ export default {
                     icon: "adminlib-google",
                     label: 'Zone-wise Shipping',
                     connected: false,
-                    desc: 'Connect and authenticate stores via Google accounts.',
-                    formFields: [
-                        {
-                            key: 'recommendation_source',
-                            type: 'setting-toggle',
-                            label: 'Zone-wise Shipping Selection',
-                            options: [
-                                {
-                                    key: 'same_store',
-                                    label: __(
-                                        'North America',
-                                        'multivendorx'
-                                    ),
-                                    value: 'same_store',
-                                },
-                                {
-                                    key: 'all_stores',
-                                    label: __(
-                                        'Europe',
-                                        'multivendorx'
-                                    ),
-                                    value: 'all_stores',
-                                },
-                                {
-                                    key: 'none',
-                                    label: __(
-                                        'Asia-Pacific',
-                                        'multivendorx'
-                                    ),
-                                    value: 'Asia-Pacific',
-                                },
-                                {
-                                    key: 'middle_east',
-                                    label: __(
-                                        'Middle East',
-                                        'multivendorx'
-                                    ),
-                                    value: 'none',
-                                },
-                            ],
-                        }
-                    ],
+                    desc: 'Connect and authenticate stores via Google accounts <span class="admin-badge yellow">North America</span>  <span class="admin-badge blue">North America</span>  <span class="admin-badge yellow">North America</span>  <span class="admin-badge red">North America</span>',
                 },
                 {
                     id: 'country-wise-shipping',
