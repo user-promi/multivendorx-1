@@ -4,8 +4,9 @@ import { __ } from '@wordpress/i18n';
 import "../Announcements/announcements.scss";
 import TransactionHistoryTable from './transactionHistoryTable';
 import TransactionDataTable from './transactionDataTable';
-import { AdminBreadcrumbs, CalendarInput, getApiLink, SelectInput } from 'zyra';
+import { AdminBreadcrumbs, CalendarInput, getApiLink, SelectInput, CommonPopup, BasicInput, TextArea, ToggleSetting } from 'zyra';
 import axios from 'axios';
+import disbursement from '../Settings/Finance/disbursement';
 
 
 export const TransactionHistory: React.FC = () => {
@@ -18,6 +19,13 @@ export const TransactionHistory: React.FC = () => {
         startDate: null,
         endDate: null,
     });
+    const [requestWithdrawal, setRequestWithdrawal] = useState(false);
+    const [amount, setAmount] = useState<number | "">("");
+    const [note, setNote] = useState<any | "">("");
+    const [storeData, setStoreData] = useState<any>(null);
+    const [optionList, setOptionList] = React.useState([]);
+    const [paymentMethod, setPaymentMethod] = useState<any | "">("");
+
 
     // 🔹 Fetch stores on mount
     useEffect(() => {
@@ -52,12 +60,34 @@ export const TransactionHistory: React.FC = () => {
             url: getApiLink(appLocalizer, `transaction/${selectedStore.value}`),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
         })
+        .then((response) => {
+            setData(response?.data || {});
+        })
+
+        axios({
+            method: "GET",
+            url: getApiLink(appLocalizer, `store/${selectedStore.value}`),
+            headers: { "X-WP-Nonce": appLocalizer.nonce },
+        })
             .then((response) => {
-                setData(response?.data || {});
+              setStoreData(response.data || {});
             })
-            .catch((error) => {
-            });
     }, [selectedStore]);
+
+    useEffect(() => {
+        if (!storeData) return;
+
+        const existingOptions = Object.values(appLocalizer.payout_payment_options);
+        const defaultOption = {
+            value: storeData.payment_method,
+            label: 'Store Default - ' + storeData.payment_method.replace(/[-_]/g, " ").replace(/\b\w/g, c => c.toUpperCase())
+        };
+
+        // Prepend default to the top
+        const mergedOptions = [defaultOption, ...existingOptions];
+        setOptionList(mergedOptions);
+    }, [storeData]);
+
 
     const handleSearch = (inputValue: string) => {
         if (!inputValue) {
@@ -69,6 +99,25 @@ export const TransactionHistory: React.FC = () => {
             setFilteredStores(filtered);
         }
     };
+
+    const handleWithdrawal = () => {
+        axios({
+            method: 'PUT',
+            url: getApiLink(appLocalizer, `transaction/${selectedStore?.value}`),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            data: {
+                disbursement: true,
+                amount: amount,
+                store_id: selectedStore?.value,
+                method: paymentMethod,
+                note: note
+            },
+        }).then((res) => {
+            if (res.data.success) {
+                setRequestWithdrawal(false);
+            }
+        });
+    };  
 
     const tabs = [
         {
@@ -175,7 +224,91 @@ export const TransactionHistory: React.FC = () => {
                         </div>
                     </div>
                 </div>
+                {requestWithdrawal && (
+                    <CommonPopup
+                        open={requestWithdrawal}
+                        width="400px"
+                        height="80%"
+                        header={
+                            <>
+                                <div className="title">
+                                    <i className="adminlib-cart"></i>
+                                    Request Withdrawal
+                                </div>
+                                <i
+                                    className="icon adminlib-close"
+                                    onClick={() => setRequestWithdrawal(false)}
+                                ></i>
+                            </>
+                        }
+                        footer={
+                            <>
+                                <div
+                                    className="admin-btn btn-purple"
+                                    onClick={() => handleWithdrawal()}
+                                >
+                                    Publish
+                                    <i className="adminlib-check"></i>
+                                </div>
 
+                            </>
+                        }
+                    >
+
+                        <div className="content">
+                            {/* start left section */}
+                            <div className="form-group-wrapper">
+                                <div className="form-group">
+                                    <label htmlFor="amount">Amount</label>
+                                    <BasicInput
+                                        type="number"
+                                        name="amount"
+                                        value={amount}
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                            setAmount(Number(e.target.value))
+                                        }
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="payment_method">Payment Processor</label>
+                                    {/* <SelectInput
+                                        name="payment_method"
+                                        value={paymentMethod}
+                                        options={optionList}
+                                        type="single-select"
+                                        onChange={(newValue) => {
+                                            if (newValue && newValue.value) {
+                                                setPaymentMethod(newValue.value);
+                                            }
+                                        }
+                                        }
+                                    /> */}
+                                    <ToggleSetting
+                                        wrapperClass="setting-form-input"
+                                        descClass="settings-metabox-description"
+                                        description="Choose your preferred payment processor."
+                                        options={optionList}
+                                        value={paymentMethod || ""}
+                                        onChange={(value) => {
+                                            setPaymentMethod(value)
+                                        }}
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="note">Note</label>
+                                    <TextArea
+                                        name="note"
+                                        wrapperClass="setting-from-textarea"
+                                        inputClass="textarea-input"
+                                        descClass="settings-metabox-description"
+                                        value={note}
+                                        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNote(e.target.value)}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </CommonPopup>
+                )}
                 <div className="row">
                     <div className="column">
                         <div className="card-header">

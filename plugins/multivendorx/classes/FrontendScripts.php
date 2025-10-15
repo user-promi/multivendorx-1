@@ -432,6 +432,22 @@ class FrontendScripts {
             );
         }
 
+        $payment_admin_settings = MultiVendorX()->setting->get_setting( 'payment_methods', [] );
+        $settings = !empty($payment_admin_settings['custom-gateway']) ? $payment_admin_settings['custom-gateway'] : [];
+        
+        $gateway_name = $settings && $settings['custom_gateway_name'] ? $settings['custom_gateway_name'] : 'Custom Gateway';
+
+        $payout_payment_options = [
+            [
+                'value' => 'custom-gateway',
+                'label' => $gateway_name
+            ],
+            [
+                'value' => 'cash',
+                'label' => 'Cash'
+            ]
+        ];
+
         $localize_scripts = apply_filters(
             'multivendorx_localize_scripts',
             array(
@@ -465,6 +481,7 @@ class FrontendScripts {
                         'user_id'                  => get_current_user_id(),
                         'currency'                 => get_woocommerce_currency(),       // e.g., USD
                         'currency_symbol'          => get_woocommerce_currency_symbol(),
+                        'payout_payment_options'   => $payout_payment_options,
                         'map_providor'             => MultiVendorX()->setting->get_setting( 'choose_map_api' ),
                         'google_api_key'           => MultiVendorX()->setting->get_setting( 'google_api_key' ),
                         'mapbox_api_key'           => MultiVendorX()->setting->get_setting( 'mapbox_api_key' ),

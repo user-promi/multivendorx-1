@@ -50,6 +50,7 @@ declare global {
         mapbox_api_key:any;
         all_verification_methods:any;
         tinymceApiKey:any;
+        payout_payment_options:any;
     }
     interface Color{
         color: any;

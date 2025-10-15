@@ -26,6 +26,8 @@ class Payments {
         $this->container = array(
             'disbursement'  => new Disbursement(),
             'processor'     => new PaymentProcessor(),
+            'custom_gateway' => new CustomPayment(),
+            'cash' => new CashPayment(),
         );
     }
 
@@ -36,6 +38,21 @@ class Payments {
 
     public function get_all_payment_settings() {
         $all_settings = [];
+
+        $providers = [
+            [
+                'id'    => 'custom-gateway',
+                'name'  => 'Custom Gateway',
+                'class' => 'MultiVendorX\\Payments\\CustomPayment'
+            ],
+            [
+                'id'    => 'cash',
+                'name'  => 'Cash',
+                'class' => 'MultiVendorX\\Payments\\CashPayment'
+            ]
+        ];
+
+        $this->providers = array_merge($this->providers ?? [], $providers);
 
         foreach ($this->providers as $provider) {
             $provider_obj = new $provider['class']();
