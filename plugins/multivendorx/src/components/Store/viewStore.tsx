@@ -18,22 +18,23 @@ interface StoreData {
   slug?: string;
 }
 
-interface Transaction {
-  balance: string;
-  locking_balance: string;
-  lifetime_earning: string;
-}
-
 interface ProductCount {
   name: string;
   value: number;
+}
+
+interface Transaction {
+  total_order_amount?: string;
+  settled_balance?: string;
+  locking_balance?: string;
+  withdraw_amount?: string;
 }
 
 const COLORS = ['#4CAF50', '#FF9800', '#F44336', '#2196F3'];
 
 const ViewStore = () => {
   const [data, setData] = useState<StoreData>({});
-  const [transaction, setTransaction] = useState<any>();
+  const [transaction, setTransaction] = useState<Transaction>({});
   const [productCounts, setProductCounts] = useState<ProductCount[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [averageRating, setAverageRating] = useState(0);
@@ -43,107 +44,175 @@ const ViewStore = () => {
   const viewId = new URLSearchParams(location.hash.replace(/^#/, '')).get('id');
   const headers = { 'X-WP-Nonce': appLocalizer.nonce };
 
-  // Simplified API fetch function
+  // 🔹 Helper for GET calls
   const fetchAPI = async (endpoint: string) => {
     try {
       const res = await axios.get(getApiLink(appLocalizer, endpoint), { headers });
       return res.data || {};
-    } catch {
+    } catch (error) {
+      console.error(`Error fetching ${endpoint}:`, error);
       return null;
     }
   };
 
-  const getAverageRatingFromAPI = async (storeId: string) => {
-    try {
-      const { data: comments = [] } = await axios.get(`${appLocalizer.apiUrl}/wp/v2/comments`, {
-        headers,
-        params: { meta_key: 'store_rating_id', meta_value: storeId, comment_type: 'multivendorx_review' },
-      });
-
-      if (!comments.length) return setAverageRating(0), setTotalReviews(0);
-
-      const ratingSum = comments.reduce((sum: number, c: any) => sum + parseFloat(c.meta?.store_rating || '0'), 0);
-      setAverageRating(Math.round((ratingSum / comments.length) * 10) / 10);
-      setTotalReviews(comments.length);
-    } catch {
-      setAverageRating(0);
-      setTotalReviews(0);
-    }
-  };
-
+  // 🔹 Fetch Store Details
   useEffect(() => {
     if (!viewId) return;
 
-    const fetchData = async () => {
-      const [store, products] = await Promise.all([
-        fetchAPI(`store/${viewId}`),
-        fetchAPI(`products/${viewId}`),
-      ]);
-
-      if (!store || !products ) {
-        setError(__('Failed to load store data', 'multivendorx'));
-        return;
-      }
-
-      setData(store);
-      setProductCounts([
-        { name: 'Pending', value: products.pending || 0 },
-        { name: 'Draft', value: products.draft || 0 },
-        { name: 'Published', value: products.publish || 0 },
-      ]);
+    const fetchStore = async () => {
+      const store = await fetchAPI(`store/${viewId}`);
+      if (store) setData(store);
+      else setError(__('Failed to load store details', 'multivendorx'));
     };
 
-    fetchData();
-    getAverageRatingFromAPI(viewId);
+    fetchStore();
   }, [viewId]);
 
+  // 🔹 Fetch Product Counts directly from WooCommerce API
   useEffect(() => {
+    if (!viewId) return;
 
-    axios({
-      method: 'GET',
-      url: getApiLink(appLocalizer, `reports/${viewId}`),
-      headers: { 'X-WP-Nonce': appLocalizer.nonce },
-    }).then((res) => {
-      setTransaction(res.data);
-    });
+    const fetchProductCounts = async () => {
+      try {
+        const statuses = ['publish', 'draft', 'pending'];
+
+        // Map each status request to WooCommerce API
+        const requests = statuses.map((status) =>
+          axios.get(`${appLocalizer.apiUrl}/wc/v3/products`, {
+            headers,
+            params: {
+              status,
+              meta_key: 'multivendorx_store_id',
+              value: viewId,
+              per_page: 1, // minimize data transfer
+            },
+          })
+        );
+
+        // Await all 3 requests in parallel
+        const results = await Promise.all(requests);
+
+        // Extract product count from headers
+        const counts = results.map((res) => parseInt(res.headers['x-wp-total']) || 0);
+
+        setProductCounts([
+          { name: 'Published', value: counts[0] },
+          { name: 'Draft', value: counts[1] },
+          { name: 'Pending', value: counts[2] },
+        ]);
+      } catch (error) {
+        console.error('Error fetching product counts:', error);
+        setProductCounts([
+          { name: 'Published', value: 0 },
+          { name: 'Draft', value: 0 },
+          { name: 'Pending', value: 0 },
+        ]);
+      }
+    };
+
+    fetchProductCounts();
   }, [viewId]);
-  console.log(transaction)
+
+  // 🔹 Fetch Ratings
+  useEffect(() => {
+    if (!viewId) return;
+
+    const fetchRatings = async () => {
+      try {
+        const { data: comments = [] } = await axios.get(`${appLocalizer.apiUrl}/wp/v2/comments`, {
+          headers,
+          params: {
+            meta_key: 'store_rating_id',
+            meta_value: viewId,
+            comment_type: 'multivendorx_review',
+          },
+        });
+
+        if (!comments.length) {
+          setAverageRating(0);
+          setTotalReviews(0);
+          return;
+        }
+
+        const ratingSum = comments.reduce(
+          (sum: number, c: any) => sum + parseFloat(c.meta?.store_rating || '0'),
+          0
+        );
+
+        setAverageRating(Math.round((ratingSum / comments.length) * 10) / 10);
+        setTotalReviews(comments.length);
+      } catch (error) {
+        console.warn('Failed to fetch ratings', error);
+        setAverageRating(0);
+        setTotalReviews(0);
+      }
+    };
+
+    fetchRatings();
+  }, [viewId]);
+
+  // 🔹 Fetch Transactions
+  useEffect(() => {
+    if (!viewId) return;
+
+    const fetchReports = async () => {
+      try {
+        const res = await axios.get(getApiLink(appLocalizer, `reports/${viewId}`), { headers });
+        setTransaction(res.data);
+      } catch (error) {
+        console.warn('Failed to fetch transaction data', error);
+      }
+    };
+
+    fetchReports();
+  }, [viewId]);
+
+  // 🔹 Star Renderer
   const renderStars = (rating: number) =>
     Array.from({ length: 5 }, (_, i) => (
-      <i key={i} className={i < Math.floor(rating) ? "adminlib-star" : i < rating ? "adminlib-star half" : "adminlib-star-o"}></i>
+      <i
+        key={i}
+        className={
+          i < Math.floor(rating)
+            ? "adminlib-star"
+            : i < rating
+            ? "adminlib-star half"
+            : "adminlib-star-o"
+        }
+      ></i>
     ));
 
-    const cards = [
-      {
-        title: 'Lifetime Earnings',
-        value: `${appLocalizer.currency_symbol}${transaction?.total_order_amount ?? '0'}`,
-        link: '#',
-        trend: '+16.24%',
-        color: 'text-green',
-      },
-      {
-        title: 'Settled Payments',
-        value: `${appLocalizer.currency_symbol}${transaction?.settled_balance ?? '0'}`,
-        link: '?page=multivendorx#&tab=payouts',
-        trend: '+16.24%',
-        color: 'text-green',
-      },
-      {
-        title: 'Awaiting Payout',
-        value: `${appLocalizer.currency_symbol}${transaction?.locking_balance ?? '0'}`,
-        link: '?page=multivendorx#&tab=payouts',
-        trend: '-8.54%',
-        color: 'text-red',
-      },
-      {
-        title: 'Requested Payout',
-        value: `${appLocalizer.currency_symbol}${transaction?.withdraw_amount ?? '0'}`,
-        link: '?page=multivendorx#&tab=transactions-history',
-        trend: '+0.00%',
-        color: '',
-      },
-    ];
-    
+  // 🔹 Cards
+  const cards = [
+    {
+      title: 'Lifetime Earnings',
+      value: `${appLocalizer.currency_symbol}${transaction?.total_order_amount ?? '0'}`,
+      link: '#',
+      trend: '+16.24%',
+      color: 'text-green',
+    },
+    {
+      title: 'Settled Payments',
+      value: `${appLocalizer.currency_symbol}${transaction?.settled_balance ?? '0'}`,
+      link: '?page=multivendorx#&tab=payouts',
+      trend: '+16.24%',
+      color: 'text-green',
+    },
+    {
+      title: 'Awaiting Payout',
+      value: `${appLocalizer.currency_symbol}${transaction?.locking_balance ?? '0'}`,
+      link: '?page=multivendorx#&tab=payouts',
+      trend: '-8.54%',
+      color: 'text-red',
+    },
+    {
+      title: 'Requested Payout',
+      value: `${appLocalizer.currency_symbol}${transaction?.withdraw_amount ?? '0'}`,
+      link: '?page=multivendorx#&tab=transactions-history',
+      trend: '+0.00%',
+      color: '',
+    },
+  ];
 
   const activities = [
     { icon: 'adminlib-cart', text: 'New product "Wireless Gaming Headset" added by TechWorld' },
@@ -159,40 +228,98 @@ const ViewStore = () => {
         tabTitle={`Viewing ${data.name || ''}`}
         description={data.description || ''}
         buttons={[
-          { label: 'Back', onClick: () => window.location.assign('?page=multivendorx#&tab=stores'), className: 'admin-btn btn-purple' },
-          { label: 'View Public Store', onClick: () => data.slug && window.open(`${appLocalizer.site_url}/store/${data.slug}/`, '_blank'), className: 'admin-btn btn-purple' },
-        ] as any}
+          {
+            label: 'Back',
+            onClick: () => window.location.assign('?page=multivendorx#&tab=stores'),
+            className: 'admin-btn btn-purple',
+          },
+          {
+            label: 'View Public Store',
+            onClick: () =>
+              data.slug && window.open(`${appLocalizer.site_url}/store/${data.slug}/`, '_blank'),
+            className: 'admin-btn btn-purple',
+          },
+        ]}
       />
 
       <div className="store-view-wrapper">
+        {/* Profile Section */}
         <div className="store-header row">
           <div className="column profile-section">
-            <span className="avater"><img src={data.image || ''} alt={data.name || 'Store'} /></span>
+            <span className="avater">
+              <img src={data.image || ''} alt={data.name || 'Store'} />
+            </span>
             <div className="name">{data.name || 'Unnamed Store'}</div>
             <div className="des">{data.description || ''}</div>
-            {data.phone && <div className="details"><i className="adminlib-form-phone"></i>{data.phone}</div>}
-            {data.email && <div className="details"><i className="adminlib-mail"></i>{data.email}</div>}
-            <div className="review">{renderStars(averageRating)} <span>({totalReviews} reviews)</span></div>
-            {data.email && <div className="buttons"><a href={`mailto:${data.email}`} className="admin-btn btn-purple"><i className="adminlib-mail"></i> Send Mail</a></div>}
+            {data.phone && (
+              <div className="details">
+                <i className="adminlib-form-phone"></i>
+                {data.phone}
+              </div>
+            )}
+            {data.email && (
+              <div className="details">
+                <i className="adminlib-mail"></i>
+                {data.email}
+              </div>
+            )}
+            <div className="review">
+              {renderStars(averageRating)} <span>({totalReviews} reviews)</span>
+            </div>
+            {data.email && (
+              <div className="buttons">
+                <a href={`mailto:${data.email}`} className="admin-btn btn-purple">
+                  <i className="adminlib-mail"></i> Send Mail
+                </a>
+              </div>
+            )}
           </div>
-          <div className="column store-image" style={{ backgroundImage: `url(${data.banner || ''})` }} />
+          <div
+            className="column store-image"
+            style={{ backgroundImage: `url(${data.banner || ''})` }}
+          />
         </div>
 
+        {/* Cards */}
         <div className="row">
           {cards.map((card, i) => (
             <div key={i} className="column">
               <div className="cards">
-                <div className="title-wrapper"><div>{card.title}</div><span className={card.color}>{card.trend}</span></div>
-                <div className="card-body"><div className="value"><span>{card.value}</span><a href={card.link}>View Details</a></div><span className="icon"><i className="adminlib-rules"></i></span></div>
+                <div className="title-wrapper">
+                  <div>{card.title}</div>
+                  <span className={card.color}>{card.trend}</span>
+                </div>
+                <div className="card-body">
+                  <div className="value">
+                    <span>{card.value}</span>
+                    <a href={card.link}>View Details</a>
+                  </div>
+                  <span className="icon">
+                    <i className="adminlib-rules"></i>
+                  </span>
+                </div>
               </div>
             </div>
           ))}
         </div>
 
+        {/* Activity + Chart */}
         <div className="row">
           <div className="column">
-            <h3>Recent Activity(Static)</h3>
-            <div className="activity-wrapper">{activities.map((a, i) => <div key={i} className="activity"><span className="icon"><i className={a.icon}></i></span><div className="details">{a.text}<span>2 minutes ago</span></div></div>)}</div>
+            <h3>Recent Activity (Static)</h3>
+            <div className="activity-wrapper">
+              {activities.map((a, i) => (
+                <div key={i} className="activity">
+                  <span className="icon">
+                    <i className={a.icon}></i>
+                  </span>
+                  <div className="details">
+                    {a.text}
+                    <span>2 minutes ago</span>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
 
           <div className="column">
@@ -201,7 +328,9 @@ const ViewStore = () => {
               <ResponsiveContainer width="100%" height={250}>
                 <PieChart>
                   <Pie data={productCounts} cx="50%" cy="50%" outerRadius={80} dataKey="value" label>
-                    {productCounts.map((entry, index) => <Cell key={index} fill={COLORS[index % COLORS.length]} />)}
+                    {productCounts.map((entry, index) => (
+                      <Cell key={index} fill={COLORS[index % COLORS.length]} />
+                    ))}
                   </Pie>
                   <Tooltip />
                   <Legend />
@@ -210,30 +339,7 @@ const ViewStore = () => {
             </div>
           </div>
         </div>
-        <div className="row">
-          <div className="column">
-            <div className="no-data-found">
-              <i className="adminlib-info icon red"></i>
-              <div className="title">No Transaction Data Yet</div>
-              <div className="des">The Handmade store hasn't processed any transactions yet. Once sales start coming in, you'll see detailed analytics here.</div>
-              <div className="buttons-wrapper center">
 
-                <div className="admin-btn btn-purple">
-                  <i className="adminlib-eye"></i>
-                  View Store Settings
-                </div>
-
-                <div className="admin-btn">
-                  <i className="adminlib-eye"></i>
-                  Learn More
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="column">
-
-          </div>
-        </div>
         {error && <div className="error-message">{error}</div>}
       </div>
     </>
