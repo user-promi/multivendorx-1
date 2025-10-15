@@ -80,7 +80,7 @@ export const TransactionHistory: React.FC = () => {
         const existingOptions = Object.values(appLocalizer.payout_payment_options);
         const defaultOption = {
             value: storeData.payment_method,
-            label: 'Store Default - ' + storeData.payment_method.replace(/[-_]/g, " ").replace(/\b\w/g, c => c.toUpperCase())
+            label: 'Store Default - ' + storeData.payment_method
         };
 
         // Prepend default to the top
