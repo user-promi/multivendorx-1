@@ -2,7 +2,7 @@
 
 .payment-tabs-component {
     .payment-method-card {
-        margin-top: 1rem;
+        margin-bottom: 1rem;
         cursor: pointer;
 
         .payment-method {
@@ -181,6 +181,10 @@
             .input-content {
                 width: 100% !important;
             }
+        }
+
+        &.disable{
+            filter: grayscale(1);
         }
     }
 }

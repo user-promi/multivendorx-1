@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import "../styles/web/PaymentTabsComponent.scss";
-import VerificationMethods from "./VerificationMethods";
 import TextArea from "./TextArea";
 import ToggleSetting from "./ToggleSetting";
 import MultiCheckBox from "./MultiCheckbox";
@@ -35,7 +34,7 @@ interface PaymentMethod {
   label: string;
   connected: boolean;
   desc: string;
-  formFields: PaymentFormField[];
+  formFields?: PaymentFormField[];
   toggleType?: "icon" | "checkbox";
   wrapperClass?: string;
 }
@@ -58,7 +57,6 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
   onChange,
 }) => {
   const [activeTab, setActiveTab] = useState<string | null>(null);
-  const [openDropdownIndex, setOpenDropdownIndex] = useState<number | null>(null);
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -80,6 +78,8 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
     handleInputChange(methodId, "enable", enable);
     setActiveTab(enable ? icon || null : null);
   };
+
+  // Close menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
@@ -87,23 +87,14 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    return () =>
+      document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
   const renderField = (methodId: string, field: PaymentFormField) => {
     const fieldValue = value[methodId]?.[field.key];
 
     switch (field.type) {
-      case "verification-methods":
-        return (
-          <VerificationMethods
-            value={fieldValue || []}
-            nestedFields={field.nestedFields || []}
-            addButtonLabel={field.addButtonLabel}
-            deleteButtonLabel={field.deleteButtonLabel}
-            onChange={(val) => handleInputChange(methodId, field.key, val)}
-          />
-        );
-
       case "payment-tabs":
         return (
           <PaymentTabsComponent
@@ -158,9 +149,6 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
             colNumber={field.colNumber}
             value={fieldValue || ""}
             proSetting={false}
-            // onChange={(e) =>
-            //   handleInputChange(methodId, field.key, e.target.value)
-            // }
           />
         );
 
@@ -187,11 +175,12 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
         const isMenuOpen = openMenu === method.id;
 
         return (
-          <div key={method.id} className="payment-method-card">
+          <div
+            key={method.id}
+            className={`payment-method-card ${isEnabled ? "" : "disable"}`}
+          >
             {/* Header */}
-            <div
-              className="payment-method"
-            >
+            <div className="payment-method">
               <div className="toggle-icon">
                 {isEnabled ? (
                   <i
@@ -205,7 +194,13 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
                   />
                 )}
               </div>
-              <div className="details" onClick={() => setActiveTab(isActive ? null : method.icon)}>
+
+              <div
+                className="details"
+                onClick={() =>
+                  setActiveTab(isActive ? null : method.icon)
+                }
+              >
                 <div className="details-wrapper">
                   <div className="payment-method-icon">
                     <i className={method.icon}></i>
@@ -214,7 +209,8 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
                     <div className="title-wrapper">
                       <span className="title">{method.label}</span>
                       <div
-                        className={`admin-badge ${isEnabled ? "green" : "red"}`}
+                        className={`admin-badge ${isEnabled ? "green" : "red"
+                          }`}
                       >
                         {isEnabled ? "Active" : "Inactive"}
                       </div>
@@ -222,47 +218,66 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
                     <div className="method-desc">{method.desc}</div>
                   </div>
                 </div>
-                {isEnabled && (
-                  <div className="admin-btn btn-purple" onClick={() => setActiveTab(isActive ? null : method.icon)} >Manage</div>
-                )}
+                {/* {isEnabled && (
+                  <div
+                    className="admin-btn btn-purple"
+                    onClick={() =>
+                      setActiveTab(isActive ? null : method.icon)
+                    }
+                  >
+                    Settings
+                  </div>
+                )} */}
               </div>
-              {/* onClick={() => toggleEnable(method.id, true, method.icon)} */}
-              <div className="right-section action-icons" ref={menuRef} >
-                <i className="adminlib-more-vertical"
-                  onClick={() => setOpenMenu(isMenuOpen ? null : method.id)}>
-                </i>
-                {openMenu && (
-                  <div className="action-dropdown">
+                {isEnabled && (
+              <div className="right-section action-section" ref={menuRef}>
+                <div className="action-icons">
+                  <i
+                    className="adminlib-more-vertical"
+                    onClick={(e) => {
+                      e.stopPropagation(); // Prevent outside click
+                      setOpenMenu(isMenuOpen ? null : method.id);
+                    }}
+                  />
+                  <div className={`action-dropdown ${isMenuOpen ? "show" : "hover"}`}>
                     <ul>
-                      <li onClick={() => console.log("Edit")}>
-                        <i className="adminlib-eye"></i>
-                        Disable
-                      </li>
-                      <li onClick={() => console.log("Edit")}>
-                        <i className="adminlib-eye"></i>
-                        Manege
+                      {isEnabled ? (
+                        <li className="hover" onClick={() => toggleEnable(method.id, false, method.icon)}>
+                          <i className="adminlib-eye"></i>
+                          Enabled
+                        </li>
+                      ) : (
+                        <li className="hover" onClick={() => toggleEnable(method.id, true, method.icon)}>
+                          <i className="adminlib-eye-blocked"></i>
+                          Disable
+                        </li>
+                      )}
+                      <li className="hover" onClick={() => setActiveTab(isActive ? null : method.icon)}>
+                        <i className="adminlib-setting"></i>
+                        Settings
                       </li>
                     </ul>
                   </div>
-                )}
-              </div>
-            </div>
-
-            <div
-              className={`${method.wrapperClass || ""} payment-method-form
-                 ${isEnabled && isActive ? "open" : ""
-                }`}
-            >
-              {method.formFields.map((field) => (
-                <div key={field.key} className="form-group">
-                  {field.label && <label>{field.label}</label>}
-                  <div className="input-content">
-                    {renderField(method.id, field)}
-                  </div>
                 </div>
-              ))}
+              </div>
+               )}
             </div>
 
+            {method.formFields && method.formFields.length > 0 && (
+              <div
+                className={`${method.wrapperClass || ""} payment-method-form ${isEnabled && isActive ? "open" : ""
+                  }`}
+              >
+                {method.formFields.map((field) => (
+                  <div key={field.key} className="form-group">
+                    {field.label && <label>{field.label}</label>}
+                    <div className="input-content">
+                      {renderField(method.id, field)}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         );
       })}
