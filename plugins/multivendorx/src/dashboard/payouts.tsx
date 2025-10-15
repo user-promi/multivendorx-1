@@ -111,11 +111,9 @@ const History: React.FC = () => {
             url: getApiLink(appLocalizer, `transaction/${appLocalizer.store_id}`),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
         })
-            .then((response) => {
-                setExisting(response?.data || {});
-            })
-            .catch((error) => {
-            });
+        .then((response) => {
+            setExisting(response?.data || {});
+        })
     }, []);
 
 
