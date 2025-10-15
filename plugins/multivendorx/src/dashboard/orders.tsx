@@ -443,6 +443,7 @@ const Orders: React.FC = () => {
                                 updateFilter(e.target.name, e.target.value);
                             }}
                             value={filterValue || ''}
+                            className='basic-select'
                         />
                         <i className="adminlib-search"></i>
                     </div>
