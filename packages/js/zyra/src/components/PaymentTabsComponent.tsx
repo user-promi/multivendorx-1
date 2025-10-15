@@ -173,7 +173,7 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
         const isEnabled = !!value?.[method.id]?.enable;
         const isActive = activeTab === method.icon;
         const isMenuOpen = openMenu === method.id;
-
+        
         return (
           <div
             key={method.id}
