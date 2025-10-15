@@ -113,7 +113,7 @@ export default {
             key: 'payment_methods',
             type: 'payment-tabs',
             label: __('Shipping Modules Overview', 'multivendorx'),
-            desc: __( 'View-only - Available shipping modules for stores', 'multivendorx' ),
+            desc: __('View-only - Available shipping modules for stores', 'multivendorx'),
             buttonEnable: true,
             toggleType: 'icon',
             modal: methods
@@ -241,12 +241,23 @@ export default {
             type: 'multi-string',
             label: __('Add stage', 'multivendorx'),
             placeholder: __('Enter Shipping stage', 'multivendorx'),
-            iconEnable : true,
+            iconEnable: true,
+            descEnable: true,
+            requiredEnable: true,
             settingDescription: __(
                 'Add one or more reasons that stores can select when handling refund requests.',
                 'multivendorx'
             ),
             name: 'abuse_report_reasons',
+            defaultValues: [
+                { value: "Order Received", locked: true, iconClass: "adminlib-check", description: "Order is received by store", tag:"Primary",required: true },
+                { value: "Processing", locked: true, iconClass: "adminlib-clock", description: "Order is being processed",tag:"Primary",required: true },
+                { value: "Shipped", iconClass: "adminlib-truck",default:"Primary" } // editable
+            ],
+            iconOptions: ["adminlib-check", "adminlib-clock", "adminlib-truck", "adminlib-box"], // dropdown options
+            proSetting: false,
+            maxItems: 10,
+            allowDuplicates: false
         },
         {
             key: 'enable_shipment_rule',

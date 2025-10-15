@@ -158,7 +158,7 @@ interface InputField {
     width?: number;
     height?: number;
     multiple?: boolean;
-    usePlainText?:boolean;
+    usePlainText?: boolean;
     range?: boolean;
     className?: string;
     selectDeselect?: boolean;
@@ -173,9 +173,13 @@ interface InputField {
     dependentSetting?: string;
     defaultValue?: string;
     valuename?: string;
+    descEnable?:boolean;
+    requiredEnable?:boolean;
+    iconOptions?:any;
     hint?: string;
     addNewBtn?: string;
     blocktext?: string;
+    defaultValues?:any;
     title?: string;
     rows?: {
         key: string;
@@ -444,13 +448,13 @@ const AdminForm: React.FC<AdminFormProps> = ({
         arrayValue: any[] = []
     ) => {
         settingChanged.current = true;
-    
+
         if (type === 'single') {
             // normal single value
             if (fromType === 'simple' || fromType === 'wpeditor') {
                 const val = event?.target?.value ?? event; // <-- handles TinyMCE and normal textarea
                 updateSetting(key, val);
-            } 
+            }
             else if (fromType === 'calender') {
                 let formattedDate: string;
                 if (Array.isArray(event)) {
@@ -465,10 +469,10 @@ const AdminForm: React.FC<AdminFormProps> = ({
                     formattedDate = event.toString();
                 }
                 updateSetting(key, formattedDate);
-            } 
+            }
             else if (fromType === 'select') {
                 updateSetting(key, arrayValue[event.index]);
-            } 
+            }
             else if (fromType === 'multi-select') {
                 updateSetting(key, event);
             }
@@ -476,13 +480,13 @@ const AdminForm: React.FC<AdminFormProps> = ({
             // multiple checkbox type
             let prevData: string[] = setting[key] || [];
             if (!Array.isArray(prevData)) prevData = [String(prevData)];
-    
+
             prevData = prevData.filter((data) => data !== event.target.value);
             if (event.target.checked) prevData.push(event.target.value);
             updateSetting(key, prevData);
         }
     };
-    
+
 
     const handleMultiNumberChange = (
         e: React.ChangeEvent<HTMLInputElement>,
@@ -696,7 +700,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             proSetting={isProSetting(
                                 inputField.proSetting ?? false
                             )}
-                            tinymceApiKey={appLocalizer.tinymceApiKey?appLocalizer.tinymceApiKey:''}
+                            tinymceApiKey={appLocalizer.tinymceApiKey ? appLocalizer.tinymceApiKey : ''}
                             onChange={(e) => {
                                 if (
                                     hasAccess(
@@ -944,13 +948,18 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             inputClass="basic-input"
                             listClass="multi-list"
                             itemClass="multi-item"
-                            placeholder={inputField.placeholder}// placeholder text inside the input
-                            values={value}
+                            placeholder={inputField.placeholder}
+                            values={setting[inputField.key] || inputField.defaultValues || []}
                             name={inputField.key}
                             proSetting={isProSetting(inputField.proSetting ?? false)}
-                            description={inputField.desc}// optional description shown below the input
+                            description={inputField.settingDescription}
                             descClass="settings-metabox-description"
-                            iconEnable= {inputField.iconEnable}
+                            iconEnable={inputField.iconEnable}
+                            descEnable={inputField.descEnable}
+                            requiredEnable={inputField.requiredEnable}
+                            iconOptions={inputField.iconOptions || []} 
+                            allowDuplicates={false}
+                            maxItems={20}
                             onStringChange={(e) => {
                                 if (
                                     hasAccess(
@@ -966,6 +975,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                         />
                     );
                     break;
+
                 case 'radio':
                     input = (
                         <RadioInput
@@ -1187,7 +1197,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             selectDeselectValue="Select / Deselect All"// text for select/deselect all
                             rightContentClass="settings-metabox-description"
                             rightContent={inputField.rightContent} // for place checkbox right
-                            addNewBtn ={inputField.addNewBtn}
+                            addNewBtn={inputField.addNewBtn}
                             options={
                                 Array.isArray(inputField.options)
                                     ? inputField.options.map((opt) => ({
@@ -1393,7 +1403,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                         <BlockText
                             key={inputField.blocktext}
                             blockTextClass="settings-metabox-note"
-                            title= {inputField.title}
+                            title={inputField.title}
                             value={String(inputField.blocktext)}// Text or HTML content to display inside the block (safe HTML injected).
                         />
                     );
