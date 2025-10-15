@@ -29,7 +29,7 @@ class CashPayment {
 
     }
 
-    public function process_payment($store_id, $amount, $order_id = null, $transaction_id = null, $note) {
+    public function process_payment($store_id, $amount, $order_id = null, $transaction_id = null, $note = null) {
         // quick autoload/class check (helps debugging)
         $payment_admin_settings = MultiVendorX()->setting->get_setting( 'payment_methods', [] );
         
