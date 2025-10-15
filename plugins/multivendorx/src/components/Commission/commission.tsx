@@ -137,21 +137,22 @@ const Commission: React.FC = () => {
                         count: response.data.paid || 0,
                     },
                     {
+                        key: 'refunded',
+                        name: 'Refunded',
+                        count: response.data.refunded || 0,
+                    },
+                    {
+                        key: 'partially_refunded',
+                        name: 'Partially Refunded',
+                        count: response.data.partially_refunded || 0,
+                    },
+                    {
                         key: 'cancelled',
                         name: 'Cancelled',
                         count: response.data.cancelled || 0,
                     },
-                    {
-                        key: 'refund',
-                        name: 'Refund',
-                        count: response.data.refund || 0,
-                    },
-                    {
-                        key: 'trash',
-                        name: 'Trash',
-                        count: response.data.trash || 0,
-                    },
                 ]);
+                
             })
             .catch(() => {
                 setError(__('Failed to load stores', 'multivendorx'));
