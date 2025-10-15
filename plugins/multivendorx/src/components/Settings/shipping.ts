@@ -14,13 +14,45 @@ export default {
     submitUrl: 'settings',
     modal: [
         {
-            key: 'payment_methods',
+            key: 'shipping_modules_overview',
             type: 'payment-tabs',
-            label: __('Shipping Modules Overview', 'multivendorx'),
-            desc: __( 'View-only - Available shipping modules for stores', 'multivendorx' ),
-            buttonEnable: true,
-            toggleType: 'icon',
-            modal: methods
+            label: 'Shipping Modules Overview',
+            settingDescription: __('Allow stores to verify their identity by connecting social media accounts.', 'multivendorx'),
+            modal: [
+                {
+                    id: 'google-connect',
+                    icon: "adminlib-google",
+                    label: 'Google Connect',
+                    connected: false,
+                    desc: 'Connect and authenticate stores via Google accounts.',
+                    formFields: [
+                        { key: 'client_id', type: 'text', label: 'Google Client ID', placeholder: 'Enter Google Client ID' },
+                        { key: 'client_secret', type: 'password', label: 'Google Client Secret', placeholder: 'Enter Google Client Secret' },
+                        { key: 'redirect_uri', type: 'text', label: 'Redirect URI', placeholder: 'Enter Redirect URI' }
+                    ],
+                },
+                {
+                    id: 'twitter-connect',
+                    icon: "adminlib-twitter",
+                    label: 'Twitter Connect',
+                    connected: false,
+                    desc: 'Connect and authenticate stores via Twitter accounts.',
+                },
+                {
+                    id: 'facebook-connect',
+                    icon: "adminlib-facebook",
+                    label: 'Facebook Connect',
+                    connected: false,
+                    desc: 'Connect and authenticate stores via Facebook accounts.',
+                },
+                {
+                    id: 'linkedin-connect',
+                    icon: "adminlib-linkedin",
+                    label: 'LinkedIn Connect',
+                    connected: false,
+                    desc: 'Connect and authenticate stores via LinkedIn accounts.',
+                }
+            ]
         },
         {
             key: 'zone-wisehipping Selection',
@@ -129,6 +161,18 @@ export default {
             selectDeselect: true,
         },
         {
+            key: 'shipping_stage',
+            type: 'multi-string',
+            label: __('Add stage', 'multivendorx'),
+            placeholder: __('Enter Shipping stage', 'multivendorx'),
+            iconEnable : true,
+            settingDescription: __(
+                'Define which statuses stores can assign to orders',
+                'multivendorx'
+            ),
+            name: 'abuse_report_reasons',
+        },
+        {
             key: 'registration page',
             type: 'blocktext',
             label: __('no_label', 'multivendorx'),
@@ -139,16 +183,13 @@ export default {
             ),
         },
         {
-            key: 'shipping_stage',
-            type: 'multi-string',
-            label: __('Add stage', 'multivendorx'),
-            placeholder: __('Enter Shipping stage', 'multivendorx'),
-            iconEnable : true,
-            settingDescription: __(
-                'Add one or more reasons that stores can select when handling refund requests.',
+            key: 'section',
+            type: 'section',
+            hint: __(
+                'Shipping controls',
                 'multivendorx'
             ),
-            name: 'abuse_report_reasons',
+            desc: __("Define shipping features stores can use.",'multivendorx'),
         },
         {
             key: 'order-completion-rules',

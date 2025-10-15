@@ -366,14 +366,6 @@ a {
 }
 
 .content-wrapper {
-    .width-35 {
-        width: 35%;
-    }
-
-    .width-65 {
-        width: 65%;
-    }
-
     .container-wrapper {
         display: flex;
         gap: 1.2rem;
@@ -402,7 +394,7 @@ a {
         border-radius: 0.313rem;
         box-shadow: 0 0.125rem 0.5rem 0 rgba(47, 43, 61, 0.12);
         background: #fff;
-        // width: 100%;   dashboard width prb
+        width: 100%;
 
         .action-btn-wrapper {
             display: flex;
@@ -418,6 +410,14 @@ a {
         .admin-table-wrapper {
             padding: 0;
         }
+    }
+
+    .width-35 {
+        width: 35%;
+    }
+
+    .width-65 {
+        width: 65%;
     }
 
     .cards {
@@ -1008,10 +1008,12 @@ a {
 
 // dashboard welcome section start
 .column:has(.dashboard-view-section) {
-    background: color-mix(in srgb, var(--themeColor) 40%, transparent);
+    background: color-mix(in srgb, var(--themeColor) 35%, transparent);
 }
 
 .dashboard-view-section {
+    position: relative;
+
     .title {
         font-size: 1.5rem;
         font-weight: 500;
@@ -1023,20 +1025,34 @@ a {
         padding: 0.5rem 0;
         padding-bottom: 1.25rem;
     }
-    .price-wrapper{
-        .price{
-            font-size: 2.313rem;
-            line-height: 2.5rem;
+
+    .price-wrapper {
+        .price {
+            font-size: 2rem;
+            line-height: 2.313rem;
             font-weight: 500;
         }
-        .details{
+
+        .details {
             padding: 0.5rem 0;
             font-size: 0.95rem;
             padding-bottom: 1rem;
         }
     }
-    .admin-btn{
+
+    .admin-btn {
         background: #fff;
+    }
+
+    .image {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+
+        img {
+            width: 10rem;
+            margin-bottom: -1.813rem;
+        }
     }
 }
 
