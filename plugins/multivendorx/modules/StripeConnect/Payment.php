@@ -231,7 +231,7 @@ class Payment
         }
     }    
 
-    public function process_payment($store_id, $amount, $order_id = null, $transaction_id = null, $note)
+    public function process_payment($store_id, $amount, $order_id = null, $transaction_id = null, $note = null)
     {
         $stripe_account_id = get_user_meta($store_id, '_stripe_connect_account_id', true);
         if (!$stripe_account_id) {
