@@ -219,9 +219,7 @@ const MultiInput: React.FC<MultiInputProps> = (props) => {
                 {!item.locked && (
                 <div className="action-section">
                   <div className="action-icons">
-                    <i className="adminlib-more-vertical"
-                      
-                      ></i>
+                    <i className="adminlib-more-vertical"></i>
                     <div className="action-dropdown hover">
                       <ul>
                         <li className=" hover" onClick={() => handleEdit(index)}>

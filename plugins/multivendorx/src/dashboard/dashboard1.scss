@@ -410,6 +410,10 @@ a {
         .admin-table-wrapper {
             padding: 0;
         }
+
+        &.theme-bg {
+            background: color-mix(in srgb, var(--themeColor) 45%, transparent);
+        }
     }
 
     .width-35 {
@@ -1007,9 +1011,6 @@ a {
 
 
 // dashboard welcome section start
-.column:has(.dashboard-view-section) {
-    background: color-mix(in srgb, var(--themeColor) 35%, transparent);
-}
 
 .dashboard-view-section {
     position: relative;
@@ -1057,3 +1058,50 @@ a {
 }
 
 // dashboard welcome section end
+
+.withdrawal-wrapper {
+    border: $border-light-small;
+    padding: 1rem;
+    margin-bottom: 2rem;
+    border-radius: 0.313rem;
+    background: #5007aa1f;
+
+    .title {
+        font-size: 1.45rem;
+        font-weight: 600;
+        line-height: 2rem;
+        padding: 0.4rem 0;
+    }
+
+    .withdrawl-notice {
+        font-size: 1rem;
+        font-weight: 500;
+        line-height: 1.313rem;
+
+        i{
+            color: $theme-color;
+        }
+    }
+}
+
+// last-withdradal-wrapper
+.last-withdradal-wrapper{
+    display: flex;
+    justify-content: space-between;
+    padding: 0.75rem;
+    border: $border-light-small;
+    border-radius: 0.313rem;
+    margin-bottom: 0.625rem;
+
+    .left{
+        .price{
+            font-size: 1.613rem;
+            font-weight: 600;
+            line-height: 1.5rem;
+            margin-bottom: 0.45rem;
+        }
+        .des{
+            font-size: 1rem;
+        }
+    }
+}
