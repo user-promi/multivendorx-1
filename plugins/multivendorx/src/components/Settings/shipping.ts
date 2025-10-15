@@ -14,45 +14,77 @@ export default {
     submitUrl: 'settings',
     modal: [
         {
-            key: 'payment_methods',
+            key: 'shipping_modules_overview',
             type: 'payment-tabs',
             label: __('Shipping Modules Overview', 'multivendorx'),
-            desc: __( 'View-only - Available shipping modules for stores', 'multivendorx' ),
+            desc: __('View-only - Available shipping modules for stores', 'multivendorx'),
             buttonEnable: true,
             toggleType: 'icon',
-            modal: methods
-        },
-        {
-            key: 'zone-wisehipping Selection',
-            type: 'setting-toggle',
-            label: __('Zone-wise Shipping Selection', 'multivendorx'),
-            // settingDescription: __("Choose the primary logic your marketplace uses to calculate and display shipping costs.", 'multivendorx'),
-            desc: __(
-                'Allow vendors to select delivery zones',
-                'multivendorx'
-            ),
-            options: [
+            modal: [
                 {
-                    key: 'north_america',
-                    label: __('North America', 'multivendorx'),
-                    value: 'zone_wise',
+                    id: 'zone-wise-shipping',
+                    icon: "adminlib-google",
+                    label: 'Zone-wise Shipping',
+                    connected: false,
+                    desc: 'Connect and authenticate stores via Google accounts.',
+                    formFields: [
+                        {
+                            key: 'recommendation_source',
+                            type: 'setting-toggle',
+                            label: 'Zone-wise Shipping Selection',
+                            options: [
+                                {
+                                    key: 'same_store',
+                                    label: __(
+                                        'North America',
+                                        'multivendorx'
+                                    ),
+                                    value: 'same_store',
+                                },
+                                {
+                                    key: 'all_stores',
+                                    label: __(
+                                        'Europe',
+                                        'multivendorx'
+                                    ),
+                                    value: 'all_stores',
+                                },
+                                {
+                                    key: 'none',
+                                    label: __(
+                                        'Asia-Pacific',
+                                        'multivendorx'
+                                    ),
+                                    value: 'Asia-Pacific',
+                                },
+                                {
+                                    key: 'middle_east',
+                                    label: __(
+                                        'Middle East',
+                                        'multivendorx'
+                                    ),
+                                    value: 'none',
+                                },
+                            ],
+                        }
+                    ],
                 },
                 {
-                    key: 'country_wise',
-                    label: __('Europe', 'multivendorx'),
-                    value: 'country_wise',
+                    id: 'country-wise-shipping',
+                    icon: "adminlib-twitter",
+                    label: 'Country-wise Shipping',
+                    connected: false,
+                    desc: 'Connect and authenticate stores via Twitter accounts.',
                 },
                 {
-                    key: 'distance_wise',
-                    label: __('Asia-Pacific', 'multivendorx'),
-                    value: 'distance_wise',
+                    id: 'distance-based-shipping',
+                    icon: "adminlib-facebook",
+                    label: 'Distance-based Shipping',
+                    connected: false,
+                    desc: 'Connect and authenticate stores via Facebook accounts.',
+
                 },
-                {
-                    key: 'Middle',
-                    label: __('Middle East', 'multivendorx'),
-                    value: 'Middle',
-                },
-            ],
+            ]
         },
         {
             key: 'section',
@@ -61,7 +93,7 @@ export default {
                 'Shipping controls',
                 'multivendorx'
             ),
-            desc: __("Define shipping features stores can use.",'multivendorx'),
+            desc: __("Define shipping features stores can use.", 'multivendorx'),
         },
         {
             key: 'enable_shipment_rule',
@@ -129,6 +161,55 @@ export default {
             selectDeselect: true,
         },
         {
+            key: 'shipping_providers',
+            type: 'multi-string',
+            label: __('Shipping Providers', 'multivendorx'),
+            placeholder: __('Select which providers vendors can use (multiple selections allowed)', 'multivendorx'),
+            // iconEnable: true,
+            descEnable: true,
+            // requiredEnable: true,
+            settingDescription: __(
+                'Add one or more reasons that stores can select when handling refund requests.',
+                'multivendorx'
+            ),
+            name: 'abuse_report_reasons',
+            defaultValues: [
+                { value: "Australia Post" ,description: "Order is received by store"},
+                { value: "Canada Post" ,description: "Order is received by store"},
+                { value: "Australia Post"  ,description: "Order is received by store"},
+                { value: "Canada Post" ,description: "Order is received by store"},
+                { value: "Australia Post" ,description: "Order is received by store"},
+                { value: "Canada Post" ,description: "Order is received by store"},
+            ],
+            // iconOptions: ["adminlib-check", "adminlib-clock", "adminlib-cart", "adminlib-store"], // dropdown options
+            proSetting: false,
+            // maxItems: 10,
+            allowDuplicates: false
+        },
+        {
+            key: 'shipping_stage',
+            type: 'multi-string',
+            label: __('Add stage', 'multivendorx'),
+            placeholder: __('Enter Shipping stage', 'multivendorx'),
+            iconEnable: true,
+            descEnable: true,
+            requiredEnable: true,
+            settingDescription: __(
+                'Add one or more reasons that stores can select when handling refund requests.',
+                'multivendorx'
+            ),
+            name: 'abuse_report_reasons',
+            defaultValues: [
+                { value: "Order Received", locked: true, iconClass: "adminlib-check", description: "Order is received by store", tag: "Primary", required: true },
+                { value: "Processing", locked: true, iconClass: "adminlib-clock", description: "Order is being processed", tag: "Primary", required: true },
+                { value: "Shipped", iconClass: "adminlib-truck", default: "Primary" } // editable
+            ],
+            iconOptions: ["adminlib-check", "adminlib-clock", "adminlib-cart", "adminlib-store"], // dropdown options
+            proSetting: false,
+            maxItems: 10,
+            allowDuplicates: false
+        },
+        {
             key: 'registration page',
             type: 'blocktext',
             label: __('no_label', 'multivendorx'),
@@ -137,18 +218,6 @@ export default {
                 '<ul><li><b>Delivered </b>status will automatically mark sub-orders as Completed</li><li><b>Cancelled  </b>status will automatically cancel the entire order</li></ul>',
                 'multivendorx'
             ),
-        },
-        {
-            key: 'shipping_stage',
-            type: 'multi-string',
-            label: __('Add stage', 'multivendorx'),
-            placeholder: __('Enter Shipping stage', 'multivendorx'),
-            iconEnable : true,
-            settingDescription: __(
-                'Add one or more reasons that stores can select when handling refund requests.',
-                'multivendorx'
-            ),
-            name: 'abuse_report_reasons',
         },
         {
             key: 'order-completion-rules',

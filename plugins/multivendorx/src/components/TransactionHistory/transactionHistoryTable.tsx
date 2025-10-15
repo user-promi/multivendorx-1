@@ -211,6 +211,14 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
             },
         },
         {
+            header: __('Transaction Type', 'multivendorx'),
+            cell: ({ row }) => (
+                <TableCell title={row.original.transaction_type || ''}>
+                    {row.original.transaction_type || '-'}
+                </TableCell>
+            ),
+        },
+        {
             id: 'credit',
             accessorKey: 'credit',
             enableSorting: true,
@@ -218,35 +226,7 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
             header: __('Credit', 'multivendorx'),
             cell: ({ row }) => {
                 const credit = row.original.credit;
-                const status = row.original.status || '';
-
-                let iconClass = '';
-                if (credit) {
-                    switch (status) {
-                        case 'pending':
-                            iconClass = 'adminlib-clock';
-                            break;
-                        case 'Completed':
-                            iconClass = 'adminlib-check';
-                            break;
-                        case 'failed':
-                            iconClass = 'adminlib-cross';
-                            break;
-                    }
-                }
-
-                return (
-                    <TableCell>
-                        {credit ? (
-                            <>
-                                {iconClass && <i className={iconClass} style={{ marginRight: '4px' }}></i>}
-                                {`${appLocalizer.currency_symbol}${credit}`}
-                            </>
-                        ) : (
-                            '-'
-                        )}
-                    </TableCell>
-                );
+                return <TableCell>{credit ? `${appLocalizer.currency_symbol}${credit}` : '-'}</TableCell>;
             },
         },
         {
@@ -257,35 +237,7 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
             header: __('Debit', 'multivendorx'),
             cell: ({ row }) => {
                 const debit = row.original.debit;
-                const status = row.original.status || '';
-
-                let iconClass = '';
-                if (debit) {
-                    switch (status) {
-                        case 'pending':
-                            iconClass = 'adminlib-clock';
-                            break;
-                        case 'Completed':
-                            iconClass = 'adminlib-check';
-                            break;
-                        case 'failed':
-                            iconClass = 'adminlib-cross';
-                            break;
-                    }
-                }
-
-                return (
-                    <TableCell>
-                        {debit ? (
-                            <>
-                                {iconClass && <i className={iconClass} style={{ marginRight: '4px' }}></i>}
-                                {`${appLocalizer.currency_symbol}${debit}`}
-                            </>
-                        ) : (
-                            '-'
-                        )}
-                    </TableCell>
-                );
+                return <TableCell>{debit ? `${appLocalizer.currency_symbol}${debit}` : '-'}</TableCell>;
             },
         },
         {
@@ -296,46 +248,10 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
             header: __('Balance', 'multivendorx'),
             cell: ({ row }) => {
                 const balance = row.original.balance;
-                const status = row.original.status || '';
-
-                let iconClass = '';
-                if (balance) {
-                    switch (status) {
-                        case 'pending':
-                            iconClass = 'adminlib-clock';
-                            break;
-                        case 'Completed':
-                            iconClass = 'adminlib-check';
-                            break;
-                        case 'failed':
-                            iconClass = 'adminlib-cross';
-                            break;
-                    }
-                }
-
-                return (
-                    <TableCell>
-                        {balance ? (
-                            <>
-                                {iconClass && <i className={iconClass} style={{ marginRight: '4px' }}></i>}
-                                {`${appLocalizer.currency_symbol}${balance}`}
-                            </>
-                        ) : (
-                            '-'
-                        )}
-                    </TableCell>
-                );
+                return <TableCell>{balance ? `${appLocalizer.currency_symbol}${balance}` : '-'}</TableCell>;
             },
         },
-        {
-            header: __('Transaction Type', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.transaction_type || ''}>
-                    {row.original.transaction_type || '-'}
-                </TableCell>
-            ),
-        },
-
+        
         {
             header: __('Status', 'multivendorx'),
             cell: ({ row }) => (
@@ -425,31 +341,35 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
 
         axios({
             method: 'GET',
-            url: getApiLink(appLocalizer, `transaction/${selectedStore.value}`),
+            url: getApiLink(appLocalizer, `reports/${storeId}`),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
         })
             .then((response) => {
                 const data = response?.data || {};
+                const currency = appLocalizer.currency_symbol || '';
+
                 const dynamicOverview = [
-                    { id: 'commission', label: 'Commission', count: data.commission ?? 'static', icon: 'adminlib-star green' },
-                    { id: 'pending', label: 'Shipping Tax', count: data.pending ?? 'static', icon: 'adminlib-clock blue' },
-                    { id: 'withdrawable', label: 'Facilitator Fee', count: data.withdrawable ?? 'static', icon: 'adminlib-star yellow' },
-                    { id: 'gateway_fees', label: 'Gateway Fees', count: data.gateway_fees ?? 'static', icon: 'adminlib-credit-card red' },
-                    { id: 'total_balance', label: 'Total Balance', count: data.balance ?? 0, icon: 'adminlib-star green' },
+                    { id: 'commission', label: 'Commission', count: `${currency}${data.commission_total ?? '0'}`, icon: 'adminlib-star green' },
+                    { id: 'shipping', label: 'Shipping Tax', count: `${currency}${data.shipping_amount ?? '0'}`, icon: 'adminlib-clock blue' },
+                    { id: 'facilator', label: 'Facilitator Fee', count: `${currency}${data.facilitator_fee ?? '0'}`, icon: 'adminlib-star yellow' },
+                    { id: 'gateway_fees', label: 'Gateway Fees', count: `${currency}${data.gateway_fee ?? '0'}`, icon: 'adminlib-credit-card red' },
+                    { id: 'total_balance', label: 'Total Balance', count: `${currency}${data.balance ?? 0}`, icon: 'adminlib-star green' },
                 ];
+
                 setOverview(dynamicOverview);
             })
             .catch(() => {
                 setOverview([
-                    { id: 'total_balance', label: 'Total Balance', count: 0, icon: 'adminlib-wallet' },
-                    { id: 'pending', label: 'Pending', count: 0, icon: 'adminlib-clock' },
-                    { id: 'locked', label: 'Locked', count: 0, icon: 'adminlib-lock' },
-                    { id: 'withdrawable', label: 'Withdrawable', count: 0, icon: 'adminlib-cash' },
-                    { id: 'commission', label: 'Commission', count: 0, icon: 'adminlib-star' },
-                    { id: 'gateway_fees', label: 'Gateway Fees', count: 0, icon: 'adminlib-credit-card' },
+                    { id: 'total_balance', label: 'Total Balance', count: `0`, icon: 'adminlib-wallet' },
+                    { id: 'pending', label: 'Pending', count: `0`, icon: 'adminlib-clock' },
+                    { id: 'locked', label: 'Locked', count: `0`, icon: 'adminlib-lock' },
+                    { id: 'withdrawable', label: 'Withdrawable', count: `0`, icon: 'adminlib-cash' },
+                    { id: 'commission', label: 'Commission', count: `0`, icon: 'adminlib-star' },
+                    { id: 'gateway_fees', label: 'Gateway Fees', count: `0`, icon: 'adminlib-credit-card' },
                 ]);
             });
-    }, [selectedStore]);
+    }, [storeId]);
+
 
     return (
         <>

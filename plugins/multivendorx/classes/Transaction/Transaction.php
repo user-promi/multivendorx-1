@@ -261,7 +261,7 @@ class Transaction {
         }
     }
 
-    public function get_balances_for_store( $store_id ) {
+    public static function get_balances_for_store( $store_id ) {
         global $wpdb;
         $table_name = $wpdb->prefix . Utill::TABLES['transaction'];
 
