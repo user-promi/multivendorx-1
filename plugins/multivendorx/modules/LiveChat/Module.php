@@ -35,8 +35,6 @@ class Module {
     public function __construct() {
         // Init helper classes.
         $this->init_classes();
-        add_filter('multivendorx_payment_providers', [$this, 'add_payment_provider']);
-
     }
 
     /**
@@ -45,7 +43,7 @@ class Module {
      * @return void
      */
     public function init_classes() {
-        $this->container['live_chat'] = new LiveChat();
+        $this->container['live-chat'] = new LiveChat() ;
     }
 
     /**

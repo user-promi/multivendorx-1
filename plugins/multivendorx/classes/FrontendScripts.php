@@ -486,6 +486,7 @@ class FrontendScripts {
                         'google_api_key'           => MultiVendorX()->setting->get_setting( 'google_api_key' ),
                         'mapbox_api_key'           => MultiVendorX()->setting->get_setting( 'mapbox_api_key' ),
                         'all_verification_methods' => MultiVendorX()->setting->get_setting( 'all_verification_methods' ),
+                        'live-chat'                => MultiVendorX()->setting->get_setting( 'live-chat' ),
 					) ),
                 ),
                 'multivendorx-product-tab-script' => array(
@@ -560,6 +561,7 @@ class FrontendScripts {
                         'edit_order_capability'    => current_user_can('edit_shop_orders'),
                         'add_product_link'         => StoreUtil::get_endpoint_url('products', 'edit'),
                         'all_verification_methods' => MultiVendorX()->setting->get_setting( 'all_verification_methods' ),
+                        'live-chat'                => MultiVendorX()->setting->get_setting( 'live-chat' ),
                     ),
                 ),
                 'multivendorx-registration-form-script'          => array(
