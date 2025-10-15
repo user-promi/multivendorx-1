@@ -192,14 +192,14 @@ const ViewStore = () => {
       color: 'text-green',
     },
     {
-      title: 'Settled Payments',
-      value: `${appLocalizer.currency_symbol}${transaction?.settled_balance ?? '0'}`,
+      title: 'Available Balance',
+      value: `${appLocalizer.currency_symbol}${transaction?.balance ?? '0'}`,
       link: '?page=multivendorx#&tab=payouts',
       trend: '+16.24%',
       color: 'text-green',
     },
     {
-      title: 'Awaiting Payout',
+      title: 'Pending Balance',
       value: `${appLocalizer.currency_symbol}${transaction?.locking_balance ?? '0'}`,
       link: '?page=multivendorx#&tab=payouts',
       trend: '-8.54%',
