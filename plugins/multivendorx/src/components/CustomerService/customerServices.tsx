@@ -11,6 +11,8 @@ import axios from 'axios';
 const CustomerServices = () => {
     const [abuseCount, setAbuseCount] = useState(0);
     const [qnaCount, setQnaCount] = useState(0);
+    const [withdrawCount, setWithdrawCount] = useState(0);
+
     // Fetch total count on mount
     useEffect(() => {
         axios
@@ -37,6 +39,18 @@ const CustomerServices = () => {
             .catch(() => {
                 console.error('Failed to load total rows');
             });
+
+        axios({
+            method: 'GET',
+            url: getApiLink(appLocalizer, 'store'),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            params: { pending_withdraw: true } //important: use this param
+        })
+            .then((response) => {
+                const count = response.data.length || 0; // response.data is an array of stores with pending withdraw
+                setWithdrawCount(count);
+            })
+            .catch(() => setWithdrawCount(0));
     }, []);
 
     const CustomerServicesStats = [
@@ -54,8 +68,8 @@ const CustomerServices = () => {
         },
         {
             id: 'withdrawals',
-            label: 'Withdrawal Requests(static)',
-            count: 8,
+            label: 'Withdrawal Requests',
+            count: withdrawCount,
             icon: 'adminlib-global-community',
         },
         {

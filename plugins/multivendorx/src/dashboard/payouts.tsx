@@ -16,94 +16,11 @@ type StoreRow = {
 };
 
 const History: React.FC = () => {
+    const [data, setData] = useState<any>([]);
     const [existing, setExisting] = useState<any[]>([]);
     const [amount, setAmount] = useState<number | "">("");
-    const [data, setData] = useState<StoreRow[] | null>(null);
-    const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
-    const [pagination, setPagination] = useState<PaginationState>({
-        pageIndex: 0,
-        pageSize: 10,
-    });
-    const [pageCount, setPageCount] = useState(0);
-    const [totalRows, setTotalRows] = useState<number>(0);
-    const [requestWithdrawal, setRequestWithdrawal] = useState(false);
 
-    useEffect(() => {
-        const demoData: ProductRow[] = [
-            {
-                id: 201,
-                amount: "£250.00",
-                method: "PayPal",
-                date: "2022/04/01",
-                notes: "March 2023 Vendor Payment",
-            },
-            {
-                id: 202,
-                amount: "£120.50",
-                method: "Bank Transfer",
-                date: "2022/05/05",
-                notes: "April 2023 Vendor Payment",
-            },
-            {
-                id: 203,
-                amount: "£500.00",
-                method: "Stripe",
-                date: "2022/06/10",
-                notes: "May 2023 Vendor Payment",
-            },
-            {
-                id: 204,
-                amount: "£75.25",
-                method: "PayPal",
-                date: "2022/07/02",
-                notes: "June 2023 Vendor Payment",
-            },
-            {
-                id: 205,
-                amount: "£310.99",
-                method: "Bank Transfer",
-                date: "2022/08/15",
-                notes: "July 2023 Vendor Payment",
-            },
-            {
-                id: 206,
-                amount: "£90.00",
-                method: "Stripe",
-                date: "2022/09/05",
-                notes: "August 2023 Vendor Payment",
-            },
-            {
-                id: 207,
-                amount: "£420.00",
-                method: "PayPal",
-                date: "2022/10/01",
-                notes: "September 2023 Vendor Payment",
-            },
-            {
-                id: 208,
-                amount: "£199.50",
-                method: "Bank Transfer",
-                date: "2022/11/03",
-                notes: "October 2023 Vendor Payment",
-            },
-            {
-                id: 209,
-                amount: "£650.00",
-                method: "Stripe",
-                date: "2022/12/20",
-                notes: "November 2023 Vendor Payment",
-            },
-            {
-                id: 210,
-                amount: "£330.75",
-                method: "PayPal",
-                date: "2023/01/08",
-                notes: "December 2023 Vendor Payment",
-            },
-        ];
-        setData(demoData);
-        setTotalRows(demoData.length);
-    }, []);
+    const [requestWithdrawal, setRequestWithdrawal] = useState(false);
 
     useEffect(() => {
         axios({
@@ -116,92 +33,41 @@ const History: React.FC = () => {
         })
     }, []);
 
+    useEffect(() => {
+        axios({
+            method: 'GET',
+            url: getApiLink(appLocalizer, `reports/${appLocalizer.store_id}`),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+        })
+        .then((response) => {
+            setData(response.data || [])
+        }).catch(()=>{
+            setData([]);
+        })
+    }, []);
 
     const analyticsData = [
         { 
             icon: "adminlib-tools red", 
-            number: `${appLocalizer.currency_symbol}${Number(existing.thresold ?? 0).toFixed(2)}`,
+            number: `${appLocalizer.currency_symbol}${Number(data.threshold_amount ?? 0).toFixed(2)}`,
             text: "Minimum Threshold" 
         },
         { 
             icon: "adminlib-book green", 
-            number: `${existing.locking_day} Day`, 
+            number: `${data.lock_period} Day`, 
             text: "Lock Period" 
         },
+        {
+            icon: "adminlib-global-community yellow",
+            number: `${appLocalizer.currency_symbol}${(
+                Number(data.locking_balance ?? 0) + Number(data.balance ?? 0)
+            ).toFixed(2)}`,
+            text: "Wallet Reserve"
+        },        
         { 
             icon: "adminlib-global-community yellow", 
-            number: `${appLocalizer.currency_symbol}${Number(existing.reserve_balance ?? 0).toFixed(2)}`,
-            text: "Wallet Reserve" 
-        },
-        { 
-            icon: "adminlib-global-community yellow", 
-            number: `${appLocalizer.currency_symbol}${Number(existing.available_balance ?? 0).toFixed(2)}`,
+            number: `${appLocalizer.currency_symbol}${Number(data.locking_balance ?? 0).toFixed(2)}`,
             text: "Pending" 
-        },
-    ];
-
-    const balanceBreakdown = [
-        { icon: "adminlib-tools green", number: "$525.00", text: "Pending" },
-        { icon: "adminlib-book red", number: "$8524.00", text: "Available" },
-        { icon: "adminlib-global-community yellow", number: "$5.00", text: "Reserved" },
-    ];
-    const columns: ColumnDef<StoreRow>[] = [
-        {
-            id: 'select',
-            header: ({ table }) => (
-                <input
-                    type="checkbox"
-                    checked={table.getIsAllRowsSelected()}
-                    onChange={table.getToggleAllRowsSelectedHandler()}
-                />
-            ),
-            cell: ({ row }) => (
-                <input
-                    type="checkbox"
-                    checked={row.getIsSelected()}
-                    onChange={row.getToggleSelectedHandler()}
-                />
-            ),
-        },
-        {
-            header: __('Amount', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.amount || ''}>
-                    {row.original.amount || '-'}
-                </TableCell>
-            ),
-        },
-        {
-            header: __('Payment Method', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.method || ''}>
-                    {row.original.method || '-'}
-                </TableCell>
-            ),
-        },
-        {
-            header: __('Date Processed', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.date || ''}>
-                    {row.original.date || '-'}
-                </TableCell>
-            ),
-        },
-        {
-            header: __('Notes', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.notes || ''}>
-                    {row.original.notes || '-'}
-                </TableCell>
-            ),
-        },
-        {
-            header: __('Status', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.notes || ''}>
-                    <span className="admin-badge green">Completed</span>
-                </TableCell>
-            ),
         },
     ];
 
@@ -230,65 +96,6 @@ const History: React.FC = () => {
                 </div>
             </div>
 
-
-            {/* <div className="row">
-                <div className="column">
-                    <div className="card">
-                        <div className="card-header">
-                            <div className="left">
-                                <div className="title">
-                                    Payout Settings
-                                </div>
-                            </div>
-                        </div>
-                        <div className="card-body">
-                            <div className="analytics-container">
-
-                                {analyticsData.map((item, idx) => (
-                                    <div key={idx} className="analytics-item">
-                                        <div className="analytics-icon">
-                                            <i className={item.icon}></i>
-                                        </div>
-                                        <div className="details">
-                                            <div className="number">{item.number}</div>
-                                            <div className="text">{item.text}</div>
-                                        </div>
-                                    </div>
-                                ))}
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="column">
-                    <div className="card">
-                        <div className="card-header">
-                            <div className="left">
-                                <div className="title">
-                                    Balance Breakdown
-                                </div>
-                            </div>
-                        </div>
-                        <div className="card-body">
-                            <div className="analytics-container">
-
-                                {balanceBreakdown.map((item, idx) => (
-                                    <div key={idx} className="analytics-item">
-                                        <div className="analytics-icon">
-                                            <i className={item.icon}></i>
-                                        </div>
-                                        <div className="details">
-                                            <div className="number">{item.number}</div>
-                                            <div className="text">{item.text}</div>
-                                        </div>
-                                    </div>
-                                ))}
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div> */}
             <div className="settings-metabox-note green">
                 <i className="adminlib-info"></i>
                 <p>You have $635.16 available for payout. Request withdrawal now or wait for the next scheduled payout on Oct 15, 2025 .</p>
@@ -313,7 +120,7 @@ const History: React.FC = () => {
                         </div>
                         <div className="payout-wrapper">
                             <div className="price">
-                                {appLocalizer.currency_symbol}{Number(existing.available_balance ?? 0).toFixed(2)}
+                                {appLocalizer.currency_symbol}{Number(data.balance ?? 0).toFixed(2)}
                             </div>
                             <div className="des">Current available balance ready for withdrawal</div>
                             <div className="admin-btn btn-purple" onClick={() => setRequestWithdrawal(true)}>
@@ -444,24 +251,6 @@ const History: React.FC = () => {
                     </div>
                 </CommonPopup>
             )}
-            {/* <div className="row">
-                <div className="column">
-                    <Table
-                        data={data}
-                        columns={columns as ColumnDef<Record<string, any>, any>[]}
-                        rowSelection={rowSelection}
-                        onRowSelectionChange={setRowSelection}
-                        defaultRowsPerPage={10}
-                        pageCount={pageCount}
-                        pagination={pagination}
-                        onPaginationChange={setPagination}
-                        // handlePagination={requestApiForData}
-                        perPageOption={[10, 25, 50]}
-                        typeCounts={[]}
-                        totalCounts={totalRows}
-                    />
-                </div>
-            </div> */}
         </>
     );
 };
