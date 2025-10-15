@@ -27,7 +27,9 @@ const Store = () => {
   // Submit store data
   const handleSubmit = () => {
     if (!formData || Object.keys(formData).length === 0) return;
+    formData.status='active';
 
+    console.log(formData)
     axios({
       method: 'POST',
       url: getApiLink(appLocalizer, 'store'),

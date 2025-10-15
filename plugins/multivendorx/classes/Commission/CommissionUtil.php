@@ -129,7 +129,7 @@ class CommissionUtil {
         }, $commissions );
     }
     
-    public function get_commission_summary_for_store( $store_id ) {
+    public static function get_commission_summary_for_store( $store_id ) {
         global $wpdb;
 
         $table_name = $wpdb->prefix . Utill::TABLES['commission'];

@@ -425,31 +425,35 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
 
         axios({
             method: 'GET',
-            url: getApiLink(appLocalizer, `transaction/${selectedStore.value}`),
+            url: getApiLink(appLocalizer, `reports/${storeId}`),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
         })
             .then((response) => {
                 const data = response?.data || {};
+                const currency = appLocalizer.currency_symbol || '';
+
                 const dynamicOverview = [
-                    { id: 'commission', label: 'Commission', count: data.commission ?? 'static', icon: 'adminlib-star green' },
-                    { id: 'pending', label: 'Shipping Tax', count: data.pending ?? 'static', icon: 'adminlib-clock blue' },
-                    { id: 'withdrawable', label: 'Facilitator Fee', count: data.withdrawable ?? 'static', icon: 'adminlib-star yellow' },
-                    { id: 'gateway_fees', label: 'Gateway Fees', count: data.gateway_fees ?? 'static', icon: 'adminlib-credit-card red' },
-                    { id: 'total_balance', label: 'Total Balance', count: data.balance ?? 0, icon: 'adminlib-star green' },
+                    { id: 'commission', label: 'Commission', count: `${currency}${data.commission_total ?? '0'}`, icon: 'adminlib-star green' },
+                    { id: 'shipping', label: 'Shipping Tax', count: `${currency}${data.shipping_amount ?? '0'}`, icon: 'adminlib-clock blue' },
+                    { id: 'facilator', label: 'Facilitator Fee', count: `${currency}${data.facilitator_fee ?? '0'}`, icon: 'adminlib-star yellow' },
+                    { id: 'gateway_fees', label: 'Gateway Fees', count: `${currency}${data.gateway_fee ?? '0'}`, icon: 'adminlib-credit-card red' },
+                    { id: 'total_balance', label: 'Total Balance', count: `${currency}${data.balance ?? 0}`, icon: 'adminlib-star green' },
                 ];
+
                 setOverview(dynamicOverview);
             })
             .catch(() => {
                 setOverview([
-                    { id: 'total_balance', label: 'Total Balance', count: 0, icon: 'adminlib-wallet' },
-                    { id: 'pending', label: 'Pending', count: 0, icon: 'adminlib-clock' },
-                    { id: 'locked', label: 'Locked', count: 0, icon: 'adminlib-lock' },
-                    { id: 'withdrawable', label: 'Withdrawable', count: 0, icon: 'adminlib-cash' },
-                    { id: 'commission', label: 'Commission', count: 0, icon: 'adminlib-star' },
-                    { id: 'gateway_fees', label: 'Gateway Fees', count: 0, icon: 'adminlib-credit-card' },
+                    { id: 'total_balance', label: 'Total Balance', count: `0`, icon: 'adminlib-wallet' },
+                    { id: 'pending', label: 'Pending', count: `0`, icon: 'adminlib-clock' },
+                    { id: 'locked', label: 'Locked', count: `0`, icon: 'adminlib-lock' },
+                    { id: 'withdrawable', label: 'Withdrawable', count: `0`, icon: 'adminlib-cash' },
+                    { id: 'commission', label: 'Commission', count: `0`, icon: 'adminlib-star' },
+                    { id: 'gateway_fees', label: 'Gateway Fees', count: `0`, icon: 'adminlib-credit-card' },
                 ]);
             });
-    }, [selectedStore]);
+    }, [storeId]);
+
 
     return (
         <>

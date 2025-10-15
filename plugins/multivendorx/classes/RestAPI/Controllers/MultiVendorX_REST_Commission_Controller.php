@@ -161,21 +161,20 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
         }
 
         // Status-wise counts with store/date filters applied
-        $all       = CommissionUtil::get_commissions( $base_filter, true, true );
-        $paid      = CommissionUtil::get_commissions( array_merge( $base_filter, ['status' => 'paid'] ), true, true );
-        $refund    = CommissionUtil::get_commissions( array_merge( $base_filter, ['status' => 'refund'] ), true, true );
-        $trash     = CommissionUtil::get_commissions( array_merge( $base_filter, ['status' => 'trash'] ), true, true );
-        $cancelled = CommissionUtil::get_commissions( array_merge( $base_filter, ['status' => 'cancelled'] ), true, true );
-
+        $all                 = CommissionUtil::get_commissions( $base_filter, true, true );
+        $paid                = CommissionUtil::get_commissions( array_merge( $base_filter, ['status' => 'paid'] ), true, true );
+        $refunded            = CommissionUtil::get_commissions( array_merge( $base_filter, ['status' => 'refunded'] ), true, true );
+        $partially_refunded  = CommissionUtil::get_commissions( array_merge( $base_filter, ['status' => 'partially_refunded'] ), true, true );
+        $cancelled           = CommissionUtil::get_commissions( array_merge( $base_filter, ['status' => 'cancelled'] ), true, true );
+        
         $response = [
-            'commissions' => $formatted_commissions,
-            'all'         => $all,
-            'paid'        => $paid,
-            'cancelled'   => $cancelled,
-            'refund'      => $refund,
-            'trash'       => $trash,
+            'commissions'        => $formatted_commissions,
+            'all'                => $all,
+            'paid'               => $paid,
+            'refunded'           => $refunded,
+            'partially_refunded' => $partially_refunded,
+            'cancelled'          => $cancelled,
         ];
-
         return rest_ensure_response( $response );
     }
     
