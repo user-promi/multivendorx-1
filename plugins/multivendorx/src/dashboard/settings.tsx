@@ -74,7 +74,7 @@ const settings = () => {
             }
         })
     };
-    const [activeTab, setActiveTab] = useState("shipping");
+    const [activeTab, setActiveTab] = useState("general");
     const settingTabs = [
         { id: "general", label: "General", icon: "tools", content: <GeneralSettings /> },
         { id: "appearance", label: "Appearance", icon: "appearance", content: <Appearance /> },

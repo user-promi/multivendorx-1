@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 export default {
     id: 'store-registration-form',
     priority: 2,
-    name: 'Store Registration Form',
+    name: 'Registration Form',
     desc: __(
         'Customise personalised store registration form for marketplace.',
         'multivendorx'

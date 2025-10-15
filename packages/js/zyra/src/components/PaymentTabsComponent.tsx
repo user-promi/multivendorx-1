@@ -228,11 +228,9 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
               </div>
               {/* onClick={() => toggleEnable(method.id, true, method.icon)} */}
               <div className="right-section action-icons" ref={menuRef} >
-                {isEnabled && (
-                  <i className="adminlib-more-vertical"
-                    onClick={() => setOpenMenu(isMenuOpen ? null : method.id)}>
-                  </i>
-                )}
+                <i className="adminlib-more-vertical"
+                  onClick={() => setOpenMenu(isMenuOpen ? null : method.id)}>
+                </i>
                 {openMenu && (
                   <div className="action-dropdown">
                     <ul>

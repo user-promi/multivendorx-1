@@ -847,6 +847,7 @@ const AllCoupon: React.FC = () => {
                         placeholder={__('Search', 'multivendorx')}
                         value={filterValue || ''}
                         onChange={(e) => updateFilter(e.target.name, e.target.value)}
+                        className='basic-select'
                     />
                     <i className="adminlib-search"></i>
                 </div>
