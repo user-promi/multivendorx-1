@@ -22,7 +22,7 @@ type StoreStatus = {
 };
 type FilterData = {
     typeCount?: any;
-    searchField?:any;
+    searchField?: any;
 };
 export interface RealtimeFilter {
     name: string;
@@ -31,7 +31,7 @@ export interface RealtimeFilter {
 const StoreTable: React.FC = () => {
 
     const [data, setData] = useState<StoreRow[] | null>(null);
-    const [ storeStatus, setStoreStatus ] = useState< StoreStatus[] | null >( null );
+    const [storeStatus, setStoreStatus] = useState<StoreStatus[] | null>(null);
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
     const [totalRows, setTotalRows] = useState<number>(0);
     const [pagination, setPagination] = useState<PaginationState>({
@@ -88,7 +88,7 @@ const StoreTable: React.FC = () => {
         })
             .then((response) => {
                 setData(response.data.stores || []);
-                setStoreStatus( [
+                setStoreStatus([
                     {
                         key: 'all',
                         name: 'All',
@@ -104,7 +104,7 @@ const StoreTable: React.FC = () => {
                         name: 'Pending',
                         count: response.data.pending || 0,
                     },
-                ] );
+                ]);
             })
             .catch(() => {
                 setError(__('Failed to load stores', 'multivendorx'));
@@ -117,7 +117,7 @@ const StoreTable: React.FC = () => {
         rowsPerPage: number,
         currentPage: number,
         filterData: FilterData
-        
+
     ) => {
         setData(null);
         requestData(
@@ -169,11 +169,11 @@ const StoreTable: React.FC = () => {
             ),
         },
         {
-            id: 'applied_on',
-            accessorKey: 'applied_on',
+            id: 'status_applied_on',
+            header: __('Status / Applied On', 'multivendorx'),
             enableSorting: true,
-            header: __('Applied On', 'multivendorx'),
             cell: ({ row }) => {
+                const status = row.original.status || '';
                 const rawDate = row.original.applied_on;
                 let formattedDate = '-';
                 if (rawDate) {
@@ -184,28 +184,33 @@ const StoreTable: React.FC = () => {
                         year: 'numeric',
                     }).format(dateObj);
                 }
-                return <TableCell title={formattedDate}>{formattedDate}</TableCell>;
+
+                const getStatusBadge = (status: string) => {
+                    switch (status) {
+                        case 'active':
+                            return <span className="admin-badge green">Active</span>;
+                        case 'pending':
+                            return <span className="admin-badge yellow">Pending</span>;
+                        case 'rejected':
+                            return <span className="admin-badge red">Rejected</span>;
+                        case 'locked':
+                            return <span className="admin-badge blue">Locked</span>;
+                        default:
+                            return <span className="admin-badge gray">{status}</span>;
+                    }
+                };
+
+                return (
+                    <TableCell title={`${status} - ${formattedDate}`}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                            {getStatusBadge(status)}Since
+                            <span>{formattedDate}</span>
+                        </div>
+                    </TableCell>
+                );
             },
         },
-        {
-            header: __('Status', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.status || ''}>
-                    {row.original.status === "active" && (
-                        <span className="admin-badge green">Active</span>
-                    )}
-                    {row.original.status === "pending" && (
-                        <span className="admin-badge yellow">Pending</span>
-                    )}
-                    {row.original.status === "rejected" && (
-                        <span className="admin-badge red">Rejected</span>
-                    )}
-                    {row.original.status === "locked" && (
-                        <span className="admin-badge blue">Locked</span>
-                    )}
-                </TableCell>
-            ),
-        },
+
         {
             id: 'action',
             header: __('Action', 'multivendorx'),
@@ -304,7 +309,7 @@ const StoreTable: React.FC = () => {
                     onPaginationChange={setPagination}
                     handlePagination={requestApiForData}
                     perPageOption={[10, 25, 50]}
-                    typeCounts={ storeStatus as StoreStatus[] }
+                    typeCounts={storeStatus as StoreStatus[]}
                     totalCounts={totalRows}
                     searchFilter={searchFilter}
                     realtimeFilter={realtimeFilter}

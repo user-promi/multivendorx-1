@@ -211,6 +211,14 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
             },
         },
         {
+            header: __('Transaction Type', 'multivendorx'),
+            cell: ({ row }) => (
+                <TableCell title={row.original.transaction_type || ''}>
+                    {row.original.transaction_type || '-'}
+                </TableCell>
+            ),
+        },
+        {
             id: 'credit',
             accessorKey: 'credit',
             enableSorting: true,
@@ -218,35 +226,7 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
             header: __('Credit', 'multivendorx'),
             cell: ({ row }) => {
                 const credit = row.original.credit;
-                const status = row.original.status || '';
-
-                let iconClass = '';
-                if (credit) {
-                    switch (status) {
-                        case 'pending':
-                            iconClass = 'adminlib-clock';
-                            break;
-                        case 'Completed':
-                            iconClass = 'adminlib-check';
-                            break;
-                        case 'failed':
-                            iconClass = 'adminlib-cross';
-                            break;
-                    }
-                }
-
-                return (
-                    <TableCell>
-                        {credit ? (
-                            <>
-                                {iconClass && <i className={iconClass} style={{ marginRight: '4px' }}></i>}
-                                {`${appLocalizer.currency_symbol}${credit}`}
-                            </>
-                        ) : (
-                            '-'
-                        )}
-                    </TableCell>
-                );
+                return <TableCell>{credit ? `${appLocalizer.currency_symbol}${credit}` : '-'}</TableCell>;
             },
         },
         {
@@ -257,35 +237,7 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
             header: __('Debit', 'multivendorx'),
             cell: ({ row }) => {
                 const debit = row.original.debit;
-                const status = row.original.status || '';
-
-                let iconClass = '';
-                if (debit) {
-                    switch (status) {
-                        case 'pending':
-                            iconClass = 'adminlib-clock';
-                            break;
-                        case 'Completed':
-                            iconClass = 'adminlib-check';
-                            break;
-                        case 'failed':
-                            iconClass = 'adminlib-cross';
-                            break;
-                    }
-                }
-
-                return (
-                    <TableCell>
-                        {debit ? (
-                            <>
-                                {iconClass && <i className={iconClass} style={{ marginRight: '4px' }}></i>}
-                                {`${appLocalizer.currency_symbol}${debit}`}
-                            </>
-                        ) : (
-                            '-'
-                        )}
-                    </TableCell>
-                );
+                return <TableCell>{debit ? `${appLocalizer.currency_symbol}${debit}` : '-'}</TableCell>;
             },
         },
         {
@@ -296,46 +248,10 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
             header: __('Balance', 'multivendorx'),
             cell: ({ row }) => {
                 const balance = row.original.balance;
-                const status = row.original.status || '';
-
-                let iconClass = '';
-                if (balance) {
-                    switch (status) {
-                        case 'pending':
-                            iconClass = 'adminlib-clock';
-                            break;
-                        case 'Completed':
-                            iconClass = 'adminlib-check';
-                            break;
-                        case 'failed':
-                            iconClass = 'adminlib-cross';
-                            break;
-                    }
-                }
-
-                return (
-                    <TableCell>
-                        {balance ? (
-                            <>
-                                {iconClass && <i className={iconClass} style={{ marginRight: '4px' }}></i>}
-                                {`${appLocalizer.currency_symbol}${balance}`}
-                            </>
-                        ) : (
-                            '-'
-                        )}
-                    </TableCell>
-                );
+                return <TableCell>{balance ? `${appLocalizer.currency_symbol}${balance}` : '-'}</TableCell>;
             },
         },
-        {
-            header: __('Transaction Type', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.transaction_type || ''}>
-                    {row.original.transaction_type || '-'}
-                </TableCell>
-            ),
-        },
-
+        
         {
             header: __('Status', 'multivendorx'),
             cell: ({ row }) => (
