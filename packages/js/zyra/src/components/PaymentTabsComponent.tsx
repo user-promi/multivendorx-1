@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import "../styles/web/PaymentTabsComponent.scss";
-import VerificationMethods from "./VerificationMethods";
 import TextArea from "./TextArea";
 import ToggleSetting from "./ToggleSetting";
 import MultiCheckBox from "./MultiCheckbox";
@@ -96,17 +95,6 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
     const fieldValue = value[methodId]?.[field.key];
 
     switch (field.type) {
-      case "verification-methods":
-        return (
-          <VerificationMethods
-            value={fieldValue || []}
-            nestedFields={field.nestedFields || []}
-            addButtonLabel={field.addButtonLabel}
-            deleteButtonLabel={field.deleteButtonLabel}
-            onChange={(val) => handleInputChange(methodId, field.key, val)}
-          />
-        );
-
       case "payment-tabs":
         return (
           <PaymentTabsComponent
