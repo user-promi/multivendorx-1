@@ -9,7 +9,7 @@ use MultiVendorX\Store\Store;
 
 class Payment {
     public function __construct(){
-        add_action('multivendorx_process_bank-transfer_payment', array($this, 'process_payment'), 10, 4);
+        add_action('multivendorx_process_bank-transfer_payment', array($this, 'process_payment'), 10, 5);
     }
 
     public function get_id() {
@@ -135,7 +135,7 @@ class Payment {
 
     }
 
-    public function process_payment($store_id, $amount, $order_id = null, $transaction_id = null) {
+    public function process_payment($store_id, $amount, $order_id = null, $transaction_id = null, $note) {
 
         // quick autoload/class check (helps debugging)
         $payment_admin_settings = MultiVendorX()->setting->get_setting( 'payment_methods', [] );
@@ -148,7 +148,8 @@ class Payment {
             'Bank Transfer',
             $status,
             $order_id, 
-            $transaction_id
+            $transaction_id,
+            $note, $amount
         );
 
         

@@ -10,7 +10,7 @@ defined('ABSPATH') || exit;
 
 class PaymentProcessor {
     public function __construct() {
-        add_action('multivendorx_after_payment_complete', array( $this, 'after_payment_complete'), 10, 5);
+        add_action('multivendorx_after_payment_complete', array( $this, 'after_payment_complete'), 10, 7);
         // add_action('multivendorx_after_real_time_payment_complete', array( $this, 'after_real_time_payment_complete'), 10, 2);
     
         //COD payments.
@@ -19,7 +19,7 @@ class PaymentProcessor {
     }
 
     
-    public function process_payment($store_id, $amount, $order_id = null) {
+    public function process_payment($store_id, $amount, $order_id = null, $method = null, $note = null) {
         global $wpdb;
         $store = new Store($store_id);
 
@@ -55,7 +55,11 @@ class PaymentProcessor {
             }
         }
 
-        $payment_method = $store->get_meta('payment_method') ?? '';
+        if ($method) { 
+            $payment_method = $method;
+        } else {
+            $payment_method = $store->get_meta('payment_method') ?? '';
+        }
 
         if (empty($payment_method)) {
             $data = [
@@ -80,18 +84,18 @@ class PaymentProcessor {
             return;
         }
             
-        do_action("multivendorx_process_{$payment_method}_payment", $store_id, $amount, $order_id, $transaction_id);
+        do_action("multivendorx_process_{$payment_method}_payment", $store_id, $amount, $order_id, $transaction_id, $note);
 
     }
 
-    public function after_payment_complete($store_id, $method, $status, $order_id, $transaction_id) {
+    public function after_payment_complete($store_id, $method, $status, $order_id, $transaction_id, $note, $amount = null) {
         global $wpdb;
 
         $order         = $order_id > 0 ? wc_get_order($order_id) : null;
         $commission_id = $order ? $order->get_meta('multivendorx_commission_id', true) : null;
         $commission    = $commission_id ? CommissionUtil::get_commission_db($commission_id) : null;
 
-        $amount = $commission ? (float) $commission->commission_total : 0.00;
+        $amount = $amount ? $amount : ($commission ? (float) $commission->commission_total : 0.00);
 
         $data = [
             'store_id'         => (int) $store_id,
@@ -101,9 +105,9 @@ class PaymentProcessor {
             'transaction_type' => 'Withdrawal',
             'amount'           => $amount,
             'currency'         => get_woocommerce_currency(),
-            'narration'        => ($status === 'success')
+            'narration'        => $note ? $note : (($status === 'success')
                                     ? "Withdrawal released via {$method} Payment Processor"
-                                    : "Withdrawal failed via {$method} Payment Processor",
+                                    : "Withdrawal failed via {$method} Payment Processor"),
             'status'           => ($status === 'success') ? 'Completed' : 'Failed',
         ];
 

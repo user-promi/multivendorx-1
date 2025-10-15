@@ -125,7 +125,6 @@ class Products {
         global $wp;
         
         $this->product_id = $wp->query_vars['value'];
-        file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":product id:  : " . var_export($this->product_id, true) . "\n", FILE_APPEND);
 
         if ( $this->product_id ) {
             $this->product_object = wc_get_product( $this->product_id );

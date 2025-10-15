@@ -14,7 +14,7 @@ export default {
     submitUrl: 'settings',
     modal: [
         {
-            key: 'payment_methods',
+            key: 'shipping_modules_overview',
             type: 'payment-tabs',
             label: __('Shipping Modules Overview', 'multivendorx'),
             desc: __('View-only - Available shipping modules for stores', 'multivendorx'),
@@ -127,6 +127,18 @@ export default {
                 },
             ],
             selectDeselect: true,
+        },
+        {
+            key: 'shipping_stage',
+            type: 'multi-string',
+            label: __('Add stage', 'multivendorx'),
+            placeholder: __('Enter Shipping stage', 'multivendorx'),
+            iconEnable : true,
+            settingDescription: __(
+                'Define which statuses stores can assign to orders',
+                'multivendorx'
+            ),
+            name: 'abuse_report_reasons',
         },
         {
             key: 'registration page',

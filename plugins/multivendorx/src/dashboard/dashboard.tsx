@@ -18,6 +18,7 @@ import { ColumnDef } from '@tanstack/react-table';
 import React, { useState, useEffect } from "react";
 import "../components/dashboard.scss";
 import '../dashboard/dashboard1.scss';
+import Mascot from "../assets/images/multivendorx-mascot-scaled.png";
 
 type StoreRow = {
   id?: number;
@@ -31,10 +32,10 @@ const salesIcon = new L.DivIcon({
   html: `<div style="background:#5007aa;color:#fff;border-radius:50%;padding:6px 10px;font-size:12px;">$</div>`,
 });
 const analyticsData = [
-  { icon: "adminlib-tools red", number: "230k", text: "Sales" },
-  { icon: "adminlib-book green", number: "45k", text: "Customers" },
-  { icon: "adminlib-global-community yellow", number: "1.2M", text: "Orders" },
-  { icon: "adminlib-wholesale blue", number: "500k", text: "Products" },
+  { icon: "adminlib-tools red", number: "230k", text: "Visitors" },
+  { icon: "adminlib-book green", number: "45k", text: "Add to Cart" },
+  { icon: "adminlib-global-community yellow", number: "1.2M", text: "Purchases" },
+  { icon: "adminlib-wholesale blue", number: "500k", text: "Conv. Rate" },
 ];
 const revenueData = [
   { month: "Jan", orders: 4000, earnings: 2400, refunds: 200, conversion: 2.4 },
@@ -44,6 +45,16 @@ const revenueData = [
   { month: "May", orders: 5890, earnings: 4800, refunds: 300, conversion: 3.4 },
   { month: "Jun", orders: 4390, earnings: 3800, refunds: 210, conversion: 2.9 },
   { month: "Jul", orders: 6490, earnings: 5200, refunds: 600, conversion: 3.6 },
+];
+const data = [
+  { month: "Jan", revenue: 4000, net_sale: 2400, admin_amount: 1200 },
+  { month: "Feb", revenue: 3000, net_sale: 2000, admin_amount: 1000 },
+  { month: "Mar", revenue: 4500, net_sale: 2800, admin_amount: 1300 },
+  { month: "Apr", revenue: 5000, net_sale: 3200, admin_amount: 1500 },
+  { month: "May", revenue: 4200, net_sale: 2500, admin_amount: 1400 },
+  { month: "Jun", revenue: 4800, net_sale: 3000, admin_amount: 1600 },
+  { month: "Jul", revenue: 5200, net_sale: 3400, admin_amount: 1700 },
+  { month: "Aug", revenue: 4700, net_sale: 2900, admin_amount: 1500 },
 ];
 const ordersByCountry = [
   { country: "USA", orders: 4200, lat: 37.0902, lng: -95.7129 },
@@ -85,12 +96,36 @@ const Dashboard: React.FC = () => {
       </div>
 
       <div className="row">
+        <div className="column width-35">
+          <div className="dashboard-view-section">
+            <div className="title">
+              Good Morning, Anna!
+            </div>
+            <div className="des">
+              Here's what's happening with your store today.
+            </div>
+
+            <div className="price-wrapper">
+              <div className="price">
+                $165K
+              </div>
+              <div className="details">58% of sales target</div>
+            </div>
+            <div className="admin-btn btn-purple">
+              View Details
+            </div>
+
+            <div className="image">
+              <img src={Mascot} alt="" />
+            </div>
+          </div>
+        </div>
         <div className="column width-65">
           <div className="card">
             <div className="card-header">
               <div className="left">
                 <div className="title">
-                  Statistics
+                  Conversion Snapshot
                 </div>
               </div>
               <div className="right">
@@ -119,12 +154,42 @@ const Dashboard: React.FC = () => {
       </div>
 
       <div className="row">
-        <div className="column width-65">
+        <div className="column">
           <div className="card">
             <div className="card-header">
               <div className="left">
                 <div className="title">
-                  Revenue
+                  Sales Overview (7 Days)
+                </div>
+                <div className="des">Lorem ipsum dolor sit amet.</div>
+              </div>
+              <div className="right">
+                <i className="adminlib-more-vertical"></i>
+              </div>
+            </div>
+            <div className="card-body">
+              <ResponsiveContainer width="100%" height={300}>
+                <LineChart data={data}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="month" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Line type="monotone" dataKey="revenue" stroke="#5007aa" strokeWidth={3} name="Top Category" />
+                  <Line type="monotone" dataKey="net_sale" stroke="#ff7300" strokeWidth={3} name="Top Brand" />
+                  <Line type="monotone" dataKey="admin_amount" stroke="#00c49f" strokeWidth={3} name="Top Store" />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
+        </div>
+        <div className="column">
+          <div className="card">
+            <div className="card-header">
+              <div className="left">
+                <div className="title">
+                  Monthly Performance
                 </div>
                 <div className="des">Lorem ipsum dolor sit amet.</div>
               </div>
@@ -177,34 +242,6 @@ const Dashboard: React.FC = () => {
           </div>
 
         </div>
-        <div className="column width-35">
-          <div className="card">
-            <div className="card-header">
-              <div className="left">
-                <div className="title">
-                  Sales by Locations
-                </div>
-                <div className="des">Lorem ipsum dolor sit amet.</div>
-              </div>
-              <div className="right">
-                <i className="adminlib-more-vertical"></i>
-              </div>
-            </div>
-            <div className="card-body">
-              <MapContainer
-                center={[20, 0]}          // Center of the map (lat, lng)
-                zoom={2}                  // Zoom level
-                style={{ height: "100%", width: "100%" }}
-              >
-                <TileLayer
-                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> contributors'
-                />
-              </MapContainer>
-            </div>
-          </div>
-
-        </div>
       </div>
 
       <div className="row">
@@ -213,7 +250,7 @@ const Dashboard: React.FC = () => {
             <div className="card-header">
               <div className="left">
                 <div className="title">
-                  Sales by Locations
+                  Store Activity Log
                 </div>
                 <div className="des">Lorem ipsum dolor sit amet.</div>
               </div>
@@ -232,7 +269,7 @@ const Dashboard: React.FC = () => {
             <div className="card-header">
               <div className="left">
                 <div className="title">
-                  Top products
+                  Latest Questions
                 </div>
                 <div className="des">Lorem ipsum dolor sit amet.</div>
               </div>

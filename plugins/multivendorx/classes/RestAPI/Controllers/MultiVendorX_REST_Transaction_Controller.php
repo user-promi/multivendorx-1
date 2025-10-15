@@ -309,20 +309,31 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
     
         $store_id = absint( $request->get_param( 'store_id' ) );
         $amount = (float) $request->get_param( 'amount' );
-        $withdraw = absint( $request->get_param( 'withdraw' ) );
+        $withdraw = $request->get_param( 'withdraw' );
 
-        if($withdraw ){
-            file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":orders: : " . var_export($store_id, true) . "\n", FILE_APPEND);
-            file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":orders: : " . var_export($amount, true) . "\n", FILE_APPEND);
+        $store = new \MultiVendorX\Store\Store( $store_id );
+        $disbursement = $request->get_param( 'disbursement' );
 
-            $store = new \MultiVendorX\Store\Store( $store_id );
-        
-            $threshold_amount = MultiVendorX()->setting->get_setting('payout_threshold_amount', 0);
+        $threshold_amount = MultiVendorX()->setting->get_setting('payout_threshold_amount', 0);
+        if ($disbursement) {
+            $method = $request->get_param( 'method' );
+            $note = $request->get_param( 'note' );
 
             if ($threshold_amount < $amount) {
-                MultiVendorX()->payments->processor->process_payment( $store_id, $amount);
+                MultiVendorX()->payments->processor->process_payment( $store_id, $amount, null, $method, $note);
+                return rest_ensure_response([
+                    'success' => true,
+                    'id'      => $store_id,
+                ]);
+
             }
-            $store->delete_meta('request_withdrawal_amount');
+        }
+
+        if($withdraw ){
+            if ($threshold_amount < $amount) {
+                MultiVendorX()->payments->processor->process_payment( $store_id, $amount);
+                $store->delete_meta('request_withdrawal_amount');
+            }
 
             return rest_ensure_response([
                 'success' => true,
@@ -330,11 +341,8 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
             ]);
         }
 
-        $store = new \MultiVendorX\Store\Store( $store_id );
         $store->update_meta('request_withdrawal_amount', $amount);
         
-
-
         return rest_ensure_response([
             'success' => true,
             'id'      => $store_id,
