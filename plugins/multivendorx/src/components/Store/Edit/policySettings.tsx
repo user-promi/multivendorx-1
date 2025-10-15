@@ -28,21 +28,12 @@ const PolicySettings = ({ id }: { id: string|null }) => {
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
 		const { name, value } = e?.target;
+		console.log(name,value);
+
 		setFormData((prev) => {
 			const updated = {
 				...(prev || {}),
 				[name]: value ?? '',
-			};
-			autoSave(updated);
-			return updated;
-		});
-	};
-
-	const handleToggleChange = (value: string) => {
-		setFormData((prev) => {
-			const updated = {
-				...(prev || {}),
-				payment_method: value,
 			};
 			autoSave(updated);
 			return updated;
@@ -75,7 +66,7 @@ const PolicySettings = ({ id }: { id: string|null }) => {
 
 						<div className="form-group-wrapper">
 							<div className="form-group">
-								<TextArea tinymceApiKey={appLocalizer.tinymceApiKey} name="shipping_policy" wrapperClass="setting-from-textarea"
+								<TextArea tinymceApiKey={appLocalizer.tinymceApiKey} usePlainText={true} name="shipping_policy" wrapperClass="setting-from-textarea"
 									inputClass="textarea-input"
 									descClass="settings-metabox-description" value={formData.shipping_policy} onChange={handleChange} />
 							</div>
