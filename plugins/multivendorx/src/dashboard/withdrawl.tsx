@@ -126,8 +126,7 @@ const Withdrawl: React.FC = () => {
 
 
   return (
-    <div className="container-wrapper">
-      <div className="card-wrapper width-65">
+      <div className="card-wrapper">
         <div className="card-content">
           <div className="card-title">Payment information</div>
 
@@ -268,7 +267,6 @@ const Withdrawl: React.FC = () => {
             })}
         </div>
       </div>
-    </div>
   );
 };
 
