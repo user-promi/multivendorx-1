@@ -80,55 +80,57 @@ class Payment {
                 'id'    => $this->get_id(),
                 'label' => __('Bank Transfer', 'multivendorx'),
                 'fields' => [
-                    'key'   => 'account_type',
-                    'type'  => 'setting-toggle',
-                    'label' => __('Account type', 'multivendorx'),
-                    'options' => [
-                        ['key' => 'current', 'label' => __('current', 'multivendorx'), 'value' => 'current'],
-                        ['key' => 'savings', 'label' => __('Savings', 'multivendorx'), 'value' => 'savings'],
+                    [
+                        'key'   => 'account_type',
+                        'type'  => 'setting-toggle',
+                        'label' => __('Account type', 'multivendorx'),
+                        'options' => [
+                            ['key' => 'current', 'label' => __('current', 'multivendorx'), 'value' => 'current'],
+                            ['key' => 'savings', 'label' => __('Savings', 'multivendorx'), 'value' => 'savings'],
+                        ]
+                    ],
+                    [
+                        'key'         => 'bank_name',
+                        'type'        => 'text',
+                        'label'       => 'Bank Name',
+                        'placeholder' => 'Enter Bank Name',
+                    ],
+                    [
+                        'key'         => 'abr_routing_number',
+                        'type'        => 'text',
+                        'label'       => 'ABA Routing Number',
+                        'placeholder' => 'Enter ABA Routing Number',
+                    ],
+                    [
+                        'key'         => 'destination currency',
+                        'type'        => 'text',
+                        'label'       => 'Destination Currency',
+                        'placeholder' => 'Enter Destination Currency',
+                    ],
+                    [
+                        'key'         => 'bank_address',
+                        'type'        => 'text-area',
+                        'label'       => 'Bank Address',
+                        'placeholder' => 'Enter Bank Address',
+                    ],
+                    [
+                        'key'         => 'iban',
+                        'type'        => 'text',
+                        'label'       => 'IBAN',
+                        'placeholder' => 'Enter IBAN',
+                    ],
+                    [
+                        'key'         => 'account_holder_name',
+                        'type'        => 'text',
+                        'label'       => 'Account Holder Name',
+                        'placeholder' => 'Enter Account Holder Name',
+                    ],
+                    [
+                        'key'         => 'account_number',
+                        'type'        => 'text',
+                        'label'       => 'Account Number',
+                        'placeholder' => 'Enter Account Number',
                     ]
-                ],
-                [
-                    'key'         => 'bank_name',
-                    'type'        => 'text',
-                    'label'       => 'Bank Name',
-                    'placeholder' => 'Enter Bank Name',
-                ],
-                [
-                    'key'         => 'abr_routing_number',
-                    'type'        => 'text',
-                    'label'       => 'ABA Routing Number',
-                    'placeholder' => 'Enter ABA Routing Number',
-                ],
-                [
-                    'key'         => 'destination currency',
-                    'type'        => 'text',
-                    'label'       => 'Destination Currency',
-                    'placeholder' => 'Enter Destination Currency',
-                ],
-                [
-                    'key'         => 'bank_address',
-                    'type'        => 'text-area',
-                    'label'       => 'Bank Address',
-                    'placeholder' => 'Enter Bank Address',
-                ],
-                [
-                    'key'         => 'iban',
-                    'type'        => 'text',
-                    'label'       => 'IBAN',
-                    'placeholder' => 'Enter IBAN',
-                ],
-                [
-                    'key'         => 'account_holder_name',
-                    'type'        => 'text',
-                    'label'       => 'Account Holder Name',
-                    'placeholder' => 'Enter Account Holder Name',
-                ],
-                [
-                    'key'         => 'account_number',
-                    'type'        => 'text',
-                    'label'       => 'Account Number',
-                    'placeholder' => 'Enter Account Number',
                 ]
             ];
         }
