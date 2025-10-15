@@ -158,6 +158,7 @@ interface InputField {
     width?: number;
     height?: number;
     multiple?: boolean;
+    usePlainText?:boolean;
     range?: boolean;
     className?: string;
     selectDeselect?: boolean;
@@ -439,70 +440,49 @@ const AdminForm: React.FC<AdminFormProps> = ({
         event: any,
         key: string,
         type: 'single' | 'multiple' = 'single',
-        fromType:
-            | 'simple'
-            | 'calender'
-            | 'select'
-            | 'multi-select'
-            | 'wpeditor' = 'simple',
+        fromType: 'simple' | 'calender' | 'select' | 'multi-select' | 'wpeditor' = 'simple',
         arrayValue: any[] = []
     ) => {
         settingChanged.current = true;
-
+    
         if (type === 'single') {
-            if (fromType === 'simple') {
-                updateSetting(key, event.target.value);
-            } else if (fromType === 'calender') {
+            // normal single value
+            if (fromType === 'simple' || fromType === 'wpeditor') {
+                const val = event?.target?.value ?? event; // <-- handles TinyMCE and normal textarea
+                updateSetting(key, val);
+            } 
+            else if (fromType === 'calender') {
                 let formattedDate: string;
-
                 if (Array.isArray(event)) {
-                    // Check if all elements are date ranges (start and end)
-                    if (
-                        event.every(
-                            (item) =>
-                                Array.isArray(item) && item.length === 2
-                        )
-                    ) {
+                    if (event.every((item) => Array.isArray(item) && item.length === 2)) {
                         formattedDate = event
-                            .map((range) => {
-                                const startDate = range[0]?.toString();
-                                const endDate = range[1]?.toString();
-                                return `${startDate} - ${endDate}`;
-                            })
+                            .map((range) => `${range[0]?.toString()} - ${range[1]?.toString()}`)
                             .join(', ');
                     } else {
-                        formattedDate = event
-                            .map((item) => item.toString())
-                            .join(','); // Multiple dates format
+                        formattedDate = event.map((item) => item.toString()).join(',');
                     }
                 } else {
                     formattedDate = event.toString();
                 }
-
                 updateSetting(key, formattedDate);
-            } else if (fromType === 'select') {
+            } 
+            else if (fromType === 'select') {
                 updateSetting(key, arrayValue[event.index]);
-            } else if (
-                fromType === 'multi-select' ||
-                fromType === 'wpeditor'
-            ) {
+            } 
+            else if (fromType === 'multi-select') {
                 updateSetting(key, event);
             }
         } else {
+            // multiple checkbox type
             let prevData: string[] = setting[key] || [];
-            if (!Array.isArray(prevData)) {
-                prevData = [String(prevData)];
-            }
-
-            prevData = prevData.filter(
-                (data) => data !== event.target.value
-            );
-            if (event.target.checked) {
-                prevData.push(event.target.value);
-            }
+            if (!Array.isArray(prevData)) prevData = [String(prevData)];
+    
+            prevData = prevData.filter((data) => data !== event.target.value);
+            if (event.target.checked) prevData.push(event.target.value);
             updateSetting(key, prevData);
         }
     };
+    
 
     const handleMultiNumberChange = (
         e: React.ChangeEvent<HTMLInputElement>,
@@ -712,6 +692,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             rowNumber={inputField.rowNumber} // for row number value
                             colNumber={inputField.colNumber} // for column number value
                             value={value || inputField.value}
+                            usePlainText={inputField.usePlainText}
                             proSetting={isProSetting(
                                 inputField.proSetting ?? false
                             )}
