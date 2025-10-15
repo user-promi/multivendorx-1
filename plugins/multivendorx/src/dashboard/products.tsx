@@ -488,6 +488,7 @@ const AllProduct: React.FC = () => {
                             onChange={(e) => {
                                 updateFilter(e.target.name, e.target.value);
                             }}
+                            className='basic-select'
                             value={filterValue || ''}
                         />
                         <i className="adminlib-search"></i>

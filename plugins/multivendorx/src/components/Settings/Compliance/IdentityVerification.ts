@@ -5,7 +5,7 @@ export default {
     priority: 2,
     name: __('Identity Verification', 'mvx-pro'),
     desc: __(
-        'Seller verification confirms a store identity with address, contact, and social profiles-building trust and boosting buyer confidence.','mvx-pro'),
+        'Seller verification confirms a store identity with address, contact, and social profiles-building trust and boosting buyer confidence.', 'mvx-pro'),
     icon: 'adminlib-verification',
     submitUrl: 'settings',
 
@@ -71,38 +71,37 @@ export default {
                     key: 'endpoint_control',
                     label: __('Restrict access to other pages', 'mvx-pro'),
                     value: 'endpoint_control',
-                    proSetting:true,
+                    proSetting: true,
                 },
                 {
                     key: 'redirect_verification_page',
                     label: __('Redirect to verification page', 'mvx-pro'),
                     value: 'redirect_verification_page',
-                    proSetting:true,
+                    proSetting: true,
                 },
                 {
                     key: 'disable_add_product_endpoint',
                     label: __('Prevent product upload', 'mvx-pro'),
                     value: 'disable_add_product_endpoint',
-                    proSetting:true,
+                    proSetting: true,
                 },
             ],
             //proSetting:true,
             selectDeselect: true,
         },
         {
-            key: 'section',
+            key: 'separator_content',
             type: 'section',
-            hint: __(
-                'Verification Method ',
-                'multivendorx'
-            ),
+            hint: __("Identity Verification", 'multivendorx'),
+            desc: __('Verify store identity using government-issued documents or facial recognition. Ensures authenticity of users.')
         },
         {
             key: 'all_verification_methods',
             type: 'payment-tabs',
+            label: __('Verification Methods', 'mvx-pro'),
             modal: [
                 {
-                    id:'id-verification',
+                    id: 'id-verification',
                     icon: "adminlib-verification3",
                     label: 'Identity Verification',
                     connected: false,
@@ -123,94 +122,88 @@ export default {
                         },
                     ],
                 },
-                {
-                    id:'email-verification',
-                    icon: "adminlib-mail",
-                    label: 'Email Verification',
-                    connected: true,
-                    desc: 'Verify stores email addresses to prevent fake registrations and enhance security.',
-                    formFields: [
-                        {
-                            key: 'registration_notice',
-                            label: __('Registration Notice', 'multivendorx'),
-                            desc: __('Displayed after registration until email verification is completed.', 'multivendorx'),
-                            type: 'textarea',
-                            class: 'mvx-setting-textarea',
-                        },
-                        {
-                            key: 'login_notice',
-                            label: __('Login Notice', 'multivendorx'),
-                            desc: __('Displayed if login is attempted before email verification.', 'multivendorx'),
-                            type: 'textarea',
-                            class: 'mvx-setting-textarea',
-                        },
-                    ],
-                },
-                {
-                    id:'social-verification',
-                    icon: "adminlib-social-share",
-                    label: 'Social Verification',
-                    connected: true,
-                    desc: 'Allow stores to verify their identity by connecting social media accounts.',
-                    wrapperClass: 'social-verification',
-                    formFields: [
-                        {
-                            key: 'social_verification_methods',
-                            type: 'payment-tabs',
-                            modal: [
-                                {
-                                    id:'google-connect',
-                                    icon: "adminlib-google",
-                                    label: 'Google Connect',
-                                    connected: false,
-                                    desc: 'Connect and authenticate stores via Google accounts.',
-                                    formFields: [
-                                        { key: 'client_id', type: 'text', label: 'Google Client ID', placeholder: 'Enter Google Client ID' },
-                                        { key: 'client_secret', type: 'password', label: 'Google Client Secret', placeholder: 'Enter Google Client Secret' },
-                                        { key: 'redirect_uri', type: 'text', label: 'Redirect URI', placeholder: 'Enter Redirect URI' }
-                                    ],
-                                },
-                                {
-                                    id:'twitter-connect',
-                                    icon: "adminlib-twitter",
-                                    label: 'Twitter Connect',
-                                    connected: false,
-                                    desc: 'Connect and authenticate stores via Twitter accounts.',
-                                    formFields: [
-                                        { key: 'api_key', type: 'text', label: 'Twitter API Key', placeholder: 'Enter Twitter API Key' },
-                                        { key: 'api_secret_key', type: 'password', label: 'Twitter API Secret Key', placeholder: 'Enter Twitter API Secret Key' },
-                                        { key: 'bearer_token', type: 'text', label: 'Bearer Token', placeholder: 'Enter Bearer Token' },
-                                    ],
-                                },
-                                {
-                                    id:'facebook-connect',
-                                    icon: "adminlib-facebook",
-                                    label: 'Facebook Connect',
-                                    connected: false,
-                                    desc: 'Connect and authenticate stores via Facebook accounts.',
-                                    formFields: [
-                                        { key: 'app_id', type: 'text', label: 'Facebook App ID', placeholder: 'Enter Facebook App ID' },
-                                        { key: 'app_secret', type: 'password', label: 'Facebook App Secret', placeholder: 'Enter Facebook App Secret' },
-                                    ],
-                                },
-                                {
-                                    id:'linkedin-connect',
-                                    icon: "adminlib-linkedin",
-                                    label: 'LinkedIn Connect',
-                                    connected: false,
-                                    desc: 'Connect and authenticate stores via LinkedIn accounts.',
-                                    formFields: [
-                                        { key: 'client_id', type: 'text', label: 'LinkedIn Client ID', placeholder: 'Enter LinkedIn Client ID' },
-                                        { key: 'client_secret', type: 'password', label: 'LinkedIn Client Secret', placeholder: 'Enter LinkedIn Client Secret' },
-                                        { key: 'redirect_uri', type: 'text', label: 'Redirect URI', placeholder: 'Enter Redirect URI' },
-                                    ],
-                                }
-                            ]
-                        }
-                    ],
-                },
             ],
-            //proSetting:true
+        },
+        {
+            key: 'all_verification_methods',
+            type: 'payment-tabs',
+            label: 'Social Verification',
+            settingDescription: __('Allow stores to verify their identity by connecting social media accounts.', 'multivendorx'),
+            modal: [
+                {
+                    id: 'google-connect',
+                    icon: "adminlib-google",
+                    label: 'Google Connect',
+                    connected: false,
+                    desc: 'Connect and authenticate stores via Google accounts.',
+                    formFields: [
+                        { key: 'client_id', type: 'text', label: 'Google Client ID', placeholder: 'Enter Google Client ID' },
+                        { key: 'client_secret', type: 'password', label: 'Google Client Secret', placeholder: 'Enter Google Client Secret' },
+                        { key: 'redirect_uri', type: 'text', label: 'Redirect URI', placeholder: 'Enter Redirect URI' }
+                    ],
+                },
+                {
+                    id: 'twitter-connect',
+                    icon: "adminlib-twitter",
+                    label: 'Twitter Connect',
+                    connected: false,
+                    desc: 'Connect and authenticate stores via Twitter accounts.',
+                    formFields: [
+                        { key: 'api_key', type: 'text', label: 'Twitter API Key', placeholder: 'Enter Twitter API Key' },
+                        { key: 'api_secret_key', type: 'password', label: 'Twitter API Secret Key', placeholder: 'Enter Twitter API Secret Key' },
+                        { key: 'bearer_token', type: 'text', label: 'Bearer Token', placeholder: 'Enter Bearer Token' },
+                    ],
+                },
+                {
+                    id: 'facebook-connect',
+                    icon: "adminlib-facebook",
+                    label: 'Facebook Connect',
+                    connected: false,
+                    desc: 'Connect and authenticate stores via Facebook accounts.',
+                    formFields: [
+                        { key: 'app_id', type: 'text', label: 'Facebook App ID', placeholder: 'Enter Facebook App ID' },
+                        { key: 'app_secret', type: 'password', label: 'Facebook App Secret', placeholder: 'Enter Facebook App Secret' },
+                    ],
+                },
+                {
+                    id: 'linkedin-connect',
+                    icon: "adminlib-linkedin",
+                    label: 'LinkedIn Connect',
+                    connected: false,
+                    desc: 'Connect and authenticate stores via LinkedIn accounts.',
+                    formFields: [
+                        { key: 'client_id', type: 'text', label: 'LinkedIn Client ID', placeholder: 'Enter LinkedIn Client ID' },
+                        { key: 'client_secret', type: 'password', label: 'LinkedIn Client Secret', placeholder: 'Enter LinkedIn Client Secret' },
+                        { key: 'redirect_uri', type: 'text', label: 'Redirect URI', placeholder: 'Enter Redirect URI' },
+                    ],
+                }
+            ]
+        },
+        {
+            key: 'separator_content',
+            type: 'section',
+            hint: __("Email Verification", 'multivendorx'),
+            desc: __('Verify stores email addresses to prevent fake registrations and enhance security.')
+        },
+        {
+            key: 'registration_notice',
+            type: 'textarea',
+            desc: __(
+                'Policies created by the admin are displayed by default. Stores can edit and override their own policies.',
+                'multivendorx'
+            ),
+            label: __( 'Registration Notice', 'multivendorx' ),
+            moduleEnabled: 'store-policy',
+        },
+        {
+            key: 'login_notice',
+            type: 'textarea',
+            desc: __(
+                'Displayed if login is attempted before email verification.',
+                'multivendorx'
+            ),
+            label: __( 'Login Notice', 'multivendorx' ),
+            moduleEnabled: 'store-policy',
         },
     ],
 };

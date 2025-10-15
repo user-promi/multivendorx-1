@@ -5,7 +5,7 @@ import template3 from '../../../assets/images/template/store/template3.jpg';
 
 export default {
     id: 'store-appearance',
-    priority: 5,
+    priority: 4,
     name: __('Appearance', 'multivendorx'),
     desc: __(
         "Control how stores look and feel on your marketplace.",
