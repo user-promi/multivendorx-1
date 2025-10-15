@@ -189,7 +189,7 @@ a {
                     // user dropdown start
                     .dropdown {
                         position: relative;
-
+                        display: none;
                         .avatar-wrapper {
                             background: var(--themeColor);
                             border-radius: 50%;
@@ -933,6 +933,7 @@ a {
 
     &.notification {
         min-width: 25rem !important;
+        display: none;
 
         .title {
             padding: 0.75rem;
