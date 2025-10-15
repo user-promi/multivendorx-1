@@ -41,7 +41,7 @@ import NestedComponent from './NestedComponent';
 import ColorSettingInput from './ColorSettingInput';
 import EndpointEditor from './EndpointEditor';
 import PaymentTabsComponent from './PaymentTabsComponent';
-import VerificationMethods from './VerificationMethods';
+// import VerificationMethods from './VerificationMethods';
 import SystemInfo from './SystemInfo';
 import MultiInput from './MultiInput';
 
@@ -1787,22 +1787,6 @@ const AdminForm: React.FC<AdminFormProps> = ({
                                     updateSetting(inputField.key, val);
                                     settingChanged.current = true;
                                 }
-                            }}
-                        />
-                    );
-                    break;
-                case 'verification-methods':
-                    input = (
-                        <VerificationMethods
-                            key={inputField.key}
-                            label={inputField.label}//Section label/title.
-                            nestedFields={inputField.nestedFields ?? []}//Array of nested input fields for verification method configuration.
-                            addButtonLabel={inputField.addButtonLabel}//Label text for the "Add" button.
-                            deleteButtonLabel={inputField.deleteButtonLabel}//Label text for the "Delete" button.
-                            value={value}
-                            onChange={(val) => {
-                                updateSetting(inputField.key, val);
-                                settingChanged.current = true;
                             }}
                         />
                     );

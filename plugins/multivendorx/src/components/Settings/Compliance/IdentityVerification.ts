@@ -96,39 +96,35 @@ export default {
             desc: __('Verify store identity using government-issued documents or facial recognition. Ensures authenticity of users.')
         },
         {
-            key: 'all_verification_methods',
-            type: 'payment-tabs',
-            label: __('Verification Methods', 'mvx-pro'),
-            modal: [
-                {
-                    id: 'id-verification',
-                    icon: "adminlib-verification3",
-                    label: 'Identity Verification',
-                    connected: false,
-                    desc: 'Verify store identity using government-issued documents or facial recognition. Ensures authenticity of users.',
-                    wrapperClass: 'add-method',
-                    formFields: [
-                        {
-                            key: 'verification_methods',
-                            type: 'verification-methods', // custom type
-                            label: 'Verification Methods',
-                            addButtonLabel: 'Add New Method',
-                            deleteButtonLabel: 'Remove',
-                            nestedFields: [
-                                { key: 'label', type: 'text', label: 'Label', placeholder: 'Enter label' },
-                                { key: 'required', type: 'checkbox', label: 'Required' },
-                                { key: 'active', type: 'checkbox', label: 'Active' },
-                            ],
-                        },
-                    ],
-                },
-            ],
+            key: 'shipping_stage',
+            type: 'multi-string',
+            label: __('Verification Methods', 'multivendorx'),
+            placeholder: __('Enter Shipping stage', 'multivendorx'),
+            // iconEnable: true,
+            // descEnable: true,
+            requiredEnable: true,
+            name: 'abuse_report_reasons',
+            // defaultValues: [
+            //     { value: "Order Received", locked: true, iconClass: "adminlib-check", description: "Order is received by store", tag:"Primary",required: true },
+            //     { value: "Processing", locked: true, iconClass: "adminlib-clock", description: "Order is being processed",tag:"Primary",required: true },
+            //     { value: "Shipped", iconClass: "adminlib-truck",default:"Primary" } // editable
+            // ],
+            iconOptions: ["adminlib-check", "adminlib-clock", "adminlib-cart", "adminlib-store"], // dropdown options
+            proSetting: false,
+            maxItems: 10,
+            allowDuplicates: false
+        },
+        {
+            key: 'separator_content',
+            type: 'section',
+            hint: __("Social Verification", 'multivendorx'),
+            desc: __('Allow stores to verify their identity by connecting social media accounts.')
         },
         {
             key: 'all_verification_methods',
             type: 'payment-tabs',
             label: 'Social Verification',
-            settingDescription: __('Allow stores to verify their identity by connecting social media accounts.', 'multivendorx'),
+            // settingDescription: __('Allow stores to verify their identity by connecting social media accounts.', 'multivendorx'),
             modal: [
                 {
                     id: 'google-connect',
@@ -192,7 +188,7 @@ export default {
                 'Policies created by the admin are displayed by default. Stores can edit and override their own policies.',
                 'multivendorx'
             ),
-            label: __( 'Registration Notice', 'multivendorx' ),
+            label: __('Registration Notice', 'multivendorx'),
             moduleEnabled: 'store-policy',
         },
         {
@@ -202,7 +198,7 @@ export default {
                 'Displayed if login is attempted before email verification.',
                 'multivendorx'
             ),
-            label: __( 'Login Notice', 'multivendorx' ),
+            label: __('Login Notice', 'multivendorx'),
             moduleEnabled: 'store-policy',
         },
     ],

@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import React, { useState, FocusEvent, KeyboardEvent } from 'react';
+import React, { useState, FocusEvent, KeyboardEvent, useEffect, useRef } from 'react';
 import "../styles/web/MultiInputString.scss";
 
 // Types
@@ -50,7 +50,6 @@ const MultiInput: React.FC<MultiInputProps> = (props) => {
     placeholder,
     wrapperClass,
     inputClass,
-    buttonClass,
     listClass,
     itemClass,
     iconOptions = [],
@@ -75,20 +74,25 @@ const MultiInput: React.FC<MultiInputProps> = (props) => {
   const [requiredChecked, setRequiredChecked] = useState(false);
   const [editIndex, setEditIndex] = useState<number | null>(null);
   const [iconDropdownOpen, setIconDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   // --- Add or Update Item ---
-  const handleAddOrUpdate = () => {
+  const handleAddOrUpdate = (index?: number) => {
     const trimmedValue = inputValue.trim();
     if (!trimmedValue) return;
 
-    if (!allowDuplicates) {
-      const duplicate = values.some((item, idx) => item.value === trimmedValue && idx !== editIndex);
-      if (duplicate) return;
-    }
-
     const updatedValues = [...values];
 
-    if (editIndex !== null) {
+    if (index !== undefined) {
+      if (updatedValues[index].locked) return;
+      updatedValues[index] = {
+        ...updatedValues[index],
+        value: trimmedValue,
+        description: itemDescription,
+        iconClass: selectedIcon || updatedValues[index].iconClass,
+        required: requiredChecked,
+      };
+    } else if (editIndex !== null) {
       if (updatedValues[editIndex].locked) return;
       updatedValues[editIndex] = {
         ...updatedValues[editIndex],
@@ -97,7 +101,6 @@ const MultiInput: React.FC<MultiInputProps> = (props) => {
         iconClass: selectedIcon || updatedValues[editIndex].iconClass,
         required: requiredChecked,
       };
-      setEditIndex(null);
     } else {
       if (maxItems && updatedValues.length >= maxItems) return;
       updatedValues.push({
@@ -106,10 +109,10 @@ const MultiInput: React.FC<MultiInputProps> = (props) => {
         iconClass: selectedIcon,
         required: requiredChecked,
       });
+      setEditIndex(updatedValues.length - 1); // open new item immediately
     }
 
     onStringChange?.({ target: { name, value: updatedValues } });
-    resetFields();
   };
 
   // --- Delete Item ---
@@ -120,9 +123,14 @@ const MultiInput: React.FC<MultiInputProps> = (props) => {
     if (editIndex === index) resetFields();
   };
 
-  // --- Edit Item ---
+  // --- Open edit panel ---
   const handleEdit = (index: number) => {
     if (values[index].locked) return;
+    if (editIndex === index) {
+      resetFields();
+      return;
+    }
+
     const item = values[index];
     setEditIndex(index);
     setInputValue(item.value);
@@ -131,11 +139,43 @@ const MultiInput: React.FC<MultiInputProps> = (props) => {
     setRequiredChecked(item.required || false);
   };
 
+  // --- Add New Item with Demo Data ---
+  const handleAddNew = () => {
+    const updatedValues = [...values];
+    const demoItem: MultiStringItem = {
+      value: "New Item",
+      description: "Demo description",
+      iconClass: iconOptions.length > 0 ? iconOptions[0] : "",
+      required: false,
+    };
+    updatedValues.push(demoItem);
+    const newIndex = updatedValues.length - 1;
+    onStringChange?.({ target: { name, value: updatedValues } });
+
+    // Open edit panel for the new item
+    setEditIndex(newIndex);
+    setInputValue(demoItem.value);
+    setItemDescription(demoItem.description || "");
+    setSelectedIcon(demoItem.iconClass || "");
+    setRequiredChecked(demoItem.required || false);
+  };
+
   // --- Keyboard Support ---
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") handleAddOrUpdate();
     if (e.key === "Escape") resetFields();
   };
+
+  // --- Click outside to close dropdown ---
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        resetFields();
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const resetFields = () => {
     setEditIndex(null);
@@ -146,96 +186,140 @@ const MultiInput: React.FC<MultiInputProps> = (props) => {
     setIconDropdownOpen(false);
   };
 
+  // --- Live update when editing fields ---
+  useEffect(() => {
+    if (editIndex !== null) handleAddOrUpdate(editIndex);
+  }, [inputValue, itemDescription, selectedIcon, requiredChecked]);
+
   return (
     <div className={wrapperClass}>
       <div className="multi-input-row">
         <ul className={listClass || "multi-string-list"}>
           {values.map((item, index) => (
-            <li key={index} className={itemClass}>
-              <div className="details">
-                {iconEnable && item.iconClass && <i className={item.iconClass}></i>}
-                <div className={`title ${item.locked ? "locked" : ""}`}>{item.value}</div>
-                {item.description && <div className="item-description">{item.description}</div>}
-                {requiredEnable && item.required && <span className="required-label">Required</span>}
-                {item.tag && <span className="item-tag">{item.tag}</span>}
-              </div>
-              <div className="action-wrapper">
+            <li key={index} className={`${itemClass} multi-item-with-dropdown`}>
+              <div className="input-header">
+
+                <div className="details-wrapper">
+                  {iconEnable && item.iconClass && <i className={item.iconClass}></i>}
+                  <div className="details">
+                    <div className={`title ${item.locked ? "locked" : ""}`}>
+                      {item.value}
+                      {requiredEnable && item.required && (
+                        <span className="admin-badge red">Required</span>
+                      )}
+                      {item.tag && <span className="admin-badge blue">{item.tag}</span>}
+                    </div>
+                    {item.description && (
+                      <div className="item-description">{item.description}</div>
+                    )}
+                  </div>
+                </div>
+                
+
                 {!item.locked && (
-                  <>
-                    <span className="icon adminlib-create" onClick={() => handleEdit(index)}></span>
-                    <span className="icon adminlib-delete" onClick={() => handleDelete(index)}></span>
-                  </>
+                <div className="action-section">
+                  <div className="action-icons">
+                    <i className="adminlib-more-vertical"></i>
+                    <div className="action-dropdown hover">
+                      <ul>
+                        <li className=" hover" onClick={() => handleEdit(index)}>
+                          <i className="adminlib-create"></i>
+                          <span>Edit</span>
+                        </li>
+                        <li className=" hover" onClick={() => handleDelete(index)}>
+                          <i className="adminlib-delete"></i>
+                          <span>Delete</span>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
                 )}
               </div>
+
+              {editIndex === index && (
+                <div className="multi-input-dropdown" ref={dropdownRef}>
+                  {iconEnable && iconOptions.length > 0 && (
+                    <div className="form-group">
+                      <div className="label">Select Icon</div>
+                      <div className="input">
+                        <div
+                          className="selected-icon"
+                          onClick={() => setIconDropdownOpen(!iconDropdownOpen)}
+                        >
+                          {selectedIcon ? <i className={selectedIcon}></i> : "Select Icon"}
+                          <span className="dropdown-arrow">▾</span>
+                        </div>
+                        {iconDropdownOpen && (
+                          <ul className="icon-options-list">
+                            {iconOptions.map((icon) => (
+                              <li
+                                key={icon}
+                                className={`icon-option ${selectedIcon === icon ? "selected" : ""}`}
+                                onClick={() => {
+                                  setSelectedIcon(icon);
+                                  setIconDropdownOpen(false);
+                                }}
+                              >
+                                <i className={icon}></i>
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="form-group">
+                    <div className="label">Title</div>
+                    <div className="input">
+                      <input
+                        type="text"
+                        value={inputValue}
+                        placeholder={placeholder}
+                        className={inputClass}
+                        onChange={(e) => setInputValue(e.target.value)}
+                        onKeyDown={handleKeyDown}
+                      />
+                    </div>
+                  </div>
+
+                  {descEnable && (
+                    <div className="form-group">
+                      <div className="label">Description</div>
+                      <div className="input">
+                        <input
+                          type="text"
+                          value={itemDescription}
+                          placeholder="Enter description"
+                          className="basic-input"
+                          onChange={(e) => setItemDescription(e.target.value)}
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  {requiredEnable && (
+                    <div className="form-group">
+                      <div className="label">Required</div>
+                      <div className="input">
+                        <input
+                          type="checkbox"
+                          checked={requiredChecked}
+                          onChange={(e) => setRequiredChecked(e.target.checked)}
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
             </li>
           ))}
 
-          <li className="multi-input-edit">
-            <input
-              type="text"
-              id={id}
-              name={name}
-              value={inputValue}
-              placeholder={placeholder}
-              className={inputClass}
-              onChange={(e) => setInputValue(e.target.value)}
-              onFocus={onFocus}
-              onBlur={onBlur}
-              onKeyDown={handleKeyDown}
-            />
-
-            {descEnable && (
-              <input
-                type="text"
-                value={itemDescription}
-                placeholder="Enter description (optional)"
-                className="multi-input-description"
-                onChange={(e) => setItemDescription(e.target.value)}
-              />
-            )}
-
-            {requiredEnable && (
-              <label className="multi-input-required">
-                <input
-                  type="checkbox"
-                  checked={requiredChecked}
-                  onChange={(e) => setRequiredChecked(e.target.checked)}
-                />
-                Required
-              </label>
-            )}
-
-            {iconEnable && iconOptions.length > 0 && (
-              <div className="multi-input-icon-dropdown">
-                <div className="selected-icon" onClick={() => setIconDropdownOpen(!iconDropdownOpen)}>
-                  {selectedIcon ? <i className={selectedIcon}></i> : "Select Icon"}
-                  <span className="dropdown-arrow">▾</span>
-                </div>
-                {iconDropdownOpen && (
-                  <ul className="icon-options-list">
-                    {iconOptions.map((icon) => (
-                      <li
-                        key={icon}
-                        className={`icon-option ${selectedIcon === icon ? "selected" : ""}`}
-                        onClick={() => {
-                          setSelectedIcon(icon);
-                          setIconDropdownOpen(false);
-                        }}
-                      >
-                        <i className={icon}></i>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-            )}
-
-            <span
-              className={editIndex !== null ? `${buttonClass || "admin-btn"} btn-green` : `${buttonClass || "admin-btn"} btn-purple`}
-              onClick={handleAddOrUpdate}
-            >
-              <i className={editIndex !== null ? "adminlib-create" : "adminlib-plus-circle-o"}></i>
-              {editIndex !== null ? "Update" : "Add"}
+          {/* Add new item button */}
+          <li className="multi-input-add">
+            <span className="admin-btn btn-purple" onClick={handleAddNew}>
+              <i className="adminlib-plus-circle-o"></i> Add New
             </span>
           </li>
         </ul>
@@ -248,7 +332,10 @@ const MultiInput: React.FC<MultiInputProps> = (props) => {
       )}
 
       {description && (
-        <p className={`${descClass} settings-metabox-description`} dangerouslySetInnerHTML={{ __html: description }} />
+        <p
+          className={`${descClass} settings-metabox-description`}
+          dangerouslySetInnerHTML={{ __html: description }}
+        />
       )}
     </div>
   );
