@@ -85,6 +85,26 @@ const Dashboard: React.FC = () => {
       </div>
 
       <div className="row">
+        <div className="column width-35">
+          <div className="dashboard-view-section">
+            <div className="title">
+              Good Morning, Anna!
+            </div>
+            <div className="des">
+              Here's what's happening with your store today.
+            </div>
+
+            <div className="price-wrapper">
+              <div className="price">
+                $165K
+              </div>
+              <div className="details">58% of sales target</div>
+            </div>
+            <div className="admin-btn btn-purple">
+              View Details
+            </div>
+          </div>
+        </div>
         <div className="column width-65">
           <div className="card">
             <div className="card-header">
