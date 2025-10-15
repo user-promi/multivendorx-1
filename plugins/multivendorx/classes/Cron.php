@@ -86,9 +86,8 @@ class Cron {
     public function normalize_settings($type) {
         switch ($type) {
             case 'hourly':
-                $raw = reset(MultiVendorX()->setting->get_setting('disbursement_hourly')) ?? [];
                 return [
-                    'interval' => isset($raw['payouts_every_hour']) ? (int) $raw['payouts_every_hour'] : 1,
+                    'interval' => MultiVendorX()->setting->get_setting('disbursement_hourly') ? (int) MultiVendorX()->setting->get_setting('disbursement_hourly') : 1,
                 ];
 
             case 'daily':
@@ -159,9 +158,17 @@ class Cron {
                 return $ts;
 
             case 'hourly':
-                $interval = !empty($settings['interval']) ? (int) $settings['interval'] : 1; // every X hours
+                $interval = !empty($settings['interval']) ? (int) $settings['interval'] : 1;
                 $now      = time();
-                $next     = strtotime('+' . $interval . ' hour', $now);
+
+                $current_minute = (int) date('i', $now);
+
+                if ( $current_minute >= $interval ) {
+                    $next = strtotime('+' . (60 - $current_minute + $interval) . ' minutes', $now);
+                } else {
+                    $next = strtotime('+' . ($interval - $current_minute) . ' minutes', $now);
+                }
+
                 return $next;
 
             default:
