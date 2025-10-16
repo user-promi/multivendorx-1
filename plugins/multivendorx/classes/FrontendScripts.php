@@ -545,6 +545,7 @@ class FrontendScripts {
                         'apiUrl'                   => untrailingslashit( get_rest_url() ),
 						'restUrl'                  => MultiVendorX()->rest_namespace,
 						'nonce'                    => wp_create_nonce( 'wp_rest' ),
+                        'khali_dabba'              => Utill::is_khali_dabba(),
                         'woo_nonce'                => wp_create_nonce( 'wc_store_api' ),
                         'country_list'             => $country_list,
                         'color'                    => MultiVendorX()->setting->get_setting( 'store_color_settings' ),
