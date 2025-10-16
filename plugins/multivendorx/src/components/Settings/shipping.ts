@@ -57,7 +57,7 @@ export default {
         {
             key: 'enable_shipment_rule',
             label: __('Allow Shipment Tracking', 'multivendorx'),
-            desc: __("Enable stores to provide tracking information for orders", 'multivendorx'),
+            settingDescription: __("Let stores add tracking IDs and courier details so customers can track their orders directly from the order page.", 'multivendorx'),
             // desc: __('', 'multivendorx'),
             type: 'checkbox',
             options: [
@@ -72,7 +72,7 @@ export default {
             key: 'disbursement_order_status',
             type: 'checkbox',
             label: __(' Shipping Providers', 'multivendorx'),
-            settingDescription: __(" Select which providers vendors can use (multiple selections allowed)", 'multivendorx'),
+            settingDescription: __(" You can select from existing carriers or let stores connect their own. Only the enabled providers will be available for assigning tracking numbers.", 'multivendorx'),
             class: 'mvx-toggle-checkbox',
             addNewBtn: 'Add Custom Provider',
             options: [
