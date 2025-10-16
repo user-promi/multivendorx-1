@@ -7,15 +7,15 @@ import MultiCheckBox from "./MultiCheckbox";
 interface PaymentFormField {
   key: string;
   type:
-  | "text"
-  | "password"
-  | "number"
-  | "checkbox"
-  | "verification-methods"
-  | "textarea"
-  | "payment-tabs"
-  | "multi-checkbox"
-  | "setting-toggle";
+    | "text"
+    | "password"
+    | "number"
+    | "checkbox"
+    | "verification-methods"
+    | "textarea"
+    | "payment-tabs"
+    | "multi-checkbox"
+    | "setting-toggle";
   label: string;
   placeholder?: string;
   nestedFields?: any[];
@@ -27,6 +27,14 @@ interface PaymentFormField {
   colNumber?: number;
   options?: any;
   modal?: PaymentMethod[];
+  look?: string;
+  selectDeselect?: boolean;
+  rightContent?: string;
+  addNewBtn?: boolean;
+  proSetting?: boolean;
+  moduleEnabled?: string;
+  dependentSetting?: string;
+  dependentPlugin?: string;
 }
 
 interface PaymentMethod {
@@ -56,10 +64,12 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
   methods,
   value,
   onChange,
+  appLocalizer,
 }) => {
   const [activeTab, setActiveTab] = useState<string | null>(null);
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
+  const [modelOpen, setModelOpen] = useState(false);
 
   const handleInputChange = (
     methodKey: string,
@@ -80,7 +90,6 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
     setActiveTab(enable ? icon || null : null);
   };
 
-  // Close menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
@@ -91,6 +100,13 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
     return () =>
       document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  // Dummy placeholders for external dependencies in your snippet
+  const isProSetting = (val: boolean) => val;
+  const hasAccess = () => true;
+  const handlMultiSelectDeselectChange = (key: string, opts: any[]) => {
+    console.log("Multi select/deselect triggered:", key, opts);
+  };
 
   const renderField = (methodId: string, field: PaymentFormField) => {
     const fieldValue = value[methodId]?.[field.key];
@@ -114,9 +130,9 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
             options={
               Array.isArray(field.options)
                 ? field.options.map((opt) => ({
-                  ...opt,
-                  value: String(opt.value),
-                }))
+                    ...opt,
+                    value: String(opt.value),
+                  }))
                 : []
             }
             value={fieldValue || ""}
@@ -152,8 +168,66 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
             proSetting={false}
           />
         );
-        
-       default:
+      case "multi-checkbox":
+        let normalizedValue: string[] = [];
+
+        if (Array.isArray(fieldValue)) {
+          normalizedValue = fieldValue.filter((v) => v && v.trim() !== "");
+        } else if (typeof fieldValue === "string" && fieldValue.trim() !== "") {
+          normalizedValue = [fieldValue];
+        }
+
+        return (
+          <MultiCheckBox
+            khali_dabba={appLocalizer?.khali_dabba ?? false}
+            wrapperClass={
+              field.look === "toggle"
+                ? "toggle-btn"
+                : field.selectDeselect === true
+                ? "checkbox-list-side-by-side"
+                : "simple-checkbox"
+            }
+            descClass="settings-metabox-description"
+            description={field.desc}
+            selectDeselectClass="admin-btn btn-purple select-deselect-trigger"
+            inputWrapperClass="toggle-checkbox-header"
+            inputInnerWrapperClass={
+              field.look === "toggle" ? "toggle-checkbox" : "default-checkbox"
+            }
+            inputClass={field.class}
+            tour={undefined}
+            hintOuterClass="settings-metabox-description"
+            hintInnerClass="hover-tooltip"
+            idPrefix="toggle-switch"
+            selectDeselect={field.selectDeselect}
+            selectDeselectValue="Select / Deselect All"
+            rightContentClass="settings-metabox-description"
+            options={
+              Array.isArray(field.options)
+                ? field.options.map((opt) => ({
+                    ...opt,
+                    value: String(opt.value),
+                  }))
+                : []
+            }
+            value={normalizedValue}
+            proSetting={isProSetting(field.proSetting ?? false)}
+            onMultiSelectDeselectChange={() =>
+              handlMultiSelectDeselectChange(
+                field.key,
+                Array.isArray(field.options)
+                  ? field.options.map((opt) => ({
+                      ...opt,
+                      value: String(opt.value),
+                    }))
+                  : []
+              )
+            }
+            proChanged={() => setModelOpen(true)}
+          />
+        );
+
+      default:
         return (
           <input
             type={field.type}
@@ -198,9 +272,7 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
 
               <div
                 className="details"
-                onClick={() =>
-                  setActiveTab(isActive ? null : method.icon)
-                }
+                onClick={() => setActiveTab(isActive ? null : method.icon)}
               >
                 <div className="details-wrapper">
                   <div className="payment-method-icon">
@@ -210,8 +282,9 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
                     <div className="title-wrapper">
                       <span className="title">{method.label}</span>
                       <div
-                        className={`admin-badge ${isEnabled ? "green" : "red"
-                          }`}
+                        className={`admin-badge ${
+                          isEnabled ? "green" : "red"
+                        }`}
                       >
                         {isEnabled ? "Active" : "Inactive"}
                       </div>
@@ -223,41 +296,51 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
                     </div>
                   </div>
                 </div>
-                {/* {isEnabled && (
-                  <div
-                    className="admin-btn btn-purple"
-                    onClick={() =>
-                      setActiveTab(isActive ? null : method.icon)
-                    }
-                  >
-                    Settings
-                  </div>
-                )} */}
               </div>
+
               {isEnabled && (
                 <div className="right-section action-section" ref={menuRef}>
                   <div className="action-icons">
                     <i
                       className="adminlib-more-vertical"
                       onClick={(e) => {
-                        e.stopPropagation(); // Prevent outside click
+                        e.stopPropagation();
                         setOpenMenu(isMenuOpen ? null : method.id);
                       }}
                     />
-                    <div className={`action-dropdown ${isMenuOpen ? "show" : "hover"}`}>
+                    <div
+                      className={`action-dropdown ${
+                        isMenuOpen ? "show" : "hover"
+                      }`}
+                    >
                       <ul>
                         {isEnabled ? (
-                          <li className="hover" onClick={() => toggleEnable(method.id, false, method.icon)}>
+                          <li
+                            className="hover"
+                            onClick={() =>
+                              toggleEnable(method.id, false, method.icon)
+                            }
+                          >
                             <i className="adminlib-eye"></i>
                             <span>Enabled</span>
                           </li>
                         ) : (
-                          <li className="hover" onClick={() => toggleEnable(method.id, true, method.icon)}>
+                          <li
+                            className="hover"
+                            onClick={() =>
+                              toggleEnable(method.id, true, method.icon)
+                            }
+                          >
                             <i className="adminlib-eye-blocked"></i>
                             <span>Disable</span>
                           </li>
                         )}
-                        <li className="hover" onClick={() => setActiveTab(isActive ? null : method.icon)}>
+                        <li
+                          className="hover"
+                          onClick={() =>
+                            setActiveTab(isActive ? null : method.icon)
+                          }
+                        >
                           <i className="adminlib-setting"></i>
                           <span>Settings</span>
                         </li>
@@ -270,8 +353,9 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
 
             {method.formFields && method.formFields.length > 0 && (
               <div
-                className={`${method.wrapperClass || ""} payment-method-form ${isEnabled && isActive ? "open" : ""
-                  }`}
+                className={`${method.wrapperClass || ""} payment-method-form ${
+                  isEnabled && isActive ? "open" : ""
+                }`}
               >
                 {method.formFields.map((field) => (
                   <div key={field.key} className="form-group">
