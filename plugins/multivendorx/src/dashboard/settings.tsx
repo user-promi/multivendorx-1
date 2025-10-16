@@ -10,7 +10,7 @@ import Withdrawl from './withdrawl';
 import Privacy from './settings/Privacy';
 import Verification from './settings/Verification';
 import ShippingDelivery from './settings/ShippingDelivery';
-import Livechat from './settings/Livechat';
+import LiveChat from './settings/LiveChat';
 
 const settings = () => {
     const id = appLocalizer.store_id;

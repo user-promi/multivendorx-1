@@ -9,7 +9,7 @@ class Payment
 {
     public function __construct()
     {
-        add_action('multivendorx_process_stripe-connect_payment', [$this, 'process_payment'], 10, 4);
+        add_action('multivendorx_process_stripe-connect_payment', [$this, 'process_payment'], 10, 5);
         $this->init_stripe();
         // Register AJAX
         add_action('wp_ajax_create_stripe_account', [$this, 'ajax_create_account']);
@@ -192,7 +192,7 @@ class Payment
             ];
         }
     }
-    public function process_payment($store_id, $amount, $order_id = null, $transaction_id = null)
+    public function process_payment($store_id, $amount, $order_id = null, $transaction_id = null, $note = null)
     {
         $store = new Store($store_id);
         $stripe_account_id = $store->get_meta( '_stripe_connect_account_id');
@@ -204,7 +204,7 @@ class Payment
         }
         $transfer = $this->create_transfer($amount, $stripe_account_id, $order_id);
         if ($transfer) {
-            do_action('multivendorx_after_payment_complete', $store_id, 'Stripe Connect', 'success', $order_id, $transaction_id);
+            do_action('multivendorx_after_payment_complete', $store_id, 'Stripe Connect', 'success', $order_id, $transaction_id, $note, $amount);
             return [
                 'success'  => true,
                 'message'  => __('Payout successful', 'multivendorx'),
