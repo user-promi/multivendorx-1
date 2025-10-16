@@ -14,6 +14,7 @@ interface PaymentFormField {
   | "verification-methods"
   | "textarea"
   | "payment-tabs"
+  | "multi-checkbox"
   | "setting-toggle";
   label: string;
   placeholder?: string;
@@ -151,8 +152,8 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
             proSetting={false}
           />
         );
-
-      default:
+        
+       default:
         return (
           <input
             type={field.type}
