@@ -128,6 +128,7 @@ interface InputField {
     | 'payment-tabs'
     | 'multi-string'
     | 'verification-methods'
+    | 'description'
     | 'form-builder'
     | 'setting-time'
     | 'endpoint-editor';
