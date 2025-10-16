@@ -40,8 +40,7 @@ export default {
                     icon: "adminlib-facebook",
                     label: 'Distance-based shipping',
                     connected: false,
-                    desc: 'Shipping cost is calculated based on miles/kilometers between the store's location and the customer.',
-
+                    desc: 'Shipping cost is calculated based on miles/kilometers between the store\'s location and the customer.',
                 },
             ]
         },
@@ -119,12 +118,12 @@ export default {
             ),
             name: 'abuse_report_reasons',
             defaultValues: [
-                { value: "Australia Post" ,description: "Order is received by store"},
-                { value: "Canada Post" ,description: "Order is received by store"},
-                { value: "Australia Post"  ,description: "Order is received by store"},
-                { value: "Canada Post" ,description: "Order is received by store"},
-                { value: "Australia Post" ,description: "Order is received by store"},
-                { value: "Canada Post" ,description: "Order is received by store"},
+                { value: "Australia Post", description: "Order is received by store" },
+                { value: "Canada Post", description: "Order is received by store" },
+                { value: "Australia Post", description: "Order is received by store" },
+                { value: "Canada Post", description: "Order is received by store" },
+                { value: "Australia Post", description: "Order is received by store" },
+                { value: "Canada Post", description: "Order is received by store" },
             ],
             // iconOptions: ["adminlib-check", "adminlib-clock", "adminlib-cart", "adminlib-store"], // dropdown options
             proSetting: false,
@@ -155,6 +154,7 @@ export default {
             allowDuplicates: false
         },
         {
+
             key: 'order-completion-rules',
             type: 'setting-toggle',
             label: __('When orders are marked complete', 'multivendorx'),
@@ -177,7 +177,8 @@ export default {
                     value: 'country_wise',
                 },
             ],
-			{
+        },
+        {
             key: 'registration page',
             type: 'blocktext',
             label: __('no_label', 'multivendorx'),
@@ -186,7 +187,6 @@ export default {
                 '<ul><li>Custom delivery stages make order tracking more transparent for customers and help stores maintain an accurate fulfillment timeline.</li></ul>',
                 'multivendorx'
             ),
-        },
         },
     ],
 };
