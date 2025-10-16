@@ -51,6 +51,8 @@ declare global {
         all_verification_methods:any;
         tinymceApiKey:any;
         payout_payment_options:any;
+        shipping_methods:any;
+        state_list:any;
     }
     interface Color{
         color: any;
