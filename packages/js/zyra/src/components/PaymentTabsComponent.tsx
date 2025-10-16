@@ -276,7 +276,7 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
         return (
           <div
             key={method.id}
-            className={`payment-method-card ${method.disableBtn && !isEnabled ? "disable" : ""} `}
+            className={`payment-method-card ${method.disableBtn && !isEnabled ? "disable" : ""} ${method.openForm ? "open-form" : ""} `}
           >
             {/* Header */}
             <div className="payment-method">

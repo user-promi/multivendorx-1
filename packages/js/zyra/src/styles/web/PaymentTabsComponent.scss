@@ -251,6 +251,14 @@
                 opacity: 0.6;
             }
         }
+
+        &.open-form{
+            cursor: default;
+
+            .payment-method{
+                cursor: default;
+            }
+        }
     }
 }
 

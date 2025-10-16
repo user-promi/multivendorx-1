@@ -20,7 +20,7 @@ const settings = () => {
 
     useEffect(() => {
         if (!id) return;
-
+ 
         axios({
             method: 'GET',
             url: getApiLink(appLocalizer, `store/${id}`),
@@ -210,6 +210,7 @@ const settings = () => {
     const getCurrentTabFromUrl = () => {
         const hash = window.location.hash.replace(/^#/, "");
         const hashParams = new URLSearchParams(hash);
+        console.log(hashParams)
         return hashParams.get("subtab") || "general";
     };
 
@@ -330,25 +331,25 @@ const settings = () => {
     const getForm = (tabId: string) => {
         switch (tabId) {
             case 'general':
-                return <GeneralSettings/>;
+                return <GeneralSettings />;
             case 'appearance':
-                return <Appearance/>;
+                return <Appearance />;
             case 'business-address':
-                return <BusinessAddress/>;
+                return <BusinessAddress />;
             case 'contact-information':
-                return <ContactInformation/>;
+                return <ContactInformation />;
             case 'social-media':
-                return <SocialMedia/>;
+                return <SocialMedia />;
             case 'payout':
-                return <Withdrawl/>;
+                return <Withdrawl />;
             case 'privacy':
-                return <Privacy/>;
+                return <Privacy />;
             case 'shipping':
-                return <ShippingDelivery/>;
+                return <ShippingDelivery />;
             case 'verification':
-                return <Verification/>;
+                return <Verification />;
             case 'livechat':
-                return <Livechat/>;
+                return <LiveChat/>;
             default:
                 return <div></div>;
         }
@@ -362,10 +363,11 @@ const settings = () => {
                 prepareUrl={prepareUrl}
                 appLocalizer={appLocalizer}
                 settingName="Settings"
-                // supprot={[]} 
+                supprot={[]}
                 Link={SimpleLink}
-                leftTabStyle= {true}
-            />
+                submenuRender={true}           />
+
+
         </>
     );
 };
