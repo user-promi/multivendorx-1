@@ -5,7 +5,7 @@
  * @package MultiVendorX
  */
 
-namespace MultiVendorX\ZoneShipping;
+namespace MultiVendorX\CountryShipping;
 
 /**
  * MultiVendorX Module class
@@ -43,7 +43,7 @@ class Module {
      * @return void
      */
     public function init_classes() {
-        $this->container['zone_shipping'] = new Shipping();
+        $this->container['country_shipping'] = new Shipping();
         $this->container['frontend'] = new Frontend();
     }
 

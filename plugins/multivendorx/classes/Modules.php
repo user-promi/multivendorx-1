@@ -141,6 +141,16 @@ class Modules {
                         'module_file'=> MultiVendorX()->plugin_path . 'modules/ZoneShipping/Module.php',
                         'module_class' => 'MultiVendorX\ZoneShipping\Module',
                     ),
+                    'country-shipping'=> array(
+                        'id'=> 'zone-shipping',
+                        'module_file'=> MultiVendorX()->plugin_path . 'modules/CountryShipping/Module.php',
+                        'module_class' => 'MultiVendorX\CountryShipping\Module',
+                    ),
+                    'distance-shipping'=> array(
+                        'id'=> 'zone-shipping',
+                        'module_file'=> MultiVendorX()->plugin_path . 'modules/DistanceShipping/Module.php',
+                        'module_class' => 'MultiVendorX\DistanceShipping\Module',
+                    ),
 				)
             );
         }
