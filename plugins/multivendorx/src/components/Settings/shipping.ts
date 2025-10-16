@@ -49,14 +49,14 @@ export default {
             key: 'section',
             type: 'section',
             hint: __(
-                'Shipping controls',
+                'Shipping & delivery flow',
                 'multivendorx'
             ),
-            desc: __("Define shipping features stores can use.", 'multivendorx'),
+            desc: __("To ensure shipping is seamless and transparent by including tracking, providers, delivery stages, and order completion for stores and customers.", 'multivendorx'),
         },
         {
             key: 'enable_shipment_rule',
-            label: __('Allow Shipment Tracking', 'multivendorx'),
+            label: __('Allow shipment tracking', 'multivendorx'),
             settingDescription: __("Let stores add tracking IDs and courier details so customers can track their orders directly from the order page.", 'multivendorx'),
             // desc: __('', 'multivendorx'),
             type: 'checkbox',
@@ -71,7 +71,7 @@ export default {
         {
             key: 'disbursement_order_status',
             type: 'checkbox',
-            label: __(' Shipping Providers', 'multivendorx'),
+            label: __(' Shipping providers', 'multivendorx'),
             settingDescription: __(" You can select from existing carriers or let stores connect their own. Only the enabled providers will be available for assigning tracking numbers.", 'multivendorx'),
             class: 'mvx-toggle-checkbox',
             addNewBtn: 'Add Custom Provider',
@@ -122,13 +122,13 @@ export default {
         {
             key: 'shipping_providers',
             type: 'multi-string',
-            label: __('Shipping Providers', 'multivendorx'),
-            placeholder: __('Select which providers vendors can use (multiple selections allowed)', 'multivendorx'),
+            label: __('Shipping providers', 'multivendorx'),
+            placeholder: __('Select which providers stores can use for order fulfillment.', 'multivendorx'),
             // iconEnable: true,
             descEnable: true,
             // requiredEnable: true,
             settingDescription: __(
-                'Add one or more reasons that stores can select when handling refund requests.',
+                'Select from existing carriers or let stores connect their own. Only the enabled providers will be available for assigning tracking numbers.',
                 'multivendorx'
             ),
             name: 'abuse_report_reasons',
@@ -201,6 +201,16 @@ export default {
                     value: 'country_wise',
                 },
             ],
+			{
+            key: 'registration page',
+            type: 'blocktext',
+            label: __('no_label', 'multivendorx'),
+            title: 'Why it matters',
+            blocktext: __(
+                '<ul><li>Custom delivery stages make order tracking more transparent for customers and help stores maintain an accurate fulfillment timeline.</li></ul>',
+                'multivendorx'
+            ),
+        },
         },
     ],
 };
