@@ -362,8 +362,9 @@ const settings = () => {
                 prepareUrl={prepareUrl}
                 appLocalizer={appLocalizer}
                 settingName="Settings"
-                supprot={[]} 
+                // supprot={[]} 
                 Link={SimpleLink}
+                leftTabStyle= {true}
             />
         </>
     );
