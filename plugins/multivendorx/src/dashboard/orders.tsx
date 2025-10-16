@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useLocation } from 'react-router-dom';
 import { __ } from "@wordpress/i18n";
 import { CalendarInput, Table, TableCell } from "zyra";
 import { ColumnDef, RowSelectionState, PaginationState } from "@tanstack/react-table";
@@ -37,8 +38,25 @@ const Orders: React.FC = () => {
     // const hash = window.location.hash || '';
     // const isViewOrder = hash.includes('view');
 
-    const path = window.location.pathname;
-    const isViewOrder = path.includes('/view/');
+    const location = useLocation();
+   
+    const hash = location.hash.replace(/^#/, '') || '';
+    const isViewOrder = hash.includes('view');
+
+    useEffect(() => {
+        if (isViewOrder) {
+            const orderId = hash.split('view/')[1];
+            if (orderId) {
+                const foundOrder = data.find(o => o.id.toString() === orderId);
+                setSelectedOrder(foundOrder || null);
+            }
+        } else {
+            setSelectedOrder(null);
+        }
+    }, [hash, data]);
+
+    // const path = window.location.pathname;
+    // const isViewOrder = path.includes('/view/');
 
     const selectedOrderIds = Object.keys(rowSelection)
         .map((key) => {
@@ -335,9 +353,14 @@ const Orders: React.FC = () => {
                                     icon: 'adminlib-eye',
                                     onClick: (rowData) => {
                                         setSelectedOrder(rowData);
-                                        const currentPath = window.location.pathname.replace(/\/$/, '');
-                                        const newPath = `${currentPath}/view/${rowData.id}`;
-                                        window.history.pushState({}, '', newPath);
+                                        // window.location.href = `view/${rowData.id}`;
+
+                                        window.location.hash = `view/${rowData.id}`;
+                                        
+
+                                        // const currentPath = window.location.pathname.replace(/\/$/, '');
+                                        // const newPath = `${currentPath}/view/${rowData.id}`;
+                                        // window.history.pushState({}, '', newPath);
                                     },
                                     hover: true,
                                     },
@@ -486,9 +509,10 @@ const Orders: React.FC = () => {
                     order={selectedOrder}
                     onBack={() => {
                         setSelectedOrder(null);
-                        const currentPath = window.location.pathname;
-                        const newPath = currentPath.replace(/\/view\/\d+$/, '');
-                        window.history.pushState({}, '', newPath);
+                        window.location.hash = '';
+                        // const currentPath = window.location.pathname;
+                        // const newPath = currentPath.replace(/\/view\/\d+$/, '');
+                        // window.history.pushState({}, '', newPath);
                     }}
                 />}
 
