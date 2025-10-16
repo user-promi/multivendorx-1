@@ -65,6 +65,17 @@ class OrderManager {
         return wc_get_orders(['parent' => is_numeric($order) ? $order : $order->get_id()]);
     }
 
+    public function is_multivendorx_order($id){
+        if ($id) {
+            $order = wc_get_order($id);
+            if ($order->get_meta( 'multivendorx_store_id', true)) {
+                return true;
+            } 
+        }
+
+        return false;
+    }
+
     /**
      * Create vendor order from a order.
      * It group item based on vendor then create suborder for each group.
