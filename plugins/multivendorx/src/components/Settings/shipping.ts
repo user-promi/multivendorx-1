@@ -24,23 +24,27 @@ export default {
                 {
                     id: 'zone-wise-shipping',
                     icon: "adminlib-google",
-                    label: 'Zone-wise shipping',
-                    connected: false,
-                    desc: 'Connect and authenticate stores via Google accounts <span class="admin-badge yellow">North America</span>  <span class="admin-badge blue">North America</span>  <span class="admin-badge yellow">North America</span>  <span class="admin-badge red">North America</span>',
+                    label: 'Zone based shipping',
+                    openForm: true,
+                    desc: 'Stores set different rates for different regions (like "East Coast" or "California").',
+                    formFields: [
+                        { key: 'client_id', type: 'description', label: 'Currently enabled zones' , des: '<span class="admin-badge yellow">North America</span>  <span class="admin-badge blue">North America</span>  <span class="admin-badge yellow">North America</span>  <span class="admin-badge red">North America</span>'}
+                    ],
                 },
                 {
                     id: 'country-wise-shipping',
                     icon: "adminlib-twitter",
                     label: 'Country-wise shipping',
                     connected: false,
-                    desc: 'Stores set flat rates per country (like "$10 to ship to Canada").',
+                    desc: 'Connect and authenticate stores via Twitter accounts.',
                 },
                 {
                     id: 'distance-based-shipping',
                     icon: "adminlib-facebook",
                     label: 'Distance-based shipping',
                     connected: false,
-                    desc: 'Shipping cost is calculated based on miles/kilometers between the store\'s location and the customer.',
+                    desc: 'Connect and authenticate stores via Facebook accounts.',
+
                 },
             ]
         },
