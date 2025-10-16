@@ -148,13 +148,13 @@ export default {
         {
             key: 'shipping_stage',
             type: 'multi-string',
-            label: __('Add stage', 'multivendorx'),
-            placeholder: __('Enter Shipping stage', 'multivendorx'),
+            label: __('Shipment status', 'multivendorx'),
+            placeholder: __('Define the key milestones in a store’s delivery process. These stages help stores communicate order progress to customers', 'multivendorx'),
             iconEnable: true,
             descEnable: true,
             requiredEnable: true,
             settingDescription: __(
-                'Add one or more reasons that stores can select when handling refund requests.',
+                'Create additional statuses to match your logistics flow (for example, Packed, Out for Delivery, Returned, Awaiting Pickup).',
                 'multivendorx'
             ),
             name: 'abuse_report_reasons',
@@ -174,7 +174,7 @@ export default {
             label: __('no_label', 'multivendorx'),
             title: 'Important Notes',
             blocktext: __(
-                '<ul><li><b>Delivered </b>status will automatically mark sub-orders as Completed</li><li><b>Cancelled  </b>status will automatically cancel the entire order</li></ul>',
+                '<ul><li><b>Cancelled  </b>status will automatically cancel the entire order</li></ul>',
                 'multivendorx'
             ),
         },
@@ -182,7 +182,7 @@ export default {
             key: 'order-completion-rules',
             type: 'setting-toggle',
             label: __('Order completion rules', 'multivendorx'),
-            settingDescription: __('Control when orders are automatically marked Completed after shipment details are added or delivery is confirmed.',
+            settingDescription: __('Control when orders are automatically marked Completed after shipment details are added or delivery is confirmed. This controls how and when the system finalizes orders once the delivery process is done.',
                 'multivendorx'
             ),
             desc: __(
