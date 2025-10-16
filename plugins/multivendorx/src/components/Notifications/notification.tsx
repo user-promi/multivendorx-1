@@ -80,10 +80,14 @@ const Notification = () => {
 
         axios({
             method: 'GET',
-            url: getApiLink(appLocalizer, 'coupons'),
+            url: `${appLocalizer.apiUrl}/wc/v3/coupons`,
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            params: { count: true },
-        }).then((response) => setCouponCount(response.data || 0));
+            params: { per_page: 1, meta_key: 'multivendorx_store_id', status: 'pending' }
+        })
+            .then((response) => {
+                const totalCount = parseInt(response.headers['x-wp-total'], 10) || 0;
+                setCouponCount(totalCount);
+            });
 
         axios({
             method: 'GET',
@@ -94,10 +98,15 @@ const Notification = () => {
 
         axios({
             method: 'GET',
-            url: getApiLink(appLocalizer, 'transaction'),
+            url: getApiLink(appLocalizer, 'store'),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            params: { count: true, status: 'Pending' },
-        }).then((response) => setTransactionCount(response.data || 0));
+            params: { pending_withdraw: true } //important: use this param
+          })
+          .then((response) => {
+            const count = response.data.length || 0; // response.data is an array of stores with pending withdraw
+            setTransactionCount(count);
+          })
+          .catch(() => setTransactionCount(0));
     };
 
     const tabs = [
@@ -169,7 +178,7 @@ const Notification = () => {
                                     <i className="adminlib-module"></i>
                                 </div>
                                 <div className="description">
-                                    Pending Withdrawal(static)
+                                    Pending Withdrawal
                                 </div>
                             </div>
                         </div>

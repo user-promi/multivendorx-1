@@ -83,6 +83,17 @@
 
                     .method-desc {
                         font-size: 0.75rem;
+
+                        p{
+                            margin: 0;
+                            display: flex;
+                            gap: 0.5rem;
+                            align-items: center;
+
+                            .admin-badge{
+                                margin-top: 0.313rem;
+                            }
+                        }
                     }
                 }
             }

@@ -215,7 +215,11 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
                         {isEnabled ? "Active" : "Inactive"}
                       </div>
                     </div>
-                    <div className="method-desc">{method.desc}</div>
+                    <div className="method-desc">
+                      <p
+                        dangerouslySetInnerHTML={{ __html: method.desc }}
+                      />
+                    </div>
                   </div>
                 </div>
                 {/* {isEnabled && (
@@ -229,38 +233,38 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
                   </div>
                 )} */}
               </div>
-                {isEnabled && (
-              <div className="right-section action-section" ref={menuRef}>
-                <div className="action-icons">
-                  <i
-                    className="adminlib-more-vertical"
-                    onClick={(e) => {
-                      e.stopPropagation(); // Prevent outside click
-                      setOpenMenu(isMenuOpen ? null : method.id);
-                    }}
-                  />
-                  <div className={`action-dropdown ${isMenuOpen ? "show" : "hover"}`}>
-                    <ul>
-                      {isEnabled ? (
-                        <li className="hover" onClick={() => toggleEnable(method.id, false, method.icon)}>
-                          <i className="adminlib-eye"></i>
-                          Enabled
+              {isEnabled && (
+                <div className="right-section action-section" ref={menuRef}>
+                  <div className="action-icons">
+                    <i
+                      className="adminlib-more-vertical"
+                      onClick={(e) => {
+                        e.stopPropagation(); // Prevent outside click
+                        setOpenMenu(isMenuOpen ? null : method.id);
+                      }}
+                    />
+                    <div className={`action-dropdown ${isMenuOpen ? "show" : "hover"}`}>
+                      <ul>
+                        {isEnabled ? (
+                          <li className="hover" onClick={() => toggleEnable(method.id, false, method.icon)}>
+                            <i className="adminlib-eye"></i>
+                            <span>Enabled</span>
+                          </li>
+                        ) : (
+                          <li className="hover" onClick={() => toggleEnable(method.id, true, method.icon)}>
+                            <i className="adminlib-eye-blocked"></i>
+                            <span>Disable</span>
+                          </li>
+                        )}
+                        <li className="hover" onClick={() => setActiveTab(isActive ? null : method.icon)}>
+                          <i className="adminlib-setting"></i>
+                          <span>Settings</span>
                         </li>
-                      ) : (
-                        <li className="hover" onClick={() => toggleEnable(method.id, true, method.icon)}>
-                          <i className="adminlib-eye-blocked"></i>
-                          Disable
-                        </li>
-                      )}
-                      <li className="hover" onClick={() => setActiveTab(isActive ? null : method.icon)}>
-                        <i className="adminlib-setting"></i>
-                        Settings
-                      </li>
-                    </ul>
+                      </ul>
+                    </div>
                   </div>
                 </div>
-              </div>
-               )}
+              )}
             </div>
 
             {method.formFields && method.formFields.length > 0 && (

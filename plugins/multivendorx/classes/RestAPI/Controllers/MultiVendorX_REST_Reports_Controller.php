@@ -57,16 +57,16 @@ class MultiVendorX_REST_Reports_Controller extends \WP_REST_Controller {
     }    
 
     public function get_items_permissions_check($request) {
-        return current_user_can( 'read' );
+        return current_user_can( 'read' )||current_user_can('edit_stores');
     }
 
      // POST permission
     public function create_item_permissions_check($request) {
-        return current_user_can( 'manage_options' );
+        return current_user_can( 'manage_options' )||current_user_can('edit_stores');
     }
 
     public function update_item_permissions_check($request) {
-        return current_user_can('manage_options');
+        return current_user_can('manage_options')||current_user_can('edit_stores');
     }
 
     public function get_items( $request ) {
@@ -167,7 +167,8 @@ class MultiVendorX_REST_Reports_Controller extends \WP_REST_Controller {
         $transaction = is_array( $transaction ) ? $transaction : array();
     
         $merged_data = array_merge( $commission, $transaction );
-    
+        $merged_data['threshold_amount'] = MultiVendorX()->setting->get_setting('payout_threshold_amount', 0);
+        $merged_data['lock_period'] = MultiVendorX()->setting->get_setting('commission_lock_period', 0);
         // --- Include Store ID and Withdraw Amount ---
         $merged_data['store_id'] = $id;
         $merged_data['withdraw_amount'] = $withdraw_amount;

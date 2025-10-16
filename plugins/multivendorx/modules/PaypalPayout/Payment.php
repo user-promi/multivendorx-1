@@ -130,7 +130,7 @@ class Payment {
                         $store_id,
                         'Paypal Payout',
                         $status,
-                        $order_id, $transaction_id, $note
+                        $order_id, $transaction_id, $note, $amount
                     );
 
                     return [
