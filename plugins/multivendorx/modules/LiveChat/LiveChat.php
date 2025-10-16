@@ -17,18 +17,37 @@ namespace MultiVendorX\LiveChat;
  */
 class LiveChat {
     
+    private $chat_settings;
+
     /**
      * LiveChat constructor.
      */
     public function __construct() {
+        $this->chat_settings = MultiVendorX()->setting->get_setting('live-chat');
+
         // Add hooks for button display
-        add_action('woocommerce_after_shop_loop_item', array($this, 'add_button_in_shop_page'), 20);
-        add_action('woocommerce_single_product_summary', array($this, 'add_button_in_single_product'), 25);
+        $this->add_chat_button_hooks();
         
         // Scripts and AJAX
         add_action('wp_enqueue_scripts', array($this, 'frontend_scripts'));
         add_action('wp_ajax_send_chat_message', array($this, 'handle_chat_message'));
         add_action('wp_ajax_nopriv_send_chat_message', array($this, 'handle_chat_message'));
+    }
+
+    /**
+     * Add chat button hooks based on settings
+     */
+    private function add_chat_button_hooks() {
+        $position = isset($this->chat_settings['product_page_chat']) ? $this->chat_settings['product_page_chat'] : 'add_to_cart_button';
+
+        if ($position === 'add_to_cart_button' || $position === 'both') {
+            add_action('woocommerce_after_shop_loop_item', array($this, 'add_button_in_shop_page'), 20);
+            add_action('woocommerce_single_product_summary', array($this, 'add_button_in_single_product'), 25);
+        }
+
+        if ($position === 'store_info' || $position === 'both') {
+            // Add hook for store info tab if you have one
+        }
     }
 
     /**
@@ -38,11 +57,36 @@ class LiveChat {
         if (is_product() || is_shop() || is_product_category()) {
             wp_enqueue_script('multivendorx-livechat', plugins_url('assets/livechat-frontend.js', __FILE__), array('jquery'), '1.0.0', true);
             wp_enqueue_style('multivendorx-livechat', plugins_url('assets/livechat-frontend.css', __FILE__), array(), '1.0.0');
-            
-            // Localize script for AJAX
-            wp_localize_script('multivendorx-livechat', 'livechat_ajax', array(
+
+            $chat_provider = isset($this->chat_settings['chat_provider']) ? $this->chat_settings['chat_provider'] : 'talkjs';
+
+            if ($chat_provider === 'talkjs') {
+                wp_enqueue_script('talkjs-sdk', 'https://cdn.talkjs.com/dist/talk.js', array(), null, false);
+            }
+
+            global $product;
+            $store_id = get_post_meta($product->get_id(), 'multivendorx_store_id', true);
+            $store_name = '';
+            if ($store_id) {
+                $store = new \MultiVendorX\Store\Store($store_id);
+                $store_name = $store->get('name');
+            }
+
+            $current_user = wp_get_current_user();
+            $user_data = array(
+                'id' => $current_user->ID,
+                'name' => $current_user->display_name,
+                'email' => $current_user->user_email,
+            );
+
+            wp_localize_script('multivendorx-livechat', 'livechat_settings', array(
                 'ajax_url' => admin_url('admin-ajax.php'),
-                'nonce' => wp_create_nonce('livechat_nonce')
+                'nonce' => wp_create_nonce('livechat_nonce'),
+                'chat_provider' => $chat_provider,
+                'settings' => $this->chat_settings,
+                'store_id' => $store_id,
+                'store_name' => $store_name,
+                'user_data' => $user_data,
             ));
         }
     }
@@ -60,7 +104,6 @@ class LiveChat {
      */
     public function add_button_in_shop_page() {
         global $product;
-
         $this->add_livechat_button($product->get_id(), 'shop');
     }
 
@@ -71,7 +114,6 @@ class LiveChat {
      * @param string $context Display context (product/shop)
      */
     public function add_livechat_button($product_id, $context = 'product') {
-        
         $product = wc_get_product($product_id);
         if (empty($product)) {
             return;
@@ -85,33 +127,35 @@ class LiveChat {
         $store = new \MultiVendorX\Store\Store($store_id);
         $store_name = $store->get('name');
 
-        // Get button settings (you can add these to your plugin settings)
-        $button_text = 'chat';
-        $button_css = '';
+        $chat_provider = isset($this->chat_settings['chat_provider']) ? $this->chat_settings['chat_provider'] : 'talkjs';
+        $button_text = 'Chat';
+
+        if ($chat_provider === 'whatsapp') {
+            $whatsapp_number = isset($this->chat_settings['whatsapp_number']) ? $this->chat_settings['whatsapp_number'] : '';
+            $pre_filled_message = isset($this->chat_settings['whatsapp_pre_filled']) ? $this->chat_settings['whatsapp_pre_filled'] : '';
+            $whatsapp_url = 'https://wa.me/' . $whatsapp_number . '?text=' . rawurlencode($pre_filled_message);
+            echo '<a href="' . esc_url($whatsapp_url) . '" target="_blank" class="button">' . esc_html($button_text) . '</a>';
+            return;
+        }
+
+        if ($chat_provider === 'facebook') {
+            $facebook_user_id = isset($this->chat_settings['facebook_user_id']) ? $this->chat_settings['facebook_user_id'] : '';
+            $messenger_url = 'https://m.me/' . $facebook_user_id;
+            echo '<a href="' . esc_url($messenger_url) . '" target="_blank" class="button">' . esc_html($button_text) . '</a>';
+            return;
+        }
+
         ob_start();
         ?>
         <div class="multivendorx-livechat-wrapper multivendorx-livechat-<?php echo esc_attr($context); ?>">
-            <?php if ($context === 'shop'): ?>
-                <button type="button" class="multivendorx-livechat-btn button" 
-                        style="<?php echo esc_attr($button_css); ?>"
-                        data-store-id="<?php echo esc_attr($store_id); ?>"
-                        data-product-id="<?php echo esc_attr($product_id); ?>"
-                        data-store-name="<?php echo esc_attr($store_name); ?>">
-                    <span class="chat-icon">💬</span>
-                    <?php echo esc_html($button_text); ?>
-                </button>
-            <?php else: ?>
-                <div class="multivendorx-livechat-single-product">
-                    <button type="button" class="multivendorx-livechat-btn button alt" 
-                            style="<?php echo esc_attr($button_css); ?>"
-                            data-store-id="<?php echo esc_attr($store_id); ?>"
-                            data-product-id="<?php echo esc_attr($product_id); ?>"
-                            data-store-name="<?php echo esc_attr($store_name); ?>">
-                        <span class="chat-icon">💬</span>
-                        <?php echo esc_html($button_text); ?>
-                    </button>
-                </div>
-            <?php endif; ?>
+            <button type="button" class="multivendorx-livechat-btn button" 
+                    data-store-id="<?php echo esc_attr($store_id); ?>"
+                    data-product-id="<?php echo esc_attr($product_id); ?>"
+                    data-store-name="<?php echo esc_attr($store_name); ?>"
+                    data-chat-provider="<?php echo esc_attr($chat_provider); ?>">
+                <span class="chat-icon">💬</span>
+                <?php echo esc_html($button_text); ?>
+            </button>
             
             <!-- Chat Modal -->
             <div class="multivendorx-chat-modal" style="display: none;">
@@ -121,13 +165,6 @@ class LiveChat {
                 </div>
                 <div class="chat-messages" id="chat-messages-<?php echo esc_attr($store_id); ?>">
                     <!-- Messages will be loaded here -->
-                    <div class="chat-welcome-message">
-                        <p>Hello! How can we help you with <?php echo esc_html($product->get_name()); ?>?</p>
-                    </div>
-                </div>
-                <div class="chat-input-area">
-                    <textarea placeholder="Type your message..." class="chat-message-input"></textarea>
-                    <button class="send-message-btn">Send</button>
                 </div>
             </div>
         </div>
