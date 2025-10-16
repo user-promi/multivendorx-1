@@ -24,21 +24,21 @@ export default {
                 {
                     id: 'zone-wise-shipping',
                     icon: "adminlib-google",
-                    label: 'Zone-wise Shipping',
+                    label: 'Zone-wise shipping',
                     connected: false,
                     desc: 'Connect and authenticate stores via Google accounts <span class="admin-badge yellow">North America</span>  <span class="admin-badge blue">North America</span>  <span class="admin-badge yellow">North America</span>  <span class="admin-badge red">North America</span>',
                 },
                 {
                     id: 'country-wise-shipping',
                     icon: "adminlib-twitter",
-                    label: 'Country-wise Shipping',
+                    label: 'Country-wise shipping',
                     connected: false,
                     desc: 'Connect and authenticate stores via Twitter accounts.',
                 },
                 {
                     id: 'distance-based-shipping',
                     icon: "adminlib-facebook",
-                    label: 'Distance-based Shipping',
+                    label: 'Distance-based shipping',
                     connected: false,
                     desc: 'Connect and authenticate stores via Facebook accounts.',
 
@@ -78,17 +78,17 @@ export default {
             options: [
                 {
                     key: 'completed',
-                    label: __('Australia Post', 'multivendorx'),
+                    label: __('Australia post', 'multivendorx'),
                     value: 'completed',
                 },
                 {
                     key: 'delivered',
-                    label: __('Canada Post', 'multivendorx'),
+                    label: __('Canada post', 'multivendorx'),
                     value: 'delivered',
                 },
                 {
                     key: 'shipped',
-                    label: __('City Link', 'multivendorx'),
+                    label: __('City link', 'multivendorx'),
                     value: 'shipped',
                 },
                 {
@@ -113,7 +113,7 @@ export default {
                 },
                 {
                     key: 'processing',
-                    label: __('Polish Shipping Providers', 'multivendorx'),
+                    label: __('Polish shipping providers', 'multivendorx'),
                     value: 'FedOnTracEx',
                 },
             ],
