@@ -114,34 +114,5 @@
                 }
             }
         }
-
-        .selected-icon {
-            width: 3rem;
-            padding: 0.313rem 0.5rem;
-            display: flex;
-            justify-content: space-between;
-            position: relative;
-            border: $border-light-small;
-
-            i {
-                font-size: 1.063rem;
-            }
-        }
-
-        .icon-options-list {
-            position: absolute;
-            width: 4rem;
-            background: #e9e9e9;
-            border: $border-light-small;
-            cursor: pointer;
-
-            li.icon-option {
-                width: 100%;
-                padding: 0.313rem 0;
-                text-align: center;
-                font-size: 1.125rem;
-                border-bottom: $border-light-small
-            }
-        }
     }
 }

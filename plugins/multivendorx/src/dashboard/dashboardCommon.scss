@@ -621,10 +621,10 @@ $border-radius-button: 8rem;
 // horizental menu start -- move to component
 .content-wrapper:has(.horizontal-title-section) {
     display: flex;
-    gap: 1.5rem;
+    gap: 2rem;
 
     .horizontal-title-section {
-        width: 25%;
+        width: 30%;
         height: auto;
 
         .tabs-wrapper {
@@ -633,14 +633,14 @@ $border-radius-button: 8rem;
             .horizontal-tabs-item {
                 display: flex;
                 flex-direction: column;
+                gap: 0.25rem;
 
                 .menu-item {
-                    padding: 0.75rem;
-                    transition: all 0.5s ease;
+                    padding: 0.813rem;
+                    transition: all 0.3s ease;
                     border-radius: 0.313rem;
                     margin-bottom: 0.313rem;
                     cursor: pointer;
-                    // border-left: 0.25rem solid #fff;
                     margin: 0;
 
                     i {
@@ -649,10 +649,12 @@ $border-radius-button: 8rem;
 
                     p {
                         margin: 0;
+                        font-weight: 500;
                     }
 
                     &:hover {
-                        background: #f3f2f3;
+                        background: color-mix(in srgb, var(--themeColor) 15%, transparent);
+                        color: var(--themeColor);
                     }
 
                     &.active-current-tab,
@@ -666,7 +668,7 @@ $border-radius-button: 8rem;
     }
 
     .general-wrapper {
-        width: 75%;
+        width: 70%;
         background: #fff;
 
         .card-content{

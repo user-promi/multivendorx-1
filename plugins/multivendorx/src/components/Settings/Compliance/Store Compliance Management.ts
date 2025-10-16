@@ -117,7 +117,7 @@ export default {
                 },
                 {
                     id: 'product-compliance',
-                    icon: "adminlib-file-check",
+                    icon: "adminlib-product",
                     label: 'Product Compliance',
                     openForm: true,
                     desc: 'Ensure product listings meet marketplace standards',
@@ -178,10 +178,10 @@ export default {
                             ],
                         },
                     ],
-                }
+                },
                 {
                     id: 'legal-policy',
-                    icon: "adminlib-scale",
+                    icon: "adminlib-verification3",
                     label: 'Legal & Policy',
                     openForm: true,
                     desc: 'Require acceptance of platform terms and policies',
@@ -242,10 +242,10 @@ export default {
                             ],
                         },
                     ],
-                }
+                },
                 {
                     id: 'financial-compliance',
-                    icon: "adminlib-dollar-sign",
+                    icon: "adminlib-import",
                     label: 'Financial Compliance',
                     openForm: true,
                     desc: 'Verify tax information and monitor transactions',

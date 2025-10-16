@@ -93,6 +93,8 @@
                             display: flex;
                             gap: 0.5rem;
                             align-items: center;
+                            color: $sub-text-color;
+
 
                             .admin-badge {
                                 margin-top: 0.313rem;
@@ -198,6 +200,8 @@
 
                 label:first-child {
                     width: 25%;
+                    color: $text-color;
+                    font-size: 0.95rem;
                 }
 
                 .input-content {
@@ -259,6 +263,8 @@
                 cursor: default;
             }
         }
+
+        
     }
 }
 

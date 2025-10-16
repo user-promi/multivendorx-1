@@ -626,3 +626,42 @@
         margin-bottom: 1rem;
     }
 }
+
+
+
+// custom icon dropdown start
+.selected-icon {
+    width: 3rem;
+    padding: 0.313rem 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    border: $border-light-small;
+
+    i {
+        font-size: 1.063rem;
+    }
+}
+
+.icon-options-list {
+    position: absolute;
+    width: 50%;
+    background: #fff;
+    border: $border-light-small;
+    cursor: pointer;
+    display: flex;
+
+    li.icon-option {
+        width: 100%;
+        padding: 0.313rem 0;
+        text-align: center;
+        font-size: 1.125rem;
+        width: 2rem;
+        height: 2rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
+
+// custom icon dropdown end
