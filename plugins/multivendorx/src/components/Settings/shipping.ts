@@ -16,7 +16,7 @@ export default {
         {
             key: 'shipping_modules_overview',
             type: 'payment-tabs',
-            label: __('Shipping Modules Overview', 'multivendorx'),
+            label: __('Shipping methods available to stores', 'multivendorx'),
             desc: __('View-only - Available shipping modules for stores', 'multivendorx'),
             buttonEnable: true,
             toggleType: 'icon',
@@ -24,23 +24,23 @@ export default {
                 {
                     id: 'zone-wise-shipping',
                     icon: "adminlib-google",
-                    label: 'Zone-wise Shipping',
+                    label: 'Zone-wise shipping',
                     connected: false,
                     desc: 'Connect and authenticate stores via Google accounts <span class="admin-badge yellow">North America</span>  <span class="admin-badge blue">North America</span>  <span class="admin-badge yellow">North America</span>  <span class="admin-badge red">North America</span>',
                 },
                 {
                     id: 'country-wise-shipping',
                     icon: "adminlib-twitter",
-                    label: 'Country-wise Shipping',
+                    label: 'Country-wise shipping',
                     connected: false,
-                    desc: 'Connect and authenticate stores via Twitter accounts.',
+                    desc: 'Stores set flat rates per country (like "$10 to ship to Canada").',
                 },
                 {
                     id: 'distance-based-shipping',
                     icon: "adminlib-facebook",
-                    label: 'Distance-based Shipping',
+                    label: 'Distance-based shipping',
                     connected: false,
-                    desc: 'Connect and authenticate stores via Facebook accounts.',
+                    desc: 'Shipping cost is calculated based on miles/kilometers between the store's location and the customer.',
 
                 },
             ]
@@ -49,46 +49,32 @@ export default {
             key: 'section',
             type: 'section',
             hint: __(
-                'Shipping controls',
+                'Order fulfillment',
                 'multivendorx'
             ),
-            desc: __("Define shipping features stores can use.", 'multivendorx'),
-        },
-        {
-            key: 'enable_shipment_rule',
-            label: __('Allow Shipment Tracking', 'multivendorx'),
-            desc: __("Enable stores to provide tracking information for orders", 'multivendorx'),
-            // desc: __('', 'multivendorx'),
-            type: 'checkbox',
-            options: [
-                {
-                    key: 'enable_shipment_rule',
-                    value: 'enable_shipment_rule',
-                },
-            ],
-            look: 'toggle',
+            desc: __("Configure the shipping carriers stores can use, how customers track their packages, and when orders are marked as complete.", 'multivendorx'),
         },
         {
             key: 'disbursement_order_status',
             type: 'checkbox',
-            label: __(' Shipping Providers', 'multivendorx'),
-            settingDescription: __(" Select which providers vendors can use (multiple selections allowed)", 'multivendorx'),
+            label: __('Shipping carriers', 'multivendorx'),
+            settingDescription: __("Select the carriers stores can choose when fulfilling orders. Customers will see these names when tracking packages.", 'multivendorx'),
             class: 'mvx-toggle-checkbox',
             addNewBtn: 'Add Custom Provider',
             options: [
                 {
                     key: 'completed',
-                    label: __('Australia Post', 'multivendorx'),
+                    label: __('Australia post', 'multivendorx'),
                     value: 'completed',
                 },
                 {
                     key: 'delivered',
-                    label: __('Canada Post', 'multivendorx'),
+                    label: __('Canada post', 'multivendorx'),
                     value: 'delivered',
                 },
                 {
                     key: 'shipped',
-                    label: __('City Link', 'multivendorx'),
+                    label: __('City link', 'multivendorx'),
                     value: 'shipped',
                 },
                 {
@@ -113,7 +99,7 @@ export default {
                 },
                 {
                     key: 'processing',
-                    label: __('Polish Shipping Providers', 'multivendorx'),
+                    label: __('Polish shipping providers', 'multivendorx'),
                     value: 'FedOnTracEx',
                 },
             ],
@@ -122,13 +108,13 @@ export default {
         {
             key: 'shipping_providers',
             type: 'multi-string',
-            label: __('Shipping Providers', 'multivendorx'),
-            placeholder: __('Select which providers vendors can use (multiple selections allowed)', 'multivendorx'),
+            label: __('Shipping providers', 'multivendorx'),
+            placeholder: __('Select which providers stores can use for order fulfillment.', 'multivendorx'),
             // iconEnable: true,
             descEnable: true,
             // requiredEnable: true,
             settingDescription: __(
-                'Add one or more reasons that stores can select when handling refund requests.',
+                'Select from existing carriers or let stores connect their own. Only the enabled providers will be available for assigning tracking numbers.',
                 'multivendorx'
             ),
             name: 'abuse_report_reasons',
@@ -148,19 +134,19 @@ export default {
         {
             key: 'shipping_stage',
             type: 'multi-string',
-            label: __('Add stage', 'multivendorx'),
-            placeholder: __('Enter Shipping stage', 'multivendorx'),
+            label: __('Delivery progress stages', 'multivendorx'),
+            placeholder: __('Steps customers see as their order moves toward delivery. These stages show up in order tracking so customers know where their package is.', 'multivendorx'),
             iconEnable: true,
             descEnable: true,
             requiredEnable: true,
             settingDescription: __(
-                'Add one or more reasons that stores can select when handling refund requests.',
+                'Create additional statuses to match your logistics flow (for example, Packed, Out for Delivery, Returned, Awaiting Pickup).',
                 'multivendorx'
             ),
             name: 'abuse_report_reasons',
             defaultValues: [
-                { value: "Order Received", locked: true, iconClass: "adminlib-check", description: "Order is received by store", tag: "Primary", required: true },
-                { value: "Processing", locked: true, iconClass: "adminlib-clock", description: "Order is being processed", tag: "Primary", required: true },
+                { value: "On the way", locked: true, iconClass: "adminlib-check", description: "Order is received by store", tag: "Primary", required: true },
+                { value: "Delivered", locked: true, iconClass: "adminlib-clock", description: "Order is being processed", tag: "Primary", required: true },
                 { value: "Shipped", iconClass: "adminlib-truck", default: "Primary" } // editable
             ],
             iconOptions: ["adminlib-check", "adminlib-clock", "adminlib-cart", "adminlib-store"], // dropdown options
@@ -169,24 +155,14 @@ export default {
             allowDuplicates: false
         },
         {
-            key: 'registration page',
-            type: 'blocktext',
-            label: __('no_label', 'multivendorx'),
-            title: 'Important Notes',
-            blocktext: __(
-                '<ul><li><b>Delivered </b>status will automatically mark sub-orders as Completed</li><li><b>Cancelled  </b>status will automatically cancel the entire order</li></ul>',
-                'multivendorx'
-            ),
-        },
-        {
             key: 'order-completion-rules',
             type: 'setting-toggle',
-            label: __('Order completion rules', 'multivendorx'),
-            settingDescription: __('Control when orders are automatically marked Completed after shipment details are added or delivery is confirmed.',
+            label: __('When orders are marked complete', 'multivendorx'),
+            settingDescription: __('Control when orders are automatically marked Completed after shipment details are added or delivery is confirmed. This controls how and when the system finalizes orders once the delivery process is done.',
                 'multivendorx'
             ),
             desc: __(
-                '<ul><li>Auto complete on delivery - completes orders automatically when delivery happens (system-controlled).</li><li>Customer confirm delivery - completes orders only if the customer confirms (buyer-controlled).</li></ul>',
+                '<ul><li>Auto complete on delivery - Orders automatically close once marked as delivered by the carrier or store.</li><li>Wait for customer confirmation - Orders stay open until the customer confirms they received their package.</li></ul>',
                 'multivendorx'
             ),
             options: [
@@ -197,10 +173,20 @@ export default {
                 },
                 {
                     key: 'country_wise',
-                    label: __('Customer Confirm Delivery', 'multivendorx'),
+                    label: __('Wait for customer confirmation', 'multivendorx'),
                     value: 'country_wise',
                 },
             ],
+			{
+            key: 'registration page',
+            type: 'blocktext',
+            label: __('no_label', 'multivendorx'),
+            title: 'Why it matters',
+            blocktext: __(
+                '<ul><li>Custom delivery stages make order tracking more transparent for customers and help stores maintain an accurate fulfillment timeline.</li></ul>',
+                'multivendorx'
+            ),
+        },
         },
     ],
 };
