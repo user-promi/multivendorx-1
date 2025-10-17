@@ -1,13 +1,13 @@
 <?php
 
-namespace MultiVendorX\BankTransfer;
+namespace MultiVendorX\Payments;
 
 defined('ABSPATH') || exit;
 
 use MultiVendorX\Store\Store;
 
 
-class Payment {
+class BankTransfer {
     public function __construct(){
         add_action('multivendorx_process_bank-transfer_payment', array($this, 'process_payment'), 10, 5);
     }

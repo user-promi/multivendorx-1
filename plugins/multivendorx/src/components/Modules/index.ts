@@ -234,16 +234,16 @@ export default {
 
         },
         { type: 'separator', id: 'payment_management', label: 'Payment Management' },
-        {
-            id: 'bank-transfer',
-            name: __('Bank Transfer', 'multivendorx'),
-            desc: "Manually transfer money directly to the store's bank account.",
-            icon: 'adminlib-rules',
-            doc_link: 'https://multivendorx.com/docs/knowledgebase/direct-bank-transfer/',
-            //settings_link: appLocalizer.site_url,
-            pro_module: false,
-            category: 'payment_management'
-        },
+        // {
+        //     id: 'bank-transfer',
+        //     name: __('Bank Transfer', 'multivendorx'),
+        //     desc: "Manually transfer money directly to the store's bank account.",
+        //     icon: 'adminlib-rules',
+        //     doc_link: 'https://multivendorx.com/docs/knowledgebase/direct-bank-transfer/',
+        //     //settings_link: appLocalizer.site_url,
+        //     pro_module: false,
+        //     category: 'payment_management'
+        // },
         // {
         //     id: 'paypal-masspay',
         //     name: __('PayPal Masspay', 'multivendorx'),
@@ -254,16 +254,16 @@ export default {
         //     pro_module: false,
         //     category: 'payment_management'
         // },
-        {
-            id: 'paypal-payout',
-            name: __('PayPal Payout', 'multivendorx'),
-            desc: "Send payments automatically to multiple vendors as per scheduled",
-            icon: 'adminlib-rules',
-            doc_link: 'https://multivendorx.com/docs/knowledgebase/paypal-payout',
-            //settings_link: admin_url('admin.php?page=mvx#&submenu=payment&name=payment-payout'),
-            pro_module: false,
-            category: 'payment_management'
-        },
+        // {
+        //     id: 'paypal-payout',
+        //     name: __('PayPal Payout', 'multivendorx'),
+        //     desc: "Send payments automatically to multiple vendors as per scheduled",
+        //     icon: 'adminlib-rules',
+        //     doc_link: 'https://multivendorx.com/docs/knowledgebase/paypal-payout',
+        //     //settings_link: admin_url('admin.php?page=mvx#&submenu=payment&name=payment-payout'),
+        //     pro_module: false,
+        //     category: 'payment_management'
+        // },
         {
             id: 'paypal-marketplace',
             name: __('PayPal Marketplace (Real time Split)', 'multivendorx'),
@@ -274,16 +274,16 @@ export default {
             pro_module: true,
             category: 'payment_management'
         },
-        {
-            id: 'stripe-connect',
-            name: __('Stripe Connect', 'multivendorx'),
-            desc: "Connect to vendors stripe account and make hassle-free transfers as scheduled.",
-            icon: 'adminlib-rules',
-            doc_link: 'https://multivendorx.com/docs/knowledgebase/stripe-connect',
-            //settings_link: admin_url('admin.php?page=mvx#&submenu=payment&name=payment-stripe-connect'),
-            pro_module: false,
-            category: 'payment_management'
-        },
+        // {
+        //     id: 'stripe-connect',
+        //     name: __('Stripe Connect', 'multivendorx'),
+        //     desc: "Connect to vendors stripe account and make hassle-free transfers as scheduled.",
+        //     icon: 'adminlib-rules',
+        //     doc_link: 'https://multivendorx.com/docs/knowledgebase/stripe-connect',
+        //     //settings_link: admin_url('admin.php?page=mvx#&submenu=payment&name=payment-stripe-connect'),
+        //     pro_module: false,
+        //     category: 'payment_management'
+        // },
         {
             id: 'stripe-marketplace',
             name: __('Stripe Marketplace (Real time Split)', 'multivendorx'),

@@ -1,6 +1,6 @@
 <?php
 
-namespace MultiVendorX\PaypalPayout;
+namespace MultiVendorX\Payments;
 
 defined('ABSPATH') || exit;
 
@@ -11,7 +11,7 @@ use PaypalPayoutsSDK\Core\SandboxEnvironment;
 use PaypalPayoutsSDK\Core\ProductionEnvironment;
 use PaypalPayoutsSDK\Payouts\PayoutsPostRequest;
 
-class Payment {
+class PaypalPayout {
     public function __construct(){
         add_action('multivendorx_process_paypal-payout_payment', array($this, 'process_payment'), 10, 5);
     }

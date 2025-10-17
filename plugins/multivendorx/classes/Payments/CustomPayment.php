@@ -19,6 +19,7 @@ class CustomPayment {
             'icon'      => 'adminlib-cart',
             'id'        => $this->get_id(),
             'label'     => 'Custom Gateway',
+            'disableBtn'=> true,
             'enableOption' => true,
             'desc'      => '',
             'formFields' => [

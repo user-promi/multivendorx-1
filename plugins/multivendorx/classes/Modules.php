@@ -96,21 +96,21 @@ class Modules {
 						'module_file'  => MultiVendorX()->plugin_path . 'modules/StoreReview/Module.php',
 						'module_class' => 'MultiVendorX\StoreReview\Module',
 					),
-                    'bank-transfer' => array(
-                        'id'           => 'bank-transfer',
-						'module_file'  => MultiVendorX()->plugin_path . 'modules/BankTransfer/Module.php',
-						'module_class' => 'MultiVendorX\BankTransfer\Module',
-					),
-                    'stripe-connect' => array(
-                        'id'           => 'stripe-connect',
-						'module_file'  => MultiVendorX()->plugin_path . 'modules/StripeConnect/Module.php',
-						'module_class' => 'MultiVendorX\StripeConnect\Module',
-					),
-                    'paypal-payout' => array(
-                        'id'           => 'paypal-payout',
-						'module_file'  => MultiVendorX()->plugin_path . 'modules/PaypalPayout/Module.php',
-						'module_class' => 'MultiVendorX\PaypalPayout\Module',
-					),
+                    // 'bank-transfer' => array(
+                    //     'id'           => 'bank-transfer',
+					// 	'module_file'  => MultiVendorX()->plugin_path . 'modules/BankTransfer/Module.php',
+					// 	'module_class' => 'MultiVendorX\BankTransfer\Module',
+					// ),
+                    // 'stripe-connect' => array(
+                    //     'id'           => 'stripe-connect',
+					// 	'module_file'  => MultiVendorX()->plugin_path . 'modules/StripeConnect/Module.php',
+					// 	'module_class' => 'MultiVendorX\StripeConnect\Module',
+					// ),
+                    // 'paypal-payout' => array(
+                    //     'id'           => 'paypal-payout',
+					// 	'module_file'  => MultiVendorX()->plugin_path . 'modules/PaypalPayout/Module.php',
+					// 	'module_class' => 'MultiVendorX\PaypalPayout\Module',
+					// ),
                     'question-answer' => array(
                         'id'           => 'question-answer',
 						'module_file'  => MultiVendorX()->plugin_path . 'modules/QuestionsAnswers/Module.php',
