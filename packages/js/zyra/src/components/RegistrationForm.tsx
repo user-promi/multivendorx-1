@@ -21,6 +21,7 @@ import TimePicker from './TimePicker';
 import TemplateSection from './TemplateSection';
 import DisplayButton from './DisplayButton';
 import BlockLayout from './BlockLayout';
+// import BlockLayout from './BlockLayout';
 
 // Types
 export interface Option {
@@ -73,7 +74,7 @@ const DEFAULT_FORM_TITLE = 'Demo Form';
 
 // Example select options
 const selectOptions: SelectOption[] = [
-    { icon: 'adminlib-module icon-form-textbox', value: 'block-layout', label: 'Block Layout' },
+    // { icon: 'adminlib-module icon-form-textbox', value: 'block-layout', label: 'Block Layout' },
     { icon: 'adminlib-t-letter-bold icon-form-textbox', value: 'text', label: 'Textbox' },
     { icon: 'adminlib-unread icon-form-email', value: 'email', label: 'Email' },
     { icon: 'adminlib-text icon-form-textarea', value: 'textarea', label: 'Textarea' },
@@ -337,6 +338,11 @@ const CustomForm: React.FC<CustomFormProps> = ({
                                             children={<i className="admin-font adminlib-delete"></i>}
                                             btnType="button"
                                         /> */}
+                                        {opendInput?.id === formField.id && (
+                                            <div className="admin-badge blue drag-handle">
+                                                <i className="admin-font adminlib-drag"></i>
+                                            </div>
+                                        )}
                                         <span
                                             onClick={() => {
                                                 const index = formFieldList.findIndex(f => f.id === opendInput.id);
@@ -347,16 +353,6 @@ const CustomForm: React.FC<CustomFormProps> = ({
                                         >
                                             <i className="admin-font adminlib-delete"></i>
                                         </span>
-                                        {/* <span
-                                            onClick={() => {
-                                                const index = formFieldList.findIndex(f => f.id === opendInput.id);
-                                                if (index >= 0) deleteParticularFormField(index);
-                                                setOpendInput(null);
-                                            }}
-                                            className="admin-badge blue"
-                                        >
-                                            <i className="admin-font adminlib-vendor-form-copy"></i>
-                                        </span> */}
                                     </section>
                                 )}
                                 <section className={`form-field-container-wrapper`}>
@@ -386,9 +382,9 @@ const CustomForm: React.FC<CustomFormProps> = ({
                                     {formField.type === 'section' && (
                                         <TemplateSection formField={formField} onChange={(key, value) => handleFormFieldChange(index, key, value)} />
                                     )}
-                                    {formField.type === 'block-layout' && (
+                                    {/* {formField.type === 'block-layout' && (
                                         <BlockLayout />
-                                    )}
+                                    )} */}
                                     {formField.type === 'textarea' && (
                                         <TemplateTextArea
                                             formField={formField}
@@ -420,36 +416,36 @@ const CustomForm: React.FC<CustomFormProps> = ({
                     })}
                 </ReactSortable>
 
-                    <ButtonCustomizer
-                        text={
-                            (buttonSetting.button_text &&
-                                buttonSetting.button_text) ||
-                            'Submit'
+                <ButtonCustomizer
+                    text={
+                        (buttonSetting.button_text &&
+                            buttonSetting.button_text) ||
+                        'Submit'
+                    }
+                    setting={buttonSetting}
+                    onChange={(
+                        key,
+                        value,
+                        isRestoreDefaults = false
+                    ) => {
+                        if (proSettingChange()) return;
+                        settingHasChanged.current = true;
+                        const previousSetting = buttonSetting || {};
+                        if (isRestoreDefaults) {
+                            setButtonSetting(value);
+                        } else {
+                            setButtonSetting({
+                                ...previousSetting,
+                                [key]: value,
+                            });
                         }
-                        setting={buttonSetting}
-                        onChange={(
-                            key,
-                            value,
-                            isRestoreDefaults = false
-                        ) => {
-                            if (proSettingChange()) return;
-                            settingHasChanged.current = true;
-                            const previousSetting = buttonSetting || {};
-                            if (isRestoreDefaults) {
-                                setButtonSetting(value);
-                            } else {
-                                setButtonSetting({
-                                    ...previousSetting,
-                                    [key]: value,
-                                });
-                            }
-                        }}
-                    />
+                    }}
+                />
             </div>
 
             {/* Meta Setting Modal outside registration-form-main-section */}
             <div className="registration-edit-form">
-                {opendInput && !opendInput.readonly && (           
+                {opendInput && !opendInput.readonly && (
                     <>
                         <SettingMetaBox
                             formField={opendInput}

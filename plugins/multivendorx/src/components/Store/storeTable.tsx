@@ -156,16 +156,30 @@ const StoreTable: React.FC = () => {
             header: __('Store', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell title={row.original.store_name || ''}>
-                    {row.original.store_name || '-'}
+                    <a
+                        onClick={() => {
+                            window.location.href = `?page=multivendorx#&tab=stores&view&id=${row.original.id}`;
+                        }}
+                        className="product-wrapper"
+                    >
+                        <img src="https://via.placeholder.com/50" style={{ width: 40, height: 40, objectFit: 'cover' }} />
+
+                        <span>{row.original.store_name || '-'}</span>
+                    </a>
                 </TableCell>
             ),
         },
         {
-            header: __('Email', 'multivendorx'),
+            header: __('Contact', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell title={row.original.email || ''}>
-                    {row.original.email || '-'}
-                </TableCell>
+                    <>
+                        <div className="table-content">
+                            <div><b>Email:</b> {row.original.email || '-'} </div>
+                            <div> <b>Phone:</b> 98745632103 </div>
+                        </div>
+                    </>
+                </TableCell >
             ),
         },
         {
@@ -202,15 +216,24 @@ const StoreTable: React.FC = () => {
 
                 return (
                     <TableCell title={`${status} - ${formattedDate}`}>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                        <>
                             {getStatusBadge(status)}Since
                             <span>{formattedDate}</span>
-                        </div>
+                        </>
                     </TableCell>
                 );
             },
         },
-
+        {
+            header: __('Primary Owner', 'multivendorx'),
+            cell: ({ row }) => (
+                <TableCell title={row.original.email || ''}>
+                    <>
+                        Owner 1
+                    </>
+                </TableCell >
+            ),
+        },
         {
             id: 'action',
             header: __('Action', 'multivendorx'),
