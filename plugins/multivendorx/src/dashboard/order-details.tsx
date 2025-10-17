@@ -15,6 +15,50 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 
 
     const [isRefund, setIsRefund] = useState(false);
+  const [refundItems, setRefundItems] = useState({});
+const [refundDetails, setRefundDetails] = useState({
+  refundAmount: 0,
+  restock: true,
+  reason: "",
+});
+
+// When any item total changes, recalculate refundAmount
+const handleItemChange = (id, field, value) => {
+  setRefundItems((prev) => {
+    const updated = {
+      ...prev,
+      [id]: {
+        ...prev[id],
+        [field]: value,
+      },
+    };
+
+    // Recalculate total refund amount
+    const refundAmount = Object.values(updated).reduce((sum, item) => {
+      return sum + (item.total ? Number(item.total) : 0);
+    }, 0);
+
+    setRefundDetails((prevDetails) => ({
+      ...prevDetails,
+      refundAmount,
+    }));
+
+    return updated;
+  });
+};
+
+
+  const handleRefundSubmit = () => {
+    const payload = {
+      items: refundItems,
+      refundAmount: refundDetails.refundAmount,
+      restock: refundDetails.restock,
+      reason: refundDetails.reason,
+    };
+    console.log("Refund Data Sent:", payload);
+    // onRefund(payload); // send to your API here
+  };
+
     const [values, setValues] = useState({
         commission: 50,
         discount: 5,
@@ -117,7 +161,78 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
                                             {/* <td className="header-col">Commission</td> */}
                                         </tr>
                                     </thead>
+
                                     <tbody className="admin-table-body">
+                                        {orderData?.line_items?.length > 0 ? (
+                                            orderData.line_items.map((item) => (
+                                            <tr key={item.id} className="admin-row simple">
+                                                <td className="admin-column">
+                                                <div className="item-details">
+                                                    <div className="image">
+                                                    <img
+                                                        src={item?.image?.src}
+                                                        alt={item?.name}
+                                                        width={40}
+                                                    />
+                                                    </div>
+                                                    <div className="detail">
+                                                    <div className="name">{item.name}</div>
+                                                    {item?.sku && <div className="sku">SKU: {item.sku}</div>}
+                                                    </div>
+                                                </div>
+                                                </td>
+
+                                                {/* Cost (not editable) */}
+                                                <td className="admin-column">
+                                                {`$${parseFloat(item.price).toFixed(2)}`}
+                                                </td>
+
+                                                {/* Qty (editable only in refund mode) */}
+                                                <td className="admin-column">
+                                                {isRefund ? (
+                                                    <input
+                                                    type="number"
+                                                    min="0"
+                                                    className="basic-input"
+                                                    value={refundItems[item.id]?.qty ?? 0}
+                                                    onChange={(e) =>
+                                                        handleItemChange(item.id, "qty", +e.target.value)
+                                                    }
+                                                    />
+                                                ) : (
+                                                    `× ${item.quantity}`
+                                                )}
+                                                </td>
+
+                                                {/* Total (editable only in refund mode) */}
+                                                <td className="admin-column">
+                                                {isRefund ? (
+                                                    <input
+                                                    type="number"
+                                                    min="0"
+                                                    className="basic-input"
+                                                    value={refundItems[item.id]?.total ?? 0}
+                                                    onChange={(e) =>
+                                                        handleItemChange(item.id, "total", +e.target.value)
+                                                    }
+                                                    />
+                                                ) : (
+                                                    `$${parseFloat(item.total).toFixed(2)}`
+                                                )}
+                                                </td>
+                                            </tr>
+                                            ))
+                                        ) : (
+                                            <tr>
+                                            <td colSpan={4} className="text-center">
+                                                No items found.
+                                            </td>
+                                            </tr>
+                                        )}
+                                    </tbody>
+
+
+                                    {/* <tbody className="admin-table-body">
                                         {orderData?.line_items?.length > 0 ? (
                                             orderData.line_items.map((item: any) => (
                                                 <tr key={item.id} className="admin-row simple">
@@ -154,7 +269,7 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
                                                 </td>
                                             </tr>
                                         )}
-                                    </tbody>
+                                    </tbody> */}
 
                                     {/* <tbody className="admin-table-body">
                                         <tr className="admin-row simple">
@@ -203,16 +318,6 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
                                                 )}
                                             </td>
 
-                                            <td className="admin-column">
-                                                {!isRefund ? `$${row.commission}` : (
-                                                    <input
-                                                        type="number"
-                                                        value={row.commission}
-                                                        onChange={(e) => setRow({ ...row, commission: +e.target.value })}
-                                                        className="basic-input"
-                                                    />
-                                                )}
-                                            </td>
                                         </tr>
 
                                         <tr className="admin-row simple">
@@ -238,7 +343,99 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
                                 </table>
                             </div>
 
+
                             <div className="coupons-calculation-wrapper">
+                                <div className="left">
+                                    {!isRefund ? (
+                                    <button
+                                        className="admin-btn btn-purple"
+                                        onClick={() => setIsRefund(true)}
+                                    >
+                                        Refund
+                                    </button>
+                                    ) : (
+                                    <div className="refund-actions">
+                                        <button
+                                        className="admin-btn btn-green"
+                                        onClick={handleRefundSubmit}
+                                        >
+                                        Refund ${refundDetails.refundAmount.toFixed(2)} manually
+                                        </button>
+                                        <button
+                                        className="admin-btn btn-gray"
+                                        onClick={() => setIsRefund(false)}
+                                        >
+                                        Cancel
+                                        </button>
+                                    </div>
+                                    )}
+                                </div>
+
+                                {isRefund && (
+                                    <div className="right">
+                                    <table className="refund-table">
+                                        <tbody>
+                                        <tr>
+                                            <td>Restock refunded items:</td>
+                                            <td>
+                                            <input
+                                                type="checkbox"
+                                                checked={refundDetails.restock}
+                                                onChange={(e) =>
+                                                setRefundDetails({
+                                                    ...refundDetails,
+                                                    restock: e.target.checked,
+                                                })
+                                                }
+                                            />
+                                            </td>
+                                        </tr>
+                                        <tr><td>Amount already refunded:</td><td>-$0.00</td></tr>
+                                        <tr>
+
+                                            <td>Total available to refund:</td>
+                                            <td>$20.00</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Refund amount:</td>
+                                            <td>
+                                            <input
+                                                type="number"
+                                                className="basic-input"
+                                                value={refundDetails.refundAmount}
+                                                onChange={(e) =>
+                                                setRefundDetails({
+                                                    ...refundDetails,
+                                                    refundAmount: +e.target.value,
+                                                })
+                                                }
+                                            />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Reason for refund (optional):</td>
+                                            <td>
+                                            <input
+                                                type="text"
+                                                className="basic-input"
+                                                placeholder="Reason for refund"
+                                                value={refundDetails.reason}
+                                                onChange={(e) =>
+                                                setRefundDetails({
+                                                    ...refundDetails,
+                                                    reason: e.target.value,
+                                                })
+                                                }
+                                            />
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    </div>
+                                )}
+
+                            </div>
+                            {/* <div className="coupons-calculation-wrapper">
                                 <div className="left">
                                     {!isRefund && (
                                         <div className="coupon">Coupon(s): <a href="#" className="admin-badge blue">COUPON30</a></div>
@@ -277,7 +474,7 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
                                         </table>
                                     )}
                                 </div>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
 
