@@ -229,15 +229,24 @@ const ViewStore = () => {
         description={data.description || ''}
         buttons={[
           {
-            label: 'Back',
+            label: 'All Store',
             onClick: () => window.location.assign('?page=multivendorx#&tab=stores'),
+            iconClass: 'adminlib-eye',
+            className: 'admin-btn btn-purple',
+          },
+          {
+            label: 'Edit Store',
+            iconClass: 'adminlib-create',
+            onClick: () =>
+              data.slug && window.open(`${appLocalizer.site_url}/store/${data.slug}/`, '_blank'),
             className: 'admin-btn btn-purple',
           },
           {
             label: 'View Public Store',
+            iconClass: 'adminlib-eye',
             onClick: () =>
               data.slug && window.open(`${appLocalizer.site_url}/store/${data.slug}/`, '_blank'),
-            className: 'admin-btn btn-purple',
+              className: 'admin-btn btn-purple',
           },
         ]}
       />
