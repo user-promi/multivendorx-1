@@ -45,50 +45,101 @@ class Payment
         ]);
     }
     public function handle_oauth_callback() {
+        $log_file = plugin_dir_path(__FILE__) . "/error.log";
+        
+        // Log initial callback
+        file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": OAUTH_CALLBACK_STARTED\n", FILE_APPEND);
+        file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": GET_PARAMS: " . var_export($_GET, true) . "\n", FILE_APPEND);
+        
         if (!isset($_GET['code'], $_GET['state'])) {
-            wp_safe_redirect(home_url('/?dashboard=1&tab=payments&subtab=withdrawl&error=stripe_oauth'));
+            file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": ERROR: Missing code or state parameters\n", FILE_APPEND);
+            wp_safe_redirect(home_url('/?dashboard&tab=settings&#subtab=payout&error=stripe_oauth'));
             exit;
         }
+        
         $state = sanitize_text_field($_GET['state']);
         $vendor_id = get_transient('mvx_stripe_oauth_state_' . $state);
+        
+        file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": STATE: " . $state . "\n", FILE_APPEND);
+        file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": VENDOR_ID_FROM_TRANSIENT: " . var_export($vendor_id, true) . "\n", FILE_APPEND);
+        
         delete_transient('mvx_stripe_oauth_state_' . $state);
+        
         if (empty($vendor_id)) {
+            file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": ERROR: Invalid or expired OAuth state\n", FILE_APPEND);
             wp_die(__('Invalid or expired OAuth state.', 'multivendorx'));
         }
+        
         $code = sanitize_text_field($_GET['code']);
         $payment_admin_settings = MultiVendorX()->setting->get_setting('payment_methods', []);
         $stripe_settings = $payment_admin_settings['stripe-connect'] ?? [];
         $secret_key = $stripe_settings['secret_key'] ?? '';
         $client_id  = $stripe_settings['client_id'] ?? '';
-        // :white_check_mark: Use Stripe SDK for token exchange
+        
+        file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": STRIPE_SETTINGS: " . var_export($stripe_settings, true) . "\n", FILE_APPEND);
+        file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": SECRET_KEY_EXISTS: " . (!empty($secret_key) ? 'YES' : 'NO') . "\n", FILE_APPEND);
+        file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": CLIENT_ID_EXISTS: " . (!empty($client_id) ? 'YES' : 'NO') . "\n", FILE_APPEND);
+        
         try {
             \Stripe\Stripe::setApiKey($secret_key);
+            file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": STRIPE_API_INITIALIZED\n", FILE_APPEND);
+            
             $resp = \Stripe\OAuth::token([
                 'grant_type' => 'authorization_code',
                 'code'       => $code,
             ]);
+            
+            file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": STRIPE_OAUTH_RESPONSE: " . var_export($resp, true) . "\n", FILE_APPEND);
+            
             if (!empty($resp->stripe_user_id)) {
+                file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": STRIPE_USER_ID_RECEIVED: " . $resp->stripe_user_id . "\n", FILE_APPEND);
+                
                 $store = new Store($vendor_id);
-                $store->update_meta("_stripe_connect_account_id", sanitize_text_field($resp->stripe_user_id));
-                $store->update_meta("_vendor_payment_mode", 'stripe-connect');
-                $store->update_meta("vendor_connected", 1);
-                $store->update_meta("admin_client_id", $client_id);
-                if (!empty($resp->access_token)) {
-                    $store->update_meta("access_token", sanitize_text_field($resp->access_token));
+                file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": STORE_OBJECT_CREATED: " . var_export($store, true) . "\n", FILE_APPEND);
+                
+                // Test store object functionality
+                $store_id = $store->get_id();
+                file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": STORE_ID: " . $store_id . "\n", FILE_APPEND);
+                
+                // Save each meta individually with logging
+                $meta_updates = [
+                    "_stripe_connect_account_id" => $resp->stripe_user_id,
+                    "_vendor_payment_mode" => 'stripe-connect',
+                    "vendor_connected" => 1,
+                    "admin_client_id" => $client_id,
+                    "access_token" => $resp->access_token ?? '',
+                    "refresh_token" => $resp->refresh_token ?? '',
+                    "stripe_publishable_key" => $resp->stripe_publishable_key ?? ''
+                ];
+                
+                foreach ($meta_updates as $key => $value) {
+                    $result = $store->update_meta($key, sanitize_text_field($value));
+                    file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": META_UPDATE - " . $key . ": " . ($result ? 'SUCCESS' : 'FAILED') . "\n", FILE_APPEND);
+                    file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": META_VALUE - " . $key . ": " . sanitize_text_field($value) . "\n", FILE_APPEND);
                 }
-                if (!empty($resp->refresh_token)) {
-                    $store->update_meta("refresh_token", sanitize_text_field($resp->refresh_token));
-                }
-                if (!empty($resp->stripe_publishable_key)) {
-                    $store->update_meta("stripe_publishable_key", sanitize_text_field($resp->stripe_publishable_key));
-                }
-                wp_safe_redirect(add_query_arg('connected', 'stripe', home_url('/?dashboard=1&tab=payments&subtab=withdrawl')));
+                
+                // Verify the data was saved
+                $saved_account_id = $store->get_meta("_stripe_connect_account_id");
+                $saved_payment_mode = $store->get_meta("_vendor_payment_mode");
+                
+                file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": VERIFICATION - _stripe_connect_account_id: " . $saved_account_id . "\n", FILE_APPEND);
+                file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": VERIFICATION - _vendor_payment_mode: " . $saved_payment_mode . "\n", FILE_APPEND);
+                
+                file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": OAUTH_SUCCESS - Redirecting to success\n", FILE_APPEND);
+                wp_safe_redirect(add_query_arg('connected', 'stripe', home_url('/?dashboard&tab=settings&#subtab=payout')));
+                exit;
+            } else {
+                file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": ERROR: No stripe_user_id in response\n", FILE_APPEND);
+                wp_safe_redirect(add_query_arg('error', 'stripe_connection_failed', home_url('/?dashboard&tab=settings&#subtab=payout')));
                 exit;
             }
-            wp_safe_redirect(add_query_arg('error', 'stripe_connection_failed', home_url('/?dashboard=1&tab=payments&subtab=withdrawl')));
-            exit;
         } catch (\Stripe\Exception\ApiErrorException $e) {
-            wp_safe_redirect(add_query_arg('error', 'stripe_sdk_error', home_url('/?dashboard=1&tab=payments&subtab=withdrawl')));
+            file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": STRIPE_API_ERROR: " . $e->getMessage() . "\n", FILE_APPEND);
+            wp_safe_redirect(add_query_arg('error', 'stripe_sdk_error', home_url('/?dashboard&tab=settings&#subtab=payout')));
+            exit;
+        } catch (Exception $e) {
+            file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": GENERAL_ERROR: " . $e->getMessage() . "\n", FILE_APPEND);
+            wp_safe_redirect(add_query_arg('error', 'general_error', home_url('/?dashboard&tab=settings&#subtab=payout')));
             exit;
         }
     }
