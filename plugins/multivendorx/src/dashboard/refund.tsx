@@ -14,7 +14,10 @@ type StoreRow = {
     store_slug?: string;
     status?: string;
 };
-
+export interface RealtimeFilter {
+    name: string;
+    render: (updateFilter: (key: string, value: any) => void, filterValue: any) => ReactNode;
+}
 const Refund: React.FC = () => {
     const [data, setData] = useState<StoreRow[] | null>(null);
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
@@ -27,76 +30,51 @@ const Refund: React.FC = () => {
 
 
     useEffect(() => {
-        const demoData: ProductRow[] = [
+        const demoData: OrderRow[] = [
             {
-                id: 201,
-                amount: "£250.00",
-                method: "PayPal",
-                date: "2022/04/01",
-                notes: "March 2023 Vendor Payment",
+                orderNumber: "ORD-2024-1547",
+                customer: "Sarah Johnson",
+                email: "sarah.j@email.com",
+                amount: "$149.99",
+                reason: "Product defective",
+                date: "2024-10-14",
+                status: "Pending",
             },
             {
-                id: 202,
-                amount: "£120.50",
-                method: "Bank Transfer",
-                date: "2022/05/05",
-                notes: "April 2023 Vendor Payment",
+                orderNumber: "ORD-2024-1523",
+                customer: "Michael Chen",
+                email: "mchen@email.com",
+                amount: "$89.50",
+                reason: "Wrong item received",
+                date: "2024-10-13",
+                status: "Pending",
             },
             {
-                id: 203,
-                amount: "£500.00",
-                method: "Stripe",
-                date: "2022/06/10",
-                notes: "May 2023 Vendor Payment",
+                orderNumber: "ORD-2024-1498",
+                customer: "Emily Rodriguez",
+                email: "emily.r@email.com",
+                amount: "$299.00",
+                reason: "Changed mind",
+                date: "2024-10-12",
+                status: "Approved",
             },
             {
-                id: 204,
-                amount: "£75.25",
-                method: "PayPal",
-                date: "2022/07/02",
-                notes: "June 2023 Vendor Payment",
+                orderNumber: "ORD-2024-1445",
+                customer: "David Thompson",
+                email: "dthompson@email.com",
+                amount: "$64.99",
+                reason: "Product damaged in shipping",
+                date: "2024-10-10",
+                status: "Rejected",
             },
             {
-                id: 205,
-                amount: "£310.99",
-                method: "Bank Transfer",
-                date: "2022/08/15",
-                notes: "July 2023 Vendor Payment",
-            },
-            {
-                id: 206,
-                amount: "£90.00",
-                method: "Stripe",
-                date: "2022/09/05",
-                notes: "August 2023 Vendor Payment",
-            },
-            {
-                id: 207,
-                amount: "£420.00",
-                method: "PayPal",
-                date: "2022/10/01",
-                notes: "September 2023 Vendor Payment",
-            },
-            {
-                id: 208,
-                amount: "£199.50",
-                method: "Bank Transfer",
-                date: "2022/11/03",
-                notes: "October 2023 Vendor Payment",
-            },
-            {
-                id: 209,
-                amount: "£650.00",
-                method: "Stripe",
-                date: "2022/12/20",
-                notes: "November 2023 Vendor Payment",
-            },
-            {
-                id: 210,
-                amount: "£330.75",
-                method: "PayPal",
-                date: "2023/01/08",
-                notes: "December 2023 Vendor Payment",
+                orderNumber: "ORD-2024-1389",
+                customer: "Lisa Anderson",
+                email: "l.anderson@email.com",
+                amount: "$179.99",
+                reason: "Product not as described",
+                date: "2024-10-09",
+                status: "Pending",
             },
         ];
         setData(demoData);
@@ -122,6 +100,30 @@ const Refund: React.FC = () => {
             ),
         },
         {
+            header: __('Order Number', 'multivendorx'),
+            cell: ({ row }) => (
+                <TableCell title={row.original.orderNumber || ''}>
+                    {row.original.orderNumber || '-'}
+                </TableCell>
+            ),
+        },
+        {
+            header: __('Customer', 'multivendorx'),
+            cell: ({ row }) => (
+                <TableCell title={row.original.customer || ''}>
+                    {row.original.customer || '-'}
+                </TableCell>
+            ),
+        },
+        {
+            header: __('Email', 'multivendorx'),
+            cell: ({ row }) => (
+                <TableCell title={row.original.email || ''}>
+                    {row.original.email || '-'}
+                </TableCell>
+            ),
+        },
+        {
             header: __('Amount', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell title={row.original.amount || ''}>
@@ -130,15 +132,15 @@ const Refund: React.FC = () => {
             ),
         },
         {
-            header: __('Payment Method', 'multivendorx'),
+            header: __('Reason', 'multivendorx'),
             cell: ({ row }) => (
-                <TableCell title={row.original.method || ''}>
-                    {row.original.method || '-'}
+                <TableCell title={row.original.reason || ''}>
+                    {row.original.reason || '-'}
                 </TableCell>
             ),
         },
         {
-            header: __('Date Processed', 'multivendorx'),
+            header: __('Date', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell title={row.original.date || ''}>
                     {row.original.date || '-'}
@@ -146,11 +148,93 @@ const Refund: React.FC = () => {
             ),
         },
         {
-            header: __('Notes', 'multivendorx'),
+            header: __('Status', 'multivendorx'),
             cell: ({ row }) => (
-                <TableCell title={row.original.notes || ''}>
-                    {row.original.notes || '-'}
+                <TableCell title={row.original.status || ''}>
+                    {row.original.status === "Approved" && (
+                        <span className="admin-badge green">Approved</span>
+                    )}
+                    {row.original.status === "Pending" && (
+                        <span className="admin-badge yellow">Pending</span>
+                    )}
+                    {row.original.status === "Rejected" && (
+                        <span className="admin-badge red">Rejected</span>
+                    )}
                 </TableCell>
+            ),
+        },
+        {
+            id: 'action',
+            header: __('Action', 'multivendorx'),
+            cell: ({ row }) => (
+                <TableCell
+                    type="action-dropdown"
+                    rowData={row.original}
+                    header={{
+                        actions: [
+                            {
+                                label: __('View Details', 'multivendorx'),
+                                icon: 'adminlib-import',
+                                hover: true,
+                                onClick: (rowData) => {
+                                    window.location.href = `?page=multivendorx#&tab=stores&edit/${rowData.id}`;
+                                },
+                            },
+                        ],
+                    }}
+                />
+            ),
+        },
+    ];
+    const searchFilter: RealtimeFilter[] = [
+        {
+            name: 'searchAction',
+            render: (updateFilter, filterValue) => (
+                <div className="search-action">
+                    <select
+                        className="basic-select"
+                        value={filterValue || ''}
+                        onChange={(e) => {
+                            updateFilter('searchAction', e.target.value || '');
+                        }}
+                    >
+                        <option value="all">
+                            {__('All', 'moowoodle')}
+                        </option>
+                        <option value="order_id">
+                            {__('Order Id', 'moowoodle')}
+                        </option>
+                        <option value="products">
+                            {__('Products', 'moowoodle')}
+                        </option>
+                        <option value="customer_email">
+                            {__('Customer Email', 'moowoodle')}
+                        </option>
+                        <option value="customer">
+                            {__('Customer', 'moowoodle')}
+                        </option>
+                    </select>
+                </div>
+            ),
+        },
+        {
+            name: 'searchField',
+            render: (updateFilter, filterValue) => (
+                <>
+                    <div className="search-section">
+                        <input
+                            name="searchField"
+                            type="text"
+                            placeholder={__('Search', 'multivendorx')}
+                            onChange={(e) => {
+                                updateFilter(e.target.name, e.target.value);
+                            }}
+                            value={filterValue || ''}
+                            className='basic-select'
+                        />
+                        <i className="adminlib-search"></i>
+                    </div>
+                </>
             ),
         },
     ];
@@ -160,6 +244,15 @@ const Refund: React.FC = () => {
                 <div className="page-title">
                     <div className="title">Refund</div>
                     <div className="des">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Debitis, perferendis.</div>
+                </div>
+                <div className="buttons-wrapper">
+                    <div
+                        className="admin-btn btn-purple"
+                    // onClick={() => setAddProduct(true)}
+                    >
+                        <i className="adminlib-export"></i>
+                        Export
+                    </div>
                 </div>
             </div>
 
@@ -178,6 +271,7 @@ const Refund: React.FC = () => {
                         perPageOption={[10, 25, 50]}
                         typeCounts={[]}
                         totalCounts={totalRows}
+                        searchFilter={searchFilter}
                     />
                 </div>
             </div>

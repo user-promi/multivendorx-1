@@ -201,21 +201,14 @@ const Commission: React.FC = () => {
             accessorKey: 'id',
             accessorFn: row => parseFloat(row.id || '0'),
             enableSorting: true,
-            header: __('Comm ID', 'multivendorx'),
+            header: __('ID', 'multivendorx'),
             cell: ({ row }) => <TableCell >#{row.original.id}</TableCell>,
-        },
-        {
-            id: 'storeName',
-            accessorKey: 'storeName',
-            enableSorting: true,
-            header: __('Store Name', 'multivendorx'),
-            cell: ({ row }) => <TableCell title={row.original.storeName || '-'}>{row.original.storeName || '-'}</TableCell>,
         },
         {
             id: 'orderId',
             accessorKey: 'orderId',
             enableSorting: true,
-            header: __('Order ID', 'multivendorx'),
+            header: __('Order', 'multivendorx'),
             cell: ({ row }) => {
                 const orderId = row.original.orderId;
                 const url = orderId
@@ -226,7 +219,7 @@ const Commission: React.FC = () => {
                     <TableCell title={orderId ? `#${orderId}` : '-'}>
                         {orderId ? (
                             <a href={url} target="_blank" rel="noopener noreferrer" className="order-link">
-                                #{orderId}
+                                #{orderId} - {row.original.storeName || '-'}
                             </a>
                         ) : (
                             '-'
