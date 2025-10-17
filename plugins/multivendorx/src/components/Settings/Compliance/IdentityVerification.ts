@@ -131,6 +131,7 @@ export default {
                     icon: "adminlib-google",
                     label: 'Google Connect',
                     connected: false,
+                    disableBtn: true,
                     desc: 'Connect and authenticate stores via Google accounts.',
                     formFields: [
                         { key: 'client_id', type: 'text', label: 'Google Client ID', placeholder: 'Enter Google Client ID' },
@@ -143,6 +144,8 @@ export default {
                     icon: "adminlib-twitter",
                     label: 'Twitter Connect',
                     connected: false,
+                    disableBtn: true,
+                    countBtn: false,
                     desc: 'Connect and authenticate stores via Twitter accounts.',
                     formFields: [
                         { key: 'api_key', type: 'text', label: 'Twitter API Key', placeholder: 'Enter Twitter API Key' },
@@ -155,6 +158,8 @@ export default {
                     icon: "adminlib-facebook",
                     label: 'Facebook Connect',
                     connected: false,
+                    disableBtn: true,
+                    countBtn: false,
                     desc: 'Connect and authenticate stores via Facebook accounts.',
                     formFields: [
                         { key: 'app_id', type: 'text', label: 'Facebook App ID', placeholder: 'Enter Facebook App ID' },
@@ -165,7 +170,8 @@ export default {
                     id: 'linkedin-connect',
                     icon: "adminlib-linkedin",
                     label: 'LinkedIn Connect',
-                    connected: false,
+                    disableBtn: true,
+                    countBtn: false,
                     desc: 'Connect and authenticate stores via LinkedIn accounts.',
                     formFields: [
                         { key: 'client_id', type: 'text', label: 'LinkedIn Client ID', placeholder: 'Enter LinkedIn Client ID' },

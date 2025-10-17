@@ -629,153 +629,39 @@
 
 
 
+// custom icon dropdown start
+.selected-icon {
+    width: 3rem;
+    padding: 0.313rem 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    border: $border-light-small;
 
-
-
-
-.setting-form-multi-input {
-    .multi-input-row {
-        display: flex;
-        gap: 0.5rem;
-        width: 50%;
-
-        input {
-            width: 90%;
-        }
-    }
-
-    .multi-list {
-        width: 100%;
-        margin: 0;
-
-        li {
-            justify-content: space-between;
-            display: flex;
-            gap: .5rem;
-            line-height: 1.2;
-            margin: 0;
-            align-items: start;
-            border-radius: 0.313rem;
-            flex-direction: column;
-
-            .input-header {
-                display: flex;
-                justify-content: space-between;
-                width: 100%;
-                box-sizing: border-box;
-                padding: .625rem;
-                background: #edecec7a;
-                cursor: pointer;
-            }
-
-            .details-wrapper {
-                display: flex;
-                gap: 0.5rem;
-                justify-content: start;
-                align-items: start;
-
-                i {
-                    font-size: 1.125rem;
-                    color: $theme-color;
-                    padding: 0.313rem;
-                    background: $theme-background-color;
-                    border-radius: 0.313rem;
-                }
-
-                .title {
-                    font-size: 1.125rem;
-                    font-weight: 500;
-                    line-height: 1rem;
-                    margin-bottom: 0.25rem;
-                    display: flex;
-                    align-items: center;
-                    gap: 0.5rem;
-                }
-
-                .item-description {
-                    color: #08080859;
-                }
-
-                .details {
-                    display: flex;
-                    flex-direction: column;
-                }
-            }
-
-            .action-wrapper {
-                gap: 0.5rem;
-                display: none;
-
-                .adminlib-delete {
-                    color: #f06b4f;
-                }
-
-                i {
-                    cursor: pointer;
-                }
-            }
-
-            &:hover {
-                .action-wrapper {
-                    display: flex;
-                }
-            }
-
-            // &:last-child {
-            //     margin-top: 0.5rem;
-            // }
-        }
-
-        .multi-item {
-            border: $border-light-small;
-            margin-bottom: 0.5rem;
-            gap: 0;
-
-            .multi-input-dropdown {
-                width: 100%;
-                padding: 0.625rem;
-                padding-top: 0;
-                border-top: $border-light-small;
-                box-sizing: border-box;
-
-                .form-group {
-                    display: flex;
-
-                    .label {
-                        width: 20%;
-                        font-size: 1rem;
-                    }
-                }
-            }
-        }
-
-        .selected-icon {
-            width: 3rem;
-            padding: 0.313rem 0.5rem;
-            display: flex;
-            justify-content: space-between;
-            position: relative;
-            border: $border-light-small;
-
-            i {
-                font-size: 1.063rem;
-            }
-        }
-
-        .icon-options-list {
-            position: absolute;
-            width: 4rem;
-            background: #e9e9e9;
-            border: $border-light-small;
-            cursor: pointer;
-
-            li.icon-option {
-                width: 100%;
-                padding: 0.313rem 0;
-                text-align: center;
-                font-size: 1.125rem;
-                border-bottom: $border-light-small
-            }
-        }
+    i {
+        font-size: 1.063rem;
     }
 }
+
+.icon-options-list {
+    position: absolute;
+    width: 50%;
+    background: #fff;
+    border: $border-light-small;
+    cursor: pointer;
+    display: flex;
+
+    li.icon-option {
+        width: 100%;
+        padding: 0.313rem 0;
+        text-align: center;
+        font-size: 1.125rem;
+        width: 2rem;
+        height: 2rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
+
+// custom icon dropdown end

@@ -90,14 +90,14 @@ a {
                 }
             }
 
-            a.tab:hover {
-                background-color: #f3f2f3;
-            }
+            // a.tab:hover {
+            //     background-color: #f3f2f3;
+            // }
 
             &.active {
                 a {
-                    background-color: color-mix(in srgb, var(--themeColor) 8%, transparent);
-                    color: var(--themeColor);
+                    background-color: var(--themeColor);
+                    color: #fff;
                 }
             }
         }

@@ -128,6 +128,7 @@ interface InputField {
     | 'payment-tabs'
     | 'multi-string'
     | 'verification-methods'
+    | 'description'
     | 'form-builder'
     | 'setting-time'
     | 'endpoint-editor';
@@ -946,7 +947,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             inputType="multi-string"
                             wrapperClass="setting-form-multi-input"
                             inputClass="basic-input"
-                            listClass="multi-list"
+                            listClass="payment-tabs-component"
                             itemClass="multi-item"
                             placeholder={inputField.placeholder}
                             values={setting[inputField.key] || inputField.defaultValues || []}

@@ -1,4 +1,6 @@
 import { render } from "@wordpress/element";
+import { BrowserRouter } from 'react-router-dom';
+
 // Load all files from dashboard folder
 const modules = require.context("./dashboard", false, /\.tsx$/);
 export default function replaceDashboardDivs(container: HTMLElement) {
@@ -33,7 +35,9 @@ export default function replaceDashboardDivs(container: HTMLElement) {
     if (modules.keys().includes(filePath)) {
       try {
         const Component = modules(filePath).default;
-        render(<Component />, div);
+        render(<BrowserRouter>
+            <Component />
+        </BrowserRouter>, div);
       } catch (err) {
         console.error(`Failed to render component for ${id}`, err);
       }
