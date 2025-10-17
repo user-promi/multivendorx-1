@@ -102,17 +102,6 @@ const selectOptionsStore: SelectOption[] = [
     { icon: 'adminlib-unread icon-form-email', value: 'email', label: 'Paypal Email', name: 'paypal_email' },
 ];
 
-const demoFormField = {
-    id: 21,
-    type: "text",
-    label: "Enter your text",
-    required: false,
-    name: "text-mfpbb9yy",
-    placeholder: "text",
-    chosen: false,
-    selected: false,
-};
-
 // Component
 const CustomForm: React.FC<CustomFormProps> = ({
     onChange,
@@ -236,7 +225,17 @@ const CustomForm: React.FC<CustomFormProps> = ({
                         }}
                     />
                     <Elements
-                        label="Store"
+                        label="MultivendorX Free"
+                        selectOptions={selectOptionsStore}
+                        onClick={(type) => {
+                            const option = selectOptionsStore.find(o => o.value === type);
+                            const fixedName = option?.name;
+                            appendNewFormField(formFieldList.length - 1, type, fixedName, true);
+                            setOpendInput(null);
+                        }}
+                    />
+                    <Elements
+                        label="MultivendorX Pro"
                         selectOptions={selectOptionsStore}
                         onClick={(type) => {
                             const option = selectOptionsStore.find(o => o.value === type);
@@ -328,7 +327,7 @@ const CustomForm: React.FC<CustomFormProps> = ({
                             >
                                 {opendInput?.id === formField.id && (
                                     <section className="meta-menu">
-                                        <DisplayButton
+                                        {/* <DisplayButton
                                             onClick={() => {
                                                 const index = formFieldList.findIndex(f => f.id === opendInput.id);
                                                 if (index >= 0) deleteParticularFormField(index);
@@ -337,7 +336,27 @@ const CustomForm: React.FC<CustomFormProps> = ({
                                             wraperClass={`delete`}
                                             children={<i className="admin-font adminlib-delete"></i>}
                                             btnType="button"
-                                        />
+                                        /> */}
+                                        <span
+                                            onClick={() => {
+                                                const index = formFieldList.findIndex(f => f.id === opendInput.id);
+                                                if (index >= 0) deleteParticularFormField(index);
+                                                setOpendInput(null);
+                                            }}
+                                            className="admin-badge red"
+                                        >
+                                            <i className="admin-font adminlib-delete"></i>
+                                        </span>
+                                        {/* <span
+                                            onClick={() => {
+                                                const index = formFieldList.findIndex(f => f.id === opendInput.id);
+                                                if (index >= 0) deleteParticularFormField(index);
+                                                setOpendInput(null);
+                                            }}
+                                            className="admin-badge blue"
+                                        >
+                                            <i className="admin-font adminlib-vendor-form-copy"></i>
+                                        </span> */}
                                     </section>
                                 )}
                                 <section className={`form-field-container-wrapper`}>
@@ -401,7 +420,6 @@ const CustomForm: React.FC<CustomFormProps> = ({
                     })}
                 </ReactSortable>
 
-                <section className="settings-input-content">
                     <ButtonCustomizer
                         text={
                             (buttonSetting.button_text &&
@@ -427,7 +445,6 @@ const CustomForm: React.FC<CustomFormProps> = ({
                             }
                         }}
                     />
-                </section>
             </div>
 
             {/* Meta Setting Modal outside registration-form-main-section */}
