@@ -26,12 +26,12 @@ const ShippingDelivery = () => {
                 }
             }
 
-            // Optional: parse mvx_shipping_rates if needed
-            if (typeof data.mvx_shipping_rates === 'string') {
+            // Optional: parse multivendorx_shipping_rates if needed
+            if (typeof data.multivendorx_shipping_rates === 'string') {
                 try {
-                    data.mvx_shipping_rates = JSON.parse(data.mvx_shipping_rates);
+                    data.multivendorx_shipping_rates = JSON.parse(data.multivendorx_shipping_rates);
                 } catch (err) {
-                    data.mvx_shipping_rates = [];
+                    data.multivendorx_shipping_rates = [];
                 }
             }
 
@@ -168,14 +168,14 @@ const ShippingDelivery = () => {
                                     {/* Default Shipping Price */}
                                     <div className="form-group-wrapper">
                                         <div className="form-group">
-                                            <label htmlFor="_mvx_shipping_type_price">Default Shipping Price ($)</label>
+                                            <label htmlFor="multivendorx_shipping_type_price">Default Shipping Price ($)</label>
                                             <BasicInput
                                                 type="number"
-                                                name="_mvx_shipping_type_price"
+                                                name="multivendorx_shipping_type_price"
                                                 wrapperClass="setting-form-input"
                                                 descClass="settings-metabox-description"
                                                 placeholder="0.00"
-                                                value={formData._mvx_shipping_type_price || ''}
+                                                value={formData.multivendorx_shipping_type_price || ''}
                                                 onChange={handleChange}
                                             />
                                             <div className="settings-metabox-description">
@@ -187,14 +187,14 @@ const ShippingDelivery = () => {
                                     {/* Per Product Additional Price */}
                                     <div className="form-group-wrapper">
                                         <div className="form-group">
-                                            <label htmlFor="_mvx_additional_product">Per Product Additional Price ($)</label>
+                                            <label htmlFor="multivendorx_additional_product">Per Product Additional Price ($)</label>
                                             <BasicInput
                                                 type="number"
-                                                name="_mvx_additional_product"
+                                                name="multivendorx_additional_product"
                                                 wrapperClass="setting-form-input"
                                                 descClass="settings-metabox-description"
                                                 placeholder="0.00"
-                                                value={formData._mvx_additional_product || ''}
+                                                value={formData.multivendorx_additional_product || ''}
                                                 onChange={handleChange}
                                             />
                                             <div className="settings-metabox-description">
@@ -206,14 +206,14 @@ const ShippingDelivery = () => {
                                     {/* Per Qty Additional Price */}
                                     <div className="form-group-wrapper">
                                         <div className="form-group">
-                                            <label htmlFor="_mvx_additional_qty">Per Qty Additional Price ($)</label>
+                                            <label htmlFor="multivendorx_additional_qty">Per Qty Additional Price ($)</label>
                                             <BasicInput
                                                 type="number"
-                                                name="_mvx_additional_qty"
+                                                name="multivendorx_additional_qty"
                                                 wrapperClass="setting-form-input"
                                                 descClass="settings-metabox-description"
                                                 placeholder="0.00"
-                                                value={formData._mvx_additional_qty || ''}
+                                                value={formData.multivendorx_additional_qty || ''}
                                                 onChange={handleChange}
                                             />
                                             <div className="settings-metabox-description">

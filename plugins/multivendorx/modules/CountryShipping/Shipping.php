@@ -6,68 +6,285 @@ defined('ABSPATH') || exit;
 
 class Shipping extends \WC_Shipping_Method {
 
+    /**
+     * Constructor for your shipping class
+    *
+    * @access public
+    *
+    * @return void
+    */
     public function __construct() {
-        // Unique ID for the shipping method
-        $this->id                 = 'mvx_country_shipping_dummy';
-        $this->method_title       = __( 'MVX Dummy Country Shipping', 'textdomain' );
-        $this->method_description = __( 'A dummy shipping method for testing visibility.', 'textdomain' );
+        $this->id                 = 'multivendorx_product_shipping_by_country';
+        $this->method_title       = __( 'Multivendorx Shipping by Country', 'multivendorx' );
+        $this->method_description = __( 'Enable vendors to set marketplace shipping per country', 'multivendorx' );
 
-        // Load settings
+        $this->enabled      = $this->get_option( 'enabled' );
+        $this->title        = $this->get_option( 'title' );
+        $this->tax_status   = $this->get_option( 'tax_status' );
+        
+        if( !$this->title ) $this->title = __( 'Shipping Cost', 'multivendorx' );
+
+        $this->init();
+    }
+
+
+    /**
+     * Init your settings
+    *
+    * @access public
+    * @return void
+    */
+    function init() {
+        // Load the settings API
         $this->init_form_fields();
         $this->init_settings();
 
-        // Load options
-        $this->enabled = $this->get_option('enabled');
-        $this->title   = $this->get_option('title');
-        $this->cost    = $this->get_option('cost');
-
-        // Save admin settings
-        add_action('woocommerce_update_options_shipping_' . $this->id, [$this, 'process_admin_options']);
+        // Save settings in admin if you have any defined
+        add_action( 'woocommerce_update_options_shipping_' . $this->id, array( $this, 'process_admin_options' ) );
     }
 
+    /**
+     * Checking is gateway enabled or not
+    *
+    * @return boolean [description]
+    */
+    public function is_method_enabled() {
+        return $this->enabled == 'yes';
+    }
+
+    /**
+     * Initialise Gateway Settings Form Fields
+    *
+    * @access public
+    * @return void
+    */
     public function init_form_fields() {
-        $this->form_fields = [
-            'enabled' => [
-                'title'   => __('Enable/Disable', 'textdomain'),
-                'type'    => 'checkbox',
-                'label'   => __('Enable this shipping method', 'textdomain'),
-                'default' => 'yes'
-            ],
-            'title' => [
-                'title'       => __('Method Title', 'textdomain'),
-                'type'        => 'text',
-                'description' => __('Title shown to customers at checkout.', 'textdomain'),
-                'default'     => __('MVX Standard Shipping', 'textdomain'),
-                'desc_tip'    => true,
-            ],
-            'cost' => [
-                'title'       => __('Shipping Cost', 'textdomain'),
-                'type'        => 'price',
-                'description' => __('Flat rate cost for testing.', 'textdomain'),
-                'default'     => '15.00',
-                'desc_tip'    => true,
-            ],
-        ];
+
+        $this->form_fields = array(
+            'enabled' => array(
+                'title'         => __( 'Enable/Disable', 'multivendorx' ),
+                'type'          => 'checkbox',
+                'label'         => __( 'Enable Shipping', 'multivendorx' ),
+                'default'       => 'yes'
+            ),
+            'title' => array(
+                'title'         => __( 'Method Title', 'multivendorx' ),
+                'type'          => 'text',
+                'description'   => __( 'This controls the title which the user sees during checkout.', 'multivendorx' ),
+                'default'       => __( 'Regular Shipping', 'multivendorx' ),
+                'desc_tip'      => true,
+            ),
+            'tax_status' => array(
+                'title'         => __( 'Tax Status', 'multivendorx' ),
+                'type'          => 'select',
+                'default'       => 'taxable',
+                'options'       => array(
+                    'taxable'   => __( 'Taxable', 'multivendorx' ),
+                    'none'      => _x( 'None', 'Tax status', 'multivendorx' )
+                ),
+            ),
+
+        );
     }
 
-    public function calculate_shipping($package = []) {
-        // Debug to confirm it's called
-        file_put_contents(
-            plugin_dir_path(__FILE__) . "/shipping_debug.log",
-            date("d/m/Y H:i:s") . " - calculate_shipping() triggered\n",
-            FILE_APPEND
-        );
-
+    public function calculate_shipping($packages = []) {
+        $products = $packages['contents'];
+        $destination_country = isset( $packages['destination']['country'] ) ? $packages['destination']['country'] : '';
+        $destination_state = isset( $packages['destination']['state'] ) ? $packages['destination']['state'] : '';
+        
+        $amount = 0.0;
+        
+        if ( ! $this->is_method_enabled() ) {
+           return;
+        }
+        
+        if ( $products ) {
+            $amount = $this->calculate_per_seller( $products, $destination_country, $destination_state );
+        }     
+    
         $cost = floatval($this->cost ?: 0);
-
+    
         $rate = [
             'id'    => $this->id . ':1',
             'label' => $this->title,
             'cost'  => $cost,
             'calc_tax' => 'per_order',
         ];
-
+    
         // Register the rate
         $this->add_rate($rate);
     }
+
+    /**
+    * Check if shipping for this product is enabled
+    *
+    * @param  integet  $product_id
+    *
+    * @return boolean
+    */
+    public static function is_shipping_enabled_for_seller( $store_id ) {
+
+        // Load the store object
+        $store = new \MultiVendorX\Store\Store( $store_id );
+    
+        // Check store meta for shipping options
+        $shipping_options = $store->meta_data['shipping_options'] ?? '';
+    
+        if ( $shipping_options === 'shipping_by_country' ) {
+            return true;
+        }
+
+        return false;
+    }
+    
+
+    /**
+     * Calculate shipping per seller
+     *
+     * @param  array   $products
+     * @param  string  $destination_country
+     * @param  string  $destination_state
+     * @param  bool    $is_consider_free_threshold
+     *
+     * @return float
+     */
+    public function calculate_per_seller( $products, $destination_country, $destination_state, $is_consider_free_threshold = false ) {
+        $amount = 0.0;
+        $price  = array();
+        $seller_products = array();
+
+        // Group products by store
+        foreach ( $products as $product ) {
+            $id       = $product['product_id'];
+            $store_id = get_post_meta( $id, 'multivendorx_store_id', true );
+
+            if ( ! empty( $store_id ) ) {
+                $seller_products[ (int) $store_id ][] = $product;
+            }
+        }
+
+        if ( $seller_products ) {
+            foreach ( $seller_products as $store_id => $products ) {
+
+                if ( ! self::is_shipping_enabled_for_seller( $store_id ) ) {
+                    continue;
+                }
+
+                $mvx_shipping_by_country = get_user_meta( $store_id, '_mvx_shipping_by_country', true );
+
+                $mvx_free_shipping_amount = isset( $mvx_shipping_by_country['_free_shipping_amount'] ) 
+                    ? $mvx_shipping_by_country['_free_shipping_amount'] 
+                    : '';
+                $mvx_free_shipping_amount = apply_filters( 'mvx_free_shipping_minimum_order_amount', $mvx_free_shipping_amount, $store_id );
+
+                $default_shipping_price     = isset( $mvx_shipping_by_country['_mvx_shipping_type_price'] ) 
+                    ? $mvx_shipping_by_country['_mvx_shipping_type_price'] 
+                    : 0;
+                $default_shipping_add_price = isset( $mvx_shipping_by_country['_mvx_additional_product'] ) 
+                    ? $mvx_shipping_by_country['_mvx_additional_product'] 
+                    : 0;
+
+                $downloadable_count  = 0;
+                $products_total_cost = 0;
+
+                foreach ( $products as $product ) {
+                    // Check virtual/downloadable
+                    if ( isset( $product['variation_id'] ) ) {
+                        $is_virtual      = get_post_meta( $product['variation_id'], '_virtual', true );
+                        $is_downloadable = get_post_meta( $product['variation_id'], '_downloadable', true );
+                    } else {
+                        $is_virtual      = get_post_meta( $product['product_id'], '_virtual', true );
+                        $is_downloadable = get_post_meta( $product['product_id'], '_downloadable', true );
+                    }
+
+                    if ( $is_virtual === 'yes' || $is_downloadable === 'yes' ) {
+                        $downloadable_count++;
+                        continue;
+                    }
+
+                    // Check if product overrides shipping
+                    if ( get_post_meta( $product['product_id'], '_overwrite_shipping', true ) === 'yes' ) {
+                        $default_shipping_qty_price = get_post_meta( $product['product_id'], '_additional_qty', true );
+                        $price[ $store_id ]['addition_price'][] = get_post_meta( $product['product_id'], '_additional_price', true );
+                    } else {
+                        $default_shipping_qty_price = isset( $mvx_shipping_by_country['_mvx_additional_qty'] ) 
+                            ? $mvx_shipping_by_country['_mvx_additional_qty'] 
+                            : 0;
+                        $price[ $store_id ]['addition_price'][] = 0;
+                    }
+
+                    $price[ $store_id ]['default'] = floatval( $default_shipping_price );
+
+                    // Additional quantity price
+                    if ( $product['quantity'] > 1 ) {
+                        $price[ $store_id ]['qty'][] = ( ( $product['quantity'] - 1 ) * floatval( $default_shipping_qty_price ) );
+                    } else {
+                        $price[ $store_id ]['qty'][] = 0;
+                    }
+
+                    // Calculate total product cost
+                    $line_subtotal      = (float) $product['line_subtotal'];
+                    $line_total         = (float) $product['line_total'];
+                    $discount_total     = $line_subtotal - $line_total;
+                    $line_subtotal_tax  = (float) $product['line_subtotal_tax'];
+                    $line_total_tax     = (float) $product['line_tax'];
+                    $discount_tax_total = $line_subtotal_tax - $line_total_tax;
+
+                    if ( apply_filters( 'mvx_free_shipping_threshold_consider_tax', true ) ) {
+                        $total = $line_subtotal + $line_subtotal_tax;
+                    } else {
+                        $total = $line_subtotal;
+                    }
+
+                    if ( WC()->cart->display_prices_including_tax() ) {
+                        $products_total_cost += round( $total - ( $discount_total + $discount_tax_total ), wc_get_price_decimals() );
+                    } else {
+                        $products_total_cost += round( $total - $discount_total, wc_get_price_decimals() );
+                    }
+                }
+
+                // Check free shipping threshold
+                if ( $is_consider_free_threshold && $mvx_free_shipping_amount && ( $mvx_free_shipping_amount <= $products_total_cost ) ) {
+                    return apply_filters( 'mvx_shipping_country_calculate_amount', 0, $price, $products, $destination_country, $destination_state );
+                }
+
+                // Additional product cost
+                $price[ $store_id ]['add_product'] = count( $products ) > 1 
+                    ? floatval( $default_shipping_add_price ) * ( count( $products ) - ( 1 + $downloadable_count ) ) 
+                    : 0;
+
+                // Country/State rates
+                $mvx_country_rates = get_user_meta( $store_id, '_mvx_country_rates', true ) ?: array();
+                $mvx_state_rates   = get_user_meta( $store_id, '_mvx_state_rates', true ) ?: array();
+
+                if ( isset( $mvx_state_rates[ $destination_country ] ) ) {
+                    if ( $destination_state && array_key_exists( $destination_state, $mvx_state_rates[ $destination_country ] ) ) {
+                        $price[ $store_id ]['state_rates'] = floatval( $mvx_state_rates[ $destination_country ][ $destination_state ] ?? $mvx_country_rates[ $destination_country ] ?? 0 );
+                    } elseif ( array_key_exists( 'everywhere', $mvx_state_rates[ $destination_country ] ) ) {
+                        $price[ $store_id ]['state_rates'] = floatval( $mvx_state_rates[ $destination_country ]['everywhere'] ?? 0 );
+                    } elseif ( array_key_exists( $destination_country, $mvx_country_rates ) ) {
+                        $price[ $store_id ]['state_rates'] = floatval( $mvx_country_rates[ $destination_country ] ?? 0 );
+                    } else {
+                        $price[ $store_id ]['state_rates'] = 0;
+                    }
+                } else {
+                    $price[ $store_id ]['state_rates'] = $mvx_country_rates[ $destination_country ] ?? $mvx_country_rates['everywhere'] ?? 0;
+                }
+            }
+        }
+
+        // Sum up total shipping amount
+        if ( ! empty( $price ) ) {
+            foreach ( $price as $s_id => $value ) {
+                $amount += ( ( isset( $value['addition_price'] ) ? array_sum( $value['addition_price'] ) : 0 ) 
+                            + ( isset( $value['default'] ) ? $value['default'] : 0 ) 
+                            + ( isset( $value['qty'] ) ? array_sum( $value['qty'] ) : 0 ) 
+                            + $value['add_product'] 
+                            + ( isset( $value['state_rates'] ) ? $value['state_rates'] : 0 ) );
+            }
+        }
+
+        return apply_filters( 'mvx_shipping_country_calculate_amount', $amount, $price, $products, $destination_country, $destination_state );
+    }
+
 }
