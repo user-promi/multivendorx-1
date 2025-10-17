@@ -185,6 +185,7 @@ const ShippingRatesByCountry: React.FC = () => {
                                         value={countryItem.country}
                                         options={[
                                             { value: "", label: "Select Country" },
+                                            { value: "everywhere", label: "Everywhere Else" },
                                             ...Object.entries(countries).map(([value, label]) => ({ value, label })),
                                         ]}
                                         onChange={(opt: any) =>

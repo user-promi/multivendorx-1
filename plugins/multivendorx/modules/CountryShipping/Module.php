@@ -91,7 +91,7 @@ class Module {
      * Register the shipping method for WooCommerce
      */
     public function register_shipping_method( $methods ) {
-        $methods['mvx_country_shipping_dummy'] = Shipping::class;
+        $methods['multivendorx_country_shipping'] = Shipping::class;
         return $methods;
     }
 }
