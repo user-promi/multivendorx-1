@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { __ } from '@wordpress/i18n';
 import productImage from "../assets/images/default.png";
-import { BasicInput, SelectInput } from "zyra";
+import { BasicInput, SelectInput, getApiLink } from "zyra";
 import axios from "axios";
 
 interface OrderDetailsProps {
@@ -50,12 +50,25 @@ const handleItemChange = (id, field, value) => {
 
   const handleRefundSubmit = () => {
     const payload = {
-      items: refundItems,
-      refundAmount: refundDetails.refundAmount,
-      restock: refundDetails.restock,
-      reason: refundDetails.reason,
+        orderId: orderId,
+        items: refundItems,
+        refundAmount: refundDetails.refundAmount,
+        restock: refundDetails.restock,
+        reason: refundDetails.reason,
     };
     console.log("Refund Data Sent:", payload);
+    axios({
+      method: 'POST',
+      url: getApiLink(appLocalizer, 'refund'),
+      headers: { 'X-WP-Nonce': appLocalizer.nonce },
+      data: { payload }
+    })
+      .then((response) => {
+        console.log(response)
+        if (response.data.success) {
+          
+        }
+      })
     // onRefund(payload); // send to your API here
   };
 
@@ -66,13 +79,7 @@ const handleItemChange = (id, field, value) => {
         total: 95,
         earned: 50,
     });
-    const [row, setRow] = useState({
-        cost: 100,
-        discount: 5,
-        qty: 1,
-        total: 95,
-        commission: 20,
-    });
+
     useEffect(() => {
         if (!orderId) return;
 
