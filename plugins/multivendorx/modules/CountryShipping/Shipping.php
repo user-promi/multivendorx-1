@@ -9,8 +9,8 @@ class Shipping extends \WC_Shipping_Method {
     public function __construct() {
         // Unique ID for the shipping method
         $this->id                 = 'mvx_country_shipping_dummy';
-        $this->method_title       = __( 'MVX Dummy Country Shipping', 'textdomain' );
-        $this->method_description = __( 'A dummy shipping method for testing visibility.', 'textdomain' );
+        $this->method_title       = __( 'MVX Dummy Country Shipping', 'multivendorx' );
+        $this->method_description = __( 'A dummy shipping method for testing visibility.', 'multivendorx' );
 
         // Load settings
         $this->init_form_fields();
@@ -28,22 +28,22 @@ class Shipping extends \WC_Shipping_Method {
     public function init_form_fields() {
         $this->form_fields = [
             'enabled' => [
-                'title'   => __('Enable/Disable', 'textdomain'),
+                'title'   => __('Enable/Disable', 'multivendorx'),
                 'type'    => 'checkbox',
-                'label'   => __('Enable this shipping method', 'textdomain'),
+                'label'   => __('Enable this shipping method', 'multivendorx'),
                 'default' => 'yes'
             ],
             'title' => [
-                'title'       => __('Method Title', 'textdomain'),
+                'title'       => __('Method Title', 'multivendorx'),
                 'type'        => 'text',
-                'description' => __('Title shown to customers at checkout.', 'textdomain'),
-                'default'     => __('MVX Standard Shipping', 'textdomain'),
+                'description' => __('Title shown to customers at checkout.', 'multivendorx'),
+                'default'     => __('MVX Standard Shipping', 'multivendorx'),
                 'desc_tip'    => true,
             ],
             'cost' => [
-                'title'       => __('Shipping Cost', 'textdomain'),
+                'title'       => __('Shipping Cost', 'multivendorx'),
                 'type'        => 'price',
-                'description' => __('Flat rate cost for testing.', 'textdomain'),
+                'description' => __('Flat rate cost for testing.', 'multivendorx'),
                 'default'     => '15.00',
                 'desc_tip'    => true,
             ],

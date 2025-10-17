@@ -27,7 +27,11 @@ class Payments {
             'disbursement'  => new Disbursement(),
             'processor'     => new PaymentProcessor(),
             'custom_gateway' => new CustomPayment(),
+            'bank_transfer' => new BankTransfer(),
             'cash' => new CashPayment(),
+            'paypal_payout' => new PaypalPayout(),
+            'stripe_connect' => new StripeConnect(),
+
         );
     }
 
@@ -49,7 +53,23 @@ class Payments {
                 'id'    => 'cash',
                 'name'  => 'Cash',
                 'class' => 'MultiVendorX\\Payments\\CashPayment'
+            ],
+            [
+                'id'    => 'bank-transfer',
+                'name'  => 'Bank Transfer',
+                'class' => 'MultiVendorX\\Payments\\BankTransfer'
+            ],
+            [
+                'id'    => 'paypal-payout',
+                'name'  => 'Paypal Payout',
+                'class' => 'MultiVendorX\\Payments\\PaypalPayout'
+            ],
+            [
+                'id'    => 'stripe-connect',
+                'name'  => 'Stripe Connect',
+                'class' => 'MultiVendorX\\Payments\\StripeConnect'
             ]
+            
         ];
 
         $this->providers = array_merge($this->providers ?? [], $providers);

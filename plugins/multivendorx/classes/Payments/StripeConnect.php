@@ -1,11 +1,11 @@
 <?php
-namespace MultiVendorX\StripeConnect;
+namespace MultiVendorX\Payments;
 use MultiVendorX\Store\Store;
 use Stripe\Stripe;
 use Stripe\Account;
 use Stripe\Transfer;
 defined('ABSPATH') || exit;
-class Payment
+class StripeConnect
 {
     public function __construct()
     {
