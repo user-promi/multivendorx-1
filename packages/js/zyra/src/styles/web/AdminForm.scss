@@ -115,7 +115,7 @@
 
 .settings-metabox-description {
   padding-top: 0.45rem;
-  color: #424242d0;
+  color: $sub-text-color;
   width: 100%;
   line-height: 1.5;
 
@@ -134,7 +134,7 @@
 
   li {
     list-style-type: number;
-    margin-left: 0.875rem;
+    margin-left: 1rem;
   }
 
   code {

@@ -276,12 +276,13 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
         return (
           <div
             key={method.id}
-            className={`payment-method-card ${method.disableBtn && !isEnabled ? "disable" : ""} `}
+            className={`payment-method-card ${method.disableBtn && !isEnabled ? "disable" : ""} ${method.openForm ? "open-form" : ""} `}
           >
             {/* Header */}
             <div className="payment-method">
-              <div className="toggle-icon">
-                {/* {isEnabled ? (
+              {!method.openForm && (
+                <div className="toggle-icon">
+                  {/* {isEnabled ? (
                   <i
                     className="adminlib-keyboard-arrow-down"
                     onClick={() => toggleActiveTab(method.id)}
@@ -292,14 +293,12 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
                     onClick={() => toggleActiveTab(method.id)}
                   />
                 )} */}
-                {!method.openForm && (
                   <i
                     className={`adminlib-${isEnabled && isActive ? "keyboard-arrow-down" : "pagination-right-arrow"}`}
                     onClick={() => toggleActiveTab(method.id)}
                   />
-                )}
-
-              </div>
+                </div>
+              )}
 
               <div
                 className="details"

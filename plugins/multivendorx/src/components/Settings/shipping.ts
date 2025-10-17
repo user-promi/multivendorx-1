@@ -28,7 +28,8 @@ export default {
                     openForm: true,
                     desc: 'Stores set different rates for different regions (like "East Coast" or "California").',
                     formFields: [
-                        { key: 'client_id', type: 'description', label: 'Currently enabled zones' , des: '<span class="admin-badge yellow">North America</span>  <span class="admin-badge blue">North America</span>  <span class="admin-badge yellow">North America</span>  <span class="admin-badge red">North America</span>'}
+                        { key: 'client_id', type: 'description', label: 'Currently enabled zones' , des: '<span class="admin-badge yellow">North America</span>  <span class="admin-badge blue">North America</span>  <span class="admin-badge yellow">North America</span>  <span class="admin-badge red">North America</span>'},
+                        { key: 'client_id', type: 'description', label: ' ' , des: '<span class="admin-btn btn-purple"><i class="adminlib-plus-circle-o"></i>Add new Zone</span>'}
                     ],
                 },
                 {
@@ -48,20 +49,12 @@ export default {
                 },
             ]
         },
-        {
-            key: 'section',
-            type: 'section',
-            hint: __(
-                'Shipping & delivery flow',
-                'multivendorx'
-            ),
-            desc: __("To ensure shipping is seamless and transparent by including tracking, providers, delivery stages, and order completion for stores and customers.", 'multivendorx'),
-        },
+
         {
             key: 'disbursement_order_status',
             type: 'checkbox',
             label: __(' Shipping carriers', 'multivendorx'),
-            settingDescription: __(" You can select from existing carriers or let stores connect their own. Only the enabled providers will be available for assigning tracking numbers.", 'multivendorx'),
+            settingDescription: __(" Choose which shipping providers stores can use. Only the carriers you enable will be available for sellers to ship their products and add tracking details. This helps keep all shipments through trusted, approved providers.", 'multivendorx'),
             class: 'mvx-toggle-checkbox',
             addNewBtn: 'Add Custom Provider',
             options: [
@@ -107,6 +100,15 @@ export default {
                 },
             ],
             selectDeselect: true,
+        },
+        {
+            key: 'section',
+            type: 'section',
+            hint: __(
+                'Delivery flow',
+                'multivendorx'
+            ),
+            desc: __("Define the steps orders follow from purchase to completion. Set what customers see in tracking and choose whether orders complete automatically or after customer confirmation.", 'multivendorx'),
         },
         // {
         //     key: 'shipping_providers',
@@ -180,16 +182,6 @@ export default {
                     value: 'country_wise',
                 },
             ],
-        },
-        {
-            key: 'registration page',
-            type: 'blocktext',
-            label: __('no_label', 'multivendorx'),
-            title: 'Why it matters',
-            blocktext: __(
-                '<ul><li>Custom delivery stages make order tracking more transparent for customers and help stores maintain an accurate fulfillment timeline.</li></ul>',
-                'multivendorx'
-            ),
         },
     ],
 };
