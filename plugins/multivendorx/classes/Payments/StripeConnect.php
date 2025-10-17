@@ -103,11 +103,9 @@ class StripeConnect
     public function init_stripe() {
         $payment_admin_settings = MultiVendorX()->setting->get_setting('payment_methods', []);
         $stripe_settings = !empty($payment_admin_settings['stripe-connect']) ? $payment_admin_settings['stripe-connect'] : [];
-        if ($stripe_settings && $stripe_settings['enable']) {
-            $secret_key = $stripe_settings['secret_key'];
-            Stripe::setApiKey($secret_key);
-            Stripe::setApiVersion('2025-08-27.basil');
-        }
+        $secret_key = $stripe_settings['secret_key'];
+        Stripe::setApiKey($secret_key);
+        Stripe::setApiVersion('2025-08-27.basil');
     }
     public function get_id() {
         return 'stripe-connect';
@@ -148,50 +146,48 @@ class StripeConnect
     public function get_store_payment_settings() {
         $payment_admin_settings = MultiVendorX()->setting->get_setting('payment_methods', []);
         $stripe_settings = $payment_admin_settings['stripe-connect'] ?? [];
-        if ($stripe_settings && $stripe_settings['enable']) {
-            $vendor_id = get_current_user_id();
-            $store = new Store($vendor_id);
-            $stripe_account_id = $store->get_meta( '_stripe_connect_account_id');
-            $onboarding_status = 'Not Connected';
-            $is_onboarded = false;
-            if ($stripe_account_id) {
-                $account = $this->get_account($stripe_account_id);
-                if ($account) {
-                    if ($account->charges_enabled) {
-                        $onboarding_status = 'Connected';
-                        $is_onboarded = true;
-                    } else {
-                        $onboarding_status = 'Connected – Verification Required';
-                    }
+        $vendor_id = get_current_user_id();
+        $store = new Store($vendor_id);
+        $stripe_account_id = $store->get_meta( '_stripe_connect_account_id');
+        $onboarding_status = 'Not Connected';
+        $is_onboarded = false;
+        if ($stripe_account_id) {
+            $account = $this->get_account($stripe_account_id);
+            if ($account) {
+                if ($account->charges_enabled) {
+                    $onboarding_status = 'Connected';
+                    $is_onboarded = true;
+                } else {
+                    $onboarding_status = 'Connected – Verification Required';
                 }
             }
-            $fields = [
-                [
-                    'type' => 'html',
-                    'html' => '<p><strong>' . __('Stripe Status:', 'multivendorx') . '</strong> ' . $onboarding_status . '</p>',
-                ],
+        }
+        $fields = [
+            [
+                'type' => 'html',
+                'html' => '<p><strong>' . __('Stripe Status:', 'multivendorx') . '</strong> ' . $onboarding_status . '</p>',
+            ],
+        ];
+        if ($is_onboarded) {
+            $fields[] = [
+                'type'  => 'button',
+                'key'   => 'disconnect_account',
+                'label' => __('Disconnect Stripe Account', 'multivendorx'),
+                'action'=> 'disconnect_stripe_account',
             ];
-            if ($is_onboarded) {
-                $fields[] = [
-                    'type'  => 'button',
-                    'key'   => 'disconnect_account',
-                    'label' => __('Disconnect Stripe Account', 'multivendorx'),
-                    'action'=> 'disconnect_stripe_account',
-                ];
-            } else {
-                $fields[] = [
-                    'type'  => 'button',
-                    'key'   => 'create_account',
-                    'label' => __('Connect with Stripe', 'multivendorx'),
-                    'action'=> 'create_stripe_account',
-                ];
-            }
-            return [
-                'id'    => $this->get_id(),
-                'label' => __('Stripe Connect', 'multivendorx'),
-                'fields'=> $fields,
+        } else {
+            $fields[] = [
+                'type'  => 'button',
+                'key'   => 'create_account',
+                'label' => __('Connect with Stripe', 'multivendorx'),
+                'action'=> 'create_stripe_account',
             ];
         }
+        return [
+            'id'    => $this->get_id(),
+            'label' => __('Stripe Connect', 'multivendorx'),
+            'fields'=> $fields,
+        ];
     }
     public function process_payment($store_id, $amount, $order_id = null, $transaction_id = null, $note = null)
     {

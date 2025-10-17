@@ -7,14 +7,14 @@ import { ReactSortable } from "react-sortablejs";
 /**
  * Internal dependencies
  */
-import Elements from "./Elements"; // Your Elements.tsx
-// import BlockLayout from "./BlockLayout"; // For 'block-layout' type
+import Elements from "./Elements"; // Sidebar block selector
 
 // Types
 interface BlockItem {
   id: string;
   type: string;
   label: string;
+  children?: Column[];
 }
 
 interface Column {
@@ -27,11 +27,12 @@ interface Container {
   columns: Column[];
 }
 
-const generateId = () => Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+const generateId = () =>
+  Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
 
-// All block types supported
+// Supported blocks
 const BLOCK_OPTIONS = [
-  // { icon: "adminlib-module icon-form-textbox", value: "block-layout", label: "Block Layout" },
+  { icon: "adminlib-module icon-form-textbox", value: "block-layout", label: "Block Layout" },
   { icon: "adminlib-t-letter-bold icon-form-textbox", value: "text", label: "Textbox" },
   { icon: "adminlib-unread icon-form-email", value: "email", label: "Email" },
   { icon: "adminlib-text icon-form-textarea", value: "textarea", label: "Textarea" },
@@ -47,7 +48,10 @@ const BLOCK_OPTIONS = [
   { icon: "adminlib-divider icon-form-address", value: "divider", label: "Divider" },
 ];
 
-const BlockLayout: React.FC = () => {
+/**
+ * Recursive BlockLayout Component
+ */
+const BlockLayout: React.FC<{ depth?: number }> = ({ depth = 0 }) => {
   const [columnsCount, setColumnsCount] = useState<number>(2);
   const [container, setContainer] = useState<Container>({
     id: generateId(),
@@ -57,7 +61,6 @@ const BlockLayout: React.FC = () => {
     ],
   });
 
-  // Change number of columns
   const handleColumnsChange = (count: number) => {
     const newColumns: Column[] = [];
     for (let i = 0; i < count; i++) {
@@ -67,35 +70,50 @@ const BlockLayout: React.FC = () => {
     setContainer({ ...container, columns: newColumns });
   };
 
-  // Add a block to a column
   const addBlock = (columnIndex: number, type: string) => {
+    const selected = BLOCK_OPTIONS.find((b) => b.value === type);
+    if (!selected) return;
+
     const newBlock: BlockItem = {
       id: generateId(),
-      type,
-      label: type.charAt(0).toUpperCase() + type.slice(1),
+      type: selected.value,
+      label: selected.label,
+      children: selected.value === "block-layout" ? [] : undefined,
     };
+
     const newColumns = [...container.columns];
     newColumns[columnIndex].blocks.push(newBlock);
     setContainer({ ...container, columns: newColumns });
   };
 
   return (
-    <div className="container-block-wrapper">
-      {/* Columns Selector */}
-      <div className="container-header">
-        <label>Columns:</label>
-        <select
-          value={columnsCount}
-          onChange={(e) => handleColumnsChange(Number(e.target.value))}
-          className="basic-select"
-        >
-          {[1, 2, 3, 4].map((num) => (
-            <option key={num} value={num}>
-              {num} Column{num > 1 ? "s" : ""}
-            </option>
-          ))}
-        </select>
-      </div>
+    <div
+      className="container-block-wrapper"
+      style={{
+        border: "1px solid #ccc",
+        borderRadius: "6px",
+        padding: "10px",
+        marginBottom: "10px",
+        background: depth === 0 ? "#f8f8f8" : "#fff",
+      }}
+    >
+      {/* Header: only show for top-level */}
+      {depth === 0 && (
+        <div className="container-header" style={{ marginBottom: "10px" }}>
+          <label>Columns:</label>
+          <select
+            value={columnsCount}
+            onChange={(e) => handleColumnsChange(Number(e.target.value))}
+            className="basic-select"
+          >
+            {[1, 2, 3, 4].map((num) => (
+              <option key={num} value={num}>
+                {num} Column{num > 1 ? "s" : ""}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
 
       {/* Columns */}
       <div className="container-columns" style={{ display: "flex", gap: "10px" }}>
@@ -107,21 +125,21 @@ const BlockLayout: React.FC = () => {
               flex: 1,
               minHeight: "150px",
               padding: "10px",
-              border: "1px solid #ccc",
+              border: "1px dashed #bbb",
               borderRadius: "4px",
-              background: "#f9f9f9",
+              background: "#fdfdfd",
             }}
           >
             <h4>Column {colIndex + 1}</h4>
 
-            {/* Elements.tsx for adding blocks */}
+            {/* Add Block Button */}
             <Elements
               label="Add Block"
               selectOptions={BLOCK_OPTIONS}
               onClick={(type) => addBlock(colIndex, type)}
             />
 
-            {/* Sortable blocks inside the column */}
+            {/* Sortable inner blocks */}
             <ReactSortable
               list={col.blocks}
               setList={(newList) => {
@@ -129,7 +147,7 @@ const BlockLayout: React.FC = () => {
                 newColumns[colIndex].blocks = newList;
                 setContainer({ ...container, columns: newColumns });
               }}
-              group="container-blocks"
+              group="shared-blocks"
               animation={150}
               className="blocks-wrapper"
             >
@@ -142,15 +160,17 @@ const BlockLayout: React.FC = () => {
                     marginBottom: "5px",
                     background: "#fff",
                     border: "1px solid #ddd",
-                    borderRadius: "3px",
+                    borderRadius: "4px",
                     cursor: "grab",
                   }}
                 >
-                  {/* Render Block Layout as nested component */}
                   {block.type === "block-layout" ? (
-                    <BlockLayout />
+                    <BlockLayout depth={depth + 1} />
                   ) : (
-                    block.label
+                    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                      <i className={`adminlib-${block.type}`}></i>
+                      <span>{block.label}</span>
+                    </div>
                   )}
                 </div>
               ))}
