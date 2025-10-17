@@ -370,15 +370,27 @@
 }
 
 .meta-setting-modal-content {
-    h3 {
+    .settings-title {
         font-size: 1.4rem;
+        font-weight: 500;
+        padding-bottom: 0.5rem;
+        margin-bottom: 1.125rem;
+        border-bottom: $border-light-small;
     }
 
     .edit-field-wrapper {
-        margin-bottom: 0.625rem;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: start;
 
-        label {
+        label:first-child {
             font-size: 1rem;
+            width: 30%;
+        }
+
+        input[type="checkbox"] {
+            width: fit-content;
+            margin-top: 0.25rem;
         }
 
         input,
@@ -386,7 +398,45 @@
             width: 100%;
             padding-top: 0.313rem;
         }
+
+        .toggle-setting-container,
+        .input-wrapper {
+            width: 100%;
+        }
     }
+}
+
+.multioption-wrapper {
+    margin-bottom: 1.125rem;
+
+    label {
+        font-size: 1rem;
+        font-weight: 500;
+    }
+
+    .option-list-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 0.313rem;
+        margin: 0.813rem 0;
+        justify-content: space-between;
+
+        .option-label {
+            width: 85%;
+            input{
+                border: none;
+            }
+        }
+        .option-icon{
+            cursor: pointer;
+        }
+    }
+
+}
+
+.recaptcha {
+    border: 0.063rem solid red;
+    padding: 0.5rem;
 }
 
 .form-field {
