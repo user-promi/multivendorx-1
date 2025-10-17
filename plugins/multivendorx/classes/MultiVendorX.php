@@ -63,8 +63,6 @@ final class MultiVendorX
         add_action('plugins_loaded', array($this, 'is_woocommerce_loaded'));
         add_filter('plugin_row_meta', array($this, 'plugin_row_meta'), 10, 2);
         add_action('init', array($this, 'migrate_from_previous_version'));
-        add_action('wp_print_styles', array($this, 'dequeue_all_styles_on_page'), 9999);
-
     }
 
     /**
@@ -321,14 +319,6 @@ final class MultiVendorX
         return self::$instance;
     }
 
-    public static function dequeue_all_styles_on_page()
-    {
-        if (is_page('dashboard')) { // Replace with the ID or slug
-            global $wp_styles;
-            $wp_styles->queue = array('multivendorx-dashboard-style', 'multivendorx-store-product-style');
-            // print_r($wp_styles);
-        }
-    }
 }
 
 

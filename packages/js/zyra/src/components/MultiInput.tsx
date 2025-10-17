@@ -193,137 +193,136 @@ const MultiInput: React.FC<MultiInputProps> = (props) => {
 
   return (
     <div className={wrapperClass}>
-      <div className="multi-input-row">
-        <ul className={listClass || "multi-string-list"}>
-          {values.map((item, index) => (
-            <li key={index} className={`${itemClass} multi-item-with-dropdown`}>
-              <div className="input-header">
+      <ul className={listClass || "payment-tabs-component"}>
+        {values.map((item, index) => (
+          <li key={index} className={`${itemClass} payment-method-card`}>
+            <div className="payment-method">
 
+              <div className="details">
                 <div className="details-wrapper">
-                  {iconEnable && item.iconClass && <i className={item.iconClass}></i>}
-                  <div className="details">
-                    <div className={`title ${item.locked ? "locked" : ""}`}>
-                      {item.value}
+                  <div className="payment-method-icon">
+                    {iconEnable && item.iconClass && <i className={item.iconClass}></i>}
+                  </div>
+
+                  <div className="payment-method-info">
+                    <div className={`title-wrapper ${item.locked ? "locked" : ""}`}>
+                      <div className="title">{item.value}</div>
                       {requiredEnable && item.required && (
                         <span className="admin-badge red">Required</span>
                       )}
                       {item.tag && <span className="admin-badge blue">{item.tag}</span>}
                     </div>
+
                     {item.description && (
-                      <div className="item-description">{item.description}</div>
+                      <div className="method-desc"><p>{item.description}</p></div>
                     )}
                   </div>
                 </div>
-                
-
-                {!item.locked && (
-                <div className="action-section">
-                  <div className="action-icons">
-                    <i className="adminlib-more-vertical"></i>
-                    <div className="action-dropdown hover">
-                      <ul>
-                        <li className=" hover" onClick={() => handleEdit(index)}>
-                          <i className="adminlib-create"></i>
-                          <span>Edit</span>
-                        </li>
-                        <li className=" hover" onClick={() => handleDelete(index)}>
-                          <i className="adminlib-delete"></i>
-                          <span>Delete</span>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-                )}
               </div>
 
-              {editIndex === index && (
-                <div className="multi-input-dropdown" ref={dropdownRef}>
-                  {iconEnable && iconOptions.length > 0 && (
-                    <div className="form-group">
-                      <div className="label">Select Icon</div>
-                      <div className="input">
-                        <div
-                          className="selected-icon"
-                          onClick={() => setIconDropdownOpen(!iconDropdownOpen)}
-                        >
-                          {selectedIcon ? <i className={selectedIcon}></i> : "Select Icon"}
-                          <span className="dropdown-arrow">▾</span>
-                        </div>
-                        {iconDropdownOpen && (
-                          <ul className="icon-options-list">
-                            {iconOptions.map((icon) => (
-                              <li
-                                key={icon}
-                                className={`icon-option ${selectedIcon === icon ? "selected" : ""}`}
-                                onClick={() => {
-                                  setSelectedIcon(icon);
-                                  setIconDropdownOpen(false);
-                                }}
-                              >
-                                <i className={icon}></i>
-                              </li>
-                            ))}
-                          </ul>
-                        )}
-                      </div>
-                    </div>
-                  )}
 
+              {!item.locked && (
+                <div className="right-section">
+                  <ul>
+                    <li className=" hover" onClick={() => handleEdit(index)}>
+                      <i className="adminlib-create"></i>
+                      <span>Edit</span>
+                    </li>
+                    <li className=" hover" onClick={() => handleDelete(index)}>
+                      <i className="adminlib-delete"></i>
+                      <span>Delete</span>
+                    </li>
+                  </ul>
+                </div>
+              )}
+            </div>
+
+            {editIndex === index && (
+              <div className="payment-method-form open" ref={dropdownRef}>
+                {iconEnable && iconOptions.length > 0 && (
                   <div className="form-group">
-                    <div className="label">Title</div>
-                    <div className="input">
+                    <label>Select Icon</label>
+                    <div className="input-content">
+                      <div
+                        className="selected-icon"
+                        onClick={() => setIconDropdownOpen(!iconDropdownOpen)}
+                      >
+                        {selectedIcon ? <i className={selectedIcon}></i> : "Select Icon"}
+                        <span className="dropdown-arrow">▾</span>
+                      </div>
+                      {iconDropdownOpen && (
+                        <ul className="icon-options-list">
+                          {iconOptions.map((icon) => (
+                            <li
+                              key={icon}
+                              className={`icon-option ${selectedIcon === icon ? "selected" : ""}`}
+                              onClick={() => {
+                                setSelectedIcon(icon);
+                                setIconDropdownOpen(false);
+                              }}
+                            >
+                              <i className={icon}></i>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                <div className="form-group">
+                  <label>Title</label>
+                  <div className="input-content">
+                    <input
+                      type="text"
+                      value={inputValue}
+                      placeholder={placeholder}
+                      className={inputClass}
+                      onChange={(e) => setInputValue(e.target.value)}
+                      onKeyDown={handleKeyDown}
+                    />
+                  </div>
+                </div>
+
+                {descEnable && (
+                  <div className="form-group">
+                    <label>Description</label>
+                    <div className="input-content">
                       <input
                         type="text"
-                        value={inputValue}
-                        placeholder={placeholder}
-                        className={inputClass}
-                        onChange={(e) => setInputValue(e.target.value)}
-                        onKeyDown={handleKeyDown}
+                        value={itemDescription}
+                        placeholder="Enter description"
+                        className="basic-input"
+                        onChange={(e) => setItemDescription(e.target.value)}
                       />
                     </div>
                   </div>
+                )}
 
-                  {descEnable && (
-                    <div className="form-group">
-                      <div className="label">Description</div>
-                      <div className="input">
-                        <input
-                          type="text"
-                          value={itemDescription}
-                          placeholder="Enter description"
-                          className="basic-input"
-                          onChange={(e) => setItemDescription(e.target.value)}
-                        />
-                      </div>
+                {requiredEnable && (
+                  <div className="form-group">
+                    <label>Required</label>
+                    <div className="input-content">
+                      <input
+                        type="checkbox"
+                        checked={requiredChecked}
+                        onChange={(e) => setRequiredChecked(e.target.checked)}
+                      />
                     </div>
-                  )}
-
-                  {requiredEnable && (
-                    <div className="form-group">
-                      <div className="label">Required</div>
-                      <div className="input">
-                        <input
-                          type="checkbox"
-                          checked={requiredChecked}
-                          onChange={(e) => setRequiredChecked(e.target.checked)}
-                        />
-                      </div>
-                    </div>
-                  )}
-                </div>
-              )}
-            </li>
-          ))}
-
-          {/* Add new item button */}
-          <li className="multi-input-add">
-            <span className="admin-btn btn-purple" onClick={handleAddNew}>
-              <i className="adminlib-plus-circle-o"></i> Add New
-            </span>
+                  </div>
+                )}
+              </div>
+            )}
           </li>
-        </ul>
-      </div>
+        ))}
+
+        {/* Add new item button */}
+        <li className="buttons-wrapper">
+          <span className="admin-btn btn-purple" onClick={handleAddNew}>
+            <i className="adminlib-plus-circle-o"></i> Add New
+          </span>
+        </li>
+      </ul>
 
       {proSetting && (
         <span className="admin-pro-tag">

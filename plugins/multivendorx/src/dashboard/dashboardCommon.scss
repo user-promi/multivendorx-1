@@ -458,52 +458,6 @@ $border-radius-button: 8rem;
 
 // notification style end
 
-// settings tab start
-.settings-tab-wrapper {
-    display: flex;
-    gap: 1.5rem;
-
-    .left-side {
-        width: 25%;
-        border-left: 0.25rem solid #fff;
-
-        .title {
-            padding: 0.75rem;
-            transition: all 0.5s ease;
-            border-radius: 0.313rem;
-            margin-bottom: 0.313rem;
-            border-top-left-radius: 0;
-            border-bottom-left-radius: 0;
-            cursor: pointer;
-
-            i {
-                padding-right: 0.5rem;
-            }
-
-            p {
-                margin: 0;
-            }
-
-            &:hover {
-                background: #fff;
-            }
-
-            &.active,
-            &.active:hover {
-                background: #fff;
-                color: $theme-color;
-            }
-        }
-    }
-
-    .content {
-        width: 75%;
-        background: #fff;
-    }
-}
-
-// settings tab end
-
 // information notice start
 .information-notioce {
     display: flex;
@@ -662,3 +616,66 @@ $border-radius-button: 8rem;
 }
 
 // no data found end
+
+
+// horizental menu start -- move to component
+.content-wrapper:has(.horizontal-title-section) {
+    display: flex;
+    gap: 2rem;
+
+    .horizontal-title-section {
+        width: 30%;
+        height: auto;
+
+        .tabs-wrapper {
+            background: transparent;
+
+            .horizontal-tabs-item {
+                display: flex;
+                flex-direction: column;
+                gap: 0.25rem;
+
+                .menu-item {
+                    padding: 0.813rem;
+                    transition: all 0.3s ease;
+                    border-radius: 0.313rem;
+                    margin-bottom: 0.313rem;
+                    cursor: pointer;
+                    margin: 0;
+
+                    i {
+                        padding-right: 0.5rem;
+                    }
+
+                    p {
+                        margin: 0;
+                        font-weight: 500;
+                    }
+
+                    &:hover {
+                        background: color-mix(in srgb, var(--themeColor) 15%, transparent);
+                        color: var(--themeColor);
+                    }
+
+                    &.active-current-tab,
+                    &.active-current-tab:hover {
+                        background: var(--themeColor);
+                        color: #fff;
+                    }
+                }
+            }
+        }
+    }
+
+    .general-wrapper {
+        width: 70%;
+        background: #fff;
+
+        .card-content{
+            padding: 0;
+        }
+    }
+}
+
+
+// horizental menu end -- move to component

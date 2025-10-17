@@ -17,6 +17,8 @@ class Shortcode {
         add_shortcode( 'multivendorx_store_dashboard', [ $this, 'display_store_dashboard' ] );
         add_shortcode( 'multivendorx_store_registration', [ $this, 'display_store_registration' ] );
         add_action( 'wp_enqueue_scripts', array($this, 'frontend_scripts'));
+
+        add_action('wp_print_styles', array($this, 'dequeue_all_styles_on_page'), 99);
     }
 
     public function frontend_scripts() {
@@ -36,6 +38,15 @@ class Shortcode {
         FrontendScripts::localize_scripts( 'multivendorx-store-dashboard-script' );
         FrontendScripts::enqueue_style( 'multivendorx-store-product-style' );
 
+    }
+
+    public static function dequeue_all_styles_on_page()
+    {
+        if (is_page() && has_shortcode(get_post()->post_content, 'multivendorx_store_dashboard') && is_user_logged_in()) {
+            global $wp_styles;
+            $wp_styles->queue = array('multivendorx-dashboard-style', 'multivendorx-store-product-style');
+            // print_r($wp_styles);
+        }
     }
 
     public function display_store_dashboard() {

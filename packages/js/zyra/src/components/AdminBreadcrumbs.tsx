@@ -10,6 +10,7 @@ interface ButtonConfig {
 interface AdminBreadcrumbsProps {
   activeTabIcon?: string;
   tabTitle?: string;
+  submenuRender?: boolean;
   renderBreadcrumb?: () => React.ReactNode;
   renderMenuItems?: (items: any[]) => React.ReactNode;
   tabData?: any[];
@@ -23,6 +24,7 @@ interface AdminBreadcrumbsProps {
 const AdminBreadcrumbs: React.FC<AdminBreadcrumbsProps> = ({
   activeTabIcon = '',
   tabTitle = '',
+  submenuRender = false,
   renderBreadcrumb,
   renderMenuItems,
   tabData = [],
@@ -55,46 +57,58 @@ const AdminBreadcrumbs: React.FC<AdminBreadcrumbsProps> = ({
 
   return (
     <>
-      <div className="title-section">
-        <div className="title-wrapper">
-          <div className="title">
-            {activeTabIcon && <i className={activeTabIcon}></i>}
-            {tabTitle}
-          </div>
+      <div className={submenuRender ? "horizontal-title-section" : "title-section"}>
+        {!submenuRender && (
+          <>
+            <div className={submenuRender ? "horizontal-title-wrapper" : "title-wrapper"}>
+              <div className="title">
+                {activeTabIcon && <i className={activeTabIcon}></i>}
+                {tabTitle}
+              </div>
 
-          <div className="buttons">
-            {buttons.length > 0 &&
-              buttons.map((btn, index) => {
-                if (React.isValidElement(btn)) return <React.Fragment key={index}>{btn}</React.Fragment>;
+              <div className="buttons">
+                {buttons.length > 0 &&
+                  buttons.map((btn, index) => {
+                    if (React.isValidElement(btn)) return <React.Fragment key={index}>{btn}</React.Fragment>;
 
-                const { label, onClick, iconClass, className } = btn as ButtonConfig;
-                return (
-                  <button
-                    key={index}
-                    className={`breadcrumb-btn ${className || ''}`}
-                    onClick={onClick}
-                  >
-                    {iconClass && <i className={iconClass}></i>}
-                    {label}
-                  </button>
-                );
-              })}
-          </div>
+                    const { label, onClick, iconClass, className } = btn as ButtonConfig;
+                    return (
+                      <button
+                        key={index}
+                        className={`breadcrumb-btn ${className || ''}`}
+                        onClick={onClick}
+                      >
+                        {iconClass && <i className={iconClass}></i>}
+                        {label}
+                      </button>
+                    );
+                  })}
+              </div>
 
-          {customContent && <div className="extra-content">{customContent}</div>}
-        </div>
+              {customContent && <div className="extra-content">{customContent}</div>}
+            </div>
 
-        {description && <div className="description">{description}</div>}
-        {renderBreadcrumb && <div className="breadcrumbs">{renderBreadcrumb()}</div>}
+            {description && <div className="description">{description}</div>}
+            {renderBreadcrumb && <div className="breadcrumbs">{renderBreadcrumb()}</div>}
+
+          </>
+        )}
+
 
         {renderMenuItems && tabData.length > 0 && (
           <div className="tabs-wrapper">
-            <div className="tabs-item">{renderMenuItems(tabData)}</div>
-            {goPremium && (
+            {submenuRender && (
+              <>
+                {activeTabIcon && <i className={activeTabIcon}></i>}
+              </>
+            )}
+            <div className={submenuRender ? "horizontal-tabs-item" : "tabs-item"}>{renderMenuItems(tabData)}</div>
+            {!submenuRender && goPremium && (
               <a href={goPremiumLink} className="menu-item pro-btn">
                 <i className="adminlib-pro-tag"></i> Upgrade<i className="adminlib-arrow-right"></i>
               </a>
             )}
+
           </div>
         )}
       </div>
