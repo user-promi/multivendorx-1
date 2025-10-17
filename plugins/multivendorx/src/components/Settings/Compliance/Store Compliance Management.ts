@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 export default {
     id: 'non-compliance',
     priority: 1,
-    name: __('Non-Compliance Handling', 'mvx-pro'),
+    name: __('Compliance Configuration', 'mvx-pro'),
     desc: __('Control store access based on verification status. Ensure only compliant stores can operate fully on your marketplace.', 'mvx-pro'),
     icon: 'adminlib-wholesale',
     submitUrl: 'settings',
