@@ -62,34 +62,6 @@ export default {
             ],
         },
         {
-            key: 'unverified_store_access',
-            type: 'checkbox',
-            label: __('Unverified restrictions', 'mvx-pro'),
-            desc: __('Select the restrictions you want to apply to stores who have not yet completed their verification process.', 'mvx-pro'),
-            options: [
-                {
-                    key: 'endpoint_control',
-                    label: __('Restrict access to other pages', 'mvx-pro'),
-                    value: 'endpoint_control',
-                    proSetting: true,
-                },
-                {
-                    key: 'redirect_verification_page',
-                    label: __('Redirect to verification page', 'mvx-pro'),
-                    value: 'redirect_verification_page',
-                    proSetting: true,
-                },
-                {
-                    key: 'disable_add_product_endpoint',
-                    label: __('Prevent product upload', 'mvx-pro'),
-                    value: 'disable_add_product_endpoint',
-                    proSetting: true,
-                },
-            ],
-            //proSetting:true,
-            selectDeselect: true,
-        },
-        {
             key: 'separator_content',
             type: 'section',
             hint: __("Identity Verification", 'multivendorx'),
