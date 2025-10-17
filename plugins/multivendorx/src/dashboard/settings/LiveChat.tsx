@@ -5,7 +5,13 @@ import axios from 'axios';
 
 const LiveChat = () => {
     const appLocalizer = (window as any).appLocalizer;
-    const livechat = appLocalizer.live-chat;
+    const product_page_chat = appLocalizer.product_page_chat;
+    const chat_provider = appLocalizer.chat_provider;
+    const messenger_color = appLocalizer.messenger_color;
+    const whatsapp_opening_pattern = appLocalizer.whatsapp_opening_pattern;
+    const whatsapp_pre_filled = appLocalizer.whatsapp_pre_filled;
+    const app_id = appLocalizer.app_id;
+    const app_secret = appLocalizer.app_secret;
     const [chatPreferences, setChatPreferences] = useState({
         preferred_chat: 'talkjs',
         facebook_user_id: '',

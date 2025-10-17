@@ -562,6 +562,11 @@ class FrontendScripts {
                     'add_product_link'         => StoreUtil::get_endpoint_url( 'products', 'edit' ),
                     'all_verification_methods' => MultiVendorX()->setting->get_setting( 'all_verification_methods' ),
                     'shipping_methods'         => apply_filters( 'multivendorx_store_shipping_options', array() ),
+                    'product_page_chat'        => MultiVendorX()->setting->get_setting( 'product_page_chat' ),
+                    'chat_provider'            => MultiVendorX()->setting->get_setting(' chat_provider' ),
+                    'messenger_color'            => MultiVendorX()->setting->get_setting(' messenger_color' ),
+                    'whatsapp_opening_pattern'            => MultiVendorX()->setting->get_setting(' whatsapp_opening_pattern' ),
+                    'whatsapp_pre_filled'            => MultiVendorX()->setting->get_setting(' whatsapp_pre_filled' ),
                 ),
             ),
 
