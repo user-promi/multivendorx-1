@@ -686,7 +686,8 @@
     a:hover {
         color: #000;
     }
-    img{
+
+    img {
         width: 11rem;
     }
 }
@@ -1157,9 +1158,33 @@
     display: flex;
     gap: 0.625rem;
     gap: 0.5rem;
+
+    .details {
+        display: flex;
+        flex-direction: column;
+
+        span {
+            font-size: 0.813rem;
+        }
+
+        .title {
+            font-size: 1rem;
+            font-weight: 500;
+            line-height: 1.2rem;
+            margin-bottom: 0.25rem;
+        }
+
+    }
 }
-.table-content{
+
+.table-content {
     display: flex;
     flex-direction: column;
     gap: 0.313rem;
+
+    i {
+        font-size: 1rem;
+        padding-right: 0.125rem;
+        color: $theme-color;
+    }
 }
