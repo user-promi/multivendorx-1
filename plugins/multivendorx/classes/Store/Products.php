@@ -117,7 +117,7 @@ class Products {
         FrontendScripts::enqueue_script( 'multivendorx-product-classify-script' );
         FrontendScripts::localize_scripts( 'multivendorx-product-classify-script' );
 
-        MultiVendorX()->util->get_template('add-product.php', ['self' => $this] );
+        MultiVendorX()->util->get_template('product/add-product.php', ['self' => $this] );
     }
 
     public function call_edit_product() {
@@ -203,7 +203,7 @@ class Products {
         wp_localize_script( 'multivendorx-store-products-script', 'mvx_advance_product_params', $edit_product_params );
 
         // do_action( 'mvx_edit_product_template_load', $this->product_id, $this->product_object, $this->post_object );
-        MultiVendorX()->util->get_template('edit.php', array( 'self' => $this, 'product_object' => $this->product_object, 'post' => $this->post_object ) );
+        MultiVendorX()->util->get_template('product/edit-product.php', array( 'self' => $this, 'product_object' => $this->product_object, 'post' => $this->post_object ) );
             
     }
 

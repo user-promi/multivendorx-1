@@ -1,6 +1,7 @@
 <?php
 
 namespace MultiVendorX\RestAPI\Controllers;
+use MultiVendorX\Store\StoreUtil;
 
 defined('ABSPATH') || exit;
 
@@ -273,5 +274,118 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller
 
         return $all_endpoints;
     }
+
+
+    public function get_current_page_and_submenu() {
+        $current_user = wp_get_current_user();
+        $capability_settings = MultiVendorX()->setting->get_setting(reset($current_user->roles));
+        $store_ids = StoreUtil::get_stores_from_user_id($current_user->ID);
+        $active_store = get_user_meta($current_user->ID, 'multivendorx_active_store', true);
+        $all_endpoints = $this->all_endpoints();
+        $div_id = '';
+        $allowed = true;
+
+        if (empty($active_store)) {
+            update_user_meta($current_user->ID, 'multivendorx_active_store', reset($store_ids));
+        }
+
+        if (get_option('permalink_structure')) {
+            $current_page = get_query_var('tab');
+            $current_sub = get_query_var('subtab');
+        } else {
+            $current_page = filter_input(INPUT_GET, 'tab', FILTER_DEFAULT);
+            $current_sub = filter_input(INPUT_GET, 'subtab', FILTER_DEFAULT);
+        }
+
+        if (empty($current_page)) {
+            $current_page = 'dashboard';
+        }
+
+        // Auto-redirect if submenu exists
+        if ($current_page && empty($current_sub)) {
+            foreach ($all_endpoints as $section) {
+                if ($section['slug'] === $current_page && !empty($section['submenu'])) {
+                    $first_sub = $section['submenu'][0]['slug'];
+                    wp_safe_redirect(StoreUtil::get_endpoint_url($current_page, $first_sub));
+                    exit;
+                }
+            }
+        }
+
+        if ($current_page) {
+            foreach ($all_endpoints as $key => $section) {
+                if ($section['slug'] === $current_page) {
+                    if (!empty($section['capability'])) {
+                        $allowed = false;
+
+                        foreach ($section['capability'] as $cap) {
+                            if (current_user_can($cap) && in_array($cap, $capability_settings, true)) {
+                                $allowed = true;
+                                break;
+                            }
+                        }
+                    }
+                    if ($current_sub) {
+                        if(empty($section['submenu'])) {
+                            if (!empty($section['capability-'. $current_sub])) {
+                                $allowed = false;
+                                foreach ($section['capability-'. $current_sub] as $cap) {
+                                    if (current_user_can($cap) && in_array($cap, $capability_settings, true)) {
+                                        $allowed = true;
+                                        break;
+                                    }
+                                }
+                            }
+                            $div_id = $current_sub;
+                        } else {
+                            foreach ($section['submenu'] as $submenu) {
+                                if ($submenu['slug'] === $current_sub) {
+                                    if (!empty($submenu['capability'])) {
+                                        $allowed = false;
+                                        foreach ($submenu['capability'] as $cap) {
+                                            if (current_user_can($cap) && in_array($cap, $capability_settings, true)) {
+                                                $allowed = true;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    $div_id = $submenu['key'];
+                                    break;
+                                }
+                            }
+                        }
+                    } else {
+                        $div_id = $key;
+                    }
+                    break;
+                }
+            }
+        }
+
+
+        return [
+            'active_store'  => $active_store,
+            'current_page'  => $current_page,
+            'current_sub'   => $current_sub,
+            'div_id'        => $div_id,
+            'allowed'        => $allowed,
+        ];
+    }
+
+    public function call_edit_product_template() {
+        $subtab = get_query_var('subtab');
+        $value = get_query_var('value');
+
+        if ($subtab === 'edit') {
+            if (!empty($value)) {
+                MultiVendorX()->store->products->call_edit_product();
+            } else {
+                if ( MultiVendorX()->setting->get_setting('category_pyramid_guide') == 'yes' ) {
+                    MultiVendorX()->store->products->call_add_product();
+                }
+            }
+        }
+    }
+
 
 }

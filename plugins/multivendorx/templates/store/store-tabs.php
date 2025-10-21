@@ -44,11 +44,11 @@ foreach ( $store_tabs as $key => $tab ) {
 <?php
 switch ( $current_tab ) {
     case 'reviews':
-        MultiVendorX()->util->get_template( 'store-review.php', ['store_id' => $store_id] );
+        MultiVendorX()->util->get_template( 'store/store-review.php', ['store_id' => $store_id] );
         break;
 
     case 'policy':
-        MultiVendorX()->util->get_template( 'store-policy.php', ['store_id' => $store_id] );
+        MultiVendorX()->util->get_template( 'store/store-policy.php', ['store_id' => $store_id] );
         break;
 
     case 'products':

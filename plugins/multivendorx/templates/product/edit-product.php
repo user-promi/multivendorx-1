@@ -1,5 +1,18 @@
 <?php
 
+// $subtab = get_query_var('subtab');
+// $value = get_query_var('value');
+
+// if ($subtab === 'edit') {
+//     if (!empty($value)) {
+//         MultiVendorX()->store->products->call_edit_product();
+//     } else {
+//         if ( MultiVendorX()->setting->get_setting('category_pyramid_guide') == 'yes' ) {
+//             MultiVendorX()->store->products->call_add_product();
+//         }
+//     }
+// }
+
 $self = $args['self'];
 $product_object = $args['product_object'];
 $post = $args['post'];
@@ -219,13 +232,13 @@ if ($default_types && !empty($default_types)) {
                             <!-- Tab content start -->
                             <div class="tab-content">
                                 <?php
-                                MultiVendorX()->util->get_template('views/html-product-data-general.php', array( 'self' => $self, 'product_object' => $product_object, 'post' => $post ) );
-                                MultiVendorX()->util->get_template('views/html-product-data-inventory.php', array( 'self' => $self, 'product_object' => $product_object, 'post' => $post ) );
-                                MultiVendorX()->util->get_template('views/html-product-data-linked-products.php', array( 'self' => $self, 'product_object' => $product_object, 'post' => $post ) );
-                                MultiVendorX()->util->get_template('views/html-product-data-attributes.php', array( 'self' => $self, 'product_object' => $product_object, 'post' => $post ) );
+                                MultiVendorX()->util->get_template('product/views/html-product-data-general.php', array( 'self' => $self, 'product_object' => $product_object, 'post' => $post ) );
+                                MultiVendorX()->util->get_template('product/views/html-product-data-inventory.php', array( 'self' => $self, 'product_object' => $product_object, 'post' => $post ) );
+                                MultiVendorX()->util->get_template('product/views/html-product-data-linked-products.php', array( 'self' => $self, 'product_object' => $product_object, 'post' => $post ) );
+                                MultiVendorX()->util->get_template('product/views/html-product-data-attributes.php', array( 'self' => $self, 'product_object' => $product_object, 'post' => $post ) );
                                 do_action( 'mvx_after_attribute_product_tabs_content', $self, $product_object, $post );
                                 
-                                MultiVendorX()->util->get_template('views/html-product-data-advanced.php', array( 'self' => $self, 'product_object' => $product_object, 'post' => $post ) );
+                                MultiVendorX()->util->get_template('product/views/html-product-data-advanced.php', array( 'self' => $self, 'product_object' => $product_object, 'post' => $post ) );
                                 ?>
                                 <?php do_action( 'mvx_product_tabs_content', $self, $product_object, $post ); ?>
                             </div>

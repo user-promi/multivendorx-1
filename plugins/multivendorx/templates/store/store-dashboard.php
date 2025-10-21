@@ -2,44 +2,17 @@
 
 use MultiVendorX\Store\StoreUtil;
 use MultiVendorX\Store\Store;
-use MultiVendorX\Store\Products;
 
 $all_endpoints = MultiVendorX()->rest->dashboard->all_endpoints();
 $current_user = wp_get_current_user();
-$role = reset($current_user->roles);
-$capability_settings = MultiVendorX()->setting->get_setting($role);
-
 $store_ids = StoreUtil::get_stores_from_user_id($current_user->ID);
-$active_store = get_user_meta($current_user->ID, 'multivendorx_active_store', true);
-
-if (empty($active_store)) {
-    update_user_meta($current_user->ID, 'multivendorx_active_store', reset($store_ids));
-}
-
+$page_info = MultiVendorX()->rest->dashboard->get_current_page_and_submenu();
+$active_store = $page_info['active_store'];
+$current_page = $page_info['current_page'];
+$current_sub = $page_info['current_sub'];
+$div_id = $page_info['div_id'];
+$allowed = $page_info['allowed'];
 $store = Store::get_store_by_id($active_store);
-
-if (get_option('permalink_structure')) {
-    $current_page = get_query_var('tab');
-    $current_sub = get_query_var('subtab');
-} else {
-    $current_page = filter_input(INPUT_GET, 'tab', FILTER_DEFAULT);
-    $current_sub = filter_input(INPUT_GET, 'subtab', FILTER_DEFAULT);
-}
-
-if (empty($current_page)) {
-    $current_page = 'dashboard';
-}
-
-// Auto-redirect if submenu exists
-if ($current_page && empty($current_sub)) {
-    foreach ($all_endpoints as $section) {
-        if ($section['slug'] === $current_page && !empty($section['submenu'])) {
-            $first_sub = $section['submenu'][0]['slug'];
-            wp_safe_redirect(StoreUtil::get_endpoint_url($current_page, $first_sub));
-            exit;
-        }
-    }
-}
 
 ?>
 <!DOCTYPE html>
@@ -200,86 +173,35 @@ if ($current_page && empty($current_sub)) {
                 </div>
                 <?php
             } else {
-                $div_id = '';
-                $allowed = true;
-
-                if ($current_page) {
-                    foreach ($all_endpoints as $key => $section) {
-                        if ($section['slug'] === $current_page) {
-                            if (!empty($section['capability'])) {
-                                $allowed = false;
-
-                                foreach ($section['capability'] as $cap) {
-                                    if (current_user_can($cap) && in_array($cap, $capability_settings, true)) {
-                                        $allowed = true;
-                                        break;
-                                    }
-                                }
-                            }
-                            if ($current_sub) {
-                            	if(empty($section['submenu'])) {
-                                    if (!empty($section['capability-'. $current_sub])) {
-                                		$allowed = false;
-                                		foreach ($section['capability-'. $current_sub] as $cap) {
-                                    		if (current_user_can($cap) && in_array($cap, $capability_settings, true)) {
-                                        		$allowed = true;
-                                        		break;
-                                    		}
-                                		}
-                            		}
-                                	$div_id = $current_sub;
-                                } else {
-                                	foreach ($section['submenu'] as $submenu) {
-                                    	if ($submenu['slug'] === $current_sub) {
-                                        	if (!empty($submenu['capability'])) {
-                                            	$allowed = false;
-                                            	foreach ($submenu['capability'] as $cap) {
-                                                	if (current_user_can($cap) && in_array($cap, $capability_settings, true)) {
-                                                    	$allowed = true;
-                                                    	break;
-                                                	}
-                                            	}
-                                        	}
-                                        	$div_id = $submenu['key'];
-                                        	break;
-                                    	}
-                                    }
-                                }
-                            } else {
-                                $div_id = $key;
-                            }
-                            break;
-                        }
-                    }
-                    if ($div_id) {
-                        if ($allowed) {
-                            if ($div_id == 'edit') {
-                                MultiVendorX()->util->get_template('edit-product.php', [] );
-                                // $edit_product = new Products();
-                                // $edit_product->output();
-                                
-                            } else {
-                                ?>
-                                <div class="content-wrapper" id="<?php echo esc_attr($div_id) ?>">     
-                                    <div class="page-title-wrapper">
-                                        <div class="page-title">
-                                            <div class="title"><?php echo esc_attr($div_id) ?></div>
-                                            <div class="des">Manage your store information and preferences</div>
-                                        </div>
-                                    </div> 
-                                </div>
-                                <?php
-                            }
+                if ($div_id) {
+                    if ($allowed) {
+                        if ($div_id == 'edit') {
+                            MultiVendorX()->rest->dashboard->call_edit_product_template();
+                            // MultiVendorX()->util->get_template('edit-product.php', [] );
+                            // $edit_product = new Products();
+                            // $edit_product->output();
+                            
                         } else {
-                            echo '<div class="content-wrapper"> 
-                                    <div class="permission-wrapper">
-                                        <i class="adminlib-info red"></i>
-                                        <div class="title"> You do not have permission to access this section.</div>
-                                        <div class="des">Manage your store information and preferences Manage your store information and preferences </div>
-                                        <div class="admin-btn btn-purple">Contact Admin</div>
+                            ?>
+                            <div class="content-wrapper" id="<?php echo esc_attr($div_id) ?>">     
+                                <div class="page-title-wrapper">
+                                    <div class="page-title">
+                                        <div class="title"><?php echo esc_attr($div_id) ?></div>
+                                        <div class="des">Manage your store information and preferences</div>
                                     </div>
-                                </div>';
+                                </div> 
+                            </div>
+                            <?php
                         }
+                    } else {
+                        echo '<div class="content-wrapper"> 
+                                <div class="permission-wrapper">
+                                    <i class="adminlib-info red"></i>
+                                    <div class="title"> You do not have permission to access this section.</div>
+                                    <div class="des">Manage your store information and preferences Manage your store information and preferences </div>
+                                    <div class="admin-btn btn-purple">Contact Admin</div>
+                                </div>
+                            </div>';
                     }
                 }
             }
