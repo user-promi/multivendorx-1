@@ -93,8 +93,8 @@ const History: React.FC = () => {
         <>
             <div className="page-title-wrapper">
                 <div className="page-title">
-                    <div className="title">Payouts</div>
-                    <div className="des">View and keep track of your payouts.</div>
+                    <div className="title">Withdrawls</div>
+                    <div className="des">View and keep track of your withdrawls.</div>
                 </div>
             </div>
 
@@ -104,7 +104,7 @@ const History: React.FC = () => {
                         <div className="card-header">
                             <div className="left">
                                 <div className="title">
-                                    Available for Payout
+                                    Withdrawable Balance
                                 </div>
                             </div>
                         </div>
