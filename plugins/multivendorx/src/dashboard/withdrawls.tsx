@@ -93,8 +93,8 @@ const History: React.FC = () => {
         <>
             <div className="page-title-wrapper">
                 <div className="page-title">
-                    <div className="title">Payouts</div>
-                    <div className="des">View and keep track of your payouts.</div>
+                    <div className="title">Withdrawls</div>
+                    <div className="des">View and keep track of your withdrawls.</div>
                 </div>
             </div>
 
@@ -104,7 +104,7 @@ const History: React.FC = () => {
                         <div className="card-header">
                             <div className="left">
                                 <div className="title">
-                                    Available for Payout
+                                    Withdrawable Balance
                                 </div>
                             </div>
                         </div>
@@ -115,7 +115,6 @@ const History: React.FC = () => {
                             <div className="des">Current available balance ready for withdrawal</div>
 
                             <div className="notice"></div>
-                            <div className="settings-metabox-note"><i className="adminlib-info"></i><p>Confirm that you have access to johndoe@gmail.com in sender email settings.</p></div>
                             <div className="admin-btn btn-purple" onClick={() => setRequestWithdrawal(true)}>
                                 Request Withdrawal
                             </div>
@@ -126,7 +125,7 @@ const History: React.FC = () => {
                     <div className="card-header">
                         <div className="left">
                             <div className="title">
-                                Available for Payout
+                                Balance Breakdown
                             </div>
                         </div>
                     </div>
