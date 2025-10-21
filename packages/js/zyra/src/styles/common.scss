@@ -1112,7 +1112,6 @@ input[type="checkbox"]:focus {
           &:hover {
             span {
               display: block;
-              // width: 100%;
               background-color: rgb(46, 46, 46);
               color: #fff;
               text-align: center;
@@ -1273,3 +1272,39 @@ input[type="checkbox"]:focus {
 .date-picker.open-top {
   bottom: calc(100% + 4px);
 }
+
+// tooltip style start
+.tooltip-btn {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+
+  .tooltip {
+    position: absolute;
+    top: -1.125rem;
+    left: -100%;
+    width: 6rem;
+    text-align: center;
+    display: none;
+    transition: all 0.4s ease;
+  }
+
+  &:hover {
+    .tooltip {
+      display: block;
+      background-color: rgb(46, 46, 46);
+      color: #fff;
+      text-align: center;
+      padding: 0.313rem;
+      border-radius: 6px;
+      position: absolute;
+      top: -2rem;
+      z-index: 1;
+      font-size: 0.8rem;
+      inset: auto auto 0px 0px;
+      transform: translate(-2rem, -2.313rem);
+    }
+  }
+}
+
+// tooltip style end
