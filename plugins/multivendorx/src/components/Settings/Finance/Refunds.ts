@@ -2,7 +2,7 @@ import { __ } from '@wordpress/i18n';
 
 export default {
     id: 'order-actions-refunds',
-    priority: 4,
+    priority: 5,
     name: __( 'Refunds', 'multivendorx' ),
     desc: __(
         'Control refund rules, eligibility stages, and valid claim periods.',

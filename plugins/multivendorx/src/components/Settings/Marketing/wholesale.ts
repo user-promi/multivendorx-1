@@ -2,8 +2,8 @@ import { __ } from '@wordpress/i18n';
 
 export default {
     id: 'wholesale',
-    priority: 2,
-    name: __('Wholesale Trading', 'mvx-pro'),
+    priority: 3,
+    name: __('Wholesale', 'mvx-pro'),
     desc: __('Configure rules for wholesale buyers and pricing.', 'mvx-pro'),
     icon: 'adminlib-wholesale',
     submitUrl: 'settings',

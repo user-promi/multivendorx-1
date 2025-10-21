@@ -2,7 +2,7 @@ import { __ } from '@wordpress/i18n';
 export default {
     id: 'disbursement',
     priority: 2,
-    name: __('Disbursement', 'multivendorx'),
+    name: __('Payouts', 'multivendorx'),
     desc: __("Tailor your marketplace commission plan to fit your revenue sharing preferences.", 'multivendorx'),
     icon: 'adminlib-cart',
     submitUrl: 'settings',
