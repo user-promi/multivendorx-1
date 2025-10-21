@@ -115,7 +115,6 @@ const History: React.FC = () => {
                             <div className="des">Current available balance ready for withdrawal</div>
 
                             <div className="notice"></div>
-                            <div className="settings-metabox-note"><i className="adminlib-info"></i><p>Confirm that you have access to johndoe@gmail.com in sender email settings.</p></div>
                             <div className="admin-btn btn-purple" onClick={() => setRequestWithdrawal(true)}>
                                 Request Withdrawal
                             </div>
@@ -126,7 +125,7 @@ const History: React.FC = () => {
                     <div className="card-header">
                         <div className="left">
                             <div className="title">
-                                Available for Payout
+                                Balance Breakdown
                             </div>
                         </div>
                     </div>
