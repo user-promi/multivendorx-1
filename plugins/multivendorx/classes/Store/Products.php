@@ -527,6 +527,24 @@ class Products {
 
         // Sort tabs based on priority.
         uasort( $tabs, array( __CLASS__, 'product_data_tabs_sort' ) );
+
+        $other_tabs = apply_filters('mvx_product_extra_tabs_added', array('shipping', 'variations'));
+        $product_fileds = MultiVendorX()->setting->get_setting('products_fields', array());
+        $default_types = array('general', 'inventory', 'linked_product', 'attribute', 'advanced', 'policies');
+        foreach ($tabs as $key_tabs => $value_tabs) {
+            if (is_array($other_tabs) && in_array($key_tabs, $other_tabs)) continue;
+        }
+
+        if ($default_types && !empty($default_types)) {
+            foreach ($default_types as $key_types => $value_types) {
+                if (!in_array($value_types, $product_fileds)) {
+                    unset($tabs[$value_types]);
+                }
+            }
+        } else {
+            unset($tabs['general'], $tabs['inventory'], $tabs['linked_product'], $tabs['attribute'], $tabs['advanced']);
+        }
+
         return $tabs;
     }
 

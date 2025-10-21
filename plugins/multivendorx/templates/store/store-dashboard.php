@@ -162,50 +162,53 @@ $store = Store::get_store_by_id($active_store);
                 </div>
             </div>
             <?php
-            if ($store->get('status') == 'pending') { ?>
-                <div>
-                    <?php echo 'waiting for approval'; ?>
-                </div>
-                <?php
-            } elseif ($store->get('status') == 'reject') { ?>
-                <div>
-                    <?php echo 'The application is rejected'; ?>
-                </div>
-                <?php
-            } else {
-                if ($div_id) {
-                    if ($allowed) {
-                        if ($div_id == 'edit') {
-                            MultiVendorX()->rest->dashboard->call_edit_product_template();
-                            // MultiVendorX()->util->get_template('edit-product.php', [] );
-                            // $edit_product = new Products();
-                            // $edit_product->output();
-                            
-                        } else {
-                            ?>
-                            <div class="content-wrapper" id="<?php echo esc_attr($div_id) ?>">     
-                                <div class="page-title-wrapper">
-                                    <div class="page-title">
-                                        <div class="title"><?php echo esc_attr($div_id) ?></div>
-                                        <div class="des">Manage your store information and preferences</div>
-                                    </div>
-                                </div> 
-                            </div>
-                            <?php
-                        }
-                    } else {
-                        echo '<div class="content-wrapper"> 
+            $status = $store->get('status');
+
+            switch ($status) {
+                case 'pending':
+                    echo '<div>Waiting for approval</div>';
+                    break;
+
+                case 'reject':
+                    echo '<div>The application is rejected</div>';
+                    break;
+
+                default:
+                    if (!$div_id) {
+                        return;
+                    }
+
+                    if (!$allowed) {
+                        echo '
+                            <div class="content-wrapper"> 
                                 <div class="permission-wrapper">
                                     <i class="adminlib-info red"></i>
-                                    <div class="title"> You do not have permission to access this section.</div>
-                                    <div class="des">Manage your store information and preferences Manage your store information and preferences </div>
+                                    <div class="title">You do not have permission to access this section.</div>
+                                    <div class="des">Manage your store information and preferences</div>
                                     <div class="admin-btn btn-purple">Contact Admin</div>
                                 </div>
                             </div>';
+                        return;
                     }
-                }
+
+                    if ($div_id === 'edit') {
+                        MultiVendorX()->rest->dashboard->call_edit_product_template();
+                    } else {
+                        ?>
+                        <div class="content-wrapper" id="<?php echo esc_attr($div_id); ?>">     
+                            <div class="page-title-wrapper">
+                                <div class="page-title">
+                                    <div class="title"><?php echo esc_html($div_id); ?></div>
+                                    <div class="des">Manage your store information and preferences</div>
+                                </div>
+                            </div> 
+                        </div>
+                        <?php
+                    }
+                    break;
             }
             ?>
+
         </div>
     </div>
     <?php wp_footer(); ?>
