@@ -154,23 +154,83 @@ const StoreTable: React.FC = () => {
             accessorKey: 'store_name',
             enableSorting: true,
             header: __('Store', 'multivendorx'),
+            cell: ({ row }) => {
+                const status = row.original.status || '';
+                const rawDate = row.original.applied_on;
+                let formattedDate = '-';
+                if (rawDate) {
+                    const dateObj = new Date(rawDate);
+                    formattedDate = new Intl.DateTimeFormat('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric',
+                    }).format(dateObj);
+                }
+
+                const getStatusBadge = (status: string) => {
+                    switch (status) {
+                        case 'active':
+                            return <span className="admin-badge green">Active</span>;
+                        case 'pending':
+                            return <span className="admin-badge yellow">Pending</span>;
+                        case 'rejected':
+                            return <span className="admin-badge red">Rejected</span>;
+                        case 'locked':
+                            return <span className="admin-badge blue">Locked</span>;
+                        default:
+                            return <span className="admin-badge gray">{status}</span>;
+                    }
+                };
+
+                return (
+                    <TableCell title={row.original.store_name || ''}>
+                        <a
+                            onClick={() => {
+                                window.location.href = `?page=multivendorx#&tab=stores&view&id=${row.original.id}`;
+                            }}
+                            className="product-wrapper"
+                        >
+                            <img src="https://via.placeholder.com/50" style={{ width: 40, height: 40, objectFit: 'cover' }} />
+
+                            <div className="details">
+                                <span className="title">{row.original.store_name || '-'}</span>
+                                <span>Since {formattedDate}</span>
+                            </div>
+                        </a>
+                    </TableCell>
+                );
+            },
+        },
+        {
+            header: __('Contact', 'multivendorx'),
             cell: ({ row }) => (
-                <TableCell title={row.original.store_name || ''}>
-                    {row.original.store_name || '-'}
-                </TableCell>
+                <TableCell title={row.original.email || ''}>
+                    <>
+                        <div className="table-content">
+                            {row.original.email && (
+                                <div>
+                                    <b><i className="adminlib-mail"></i></b> {row.original.email}
+                                </div>
+                            )}
+                            <div> <b><i className="adminlib-form-phone"></i></b> 98745632103 </div>
+                        </div>
+                    </>
+                </TableCell >
             ),
         },
         {
-            header: __('Email', 'multivendorx'),
+            header: __('Primary Owner', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell title={row.original.email || ''}>
-                    {row.original.email || '-'}
-                </TableCell>
+                    <>
+                        Owner 1
+                    </>
+                </TableCell >
             ),
         },
         {
             id: 'status_applied_on',
-            header: __('Status / Applied On', 'multivendorx'),
+            header: __('Status', 'multivendorx'),
             enableSorting: true,
             cell: ({ row }) => {
                 const status = row.original.status || '';
@@ -202,15 +262,13 @@ const StoreTable: React.FC = () => {
 
                 return (
                     <TableCell title={`${status} - ${formattedDate}`}>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                            {getStatusBadge(status)}Since
-                            <span>{formattedDate}</span>
-                        </div>
+                        <>
+                            {getStatusBadge(status)}
+                        </>
                     </TableCell>
                 );
             },
         },
-
         {
             id: 'action',
             header: __('Action', 'multivendorx'),

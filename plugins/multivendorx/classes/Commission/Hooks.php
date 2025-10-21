@@ -15,7 +15,7 @@ defined('ABSPATH') || exit;
 class Hooks {
     function __construct() {
         add_action( 'mvx_checkout_vendor_order_processed', [$this, 'create_commission'], 10, 3 );
-        // add_action( 'woocommerce_order_refunded', [$this, 'create_commission_refunds'], 99, 2 );
+        add_action( 'woocommerce_order_refunded', [$this, 'create_commission_refunds'], 99, 2 );
     }
 
     /**
@@ -47,8 +47,12 @@ class Hooks {
      * @return void
      */
     public function create_commission_refunds( $order_id, $refund_id ) {
-        $vendor_order = new VendorOrder();
+
+        $vendor_order = new VendorOrder($order_id);
+
         if( $vendor_order->is_vendor_order() ) {
+            $vendor_order = wc_get_order($order_id);
+
             $commission_id = MultiVendorX()->commission->calculate_commission_refunds( $vendor_order, $refund_id );
             /**
              * Action hook after commission refund save.

@@ -386,6 +386,10 @@
  // store template start
  .multivendorx-banner {
      position: relative;
+     height: 25rem;
+     background-size: contain !important;
+     background-position: center !important;
+     background-repeat: no-repeat !important;
 
      .banner-img {
          width: 100%;
@@ -460,8 +464,6 @@
              left: 4%;
              width: 92%;
          }
-
-         .follow-wrapper {}
      }
 
      &.template2 {
@@ -588,10 +590,12 @@
              flex-direction: column;
              gap: 0.5rem;
              align-items: start;
-                .follower-count{
-                    font-size: 0.813rem;
-                    margin-top: 0.5rem;
-                }
+
+             .follower-count {
+                 font-size: 0.813rem;
+                 margin-top: 0.5rem;
+             }
+
              .admin-badge {
                  span {
                      color: #000000a8;

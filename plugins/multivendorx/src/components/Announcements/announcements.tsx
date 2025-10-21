@@ -393,7 +393,7 @@ export const Announcements: React.FC = () => {
             ),
         },
         {
-            header: __('Sent To', 'multivendorx'),
+            header: __('Visible To', 'multivendorx'),
             cell: ({ row }) => {
                 const storeString = row.original.store_name || '';
                 const stores = storeString.split(',').map(s => s.trim()); // Split string into array and trim spaces

@@ -15,6 +15,7 @@ use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Coupons_Controller;
 use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Payouts_Controller;
 use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Transaction_Controller;
 use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Reports_Controller;
+use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Refund_Controller;
 use MultiVendorX\Store\StoreUtil;
 
 defined('ABSPATH') || exit;
@@ -227,7 +228,7 @@ class Rest {
             'payouts'   => new MultiVendorX_REST_Payouts_Controller(),
             'transaction'=> new MultiVendorX_REST_Transaction_Controller(),
             'report'=> new MultiVendorX_REST_Reports_Controller(),
-            
+            'refund'=> new MultiVendorX_REST_Refund_Controller(),
         );
     }
 

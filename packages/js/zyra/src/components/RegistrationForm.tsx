@@ -21,6 +21,7 @@ import TimePicker from './TimePicker';
 import TemplateSection from './TemplateSection';
 import DisplayButton from './DisplayButton';
 import BlockLayout from './BlockLayout';
+// import BlockLayout from './BlockLayout';
 
 // Types
 export interface Option {
@@ -73,7 +74,7 @@ const DEFAULT_FORM_TITLE = 'Demo Form';
 
 // Example select options
 const selectOptions: SelectOption[] = [
-    { icon: 'adminlib-module icon-form-textbox', value: 'block-layout', label: 'Block Layout' },
+    // { icon: 'adminlib-module icon-form-textbox', value: 'block-layout', label: 'Block Layout' },
     { icon: 'adminlib-t-letter-bold icon-form-textbox', value: 'text', label: 'Textbox' },
     { icon: 'adminlib-unread icon-form-email', value: 'email', label: 'Email' },
     { icon: 'adminlib-text icon-form-textarea', value: 'textarea', label: 'Textarea' },
@@ -101,17 +102,6 @@ const selectOptionsStore: SelectOption[] = [
     { icon: 'adminlib-t-letter-bold icon-form-textbox', value: 'text', label: 'Post Code', name: 'post_code' },
     { icon: 'adminlib-unread icon-form-email', value: 'email', label: 'Paypal Email', name: 'paypal_email' },
 ];
-
-const demoFormField = {
-    id: 21,
-    type: "text",
-    label: "Enter your text",
-    required: false,
-    name: "text-mfpbb9yy",
-    placeholder: "text",
-    chosen: false,
-    selected: false,
-};
 
 // Component
 const CustomForm: React.FC<CustomFormProps> = ({
@@ -236,7 +226,17 @@ const CustomForm: React.FC<CustomFormProps> = ({
                         }}
                     />
                     <Elements
-                        label="Store"
+                        label="MultivendorX Free"
+                        selectOptions={selectOptionsStore}
+                        onClick={(type) => {
+                            const option = selectOptionsStore.find(o => o.value === type);
+                            const fixedName = option?.name;
+                            appendNewFormField(formFieldList.length - 1, type, fixedName, true);
+                            setOpendInput(null);
+                        }}
+                    />
+                    <Elements
+                        label="MultivendorX Pro"
                         selectOptions={selectOptionsStore}
                         onClick={(type) => {
                             const option = selectOptionsStore.find(o => o.value === type);
@@ -328,7 +328,7 @@ const CustomForm: React.FC<CustomFormProps> = ({
                             >
                                 {opendInput?.id === formField.id && (
                                     <section className="meta-menu">
-                                        <DisplayButton
+                                        {/* <DisplayButton
                                             onClick={() => {
                                                 const index = formFieldList.findIndex(f => f.id === opendInput.id);
                                                 if (index >= 0) deleteParticularFormField(index);
@@ -337,7 +337,22 @@ const CustomForm: React.FC<CustomFormProps> = ({
                                             wraperClass={`delete`}
                                             children={<i className="admin-font adminlib-delete"></i>}
                                             btnType="button"
-                                        />
+                                        /> */}
+                                        {opendInput?.id === formField.id && (
+                                            <div className="admin-badge blue drag-handle">
+                                                <i className="admin-font adminlib-drag"></i>
+                                            </div>
+                                        )}
+                                        <span
+                                            onClick={() => {
+                                                const index = formFieldList.findIndex(f => f.id === opendInput.id);
+                                                if (index >= 0) deleteParticularFormField(index);
+                                                setOpendInput(null);
+                                            }}
+                                            className="admin-badge red"
+                                        >
+                                            <i className="admin-font adminlib-delete"></i>
+                                        </span>
                                     </section>
                                 )}
                                 <section className={`form-field-container-wrapper`}>
@@ -367,9 +382,9 @@ const CustomForm: React.FC<CustomFormProps> = ({
                                     {formField.type === 'section' && (
                                         <TemplateSection formField={formField} onChange={(key, value) => handleFormFieldChange(index, key, value)} />
                                     )}
-                                    {formField.type === 'block-layout' && (
+                                    {/* {formField.type === 'block-layout' && (
                                         <BlockLayout />
-                                    )}
+                                    )} */}
                                     {formField.type === 'textarea' && (
                                         <TemplateTextArea
                                             formField={formField}
@@ -401,38 +416,36 @@ const CustomForm: React.FC<CustomFormProps> = ({
                     })}
                 </ReactSortable>
 
-                <section className="settings-input-content">
-                    <ButtonCustomizer
-                        text={
-                            (buttonSetting.button_text &&
-                                buttonSetting.button_text) ||
-                            'Submit'
+                <ButtonCustomizer
+                    text={
+                        (buttonSetting.button_text &&
+                            buttonSetting.button_text) ||
+                        'Submit'
+                    }
+                    setting={buttonSetting}
+                    onChange={(
+                        key,
+                        value,
+                        isRestoreDefaults = false
+                    ) => {
+                        if (proSettingChange()) return;
+                        settingHasChanged.current = true;
+                        const previousSetting = buttonSetting || {};
+                        if (isRestoreDefaults) {
+                            setButtonSetting(value);
+                        } else {
+                            setButtonSetting({
+                                ...previousSetting,
+                                [key]: value,
+                            });
                         }
-                        setting={buttonSetting}
-                        onChange={(
-                            key,
-                            value,
-                            isRestoreDefaults = false
-                        ) => {
-                            if (proSettingChange()) return;
-                            settingHasChanged.current = true;
-                            const previousSetting = buttonSetting || {};
-                            if (isRestoreDefaults) {
-                                setButtonSetting(value);
-                            } else {
-                                setButtonSetting({
-                                    ...previousSetting,
-                                    [key]: value,
-                                });
-                            }
-                        }}
-                    />
-                </section>
+                    }}
+                />
             </div>
 
             {/* Meta Setting Modal outside registration-form-main-section */}
             <div className="registration-edit-form">
-                {opendInput && !opendInput.readonly && (           
+                {opendInput && !opendInput.readonly && (
                     <>
                         <SettingMetaBox
                             formField={opendInput}
