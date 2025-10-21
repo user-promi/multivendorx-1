@@ -15,7 +15,7 @@ defined('ABSPATH') || exit;
 class Hooks {
     function __construct() {
         add_action( 'mvx_checkout_vendor_order_processed', [$this, 'create_commission'], 10, 3 );
-        add_action( 'woocommerce_order_refunded', [$this, 'create_commission_refunds'], 99, 2 );
+        add_action( 'woocommerce_order_refunded', [$this, 'create_commission_refunds'], 10, 2 );
     }
 
     /**
@@ -47,13 +47,21 @@ class Hooks {
      * @return void
      */
     public function create_commission_refunds( $order_id, $refund_id ) {
+        $order  = wc_get_order($order_id);
+        $refund  = wc_get_order($refund_id);
+       
+        if ($order->get_parent_id() == 0) return;
+        
+        if ( $refund->get_meta( '_commission_refund_processed', true ) ) {
+            return;
+        }
 
-        $vendor_order = new VendorOrder($order_id);
+        $commission_id = MultiVendorX()->commission->calculate_commission_refunds( $order, $refund_id );
 
-        if( $vendor_order->is_vendor_order() ) {
-            $vendor_order = wc_get_order($order_id);
+        if ($commission_id) {
+            $refund->update_meta_data( '_commission_refund_processed', true );
+            $refund->save();
 
-            $commission_id = MultiVendorX()->commission->calculate_commission_refunds( $vendor_order, $refund_id );
             /**
              * Action hook after commission refund save.
              * @since 3.4.0

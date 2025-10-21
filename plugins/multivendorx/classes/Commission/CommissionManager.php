@@ -555,6 +555,14 @@ class CommissionManager {
                 $gateway_fee = (float) $commission_amount * ((float) $percentage_fee / 100) + (float) $fixed_fee;
             }
 
+            $commission = CommissionUtil::get_commission_db($commission_id);
+            $amount = $commission->commission_amount - $refund_total;
+
+            if ( $amount == 0  ) {
+                $status = 'refunded'; 
+            } else {
+                $status = 'partially_refunded';
+            }
             $commission_total = (float) $commission_amount + (float) $shipping_amount + (float) $tax_amount + (float) $shipping_tax_amount - (float) $gateway_fee;
 
             $data = [
@@ -563,17 +571,18 @@ class CommissionManager {
                 'customer_id'           => $vendor_order->get_customer_id(),
                 'total_order_amount'    => $vendor_order->get_total(),
                 'commission_amount'     => $commission_amount,
+                'gateway_fee'           => $gateway_fee,
                 // 'shipping_amount'       => $shipping_amount,
                 // 'tax_amount'            => $tax_amount,
                 // 'shipping_tax_amount'   => $shipping_tax_amount,
                 'discount_amount'       => $vendor_order->get_discount_total(),
                 'commission_total'      => $commission_total,
-                'commission_refunded'    => $refund_total,
-                
+                'commission_refunded'   => $refund_total,
+                'status'                => $status
             ];
-            $format = [ "%d", "%d", "%d", "%f", "%f", "%f", "%f", "%f" ];
+
+            $format = [ "%d", "%d", "%d", "%f", "%f", "%f", "%f", "%f", "%f", "%s" ];
         
-                
             $wpdb->update( $wpdb->prefix . Utill::TABLES['commission'], $data, ['ID' => $commission_id], $format );
 
             do_action('mvx_after_create_commission_refunds', $vendor_order, $commission_id);
