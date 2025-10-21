@@ -20,14 +20,14 @@ class Frontend {
      * Frontend class constructor function.
      */
     public function __construct() {
-        add_filter('multivendorx_store_shipping_options', array($this, 'add_shipping_options'));
-        add_filter( 'woocommerce_checkout_fields', array( $this, 'mvx_checkout_user_location_fields' ), 50 );
-        add_action( 'woocommerce_after_checkout_billing_form', array( $this, 'mvx_checkout_user_location_map' ), 50 );
-        add_action( 'woocommerce_checkout_update_order_review', array( $this, 'mvx_checkout_user_location_session_set' ), 50 );
-        add_action( 'woocommerce_checkout_update_order_meta', array( $this, 'mvx_checkout_user_location_save' ), 50 );
+        // add_filter('multivendorx_store_shipping_options', array($this, 'add_shipping_options'));
+        // add_filter( 'woocommerce_checkout_fields', array( $this, 'mvx_checkout_user_location_fields' ), 50 );
+        // add_action( 'woocommerce_after_checkout_billing_form', array( $this, 'mvx_checkout_user_location_map' ), 50 );
+        // add_action( 'woocommerce_checkout_update_order_review', array( $this, 'mvx_checkout_user_location_session_set' ), 50 );
+        // add_action( 'woocommerce_checkout_update_order_meta', array( $this, 'mvx_checkout_user_location_save' ), 50 );
 
-        // Load scripts
-        add_action('wp_enqueue_scripts', array($this, 'load_scripts'));
+        // // Load scripts
+        // add_action('wp_enqueue_scripts', array($this, 'load_scripts'));
     }
 
     /**
@@ -37,10 +37,10 @@ class Frontend {
         
         if ( $this->mvx_mapbox_api_enabled() ) {
             // Mapbox scripts
-            wp_enqueue_script('mapbox-gl', 'https://api.mapbox.com/mapbox-gl-js/v2.17.0/mapbox-gl.js', array(), null, true);
-            wp_enqueue_script('mapbox-geocoder', 'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.min.js', array('mapbox-gl'), null, true);
-            wp_enqueue_style('mapbox-gl-css', 'https://api.mapbox.com/mapbox-gl-js/v2.17.0/mapbox-gl.css');
-            wp_enqueue_style('mapbox-geocoder-css', 'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.css');
+            wp_enqueue_script('mapbox-gl', 'https://api.mapbox.com/mapbox-gl-js/v2.19.0/mapbox-gl.js', array(), null, true);
+            wp_enqueue_script('mapbox-geocoder', 'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.8.0/mapbox-gl-geocoder.min.js', array('mapbox-gl'), null, true);
+            wp_enqueue_style('mapbox-gl-css', 'https://api.mapbox.com/mapbox-gl-js/v2.19.0/mapbox-gl.css');
+            wp_enqueue_style('mapbox-geocoder-css', 'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.8.0/mapbox-gl-geocoder.css');            
         } else {
             // Google Maps scripts
             $google_maps_api_key = MultiVendorX()->setting->get_setting('google_maps_api_key', '');
@@ -154,7 +154,7 @@ class Frontend {
         }
     }
 
-    public function mvx_mapbox_api_enabled() {
+    public static function mvx_mapbox_api_enabled() {
         if ( MultiVendorX()->modules->is_active('geo-location') ) {
     
             $get_choose_map = MultiVendorX()->setting->get_setting('choose_map_api', '' ); // default as empty string
@@ -163,7 +163,7 @@ class Frontend {
 
             // Check properly
             if ( !empty($mapbox_api_key) && $get_choose_map === 'mapbox_api_set' ) {
-                return true;
+                return $mapbox_api_key;
             }
         }
         return false;

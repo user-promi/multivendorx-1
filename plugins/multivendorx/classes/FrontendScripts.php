@@ -535,7 +535,7 @@ class FrontendScripts {
                     'data'        => array(
                         'ajaxurl'           => admin_url('admin-ajax.php'),
                         'nonce'             => wp_create_nonce('distance_shipping_ajax_nonce'),
-                        'mapbox_emable'     => true,
+                        'mapbox_emable'     => \MultiVendorX\DistanceShipping\Frontend::mvx_mapbox_api_enabled(),
                         'default_lat'       => MultiVendorX()->setting->get_setting('default_map_lat', '28.6139'), // example default lat
                         'default_lng'       => MultiVendorX()->setting->get_setting('default_map_lng', '77.2090'), // example default lng
                         'default_zoom'      => 13,

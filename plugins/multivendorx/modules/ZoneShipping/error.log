@@ -1,0 +1,1280 @@
+21/10/2025 12:47:49:orders:method : array (
+)
+21/10/2025 12:47:49:orders:method : array (
+)
+21/10/2025 12:47:49:orders:zones : array (
+  2 => 
+  array (
+    'id' => 2,
+    'zone_name' => 'US',
+    'zone_order' => 0,
+    'zone_locations' => 
+    array (
+      0 => 
+      (object) array(
+         'code' => 'US',
+         'type' => 'country',
+      ),
+    ),
+    'meta_data' => 
+    array (
+      0 => 
+      WC_Meta_Data::__set_state(array(
+         'current_data' => 
+        array (
+          'id' => 1,
+          'key' => '_wp_page_template',
+          'value' => 'default',
+        ),
+         'data' => 
+        array (
+          'id' => 1,
+          'key' => '_wp_page_template',
+          'value' => 'default',
+        ),
+      )),
+    ),
+    'zone_id' => 2,
+    'formatted_zone_location' => 'United States (US)',
+    'shipping_methods' => 
+    array (
+    ),
+  ),
+  3 => 
+  array (
+    'id' => 3,
+    'zone_name' => 'UK',
+    'zone_order' => 0,
+    'zone_locations' => 
+    array (
+      0 => 
+      (object) array(
+         'code' => 'EG',
+         'type' => 'country',
+      ),
+    ),
+    'meta_data' => 
+    array (
+      0 => 
+      WC_Meta_Data::__set_state(array(
+         'current_data' => 
+        array (
+          'id' => 2,
+          'key' => '_wp_page_template',
+          'value' => 'default',
+        ),
+         'data' => 
+        array (
+          'id' => 2,
+          'key' => '_wp_page_template',
+          'value' => 'default',
+        ),
+      )),
+    ),
+    'zone_id' => 3,
+    'formatted_zone_location' => 'Egypt',
+    'shipping_methods' => 
+    array (
+    ),
+  ),
+)
+21/10/2025 12:57:03:orders:method : array (
+)
+21/10/2025 12:57:03:orders:method : array (
+)
+21/10/2025 12:57:03:orders:zones : array (
+  2 => 
+  array (
+    'id' => 2,
+    'zone_name' => 'US',
+    'zone_order' => 0,
+    'zone_locations' => 
+    array (
+      0 => 
+      (object) array(
+         'code' => 'US',
+         'type' => 'country',
+      ),
+    ),
+    'meta_data' => 
+    array (
+      0 => 
+      WC_Meta_Data::__set_state(array(
+         'current_data' => 
+        array (
+          'id' => 1,
+          'key' => '_wp_page_template',
+          'value' => 'default',
+        ),
+         'data' => 
+        array (
+          'id' => 1,
+          'key' => '_wp_page_template',
+          'value' => 'default',
+        ),
+      )),
+    ),
+    'zone_id' => 2,
+    'formatted_zone_location' => 'United States (US)',
+    'shipping_methods' => 
+    array (
+    ),
+  ),
+  3 => 
+  array (
+    'id' => 3,
+    'zone_name' => 'UK',
+    'zone_order' => 0,
+    'zone_locations' => 
+    array (
+      0 => 
+      (object) array(
+         'code' => 'EG',
+         'type' => 'country',
+      ),
+    ),
+    'meta_data' => 
+    array (
+      0 => 
+      WC_Meta_Data::__set_state(array(
+         'current_data' => 
+        array (
+          'id' => 2,
+          'key' => '_wp_page_template',
+          'value' => 'default',
+        ),
+         'data' => 
+        array (
+          'id' => 2,
+          'key' => '_wp_page_template',
+          'value' => 'default',
+        ),
+      )),
+    ),
+    'zone_id' => 3,
+    'formatted_zone_location' => 'Egypt',
+    'shipping_methods' => 
+    array (
+    ),
+  ),
+)
+21/10/2025 12:59:13:orders:method : array (
+)
+21/10/2025 12:59:13:orders:method : array (
+)
+21/10/2025 12:59:13:orders:zones : array (
+  2 => 
+  array (
+    'id' => 2,
+    'zone_name' => 'US',
+    'zone_order' => 0,
+    'zone_locations' => 
+    array (
+      0 => 
+      (object) array(
+         'code' => 'US',
+         'type' => 'country',
+      ),
+    ),
+    'meta_data' => 
+    array (
+      0 => 
+      WC_Meta_Data::__set_state(array(
+         'current_data' => 
+        array (
+          'id' => 1,
+          'key' => '_wp_page_template',
+          'value' => 'default',
+        ),
+         'data' => 
+        array (
+          'id' => 1,
+          'key' => '_wp_page_template',
+          'value' => 'default',
+        ),
+      )),
+    ),
+    'zone_id' => 2,
+    'formatted_zone_location' => 'United States (US)',
+    'shipping_methods' => 
+    array (
+    ),
+  ),
+  3 => 
+  array (
+    'id' => 3,
+    'zone_name' => 'UK',
+    'zone_order' => 0,
+    'zone_locations' => 
+    array (
+      0 => 
+      (object) array(
+         'code' => 'EG',
+         'type' => 'country',
+      ),
+    ),
+    'meta_data' => 
+    array (
+      0 => 
+      WC_Meta_Data::__set_state(array(
+         'current_data' => 
+        array (
+          'id' => 2,
+          'key' => '_wp_page_template',
+          'value' => 'default',
+        ),
+         'data' => 
+        array (
+          'id' => 2,
+          'key' => '_wp_page_template',
+          'value' => 'default',
+        ),
+      )),
+    ),
+    'zone_id' => 3,
+    'formatted_zone_location' => 'Egypt',
+    'shipping_methods' => 
+    array (
+    ),
+  ),
+)
+21/10/2025 13:00:02:orders:method : array (
+)
+21/10/2025 13:00:02:orders:method : array (
+)
+21/10/2025 13:00:02:orders:zones : array (
+  2 => 
+  array (
+    'id' => 2,
+    'zone_name' => 'US',
+    'zone_order' => 0,
+    'zone_locations' => 
+    array (
+      0 => 
+      (object) array(
+         'code' => 'US',
+         'type' => 'country',
+      ),
+    ),
+    'meta_data' => 
+    array (
+      0 => 
+      WC_Meta_Data::__set_state(array(
+         'current_data' => 
+        array (
+          'id' => 1,
+          'key' => '_wp_page_template',
+          'value' => 'default',
+        ),
+         'data' => 
+        array (
+          'id' => 1,
+          'key' => '_wp_page_template',
+          'value' => 'default',
+        ),
+      )),
+    ),
+    'zone_id' => 2,
+    'formatted_zone_location' => 'United States (US)',
+    'shipping_methods' => 
+    array (
+    ),
+  ),
+  3 => 
+  array (
+    'id' => 3,
+    'zone_name' => 'UK',
+    'zone_order' => 0,
+    'zone_locations' => 
+    array (
+      0 => 
+      (object) array(
+         'code' => 'EG',
+         'type' => 'country',
+      ),
+    ),
+    'meta_data' => 
+    array (
+      0 => 
+      WC_Meta_Data::__set_state(array(
+         'current_data' => 
+        array (
+          'id' => 2,
+          'key' => '_wp_page_template',
+          'value' => 'default',
+        ),
+         'data' => 
+        array (
+          'id' => 2,
+          'key' => '_wp_page_template',
+          'value' => 'default',
+        ),
+      )),
+    ),
+    'zone_id' => 3,
+    'formatted_zone_location' => 'Egypt',
+    'shipping_methods' => 
+    array (
+    ),
+  ),
+)
+21/10/2025 13:02:42:orders:method : array (
+)
+21/10/2025 13:02:42:orders:method : array (
+)
+21/10/2025 13:02:42:orders:zones : array (
+  2 => 
+  array (
+    'id' => 2,
+    'zone_name' => 'US',
+    'zone_order' => 0,
+    'zone_locations' => 
+    array (
+      0 => 
+      (object) array(
+         'code' => 'US',
+         'type' => 'country',
+      ),
+    ),
+    'meta_data' => 
+    array (
+      0 => 
+      WC_Meta_Data::__set_state(array(
+         'current_data' => 
+        array (
+          'id' => 1,
+          'key' => '_wp_page_template',
+          'value' => 'default',
+        ),
+         'data' => 
+        array (
+          'id' => 1,
+          'key' => '_wp_page_template',
+          'value' => 'default',
+        ),
+      )),
+    ),
+    'zone_id' => 2,
+    'formatted_zone_location' => 'United States (US)',
+    'shipping_methods' => 
+    array (
+    ),
+  ),
+  3 => 
+  array (
+    'id' => 3,
+    'zone_name' => 'UK',
+    'zone_order' => 0,
+    'zone_locations' => 
+    array (
+      0 => 
+      (object) array(
+         'code' => 'EG',
+         'type' => 'country',
+      ),
+    ),
+    'meta_data' => 
+    array (
+      0 => 
+      WC_Meta_Data::__set_state(array(
+         'current_data' => 
+        array (
+          'id' => 2,
+          'key' => '_wp_page_template',
+          'value' => 'default',
+        ),
+         'data' => 
+        array (
+          'id' => 2,
+          'key' => '_wp_page_template',
+          'value' => 'default',
+        ),
+      )),
+    ),
+    'zone_id' => 3,
+    'formatted_zone_location' => 'Egypt',
+    'shipping_methods' => 
+    array (
+    ),
+  ),
+)
+21/10/2025 13:03:20:orders:method : array (
+)
+21/10/2025 13:03:20:orders:method : array (
+)
+21/10/2025 13:03:20:orders:zones : array (
+  2 => 
+  array (
+    'id' => 2,
+    'zone_name' => 'US',
+    'zone_order' => 0,
+    'zone_locations' => 
+    array (
+      0 => 
+      (object) array(
+         'code' => 'US',
+         'type' => 'country',
+      ),
+    ),
+    'meta_data' => 
+    array (
+      0 => 
+      WC_Meta_Data::__set_state(array(
+         'current_data' => 
+        array (
+          'id' => 1,
+          'key' => '_wp_page_template',
+          'value' => 'default',
+        ),
+         'data' => 
+        array (
+          'id' => 1,
+          'key' => '_wp_page_template',
+          'value' => 'default',
+        ),
+      )),
+    ),
+    'zone_id' => 2,
+    'formatted_zone_location' => 'United States (US)',
+    'shipping_methods' => 
+    array (
+    ),
+  ),
+  3 => 
+  array (
+    'id' => 3,
+    'zone_name' => 'UK',
+    'zone_order' => 0,
+    'zone_locations' => 
+    array (
+      0 => 
+      (object) array(
+         'code' => 'EG',
+         'type' => 'country',
+      ),
+    ),
+    'meta_data' => 
+    array (
+      0 => 
+      WC_Meta_Data::__set_state(array(
+         'current_data' => 
+        array (
+          'id' => 2,
+          'key' => '_wp_page_template',
+          'value' => 'default',
+        ),
+         'data' => 
+        array (
+          'id' => 2,
+          'key' => '_wp_page_template',
+          'value' => 'default',
+        ),
+      )),
+    ),
+    'zone_id' => 3,
+    'formatted_zone_location' => 'Egypt',
+    'shipping_methods' => 
+    array (
+    ),
+  ),
+)
+21/10/2025 13:09:57:orders:method : array (
+)
+21/10/2025 13:09:57:orders:method : array (
+)
+21/10/2025 13:09:57:orders:zones : array (
+  2 => 
+  array (
+    'id' => 2,
+    'zone_name' => 'US',
+    'zone_order' => 0,
+    'zone_locations' => 
+    array (
+      0 => 
+      (object) array(
+         'code' => 'US',
+         'type' => 'country',
+      ),
+    ),
+    'meta_data' => 
+    array (
+      0 => 
+      WC_Meta_Data::__set_state(array(
+         'current_data' => 
+        array (
+          'id' => 1,
+          'key' => '_wp_page_template',
+          'value' => 'default',
+        ),
+         'data' => 
+        array (
+          'id' => 1,
+          'key' => '_wp_page_template',
+          'value' => 'default',
+        ),
+      )),
+    ),
+    'zone_id' => 2,
+    'formatted_zone_location' => 'United States (US)',
+    'shipping_methods' => 
+    array (
+    ),
+  ),
+  3 => 
+  array (
+    'id' => 3,
+    'zone_name' => 'UK',
+    'zone_order' => 0,
+    'zone_locations' => 
+    array (
+      0 => 
+      (object) array(
+         'code' => 'EG',
+         'type' => 'country',
+      ),
+    ),
+    'meta_data' => 
+    array (
+      0 => 
+      WC_Meta_Data::__set_state(array(
+         'current_data' => 
+        array (
+          'id' => 2,
+          'key' => '_wp_page_template',
+          'value' => 'default',
+        ),
+         'data' => 
+        array (
+          'id' => 2,
+          'key' => '_wp_page_template',
+          'value' => 'default',
+        ),
+      )),
+    ),
+    'zone_id' => 3,
+    'formatted_zone_location' => 'Egypt',
+    'shipping_methods' => 
+    array (
+    ),
+  ),
+)
+21/10/2025 13:11:42:orders:method : array (
+)
+21/10/2025 13:11:42:orders:method : array (
+)
+21/10/2025 13:11:42:orders:zones : array (
+  2 => 
+  array (
+    'id' => 2,
+    'zone_name' => 'US',
+    'zone_order' => 0,
+    'zone_locations' => 
+    array (
+      0 => 
+      (object) array(
+         'code' => 'US',
+         'type' => 'country',
+      ),
+    ),
+    'meta_data' => 
+    array (
+      0 => 
+      WC_Meta_Data::__set_state(array(
+         'current_data' => 
+        array (
+          'id' => 1,
+          'key' => '_wp_page_template',
+          'value' => 'default',
+        ),
+         'data' => 
+        array (
+          'id' => 1,
+          'key' => '_wp_page_template',
+          'value' => 'default',
+        ),
+      )),
+    ),
+    'zone_id' => 2,
+    'formatted_zone_location' => 'United States (US)',
+    'shipping_methods' => 
+    array (
+    ),
+  ),
+  3 => 
+  array (
+    'id' => 3,
+    'zone_name' => 'UK',
+    'zone_order' => 0,
+    'zone_locations' => 
+    array (
+      0 => 
+      (object) array(
+         'code' => 'EG',
+         'type' => 'country',
+      ),
+    ),
+    'meta_data' => 
+    array (
+      0 => 
+      WC_Meta_Data::__set_state(array(
+         'current_data' => 
+        array (
+          'id' => 2,
+          'key' => '_wp_page_template',
+          'value' => 'default',
+        ),
+         'data' => 
+        array (
+          'id' => 2,
+          'key' => '_wp_page_template',
+          'value' => 'default',
+        ),
+      )),
+    ),
+    'zone_id' => 3,
+    'formatted_zone_location' => 'Egypt',
+    'shipping_methods' => 
+    array (
+    ),
+  ),
+)
+21/10/2025 13:13:16:orders:method : array (
+)
+21/10/2025 13:13:16:orders:method : array (
+)
+21/10/2025 13:13:16:orders:zones : array (
+  2 => 
+  array (
+    'id' => 2,
+    'zone_name' => 'US',
+    'zone_order' => 0,
+    'zone_locations' => 
+    array (
+      0 => 
+      (object) array(
+         'code' => 'US',
+         'type' => 'country',
+      ),
+    ),
+    'meta_data' => 
+    array (
+      0 => 
+      WC_Meta_Data::__set_state(array(
+         'current_data' => 
+        array (
+          'id' => 1,
+          'key' => '_wp_page_template',
+          'value' => 'default',
+        ),
+         'data' => 
+        array (
+          'id' => 1,
+          'key' => '_wp_page_template',
+          'value' => 'default',
+        ),
+      )),
+    ),
+    'zone_id' => 2,
+    'formatted_zone_location' => 'United States (US)',
+    'shipping_methods' => 
+    array (
+    ),
+  ),
+  3 => 
+  array (
+    'id' => 3,
+    'zone_name' => 'UK',
+    'zone_order' => 0,
+    'zone_locations' => 
+    array (
+      0 => 
+      (object) array(
+         'code' => 'EG',
+         'type' => 'country',
+      ),
+    ),
+    'meta_data' => 
+    array (
+      0 => 
+      WC_Meta_Data::__set_state(array(
+         'current_data' => 
+        array (
+          'id' => 2,
+          'key' => '_wp_page_template',
+          'value' => 'default',
+        ),
+         'data' => 
+        array (
+          'id' => 2,
+          'key' => '_wp_page_template',
+          'value' => 'default',
+        ),
+      )),
+    ),
+    'zone_id' => 3,
+    'formatted_zone_location' => 'Egypt',
+    'shipping_methods' => 
+    array (
+    ),
+  ),
+)
+21/10/2025 13:16:03:orders:method : array (
+)
+21/10/2025 13:16:03:orders:method : array (
+)
+21/10/2025 13:16:03:orders:zones : array (
+  2 => 
+  array (
+    'id' => 2,
+    'zone_name' => 'US',
+    'zone_order' => 0,
+    'zone_locations' => 
+    array (
+      0 => 
+      (object) array(
+         'code' => 'US',
+         'type' => 'country',
+      ),
+    ),
+    'meta_data' => 
+    array (
+      0 => 
+      WC_Meta_Data::__set_state(array(
+         'current_data' => 
+        array (
+          'id' => 1,
+          'key' => '_wp_page_template',
+          'value' => 'default',
+        ),
+         'data' => 
+        array (
+          'id' => 1,
+          'key' => '_wp_page_template',
+          'value' => 'default',
+        ),
+      )),
+    ),
+    'zone_id' => 2,
+    'formatted_zone_location' => 'United States (US)',
+    'shipping_methods' => 
+    array (
+    ),
+  ),
+  3 => 
+  array (
+    'id' => 3,
+    'zone_name' => 'UK',
+    'zone_order' => 0,
+    'zone_locations' => 
+    array (
+      0 => 
+      (object) array(
+         'code' => 'EG',
+         'type' => 'country',
+      ),
+    ),
+    'meta_data' => 
+    array (
+      0 => 
+      WC_Meta_Data::__set_state(array(
+         'current_data' => 
+        array (
+          'id' => 2,
+          'key' => '_wp_page_template',
+          'value' => 'default',
+        ),
+         'data' => 
+        array (
+          'id' => 2,
+          'key' => '_wp_page_template',
+          'value' => 'default',
+        ),
+      )),
+    ),
+    'zone_id' => 3,
+    'formatted_zone_location' => 'Egypt',
+    'shipping_methods' => 
+    array (
+    ),
+  ),
+)
+21/10/2025 13:16:58:orders:method : array (
+)
+21/10/2025 13:16:58:orders:method : array (
+)
+21/10/2025 13:16:58:orders:zones : array (
+  2 => 
+  array (
+    'id' => 2,
+    'zone_name' => 'US',
+    'zone_order' => 0,
+    'zone_locations' => 
+    array (
+      0 => 
+      (object) array(
+         'code' => 'US',
+         'type' => 'country',
+      ),
+    ),
+    'meta_data' => 
+    array (
+      0 => 
+      WC_Meta_Data::__set_state(array(
+         'current_data' => 
+        array (
+          'id' => 1,
+          'key' => '_wp_page_template',
+          'value' => 'default',
+        ),
+         'data' => 
+        array (
+          'id' => 1,
+          'key' => '_wp_page_template',
+          'value' => 'default',
+        ),
+      )),
+    ),
+    'zone_id' => 2,
+    'formatted_zone_location' => 'United States (US)',
+    'shipping_methods' => 
+    array (
+    ),
+  ),
+  3 => 
+  array (
+    'id' => 3,
+    'zone_name' => 'UK',
+    'zone_order' => 0,
+    'zone_locations' => 
+    array (
+      0 => 
+      (object) array(
+         'code' => 'EG',
+         'type' => 'country',
+      ),
+    ),
+    'meta_data' => 
+    array (
+      0 => 
+      WC_Meta_Data::__set_state(array(
+         'current_data' => 
+        array (
+          'id' => 2,
+          'key' => '_wp_page_template',
+          'value' => 'default',
+        ),
+         'data' => 
+        array (
+          'id' => 2,
+          'key' => '_wp_page_template',
+          'value' => 'default',
+        ),
+      )),
+    ),
+    'zone_id' => 3,
+    'formatted_zone_location' => 'Egypt',
+    'shipping_methods' => 
+    array (
+    ),
+  ),
+)
+21/10/2025 13:18:11:orders:method : array (
+)
+21/10/2025 13:18:11:orders:method : array (
+)
+21/10/2025 13:18:11:orders:zones : array (
+  2 => 
+  array (
+    'id' => 2,
+    'zone_name' => 'US',
+    'zone_order' => 0,
+    'zone_locations' => 
+    array (
+      0 => 
+      (object) array(
+         'code' => 'US',
+         'type' => 'country',
+      ),
+    ),
+    'meta_data' => 
+    array (
+      0 => 
+      WC_Meta_Data::__set_state(array(
+         'current_data' => 
+        array (
+          'id' => 1,
+          'key' => '_wp_page_template',
+          'value' => 'default',
+        ),
+         'data' => 
+        array (
+          'id' => 1,
+          'key' => '_wp_page_template',
+          'value' => 'default',
+        ),
+      )),
+    ),
+    'zone_id' => 2,
+    'formatted_zone_location' => 'United States (US)',
+    'shipping_methods' => 
+    array (
+    ),
+  ),
+  3 => 
+  array (
+    'id' => 3,
+    'zone_name' => 'UK',
+    'zone_order' => 0,
+    'zone_locations' => 
+    array (
+      0 => 
+      (object) array(
+         'code' => 'EG',
+         'type' => 'country',
+      ),
+    ),
+    'meta_data' => 
+    array (
+      0 => 
+      WC_Meta_Data::__set_state(array(
+         'current_data' => 
+        array (
+          'id' => 2,
+          'key' => '_wp_page_template',
+          'value' => 'default',
+        ),
+         'data' => 
+        array (
+          'id' => 2,
+          'key' => '_wp_page_template',
+          'value' => 'default',
+        ),
+      )),
+    ),
+    'zone_id' => 3,
+    'formatted_zone_location' => 'Egypt',
+    'shipping_methods' => 
+    array (
+    ),
+  ),
+)
+21/10/2025 13:18:38:orders:method : array (
+)
+21/10/2025 13:18:38:orders:method : array (
+)
+21/10/2025 13:18:38:orders:zones : array (
+  2 => 
+  array (
+    'id' => 2,
+    'zone_name' => 'US',
+    'zone_order' => 0,
+    'zone_locations' => 
+    array (
+      0 => 
+      (object) array(
+         'code' => 'US',
+         'type' => 'country',
+      ),
+    ),
+    'meta_data' => 
+    array (
+      0 => 
+      WC_Meta_Data::__set_state(array(
+         'current_data' => 
+        array (
+          'id' => 1,
+          'key' => '_wp_page_template',
+          'value' => 'default',
+        ),
+         'data' => 
+        array (
+          'id' => 1,
+          'key' => '_wp_page_template',
+          'value' => 'default',
+        ),
+      )),
+    ),
+    'zone_id' => 2,
+    'formatted_zone_location' => 'United States (US)',
+    'shipping_methods' => 
+    array (
+    ),
+  ),
+  3 => 
+  array (
+    'id' => 3,
+    'zone_name' => 'UK',
+    'zone_order' => 0,
+    'zone_locations' => 
+    array (
+      0 => 
+      (object) array(
+         'code' => 'EG',
+         'type' => 'country',
+      ),
+    ),
+    'meta_data' => 
+    array (
+      0 => 
+      WC_Meta_Data::__set_state(array(
+         'current_data' => 
+        array (
+          'id' => 2,
+          'key' => '_wp_page_template',
+          'value' => 'default',
+        ),
+         'data' => 
+        array (
+          'id' => 2,
+          'key' => '_wp_page_template',
+          'value' => 'default',
+        ),
+      )),
+    ),
+    'zone_id' => 3,
+    'formatted_zone_location' => 'Egypt',
+    'shipping_methods' => 
+    array (
+    ),
+  ),
+)
+21/10/2025 13:20:14:orders:method : array (
+)
+21/10/2025 13:20:14:orders:method : array (
+)
+21/10/2025 13:20:14:orders:zones : array (
+  2 => 
+  array (
+    'id' => 2,
+    'zone_name' => 'US',
+    'zone_order' => 0,
+    'zone_locations' => 
+    array (
+      0 => 
+      (object) array(
+         'code' => 'US',
+         'type' => 'country',
+      ),
+    ),
+    'meta_data' => 
+    array (
+      0 => 
+      WC_Meta_Data::__set_state(array(
+         'current_data' => 
+        array (
+          'id' => 1,
+          'key' => '_wp_page_template',
+          'value' => 'default',
+        ),
+         'data' => 
+        array (
+          'id' => 1,
+          'key' => '_wp_page_template',
+          'value' => 'default',
+        ),
+      )),
+    ),
+    'zone_id' => 2,
+    'formatted_zone_location' => 'United States (US)',
+    'shipping_methods' => 
+    array (
+    ),
+  ),
+  3 => 
+  array (
+    'id' => 3,
+    'zone_name' => 'UK',
+    'zone_order' => 0,
+    'zone_locations' => 
+    array (
+      0 => 
+      (object) array(
+         'code' => 'EG',
+         'type' => 'country',
+      ),
+    ),
+    'meta_data' => 
+    array (
+      0 => 
+      WC_Meta_Data::__set_state(array(
+         'current_data' => 
+        array (
+          'id' => 2,
+          'key' => '_wp_page_template',
+          'value' => 'default',
+        ),
+         'data' => 
+        array (
+          'id' => 2,
+          'key' => '_wp_page_template',
+          'value' => 'default',
+        ),
+      )),
+    ),
+    'zone_id' => 3,
+    'formatted_zone_location' => 'Egypt',
+    'shipping_methods' => 
+    array (
+    ),
+  ),
+)
+21/10/2025 13:20:37:orders:method : array (
+)
+21/10/2025 13:20:37:orders:method : array (
+)
+21/10/2025 13:20:37:orders:zones : array (
+  2 => 
+  array (
+    'id' => 2,
+    'zone_name' => 'US',
+    'zone_order' => 0,
+    'zone_locations' => 
+    array (
+      0 => 
+      (object) array(
+         'code' => 'US',
+         'type' => 'country',
+      ),
+    ),
+    'meta_data' => 
+    array (
+      0 => 
+      WC_Meta_Data::__set_state(array(
+         'current_data' => 
+        array (
+          'id' => 1,
+          'key' => '_wp_page_template',
+          'value' => 'default',
+        ),
+         'data' => 
+        array (
+          'id' => 1,
+          'key' => '_wp_page_template',
+          'value' => 'default',
+        ),
+      )),
+    ),
+    'zone_id' => 2,
+    'formatted_zone_location' => 'United States (US)',
+    'shipping_methods' => 
+    array (
+    ),
+  ),
+  3 => 
+  array (
+    'id' => 3,
+    'zone_name' => 'UK',
+    'zone_order' => 0,
+    'zone_locations' => 
+    array (
+      0 => 
+      (object) array(
+         'code' => 'EG',
+         'type' => 'country',
+      ),
+    ),
+    'meta_data' => 
+    array (
+      0 => 
+      WC_Meta_Data::__set_state(array(
+         'current_data' => 
+        array (
+          'id' => 2,
+          'key' => '_wp_page_template',
+          'value' => 'default',
+        ),
+         'data' => 
+        array (
+          'id' => 2,
+          'key' => '_wp_page_template',
+          'value' => 'default',
+        ),
+      )),
+    ),
+    'zone_id' => 3,
+    'formatted_zone_location' => 'Egypt',
+    'shipping_methods' => 
+    array (
+    ),
+  ),
+)
+21/10/2025 13:20:52:orders:method : array (
+)
+21/10/2025 13:20:52:orders:method : array (
+)
+21/10/2025 13:20:52:orders:zones : array (
+  2 => 
+  array (
+    'id' => 2,
+    'zone_name' => 'US',
+    'zone_order' => 0,
+    'zone_locations' => 
+    array (
+      0 => 
+      (object) array(
+         'code' => 'US',
+         'type' => 'country',
+      ),
+    ),
+    'meta_data' => 
+    array (
+      0 => 
+      WC_Meta_Data::__set_state(array(
+         'current_data' => 
+        array (
+          'id' => 1,
+          'key' => '_wp_page_template',
+          'value' => 'default',
+        ),
+         'data' => 
+        array (
+          'id' => 1,
+          'key' => '_wp_page_template',
+          'value' => 'default',
+        ),
+      )),
+    ),
+    'zone_id' => 2,
+    'formatted_zone_location' => 'United States (US)',
+    'shipping_methods' => 
+    array (
+    ),
+  ),
+  3 => 
+  array (
+    'id' => 3,
+    'zone_name' => 'UK',
+    'zone_order' => 0,
+    'zone_locations' => 
+    array (
+      0 => 
+      (object) array(
+         'code' => 'EG',
+         'type' => 'country',
+      ),
+    ),
+    'meta_data' => 
+    array (
+      0 => 
+      WC_Meta_Data::__set_state(array(
+         'current_data' => 
+        array (
+          'id' => 2,
+          'key' => '_wp_page_template',
+          'value' => 'default',
+        ),
+         'data' => 
+        array (
+          'id' => 2,
+          'key' => '_wp_page_template',
+          'value' => 'default',
+        ),
+      )),
+    ),
+    'zone_id' => 3,
+    'formatted_zone_location' => 'Egypt',
+    'shipping_methods' => 
+    array (
+    ),
+  ),
+)

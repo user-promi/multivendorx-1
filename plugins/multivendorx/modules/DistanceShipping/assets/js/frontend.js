@@ -1,6 +1,6 @@
 jQuery(document).ready( function($) {
-	var mvx_checkout_map_options = distanceShippingFrontend.data;
-
+	var mvx_checkout_map_options = distanceShippingFrontend;
+	console.log(mvx_checkout_map_options)
 	var map = geocoder = marker = map_marker = infowindow = '';
 	
 	$mvx_user_location_lat = jQuery("#mvx_user_location_lat").val();
@@ -71,6 +71,10 @@ jQuery(document).ready( function($) {
 				});
 			});
 		} else {
+			if (typeof mapboxgl === 'undefined') {
+				console.log('map not load')
+			}
+			console.log(mapboxgl)
 			mapboxgl.accessToken = mvx_checkout_map_options.mapbox_emable;
 			var map = new mapboxgl.Map({
 			container: 'mvx-user-locaton-map', // container id
@@ -147,6 +151,6 @@ jQuery(document).ready( function($) {
 			if ( navigator.geolocation ) {
 				setUser_CurrentLocation();
 			}
-		}, 1000 );
+		}, 10000 );
 	}
 });
