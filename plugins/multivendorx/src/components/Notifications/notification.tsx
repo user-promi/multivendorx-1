@@ -135,7 +135,7 @@ const Notification = () => {
                         <div className="card-header">
                             <div className="left">
                                 <div className="title">
-                                    Account Overview
+                                    Review Store Submissions
                                 </div>
                             </div>
                             {/* <div className="right">
@@ -149,7 +149,7 @@ const Notification = () => {
                                     <i className="adminlib-cart"></i>
                                 </div>
                                 <div className="description">
-                                    Pending Products
+                                    Products Submitted
                                 </div>
                             </div>
                             <div className="action">
@@ -169,7 +169,7 @@ const Notification = () => {
                                     <i className="adminlib-catalog"></i>
                                 </div>
                                 <div className="description">
-                                    Pending Coupons
+                                    Coupon Approvals
                                 </div>
                             </div>
                             <div className="action">
@@ -178,7 +178,7 @@ const Notification = () => {
                                     <i className="adminlib-module"></i>
                                 </div>
                                 <div className="description">
-                                    Pending Withdrawal
+                                    Withdrawal Requests
                                 </div>
                             </div>
                         </div>
