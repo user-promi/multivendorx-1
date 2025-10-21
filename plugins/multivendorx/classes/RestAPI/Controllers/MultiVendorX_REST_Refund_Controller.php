@@ -136,19 +136,21 @@ class MultiVendorX_REST_Refund_Controller extends \WP_REST_Controller {
             //     }
             // }
 
-            // Create the refund object.
-            $refund = wc_create_refund(
-                    array(
-                        'amount' => $refund_amount,
-                        'reason' => $refund_reason,
-                        'order_id' => $order_id,
-                        'line_items' => $line_items,
-                        'refund_payment' => false,
-                        'restock_items' => $restock_refunded_items,
-                    )
-            );
+            if ( $line_items ) {
+                // Create the refund object.
+                $refund = wc_create_refund(
+                        array(
+                            'amount' => $refund_amount,
+                            'reason' => $refund_reason,
+                            'order_id' => $order_id,
+                            'line_items' => $line_items,
+                            'refund_payment' => false,
+                            'restock_items' => $restock_refunded_items,
+                        )
+                );  
+            }
             
-            if( $parent_line_items ){
+            if( !empty($parent_line_items) ){
                 if (apply_filters('mvx_allow_refund_parent_order', true)) {
                     $parent_refund = wc_create_refund(
                             array(
@@ -187,7 +189,7 @@ class MultiVendorX_REST_Refund_Controller extends \WP_REST_Controller {
 
     public function get_vendor_parent_order_item_id( $item_id ) {
         global $wpdb;
-        $vendor_item_id = $wpdb->get_var( $wpdb->prepare( "SELECT meta_value FROM {$wpdb->order_itemmeta} WHERE meta_key=%s AND order_item_id=%d", '_vendor_order_item_id', absint( $item_id ) ) );
+        $vendor_item_id = $wpdb->get_var( $wpdb->prepare( "SELECT meta_value FROM {$wpdb->order_itemmeta} WHERE meta_key=%s AND order_item_id=%d", 'store_order_item_id', absint( $item_id ) ) );
         // check for shipping
         // if( !$vendor_item_id ){
         //     $vendor_item_id = $wpdb->get_var( $wpdb->prepare( "SELECT meta_value FROM {$wpdb->order_itemmeta} WHERE meta_key=%s AND order_item_id=%d", '_vendor_order_shipping_item_id', absint( $item_id ) ) );
