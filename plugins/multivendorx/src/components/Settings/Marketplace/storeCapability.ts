@@ -19,8 +19,8 @@ const capabilityOptions = appLocalizer?.capabilities
 
 export default {
     id: 'store-capability',
-    priority: 1,
-    name: __('Store Capabilities', 'multivendorx'),
+    priority: 2,
+    name: __('Store Permissions', 'multivendorx'),
     desc: __('Control which features and actions are available to each store role.', 'multivendorx'),
     icon: 'adminlib-wholesale',
     submitUrl: 'settings',
