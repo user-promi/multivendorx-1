@@ -188,18 +188,18 @@ const EditStore = () => {
                                     <>
                                         <a
                                             href={`?page=multivendorx#&tab=stores&view&id=${editId}`}
-                                            className="admin-btn btn-purple"
+                                            className="tooltip-btn admin-badge green"
                                         >
-                                            <i className="adminlib-eye"></i>
-                                            Store Details
+                                            <i className="adminlib-storefront"></i>
+                                            <span className="tooltip">Store Details</span>
                                         </a>
                                         <a
                                             href={`${appLocalizer.site_url}/store/${data.slug}`}
                                             target="_blank"
-                                            className="admin-btn btn-purple"
+                                            className="tooltip-btn admin-badge yellow"
                                         >
                                             <i className="adminlib-eye"></i>
-                                            View Public Store
+                                            <span className="tooltip">View Public Store</span>
                                         </a>
                                     </>
                                 )}

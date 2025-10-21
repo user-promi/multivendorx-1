@@ -39,7 +39,7 @@ const Orders: React.FC = () => {
     // const isViewOrder = hash.includes('view');
 
     const location = useLocation();
-   
+
     const hash = location.hash.replace(/^#/, '') || '';
     const isViewOrder = hash.includes('view');
 
@@ -263,9 +263,9 @@ const Orders: React.FC = () => {
             header: __("Order ID", "multivendorx"),
             cell: ({ row }) => (
                 <TableCell>
-                        <span className="link" onClick={() => setSelectedOrder(row.original)}>
-                            #{row.original.number}
-                        </span>
+                    <span className="link" onClick={() => setSelectedOrder(row.original)}>
+                        #{row.original.number}
+                    </span>
                 </TableCell>
             ),
         },
@@ -349,23 +349,23 @@ const Orders: React.FC = () => {
                             ...(appLocalizer.edit_order_capability
                                 ? [
                                     {
-                                    label: __('View', 'multivendorx'),
-                                    icon: 'adminlib-eye',
-                                    onClick: (rowData) => {
-                                        setSelectedOrder(rowData);
-                                        // window.location.href = `view/${rowData.id}`;
+                                        label: __('View', 'multivendorx'),
+                                        icon: 'adminlib-eye',
+                                        onClick: (rowData) => {
+                                            setSelectedOrder(rowData);
+                                            // window.location.href = `view/${rowData.id}`;
 
-                                        window.location.hash = `view/${rowData.id}`;
-                                        
+                                            window.location.hash = `view/${rowData.id}`;
 
-                                        // const currentPath = window.location.pathname.replace(/\/$/, '');
-                                        // const newPath = `${currentPath}/view/${rowData.id}`;
-                                        // window.history.pushState({}, '', newPath);
-                                    },
-                                    hover: true,
+
+                                            // const currentPath = window.location.pathname.replace(/\/$/, '');
+                                            // const newPath = `${currentPath}/view/${rowData.id}`;
+                                            // window.history.pushState({}, '', newPath);
+                                        },
+                                        hover: true,
                                     },
                                 ]
-                            : []),
+                                : []),
                             {
                                 label: __('Download', 'multivendorx'),
                                 icon: 'adminlib-import',
@@ -477,15 +477,16 @@ const Orders: React.FC = () => {
 
     return (
         <>
-        {console.log(appLocalizer.edit_order_capability)}
-            <div className="page-title-wrapper">
-                <div className="page-title">
-                    <div className="title">Orders</div>
-                    <div className="des">Manage your store information and preferences</div>
-                </div>
-            </div>
-            <div className="admin-table-wrapper">
-                {!isViewOrder && !selectedOrder && (
+            {!isViewOrder && !selectedOrder && (
+                <>
+                    <div className="page-title-wrapper">
+                        <div className="page-title">
+                            <div className="title">Orders</div>
+                            <div className="des">Manage your store information and preferences</div>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="column">
                     <Table
                         data={data}
                         columns={columns as ColumnDef<Record<string, any>, any>[]}
@@ -503,20 +504,18 @@ const Orders: React.FC = () => {
                         typeCounts={orderStatus}
                         bulkActionComp={() => <BulkAction />}
                     />
-                )}
-                
-                {isViewOrder && <OrderDetails
-                    order={selectedOrder}
-                    onBack={() => {
-                        setSelectedOrder(null);
-                        window.location.hash = '';
-                        // const currentPath = window.location.pathname;
-                        // const newPath = currentPath.replace(/\/view\/\d+$/, '');
-                        // window.history.pushState({}, '', newPath);
-                    }}
-                />}
+                    </div>
+                    </div>
+                </>
+            )}
 
-            </div>
+            {isViewOrder && <OrderDetails
+                order={selectedOrder}
+                onBack={() => {
+                    setSelectedOrder(null);
+                    window.location.hash = '';
+                }}
+            />}
         </>
     );
 };

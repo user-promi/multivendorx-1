@@ -232,15 +232,15 @@ const ViewStore = () => {
             label: '',
             onClick: () => window.location.assign('?page=multivendorx#&tab=stores'),
             iconClass: 'adminlib-storefront',
-            className: 'admin-btn btn-purple',
-            tooltip: 'Home'
+            className: 'admin-badge blue',
+            tooltip: 'All Store'
           },
           {
             label: '',
             iconClass: 'adminlib-create',
             onClick: () =>
-              data.slug && window.open(`${appLocalizer.site_url}/store/${data.slug}/`, '_blank'),
-            className: 'admin-btn btn-purple',
+             window.location.href = `?page=multivendorx#&tab=stores&edit/${rowData.id}`,
+            className: 'admin-badge yellow',
             tooltip: 'Edit'
           },
           {
@@ -248,7 +248,7 @@ const ViewStore = () => {
             iconClass: 'adminlib-eye',
             onClick: () =>
               data.slug && window.open(`${appLocalizer.site_url}/store/${data.slug}/`, '_blank'),
-              className: 'admin-btn btn-purple',
+              className: 'admin-badge green',
               tooltip: 'View Public Store'
           },
         ]}
