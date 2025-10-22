@@ -14,8 +14,6 @@ $div_id = $page_info['div_id'];
 $allowed = $page_info['allowed'];
 $store = Store::get_store_by_id($active_store);
 
-<<<<<<< HEAD:plugins/multivendorx/templates/store/store-dashboard.php
-=======
 if (get_option('permalink_structure')) {
     $current_page = get_query_var('tab');
     $current_sub = get_query_var('subtab');
@@ -45,7 +43,6 @@ $store_dashboard_logo = MultiVendorX()->setting->get_setting('store_dashboard_si
 // If not set, fallback to site name
 $store_dashboard_logo = !empty($store_dashboard_logo) ? $store_dashboard_logo : get_bloginfo('name');
 
->>>>>>> 8aff9e41 (up to date):plugins/multivendorx/templates/store-dashboard.php
 ?>
 <!DOCTYPE html>
 <html <?php language_attributes(); ?>>

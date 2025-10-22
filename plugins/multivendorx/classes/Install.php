@@ -444,14 +444,13 @@ By signing and submitting, the Seller accepts all terms above.
                 'Counterfeit Products',
                 'Stolen Goods',
             ],
+            'who_can_report' =>'anyone',
             // You can add other keys here if needed, e.g. 'required_store_uploads' => [...]
         ];
         // 6. Save back to DB
         update_option('multivendorx_identity_verification_settings', $settings);
         update_option('multivendorx_review_management_settings', $review_settings);
         update_option('multivendorx_order_actions_refunds_settings', $order_settings);
-        update_option('multivendorx_product_report_abuse_settings', $abuse_settings);
-        update_option('multivendorx_shipping_settings', $abuse_report);
         update_option('multivendorx_legal_compliance_settings', $legal_settings);
         update_option('multivendorx_product_compliance_settings', $product_compliance_settings);        
     }
