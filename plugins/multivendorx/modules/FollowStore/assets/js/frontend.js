@@ -19,7 +19,11 @@ jQuery(document).ready(function($){
                     });
                 }
 
-                $('#followers-count-' + store_id).text(res.data.follower_count + ' Followers');
+                if (res.data.follower_count == 1){
+                    $('#followers-count-' + store_id).text(res.data.follower_count + ' Follower');
+                } else{
+                    $('#followers-count-' + store_id).text(res.data.follower_count + ' Followers');
+                }
             }
         });
     });
@@ -48,8 +52,12 @@ jQuery(document).ready(function($){
                     nonce: followStoreFrontend.nonce
                 }, function(resp){
                     if(resp.success){
-                        $('#followers-count-' + store_id).text(resp.data.follower_count + ' Followers');
-                    }
+                        if (resp.data.follower_count == 1){
+                            $('#followers-count-' + store_id).text(resp.data.follower_count + ' Follower');
+                        } else{
+                            $('#followers-count-' + store_id).text(resp.data.follower_count + ' Followers');
+                        }
+                    }                    
                 });
             }
         });

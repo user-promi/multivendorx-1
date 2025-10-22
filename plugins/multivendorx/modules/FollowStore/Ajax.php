@@ -54,7 +54,7 @@ class Ajax {
             $following[] = $store_id;
             $followers[] = [
                 'id'   => $user_id,
-                'date' => current_time('mysql'), // WordPress time zone aware
+                'date' => wp_date('c', time(), wp_timezone()), 
             ];
             $new_status = 'Unfollow';
         }
