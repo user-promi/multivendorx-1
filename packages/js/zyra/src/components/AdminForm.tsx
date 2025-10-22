@@ -174,13 +174,13 @@ interface InputField {
     dependentSetting?: string;
     defaultValue?: string;
     valuename?: string;
-    descEnable?:boolean;
-    requiredEnable?:boolean;
-    iconOptions?:any;
+    descEnable?: boolean;
+    requiredEnable?: boolean;
+    iconOptions?: any;
     hint?: string;
     addNewBtn?: string;
     blocktext?: string;
-    defaultValues?:any;
+    defaultValues?: any;
     title?: string;
     rows?: {
         key: string;
@@ -766,31 +766,23 @@ const AdminForm: React.FC<AdminFormProps> = ({
                                     ? String(value)
                                     : appLocalizer?.default_logo
                             }
-                            imageWidth={inputField.width} // for width
-                            imageHeight={inputField.height} // for height
+                            imageWidth={inputField.width}
+                            imageHeight={inputField.height}
                             buttonClass="admin-btn btn-purple"
-                            openUploader={appLocalizer?.open_uploader} // for upload button text
+                            openUploader={appLocalizer?.open_uploader}
                             type="hidden"
                             key={inputField.key}
                             name={inputField.name}
                             value={value !== undefined ? String(value) : ''}
-                            proSetting={isProSetting(
-                                inputField.proSetting ?? false
-                            )}
+                            proSetting={isProSetting(inputField.proSetting ?? false)}
                             size={inputField.size}
                             onChange={(e) => {
                                 if (
                                     hasAccess(
                                         inputField.proSetting ?? false,
-                                        String(
-                                            inputField.moduleEnabled ?? ''
-                                        ),
-                                        String(
-                                            inputField.dependentSetting ?? ''
-                                        ),
-                                        String(
-                                            inputField.dependentPlugin ?? ''
-                                        )
+                                        String(inputField.moduleEnabled ?? ''),
+                                        String(inputField.dependentSetting ?? ''),
+                                        String(inputField.dependentPlugin ?? '')
                                     )
                                 ) {
                                     handleChange(e, inputField.key);
@@ -799,9 +791,20 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             onButtonClick={() => {
                                 runUploader(inputField.key);
                             }}
+                            //Fix Remove
+                            onRemove={() => {
+                                // clear value in parent state so FileInput sees no image
+                                handleChange('', inputField.key);
+                            }}
+                            //Fix Replace
+                            onReplace={() => {
+                                // call uploader to allow selecting new file
+                                runUploader(inputField.key);
+                            }}
                         />
                     );
                     break;
+
                 // Check in MVX
                 case 'color':
                     input = (
@@ -958,7 +961,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             iconEnable={inputField.iconEnable}
                             descEnable={inputField.descEnable}
                             requiredEnable={inputField.requiredEnable}
-                            iconOptions={inputField.iconOptions || []} 
+                            iconOptions={inputField.iconOptions || []}
                             allowDuplicates={false}
                             maxItems={20}
                             onStringChange={(e) => {

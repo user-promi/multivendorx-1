@@ -14,6 +14,38 @@ $div_id = $page_info['div_id'];
 $allowed = $page_info['allowed'];
 $store = Store::get_store_by_id($active_store);
 
+<<<<<<< HEAD:plugins/multivendorx/templates/store/store-dashboard.php
+=======
+if (get_option('permalink_structure')) {
+    $current_page = get_query_var('tab');
+    $current_sub = get_query_var('subtab');
+} else {
+    $current_page = filter_input(INPUT_GET, 'tab', FILTER_DEFAULT);
+    $current_sub = filter_input(INPUT_GET, 'subtab', FILTER_DEFAULT);
+}
+
+if (empty($current_page)) {
+    $current_page = 'dashboard';
+}
+
+// Auto-redirect if submenu exists
+if ($current_page && empty($current_sub)) {
+    foreach ($all_endpoints as $section) {
+        if ($section['slug'] === $current_page && !empty($section['submenu'])) {
+            $first_sub = $section['submenu'][0]['slug'];
+            wp_safe_redirect(StoreUtil::get_endpoint_url($current_page, $first_sub));
+            exit;
+        }
+    }
+}
+
+// Prepare the store dashboard logo
+$store_dashboard_logo = MultiVendorX()->setting->get_setting('store_dashboard_site_logo', []);
+
+// If not set, fallback to site name
+$store_dashboard_logo = !empty($store_dashboard_logo) ? $store_dashboard_logo : get_bloginfo('name');
+
+>>>>>>> 8aff9e41 (up to date):plugins/multivendorx/templates/store-dashboard.php
 ?>
 <!DOCTYPE html>
 <html <?php language_attributes(); ?>>
@@ -26,10 +58,15 @@ $store = Store::get_store_by_id($active_store);
 <body <?php body_class(); ?>>
     <div id="store-dashboard">
         <div class="dashboard-tabs-wrapper">
-            <div class="logo-wrapper">
-                <img src="https://multivendorx.com/wp-content/uploads/2025/06/multivendorx-logo-180x40.png" alt="">
-                <i class='adminlib-menu'></i>
-            </div>
+        <div class="logo-wrapper">
+            <?php if (filter_var($store_dashboard_logo, FILTER_VALIDATE_URL)): ?>
+                <img src="<?php echo esc_url($store_dashboard_logo); ?>" alt="">
+            <?php else: ?>
+                <span class="site-name"><?php echo esc_html($store_dashboard_logo); ?></span>
+            <?php endif; ?>
+            <i class='adminlib-menu'></i>
+        </div>
+
             <ul class="dashboard-tabs">
                 <?php foreach ($all_endpoints as $section): ?>
                     <li

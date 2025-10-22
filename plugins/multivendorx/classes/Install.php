@@ -330,25 +330,12 @@ class Install {
             'Product quality',
             'Reliability',
         ];
-        $abuse_report['shipping_stage'] = [
-            'Delivered',
-            'Cancelled',
-            'Processing',
-        ];
         
         // 4. Set default product review sync
         $review_settings['product_review_sync'] = [
             'product_review_sync',
         ];
     
-        // 5. Set default abuse report reasons
-        $abuse_settings['abuse_report_reasons'] = [
-            'Product not received',
-            'Product not as described',
-            'Product damaged/defective',
-            'Wrong item received',
-            'Order arrived late'
-        ];
         $legal_settings = [
             'seller_agreement'         => 'This Seller Agreement (“Agreement”) is entered into between Marketplace (“Platform”) and the Seller (“You” or “Seller”) upon registration on the Platform. By submitting this agreement and uploading the required documents, you agree to comply with all rules, policies, and guidelines of the Platform.
 
