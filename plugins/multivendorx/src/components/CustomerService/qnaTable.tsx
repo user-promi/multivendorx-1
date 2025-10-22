@@ -264,6 +264,14 @@ const Qna: React.FC = () => {
                                     setSelectedQna(rowData);
                                     setAnswer(rowData.answer_text || '');
                                 },
+                            },
+                            { label: __('Delete', 'multivendorx'), icon: 'adminlib-delete', onClick: (rowData) => {
+                                    if(confirm(__('Are you sure you want to delete this question?', 'multivendorx'))) {
+                                        axios.delete(getApiLink(appLocalizer, `qna/${rowData.id}`), { headers: { 'X-WP-Nonce': appLocalizer.nonce } })
+                                            .then(() => requestData(pagination.pageSize, pagination.pageIndex + 1))
+                                            .catch(() => alert(__('Failed to delete question', 'multivendorx')));
+                                    }
+                                },
                                 hover: true,
                             },
                         ],
