@@ -381,7 +381,7 @@ class StoreUtil {
                     $shipping_policy = $store->get_meta('shipping_policy');
                 }
                 if ( in_array ('refund_return', $privacy_override_settings) ) {
-                    $refund_policy = $store->get_meta('return_policy');
+                    $refund_policy = $store->get_meta('refund_policy');
                     $cancellation_policy = $store->get_meta('exchange_policy');
                 }
             }
