@@ -40,14 +40,13 @@ export interface SelectOption {
     label: string;
     name?: string;
 }
-// Add this interface near your other type definitions
+// Add this interface at the top of CustomForm.tsx with other interfaces
 interface ImageItem {
     id: string;
     url: string;
     alt: string;
     caption?: string;
 }
-
 interface FormField {
     id: number;
     type: string;
@@ -64,7 +63,7 @@ interface FormField {
         action: 'show' | 'hide';
         rules: ConditionalRule[];
     };
-    images?: ImageItem[]; // Updated type
+    images?: ImageItem[]; // Use ImageItem type instead of any[]
     layout?: any;
     charlimit?: number;
     row?: number;
@@ -72,6 +71,7 @@ interface FormField {
     filesize?: number;
     disabled?: boolean;
 }
+
 
 interface ConditionalRule {
     field: string;
@@ -161,7 +161,7 @@ const CustomForm: React.FC<CustomFormProps> = ({
     const [buttonSetting, setButtonSetting] = useState<ButtonSetting>(formSetting.butttonsetting || {});
     const [opendInput, setOpendInput] = useState<FormField | null>(null);
     const [randMaxId, setRendMaxId] = useState<number>(0);
-
+    
     // New state for advanced features
     const [showConditionalLogic, setShowConditionalLogic] = useState(false);
     const [showImageGallery, setShowImageGallery] = useState(false);
@@ -246,7 +246,7 @@ const CustomForm: React.FC<CustomFormProps> = ({
         newFormFieldList[index] = { ...newFormFieldList[index], [key]: value };
         settingHasChanged.current = true;
         setFormFieldList(newFormFieldList);
-
+        
         // Update opened input if it's the same field
         if (opendInput?.id === newFormFieldList[index].id) {
             setOpendInput(newFormFieldList[index]);
@@ -257,15 +257,15 @@ const CustomForm: React.FC<CustomFormProps> = ({
         if (proSettingChange()) return;
         const selectedFormField = formFieldList[index];
         if (selectedFormField.type === newType) return;
-
+        
         const newFormField = getNewFormField(newType);
         newFormField.id = selectedFormField.id;
-
+        
         // Preserve some properties if needed
         if (selectedFormField.readonly) {
             newFormField.readonly = true;
         }
-
+        
         const newFormFieldList = [...formFieldList];
         newFormFieldList[index] = newFormField;
         settingHasChanged.current = true;
@@ -273,17 +273,17 @@ const CustomForm: React.FC<CustomFormProps> = ({
         setOpendInput(newFormField);
     };
 
-    const handleImageSelect = (images: ImageItem[]) => {  // Use ImageItem type
-        if (!selectedFieldForGallery) return;
-
-        const index = formFieldList.findIndex(f => f.id === selectedFieldForGallery.id);
-        if (index >= 0) {
-            handleFormFieldChange(index, 'images', images);
-        }
-
-        setShowImageGallery(false);
-        setSelectedFieldForGallery(null);
-    };
+    const handleImageSelect = (images: ImageItem[]) => {
+    if (!selectedFieldForGallery) return;
+    
+    const index = formFieldList.findIndex(f => f.id === selectedFieldForGallery.id);
+    if (index >= 0) {
+        handleFormFieldChange(index, 'images', images);
+    }
+    
+    setShowImageGallery(false);
+    setSelectedFieldForGallery(null);
+};
 
     const applyTemplate = (template: any) => {
         if (proSettingChange()) return;
@@ -294,9 +294,9 @@ const CustomForm: React.FC<CustomFormProps> = ({
     };
 
     // Image Gallery Field Component
-    const ImageGalleryField: React.FC<{ formField: FormField; onChange: (key: string, value: any) => void }> = ({
-        formField,
-        onChange
+    const ImageGalleryField: React.FC<{ formField: FormField; onChange: (key: string, value: any) => void }> = ({ 
+        formField, 
+        onChange 
     }) => {
         return (
             <div className="image-gallery-field">
@@ -304,13 +304,13 @@ const CustomForm: React.FC<CustomFormProps> = ({
                 <div className="gallery-preview">
                     {formField.images && formField.images.length > 0 ? (
                         <div className="selected-images">
-                            {formField.images.map((image: any, index: number) => (
+                            {formField.images.map((image, index) => (
                                 <div key={index} className="image-thumbnail">
                                     <img src={image.url} alt={image.alt} />
                                     <button
                                         className="remove-image"
                                         onClick={() => {
-                                            const newImages = formField.images?.filter((_: any, i: number) => i !== index) || [];
+                                            const newImages = formField.images?.filter((_, i) => i !== index) || [];
                                             onChange('images', newImages);
                                         }}
                                     >
@@ -339,6 +339,7 @@ const CustomForm: React.FC<CustomFormProps> = ({
             </div>
         );
     };
+
     // Tabs configuration with advanced features
     const [activeTab, setActiveTab] = useState("blocks");
     const tabs = [
@@ -349,7 +350,7 @@ const CustomForm: React.FC<CustomFormProps> = ({
                 <>
                     <Elements
                         label="Layout"
-                        selectOptions={selectOptions.filter(opt =>
+                        selectOptions={selectOptions.filter(opt => 
                             ['block-layout', 'image-gallery', 'section', 'divider'].includes(opt.value)
                         )}
                         onClick={(type) => {
@@ -361,7 +362,7 @@ const CustomForm: React.FC<CustomFormProps> = ({
                     />
                     <Elements
                         label="General"
-                        selectOptions={selectOptions.filter(opt =>
+                        selectOptions={selectOptions.filter(opt => 
                             !['block-layout', 'image-gallery', 'section', 'divider'].includes(opt.value)
                         )}
                         onClick={(type) => {
@@ -394,14 +395,14 @@ const CustomForm: React.FC<CustomFormProps> = ({
                 </>
             ),
         },
-        {
-            id: "templates",
-            label: "Templates",
+        { 
+            id: "templates", 
+            label: "Templates", 
             content: <FormTemplates onTemplateSelect={applyTemplate} />
         },
-        {
-            id: "analytics",
-            label: "Analytics",
+        { 
+            id: "analytics", 
+            label: "Analytics", 
             content: <FormAnalytics formFields={formFieldList} />
         },
     ];
@@ -665,7 +666,7 @@ const CustomForm: React.FC<CustomFormProps> = ({
                     <div className="modal-content large">
                         <div className="modal-header">
                             <h3>Select Images</h3>
-                            <button
+                            <button 
                                 className="close-btn"
                                 onClick={() => {
                                     setShowImageGallery(false);
@@ -675,7 +676,7 @@ const CustomForm: React.FC<CustomFormProps> = ({
                                 <i className="admin-font adminlib-close"></i>
                             </button>
                         </div>
-                        <ImageGallery
+                        <ImageGallery 
                             onImageSelect={handleImageSelect}
                             multiple={true}
                             selectedImages={selectedFieldForGallery?.images || []}

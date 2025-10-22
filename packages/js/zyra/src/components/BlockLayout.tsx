@@ -1,183 +1,308 @@
-/**
- * External dependencies
- */
-import React, { useState } from "react";
-import { ReactSortable } from "react-sortablejs";
+// BlockLayout.tsx
+import React, { useState } from 'react';
+import ImageGallery from './ImageGallery';
 
-/**
- * Internal dependencies
- */
-import Elements from "./Elements"; // Sidebar block selector
-
-// Types
-interface BlockItem {
+interface LayoutBlock {
   id: string;
-  type: string;
-  label: string;
-  children?: Column[];
+  type: 'text' | 'image' | 'heading' | 'spacer';
+  content: string;
+  image?: any;
+  settings: {
+    alignment: 'left' | 'center' | 'right';
+    padding: number;
+    backgroundColor: string;
+  };
 }
 
-interface Column {
-  id: string;
-  blocks: BlockItem[];
+interface BlockLayoutProps {
+  formField?: any;
+  onChange?: (key: string, value: any) => void;
 }
 
-interface Container {
-  id: string;
-  columns: Column[];
-}
+const BlockLayout: React.FC<BlockLayoutProps> = ({ formField, onChange }) => {
+  const [blocks, setBlocks] = useState<LayoutBlock[]>([]);
+  const [showImageGallery, setShowImageGallery] = useState(false);
+  const [selectedBlock, setSelectedBlock] = useState<string | null>(null);
 
-const generateId = () =>
-  Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
-
-// Supported blocks
-const BLOCK_OPTIONS = [
-  { icon: "adminlib-module icon-form-textbox", value: "block-layout", label: "Block Layout" },
-  { icon: "adminlib-t-letter-bold icon-form-textbox", value: "text", label: "Textbox" },
-  { icon: "adminlib-unread icon-form-email", value: "email", label: "Email" },
-  { icon: "adminlib-text icon-form-textarea", value: "textarea", label: "Textarea" },
-  { icon: "adminlib-checkbox icon-form-checkboxes", value: "checkboxes", label: "Checkboxes" },
-  { icon: "adminlib-multi-select icon-form-multi-select", value: "multiselect", label: "Multi Select" },
-  { icon: "adminlib-radio icon-form-radio", value: "radio", label: "Radio" },
-  { icon: "adminlib-dropdown-checklist icon-form-dropdown", value: "dropdown", label: "Dropdown" },
-  { icon: "adminlib-captcha-automatic-code icon-form-recaptcha", value: "recaptcha", label: "reCaptcha v3" },
-  { icon: "adminlib-submission-message icon-form-attachment", value: "attachment", label: "Attachment" },
-  { icon: "adminlib-form-section icon-form-section", value: "section", label: "Section" },
-  { icon: "adminlib-calendar icon-form-store-description", value: "datepicker", label: "Date Picker" },
-  { icon: "adminlib-alarm icon-form-address", value: "TimePicker", label: "Time Picker" },
-  { icon: "adminlib-divider icon-form-address", value: "divider", label: "Divider" },
-];
-
-/**
- * Recursive BlockLayout Component
- */
-const BlockLayout: React.FC<{ depth?: number }> = ({ depth = 0 }) => {
-  const [columnsCount, setColumnsCount] = useState<number>(2);
-  const [container, setContainer] = useState<Container>({
-    id: generateId(),
-    columns: [
-      { id: generateId(), blocks: [] },
-      { id: generateId(), blocks: [] },
-    ],
-  });
-
-  const handleColumnsChange = (count: number) => {
-    const newColumns: Column[] = [];
-    for (let i = 0; i < count; i++) {
-      newColumns.push(container.columns[i] || { id: generateId(), blocks: [] });
-    }
-    setColumnsCount(count);
-    setContainer({ ...container, columns: newColumns });
+  const addBlock = (type: LayoutBlock['type']) => {
+    const newBlock: LayoutBlock = {
+      id: `block-${Date.now()}`,
+      type,
+      content: '',
+      settings: {
+        alignment: 'left',
+        padding: 10,
+        backgroundColor: '#ffffff'
+      }
+    };
+    setBlocks(prev => [...prev, newBlock]);
+    setSelectedBlock(newBlock.id);
   };
 
-  const addBlock = (columnIndex: number, type: string) => {
-    const selected = BLOCK_OPTIONS.find((b) => b.value === type);
-    if (!selected) return;
+  const updateBlock = (blockId: string, updates: Partial<LayoutBlock>) => {
+    setBlocks(prev => 
+      prev.map(block => 
+        block.id === blockId ? { ...block, ...updates } : block
+      )
+    );
+  };
 
-    const newBlock: BlockItem = {
-      id: generateId(),
-      type: selected.value,
-      label: selected.label,
-      children: selected.value === "block-layout" ? [] : undefined,
-    };
+  const deleteBlock = (blockId: string) => {
+    setBlocks(prev => prev.filter(block => block.id !== blockId));
+    if (selectedBlock === blockId) {
+      setSelectedBlock(null);
+    }
+  };
 
-    const newColumns = [...container.columns];
-    newColumns[columnIndex].blocks.push(newBlock);
-    setContainer({ ...container, columns: newColumns });
+  const handleImageSelect = (image: any) => {
+    if (selectedBlock) {
+      updateBlock(selectedBlock, { 
+        type: 'image',
+        image,
+        content: image.alt 
+      });
+    }
+    setShowImageGallery(false);
+  };
+
+  const renderBlock = (block: LayoutBlock) => {
+    const isSelected = selectedBlock === block.id;
+
+    switch (block.type) {
+      case 'heading':
+        return (
+          <h2 
+            contentEditable
+            suppressContentEditableWarning
+            onBlur={(e) => updateBlock(block.id, { content: e.currentTarget.textContent || '' })}
+            style={{ 
+              textAlign: block.settings.alignment,
+              padding: `${block.settings.padding}px`,
+              backgroundColor: block.settings.backgroundColor
+            }}
+          >
+            {block.content || 'Heading...'}
+          </h2>
+        );
+      
+      case 'text':
+        return (
+          <div
+            contentEditable
+            suppressContentEditableWarning
+            onBlur={(e) => updateBlock(block.id, { content: e.currentTarget.textContent || '' })}
+            style={{ 
+              textAlign: block.settings.alignment,
+              padding: `${block.settings.padding}px`,
+              backgroundColor: block.settings.backgroundColor
+            }}
+          >
+            {block.content || 'Start typing...'}
+          </div>
+        );
+      
+      case 'image':
+        return (
+          <div style={{ 
+            textAlign: block.settings.alignment,
+            padding: `${block.settings.padding}px`,
+            backgroundColor: block.settings.backgroundColor
+          }}>
+            {block.image ? (
+              <img 
+                src={block.image.url} 
+                alt={block.image.alt}
+                style={{ maxWidth: '100%', height: 'auto' }}
+              />
+            ) : (
+              <div 
+                className="placeholder-image"
+                onClick={() => {
+                  setSelectedBlock(block.id);
+                  setShowImageGallery(true);
+                }}
+              >
+                <i className="admin-font adminlib-image"></i>
+                <span>Click to add image</span>
+              </div>
+            )}
+          </div>
+        );
+      
+      case 'spacer':
+        return (
+          <div style={{ 
+            height: `${block.content || 20}px`,
+            backgroundColor: block.settings.backgroundColor
+          }}></div>
+        );
+      
+      default:
+        return null;
+    }
   };
 
   return (
-    <div
-      className="container-block-wrapper"
-      style={{
-        border: "1px solid #ccc",
-        borderRadius: "6px",
-        padding: "10px",
-        marginBottom: "10px",
-        background: depth === 0 ? "#f8f8f8" : "#fff",
-      }}
-    >
-      {/* Header: only show for top-level */}
-      {depth === 0 && (
-        <div className="container-header" style={{ marginBottom: "10px" }}>
-          <label>Columns:</label>
-          <select
-            value={columnsCount}
-            onChange={(e) => handleColumnsChange(Number(e.target.value))}
-            className="basic-select"
+    <div className="block-layout-editor">
+      {/* Toolbar */}
+      <div className="block-toolbar">
+        <button 
+          className="admin-btn default-btn"
+          onClick={() => addBlock('heading')}
+        >
+          <i className="admin-font adminlib-heading"></i> Heading
+        </button>
+        <button 
+          className="admin-btn default-btn"
+          onClick={() => addBlock('text')}
+        >
+          <i className="admin-font adminlib-text"></i> Text
+        </button>
+        <button 
+          className="admin-btn default-btn"
+          onClick={() => {
+            addBlock('image');
+            setShowImageGallery(true);
+          }}
+        >
+          <i className="admin-font adminlib-image"></i> Image
+        </button>
+        <button 
+          className="admin-btn default-btn"
+          onClick={() => addBlock('spacer')}
+        >
+          <i className="admin-font adminlib-spacer"></i> Spacer
+        </button>
+      </div>
+
+      {/* Blocks Container */}
+      <div className="blocks-container">
+        {blocks.map((block) => (
+          <div
+            key={block.id}
+            className={`block-wrapper ${selectedBlock === block.id ? 'selected' : ''}`}
+            onClick={() => setSelectedBlock(block.id)}
           >
-            {[1, 2, 3, 4].map((num) => (
-              <option key={num} value={num}>
-                {num} Column{num > 1 ? "s" : ""}
-              </option>
-            ))}
-          </select>
+            {renderBlock(block)}
+            
+            {/* Block Controls */}
+            {selectedBlock === block.id && (
+              <div className="block-controls">
+                <button
+                  className="control-btn"
+                  onClick={() => deleteBlock(block.id)}
+                >
+                  <i className="admin-font adminlib-delete"></i>
+                </button>
+                <div className="drag-handle">
+                  <i className="admin-font adminlib-drag"></i>
+                </div>
+              </div>
+            )}
+          </div>
+        ))}
+
+        {blocks.length === 0 && (
+          <div className="empty-blocks-state">
+            <i className="admin-font adminlib-layout"></i>
+            <p>No blocks added yet. Start by adding a block from the toolbar above.</p>
+          </div>
+        )}
+      </div>
+
+      {/* Block Settings Panel */}
+      {selectedBlock && (
+        <div className="block-settings-panel">
+          <h4>Block Settings</h4>
+          {blocks.find(b => b.id === selectedBlock) && (
+            <BlockSettings
+              block={blocks.find(b => b.id === selectedBlock)!}
+              onUpdate={(updates) => updateBlock(selectedBlock, updates)}
+            />
+          )}
         </div>
       )}
 
-      {/* Columns */}
-      <div className="container-columns" style={{ display: "flex", gap: "10px" }}>
-        {container.columns.map((col, colIndex) => (
-          <div
-            key={col.id}
-            className="container-column"
-            style={{
-              flex: 1,
-              minHeight: "150px",
-              padding: "10px",
-              border: "1px dashed #bbb",
-              borderRadius: "4px",
-              background: "#fdfdfd",
-            }}
-          >
-            <h4>Column {colIndex + 1}</h4>
-
-            {/* Add Block Button */}
-            <Elements
-              label="Add Block"
-              selectOptions={BLOCK_OPTIONS}
-              onClick={(type) => addBlock(colIndex, type)}
-            />
-
-            {/* Sortable inner blocks */}
-            <ReactSortable
-              list={col.blocks}
-              setList={(newList) => {
-                const newColumns = [...container.columns];
-                newColumns[colIndex].blocks = newList;
-                setContainer({ ...container, columns: newColumns });
-              }}
-              group="shared-blocks"
-              animation={150}
-              className="blocks-wrapper"
-            >
-              {col.blocks.map((block) => (
-                <div
-                  key={block.id}
-                  className="block-item"
-                  style={{
-                    padding: "8px",
-                    marginBottom: "5px",
-                    background: "#fff",
-                    border: "1px solid #ddd",
-                    borderRadius: "4px",
-                    cursor: "grab",
-                  }}
-                >
-                  {block.type === "block-layout" ? (
-                    <BlockLayout depth={depth + 1} />
-                  ) : (
-                    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                      <i className={`adminlib-${block.type}`}></i>
-                      <span>{block.label}</span>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </ReactSortable>
+      {/* Image Gallery Modal */}
+      {showImageGallery && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h3>Select Image</h3>
+              <button 
+                className="close-btn"
+                onClick={() => setShowImageGallery(false)}
+              >
+                <i className="admin-font adminlib-close"></i>
+              </button>
+            </div>
+            <ImageGallery onImageSelect={handleImageSelect} />
           </div>
-        ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+// Block Settings Component
+interface BlockSettingsProps {
+  block: LayoutBlock;
+  onUpdate: (updates: Partial<LayoutBlock>) => void;
+}
+
+const BlockSettings: React.FC<BlockSettingsProps> = ({ block, onUpdate }) => {
+  return (
+    <div className="block-settings">
+      <div className="setting-group">
+        <label>Alignment</label>
+        <select
+          value={block.settings.alignment}
+          onChange={(e) => onUpdate({
+            settings: { ...block.settings, alignment: e.target.value as any }
+          })}
+          className="basic-select"
+        >
+          <option value="left">Left</option>
+          <option value="center">Center</option>
+          <option value="right">Right</option>
+        </select>
       </div>
+
+      <div className="setting-group">
+        <label>Padding</label>
+        <input
+          type="number"
+          value={block.settings.padding}
+          onChange={(e) => onUpdate({
+            settings: { ...block.settings, padding: parseInt(e.target.value) }
+          })}
+          className="basic-input"
+        />
+      </div>
+
+      <div className="setting-group">
+        <label>Background Color</label>
+        <input
+          type="color"
+          value={block.settings.backgroundColor}
+          onChange={(e) => onUpdate({
+            settings: { ...block.settings, backgroundColor: e.target.value }
+          })}
+          className="basic-input"
+        />
+      </div>
+
+      {block.type === 'spacer' && (
+        <div className="setting-group">
+          <label>Height (px)</label>
+          <input
+            type="number"
+            value={block.content}
+            onChange={(e) => onUpdate({ content: e.target.value })}
+            className="basic-input"
+          />
+        </div>
+      )}
     </div>
   );
 };

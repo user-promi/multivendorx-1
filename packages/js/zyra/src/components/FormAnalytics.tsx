@@ -4,6 +4,10 @@ interface FormAnalyticsProps {
     formFields: any[];
 }
 
+interface FieldTypeCount {
+    [key: string]: number;
+}
+
 const FormAnalytics: React.FC<FormAnalyticsProps> = ({ formFields }) => {
     const fieldStats = {
         totalFields: formFields.length - 1, // Exclude title
@@ -13,8 +17,14 @@ const FormAnalytics: React.FC<FormAnalyticsProps> = ({ formFields }) => {
                 acc[field.type] = (acc[field.type] || 0) + 1;
             }
             return acc;
-        }, {} as Record<string, number>)
+        }, {} as FieldTypeCount)
     };
+
+    // Safe way to handle Object.entries with proper typing
+    const fieldTypeEntries = Object.entries(fieldStats.fieldTypes).map(([type, count]) => ({
+        type,
+        count: count as number
+    }));
 
     return (
         <div className="form-analytics">
@@ -38,7 +48,7 @@ const FormAnalytics: React.FC<FormAnalyticsProps> = ({ formFields }) => {
             
             <div className="field-type-breakdown">
                 <h4>Field Type Breakdown</h4>
-                {Object.entries(fieldStats.fieldTypes).map(([type, count]) => (
+                {fieldTypeEntries.map(({ type, count }) => (
                     <div key={type} className="type-row">
                         <span className="type-name">{type}</span>
                         <span className="type-count">{count}</span>

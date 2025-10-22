@@ -26,8 +26,8 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({
 
   // Mock initial images - replace with actual API call
   const mockImages: ImageItem[] = [
-    { id: '1', url: 'https://via.placeholder.com/300x200', alt: 'Placeholder 1' },
-    { id: '2', url: 'https://via.placeholder.com/300x200/008000', alt: 'Placeholder 2' },
+    { id: '1', url: 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fpicjumbo.com%2Ffree-images%2Fnature%2F&psig=AOvVaw2X_9wUirx9YNWP52nbvnqV&ust=1761216292635000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCIiUi5PQt5ADFQAAAAAdAAAAABAE', alt: 'Placeholder 1' },
+    { id: '2', url: 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fpicjumbo.com%2Ffree-images%2Fnature%2F&psig=AOvVaw2X_9wUirx9YNWP52nbvnqV&ust=1761216292635000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCIiUi5PQt5ADFQAAAAAdAAAAABAE', alt: 'Placeholder 2' },
     { id: '3', url: 'https://via.placeholder.com/300x200/FF0000', alt: 'Placeholder 3' },
     { id: '4', url: 'https://via.placeholder.com/300x200/0000FF', alt: 'Placeholder 4' },
   ];
@@ -91,6 +91,10 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({
     onImageSelect(localSelected);
   };
 
+  const handleCancel = () => {
+    onImageSelect([]);
+  };
+
   return (
     <div className="image-gallery-wrapper">
       <div className="gallery-header">
@@ -152,7 +156,7 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({
           {localSelected.length} image{localSelected.length !== 1 ? 's' : ''} selected
         </div>
         <div className="footer-actions">
-          <button className="admin-btn default-btn" onClick={() => onImageSelect([])}>
+          <button className="admin-btn default-btn" onClick={handleCancel}>
             Cancel
           </button>
           <button className="admin-btn btn-purple" onClick={handleConfirmSelection}>
