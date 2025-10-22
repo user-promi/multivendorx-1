@@ -65,4 +65,11 @@
             }
         });
     };
+
+
+    if ( $.isFunction($.fn.singleProductMulipleVendor) ) {
+        $('input[name=post_title]').singleProductMulipleVendor({
+            ajaxurl : 'admin-ajax.php',
+        });
+    }	
 }(jQuery));

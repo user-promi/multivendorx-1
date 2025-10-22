@@ -53,15 +53,15 @@ class Admin {
             if($has_mvx_spmv_map_id){
                 $data = array('product_id' => $duplicate->get_id(), 'product_map_id' => $has_mvx_spmv_map_id);
                 update_post_meta($duplicate->get_id(), '_mvx_spmv_map_id', $has_mvx_spmv_map_id);
-                mvx_spmv_products_map($data, 'insert');
+                Util::mvx_spmv_products_map($data, 'insert');
             }else{
                 $data = array('product_id' => $duplicate->get_id());
-                $map_id = mvx_spmv_products_map($data, 'insert');
+                $map_id = Util::mvx_spmv_products_map($data, 'insert');
                 if($map_id){
                     update_post_meta($duplicate->get_id(), '_mvx_spmv_map_id', $map_id);
                     // Enroll in SPMV parent product too 
                     $data = array('product_id' => $product->get_id(), 'product_map_id' => $map_id);
-                    mvx_spmv_products_map($data, 'insert');
+                    Util::mvx_spmv_products_map($data, 'insert');
                     update_post_meta($product->get_id(), '_mvx_spmv_map_id', $map_id);
                     update_post_meta($product->get_id(), '_mvx_spmv_product', true);
                 }

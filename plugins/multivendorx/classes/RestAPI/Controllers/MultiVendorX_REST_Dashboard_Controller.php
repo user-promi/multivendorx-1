@@ -362,7 +362,6 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller
             }
         }
 
-
         return [
             'active_store'  => $active_store,
             'current_page'  => $current_page,
@@ -380,7 +379,7 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller
             if (!empty($value)) {
                 MultiVendorX()->store->products->call_edit_product();
             } else {
-                if ( MultiVendorX()->setting->get_setting('category_pyramid_guide') == 'yes' ) {
+                if ( MultiVendorX()->setting->get_setting('category_pyramid_guide') == 'yes' || MultiVendorX()->modules->is_active('spmv') ) {
                     MultiVendorX()->store->products->call_add_product();
                 }
             }

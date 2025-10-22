@@ -256,7 +256,7 @@
             var $_this = $( this );
             var data = {
                 action: 'mvx_create_duplicate_product',
-                security: mvx_product_classify.types_nonce,
+                // security: mvx_product_classify.types_nonce,
                 product_id: $product_id
             };
             // Make ajax call.
@@ -293,7 +293,7 @@
             var product_id = $( this ).data( 'product_id' );
             var data = {
                 action: 'mvx_create_duplicate_product',
-                security: mvx_product_classify.types_nonce,
+                // security: mvx_product_classify.types_nonce,
                 product_id: product_id
             };
             $.ajax({
@@ -430,7 +430,7 @@
         var product_id = $(this).data('product_id');
         var data = {
             action: 'mvx_create_duplicate_product',
-            security: wcmp_product_classify_script_data.types_nonce,
+            // security: wcmp_product_classify_script_data.types_nonce,
             product_id: product_id
         };
         $.post(mvx_product_classify.ajaxurl, data, function (response) {

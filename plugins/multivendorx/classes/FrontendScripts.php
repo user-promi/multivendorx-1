@@ -209,8 +209,8 @@ class FrontendScripts {
 					'deps'    => array( 'jquery' ),
 					'version' => $version,
 				),
-          'multivendorx-distance-shipping-frontend-script' => array(
-					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'modules/DistanceShipping/js/' . MULTIVENDORX_PLUGIN_SLUG . '-frontend.min.js',
+                'multivendorx-single-product-multiple-vendor-script' => array(
+					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'modules/Spmv/js/' . MULTIVENDORX_PLUGIN_SLUG . '-frontend.min.js',
 					'deps'    => array( 'jquery' ),
 					'version' => $version,
 				),
@@ -293,6 +293,11 @@ class FrontendScripts {
 					'deps'    => array( 'jquery', 'jquery-blockui', 'wp-element', 'wp-i18n', 'react-jsx-runtime' ),
 					'version' => $version,
 				),
+                'multivendorx-admin-product-auto-search-script' => array(
+					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'modules/Spmv/js/' . MULTIVENDORX_PLUGIN_SLUG . '-admin-product-auto-search.min.js',
+					'deps'    => array( 'jquery' ),
+					'version' => $version,
+				),
             )
         );
 		foreach ( $register_scripts as $name => $props ) {
@@ -367,6 +372,7 @@ class FrontendScripts {
                 'product-compliance',
                 'tax-compliance',
                 'custom-css',
+                'single-product-multiple-store',
             )
 		);
 
@@ -564,6 +570,14 @@ class FrontendScripts {
 					'data'        => array(
 						'ajaxurl'     => admin_url( 'admin-ajax.php' ),
                         'search_products_nonce' => wp_create_nonce('search-products'),
+					),
+				),
+                'multivendorx-single-product-multiple-vendor-script' => array(
+					'object_name' => 'single_product_multiple_vendors',
+					'data'        => array(
+						'ajaxurl'     => admin_url( 'admin-ajax.php' ),
+                        'dashboard_nonce' => wp_create_nonce('mvx-dashboard'),
+                        'vendors_nonce' => wp_create_nonce('mvx-vendors'),
 					),
 				),
                 'multivendorx-dashboard-script' => array(
