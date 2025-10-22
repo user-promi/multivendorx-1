@@ -170,11 +170,11 @@ const EditQna: React.FC<EditQnaProps> = ({ open, onClose, qnaId, onUpdated }) =>
                   <label style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                     <input
                       type="checkbox"
-                      checked={qna.question_visibility === "public"}
+                      checked={qna.question_visibility === "Public"}
                       onChange={(e) =>
                         setQna({
                           ...qna,
-                          question_visibility: e.target.checked ? "public" : "private",
+                          question_visibility: e.target.checked ? "Public" : "Private",
                         })
                       }
                     />
