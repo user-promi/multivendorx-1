@@ -245,7 +245,7 @@ const AllProduct: React.FC = () => {
                         href={row.original.permalink}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-purple-600 hover:underline"
+                        className=""
                     >
                         {row.original.name}
                     </a>

@@ -54,9 +54,11 @@
         "@rollup/plugin-replace": "^6.0.2",
         "@tanstack/react-table": "^8.21.3",
         "axios": "^1.8.4",
+        "js-yaml": "^4.1.0",
         "react-csv": "^2.2.2",
         "react-modal": "^3.16.3",
         "rollup-plugin-url": "^3.0.1",
+        "yaml": "^2.8.1",
         "zustand": "^5.0.6"
     },
     "peerDependencies": {
@@ -102,6 +104,7 @@
         "@types/react-router-dom": "^5.3.3",
         "@types/react-select": "^5.0.0",
         "@types/reactour": "^1.18.5",
+        "@types/yaml": "^1.9.7",
         "@typescript-eslint/parser": "^8.32.1",
         "@wordpress/scripts": "^30.16.0",
         "babel-loader": "^10.0.0",

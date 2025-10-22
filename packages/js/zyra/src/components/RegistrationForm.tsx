@@ -21,7 +21,10 @@ import TimePicker from './TimePicker';
 import TemplateSection from './TemplateSection';
 import DisplayButton from './DisplayButton';
 import BlockLayout from './BlockLayout';
-// import BlockLayout from './BlockLayout';
+import ImageGallery from './ImageGallery';
+import FormTemplates from './FormTemplates';
+import ConditionalLogicModal from './ConditionalLogic';
+import FormAnalytics from './FormAnalytics';
 
 // Types
 export interface Option {
@@ -37,6 +40,13 @@ export interface SelectOption {
     label: string;
     name?: string;
 }
+// Add this interface near your other type definitions
+interface ImageItem {
+    id: string;
+    url: string;
+    alt: string;
+    caption?: string;
+}
 
 interface FormField {
     id: number;
@@ -48,9 +58,33 @@ interface FormField {
     options?: Option[];
     sitekey?: string;
     readonly?: boolean;
+    // New properties for advanced features
+    conditionalLogic?: {
+        enabled: boolean;
+        action: 'show' | 'hide';
+        rules: ConditionalRule[];
+    };
+    images?: ImageItem[]; // Updated type
+    layout?: any;
+    charlimit?: number;
+    row?: number;
+    column?: number;
+    filesize?: number;
+    disabled?: boolean;
 }
 
-interface ButtonSetting { }
+interface ConditionalRule {
+    field: string;
+    operator: 'equals' | 'not_equals' | 'contains' | 'greater_than' | 'less_than';
+    value: string;
+}
+
+interface ButtonSetting {
+    button_text?: string;
+    button_style?: string;
+    button_color?: string;
+    button_background?: string;
+}
 
 interface CustomFormProps {
     onChange: (data: { formfieldlist: FormField[]; butttonsetting: ButtonSetting }) => void;
@@ -74,7 +108,8 @@ const DEFAULT_FORM_TITLE = 'Demo Form';
 
 // Example select options
 const selectOptions: SelectOption[] = [
-    // { icon: 'adminlib-module icon-form-textbox', value: 'block-layout', label: 'Block Layout' },
+    { icon: 'adminlib-module icon-form-textbox', value: 'block-layout', label: 'Block Layout' },
+    { icon: 'adminlib-gallery icon-form-gallery', value: 'image-gallery', label: 'Image Gallery' },
     { icon: 'adminlib-t-letter-bold icon-form-textbox', value: 'text', label: 'Textbox' },
     { icon: 'adminlib-unread icon-form-email', value: 'email', label: 'Email' },
     { icon: 'adminlib-text icon-form-textarea', value: 'textarea', label: 'Textarea' },
@@ -123,19 +158,24 @@ const CustomForm: React.FC<CustomFormProps> = ({
         return inputList;
     });
 
-    const [buttonSetting, setButtonSetting] = useState(formSetting.butttonsetting || {});
+    const [buttonSetting, setButtonSetting] = useState<ButtonSetting>(formSetting.butttonsetting || {});
     const [opendInput, setOpendInput] = useState<FormField | null>(null);
     const [randMaxId, setRendMaxId] = useState<number>(0);
 
+    // New state for advanced features
+    const [showConditionalLogic, setShowConditionalLogic] = useState(false);
+    const [showImageGallery, setShowImageGallery] = useState(false);
+    const [selectedFieldForGallery, setSelectedFieldForGallery] = useState<FormField | null>(null);
+
     // Close meta modal if clicked outside
-    // useEffect(() => {
-    //     const closePopup = (event: MouseEvent) => {
-    //         if ((event.target as HTMLElement).closest('.meta-menu, .meta-setting-modal, .react-draggable')) return;
-    //         setOpendInput(null);
-    //     };
-    //     document.body.addEventListener('click', closePopup);
-    //     return () => document.body.removeEventListener('click', closePopup);
-    // }, []);
+    useEffect(() => {
+        const closePopup = (event: MouseEvent) => {
+            if ((event.target as HTMLElement).closest('.meta-menu, .meta-setting-modal, .react-draggable, .modal-overlay')) return;
+            setOpendInput(null);
+        };
+        document.body.addEventListener('click', closePopup);
+        return () => document.body.removeEventListener('click', closePopup);
+    }, []);
 
     useEffect(() => {
         setRendMaxId(formFieldList.reduce((maxId, field) => Math.max(maxId, field.id), 0) + 1);
@@ -158,13 +198,24 @@ const CustomForm: React.FC<CustomFormProps> = ({
             required: false,
             name: fixedName ?? `${type}-${getUniqueName()}`,
         };
+
+        // Set default values based on field type
         if (['multiselect', 'radio', 'dropdown', 'checkboxes'].includes(type)) {
             newFormField.label = DEFAULT_LABEL_SELECT;
             newFormField.options = DEFAULT_OPTIONS;
+        } else if (type === 'title') {
+            newFormField.label = DEFAULT_FORM_TITLE;
+        } else if (type === 'image-gallery') {
+            newFormField.label = 'Image Gallery';
+            newFormField.images = [];
+        } else if (type === 'block-layout') {
+            newFormField.label = 'Content Block';
+            newFormField.layout = { blocks: [] };
         } else {
             newFormField.label = DEFAULT_LABEL_SIMPLE(type);
             newFormField.placeholder = DEFAULT_PLACEHOLDER(type);
         }
+
         setRendMaxId(prev => (prev ?? 0) + 1);
         return newFormField;
     };
@@ -184,6 +235,9 @@ const CustomForm: React.FC<CustomFormProps> = ({
         const newFormFieldList = formFieldList.filter((_, i) => i !== index);
         settingHasChanged.current = true;
         setFormFieldList(newFormFieldList);
+        if (opendInput?.id === formFieldList[index].id) {
+            setOpendInput(null);
+        }
     };
 
     const handleFormFieldChange = (index: number, key: string, value: any) => {
@@ -192,21 +246,100 @@ const CustomForm: React.FC<CustomFormProps> = ({
         newFormFieldList[index] = { ...newFormFieldList[index], [key]: value };
         settingHasChanged.current = true;
         setFormFieldList(newFormFieldList);
+
+        // Update opened input if it's the same field
+        if (opendInput?.id === newFormFieldList[index].id) {
+            setOpendInput(newFormFieldList[index]);
+        }
     };
 
     const handleFormFieldTypeChange = (index: number, newType: string) => {
         if (proSettingChange()) return;
         const selectedFormField = formFieldList[index];
         if (selectedFormField.type === newType) return;
+
         const newFormField = getNewFormField(newType);
         newFormField.id = selectedFormField.id;
+
+        // Preserve some properties if needed
+        if (selectedFormField.readonly) {
+            newFormField.readonly = true;
+        }
+
         const newFormFieldList = [...formFieldList];
         newFormFieldList[index] = newFormField;
         settingHasChanged.current = true;
         setFormFieldList(newFormFieldList);
+        setOpendInput(newFormField);
     };
 
-    // Tabs
+    const handleImageSelect = (images: ImageItem[]) => {  // Use ImageItem type
+        if (!selectedFieldForGallery) return;
+
+        const index = formFieldList.findIndex(f => f.id === selectedFieldForGallery.id);
+        if (index >= 0) {
+            handleFormFieldChange(index, 'images', images);
+        }
+
+        setShowImageGallery(false);
+        setSelectedFieldForGallery(null);
+    };
+
+    const applyTemplate = (template: any) => {
+        if (proSettingChange()) return;
+        settingHasChanged.current = true;
+        setFormFieldList(template.fields);
+        setButtonSetting(template.buttonSetting);
+        setOpendInput(null);
+    };
+
+    // Image Gallery Field Component
+    const ImageGalleryField: React.FC<{ formField: FormField; onChange: (key: string, value: any) => void }> = ({
+        formField,
+        onChange
+    }) => {
+        return (
+            <div className="image-gallery-field">
+                <label>{formField.label}</label>
+                <div className="gallery-preview">
+                    {formField.images && formField.images.length > 0 ? (
+                        <div className="selected-images">
+                            {formField.images.map((image: any, index: number) => (
+                                <div key={index} className="image-thumbnail">
+                                    <img src={image.url} alt={image.alt} />
+                                    <button
+                                        className="remove-image"
+                                        onClick={() => {
+                                            const newImages = formField.images?.filter((_: any, i: number) => i !== index) || [];
+                                            onChange('images', newImages);
+                                        }}
+                                    >
+                                        <i className="admin-font adminlib-delete"></i>
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <div className="empty-gallery">
+                            <i className="admin-font adminlib-image"></i>
+                            <p>No images selected</p>
+                        </div>
+                    )}
+                </div>
+                <button
+                    className="admin-btn btn-purple"
+                    onClick={() => {
+                        setSelectedFieldForGallery(formField);
+                        setShowImageGallery(true);
+                    }}
+                >
+                    <i className="admin-font adminlib-plus"></i>
+                    Select Images
+                </button>
+            </div>
+        );
+    };
+    // Tabs configuration with advanced features
     const [activeTab, setActiveTab] = useState("blocks");
     const tabs = [
         {
@@ -215,14 +348,27 @@ const CustomForm: React.FC<CustomFormProps> = ({
             content: (
                 <>
                     <Elements
-                        label="General"
-                        selectOptions={selectOptions}
+                        label="Layout"
+                        selectOptions={selectOptions.filter(opt =>
+                            ['block-layout', 'image-gallery', 'section', 'divider'].includes(opt.value)
+                        )}
                         onClick={(type) => {
                             const newInput = appendNewFormField(formFieldList.length - 1, type);
                             if (newInput) {
                                 setOpendInput(newInput);
                             }
-
+                        }}
+                    />
+                    <Elements
+                        label="General"
+                        selectOptions={selectOptions.filter(opt =>
+                            !['block-layout', 'image-gallery', 'section', 'divider'].includes(opt.value)
+                        )}
+                        onClick={(type) => {
+                            const newInput = appendNewFormField(formFieldList.length - 1, type);
+                            if (newInput) {
+                                setOpendInput(newInput);
+                            }
                         }}
                     />
                     <Elements
@@ -248,7 +394,16 @@ const CustomForm: React.FC<CustomFormProps> = ({
                 </>
             ),
         },
-        { id: "templates", label: "Templates", content: <div /> },
+        {
+            id: "templates",
+            label: "Templates",
+            content: <FormTemplates onTemplateSelect={applyTemplate} />
+        },
+        {
+            id: "analytics",
+            label: "Analytics",
+            content: <FormAnalytics formFields={formFieldList} />
+        },
     ];
 
     return (
@@ -328,16 +483,6 @@ const CustomForm: React.FC<CustomFormProps> = ({
                             >
                                 {opendInput?.id === formField.id && (
                                     <section className="meta-menu">
-                                        {/* <DisplayButton
-                                            onClick={() => {
-                                                const index = formFieldList.findIndex(f => f.id === opendInput.id);
-                                                if (index >= 0) deleteParticularFormField(index);
-                                                setOpendInput(null);
-                                            }}
-                                            wraperClass={`delete`}
-                                            children={<i className="admin-font adminlib-delete"></i>}
-                                            btnType="button"
-                                        /> */}
                                         {opendInput?.id === formField.id && (
                                             <div className="admin-badge blue drag-handle">
                                                 <i className="admin-font adminlib-drag"></i>
@@ -353,6 +498,18 @@ const CustomForm: React.FC<CustomFormProps> = ({
                                         >
                                             <i className="admin-font adminlib-delete"></i>
                                         </span>
+                                        {!formField.readonly && (
+                                            <span
+                                                onClick={() => {
+                                                    setOpendInput(formField);
+                                                    setShowConditionalLogic(true);
+                                                }}
+                                                className="admin-badge purple"
+                                                title="Conditional Logic"
+                                            >
+                                                <i className="admin-font adminlib-logic"></i>
+                                            </span>
+                                        )}
                                     </section>
                                 )}
                                 <section className={`form-field-container-wrapper`}>
@@ -382,9 +539,18 @@ const CustomForm: React.FC<CustomFormProps> = ({
                                     {formField.type === 'section' && (
                                         <TemplateSection formField={formField} onChange={(key, value) => handleFormFieldChange(index, key, value)} />
                                     )}
-                                    {/* {formField.type === 'block-layout' && (
-                                        <BlockLayout />
-                                    )} */}
+                                    {formField.type === 'block-layout' && (
+                                        <BlockLayout
+                                            formField={formField}
+                                            onChange={(key, value) => handleFormFieldChange(index, key, value)}
+                                        />
+                                    )}
+                                    {formField.type === 'image-gallery' && (
+                                        <ImageGalleryField
+                                            formField={formField}
+                                            onChange={(key, value) => handleFormFieldChange(index, key, value)}
+                                        />
+                                    )}
                                     {formField.type === 'textarea' && (
                                         <TemplateTextArea
                                             formField={formField}
@@ -397,19 +563,24 @@ const CustomForm: React.FC<CustomFormProps> = ({
                                             }
                                         />
                                     )}
-                                    {formField.type ===
-                                        'recaptcha' && (
-                                            <Recaptcha
-                                                formField={formField}
-                                                onChange={(key, value) =>
-                                                    handleFormFieldChange(
-                                                        index,
-                                                        key,
-                                                        value
-                                                    )
-                                                }
-                                            />
-                                        )}
+                                    {formField.type === 'recaptcha' && (
+                                        <Recaptcha
+                                            formField={formField}
+                                            onChange={(key, value) =>
+                                                handleFormFieldChange(
+                                                    index,
+                                                    key,
+                                                    value
+                                                )
+                                            }
+                                        />
+                                    )}
+                                    {formField.type === 'divider' && (
+                                        <div className="divider-field">
+                                            <hr />
+                                            <span>{formField.label}</span>
+                                        </div>
+                                    )}
                                 </section>
                             </main>
                         );
@@ -471,6 +642,47 @@ const CustomForm: React.FC<CustomFormProps> = ({
                     </>
                 )}
             </div>
+
+            {/* Conditional Logic Modal */}
+            {showConditionalLogic && opendInput && (
+                <ConditionalLogicModal
+                    formField={opendInput}
+                    allFields={formFieldList}
+                    onSave={(logic) => {
+                        const index = formFieldList.findIndex(f => f.id === opendInput.id);
+                        if (index >= 0) {
+                            handleFormFieldChange(index, 'conditionalLogic', logic);
+                        }
+                        setShowConditionalLogic(false);
+                    }}
+                    onClose={() => setShowConditionalLogic(false)}
+                />
+            )}
+
+            {/* Image Gallery Modal */}
+            {showImageGallery && (
+                <div className="modal-overlay">
+                    <div className="modal-content large">
+                        <div className="modal-header">
+                            <h3>Select Images</h3>
+                            <button
+                                className="close-btn"
+                                onClick={() => {
+                                    setShowImageGallery(false);
+                                    setSelectedFieldForGallery(null);
+                                }}
+                            >
+                                <i className="admin-font adminlib-close"></i>
+                            </button>
+                        </div>
+                        <ImageGallery
+                            onImageSelect={handleImageSelect}
+                            multiple={true}
+                            selectedImages={selectedFieldForGallery?.images || []}
+                        />
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
