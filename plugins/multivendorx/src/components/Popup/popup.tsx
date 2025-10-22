@@ -1,8 +1,12 @@
 /* global appLocalizer */
 import React from 'react';
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import { ProPopup } from 'zyra';
 import './popup.scss';
+
+interface PopupProps {
+    moduleName?: string;
+}
 
 const proPopupContent = {
     proUrl: typeof appLocalizer !== 'undefined' ? appLocalizer.pro_url : '#',
@@ -78,8 +82,33 @@ const proPopupContent = {
     ]
 };
 
-const ShowProPopup: React.FC = () => {
-    return <ProPopup {...proPopupContent} />;
+const ShowProPopup: React.FC< PopupProps > = (props) => {
+    const modulePopupContent = {
+        moduleName: props.moduleName,
+        message: sprintf(
+            /* translators: %s: Module name */
+            __(
+                'This feature is currently unavailable. To activate it, please enable the %s',
+                'catalogx'
+            ),
+            props.moduleName
+        ),
+        moduleButton: __( 'Enable Now', 'catalogx' ),
+        modulePageUrl:
+            typeof appLocalizer !== 'undefined'
+                ? `http://localhost:8889/wp-admin/admin.php?page=multivendorx#&tab=modules&module=${props.moduleName}`
+                : '#',
+    };
+
+    return (
+        <>
+            { props.moduleName ? (
+                <ProPopup { ...modulePopupContent } />
+            ) : (
+                <ProPopup { ...proPopupContent } />
+            ) }
+        </>
+    );
 };
 
 export default ShowProPopup;

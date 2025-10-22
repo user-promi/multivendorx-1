@@ -203,7 +203,7 @@
       }
     }
 
-    .module-list-item:nth-child(5) {
+    .module-list-item.highlight {
       animation: animate4 2.5s ease-in-out infinite;
       border: $border-theme-small;
     }

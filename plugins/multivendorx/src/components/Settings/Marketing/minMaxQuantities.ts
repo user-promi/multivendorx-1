@@ -29,6 +29,7 @@ export default {
                     type: 'number',
                 },
             ],
+            moduleEnabled: 'marketplace-refund',
         },
     ],
 };
