@@ -35,13 +35,13 @@ do_action( 'woocommerce_before_main_content' );
         <?php
         // Store banner & vendor info
         do_action( 'mvx_archive_description' );
-        MultiVendorX()->util->get_template( 'store-banner-info.php', [ 'store_id' => $store_id ] );
+        MultiVendorX()->util->get_template( 'store/store-banner-info.php', [ 'store_id' => $store_id ] );
         ?>
     </header>
 
     <?php
     // Tabs
-    MultiVendorX()->util->get_template( 'store-tabs.php', [ 'store_id' => $store_id ] );
+    MultiVendorX()->util->get_template( 'store/store-tabs.php', [ 'store_id' => $store_id ] );
 ?>
 
 </div>

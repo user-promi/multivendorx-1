@@ -276,6 +276,14 @@ class Install {
                     SET NEW.balance = last_balance;
                     SET NEW.locking_balance = last_locking_balance;
                 END IF;
+            ELSEIF NEW.transaction_type = 'Refund' AND NEW.entry_type = 'Dr' THEN
+                IF NEW.status = 'Completed' THEN
+                    SET NEW.balance = last_balance - NEW.amount;
+                    SET NEW.locking_balance = last_locking_balance;
+                ELSEIF NEW.status = 'Failed' THEN
+                    SET NEW.balance = last_balance;
+                    SET NEW.locking_balance = last_locking_balance;
+                END IF;
             ELSE
                 SET NEW.balance = last_balance;
                 SET NEW.locking_balance = last_locking_balance;

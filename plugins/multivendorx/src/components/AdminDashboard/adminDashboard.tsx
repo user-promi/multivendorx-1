@@ -134,7 +134,7 @@ const AdminDashboard = () => {
       href: "#",
     },
     {
-      title: "Earn Steady Monthly Income",
+      title: "Membership Rewards & Commission",
       desc: "Charge your sellers a monthly or yearly membership fee to sell on your marketplace – predictable revenue every month.",
       iconClass: "adminlib-global-community",
       linkText: "Join Discord",
@@ -320,7 +320,7 @@ const AdminDashboard = () => {
                   </div>
                   <div className="des">Create, manage, and grow your marketplace with confidence. Trusted by thousands of entrepreneurs worldwide.</div>
                   <a href='https://multivendorx.com/pricing/' className="admin-btn btn-purple">
-                    Upgrade Now - 15 Day Guarantee
+                    Upgrade Now - 15 Days Refund*
                     <i className="adminlib-arrow-right icon-pro-btn"></i>
                   </a>
                 </div>

@@ -440,7 +440,7 @@ class FrontendScripts {
         $payment_admin_settings = MultiVendorX()->setting->get_setting( 'payment_methods', [] );
         $settings = !empty($payment_admin_settings['custom-gateway']) ? $payment_admin_settings['custom-gateway'] : [];
         
-        $gateway_name = $settings && $settings['custom_gateway_name'] ? $settings['custom_gateway_name'] : 'Custom Gateway';
+        $gateway_name = $settings && !empty($settings['custom_gateway_name']) ? $settings['custom_gateway_name'] : 'Custom Gateway';
 
         $payout_payment_options = [
             [
