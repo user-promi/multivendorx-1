@@ -65,7 +65,7 @@ class Shortcode {
             wc_get_template('myaccount/form-login.php');
             echo '</div>';
         } else if ( in_array( 'store_owner', $user->roles, true ) ) {
-            MultiVendorX()->util->get_template( 'store-dashboard.php', [] );
+            MultiVendorX()->util->get_template( 'store/store-dashboard.php', [] );
         } else {
             
         }

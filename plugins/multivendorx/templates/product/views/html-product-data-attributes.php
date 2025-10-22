@@ -63,7 +63,7 @@ $post = $args['post'];
                             $metabox_class[] = 'taxonomy';
                             $metabox_class[] = $attribute->get_name();
                         }
-                        MultiVendorX()->util->get_template('views/html-product-attribute.php', ['attribute' => $attribute, 'metabox_class' => $metabox_class, 'i' => $i, 'self' => $self ] );
+                        MultiVendorX()->util->get_template('product/views/html-product-attribute.php', ['attribute' => $attribute, 'metabox_class' => $metabox_class, 'i' => $i, 'self' => $self ] );
                         
                     }
                     ?>

@@ -96,8 +96,8 @@ const EditStore = () => {
             type: 'file',
             content: {
                 id: 'store-policy',
-                name: 'Store Policy',
-                desc: 'Store Policy',
+                name: 'Policy',
+                desc: 'Policy',
                 hideTabHeader: true,
                 icon: 'adminlib-credit-card',
             },
@@ -106,8 +106,8 @@ const EditStore = () => {
             type: 'file',
             content: {
                 id: 'staff',
-                name: 'Store Staff',
-                desc: 'Store Users',
+                name: 'Staff',
+                desc: 'Staff',
                 hideTabHeader: true,
                 icon: 'adminlib-credit-card',
             },
@@ -116,8 +116,8 @@ const EditStore = () => {
             type: 'file',
             content: {
                 id: 'store-application',
-                name: 'Store Application',
-                desc: 'Store Application',
+                name: 'Application',
+                desc: 'Application',
                 hideTabHeader: true,
                 icon: 'adminlib-credit-card',
             },
@@ -126,8 +126,8 @@ const EditStore = () => {
             type: 'file',
             content: {
                 id: 'store-facilitator',
-                name: 'Store Facilitator',
-                desc: 'Store Facilitator',
+                name: 'Facilitator',
+                desc: 'Facilitator',
                 hideTabHeader: true,
                 icon: 'adminlib-credit-card',
             },
