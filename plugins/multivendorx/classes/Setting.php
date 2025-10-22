@@ -123,6 +123,8 @@ class Setting {
                 'multivendorx_legal-compliance_settings',
                 'multivendorx_product-compliance_settings',
                 'multivendorx_tax-compliance_settings',
+                'multivendorx_custom_css_settings',
+                
 			)
         );
 
