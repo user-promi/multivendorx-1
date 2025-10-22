@@ -1,7 +1,7 @@
 /* global appLocalizer */
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Table, TableCell, CommonPopup, getApiLink, CalendarInput } from "zyra";
+import { Table, TableCell, CommonPopup, getApiLink, CalendarInput, TextArea } from "zyra";
 import { ColumnDef, PaginationState } from "@tanstack/react-table";
 import { __ } from '@wordpress/i18n';
 import { store } from "@wordpress/blocks";
@@ -272,28 +272,48 @@ const StoreQna: React.FC = () => {
 
       {selectedQna && (
         <CommonPopup
-          open={!!selectedQna}
-          width="500px"
-          height="100%"
-          header={<div>Answer Question</div>}
-          footer={
-            <div style={{ display: "flex", gap: "10px" }}>
-              <button onClick={handleSaveAnswer} disabled={saving}>
-                {saving ? "Saving..." : "Save Answer"}
-              </button>
-              <button onClick={() => setSelectedQna(null)}>Cancel</button>
-            </div>
-          }
+            open={selectedQna}
+            onClose={setSelectedQna}
+            width="500px"
+            header={
+                <>
+                    <div className="title">
+                        <i className="adminlib-cart"></i>
+                        Answer Question
+                    </div>
+                    <p>Publish important news, updates, or alerts that appear directly in store dashboards, ensuring sellers never miss critical information.</p>
+                </>
+            }
+            footer={
+                <>
+                    <button
+                        type="button" 
+                        onClick={() => setSelectedQna(null)}
+                        className="admin-btn btn-red"
+                    >
+                        Cancel
+                    </button>
+                    <button onClick={handleSaveAnswer} disabled={saving} className="admin-btn btn-purple">
+                        {saving ? "Saving..." : "Save Answer"}
+                    </button>
+                </>
+            }
+
         >
-          <div>
-            <p><b>Question:</b> {selectedQna.question_text}</p>
-            <textarea
-              value={answer}
-              onChange={(e) => setAnswer(e.target.value)}
-              rows={6}
-              style={{ width: "100%" }}
-            />
+        <div className="content">
+          <div className="form-group-wrapper">
+              <div className="form-group">
+                  <label htmlFor="title">Question:  {selectedQna.question_text}</label>
+                  <TextArea
+                      name="content"
+                      inputClass="textarea-input"
+                      value={answer}
+                      onChange={(e) => setAnswer(e.target.value)}
+                  />
+              </div>
+              <span className="space"></span>
           </div>
+      </div>
         </CommonPopup>
       )}
     </>

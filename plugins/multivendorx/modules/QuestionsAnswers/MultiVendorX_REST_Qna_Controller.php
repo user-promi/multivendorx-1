@@ -127,7 +127,7 @@ class MultiVendorX_REST_Qna_Controller extends \WP_REST_Controller {
                 'question_text'       => $q['question_text'],
                 'answer_text'         => $q['answer_text'],
                 'question_by'         => (int) $q['question_by'],
-                'author_name'         => get_the_author_meta( 'display_name', $q['question_by'] ),
+                'author_name'         => get_the_author_meta( 'first_name', $q['question_by'] ) . ' ' . get_the_author_meta( 'last_name', $q['question_by'] ),
                 'question_date'       => $q['question_date'],
                 'time_ago'            => human_time_diff( strtotime( $q['question_date'] ), current_time( 'timestamp' ) ) . ' ago',
                 'total_votes'         => (int) $q['total_votes'],
