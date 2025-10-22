@@ -1,45 +1,11 @@
-import { useLocation } from 'react-router-dom';
 import { AdminBreadcrumbs, SelectInput } from 'zyra';
 import { useEffect, useRef, useState } from 'react';
 
-import {
-  BarChart,
-  Bar,
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  PieChart, Pie, Cell, Legend
-} from 'recharts';
-
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import L from "leaflet";
-
-const salesByLocations = [
-  { name: "USA", coordinates: [40, -100], sales: 12000 },
-  { name: "India", coordinates: [22, 78], sales: 8500 },
-  { name: "UK", coordinates: [54, -2], sales: 6700 },
-  { name: "Germany", coordinates: [51, 10], sales: 5400 },
-  { name: "Australia", coordinates: [-25, 133], sales: 4300 },
-];
-
-// Custom marker icon (optional)
-const salesIcon = new L.DivIcon({
-  className: "custom-marker",
-  html: `<div style="background:#5007aa;color:#fff;border-radius:50%;padding:6px 10px;font-size:12px;">$</div>`,
-});
-
-// import "./adminDashboard.scss";
 import "../../dashboard/dashboardCommon.scss";
 import Overview from './Overview';
 import Transactions from './Payout';
 import Revenue from './Revenue';
-import RefundedOrders from './RefundedOrders';
 import StoreOrders from './StoreOrders';
-import RevenueOld from './RevenueOld';
 import RefundedOrderOld from './RefundedOrderOld';
 import axios from 'axios';
 
@@ -48,39 +14,34 @@ const Reports = () => {
   function requestOrders() {
     axios({
       method: "GET",
-      url: `${appLocalizer.apiUrl}/wc-analytics`,
-      headers: { "X-WP-Nonce": appLocalizer.nonce },
-    }).then(response => {
-      console.log("data->", response.data)
-    });
-
-    axios({
-      method: "GET",
-      url: `${appLocalizer.apiUrl}/wc/v3/reports`,
+      url: `${appLocalizer.apiUrl}/wc-analytics/`,
       headers: { "X-WP-Nonce": appLocalizer.nonce },
     })
-    .then(response => console.log(response.data))
-    .catch(error => console.error(error));
+      .then(response => console.log("analytics", response.data))
+      .catch(error => console.error(error));
 
-    axios({
-      method: "GET",
-      url: `${appLocalizer.apiUrl}/wc-analytics/leaderboards/categories`,
-      headers: { "X-WP-Nonce": appLocalizer.nonce },
-      // params: {
-      //   per_page: 10, // limit categories
-      //   orderby: "sales", // sort by sales
-      //   order: "desc"
-      // }
-    })
-    .then(response => console.log(response.data))
-    .catch(error => console.error(error));
-    
-    
+      axios({
+        method: 'GET',
+        url: `${appLocalizer.apiUrl}/wc/v3/products`,
+        headers: { 'X-WP-Nonce': appLocalizer.nonce },
+        params: {
+          per_page: 100,                  // Number of orders to fetch
+          meta_key: 'multivendorx_store_id', // The meta key you want to check
+        },
+      })
+      .then(response => {
+        const ordersWithMeta = response.data;
+        console.log('prodyct with the meta key:', ordersWithMeta);
+      })
+      .catch(error => {
+        console.error('Error fetching orders:', error);
+      });
+
   }
 
   useEffect(() => {
     requestOrders();
-  }, []);
+  });
 
   // Dummy chart data
   const data = [
@@ -206,7 +167,6 @@ const Reports = () => {
               </div>
             )
         )}
-
       </div>
     </>
   );

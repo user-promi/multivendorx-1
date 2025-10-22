@@ -20,6 +20,8 @@ import Datepicker from './DatePicker';
 import TimePicker from './TimePicker';
 import TemplateSection from './TemplateSection';
 import DisplayButton from './DisplayButton';
+import BlockLayout from './BlockLayout';
+// import BlockLayout from './BlockLayout';
 
 // Types
 export interface Option {
@@ -36,167 +38,6 @@ export interface SelectOption {
     name?: string;
 }
 
-// Props interface for AddNewBtn
-// interface AddNewBtnProps {
-// 	onAddNew?: () => void;
-// 	large?: boolean;
-// }
-
-// Props interface for DeleteBtn
-// interface DeleteBtnProps {
-// 	onDelete?: () => void;
-// 	hideDelete?: boolean;
-// }
-
-// Default values for input options
-const DEFAULT_OPTIONS: Option[] = [
-    { id: '1', label: 'Manufacture', value: 'manufacture' },
-    { id: '2', label: 'Trader', value: 'trader' },
-    { id: '3', label: 'Authorized Agent', value: 'authorized_agent' },
-];
-
-// Utility functions for default placeholders and labels
-const DEFAULT_PLACEHOLDER = (type: string): string => `${type}`;
-const DEFAULT_LABEL_SIMPLE = (type: string): string => `Enter your ${type}`;
-const DEFAULT_LABEL_SELECT = 'Nature of Business';
-const DEFAULT_FORM_TITLE = 'Demo Form';
-
-// Select options list
-const selectOptions: SelectOption[] = [
-    {
-        icon: 'adminlib-t-letter-bold icon-form-textbox',
-        value: 'text',
-        label: 'Textbox',
-    },
-    { icon: 'adminlib-unread icon-form-email', value: 'email', label: 'Email' },
-    {
-        icon: 'adminlib-text icon-form-textarea',
-        value: 'textarea',
-        label: 'Textarea',
-    },
-    {
-        icon: 'adminlib-checkbox icon-form-checkboxes',
-        value: 'checkboxes',
-        label: 'Checkboxes',
-    },
-    {
-        icon: 'adminlib-multi-select icon-form-multi-select',
-        value: 'multiselect',
-        label: 'Multi Select',
-    },
-    { icon: 'adminlib-radio icon-form-radio', value: 'radio', label: 'Radio' },
-    {
-        icon: 'adminlib-dropdown-checklist icon-form-dropdown',
-        value: 'dropdown',
-        label: 'Dropdown',
-    },
-    {
-        icon: 'adminlib-captcha-automatic-code icon-form-recaptcha',
-        value: 'recaptcha',
-        label: 'reCaptcha v3',
-    },
-    {
-        icon: 'adminlib-submission-message icon-form-attachment',
-        value: 'attachment',
-        label: 'Attachment',
-    },
-    {
-        icon: 'adminlib-form-section icon-form-section',
-        value: 'section',
-        label: 'Section',
-    },
-    {
-        icon: 'adminlib-calendar icon-form-store-description',
-        value: 'datepicker',
-        label: 'Date Picker',
-    },
-    {
-        icon: 'adminlib-alarm icon-form-address',
-        value: 'TimePicker',
-        label: 'Time Picker',
-    },
-    {
-        icon: 'adminlib-divider icon-form-address',
-        value: 'divider',
-        label: 'Divider',
-    },
-];
-const selectOptionsStore: SelectOption[] = [
-    {
-        icon: 'adminlib-t-letter-bold icon-form-textbox',
-        value: 'text',
-        label: 'Store Name',
-        name: 'name'
-    },
-    {
-        icon: 'adminlib-text icon-form-textarea',
-        value: 'textarea',
-        label: 'Store Desc',
-        name: 'description',
-    },
-    {
-        icon: 'adminlib-t-letter-bold icon-form-textbox',
-        value: 'text',
-        label: 'Address 1',
-        name: 'address_1'
-    },
-    {
-        icon: 'adminlib-t-letter-bold icon-form-textbox',
-        value: 'text',
-        label: 'Address 2',
-        name: 'address_2'
-    },
-    {
-        icon: 'adminlib-t-letter-bold icon-form-textbox',
-        value: 'text',
-        label: 'Phone',
-        name: 'phone'
-    },
-    {
-        icon: 'adminlib-dropdown-checklist icon-form-dropdown',
-        value: 'dropdown',
-        label: 'Country',
-        name: 'country',
-    },
-    {
-        icon: 'adminlib-dropdown-checklist icon-form-dropdown',
-        value: 'dropdown',
-        label: 'State',
-        name: 'state',
-    },
-    {
-        icon: 'adminlib-t-letter-bold icon-form-textbox',
-        value: 'text',
-        label: 'City',
-        name: 'city'
-    },
-    {
-        icon: 'adminlib-t-letter-bold icon-form-textbox',
-        value: 'text',
-        label: 'Post Code',
-        name: 'post_code'
-    },
-    { icon: 'adminlib-unread icon-form-email', value: 'email', label: 'Paypal Email', name: 'paypal_email' },
-
-];
-const demoFormField = {
-    id: 21,
-    type: "text",
-    label: "Enter your text",
-    required: false,
-    name: "text-mfpbb9yy",
-    placeholder: "text",
-    chosen: false,
-    selected: false,
-};
-
-// ✅ Example select/dropdown options
-const demoSelectOptions = [
-    { value: "text", label: "Text" },
-    { value: "textarea", label: "Textarea" },
-    { value: "number", label: "Number" },
-    { value: "checkbox", label: "Checkbox" },
-];
 interface FormField {
     id: number;
     type: string;
@@ -208,131 +49,115 @@ interface FormField {
     sitekey?: string;
     readonly?: boolean;
 }
+
 interface ButtonSetting { }
+
 interface CustomFormProps {
-    onChange: (data: {
-        formfieldlist: FormField[];
-        butttonsetting: ButtonSetting;
-    }) => void;
+    onChange: (data: { formfieldlist: FormField[]; butttonsetting: ButtonSetting }) => void;
     name: string;
     proSettingChange: () => boolean;
     formTitlePlaceholder?: string;
     setting: Record<string, any>;
 }
-// props value
-// 1. formTitlePlaceholder
-// 2. formTitleDescription
-// 3. formFieldTypes
 
-const CustomFrom: React.FC<CustomFormProps> = ({
+// Default values for input options
+const DEFAULT_OPTIONS: Option[] = [
+    { id: '1', label: 'Manufacture', value: 'manufacture' },
+    { id: '2', label: 'Trader', value: 'trader' },
+    { id: '3', label: 'Authorized Agent', value: 'authorized_agent' },
+];
+
+const DEFAULT_PLACEHOLDER = (type: string): string => `${type}`;
+const DEFAULT_LABEL_SIMPLE = (type: string): string => `Enter your ${type}`;
+const DEFAULT_LABEL_SELECT = 'Nature of Business';
+const DEFAULT_FORM_TITLE = 'Demo Form';
+
+// Example select options
+const selectOptions: SelectOption[] = [
+    // { icon: 'adminlib-module icon-form-textbox', value: 'block-layout', label: 'Block Layout' },
+    { icon: 'adminlib-t-letter-bold icon-form-textbox', value: 'text', label: 'Textbox' },
+    { icon: 'adminlib-unread icon-form-email', value: 'email', label: 'Email' },
+    { icon: 'adminlib-text icon-form-textarea', value: 'textarea', label: 'Textarea' },
+    { icon: 'adminlib-checkbox icon-form-checkboxes', value: 'checkboxes', label: 'Checkboxes' },
+    { icon: 'adminlib-multi-select icon-form-multi-select', value: 'multiselect', label: 'Multi Select' },
+    { icon: 'adminlib-radio icon-form-radio', value: 'radio', label: 'Radio' },
+    { icon: 'adminlib-dropdown-checklist icon-form-dropdown', value: 'dropdown', label: 'Dropdown' },
+    { icon: 'adminlib-captcha-automatic-code icon-form-recaptcha', value: 'recaptcha', label: 'reCaptcha v3' },
+    { icon: 'adminlib-submission-message icon-form-attachment', value: 'attachment', label: 'Attachment' },
+    { icon: 'adminlib-form-section icon-form-section', value: 'section', label: 'Section' },
+    { icon: 'adminlib-calendar icon-form-store-description', value: 'datepicker', label: 'Date Picker' },
+    { icon: 'adminlib-alarm icon-form-address', value: 'TimePicker', label: 'Time Picker' },
+    { icon: 'adminlib-divider icon-form-address', value: 'divider', label: 'Divider' },
+];
+
+const selectOptionsStore: SelectOption[] = [
+    { icon: 'adminlib-t-letter-bold icon-form-textbox', value: 'text', label: 'Store Name', name: 'name' },
+    { icon: 'adminlib-text icon-form-textarea', value: 'textarea', label: 'Store Desc', name: 'description' },
+    { icon: 'adminlib-t-letter-bold icon-form-textbox', value: 'text', label: 'Address 1', name: 'address_1' },
+    { icon: 'adminlib-t-letter-bold icon-form-textbox', value: 'text', label: 'Address 2', name: 'address_2' },
+    { icon: 'adminlib-t-letter-bold icon-form-textbox', value: 'text', label: 'Phone', name: 'phone' },
+    { icon: 'adminlib-dropdown-checklist icon-form-dropdown', value: 'dropdown', label: 'Country', name: 'country' },
+    { icon: 'adminlib-dropdown-checklist icon-form-dropdown', value: 'dropdown', label: 'State', name: 'state' },
+    { icon: 'adminlib-t-letter-bold icon-form-textbox', value: 'text', label: 'City', name: 'city' },
+    { icon: 'adminlib-t-letter-bold icon-form-textbox', value: 'text', label: 'Post Code', name: 'post_code' },
+    { icon: 'adminlib-unread icon-form-email', value: 'email', label: 'Paypal Email', name: 'paypal_email' },
+];
+
+// Component
+const CustomForm: React.FC<CustomFormProps> = ({
     onChange,
     name,
     proSettingChange,
     setting,
     formTitlePlaceholder,
 }) => {
-    ////////////// Define state variable here /////////////////
     const formSetting = setting[name] || {};
-
     const settingHasChanged = useRef(false);
     const firstTimeRender = useRef(true);
 
-    // Contain list of selected form fields.
     const [formFieldList, setFormFieldList] = useState<FormField[]>(() => {
-        // Form field list can't be empty it should contain atlest form title.
-        // This action prevent any backend action for empty form field list.
-
         const inputList = formSetting.formfieldlist || [];
-
         if (!Array.isArray(inputList) || inputList.length <= 0) {
-            return [
-                {
-                    id: 1,
-                    type: 'title',
-                    label: DEFAULT_FORM_TITLE,
-                    required: true,
-                },
-            ];
+            return [{ id: 1, type: 'title', label: DEFAULT_FORM_TITLE, required: true }];
         }
-
         return inputList;
     });
 
-    const [buttonSetting, setButtonSetting] = useState(
-        formSetting.butttonsetting || {}
-    );
-
-    // State for hold id of opend input section.
-    const [opendInput, setOpendInput] = useState<any>(null);
-
-    const [isInputBoxClick, SetIsInputBoxClick] = useState({
-        click: false,
-    });
-
-    // State variable for a random maximum id
+    const [buttonSetting, setButtonSetting] = useState(formSetting.butttonsetting || {});
+    const [opendInput, setOpendInput] = useState<FormField | null>(null);
     const [randMaxId, setRendMaxId] = useState<number>(0);
 
-    useEffect(() => {
-        const closePopup = (event: MouseEvent) => {
-            if (
-                (event.target as HTMLElement).closest(
-                    '.meta-menu, .meta-setting-modal, .react-draggable'
-                )
-            ) {
-                return;
-            }
-            SetIsInputBoxClick({ click: false });
-            setOpendInput(null);
-        };
-        document.body.addEventListener('click', closePopup);
-        return () => {
-            document.body.removeEventListener('click', closePopup);
-        };
-    }, []);
+    // Close meta modal if clicked outside
+    // useEffect(() => {
+    //     const closePopup = (event: MouseEvent) => {
+    //         if ((event.target as HTMLElement).closest('.meta-menu, .meta-setting-modal, .react-draggable')) return;
+    //         setOpendInput(null);
+    //     };
+    //     document.body.addEventListener('click', closePopup);
+    //     return () => document.body.removeEventListener('click', closePopup);
+    // }, []);
 
-    // Prepare random maximum id
     useEffect(() => {
-        setRendMaxId(
-            formFieldList.reduce(
-                (maxId, field) => Math.max(maxId, field.id),
-                0
-            ) + 1
-        );
+        setRendMaxId(formFieldList.reduce((maxId, field) => Math.max(maxId, field.id), 0) + 1);
     }, [formFieldList]);
 
-    // Save button setting and formfieldlist setting
     useEffect(() => {
         if (settingHasChanged.current) {
             settingHasChanged.current = false;
-            onChange({
-                formfieldlist: formFieldList,
-                butttonsetting: buttonSetting,
-            });
+            onChange({ formfieldlist: formFieldList, butttonsetting: buttonSetting });
         }
     }, [buttonSetting, formFieldList, onChange]);
 
-    ////////////// Define functionality here /////////////////
+    const getUniqueName = () => Date.now().toString(36);
 
-    const getUniqueName = () => {
-        return Date.now().toString(36); // Convert timestamp to base 36
-    };
-
-    /**
-     * Function generate a empty form field and return it.
-     * By default it set the type to simple text
-     */
-    const getNewFormField = (
-        type: string = 'text',
-        fixedName?: string
-    ): FormField => {
+    const getNewFormField = (type = 'text', fixedName?: string): FormField => {
         const newFormField: FormField = {
             id: randMaxId ?? 0,
             type,
             label: '',
             required: false,
-            name: fixedName ?? `${type}-${getUniqueName()}`, // Only use fixed name if provided
+            name: fixedName ?? `${type}-${getUniqueName()}`,
         };
-
         if (['multiselect', 'radio', 'dropdown', 'checkboxes'].includes(type)) {
             newFormField.label = DEFAULT_LABEL_SELECT;
             newFormField.options = DEFAULT_OPTIONS;
@@ -340,119 +165,49 @@ const CustomFrom: React.FC<CustomFormProps> = ({
             newFormField.label = DEFAULT_LABEL_SIMPLE(type);
             newFormField.placeholder = DEFAULT_PLACEHOLDER(type);
         }
-
-        setRendMaxId((prev) => (prev ?? 0) + 1);
+        setRendMaxId(prev => (prev ?? 0) + 1);
         return newFormField;
     };
 
-    /**
-     * Appends a new form field after a particular index.
-     * If the form field list is empty, it appends at the beginning of the list.
-     *
-     * @param {number} index         - The index after which to insert the new form field.
-     * @param {string} [type="text"] - The type of the new form field to create.
-     * @return {FormField | undefined} The newly created form field object, or undefined if blocked.
-     */
-    const appendNewFormField = (
-        index: number,
-        type = 'text',
-        fixedName?: string,
-        readonly: boolean = false
-    ) => {
+    const appendNewFormField = (index: number, type = 'text', fixedName?: string, readonly = false) => {
         if (proSettingChange()) return;
-
         const newField: FormField = getNewFormField(type, fixedName);
-
-        // Add readonly property
-        if (readonly) {
-            (newField as any).readonly = true;
-        }
-
-        const newFormFieldList = [
-            ...formFieldList.slice(0, index + 1),
-            newField,
-            ...formFieldList.slice(index + 1),
-        ];
-
+        if (readonly) newField.readonly = true;
+        const newFormFieldList = [...formFieldList.slice(0, index + 1), newField, ...formFieldList.slice(index + 1)];
         settingHasChanged.current = true;
         setFormFieldList(newFormFieldList);
-
         return newField;
     };
 
-    /**
-     * Function that delete a particular form field
-     * @param {*} index
-     */
     const deleteParticularFormField = (index: number) => {
         if (proSettingChange()) return;
-
-        // Create a new array without the element at the specified index
-        const newFormFieldList = formFieldList.filter(
-            (_, i) => i !== index
-        );
-        // Update the state with the new array
+        const newFormFieldList = formFieldList.filter((_, i) => i !== index);
         settingHasChanged.current = true;
         setFormFieldList(newFormFieldList);
     };
 
-    /**
-     * Handles individual form field changes by updating the form field list.
-     *
-     * @param {number} index - The index of the form field to update.
-     * @param {string} key   - The key/property of the form field to update.
-     * @param {*}      value - The new value to assign to the specified key.
-     */
-    const handleFormFieldChange = (
-        index: number,
-        key: string,
-        value: any
-    ) => {
+    const handleFormFieldChange = (index: number, key: string, value: any) => {
         if (proSettingChange()) return;
-        // copy the form field before modify
         const newFormFieldList = [...formFieldList];
-
-        // Update the new form field list
-        newFormFieldList[index] = {
-            ...newFormFieldList[index],
-            [key]: value,
-        };
-
-        // Update the state variable
+        newFormFieldList[index] = { ...newFormFieldList[index], [key]: value };
         settingHasChanged.current = true;
         setFormFieldList(newFormFieldList);
     };
 
-    /**
-     * Function that handle type change for a particular form field
-     * @param {*} index
-     * @param {*} newType
-     */
     const handleFormFieldTypeChange = (index: number, newType: string) => {
         if (proSettingChange()) return;
-
-        // Get the input which one is selected
         const selectedFormField = formFieldList[index];
-
-        // Check if selected type is previously selected type
-        if (selectedFormField.type === newType) {
-            return;
-        }
-
-        // Create a empty form field for that position
+        if (selectedFormField.type === newType) return;
         const newFormField = getNewFormField(newType);
         newFormField.id = selectedFormField.id;
-
-        // Replace the newly created form field with old one
         const newFormFieldList = [...formFieldList];
         newFormFieldList[index] = newFormField;
-
         settingHasChanged.current = true;
         setFormFieldList(newFormFieldList);
     };
+
+    // Tabs
     const [activeTab, setActiveTab] = useState("blocks");
-    const [settingsActiveTab, setSettingsActiveTab] = useState("blocks");
-    const [showMetaBox, setShowMetaBox] = useState(false);
     const tabs = [
         {
             id: "blocks",
@@ -463,561 +218,261 @@ const CustomFrom: React.FC<CustomFormProps> = ({
                         label="General"
                         selectOptions={selectOptions}
                         onClick={(type) => {
-                            const newInput = appendNewFormField(
-                                formFieldList.length - 1,
-                                type
-                            );
-                            setOpendInput(newInput);
-                        }}
-                    />
-                    <Elements
-                        label="MultivendorX Free"
-                        selectOptions={selectOptionsStore}
-                        onClick={(type) => {
-                            const option = selectOptionsStore.find((o) => o.value === type);
-                            const fixedName = option?.name;
-
-                            // Append new store field as readonly
-                            appendNewFormField(
-                                formFieldList.length - 1,
-                                type,
-                                fixedName,
-                                true // readonly flag
-                            );
-
-                            // Ensure meta box does not open
-                            SetIsInputBoxClick({ click: false });
-                            setOpendInput(null);
-                        }}
-                    />
-                    <Elements
-                        label="MultivendorX Pro"
-                        selectOptions={selectOptionsStore}
-                        onClick={(type) => {
-                            const option = selectOptionsStore.find((o) => o.value === type);
-                            const fixedName = option?.name;
-
-                            // Append new store field as readonly
-                            appendNewFormField(
-                                formFieldList.length - 1,
-                                type,
-                                fixedName,
-                                true // readonly flag
-                            );
-
-                            // Ensure meta box does not open
-                            SetIsInputBoxClick({ click: false });
-                            setOpendInput(null);
-                        }}
-                    />
-                    <Elements
-                        label="Store"
-                        selectOptions={selectOptionsStore}
-                        onClick={(type) => {
-                            const option = selectOptionsStore.find((o) => o.value === type);
-                            const fixedName = option?.name;
-
-                            // Append new store field as readonly
-                            appendNewFormField(
-                                formFieldList.length - 1,
-                                type,
-                                fixedName,
-                                true // readonly flag
-                            );
-
-                            // Ensure meta box does not open
-                            SetIsInputBoxClick({ click: false });
-                            setOpendInput(null);
-                        }}
-                    />
-                </>
-            ),
-        },
-        { id: "templates", label: "Templates", content: <div /> },
-    ];
-
-    const settingstabs = [
-        {
-            id: "blocks",
-            label: "Blocks",
-            content: (
-                <>
-                    <Elements
-                        label="General"
-                        selectOptions={selectOptions}
-                        onClick={(type) => {
-                            const newInput = appendNewFormField(
-                                formFieldList.length - 1,
-                                type
-                            );
-                            setOpendInput(newInput);
-                        }}
-                    />
-                    <Elements
-                        label="MultivendorX Free"
-                        selectOptions={selectOptionsStore}
-                        onClick={(type) => {
-                            const option = selectOptionsStore.find((o) => o.value === type);
-                            const fixedName = option?.name;
-
-                            // Append new store field as readonly
-                            appendNewFormField(
-                                formFieldList.length - 1,
-                                type,
-                                fixedName,
-                                true // readonly flag
-                            );
-
-                            // Ensure meta box does not open
-                            SetIsInputBoxClick({ click: false });
-                            setOpendInput(null);
-                        }}
-                    />
-                    <Elements
-                        label="MultivendorX Pro"
-                        selectOptions={selectOptionsStore}
-                        onClick={(type) => {
-                            const option = selectOptionsStore.find((o) => o.value === type);
-                            const fixedName = option?.name;
-
-                            // Append new store field as readonly
-                            appendNewFormField(
-                                formFieldList.length - 1,
-                                type,
-                                fixedName,
-                                true // readonly flag
-                            );
-
-                            // Ensure meta box does not open
-                            SetIsInputBoxClick({ click: false });
-                            setOpendInput(null);
-                        }}
-                    />
-                    <Elements
-                        label="Store"
-                        selectOptions={selectOptionsStore}
-                        onClick={(type) => {
-                            const option = selectOptionsStore.find((o) => o.value === type);
-                            const fixedName = option?.name;
-
-                            // Append new store field as readonly
-                            appendNewFormField(
-                                formFieldList.length - 1,
-                                type,
-                                fixedName,
-                                true // readonly flag
-                            );
-
-                            // Ensure meta box does not open
-                            SetIsInputBoxClick({ click: false });
-                            setOpendInput(null);
-                        }}
-                    />
-                </>
-            ),
-        },
-        { id: "templates", label: "Templates", content: <div /> },
-    ];
-    return (
-        <>
-            <div className="registration-from-wrapper">
-                { /* Render element type section */}
-                <div className="elements-wrapper">
-                    <div className="tab-titles">
-                        {tabs.map((tab) => (
-                            <div
-                                key={tab.id}
-                                className={`title ${activeTab === tab.id ? "active" : ""}`}
-                                onClick={() => setActiveTab(tab.id)}
-                            >
-                                <p>{tab.label}</p>
-                            </div>
-                        ))}
-                    </div>
-                    <div className="tab-contend">
-                        {tabs.map(
-                            (tab) =>
-                                activeTab === tab.id && (
-                                    <div key={tab.id} className="tab-panel">
-                                        {tab.content}
-                                    </div>
-                                )
-                        )}
-                    </div>
-                </div>
-
-                <div className="registration-form-main-section">
-                    { /* Render form title here */}
-                    {
-                        <div className="form-heading">
-                            <input
-                                type="text"
-                                className="basic-input"
-                                placeholder={formTitlePlaceholder}
-                                value={formFieldList[0]?.label}
-                                onChange={(event) => {
-                                    handleFormFieldChange(
-                                        0,
-                                        'label',
-                                        event.target.value
-                                    );
-                                }}
-                            />
-                            <DisplayButton
-                                wraperClass={'add-new-sections'}
-                                children={
-                                    <div className="icon-wrapper">
-                                        <span className="admin-font adminlib-move"></span>
-                                    </div>
-                                }
-                                onClick={() => {
-                                    const newInput = appendNewFormField(0);
-                                    setOpendInput(newInput);
-                                }}
-                                btnType='button'
-                            />
-                        </div>
-                    }
-
-                    { /* Render form fields here */}
-                    {
-                        <ReactSortable
-                            list={formFieldList}
-                            setList={(newList) => {
-                                if (firstTimeRender.current) {
-                                    firstTimeRender.current = false;
-                                    return;
-                                }
-                                if (proSettingChange()) return;
-                                settingHasChanged.current = true;
-                                setFormFieldList(newList);
-                            }}
-                            handle=".drag-handle"
-                        >
-                            {formFieldList.length > 0 &&
-                                formFieldList.map((formField, index) => {
-                                    if (index === 0) {
-                                        return (
-                                            <div
-                                                key={index}
-                                                style={{ display: 'none' }}
-                                            ></div>
-                                        );
-                                    }
-                                    return (
-                                        <main
-                                            key={index}
-                                            className={`form-field 
-                                                ${opendInput?.id === formField.id
-                                                ? 'active'
-                                                : ''
-                                                }`}
-                                        >
-                                            { /* Render dragable button */}
-                                            {/* {opendInput?.id === formField.id && (
-                                                <div className="bth-move">
-                                                    <i className="admin-font adminlib-move"></i>
-                                                </div>
-                                            )} */}
-
-                                            { /* Render setting section */}
-                                            {/* {opendInput?.id === formField.id && (
-                                                <section className="meta-menu">
-                                                    <div className="btn-delete">
-                                                        <DisplayButton
-                                                            onClick={() => {
-                                                                deleteParticularFormField(
-                                                                    index
-                                                                );
-                                                                setOpendInput(
-                                                                    null
-                                                                );
-                                                            }}
-                                                            wraperClass={`delete`}
-                                                            children={
-                                                                <i className="admin-font adminlib-close"></i>
-                                                            }
-                                                            btnType='button'
-                                                        />
-                                                    </div>
-                                                    <SettingMetaBox
-                                                        formField={formField}
-                                                        opened={isInputBoxClick}
-                                                        onChange={(key, value) =>
-                                                            handleFormFieldChange(
-                                                                index,
-                                                                key,
-                                                                value
-                                                            )
-                                                        }
-                                                        onTypeChange={(
-                                                            newType
-                                                        ) =>
-                                                            handleFormFieldTypeChange(
-                                                                index,
-                                                                newType
-                                                            )
-                                                        }
-                                                        inputTypeList={
-                                                            selectOptions
-                                                        }
-                                                    />
-                                                </section>
-                                            )} */}
-
-                                            {opendInput?.id === formField.id && (
-                                                <section className="meta-menu">
-                                                    {/* Always show delete button */}
-                                                    <DisplayButton
-                                                        onClick={() => {
-                                                            deleteParticularFormField(index);
-                                                            setOpendInput(null);
-                                                        }}
-                                                        wraperClass={`delete`}
-                                                        children={<i className="admin-font adminlib-delete"></i>}
-                                                        btnType="button"
-                                                    />
-                                                    {/* Show settings only if field is editable */}
-                                                    {/* {!formField.readonly && (
-                                                        <SettingMetaBox
-                                                            formField={formField}
-                                                            opened={isInputBoxClick}
-                                                            onChange={(key, value) =>
-                                                                handleFormFieldChange(index, key, value)
-                                                            }
-                                                            onTypeChange={(newType) =>
-                                                                handleFormFieldTypeChange(index, newType)
-                                                            }
-                                                            inputTypeList={selectOptions}
-                                                        />
-                                                    )} */}
-                                                </section>
-                                            )}
-
-                                            { /* Render main content */}
-                                            <section
-                                                className={`${opendInput?.id !== formField.id
-                                                    ? 'hidden-list'
-                                                    : ''
-                                                    } form-field-container-wrapper`}
-                                                role="button"
-                                                tabIndex={0}
-                                                onClick={(event) => {
-                                                    event.stopPropagation();
-                                                    SetIsInputBoxClick({
-                                                        click: true,
-                                                    });
-                                                    if (
-                                                        opendInput?.id !==
-                                                        formField.id
-                                                    ) {
-                                                        setOpendInput(formField);
-                                                    }
-                                                }}
-                                            >
-                                                { /* Render question name here */}
-                                                {(formField.type === 'text' ||
-                                                    formField.type === 'email' ||
-                                                    formField.type ===
-                                                    'number') && (
-                                                        <SimpleInput
-                                                            formField={formField}
-                                                            onChange={(key, value) =>
-                                                                handleFormFieldChange(
-                                                                    index,
-                                                                    key,
-                                                                    value
-                                                                )
-                                                            }
-                                                        />
-                                                    )}
-                                                {(formField.type ===
-                                                    'checkboxes' ||
-                                                    formField.type ===
-                                                    'multiselect' ||
-                                                    formField.type === 'radio' ||
-                                                    formField.type ===
-                                                    'dropdown') && (
-                                                        <MultipleOptions
-                                                            formField={formField}
-                                                            type={formField.type}
-                                                            selected={
-                                                                opendInput?.id ===
-                                                                formField.id
-                                                            }
-                                                            onChange={(key, value) =>
-                                                                handleFormFieldChange(
-                                                                    index,
-                                                                    key,
-                                                                    value
-                                                                )
-                                                            }
-                                                        />
-                                                    )}
-                                                {formField.type === 'textarea' && (
-                                                    <TemplateTextArea
-                                                        formField={formField}
-                                                        onChange={(key, value) =>
-                                                            handleFormFieldChange(
-                                                                index,
-                                                                key,
-                                                                value
-                                                            )
-                                                        }
-                                                    />
-                                                )}
-                                                {formField.type ===
-                                                    'attachment' && (
-                                                        <Attachment
-                                                            formField={formField}
-                                                            onChange={(key, value) =>
-                                                                handleFormFieldChange(
-                                                                    index,
-                                                                    key,
-                                                                    value
-                                                                )
-                                                            }
-                                                        />
-                                                    )}
-                                                {formField.type ===
-                                                    'recaptcha' && (
-                                                        <Recaptcha
-                                                            formField={formField}
-                                                            onChange={(key, value) =>
-                                                                handleFormFieldChange(
-                                                                    index,
-                                                                    key,
-                                                                    value
-                                                                )
-                                                            }
-                                                        />
-                                                    )}
-                                                {formField.type ===
-                                                    'datepicker' && (
-                                                        <Datepicker
-                                                            formField={formField}
-                                                            onChange={(key, value) =>
-                                                                handleFormFieldChange(
-                                                                    index,
-                                                                    key,
-                                                                    value
-                                                                )
-                                                            }
-                                                        />
-                                                    )}
-                                                {formField.type ===
-                                                    'TimePicker' && (
-                                                        <TimePicker
-                                                            formField={formField}
-                                                            onChange={(key, value) =>
-                                                                handleFormFieldChange(
-                                                                    index,
-                                                                    key,
-                                                                    value
-                                                                )
-                                                            }
-                                                        />
-                                                    )}
-                                                {formField.type === 'section' && (
-                                                    <TemplateSection
-                                                        formField={formField}
-                                                        onChange={(key, value) =>
-                                                            handleFormFieldChange(
-                                                                index,
-                                                                key,
-                                                                value
-                                                            )
-                                                        }
-                                                    />
-                                                )}
-                                                {formField.type === 'divider' && (
-                                                    <div className="section-divider-container">
-                                                        Section Divider
-                                                    </div>
-                                                )}
-                                            </section>
-                                            {/* <DisplayButton
-                                                wraperClass={'add-new-sections'}
-                                                children={
-                                                    <div className="icon-wrapper">
-                                                        <span className="admin-font adminlib-move"></span>
-                                                    </div>
-                                                }
-                                                onClick={() => {
-                                                    const newInput =
-                                                        appendNewFormField(index);
-                                                    setOpendInput(newInput);
-                                                }}
-                                                btnType='button'
-                                            /> */}
-                                        </main>
-                                    );
-                                })}
-                        </ReactSortable>
-                    }
-
-                    <section className="settings-input-content">
-                        <ButtonCustomizer
-                            text={
-                                (buttonSetting.button_text &&
-                                    buttonSetting.button_text) ||
-                                'Submit'
+                            const newInput = appendNewFormField(formFieldList.length - 1, type);
+                            if (newInput) {
+                                setOpendInput(newInput);
                             }
-                            setting={buttonSetting}
-                            onChange={(
-                                key,
-                                value,
-                                isRestoreDefaults = false
-                            ) => {
-                                if (proSettingChange()) return;
-                                settingHasChanged.current = true;
-                                const previousSetting = buttonSetting || {};
-                                if (isRestoreDefaults) {
-                                    setButtonSetting(value);
-                                } else {
-                                    setButtonSetting({
-                                        ...previousSetting,
-                                        [key]: value,
-                                    });
-                                }
-                            }}
-                        />
-                    </section>
+
+                        }}
+                    />
+                    <Elements
+                        label="MultivendorX Free"
+                        selectOptions={selectOptionsStore}
+                        onClick={(type) => {
+                            const option = selectOptionsStore.find(o => o.value === type);
+                            const fixedName = option?.name;
+                            appendNewFormField(formFieldList.length - 1, type, fixedName, true);
+                            setOpendInput(null);
+                        }}
+                    />
+                    <Elements
+                        label="MultivendorX Pro"
+                        selectOptions={selectOptionsStore}
+                        onClick={(type) => {
+                            const option = selectOptionsStore.find(o => o.value === type);
+                            const fixedName = option?.name;
+                            appendNewFormField(formFieldList.length - 1, type, fixedName, true);
+                            setOpendInput(null);
+                        }}
+                    />
+                </>
+            ),
+        },
+        { id: "templates", label: "Templates", content: <div /> },
+    ];
+
+    return (
+        <div className="registration-from-wrapper">
+            <div className="elements-wrapper">
+                <div className="tab-titles">
+                    {tabs.map(tab => (
+                        <div
+                            key={tab.id}
+                            className={`title ${activeTab === tab.id ? "active" : ""}`}
+                            onClick={() => setActiveTab(tab.id)}
+                        >
+                            <p>{tab.label}</p>
+                        </div>
+                    ))}
+                </div>
+                <div className="tab-contend">
+                    {tabs.map(tab => activeTab === tab.id && <div key={tab.id} className="tab-panel">{tab.content}</div>)}
+                </div>
+            </div>
+
+            <div className="registration-form-main-section">
+                {/* Form Title */}
+                <div className="form-heading">
+                    <input
+                        type="text"
+                        className="basic-input"
+                        placeholder={formTitlePlaceholder}
+                        value={formFieldList[0]?.label}
+                        onChange={(e) => handleFormFieldChange(0, 'label', e.target.value)}
+                    />
                     <DisplayButton
-                        wraperClass="addnew"
+                        wraperClass={'add-new-sections'}
                         children={
-                            <>
-                                <i className="admin-font adminlib-move"></i>
-                                <p>{'Click to add next text field'}</p>
-                            </>
+                            <div className="icon-wrapper">
+                                <span className="admin-font adminlib-move"></span>
+                            </div>
                         }
                         onClick={() => {
-                            const newInput = appendNewFormField(
-                                formFieldList.length - 1
-                            );
-                            setOpendInput(newInput);
+                            const newInput = appendNewFormField(formFieldList.length - 1);
+                            if (newInput) {
+                                setOpendInput(newInput);
+                            }
                         }}
                         btnType='button'
                     />
                 </div>
-                <div className="registration-edit-form">
-                    <SettingMetaBox
-                        formField={demoFormField}
-                        opened={{ click: true }} 
-                        onChange={(key, value) => {
-                            console.log("Field changed:", key, value);
-                        }}
-                        onTypeChange={(newType) => {
-                            console.log("Type changed:", newType);
-                        }}
-                        inputTypeList={demoSelectOptions}
-                    />
-                </div>
+
+                {/* Form Fields */}
+                <ReactSortable
+                    list={formFieldList}
+                    setList={(newList) => {
+                        if (firstTimeRender.current) {
+                            firstTimeRender.current = false;
+                            return;
+                        }
+                        if (proSettingChange()) return;
+                        settingHasChanged.current = true;
+                        setFormFieldList(newList);
+                    }}
+                    handle=".drag-handle"
+                >
+                    {formFieldList.map((formField, index) => {
+                        if (index === 0) return <div key={index} style={{ display: 'none' }}></div>;
+                        return (
+                            <main
+                                key={formField.id}
+                                className={`form-field 
+                                                ${opendInput?.id === formField.id
+                                        ? 'active'
+                                        : ''
+                                    }`}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    setOpendInput(formField);
+                                }}
+                            >
+                                {opendInput?.id === formField.id && (
+                                    <section className="meta-menu">
+                                        {/* <DisplayButton
+                                            onClick={() => {
+                                                const index = formFieldList.findIndex(f => f.id === opendInput.id);
+                                                if (index >= 0) deleteParticularFormField(index);
+                                                setOpendInput(null);
+                                            }}
+                                            wraperClass={`delete`}
+                                            children={<i className="admin-font adminlib-delete"></i>}
+                                            btnType="button"
+                                        /> */}
+                                        {opendInput?.id === formField.id && (
+                                            <div className="admin-badge blue drag-handle">
+                                                <i className="admin-font adminlib-drag"></i>
+                                            </div>
+                                        )}
+                                        <span
+                                            onClick={() => {
+                                                const index = formFieldList.findIndex(f => f.id === opendInput.id);
+                                                if (index >= 0) deleteParticularFormField(index);
+                                                setOpendInput(null);
+                                            }}
+                                            className="admin-badge red"
+                                        >
+                                            <i className="admin-font adminlib-delete"></i>
+                                        </span>
+                                    </section>
+                                )}
+                                <section className={`form-field-container-wrapper`}>
+                                    {['text', 'email', 'number'].includes(formField.type) && (
+                                        <SimpleInput
+                                            formField={formField}
+                                            onChange={(key, value) => handleFormFieldChange(index, key, value)}
+                                        />
+                                    )}
+                                    {['radio', 'dropdown', 'multiselect', 'checkboxes'].includes(formField.type) && (
+                                        <MultipleOptions
+                                            formField={formField}
+                                            onChange={(key, value) => handleFormFieldChange(index, key, value)}
+                                            type={formField.type as any}
+                                            selected={false}
+                                        />
+                                    )}
+                                    {formField.type === 'datepicker' && (
+                                        <Datepicker formField={formField} onChange={(key, value) => handleFormFieldChange(index, key, value)} />
+                                    )}
+                                    {formField.type === 'TimePicker' && (
+                                        <TimePicker formField={formField} onChange={(key, value) => handleFormFieldChange(index, key, value)} />
+                                    )}
+                                    {formField.type === 'attachment' && (
+                                        <Attachment formField={formField} onChange={(key, value) => handleFormFieldChange(index, key, value)} />
+                                    )}
+                                    {formField.type === 'section' && (
+                                        <TemplateSection formField={formField} onChange={(key, value) => handleFormFieldChange(index, key, value)} />
+                                    )}
+                                    {/* {formField.type === 'block-layout' && (
+                                        <BlockLayout />
+                                    )} */}
+                                    {formField.type === 'textarea' && (
+                                        <TemplateTextArea
+                                            formField={formField}
+                                            onChange={(key, value) =>
+                                                handleFormFieldChange(
+                                                    index,
+                                                    key,
+                                                    value
+                                                )
+                                            }
+                                        />
+                                    )}
+                                    {formField.type ===
+                                        'recaptcha' && (
+                                            <Recaptcha
+                                                formField={formField}
+                                                onChange={(key, value) =>
+                                                    handleFormFieldChange(
+                                                        index,
+                                                        key,
+                                                        value
+                                                    )
+                                                }
+                                            />
+                                        )}
+                                </section>
+                            </main>
+                        );
+                    })}
+                </ReactSortable>
+
+                <ButtonCustomizer
+                    text={
+                        (buttonSetting.button_text &&
+                            buttonSetting.button_text) ||
+                        'Submit'
+                    }
+                    setting={buttonSetting}
+                    onChange={(
+                        key,
+                        value,
+                        isRestoreDefaults = false
+                    ) => {
+                        if (proSettingChange()) return;
+                        settingHasChanged.current = true;
+                        const previousSetting = buttonSetting || {};
+                        if (isRestoreDefaults) {
+                            setButtonSetting(value);
+                        } else {
+                            setButtonSetting({
+                                ...previousSetting,
+                                [key]: value,
+                            });
+                        }
+                    }}
+                />
             </div>
 
-        </>
-
+            {/* Meta Setting Modal outside registration-form-main-section */}
+            <div className="registration-edit-form">
+                {opendInput && !opendInput.readonly && (
+                    <>
+                        <SettingMetaBox
+                            formField={opendInput}
+                            opened={{ click: true }}
+                            onChange={(key, value) => {
+                                const index = formFieldList.findIndex(f => f.id === opendInput.id);
+                                if (index >= 0) {
+                                    handleFormFieldChange(index, key, value);
+                                    // Update the local open input so the UI updates immediately
+                                    setOpendInput({ ...formFieldList[index], [key]: value });
+                                }
+                            }}
+                            onTypeChange={(newType) => {
+                                const index = formFieldList.findIndex(f => f.id === opendInput.id);
+                                if (index >= 0) {
+                                    handleFormFieldTypeChange(index, newType);
+                                    // Update the local open input type
+                                    setOpendInput({ ...formFieldList[index], type: newType });
+                                }
+                            }}
+                            inputTypeList={selectOptions}
+                        />
+                    </>
+                )}
+            </div>
+        </div>
     );
 };
 
-export default CustomFrom;
+export default CustomForm;

@@ -135,44 +135,79 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
         $count    = $request->get_param( 'count' );
         $store_id = intval( $request->get_param( 'store_id' ) );
         $status   = $request->get_param( 'status' );
+        $filter_status   = $request->get_param( 'filter_status' );
+        // 🔹 Handle date range from request
+        $start_date = $request->get_param('start_date');
+        $end_date   = $request->get_param('end_date');
+        $transaction_type   = $request->get_param('transaction_type');
+        $transaction_status   = $request->get_param('transaction_status');
+    
+        if ( $start_date ) {
+            $start_date = date('Y-m-d H:i:s', strtotime($start_date));
+        }
+        if ( $end_date ) {
+            $end_date = date('Y-m-d H:i:s', strtotime($end_date));
+        }
     
         $args = array();
         if ( $count ) $args['count'] = true;
         if ( $status ) $args['status'] = $status;
         if ( $store_id ) $args['store_id'] = $store_id;
     
+        // Add date filters
+        if ( $start_date ) $args['start_date'] = $start_date;
+        if ( $end_date )   $args['end_date']   = $end_date;
+        if ( $filter_status )   $args['entry_type']   = $filter_status;
+    
         if ( $count ) {
             $transactions = Transaction::get_transaction_information( $args );
             return rest_ensure_response( (int) $transactions );
         }
-    
-        $args['limit'] = $limit;
+        if ( $transaction_status )   $args['status']   = $transaction_status;
+        if ( $transaction_type )   $args['transaction_type']   = $transaction_type;
+        $args['limit']  = $limit;
         $args['offset'] = $offset;
     
         $transactions = Transaction::get_transaction_information( $args );
     
         $formatted = array_map(function($row) {
-            // Get store details
             $store = new \MultiVendorX\Store\Store($row['store_id']);
-        
+    
             return [
+                'id'             => $row['id'],
                 'store_name'     => $store ? $store->get('name') : '-',
                 'amount'         => $row['amount'],
                 'balance'        => $row['balance'],
                 'status'         => $row['status'],
                 'payment_method' => $store->meta_data['payment_method'] ?? 'Not Saved',
-                'credit'           => $row['entry_type'] === 'Cr' ? $row['amount'] : 0,
-                'debit'            => $row['entry_type'] === 'Dr' ? $row['amount'] : 0,
-                'date'             => $row['created_at'],
-                'order_details'    => $row['order_id'],
+                'credit'         => $row['entry_type'] === 'Cr' ? $row['amount'] : 0,
+                'debit'          => $row['entry_type'] === 'Dr' ? $row['amount'] : 0,
+                'date'           => $row['created_at'],
+                'order_details'  => $row['order_id'],
                 'transaction_type' => $row['transaction_type'],
-
             ];
         }, $transactions);
+        $countArgs = [
+            'count' => true,
+        ];
         
-    
-        return rest_ensure_response( $formatted );
+        if ( $store_id ) {
+            $countArgs['store_id'] = $store_id;
+        }
+        
+        $all    = Transaction::get_transaction_information( $countArgs );
+        $credit = Transaction::get_transaction_information( array_merge( $countArgs, ['entry_type' => 'Cr'] ) );
+        $debit  = Transaction::get_transaction_information( array_merge( $countArgs, ['entry_type' => 'Dr'] ) );
+        
+        $response = [
+            'transaction' => $formatted,
+            'all'         => $all,
+            'credit'      => $credit,
+            'debit'      =>  $debit,
+        ];
+        return rest_ensure_response( $response );
     }
+    
     
     
     
@@ -198,8 +233,9 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
     
         if ( ! $store_id ) {
             return rest_ensure_response( [
-                'balance' => 0,
-                'locking_balance' => 0
+                'balance'         => 0,
+                'locking_balance' => 0,
+                'lifetime_earning'=> 0,
             ] );
         }
     
@@ -219,15 +255,98 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
             ARRAY_A
         );
     
+        $balance = isset($last_transaction['balance']) ? $last_transaction['balance'] : 0;
+        $locking_balance = isset($last_transaction['locking_balance']) ? $last_transaction['locking_balance'] : 0;
+    
+        // Calculate total lifetime earnings (sum of all amounts)
+        $total_earning = $wpdb->get_var(
+            $wpdb->prepare(
+                "SELECT SUM(amount) 
+                 FROM $table_name 
+                 WHERE store_id = %d",
+                $store_id
+            )
+        );
+    
+        $total_earning = $total_earning ? $total_earning : 0;
+    
+        // Lifetime earning minus locking balance
+        $lifetime_earning = $total_earning - $locking_balance;
+
+        $payout_threshold = MultiVendorX()->setting->get_setting('payout_threshold_amount', 0);
+
+        // If it’s an array, take first value, else use as is
+        if (is_array($payout_threshold)) {
+            $payout_threshold = reset($payout_threshold) ?: 0;
+        }
+        
+        $payout_threshold = floatval($payout_threshold);
+        $minimum_wallet_amount = MultiVendorX()->setting->get_setting( 'wallet_threshold_amount', 0 );
+        $locking_day = MultiVendorX()->setting->get_setting( 'commission_lock_period', 0 );
+
         return rest_ensure_response([
-            'balance'      => isset($last_transaction['balance']) ? $last_transaction['balance'] : 0,
-            'locking_balance' => isset($last_transaction['locking_balance']) ? $last_transaction['locking_balance'] : 0,
+            'wallet_balance'   => $balance,
+            'reserve_balance'  => $minimum_wallet_amount,
+            'thresold'         => $payout_threshold,
+            'available_balance'=> max(0, $balance - $minimum_wallet_amount),
+            'balance'          => $balance,
+            'locking_day'      => $locking_day,
+            'locking_balance'  => $locking_balance,
+            'lifetime_earning' => $lifetime_earning,
         ]);
+                
     }
     
-
     public function update_item( $request ) {
+        $nonce = $request->get_header( 'X-WP-Nonce' );
+        if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
+            return new \WP_Error(
+                'invalid_nonce',
+                __( 'Invalid nonce', 'multivendorx' ),
+                array( 'status' => 403 )
+            );
+        }
+    
+        $store_id = absint( $request->get_param( 'store_id' ) );
+        $amount = (float) $request->get_param( 'amount' );
+        $withdraw = $request->get_param( 'withdraw' );
+
+        $store = new \MultiVendorX\Store\Store( $store_id );
+        $disbursement = $request->get_param( 'disbursement' );
+
+        $threshold_amount = MultiVendorX()->setting->get_setting('payout_threshold_amount', 0);
+        if ($disbursement) {
+            $method = $request->get_param( 'method' );
+            $note = $request->get_param( 'note' );
+
+            if ($threshold_amount < $amount) {
+                MultiVendorX()->payments->processor->process_payment( $store_id, $amount, null, $method, $note);
+                return rest_ensure_response([
+                    'success' => true,
+                    'id'      => $store_id,
+                ]);
+
+            }
+        }
+
+        if($withdraw ){
+            if ($threshold_amount < $amount) {
+                MultiVendorX()->payments->processor->process_payment( $store_id, $amount);
+                $store->delete_meta('request_withdrawal_amount');
+            }
+
+            return rest_ensure_response([
+                'success' => true,
+                'id'      => $store_id,
+            ]);
+        }
+
+        $store->update_meta('request_withdrawal_amount', $amount);
         
+        return rest_ensure_response([
+            'success' => true,
+            'id'      => $store_id,
+        ]);
     }
 
 }

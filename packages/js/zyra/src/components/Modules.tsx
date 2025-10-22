@@ -306,15 +306,14 @@ const Modules: React.FC<ModuleProps> = ({
                                     </div>
                                     <div className="module-details">
 
-                                        <div className="meta-name">{module.name}
+                                        <div className="meta-name">{module.name}</div>
+                                        <div className="tag-wrapper">                                        
                                             {getCategories(module.category).map((cat, idx) => (
                                                 <span key={idx} className="admin-badge blue">
                                                     {formatCategory(cat)}
                                                 </span>
                                             ))}
-
                                         </div>
-
                                         <p
                                             className="meta-description"
                                             dangerouslySetInnerHTML={{ __html: module.desc }}
@@ -359,7 +358,6 @@ const Modules: React.FC<ModuleProps> = ({
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
                         );
                     })}

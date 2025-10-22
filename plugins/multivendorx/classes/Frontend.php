@@ -43,27 +43,56 @@ class Frontend {
     
     }
     public function show_store_info($product_id) {
-        
-        $store_details = MultiVendorX()->setting->get_setting( 'store_branding_details', [] );
-        if (in_array( 'show_store_name', $store_details )) {
-            $store = StoreUtil::get_products_vendor($product_id);
+        $store_details = MultiVendorX()->setting->get_setting('store_branding_details', []);
+    
+        if (in_array('show_store_name', $store_details)) {
+            $store = StoreUtil::get_products_vendor($product_id);    
             if (!$store) return;
-            $name = $store->get('name');
-
-             $logo_html = '';
-            if ( in_array( 'show_store_logo_next_to_products', $store_details ) ) {
-                $logo_url  = $store->get( 'image' ) ?: MultiVendorX()->plugin_url . 'assets/images/default-store.jpg';
-                $logo_html = '<img src="' . esc_url( $logo_url ) . '" alt="' . esc_attr( $name ) . '" />';
+    
+            $store_user_ids = StoreUtil::get_store_users($store->get_id());
+            $store_owner_id = null;
+            $store_owner_name = '';
+    
+            // Find store owner
+            if (!empty($store_user_ids) && is_array($store_user_ids)) {
+                foreach ($store_user_ids as $user_id) {
+                    $user = get_userdata($user_id);
+                    if ($user && in_array('store_owner', (array) $user->roles, true)) {
+                        $store_owner_id = $user->ID;
+                        $store_owner_name = $user->display_name;
+                        break;
+                    }
+                }
             }
-
+    
+            $name        = $store->get('name');
+            $description = $store->get('description');
+            $phone       = $store->get_meta('phone')?? '';
+            $email       = $store->get_meta('email')??'';
+            $address_1   = $store->get_meta('address_1')??'';
+    
+            $logo_html = '';
+            if (in_array('show_store_logo_next_to_products', $store_details)) {
+                
+                $logo_url  = $store->get_meta('image') ?? MultiVendorX()->plugin_url . 'assets/images/default-store.jpg';
+                $logo_html = '<img src="' . esc_url($logo_url) . '" alt="' . esc_attr($name) . '" />';
+            }
+    
             return [
-                'id'  => $store->get_id(),
-                'name'  => $name,
-                'logo_html'  => $logo_html,
+                'id'            => $store->get_id(),
+                'name'          => $name,
+                'description'   => $description,
+                'logo_html'     => $logo_html,
+                'owner_id'      => $store_owner_id,
+                'owner_name'    => $store_owner_name,
+                'phone'         => $phone,
+                'email'         => $email,
+                'address'       => $address_1,
             ];
-            
         }
     }
+    
+    
 
     public function add_text_in_shop_and_single_product_page() {
         global $post;
@@ -76,7 +105,9 @@ class Frontend {
     
                 echo '<a class="by-store-name-link" style="display:block;" target="_blank" href="' 
                     . esc_url( MultiVendorX()->store->storeutil->get_store_url( $details['id'] ) ) . '">'
-                    . esc_html( $sold_by_text ) . ' ' . $details['logo_html'] . esc_html( $details['name'] ) 
+                    . esc_html( $sold_by_text ) . ' ' 
+                    // . $details['logo_html'] 
+                    . esc_html( $details['name'] ) 
                     . '</a>';
             }
         }
@@ -120,7 +151,7 @@ class Frontend {
     }
 
     public function woocommerce_product_store_tab() {
-        MultiVendorX()->util->get_template( 'store-single-product-tab.php' );
+        MultiVendorX()->util->get_template( 'store/store-single-product-tab.php' );
     }
 
     /**
@@ -224,22 +255,21 @@ class Frontend {
     public function vendor_dashboard_template($template) {
         //checking change later when all function ready
         if (  is_user_logged_in() && is_page() && has_shortcode(get_post()->post_content, 'multivendorx_store_dashboard') ) {
-            return MultiVendorX()->plugin_path . 'templates/store-dashboard.php';
+            return MultiVendorX()->plugin_path . 'templates/store/store-dashboard.php';
         }
         return $template;
     }
 
-    public function multivendorx_store_login() {
-        MultiVendorX()->plugin_path . 'templates/store-dashboard.php';
-    }
+    // public function multivendorx_store_login() {
+    //     MultiVendorX()->plugin_path . 'templates/store-dashboard.php';
+    // }
 
     public function save_product() {
         global $wp;
-        file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":request:  : " . var_export($_POST, true) . "\n", FILE_APPEND);
-
+      
         if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) { 
 
-            if ( $wp->query_vars['subtab'] != 'edit-product' || ! isset( $_POST['mvx_product_nonce'] ) ) {
+            if ( $wp->query_vars['subtab'] != 'edit' || ! isset( $_POST['mvx_product_nonce'] ) ) {
                 return;
             }
             
@@ -401,26 +431,26 @@ class Frontend {
                     }
                 }
                 // Group Products
-                // $grouped_products = isset( $_POST['grouped_products'] ) ? array_filter( array_map( 'intval', (array) $_POST['grouped_products'] ) ) : array();
+                $grouped_products = isset( $_POST['grouped_products'] ) ? array_filter( array_map( 'intval', (array) $_POST['grouped_products'] ) ) : array();
 
-                // // file paths will be stored in an array keyed off md5(file path)
-                // $downloads = array();
-                // if ( isset( $_POST['_downloadable'] ) && isset( $_POST['_wc_file_urls'] ) ) {
-                //     $file_urls = isset($_POST['_wc_file_urls']) ? wp_unslash($_POST['_wc_file_urls']) : '';
-                //     $file_names = isset( $_POST['_wc_file_names'] ) ? wp_unslash($_POST['_wc_file_names']) : array();
-                //     $file_hashes = isset( $_POST['_wc_file_hashes'] ) ? wp_unslash($_POST['_wc_file_hashes']) : array();
+                // file paths will be stored in an array keyed off md5(file path)
+                $downloads = array();
+                if ( isset( $_POST['_downloadable'] ) && isset( $_POST['_wc_file_urls'] ) ) {
+                    $file_urls = isset($_POST['_wc_file_urls']) ? wp_unslash($_POST['_wc_file_urls']) : '';
+                    $file_names = isset( $_POST['_wc_file_names'] ) ? wp_unslash($_POST['_wc_file_names']) : array();
+                    $file_hashes = isset( $_POST['_wc_file_hashes'] ) ? wp_unslash($_POST['_wc_file_hashes']) : array();
 
-                //     $file_url_size = sizeof( $file_urls );
-                //     for ( $i = 0; $i < $file_url_size; $i ++ ) {
-                //         if ( ! empty( $file_urls[$i] ) ) {
-                //             $downloads[] = array(
-                //                 'name'        => wc_clean( $file_names[$i] ),
-                //                 'file'        => wp_unslash( trim( $file_urls[$i] ) ),
-                //                 'download_id' => wc_clean( $file_hashes[$i] ),
-                //             );
-                //         }
-                //     }
-                // }
+                    $file_url_size = sizeof( $file_urls );
+                    for ( $i = 0; $i < $file_url_size; $i ++ ) {
+                        if ( ! empty( $file_urls[$i] ) ) {
+                            $downloads[] = array(
+                                'name'        => wc_clean( $file_names[$i] ),
+                                'file'        => wp_unslash( trim( $file_urls[$i] ) ),
+                                'download_id' => wc_clean( $file_hashes[$i] ),
+                            );
+                        }
+                    }
+                }
 
                 $error = $product->set_props(
                     array(
@@ -458,7 +488,7 @@ class Frontend {
                         'menu_order'         => isset( $_POST['menu_order'] ) ? wc_clean( $_POST['menu_order'] ) : null,
                         'reviews_allowed'    => ! empty( $_POST['comment_status'] ) && 'open' === $_POST['comment_status'],
                         'attributes'         => $attributes,
-                        // 'default_attributes' => mvx_woo()->prepare_set_attributes( $attributes, 'default_attribute_', $_POST ),
+                        'default_attributes' => Products::prepare_set_attributes( $attributes, 'default_attribute_', $_POST ),
                     )
                 );
 
@@ -470,11 +500,11 @@ class Frontend {
 
                 $product->save();
 
-                // if ( $product->is_type( 'variable' ) ) {
-                //     $product->get_data_store()->sync_variation_names( $product, wc_clean( $_POST['original_post_title'] ), wc_clean( $_POST['post_title'] ) );
-                //     $error = mvx_woo()->save_product_variations( $post_id, $_POST );
-                //     $errors = array_merge( $errors, $error );
-                // }
+                if ( $product->is_type( 'variable' ) ) {
+                    $product->get_data_store()->sync_variation_names( $product, wc_clean( $_POST['original_post_title'] ), wc_clean( $_POST['post_title'] ) );
+                    $error = Products::save_product_variations( $post_id, $_POST );
+                    $errors = array_merge( $errors, $error );
+                }
 
 
                 do_action( 'mvx_process_product_meta_' . $product_type, $post_id, $_POST );
@@ -492,7 +522,7 @@ class Frontend {
                         break;
                 }
                 wc_add_notice( $status_msg, 'success' );
-                wp_safe_redirect(StoreUtil::get_endpoint_url('products', 'edit-product', $post_id));
+                wp_safe_redirect(StoreUtil::get_endpoint_url('products', 'edit', $post_id));
                 exit;
             } else {
                 $error_msg = ( $post_id->get_error_code() === 'empty_content' ) ? __( 'Content, title, and excerpt are empty.', 'multivendorx' ) : $post_id->get_error_message();

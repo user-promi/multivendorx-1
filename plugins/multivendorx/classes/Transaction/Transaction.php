@@ -212,17 +212,21 @@ class Transaction {
         }
     
         // Filter by status
+        if ( isset( $args['entry_type'] ) ) {
+            $where[] = " ( entry_type = '" . esc_sql( $args['entry_type'] ) . "' ) ";
+        }
+        
+        // Filter by status
         if ( isset( $args['status'] ) ) {
             $where[] = " ( status = '" . esc_sql( $args['status'] ) . "' ) ";
         }
-    
-        // Filter by date range (available_at)
+        // 🔹 Filter by date range on created_at
         if ( isset( $args['start_date'] ) ) {
-            $where[] = ' ( available_at >= ' . esc_sql( $args['start_date'] ) . ' ) ';
+            $where[] = " ( created_at >= '" . esc_sql( $args['start_date'] ) . "' ) ";
         }
     
         if ( isset( $args['end_date'] ) ) {
-            $where[] = ' ( available_at <= ' . esc_sql( $args['end_date'] ) . ' ) ';
+            $where[] = " ( created_at <= '" . esc_sql( $args['end_date'] ) . "' ) ";
         }
     
         $table = $wpdb->prefix . Utill::TABLES['transaction'];
@@ -256,5 +260,35 @@ class Transaction {
             return $results ?? array();
         }
     }
-    
+
+    public static function get_balances_for_store( $store_id ) {
+        global $wpdb;
+        $table_name = $wpdb->prefix . Utill::TABLES['transaction'];
+
+        $query = $wpdb->prepare("
+            SELECT 
+                balance, 
+                locking_balance
+            FROM {$table_name}
+            WHERE store_id = %d
+            ORDER BY id DESC
+            LIMIT 1
+        ", $store_id);
+
+        // Fetch the result
+        $result = $wpdb->get_row($query);
+
+        if ( ! $result ) {
+            return [
+                'balance' => 0.00,
+                'locking_balance' => 0.00,
+            ];
+        }
+
+        return [
+            'balance' => floatval($result->balance),
+            'locking_balance' => floatval($result->locking_balance),
+        ];
+    }
+
 }

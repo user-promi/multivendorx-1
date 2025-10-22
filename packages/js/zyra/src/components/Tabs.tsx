@@ -34,6 +34,7 @@ type TabsProps = {
   onNavigate?: (url: string) => void;
   tabTitleSection?: React.ReactNode;
   appLocalizer?:any;
+  submenuRender?: boolean;
 };
 
 // Helper functions outside component to avoid recreation on every render
@@ -166,6 +167,7 @@ const Tabs: React.FC<TabsProps> = ({
   onNavigate,
   tabTitleSection,
   appLocalizer,
+  submenuRender,
 }) => {
   const [activeTab, setActiveTab] = useState(currentTab);
   const [menuStack, setMenuStack] = useState<TabData[][]>([tabData]);
@@ -414,6 +416,7 @@ const Tabs: React.FC<TabsProps> = ({
       <AdminBreadcrumbs
         activeTabIcon={tabIcon}
         tabTitle={parentTab}
+        submenuRender={submenuRender}
         renderBreadcrumb={renderBreadcrumbLinks}
         renderMenuItems={renderAllMenuItems}
         tabData={tabData}

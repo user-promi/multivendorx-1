@@ -1,72 +1,10 @@
-// /**
-//  * External dependencies
-//  */
-// import React, { useState } from 'react';
-// import DatePicker from 'react-multi-date-picker';
-
-// // Types
-// interface CalendarInputProps {
-//     wrapperClass?: string;
-//     inputClass?: string;
-//     format?: string;
-//     multiple?: boolean;
-//     range?: boolean;
-//     value: string;
-//     onChange?: ( date: any ) => void;
-//     proSetting?: boolean;
-// }
-
-// const CalendarInput: React.FC< CalendarInputProps > = ( props ) => {
-//     let formattedDate: any;
-//     const dates = props.value.split( ',' );
-
-//     if ( dates.length === 1 && ! dates[ 0 ].includes( ' - ' ) ) {
-//         formattedDate = new Date( dates[ 0 ].trim() );
-//     } else {
-//         formattedDate = dates.map( ( date ) => {
-//             if ( date.includes( ' - ' ) ) {
-//                 const rangeDates = date.split( ' - ' );
-//                 const startDate = new Date( rangeDates[ 0 ].trim() );
-//                 const endDate = new Date( rangeDates[ 1 ].trim() );
-//                 return [ startDate, endDate ];
-//             }
-//             return new Date( date.trim() );
-//         } );
-//     }
-
-//     const [ selectedDate, setSelectedDate ] = useState< any >(
-//         formattedDate || ''
-//     );
-
-//     const handleDateChange = ( e: any ) => {
-//         setSelectedDate( e );
-//         props.onChange?.( e );
-//     };
-
-//     return (
-//         <div className={ props.wrapperClass }>
-//             <DatePicker
-//                 className={ props.inputClass }
-//                 format={ props.format || 'YYYY-MM-DD' }
-//                 multiple={ props.multiple }
-//                 range={ props.range }
-//                 value={ selectedDate }
-//                 placeholder={ 'YYYY-MM-DD' }
-//                 onChange={ handleDateChange }
-//             />
-//             { props.proSetting && <span className="admin-pro-tag"><i className="adminlib-pro-tag"></i>Pro</span> }
-//         </div>
-//     );
-// };
-
-// export default CalendarInput;
-
-
 /**
  * External dependencies
  */
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { DateRangePicker, Range, RangeKeyDict } from 'react-date-range';
+import 'react-date-range/dist/styles.css'; // main style file
+import 'react-date-range/dist/theme/default.css'; // theme css file
 
 interface CalendarInputProps {
     wrapperClass?: string;
@@ -77,6 +15,7 @@ interface CalendarInputProps {
     value?: { startDate: Date; endDate: Date }; // better type
     onChange?: (date: { startDate: Date; endDate: Date }) => void;
     proSetting?: boolean;
+    showLabel?: boolean;
 }
 
 const CalendarInput: React.FC<CalendarInputProps> = (props) => {
@@ -93,7 +32,22 @@ const CalendarInput: React.FC<CalendarInputProps> = (props) => {
     const [pickerPosition, setPickerPosition] = useState<'top' | 'bottom'>('bottom');
     const dateRef = useRef<HTMLDivElement | null>(null);
     const [openDatePicker, setOpenDatePicker] = useState(false);
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (
+                openDatePicker &&
+                dateRef.current &&
+                !dateRef.current.contains(event.target as Node)
+            ) {
+                setOpenDatePicker(false);
+            }
+        };
 
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [openDatePicker]);
     const handleDateOpen = () => {
         if (dateRef.current) {
             const rect = dateRef.current.getBoundingClientRect();
@@ -126,9 +80,74 @@ const CalendarInput: React.FC<CalendarInputProps> = (props) => {
         });
     };
 
+    const getLabel = () => {
+        const start = selectedRange[0].startDate!;
+        const end = selectedRange[0].endDate!;
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        // Today
+        if (start.toDateString() === today.toDateString() && end.toDateString() === today.toDateString()) {
+            return "Today";
+        }
+
+        // Yesterday
+        const yesterday = new Date(today);
+        yesterday.setDate(today.getDate() - 1);
+        if (start.toDateString() === yesterday.toDateString() && end.toDateString() === yesterday.toDateString()) {
+            return "Yesterday";
+        }
+
+        // This Week
+        const dayOfWeek = today.getDay();
+        const mondayThisWeek = new Date(today);
+        mondayThisWeek.setDate(today.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1));
+        const sundayThisWeek = new Date(mondayThisWeek);
+        sundayThisWeek.setDate(mondayThisWeek.getDate() + 6);
+
+        if (start.toDateString() === mondayThisWeek.toDateString() && end.toDateString() === sundayThisWeek.toDateString()) {
+            return "This Week";
+        }
+
+        // Last Week
+        const mondayLastWeek = new Date(mondayThisWeek);
+        mondayLastWeek.setDate(mondayThisWeek.getDate() - 7);
+        const sundayLastWeek = new Date(mondayLastWeek);
+        sundayLastWeek.setDate(mondayLastWeek.getDate() + 6);
+
+        if (start.toDateString() === mondayLastWeek.toDateString() && end.toDateString() === sundayLastWeek.toDateString()) {
+            return "Last Week";
+        }
+
+        // This Month
+        const firstOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+        const lastOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+
+        if (start.toDateString() === firstOfMonth.toDateString() && end.toDateString() === lastOfMonth.toDateString()) {
+            return "This Month";
+        }
+
+        // Last Month
+        const firstOfLastMonth = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+        const lastOfLastMonth = new Date(today.getFullYear(), today.getMonth(), 0);
+
+        if (start.toDateString() === firstOfLastMonth.toDateString() && end.toDateString() === lastOfLastMonth.toDateString()) {
+            return "Last Month";
+        }
+
+        // If no match, show nothing
+        return "";
+    };
+
+
+
     return (
         <div className={props.wrapperClass}>
             <div className="date-picker-section-wrapper" ref={dateRef}>
+                {props.showLabel && getLabel() && (
+                    <div className="date-label">{getLabel()}</div>
+                )}
+
                 <input
                     value={`${selectedRange[0].startDate?.toLocaleDateString('en-US', {
                         month: 'short',
@@ -140,16 +159,15 @@ const CalendarInput: React.FC<CalendarInputProps> = (props) => {
                         year: 'numeric',
                     })}`}
                     onClick={handleDateOpen}
-                    className={props.inputClass || 'basic-input'}
+                    className={props.inputClass || 'basic-input date'}
                     type="text"
                     readOnly
                     placeholder="DD/MM/YYYY"
                 />
                 {openDatePicker && (
                     <div
-                        className={`date-picker ${
-                            pickerPosition === 'top' ? 'open-top' : 'open-bottom'
-                        }`}
+                        className={`date-picker ${pickerPosition === 'top' ? 'open-top' : 'open-bottom'
+                            }`}
                         id="date-picker-wrapper"
                     >
                         <DateRangePicker

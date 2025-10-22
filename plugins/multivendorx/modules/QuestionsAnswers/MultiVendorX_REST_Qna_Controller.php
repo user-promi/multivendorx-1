@@ -46,11 +46,19 @@ class MultiVendorX_REST_Qna_Controller extends \WP_REST_Controller {
                 'callback'            => [$this, 'update_item'],
                 'permission_callback' => [$this, 'update_item_permissions_check'],
             ],
+            [
+                'methods'             => \WP_REST_Server::DELETABLE,
+                'callback'            => [$this, 'delete_item'],
+                'permission_callback' => [$this, 'update_item_permissions_check'],
+                'args'                => [
+                    'id' => ['required' => true],
+                ],
+            ],
         ]);
     }
 
     public function get_items_permissions_check($request) {
-        return current_user_can( 'read' );
+        return current_user_can( 'read' )||current_user_can('edit_stores');
     }
 
      // POST permission
@@ -63,7 +71,9 @@ class MultiVendorX_REST_Qna_Controller extends \WP_REST_Controller {
     }
 
 
-    // GET 
+    /**
+     * Get QnA items with optional pagination and date filter
+     */
     public function get_items( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
@@ -73,42 +83,48 @@ class MultiVendorX_REST_Qna_Controller extends \WP_REST_Controller {
                 [ 'status' => 403 ]
             );
         }
-    
-        $current_user_id = get_current_user_id();
-        $current_user    = wp_get_current_user();
-    
-        $limit  = max( intval( $request->get_param( 'row' ) ), 10 );
-        $page   = max( intval( $request->get_param( 'page' ) ), 1 );
-        $offset = ( $page - 1 ) * $limit;
-    
+
+        $store_id   = $request->get_param( 'store_id' );
+        $limit      = max( intval( $request->get_param( 'row' ) ), 10 );
+        $page       = max( intval( $request->get_param( 'page' ) ), 1 );
+        $offset     = ( $page - 1 ) * $limit;
+        $start_date = $request->get_param('startDate');
+        $end_date   = $request->get_param('endDate');
+        $count = $request->get_param( 'count' );
+        $args = array();
+
+        if ( $store_id ) {
+            $args['store_id'] = intval( $store_id );
+        }
+
         // Count only
-        if ( $request->get_param( 'count' ) ) {
-            $total_count = Util::get_question_information( [ 'count' => true ] );
+        if ( $count ) {
+            $args['count'] = true;
+            $total_count = Util::get_question_information( $args );
             return rest_ensure_response( (int) $total_count );
         }
-    
-        $questions = Util::get_question_information( [
-            'limit'  => $limit,
-            'offset' => $offset,
-        ] );
-    
-        // Filter based on role
-        $questions = array_filter( $questions, function( $q ) use ( $current_user, $current_user_id ) {
-            if ( in_array( 'administrator', $current_user->roles ) ) {
-                return true; // Admin sees all
-            }
-    
-            if ( in_array( 'store_owner', $current_user->roles ) ) {
-                $product = wc_get_product( $q['product_id'] );
-                return $product && $product->get_author() == $current_user_id;
-            }
-    
-            return false; // Other users see nothing
-        });
-    
-        // Format response with product details
+
+        $args['limit'] = $limit;
+        $args['offset'] = $offset;
+
+        if ( $start_date ) {
+            $args['start_date'] = sanitize_text_field( $start_date );
+        }
+        if ( $end_date ) {
+            $args['end_date'] = sanitize_text_field( $end_date );
+        }
+
+        $questions = Util::get_question_information( $args );
+
+        // Format response
         $formatted = array_map( function( $q ) {
-            $product = wc_get_product( $q['product_id'] );
+        $product = wc_get_product( $q['product_id'] );
+        $first_name = get_the_author_meta( 'first_name', $q['question_by'] );
+        $last_name  = get_the_author_meta( 'last_name', $q['question_by'] );
+        $author_name = ($first_name && $last_name)
+            ? $first_name . ' ' . $last_name
+            : get_the_author_meta( 'display_name', $q['question_by'] );
+            
             return [
                 'id'                  => (int) $q['id'],
                 'product_id'          => (int) $q['product_id'],
@@ -117,18 +133,17 @@ class MultiVendorX_REST_Qna_Controller extends \WP_REST_Controller {
                 'question_text'       => $q['question_text'],
                 'answer_text'         => $q['answer_text'],
                 'question_by'         => (int) $q['question_by'],
-                'author_name'         => get_the_author_meta( 'display_name', $q['question_by'] ),
+                'author_name'         => $author_name,
                 'question_date'       => $q['question_date'],
                 'time_ago'            => human_time_diff( strtotime( $q['question_date'] ), current_time( 'timestamp' ) ) . ' ago',
                 'total_votes'         => (int) $q['total_votes'],
                 'question_visibility' => $q['question_visibility'],
             ];
         }, $questions );
-    
+
         return rest_ensure_response( $formatted );
     }
-    
-    
+
     
     public function create_item( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
@@ -147,7 +162,7 @@ class MultiVendorX_REST_Qna_Controller extends \WP_REST_Controller {
                 [ 'status' => 403 ]
             );
         }
-    
+        
         $current_user_id = get_current_user_id();
         $current_user    = wp_get_current_user();
     
@@ -197,9 +212,8 @@ class MultiVendorX_REST_Qna_Controller extends \WP_REST_Controller {
         return rest_ensure_response( $data );
     }
     
-    
-    
     public function update_item( $request ) {
+        // Verify nonce
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             return new \WP_Error(
@@ -209,9 +223,7 @@ class MultiVendorX_REST_Qna_Controller extends \WP_REST_Controller {
             );
         }
     
-        $current_user_id = get_current_user_id();
-        $current_user    = wp_get_current_user();
-    
+        // Get question ID
         $id = absint( $request->get_param( 'id' ) );
         if ( ! $id ) {
             return new \WP_Error(
@@ -221,33 +233,13 @@ class MultiVendorX_REST_Qna_Controller extends \WP_REST_Controller {
             );
         }
     
-        // Fetch the question first
+        // Fetch the question
         $q = reset( Util::get_question_information( [ 'id' => $id ] ) );
         if ( ! $q ) {
             return new \WP_Error(
                 'not_found',
                 __( 'Question not found', 'multivendorx' ),
                 [ 'status' => 404 ]
-            );
-        }
-    
-        // Permission check
-        if ( in_array( 'administrator', $current_user->roles ) ) {
-            // Admin can update anything
-        } elseif ( in_array( 'store_owner', $current_user->roles ) ) {
-            $product = wc_get_product( $q['product_id'] );
-            if ( ! $product || $product->get_author() != $current_user_id ) {
-                return new \WP_Error(
-                    'forbidden',
-                    __( 'You are not allowed to edit this question', 'multivendorx' ),
-                    [ 'status' => 403 ]
-                );
-            }
-        } else {
-            return new \WP_Error(
-                'forbidden',
-                __( 'You are not allowed to edit questions', 'multivendorx' ),
-                [ 'status' => 403 ]
             );
         }
     
@@ -282,7 +274,7 @@ class MultiVendorX_REST_Qna_Controller extends \WP_REST_Controller {
             );
         }
     
-        // Save via Util helper (implement update_question in Util)
+        // Save via Util helper
         $updated = Util::update_question( $id, $data_to_update );
     
         if ( ! $updated ) {
@@ -292,4 +284,48 @@ class MultiVendorX_REST_Qna_Controller extends \WP_REST_Controller {
         return rest_ensure_response( [ 'success' => true ] );
     }
     
+    public function delete_item( $request ) {
+        // Verify nonce
+        $nonce = $request->get_header( 'X-WP-Nonce' );
+        if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
+            return new \WP_Error(
+                'invalid_nonce',
+                __( 'Invalid nonce', 'multivendorx' ),
+                [ 'status' => 403 ]
+            );
+        }
+    
+        // Get question ID
+        $id = absint( $request->get_param( 'id' ) );
+        if ( ! $id ) {
+            return new \WP_Error(
+                'invalid_id',
+                __( 'Invalid question ID', 'multivendorx' ),
+                [ 'status' => 400 ]
+            );
+        }
+    
+        // Fetch the question
+        $q = reset( Util::get_question_information( [ 'id' => $id ] ) );
+        if ( ! $q ) {
+            return new \WP_Error(
+                'not_found',
+                __( 'Question not found', 'multivendorx' ),
+                [ 'status' => 404 ]
+            );
+        }
+    
+        // Delete via Util helper (implement delete_question in Util)
+        $deleted = Util::delete_question( $id );
+    
+        if ( ! $deleted ) {
+            return new \WP_Error(
+                'delete_failed',
+                __( 'Failed to delete question', 'multivendorx' ),
+                [ 'status' => 500 ]
+            );
+        }
+    
+        return rest_ensure_response( [ 'success' => true ] );
+    }  
 }

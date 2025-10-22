@@ -96,32 +96,61 @@ class Modules {
 						'module_file'  => MultiVendorX()->plugin_path . 'modules/StoreReview/Module.php',
 						'module_class' => 'MultiVendorX\StoreReview\Module',
 					),
-                    'bank-transfer' => array(
-                        'id'           => 'bank-transfer',
-						'module_file'  => MultiVendorX()->plugin_path . 'modules/BankTransfer/Module.php',
-						'module_class' => 'MultiVendorX\BankTransfer\Module',
-					),
-                    'stripe-connect' => array(
-                        'id'           => 'stripe-connect',
-						'module_file'  => MultiVendorX()->plugin_path . 'modules/StripeConnect/Module.php',
-						'module_class' => 'MultiVendorX\StripeConnect\Module',
-					),
-                    'paypal-payout' => array(
-                        'id'           => 'paypal-payout',
-						'module_file'  => MultiVendorX()->plugin_path . 'modules/PaypalPayout/Module.php',
-						'module_class' => 'MultiVendorX\PaypalPayout\Module',
-					),
+                    // 'bank-transfer' => array(
+                    //     'id'           => 'bank-transfer',
+					// 	'module_file'  => MultiVendorX()->plugin_path . 'modules/BankTransfer/Module.php',
+					// 	'module_class' => 'MultiVendorX\BankTransfer\Module',
+					// ),
+                    // 'stripe-connect' => array(
+                    //     'id'           => 'stripe-connect',
+					// 	'module_file'  => MultiVendorX()->plugin_path . 'modules/StripeConnect/Module.php',
+					// 	'module_class' => 'MultiVendorX\StripeConnect\Module',
+					// ),
+                    // 'paypal-payout' => array(
+                    //     'id'           => 'paypal-payout',
+					// 	'module_file'  => MultiVendorX()->plugin_path . 'modules/PaypalPayout/Module.php',
+					// 	'module_class' => 'MultiVendorX\PaypalPayout\Module',
+					// ),
                     'question-answer' => array(
                         'id'           => 'question-answer',
 						'module_file'  => MultiVendorX()->plugin_path . 'modules/QuestionsAnswers/Module.php',
 						'module_class' => 'MultiVendorX\QuestionsAnswers\Module',
 					),
-                    'spmv' => array(
-                        'id'           => 'spmv',
-						'module_file'  => MultiVendorX()->plugin_path . 'modules/Spmv/Module.php',
-						'module_class' => 'MultiVendorX\SPMV\Module',
+                    'marketplace-refund' => array(
+                        'id'           => 'marketplace-refund',
+						'module_file'  => MultiVendorX()->plugin_path . 'modules/Refund/Module.php',
+						'module_class' => 'MultiVendorX\Refund\Module',
 					),
-
+                    'follow-store' => array(
+                        'id'           => 'follow-store',
+						'module_file'  => MultiVendorX()->plugin_path . 'modules/FollowStore/Module.php',
+						'module_class' => 'MultiVendorX\FollowStore\Module',
+					),
+                    'report-abuse' => array(
+                        'id'           => 'report-abuse',
+						'module_file'  => MultiVendorX()->plugin_path . 'modules/ReportAbuse/Module.php',
+						'module_class' => 'MultiVendorX\ReportAbuse\Module',
+					),
+                    'geo-location'=> array(
+                        'id'=> 'geo-location',
+                        'module_file'=> MultiVendorX()->plugin_path . 'modules/GeoLocation/Module.php',
+                        'module_class' => 'MultiVendorX\GeoLocation\Module',
+                    ),
+                    'zone-shipping'=> array(
+                        'id'=> 'zone-shipping',
+                        'module_file'=> MultiVendorX()->plugin_path . 'modules/ZoneShipping/Module.php',
+                        'module_class' => 'MultiVendorX\ZoneShipping\Module',
+                    ),
+                    'country-shipping'=> array(
+                        'id'=> 'zone-shipping',
+                        'module_file'=> MultiVendorX()->plugin_path . 'modules/CountryShipping/Module.php',
+                        'module_class' => 'MultiVendorX\CountryShipping\Module',
+                    ),
+                    'distance-shipping'=> array(
+                        'id'=> 'zone-shipping',
+                        'module_file'=> MultiVendorX()->plugin_path . 'modules/DistanceShipping/Module.php',
+                        'module_class' => 'MultiVendorX\DistanceShipping\Module',
+                    ),
 				)
             );
         }

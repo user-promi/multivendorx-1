@@ -36,7 +36,6 @@ class Module {
         // Init helper classes.
         $this->init_classes();
 
-        do_action( 'load_premium_variable_module' );
     }
 
     /**
@@ -45,6 +44,9 @@ class Module {
      * @return void
      */
     public function init_classes() {
+        $this->container['frontend'] = new Frontend();
+        $this->container['ajax'] = new Ajax();
+
     }
 
     /**

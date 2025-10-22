@@ -116,9 +116,13 @@
             font-size: 1rem;
         }
         input,
+        input:not([type="checkbox"]),
         select{
             width: 100%;
             padding-top: 0.313rem;
+        }
+        input[type="checkbox"]{
+            margin-left: 0.5rem;
         }
     }
 }

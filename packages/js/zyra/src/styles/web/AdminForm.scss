@@ -42,34 +42,88 @@
         }
       }
     }
+
+    .form-group:has(.pro-setting) {
+      position: relative;
+      background: #e350470a;
+      border: 0.063rem solid #e350472e;
+      padding: 0.45rem;
+      border-radius: 0.313rem;
+    }
   }
 }
 
 // metabox description start
 .settings-metabox-note {
-  width: 67%;
   background: #ece2f991;
   padding: 0.5rem 0.8rem;
   display: flex;
-  align-items: center;
+  align-items: start;
   gap: 0.5rem;
   border: 0.063rem solid $theme-color;
   border-radius: 0.313rem;
+  margin: 0.625rem 0;
+  // width: 100%;
 
   i {
     font-size: 1.313rem;
     color: $theme-color;
   }
 
+  ul,
+  li {
+    margin: 0;
+  }
+
+  .title {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: $theme-color;
+    line-height: 1.5rem;
+  }
+
   p {
     font-size: 0.875rem;
     margin: 0;
+  }
+
+  &.notice {
+    flex-direction: column;
+    align-items: start;
+    width: 100%;
+
+    .title {
+      display: flex;
+      gap: 0.5rem;
+
+      h3 {
+        margin: 0;
+      }
+    }
+  }
+
+  &.green {
+    background: #d9f5f0d8;
+    border-color: #06be9f;
+
+    i {
+      color: #06be9f;
+    }
+  }
+
+  &.yellow {
+    background: #fff0e1e3;
+    border-color: #ff9f43;
+
+    i {
+      color: #ff9f43;
+    }
   }
 }
 
 .settings-metabox-description {
   padding-top: 0.45rem;
-  color: #424242d0;
+  color: $sub-text-color;
   width: 100%;
   line-height: 1.5;
 
@@ -88,7 +142,7 @@
 
   li {
     list-style-type: number;
-    margin-left: 0.875rem;
+    margin-left: 1rem;
   }
 
   code {
@@ -300,7 +354,9 @@
       }
     }
   }
-} // radio input end
+}
+
+// radio input end
 
 @media screen and (width <=61.488rem) {
   .dynamic-fields-wrapper {

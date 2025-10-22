@@ -24,8 +24,6 @@ const Transactions: React.FC = () => {
     const [totalRows, setTotalRows] = useState<number>(0);
     const [pagination, setPagination] = useState<PaginationState>({ pageIndex: 0, pageSize: 10 });
     const [pageCount, setPageCount] = useState(0);
-    const [showDropdown, setShowDropdown] = useState<number | false>(false);
-    const [modalTransaction, setModalTransaction] = useState<TransactionRow | null>(null);
 
     // Fetch total pending transactions
     useEffect(() => {
@@ -40,22 +38,29 @@ const Transactions: React.FC = () => {
                 setPageCount(Math.ceil(response.data / pagination.pageSize));
             });
     }, []);
-    const handleTransactionAction = (action: 'approve' | 'reject', transactionId: number) => {
-        let newStatus = action === 'approve' ? 'Completed' : 'Rejected';
 
-        axios.put(
-            `${appLocalizer.apiUrl}/transactions/${transactionId}`, // replace with your actual endpoint
-            { status: newStatus },
-            { headers: { 'X-WP-Nonce': appLocalizer.nonce } }
-        )
-            .then(() => {
-                console.log(`Transaction ${action}d successfully`);
-                requestData(pagination.pageSize, pagination.pageIndex + 1); // refresh table
-            })
-            .catch((error) => {
-                console.error(`Failed to ${action} transaction`, error.response || error.message);
-            });
+    const handleTransactionAction = (rowData: any) => {
+        axios({
+            method: 'PUT',
+            url: getApiLink(appLocalizer, `transaction/${rowData.id}`), // fix template literal
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            data: { // use data for PUT payload
+                withdraw: true,
+                store_id: rowData.id,
+                amount: rowData.withdraw_amount
+            }
+        })
+        .then((response) => {
+            console.log("success", response.data);
+            requestData(pagination.pageSize, pagination.pageIndex + 1);
+        })
+        .catch((error) => {
+            console.error(error);
+            setData([]);
+        });
     };
+    
+    
 
     // Fetch paginated transactions
     useEffect(() => {
@@ -64,19 +69,18 @@ const Transactions: React.FC = () => {
         setPageCount(Math.ceil(totalRows / pagination.pageSize));
     }, [pagination]);
 
-    const toggleDropdown = (id: number) => {
-        setShowDropdown(showDropdown === id ? false : id);
-    };
-
     const requestData = (rowsPerPage = 10, currentPage = 1) => {
         setData(null);
         axios({
             method: 'GET',
-            url: getApiLink(appLocalizer, 'transaction'),
+            url: getApiLink(appLocalizer, 'store'),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            params: { row: rowsPerPage, page: currentPage, status: 'Completed' },
+            // params: { row: rowsPerPage, page: currentPage, status: 'Completed' },
+            params:{pending_withdraw:true}
         })
-            .then((response) => setData(response.data || []))
+            .then((response) =>{
+                setData(response.data || [])
+            } )
             .catch(() => setData([]));
     };
 
@@ -102,36 +106,36 @@ const Transactions: React.FC = () => {
             header: __('Store', 'multivendorx'),
             cell: ({ row }) => <TableCell>{row.original.store_name || '-'}</TableCell>,
         },
-        {
-            header: __('Amount', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell>
-                    {`${appLocalizer.currency_symbol}${Number(row.original.amount).toFixed(2)}`}
-                </TableCell>
-            ),
-        },
+        // {
+        //     header: __('Amount', 'multivendorx'),
+        //     cell: ({ row }) => (
+        //         <TableCell>
+        //             {`${appLocalizer.currency_symbol}${Number(row.original.amount).toFixed(2)}`}
+        //         </TableCell>
+        //     ),
+        // },
         {
             header: __('Requested Amount', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell>
-                    {`${appLocalizer.currency_symbol}${Number(row.original.balance).toFixed(2)}`}
+                    {`${appLocalizer.currency_symbol}${Number(row.original.withdraw_amount).toFixed(2)}`}
                 </TableCell>
             ),
         },
-        {
-            header: __('Payment Method', 'multivendorx'),
-            cell: ({ row }) => <TableCell>{row.original.payment_method || '-'}</TableCell>,
-        },
-        {
-            header: __('Status', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell>
-                    <span className={`admin-badge ${row.original.status === 'pending' ? 'red' : 'green'}`}>
-                        {row.original.status}
-                    </span>
-                </TableCell>
-            ),
-        },
+        // {
+        //     header: __('Payment Method', 'multivendorx'),
+        //     cell: ({ row }) => <TableCell>{row.original.payment_method || '-'}</TableCell>,
+        // },
+        // {
+        //     header: __('Status', 'multivendorx'),
+        //     cell: ({ row }) => (
+        //         <TableCell>
+        //             <span className={`admin-badge ${row.original.status === 'pending' ? 'red' : 'green'}`}>
+        //                 {row.original.status}
+        //             </span>
+        //         </TableCell>
+        //     ),
+        // },
         {
             header: __('Action', 'multivendorx'),
             cell: ({ row }) => (
@@ -144,7 +148,7 @@ const Transactions: React.FC = () => {
                                 label: __('Approve', 'multivendorx'),
                                 icon: 'adminlib-check',
                                 onClick: (rowData) => {
-                                    handleTransactionAction('approve', rowData.id!);
+                                    handleTransactionAction(rowData);
                                 },
                                 hover: true,
                             },
@@ -183,13 +187,6 @@ const Transactions: React.FC = () => {
                     totalCounts={totalRows}
                 />
             </div>
-
-            {/* {modalTransaction && (
-                <TransactionDetailsModal
-                    transaction={modalTransaction}
-                    onClose={() => setModalTransaction(null)}
-                />
-            )} */}
         </>
     );
 };

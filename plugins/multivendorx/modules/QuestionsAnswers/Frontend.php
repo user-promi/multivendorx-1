@@ -48,7 +48,7 @@ class Frontend {
      */
     public function multivendorx_product_qna_tab_content() {
         global $product;
-        MultiVendorX()->util->get_template( 'store-single-product-qna-tab.php', ['product_id' => $product->get_id()] );
+        MultiVendorX()->util->get_template( 'store/store-single-product-qna-tab.php', ['product_id' => $product->get_id()] );
     }
     
 }

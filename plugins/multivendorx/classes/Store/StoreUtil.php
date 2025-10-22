@@ -274,8 +274,6 @@ class StoreUtil {
         return $stores ?: [];
     }
     
-
-
     public static function set_primary_owner( $user_id, $store_id ) {
         global $wpdb;
 
@@ -453,6 +451,71 @@ class StoreUtil {
             }
         }
         return esc_url($url);
+    }
+
+    /**
+     * Get store records from the database based on given filters.
+     *
+     * @param array $args Filter options like 'ID', 'status', 'name', 'slug', 'description', 'who_created', 'create_time', 'limit', 'offset', 'count'.
+     * @return array|int List of stores (array) or count (int) if 'count' is set.
+     */
+    public static function get_store_information( $args = [] ) {
+        global $wpdb;
+
+        $where = [];
+
+        if ( isset( $args['ID'] ) ) {
+            $ids     = is_array( $args['ID'] ) ? $args['ID'] : [ $args['ID'] ];
+            $ids     = implode( ',', array_map( 'intval', $ids ) );
+            $where[] = "ID IN ($ids)";
+        }
+
+        if ( isset( $args['status'] ) ) {
+            $where[] = "status = '" . esc_sql( $args['status'] ) . "'";
+        }
+
+        if ( isset( $args['name'] ) ) {
+            $where[] = "name LIKE '%" . esc_sql( $args['name'] ) . "%'";
+        }
+
+        if ( isset( $args['slug'] ) ) {
+            $where[] = "slug = '" . esc_sql( $args['slug'] ) . "'";
+        }
+
+        if ( isset( $args['searchField'] ) ) {
+            $search = esc_sql( $args['searchField'] );
+            $where[] = "(name LIKE '%$search%')";
+        }
+        
+        if ( isset( $args['start_date'] ) && isset( $args['end_date'] ) ) {
+            $where[] = "create_time BETWEEN '" . esc_sql( $args['start_date'] ) . "' AND '" . esc_sql( $args['end_date'] ) . "'";
+        }
+        
+        $table = $wpdb->prefix . Utill::TABLES['store'];
+
+        if ( isset( $args['count'] ) ) {
+            $query = "SELECT COUNT(*) FROM {$table}";
+        } else {
+            $query = "SELECT * FROM {$table}";
+        }
+
+        if ( ! empty( $where ) ) {
+            $condition = $args['condition'] ?? ' AND ';
+            $query    .= ' WHERE ' . implode( $condition, $where );
+        }
+
+        if ( isset( $args['limit'] ) && isset( $args['offset'] ) && empty( $args['count'] ) ) {
+            $limit  = intval( $args['limit'] );
+            $offset = intval( $args['offset'] );
+            $query .= " LIMIT $limit OFFSET $offset";
+        }
+        if ( isset( $args['count'] ) ) {
+            $results = $wpdb->get_var( $query ); // phpcs:ignore WordPress.DB.*
+            return $results ?? 0;
+        } else {
+            $results = $wpdb->get_results( $query, ARRAY_A ); // phpcs:ignore WordPress.DB.*
+            return $results ?? [];
+        }
     }
 
 }

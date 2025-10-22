@@ -31,6 +31,10 @@ class Utill {
         'transaction'   => 'multivendorx_transactions',
         'real_time_transaction'   => 'multivendorx_real_time_transactions',
         'product_qna'   => 'multivendorx_questions_and_answers',
+        'report_abuse'   => 'multivendorx_report_abuse',
+        'shipping_zone'   => 'multivendorx_shipping_zone_methods',
+        'shipping_zone_locations'   => 'multivendorx_shipping_zone_locations',
+        
     );
 
     /**

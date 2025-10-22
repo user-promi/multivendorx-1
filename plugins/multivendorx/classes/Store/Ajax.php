@@ -27,6 +27,7 @@ class Ajax {
 
         add_action('wp_ajax_mvx_edit_product_attribute', array($this, 'edit_product_attribute_callback'));
         add_action('wp_ajax_mvx_product_save_attributes', array($this, 'save_product_attributes_callback'));
+        add_action('wp_ajax_mvx_product_tag_add', array($this, 'mvx_product_tag_add'));
         
     }
 
@@ -206,19 +207,20 @@ class Ajax {
     }
 
     public function mvx_set_classified_product_terms() {
+        // $product_id = isset($_POST['productId']) ? absint($_POST['productId']) : 0;
         $term_id = isset($_POST['term_id']) ? absint($_POST['term_id']) : 0;
         $taxonomy = isset($_POST['taxonomy']) ? wc_clean($_POST['taxonomy']) : '';
         $user_id = get_current_user_id();
         $url = '';
-        file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":term_id:  : " . var_export($term_id, true) . "\n", FILE_APPEND);
-        file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":taxonomy:  : " . var_export($taxonomy, true) . "\n", FILE_APPEND);
         // if (is_user_mvx_vendor($user_id)) {
             $data = array(
                 'term_id' => $term_id,
                 'taxonomy' => $taxonomy,
             );
             set_transient('classified_product_terms_vendor' . $user_id, $data, HOUR_IN_SECONDS);
-            $url = esc_url(StoreUtil::get_endpoint_url('products', 'edit-product'));
+
+            $product_id = MultiVendorX()->store->products->create_product_draft('product');
+            $url = esc_url(StoreUtil::get_endpoint_url('products', 'edit', $product_id));
         // }
         wp_send_json(array('url' => $url));
         die;
@@ -280,7 +282,7 @@ class Ajax {
         check_ajax_referer('mvx-types', 'security');
         $product_id = isset($_POST['product_id']) ? absint($_POST['product_id']) : 0;
         $parent_post = get_post($product_id);
-        $redirect_url = isset($_POST['redirect_url']) ? esc_url($_POST['redirect_url']) : esc_url(StoreUtil::get_endpoint_url('products', 'edit-product'));
+        $redirect_url = isset($_POST['redirect_url']) ? esc_url($_POST['redirect_url']) : esc_url(StoreUtil::get_endpoint_url('products', 'edit'));
         $product = wc_get_product($product_id);
         if (!function_exists('duplicate_post_plugin_activation')) {
             include_once( WC_ABSPATH . 'includes/admin/class-wc-admin-duplicate-product.php' );
@@ -364,6 +366,7 @@ class Ajax {
         $i = isset($_POST['i']) ? absint($_POST['i']) : 0;
         $metabox_class = array();
         $attribute = new \WC_Product_Attribute();
+        $self = new Products();
 
         $attribute->set_id(wc_attribute_taxonomy_id_by_name(sanitize_text_field($_POST['taxonomy'])));
         $attribute->set_name(sanitize_text_field($_POST['taxonomy']));
@@ -375,7 +378,7 @@ class Ajax {
             $metabox_class[] = $attribute->get_name();
         }
 
-        MultiVendorX()->util->get_template('views/html-product-attribute.php', ['attribute' => $attribute, 'metabox_class' => $metabox_class, 'i' => $i] );
+        MultiVendorX()->util->get_template('product/views/html-product-attribute.php', ['attribute' => $attribute, 'metabox_class' => $metabox_class, 'i' => $i, 'self' => $self] );
 
         wp_die();
     }
@@ -404,5 +407,32 @@ class Ajax {
         $product->save();
         wp_die();
     }
-}
 
+    function mvx_product_tag_add() {
+        check_ajax_referer('add-attribute', 'security');
+        $taxonomy = apply_filters('mvx_product_tag_add_taxonomy', 'product_tag');
+        $tax = get_taxonomy($taxonomy);
+        $tag_name = '';
+        $message = '';
+        $status = false;
+        if (!apply_filters('mvx_vendor_can_add_product_tag', true, get_current_user_id())) {
+            $message = __("You don't have permission to add product tags", 'multivendorx');
+            wp_send_json(array('status' => $status, 'tag_name' => $tag_name, 'message' => $message));
+            die;
+        }
+        $new_tag = isset($_POST['new_tag']) ? wc_clean($_POST['new_tag']) : '';
+        $tag = wp_insert_term($_POST['new_tag'], $taxonomy, array());
+
+        if (!$tag || is_wp_error($tag) || (!$tag = get_term($tag['term_id'], $taxonomy))) {
+            $message = __('An error has occurred. Please reload the page and try again.', 'multivendorx');
+            if (is_wp_error($tag) && $tag->get_error_message())
+                $message = $tag->get_error_message();
+        }else {
+            $tag_name = $tag->name;
+            $status = true;
+        }
+        wp_send_json(array('status' => $status, 'tag' => $tag, 'tag_name' => $tag_name, 'message' => $message));
+        die;
+    }
+
+}

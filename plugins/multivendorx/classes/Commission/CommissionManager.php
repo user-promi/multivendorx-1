@@ -249,7 +249,7 @@ class CommissionManager {
      * @param   object $vendor
      * @return  float
      */
-    public function get_item_commission( $product_id, $item_id, $item, $order, $vendor ) {
+    public function get_item_commission( $product_id, $item_id, $item, $order, $vendor, $after_refund_amount = null ) {
         $amount = 0;
         $commission = [];
         $product_value_total = 0;
@@ -270,12 +270,13 @@ class CommissionManager {
 
         // Calculate item total based on condition
         if ( MultiVendorX()->setting->get_setting( 'commission_include_coupon' ) == 'seperate' && empty( MultiVendorX()->setting->get_setting( 'admin_coupon_excluded' ) ) && !$store_coupon ) {
-            $line_total = $order->get_item_total( $item, false, false ) * $item['qty'];
+            $line_total = $after_refund_amount ? (($order->get_item_total( $item, false, false ) - $after_refund_amount) * $item['qty']) : $order->get_item_total( $item, false, false ) * $item['qty'];
         } else {
-            $line_total = $order->get_item_subtotal( $item, false, false ) * $item['qty'];
+            $line_total = $after_refund_amount ? (($order->get_item_subtotal( $item, false, false ) - $after_refund_amount) * $item['qty']) : $order->get_item_subtotal( $item, false, false ) * $item['qty'];
         }
         // Filter the item total before calculating item commission.
         $line_total = apply_filters( 'mvx_get_commission_line_total', $line_total, $item, $order );
+
 
         if ( $product_id && $vendor ) {
             
@@ -424,172 +425,231 @@ class CommissionManager {
      * @return  void
      */
     public function calculate_commission_refunds( $vendor_order, $refund_id ) {
+        global $wpdb;
         // $refund = new \WC_Order_Refund( $refund_id );
-        $commission_id = $vendor_order->get_props( '_commission_id' );
-        $vendor_id = $vendor_order->get_props( '_vendor_id', true );
+        $commission_id = $vendor_order->get_meta( 'multivendorx_commission_id', true );
+        $store_id = $vendor_order->get_meta( 'multivendorx_store_id', true );
+        $vendor = Store::get_store_by_id( $store_id );
         
-        $commission_amount = get_post_meta( $commission_id, '_commission_amount', true);
-        $included_coupon = get_post_meta( $commission_id, '_commission_include_coupon', true) ? true : false;
-        $included_tax = get_post_meta( $commission_id, '_commission_total_include_tax', true) ? true : false;
-        $items_commission_rates = $vendor_order->get_meta( 'multivendorx_order_items_commission_rates', true);
-        
-        $refunded_total = $refunds = $global_refunds = $commission_refunded_items = array();
+        if ($commission_id) {
 
-        if($commission_id){
-            $line_items_commission_refund = $global_commission_refund = 0;
+            $refund_total = 0;
             foreach ($vendor_order->get_refunds() as $_refund) {
-                $line_items_refund = $shipping_item_refund = $tax_item_refund = $amount = $refund_item_totals = 0;
-                // if commission refund exists
-                if ($_refund->get_meta('_refunded_commissions', true)) {
-                    $commission_amt = get_post_meta($_refund->get_id(), '_refunded_commissions', true);
-                    $refunds[$_refund->get_id()][$commission_id] = $commission_amt[$commission_id];
-                }
-                /** WC_Order_Refund items **/
-                foreach ($_refund->get_items() as $item_id => $item) { 
-                    $refunded_item_id = $item['refunded_item_id'];
-                    $refund_amount = $item['line_total'];
-                    $refunded_item_id = $item['refunded_item_id'];
-                    
-                    if ($refund_amount != 0) { 
-                        $refunded_total[$commission_id] += $refund_amount;
-                        $line_items_refund += $refund_amount;
+
+                $commission_type = MultiVendorX()->setting->get_setting( 'commission_type' );
+
+                $commission_amount = $shipping_amount = $tax_amount = $shipping_tax_amount = $gateway_fee = 0;
+
+                $commission_rates = [];
+
+                if ( $commission_type == 'per_item' ) {
+                    foreach ( $_refund->get_items() as $item_id => $item ) {
+                        $refund_amount = $item['line_total'];
+
+                        $product_id = $item['variation_id'] ? $item['variation_id'] : $item['product_id'];
+
+                        $item_commission = $this->get_item_commission( $product_id, $item_id, $item, $vendor_order, $vendor, $refund_amount );
+                        $commission_values = $this->get_commission_amount( $product_id, $item, $vendor );
+                        $commission_rate = [
+                            'mode' => 'store',
+                            'type' => 'per_item',
+                            'commission_val' => (float) ( $commission_values['commission_val'] ?? 0 ),
+                            'commission_fixed' => (float) ( $commission_values['commission_fixed'] ?? 0 )
+                        ];
                         
-                        if(isset($items_commission_rates[$refunded_item_id])){
-                            if ($items_commission_rates[$refunded_item_id]['type'] == 'fixed_with_percentage') {
-                                $amount = (float) $refund_amount * ( (float) $items_commission_rates[$refunded_item_id]['commission_val'] / 100 ) + (float) $items_commission_rates[$refunded_item_id]['commission_fixed'];
-                            } else if ($items_commission_rates[$refunded_item_id]['type'] == 'fixed_with_percentage_qty') {
-                                $amount = (float) $refund_amount * ( (float) $items_commission_rates[$refunded_item_id]['commission_val'] / 100 ) + ((float) $items_commission_rates[$refunded_item_id]['commission_fixed'] * $item['quantity']);
-                            } else if ($items_commission_rates[$refunded_item_id]['type'] == 'percent') {
-                                $amount = (float) $refund_amount * ( (float) $items_commission_rates[$refunded_item_id]['commission_val'] / 100 );
-                            } else if ($items_commission_rates[$refunded_item_id]['type'] == 'fixed') {
-                                $amount = (float) $items_commission_rates[$refunded_item_id]['commission_val'] * $item['quantity'];
-                            }
-                            if (isset($items_commission_rates[$refunded_item_id]['mode']) && $items_commission_rates[$refunded_item_id]['mode'] == 'admin') {
-                                $amount = (float) $refund_amount - (float) $amount;
-                            }
-                            $line_items_commission_refund += $amount;
-                            $refund_item_totals += $amount;
-                            $commission_refunded_items[$_refund->get_id()][$refunded_item_id] = $amount;
-                        }
+                        wc_update_order_item_meta( $item_id, 'multivendorx_store_item_commission', $item_commission );
+                        $commission_amount += floatval($item_commission);
+                        $commission_rates[$item_id] = $commission_rate;
                     }
+                } elseif ( $commission_type == 'store_order' ) {
+                    $commission_per_store_order = MultiVendorX()->setting->get_setting( 'commission_per_store_order' );
+                    foreach ($commission_per_store_order as $row) {
+                        if (array_key_exists('rule_type', $row)) {  
+                            switch ($row['rule_type']) {
+                                case 'order_value':
+                                    $order_total = (float) $vendor_order->get_total();
+        
+                                    if (
+                                        ($row['rule'] === 'less_than'  && $order_total <= (float) $row['order_value']) ||
+                                        ($row['rule'] === 'more_than' && $order_total >  (float) $row['order_value'])
+                                    ) {
+                                        $commission_amount = $order_total * ((float) $row['commission_percentage'] / 100) + (float) $row['commission_fixed'];
+                                        break 2;
+                                    }
+                                    break;
+        
+                                case 'price':
+                                case 'quantity':
+                                    foreach ($_refund->get_items() as $item_id => $item) {
+                                        // $line_total = $order->get_item_subtotal($item, false, false) * $item['qty'];
+                                        $store_coupon = false;
+                                        if ( $vendor_order->get_coupon_codes() ) {
+                                            foreach ( $vendor_order->get_coupon_codes() as $coupon_code ) {
+                                                $coupon   = new \WC_Coupon( $coupon_code );
+                                                $store_id = (int) get_post_meta( $coupon->get_id(), 'multivendorx_store_id', true );
+
+                                                if ( $store_id && Store::get_store_by_id( $store_id ) ) {
+                                                    $store_coupon = true;
+                                                }
+                                            }
+                                        }
+
+                                        if ( MultiVendorX()->setting->get_setting( 'commission_include_coupon' ) == 'seperate' && empty( MultiVendorX()->setting->get_setting( 'admin_coupon_excluded' ) ) && !$store_coupon ) {
+                                            $line_total = ($vendor_order->get_item_total( $item, false, false ) - $item['line_total']) * $item['qty'];
+                                        } else {
+                                            $line_total = ($vendor_order->get_item_subtotal( $item, false, false ) - $item['line_total']) * $item['qty'];
+                                        }
+        
+                                        $base_value = $row['rule_type'] === 'price'
+                                            ? (float) wc_get_product($item['variation_id'] ?: $item['product_id'])->get_price()
+                                            : (float) $row['product_qty'];
+        
+                                        $compare_value = $row['rule_type'] === 'price'
+                                            ? (float) $line_total
+                                            : (float) $item['qty'];
+        
+                                        if (
+                                            ($row['rule'] === 'less_than'  && $compare_value <= $base_value) ||
+                                            ($row['rule'] === 'more_than' && $compare_value >  $base_value)
+                                        ) {
+                                            $commission_amount += $line_total * ((float) $row['commission_percentage'] / 100) + (float) $row['commission_fixed'];
+                                        }
+                                    }
+        
+                                    if ($commission_amount > 0) {
+                                        break 2; // exit foreach + switch
+                                    }
+                                    break;
+                            }
+                        } 
+                    }
+
+                    if ($commission_amount <= 0) {
+                        $default_store_order_commission = reset($commission_per_store_order);                    
+                        $commission_amount = (float) ($vendor_order->get_total() - $_refund->get_amount()) * ((float) $default_store_order_commission['commission_percentage'] / 100) + (float) $default_store_order_commission['commission_fixed'];
+                    }
+
                 }
-                // add items total refunds
-                $refunds[$_refund->get_id()][$commission_id]['line_item'] = $refund_item_totals;
-                
-                if($line_items_commission_refund != 0){
-                    update_post_meta( $commission_id, '_commission_refunded_items', $line_items_commission_refund );
-                    update_post_meta( $commission_id, '_commission_refunded_items_data', $commission_refunded_items );
-                }
-                
+                $refund_total += $_refund->get_amount();
+            }
+
+            if (!empty( MultiVendorX()->setting->get_setting('gateway_fees') )) {
+                $fixed_fee      = 0;
+                $percentage_fee = 0;
+                $gateway_settings = reset(MultiVendorX()->setting->get_setting('gateway_fees', []));
+                $parent_order = wc_get_order($vendor_order->get_parent_id());
+
+                $payment_method = $parent_order->get_payment_method();
+                $fixed_fee = (float) (
+                    $gateway_settings[ $payment_method . '_fixed' ]
+                    ?? $gateway_settings['default_fixed']
+                    ?? 0
+                );
+
+                $percentage_fee = (float) (
+                    $gateway_settings[ $payment_method . '_percentage' ]
+                    ?? $gateway_settings['default_percentage']
+                    ?? 0
+                );
+
+                $gateway_fee = (float) $commission_amount * ((float) $percentage_fee / 100) + (float) $fixed_fee;
+            }
+
+            $commission = CommissionUtil::get_commission_db($commission_id);
+            $amount = $commission->commission_amount - $refund_total;
+
+            if ( $amount == 0  ) {
+                $status = 'refunded'; 
+            } else {
+                $status = 'partially_refunded';
+            }
+            $commission_total = (float) $commission_amount + (float) $shipping_amount + (float) $tax_amount + (float) $shipping_tax_amount - (float) $gateway_fee;
+
+            $data = [
+                'order_id'              => $vendor_order->get_id(),
+                'store_id'              => $store_id,
+                'customer_id'           => $vendor_order->get_customer_id(),
+                'total_order_amount'    => $vendor_order->get_total(),
+                'commission_amount'     => $commission_amount,
+                'gateway_fee'           => $gateway_fee,
+                // 'shipping_amount'       => $shipping_amount,
+                // 'tax_amount'            => $tax_amount,
+                // 'shipping_tax_amount'   => $shipping_tax_amount,
+                'discount_amount'       => $vendor_order->get_discount_total(),
+                'commission_total'      => $commission_total,
+                'commission_refunded'   => $refund_total,
+                'status'                => $status
+            ];
+
+            $format = [ "%d", "%d", "%d", "%f", "%f", "%f", "%f", "%f", "%f", "%s" ];
+        
+            $wpdb->update( $wpdb->prefix . Utill::TABLES['commission'], $data, ['ID' => $commission_id], $format );
+
+            do_action('mvx_after_create_commission_refunds', $vendor_order, $commission_id);
+
+
+            $data = [
+                'store_id'         => (int) $store_id,
+                'order_id'         => (int) $vendor_order->get_id(),
+                'commission_id'    => $commission_id ? (int) $commission_id : null,
+                'entry_type'       => 'Dr',
+                'transaction_type' => 'Refund',
+                'amount'           => abs($refund_total),
+                'currency'         => get_woocommerce_currency(),
+                'narration'        => "Withdrawal via refund",
+                'status'           => 'Completed',
+            ];
+
+            $format = ["%d", "%d", "%d", "%s", "%s", "%f", "%s", "%s", "%s"];
+
+            $wpdb->insert(
+                $wpdb->prefix . Utill::TABLES['transaction'],
+                $data,
+                $format
+            );
+            
+            return $commission_id;
+
                 /** WC_Order_Refund shipping **/
-                $refund_shipping_totals = 0;
-                foreach ($_refund->get_items('shipping') as $item_id => $item) { 
-                    if ( 0 < get_post_meta($commission_id, '_shipping', true) && get_post_meta($commission_id, '_commission_total_include_shipping', true) ){
-                        if($item['total'] != 0){
-                            $shipping_item_refund += $item['total'];
-                            $refund_shipping_totals += $item['total'];
-                        }
-                    }
-                }
-                if($shipping_item_refund != 0){
-                    $amount = $shipping_item_refund;
-                    if( $refund_shipping_totals )
-                        $refunds[$_refund->get_id()][$commission_id]['shipping'] = $refund_shipping_totals;
-                    update_post_meta( $commission_id, '_commission_refunded_shipping', $shipping_item_refund );
-                }
+                // $refund_shipping_totals = 0;
+                // foreach ($_refund->get_items('shipping') as $item_id => $item) { 
+                //     if ( 0 < get_post_meta($commission_id, '_shipping', true) && get_post_meta($commission_id, '_commission_total_include_shipping', true) ){
+                //         if($item['total'] != 0){
+                //             $shipping_item_refund += $item['total'];
+                //             $refund_shipping_totals += $item['total'];
+                //         }
+                //     }
+                // }
+                // if($shipping_item_refund != 0){
+                //     $amount = $shipping_item_refund;
+                //     if( $refund_shipping_totals )
+                //         $refunds[$_refund->get_id()][$commission_id]['shipping'] = $refund_shipping_totals;
+                //     update_post_meta( $commission_id, '_commission_refunded_shipping', $shipping_item_refund );
+                // }
                 
-                /** WC_Order_Refund tax **/
-                $refund_tax_totals = 0;
-                foreach ($_refund->get_items('tax') as $item_id => $item) { 
-                    if ( 0 < get_post_meta($commission_id, '_tax', true) && get_post_meta($commission_id, '_commission_total_include_tax', true) ){
-                        if($item['tax_total'] != 0 || $item['shipping_tax_total'] != 0){
-                            $tax_item_refund += $item['tax_total'] + $item['shipping_tax_total'];
-                            $refund_tax_totals += $item['tax_total'] + $item['shipping_tax_total'];
-                        }
-                    }
-                }
-                if($tax_item_refund != 0){
-                    $amount = $tax_item_refund;
-                    if( $refund_tax_totals )
-                        $refunds[$_refund->get_id()][$commission_id]['tax'] = $refund_tax_totals;
-                    update_post_meta( $commission_id, '_commission_refunded_tax', $tax_item_refund );
-                }
+                // /** WC_Order_Refund tax **/
+                // $refund_tax_totals = 0;
+                // foreach ($_refund->get_items('tax') as $item_id => $item) { 
+                //     if ( 0 < get_post_meta($commission_id, '_tax', true) && get_post_meta($commission_id, '_commission_total_include_tax', true) ){
+                //         if($item['tax_total'] != 0 || $item['shipping_tax_total'] != 0){
+                //             $tax_item_refund += $item['tax_total'] + $item['shipping_tax_total'];
+                //             $refund_tax_totals += $item['tax_total'] + $item['shipping_tax_total'];
+                //         }
+                //     }
+                // }
+                // if($tax_item_refund != 0){
+                //     $amount = $tax_item_refund;
+                //     if( $refund_tax_totals )
+                //         $refunds[$_refund->get_id()][$commission_id]['tax'] = $refund_tax_totals;
+                //     update_post_meta( $commission_id, '_commission_refunded_tax', $tax_item_refund );
+                // }
                 
-                // if global refund applied in this refund
-                $refund_amount = $_refund->get_amount() - abs( $line_items_refund );
-                if ( !$_refund->get_items() && !$_refund->get_items('shipping') && !$_refund->get_items('tax') ) {
-                    $global_refunds[$_refund->get_id()] = $_refund;
-                }
-                
-            }
-   
-            // global refund calculation
-            foreach ( $global_refunds as $_refund ) {
-                //$rate_to_refund = $_refund->get_amount() / $order->get_total();
-                //$commission_total = MVX_Commission::commission_totals($commission_id, 'edit');
-
-                if(!$_refund->get_meta('_refunded_commissions', true)){
-                    $refunds[$_refund->get_id()][$commission_id]['global'] = $_refund->get_amount() * -1;
-                    $global_commission_refund += $_refund->get_amount() * -1;
-                }else{
-                    $refunded_commission = $_refund->get_meta('_refunded_commissions', true);
-                    $refunded_commission_amt_data = isset($refunded_commission[$commission_id]) ? $refunded_commission[$commission_id] : array();
-                    $refunded_commission_amt = array_sum($refunded_commission_amt_data);
-                    $global_commission_refund += $refunded_commission_amt;
-                }
-            }
-            if($global_commission_refund != 0){
-                update_post_meta( $commission_id, '_commission_refunded_global', $global_commission_refund );
-            }
-       
-            // update the refunded commissions in the order to easy manage these in future
-            $refunded_amt_total = 0;
-            if($refunds) :
-                foreach ( $refunds as $_refund_id => $commissions_refunded ) {
-                    $comm_refunded_amt = $commissions_refunded_total = 0;
-                    foreach ( $commissions_refunded as $commission_id => $data_amount ) {
-                        $amount = array_sum($data_amount);
-                        $commissions_refunded_total = $amount;
-                        if( -($amount) != 0 ){
-                            $comm_refunded_amt += $amount;
-                            $note = sprintf( __( 'Refunded %s from commission', 'multivendorx' ), wc_price( abs( $amount ) ) );
-                            if($_refund_id == $refund_id){
-                                MVX_Commission::add_commission_note($commission_id, $note, $vendor_id);
-                                /**
-                                 * Action hook after add commission refund note.
-                                 *
-                                 * @since 3.4.0
-                                 */
-                                do_action( 'mvx_create_commission_refund_after_commission_note', $commission_id, $data_amount, $refund_id, $vendor_order );
-                            }
-                            //update_post_meta( $commission_id, '_commission_amount', $amount );
-
-                            //if( $amount == 0 ) update_post_meta($commission_id, '_paid_status', 'cancelled');
-                        }
-                    }
-                    $refunded_amt_total += $comm_refunded_amt;
-
-                    update_post_meta( $_refund_id, '_refunded_commissions', $commissions_refunded );
-                    update_post_meta( $_refund_id, '_refunded_commissions_total', $commissions_refunded_total );
-                }
-                
-                update_post_meta( $commission_id, '_commission_refunded_data', $refunds );
-                update_post_meta( $commission_id, '_commission_refunded', $refunded_amt_total );
-                // Trigger notification emails.
-                if ( MVX_Commission::commission_totals($commission_id, 'edit') == 0  ) {
-                    do_action( 'mvx_commission_fully_refunded', $commission_id, $vendor_order );
-                    update_post_meta($commission_id, '_paid_status', 'refunded'); 
-                } else {
-                    do_action( 'mvx_commission_partially_refunded', $commission_id, $vendor_order );
-                    update_post_meta($commission_id, '_paid_status', 'partial_refunded');
-                }
+              
                 /**
                  * Action hook after commission refund save.
                  *
                  * @since 3.4.0
                  */
-                do_action('mvx_after_create_commission_refunds', $vendor_order, $commission_id);
-            endif;
         }
     }
 }

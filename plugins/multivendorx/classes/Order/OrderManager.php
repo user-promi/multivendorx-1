@@ -20,7 +20,7 @@ class OrderManager {
     public function __construct() {
         $this->init_classes();
         // Filter the query of order table before it is fetch.
-        if (is_admin()) {
+        if (is_admin() && is_account_page()) {
             add_filter('woocommerce_order_query_args', [$this, 'set_filter_order_query']);
         }
     }
@@ -63,6 +63,17 @@ class OrderManager {
      */
     public function get_suborders($order, $args = [], $object = true) {
         return wc_get_orders(['parent' => is_numeric($order) ? $order : $order->get_id()]);
+    }
+
+    public function is_multivendorx_order($id){
+        if ($id) {
+            $order = wc_get_order($id);
+            if ($order->get_meta( 'multivendorx_store_id', true)) {
+                return true;
+            } 
+        }
+
+        return false;
     }
 
     /**

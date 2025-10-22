@@ -41,7 +41,6 @@ const RefundRequest: React.FC = () => {
                 setPageCount(Math.ceil(response.data / pagination.pageSize));
             })
             .catch(() => {
-                setError(__('Failed to load total rows', 'multivendorx'));
             });
     }, []);
 
@@ -68,10 +67,9 @@ const RefundRequest: React.FC = () => {
             },
         })
             .then((response) => {
-                setData(response.data || []);
+                setData(response.data.stores || []);
             })
             .catch(() => {
-                setError(__('Failed to load stores', 'multivendorx'));
                 setData([]);
             });
     }
@@ -127,56 +125,32 @@ const RefundRequest: React.FC = () => {
             header: __('Status', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell title={row.original.status || ''}>
-                    {row.original.status || '-'}
+                    {row.original.status === "active" && (
+                        <span className="admin-badge green">Active</span>
+                    )}
+                    {row.original.status === "pending" && (
+                        <span className="admin-badge yellow">Pending</span>
+                    )}
                 </TableCell>
             ),
         },
-        // {
-        //     header: __('Action', 'multivendorx'),
-        //     cell: ({ row }) => (
-        //         <TableCell title="Action">
-        //             <div className="action-section">
-        //                 <ul>
-        //                     <li
-        //                         onClick={() =>
-        //                             (window.location.href = `?page=multivendorx#&tab=stores&view&id=${row.original.id}`)
-        //                         }
-        //                     >
-        //                         <i className="adminlib-eye"></i>
-        //                         { __( 'View Store', 'multivendorx' ) }
-        //                     </li>
-        //                     <li
-        //                         onClick={() =>
-        //                             (window.location.href = `?page=multivendorx#&tab=stores&edit/${row.original.id}`)
-        //                         }
-        //                     >
-        //                         <i className="adminlib-create"></i>
-        //                         { __( 'Edit Store', 'multivendorx' ) }
-        //                     </li>
-        //                 </ul>
-        //             </div>
-        //         </TableCell>
-        //     ),
-        // }
     ];
 
     return (
         <>
-            <div className="admin-table-wrapper">
-                <Table
-                    data={data}
-                    columns={columns as ColumnDef<Record<string, any>, any>[]}
-                    rowSelection={rowSelection}
-                    onRowSelectionChange={setRowSelection}
-                    defaultRowsPerPage={10}
-                    pageCount={pageCount}
-                    pagination={pagination}
-                    onPaginationChange={setPagination}
-                    handlePagination={requestApiForData}
-                    perPageOption={[10, 25, 50]}
-                    typeCounts={[]}
-                />
-            </div>
+            <Table
+                data={data}
+                columns={columns as ColumnDef<Record<string, any>, any>[]}
+                rowSelection={rowSelection}
+                onRowSelectionChange={setRowSelection}
+                defaultRowsPerPage={10}
+                pageCount={pageCount}
+                pagination={pagination}
+                onPaginationChange={setPagination}
+                handlePagination={requestApiForData}
+                perPageOption={[10, 25, 50]}
+                typeCounts={[]}
+            />
         </>
     );
 };

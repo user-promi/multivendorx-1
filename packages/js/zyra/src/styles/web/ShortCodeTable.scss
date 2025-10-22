@@ -13,10 +13,20 @@
     th,
     td {
         text-align: left;
-        font-size: 0.875rem;
+        font-size: 0.95rem;
         padding: 1rem;
-    }
+        vertical-align: top;
 
+        .name{
+            margin-bottom: 0.5rem;
+        }
+    }
+    ul{
+        margin: 0;
+        li{
+            font-size: 0.95rem;
+        }
+    }
     code {
         font-weight: 500;
         color: $theme-color;

@@ -1,4 +1,4 @@
-import React, { ChangeEvent, MouseEvent } from 'react';
+import React, { useState, ChangeEvent, MouseEvent } from 'react';
 
 // Types
 interface Option {
@@ -16,6 +16,7 @@ interface Option {
 interface MultiCheckBoxProps {
     wrapperClass?: string;
     selectDeselect?: boolean;
+    addNewBtn?: string;
     selectDeselectClass?: string;
     selectDeselectValue?: string;
     onMultiSelectDeselectChange?: (
@@ -42,7 +43,11 @@ interface MultiCheckBoxProps {
 }
 
 const MultiCheckBox: React.FC<MultiCheckBoxProps> = (props) => {
-    const allSelected = props.value?.length === props.options.length;
+    const [localOptions, setLocalOptions] = useState<Option[]>(props.options);
+    const [showNewInput, setShowNewInput] = useState(false);
+    const [newOptionValue, setNewOptionValue] = useState('');
+
+    const allSelected = props.value?.length === localOptions.length;
     const selectedCount = props.value?.length ?? 0;
 
     const handleCheckboxChange = (directionValue: string, isChecked: boolean) => {
@@ -58,119 +63,132 @@ const MultiCheckBox: React.FC<MultiCheckBoxProps> = (props) => {
         }
     };
 
+    const handleAddNewClick = () => {
+        setShowNewInput(true);
+    };
+
+    const handleSaveNewOption = () => {
+        if (!newOptionValue.trim()) return;
+
+        const newOption: Option = {
+            key: `${Date.now()}`,
+            value: newOptionValue.trim().toLowerCase().replace(/\s+/g, '-'),
+            label: newOptionValue.trim(),
+        };
+
+        const updatedOptions = [...localOptions, newOption];
+        setLocalOptions(updatedOptions);
+        setNewOptionValue('');
+        setShowNewInput(false);
+    };
+
     return (
-        <div className={props.wrapperClass}>
-            {props.selectDeselect && (
-                <div className="checkbox-list-header">
-                    <div className="checkbox">
-                        <input
-                            type="checkbox"
-                            checked={allSelected}
-                            onChange={(e) => props.onMultiSelectDeselectChange?.(e)}
-                            className={!allSelected && selectedCount > 0 ? 'minus-icon' : ''}
-                        />
-                        <span className="">{selectedCount} items</span>
-                    </div>
-                </div>
-            )}
-
-            {props.options.map((option) => {
-                const checked = props.value?.includes(option.value) ?? false;
-
-                return (
-                    <div
-                        key={option.key}
-                        className={props.inputWrapperClass}
-                        onClick={(e) => {
-                            // Prevent triggering when clicking input or label
-                            const tag = (e.target as HTMLElement).tagName;
-                            if (tag === 'INPUT' || tag === 'LABEL') return;
-
-                            if (props.type === 'checkbox-custom-img') {
-                                handleCheckboxChange(option.value, !checked);
-                            } else if (option.proSetting && !props.khali_dabba) {
-                                props.proChanged?.();
-                            } else {
-                                const syntheticEvent = {
-                                    target: { value: option.value, checked: !checked },
-                                } as unknown as ChangeEvent<HTMLInputElement>;
-                                props.onChange?.(syntheticEvent);
-                            }
-                        }}
-                    >
-                        {props.rightContent && (
-                            <p
-                                className={props.rightContentClass}
-                                dangerouslySetInnerHTML={{
-                                    __html: option.label ?? '',
-                                }}
-                            ></p>
-                        )}
-                        <div
-                            className={props.inputInnerWrapperClass}
-                            data-tour={props.tour}
-                        >
+        <>
+            <div className={props.wrapperClass}>
+                {props.selectDeselect && (
+                    <div className="checkbox-list-header">
+                        <div className="checkbox">
                             <input
-                                className={props.inputClass}
-                                id={`${props.idPrefix}-${option.key}`}
-                                type={props.type?.split('-')[0] || 'checkbox'}
-                                name={option.name || 'basic-input'}
-                                value={option.value}
-                                checked={checked}
-                                onChange={(e) => {
-                                    if (props.type === 'checkbox-custom-img') {
-                                        handleCheckboxChange(option.value, e.target.checked);
-                                    } else if (option.proSetting && !props.khali_dabba) {
-                                        props.proChanged?.();
-                                    } else {
-                                        props.onChange?.(e);
-                                    }
-                                }}
+                                type="checkbox"
+                                checked={allSelected}
+                                onChange={(e) => props.onMultiSelectDeselectChange?.(e)}
+                                className={!allSelected && selectedCount > 0 ? 'minus-icon' : ''}
                             />
-                            {props.type === 'checkbox-custom-img' ? (
-                                <>
-                                    <div
-                                        className="custom-img-meta-wrapper"
-                                        key={`${option.key}-img-wrp`}
-                                    >
-                                        <img src={option.img1} alt="" />
-                                    </div>
-                                    <p className="custom-img-label">{option.label}</p>
-                                </>
-                            ) : (
+                            <span>{selectedCount} items</span>
+                        </div>
+                    </div>
+                )}
+
+                {localOptions.map((option) => {
+                    const checked = props.value?.includes(option.value) ?? false;
+
+                    return (
+                        <div
+                            key={option.key}
+                            className={props.inputWrapperClass}
+                            onClick={(e) => {
+                                const tag = (e.target as HTMLElement).tagName;
+                                if (tag === 'INPUT' || tag === 'LABEL' || tag === 'BUTTON') return;
+
+                                if (props.type === 'checkbox-custom-img') {
+                                    handleCheckboxChange(option.value, !checked);
+                                } else if (option.proSetting && !props.khali_dabba) {
+                                    props.proChanged?.();
+                                } else {
+                                    const syntheticEvent = {
+                                        target: { value: option.value, checked: !checked },
+                                    } as unknown as ChangeEvent<HTMLInputElement>;
+                                    props.onChange?.(syntheticEvent);
+                                }
+                            }}
+                        >
+                            {props.rightContent && (
+                                <p
+                                    className={props.rightContentClass}
+                                    dangerouslySetInnerHTML={{
+                                        __html: option.label ?? '',
+                                    }}
+                                ></p>
+                            )}
+
+                            <div className={props.inputInnerWrapperClass} data-tour={props.tour}>
+                                <input
+                                    className={props.inputClass}
+                                    id={`${props.idPrefix}-${option.key}`}
+                                    type={props.type?.split('-')[0] || 'checkbox'}
+                                    name={option.name || 'basic-input'}
+                                    value={option.value}
+                                    checked={checked}
+                                    onChange={(e) => {
+                                        if (props.type === 'checkbox-custom-img') {
+                                            handleCheckboxChange(option.value, e.target.checked);
+                                        } else if (option.proSetting && !props.khali_dabba) {
+                                            props.proChanged?.();
+                                        } else {
+                                            props.onChange?.(e);
+                                        }
+                                    }}
+                                />
                                 <label htmlFor={`${props.idPrefix}-${option.key}`}>
                                     {option.label}
-                                    {option.proSetting && !props.khali_dabba && (
-                                        <span className="admin-pro-tag"><i className="adminlib-pro-tag"></i>Pro</span>
-                                    )}
                                 </label>
-                            )}
+                            </div>
                         </div>
+                    );
+                })}
 
-                        {option.desc && !props.rightContent && props.type !== 'checkbox-custom-img' && (
-                            <p
-                                className={props.rightContentClass}
-                                dangerouslySetInnerHTML={{ __html: option.desc ?? '' }}
-                            ></p>
-                        )}
-                        {option.hints && (
-                            <span
-                                className={props.hintOuterClass}
-                                dangerouslySetInnerHTML={{ __html: option.hints }}
-                            ></span>
-                        )}
-                        {props.proSetting && <span className="admin-pro-tag"><i className="adminlib-pro-tag"></i>Pro</span>}
+                {props.description && (
+                    <p
+                        className={props.descClass}
+                        dangerouslySetInnerHTML={{ __html: props.description }}
+                    ></p>
+                )}
+            </div>
+            {/* Add New Section */}
+            {props.addNewBtn && (
+                showNewInput ? (
+                    <div className="add-new-option">
+                        <input
+                            type="text"
+                            value={newOptionValue}
+                            onChange={(e) => setNewOptionValue(e.target.value)}
+                            placeholder="Enter new option"
+                            className="basic-input"
+                        />
+                        <button className="admin-btn btn-green" onClick={handleSaveNewOption}>
+                            <i className="adminlib-plus-circle-o"></i> Save
+                        </button>
                     </div>
-                );
-            })}
-
-            {props.description && (
-                <p
-                    className={props.descClass}
-                    dangerouslySetInnerHTML={{ __html: props.description }}
-                ></p>
+                ) : (
+                    <div className="add-new-option">
+                    <div className="admin-btn btn-purple" onClick={handleAddNewClick}>
+                        <i className="adminlib-plus-circle-o"></i> {props.addNewBtn}
+                    </div>
+                    </div>
+                )
             )}
-        </div>
+
+        </>
     );
 };
 

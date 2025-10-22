@@ -23,7 +23,7 @@ const Attachment: React.FC< AttachmentProps > = ( { formField, onChange } ) => {
     return (
         <div className="main-input-wrapper">
             { /* Render label */ }
-            <input
+            {/* <input
                 className="basic-input textarea-label"
                 type="text"
                 value={ formField.label }
@@ -31,7 +31,7 @@ const Attachment: React.FC< AttachmentProps > = ( { formField, onChange } ) => {
                 onChange={ ( event ) =>
                     onChange( 'label', event.target.value )
                 }
-            />
+            /> */}
 
             { /* Render attachments */ }
             { /* Check in catalogx (label frontend)*/ }

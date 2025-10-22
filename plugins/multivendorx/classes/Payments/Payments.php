@@ -26,6 +26,12 @@ class Payments {
         $this->container = array(
             'disbursement'  => new Disbursement(),
             'processor'     => new PaymentProcessor(),
+            'custom_gateway' => new CustomPayment(),
+            'bank_transfer' => new BankTransfer(),
+            'cash' => new CashPayment(),
+            'paypal_payout' => new PaypalPayout(),
+            'stripe_connect' => new StripeConnect(),
+
         );
     }
 
@@ -36,6 +42,37 @@ class Payments {
 
     public function get_all_payment_settings() {
         $all_settings = [];
+
+        $providers = [
+            [
+                'id'    => 'custom-gateway',
+                'name'  => 'Custom Gateway',
+                'class' => 'MultiVendorX\\Payments\\CustomPayment'
+            ],
+            [
+                'id'    => 'cash',
+                'name'  => 'Cash',
+                'class' => 'MultiVendorX\\Payments\\CashPayment'
+            ],
+            [
+                'id'    => 'bank-transfer',
+                'name'  => 'Bank Transfer',
+                'class' => 'MultiVendorX\\Payments\\BankTransfer'
+            ],
+            [
+                'id'    => 'paypal-payout',
+                'name'  => 'Paypal Payout',
+                'class' => 'MultiVendorX\\Payments\\PaypalPayout'
+            ],
+            [
+                'id'    => 'stripe-connect',
+                'name'  => 'Stripe Connect',
+                'class' => 'MultiVendorX\\Payments\\StripeConnect'
+            ]
+            
+        ];
+
+        $this->providers = array_merge($this->providers ?? [], $providers);
 
         foreach ($this->providers as $provider) {
             $provider_obj = new $provider['class']();

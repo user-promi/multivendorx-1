@@ -2,7 +2,7 @@ import { __ } from '@wordpress/i18n';
 
 export default {
     id: 'live-chat',
-    priority: 3,
+    priority: 5,
     name: __('Live Chat', 'multivendorx'),
     desc: __('Set up and manage live chat options for customer interaction.', 'multivendorx'),
     icon: 'adminlib-wholesale',
@@ -30,8 +30,8 @@ export default {
                     value: 'none',
                 },
             ],
-            moduleEnabled: 'live-chat',
-            proSetting: true,
+            // moduleEnabled: 'live-chat',
+            // proSetting: true,
         },
         {
             key: 'chat_provider',
@@ -55,7 +55,7 @@ export default {
                     value: 'whatsapp',
                 },
             ],
-            //proSetting:true
+            // proSetting:true
         },
         {
             key: 'messenger_color',
@@ -95,8 +95,8 @@ export default {
                 set: true,
                 value: 'whatsapp',
             },
-            moduleEnabled: 'live-chat',
-            proSetting: true,
+            // moduleEnabled: 'live-chat',
+            // proSetting: true,
         },
         {
             key: 'whatsapp_pre_filled',
@@ -108,8 +108,8 @@ export default {
                 set: true,
                 value: 'whatsapp',
             },
-            moduleEnabled: 'live-chat',
-            proSetting: true,
+            // moduleEnabled: 'live-chat',
+            // proSetting: true,
         },
         {
             key: 'app_id',
@@ -121,8 +121,8 @@ export default {
                 set: true,
                 value: 'talkjs',
             },
-            moduleEnabled: 'live-chat',
-            proSetting: true,
+            // moduleEnabled: 'live-chat',
+            // proSetting: true,
         },
         {
             key: 'app_secret',
@@ -137,8 +137,8 @@ export default {
                 set: true,
                 value: 'talkjs',
             },
-            moduleEnabled: 'live-chat',
-            proSetting: true,
+            // moduleEnabled: 'live-chat',
+            // proSetting: true,
         },
     ],
 };

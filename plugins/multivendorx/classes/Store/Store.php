@@ -38,7 +38,7 @@ class Store {
             'rewrites'  => new Rewrites(),
             'storeutil' => new StoreUtil(),
             'ajax'      => new Ajax(),
-            // 'products'  => new Products(),
+            'products'  => new Products(),
         );
     }
 
@@ -214,5 +214,25 @@ class Store {
 
         return $stores;
     }
+    
+    /**
+     * Delete a store meta key.
+     *
+     * @param string $key Meta key to delete.
+     */
+    public function delete_meta( $key ) {
+        global $wpdb;
+        $table = "{$wpdb->prefix}" . Utill::TABLES['store_meta'];
+
+        $wpdb->delete(
+            $table,
+            [
+                'store_id' => $this->id,
+                'meta_key' => $key
+            ],
+            [ '%d', '%s' ]
+        );
+    }
+
 
 }

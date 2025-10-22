@@ -167,18 +167,21 @@ const EditQna: React.FC<EditQnaProps> = ({ open, onClose, qnaId, onUpdated }) =>
               <div className="items">
                 <div className="text">{__("Visibility", "multivendorx")}</div>
                 <div className="value">
-                  <select
-                    value={qna.question_visibility}
-                    onChange={(e) =>
-                      setQna({ ...qna, question_visibility: e.target.value })
-                    }
-                  >
-                    <option value="public">{__("Public", "multivendorx")}</option>
-                    <option value="private">{__("Private", "multivendorx")}</option>
-                    <option value="hidden">{__("Hidden", "multivendorx")}</option>
-                  </select>
+                  <label style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                    <input
+                      type="checkbox"
+                      checked={qna.question_visibility === "Public"}
+                      onChange={(e) =>
+                        setQna({
+                          ...qna,
+                          question_visibility: e.target.checked ? "Public" : "Private",
+                        })
+                      }
+                    />
+                  </label>
                 </div>
               </div>
+
             </div>
           </div>
         </div>

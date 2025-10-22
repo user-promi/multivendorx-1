@@ -11,7 +11,9 @@ import '../styles/web/ShortCodeTable.scss';
 // Types
 interface Option {
     label?: string;
+    name?: string;
     desc?: string;
+    arguments?: string;
 }
 
 interface ShortCodeTableProps {
@@ -31,46 +33,48 @@ const ShortCodeTable: React.FC<ShortCodeTableProps> = (props) => {
 
     return (
         <>
-        <div className="shortcode-table">
-            <table >
-                <thead>
-                    <tr>
-                        {optionLabel && optionLabel.length > 0 ? (
-                            optionLabel.map((label, index) => (
-                                <th key={index}>{label}</th>
+            <div className="shortcode-table">
+                <table >
+                    <thead>
+                        <tr>
+                            {optionLabel && optionLabel.length > 0 ? (
+                                optionLabel.map((label, index) => (
+                                    <th key={index}>{label}</th>
+                                ))
+                            ) : (
+                                <th>No Labels</th>
+                            )}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {options && options.length > 0 ? (
+                            options.map((option, index) => (
+                                <tr key={index}>
+                                    <td onClick={() => handleCopy(option.label!)}>
+                                        <div className="name">{option.name}</div>
+                                        <code>{option.label}</code>
+                                        {icon && option.label && (
+                                            <i className="adminlib-vendor-form-copy"></i>
+                                        )}
+                                    </td>
+                                    <td>{option.desc}</td>
+                                    <td><p dangerouslySetInnerHTML={{ __html: option.arguments || '' }} /></td>
+                                </tr>
                             ))
                         ) : (
-                            <th>No Labels</th>
-                        )}
-                    </tr>
-                </thead>
-                <tbody>
-                    {options && options.length > 0 ? (
-                        options.map((option, index) => (
-                            <tr key={index}>
-                                <td onClick={() => handleCopy(option.label!)}>
-                                    <code>{option.label}</code>
-                                    {icon && option.label && (
-                                        <i className="adminlib-vendor-form-copy"></i>
-                                    )}
-                                </td>
-                                <td>{option.desc}</td>
+                            <tr>
+                                <td colSpan={5}>No Options Available</td>
                             </tr>
-                        ))
-                    ) : (
-                        <tr>
-                            <td colSpan={2}>No Options Available</td>
-                        </tr>
-                    )}
-                </tbody>
-            </table>
-            {description && (
-                <p
-                    className={descClass}
-                    dangerouslySetInnerHTML={{ __html: description }}
-                />
-            )}
-        </div>
+                        )}
+                    </tbody>
+                </table>
+                {description && (
+                    <p
+                        className={descClass}
+                        dangerouslySetInnerHTML={{ __html: description }}
+                    />
+                )}
+            </div>
         </>
     );
 };

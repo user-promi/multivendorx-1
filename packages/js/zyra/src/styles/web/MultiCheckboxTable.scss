@@ -62,10 +62,6 @@
                     place-content: start;
                 }
 
-                input[type="checkbox"] {
-                    width: fit-content;
-                }
-
                 .clear {
                     clear: both;
                 }
@@ -224,14 +220,13 @@
                         .options-item {
                             cursor: pointer;
                         }
-
                     }
                 }
             }
         }
 
         tr:nth-child(odd) {
-            background: $background-color;
+            background: #f0e4e4b8;
         }
     }
 
@@ -241,7 +236,7 @@
         cursor: pointer;
 
         h1 {
-            background: #f9f4f4b8;
+            background: $background-color;
             display: flex;
             justify-content: space-between;
             align-items: center;

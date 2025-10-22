@@ -1,199 +1,227 @@
 /* global appLocalizer */
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
-import { Table, getApiLink, TableCell, CommonPopup } from 'zyra';
-import {
-    ColumnDef,
-    RowSelectionState,
-    PaginationState,
-} from '@tanstack/react-table';
-import image from "../../assets/images/email.png";
-type StoreRow = {
-    id?: number;
-    store_name?: string;
-    store_slug?: string;
-    status?: string;
+import { Table, TableCell, CommonPopup } from 'zyra';
+import { ColumnDef, RowSelectionState, PaginationState } from '@tanstack/react-table';
+
+type ReviewRow = {
+    comment_ID: number;
+    comment_post_ID: number;
+    comment_author: string;
+    comment_content: string;
+    comment_date: string;
+    comment_parent: number;
+    user_id: number;
+    store_rating?: number; // rating given by customer
+    store_rating_id?: number; // store ID
+    replies?: ReviewRow[];
 };
 
 const StoreReviews: React.FC = () => {
-
-    const [data, setData] = useState<StoreRow[] | null>(null);
-
+    const [data, setData] = useState<ReviewRow[]>([]);
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
-    const [totalRows, setTotalRows] = useState<number>(0);
-    const [pagination, setPagination] = useState<PaginationState>({
-        pageIndex: 0,
-        pageSize: 10,
-    });
+    const [pagination, setPagination] = useState<PaginationState>({ pageIndex: 0, pageSize: 10 });
     const [pageCount, setPageCount] = useState(0);
-    const [expandedRow, setExpandedRow] = useState<string | null>(null);
-    const [moreDetails, setMoreDetails] = useState(false);
+    const [totalRows, setTotalRows] = useState(0);
 
-    const toggleRow = (rowId: string) => {
-        setExpandedRow(expandedRow === rowId ? null : rowId);
+    const [editModalOpen, setEditModalOpen] = useState(false);
+    const [selectedReview, setSelectedReview] = useState<ReviewRow | null>(null);
+    const [editContent, setEditContent] = useState('');
+    const [newReply, setNewReply] = useState('');
+
+    // Fetch total reviews count
+    useEffect(() => {
+        axios.get(`${appLocalizer.apiUrl}/wp/v2/comments`, {
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            params: { type: 'multivendorx_review', per_page: 1 },
+        }).then(res => {
+            const total = parseInt(res.headers['x-wp-total'] || '0', 10);
+            setTotalRows(total);
+            setPageCount(Math.ceil(total / pagination.pageSize));
+        }).catch(() => setTotalRows(0));
+    }, [pagination.pageSize]);
+
+    // Fetch reviews with replies
+    const fetchReviews = async (page = 1, perPage = 10) => {
+        try {
+            setData([]);
+            const reviewRes = await axios.get(`${appLocalizer.apiUrl}/wp/v2/comments`, {
+                headers: { 'X-WP-Nonce': appLocalizer.nonce },
+                params: { type: 'multivendorx_review', per_page: perPage, page },
+            });
+            const rawReviews = Array.isArray(reviewRes.data) ? reviewRes.data : [];
+
+            const reviewsWithReplies: ReviewRow[] = await Promise.all(
+                rawReviews.map(async (rev: any) => {
+                    const review: ReviewRow = {
+                        comment_ID: rev.id,
+                        comment_post_ID: rev.post,
+                        comment_author: rev.author_name || '',
+                        comment_content: rev.content?.rendered?.replace(/<\/?p>/g, '') || '',
+                        comment_date: rev.date || '',
+                        comment_parent: rev.parent || 0,
+                        user_id: rev.user || 0,
+                        store_rating: rev.meta?.store_rating ? parseInt(rev.meta.store_rating, 10) : undefined,
+                        store_rating_id: rev.meta?.store_rating_id ? parseInt(rev.meta.store_rating_id, 10) : undefined,
+                        replies: [],
+                    };
+
+                    // fetch replies for this review
+                    try {
+                        const replyRes = await axios.get(`${appLocalizer.apiUrl}/wp/v2/comments`, {
+                            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+                            params: { type: 'comment', parent: rev.id },
+                        });
+                        const replies = Array.isArray(replyRes.data) ? replyRes.data.map((r: any) => ({
+                            comment_ID: r.id,
+                            comment_post_ID: r.post,
+                            comment_author: r.author_name || '',
+                            comment_content: r.content?.rendered?.replace(/<\/?p>/g, '') || '',
+                            comment_date: r.date || '',
+                            comment_parent: r.parent || 0,
+                            user_id: r.user || 0,
+                        })) : [];
+                        review.replies = replies;
+                    } catch (err) {
+                        console.error('Failed to fetch replies', err);
+                        review.replies = [];
+                    }
+
+                    return review;
+                })
+            );
+
+            setData(reviewsWithReplies);
+        } catch (err) {
+            console.error('Failed to fetch reviews', err);
+            setData([]);
+        }
     };
 
-    // Fetch total rows on mount
     useEffect(() => {
-        axios({
-            method: 'GET',
-            url: getApiLink(appLocalizer, 'store'),
-            headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            params: { count: true },
-        })
-            .then((response) => {
-                setTotalRows(response.data || 0);
-                setPageCount(Math.ceil(response.data / pagination.pageSize));
-            })
-            .catch(() => {
-                setError(__('Failed to load total rows', 'multivendorx'));
-            });
-    }, []);
-
-    useEffect(() => {
-        const currentPage = pagination.pageIndex + 1;
-        const rowsPerPage = pagination.pageSize;
-        requestData(rowsPerPage, currentPage);
-        setPageCount(Math.ceil(totalRows / rowsPerPage));
+        fetchReviews(pagination.pageIndex + 1, pagination.pageSize);
     }, [pagination]);
 
-    // Fetch data from backend.
-    function requestData(
-        rowsPerPage = 10,
-        currentPage = 1,
-    ) {
-        setData(null);
-        axios({
-            method: 'GET',
-            url: getApiLink(appLocalizer, 'store'),
-            headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            params: {
-                page: currentPage,
-                row: rowsPerPage,
-            },
-        })
-            .then((response) => {
-                setData(response.data || []);
-            })
-            .catch(() => {
-                setError(__('Failed to load stores', 'multivendorx'));
-                setData([]);
-            });
-    }
-
-    // Handle pagination and filter changes
-    const requestApiForData = (
-        rowsPerPage: number,
-        currentPage: number,
-    ) => {
-        setData(null);
-        requestData(
-            rowsPerPage,
-            currentPage,
-        );
+    const openEditModal = (review: ReviewRow) => {
+        setSelectedReview(review);
+        setEditContent(review.comment_content);
+        setNewReply('');
+        setEditModalOpen(true);
     };
 
-    // Column definitions
-    const columns: ColumnDef<StoreRow>[] = [
-        {
-            id: 'select',
-            header: ({ table }) => (
-                <input
-                    type="checkbox"
-                    checked={table.getIsAllRowsSelected()}
-                    onChange={table.getToggleAllRowsSelectedHandler()}
-                />
-            ),
-            cell: ({ row }) => (
-                <input
-                    type="checkbox"
-                    checked={row.getIsSelected()}
-                    onChange={row.getToggleSelectedHandler()}
-                />
-            ),
-        },
-        {
-            header: __('Store', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.store_name || ''}>
-                    {/* {row.original.store_name || '-'} */}
-                    <div className="single-column">
-                        <div className="image">
-                            <img src={image} alt="" />
-                        </div>
-                        <div className="store-details">
-                            <div className="details">
-                                Welcome to <strong>Urban Trends</strong>, your one-stop shop for the latest in fashion.
-                            </div>
+    const saveEdit = async () => {
+        if (!selectedReview) return;
+        try {
+            // update review content
+            await axios.post(`${appLocalizer.apiUrl}/wp/v2/comments/${selectedReview.comment_ID}`, {
+                content: editContent,
+            }, { headers: { 'X-WP-Nonce': appLocalizer.nonce } });
 
-                            <div className="sub-tag">
-                                <div className="tag">
-                                    <i className="adminlib-form-address"></i>
-                                    <div className="text">Fast Shipping</div>
-                                </div>
-                                <div className="tag">
-                                    <i className="adminlib-mail"></i>
-                                    <div className="text">customer@gmail.com</div>
-                                </div>
-                                <div className="tag">
-                                    <i className="adminlib-form-phone"></i>
-                                    <div className="text">+91 32147998569</div>
-                                </div>
-                            </div>
-                        </div>
+            // add reply if provided
+            if (newReply.trim()) {
+                await axios.post(`${appLocalizer.apiUrl}/wp/v2/comments`, {
+                    post: selectedReview.comment_post_ID,
+                    content: newReply,
+                    type: 'comment',
+                    parent: selectedReview.comment_ID,
+                }, { headers: { 'X-WP-Nonce': appLocalizer.nonce } });
+            }
 
-                        {/* <strong>{row.original.store_name || '-'}</strong>
-                        <br />
-                        <small>ID: {row.original.id}</small> */}
-                    </div>
-                </TableCell>
-            ),
+            setEditModalOpen(false);
+            setSelectedReview(null);
+            fetchReviews(pagination.pageIndex + 1, pagination.pageSize);
+        } catch {
+            alert(__('Failed to update review/reply', 'multivendorx'));
+        }
+    };
+
+    const columns: ColumnDef<ReviewRow>[] = [
+        {
+            id: 'author',
+            header: __('Author', 'multivendorx'),
+            cell: ({ row }) => <TableCell title={row.original.comment_author}>{row.original.comment_author}</TableCell>
         },
         {
-            header: __('Store', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.store_name || ''}>
-                    <div className="admin-badge green more-btn" onClick={(e) => {
-                        setMoreDetails(true);
-                    }}>More</div>
-                </TableCell>
-            ),
+            id: 'content',
+            header: __('Content', 'multivendorx'),
+            cell: ({ row }) => <TableCell title={row.original.comment_content}>{row.original.comment_content}</TableCell>
         },
-        // {
-        //     header: __('Action', 'multivendorx'),
-        //     cell: ({ row }) => (
-        //         <TableCell title="Action">
-        //             <div className="action-section">
-        //                 <ul>
-        //                     <li
-        //                         onClick={() =>
-        //                             (window.location.href = `?page=multivendorx#&tab=stores&view&id=${row.original.id}`)
-        //                         }
-        //                     >
-        //                         <i className="adminlib-eye"></i>
-        //                         { __( 'View Store', 'multivendorx' ) }
-        //                     </li>
-        //                     <li
-        //                         onClick={() =>
-        //                             (window.location.href = `?page=multivendorx#&tab=stores&edit/${row.original.id}`)
-        //                         }
-        //                     >
-        //                         <i className="adminlib-create"></i>
-        //                         { __( 'Edit Store', 'multivendorx' ) }
-        //                     </li>
-        //                 </ul>
-        //             </div>
-        //         </TableCell>
-        //     ),
-        // }
+        {
+            id: 'rating',
+            header: __('Rating', 'multivendorx'),
+            cell: ({ row }) => {
+                const rating = row.original.store_rating ?? 0;
+                return (
+                    <TableCell title={rating}>
+                        {rating > 0
+                            ? '★'.repeat(rating) + '☆'.repeat(5 - rating)
+                            : '-'}
+                    </TableCell>
+                );
+            }
+        },
+        {
+            id: 'date',
+            header: __('Date', 'multivendorx'),
+            cell: ({ row }) => {
+                const rawDate = row.original.comment_date;
+                let formattedDate = '-';
+                if (rawDate) {
+                    const dateObj = new Date(rawDate);
+                    formattedDate = new Intl.DateTimeFormat('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric',
+                    }).format(dateObj);
+                }
+                return <TableCell title={formattedDate}>{formattedDate}</TableCell>;
+            },
+        },
+        {
+            id: 'action',
+            header: __('Action', 'multivendorx'),
+            cell: ({ row }) => (
+                <TableCell
+                    type="action-dropdown"
+                    rowData={row.original}
+                    header={{
+                        actions: [
+                            {
+                                label: __('Edit / Reply', 'multivendorx'),
+                                icon: 'adminlib-eye',
+                                onClick: openEditModal,
+                                hover: true,
+                            },
+                            {
+                                label: __('Delete', 'multivendorx'),
+                                icon: 'adminlib-delete',
+                                onClick: async (review) => {
+                                    if (confirm(__('Are you sure you want to delete this review?', 'multivendorx'))) {
+                                        try {
+                                            await axios.delete(`${appLocalizer.apiUrl}/wp/v2/comments/${review.comment_ID}`, {
+                                                headers: { 'X-WP-Nonce': appLocalizer.nonce }
+                                            });
+                                            fetchReviews(pagination.pageIndex + 1, pagination.pageSize);
+                                        } catch {
+                                            alert(__('Failed to delete review', 'multivendorx'));
+                                        }
+                                    }
+                                },
+                                hover: true,
+                            }
+                        ]
+                    }}
+                />
+            )
+        }
     ];
 
     return (
         <>
             <div className="admin-table-wrapper">
                 <Table
-                    data={data}
+                    data={data || []}
                     columns={columns as ColumnDef<Record<string, any>, any>[]}
                     rowSelection={rowSelection}
                     onRowSelectionChange={setRowSelection}
@@ -201,81 +229,65 @@ const StoreReviews: React.FC = () => {
                     pageCount={pageCount}
                     pagination={pagination}
                     onPaginationChange={setPagination}
-                    handlePagination={requestApiForData}
+                    handlePagination={fetchReviews}
                     perPageOption={[10, 25, 50]}
-                    typeCounts={[]}
+                    totalCounts={totalRows}
                 />
             </div>
-            {moreDetails && (
+
+            {editModalOpen && selectedReview && (
                 <CommonPopup
-                    open={moreDetails}
-                    onClose={() => setMoreDetails(false)}
-                    width="500px"
-                    header={
-                        <>
-                            <div className="title">
-                                <i className="adminlib-cart"></i>
-                                Welcome to Urban Trends, your one-stop shop
-                            </div>
-                            <p>Publish important news, updates, or alerts that appear directly in store dashboards,</p>
-                            <i
-                                // onClick={handleCloseForm}
-                                className="icon adminlib-close"
-                                onClick={(e) => {
-                                    setMoreDetails(false);
-                                }}
-                            ></i>
-                        </>
-                    }
+                    open={editModalOpen}
+                    onClose={() => setEditModalOpen(false)}
+                    width="600px"
+                    header={<div>Edit / Reply Review</div>}
                     footer={
                         <>
-
-                            <div className="admin-btn btn-red" onClick={(e) => {
-                                setMoreDetails(false);
-                            }}>Close</div>
+                            <div className="admin-btn btn-red" onClick={() => setEditModalOpen(false)}>
+                                {__('Cancel', 'multivendorx')}
+                            </div>
+                            <div className="admin-btn btn-green" onClick={saveEdit}>
+                                {__('Save', 'multivendorx')}
+                            </div>
                         </>
                     }
                 >
-
                     <div className="content">
-                        <div className="form-group-wrapper">
-                            <div className="form-group">
-                                <label htmlFor="title">Prioruty</label>
-                                <div className="tag-wrapper">
-                                    <div className="admin-badge red">Urgent</div>
-                                </div>
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="title">Status</label>
-                                <div className="tag-wrapper">
-                                    <div className="admin-badge red">Urgent</div>
-                                    <div className="admin-badge green">Urgent</div>
-                                    <div className="admin-badge blue">Urgent</div>
-                                </div>
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="title">category</label>
-                                <div className="tag-wrapper">
-                                    <div className="admin-badge red">Urgent</div>
-                                    <div className="admin-badge green">Urgent</div>
-                                    <div className="admin-badge yellow">Urgent</div>
-                                    <div className="admin-badge blue">Urgent</div>
-                                </div>
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="title">group</label>
-                                <div className="tag-wrapper">
-                                    <div className="admin-badge red">Urgent</div>
-                                    <div className="admin-badge red">Urgent</div>
-                                    <div className="admin-badge red">Urgent</div>
-                                </div>
-                            </div>
+                        <div className="form-group">
+                            <label>{__('Review Content', 'multivendorx')}</label>
+                            <textarea
+                                value={editContent}
+                                onChange={(e) => setEditContent(e.target.value)}
+                                rows={5}
+                                style={{ width: '100%' }}
+                            />
                         </div>
-                    </div>
 
+                        <div className="form-group" style={{ marginTop: '1rem' }}>
+                            <label>{__('Add Reply', 'multivendorx')}</label>
+                            <textarea
+                                value={newReply}
+                                onChange={(e) => setNewReply(e.target.value)}
+                                rows={3}
+                                style={{ width: '100%' }}
+                            />
+                        </div>
+
+                        {selectedReview.replies && selectedReview.replies.length > 0 && (
+                            <div style={{ marginTop: '1rem' }}>
+                                <strong>{__('Existing Replies:', 'multivendorx')}</strong>
+                                {selectedReview.replies.map((rep) => (
+                                    <div key={rep.comment_ID} style={{ padding: '0.5rem', borderBottom: '1px solid #eee' }}>
+                                        <strong>{rep.comment_author}:</strong> {rep.comment_content}
+                                        <br />
+                                        <small>{new Date(rep.comment_date).toLocaleString()}</small>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
                 </CommonPopup>
-            )
-            }
+            )}
         </>
     );
 };

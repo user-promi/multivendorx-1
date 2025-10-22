@@ -5,8 +5,8 @@ import template3 from '../../../assets/images/template/store/template3.jpg';
 
 export default {
     id: 'store-invoice',
-    priority: 5,
-    name: __('Invoice & Taxation', 'mvx-pro'),
+    priority: 6,
+    name: __('Invoices', 'mvx-pro'),
     desc: __('Set up when and how invoices are generated in your marketplace.', 'mvx-pro'),
     icon: 'adminlib-clock',
     submitUrl: 'settings',

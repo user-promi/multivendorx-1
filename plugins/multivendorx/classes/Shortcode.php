@@ -17,11 +17,13 @@ class Shortcode {
         add_shortcode( 'multivendorx_store_dashboard', [ $this, 'display_store_dashboard' ] );
         add_shortcode( 'multivendorx_store_registration', [ $this, 'display_store_registration' ] );
         add_action( 'wp_enqueue_scripts', array($this, 'frontend_scripts'));
+
+        add_action('wp_print_styles', array($this, 'dequeue_all_styles_on_page'), 99);
     }
 
     public function frontend_scripts() {
         wp_enqueue_script( 'wp-element' );
-        
+        wp_enqueue_media();
         FrontendScripts::load_scripts();
         FrontendScripts::enqueue_script( 'multivendorx-dashboard-components-script' );
         FrontendScripts::enqueue_script( 'multivendorx-dashboard-script' );
@@ -36,6 +38,21 @@ class Shortcode {
         FrontendScripts::localize_scripts( 'multivendorx-store-dashboard-script' );
         FrontendScripts::enqueue_style( 'multivendorx-store-product-style' );
 
+        ?>
+        <style>
+            <?php 
+            echo MultiVendorX()->setting->get_setting('custom_css_product_page', []);?>
+        </style>
+        <?php
+    }
+
+    public static function dequeue_all_styles_on_page()
+    {
+        if (is_page() && has_shortcode(get_post()->post_content, 'multivendorx_store_dashboard') && is_user_logged_in()) {
+            global $wp_styles;
+            $wp_styles->queue = array('multivendorx-dashboard-style', 'multivendorx-store-product-style');
+            // print_r($wp_styles);
+        }
     }
 
     public function display_store_dashboard() {
@@ -54,7 +71,7 @@ class Shortcode {
             wc_get_template('myaccount/form-login.php');
             echo '</div>';
         } else if ( in_array( 'store_owner', $user->roles, true ) ) {
-            MultiVendorX()->util->get_template( 'store-dashboard.php', [] );
+            MultiVendorX()->util->get_template( 'store/store-dashboard.php', [] );
         } else {
             
         }

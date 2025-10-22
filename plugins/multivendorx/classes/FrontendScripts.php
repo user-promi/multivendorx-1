@@ -39,7 +39,7 @@ class FrontendScripts {
      */
     public function __construct() {
         add_action( 'wp_enqueue_scripts', array( $this, 'load_scripts' ) );
-        add_action( 'admin_enqueue_scripts', array( $this, 'admin_load_scripts' ) );
+        add_action( 'admin_enqueue_scripts', array( $this, 'admin_load_scripts' )  , 55);
     }
 
     /**
@@ -194,13 +194,23 @@ class FrontendScripts {
 					'deps'    => array( 'jquery' ),
 					'version' => $version,
 				),
+                'multivendorx-follow-store-frontend-script' => array(
+					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'modules/FollowStore/js/' . MULTIVENDORX_PLUGIN_SLUG . '-frontend.min.js',
+					'deps'    => array( 'jquery' ),
+					'version' => $version,
+				),
+                'multivendorx-report-abuse-frontend-script' => array(
+					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'modules/ReportAbuse/js/' . MULTIVENDORX_PLUGIN_SLUG . '-frontend.min.js',
+					'deps'    => array( 'jquery' ),
+					'version' => $version,
+				),
                 'multivendorx-review-frontend-script' => array(
 					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'modules/StoreReview/js/' . MULTIVENDORX_PLUGIN_SLUG . '-frontend.min.js',
 					'deps'    => array( 'jquery' ),
 					'version' => $version,
 				),
-                'multivendorx-admin-product-auto-search-script' => array(
-					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'modules/Spmv/js/' . MULTIVENDORX_PLUGIN_SLUG . '-admin-product-auto-search.min.js',
+          'multivendorx-distance-shipping-frontend-script' => array(
+					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'modules/DistanceShipping/js/' . MULTIVENDORX_PLUGIN_SLUG . '-frontend.min.js',
 					'deps'    => array( 'jquery' ),
 					'version' => $version,
 				),
@@ -350,7 +360,13 @@ class FrontendScripts {
                 'order-actions-refunds',
                 'advertising',
                 'product-preferencess',
-                'product-store-category-control'
+                'product-store-category-control',
+                'geolocation',
+                'shipping',
+                'legal-compliance',
+                'product-compliance',
+                'tax-compliance',
+                'custom-css',
             )
 		);
 
@@ -422,6 +438,22 @@ class FrontendScripts {
             );
         }
 
+        $payment_admin_settings = MultiVendorX()->setting->get_setting( 'payment_methods', [] );
+        $settings = !empty($payment_admin_settings['custom-gateway']) ? $payment_admin_settings['custom-gateway'] : [];
+        
+        $gateway_name = $settings && !empty($settings['custom_gateway_name']) ? $settings['custom_gateway_name'] : 'Custom Gateway';
+
+        $payout_payment_options = [
+            [
+                'value' => 'custom-gateway',
+                'label' => $gateway_name
+            ],
+            [
+                'value' => 'cash',
+                'label' => 'Cash'
+            ]
+        ];
+
         $localize_scripts = apply_filters(
             'multivendorx_localize_scripts',
             array(
@@ -442,6 +474,7 @@ class FrontendScripts {
                         'country_list'             => $country_list,
                         'store_owners'             => $owners_list,
                         'gateway_list'             => $gateway_list,
+                        'tinymceApiKey'             => MultiVendorX()->setting->get_setting( 'tinymce_api_section' ),
                         'default_logo'             => MultiVendorX()->plugin_url.'assets/images/WP-stdavatar.png',
                         'capabilities'             => StoreUtil::get_store_capability(),
                         'custom_roles'             => Roles::multivendorx_get_roles(),
@@ -453,7 +486,12 @@ class FrontendScripts {
                         'woocommerce_currency'     => get_woocommerce_currency(),
                         'user_id'                  => get_current_user_id(),
                         'currency'                 => get_woocommerce_currency(),       // e.g., USD
-                        'currency_symbol'          => get_woocommerce_currency_symbol()
+                        'currency_symbol'          => get_woocommerce_currency_symbol(),
+                        'payout_payment_options'   => $payout_payment_options,
+                        'map_providor'             => MultiVendorX()->setting->get_setting( 'choose_map_api' ),
+                        'google_api_key'           => MultiVendorX()->setting->get_setting( 'google_api_key' ),
+                        'mapbox_api_key'           => MultiVendorX()->setting->get_setting( 'mapbox_api_key' ),
+                        'all_verification_methods' => MultiVendorX()->setting->get_setting( 'all_verification_methods' ),
 					) ),
                 ),
                 'multivendorx-product-tab-script' => array(
@@ -486,6 +524,34 @@ class FrontendScripts {
                         'nonce'    => wp_create_nonce('qna_ajax_nonce'),
 					),
 				),
+                'multivendorx-follow-store-frontend-script' => array(
+					'object_name' => 'followStoreFrontend',
+					'data'        => array(
+						'ajaxurl'     => admin_url( 'admin-ajax.php' ),
+                        'nonce'    => wp_create_nonce('follow_store_ajax_nonce'),
+					),
+				),
+                'multivendorx-distance-shipping-frontend-script' => array(
+					'object_name' => 'distanceShippingFrontend',
+                    'data'        => array(
+                        'ajaxurl'           => admin_url('admin-ajax.php'),
+                        'nonce'             => wp_create_nonce('distance_shipping_ajax_nonce'),
+                        'mapbox_emable'     => \MultiVendorX\DistanceShipping\Frontend::mvx_mapbox_api_enabled(),
+                        'default_lat'       => MultiVendorX()->setting->get_setting('default_map_lat', '28.6139'), // example default lat
+                        'default_lng'       => MultiVendorX()->setting->get_setting('default_map_lng', '77.2090'), // example default lng
+                        'default_zoom'      => 13,
+                        'store_icon'        => plugin_dir_url(__FILE__) . 'assets/images/store-icon.png',
+                        'icon_width'        => 40,
+                        'icon_height'       => 40,
+                    ),
+				),
+                'multivendorx-report-abuse-frontend-script' => array(
+					'object_name' => 'reportAbuseFrontend',
+					'data'        => array(
+						'ajaxurl'     => admin_url( 'admin-ajax.php' ),
+                        'nonce'    => wp_create_nonce('report_abuse_ajax_nonce'),
+					),
+				),
                 'multivendorx-review-frontend-script' => array(
 					'object_name' => 'review',
 					'data'        => array(
@@ -501,21 +567,36 @@ class FrontendScripts {
 					),
 				),
                 'multivendorx-dashboard-script' => array(
-                    'object_name' => 'appLocalizer',
-                    'data'        => array(
-                        'apiUrl'                   => untrailingslashit( get_rest_url() ),
-						'restUrl'                  => MultiVendorX()->rest_namespace,
-						'nonce'                    => wp_create_nonce( 'wp_rest' ),
-                        'woo_nonce'                => wp_create_nonce( 'wc_store_api' ),
-                        'country_list'             => $country_list,
-                        'color'                    => MultiVendorX()->setting->get_setting( 'store_color_settings' ),
-                        'store_payment_settings'    => MultiVendorX()->payments->get_all_store_payment_settings(),
-                        'store_id'                  => get_user_meta(wp_get_current_user()->ID, 'multivendorx_active_store', true),
-                        'ajaxurl'                   => admin_url( 'admin-ajax.php' ),
-                        'currency'                 => get_woocommerce_currency(),       // e.g., USD
-                        'currency_symbol'          => get_woocommerce_currency_symbol()
-                    ),
+                'object_name' => 'appLocalizer',
+                'data'        => array(
+                    'apiUrl'                   => untrailingslashit( get_rest_url() ),
+                    'restUrl'                  => MultiVendorX()->rest_namespace,
+                    'nonce'                    => wp_create_nonce( 'wp_rest' ),
+                    'woo_nonce'                => wp_create_nonce( 'wc_store_api' ),
+                    'country_list'             => WC()->countries->get_shipping_countries(),
+                    'state_list'               => WC()->countries->get_states(),
+                    'color'                    => MultiVendorX()->setting->get_setting( 'store_color_settings' ),
+                    'map_providor'             => MultiVendorX()->setting->get_setting( 'choose_map_api' ),
+                    'google_api_key'           => MultiVendorX()->setting->get_setting( 'google_api_key' ),
+                    'mapbox_api_key'           => MultiVendorX()->setting->get_setting( 'mapbox_api_key' ),
+                    'tinymceApiKey'            => MultiVendorX()->setting->get_setting( 'tinymce_api_section' ),
+                    'store_payment_settings'   => MultiVendorX()->payments->get_all_store_payment_settings(),
+                    'store_id'                 => get_user_meta( wp_get_current_user()->ID, 'multivendorx_active_store', true ),
+                    'ajaxurl'                  => admin_url( 'admin-ajax.php' ),
+                    'currency'                 => get_woocommerce_currency(),
+                    'currency_symbol'          => get_woocommerce_currency_symbol(),
+                    'edit_order_capability'    => current_user_can( 'edit_shop_orders' ),
+                    'add_product_link'         => StoreUtil::get_endpoint_url( 'products', 'edit' ),
+                    'all_verification_methods' => MultiVendorX()->setting->get_setting( 'all_verification_methods' ),
+                    'shipping_methods'         => apply_filters( 'multivendorx_store_shipping_options', array() ),
+                    'product_page_chat'        => MultiVendorX()->setting->get_setting( 'product_page_chat' ),
+                    'chat_provider'            => MultiVendorX()->setting->get_setting(' chat_provider' ),
+                    'messenger_color'            => MultiVendorX()->setting->get_setting(' messenger_color' ),
+                    'whatsapp_opening_pattern'            => MultiVendorX()->setting->get_setting(' whatsapp_opening_pattern' ),
+                    'whatsapp_pre_filled'            => MultiVendorX()->setting->get_setting(' whatsapp_pre_filled' ),
                 ),
+            ),
+
                 'multivendorx-registration-form-script'          => array(
 					'object_name' => 'registrationForm',
 					'data'        => array(

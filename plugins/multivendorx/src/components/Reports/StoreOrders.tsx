@@ -1,68 +1,97 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 import { Table, TableCell } from "zyra";
+import { ColumnDef, RowSelectionState, PaginationState } from '@tanstack/react-table';
 
-const overview = [
-  {
-    id: 'sales',
-    label: 'Admin Net Earning',
-    count: 15,
-    icon: 'adminlib-star',
-  },
-  {
-    id: 'earnings',
-    label: 'Store Commission',
-    count: 625,
-    icon: 'adminlib-support',
-  },
-  {
-    id: 'Vendors',
-    label: 'Store Net Commission',
-    count: 8,
-    icon: 'adminlib-global-community',
-  },
-  {
-    id: 'free',
-    label: 'Sub Total',
-    count: 758,
-    icon: 'adminlib-global-community',
-  },
-  {
-    id: 'free',
-    label: 'Shipping',
-    count: 85,
-    icon: 'adminlib-global-community',
-  },
-];
-const StoreOrders: React.FC = () => {
-  const [data, setData] = useState<StoreRow[] | null>(null);
-  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
-  const [pagination, setPagination] = useState<PaginationState>({
-    pageIndex: 0,
-    pageSize: 10,
-  });
-  const [pageCount, setPageCount] = useState(0);
-  type StoreRow = {
+type StoreRow = {
   id: number;
   vendor: string;
   amount: string;
   commission: string;
   date: string;
-  status: "Paid" | "Unpaid";
+  status: string;
+  currency: string;
 };
 
-  const demoData: StoreRow[] = [
-  { id: 1, vendor: "John's Electronics", amount: "$1200", commission: "$120", date: "2025-09-01", status: "Paid" },
-  { id: 2, vendor: "Jane's Apparel", amount: "$850", commission: "$85", date: "2025-09-02", status: "Unpaid" },
-  { id: 3, vendor: "Tech Hub", amount: "$2300", commission: "$230", date: "2025-09-03", status: "Paid" },
-  { id: 4, vendor: "Gadget World", amount: "$670", commission: "$67", date: "2025-09-04", status: "Unpaid" },
-  { id: 5, vendor: "Fashion Store", amount: "$980", commission: "$98", date: "2025-09-05", status: "Paid" },
-  { id: 6, vendor: "Mobile Planet", amount: "$1500", commission: "$150", date: "2025-09-06", status: "Unpaid" },
-  { id: 7, vendor: "Home Essentials", amount: "$720", commission: "$72", date: "2025-09-07", status: "Paid" },
-  { id: 8, vendor: "Office Supplies Co.", amount: "$430", commission: "$43", date: "2025-09-08", status: "Unpaid" },
-  { id: 9, vendor: "Luxury Bags", amount: "$1250", commission: "$125", date: "2025-09-09", status: "Paid" },
-  { id: 10, vendor: "Kitchen King", amount: "$980", commission: "$98", date: "2025-09-10", status: "Unpaid" },
-];
+const getApiLink = (appLocalizer: any, endpoint: string) => {
+  return `${appLocalizer.apiUrl}/${endpoint}`;
+};
+
+const StoreOrders: React.FC = () => {
+  const [data, setData] = useState<StoreRow[]>([]);
+  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+  const [pagination, setPagination] = useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 10,
+  });
+  const [totalRows, setTotalRows] = useState<number>(0);
+  const [pageCount, setPageCount] = useState(0);
+
+  const fetchCommissionAmount = async (commissionId: string, currencySymbol: string) => {
+    if (!commissionId) return `${currencySymbol}0`;
+
+    try {
+      const response = await axios({
+        method: "GET",
+        url: getApiLink(appLocalizer, `commission/${commissionId}`),
+        headers: { "X-WP-Nonce": appLocalizer.nonce },
+      });
+      return `${currencySymbol}${response.data.commission_amount || 0}`;
+    } catch (err) {
+      console.error(`Error fetching commission for ID ${commissionId}:`, err);
+      return `${currencySymbol}0`;
+    }
+  };
+
+  const requestApiForData = async (rowsPerPage: number, currentPage: number) => {
+    try {
+      const response = await axios({
+        method: 'GET',
+        url: `${appLocalizer.apiUrl}/wc/v3/orders`,
+        headers: { 'X-WP-Nonce': appLocalizer.nonce },
+        params: {
+          per_page: rowsPerPage,
+          page: currentPage + 1,
+          key: 'multivendorx_store_id',
+        },
+      });
+
+      const total = Number(response.headers['x-wp-total']) || 0;
+      setTotalRows(total);
+
+      // Fetch orders and their commission dynamically
+      const orders: StoreRow[] = await Promise.all(response.data.map(async (order: any) => {
+        const lineItem = order.line_items[0] || {};
+        const storeMeta = lineItem.meta_data.find((meta: any) => meta.key === 'multivendorx_sold_by');
+        const commissionMeta = order.meta_data.find((meta: any) => meta.key === 'multivendorx_commission_id');
+
+        const commission = commissionMeta 
+          ? await fetchCommissionAmount(commissionMeta.value, order.currency_symbol)
+          : `${order.currency_symbol}0`;
+
+        return {
+          id: order.id,
+          vendor: storeMeta ? storeMeta.value : '-',
+          amount: `${order.currency_symbol}${order.total}`,
+          commission,
+          date: order.date_created.split('T')[0],
+          status: order.status,
+          currency: order.currency_symbol,
+        };
+      }));
+
+      setData(orders);
+      setPageCount(Math.ceil(total / rowsPerPage));
+
+    } catch (error) {
+      console.error('Error fetching orders:', error);
+    }
+  };
+
+  useEffect(() => {
+    requestApiForData(pagination.pageSize, pagination.pageIndex);
+  }, [pagination.pageSize, pagination.pageIndex]);
 
   const columns: ColumnDef<StoreRow>[] = [
     {
@@ -84,86 +113,82 @@ const StoreOrders: React.FC = () => {
     },
     {
       header: __('Order Id', 'multivendorx'),
-      cell: ({ row }) => (
-        <TableCell title={row.original.store_name || ''}>
-          {'#7585'}
-        </TableCell>
-      ),
+      cell: ({ row }) => <TableCell>#{row.original.id}</TableCell>,
     },
     {
       header: __('Store', 'multivendorx'),
-      cell: ({ row }) => (
-        <TableCell title={row.original.store_name || ''}>
-          {row.original.vendor || '-'}
-        </TableCell>
-      ),
+      cell: ({ row }) => <TableCell>{row.original.vendor}</TableCell>,
     },
     {
       header: __('Amount', 'multivendorx'),
-      cell: ({ row }) => (
-        <TableCell title={row.original.store_slug || ''}>
-          {row.original.amount || '-'}
-        </TableCell>
-      ),
+      cell: ({ row }) => <TableCell>{row.original.amount}</TableCell>,
     },
     {
       header: __('Commission', 'multivendorx'),
-      cell: ({ row }) => (
-        <TableCell title={row.original.store_slug || ''}>
-          {row.original.commission || '-'}
-        </TableCell>
-      ),
+      cell: ({ row }) => <TableCell>{row.original.commission}</TableCell>,
     },
     {
       header: __('Date', 'multivendorx'),
-      cell: ({ row }) => (
-        <TableCell title={row.original.store_slug || ''}>
-          {row.original.date || '-'}
-        </TableCell>
-      ),
+      cell: ({ row }) => {
+        const date = new Date(row.original.date);
+        const formattedDate = date.toLocaleDateString(undefined, {
+          year: 'numeric',
+          month: 'short',
+          day: '2-digit',
+        });
+        return <TableCell>{formattedDate}</TableCell>;
+      },
     },
     {
       header: __('Status', 'multivendorx'),
       cell: ({ row }) => (
-        <TableCell title={row.original.status || ''}>
-          {row.original.status === "Paid" && (
-            <span className="admin-badge green">Paid</span>
+        <TableCell>
+          {row.original.status === "completed" && (
+            <span className="admin-badge green">Completed</span>
           )}
-          {row.original.status === "Unpaid" && (
-            <span className="admin-badge red">Unpaid</span>
+          {row.original.status === "processing" && (
+            <span className="admin-badge blue">Processing</span>
+          )}
+          {row.original.status === "refunded" && (
+            <span className="admin-badge red">Refunded</span>
+          )}
+          {row.original.status !== "completed" &&
+           row.original.status !== "processing" &&
+           row.original.status !== "refunded" && (
+            <span className="admin-badge gray">{row.original.status}</span>
           )}
         </TableCell>
       ),
     },
   ];
+
   return (
-    <>
     <div className="row">
       <div className="column">
         <div className="card-header">
-            <div className="left">
-              <div className="title">
-                Revenue Distribution
-              </div>
+          <div className="left">
+            <div className="title">Revenue Distribution</div>
+            <div className="total-orders" style={{ marginTop: '4px', fontSize: '14px', color: '#555' }}>
+              {__('Total Orders:', 'multivendorx')} {totalRows}
             </div>
           </div>
-          {/* <Table
-          data={demoData}
+        </div>
+        <Table
+          data={data}
           columns={columns as ColumnDef<Record<string, any>, any>[]}
           rowSelection={rowSelection}
           onRowSelectionChange={setRowSelection}
           defaultRowsPerPage={10}
-          // pageCount={pageCount}
-          // pagination={pagination}
+          pageCount={pageCount}
+          pagination={pagination}
           onPaginationChange={setPagination}
-          // handlePagination={requestApiForData}
+          handlePagination={requestApiForData}
           perPageOption={[10, 25, 50]}
           typeCounts={[]}
-        /> */}
+          totalCounts={totalRows}
+        />
       </div>
     </div>
-        
-    </>
   );
 };
 

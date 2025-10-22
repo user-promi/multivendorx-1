@@ -77,7 +77,10 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
         $offset  = ( $page - 1 ) * $limit;
         $count   = $request->get_param( 'count' );
         $storeId = $request->get_param( 'store_id' );
-    
+        $status = $request->get_param( 'status' );
+        $start_date = date('Y-m-d 00:00:00', strtotime(sanitize_text_field($request->get_param('startDate'))));
+        $end_date   = date('Y-m-d 23:59:59', strtotime(sanitize_text_field($request->get_param('endDate'))));
+        
         // Prepare filter for CommissionUtil
         $filter = array(
             'perpage' => $limit,
@@ -87,13 +90,17 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
         if ( ! empty( $storeId ) ) {
             $filter['store_id'] = intval( $storeId );
         }
-    
-        // Fetch commissions
-        $commissions = CommissionUtil::get_commissions(
-            $filter,
-            false // return stdClass instead of Commission object
-        );
-    
+
+        if ( ! empty( $status ) ) {
+            $filter['status'] = $status;
+        }
+
+        if ( ! empty( $start_date ) && ! empty( $end_date ) ) {
+            $filter['created_at'] = array(
+                'compare' => 'BETWEEN',
+                'value'   => array( $start_date, $end_date ),
+            );
+        }
         if ( $count ) {
             global $wpdb;
             $table_name  = "{$wpdb->prefix}" . Utill::TABLES['commission'];
@@ -109,6 +116,11 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
     
             return rest_ensure_response( (int) $total_count );
         }
+        // Fetch commissions
+        $commissions = CommissionUtil::get_commissions(
+            $filter,
+            false // return stdClass instead of Commission object
+        );
     
         $formatted_commissions = array();
     
@@ -141,8 +153,29 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
                 )
             );
         }
-    
-        return rest_ensure_response( $formatted_commissions );
+
+        // Prepare base filter (for store-specific counts)
+        $base_filter = [];
+        if ( ! empty( $storeId ) ) {
+            $base_filter['store_id'] = intval( $storeId );
+        }
+
+        // Status-wise counts with store/date filters applied
+        $all                 = CommissionUtil::get_commissions( $base_filter, true, true );
+        $paid                = CommissionUtil::get_commissions( array_merge( $base_filter, ['status' => 'paid'] ), true, true );
+        $refunded            = CommissionUtil::get_commissions( array_merge( $base_filter, ['status' => 'refunded'] ), true, true );
+        $partially_refunded  = CommissionUtil::get_commissions( array_merge( $base_filter, ['status' => 'partially_refunded'] ), true, true );
+        $cancelled           = CommissionUtil::get_commissions( array_merge( $base_filter, ['status' => 'cancelled'] ), true, true );
+        
+        $response = [
+            'commissions'        => $formatted_commissions,
+            'all'                => $all,
+            'paid'               => $paid,
+            'refunded'           => $refunded,
+            'partially_refunded' => $partially_refunded,
+            'cancelled'          => $cancelled,
+        ];
+        return rest_ensure_response( $response );
     }
     
     public function get_item( $request ) {
@@ -222,9 +255,4 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
     
         return rest_ensure_response( $response );
     }
-    
-    
-    
-    
-    
 }

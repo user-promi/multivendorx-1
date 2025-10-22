@@ -13,7 +13,7 @@ use PaypalPayoutsSDK\Payouts\PayoutsPostRequest;
 
 class Payment {
     public function __construct(){
-        add_action('multivendorx_process_paypal-payout_payment', array($this, 'process_payment'), 10, 4);
+        add_action('multivendorx_process_paypal-payout_payment', array($this, 'process_payment'), 10, 5);
     }
 
     public function get_id() {
@@ -22,10 +22,11 @@ class Payment {
 
     public function get_settings() {
         return [
-            'icon'      => 'PP',
+            'icon'      => 'adminlib-form-paypal-email',
             'id'        => $this->get_id(),
             'label'     => 'Paypal Payout',
             'enableOption' => true,
+            'disableBtn'=> true,
             'desc'      => 'Full marketplace solution with instant payouts, comprehensive dispute handling, and global coverage. Best for established marketplaces.',
             'formFields' => [
                 [
@@ -74,7 +75,7 @@ class Payment {
         }
     }
 
-    public function process_payment($store_id, $amount, $order_id = null, $transaction_id = null) {
+    public function process_payment($store_id, $amount, $order_id = null, $transaction_id = null, $note = null) {
 
         // quick autoload/class check (helps debugging)
         $payment_admin_settings = MultiVendorX()->setting->get_setting( 'payment_methods', [] );
@@ -130,7 +131,7 @@ class Payment {
                         $store_id,
                         'Paypal Payout',
                         $status,
-                        $order_id, $transaction_id
+                        $order_id, $transaction_id, $note, $amount
                     );
 
                     return [

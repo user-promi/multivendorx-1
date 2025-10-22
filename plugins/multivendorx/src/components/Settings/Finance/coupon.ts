@@ -2,7 +2,7 @@ import { __ } from '@wordpress/i18n';
 
 export default {
     id: 'store-coupon',
-    priority: 3,
+    priority: 4,
     name: __('Coupon and Discount', 'mvx-pro'),
     desc: __('Manage how discounts and coupons affect commission calculations.', 'mvx-pro'),
     icon: 'adminlib-clock',

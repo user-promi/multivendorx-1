@@ -3,14 +3,17 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 import { DateRangePicker, RangeKeyDict, Range } from 'react-date-range';
-import { Table, getApiLink, TableCell } from 'zyra';
+import { Table, getApiLink, TableCell, CalendarInput, CommonPopup, TextArea } from 'zyra';
 import {
     ColumnDef,
     RowSelectionState,
     PaginationState,
 } from '@tanstack/react-table';
 import EditQna from './editQna';
-
+export interface RealtimeFilter {
+    name: string;
+    render: (updateFilter: (key: string, value: any) => void, filterValue: any) => React.ReactNode;
+}
 // QnA Row Type
 type QnaRow = {
     id: number;
@@ -27,13 +30,26 @@ type QnaRow = {
     question_visibility: string;
 };
 
+type StoreQnaRow = {
+    id: number;
+    product_name: string;
+    product_link: string;
+    question_text: string;
+    answer_text?: string | null;
+    author_name?: string;
+    question_date?: string;
+    time_ago?: string;
+};
+
+
 const Qna: React.FC = () => {
-    const dateRef = useRef<HTMLDivElement | null>(null);
     const [error, setError] = useState<string>();
+    const [selectedQna, setSelectedQna] = useState<StoreQnaRow | null>(null);
+    const [answer, setAnswer] = useState("");
+    const [saving, setSaving] = useState(false);
     const [data, setData] = useState<QnaRow[] | null>(null);
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
     const [totalRows, setTotalRows] = useState<number>(0);
-    const [openDatePicker, setOpenDatePicker] = useState(false);
 
     const [viewQna, setViewQna] = useState(false);
     const [selectedQnaId, setSelectedQnaId] = useState<number | null>(null);
@@ -87,6 +103,8 @@ const Qna: React.FC = () => {
     function requestData(
         rowsPerPage = 10,
         currentPage = 1,
+        startDate = new Date(0),
+        endDate = new Date(),
     ) {
         setData(null);
         axios({
@@ -96,6 +114,8 @@ const Qna: React.FC = () => {
             params: {
                 page: currentPage,
                 row: rowsPerPage,
+                startDate,
+                endDate
             },
         })
             .then((response) => {
@@ -107,143 +127,175 @@ const Qna: React.FC = () => {
             });
     }
 
-    // Refresh table when child updates
-    const handleUpdated = () => {
-        requestData(pagination.pageSize, pagination.pageIndex + 1);
+    // Handle pagination and filter changes
+    const requestApiForData = (
+        rowsPerPage: number,
+        currentPage: number,
+        filterData: FilterData
+    ) => {
+        setData(null);
+        requestData(
+            rowsPerPage,
+            currentPage,
+            filterData?.date?.start_date,
+            filterData?.date?.end_date
+        );
+    };
+
+    // Save answer
+    const handleSaveAnswer = async () => {
+        if (!selectedQna) return;
+        setSaving(true);
+        try {
+            await axios.put(
+                getApiLink(appLocalizer, `qna/${selectedQna.id}`),
+                { answer_text: answer },
+                { headers: { "X-WP-Nonce": appLocalizer.nonce } }
+            );
+            setData((prev) =>
+                prev.map((q) =>
+                    q.id === selectedQna.id ? { ...q, answer_text: answer } : q
+                )
+            );
+            setSelectedQna(null);
+            setAnswer("");
+        } catch (err) {
+            console.error("Failed to save answer:", err);
+            alert("Failed to save answer");
+        } finally {
+            setSaving(false);
+        }
     };
 
     const columns: ColumnDef<QnaRow>[] = [
         {
             id: 'select',
-            header: ({ table }) => (
-                <input
-                    type="checkbox"
-                    checked={table.getIsAllRowsSelected()}
-                    onChange={table.getToggleAllRowsSelectedHandler()}
-                />
-            ),
-            cell: ({ row }) => (
-                <input
-                    type="checkbox"
-                    checked={row.getIsSelected()}
-                    onChange={row.getToggleSelectedHandler()}
-                />
-            ),
+            header: ({ table }) => <input type="checkbox" checked={table.getIsAllRowsSelected()} onChange={table.getToggleAllRowsSelectedHandler()} />,
+            cell: ({ row }) => <input type="checkbox" checked={row.getIsSelected()} onChange={row.getToggleSelectedHandler()} />
         },
         {
             header: __('Product Name', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell title={row.original.product_name || ''}>
                     {row.original.product_name ? (
-                        <a href={row.original.product_link} target="_blank" rel="noreferrer">
-                            {row.original.product_name}
-                        </a>
-                    ) : (
-                        '-'
-                    )}
+                        <a href={row.original.product_link} target="_blank" rel="noreferrer">{row.original.product_name}</a>
+                    ) : '-'}
                 </TableCell>
-            ),
+            )
         },
         {
             header: __('Question', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.question_text || ''}>
-                    {row.original.question_text ?? '-'}
-                </TableCell>
-            ),
+            cell: ({ row }) => {
+                const text = row.original.question_text ?? '-';
+                const displayText = text.length > 50 ? text.slice(0, 50) + '…' : text;
+                return <TableCell title={text}>{displayText}</TableCell>;
+            }
         },
         {
             header: __('Answer', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.answer_text || ''}>
-                    {row.original.answer_text ?? '-'}
-                </TableCell>
-            ),
+            cell: ({ row }) => {
+                const text = row.original.answer_text ?? '-';
+                const displayText = text.length > 50 ? text.slice(0, 50) + '…' : text;
+                return <TableCell title={text}>{displayText}</TableCell>;
+            }
         },
         {
             header: __('Asked By', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.author_name || ''}>
-                    {row.original.author_name ?? '-'}
-                </TableCell>
-            ),
+            cell: ({ row }) => <TableCell title={row.original.author_name || ''}>{row.original.author_name ?? '-'}</TableCell>
         },
         {
             header: __('Date', 'multivendorx'),
+            accessorFn: row => row.question_date ? new Date(row.question_date).getTime() : 0, // numeric timestamp for sorting
+            enableSorting: true,
             cell: ({ row }) => {
                 const rawDate = row.original.question_date;
-                let formattedDate = '-';
-                if (rawDate) {
-                    const dateObj = new Date(rawDate);
-                    formattedDate = new Intl.DateTimeFormat('en-US', {
-                        month: 'short',
-                        day: 'numeric',
-                        year: 'numeric',
-                    }).format(dateObj);
-                }
+                const formattedDate = rawDate ? new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).format(new Date(rawDate)) : '-';
                 return <TableCell title={formattedDate}>{formattedDate}</TableCell>;
-            },
+            }
         },
         {
             header: __('Time Ago', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.time_ago || ''}>
-                    {row.original.time_ago ?? '-'}
-                </TableCell>
-            ),
+            accessorFn: row => {
+                // Parse "2 weeks ago", "3 days ago", etc., to approximate days
+                const str = row.time_ago || '';
+                const parts = str.split(' ');
+                if (parts.length < 2) return 0;
+                const value = parseInt(parts[0]) || 0;
+                const unit = parts[1].toLowerCase();
+                switch (unit) {
+                    case 'minute':
+                    case 'minutes': return value / 60; // fraction of hour
+                    case 'hour':
+                    case 'hours': return value; // in hours
+                    case 'day':
+                    case 'days': return value * 24; // in hours
+                    case 'week':
+                    case 'weeks': return value * 24 * 7;
+                    case 'month':
+                    case 'months': return value * 24 * 30;
+                    case 'year':
+                    case 'years': return value * 24 * 365;
+                    default: return 0;
+                }
+            },
+            enableSorting: true,
+            cell: ({ row }) => <TableCell title={row.original.time_ago || ''}>{row.original.time_ago ?? '-'}</TableCell>
         },
         {
             header: __('Votes', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={String(row.original.total_votes) || ''}>
-                    {row.original.total_votes ?? 0}
-                </TableCell>
-            ),
+            cell: ({ row }) => <TableCell title={String(row.original.total_votes) || ''}>{row.original.total_votes ?? 0}</TableCell>
         },
         {
             header: __('Visibility', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.question_visibility || ''}>
-                    {row.original.question_visibility ?? '-'}
-                </TableCell>
-            ),
+            cell: ({ row }) => <TableCell title={row.original.question_visibility || ''}>{row.original.question_visibility ?? '-'}</TableCell>
         },
         {
             header: __('Action', 'multivendorx'),
             cell: ({ row }) => (
-                <TableCell title="Action">
-                    <div className="action-section">
-                        <div className="action-icons">
-                            <i
-                                className="adminlib-more-vertical"
-                                onClick={() =>
-                                    setShowDropdown(showDropdown === row.original.id ? false : row.original.id)
-                                }
-                            ></i>
-                            <div
-                                className={`action-dropdown ${showDropdown === row.original.id
-                                    ? 'show'
-                                    : ''
-                                    }`}
-                            >
-                                <ul>
-                                    <li
-                                        onClick={() => {
-                                            setSelectedQnaId(row.original.id ?? null);
-                                            setViewQna(true);
-                                        }}
-                                    >
-                                        <i className="adminlib-eye"></i>
-                                        {__('Edit', 'multivendorx')}
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </TableCell>
-            ),
+                <TableCell
+                    type="action-dropdown"
+                    rowData={row.original}
+                    header={{
+                        actions: [
+                            {
+                                label: __('Answer', 'multivendorx'),
+                                icon: 'adminlib-eye', // you can change the icon
+                                onClick: (rowData) => {
+                                    setSelectedQna(rowData);
+                                    setAnswer(rowData.answer_text || '');
+                                },
+                            },
+                            { label: __('Delete', 'multivendorx'), icon: 'adminlib-delete', onClick: (rowData) => {
+                                    if(confirm(__('Are you sure you want to delete this question?', 'multivendorx'))) {
+                                        axios.delete(getApiLink(appLocalizer, `qna/${rowData.id}`), { headers: { 'X-WP-Nonce': appLocalizer.nonce } })
+                                            .then(() => requestData(pagination.pageSize, pagination.pageIndex + 1))
+                                            .catch(() => alert(__('Failed to delete question', 'multivendorx')));
+                                    }
+                                },
+                                hover: true,
+                            },
+                        ],
+                    }}
+                />
+            )
         }
     ];
+
+    const realtimeFilter: RealtimeFilter[] = [
+        {
+            name: 'date',
+            render: (updateFilter) => (
+                <div className="right">
+                    <CalendarInput
+                        wrapperClass=""
+                        inputClass=""
+                        onChange={(range: any) => updateFilter('date', { start_date: range.startDate, end_date: range.endDate })}
+                    />
+                </div>
+            ),
+        },
+    ];
+
 
     return (
         <>
@@ -257,18 +309,61 @@ const Qna: React.FC = () => {
                     pageCount={pageCount}
                     pagination={pagination}
                     onPaginationChange={setPagination}
-                    handlePagination={requestData}
                     perPageOption={[10, 25, 50]}
+                    totalCounts={totalRows}
+                    realtimeFilter={realtimeFilter}
+                    handlePagination={requestApiForData}
                 />
             </div>
 
-            {viewQna && selectedQnaId !== null && (
-                <EditQna
-                    open={viewQna}
-                    onClose={() => setViewQna(false)}
-                    qnaId={selectedQnaId}
-                    onUpdated={handleUpdated}  
-                />
+            {selectedQna && (
+                <CommonPopup
+                    open={selectedQna}
+                    onClose={setSelectedQna}
+                    width="500px"
+                    header={
+                        <>
+                            <div className="title">
+                                <i className="adminlib-cart"></i>
+                                Answer Question
+                            </div>
+                            <p>Publish important news, updates, or alerts that appear directly in store dashboards, ensuring sellers never miss critical information.</p>
+                        </>
+                    }
+                    footer={
+                        <>
+                            <button
+                                type="button" 
+                                onClick={() => setSelectedQna(null)}
+                                className="admin-btn btn-red"
+                            >
+                                Cancel
+                            </button>
+                            <button onClick={handleSaveAnswer} disabled={saving} className="admin-btn btn-purple">
+                                {saving ? "Saving..." : "Save Answer"}
+                            </button>
+                        </>
+                    }
+
+                >
+
+                    <div className="content">
+                        <div className="form-group-wrapper">
+                            <div className="form-group">
+                                <label htmlFor="title">Question:  {selectedQna.question_text}</label>
+                                <TextArea
+                                    name="content"
+                                    inputClass="textarea-input"
+                                    value={answer}
+                                    onChange={(e) => setAnswer(e.target.value)}
+                                />
+                            </div>
+                            <span className="space"></span>
+                        </div>
+                    </div>
+
+                    {error && <p className="error-text">{error}</p>}
+                </CommonPopup>
             )}
         </>
     );

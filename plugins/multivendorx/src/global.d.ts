@@ -8,6 +8,7 @@ export {};
 
 declare global {
     interface AppLocalizer {
+        google_maps_api_key: any;
         apiUrl: string;
         restUrl: string;
         nonce: string;
@@ -42,6 +43,16 @@ declare global {
         user_id:any;
         currency:any;
         currency_symbol:any;
+        edit_order_capability:any;
+        add_product_link:any;
+        map_providor:any;
+        google_api_key:any;
+        mapbox_api_key:any;
+        all_verification_methods:any;
+        tinymceApiKey:any;
+        payout_payment_options:any;
+        shipping_methods:any;
+        state_list:any;
     }
     interface Color{
         color: any;

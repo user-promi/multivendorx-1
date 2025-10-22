@@ -14,6 +14,8 @@ use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Products_Controller;
 use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Coupons_Controller;
 use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Payouts_Controller;
 use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Transaction_Controller;
+use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Reports_Controller;
+use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Refund_Controller;
 use MultiVendorX\Store\StoreUtil;
 
 defined('ABSPATH') || exit;
@@ -34,31 +36,76 @@ class Rest {
         add_filter('woocommerce_rest_check_permissions', array($this,'give_permission'), 10, 4);
         add_filter('woocommerce_rest_shop_order_object_query', array($this, 'filter_orders_by_store_id'), 10, 2);
         add_filter('woocommerce_rest_product_object_query', array($this, 'filter_products_by_meta_exists'), 10, 2);
-        add_filter('woocommerce_rest_coupon_object_query', array($this, 'filter_coupons_by_meta_exists'), 10, 2);
+        add_filter('woocommerce_rest_shop_coupon_object_query', array($this, 'filter_coupons_by_meta_exists'), 10, 2);
+        add_filter('woocommerce_analytics_products_query_args', array($this, 'filter_low_stock_by_meta_exists'), 10, 1);
+        add_filter( 'rest_comment_query', array($this, 'mvx_filter_comments_by_store'), 10, 2 );
+
     }
 
-     /**
-     * Filter orders by store_id in line items
+    public function mvx_filter_comments_by_store($args, $request) {
+        // Get query parameters from REST request
+        $store_id = $request->get_param('meta_value');
+        $meta_key = $request->get_param('meta_key');
+    
+        // Only modify if the meta_key is store_rating_id and store_id is provided
+        if ($meta_key === 'store_rating_id' && !empty($store_id)) {
+            $args['meta_query'] = [
+                [
+                    'key'     => 'store_rating_id',
+                    'value'   => $store_id,
+                    'compare' => '=',
+                ]
+            ];
+            $args['type'] = 'multivendorx_review';
+        }
+        return $args;
+    }
+
+    public function filter_low_stock_by_meta_exists( $args ) {
+        if ( isset( $request['meta_key'] ) && $request['meta_key'] === 'multivendorx_store_id' ) {
+            
+            // Build the meta query to check for the existence of the MultiVendorX key
+            $meta_query = array(
+                'key'     => 'multivendorx_store_id',
+                'compare' => 'EXISTS',
+            );
+    
+            if ( ! isset( $args['meta_query'] ) ) {
+                $args['meta_query'] = array();
+            }
+            $args['meta_query'][] = $meta_query;
+        }
+
+        return $args;
+    }
+
+    /**
+     * Filter orders dynamically by meta key and optionally by value
      */
     public function filter_orders_by_store_id( $args, $request ) {
-        if ( ! isset( $request['store_id'] ) ) {
+        $meta_key   = $request->get_param('meta_key');
+        $meta_value = $request->get_param('value');
+    
+        if ( empty( $meta_key ) ) {
             return $args;
         }
     
-        $store_id = absint( $request['store_id'] );
-
-        $store_meta_query = array(
-            'key'   => 'multivendorx_store_id',
-            'value' => $store_id,
-            'compare' => '='
-        );
+        $store_meta_query = [
+            'key'     => sanitize_key( $meta_key ),
+            'compare' => $meta_value ? '=' : 'EXISTS',
+        ];
+    
+        if ( $meta_value ) {
+            $store_meta_query['value'] = sanitize_text_field( $meta_value );
+        }
     
         if ( isset( $args['meta_query'] ) ) {
             $args['meta_query']['relation'] = 'AND';
             $args['meta_query'][] = $store_meta_query;
         } else {
-            $args['meta_query'] = array( $store_meta_query );
+            $args['meta_query'] = [ $store_meta_query ];
         }
+    
         return $args;
     }
 
@@ -70,48 +117,83 @@ class Rest {
      * @return array Modified WP_Query arguments.
      */
     public function filter_products_by_meta_exists( $args, $request ) {
-        // Check if the request has our specific meta_key parameter
         if ( isset( $request['meta_key'] ) && $request['meta_key'] === 'multivendorx_store_id' ) {
-
-            // Only include products where this meta key exists
-            $meta_query = array(
-                'key'     => 'multivendorx_store_id',
-                'compare' => 'EXISTS',
-            );
-
+    
+            // Check if a value (store_id) was passed
+            $meta_query = [];
+    
+            if ( isset( $request['value'] ) && ! empty( $request['value'] ) ) {
+                //Filter for exact match
+                $meta_query[] = [
+                    'key'     => 'multivendorx_store_id',
+                    'value'   => sanitize_text_field( $request['value'] ),
+                    'compare' => '=',
+                ];
+            } else {
+                //If no value, just check that the key exists
+                $meta_query[] = [
+                    'key'     => 'multivendorx_store_id',
+                    'compare' => 'EXISTS',
+                ];
+            }
+    
             // Merge with existing meta_query if present
             if ( isset( $args['meta_query'] ) ) {
                 $args['meta_query']['relation'] = 'AND';
                 $args['meta_query'][] = $meta_query;
             } else {
-                $args['meta_query'] = array( $meta_query );
+                $args['meta_query'] = $meta_query;
             }
         }
-
+    
         return $args;
     }
+    
 
     public function filter_coupons_by_meta_exists( $args, $request ) {
-        // Check if the request has our specific meta_key parameter
+
+        $meta_query = array();
+    
+        //Handle filtering by store ID (existing logic)
         if ( isset( $request['meta_key'] ) && $request['meta_key'] === 'multivendorx_store_id' ) {
-
-            // Only include coupons where this meta key exists
-            $meta_query = array(
-                'key'     => 'multivendorx_store_id',
-                'compare' => 'EXISTS',
-            );
-
-            // Merge with existing meta_query if present
-            if ( isset( $args['meta_query'] ) ) {
-                $args['meta_query']['relation'] = 'AND';
-                $args['meta_query'][] = $meta_query;
+    
+            if ( isset( $request['value'] ) && $request['value'] !== '' ) {
+                $meta_query[] = array(
+                    'key'     => 'multivendorx_store_id',
+                    'value'   => sanitize_text_field( $request['value'] ),
+                    'compare' => '=',
+                );
             } else {
-                $args['meta_query'] = array( $meta_query );
+                $meta_query[] = array(
+                    'key'     => 'multivendorx_store_id',
+                    'compare' => 'EXISTS',
+                );
             }
         }
-
+    
+        //Handle filtering by discount_type (new addition)
+        if ( isset( $request['discount_type'] ) && ! empty( $request['discount_type'] ) ) {
+            $meta_query[] = array(
+                'key'     => 'discount_type',
+                'value'   => sanitize_text_field( $request['discount_type'] ),
+                'compare' => '=',
+            );
+        }
+    
+        // 3️⃣ Merge with existing meta_query if present
+        if ( ! empty( $meta_query ) ) {
+            if ( isset( $args['meta_query'] ) ) {
+                $args['meta_query']['relation'] = 'AND';
+                $args['meta_query'] = array_merge( $args['meta_query'], $meta_query );
+            } else {
+                $args['meta_query'] = $meta_query;
+            }
+        }
+    
         return $args;
     }
+    
+    
 
     public function give_permission($permission, $context, $object_id, $post_type) {
         $current_user = wp_get_current_user();
@@ -136,7 +218,6 @@ class Rest {
      */
     public function init_classes() {
         $this->container = array(
-            'orders'    => new MultiVendorX_REST_Orders_Controller(),
             'settings'  => new MultiVendorX_REST_Settings_Controller(),
             'dashboard' => new MultiVendorX_REST_Dashboard_Controller(),
             'store'     => new MultiVendorX_REST_Store_Controller(),
@@ -144,10 +225,10 @@ class Rest {
             'status'    => new MultiVendorX_REST_Status_Controller(),
             'announcement' => new MultiVendorX_REST_Announcement_Controller(),
             'knowledge' => new MultiVendorX_REST_Knowledge_Controller(),
-            'products'  => new MultiVendorX_REST_Products_Controller(),
-            'coupons'   => new MultiVendorX_REST_Coupons_Controller(),
             'payouts'   => new MultiVendorX_REST_Payouts_Controller(),
             'transaction'=> new MultiVendorX_REST_Transaction_Controller(),
+            'report'=> new MultiVendorX_REST_Reports_Controller(),
+            'refund'=> new MultiVendorX_REST_Refund_Controller(),
         );
     }
 
@@ -155,6 +236,21 @@ class Rest {
      * Register REST API routes.
      */
     public function register_rest_routes() {
+        
+        register_meta('comment', 'store_rating', [
+            'type' => 'number',
+            'single' => true,
+            'show_in_rest' => true, // important to show in REST API
+            'description' => 'Customer rating for the store',
+        ]);
+    
+        // Register store_rating_id meta
+        register_meta('comment', 'store_rating_id', [
+            'type' => 'number',
+            'single' => true,
+            'show_in_rest' => true,
+            'description' => 'Store ID associated with the rating',
+        ]);
 
         register_meta('user', 'multivendorx_dashboard_tasks', [
             'type' => 'array',

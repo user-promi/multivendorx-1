@@ -39,6 +39,14 @@ class CommissionUtil {
         return new Commission( $id );
     }
 
+    public static function get_commission_by_store_and_order_id( $store_id, $order_id ) {
+        global $wpdb;
+        $commission = $wpdb->get_row(
+            $wpdb->prepare( "SELECT * FROM `" . $wpdb->prefix . Utill::TABLES['commission'] . "` WHERE store_id = %d AND order_id = %d", $store_id, $order_id )
+        );
+        return $commission ?? new \stdClass();
+    }
+
     /**
      * Get array of commission object or count based on filter.
      * 
@@ -107,7 +115,6 @@ class CommissionUtil {
         if ( $count ) {
             return (int) $wpdb->get_var( $query ) ?? 0;
         }
-    
         // Database query for commissions
         $commissions = $wpdb->get_results( $query );
     
@@ -122,4 +129,38 @@ class CommissionUtil {
         }, $commissions );
     }
     
+    public static function get_commission_summary_for_store( $store_id ) {
+        global $wpdb;
+
+        $table_name = $wpdb->prefix . Utill::TABLES['commission'];
+
+        //COALESCE use because this converts that NULL to 0.00
+        $query = $wpdb->prepare("
+            SELECT 
+                COALESCE(SUM(total_order_amount), 0) AS total_order_amount,
+                COALESCE(SUM(facilitator_fee), 0) AS facilitator_fee,
+                COALESCE(SUM(gateway_fee), 0) AS gateway_fee,
+                COALESCE(SUM(shipping_amount), 0) AS shipping_amount,
+                COALESCE(SUM(tax_amount), 0) AS tax_amount,
+                COALESCE(SUM(shipping_tax_amount), 0) AS shipping_tax_amount,
+                COALESCE(SUM(commission_total), 0) AS commission_total,
+                COALESCE(SUM(commission_refunded), 0) AS commission_refunded
+            FROM {$table_name}
+            WHERE store_id = %d
+        ", $store_id);
+
+        $result = $wpdb->get_row($query);
+
+        return [
+            'total_order_amount'   => floatval($result->total_order_amount),
+            'facilitator_fee'      => floatval($result->facilitator_fee),
+            'gateway_fee'          => floatval($result->gateway_fee),
+            'shipping_amount'      => floatval($result->shipping_amount),
+            'tax_amount'           => floatval($result->tax_amount),
+            'shipping_tax_amount'  => floatval($result->shipping_tax_amount),
+            'commission_total'     => floatval($result->commission_total),
+            'commission_refunded'  => floatval($result->commission_refunded),
+        ];
+    }
+
 }

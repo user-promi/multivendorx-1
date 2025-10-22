@@ -4,15 +4,28 @@ import { __ } from '@wordpress/i18n';
 import "../Announcements/announcements.scss";
 import TransactionHistoryTable from './transactionHistoryTable';
 import TransactionDataTable from './transactionDataTable';
-import { AdminBreadcrumbs, getApiLink, SelectInput } from 'zyra';
+import { AdminBreadcrumbs, CalendarInput, getApiLink, SelectInput, CommonPopup, BasicInput, TextArea, ToggleSetting } from 'zyra';
 import axios from 'axios';
+import disbursement from '../Settings/Finance/disbursement';
+
 
 export const TransactionHistory: React.FC = () => {
-    const [overview, setOverview] = useState<any[]>([]);
+    const [data, setData] = useState<any[]>([]);
     const [activeTab, setActiveTab] = useState("products");
     const [allStores, setAllStores] = useState<any[]>([]);
     const [filteredStores, setFilteredStores] = useState<any[]>([]);
     const [selectedStore, setSelectedStore] = useState<any>(null);
+    const [dateRange, setDateRange] = useState<{ startDate: Date | null; endDate: Date | null }>({
+        startDate: null,
+        endDate: null,
+    });
+    const [requestWithdrawal, setRequestWithdrawal] = useState(false);
+    const [amount, setAmount] = useState<number | "">("");
+    const [note, setNote] = useState<any | "">("");
+    const [storeData, setStoreData] = useState<any>(null);
+    const [optionList, setOptionList] = React.useState([]);
+    const [paymentMethod, setPaymentMethod] = useState<any | "">("");
+
 
     // 🔹 Fetch stores on mount
     useEffect(() => {
@@ -47,29 +60,34 @@ export const TransactionHistory: React.FC = () => {
             url: getApiLink(appLocalizer, `transaction/${selectedStore.value}`),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
         })
+        .then((response) => {
+            setData(response?.data || {});
+        })
+
+        axios({
+            method: "GET",
+            url: getApiLink(appLocalizer, `store/${selectedStore.value}`),
+            headers: { "X-WP-Nonce": appLocalizer.nonce },
+        })
             .then((response) => {
-                const data = response?.data || {};
-                const dynamicOverview = [
-                    { id: 'total_balance', label: 'Total Balance', count: data.balance ?? 0, icon: 'adminlib-wallet' },
-                    { id: 'pending', label: 'Pending', count: data.pending ?? 0, icon: 'adminlib-clock' },
-                    { id: 'locked', label: 'Locked', count: data.locking_balance ?? 0, icon: 'adminlib-lock' },
-                    { id: 'withdrawable', label: 'Withdrawable', count: data.withdrawable ?? 0, icon: 'adminlib-cash' },
-                    { id: 'commission', label: 'Commission', count: data.commission ?? 0, icon: 'adminlib-star' },
-                    { id: 'gateway_fees', label: 'Gateway Fees', count: data.gateway_fees ?? 0, icon: 'adminlib-credit-card' },
-                ];
-                setOverview(dynamicOverview);
+              setStoreData(response.data || {});
             })
-            .catch((error) => {
-                setOverview([
-                    { id: 'total_balance', label: 'Total Balance', count: 0, icon: 'adminlib-wallet' },
-                    { id: 'pending', label: 'Pending', count: 0, icon: 'adminlib-clock' },
-                    { id: 'locked', label: 'Locked', count: 0, icon: 'adminlib-lock' },
-                    { id: 'withdrawable', label: 'Withdrawable', count: 0, icon: 'adminlib-cash' },
-                    { id: 'commission', label: 'Commission', count: 0, icon: 'adminlib-star' },
-                    { id: 'gateway_fees', label: 'Gateway Fees', count: 0, icon: 'adminlib-credit-card' },
-                ]);
-            });
     }, [selectedStore]);
+
+    useEffect(() => {
+        if (!storeData) return;
+
+        const existingOptions = Object.values(appLocalizer.payout_payment_options);
+        const defaultOption = {
+            value: storeData.payment_method,
+            label: 'Store Default - ' + storeData.payment_method
+        };
+
+        // Prepend default to the top
+        const mergedOptions = [defaultOption, ...existingOptions];
+        setOptionList(mergedOptions);
+    }, [storeData]);
+
 
     const handleSearch = (inputValue: string) => {
         if (!inputValue) {
@@ -82,74 +100,241 @@ export const TransactionHistory: React.FC = () => {
         }
     };
 
+    const handleWithdrawal = () => {
+        axios({
+            method: 'PUT',
+            url: getApiLink(appLocalizer, `transaction/${selectedStore?.value}`),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            data: {
+                disbursement: true,
+                amount: amount,
+                store_id: selectedStore?.value,
+                method: paymentMethod,
+                note: note
+            },
+        }).then((res) => {
+            if (res.data.success) {
+                setRequestWithdrawal(false);
+            }
+        });
+    };  
+
     const tabs = [
         {
             id: "products",
             label: "Wallet Transaction",
-            content: <TransactionHistoryTable storeId={selectedStore?.value} />
+            content: <TransactionHistoryTable storeId={selectedStore?.value} dateRange={dateRange} />
         },
         {
             id: "stores",
             label: "Direct Transaction",
-            content: <TransactionDataTable storeId={selectedStore?.value} />
+            content: <TransactionDataTable storeId={selectedStore?.value} dateRange={dateRange} />
         },
     ];
+
 
     return (
         <>
             <AdminBreadcrumbs
                 activeTabIcon="adminlib-book"
-                tabTitle="Storewise Transaction History"
-                description={"Build your knowledge base: add new guides or manage existing ones in one place."}
+                tabTitle={
+                    selectedStore
+                        ? `Storewise Transaction History - ${selectedStore.label}`
+                        : "Storewise Transaction History"
+                }
+                description={
+                    selectedStore
+                        ? `View and manage transactions for ${selectedStore.label} store`
+                        : "View and manage storewise transactions"
+                }
                 customContent={
-                    <SelectInput
-                        name="store"
-                        value={selectedStore?.value || ""}
-                        options={filteredStores}
-                        type="single-select"
-                        onChange={(newValue: any) => setSelectedStore(newValue)}
-                        onInputChange={(inputValue: string) => handleSearch(inputValue)}
-                    />
+                    <>
+                        <div>Switch Store</div>
+                        <SelectInput
+                            name="store"
+                            value={selectedStore?.value || ""}
+                            options={filteredStores}
+                            type="single-select"
+                            onChange={(newValue: any) => setSelectedStore(newValue)}
+                            onInputChange={(inputValue: string) => handleSearch(inputValue)}
+                        />
+                    </>
                 }
             />
 
             <div className="admin-dashboard">
-                <div className="header">
-                    <div className="title-wrapper">
-                        <div className="title">
-                            {selectedStore ? `You are viewing ${selectedStore.label}` : "Select a store"}
-                        </div>
-                        <div className="des">Here's what's happening with your marketplace today</div>
-                    </div>
-                </div>
-
                 <div className="row">
-
-                    <div className="overview-card-wrapper">
-                        {overview.map((stat) => (
-                            <div className="action" key={stat.id}>
+                     <div className="column">
+                        <div className="card-header">
+                            <div className="left">
                                 <div className="title">
-                                    {appLocalizer.currency_symbol}{stat.count} <i className={stat.icon}></i>
+                                    Available for Payout
                                 </div>
-                                <div className="description">{stat.label}</div>
                             </div>
-                        ))}
+                        </div>
+                        <div className="payout-wrapper">
+                            <div className="price">
+                                {appLocalizer.currency_symbol}{Number(data.available_balance ?? 0).toFixed(2)}
+                            </div>
+                            <div className="des">Current available balance ready for withdrawal</div>
+                            <div className="admin-btn btn-purple" onClick={() => setRequestWithdrawal(true)}>
+                                Disburse payment
+                            </div>
+                        </div>
                     </div>
+                    <div className="column">
+                        <div className="card-header">
+                            <div className="left">
+                                <div className="title">
+                                    Balance Breakdown
+                                </div>
+                            </div>
+                        </div>
+                        <div className="card-body">
+                            <div className="analytics-container">
 
+                                <div className="analytics-item">
+                                    <div className="analytics-icon">
+                                        <i className="adminlib-cart red"></i>
+                                    </div>
+                                    <div className="details">
+                                        <div className="number">{appLocalizer.currency_symbol}{Number(data.wallet_balance ?? 0).toFixed(2)}</div>
+                                        <div className="text">Wallet Balance</div>
+                                    </div>
+                                </div>
+                                <div className="analytics-item">
+                                    <div className="analytics-icon">
+                                        <i className="adminlib-cart green"></i>
+                                    </div>
+                                    <div className="details">
+                                        <div className="number">{appLocalizer.currency_symbol}{Number(data.reserve_balance ?? 0).toFixed(2)}</div>
+                                        <div className="text">Reserve Balance</div>
+                                    </div>
+                                </div>
+                                <div className="analytics-item">
+                                    <div className="analytics-icon">
+                                        <i className="adminlib-cart yellow"></i>
+                                    </div>
+                                    <div className="details">
+                                        <div className="number">{appLocalizer.currency_symbol}{Number(data.locking_balance ?? 0).toFixed(2)}</div>
+                                        <div className="text">Locked Balance</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+                {requestWithdrawal && (
+                    <CommonPopup
+                        open={requestWithdrawal}
+                        width="400px"
+                        height="80%"
+                        header={
+                            <>
+                                <div className="title">
+                                    <i className="adminlib-cart"></i>
+                                    Request Withdrawal
+                                </div>
+                                <i
+                                    className="icon adminlib-close"
+                                    onClick={() => setRequestWithdrawal(false)}
+                                ></i>
+                            </>
+                        }
+                        footer={
+                            <>
+                                <div
+                                    className="admin-btn btn-purple"
+                                    onClick={() => handleWithdrawal()}
+                                >
+                                    Publish
+                                    <i className="adminlib-check"></i>
+                                </div>
 
+                            </>
+                        }
+                    >
+
+                        <div className="content">
+                            {/* start left section */}
+                            <div className="form-group-wrapper">
+                                <div className="form-group">
+                                    <label htmlFor="amount">Amount</label>
+                                    <BasicInput
+                                        type="number"
+                                        name="amount"
+                                        value={amount}
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                            setAmount(Number(e.target.value))
+                                        }
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="payment_method">Payment Processor</label>
+                                    {/* <SelectInput
+                                        name="payment_method"
+                                        value={paymentMethod}
+                                        options={optionList}
+                                        type="single-select"
+                                        onChange={(newValue) => {
+                                            if (newValue && newValue.value) {
+                                                setPaymentMethod(newValue.value);
+                                            }
+                                        }
+                                        }
+                                    /> */}
+                                    <ToggleSetting
+                                        wrapperClass="setting-form-input"
+                                        descClass="settings-metabox-description"
+                                        description="Choose your preferred payment processor."
+                                        options={optionList}
+                                        value={paymentMethod || ""}
+                                        onChange={(value) => {
+                                            setPaymentMethod(value)
+                                        }}
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="note">Note</label>
+                                    <TextArea
+                                        name="note"
+                                        wrapperClass="setting-from-textarea"
+                                        inputClass="textarea-input"
+                                        descClass="settings-metabox-description"
+                                        value={note}
+                                        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNote(e.target.value)}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </CommonPopup>
+                )}
                 <div className="row">
                     <div className="column">
-                        <div className="tab-titles">
-                            {tabs.map((tab) => (
-                                <div
-                                    key={tab.id}
-                                    className={`title ${activeTab === tab.id ? "active" : ""}`}
-                                    onClick={() => setActiveTab(tab.id)}
-                                >
-                                    <p><i className="adminlib-cart"></i>{tab.label}</p>
+                        <div className="card-header">
+                            <div className="left">
+                                <div className="tab-titles">
+                                    {tabs.map((tab) => (
+                                        <div
+                                            key={tab.id}
+                                            className={`title ${activeTab === tab.id ? "active" : ""}`}
+                                            onClick={() => setActiveTab(tab.id)}
+                                        >
+                                            <p><i className="adminlib-cart"></i>{tab.label}</p>
+                                        </div>
+                                    ))}
                                 </div>
-                            ))}
+                            </div>
+                            <div className="right">
+                                <CalendarInput
+                                    wrapperClass=""
+                                    inputClass=""
+                                    showLabel={true}
+                                    onChange={(range: any) => {
+                                        setDateRange({ startDate: range.startDate, endDate: range.endDate });
+                                    }}
+                                />
+                            </div>
                         </div>
 
                         <div className="tab-content">

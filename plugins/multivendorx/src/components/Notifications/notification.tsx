@@ -14,6 +14,9 @@ const Notification = () => {
 
     const [activeTab, setActiveTab] = useState("products");
     const [tasks, setTasks] = useState<string[]>([]);
+    const [showInput, setShowInput] = useState(false);
+    const [task, setTask] = useState("");
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         if (!appLocalizer.user_id) return;
@@ -40,12 +43,19 @@ const Notification = () => {
     };
 
 
-    const handleConfirm = () => {
+    const handleConfirm = async () => {
         if (!task.trim()) return;
-        const updatedTasks = [...tasks, task];
-        saveTasks(updatedTasks);
-        setTask("");
-        setShowInput(false);
+
+        setLoading(true);
+        try {
+            await saveTasks([...tasks, task]);
+            setTask("");
+            setShowInput(false);
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
     };
 
     const handleDelete = (index: number) => {
@@ -54,7 +64,7 @@ const Notification = () => {
     };
 
 
-    
+
     // In Notification.tsx
     const refreshCounts = () => {
         axios({
@@ -70,10 +80,14 @@ const Notification = () => {
 
         axios({
             method: 'GET',
-            url: getApiLink(appLocalizer, 'coupons'),
+            url: `${appLocalizer.apiUrl}/wc/v3/coupons`,
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            params: { count: true },
-        }).then((response) => setCouponCount(response.data || 0));
+            params: { per_page: 1, meta_key: 'multivendorx_store_id', status: 'pending' }
+        })
+            .then((response) => {
+                const totalCount = parseInt(response.headers['x-wp-total'], 10) || 0;
+                setCouponCount(totalCount);
+            });
 
         axios({
             method: 'GET',
@@ -84,26 +98,27 @@ const Notification = () => {
 
         axios({
             method: 'GET',
-            url: getApiLink(appLocalizer, 'transaction'),
+            url: getApiLink(appLocalizer, 'store'),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            params: { count: true, status: 'Pending' },
-        }).then((response) => setTransactionCount(response.data || 0));
+            params: { pending_withdraw: true } //important: use this param
+          })
+          .then((response) => {
+            const count = response.data.length || 0; // response.data is an array of stores with pending withdraw
+            setTransactionCount(count);
+          })
+          .catch(() => setTransactionCount(0));
     };
-    
+
     const tabs = [
         { id: "products", label: "Products", content: <Products onUpdated={refreshCounts} /> },
         { id: "stores", label: "Stores", content: <Vendors onUpdated={refreshCounts} /> },
         { id: "coupons", label: "Coupons", content: <Coupons onUpdated={refreshCounts} /> },
-        { id: "transactions", label: "Transaction", content: <Transactions onUpdated={refreshCounts} /> },
+        { id: "transactions", label: "Withdrawal", content: <Transactions onUpdated={refreshCounts} /> },
     ];
     // run once on mount
     useEffect(() => {
         refreshCounts();
     }, []);
-
-    const [showInput, setShowInput] = useState(false);
-    const [task, setTask] = useState("");
-
     return (
         <>
             <AdminBreadcrumbs
@@ -120,12 +135,12 @@ const Notification = () => {
                         <div className="card-header">
                             <div className="left">
                                 <div className="title">
-                                    Account Overview
+                                    Review Store Submissions
                                 </div>
                             </div>
-                            <div className="right">
+                            {/* <div className="right">
                                 <span>Updated 1 month ago</span>
-                            </div>
+                            </div> */}
                         </div>
                         <div className="overview-card-wrapper">
                             <div className="action">
@@ -134,7 +149,7 @@ const Notification = () => {
                                     <i className="adminlib-cart"></i>
                                 </div>
                                 <div className="description">
-                                    Pending Products
+                                    Products Submitted
                                 </div>
                             </div>
                             <div className="action">
@@ -154,7 +169,7 @@ const Notification = () => {
                                     <i className="adminlib-catalog"></i>
                                 </div>
                                 <div className="description">
-                                    Pending Coupons
+                                    Coupon Approvals
                                 </div>
                             </div>
                             <div className="action">
@@ -163,7 +178,7 @@ const Notification = () => {
                                     <i className="adminlib-module"></i>
                                 </div>
                                 <div className="description">
-                                    Pending Transaction
+                                    Withdrawal Requests
                                 </div>
                             </div>
                         </div>
@@ -174,12 +189,6 @@ const Notification = () => {
                             <div className="left">
                                 <div className="title">
                                     Tasks
-                                </div>
-                            </div>
-                            <div className="right">
-                                <div className="admin-btn btn-purple">
-                                    <i className="adminlib-plus-circle-o"></i>
-                                    Add task
                                 </div>
                             </div>
                         </div>
@@ -206,20 +215,30 @@ const Notification = () => {
                                         placeholder="Enter task"
                                         className="basic-input"
                                         autoFocus
+                                        disabled={loading} // disable input while saving
                                     />
                                     <div className="buttons-wrapper">
-                                        <button className="admin-btn btn-red" onClick={() => setShowInput(false)}>
+                                        <button
+                                            className="admin-btn btn-red"
+                                            onClick={() => setShowInput(false)}
+                                            disabled={loading} // disable cancel while saving
+                                        >
                                             <i className="adminlib-close"></i> Cancel
                                         </button>
-                                        <button className="admin-btn btn-purple" onClick={handleConfirm}>
-                                            <i className="adminlib-plus-circle-o"></i> Add
+                                        <button
+                                            className="admin-btn btn-purple"
+                                            onClick={handleConfirm}
+                                            disabled={!task.trim() || loading} // disable add button if empty or loading
+                                        >
+                                            {loading ? <i className="adminlib-spinner spinning"></i> : <i className="adminlib-plus-circle-o"></i>} Add
                                         </button>
                                     </div>
                                 </span>
                             )}
+
                             {!showInput && (
                                 <button className="admin-btn btn-purple" onClick={() => setShowInput(true)}>
-                                    + Add Task
+                                    <i className="adminlib-plus-circle-o"></i> Add Task
                                 </button>
                             )}
 
@@ -234,7 +253,10 @@ const Notification = () => {
                                 </div>
                             </div>
                             <div className="right">
-                                <span>Updated 1 month ago</span>
+                                <div className="admin-btn btn-purple">
+                                    <i className="adminlib-eye"></i>
+                                    Show all notification
+                                </div>
                             </div>
                         </div>
                         <div className="notification-wrapper">
@@ -270,24 +292,7 @@ const Notification = () => {
                                         <span>34min ago</span>
                                     </div>
                                 </li>
-                                <li>
-                                    <div className="icon-wrapper">
-                                        <i className="adminlib-calendar red"></i>
-                                    </div>
-                                    <div className="details">
-                                        <div className="notification-title">Lorem ipsum dolor sit amet.</div>
-                                        <div className="des">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</div>
-                                        <span>34min ago</span>
-                                    </div>
-                                </li>
                             </ul>
-
-                            <div className="buttons-wrapper">
-                                <div className="admin-btn btn-purple">
-                                    <i className="adminlib-eye"></i>
-                                    Show all notification
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>

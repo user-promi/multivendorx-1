@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { BasicInput, TextArea, ToggleSetting, getApiLink } from 'zyra';
+import { BasicInput, TextArea, SuccessNotice, getApiLink } from 'zyra';
 
 const PolicySettings = ({ id }: { id: string|null }) => {
 	const [formData, setFormData] = useState<{ [key: string]: string }>({});
@@ -27,22 +27,13 @@ const PolicySettings = ({ id }: { id: string|null }) => {
 	}, [successMsg]);
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-		const { name, value } = e.target;
+		const { name, value } = e?.target;
+		console.log(name,value);
+
 		setFormData((prev) => {
 			const updated = {
 				...(prev || {}),
 				[name]: value ?? '',
-			};
-			autoSave(updated);
-			return updated;
-		});
-	};
-
-	const handleToggleChange = (value: string) => {
-		setFormData((prev) => {
-			const updated = {
-				...(prev || {}),
-				payment_method: value,
 			};
 			autoSave(updated);
 			return updated;
@@ -64,15 +55,7 @@ const PolicySettings = ({ id }: { id: string|null }) => {
 
 	return (
 		<>
-			{successMsg && (
-				<div className="admin-notice-wrapper">
-					<i className="admin-font adminlib-icon-yes"></i>
-					<div className="notice-details">
-						<div className="title">Great!</div>
-						<div className="desc">{successMsg}</div>
-					</div>
-				</div>
-			)}
+			<SuccessNotice message={successMsg} />
 
 			<div className="container-wrapper">
 				<div className="card-wrapper width-65">
@@ -83,7 +66,7 @@ const PolicySettings = ({ id }: { id: string|null }) => {
 
 						<div className="form-group-wrapper">
 							<div className="form-group">
-								<TextArea name="shipping_policy" wrapperClass="setting-from-textarea"
+								<TextArea tinymceApiKey={appLocalizer.tinymceApiKey} usePlainText={true} name="shipping_policy" wrapperClass="setting-from-textarea"
 									inputClass="textarea-input"
 									descClass="settings-metabox-description" value={formData.shipping_policy} onChange={handleChange} />
 							</div>
@@ -97,7 +80,7 @@ const PolicySettings = ({ id }: { id: string|null }) => {
 
 						<div className="form-group-wrapper">
 							<div className="form-group">
-								<TextArea name="refund_policy" wrapperClass="setting-from-textarea"
+								<TextArea tinymceApiKey={appLocalizer.tinymceApiKey} name="refund_policy" wrapperClass="setting-from-textarea"
 									inputClass="textarea-input"
 									descClass="settings-metabox-description" value={formData.refund_policy} onChange={handleChange} />
 							</div>
@@ -111,7 +94,7 @@ const PolicySettings = ({ id }: { id: string|null }) => {
 
 						<div className="form-group-wrapper">
 							<div className="form-group">
-								<TextArea name="exchange_policy" wrapperClass="setting-from-textarea"
+								<TextArea tinymceApiKey={appLocalizer.tinymceApiKey} name="exchange_policy" wrapperClass="setting-from-textarea"
 									inputClass="textarea-input"
 									descClass="settings-metabox-description" value={formData.exchange_policy} onChange={handleChange} />
 							</div>

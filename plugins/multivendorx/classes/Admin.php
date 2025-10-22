@@ -47,7 +47,6 @@ class Admin {
         add_action('product_cat_edit_form_fields', array($this, 'edit_product_cat_commission_fields'), 10);
         add_action('created_term', array($this, 'save_product_cat_commission_fields'), 10, 3);
         add_action('edit_term', array($this, 'save_product_cat_commission_fields'), 10, 3);
-        add_action( 'init', array( $this, 'register_multivendorx_custom_post_types' ), 5 );
 
         //add store tab in coupons section backend
         add_filter('woocommerce_coupon_data_tabs', array($this, 'add_store_tab_in_coupon'));
@@ -171,10 +170,10 @@ class Admin {
                     'name'   => __( 'Help & Support', 'multivendorx' ),
                     'subtab' => '',
                 ),
-                // 'setup' => array(
-                //     'name'   => __( 'Setup', 'multivendorx' ),
-                //     'subtab' => '',
-                // ),
+                'setup' => array(
+                    'name'   => __( 'Setup', 'multivendorx' ),
+                    'subtab' => '',
+                ),
             );
             
             foreach ( $submenus as $slug => $submenu ) {
@@ -516,36 +515,6 @@ class Admin {
 
         wp_send_json( $results );
     }
-    public function register_multivendorx_custom_post_types() {
-        // Announcements
-        register_post_type( 'multivendorx_an', array(
-            'public'             => false,   // Not publicly queryable
-            'show_ui'            => false,   // Hide from admin UI
-            'show_in_menu'       => false,   // Do not add to admin menu
-            'show_in_nav_menus'  => false,
-            'exclude_from_search'=> true,
-            'publicly_queryable' => false,   // Prevent front-end queries
-            'show_in_rest'       => true,    // REST API access
-            'rest_base'          => 'announcements', // Optional custom REST endpoint
-            'supports'           => array( 'title', 'editor' ),
-        ) );
-        
-    
-        // Knowledge Base (KB)
-        register_post_type( 'multivendorx_kb', array(
-            'public'             => false,   // Not publicly queryable
-            'show_ui'            => false,   // Hide in admin UI
-            'show_in_menu'       => false,   // Do not add to admin menu
-            'show_in_nav_menus'  => false,
-            'exclude_from_search'=> true,
-            'publicly_queryable' => false,   // Prevent frontend queries
-            'show_in_rest'       => true,    // REST API access only
-            'rest_base'          => 'kb',    // Custom REST endpoint base
-            'supports'           => array( 'title', 'editor' ),
-        ) );
-        
-    }
-    
     public function add_store_tab_in_coupon( $coupon_data_tabs ) {
         $coupon_data_tabs['store'] = array(
             'label'  => __( 'Store', 'multivendorx' ),
