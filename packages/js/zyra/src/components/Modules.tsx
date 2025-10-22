@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Dialog from '@mui/material/Dialog';
 
 /**
@@ -167,6 +167,45 @@ const Modules: React.FC<ModuleProps> = ({
             setTimeout(() => setSuccessMsg(''), 2000);
         }
     };
+    useEffect(() => {
+    let highlightedElement: HTMLElement | null = null;
+
+    const scrollToTargetSection = () => {
+        const hash = window.location.hash;
+        const params = new URLSearchParams(hash.replace('#&', ''));
+        const targetId = params.get('module'); // your dynamic module id
+
+        if (targetId) {
+            setTimeout(() => {
+                const targetElement = document.getElementById(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    targetElement.classList.add('highlight');
+                    highlightedElement = targetElement;
+                }
+            }, 500);
+        }
+    };
+
+    // Remove highlight if click is outside the element
+    const handleClickOutside = (event: MouseEvent) => {
+        if (highlightedElement && !highlightedElement.contains(event.target as Node)) {
+            highlightedElement.classList.remove('highlight');
+            highlightedElement = null;
+        }
+    };
+
+    scrollToTargetSection();
+
+    window.addEventListener('hashchange', scrollToTargetSection);
+    document.addEventListener('click', handleClickOutside);
+
+    return () => {
+        window.removeEventListener('hashchange', scrollToTargetSection);
+        document.removeEventListener('click', handleClickOutside);
+    };
+}, [filteredModules]);
+
 
     return (
         <>
@@ -276,7 +315,7 @@ const Modules: React.FC<ModuleProps> = ({
                         const module = item as Module;
                         const requiredPlugins = module.req_plugin || (module as any).req_pluging || [];
                         return (
-                            <div className="module-list-item" key={module.id}>
+                            <div className="module-list-item" key={module.id} id={module.id}>
                                 <div className="module-body">
                                     <div className="module-header">
                                         <div className="icon">
@@ -307,7 +346,7 @@ const Modules: React.FC<ModuleProps> = ({
                                     <div className="module-details">
 
                                         <div className="meta-name">{module.name}</div>
-                                        <div className="tag-wrapper">                                        
+                                        <div className="tag-wrapper">
                                             {getCategories(module.category).map((cat, idx) => (
                                                 <span key={idx} className="admin-badge blue">
                                                     {formatCategory(cat)}

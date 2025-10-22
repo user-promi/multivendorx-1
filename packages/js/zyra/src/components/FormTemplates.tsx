@@ -20,7 +20,7 @@ const FormTemplates: React.FC<FormTemplatesProps> = ({ onTemplateSelect }) => {
       id: 'contact',
       name: 'Contact Form',
       description: 'Simple contact form with name, email, and message fields',
-      thumbnail: 'https://via.placeholder.com/300x200/007cba/ffffff?text=Contact+Form',
+      thumbnail: 'http://localhost:8889/wp-content/plugins/multivendorx/release/assets/images/template181b2a5626c4339fd8187.jpg',
       fields: [
         { id: 1, type: 'title', label: 'Contact Us', required: true },
         { id: 2, type: 'text', label: 'Full Name', required: true, placeholder: 'Enter your full name' },
@@ -33,7 +33,7 @@ const FormTemplates: React.FC<FormTemplatesProps> = ({ onTemplateSelect }) => {
       id: 'registration',
       name: 'Registration Form',
       description: 'User registration form with multiple field types',
-      thumbnail: 'https://via.placeholder.com/300x200/28a745/ffffff?text=Registration+Form',
+      thumbnail: 'http://localhost:8889/wp-content/plugins/multivendorx/release/assets/images/template297dd30c6495eeddf2926.jpg',
       fields: [
         { id: 1, type: 'title', label: 'Create Account', required: true },
         { id: 2, type: 'text', label: 'Username', required: true, placeholder: 'Choose a username' },

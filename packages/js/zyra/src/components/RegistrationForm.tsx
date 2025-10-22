@@ -23,7 +23,6 @@ import DisplayButton from './DisplayButton';
 import BlockLayout from './BlockLayout';
 import ImageGallery from './ImageGallery';
 import FormTemplates from './FormTemplates';
-import ConditionalLogicModal from './ConditionalLogic';
 import FormAnalytics from './FormAnalytics';
 
 // Types
@@ -40,13 +39,14 @@ export interface SelectOption {
     label: string;
     name?: string;
 }
-// Add this interface at the top of CustomForm.tsx with other interfaces
+
 interface ImageItem {
     id: string;
     url: string;
     alt: string;
     caption?: string;
 }
+
 interface FormField {
     id: number;
     type: string;
@@ -57,26 +57,13 @@ interface FormField {
     options?: Option[];
     sitekey?: string;
     readonly?: boolean;
-    // New properties for advanced features
-    conditionalLogic?: {
-        enabled: boolean;
-        action: 'show' | 'hide';
-        rules: ConditionalRule[];
-    };
-    images?: ImageItem[]; // Use ImageItem type instead of any[]
+    images?: ImageItem[];
     layout?: any;
     charlimit?: number;
     row?: number;
     column?: number;
     filesize?: number;
     disabled?: boolean;
-}
-
-
-interface ConditionalRule {
-    field: string;
-    operator: 'equals' | 'not_equals' | 'contains' | 'greater_than' | 'less_than';
-    value: string;
 }
 
 interface ButtonSetting {
@@ -162,8 +149,7 @@ const CustomForm: React.FC<CustomFormProps> = ({
     const [opendInput, setOpendInput] = useState<FormField | null>(null);
     const [randMaxId, setRendMaxId] = useState<number>(0);
     
-    // New state for advanced features
-    const [showConditionalLogic, setShowConditionalLogic] = useState(false);
+    // State for image gallery
     const [showImageGallery, setShowImageGallery] = useState(false);
     const [selectedFieldForGallery, setSelectedFieldForGallery] = useState<FormField | null>(null);
 
@@ -274,16 +260,16 @@ const CustomForm: React.FC<CustomFormProps> = ({
     };
 
     const handleImageSelect = (images: ImageItem[]) => {
-    if (!selectedFieldForGallery) return;
-    
-    const index = formFieldList.findIndex(f => f.id === selectedFieldForGallery.id);
-    if (index >= 0) {
-        handleFormFieldChange(index, 'images', images);
-    }
-    
-    setShowImageGallery(false);
-    setSelectedFieldForGallery(null);
-};
+        if (!selectedFieldForGallery) return;
+        
+        const index = formFieldList.findIndex(f => f.id === selectedFieldForGallery.id);
+        if (index >= 0) {
+            handleFormFieldChange(index, 'images', images);
+        }
+        
+        setShowImageGallery(false);
+        setSelectedFieldForGallery(null);
+    };
 
     const applyTemplate = (template: any) => {
         if (proSettingChange()) return;
@@ -340,7 +326,7 @@ const CustomForm: React.FC<CustomFormProps> = ({
         );
     };
 
-    // Tabs configuration with advanced features
+    // Tabs configuration
     const [activeTab, setActiveTab] = useState("blocks");
     const tabs = [
         {
@@ -499,18 +485,6 @@ const CustomForm: React.FC<CustomFormProps> = ({
                                         >
                                             <i className="admin-font adminlib-delete"></i>
                                         </span>
-                                        {!formField.readonly && (
-                                            <span
-                                                onClick={() => {
-                                                    setOpendInput(formField);
-                                                    setShowConditionalLogic(true);
-                                                }}
-                                                className="admin-badge purple"
-                                                title="Conditional Logic"
-                                            >
-                                                <i className="admin-font adminlib-logic"></i>
-                                            </span>
-                                        )}
                                     </section>
                                 )}
                                 <section className={`form-field-container-wrapper`}>
@@ -643,22 +617,6 @@ const CustomForm: React.FC<CustomFormProps> = ({
                     </>
                 )}
             </div>
-
-            {/* Conditional Logic Modal */}
-            {showConditionalLogic && opendInput && (
-                <ConditionalLogicModal
-                    formField={opendInput}
-                    allFields={formFieldList}
-                    onSave={(logic) => {
-                        const index = formFieldList.findIndex(f => f.id === opendInput.id);
-                        if (index >= 0) {
-                            handleFormFieldChange(index, 'conditionalLogic', logic);
-                        }
-                        setShowConditionalLogic(false);
-                    }}
-                    onClose={() => setShowConditionalLogic(false)}
-                />
-            )}
 
             {/* Image Gallery Modal */}
             {showImageGallery && (

@@ -63,6 +63,7 @@ export default {
             size: '8rem',
             moduleEnabled: 'advertisement',
             proSetting: true,
+
         },
         {
             key: 'store_advertisement_advanced_settings',
