@@ -358,7 +358,6 @@ const Modules: React.FC<ModuleProps> = ({
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
                         );
                     })}

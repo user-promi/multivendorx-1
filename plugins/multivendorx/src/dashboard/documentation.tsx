@@ -100,14 +100,19 @@ const Documentation: React.FC = () => {
 
             <div className="row">
                 <div className="column">
-                    <div className="search-wrapper">
-                        <input
-                            type="text"
-                            placeholder="Search documents..."
-                            value={searchText}
-                            onChange={(e) => setSearchText(e.target.value)}
-                            className="basic-input"
-                        />
+                    <div className="buttons-wrapper">
+                        <div className="search-field">
+                            <div className="search-section">
+                                <input
+                                    type="text"
+                                    placeholder="Search documents..."
+                                    value={searchText}
+                                    onChange={(e) => setSearchText(e.target.value)}
+                                    className="basic-input"
+                                />
+                                <i className="adminlib-search"></i>
+                            </div>
+                        </div>
                     </div>
 
                     <div className="documentation-wrapper">
@@ -117,7 +122,6 @@ const Documentation: React.FC = () => {
 
                         {filteredDocuments.map((doc) => (
                             <div key={doc.id} className="document">
-                                {/* 🟣 static icon for all */}
                                 <div className="document-icon">
                                     <i className="adminlib-contact-form"></i>
                                 </div>
@@ -161,13 +165,15 @@ const Documentation: React.FC = () => {
                         footer={
                             <div className="footer-buttons">
                                 <div className="buttons-wrapper">
-                                    <div className="admin-btn btn-purple" onClick={() => setPopupOpen(false)}>
+                                    <div className="admin-btn btn-red" onClick={() => setPopupOpen(false)}>
+                                         <i className="adminlib-close"></i>
                                         Close
                                     </div>
                                     <div
-                                        className="admin-btn btn-green"
+                                        className="admin-btn btn-purple"
                                         onClick={() => handlePrint(activeDocument)}
                                     >
+                                        <i className="adminlib-import"></i>
                                         Print
                                     </div>
                                 </div>
@@ -183,7 +189,6 @@ const Documentation: React.FC = () => {
                     </CommonPopup>
                 </>
             )}
-
         </>
     );
 };

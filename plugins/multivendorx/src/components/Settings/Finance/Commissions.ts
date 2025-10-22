@@ -47,7 +47,7 @@ const nestedFields = [
 export default {
     id: 'store-commissions',
     priority: 1,
-    name: __('Store Commissions', 'multivendorx'),
+    name: __('Commissions', 'multivendorx'),
     desc: __(
         "Tailor your marketplace commission plan to decide how much revenue stores earn from each sale.",
         'multivendorx'

@@ -42,6 +42,14 @@
         }
       }
     }
+
+    .form-group:has(.pro-setting) {
+      position: relative;
+      background: #e350470a;
+      border: 0.063rem solid #e350472e;
+      padding: 0.45rem;
+      border-radius: 0.313rem;
+    }
   }
 }
 

@@ -137,7 +137,7 @@ const StoreCommission: React.FC = () => {
             accessorKey: 'id',
             accessorFn: row => parseFloat(row.id || '0'),
             enableSorting: true,
-            header: __('Comm ID', 'multivendorx'),
+            header: __('ID', 'multivendorx'),
             cell: ({ row }) => <TableCell >#{row.original.id}</TableCell>,
         },
         {
@@ -201,12 +201,13 @@ const StoreCommission: React.FC = () => {
             cell: ({ row }) => (
                 <TableCell>
                     <span className={`admin-badge ${row.original.status === "paid" ? "green" : "red"}`}>
-                        {row.original.status}
+                        {row.original.status === "paid" ? "Paid" : "Unpaid"}
                     </span>
                 </TableCell>
             ),
         },
         {
+            id: 'action',
             header: __("Action", "multivendorx"),
             cell: ({ row }) => (
                 <TableCell
