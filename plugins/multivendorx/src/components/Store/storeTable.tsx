@@ -223,7 +223,7 @@ const StoreTable: React.FC = () => {
             cell: ({ row }) => (
                 <TableCell title={row.original.email || ''}>
                     <>
-                        Owner 1
+                        <a href="#">Owner 1 </a>
                     </>
                 </TableCell >
             ),

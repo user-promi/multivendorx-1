@@ -5,6 +5,7 @@ interface ButtonConfig {
   onClick?: () => void;
   iconClass?: string;
   className?: string;
+  tooltip?: string;
 }
 
 interface AdminBreadcrumbsProps {
@@ -71,15 +72,16 @@ const AdminBreadcrumbs: React.FC<AdminBreadcrumbsProps> = ({
                   buttons.map((btn, index) => {
                     if (React.isValidElement(btn)) return <React.Fragment key={index}>{btn}</React.Fragment>;
 
-                    const { label, onClick, iconClass, className } = btn as ButtonConfig;
+                    const { label, onClick, iconClass, className, tooltip } = btn as ButtonConfig;
                     return (
                       <button
                         key={index}
-                        className={`breadcrumb-btn ${className || ''}`}
+                        className={`tooltip-btn ${className || ''}`}
                         onClick={onClick}
                       >
                         {iconClass && <i className={iconClass}></i>}
                         {label}
+                       {tooltip && <span className="tooltip">{tooltip}</span> }
                       </button>
                     );
                   })}

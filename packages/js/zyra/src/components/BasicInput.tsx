@@ -129,7 +129,7 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
         return (
             <>
                 <div
-                    className={`${wrapperClass || ''} ${generate ? 'generate' : ''} ${preInsideText || postInsideText ? 'inner-input' : ''}`}
+                    className={`${wrapperClass || ''} ${generate ? 'generate' : ''} ${proSetting ? 'pro-setting' : ''} ${preInsideText || postInsideText ? 'inner-input' : ''}`}
                 >
                     {inputLabel && (
                         <label htmlFor={id}>{inputLabel}</label>
@@ -237,9 +237,6 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
                             )}
                         </>
                     )}
-
-                    {proSetting && <span className="admin-pro-tag"><i className="adminlib-pro-tag"></i>Pro</span>}
-
                     {type === 'range' && (
                         <output className={descClass}>
                             {value ?? 0}
@@ -254,6 +251,8 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
                         dangerouslySetInnerHTML={{ __html: description }}
                     />
                 )}
+
+                {proSetting && <span className="admin-pro-tag"><i className="adminlib-pro-tag"></i>Pro</span>}
             </>
         );
     }

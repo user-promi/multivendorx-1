@@ -783,13 +783,14 @@ const Table: React.FC<TableProps> = ({
 
                                 {/* Show Reset button only if filters are applied */}
                                 {Object.keys(filterData).length > 0 && (
-                                    <div className="wrap-bulk-all-date filter admin-badge red">
+                                    <div className="reset-btn">
                                         <span
                                             onClick={() => {
                                                 setFilterData({});            // clear all filters
                                                 onRowSelectionChange?.({});   // clear row selection if any
                                                 handlePagination?.(defaultRowsPerPage, 1, {}); // reload data
                                             }}
+                                            className="admin-badge red"
                                         >
                                             <i className="adminlib-refresh"></i> Reset
                                         </span>

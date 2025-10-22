@@ -159,21 +159,22 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({ open, onClose, commissi
 
         return (
           <TableCell title={productName}>
-            <div className="name">
-              {productId ? (
-                <a
-                  href={`${appLocalizer.site_url.replace(/\/$/, '')}/wp-admin/post.php?post=${productId}&action=edit`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="product-link"
-                >
+            {productId ? (
+              <a
+                href={`${appLocalizer.site_url.replace(/\/$/, '')}/wp-admin/post.php?post=${productId}&action=edit`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="product-wrapper"
+              >
+                <div className="details">
                   {productName}
-                </a>
-              ) : (
-                productName
-              )}
-            </div>
-            <div className="sub-text">Sku: {row.original.sku ?? "-"}</div>
+                  <div className="sub-text">Sku: {row.original.sku ?? "-"}</div>
+                </div>
+              </a>
+            ) : (
+              productName
+            )}
+
           </TableCell>
         );
       },
@@ -220,13 +221,13 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({ open, onClose, commissi
           <i onClick={onClose} className="icon adminlib-close"></i>
         </>
       }
-      footer={
-        <>
-          <div onClick={onClose} className="admin-btn btn-red">
-            {__("Cancel", "multivendorx")}
-          </div>
-        </>
-      }
+    // footer={
+    //   <>
+    //     <div onClick={onClose} className="admin-btn btn-red">
+    //       {__("Cancel", "multivendorx")}
+    //     </div>
+    //   </>
+    // }
     >
       <div className="content multi">
         {/* your existing code untouched */}

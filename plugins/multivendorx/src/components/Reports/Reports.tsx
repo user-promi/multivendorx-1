@@ -1,38 +1,6 @@
-import { useLocation } from 'react-router-dom';
 import { AdminBreadcrumbs, SelectInput } from 'zyra';
 import { useEffect, useRef, useState } from 'react';
 
-import {
-  BarChart,
-  Bar,
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  PieChart, Pie, Cell, Legend
-} from 'recharts';
-
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import L from "leaflet";
-
-const salesByLocations = [
-  { name: "USA", coordinates: [40, -100], sales: 12000 },
-  { name: "India", coordinates: [22, 78], sales: 8500 },
-  { name: "UK", coordinates: [54, -2], sales: 6700 },
-  { name: "Germany", coordinates: [51, 10], sales: 5400 },
-  { name: "Australia", coordinates: [-25, 133], sales: 4300 },
-];
-
-// Custom marker icon (optional)
-const salesIcon = new L.DivIcon({
-  className: "custom-marker",
-  html: `<div style="background:#5007aa;color:#fff;border-radius:50%;padding:6px 10px;font-size:12px;">$</div>`,
-});
-
-// import "./adminDashboard.scss";
 import "../../dashboard/dashboardCommon.scss";
 import Overview from './Overview';
 import Transactions from './Payout';
@@ -199,7 +167,6 @@ const Reports = () => {
               </div>
             )
         )}
-
       </div>
     </>
   );
