@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { BasicInput, TextArea, FileInput, SelectInput, getApiLink } from 'zyra';
+import { BasicInput, TextArea, FileInput, SelectInput, getApiLink, SuccessNotice } from 'zyra';
 
 const ContactInformation = () => {
     const id = appLocalizer.store_id;
@@ -66,6 +66,7 @@ const ContactInformation = () => {
     };
     return (
         <>
+            <SuccessNotice message={successMsg} />
             <div className="card-wrapper">
                 <div className="card-content">
                     <div className="card-title">Contact & Communication </div>
@@ -78,7 +79,7 @@ const ContactInformation = () => {
                     <div className="form-group-wrapper">
                         <div className="form-group">
                             <label htmlFor="product-name">Email / Additional Email</label>
-                            <BasicInput name="phone" wrapperClass="setting-form-input" descClass="settings-metabox-description" />
+                            <BasicInput type="email" name="email" wrapperClass="setting-form-input" descClass="settings-metabox-description" value={formData.email} onChange={handleChange} />
                         </div>
                     </div>
                     <div className="form-group-wrapper">
