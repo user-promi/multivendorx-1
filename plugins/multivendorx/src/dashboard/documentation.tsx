@@ -189,7 +189,6 @@ const Documentation: React.FC = () => {
                     </CommonPopup>
                 </>
             )}
-
         </>
     );
 };
