@@ -109,10 +109,10 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller
                 'icon' => 'adminlib-contact-form',
                 'capability' => ['read_shop_coupons', 'edit_shop_coupons', 'delete_shop_coupons']
             ),
-            'payouts' => array(
-                'key' => 'payouts',
-                'name' => 'Payouts',
-                'slug' => 'payouts',
+            'withdrawls' => array(
+                'key' => 'withdrawls',
+                'name' => 'Withdrawls',
+                'slug' => 'withdrawls',
                 'icon' => 'adminlib-contact-form',
                 'capability' => ['read_shop_coupons', 'edit_shop_coupons']
             ),
@@ -278,7 +278,7 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller
 
     public function get_current_page_and_submenu() {
         $current_user = wp_get_current_user();
-        $capability_settings = MultiVendorX()->setting->get_setting(reset($current_user->roles));
+        $capability_settings = MultiVendorX()->setting->get_setting(reset($current_user->roles),[]);
         $store_ids = StoreUtil::get_stores_from_user_id($current_user->ID);
         $active_store = get_user_meta($current_user->ID, 'multivendorx_active_store', true);
         $all_endpoints = $this->all_endpoints();

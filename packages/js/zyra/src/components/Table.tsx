@@ -2,6 +2,7 @@
  * External dependencies
  */
 import React, { useState, useEffect, useRef, ReactNode } from 'react';
+import type { SortingState, Updater } from '@tanstack/react-table';
 import {
     useReactTable,
     flexRender,
@@ -24,7 +25,6 @@ import type {
  * Internal dependencies
  */
 import BasicInput from './BasicInput';
-import SelectInput from './SelectInput';
 import '../styles/web/Table.scss';
 
 const PENALTY = 28;
@@ -75,9 +75,7 @@ export const TableCell: React.FC<TableCellProps> = ({
     onChange,
     rowId,
     onToggleRow,
-    onToggleActive,
     rowData,
-    isExpanded,
 }) => {
     const [cellData, setCellData] = useState(fieldValue);
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -445,18 +443,40 @@ const Table: React.FC<TableProps> = ({
     const table = useReactTable({
         data: flattenedData,
         columns,
-        state: { rowSelection, sorting, ...(pagination ? { pagination } : {}), },
+        state: { rowSelection, sorting, ...(pagination ? { pagination } : {}) },
         enableRowSelection: true,
         manualPagination: true,
+        manualSorting: true,
         pageCount,
         onPaginationChange,
         onRowSelectionChange,
-        onSortingChange: setSorting,
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
+        onSortingChange: (newSorting: Updater<SortingState>) => {
+            setSorting(newSorting);
+            
+            // Extract sorting information and update filterData
+            // This will trigger the existing useEffect that handles API calls
+            const sortingArray = typeof newSorting === 'function' 
+                ? newSorting(table.getState().sorting) 
+                : newSorting;
+            
+            const sortingObj = sortingArray[0];
+            const orderBy = sortingObj?.id || '';
+            const order = sortingObj?.desc ? 'desc' : 'asc';
+            
+            // Update filterData with sorting parameters
+            // This will trigger the existing useEffect that calls handlePagination
+            setFilterData(prevData => ({
+                ...prevData,
+                orderBy,
+                order
+            }));
+        },
         getPaginationRowModel: getPaginationRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
     });
+
     const typeCountActive = filterData.typeCount || 'all';
     const { pageIndex, pageSize } = table.getState().pagination;
     const totalRows = flattenedData.length;
@@ -465,40 +485,40 @@ const Table: React.FC<TableProps> = ({
     return (
         <>
             {(typeCounts?.length > 0 || searchFilter) && (
-            <div className="admin-top-filter">
-                {typeCounts && typeCounts.length > 0 && (
-                    <div className="admin-table-wrapper-filter">
-                        {typeCounts.map((countInfo, index) => (
-                            <div
-                                key={index} // Add a key for better React performance
-                                role="button"
-                                tabIndex={0}
-                                onClick={() => {
-                                    setFilterData({ typeCount: countInfo.key });
-                                }}
-                                className={
-                                    countInfo.key === typeCountActive
-                                        ? 'type-count-active'
-                                        : ''
-                                }
-                            >
-                                {`${countInfo.name} (${countInfo.count})`}
-                                {index !== typeCounts.length - 1 && ' |'}{' '}
-                            </div>
-                        ))}
-                    </div>
+                <div className="admin-top-filter">
+                    {typeCounts && typeCounts.length > 0 && (
+                        <div className="admin-table-wrapper-filter">
+                            {typeCounts.map((countInfo, index) => (
+                                <div
+                                    key={index} // Add a key for better React performance
+                                    role="button"
+                                    tabIndex={0}
+                                    onClick={() => {
+                                        setFilterData({ typeCount: countInfo.key });
+                                    }}
+                                    className={
+                                        countInfo.key === typeCountActive
+                                            ? 'type-count-active'
+                                            : ''
+                                    }
+                                >
+                                    {`${countInfo.name} (${countInfo.count})`}
+                                    {index !== typeCounts.length - 1 && ' |'}{' '}
+                                </div>
+                            ))}
+                        </div>
 
-                )}
-                {searchFilter && (
-                    <div className="search-field">
-                        {searchFilter?.map((filter) => (
-                            <React.Fragment key={filter.name}>
-                                {filter.render(handleFilterChange, filterData[filter.name])}
-                            </React.Fragment>
-                        ))}
-                    </div>
-                )}
-            </div>
+                    )}
+                    {searchFilter && (
+                        <div className="search-field">
+                            {searchFilter?.map((filter) => (
+                                <React.Fragment key={filter.name}>
+                                    {filter.render(handleFilterChange, filterData[filter.name])}
+                                </React.Fragment>
+                            ))}
+                        </div>
+                    )}
+                </div>
             )}
             {loading ? (
                 <LoadingTable />
@@ -593,7 +613,7 @@ const Table: React.FC<TableProps> = ({
                                                             key={cell.id}
                                                             className={[
                                                                 'admin-column',
-                                                                cell.column.id ? `${cell.column.id}` : null, 
+                                                                cell.column.id ? `${cell.column.id}` : null,
                                                             ].filter(Boolean).join(' ')}
                                                             onClick={(e) => {
                                                                 const target = e.target as HTMLElement;
@@ -634,7 +654,7 @@ const Table: React.FC<TableProps> = ({
 
                             { /* Pagination Controls */}
                             {pagination && pageCount && perPageOption && (
-                                <>                                
+                                <>
                                     <div className="table-pagination">
                                         <div className="pagination-number-wrapper">
 
@@ -662,7 +682,7 @@ const Table: React.FC<TableProps> = ({
                                                 totalCounts
                                             )} of ${totalCounts} entries`}
                                         </div>
-                                        
+
                                         {totalCounts > pagination.pageSize && (
                                             <div className="pagination-arrow">
                                                 <span

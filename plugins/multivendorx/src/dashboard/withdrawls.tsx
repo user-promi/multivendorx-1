@@ -1,23 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
-import { Table, getApiLink, TableCell, CommonPopup, BasicInput } from 'zyra';
-import {
-    ColumnDef,
-    RowSelectionState,
-    PaginationState,
-} from '@tanstack/react-table';
-
-type StoreRow = {
-    id?: number;
-    store_name?: string;
-    store_slug?: string;
-    status?: string;
-};
+import { getApiLink, CommonPopup, BasicInput } from 'zyra';
 
 const History: React.FC = () => {
     const [data, setData] = useState<any>([]);
-    const [existing, setExisting] = useState<any[]>([]);
     const [amount, setAmount] = useState<number | "">("");
 
     const [requestWithdrawal, setRequestWithdrawal] = useState(false);
@@ -27,50 +14,38 @@ const History: React.FC = () => {
             method: 'GET',
             url: getApiLink(appLocalizer, `transaction/${appLocalizer.store_id}`),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            params: { id: appLocalizer.store_id }
         })
             .then((response) => {
-                setExisting(response?.data || {});
-            })
-    }, []);
-
-    useEffect(() => {
-        axios({
-            method: 'GET',
-            url: getApiLink(appLocalizer, `reports/${appLocalizer.store_id}`),
-            headers: { 'X-WP-Nonce': appLocalizer.nonce },
-        })
-            .then((response) => {
-                setData(response.data || [])
-            }).catch(() => {
-                setData([]);
+                setData(response.data || []);
+                console.log(response.data)
             })
     }, []);
 
     const analyticsData = [
         {
             icon: "adminlib-tools red",
-            number: `${appLocalizer.currency_symbol}${Number(data.threshold_amount ?? 0).toFixed(2)}`,
-            text: "Minimum Threshold"
+            number: `${appLocalizer.currency_symbol}${Number(data.wallet_balance ?? 0).toFixed(2)}`,
+            text: "Wallet Balance"
         },
         {
             icon: "adminlib-book green",
-            number: `${data.lock_period} Day`,
-            text: "Lock Period"
+            number: `${appLocalizer.currency_symbol}${Number(data.reserve_balance ?? 0).toFixed(2)}`,
+            text: "Reserve Balance"
         },
     ];
     const analyticsData2 = [
         {
             icon: "adminlib-global-community yellow",
-            number: `${appLocalizer.currency_symbol}${(
-                Number(data.locking_balance ?? 0) + Number(data.balance ?? 0)
-            ).toFixed(2)}`,
-            text: "Wallet Reserve"
+            number: `${appLocalizer.currency_symbol}${Number(data.locking_balance ?? 0).toFixed(2)}`,
+            text: "Locked"
         },
         {
             icon: "adminlib-global-community yellow",
-            number: `${appLocalizer.currency_symbol}${Number(data.locking_balance ?? 0).toFixed(2)}`,
-            text: "Pending"
+            number: `${data.locking_day} Days`,
+            text: "Locking Period"
         },
+
     ];
 
     const handleWithdrawal = () => {
@@ -110,7 +85,7 @@ const History: React.FC = () => {
                         </div>
                         <div className="payout-wrapper">
                             <div className="price">
-                                {appLocalizer.currency_symbol}652 {Number(data.balance ?? 0).toFixed(2)}
+                                {appLocalizer.currency_symbol}{Number(data.available_balance ?? 0).toFixed(2)}
                             </div>
                             <div className="des">Current available balance ready for withdrawal</div>
 
@@ -145,7 +120,7 @@ const History: React.FC = () => {
                             ))}
                         </div>
                         <div className="analytics-container">
-                         {analyticsData2.map((item, idx) => (
+                            {analyticsData2.map((item, idx) => (
                                 <div key={idx} className="analytics-item">
                                     <div className="analytics-icon">
                                         <i className={item.icon}></i>
@@ -156,7 +131,7 @@ const History: React.FC = () => {
                                     </div>
                                 </div>
                             ))}
-                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -173,15 +148,28 @@ const History: React.FC = () => {
                             </div>
                         </div>
                         <div className="withdrawal-wrapper">
-                            <div className="des">
-                                Frequency
-                            </div>
-                            <div className="title">
-                                Quarterly
-                            </div>
-                            <div className="withdrawl-notice">
-                                <i className="adminlib-info"></i> Withdrawal occurs only when your balance reaches $1,000.00 or more. View payment calendar
-                            </div>
+                            {/* Show Frequency + Title only if NOT manual */}
+                            {data?.payment_schedules !== "mannual" && (
+                                <>
+                                    <div className="des">
+                                        Frequency
+                                    </div>
+                                    <div className="title">
+                                        {data?.payment_schedules
+                                            ? data.payment_schedules.charAt(0).toUpperCase() + data.payment_schedules.slice(1)
+                                            : "N/A"}
+                                    </div>
+                                </>
+                            )}
+
+                            {/* Show threshold line only if > 0 */}
+                            {Number(data?.thresold ?? 0) > 0 && (
+                                <div className="withdrawl-notice">
+                                    <i className="adminlib-info"></i>{" "}
+                                    Withdrawal occurs only when your balance reaches {appLocalizer.currency_symbol}
+                                    {Number(data.thresold).toFixed(2)} or more. View payment calendar
+                                </div>
+                            )}
                         </div>
                         <div className="card-header">
                             <div className="left">
@@ -202,28 +190,10 @@ const History: React.FC = () => {
                                         <div className="des">Withdrawal request pending</div>
                                         <span><a href="">Change</a></span>
                                     </div>
-
                                 </li>
                             </ul>
                         </div>
                     </div>
-                    {/* <div className="no-data-found">
-                        <i className="adminlib-info icon red"></i>
-                        <div className="title">No Transaction Data Yet</div>
-                        <div className="des">The Handmade store hasn't processed any transactions yet. Once sales start coming in, you'll see detailed analytics here.</div>
-                        <div className="buttons-wrapper center">
-
-                            <div className="admin-btn btn-purple">
-                                <i className="adminlib-eye"></i>
-                                View Store Settings
-                            </div>
-
-                            <div className="admin-btn">
-                                <i className="adminlib-eye"></i>
-                                Learn More
-                            </div>
-                        </div>
-                    </div> */}
                 </div>
                 <div className="column">
                     <div className="card-header">

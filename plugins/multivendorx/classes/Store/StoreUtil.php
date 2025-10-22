@@ -461,61 +461,73 @@ class StoreUtil {
      */
     public static function get_store_information( $args = [] ) {
         global $wpdb;
-
+    
         $where = [];
-
+    
         if ( isset( $args['ID'] ) ) {
             $ids     = is_array( $args['ID'] ) ? $args['ID'] : [ $args['ID'] ];
             $ids     = implode( ',', array_map( 'intval', $ids ) );
             $where[] = "ID IN ($ids)";
         }
-
+    
         if ( isset( $args['status'] ) ) {
             $where[] = "status = '" . esc_sql( $args['status'] ) . "'";
         }
-
+    
         if ( isset( $args['name'] ) ) {
             $where[] = "name LIKE '%" . esc_sql( $args['name'] ) . "%'";
         }
-
+    
         if ( isset( $args['slug'] ) ) {
             $where[] = "slug = '" . esc_sql( $args['slug'] ) . "'";
         }
-
+    
         if ( isset( $args['searchField'] ) ) {
             $search = esc_sql( $args['searchField'] );
             $where[] = "(name LIKE '%$search%')";
         }
-        
+    
         if ( isset( $args['start_date'] ) && isset( $args['end_date'] ) ) {
             $where[] = "create_time BETWEEN '" . esc_sql( $args['start_date'] ) . "' AND '" . esc_sql( $args['end_date'] ) . "'";
         }
-        
+    
         $table = $wpdb->prefix . Utill::TABLES['store'];
-
+    
         if ( isset( $args['count'] ) ) {
             $query = "SELECT COUNT(*) FROM {$table}";
         } else {
             $query = "SELECT * FROM {$table}";
         }
-
+    
         if ( ! empty( $where ) ) {
             $condition = $args['condition'] ?? ' AND ';
             $query    .= ' WHERE ' . implode( $condition, $where );
         }
-
+    
+        //ADD SORTING SUPPORT HERE
+        if ( ! empty( $args['orderBy'] ) ) {
+            // Only allow safe columns to sort by (avoid SQL injection)
+            $allowed_columns = ['ID', 'name', 'status', 'slug', 'create_time'];
+            $orderBy = in_array( $args['orderBy'], $allowed_columns, true ) ? $args['orderBy'] : 'ID';
+            $order   = ( isset( $args['order'] ) && strtolower( $args['order'] ) === 'desc' ) ? 'DESC' : 'ASC';
+            $query  .= " ORDER BY {$orderBy} {$order}";
+        }
+    
+        //Keep your pagination logic
         if ( isset( $args['limit'] ) && isset( $args['offset'] ) && empty( $args['count'] ) ) {
             $limit  = intval( $args['limit'] );
             $offset = intval( $args['offset'] );
             $query .= " LIMIT $limit OFFSET $offset";
         }
+    
         if ( isset( $args['count'] ) ) {
-            $results = $wpdb->get_var( $query ); // phpcs:ignore WordPress.DB.*
+            $results = $wpdb->get_var( $query );
             return $results ?? 0;
         } else {
-            $results = $wpdb->get_results( $query, ARRAY_A ); // phpcs:ignore WordPress.DB.*
+            $results = $wpdb->get_results( $query, ARRAY_A );
             return $results ?? [];
         }
     }
+    
 
 }

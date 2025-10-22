@@ -541,18 +541,7 @@ const StoreSettings = ({ id }: { id: string | null }) => {
     return (
         <>
             <SuccessNotice message={successMsg} />
-            {/* {successMsg && (
-                <>
-                    <div className="admin-notice-wrapper">
-                        <i className="admin-font adminlib-icon-yes"></i>
-                        <div className="notice-details">
-                            <div className="title">Great!</div>
-                            <div className="desc">{successMsg}</div>
-                        </div>
-                    </div>
-                </>
-            )} */}
-            
+
             {/* Debug Info - You can remove this in production */}
             <div style={{ background: '#f5f5f5', padding: '10px', marginBottom: '15px', borderRadius: '4px', fontSize: '12px' }}>
                 <div>Debug Info:</div>

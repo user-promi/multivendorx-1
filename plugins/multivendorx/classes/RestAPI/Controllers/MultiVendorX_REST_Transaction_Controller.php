@@ -283,6 +283,7 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
         $payout_threshold = floatval($payout_threshold);
         $minimum_wallet_amount = MultiVendorX()->setting->get_setting( 'wallet_threshold_amount', 0 );
         $locking_day = MultiVendorX()->setting->get_setting( 'commission_lock_period', 0 );
+        $payment_schedules = MultiVendorX()->setting->get_setting( 'payment_schedules', '' );
 
         return rest_ensure_response([
             'wallet_balance'   => $balance,
@@ -293,6 +294,7 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
             'locking_day'      => $locking_day,
             'locking_balance'  => $locking_balance,
             'lifetime_earning' => $lifetime_earning,
+            'payment_schedules'=> $payment_schedules,
         ]);
                 
     }

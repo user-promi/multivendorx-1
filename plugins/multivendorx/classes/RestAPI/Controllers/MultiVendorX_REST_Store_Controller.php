@@ -276,6 +276,8 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
 
             $start_date = $start_timestamp ? date( 'Y-m-d 00:00:00', $start_timestamp ) : '';
             $end_date   = $end_timestamp   ? date( 'Y-m-d 23:59:59', $end_timestamp )   : '';
+            $orderBy   = sanitize_text_field( $request->get_param( 'orderBy' ) );
+            $order     = sanitize_text_field( $request->get_param( 'order' ) );
 
             $args = [
                 'limit'  => $limit,
@@ -294,7 +296,10 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             if ( ! empty( $filter_status ) ) {
                 $args['status'] = $filter_status;
             }
-            
+            if ( ! empty( $orderBy ) && ! empty( $order )) {
+                $args['orderBy'] = $orderBy;
+                $args['order']   = $order;
+            }
 
             $stores = StoreUtil::get_store_information( $args );
 
