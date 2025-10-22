@@ -190,7 +190,6 @@ const History: React.FC = () => {
                                         <div className="des">Withdrawal request pending</div>
                                         <span><a href="">Change</a></span>
                                     </div>
-
                                 </li>
                             </ul>
                         </div>

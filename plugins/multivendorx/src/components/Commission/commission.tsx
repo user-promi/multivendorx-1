@@ -41,15 +41,14 @@ type FilterData = {
     searchField?: string;
     typeCount?: any;
     store?: string;
+    order?:any;
+    orderBy?:any;
 };
 
 const Commission: React.FC = () => {
-    const [openModal, setOpenModal] = useState(false);
-    const [modalDetails, setModalDetails] = useState<string>('');
     const [error, setError] = useState<String>();
     const [data, setData] = useState<CommissionRow[] | null>(null);
     const [store, setStore] = useState<any[] | null>(null);
-    const bulkSelectRef = useRef<HTMLSelectElement>(null);
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
     const [totalRows, setTotalRows] = useState<number>(0);
     const [viewCommission, setViewCommission] = useState(false);
@@ -166,6 +165,7 @@ const Commission: React.FC = () => {
         currentPage: number,
         filterData: FilterData
     ) => {
+        console.log(filterData)
         setData(null);
         requestData(
             rowsPerPage,

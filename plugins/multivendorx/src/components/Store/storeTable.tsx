@@ -23,6 +23,8 @@ type StoreStatus = {
 type FilterData = {
     typeCount?: any;
     searchField?: any;
+    orderBy?:any;
+    order?:any;
 };
 export interface RealtimeFilter {
     name: string;
@@ -69,6 +71,8 @@ const StoreTable: React.FC = () => {
         currentPage = 1,
         typeCount = '',
         searchField = '',
+        orderBy='',
+        order='',
         startDate = new Date(new Date().getFullYear(), new Date().getMonth() - 1, 1),
         endDate = new Date()
     ) {
@@ -82,6 +86,8 @@ const StoreTable: React.FC = () => {
                 row: rowsPerPage,
                 filter_status: typeCount === 'all' ? '' : typeCount,
                 searchField,
+                orderBy,
+                order,
                 startDate,
                 endDate
             },
@@ -125,6 +131,8 @@ const StoreTable: React.FC = () => {
             currentPage,
             filterData?.typeCount,
             filterData?.searchField,
+            filterData?.orderBy,
+            filterData?.order,
             filterData?.date?.start_date,
             filterData?.date?.end_date,
         );
@@ -150,8 +158,8 @@ const StoreTable: React.FC = () => {
             ),
         },
         {
-            id: 'store_name',
-            accessorKey: 'store_name',
+            id: 'name',
+            accessorKey: 'name',
             enableSorting: true,
             header: __('Store', 'multivendorx'),
             cell: ({ row }) => {
