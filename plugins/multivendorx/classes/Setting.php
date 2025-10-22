@@ -124,6 +124,7 @@ class Setting {
                 'multivendorx_product_compliance_settings',
                 'multivendorx_tax_compliance_settings',
                 'multivendorx_custom_css_settings',
+                'multivendorx_single_product_multiple_store_settings',
 			)
         );
 

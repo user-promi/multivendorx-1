@@ -209,8 +209,9 @@ class Install {
             `location_code` varchar(255) DEFAULT NULL,
             `location_type` varchar(255) DEFAULT NULL,
             PRIMARY KEY (`id`)
+         $sql_product_map = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}" . Utill::TABLES['products_map'] . "` (
         ) $collate;";
-
+        
         // Include upgrade functions if not loaded.
         if ( ! function_exists( 'dbDelta' ) ) {
             require_once ABSPATH . 'wp-admin/includes/upgrade.php';
@@ -226,6 +227,7 @@ class Install {
         dbDelta( $sql_report_abuse );
         dbDelta( $sql_shipping_zone );
         dbDelta( $sql_shipping_zone_locations );
+        dbDelta( $sql_product_map );
     }
 
     public function create_database_triggers() {

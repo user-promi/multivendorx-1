@@ -31,6 +31,7 @@ if (is_user_logged_in() && !current_user_can('edit_products')) {
     <div class="select-product-cat-wrapper">
         <?php $is_new_listing = isset($_REQUEST['new_listing']) ? true : false;
         $is_cats_hier = isset($_REQUEST['cats_hier']) ? true : false;
+        file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":module:  : " . var_export(MultiVendorX()->modules->is_active('spmv'), true) . "\n", FILE_APPEND);
         if( ( $is_new_listing && $is_cats_hier ) || MultiVendorX()->modules->is_active('spmv') == false ) {
         ?> 
         <!-- New product list categories hierarchically -->
@@ -96,7 +97,13 @@ if (is_user_logged_in() && !current_user_can('edit_products')) {
                             $category_url = StoreUtil::get_endpoint_url('products', 'edit' ) . '&new_listing=1&cats_hier=1';
                         }
 
-                        $url = ( MultiVendorX()->setting->get_setting('category_pyramid_guide') == 'no' ) ? esc_url(StoreUtil::get_endpoint_url( 'products', 'edit')) : $category_url; ?>
+                        if (MultiVendorX()->setting->get_setting('category_pyramid_guide') == 'no' || MultiVendorX()->modules->is_active('spmv')) {
+                            $product_id = MultiVendorX()->store->products->create_product_draft('product');
+                            $url = esc_url(StoreUtil::get_endpoint_url('products', 'edit', $product_id));
+                        } else {
+                            $url = $category_url;
+                        }
+                        ?>
                         <p><?php _e('Not in the catalog?', 'multivendorx'); ?> <a href="<?php echo $url; ?>" class="cat-step-btn"><?php _e('Create a new product', 'multivendorx'); ?> <i class="mvx-font ico-right-arrow-icon"></i></a></p>
                     </div>
                 </div>

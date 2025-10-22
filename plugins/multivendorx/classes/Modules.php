@@ -121,6 +121,11 @@ class Modules {
 						'module_file'  => MultiVendorX()->plugin_path . 'modules/Refund/Module.php',
 						'module_class' => 'MultiVendorX\Refund\Module',
 					),
+                    'spmv' => array(
+                        'id'           => 'spmv',
+						'module_file'  => MultiVendorX()->plugin_path . 'modules/Spmv/Module.php',
+						'module_class' => 'MultiVendorX\Spmv\Module',
+					),
                     'follow-store' => array(
                         'id'           => 'follow-store',
 						'module_file'  => MultiVendorX()->plugin_path . 'modules/FollowStore/Module.php',

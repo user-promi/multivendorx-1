@@ -114,34 +114,35 @@ jQuery(document).ready(function ($) {
 
 
     // General tab
-    $('.sale_price_dates_fields').hide();
-    $(document).on('click', '.sale_schedule', function (e) {
-        e.preventDefault();
-        $('.sale_price_dates_fields').slideDown();
-        $('.sale_schedule').hide();
-    });
+    // $('.sale_price_dates_fields').hide();
+    // $(document).on('click', '.sale_schedule', function (e) {
+    //     e.preventDefault();
+    //     $('.sale_price_dates_fields').slideDown();
+    //     $('.sale_schedule').hide();
+    // });
 
-    $(document).on('click', '.cancel_sale_schedule', function (e) {
-        e.preventDefault();
-        $('.sale_price_dates_fields').slideUp();
-        $('.sale_schedule').show();
-    });
+    // $(document).on('click', '.cancel_sale_schedule', function (e) {
+    //     e.preventDefault();
+    //     $('.sale_price_dates_fields').slideUp();
+    //     $('.sale_schedule').show();
+    // });
 
 
     // Inventory tab
-    function toggleStockFields() {
-        if ($('#_manage_stock').is(':checked')) {
-            $('.stock_fields').slideDown();
-            $('.stock_status_field').slideUp();
-        } else {
-            $('.stock_fields').slideUp();
-            $('.stock_status_field').slideDown();
-        }
-    }
-    toggleStockFields();
-    $(document).on('change', '#_manage_stock', function () {
-        toggleStockFields();
-    });
+    // function toggleStockFields() {
+    //     if ($('#_manage_stock').is(':checked')) {
+    //         $('.stock_fields').slideDown();
+    //         $('.stock_status_field').slideUp();
+    //     } else {
+    //         $('.stock_fields').slideUp();
+    //         $('.stock_status_field').slideDown();
+    //     }
+    // }
+    // toggleStockFields();
+    // $(document).on('change', '#_manage_stock', function () {
+    //     toggleStockFields();
+    // });
+
 
 //     // select 
 // mvxAfmLibrary.wcEnhancedSelectInit();

@@ -35,6 +35,7 @@ class Utill {
         'shipping_zone'   => 'multivendorx_shipping_zone_methods',
         'shipping_zone_locations'   => 'multivendorx_shipping_zone_locations',
         
+        'products_map'   => 'multivendorx_products_map',
     );
 
     /**

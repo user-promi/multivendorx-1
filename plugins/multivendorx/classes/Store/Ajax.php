@@ -1,6 +1,7 @@
 <?php
 
 namespace MultiVendorX\Store;
+use MultiVendorX\SPMV\Util;
 
 defined('ABSPATH') || exit;
 
@@ -22,8 +23,8 @@ class Ajax {
         add_action('wp_ajax_mvx_list_a_product_by_name_or_gtin', array($this, 'mvx_list_a_product_by_name_or_gtin'));
         add_action('wp_ajax_mvx_set_classified_product_terms', array($this, 'mvx_set_classified_product_terms'));
 
-        add_action('wp_ajax_mvx_create_duplicate_product', array(&$this, 'mvx_create_duplicate_product'));
-        add_action('wp_ajax_mvx_show_all_products', array(&$this, 'mvx_show_all_products'));
+        add_action('wp_ajax_mvx_create_duplicate_product', array($this, 'mvx_create_duplicate_product'));
+        add_action('wp_ajax_mvx_show_all_products', array($this, 'mvx_show_all_products'));
 
         add_action('wp_ajax_mvx_edit_product_attribute', array($this, 'edit_product_attribute_callback'));
         add_action('wp_ajax_mvx_product_save_attributes', array($this, 'save_product_attributes_callback'));
@@ -84,7 +85,6 @@ class Ajax {
     }
 
     public function mvx_product_classify_search_category_level() {
-        global $MVX, $wpdb;
         $keyword = isset($_POST['keyword']) ? wc_clean( wp_unslash( $_POST['keyword'] ) ) : '';
         if (!empty($keyword)) {
             $query = apply_filters("mvx_product_classify_search_category_level_args", array(
@@ -120,7 +120,7 @@ class Ajax {
     }
 
     public function mvx_list_a_product_by_name_or_gtin() {
-        global $MVX, $wpdb;
+        global $wpdb;
         $keyword = isset($_POST['keyword']) ? wc_clean( wp_unslash( $_POST['keyword'] ) ) : '';
         $html = '';
         if (!empty($keyword)) {
@@ -275,11 +275,9 @@ class Ajax {
     }
 
     public function mvx_create_duplicate_product() {
-        global $MVX;
         if (!current_user_can('edit_products') ) {
             wp_die(-1);
         }
-        check_ajax_referer('mvx-types', 'security');
         $product_id = isset($_POST['product_id']) ? absint($_POST['product_id']) : 0;
         $parent_post = get_post($product_id);
         $redirect_url = isset($_POST['redirect_url']) ? esc_url($_POST['redirect_url']) : esc_url(StoreUtil::get_endpoint_url('products', 'edit'));
@@ -290,36 +288,38 @@ class Ajax {
         $duplicate_product_class = new \WC_Admin_Duplicate_Product();
         $duplicate_product = $duplicate_product_class->product_duplicate($product);
         $response = array('status' => false);
-        if ($duplicate_product && is_user_mvx_vendor(get_current_user_id())) {
+        if ($duplicate_product) {
             // if Product title have Copy string
             $title = str_replace(" (Copy)", "", $parent_post->post_title);
-            wp_update_post(array('ID' => $duplicate_product->get_id(), 'post_author' => get_current_vendor_id(), 'post_title' => $title));
-            wp_set_object_terms($duplicate_product->get_id(), absint(get_current_vendor()->term_id), $MVX->taxonomy->taxonomy_name);
+            wp_update_post(array('ID' => $duplicate_product->get_id(), 'post_author' => get_current_user_id(), 'post_title' => $title));
+
+            $store_id = get_user_meta( get_current_user_id(), 'multivendorx_active_store', true );
+            update_post_meta( $duplicate_product->get_id(), 'multivendorx_store_id', $store_id );
 
             // Add GTIN, if exists
-            $gtin_data = wp_get_post_terms($product->get_id(), $MVX->taxonomy->mvx_gtin_taxonomy);
-            if ($gtin_data) {
-                $gtin_type = isset($gtin_data[0]->term_id) ? $gtin_data[0]->term_id : '';
-                wp_set_object_terms($duplicate_product->get_id(), $gtin_type, $MVX->taxonomy->mvx_gtin_taxonomy, true);
-            }
-            $gtin_code = get_post_meta($product->get_id(), '_mvx_gtin_code', true);
-            if ($gtin_code)
-                update_post_meta($duplicate_product->get_id(), '_mvx_gtin_code', wc_clean($gtin_code));
+            // $gtin_data = wp_get_post_terms($product->get_id(), $MVX->taxonomy->mvx_gtin_taxonomy);
+            // if ($gtin_data) {
+            //     $gtin_type = isset($gtin_data[0]->term_id) ? $gtin_data[0]->term_id : '';
+            //     wp_set_object_terms($duplicate_product->get_id(), $gtin_type, $MVX->taxonomy->mvx_gtin_taxonomy, true);
+            // }
+            // $gtin_code = get_post_meta($product->get_id(), '_mvx_gtin_code', true);
+            // if ($gtin_code)
+            //     update_post_meta($duplicate_product->get_id(), '_mvx_gtin_code', wc_clean($gtin_code));
 
             $has_mvx_spmv_map_id = get_post_meta($product->get_id(), '_mvx_spmv_map_id', true);
             if ($has_mvx_spmv_map_id) {
                 $data = array('product_id' => $duplicate_product->get_id(), 'product_map_id' => $has_mvx_spmv_map_id);
                 update_post_meta($duplicate_product->get_id(), '_mvx_spmv_map_id', $has_mvx_spmv_map_id);
-                mvx_spmv_products_map($data, 'insert');
+                Util::mvx_spmv_products_map($data, 'insert');
             } else {
                 $data = array('product_id' => $duplicate_product->get_id());
-                $map_id = mvx_spmv_products_map($data, 'insert');
+                $map_id = Util::mvx_spmv_products_map($data, 'insert');
 
                 if ($map_id) {
                     update_post_meta($duplicate_product->get_id(), '_mvx_spmv_map_id', $map_id);
                     // Enroll in SPMV parent product too 
                     $data = array('product_id' => $product->get_id(), 'product_map_id' => $map_id);
-                    mvx_spmv_products_map($data, 'insert');
+                    Util::mvx_spmv_products_map($data, 'insert');
                     update_post_meta($product->get_id(), '_mvx_spmv_map_id', $map_id);
                 }
                 update_post_meta($product->get_id(), '_mvx_spmv_product', true);
@@ -331,7 +331,7 @@ class Ajax {
             if (!empty($permalink_structure)) {
                 $redirect_url .= $duplicate_product->get_id();
             } else {
-                $redirect_url .= '=' . $duplicate_product->get_id();
+                $redirect_url .= '/' . $duplicate_product->get_id();
             }
             $response['status'] = true;
             $response['redirect_url'] = htmlspecialchars_decode($redirect_url);
@@ -340,21 +340,25 @@ class Ajax {
     }
 
     public function mvx_show_all_products() {
-        global $MVX;
-        $vendor_id = get_current_user_id() ? absint(get_current_user_id()) : 0;
+        $store_id = get_user_meta( get_current_user_id(), 'multivendorx_active_store', true );
         $default = array(
             'posts_per_page'   => -1,
             'post_type'        => 'product',
             'post_status' => 'publish',
-            'author__not_in' => $vendor_id,
+            'meta_query'     => [
+                [
+                    'key'     => 'multivendorx_store_id',
+                    'value'   => $store_id,
+                    'compare' => '!=',
+                ],
+            ],
         );
         $query = new \WP_Query( $default ); 
-        // $MVX->template->get_template( 'vendor-dashboard/product-manager/show_products.php', array('query' => $query) );	
+        MultiVendorX()->util->get_template('product/show_products.php', ['query' => $query] );
         die;
     }
 
     public function edit_product_attribute_callback() {
-        global $MVX;
         ob_start();
 
         check_ajax_referer('add-attribute', 'security');
