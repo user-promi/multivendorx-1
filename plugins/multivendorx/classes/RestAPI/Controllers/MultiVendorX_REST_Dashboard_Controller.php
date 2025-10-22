@@ -109,10 +109,10 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller
                 'icon' => 'adminlib-contact-form',
                 'capability' => ['read_shop_coupons', 'edit_shop_coupons', 'delete_shop_coupons']
             ),
-            'payouts' => array(
-                'key' => 'payouts',
-                'name' => 'Payouts',
-                'slug' => 'payouts',
+            'withdrawls' => array(
+                'key' => 'withdrawls',
+                'name' => 'Withdrawls',
+                'slug' => 'withdrawls',
                 'icon' => 'adminlib-contact-form',
                 'capability' => ['read_shop_coupons', 'edit_shop_coupons']
             ),
