@@ -209,6 +209,11 @@ class FrontendScripts {
 					'deps'    => array( 'jquery' ),
 					'version' => $version,
 				),
+                'multivendorx-distance-shipping-frontend-script' => array(
+					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'modules/DistanceShipping/js/' . MULTIVENDORX_PLUGIN_SLUG . '-frontend.min.js',
+					'deps'    => array( 'jquery' ),
+					'version' => $version,
+				),
 			)
         );
         foreach ( $register_scripts as $name => $props ) {
@@ -525,6 +530,20 @@ class FrontendScripts {
 						'ajaxurl'     => admin_url( 'admin-ajax.php' ),
                         'nonce'    => wp_create_nonce('follow_store_ajax_nonce'),
 					),
+				),
+                'multivendorx-distance-shipping-frontend-script' => array(
+					'object_name' => 'distanceShippingFrontend',
+                    'data'        => array(
+                        'ajaxurl'           => admin_url('admin-ajax.php'),
+                        'nonce'             => wp_create_nonce('distance_shipping_ajax_nonce'),
+                        'mapbox_emable'     => \MultiVendorX\DistanceShipping\Frontend::mvx_mapbox_api_enabled(),
+                        'default_lat'       => MultiVendorX()->setting->get_setting('default_map_lat', '28.6139'), // example default lat
+                        'default_lng'       => MultiVendorX()->setting->get_setting('default_map_lng', '77.2090'), // example default lng
+                        'default_zoom'      => 13,
+                        'store_icon'        => plugin_dir_url(__FILE__) . 'assets/images/store-icon.png',
+                        'icon_width'        => 40,
+                        'icon_height'       => 40,
+                    ),
 				),
                 'multivendorx-report-abuse-frontend-script' => array(
 					'object_name' => 'reportAbuseFrontend',

@@ -41,7 +41,16 @@ class Frontend {
         }
         $product = wc_get_product($product_id);
         if (!$product) return;
+        $who_can_report = MultiVendorX()->setting->get_setting('who_can_report', []);
 
+        if (
+            ( $who_can_report === 'logged_in' && ! is_user_logged_in() ) ||
+            ( $who_can_report === 'guests' && is_user_logged_in() )
+        ) {
+            // Do not show link
+            return;
+        }
+        
         if (apply_filters('mvx_show_report_abuse_link', true, $product)) {
             $report_abuse_text = apply_filters('mvx_report_abuse_text', __('Report Abuse', 'multivendorx'), $product);
             ?>

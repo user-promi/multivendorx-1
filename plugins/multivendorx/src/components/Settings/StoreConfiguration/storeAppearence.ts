@@ -15,7 +15,7 @@ export default {
     submitUrl: 'settings',
     modal: [
         {
-            key: 'mvx_new_dashboard_site_logo',
+            key: 'store_dashboard_site_logo',
             type: 'file',
             label: __('Branding logo', 'multivendorx'),
             size: 'small',

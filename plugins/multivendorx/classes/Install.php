@@ -192,7 +192,25 @@ class Install {
             `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             PRIMARY KEY (`ID`)
         ) $collate;";
-        
+        $sql_shipping_zone = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}" . Utill::TABLES['shipping_zone'] . "` (
+            `instance_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+            `method_id` varchar(255) NOT NULL DEFAULT '',
+            `store_id` int(11) unsigned NOT NULL,
+            `vendor_id` int(11) NOT NULL,
+            `is_enabled` tinyint(1) NOT NULL DEFAULT '1',
+            `settings` longtext,
+            PRIMARY KEY (`instance_id`)
+        ) $collate;";
+
+        $sql_shipping_zone_locations = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}" . Utill::TABLES['shipping_zone_locations'] . "` (
+            `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+            `store_id` int(11) DEFAULT NULL,
+            `zone_id` int(11) DEFAULT NULL,
+            `location_code` varchar(255) DEFAULT NULL,
+            `location_type` varchar(255) DEFAULT NULL,
+            PRIMARY KEY (`id`)
+        ) $collate;";
+
         // Include upgrade functions if not loaded.
         if ( ! function_exists( 'dbDelta' ) ) {
             require_once ABSPATH . 'wp-admin/includes/upgrade.php';
@@ -206,6 +224,8 @@ class Install {
         dbDelta( $sql_real_time_transaction );
         dbDelta( $sql_qna );
         dbDelta( $sql_report_abuse );
+        dbDelta( $sql_shipping_zone );
+        dbDelta( $sql_shipping_zone_locations );
     }
 
     public function create_database_triggers() {
@@ -310,25 +330,12 @@ class Install {
             'Product quality',
             'Reliability',
         ];
-        $abuse_report['shipping_stage'] = [
-            'Delivered',
-            'Cancelled',
-            'Processing',
-        ];
         
         // 4. Set default product review sync
         $review_settings['product_review_sync'] = [
             'product_review_sync',
         ];
     
-        // 5. Set default abuse report reasons
-        $abuse_settings['abuse_report_reasons'] = [
-            'Product not received',
-            'Product not as described',
-            'Product damaged/defective',
-            'Wrong item received',
-            'Order arrived late'
-        ];
         $legal_settings = [
             'seller_agreement'         => 'This Seller Agreement (“Agreement”) is entered into between Marketplace (“Platform”) and the Seller (“You” or “Seller”) upon registration on the Platform. By submitting this agreement and uploading the required documents, you agree to comply with all rules, policies, and guidelines of the Platform.
 
@@ -437,14 +444,13 @@ By signing and submitting, the Seller accepts all terms above.
                 'Counterfeit Products',
                 'Stolen Goods',
             ],
+            'who_can_report' =>'anyone',
             // You can add other keys here if needed, e.g. 'required_store_uploads' => [...]
         ];
         // 6. Save back to DB
         update_option('multivendorx_identity_verification_settings', $settings);
         update_option('multivendorx_review_management_settings', $review_settings);
         update_option('multivendorx_order_actions_refunds_settings', $order_settings);
-        update_option('multivendorx_product_report_abuse_settings', $abuse_settings);
-        update_option('multivendorx_shipping_settings', $abuse_report);
         update_option('multivendorx_legal_compliance_settings', $legal_settings);
         update_option('multivendorx_product_compliance_settings', $product_compliance_settings);        
     }

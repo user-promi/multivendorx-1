@@ -35,6 +35,7 @@ class Module {
     public function __construct() {
         // Init helper classes.
         $this->init_classes();
+        add_filter('woocommerce_shipping_methods', [ $this, 'register_shipping_method' ]);
     }
 
     /**
@@ -43,8 +44,9 @@ class Module {
      * @return void
      */
     public function init_classes() {
-        $this->container['zone_shipping'] = new Shipping();
+        $this->container['util'] = new Util();
         $this->container['frontend'] = new Frontend();
+        $this->container['rest'] = new MultiVendorX_REST_Zone_Shipping_Controller();
     }
 
     /**
@@ -85,5 +87,12 @@ class Module {
         }
 
         return self::$instance;
+    }
+    /**
+     * Register the shipping method for WooCommerce
+     */
+    public function register_shipping_method( $methods ) {
+        $methods['multivendorx_vendor_shipping'] = Shipping::class;
+        return $methods;
     }
 }
