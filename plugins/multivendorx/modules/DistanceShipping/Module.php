@@ -35,6 +35,8 @@ class Module {
     public function __construct() {
         // Init helper classes.
         $this->init_classes();
+        // Register WooCommerce shipping method
+         add_filter('woocommerce_shipping_methods', [ $this, 'register_shipping_method' ]);
     }
 
     /**
@@ -85,5 +87,12 @@ class Module {
         }
 
         return self::$instance;
+    }
+    /**
+     * Register the shipping method for WooCommerce
+     */
+    public function register_shipping_method( $methods ) {
+        $methods['multivendorx_distance_shipping'] = Shipping::class;
+        return $methods;
     }
 }

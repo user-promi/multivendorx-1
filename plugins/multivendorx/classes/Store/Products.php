@@ -104,7 +104,7 @@ class Products {
         $subtab = get_query_var('subtab');
         $value  = get_query_var('value');
 
-        if ($subtab === 'edit' && empty($value) && MultiVendorX()->setting->get_setting('category_pyramid_guide') == 'no' ) {
+        if ($subtab === 'edit' && empty($value) && MultiVendorX()->setting->get_setting('category_pyramid_guide') == 'no' && MultiVendorX()->modules->is_active('spmv') == false ) {
             $product_id =$this->create_product_draft('product');
             
             wp_safe_redirect( StoreUtil::get_endpoint_url('products', 'edit', $product_id) );

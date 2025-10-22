@@ -122,31 +122,6 @@ var mvxAfmLibrary = ( function ( $ ) {
                 window.console.log( err );
             }
         },
-        // qtip: function (){
-        //     // Tool-tips
-        //     $('.img_tip').each(function () {
-        //         $(this).qtip({
-        //             content: $(this).attr('data-desc'),
-        //             position: {
-        //                 my: 'top center',
-        //                 at: 'bottom center',
-        //                 viewport: $(window)
-        //             },
-        //             show: {
-        //                 event: 'mouseover',
-        //                 solo: true,
-        //             },
-        //             hide: {
-        //                 inactive: 6000,
-        //                 fixed: true
-        //             },
-        //             style: {
-        //                 classes: 'qtip-dark qtip-shadow qtip-rounded qtip-dc-css',
-        //                 width: 200
-        //             }
-        //         });
-        //     });
-        // }
     };
 } )( jQuery );
 var mvxAfmProductEditor = ( function ( $ ) {
@@ -171,12 +146,6 @@ var mvxAfmProductEditor = ( function ( $ ) {
             return false;
         },
         init: function ( ) {
-            // .on( 'change', 'select#product-type', this.productTypeChanged.bind( this ) )
-            // .on( 'change', 'input#_downloadable, input#_virtual', this.updateTabsDisplay.bind( this ) )
-            // .on( 'click', '.sale_schedule', this.showSalePriceDates )
-            // .on( 'click', '.cancel_sale_schedule', this.hideSalePriceDates )
-            // .on( 'change', 'input#_manage_stock', this.stockManagementPreferenceChanged.bind( this ) )
-            // ;
            $( '#woocommerce-product-data' )
             .on( 'change', 'select#product-type', this.productTypeChanged.bind( this ) )
             .on( 'change', 'input#_downloadable, input#_virtual', this.updateTabsDisplay.bind( this ) )
@@ -484,7 +453,6 @@ var mvxAfmProductEditor = ( function ( $ ) {
             $( 'input#_manage_stock' ).change();
             mvxAfmLibrary.wcEnhancedSelectInit();
             mvxAfmLibrary.wcEnhancedSelectClose();
-            // mvxAfmLibrary.qtip();
 
             media.init();
             downloads.init();
@@ -796,7 +764,6 @@ var mvxAfmProductEditor = ( function ( $ ) {
                                 }
 
                                 mvxAfmLibrary.wcEnhancedSelectInit();
-                                // mvxAfmLibrary.qtip();
                                 ref.updateRowIndices();
                                 //open the added attribute in expanded view
                                 $attributes.find( '.woocommerce_attribute' ).last().find( '.variation-title' ).click();
