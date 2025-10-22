@@ -8,6 +8,10 @@ $questions = Util::get_questions($product_id);
 $answered_questions = array_filter($questions, function ($q) {
     return !empty($q->answer_text);
 });
+$current_url = get_permalink($product_id);
+// Get My Account page URL with redirect parameter
+$myaccount_url = wc_get_page_permalink('myaccount');
+$login_url = add_query_arg('redirect_to', $current_url, $myaccount_url);
 ?>
 
 <div id="product-qna" data-product="<?php echo esc_attr($product_id); ?>">
@@ -57,7 +61,7 @@ $answered_questions = array_filter($questions, function ($q) {
         </div>
     <?php else: ?>
         <div class="qna-cta">
-            <a href="<?php echo esc_url(wc_get_page_permalink('myaccount')); ?>">
+        <a href="<?php echo esc_url($login_url); ?>">
                 Log in to Ask
             </a>
         </div>

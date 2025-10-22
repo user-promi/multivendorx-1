@@ -366,6 +366,7 @@ class FrontendScripts {
                 'legal-compliance',
                 'product-compliance',
                 'tax-compliance',
+                'custom-css',
             )
 		);
 

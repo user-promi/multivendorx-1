@@ -38,6 +38,12 @@ class Shortcode {
         FrontendScripts::localize_scripts( 'multivendorx-store-dashboard-script' );
         FrontendScripts::enqueue_style( 'multivendorx-store-product-style' );
 
+        ?>
+        <style>
+            <?php 
+            echo MultiVendorX()->setting->get_setting('custom_css_product_page', []);?>
+        </style>
+        <?php
     }
 
     public static function dequeue_all_styles_on_page()
