@@ -47,21 +47,16 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
     }
 
     public function get_items_permissions_check($request) {
-        // return current_user_can( 'read' );
         return true;
     }
 
-     // POST permission
     public function create_item_permissions_check($request) {
-        // return current_user_can( 'manage_options' );
         return true;
     }
 
     public function update_item_permissions_check($request) {
-        // return current_user_can('manage_options');
         return true;
     }
-
 
     // GET 
     // public function get_items( $request ) {
@@ -128,6 +123,12 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
                 array( 'status' => 403 )
             );
         }
+
+        // Check if CSV download is requested
+        $format = $request->get_param( 'format' );
+        if ( $format === 'csv' ) {
+            return $this->download_transaction_csv( $request );
+        }
     
         $limit    = max( intval( $request->get_param( 'row' ) ), 10 );
         $page     = max( intval( $request->get_param( 'page' ) ), 1 );
@@ -136,6 +137,7 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
         $store_id = intval( $request->get_param( 'store_id' ) );
         $status   = $request->get_param( 'status' );
         $filter_status   = $request->get_param( 'filter_status' );
+        
         // 🔹 Handle date range from request
         $start_date = $request->get_param('start_date');
         $end_date   = $request->get_param('end_date');
@@ -187,6 +189,7 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
                 'transaction_type' => $row['transaction_type'],
             ];
         }, $transactions);
+        
         $countArgs = [
             'count' => true,
         ];
@@ -207,9 +210,102 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
         ];
         return rest_ensure_response( $response );
     }
+
+    /**
+     * Download transactions as CSV
+     */
+    private function download_transaction_csv( $request ) {
+        $store_id = intval( $request->get_param( 'store_id' ) );
+        $filter_status = $request->get_param( 'filter_status' );
+        $transaction_type = $request->get_param( 'transaction_type' );
+        $transaction_status = $request->get_param( 'transaction_status' );
+        $ids = $request->get_param( 'ids' );
+        $start_date = sanitize_text_field( $request->get_param( 'start_date' ) );
+        $end_date = sanitize_text_field( $request->get_param( 'end_date' ) );
     
+        // Prepare filter for Transaction
+        $args = array();
+        if ( ! empty( $store_id ) ) {
+            $args['store_id'] = $store_id;
+        }
+        if ( ! empty( $filter_status ) ) {
+            $args['entry_type'] = $filter_status;
+        }
+        if ( ! empty( $transaction_type ) ) {
+            $args['transaction_type'] = $transaction_type;
+        }
+        if ( ! empty( $transaction_status ) ) {
+            $args['status'] = $transaction_status;
+        }
+        if ( ! empty( $start_date ) && ! empty( $end_date ) ) {
+            $args['start_date'] = date('Y-m-d 00:00:00', strtotime($start_date));
+            $args['end_date'] = date('Y-m-d 23:59:59', strtotime($end_date));
+        }
     
+        // If specific IDs are requested
+        if ( ! empty( $ids ) ) {
+            $args['id__in'] = array_map( 'intval', explode( ',', $ids ) );
+        }
     
+        // Fetch transactions
+        $transactions = Transaction::get_transaction_information( $args );
+        
+        if ( empty( $transactions ) ) {
+            return new \WP_Error( 'no_data', __( 'No transaction data found.', 'multivendorx' ), array( 'status' => 404 ) );
+        }
+    
+        // CSV headers
+        $headers = array(
+            'Transaction ID',
+            'Date',
+            'Order ID', 
+            'Store Name',
+            'Transaction Type',
+            'Credit',
+            'Debit',
+            'Balance',
+            'Status',
+            'Payment Method'
+        );
+    
+        // Build CSV data
+        $csv_output = fopen( 'php://output', 'w' );
+        ob_start();
+        fputcsv( $csv_output, $headers );
+    
+        foreach ( $transactions as $transaction ) {
+            $store = new \MultiVendorX\Store\Store( $transaction['store_id'] );
+            $store_name = $store ? $store->get('name') : '';
+            
+            // Format date
+            $date = !empty($transaction['created_at']) ? date('M j, Y', strtotime($transaction['created_at'])) : '-';
+            
+            fputcsv( $csv_output, array(
+                $transaction['id'],
+                $date,
+                $transaction['order_id'] ?: '-',
+                $store_name,
+                $transaction['transaction_type'] ?: '-',
+                $transaction['entry_type'] === 'Cr' ? $transaction['amount'] : 0,
+                $transaction['entry_type'] === 'Dr' ? $transaction['amount'] : 0,
+                $transaction['balance'],
+                $transaction['status'],
+                $store->meta_data['payment_method'] ?? 'Not Saved',
+            ));
+        }
+    
+        fclose( $csv_output );
+        $csv = ob_get_clean();
+    
+        // Send headers for browser download
+        header( 'Content-Type: text/csv' );
+        header( 'Content-Disposition: attachment; filename="transactions_' . date( 'Y-m-d' ) . '.csv"' );
+        header( 'Pragma: no-cache' );
+        header( 'Expires: 0' );
+    
+        echo $csv;
+        exit;
+    }
     
     public function create_item( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
@@ -275,7 +371,7 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
 
         $payout_threshold = MultiVendorX()->setting->get_setting('payout_threshold_amount', 0);
 
-        // If it’s an array, take first value, else use as is
+        // If it's an array, take first value, else use as is
         if (is_array($payout_threshold)) {
             $payout_threshold = reset($payout_threshold) ?: 0;
         }

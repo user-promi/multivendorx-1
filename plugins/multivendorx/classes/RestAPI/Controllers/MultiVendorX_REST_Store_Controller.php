@@ -216,7 +216,6 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
     }
 
 
-    // GET 
     public function get_items( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
 
@@ -225,7 +224,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             
             // Log the error
             if ( is_wp_error( $error ) ) {
-				MultiVendorX()->util->log(
+                MultiVendorX()->util->log(
                     "MVX REST Error:\n" .
                     "\tCode: " . $error->get_error_code() . "\n" .
                     "\tMessage: " . $error->get_error_message() . "\n" .
@@ -307,6 +306,10 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             foreach ( $stores as $store ) {
                 $store_meta = Store::get_store_by_id( (int) $store['ID'] );
 
+                // Get primary owner information using Store object
+                $primary_owner_id = StoreUtil::get_primary_owner( $store['ID'] );
+                $primary_owner = $this->get_user_info( $primary_owner_id );
+
                 $formatted_stores[] = apply_filters(
                     'multivendorx_stores',
                     array(
@@ -315,6 +318,8 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                         'store_slug' => $store['slug'],
                         'status'     => $store['status'],
                         'email'      => $store_meta->meta_data['email'] ?? '',
+                        'phone'      => $store_meta->meta_data['phone'] ?? $store_meta->meta_data['_phone'] ?? $store_meta->meta_data['contact_number'] ?? '',
+                        'primary_owner' => $primary_owner,
                         'applied_on' => $store['create_time'],
                     )
                 );
@@ -341,6 +346,40 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
 
             return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
         }
+    }
+
+    /**
+     * Get user information by user ID
+     *
+     * @param int $user_id
+     * @return array|null
+     */
+    private function get_user_info( $user_id ) {
+        if ( ! $user_id ) {
+            return null;
+        }
+
+        $user = get_userdata( $user_id );
+        
+        if ( ! $user ) {
+            return null;
+        }
+
+        // Get user's first and last name
+        $first_name = get_user_meta( $user_id, 'first_name', true );
+        $last_name = get_user_meta( $user_id, 'last_name', true );
+        
+        // Combine names, fallback to display name if empty
+        $full_name = trim( $first_name . ' ' . $last_name );
+        if ( empty( $full_name ) ) {
+            $full_name = $user->display_name;
+        }
+
+        return [
+            'id'    => $user_id,
+            'name'  => $full_name,
+            'email' => $user->user_email,
+        ];
     }
 
     public function get_pending_stores( $request ) {

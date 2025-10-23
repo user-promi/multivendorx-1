@@ -14,21 +14,180 @@ type StoreRow = {
     store_name?: string;
     store_slug?: string;
     status?: string;
+    date?: string;
+    order_details?: string;
+    transaction_type?: string;
+    credit?: string;
+    debit?: string;
+    balance?: string;
+    payment_method?: string;
 };
 
 interface TransactionHistoryTableProps {
     storeId: number | null;
     dateRange: { startDate: Date | null; endDate: Date | null };
 }
+
 export interface RealtimeFilter {
     name: string;
     render: (updateFilter: (key: string, value: any) => void, filterValue: any) => ReactNode;
 }
+
 type TransactionStatus = {
     key: string;
     name: string;
     count: number;
 };
+
+type FilterData = {
+    searchAction?: string;
+    searchField?: string;
+    typeCount?: any;
+    store?: string;
+    order?: any;
+    orderBy?: any;
+    date?: {
+        start_date: Date;
+        end_date: Date;
+    };
+    transactionType?: string;
+    transactionStatus?: string;
+};
+
+// CSV Download Button Component for Transactions
+const DownloadTransactionCSVButton: React.FC<{
+    selectedRows: RowSelectionState;
+    data: StoreRow[] | null;
+    filterData: FilterData;
+    storeId: number | null;
+    isLoading?: boolean;
+}> = ({ selectedRows, data, filterData, storeId, isLoading = false }) => {
+    const [isDownloading, setIsDownloading] = useState(false);
+
+    const handleDownload = async () => {
+        if (!storeId) {
+            alert(__('Please select a store first.', 'multivendorx'));
+            return;
+        }
+
+        setIsDownloading(true);
+        try {
+            // Get selected row IDs
+            const selectedIds = Object.keys(selectedRows)
+                .filter(key => selectedRows[key])
+                .map(key => {
+                    const rowIndex = parseInt(key);
+                    return data?.[rowIndex]?.id;
+                })
+                .filter(id => id !== undefined);
+
+            // Prepare parameters for CSV download
+            const params: any = {
+                format: 'csv',
+                store_id: storeId,
+            };
+
+            // Add date filters if present
+            if (filterData?.date?.start_date) {
+                params.start_date = filterData.date.start_date.toISOString().split('T')[0];
+            }
+            if (filterData?.date?.end_date) {
+                params.end_date = filterData.date.end_date.toISOString().split('T')[0];
+            }
+
+            // Add transaction type filter
+            if (filterData?.transactionType) {
+                params.transaction_type = filterData.transactionType;
+            }
+
+            // Add transaction status filter
+            if (filterData?.transactionStatus) {
+                params.transaction_status = filterData.transactionStatus;
+            }
+
+            // Add status filter (Cr/Dr)
+            if (filterData?.typeCount && filterData.typeCount !== 'all') {
+                params.filter_status = filterData.typeCount;
+            }
+
+            // If specific rows are selected, send their IDs
+            if (selectedIds.length > 0) {
+                params.ids = selectedIds.join(',');
+            }
+
+            // Make API request for CSV
+            const response = await axios({
+                method: 'GET',
+                url: getApiLink(appLocalizer, 'transaction'),
+                headers: { 
+                    'X-WP-Nonce': appLocalizer.nonce,
+                    'Accept': 'text/csv'
+                },
+                params: params,
+                responseType: 'blob'
+            });
+
+            // Create download link
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            
+            // Generate filename with timestamp and store ID
+            const timestamp = new Date().toISOString().split('T')[0];
+            const filename = `transactions_store_${storeId}_${timestamp}.csv`;
+            link.setAttribute('download', filename);
+            
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            window.URL.revokeObjectURL(url);
+
+        } catch (error) {
+            console.error('Error downloading CSV:', error);
+            alert(__('Failed to download CSV. Please try again.', 'multivendorx'));
+        } finally {
+            setIsDownloading(false);
+        }
+    };
+
+    const hasSelectedRows = Object.keys(selectedRows).some(key => selectedRows[key]);
+
+    return (
+        <button
+            onClick={handleDownload}
+            disabled={isDownloading || isLoading || !storeId || (!hasSelectedRows && !data)}
+            className="button button-secondary"
+            style={{ 
+                marginLeft: '10px',
+                opacity: (isDownloading || isLoading || !storeId || (!hasSelectedRows && !data)) ? 0.6 : 1
+            }}
+        >
+            {isDownloading ? __('Downloading...', 'multivendorx') : __('Download CSV', 'multivendorx')}
+        </button>
+    );
+};
+
+// Bulk Actions Component for Transactions
+const TransactionBulkActions: React.FC<{
+    selectedRows: RowSelectionState;
+    data: StoreRow[] | null;
+    filterData: FilterData;
+    storeId: number | null;
+    onActionComplete?: () => void;
+}> = ({ selectedRows, data, filterData, storeId, onActionComplete }) => {
+    return (
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <DownloadTransactionCSVButton 
+                selectedRows={selectedRows} 
+                data={data}
+                filterData={filterData}
+                storeId={storeId}
+            />
+            {/* Add other bulk actions here if needed */}
+        </div>
+    );
+};
+
 const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ storeId, dateRange }) => {
     const [data, setData] = useState<StoreRow[] | null>(null);
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
@@ -44,6 +203,7 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
     const [selectedStore, setSelectedStore] = useState<any>(null);
     const [overview, setOverview] = useState<any[]>([]);
     const [transactionStatus, setTransactionStatus] = useState<TransactionStatus[] | null>(null);
+    const [currentFilterData, setCurrentFilterData] = useState<FilterData>({});
 
     // 🔹 Helper: get effective date range
     const getEffectiveDateRange = () => {
@@ -137,6 +297,7 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
     }, [pagination, storeId, dateRange, totalRows]);
 
     const requestApiForData = (rowsPerPage: number, currentPage: number, filterData: FilterData) => {
+        setCurrentFilterData(filterData);
         requestData(
             rowsPerPage,
             currentPage,
@@ -146,7 +307,7 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
         );
     };
 
-    // 🔹 Column definitions
+    // 🔹 Column definitions with Status sorting
     const columns: ColumnDef<StoreRow>[] = [
         {
             id: 'select',
@@ -185,6 +346,9 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
             },
         },
         {
+            id: 'id',
+            accessorKey: 'id',
+            enableSorting: true,
             header: __("Transaction ID", "multivendorx"),
             cell: ({ row }) => <TableCell>#{row.original.id}</TableCell>,
         },
@@ -211,6 +375,9 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
             },
         },
         {
+            id: 'transaction_type',
+            accessorKey: 'transaction_type',
+            enableSorting: true,
             header: __('Transaction Type', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell title={row.original.transaction_type || ''}>
@@ -251,8 +418,10 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                 return <TableCell>{balance ? `${appLocalizer.currency_symbol}${balance}` : '-'}</TableCell>;
             },
         },
-        
         {
+            id: 'status',
+            accessorKey: 'status',
+            enableSorting: true, // Enable sorting for status column
             header: __('Status', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell title={row.original.status || ''}>
@@ -263,6 +432,9 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
             ),
         },
         {
+            id: 'payment_method',
+            accessorKey: 'payment_method',
+            enableSorting: true,
             header: __('Payment Method', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell title={row.original.payment_method || ''}>
@@ -276,7 +448,7 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
         {
             name: 'transactionType',
             render: (updateFilter: (key: string, value: string) => void, filterValue: string | undefined) => (
-                <div className="   group-field">
+                <div className="group-field">
                     <select
                         name="transactionType"
                         onChange={(e) => updateFilter(e.target.name, e.target.value)}
@@ -296,7 +468,7 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
         {
             name: 'transactionStatus',
             render: (updateFilter: (key: string, value: string) => void, filterValue: string | undefined) => (
-                <div className="   group-field">
+                <div className="group-field">
                     <select
                         name="transactionStatus"
                         onChange={(e) => updateFilter(e.target.name, e.target.value)}
@@ -313,6 +485,7 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
             ),
         },
     ];
+
     // 🔹 Fetch stores on mount
     useEffect(() => {
         axios({
@@ -337,7 +510,7 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
 
     // 🔹 Fetch wallet/transaction overview whenever store changes
     useEffect(() => {
-        if (!selectedStore) return;
+        if (!storeId) return;
 
         axios({
             method: 'GET',
@@ -370,7 +543,6 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
             });
     }, [storeId]);
 
-
     return (
         <>
             <div className="analytics-container">
@@ -401,6 +573,14 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                     typeCounts={transactionStatus as TransactionStatus[]}
                     totalCounts={totalRows}
                     realtimeFilter={realtimeFilter}
+                    bulkActionComp={() => (
+                        <TransactionBulkActions 
+                            selectedRows={rowSelection} 
+                            data={data}
+                            filterData={currentFilterData}
+                            storeId={storeId}
+                        />
+                    )}
                 />
             </div>
         </>

@@ -273,6 +273,18 @@ class StoreUtil {
     
         return $stores ?: [];
     }
+
+    public static function get_primary_owner($store_id){
+        global $wpdb;
+        $table_name = $wpdb->prefix . Utill::TABLES['store_users'];
+        $primary_owner = $wpdb->get_var(
+            $wpdb->prepare(
+                "SELECT primary_owner FROM $table_name WHERE store_id = %d",
+                $store_id
+            )
+        );
+        return $primary_owner;
+    }
     
     public static function set_primary_owner( $user_id, $store_id ) {
         global $wpdb;

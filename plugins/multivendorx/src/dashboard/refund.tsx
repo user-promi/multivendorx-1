@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 import { Table, getApiLink, TableCell, CalendarInput } from 'zyra';
@@ -8,18 +8,25 @@ import {
     PaginationState,
 } from '@tanstack/react-table';
 
-type StoreRow = {
-    id?: number;
-    store_name?: string;
-    store_slug?: string;
-    status?: string;
+type RefundRow = {
+    id: number;
+    orderNumber: string;
+    customer: string;
+    email: string;
+    products: string;
+    amount: string;
+    reason: string;
+    date: string;
+    status: string;
 };
+
 export interface RealtimeFilter {
     name: string;
-    render: (updateFilter: (key: string, value: any) => void, filterValue: any) => ReactNode;
+    render: (updateFilter: (key: string, value: any) => void, filterValue: any) => React.ReactNode;
 }
+
 const Refund: React.FC = () => {
-    const [data, setData] = useState<StoreRow[] | null>(null);
+    const [data, setData] = useState<RefundRow[]>([]);
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
     const [pagination, setPagination] = useState<PaginationState>({
         pageIndex: 0,
@@ -27,61 +34,133 @@ const Refund: React.FC = () => {
     });
     const [pageCount, setPageCount] = useState(0);
     const [totalRows, setTotalRows] = useState<number>(0);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string>();
 
-
+    // Fetch total rows on mount
     useEffect(() => {
-        const demoData: OrderRow[] = [
-            {
-                orderNumber: "ORD-2024-1547",
-                customer: "Sarah Johnson",
-                email: "sarah.j@email.com",
-                amount: "$149.99",
-                reason: "Product defective",
-                date: "2024-10-14",
-                status: "Pending",
-            },
-            {
-                orderNumber: "ORD-2024-1523",
-                customer: "Michael Chen",
-                email: "mchen@email.com",
-                amount: "$89.50",
-                reason: "Wrong item received",
-                date: "2024-10-13",
-                status: "Pending",
-            },
-            {
-                orderNumber: "ORD-2024-1498",
-                customer: "Emily Rodriguez",
-                email: "emily.r@email.com",
-                amount: "$299.00",
-                reason: "Changed mind",
-                date: "2024-10-12",
-                status: "Approved",
-            },
-            {
-                orderNumber: "ORD-2024-1445",
-                customer: "David Thompson",
-                email: "dthompson@email.com",
-                amount: "$64.99",
-                reason: "Product damaged in shipping",
-                date: "2024-10-10",
-                status: "Rejected",
-            },
-            {
-                orderNumber: "ORD-2024-1389",
-                customer: "Lisa Anderson",
-                email: "l.anderson@email.com",
-                amount: "$179.99",
-                reason: "Product not as described",
-                date: "2024-10-09",
-                status: "Pending",
-            },
-        ];
-        setData(demoData);
-        setTotalRows(demoData.length);
+        fetchTotalRows();
     }, []);
 
-    const columns: ColumnDef<StoreRow>[] = [
+    // Fetch data when pagination changes
+    useEffect(() => {
+        const currentPage = pagination.pageIndex + 1;
+        const rowsPerPage = pagination.pageSize;
+        requestData(rowsPerPage, currentPage);
+    }, [pagination]);
+
+    const fetchTotalRows = () => {
+        axios({
+            method: 'GET',
+            url: getApiLink(appLocalizer, 'refund'),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            params: { count: true },
+        })
+            .then((response) => {
+                setTotalRows(response.data || 0);
+                setPageCount(Math.ceil(response.data / pagination.pageSize));
+            })
+            .catch((err) => {
+                setError(__('Failed to load total rows', 'multivendorx'));
+                console.error('Error fetching total rows:', err);
+            });
+    };
+
+    // Fetch data from backend
+    const requestData = (
+        rowsPerPage = 10,
+        currentPage = 1,
+        filters = {}
+    ) => {
+        setLoading(true);
+        setError(undefined);
+
+        axios({
+            method: 'GET',
+            url: getApiLink(appLocalizer, 'refund'),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            params: {
+                page: currentPage,
+                row: rowsPerPage,
+                ...filters
+            },
+        })
+            .then((response) => {
+                console.log('Refund data received:', response.data);
+                setData(response.data || []);
+                setLoading(false);
+            })
+            .catch((err) => {
+                setError(__('Failed to load refund data', 'multivendorx'));
+                setData([]);
+                setLoading(false);
+                console.error('Error fetching refund data:', err);
+            });
+    };
+
+    // Handle pagination and filter changes
+    const handlePagination = (
+        rowsPerPage: number,
+        currentPage: number,
+        filterData: any
+    ) => {
+        requestData(rowsPerPage, currentPage, filterData);
+    };
+
+    // Function to safely render HTML content
+    const renderAmount = (amount: string) => {
+        if (!amount) return '-';
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = amount;
+        const textContent = tempDiv.textContent || tempDiv.innerText || '';
+        return textContent || '-';
+    };
+
+    // Handle action functions
+    const handleViewDetails = (rowData: RefundRow) => {
+        console.log('View details:', rowData);
+        // Implement view details logic (modal, etc.)
+    };
+
+    const handleApproveRefund = (rowData: RefundRow) => {
+        console.log('Approve refund:', rowData);
+        // Implement approve refund logic
+        if (window.confirm(__('Are you sure you want to approve this refund?', 'multivendorx'))) {
+            updateRefundStatus(rowData.id, 'approved');
+        }
+    };
+
+    const handleRejectRefund = (rowData: RefundRow) => {
+        console.log('Reject refund:', rowData);
+        // Implement reject refund logic
+        if (window.confirm(__('Are you sure you want to reject this refund?', 'multivendorx'))) {
+            updateRefundStatus(rowData.id, 'rejected');
+        }
+    };
+
+    const updateRefundStatus = (orderId: number, status: string) => {
+        axios({
+            method: 'POST',
+            url: getApiLink(appLocalizer, 'refund'),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            data: {
+                order_id: orderId,
+                status: status
+            }
+        })
+        .then((response) => {
+            // Refresh the data
+            const currentPage = pagination.pageIndex + 1;
+            const rowsPerPage = pagination.pageSize;
+            requestData(rowsPerPage, currentPage);
+        })
+        .catch((err) => {
+            setError(__('Failed to update refund status', 'multivendorx'));
+            console.error('Error updating refund status:', err);
+        });
+    };
+
+    const columns: ColumnDef<RefundRow>[] = [
         {
             id: 'select',
             header: ({ table }) => (
@@ -100,7 +179,7 @@ const Refund: React.FC = () => {
             ),
         },
         {
-            header: __('Order Number', 'multivendorx'),
+            header: __('Order ID', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell title={row.original.orderNumber || ''}>
                     {row.original.orderNumber || '-'}
@@ -108,7 +187,7 @@ const Refund: React.FC = () => {
             ),
         },
         {
-            header: __('Customer', 'multivendorx'),
+            header: __('Customer Name', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell title={row.original.customer || ''}>
                     {row.original.customer || '-'}
@@ -124,10 +203,18 @@ const Refund: React.FC = () => {
             ),
         },
         {
+            header: __('Product(s)', 'multivendorx'),
+            cell: ({ row }) => (
+                <TableCell title={row.original.products || ''}>
+                    {row.original.products || '-'}
+                </TableCell>
+            ),
+        },
+        {
             header: __('Amount', 'multivendorx'),
             cell: ({ row }) => (
-                <TableCell title={row.original.amount || ''}>
-                    {row.original.amount || '-'}
+                <TableCell title={renderAmount(row.original.amount)}>
+                    <span dangerouslySetInnerHTML={{ __html: row.original.amount || '-' }} />
                 </TableCell>
             ),
         },
@@ -141,11 +228,16 @@ const Refund: React.FC = () => {
         },
         {
             header: __('Date', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.date || ''}>
-                    {row.original.date || '-'}
-                </TableCell>
-            ),
+            enableSorting: true,
+            cell: ({ row }) => {
+                const rawDate = row.original.date;
+                const formattedDate = rawDate ? new Intl.DateTimeFormat('en-US', { 
+                    month: 'short', 
+                    day: 'numeric', 
+                    year: 'numeric' 
+                }).format(new Date(rawDate)) : '-';
+                return <TableCell title={formattedDate}>{formattedDate}</TableCell>;
+            }
         },
         {
             header: __('Status', 'multivendorx'),
@@ -160,6 +252,9 @@ const Refund: React.FC = () => {
                     {row.original.status === "Rejected" && (
                         <span className="admin-badge red">Rejected</span>
                     )}
+                    {!['Approved', 'Pending', 'Rejected'].includes(row.original.status) && (
+                        <span className="admin-badge gray">{row.original.status}</span>
+                    )}
                 </TableCell>
             ),
         },
@@ -173,12 +268,22 @@ const Refund: React.FC = () => {
                     header={{
                         actions: [
                             {
-                                label: __('View Details', 'multivendorx'),
-                                icon: 'adminlib-import',
+                                label: __('View', 'multivendorx'),
+                                icon: 'adminlib-eye',
                                 hover: true,
-                                onClick: (rowData) => {
-                                    window.location.href = `?page=multivendorx#&tab=stores&edit/${rowData.id}`;
-                                },
+                                onClick: (rowData) => handleViewDetails(rowData),
+                            },
+                            {
+                                label: __('Approve', 'multivendorx'),
+                                icon: 'adminlib-check',
+                                hover: true,
+                                onClick: (rowData) => handleApproveRefund(rowData),
+                            },
+                            {
+                                label: __('Reject', 'multivendorx'),
+                                icon: 'adminlib-close',
+                                hover: true,
+                                onClick: (rowData) => handleRejectRefund(rowData),
                             },
                         ],
                     }}
@@ -186,6 +291,7 @@ const Refund: React.FC = () => {
             ),
         },
     ];
+
     const searchFilter: RealtimeFilter[] = [
         {
             name: 'searchAction',
@@ -199,19 +305,19 @@ const Refund: React.FC = () => {
                         }}
                     >
                         <option value="all">
-                            {__('All', 'moowoodle')}
+                            {__('All', 'multivendorx')}
                         </option>
-                        <option value="order_id">
-                            {__('Order Id', 'moowoodle')}
+                        <option value="order_number">
+                            {__('Order ID', 'multivendorx')}
                         </option>
                         <option value="products">
-                            {__('Products', 'moowoodle')}
+                            {__('Products', 'multivendorx')}
                         </option>
                         <option value="customer_email">
-                            {__('Customer Email', 'moowoodle')}
+                            {__('Customer Email', 'multivendorx')}
                         </option>
                         <option value="customer">
-                            {__('Customer', 'moowoodle')}
+                            {__('Customer Name', 'multivendorx')}
                         </option>
                     </select>
                 </div>
@@ -220,36 +326,74 @@ const Refund: React.FC = () => {
         {
             name: 'searchField',
             render: (updateFilter, filterValue) => (
-                <>
-                    <div className="search-section">
-                        <input
-                            name="searchField"
-                            type="text"
-                            placeholder={__('Search', 'multivendorx')}
-                            onChange={(e) => {
-                                updateFilter(e.target.name, e.target.value);
-                            }}
-                            value={filterValue || ''}
-                            className='basic-select'
-                        />
-                        <i className="adminlib-search"></i>
-                    </div>
-                </>
+                <div className="search-section">
+                    <input
+                        name="searchField"
+                        type="text"
+                        placeholder={__('Search', 'multivendorx')}
+                        onChange={(e) => {
+                            updateFilter(e.target.name, e.target.value);
+                        }}
+                        value={filterValue || ''}
+                        className='basic-select'
+                    />
+                    <i className="adminlib-search"></i>
+                </div>
+            ),
+        },
+        {
+            name: 'status',
+            render: (updateFilter, filterValue) => (
+                <div className="search-action">
+                    <select
+                        className="basic-select"
+                        value={filterValue || ''}
+                        onChange={(e) => {
+                            updateFilter('status', e.target.value || '');
+                        }}
+                    >
+                        <option value="all">
+                            {__('All Status', 'multivendorx')}
+                        </option>
+                        <option value="pending">
+                            {__('Pending', 'multivendorx')}
+                        </option>
+                        <option value="approved">
+                            {__('Approved', 'multivendorx')}
+                        </option>
+                        <option value="rejected">
+                            {__('Rejected', 'multivendorx')}
+                        </option>
+                    </select>
+                </div>
+            ),
+        },
+        {
+            name: 'date',
+            render: (updateFilter) => (
+                <div className="right">
+                    <CalendarInput
+                        wrapperClass=""
+                        inputClass=""
+                        onChange={(range: any) => updateFilter('date', { 
+                            start_date: range.startDate, 
+                            end_date: range.endDate 
+                        })}
+                    />
+                </div>
             ),
         },
     ];
+
     return (
         <>
             <div className="page-title-wrapper">
                 <div className="page-title">
                     <div className="title">Refund</div>
-                    <div className="des">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Debitis, perferendis.</div>
+                    <div className="des">Manage and process refund requests from customers.</div>
                 </div>
                 <div className="buttons-wrapper">
-                    <div
-                        className="admin-btn btn-purple"
-                    // onClick={() => setAddProduct(true)}
-                    >
+                    <div className="admin-btn btn-purple">
                         <i className="adminlib-export"></i>
                         Export
                     </div>
@@ -258,6 +402,12 @@ const Refund: React.FC = () => {
 
             <div className="row">
                 <div className="column">
+                    {error && (
+                        <div className="admin-notice admin-notice-error">
+                            {error}
+                        </div>
+                    )}
+
                     <Table
                         data={data}
                         columns={columns as ColumnDef<Record<string, any>, any>[]}
@@ -267,11 +417,11 @@ const Refund: React.FC = () => {
                         pageCount={pageCount}
                         pagination={pagination}
                         onPaginationChange={setPagination}
-                        // handlePagination={requestApiForData}
+                        handlePagination={handlePagination}
                         perPageOption={[10, 25, 50]}
-                        typeCounts={[]}
                         totalCounts={totalRows}
                         searchFilter={searchFilter}
+                        isLoading={loading}
                     />
                 </div>
             </div>
