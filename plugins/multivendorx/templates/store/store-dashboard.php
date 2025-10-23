@@ -186,7 +186,7 @@ $store_dashboard_logo = !empty($store_dashboard_logo) ? $store_dashboard_logo : 
                                     <div class="dropdown-footer">
                                         <ul>
                                             <li>
-                                                <a href="#">
+                                                <a href="<?php echo esc_url(wp_logout_url(get_permalink((int) MultiVendorX()->setting->get_setting('store_dashboard_page')))); ?>">
                                                     <i class="adminlib-import"></i>
                                                     Sign Out
                                                 </a>
