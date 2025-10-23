@@ -138,13 +138,9 @@ class MultiVendorX_REST_Refund_Controller extends \WP_REST_Controller {
         $start_date = $request->get_param( 'start_date' );
         $end_date   = $request->get_param( 'end_date' );
 
-        // Get current store ID from the request or use current user's store
-        $store_id = get_user_meta( wp_get_current_user()->ID, 'multivendorx_active_store', true );
-
         // Count only request
         if ( $count ) {
             $total_count = $this->get_refund_requests_count( [
-                'store_id' => $store_id,
                 'search' => $search,
                 'search_action' => $search_action,
                 'status' => $status,
@@ -156,7 +152,6 @@ class MultiVendorX_REST_Refund_Controller extends \WP_REST_Controller {
 
         // Get refund data
         $refunds = $this->get_refund_requests_data( [
-            'store_id' => $store_id,
             'limit' => $limit,
             'offset' => $offset,
             'search' => $search,
@@ -175,7 +170,6 @@ class MultiVendorX_REST_Refund_Controller extends \WP_REST_Controller {
     private function get_refund_requests_count( $args = [] ) {
         global $wpdb;
 
-        $store_id = isset( $args['store_id'] ) ? intval( $args['store_id'] ) : 0;
         $search = isset( $args['search'] ) ? sanitize_text_field( $args['search'] ) : '';
         $search_action = isset( $args['search_action'] ) ? sanitize_text_field( $args['search_action'] ) : 'all';
         $status = isset( $args['status'] ) ? sanitize_text_field( $args['status'] ) : 'all';
@@ -192,15 +186,6 @@ class MultiVendorX_REST_Refund_Controller extends \WP_REST_Controller {
                   WHERE o.type = 'shop_order' 
                   AND om.meta_key = '_customer_refund_order' 
                   AND om.meta_value = 'refund_request'";
-
-        // Filter by store
-        if ( $store_id ) {
-            $query .= $wpdb->prepare( " AND o.id IN (
-                SELECT order_id FROM {$orders_meta_table} 
-                WHERE meta_key = 'multivendorx_store_id' 
-                AND meta_value = %d
-            )", $store_id );
-        }
 
         // Date filter
         if ( $start_date && $end_date ) {
@@ -246,6 +231,17 @@ class MultiVendorX_REST_Refund_Controller extends \WP_REST_Controller {
                         AND meta_value LIKE %s
                     )", '%' . $wpdb->esc_like( $search ) . '%' );
                     break;
+                case 'store':
+                    $query .= $wpdb->prepare( " AND o.id IN (
+                        SELECT order_id FROM {$orders_meta_table} 
+                        WHERE meta_key = 'multivendorx_store_id' 
+                        AND meta_value IN (
+                            SELECT user_id FROM {$wpdb->usermeta} 
+                            WHERE meta_key = 'store_name' 
+                            AND meta_value LIKE %s
+                        )
+                    )", '%' . $wpdb->esc_like( $search ) . '%' );
+                    break;
                 default: // 'all'
                     $query .= $wpdb->prepare( " AND (
                         o.id LIKE %s OR 
@@ -253,8 +249,17 @@ class MultiVendorX_REST_Refund_Controller extends \WP_REST_Controller {
                             SELECT order_id FROM {$orders_meta_table} 
                             WHERE meta_key IN ('_billing_first_name', '_billing_last_name', '_billing_company', '_billing_email', '_customer_refund_reason')
                             AND meta_value LIKE %s
+                        ) OR
+                        o.id IN (
+                            SELECT order_id FROM {$orders_meta_table} 
+                            WHERE meta_key = 'multivendorx_store_id' 
+                            AND meta_value IN (
+                                SELECT user_id FROM {$wpdb->usermeta} 
+                                WHERE meta_key = 'store_name' 
+                                AND meta_value LIKE %s
+                            )
                         )
-                    )", '%' . $wpdb->esc_like( $search ) . '%', '%' . $wpdb->esc_like( $search ) . '%' );
+                    )", '%' . $wpdb->esc_like( $search ) . '%', '%' . $wpdb->esc_like( $search ) . '%', '%' . $wpdb->esc_like( $search ) . '%' );
                     break;
             }
         }
@@ -268,7 +273,6 @@ class MultiVendorX_REST_Refund_Controller extends \WP_REST_Controller {
     private function get_refund_requests_data( $args = [] ) {
         global $wpdb;
 
-        $store_id = isset( $args['store_id'] ) ? intval( $args['store_id'] ) : 0;
         $limit = isset( $args['limit'] ) ? intval( $args['limit'] ) : 10;
         $offset = isset( $args['offset'] ) ? intval( $args['offset'] ) : 0;
         $search = isset( $args['search'] ) ? sanitize_text_field( $args['search'] ) : '';
@@ -287,7 +291,8 @@ class MultiVendorX_REST_Refund_Controller extends \WP_REST_Controller {
                          om3.meta_value as refund_images,
                          om4.meta_value as billing_first_name,
                          om5.meta_value as billing_last_name,
-                         om6.meta_value as billing_email
+                         om6.meta_value as billing_email,
+                         om7.meta_value as store_id
                   FROM {$orders_table} o 
                   INNER JOIN {$orders_meta_table} om ON o.id = om.order_id 
                   LEFT JOIN {$orders_meta_table} om1 ON o.id = om1.order_id AND om1.meta_key = '_customer_refund_reason'
@@ -296,18 +301,10 @@ class MultiVendorX_REST_Refund_Controller extends \WP_REST_Controller {
                   LEFT JOIN {$orders_meta_table} om4 ON o.id = om4.order_id AND om4.meta_key = '_billing_first_name'
                   LEFT JOIN {$orders_meta_table} om5 ON o.id = om5.order_id AND om5.meta_key = '_billing_last_name'
                   LEFT JOIN {$orders_meta_table} om6 ON o.id = om6.order_id AND om6.meta_key = '_billing_email'
+                  LEFT JOIN {$orders_meta_table} om7 ON o.id = om7.order_id AND om7.meta_key = 'multivendorx_store_id'
                   WHERE o.type = 'shop_order' 
                   AND om.meta_key = '_customer_refund_order' 
                   AND om.meta_value = 'refund_request'";
-
-        // Filter by store
-        if ( $store_id ) {
-            $query .= $wpdb->prepare( " AND o.id IN (
-                SELECT order_id FROM {$orders_meta_table} 
-                WHERE meta_key = 'multivendorx_store_id' 
-                AND meta_value = %d
-            )", $store_id );
-        }
 
         // Date filter
         if ( $start_date && $end_date ) {
@@ -345,14 +342,27 @@ class MultiVendorX_REST_Refund_Controller extends \WP_REST_Controller {
                 case 'products':
                     $query .= $wpdb->prepare( " AND om2.meta_value LIKE %s", '%' . $wpdb->esc_like( $search ) . '%' );
                     break;
+                case 'store':
+                    $query .= $wpdb->prepare( " AND om7.meta_value IN (
+                        SELECT user_id FROM {$wpdb->usermeta} 
+                        WHERE meta_key = 'store_name' 
+                        AND meta_value LIKE %s
+                    )", '%' . $wpdb->esc_like( $search ) . '%' );
+                    break;
                 default: // 'all'
                     $query .= $wpdb->prepare( " AND (
                         o.id LIKE %s OR 
                         om4.meta_value LIKE %s OR 
                         om5.meta_value LIKE %s OR 
                         om6.meta_value LIKE %s OR 
-                        om1.meta_value LIKE %s
+                        om1.meta_value LIKE %s OR
+                        om7.meta_value IN (
+                            SELECT user_id FROM {$wpdb->usermeta} 
+                            WHERE meta_key = 'store_name' 
+                            AND meta_value LIKE %s
+                        )
                     )", 
+                    '%' . $wpdb->esc_like( $search ) . '%',
                     '%' . $wpdb->esc_like( $search ) . '%',
                     '%' . $wpdb->esc_like( $search ) . '%',
                     '%' . $wpdb->esc_like( $search ) . '%',
@@ -424,6 +434,14 @@ class MultiVendorX_REST_Refund_Controller extends \WP_REST_Controller {
             // Get email from meta or order object
             $customer_email = $refund_request['billing_email'] ?? $order->get_billing_email();
 
+            // Get store name
+            $store_name = __('Unknown Store', 'multivendorx');
+            $store_id = $refund_request['store_id'] ?? 0;
+            if ( $store_id ) {
+                $store_obj = MultivendorX()->store->get_store_by_id( $store_id );
+                $store_name = $store_obj->get('name');
+            }
+
             $formatted_refunds[] = [
                 'id' => (int) $order_id,
                 'orderNumber' => '#' . $order_id,
@@ -434,6 +452,7 @@ class MultiVendorX_REST_Refund_Controller extends \WP_REST_Controller {
                 'date' => $refund_request['date_created_gmt'],
                 'status' => $status,
                 'products' => implode(', ', $product_names),
+                'store_name' => $store_name,
             ];
         }
 

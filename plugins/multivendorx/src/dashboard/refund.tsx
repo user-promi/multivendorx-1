@@ -407,15 +407,6 @@ const Refund: React.FC = () => {
                             {error}
                         </div>
                     )}
-                    
-                    {process.env.NODE_ENV === 'development' && (
-                        <div style={{ background: '#f0f0f1', padding: '10px', marginBottom: '10px', borderRadius: '4px' }}>
-                            <strong>Debug Info:</strong> 
-                            Total Rows: {totalRows} | 
-                            Current Data: {data.length} items | 
-                            Page Count: {pageCount}
-                        </div>
-                    )}
 
                     <Table
                         data={data}
