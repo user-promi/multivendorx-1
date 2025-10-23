@@ -92,8 +92,6 @@ class Frontend {
         }
     }
     
-    
-
     public function add_text_in_shop_and_single_product_page() {
         global $post;
 
@@ -253,8 +251,10 @@ class Frontend {
     }
 
     public function vendor_dashboard_template($template) {
+        $user = wp_get_current_user();
+
         //checking change later when all function ready
-        if (  is_user_logged_in() && is_page() && has_shortcode(get_post()->post_content, 'multivendorx_store_dashboard') ) {
+        if (  is_user_logged_in() && is_page() && has_shortcode(get_post()->post_content, 'multivendorx_store_dashboard') && in_array( 'store_owner', $user->roles, true ) ) {
             return MultiVendorX()->plugin_path . 'templates/store/store-dashboard.php';
         }
         return $template;
