@@ -150,7 +150,7 @@ const StoreTable: React.FC = () => {
         );
     };
 
-    // Column definitions
+    // Column definitions with sorting enabled
     const columns: ColumnDef<StoreRow>[] = [
         {
             id: 'select',
@@ -170,8 +170,8 @@ const StoreTable: React.FC = () => {
             ),
         },
         {
-            id: 'name',
-            accessorKey: 'name',
+            id: 'store_name',
+            accessorKey: 'store_name',
             enableSorting: true,
             header: __('Store', 'multivendorx'),
             cell: ({ row }) => {
@@ -244,6 +244,10 @@ const StoreTable: React.FC = () => {
             ),
         },
         {
+            id: 'primary_owner',
+            accessorKey: 'primary_owner',
+            enableSorting: true,
+            accessorFn: (row) => row.primary_owner?.name || row.primary_owner?.email || '',
             header: __('Primary Owner', 'multivendorx'),
             cell: ({ row }) => {
                 const primaryOwner = row.original.primary_owner;
@@ -267,9 +271,8 @@ const StoreTable: React.FC = () => {
             },
         },
         {
-            id: 'status_applied_on',
+            id: 'status',
             header: __('Status', 'multivendorx'),
-            enableSorting: true,
             cell: ({ row }) => {
                 const status = row.original.status || '';
                 const rawDate = row.original.applied_on;
@@ -301,6 +304,9 @@ const StoreTable: React.FC = () => {
                 return (
                     <TableCell title={`${status} - ${formattedDate}`}>
                         {getStatusBadge(status)}
+                        <div style={{ fontSize: '12px', color: '#666', marginTop: '4px' }}>
+                            {formattedDate}
+                        </div>
                     </TableCell>
                 );
             },
