@@ -8,11 +8,20 @@ import {
     RowSelectionState,
     PaginationState,
 } from '@tanstack/react-table';
+
 type StoreRow = {
     id?: number;
     store_name?: string;
     store_slug?: string;
     status?: string;
+    email?: string;
+    phone?: string;
+    primary_owner?: {
+        id: number;
+        name: string;
+        email: string;
+    };
+    applied_on?: string;
 };
 
 type StoreStatus = {
@@ -20,18 +29,20 @@ type StoreStatus = {
     name: string;
     count: number;
 };
+
 type FilterData = {
     typeCount?: any;
     searchField?: any;
-    orderBy?:any;
-    order?:any;
+    orderBy?: any;
+    order?: any;
 };
+
 export interface RealtimeFilter {
     name: string;
     render: (updateFilter: (key: string, value: any) => void, filterValue: any) => ReactNode;
 }
-const StoreTable: React.FC = () => {
 
+const StoreTable: React.FC = () => {
     const [data, setData] = useState<StoreRow[] | null>(null);
     const [storeStatus, setStoreStatus] = useState<StoreStatus[] | null>(null);
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
@@ -41,6 +52,7 @@ const StoreTable: React.FC = () => {
         pageSize: 10,
     });
     const [pageCount, setPageCount] = useState(0);
+    const [error, setError] = useState<string | null>(null);
 
     // Fetch total rows on mount
     useEffect(() => {
@@ -65,14 +77,15 @@ const StoreTable: React.FC = () => {
         requestData(rowsPerPage, currentPage);
         setPageCount(Math.ceil(totalRows / rowsPerPage));
     }, [pagination]);
+
     // Fetch data from backend.
     function requestData(
         rowsPerPage = 10,
         currentPage = 1,
         typeCount = '',
         searchField = '',
-        orderBy='',
-        order='',
+        orderBy = '',
+        order = '',
         startDate = new Date(new Date().getFullYear(), new Date().getMonth() - 1, 1),
         endDate = new Date()
     ) {
@@ -123,7 +136,6 @@ const StoreTable: React.FC = () => {
         rowsPerPage: number,
         currentPage: number,
         filterData: FilterData
-
     ) => {
         setData(null);
         requestData(
@@ -197,9 +209,13 @@ const StoreTable: React.FC = () => {
                                 window.location.href = `?page=multivendorx#&tab=stores&view&id=${row.original.id}`;
                             }}
                             className="product-wrapper"
+                            style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px' }}
                         >
-                            <img src="https://via.placeholder.com/50" style={{ width: 40, height: 40, objectFit: 'cover' }} />
-
+                            <img 
+                                src="https://via.placeholder.com/50" 
+                                style={{ width: 40, height: 40, objectFit: 'cover' }} 
+                                alt={row.original.store_name}
+                            />
                             <div className="details">
                                 <span className="title">{row.original.store_name || '-'}</span>
                                 <span>Since {formattedDate}</span>
@@ -213,28 +229,42 @@ const StoreTable: React.FC = () => {
             header: __('Contact', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell title={row.original.email || ''}>
-                    <>
-                        <div className="table-content">
-                            {row.original.email && (
-                                <div>
-                                    <b><i className="adminlib-mail"></i></b> {row.original.email}
-                                </div>
-                            )}
-                            <div> <b><i className="adminlib-form-phone"></i></b> 98745632103 </div>
+                    <div className="table-content">
+                        {row.original.email && (
+                            <div>
+                                <b><i className="adminlib-mail"></i></b> {row.original.email}
+                            </div>
+                        )}
+                        <div>
+                            <b><i className="adminlib-form-phone"></i></b> 
+                            {row.original.phone ? (row.original.phone) : '-'}
                         </div>
-                    </>
-                </TableCell >
+                    </div>
+                </TableCell>
             ),
         },
         {
             header: __('Primary Owner', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.email || ''}>
-                    <>
-                        <a href="#">Owner 1 </a>
-                    </>
-                </TableCell >
-            ),
+            cell: ({ row }) => {
+                const primaryOwner = row.original.primary_owner;
+                return (
+                    <TableCell title={primaryOwner?.name || primaryOwner?.email || ''}>
+                        {primaryOwner ? (
+                            <a 
+                                href={`/wp-admin/user-edit.php?user_id=${primaryOwner.id}`}
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    window.location.href = `/wp-admin/user-edit.php?user_id=${primaryOwner.id}`;
+                                }}
+                            >
+                                {primaryOwner.name || primaryOwner.email}
+                            </a>
+                        ) : (
+                            <span>-</span>
+                        )}
+                    </TableCell>
+                );
+            },
         },
         {
             id: 'status_applied_on',
@@ -270,9 +300,7 @@ const StoreTable: React.FC = () => {
 
                 return (
                     <TableCell title={`${status} - ${formattedDate}`}>
-                        <>
-                            {getStatusBadge(status)}
-                        </>
+                        {getStatusBadge(status)}
                     </TableCell>
                 );
             },
@@ -310,33 +338,29 @@ const StoreTable: React.FC = () => {
                                 },
                                 hover: true
                             },
-
                         ],
                     }}
                 />
             ),
         },
-
     ];
 
     const searchFilter: RealtimeFilter[] = [
         {
             name: 'searchField',
             render: (updateFilter, filterValue) => (
-                <>
-                    <div className="search-section">
-                        <input
-                            name="searchField"
-                            type="text"
-                            placeholder={__('Search', 'multivendorx')}
-                            onChange={(e) => {
-                                updateFilter(e.target.name, e.target.value);
-                            }}
-                            value={filterValue || ''}
-                        />
-                        <i className="adminlib-search"></i>
-                    </div>
-                </>
+                <div className="search-section">
+                    <input
+                        name="searchField"
+                        type="text"
+                        placeholder={__('Search', 'multivendorx')}
+                        onChange={(e) => {
+                            updateFilter(e.target.name, e.target.value);
+                        }}
+                        value={filterValue || ''}
+                    />
+                    <i className="adminlib-search"></i>
+                </div>
             ),
         },
     ];
@@ -362,26 +386,29 @@ const StoreTable: React.FC = () => {
     ];
 
     return (
-        <>
-            <div className="admin-table-wrapper">
-                <Table
-                    data={data}
-                    columns={columns as ColumnDef<Record<string, any>, any>[]}
-                    rowSelection={rowSelection}
-                    onRowSelectionChange={setRowSelection}
-                    defaultRowsPerPage={10}
-                    pageCount={pageCount}
-                    pagination={pagination}
-                    onPaginationChange={setPagination}
-                    handlePagination={requestApiForData}
-                    perPageOption={[10, 25, 50]}
-                    typeCounts={storeStatus as StoreStatus[]}
-                    totalCounts={totalRows}
-                    searchFilter={searchFilter}
-                    realtimeFilter={realtimeFilter}
-                />
-            </div>
-        </>
+        <div className="admin-table-wrapper">
+            {error && (
+                <div className="error-notice">
+                    {error}
+                </div>
+            )}
+            <Table
+                data={data}
+                columns={columns as ColumnDef<Record<string, any>, any>[]}
+                rowSelection={rowSelection}
+                onRowSelectionChange={setRowSelection}
+                defaultRowsPerPage={10}
+                pageCount={pageCount}
+                pagination={pagination}
+                onPaginationChange={setPagination}
+                handlePagination={requestApiForData}
+                perPageOption={[10, 25, 50]}
+                typeCounts={storeStatus as StoreStatus[]}
+                totalCounts={totalRows}
+                searchFilter={searchFilter}
+                realtimeFilter={realtimeFilter}
+            />
+        </div>
     );
 };
 
