@@ -54,7 +54,7 @@ class Ajax {
         }
         $self = new Products();
 
-        MultiVendorX()->util->get_template('views/html-product-attribute.php', ['attribute' => $attribute, 'metabox_class' => $metabox_class, 'i' => $i, 'self' => $self] );        
+        MultiVendorX()->util->get_template('product/views/html-product-attribute.php', ['attribute' => $attribute, 'metabox_class' => $metabox_class, 'i' => $i, 'self' => $self] );        
 
         wp_die();
     }
@@ -122,7 +122,7 @@ class Ajax {
                 $variation_id = $variation_object->get_id();
                 $variation = get_post( $variation_id );
                 $variation_data = array_merge( array_map( 'maybe_unserialize', get_post_custom( $variation_id ) ), wc_get_product_variation_attributes( $variation_id ) ); // kept for BW compatibility.
-                MultiVendorX()->util->get_template('views/html-product-variations.php', array( 'variation_object' => $variation_object, 'variation_id' => $variation_id, 'variation_data' => $variation_data, 'variation' => $variation, 'product_object' => $product_object ) );      
+                MultiVendorX()->util->get_template('product/views/html-product-variations.php', array( 'variation_object' => $variation_object, 'variation_id' => $variation_id, 'variation_data' => $variation_data, 'variation' => $variation, 'product_object' => $product_object ) );      
                 $loop ++;
             }
         }
@@ -154,7 +154,7 @@ class Ajax {
         $variation_id = $variation_object->save();
         $variation = get_post( $variation_id );
         $variation_data = array_merge( array_map( 'maybe_unserialize', get_post_custom( $variation_id ) ), wc_get_product_variation_attributes( $variation_id ) ); // kept for BW compatibility.
-        MultiVendorX()->util->get_template('views/html-product-variations.php', array( 'variation_object' => $variation_object, 'variation_id' => $variation_id, 'variation_data' => $variation_data, 'variation' => $variation, 'product_object' => $product_object ) );      
+        MultiVendorX()->util->get_template('product/views/html-product-variations.php', array( 'variation_object' => $variation_object, 'variation_id' => $variation_id, 'variation_data' => $variation_data, 'variation' => $variation, 'product_object' => $product_object ) );      
                 
         wp_die();
     }
