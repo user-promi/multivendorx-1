@@ -71,6 +71,12 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
                 array( 'status' => 403 )
             );
         }
+
+        // Check if CSV download is requested
+        $format = $request->get_param( 'format' );
+        if ( $format === 'csv' ) {
+            return $this->download_csv( $request );
+        }
     
         $limit   = max( intval( $request->get_param( 'row' ) ), 10 );
         $page    = max( intval( $request->get_param( 'page' ) ), 1 );
@@ -101,6 +107,7 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
                 'value'   => array( $start_date, $end_date ),
             );
         }
+
         if ( $count ) {
             global $wpdb;
             $table_name  = "{$wpdb->prefix}" . Utill::TABLES['commission'];
@@ -116,10 +123,11 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
     
             return rest_ensure_response( (int) $total_count );
         }
+
         // Fetch commissions
         $commissions = CommissionUtil::get_commissions(
             $filter,
-            false // return stdClass instead of Commission object
+            false
         );
     
         $formatted_commissions = array();
@@ -177,6 +185,84 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
         ];
         return rest_ensure_response( $response );
     }
+
+    private function download_csv( $request ) {
+        $storeId    = $request->get_param( 'store_id' );
+        $status     = $request->get_param( 'status' );
+        $ids        = $request->get_param( 'ids' );
+        $start_date = sanitize_text_field( $request->get_param( 'startDate' ) );
+        $end_date   = sanitize_text_field( $request->get_param( 'endDate' ) );
+    
+        // Prepare filter for CommissionUtil
+        $filter = array();
+        if ( ! empty( $storeId ) ) {
+            $filter['store_id'] = intval( $storeId );
+        }
+        if ( ! empty( $status ) ) {
+            $filter['status'] = $status;
+        }
+        if ( ! empty( $start_date ) && ! empty( $end_date ) ) {
+            $filter['created_at'] = array(
+                'compare' => 'BETWEEN',
+                'value'   => array( date('Y-m-d 00:00:00', strtotime($start_date)), date('Y-m-d 23:59:59', strtotime($end_date)) ),
+            );
+        }
+    
+        // If specific IDs are requested
+        if ( ! empty( $ids ) ) {
+            $filter['id__in'] = array_map( 'intval', explode( ',', $ids ) );
+        }
+    
+        // Fetch commissions
+        $commissions = \MultiVendorX\Commission\CommissionUtil::get_commissions( $filter, false );
+        if ( empty( $commissions ) ) {
+            return new \WP_Error( 'no_data', __( 'No commission data found.', 'multivendorx' ), array( 'status' => 404 ) );
+        }
+    
+        // CSV headers
+        $headers = array(
+            'ID', 'Order ID', 'Store Name', 'Total Order Amount', 'Commission Amount',
+            'Facilitator Fee', 'Gateway Fee', 'Shipping Amount', 'Tax Amount',
+            'Commission Total', 'Status', 'Created At'
+        );
+    
+        // Build CSV data
+        $csv_output = fopen( 'php://output', 'w' );
+        ob_start();
+        fputcsv( $csv_output, $headers );
+    
+        foreach ( $commissions as $commission ) {
+            $store = new \MultiVendorX\Store\Store( $commission->store_id );
+            $store_name = $store ? $store->get('name') : '';
+    
+            fputcsv( $csv_output, array(
+                $commission->ID,
+                $commission->order_id,
+                $store_name,
+                $commission->total_order_amount,
+                $commission->commission_amount,
+                $commission->facilitator_fee,
+                $commission->gateway_fee,
+                $commission->shipping_amount,
+                $commission->tax_amount,
+                $commission->commission_total,
+                $commission->status,
+                $commission->created_at,
+            ));
+        }
+    
+        fclose( $csv_output );
+        $csv = ob_get_clean();
+    
+        // Send headers for browser download
+        header( 'Content-Type: text/csv' );
+        header( 'Content-Disposition: attachment; filename="commissions_' . date( 'Y-m-d' ) . '.csv"' );
+        header( 'Pragma: no-cache' );
+        header( 'Expires: 0' );
+    
+        echo $csv;
+        exit;
+    }    
     
     public function get_item( $request ) {
         // Verify nonce

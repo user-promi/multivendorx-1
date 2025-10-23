@@ -398,7 +398,13 @@ const Commission: React.FC = () => {
                     handlePagination={requestApiForData}
                     perPageOption={[10, 25, 50]}
                     typeCounts={commissionStatus as CommissionStatus}
-                    // bulkActionComp={() => <BulkAction />}
+                    bulkActionComp={() => (
+                        <BulkActions 
+                            selectedRows={rowSelection} 
+                            data={data}
+                            filterData={currentFilterData}
+                        />
+                    )}
                     totalCounts={totalRows}
                 />
             </div>
