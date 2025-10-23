@@ -404,28 +404,6 @@ class StoreUtil {
         return $policies;
     }
 
-    // public static function get_endpoint_url($page = '', $sub = '') {
-    //     if (get_option('permalink_structure')) {
-    //         $url = home_url('/dashboard');
-    //         if ($page && $page !== 'dashboard') {
-    //             $url .= '/' . $page;
-    //         }
-    //         if ($sub) {
-    //             $url .= '/' . $sub;
-    //         }
-    //     } else {
-    //         $url = add_query_arg(array('dashboard' => '1'), home_url('/'));
-    //         if ($page) {
-    //             $url = add_query_arg('tab', $page, $url);
-    //         }
-
-    //         if ($sub) {
-    //             $url = add_query_arg('subtab', $sub, $url);
-    //         }
-    //     }
-    //     return esc_url($url);
-    // }
-
     public static function get_endpoint_url($page = '', $sub = '', $value = '') {
         if (get_option('permalink_structure')) {
             $url = home_url('/dashboard');
@@ -439,7 +417,15 @@ class StoreUtil {
                 $url .= '/' . $value;
             }
         } else {
-            $url = add_query_arg(array('dashboard' => '1'), home_url('/'));
+            $page_id = isset($_GET['page_id']) ? (int) $_GET['page_id'] : 0;
+
+            if ($page_id) {
+                $base_url = add_query_arg(['page_id' => $page_id], home_url('/'));
+            } else {
+                $base_url = home_url('/');
+            }
+
+            $url = add_query_arg(['dashboard' => '1'], $base_url);
             if ($page) {
                 $url = add_query_arg('tab', $page, $url);
             }
@@ -450,6 +436,7 @@ class StoreUtil {
                 $url = add_query_arg('value', $value, $url);
             }
         }
+
         return esc_url($url);
     }
 
