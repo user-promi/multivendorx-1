@@ -148,6 +148,9 @@ const CustomerServices = () => {
                         </div>
                         <RefundRequest />
                     </div>
+                </div>
+
+                <div className="row">
                     <div className="column">
                         <div className="card-header">
                             <div className="left">
@@ -163,6 +166,7 @@ const CustomerServices = () => {
                         <AbuseReports />
                     </div>
                 </div>
+                
 
                 <div className="row">
                     <div className="column">
