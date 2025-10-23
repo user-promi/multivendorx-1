@@ -39,8 +39,16 @@ class Ajax {
         if ($user_id && $store_id) {
             update_user_meta($user_id, 'multivendorx_active_store', $store_id);
 
+            $dashboard_page_id = (int) MultiVendorX()->setting->get_setting('store_dashboard_page');
+            if ($dashboard_page_id) {
+                $redirect_url = get_permalink($dashboard_page_id);
+            } else {
+                // fallback
+                $redirect_url = home_url('/dashboard');
+            }
+
             wp_send_json_success([
-                'redirect' => site_url('/dashboard')
+                'redirect' => $redirect_url
             ]);
         }
     }

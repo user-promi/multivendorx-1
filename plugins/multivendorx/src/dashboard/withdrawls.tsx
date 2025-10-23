@@ -5,8 +5,8 @@ import { getApiLink, CommonPopup, BasicInput } from 'zyra';
 
 const History: React.FC = () => {
     const [data, setData] = useState<any>([]);
-    const [amount, setAmount] = useState<number | "">("");
-
+    const [amount, setAmount] = useState<number>(0);
+    const [error, setError] = useState<string>("");
     const [requestWithdrawal, setRequestWithdrawal] = useState(false);
 
     useEffect(() => {
@@ -48,7 +48,22 @@ const History: React.FC = () => {
 
     ];
 
+    const handleAmountChange = (value: number) => {
+        if (value > data.available_balance) {
+            setError(`Amount cannot be greater than available balance (${data.available_balance})`);
+        } else {
+            setError("");
+        }
+        setAmount(value);
+    };
+
     const handleWithdrawal = () => {
+        if (amount > data.available_balance) {
+            setError(`Amount cannot be greater than available balance (${data.available_balance})`);
+            setRequestWithdrawal(true);
+            return;
+        }
+
         axios({
             method: 'PUT',
             url: getApiLink(appLocalizer, `transaction/${appLocalizer.store_id}`),
@@ -279,10 +294,9 @@ const History: React.FC = () => {
                                     type="number"
                                     name="amount"
                                     value={amount}
-                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                        setAmount(Number(e.target.value))
-                                    }
+                                    onChange={(e) => handleAmountChange(Number(e.target.value))}
                                 />
+                                {error && <p className="error-message" style={{ color: "red" }}>{error}</p>}
                             </div>
                         </div>
                     </div>

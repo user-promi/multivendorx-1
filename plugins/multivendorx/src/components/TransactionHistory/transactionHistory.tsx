@@ -20,7 +20,8 @@ export const TransactionHistory: React.FC = () => {
         endDate: null,
     });
     const [requestWithdrawal, setRequestWithdrawal] = useState(false);
-    const [amount, setAmount] = useState<number | "">("");
+    const [amount, setAmount] = useState<number>(0);
+    const [error, setError] = useState<string>("");
     const [note, setNote] = useState<any | "">("");
     const [storeData, setStoreData] = useState<any>(null);
     const [optionList, setOptionList] = React.useState([]);
@@ -88,6 +89,14 @@ export const TransactionHistory: React.FC = () => {
         setOptionList(mergedOptions);
     }, [storeData]);
 
+    const handleAmountChange = (value: number) => {
+        if (value > data.available_balance) {
+        setError(`Amount cannot be greater than available balance (${data.available_balance})`);
+        } else {
+        setError(""); // clear error if valid
+        }
+        setAmount(value);
+    };
 
     const handleSearch = (inputValue: string) => {
         if (!inputValue) {
@@ -101,6 +110,12 @@ export const TransactionHistory: React.FC = () => {
     };
 
     const handleWithdrawal = () => {
+        if (amount > data.availableBalance) {
+            setError(`Amount cannot be greater than available balance (${data.availableBalance})`);
+            setRequestWithdrawal(true);
+            return;
+        }
+
         axios({
             method: 'PUT',
             url: getApiLink(appLocalizer, `transaction/${selectedStore?.value}`),
@@ -264,10 +279,9 @@ export const TransactionHistory: React.FC = () => {
                                         type="number"
                                         name="amount"
                                         value={amount}
-                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                            setAmount(Number(e.target.value))
-                                        }
+                                        onChange={(e) => handleAmountChange(Number(e.target.value))}
                                     />
+                                    {error && <p className="error-message" style={{ color: "red" }}>{error}</p>}
                                 </div>
                                 <div className="form-group">
                                     <label htmlFor="payment_method">Payment Processor</label>

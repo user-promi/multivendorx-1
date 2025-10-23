@@ -192,6 +192,7 @@ class Install {
             `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             PRIMARY KEY (`ID`)
         ) $collate;";
+
         $sql_shipping_zone = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}" . Utill::TABLES['shipping_zone'] . "` (
             `instance_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
             `method_id` varchar(255) NOT NULL DEFAULT '',
@@ -209,7 +210,14 @@ class Install {
             `location_code` varchar(255) DEFAULT NULL,
             `location_type` varchar(255) DEFAULT NULL,
             PRIMARY KEY (`id`)
+        ) $collate;";
+
          $sql_product_map = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}" . Utill::TABLES['products_map'] . "` (
+            `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+            `product_map_id` BIGINT UNSIGNED NOT NULL DEFAULT 0,
+            `product_id` BIGINT UNSIGNED NOT NULL DEFAULT 0,
+            `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (`ID`)
         ) $collate;";
         
         // Include upgrade functions if not loaded.
