@@ -32,13 +32,13 @@ if(isset($more_product_array) && is_array($more_product_array) && count($more_pr
 			usort($more_product_array, function($a, $b){return $a['price_val'] - $b['price_val'];});
 			$more_product_array = array_reverse (  $more_product_array);
 		}
-		elseif($sorting == 'rating') {
-			$more_product_array = mvx_sort_by_rating_multiple_product($more_product_array);			
-		}
-		elseif($sorting == 'rating_low') {
-			$more_product_array = mvx_sort_by_rating_multiple_product($more_product_array);
-			$more_product_array = array_reverse (  $more_product_array);			
-		}
+		// elseif($sorting == 'rating') {
+		// 	$more_product_array = mvx_sort_by_rating_multiple_product($more_product_array);			
+		// }
+		// elseif($sorting == 'rating_low') {
+		// 	$more_product_array = mvx_sort_by_rating_multiple_product($more_product_array);
+		// 	$more_product_array = array_reverse (  $more_product_array);			
+		// }
 	}
 	foreach ($more_product_array as $more_product ) {	
             $_product = wc_get_product($more_product['product_id']);
