@@ -239,7 +239,7 @@ const ViewStore = () => {
             label: '',
             iconClass: 'adminlib-create',
             onClick: () =>
-             window.location.href = `?page=multivendorx#&tab=stores&edit/${rowData.id}`,
+             window.location.href = `?page=multivendorx#&tab=stores&edit/${viewId}`,
             className: 'admin-badge yellow',
             tooltip: 'Edit'
           },
