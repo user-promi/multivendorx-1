@@ -18,7 +18,10 @@ $selectedTemplate = isset($template['selectedPalette']) ? $template['selectedPal
 
 ?>
 
-<div class="multivendorx-banner <?php echo esc_attr($selectedTemplate); ?>" style="background: url(<?php echo esc_url($banner); ?>)">
+<div class="multivendorx-banner <?php echo esc_attr($selectedTemplate); ?>">
+    <div class="banner-img">
+        <img src="<?php echo esc_url($banner); ?>" alt="">
+    </div>
     <div class='banner-right'>
         <div class="social-profile">
             <?php if (!empty($meta_data['facebook'])): ?>

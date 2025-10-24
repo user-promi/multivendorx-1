@@ -44,8 +44,7 @@ $login_url = add_query_arg('redirect_to', $current_url, $myaccount_url);
                     </div>
                 </li>
             <?php endforeach; ?>
-        <?php else: ?>
-            <li>No questions yet.</li>
+            
         <?php endif; ?>
     </ul>
 
