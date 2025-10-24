@@ -79,11 +79,11 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             ],
         ]);
 
-        // register_rest_route(MultiVendorX()->rest_namespace, '/states/(?P<country>[A-Z]{2})', [
-        //     'methods'               => \WP_REST_Server::READABLE,
-        //     'callback'              => [$this, 'get_states_by_country'],
-        //     'permission_callback'   => [$this, 'get_items_permissions_check'],
-        // ]);
+        register_rest_route(MultiVendorX()->rest_namespace, '/states/(?P<country>[A-Z]{2})', [
+            'methods'               => \WP_REST_Server::READABLE,
+            'callback'              => [$this, 'get_states_by_country'],
+            'permission_callback'   => [$this, 'get_items_permissions_check'],
+        ]);
 
     }
 
@@ -218,7 +218,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
 
     public function get_items( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
-
+    
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
             
@@ -231,10 +231,10 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                     "\tData: " . wp_json_encode( $error->get_error_data() ) . "\n"
                 );
             }
-
+    
             return $error;
         }
-
+    
         try {
             
             if ( $request->get_param( 'pending_withdraw' ) ) {
@@ -299,17 +299,21 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                 $args['orderBy'] = $orderBy;
                 $args['order']   = $order;
             }
-
+    
             $stores = StoreUtil::get_store_information( $args );
-
+    
             $formatted_stores = array();
             foreach ( $stores as $store ) {
                 $store_meta = Store::get_store_by_id( (int) $store['ID'] );
-
+    
                 // Get primary owner information using Store object
                 $primary_owner_id = StoreUtil::get_primary_owner( $store['ID'] );
                 $primary_owner = $this->get_user_info( $primary_owner_id );
-
+    
+                // Get store image and banner from meta
+                $store_image = $store_meta->meta_data['image'] ?? '';
+                $store_banner = $store_meta->meta_data['banner'] ?? '';
+    
                 $formatted_stores[] = apply_filters(
                     'multivendorx_stores',
                     array(
@@ -321,13 +325,15 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                         'phone'      => $store_meta->meta_data['phone'] ?? $store_meta->meta_data['_phone'] ?? $store_meta->meta_data['contact_number'] ?? '',
                         'primary_owner' => $primary_owner,
                         'applied_on' => $store['create_time'],
+                        'store_image' => $store_image, // Add store image
+                        'store_banner' => $store_banner, // Add store banner
                     )
                 );
             }
             $all = StoreUtil::get_store_information(['count' => true]);
             $active = StoreUtil::get_store_information(['status' => 'active','count' => true]);
             $pending = StoreUtil::get_store_information(['status' => 'pending','count' => true]);
-
+    
             $response = [
                 'stores'  => $formatted_stores,
                 'all'     => $all,
@@ -335,7 +341,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                 'pending' => $pending,
             ];
             return rest_ensure_response( $response);
-
+    
         } catch ( \Exception $e ) {
             MultiVendorX()->util->log(
                 "MVX REST Exception:\n" .
@@ -343,7 +349,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                 "\tFile: " . $e->getFile() . "\n" .
                 "\tLine: " . $e->getLine() . "\n"
             );
-
+    
             return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
         }
     }
@@ -657,6 +663,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
     
 
     public function get_states_by_country($request) {
+        file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":orders: : " . var_export('hi', true) . "\n", FILE_APPEND);
         $country_code = $request->get_param('country');
         $states = WC()->countries->get_states($country_code);
 

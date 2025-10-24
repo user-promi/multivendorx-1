@@ -78,7 +78,7 @@ const Products: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
             })
             .catch(() => setData([]));
     };
-
+console.log(data)
     useEffect(() => {
         const currentPage = pagination.pageIndex + 1;
         requestData(pagination.pageSize, currentPage);
@@ -173,6 +173,13 @@ const Products: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
                 const categories = row.original.categories || [];
                 const categoryNames = categories.map((c) => c.name).join(', ') || '-';
                 return <TableCell title={categoryNames}>{categoryNames}</TableCell>;
+            },
+        },
+        {
+            header: __('Sold By', 'multivendorx'),
+            cell: ({ row }) => {
+                const storeName = row.original.store_name || [];
+                return <TableCell title={storeName}>{storeName}</TableCell>;
             },
         },
         {

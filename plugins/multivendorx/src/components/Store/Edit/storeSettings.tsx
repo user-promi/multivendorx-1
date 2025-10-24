@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
-import { BasicInput, TextArea, FileInput, getApiLink, SuccessNotice } from 'zyra';
+import { BasicInput, TextArea, FileInput, getApiLink, SuccessNotice, SelectInput } from 'zyra';
 
 declare global {
     interface Window {
@@ -476,6 +476,34 @@ const StoreSettings = ({ id }: { id: string | null }) => {
         autoSave(updatedFormData);
     };
 
+    // Handle country select change (from old code)
+    const handleCountryChange = (newValue: any) => {
+        if (!newValue || Array.isArray(newValue)) return;
+        
+        const updated = { 
+            ...formData, 
+            country: newValue.value, 
+            state: '' // reset state when country changes
+        };
+        
+        setFormData(updated);
+        autoSave(updated);
+        fetchStatesByCountry(newValue.value);
+    };
+
+    // Handle state select change (from old code)
+    const handleStateChange = (newValue: any) => {
+        if (!newValue || Array.isArray(newValue)) return;
+        
+        const updated = { 
+            ...formData, 
+            state: newValue.value 
+        };
+        
+        setFormData(updated);
+        autoSave(updated);
+    };
+
     const fetchStatesByCountry = (countryCode: string) => {
         axios({
             method: 'GET',
@@ -609,7 +637,7 @@ const StoreSettings = ({ id }: { id: string | null }) => {
                                         id="store-location-autocomplete"
                                         type="text"
                                         className="setting-form-input"
-                                        placeholder="Start typing your store address..."
+                                        placeholder="Search your store address..."
                                         defaultValue={addressData.location_address}
                                     />
                                 </div>
@@ -689,25 +717,26 @@ const StoreSettings = ({ id }: { id: string | null }) => {
                             </div>
                         </div>
 
+                        {/* Country and State Select Inputs (from old code) */}
                         <div className="form-group-wrapper">
                             <div className="form-group">
                                 <label htmlFor="product-name">Country</label>
-                                <BasicInput
+                                <SelectInput
                                     name="country"
                                     value={formData.country}
                                     options={appLocalizer.country_list || []}
                                     type="single-select"
-                                    onChange={handleAddressChange} 
+                                    onChange={handleCountryChange}
                                 />
                             </div>
                             <div className="form-group">
                                 <label htmlFor="product-name">State</label>
-                                <BasicInput
+                                <SelectInput
                                     name="state"
                                     value={formData.state}
                                     options={stateOptions}
                                     type="single-select"
-                                    onChange={handleAddressChange} 
+                                    onChange={handleStateChange}
                                 />
                             </div>
                         </div>
@@ -854,5 +883,3 @@ const StoreSettings = ({ id }: { id: string | null }) => {
 };
 
 export default StoreSettings;
-
-
