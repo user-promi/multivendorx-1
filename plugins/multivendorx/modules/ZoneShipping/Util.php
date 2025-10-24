@@ -19,7 +19,7 @@ class Util {
             $enabled_methods    = $zone->get_shipping_methods( true );
             $methods_id         = wp_list_pluck( $enabled_methods, 'id' );
 
-            if ( in_array( 'multivendorx_vendor_shipping', $methods_id ) ) {
+            if ( in_array( 'multivendorx_store_shipping', $methods_id ) ) {
                 $zones[$zone->get_id()]                            = $zone->get_data();
                 $zones[$zone->get_id()]['zone_id']                 = $zone->get_id();
                 $zones[$zone->get_id()]['formatted_zone_location'] = $zone->get_formatted_location();
@@ -31,7 +31,7 @@ class Util {
         $enabled_methods    = $overall_zone->get_shipping_methods( true );
         $methods_id         = wp_list_pluck( $enabled_methods, 'id' );
 
-        if ( in_array( 'multivendorx_vendor_shipping', $methods_id ) ) {
+        if ( in_array( 'multivendorx_store_shipping', $methods_id ) ) {
             $zones[$overall_zone->get_id()]                            = $overall_zone->get_data();
             $zones[$overall_zone->get_id()]['zone_id']                 = $overall_zone->get_id();
             $zones[$overall_zone->get_id()]['formatted_zone_location'] = $overall_zone->get_formatted_location();
@@ -160,6 +160,70 @@ class Util {
         return $method;
     }
 
+    public static function get_shipping_method( $instance_id ) {
+        global $wpdb;
+    
+        $table = $wpdb->prefix . Utill::TABLES['shipping_zone'];
+    
+        // Fetch single shipping method record
+        $result = $wpdb->get_row(
+            $wpdb->prepare(
+                "SELECT instance_id, method_id, zone_id, is_enabled, settings 
+                 FROM $table 
+                 WHERE instance_id = %d",
+                $instance_id
+            ),
+            ARRAY_A
+        );
+    
+        // Handle no record found
+        if ( ! $result ) {
+            return new \WP_Error(
+                'shipping_method_not_found',
+                __( 'Shipping method not found.', 'multivendorx' ),
+                [ 'status' => 404 ]
+            );
+        }
+    
+        // Unserialize settings if stored as serialized array
+        $result['settings'] = maybe_unserialize( $result['settings'] );
+    
+        return $result;
+    }
+
+    public static function delete_shipping_method( $instance_id ) {
+        global $wpdb;
+    
+        $table = $wpdb->prefix . Utill::TABLES['shipping_zone'];
+    
+        // Check if the shipping method exists
+        $shipping_method = self::get_shipping_method( $instance_id );
+    
+        // If the shipping method does not exist, return error
+        if ( is_wp_error( $shipping_method ) ) {
+            return $shipping_method;
+        }
+    
+        // Delete the shipping method
+        $result = $wpdb->delete(
+            $table,
+            [ 'instance_id' => $instance_id ],
+            [ '%d' ] // Data format (for instance_id)
+        );
+    
+        // Check if the delete operation was successful
+        if ( false === $result ) {
+            return new \WP_Error(
+                'delete_shipping_method_failed',
+                __( 'Failed to delete shipping method.', 'multivendorx' ),
+                [ 'status' => 500 ]
+            );
+        }
+    
+        // Return success message
+        return true;
+    }
+    
     public static function update_shipping_method( $args ) {
         global $wpdb;
 
@@ -170,8 +234,8 @@ class Util {
             'settings'  => maybe_serialize( $args['settings'] )
         );
 
-        $table_name = "{$wpdb->prefix}mvx_shipping_zone_methods";
-        $updated = $wpdb->update( $table_name, $data, array( 'instance_id' => $args['instance_id' ] ), array( '%s', '%d', '%d', '%s' ) );
+        $table = $wpdb->prefix . Utill::TABLES['shipping_zone'];
+        $updated = $wpdb->update( $table, $data, array( 'instance_id' => $args['instance_id' ] ), array( '%s', '%d', '%d', '%s' ) );
 
         if ( $updated ) {
             return $data;

@@ -90,11 +90,11 @@ class MultiVendorX_REST_Zone_Shipping_Controller extends \WP_REST_Controller {
             ] );
         }
     
-        // Extract parameters from request
-        $store_id  = intval( $request->get_param( 'storeId' ) );
-        $zone_id   = intval( $request->get_param( 'zoneID' ) );
-        $method_id = sanitize_text_field( $request->get_param( 'method' ) );
-        $settings  = $request->get_param( 'settings' );
+
+        $store_id      = intval( $request->get_param('store_id') );
+        $zone_id       = intval( $request->get_param('zone_id') );
+        $method_id     = sanitize_text_field( $request->get_param('method_id') );
+        $settings      = $request->get_param('settings');
     
         // Validate required fields
         if ( empty( $method_id ) ) {
@@ -127,7 +127,15 @@ class MultiVendorX_REST_Zone_Shipping_Controller extends \WP_REST_Controller {
     
         // Call your helper to add the shipping method
         $result = Util::add_shipping_methods( $data, $store_id );
-    
+
+        $shipping = new Shipping(); // instantiate your new shipping class
+        $shipping->set_post_data( $data['settings'] ); // pass saved settings
+        $shipping->process_admin_options(); // process/save settings
+        
+        // Clear WooCommerce shipping cache
+        \WC_Cache_Helper::get_transient_version('shipping', true);
+        // Log result
+
         // Handle response
         if ( is_wp_error( $result ) ) {
             return rest_ensure_response( [
@@ -148,11 +156,10 @@ class MultiVendorX_REST_Zone_Shipping_Controller extends \WP_REST_Controller {
     
 
     public function get_item( $request ) {
-        $zone_id = $request->get_param( 'zone_id' );
-        $store_id = $request->get_param( 'store_id' );
+        $instance_id = $request->get_param( 'instanceId' );
 
-        $zone = Util::get_zone( $zone_id, $store_id );
-        return rest_ensure_response( $zone );
+        $method = Util::get_shipping_method( $instance_id );
+        return rest_ensure_response( $method );
     }
     
     public function update_item( $request ) {
@@ -164,42 +171,80 @@ class MultiVendorX_REST_Zone_Shipping_Controller extends \WP_REST_Controller {
                 'message' => __( 'Invalid nonce', 'multivendorx' )
             ]);
         }
-    
-        $store_id      = intval($request->get_param('store_id'));
-        $zone_id       = intval($request->get_param('zone_id'));
-        $shipping_data = $request->get_param('shipping_data');
-        $action        = $request->get_param('action');
-        
-        // Handle "add shipping"
-        if ($action === 'add_shipping' && !empty($shipping_data['shippingMethod'])) {
-            $data = [
-                'zone_id'   => $zone_id,
-                'method_id' => sanitize_text_field($shipping_data['shippingMethod']),
-            ];
-    
-            $result = Util::add_shipping_methods($data, $store_id);
-    
-            // Log result
-    
-            if (is_wp_error($result)) {
-                return rest_ensure_response([
-                    'success' => false,
-                    'message' => $result->get_error_message(),
-                    'code'    => $result->get_error_code(),
-                    'data'    => $result->get_error_data()
-                ]);
-            }
-    
+
+        $store_id      = intval( $request->get_param('store_id') );
+        $zone_id       = intval( $request->get_param('zone_id') );
+        $method_id     = sanitize_text_field( $request->get_param('method_id') );
+        $settings      = $request->get_param('settings');
+        $instance_id   = $request->get_param('instance_id'); // optional, only for update
+
+        if ( ! $method_id || ! $zone_id || ! $store_id || ! $settings ) {
             return rest_ensure_response([
-                'success' => true,
-                'message' => __( 'Shipping method added successfully', 'multivendorx' ),
-                'insert_id' => $result
+                'success' => false,
+                'message' => __( 'Missing required parameters', 'multivendorx' )
             ]);
         }
-    
-        // Normal update
-        return rest_ensure_response([ 'success' => true ]);
+
+        // Prepare data for DB
+        $data = [
+            'method_id' => $method_id,
+            'zone_id'   => $zone_id,
+            'store_id'  => $store_id,
+            'settings'  => $settings
+        ];
+
+        // If instance_id is provided, update existing shipping method
+        if ( $instance_id ) {
+            $data['instance_id'] = intval( $instance_id );
+            $updated = Util::update_shipping_method( $data );
+
+            if ( $updated ) {
+                // Process settings in Shipping class
+                $shipping = new Shipping();
+                $shipping->set_post_data( $settings );
+                $shipping->process_admin_options();
+
+                // Clear WooCommerce shipping cache
+                \WC_Cache_Helper::get_transient_version('shipping', true);
+
+                return rest_ensure_response([
+                    'success' => true,
+                    'message' => __( 'Shipping method updated successfully', 'multivendorx' ),
+                    'data'    => $updated
+                ]);
+            }
+
+            return rest_ensure_response([
+                'success' => false,
+                'message' => __( 'Failed to update shipping method', 'multivendorx' )
+            ]);
+        }
+
+        // Otherwise, add new shipping method
+        $result = Util::add_shipping_methods( [ 'zone_id' => $zone_id, 'method_id' => $method_id ], $store_id );
+
+        if ( is_wp_error( $result ) ) {
+            return rest_ensure_response([
+                'success' => false,
+                'message' => $result->get_error_message(),
+                'code'    => $result->get_error_code(),
+                'data'    => $result->get_error_data()
+            ]);
+        }
+
+        // Process settings for new shipping method
+        $shipping = new Shipping();
+        $shipping->set_post_data( $settings );
+        $shipping->process_admin_options();
+        WC_Cache_Helper::get_transient_version('shipping', true);
+
+        return rest_ensure_response([
+            'success'   => true,
+            'message'   => __( 'Shipping method added successfully', 'multivendorx' ),
+            'insert_id' => $result
+        ]);
     }
+
     
     public function delete_item( $request ) {
         // Verify nonce
@@ -211,26 +256,21 @@ class MultiVendorX_REST_Zone_Shipping_Controller extends \WP_REST_Controller {
             ]);
         }
     
-        $store_id    = intval( $request->get_param('store_id') );
-        $zone_id     = intval( $request->get_param('zone_id') );
+        // Get the instance_id from the request
         $instance_id = intval( $request->get_param('instance_id') );
     
-        if ( ! $store_id || ! $zone_id || ! $instance_id ) {
+        // Validate the instance_id
+        if ( ! $instance_id ) {
             return rest_ensure_response([
                 'success' => false,
-                'message' => __( 'Missing required parameters', 'multivendorx' )
+                'message' => __( 'Missing required instance_id parameter', 'multivendorx' )
             ]);
         }
     
-        // Call delete function
-        $result = Util::delete_shipping_methods(
-            [
-                'zone_id'     => $zone_id,
-                'instance_id' => $instance_id,
-            ],
-            $store_id
-        );
+        // Call the delete_shipping_method function
+        $result = Util::delete_shipping_method( $instance_id );
     
+        // Check if an error occurred during deletion
         if ( is_wp_error( $result ) ) {
             return rest_ensure_response([
                 'success' => false,
@@ -238,9 +278,11 @@ class MultiVendorX_REST_Zone_Shipping_Controller extends \WP_REST_Controller {
             ]);
         }
     
+        // Return success message if deletion was successful
         return rest_ensure_response([
             'success' => true,
             'message' => __( 'Shipping method deleted successfully', 'multivendorx' )
         ]);
     }
+    
 }

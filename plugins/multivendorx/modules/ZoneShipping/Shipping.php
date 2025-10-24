@@ -12,7 +12,7 @@ class Shipping extends \WC_Shipping_Method {
     public $fee_cost;
     
     public function __construct( $instance_id = 0 ) {
-        $this->id                   = 'multivendorx_vendor_shipping';
+        $this->id                   = 'multivendorx_store_shipping';
         $this->instance_id          = absint( $instance_id );
         $this->method_title         = __( 'Store Shipping', 'multivendorx' );
         $this->method_description   = __( 'Charge varying rates based on user defined conditions', 'multivendorx' );
@@ -37,42 +37,37 @@ class Shipping extends \WC_Shipping_Method {
     */
     protected function evaluate_cost( $sum, $args = array() ) {
         include_once( WC()->plugin_path() . '/includes/libraries/class-wc-eval-math.php' );
-
+    
         // Allow 3rd parties to process shipping cost arguments
         $args           = apply_filters( 'woocommerce_evaluate_shipping_cost_args', $args, $sum, $this );
         $locale         = localeconv();
         $decimals       = array( wc_get_price_decimal_separator(), $locale['decimal_point'], $locale['mon_decimal_point'], ',' );
         $this->fee_cost = $args['cost'];
-
+    
         // Expand shortcodes
         add_shortcode( 'fee', array( $this, 'fee' ) );
-
+    
         $sum = do_shortcode( str_replace(
-          array(
-              '[qty]',
-              '[cost]',
-          ),
-          array(
-              $args['qty'],
-              $args['cost'],
-          ),
+          array('[qty]', '[cost]'),
+          array($args['qty'], $args['cost']),
           $sum
         ) );
-
+    
         remove_shortcode( 'fee', array( $this, 'fee' ) );
-
+    
         // Remove whitespace from string
         $sum = preg_replace( '/\s+/', '', $sum );
-
+    
         // Remove locale from string
         $sum = str_replace( $decimals, '.', $sum );
-
+    
         // Trim invalid start/end characters
         $sum = rtrim( ltrim( $sum, "\t\n\r\0\x0B+*/" ), "\t\n\r\0\x0B+-*/" );
-
-        // Do the math
-        return $sum ? WC_Eval_Math::evaluate( $sum ) : 0;
+    
+        // Do the math (FIXED: global namespace)
+        return $sum ? \WC_Eval_Math::evaluate( $sum ) : 0;
     }
+    
 
     /**
     * Work out fee (shortcode).
@@ -184,131 +179,134 @@ class Shipping extends \WC_Shipping_Method {
     */
     public function calculate_shipping( $package = array() ) {
         $rates = array();
-        
-        $zone = WC_Shipping_Zones::get_zone_matching_package( $package );
-        $vendor_id = $package['vendor_id'];
 
-        if ( empty( $vendor_id ) ) {
-            return;
+        // Group products by store ID
+        $products = $package['contents'];
+        $seller_products = [];
+    
+        foreach ( $products as $product ) {
+            $id = $product['product_id'];
+            $store_id = get_post_meta( $id, 'multivendorx_store_id', true );
+    
+            if ( ! empty( $store_id ) ) {
+                $seller_products[ (int) $store_id ][] = $product;
+            }
         }
-        
-        $shipping_methods = Util::get_shipping_methods( $zone->get_id(), $vendor_id );
-        /*
-        * Contributing Author: Vivek Athalye @vnathalye
-        */
-        $shipping_methods = apply_filters('mvx_get_shipping_methods_for_shipping_address', $shipping_methods, $package );
-        /*if ( !self::is_shipping_enabled_for_seller( $vendor_id ) ) {
-            return;
-        }*/
-
-        $vendor_shipping_options = get_user_meta($vendor_id, 'vendor_shipping_options', true) ? get_user_meta($vendor_id, 'vendor_shipping_options', true) : '';
-        if ( get_mvx_vendor_settings( 'enabled_distance_by_shipping_for_vendor', 'general' ) && 'Enable' === get_mvx_vendor_settings( 'enabled_distance_by_shipping_for_vendor', 'general' ) && $vendor_shipping_options && $vendor_shipping_options == 'distance_by_shipping') {
-            return;
+    
+        if ( empty( $seller_products ) ) {
+            return; // no store info found
         }
 
-        if ( get_mvx_vendor_settings( 'enabled_shipping_by_country_for_vendor', 'general' ) && 'Enable' === get_mvx_vendor_settings( 'enabled_shipping_by_country_for_vendor', 'general' ) && $vendor_shipping_options && $vendor_shipping_options == 'shipping_by_country') {
-            return;
-        }
+        // Loop through each store
+        foreach ( $seller_products as $store_id => $products ) {
+            $zone = WC_Shipping_Zones::get_zone_matching_package( $package );
 
-        if ( empty( $shipping_methods ) ) {
-            return;
-        }
+            // Get shipping methods for this store
+            $shipping_methods = Util::get_shipping_methods( $zone->get_id(), $store_id );
 
-        foreach ( $shipping_methods as $key => $method ) {
-            $tax_rate = ( $method['settings']['tax_status'] == 'none' ) ? false : '';
-            $has_costs     = false;
-            $cost = 0;
-
-            if ( 'yes' != $method['enabled'] ) {
+            if ( empty( $shipping_methods ) ) {
                 continue;
             }
-
-            if ( $method['id'] == 'flat_rate' ) { 
-                $setting_cost = isset( $method['settings']['cost'] ) ? stripslashes_deep( $method['settings']['cost'] ) : '';
-
-                if ( '' !== $setting_cost ) {
-                    $has_costs = true;
-                    $cost = $this->evaluate_cost( $setting_cost, array(
-                        'qty'  => $this->get_package_item_qty( $package ),
-                        'cost' => $package['contents_cost'],
-                    ) );
+            // Filter shipping methods (optional)
+            $shipping_methods = apply_filters('mvx_get_shipping_methods_for_shipping_address', $shipping_methods, $package, $store_id );
+    
+            foreach ( $shipping_methods as $key => $method ) {
+                $tax_rate = ( $method['settings']['tax_status'] == 'none' ) ? false : '';
+                $has_costs = false;
+                $cost = 0;
+    
+                if ( 'yes' != $method['enabled'] ) {
+                    continue;
                 }
-
-                // Add shipping class costs.
-                $shipping_classes = WC()->shipping->get_shipping_classes();
-
-                if ( ! empty( $shipping_classes ) ) {
-                    $found_shipping_classes = $this->find_shipping_classes( $package );                   
-                    $highest_class_cost     = 0;
-                    $calculation_type = ! empty( $method['settings']['calculation_type'] ) ? $method['settings']['calculation_type'] : 'class';
-                    foreach ( $found_shipping_classes as $shipping_class => $products ) {                       
-                          // Also handles BW compatibility when slugs were used instead of ids
-                        $shipping_class_term = get_term_by( 'slug', $shipping_class, 'product_shipping_class' );
-                        $class_cost_string   = $shipping_class_term && $shipping_class_term->term_id
-                        ? ( ! empty( $method['settings']['class_cost_' . $shipping_class_term->term_id ] ) ? stripslashes_deep( $method['settings']['class_cost_' . $shipping_class_term->term_id] ) : '' )
-                        : ( ! empty( $method['settings']['no_class_cost'] ) ? $method['settings']['no_class_cost'] : '' );
-
-                        if ( '' === $class_cost_string ) {
-                            continue;
-                        }
-
-                        $has_costs  = true;
-
-                        $class_cost = $this->evaluate_cost( $class_cost_string, array(
-                            'qty'  => array_sum( wp_list_pluck( $products, 'quantity' ) ),
-                            'cost' => array_sum( wp_list_pluck( $products, 'line_total' ) ),
+    
+                // Flat rate shipping
+                if ( $method['id'] == 'flat_rate' ) {
+                    $setting_cost = isset( $method['settings']['cost'] ) ? stripslashes_deep( $method['settings']['cost'] ) : '';
+    
+                    if ( '' !== $setting_cost ) {
+                        $has_costs = true;
+                        $cost = $this->evaluate_cost( $setting_cost, array(
+                            'qty'  => $this->get_package_item_qty( $package ),
+                            'cost' => $package['contents_cost'],
                         ) );
-
-                        if ( 'class' === $calculation_type ) {
-                            $cost += $class_cost;
-                        } else {
-                            $highest_class_cost = $class_cost > $highest_class_cost ? $class_cost : $highest_class_cost;
+                    }
+    
+                    // Shipping class costs
+                    $shipping_classes = WC()->shipping->get_shipping_classes();
+                    if ( ! empty( $shipping_classes ) ) {
+                        $found_shipping_classes = $this->find_shipping_classes( $package );
+                        $highest_class_cost = 0;
+                        $calculation_type = ! empty( $method['settings']['calculation_type'] ) ? $method['settings']['calculation_type'] : 'class';
+    
+                        foreach ( $found_shipping_classes as $shipping_class => $products_in_class ) {
+                            $shipping_class_term = get_term_by( 'slug', $shipping_class, 'product_shipping_class' );
+                            $class_cost_string = $shipping_class_term && $shipping_class_term->term_id
+                                ? ( ! empty( $method['settings']['class_cost_' . $shipping_class_term->term_id] ) ? stripslashes_deep( $method['settings']['class_cost_' . $shipping_class_term->term_id] ) : '' )
+                                : ( ! empty( $method['settings']['no_class_cost'] ) ? $method['settings']['no_class_cost'] : '' );
+    
+                            if ( '' === $class_cost_string ) {
+                                continue;
+                            }
+    
+                            $has_costs = true;
+    
+                            $class_cost = $this->evaluate_cost( $class_cost_string, array(
+                                'qty'  => array_sum( wp_list_pluck( $products_in_class, 'quantity' ) ),
+                                'cost' => array_sum( wp_list_pluck( $products_in_class, 'line_total' ) ),
+                            ) );
+    
+                            if ( 'class' === $calculation_type ) {
+                                $cost += $class_cost;
+                            } else {
+                                $highest_class_cost = max( $highest_class_cost, $class_cost );
+                            }
                         }
-                  }
-
-                  if ( 'order' === $calculation_type && $highest_class_cost ) {
-                      $cost += $highest_class_cost;
-                  }
+    
+                        if ( 'order' === $calculation_type && $highest_class_cost ) {
+                            $cost += $highest_class_cost;
+                        }
+                    }
+    
+                } elseif ( 'free_shipping' == $method['id'] ) {
+                    $is_available = self::free_shipping_is_available( $package, $method );
+    
+                    if ( $is_available ) {
+                        $cost = '0';
+                        $has_costs = true;
+                    }
+                } else { // local pickup or other methods
+                    if ( isset( $method['settings']['cost'] ) && $method['settings']['cost'] != '' ) {
+                        $has_costs = true;
+                        $cost = $method['settings']['cost'];
+                    }
                 }
-
-            } elseif ( 'free_shipping' == $method['id'] ) {
-                $is_available = self::free_shipping_is_available( $package, $method );
-
-                if ( $is_available ) {
-                    $cost = '0';
-                    $has_costs = true;
+    
+                if ( ! $has_costs ) {
+                    continue;
                 }
-            } else {
-                if ( isset( $method['settings']['cost'] ) && $method['settings']['cost'] != '' ) {
-                    $has_costs = true;
-                    $cost = $method['settings']['cost'];
-                }
+    
+                $rates[] = array(
+                    'id'          => $this->get_method_rate_id( $method ),
+                    'label'       => $method['title'],
+                    'cost'        => $cost,
+                    'description' => ! empty( $method['settings']['description'] ) ? $method['settings']['description'] : '',
+                    'taxes'       => $tax_rate,
+                    'default'     => 'off'
+                );
             }
-
-
-            if ( ! $has_costs ) {
-                continue;
-            }
-
-            $rates[] = array(
-                'id'          => $this->get_method_rate_id( $method ),
-                'label'       => $method['title'],
-                'cost'        => $cost,
-                'description' => ! empty( $method['settings']['description'] ) ? $method['settings']['description'] : '',
-                'taxes'       => $tax_rate,
-                'default'     => 'off'
-            );
         }
-        
-        $rates = apply_filters('mvx_get_rates_for_custom_shipping', $rates, $package );
-        // send shipping rates to WooCommerce
-        if( is_array( $rates ) && count( $rates ) > 0 ) {
-            // cycle through rates to send and alter post-add settings
-            foreach( $rates as $key => $rate ) { 
+    
+        // Apply filters
+        $rates = apply_filters('mvx_get_rates_for_custom_shipping', $rates, $package);
+    
+        // Send rates to WooCommerce
+        if ( is_array( $rates ) && count( $rates ) > 0 ) {
+            foreach ( $rates as $rate ) {
                 $this->add_rate( apply_filters( 'mvx_vendor_before_add_shipping_rates', $rate, $package ) );
             }
         }
     }
+    
 
     /**
     * See if free shipping is available based on the package and cart.
@@ -318,6 +316,7 @@ class Shipping extends \WC_Shipping_Method {
     * @return bool
     */
     public static function free_shipping_is_available( $package, $method ) {
+        return true;
         if (isset( $method['settings']['requires'] ) && $method['settings']['requires'] == 'coupon') {
             $coupon_code = $package['applied_coupons'] ? reset($package['applied_coupons']) : '';
             $coupon = new WC_Coupon( $coupon_code );
@@ -360,6 +359,7 @@ class Shipping extends \WC_Shipping_Method {
     * @return void
     */
     public function is_available( $package ) {
+        return true;
         $vendor_id = isset( $package['vendor_id'] ) ? $package['vendor_id'] : '';
 
         $destination_country = isset( $package['destination']['country'] ) ? $package['destination']['country'] : '';
