@@ -25,14 +25,16 @@ class Shortcode {
     }
 
     public function frontend_scripts() {
-        wp_enqueue_script( 'wp-element' );
-        wp_enqueue_media();
-        FrontendScripts::load_scripts();
-        FrontendScripts::enqueue_script( 'multivendorx-dashboard-components-script' );
-        FrontendScripts::enqueue_script( 'multivendorx-dashboard-script' );
-        FrontendScripts::localize_scripts( 'multivendorx-dashboard-script' );
-        FrontendScripts::enqueue_style( 'multivendorx-dashboard-style' );
-        wp_enqueue_style( 'dashicons' );
+        
+
+            wp_enqueue_script( 'wp-element' );
+            wp_enqueue_media();
+            FrontendScripts::load_scripts();
+            FrontendScripts::enqueue_script( 'multivendorx-dashboard-components-script' );
+            FrontendScripts::enqueue_script( 'multivendorx-dashboard-script' );
+            FrontendScripts::localize_scripts( 'multivendorx-dashboard-script' );
+            FrontendScripts::enqueue_style( 'multivendorx-dashboard-style' );
+            wp_enqueue_style( 'dashicons' );
 
         FrontendScripts::enqueue_script( 'multivendorx-registration-form-script' );
         FrontendScripts::localize_scripts( 'multivendorx-registration-form-script' );
@@ -41,12 +43,13 @@ class Shortcode {
         FrontendScripts::localize_scripts( 'multivendorx-store-dashboard-script' );
         FrontendScripts::enqueue_style( 'multivendorx-store-product-style' );
 
-        ?>
-        <style>
-            <?php 
-            echo MultiVendorX()->setting->get_setting('custom_css_product_page', []);?>
-        </style>
-        <?php
+            ?>
+            <style>
+                <?php 
+                echo MultiVendorX()->setting->get_setting('custom_css_product_page', []);?>
+            </style>
+            <?php
+        
     }
 
     public static function dequeue_all_styles_on_page()

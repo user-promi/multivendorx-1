@@ -14,10 +14,17 @@ if ($store) {
         $show_meet_text = apply_filters('mvx_show_meet_seller_text', true, $details);
 
         if ($show_meet_text) {
+            $store_url = esc_url(MultiVendorX()->store->storeutil->get_store_url($store->get_id()));
+            $store_name_link = sprintf(
+                '<a href="%1$s">%2$s</a>',
+                $store_url,
+                esc_html($details['name'])
+            );
+
             $heading_text = sprintf(
                 __('Meet our %1$s of shop %2$s', 'multivendorx'),
                 esc_html($details['owner_name']),
-                esc_html($details['name'])
+                $store_name_link
             );
         } else {
             $heading_text = esc_html($details['name']);
@@ -28,9 +35,9 @@ if ($store) {
         $html .= '<div class="header">' . $details['logo_html'];
         $html .= '<div class="heading-wrapper"> <h4 class="heading">' . $heading_text . '</h4>';
 
-        $rating_html = '<div class="admin-badge yellow"> <i class="adminlib-star"></i> 4.0 <span>(4523)</span></div> ' 
-                        // . apply_filters('mvx_follow_button_html', '', $store->get_id(), get_current_user_id()) 
-                        . '</div> </div>';
+        $rating_html = '<div class="admin-badge yellow"> <i class="adminlib-star"></i> 4.0 <span>(4523)</span></div> '
+            // . apply_filters('mvx_follow_button_html', '', $store->get_id(), get_current_user_id()) 
+            . '</div> </div>';
         $html .= $rating_html;
 
         if (!empty($details['address'])) {

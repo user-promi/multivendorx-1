@@ -72,8 +72,8 @@ jQuery(document).ready(function ($) {
         if (!$(e.target).closest(".login-user").length) {
             $dropdown.hide();
         }
-    }); 
-    
+    });
+
     $notificationList.hide();
     $notificationIcon.on("click", function (e) {
         e.stopPropagation();
@@ -83,11 +83,11 @@ jQuery(document).ready(function ($) {
         if (!$(e.target).closest(".login-user").length) {
             $notificationList.hide();
         }
-    }); 
+    });
     // my acoount start
 
     // top header full screen icon strat
-    $('#fullscreenToggle').on('click', function() {
+    $('#fullscreenToggle').on('click', function () {
         if (!document.fullscreenElement) {
             document.documentElement.requestFullscreen().catch(err => {
                 console.warn(`Error attempting fullscreen: ${err.message}`);
@@ -144,7 +144,32 @@ jQuery(document).ready(function ($) {
     // });
 
 
-//     // select 
-// mvxAfmLibrary.wcEnhancedSelectInit();
-    
+    //     // select 
+    // mvxAfmLibrary.wcEnhancedSelectInit();
+
+
+    // tabs for store policy tab
+    const items = document.querySelectorAll('.multivendorx-policies-accordion .accordion-item');
+
+    items.forEach(item => {
+        const header = item.querySelector('.accordion-header');
+        const body = item.querySelector('.accordion-body');
+
+        header.addEventListener('click', () => {
+            const isActive = header.classList.contains('active');
+
+            // Close all items
+            document.querySelectorAll('.multivendorx-policies-accordion .accordion-header')
+                .forEach(h => h.classList.remove('active'));
+            document.querySelectorAll('.multivendorx-policies-accordion .accordion-body')
+                .forEach(b => b.style.display = 'none');
+
+            // Toggle clicked item
+            if (!isActive) {
+                header.classList.add('active');
+                body.style.display = 'block';
+            }
+        });
+    });
+    // tabs for store policy end
 });
