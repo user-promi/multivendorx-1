@@ -22,6 +22,7 @@ type StoreRow = {
         email: string;
     };
     applied_on?: string;
+    store_image?: string; // Add store image field
 };
 
 type StoreStatus = {
@@ -150,6 +151,17 @@ const StoreTable: React.FC = () => {
         );
     };
 
+    // Get store image with fallback
+    const getStoreImage = (store: StoreRow) => {
+        if (store.store_image) {
+            return store.store_image;
+        }
+        // Fallback to placeholder with store initial
+        const storeName = store.store_name || 'Store';
+        const initial = storeName.charAt(0).toUpperCase();
+        return `https://via.placeholder.com/50/007cba/ffffff?text=${initial}`;
+    };
+
     // Column definitions with sorting enabled
     const columns: ColumnDef<StoreRow>[] = [
         {
@@ -187,21 +199,6 @@ const StoreTable: React.FC = () => {
                     }).format(dateObj);
                 }
 
-                const getStatusBadge = (status: string) => {
-                    switch (status) {
-                        case 'active':
-                            return <span className="admin-badge green">Active</span>;
-                        case 'pending':
-                            return <span className="admin-badge yellow">Pending</span>;
-                        case 'rejected':
-                            return <span className="admin-badge red">Rejected</span>;
-                        case 'locked':
-                            return <span className="admin-badge blue">Locked</span>;
-                        default:
-                            return <span className="admin-badge gray">{status}</span>;
-                    }
-                };
-
                 return (
                     <TableCell title={row.original.store_name || ''}>
                         <a
@@ -212,13 +209,28 @@ const StoreTable: React.FC = () => {
                             style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px' }}
                         >
                             <img 
-                                src="https://via.placeholder.com/50" 
-                                style={{ width: 40, height: 40, objectFit: 'cover' }} 
+                                src={getStoreImage(row.original)}
+                                style={{ 
+                                    width: 40, 
+                                    height: 40, 
+                                    objectFit: 'cover',
+                                    borderRadius: '4px'
+                                }} 
                                 alt={row.original.store_name}
+                                onError={(e) => {
+                                    const target = e.target as HTMLImageElement;
+                                    const storeName = row.original.store_name || 'Store';
+                                    const initial = storeName.charAt(0).toUpperCase();
+                                    target.src = `https://via.placeholder.com/50/007cba/ffffff?text=${initial}`;
+                                }}
                             />
                             <div className="details">
-                                <span className="title">{row.original.store_name || '-'}</span>
-                                <span>Since {formattedDate}</span>
+                                <span className="title" style={{ fontWeight: 'bold', display: 'block' }}>
+                                    {row.original.store_name || '-'}
+                                </span>
+                                <span style={{ fontSize: '12px', color: '#666' }}>
+                                    Since {formattedDate}
+                                </span>
                             </div>
                         </a>
                     </TableCell>
