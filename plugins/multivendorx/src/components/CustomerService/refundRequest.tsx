@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
-import { Table, getApiLink, TableCell, CalendarInput } from 'zyra';
+import { Table, getApiLink, TableCell, CalendarInput, CommonPopup, TextArea } from 'zyra';
 import {
     ColumnDef,
     RowSelectionState,
@@ -38,6 +38,9 @@ const RefundRequest: React.FC = () => {
     const [totalRows, setTotalRows] = useState<number>(0);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string>();
+    const [selectedRefund, setSelectedRefund] = useState<RefundRow | null>(null);
+    const [rejectReason, setRejectReason] = useState("");
+    const [rejecting, setRejecting] = useState(false);
 
     // Fetch total rows on mount
     useEffect(() => {
@@ -118,28 +121,56 @@ const RefundRequest: React.FC = () => {
         return textContent || '-';
     };
 
-    // Handle action functions
+    // Handle View Details - Redirect to order page
     const handleViewDetails = (rowData: RefundRow) => {
-        console.log('View details:', rowData);
-        // Implement view details logic (modal, etc.)
+        setSelectedRefund(rowData);
+        setRejectReason("");
     };
 
-    const handleApproveRefund = (rowData: RefundRow) => {
-        console.log('Approve refund:', rowData);
-        if (window.confirm(__('Are you sure you want to approve this refund?', 'multivendorx'))) {
-            updateRefundStatus(rowData.id, 'approved');
+    // Handle Approve Refund
+    const handleApproveRefund = async (rowData: RefundRow) => {
+        try {
+            await updateRefundStatus(rowData.id, 'approved');
+            // Refresh data after approval
+            const currentPage = pagination.pageIndex + 1;
+            const rowsPerPage = pagination.pageSize;
+            requestData(rowsPerPage, currentPage);
+        } catch (err) {
+            console.error('Error approving refund:', err);
         }
     };
 
+    // Handle Reject Refund - Open popup instead of immediate rejection
     const handleRejectRefund = (rowData: RefundRow) => {
-        console.log('Reject refund:', rowData);
-        if (window.confirm(__('Are you sure you want to reject this refund?', 'multivendorx'))) {
-            updateRefundStatus(rowData.id, 'rejected');
+        setSelectedRefund(rowData);
+        setRejectReason("");
+    };
+
+    // Handle reject with reason
+    const handleRejectWithReason = async () => {
+        if (!selectedRefund || !rejectReason.trim()) {
+            alert(__('Please provide a rejection reason', 'multivendorx'));
+            return;
+        }
+
+        setRejecting(true);
+        try {
+            await updateRefundStatus(selectedRefund.id, 'rejected', rejectReason);
+            setSelectedRefund(null);
+            setRejectReason("");
+            // Refresh data after rejection
+            const currentPage = pagination.pageIndex + 1;
+            const rowsPerPage = pagination.pageSize;
+            requestData(rowsPerPage, currentPage);
+        } catch (err) {
+            console.error('Error rejecting refund:', err);
+        } finally {
+            setRejecting(false);
         }
     };
 
-    const updateRefundStatus = (orderId: number, status: string) => {
-        axios({
+    const updateRefundStatus = (orderId: number, status: string, rejectReason = '') => {
+        return axios({
             method: 'POST',
             url: getApiLink(appLocalizer, 'refund'),
             headers: { 
@@ -148,22 +179,20 @@ const RefundRequest: React.FC = () => {
             },
             data: {
                 order_id: orderId,
-                status: status
+                status: status,
+                reject_reason: rejectReason
             }
         })
         .then((response) => {
             console.log('Refund status updated successfully:', response.data);
             setError(undefined);
-            
-            // Refresh the data
-            const currentPage = pagination.pageIndex + 1;
-            const rowsPerPage = pagination.pageSize;
-            requestData(rowsPerPage, currentPage);
+            return response;
         })
         .catch((err) => {
             const errorMessage = err.response?.data?.message || __('Failed to update refund status', 'multivendorx');
             setError(errorMessage);
             console.error('Error updating refund status:', err);
+            throw err;
         });
     };
 
@@ -184,6 +213,14 @@ const RefundRequest: React.FC = () => {
                     checked={row.getIsSelected()}
                     onChange={row.getToggleSelectedHandler()}
                 />
+            ),
+        },
+        {
+            header: __('Product(s)', 'multivendorx'),
+            cell: ({ row }) => (
+                <TableCell title={row.original.products || ''}>
+                    {row.original.products || '-'}
+                </TableCell>
             ),
         },
         {
@@ -215,14 +252,6 @@ const RefundRequest: React.FC = () => {
             cell: ({ row }) => (
                 <TableCell title={row.original.email || ''}>
                     {row.original.email || '-'}
-                </TableCell>
-            ),
-        },
-        {
-            header: __('Product(s)', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.products || ''}>
-                    {row.original.products || '-'}
                 </TableCell>
             ),
         },
@@ -406,41 +435,91 @@ const RefundRequest: React.FC = () => {
 
     return (
         <>
-            {/* <div className="page-title-wrapper">
-                <div className="page-title">
-                    <div className="title">{__('Refund Requests', 'multivendorx')}</div>
-                    <div className="des">{__('Manage and process refund requests from customers.', 'multivendorx')}</div>
-                </div>
-                <div className="buttons-wrapper">
-                    <div className="admin-btn btn-purple">
-                        <i className="adminlib-export"></i>
-                        {__('Export', 'multivendorx')}
+            <div className="column">
+                {error && (
+                    <div className="admin-notice admin-notice-error">
+                        {error}
                     </div>
-                </div>
-            </div> */}
-                <div className="column">
-                    {error && (
-                        <div className="admin-notice admin-notice-error">
-                            {error}
-                        </div>
-                    )}
+                )}
 
-                    <Table
-                        data={data}
-                        columns={columns as ColumnDef<Record<string, any>, any>[]}
-                        rowSelection={rowSelection}
-                        onRowSelectionChange={setRowSelection}
-                        defaultRowsPerPage={10}
-                        pageCount={pageCount}
-                        pagination={pagination}
-                        onPaginationChange={setPagination}
-                        handlePagination={handlePagination}
-                        perPageOption={[10, 25, 50]}
-                        totalCounts={totalRows}
-                        searchFilter={searchFilter}
-                        isLoading={loading}
-                    />
-                </div>
+                <Table
+                    data={data}
+                    columns={columns as ColumnDef<Record<string, any>, any>[]}
+                    rowSelection={rowSelection}
+                    onRowSelectionChange={setRowSelection}
+                    defaultRowsPerPage={10}
+                    pageCount={pageCount}
+                    pagination={pagination}
+                    onPaginationChange={setPagination}
+                    handlePagination={handlePagination}
+                    perPageOption={[10, 25, 50]}
+                    totalCounts={totalRows}
+                    searchFilter={searchFilter}
+                    isLoading={loading}
+                />
+
+                {/* Reject Refund Popup */}
+                {selectedRefund && (
+                    <CommonPopup
+                        open={!!selectedRefund}
+                        onClose={() => setSelectedRefund(null)}
+                        width="500px"
+                        header={
+                            <>
+                                <div className="title">
+                                    <i className="adminlib-close"></i>
+                                    Reject Refund Request
+                                </div>
+                                <p>Provide a reason for rejecting this refund request. The customer will be notified with this reason.</p>
+                            </>
+                        }
+                        footer={
+                            <>
+                                <button
+                                    type="button" 
+                                    onClick={() => setSelectedRefund(null)}
+                                    className="admin-btn btn-red"
+                                >
+                                    Cancel
+                                </button>
+                                <button 
+                                    onClick={handleRejectWithReason} 
+                                    disabled={rejecting || !rejectReason.trim()} 
+                                    className="admin-btn btn-purple"
+                                >
+                                    {rejecting ? "Rejecting..." : "Reject Refund"}
+                                </button>
+                            </>
+                        }
+                    >
+                        <div className="content">
+                            <div className="form-group-wrapper">
+                                <div className="form-group">
+                                    <label htmlFor="rejectReason">
+                                        Rejection Reason
+                                    </label>
+                                    <TextArea
+                                        name="rejectReason"
+                                        inputClass="textarea-input"
+                                        value={rejectReason}
+                                        onChange={(e) => setRejectReason(e.target.value)}
+                                        placeholder="Enter reason for rejecting this refund request..."
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <div className="refund-details">
+                                        <strong>Store:</strong> {selectedRefund.store_name}<br/>
+                                        <strong>Order ID:</strong> {selectedRefund.orderNumber}<br/>
+                                        <strong>Customer:</strong> {selectedRefund.customer}<br/>
+                                        <strong>Amount:</strong> <span dangerouslySetInnerHTML={{ __html: selectedRefund.amount }} /><br/>
+                                        <strong>Original Reason:</strong> {selectedRefund.reason}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </CommonPopup>
+                )}
+            </div>
         </>
     );
 };

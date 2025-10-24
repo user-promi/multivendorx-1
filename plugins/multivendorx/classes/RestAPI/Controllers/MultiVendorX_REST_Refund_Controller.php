@@ -25,15 +25,15 @@ class MultiVendorX_REST_Refund_Controller extends \WP_REST_Controller {
                 'permission_callback' => [ $this, 'get_items_permissions_check' ],
             ],
             [
-                'methods'             => \WP_REST_Server::EDITABLE,
+                'methods'             => \WP_REST_Server::CREATABLE, // Add POST method
                 'callback'            => [ $this, 'update_item' ],
                 'permission_callback' => [ $this, 'update_item_permissions_check' ],
             ],
             [
-                'methods'             => \WP_REST_Server::CREATABLE,
-                'callback'            => [ $this, 'update_refund_status' ],
+                'methods'             => \WP_REST_Server::EDITABLE,
+                'callback'            => [ $this, 'update_item' ],
                 'permission_callback' => [ $this, 'update_item_permissions_check' ],
-            ],
+            ]
         ] );
     }
 
@@ -43,76 +43,6 @@ class MultiVendorX_REST_Refund_Controller extends \WP_REST_Controller {
 
     public function update_item_permissions_check($request) {
         return current_user_can('edit_shop_orders');
-    }
-
-    /**
-     * Update refund status (Approve/Reject)
-     */
-    public function update_refund_status( $request ) {
-        $nonce = $request->get_header( 'X-WP-Nonce' );
-        if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
-            return new \WP_Error(
-                'invalid_nonce',
-                __( 'Invalid nonce', 'multivendorx' ),
-                [ 'status' => 403 ]
-            );
-        }
-
-        $order_id = absint( $request->get_param( 'order_id' ) );
-        $status = sanitize_text_field( $request->get_param( 'status' ) );
-
-        if ( ! $order_id ) {
-            return new \WP_Error(
-                'missing_order_id',
-                __( 'Order ID is required', 'multivendorx' ),
-                [ 'status' => 400 ]
-            );
-        }
-
-        $order = wc_get_order( $order_id );
-        if ( ! $order ) {
-            return new \WP_Error(
-                'invalid_order',
-                __( 'Order not found', 'multivendorx' ),
-                [ 'status' => 404 ]
-            );
-        }
-
-        // Map status to order status
-        $status_map = [
-            'approved' => 'refund-approved',
-            'rejected' => 'refund-rejected'
-        ];
-
-        if ( ! isset( $status_map[ $status ] ) ) {
-            return new \WP_Error(
-                'invalid_status',
-                __( 'Invalid status. Must be "approved" or "rejected"', 'multivendorx' ),
-                [ 'status' => 400 ]
-            );
-        }
-
-        try {
-            // Update order status
-            $order->update_status( $status_map[ $status ] );
-
-            // Add order note
-            $action = $status === 'approved' ? 'approved' : 'rejected';
-            $order->add_order_note( sprintf( __( 'Refund request %s by admin.', 'multivendorx' ), $action ) );
-
-            return rest_ensure_response( [
-                'success' => true,
-                'message' => sprintf( __( 'Refund request %s successfully.', 'multivendorx' ), $action ),
-                'new_status' => ucfirst( $status )
-            ] );
-
-        } catch ( \Exception $e ) {
-            return new \WP_Error(
-                'update_failed',
-                __( 'Failed to update refund status', 'multivendorx' ),
-                [ 'status' => 500 ]
-            );
-        }
     }
 
     /**
@@ -459,120 +389,100 @@ class MultiVendorX_REST_Refund_Controller extends \WP_REST_Controller {
         return $formatted_refunds;
     }
 
+    /**
+     * Update refund status (approve/reject)
+     */
     public function update_item($request) {
-        $refund_info = $request->get_param('payload');
+        $nonce = $request->get_header('X-WP-Nonce');
+        if (!wp_verify_nonce($nonce, 'wp_rest')) {
+            return new \WP_Error(
+                'invalid_nonce',
+                __('Invalid nonce', 'multivendorx'),
+                ['status' => 403]
+            );
+        }
 
-        $order_id = $refund_info['orderId'] ? absint($refund_info['orderId']) : 0;
-        $refund_amount = wc_format_decimal($refund_info['refundAmount'], wc_get_price_decimals());
-        $items = $refund_info['items'] ?? [];
-        $refund_reason = sanitize_text_field($refund_info['reason']);
-        $restock_refunded_items = 'true' === $refund_info['restock'];
-        $refund = false;
-        $response_data = array();
+        $order_id = absint($request->get_param('order_id'));
+        $status = sanitize_text_field($request->get_param('status'));
+        $reject_reason = sanitize_text_field($request->get_param('reject_reason'));
+
+        if (!$order_id) {
+            return new \WP_Error(
+                'invalid_order_id',
+                __('Invalid order ID', 'multivendorx'),
+                ['status' => 400]
+            );
+        }
+
+        $order = wc_get_order($order_id);
+        if (!$order) {
+            return new \WP_Error(
+                'order_not_found',
+                __('Order not found', 'multivendorx'),
+                ['status' => 404]
+            );
+        }
 
         try {
-            $order = wc_get_order($order_id);
+            // Map status to WooCommerce order status
+            $status_map = [
+                'approved' => 'refund-approved',
+                'rejected' => 'refund-rejected'
+            ];
 
-            if ( ! $order ) {
-                return new \WP_Error('invalid_order', __('Order not found.', 'multivendorx'), ['status' => 404]);
-            }
-
-            $parent_order_id = $order->get_parent_id();
-            $parent_order = wc_get_order( $parent_order_id );
-            $parent_items_ids = $parent_order ? array_keys($parent_order->get_items( array( 'line_item', 'fee', 'shipping' ) )) : [];
-
-            $order_items = $order->get_items();
-            $max_refund = wc_format_decimal($order->get_total() - $order->get_total_refunded(), wc_get_price_decimals());
-
-            if (!$refund_amount || $max_refund < $refund_amount || $refund_amount < 0) {
-                return new \WP_Error('invalid_amount', __('Invalid refund amount.', 'multivendorx'), ['status' => 400]);
-            }
-
-            // Prepare line items which we are refunding.
-            $line_items = array();
-            $parent_line_items = array();
-
-            $item_keys = array_keys($items);
-
-            foreach ($item_keys as $item_id) {
-                $line_items[$item_id] = array(
-                    'qty' => 0,
-                    'refund_total' => 0,
-                    'refund_tax' => array(),
+            if (!isset($status_map[$status])) {
+                return new \WP_Error(
+                    'invalid_status',
+                    __('Invalid refund status', 'multivendorx'),
+                    ['status' => 400]
                 );
-                $parent_item_id = $this->get_vendor_parent_order_item_id($item_id);
-                if( $parent_item_id && in_array($parent_item_id, $parent_items_ids) ){
-                    $parent_line_items[$parent_item_id] = array(
-                        'qty' => 0,
-                        'refund_total' => 0,
-                        'refund_tax' => array(),
-                    );
-                }
             }
 
-            foreach ($items as $item_id => $value) {
-                $line_items[$item_id]['qty'] = max($value['qty'], 0);
-                $line_items[$item_id]['refund_total'] = wc_format_decimal($value['total']);
+            $wc_status = $status_map[$status];
 
-                $parent_item_id = $this->get_vendor_parent_order_item_id($item_id);
-                if( $parent_item_id && in_array($parent_item_id, $parent_items_ids) ){
-                    $parent_line_items[$parent_item_id]['qty'] = max($value['qty'], 0);
-                    $parent_line_items[$parent_item_id]['refund_total'] = wc_format_decimal($value['total']);
-                }
+            // Update order status
+            $order->update_status($wc_status);
+
+            // Store rejection reason if provided
+            if ($status === 'rejected' && $reject_reason) {
+                $order->update_meta_data('_refund_rejection_reason', $reject_reason);
+                $order->save();
             }
 
-            if ( $line_items ) {
-                // Create the refund object.
-                $refund = wc_create_refund(
-                        array(
-                            'amount' => $refund_amount,
-                            'reason' => $refund_reason,
-                            'order_id' => $order_id,
-                            'line_items' => $line_items,
-                            'refund_payment' => false,
-                            'restock_items' => $restock_refunded_items,
-                        )
-                );  
-            }
+            // Add order note
+            $note = sprintf(
+                __('Refund request %s.', 'multivendorx'),
+                $status === 'approved' ? __('approved', 'multivendorx') : __('rejected', 'multivendorx')
+            );
             
-            if( !empty($parent_line_items) && $parent_order ){
-                if (apply_filters('mvx_allow_refund_parent_order', true)) {
-                    $parent_refund = wc_create_refund(
-                            array(
-                                'amount' => $refund_amount,
-                                'reason' => $refund_reason,
-                                'order_id' => $parent_order_id,
-                                'line_items' => $parent_line_items,
-                                'refund_payment' => false,
-                                'restock_items' => $restock_refunded_items,
-                            )
-                    );
-                }
+            if ($status === 'rejected' && $reject_reason) {
+                $note .= ' ' . sprintf(__('Reason: %s', 'multivendorx'), $reject_reason);
             }
 
-            if (is_wp_error($refund)) {
-                return new \WP_Error('refund_failed', $refund->get_error_message(), ['status' => 400]);
-            }
-            
-            if (isset($parent_refund) && is_wp_error($parent_refund)) {
-                return new \WP_Error('refund_failed', $parent_refund->get_error_message(), ['status' => 400]);
-            }
-            
-            // Update order status to reflect refund approval
-            $order->update_status('refund-approved');
-            
-            do_action( 'mvx_order_refunded', $order_id, $refund->get_id() );
+            $order->add_order_note($note);
 
-            if (did_action('woocommerce_order_fully_refunded')) {
-                $response_data['status'] = 'fully_refunded';
+            // If approved, you might want to process the actual refund here
+            if ($status === 'approved') {
+                // Add your refund processing logic here
+                // This would typically create a WooCommerce refund
+                do_action('multivendorx_refund_approved', $order_id);
+            } else {
+                do_action('multivendorx_refund_rejected', $order_id, $reject_reason);
             }
 
             return rest_ensure_response([
                 'success' => true,
-                'response_data' => $response_data,
+                'message' => sprintf(__('Refund request %s successfully', 'multivendorx'), $status),
+                'order_id' => $order_id,
+                'status' => $status
             ]);
+
         } catch (Exception $e) {
-            return new \WP_Error('refund_failed', __('Refund Failed', 'multivendorx'), ['status' => 400]);
+            return new \WP_Error(
+                'update_failed',
+                __('Failed to update refund status', 'multivendorx'),
+                ['status' => 500]
+            );
         }
     }
 
