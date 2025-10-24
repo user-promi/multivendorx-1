@@ -263,6 +263,7 @@ a {
   font-size: 0.875rem;
   line-height: 1.5;
   box-shadow: none;
+  box-sizing: border-box;
 
   &:focus {
     outline: none;

@@ -125,7 +125,7 @@ $product_fileds = MultiVendorX()->setting->get_setting('products_fields', array(
                         <div class="add-product-info-header row-padding">
                             <div class="select-group">
                                 <label for="product-type"><?php esc_html_e('Product Type', 'multivendorx'); ?></label>
-                                <select class="form-control inline-select" id="product-type" name="product-type">
+                                <select class="form-control basic-select" id="product-type" name="product-type">
                                     <?php foreach (wc_get_product_types() as $value => $label): ?>
                                         <option value="<?php echo esc_attr($value); ?>" <?php echo selected($product_object->get_type(), $value, false); ?>>
                                             <?php echo esc_html($label); ?>
@@ -385,8 +385,6 @@ $product_fileds = MultiVendorX()->setting->get_setting('products_fields', array(
                     </div>
                 </div>
             </div> <!-- right section end -->
-
-
         </div>
     </form>
 </div>

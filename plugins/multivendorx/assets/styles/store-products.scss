@@ -29,229 +29,10 @@
      transition: 0.05s border-color ease-in-out;
  }
 
- // Add Product Info Header
-
- .add-product-info-header {
-     display: flex;
-     justify-content: end;
-     flex-direction: column;
-     align-items: end;
-     gap: 0.813rem;
-
-     .select-group {
-         width: 30%;
-     }
- }
-
-
- // Product Info Tabs
-
- .product-info-tab-wrapper {
-     .nav.nav-tabs {
-         li {
-             padding-bottom: 0.5rem;
-             border-bottom: 0.125rem solid #fff;
-             font-weight: 600;
-             font-size: 1rem;
-
-             &.active {
-                 border-bottom: 0.125rem solid $primary;
-                 color: $primary;
-
-                 a {
-                     color: $primary;
-                 }
-             }
-         }
-     }
-
-     ul {
-         display: flex;
-         list-style: none;
-         gap: 0.813rem;
-         margin: 1rem 0;
-         font-size: 1rem;
-     }
- }
-
-
- // Category Styles
-
- .category {
-     ul {
-         margin: 0;
-         list-style: none;
-
-         li {
-             margin-bottom: 0.45rem;
-
-             label {
-                 font-size: 1rem;
-             }
-
-             ul {
-                 margin-left: 1rem;
-                 margin-top: 0.45rem;
-
-                 li {
-                     margin-bottom: 0.45rem;
-                 }
-             }
-         }
-     }
- }
-
-
- // Tag Panel
-
- .tag-panel {
-     border: 1px solid $border;
-     border-radius: 12px;
-     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-     background: #fff;
-     padding: 16px;
-     margin-bottom: 20px;
-
-     &-body {
-         padding: 8px 0;
-     }
- }
-
-
- // Form Group
-
- .form-group {
-     position: relative;
-
-     ul {
-         margin: 0;
-         padding: 0;
-         list-style: none;
-     }
-
-     select {
-         position: absolute;
-         bottom: -3rem;
-     }
-
-     label {
-         font-size: 14px;
-         font-weight: 600;
-         color: #333;
-         margin-bottom: 6px;
-         display: block;
-     }
- }
-
-
- // Select2 Styling
-
- .select2-container--default {
-     .select2-selection--multiple {
-         border: 1px solid #ccc;
-         border-radius: 8px;
-         min-height: 42px;
-         display: flex;
-         flex-wrap: wrap;
-         padding: 4px 6px;
-         cursor: text;
-         transition: border-color 0.2s ease, box-shadow 0.2s ease;
-
-         .select2-selection__choice {
-             background-color: $primary;
-             border-radius: 16px;
-             padding: 4px 10px;
-             color: #fff;
-             font-size: 13px;
-             margin: 3px;
-             display: flex;
-             align-items: center;
-             border: none;
-             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-
-             .select2-selection__choice__remove {
-                 color: #fff;
-                 margin-right: 6px;
-                 font-weight: bold;
-                 cursor: pointer;
-                 transition: color 0.2s ease;
-
-                 &:hover {
-                     color: #ffeb3b;
-                 }
-             }
-         }
-
-         .select2-search__field {
-             border: none !important;
-             outline: none !important;
-             margin: 4px;
-             font-size: 14px;
-             min-width: 80px;
-         }
-     }
-
-     &.select2-container--focus {
-         .select2-selection--multiple {
-             border-color: $primary;
-             box-shadow: 0 0 0 2px rgba($primary, 0.2);
-         }
-     }
-
-     .select2-results__option {
-         padding: 10px 12px;
-         font-size: 14px;
-         cursor: pointer;
-         transition: background 0.2s ease;
-
-         &--highlighted[aria-selected] {
-             background-color: $primary;
-             color: #fff;
-         }
-     }
- }
-
-
- // Form Card
-
- .form-card {
-     border: 1px solid $border;
-     border-radius: 12px;
-     background: #fff;
-     padding: 16px;
-     margin-bottom: 20px;
-     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-
-     &-header {
-         margin-bottom: 12px;
-
-         .form-card-label {
-             display: block;
-             font-size: 14px;
-             font-weight: 600;
-             color: $text-dark;
-             margin-bottom: 4px;
-         }
-
-         .form-card-desc {
-             font-size: 12px;
-             color: $text-light;
-         }
-     }
-
-     &-body {
-         .form-group {
-             margin: 0;
-         }
-     }
- }
-
-
-
  // store template start
  .multivendorx-banner {
      position: relative;
-    //  height: 25rem;
+     //  height: 25rem;
      background-size: contain !important;
      background-position: center !important;
      background-repeat: no-repeat !important;
@@ -260,8 +41,9 @@
          width: 100%;
          background: #5756561f;
          text-align: center;
-         img{
-            max-height: 25rem;
+
+         img {
+             max-height: 25rem;
          }
 
      }
@@ -363,8 +145,9 @@
              .contact-detail {
                  padding: 0;
              }
-             .details{
-                width: 100%;
+
+             .details {
+                 width: 100%;
              }
          }
      }
@@ -496,44 +279,45 @@
          margin-top: 1rem;
      }
  }
+
  //  single product store info end
 
 
- 
-//  store page policy tabs start
-.multivendorx-policies-accordion {
-  .accordion-item {
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    margin-bottom: 10px;
-    overflow: hidden;
 
-    .accordion-header {
-      padding: 15px;
-      background: #f7f7f7;
-      cursor: pointer;
-      font-weight: bold;
-      position: relative;
+ //  store page policy tabs start
+ .multivendorx-policies-accordion {
+     .accordion-item {
+         border: 1px solid #ddd;
+         border-radius: 5px;
+         margin-bottom: 10px;
+         overflow: hidden;
 
-      &::after {
-        content: '+';
-        position: absolute;
-        right: 20px;
-        font-size: 18px;
-        transition: transform 0.2s;
-      }
+         .accordion-header {
+             padding: 15px;
+             background: #f7f7f7;
+             cursor: pointer;
+             font-weight: bold;
+             position: relative;
 
-      &.active::after {
-        content: '-';
-      }
-    }
+             &::after {
+                 content: '+';
+                 position: absolute;
+                 right: 20px;
+                 font-size: 18px;
+                 transition: transform 0.2s;
+             }
 
-    .accordion-body {
-      display: none;
-      padding: 15px;
-      background: #fff;
-    }
-  }
-}
-//  store page policy tabs end
+             &.active::after {
+                 content: '-';
+             }
+         }
 
+         .accordion-body {
+             display: none;
+             padding: 15px;
+             background: #fff;
+         }
+     }
+ }
+
+ //  store page policy tabs end
