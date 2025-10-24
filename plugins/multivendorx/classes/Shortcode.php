@@ -22,15 +22,7 @@ class Shortcode {
     }
 
     public function frontend_scripts() {
-        if (is_page() && has_shortcode(get_post()->post_content, 'multivendorx_store_dashboard')) {
-
-            global $wp_styles;
-            if (!empty($wp_styles->queue)) {
-                foreach ($wp_styles->queue as $style) {
-                    wp_dequeue_style($style);
-                    wp_deregister_style($style);
-                }
-            }
+        
 
             wp_enqueue_script( 'wp-element' );
             wp_enqueue_media();
@@ -54,7 +46,7 @@ class Shortcode {
                 echo MultiVendorX()->setting->get_setting('custom_css_product_page', []);?>
             </style>
             <?php
-        }
+        
     }
 
     public static function dequeue_all_styles_on_page()
