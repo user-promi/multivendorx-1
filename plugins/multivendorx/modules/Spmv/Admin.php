@@ -24,8 +24,8 @@ class Admin {
         add_filter('woocommerce_duplicate_product_exclude_meta', array($this, 'exclude_postmeta_copy_to_draft'), 10, 1);
         add_action('woocommerce_product_duplicate', array($this, 'mvx_product_duplicate_update_meta'), 10, 2);
         add_action('save_post_product', array($this, 'update_duplicate_product_title'), 10, 3);
-        // add_filter('woocommerce_product_tabs', array(&$this, 'product_single_product_multivendor_tab'));
-        // add_action('woocommerce_single_product_summary', array($this, 'product_single_product_multivendor_tab_link'), 60);
+        add_filter('woocommerce_product_tabs', array($this, 'product_single_product_multivendor_tab'));
+        add_action('woocommerce_single_product_summary', array($this, 'product_single_product_multivendor_tab_link'), 60);
         add_filter( 'wp_insert_post_data', array( $this, 'override_wc_product_post_parent' ), 99, 2 );
     }
 
@@ -105,30 +105,41 @@ class Admin {
         return $data;
     }
 
-    // function product_single_product_multivendor_tab($tabs) {
-    //     global $product, $MVX;
-    //     $title = apply_filters('mvx_more_vendors_tab', __('More Offers', 'multivendorx'));
-    //     $tabs['singleproductmultivendor'] = array(
-    //         'title' => $title,
-    //         'priority' => 80,
-    //         'callback' => array($this, 'product_single_product_multivendor_tab_template')
-    //     );
+    function product_single_product_multivendor_tab($tabs) {
+        global $product, $MVX;
+        $title = apply_filters('mvx_more_vendors_tab', __('More Offers', 'multivendorx'));
+        $tabs['singleproductmultivendor'] = array(
+            'title' => $title,
+            'priority' => 80,
+            'callback' => array($this, 'product_single_product_multivendor_tab_template')
+        );
 
-    //     return $tabs;
-    // }
+        return $tabs;
+    }
 
     /**
      * Add vendor tab html
      *
      * @return void
      */
-    // function product_single_product_multivendor_tab_template() {
-    //     global $woocommerce, $MVX, $post, $wpdb;
-    //     $more_product_array = array();
-    //     $results = array();
-    //     $more_products = apply_filters('mvx_single_product_multiple_vendor_products_array', $this->get_multiple_vendors_array_for_single_product($post->ID), $post->ID);
-    //     $more_product_array = $more_products['more_product_array'];
-    //     $results = $more_products['results'];
-    //     $MVX->template->get_template('single-product/multiple-vendors-products.php', array('results' => $results, 'more_product_array' => $more_product_array));
-    // }
+    public function product_single_product_multivendor_tab_template() {
+        global $post;
+        $more_product_array = $results = array();
+        $ajax = new Ajax();
+        $more_products = apply_filters('mvx_single_product_multiple_vendor_products_array', $ajax->get_multiple_vendors_array_for_single_product($post->ID), $post->ID);
+        $more_product_array = $more_products['more_product_array'];
+        $results = $more_products['results'];
+        MultiVendorX()->util->get_template('product/multiple-vendors-products.php', ['results' => $results, 'more_product_array' => $more_product_array] );
+    }
+
+    public function product_single_product_multivendor_tab_link() {
+        global $product;
+        $ajax = new Ajax();
+        $more_products = $ajax->get_mvx_more_spmv_products( $product->get_id() );
+
+        if (is_product()) {
+            MultiVendorX()->util->get_template('product//multiple-vendors-products-link.php', ['more_products' => $more_products]);
+        }
+    }
+
 }

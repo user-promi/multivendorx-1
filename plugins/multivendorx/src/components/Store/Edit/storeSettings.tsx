@@ -772,6 +772,7 @@ const StoreSettings = ({ id }: { id: string | null }) => {
                                     }}
                                     onReplace={() => runUploader('image')}
                                 />
+                                <div className="settings-metabox-description">Upload Profile image max size 500px X 500px</div>
                             </div>
                         </div>
 
@@ -798,6 +799,7 @@ const StoreSettings = ({ id }: { id: string | null }) => {
                                     }}
                                     onReplace={() => runUploader('banner')}
                                 />
+                                <div className="settings-metabox-description">Upload banner image size 1200px X 390px</div>
                             </div>
                         </div>
                     </div>

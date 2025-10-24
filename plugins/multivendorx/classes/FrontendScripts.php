@@ -214,6 +214,11 @@ class FrontendScripts {
 					'deps'    => array( 'jquery' ),
 					'version' => $version,
 				),
+                'multivendorx-stores-list-script'        => array(
+					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'js/blocks/stores-list/index.js',
+					'deps'    => array( 'jquery', 'jquery-blockui', 'wp-element', 'wp-i18n', 'wp-blocks' ),
+					'version' => $version,
+				),
 			)
         );
         foreach ( $register_scripts as $name => $props ) {
@@ -610,24 +615,39 @@ class FrontendScripts {
                     'messenger_color'            => MultiVendorX()->setting->get_setting(' messenger_color' ),
                     'whatsapp_opening_pattern'            => MultiVendorX()->setting->get_setting(' whatsapp_opening_pattern' ),
                     'whatsapp_pre_filled'            => MultiVendorX()->setting->get_setting(' whatsapp_pre_filled' ),
+                    ),
                 ),
-            ),
-
                 'multivendorx-registration-form-script'          => array(
-					'object_name' => 'registrationForm',
-					'data'        => array(
+                    'object_name' => 'registrationForm',
+                    'data'        => array(
                         'apiUrl'                   => untrailingslashit( get_rest_url() ),
-						'restUrl'                  => MultiVendorX()->rest_namespace,
-						'nonce'               => wp_create_nonce( 'wp_rest' ),
-						'settings'            => VendorUtil::get_vendor_registration_form() ?? array(),
-						'content_before_form' => apply_filters( 'multivendorx_add_content_before_form', '' ),
-						'content_after_form'  => apply_filters( 'multivendorx_add_content_after_form', '' ),
-						'error_strings'       => array(
-							'required' => __( 'This field is required', 'multivendorx' ),
-							'invalid'  => __( 'Invalid email format', 'multivendorx' ),
-						),
-					),
-				),
+                        'restUrl'                  => MultiVendorX()->rest_namespace,
+                        'nonce'               => wp_create_nonce( 'wp_rest' ),
+                        'settings'            => VendorUtil::get_vendor_registration_form() ?? array(),
+                        'content_before_form' => apply_filters( 'multivendorx_add_content_before_form', '' ),
+                        'content_after_form'  => apply_filters( 'multivendorx_add_content_after_form', '' ),
+                        'error_strings'       => array(
+                            'required' => __( 'This field is required', 'multivendorx' ),
+                            'invalid'  => __( 'Invalid email format', 'multivendorx' ),
+                        ),
+                    ),
+                ),
+                'multivendorx-stores-list-editor-script'  => array(
+                    'object_name' => 'storesList',
+                    'data'        => array(
+                        'apiUrl'    => untrailingslashit( get_rest_url() ),
+                        'restUrl'   => MultiVendorX()->rest_namespace,
+                        'nonce'     => wp_create_nonce( 'wp_rest' ),
+                    ),
+                ),
+                'multivendorx-stores-list-script'  => array(
+                    'object_name' => 'storesList',
+                    'data'        => array(
+                        'apiUrl'    => untrailingslashit( get_rest_url() ),
+                        'restUrl'   => MultiVendorX()->rest_namespace,
+                        'nonce'     => wp_create_nonce( 'wp_rest' ),
+                    ),
+                ),
 			)
         );
 

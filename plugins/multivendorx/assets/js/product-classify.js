@@ -291,10 +291,15 @@
         },
         create_product: function () {
             var product_id = $( this ).data( 'product_id' );
+            const currentTab = document.querySelector('body').dataset.tab || 'products';
+            const currentSubtab = document.querySelector('body').dataset.subtab || 'edit';
+
             var data = {
                 action: 'mvx_create_duplicate_product',
                 // security: mvx_product_classify.types_nonce,
-                product_id: product_id
+                product_id: product_id,
+                tab: currentTab,
+                subtab: currentSubtab
             };
             $.ajax({
                 type:  'post',

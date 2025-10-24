@@ -19,18 +19,13 @@ class Shortcode {
         add_action( 'wp_enqueue_scripts', array($this, 'frontend_scripts'));
 
         add_action('wp_print_styles', array($this, 'dequeue_all_styles_on_page'), 99);
+        
+        add_shortcode( 'multivendorx_stores_list', array( $this, 'display_stores_list' ) );
+
     }
 
     public function frontend_scripts() {
-        if (is_page() && has_shortcode(get_post()->post_content, 'multivendorx_store_dashboard')) {
-
-            global $wp_styles;
-            if (!empty($wp_styles->queue)) {
-                foreach ($wp_styles->queue as $style) {
-                    wp_dequeue_style($style);
-                    wp_deregister_style($style);
-                }
-            }
+        
 
             wp_enqueue_script( 'wp-element' );
             wp_enqueue_media();
@@ -41,12 +36,12 @@ class Shortcode {
             FrontendScripts::enqueue_style( 'multivendorx-dashboard-style' );
             wp_enqueue_style( 'dashicons' );
 
-            FrontendScripts::enqueue_script( 'multivendorx-registration-form-script' );
-            FrontendScripts::localize_scripts( 'multivendorx-registration-form-script' );
+        FrontendScripts::enqueue_script( 'multivendorx-registration-form-script' );
+        FrontendScripts::localize_scripts( 'multivendorx-registration-form-script' );
 
-            FrontendScripts::enqueue_script( 'multivendorx-store-dashboard-script' );
-            FrontendScripts::localize_scripts( 'multivendorx-store-dashboard-script' );
-            FrontendScripts::enqueue_style( 'multivendorx-store-product-style' );
+        FrontendScripts::enqueue_script( 'multivendorx-store-dashboard-script' );
+        FrontendScripts::localize_scripts( 'multivendorx-store-dashboard-script' );
+        FrontendScripts::enqueue_style( 'multivendorx-store-product-style' );
 
             ?>
             <style>
@@ -54,7 +49,7 @@ class Shortcode {
                 echo MultiVendorX()->setting->get_setting('custom_css_product_page', []);?>
             </style>
             <?php
-        }
+        
     }
 
     public static function dequeue_all_styles_on_page()
@@ -116,6 +111,15 @@ class Shortcode {
         }
     
         // Return the output buffer content
+        return ob_get_clean();
+    }
+
+    public function display_stores_list(){
+        ob_start();
+        ?>
+        <div id="multivendorx-stores-list">
+        </div>
+        <?php
         return ob_get_clean();
     }
     
