@@ -386,13 +386,19 @@
  // store template start
  .multivendorx-banner {
      position: relative;
-     height: 25rem;
+    //  height: 25rem;
      background-size: contain !important;
      background-position: center !important;
      background-repeat: no-repeat !important;
 
      .banner-img {
          width: 100%;
+         background: #5756561f;
+         text-align: center;
+         img{
+            max-height: 25rem;
+         }
+
      }
 
      .banner-right {
@@ -439,7 +445,7 @@
 
      .store-details {
          img {
-             width: 7rem;
+             width: 5rem;
              height: auto;
          }
      }
@@ -460,7 +466,7 @@
      &.template1 {
          .store-details {
              position: absolute;
-             top: 15%;
+             bottom: 5%;
              left: 4%;
              width: 92%;
          }
@@ -469,7 +475,8 @@
      &.template2 {
          .store-details {
              text-align: center;
-             margin-top: -5%;
+             margin-top: -4%;
+
 
              .row {
                  justify-content: center;
@@ -490,6 +497,9 @@
 
              .contact-detail {
                  padding: 0;
+             }
+             .details{
+                width: 100%;
              }
          }
      }
@@ -574,6 +584,7 @@
      width: fit-content;
      padding: 1.313rem;
      border: $border-light-small;
+     background: #f9f9f9;
 
      .header {
          display: flex;
@@ -620,5 +631,44 @@
          margin-top: 1rem;
      }
  }
-
  //  single product store info end
+
+
+ 
+//  store page policy tabs start
+.multivendorx-policies-accordion {
+  .accordion-item {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    overflow: hidden;
+
+    .accordion-header {
+      padding: 15px;
+      background: #f7f7f7;
+      cursor: pointer;
+      font-weight: bold;
+      position: relative;
+
+      &::after {
+        content: '+';
+        position: absolute;
+        right: 20px;
+        font-size: 18px;
+        transition: transform 0.2s;
+      }
+
+      &.active::after {
+        content: '-';
+      }
+    }
+
+    .accordion-body {
+      display: none;
+      padding: 15px;
+      background: #fff;
+    }
+  }
+}
+//  store page policy tabs end
+

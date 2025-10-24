@@ -30,7 +30,7 @@ foreach ( $store_tabs as $key => $tab ) {
 <ul class="multivendorx-store-tabs">
     <?php foreach ( $store_tabs as $key => $tab ) : ?>
         <?php if ( ! empty( $tab['url'] ) ) : ?>
-            <li class="multivendorx-store-tab <?php echo esc_attr( $key ); ?>">
+            <li class="multivendorx-store-tab <?php echo esc_attr( $key ); ?> <?php echo ( $current_tab === $key ) ? 'active' : ''; ?>">
                 <a href="<?php echo esc_url( $tab['url'] ); ?>">
                     <?php echo esc_html( $tab['title'] ); ?>
                 </a>
