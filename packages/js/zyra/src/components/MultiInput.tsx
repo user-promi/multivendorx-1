@@ -200,9 +200,11 @@ const MultiInput: React.FC<MultiInputProps> = (props) => {
 
               <div className="details">
                 <div className="details-wrapper">
-                  <div className="payment-method-icon">
-                    {iconEnable && item.iconClass && <i className={item.iconClass}></i>}
-                  </div>
+                  {iconEnable && item.iconClass &&
+                    <div className="payment-method-icon">
+                      <i className={item.iconClass}></i>
+                    </div>
+                  }
 
                   <div className="payment-method-info">
                     <div className={`title-wrapper ${item.locked ? "locked" : ""}`}>

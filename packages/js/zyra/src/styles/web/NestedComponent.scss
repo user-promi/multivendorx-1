@@ -71,11 +71,12 @@
     .nested-row.multiple:first-child {
         background: transparent;
         padding: 0;
+        position: relative;
 
         .buttons-wrapper {
-            position: absolute;
+            // position: absolute;
             width: fit-content;
-            right: 0;
+            // right: 0;
         }
     }
 }

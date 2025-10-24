@@ -237,6 +237,7 @@
             }
             .payment-description{
                 display: flex;
+                flex-wrap: wrap;
                 gap: 0.625rem;
                 margin: 0;
             }

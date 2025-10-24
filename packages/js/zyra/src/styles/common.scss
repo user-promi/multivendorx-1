@@ -499,6 +499,11 @@ input[type="checkbox"]:focus {
   gap: 0.125rem;
   z-index: 2;
   border-radius: 0.313rem;
+
+  &.module {
+    background: #d9f5f0;
+    color: #06be9f;
+  }
 }
 
 // pro tag end
@@ -853,9 +858,11 @@ input[type="checkbox"]:focus {
 .settings-input-content:has(.registration-from-wrapper) {
   width: 100%;
 }
-.settings-input-content:has(.payment-tabs-component){
+
+.settings-input-content:has(.payment-tabs-component) {
   width: 50%;
 }
+
 .select-deselect-trigger {
   margin-bottom: 1rem;
 }
@@ -1247,20 +1254,21 @@ input[type="checkbox"]:focus {
     }
   }
 }
- .search-section {
-        display: flex;
-        align-items: center;
-        padding-left: 0.5rem;
 
-        i {
-            font-size: 1.25rem;
-        }
+.search-section {
+  display: flex;
+  align-items: center;
+  padding-left: 0.5rem;
 
-        input {
-            padding-left: 0;
-            background: none;
-        }
-    }
+  i {
+    font-size: 1.25rem;
+  }
+
+  input {
+    padding-left: 0;
+    background: none;
+  }
+}
 
 // date picker start
 .date-picker-section-wrapper {

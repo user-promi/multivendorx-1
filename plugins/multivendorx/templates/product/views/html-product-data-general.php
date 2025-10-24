@@ -46,13 +46,13 @@ $post = $args['post'];
             <div class="form-group-row pricing <?php echo $show_classes; ?>"> 
                 <div class="form-group">
                     <label class="control-label col-sm-3 col-md-3" for="_regular_price"><?php echo __( 'Regular price', 'multivendorx' ) . ' (' . get_woocommerce_currency_symbol() . ')'; ?></label>
-                    <div class="">
+                    <div class="input-wrapper">
                         <input type="text" id="_regular_price" name="_regular_price" value="<?php echo isset($_POST['_regular_price']) ? wc_clean($_POST['_regular_price']) : ($product_object->get_regular_price( 'edit' ) ? $product_object->get_regular_price( 'edit' ) : ''); ?>" class="form-control basic-input">
                     </div>
                 </div>  
                 <div class="form-group">
                     <label class="control-label col-sm-3 col-md-3" for="_sale_price"><?php echo __( 'Sale price', 'multivendorx' ) . ' (' . get_woocommerce_currency_symbol() . ')'; ?></label>
-                    <div class="col-md-6 col-sm-9">
+                    <div class="input-wrapper">
                         <input type="text" id="_sale_price" name="_sale_price" value="<?php echo isset($_POST['_sale_price']) ? wc_clean($_POST['_sale_price']) : ($product_object->get_sale_price( 'edit' ) ? $product_object->get_sale_price( 'edit' ) : ''); ?>" class="form-control basic-input">
                         <a href="#" class="pull-right sale_schedule form-text"><?php esc_html_e( 'Schedule', 'multivendorx' ); ?></a>
                     </div>
@@ -63,16 +63,16 @@ $post = $args['post'];
                 ?> 
                 <div class="form-group sale_price_dates_fields">
                     <label class="control-label col-sm-3 col-md-3"><?php esc_html_e( 'Sale price dates', 'multivendorx' ); ?></label>
-                    <div class="col-md-6 col-sm-9">
+                    <div class="input-wrapper">
                         <div class="row">
                             <div class="col-md-6">
                                 <span class="date-inp-wrap">
-                                    <input type="date" class="form-control sale_price_dates_from" name="_sale_price_dates_from" id="_sale_price_dates_from" value="<?php echo isset($_POST['_sale_price_dates_from']) ? wc_clean($_POST['_sale_price_dates_from']) : ($sale_price_dates_from ? esc_attr( $sale_price_dates_from ) : ''); ?>" placeholder="<?php echo esc_html( _x( 'From&hellip;', 'placeholder', 'multivendorx' ) ) . ' YYYY-MM-DD'; ?>" maxlength="10" pattern="<?php echo esc_attr( apply_filters( 'woocommerce_date_input_html_pattern', '[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])' ) ); ?>" />
+                                    <input type="date" class="basic-input sale_price_dates_from" name="_sale_price_dates_from" id="_sale_price_dates_from" value="<?php echo isset($_POST['_sale_price_dates_from']) ? wc_clean($_POST['_sale_price_dates_from']) : ($sale_price_dates_from ? esc_attr( $sale_price_dates_from ) : ''); ?>" placeholder="<?php echo esc_html( _x( 'From&hellip;', 'placeholder', 'multivendorx' ) ) . ' YYYY-MM-DD'; ?>" maxlength="10" pattern="<?php echo esc_attr( apply_filters( 'woocommerce_date_input_html_pattern', '[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])' ) ); ?>" />
                                 </span>
                             </div>
                             <div class="col-md-6">
                                 <span class="date-inp-wrap">
-                                    <input type="date" class="form-control sale_price_dates_to" name="_sale_price_dates_to" id="_sale_price_dates_to" value="<?php echo isset($_POST['_sale_price_dates_to']) ? wc_clean($_POST['_sale_price_dates_to']) : ($sale_price_dates_to ? esc_attr( $sale_price_dates_to ) : ''); ?>" placeholder="<?php echo esc_html( _x( 'To&hellip;', 'placeholder', 'multivendorx' ) ) . '  YYYY-MM-DD'; ?>" maxlength="10" pattern="<?php echo esc_attr( apply_filters( 'woocommerce_date_input_html_pattern', '[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])' ) ); ?>" />
+                                    <input type="date" class="basic-input sale_price_dates_to" name="_sale_price_dates_to" id="_sale_price_dates_to" value="<?php echo isset($_POST['_sale_price_dates_to']) ? wc_clean($_POST['_sale_price_dates_to']) : ($sale_price_dates_to ? esc_attr( $sale_price_dates_to ) : ''); ?>" placeholder="<?php echo esc_html( _x( 'To&hellip;', 'placeholder', 'multivendorx' ) ) . '  YYYY-MM-DD'; ?>" maxlength="10" pattern="<?php echo esc_attr( apply_filters( 'woocommerce_date_input_html_pattern', '[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])' ) ); ?>" />
                                 </span>
                             </div>
                         </div>
