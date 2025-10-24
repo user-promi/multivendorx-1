@@ -609,7 +609,7 @@ const StoreSettings = ({ id }: { id: string | null }) => {
                                         id="store-location-autocomplete"
                                         type="text"
                                         className="setting-form-input"
-                                        placeholder="Start typing your store address..."
+                                        placeholder="Search your store address..."
                                         defaultValue={addressData.location_address}
                                     />
                                 </div>
