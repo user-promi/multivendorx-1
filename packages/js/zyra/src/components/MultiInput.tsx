@@ -144,7 +144,7 @@ const MultiInput: React.FC<MultiInputProps> = (props) => {
     const updatedValues = [...values];
     const demoItem: MultiStringItem = {
       value: "New Item",
-      description: "Demo description",
+      description: "",
       iconClass: iconOptions.length > 0 ? iconOptions[0] : "",
       required: false,
     };

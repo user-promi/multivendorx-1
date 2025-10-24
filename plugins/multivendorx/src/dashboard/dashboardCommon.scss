@@ -377,7 +377,7 @@ $border-radius-button: 8rem;
     }
 }
 
-// notification style start
+// notification style start  (common admin-dashboard)
 .notification-wrapper {
     ul {
         margin: 0;
@@ -390,6 +390,7 @@ $border-radius-button: 8rem;
             cursor: pointer;
             border-radius: 0.313rem;
             margin-bottom: 1rem;
+            gap: 0.5rem;
 
             .icon-wrapper {
                 width: 6%;

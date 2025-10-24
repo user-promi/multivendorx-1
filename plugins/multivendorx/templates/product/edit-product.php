@@ -46,7 +46,7 @@ $product_fileds = MultiVendorX()->setting->get_setting('products_fields', array(
                 ?>
                 <input type="submit" class="admin-btn btn-purple" name="submit-data"
                     value="<?php echo esc_attr($primary_action); ?>" id="mvx_frontend_dashboard_product_submit" />
-                <input type="submit" class="admin-btn btn-purple" name="draft-data"
+                <input type="submit" class="admin-btn btn-light-blue" name="draft-data"
                     value="<?php esc_attr_e('Draft', 'multivendorx'); ?>" id="mvx_frontend_dashboard_product_draft" />
                 <input type="hidden" name="status" value="<?php echo esc_attr(get_post_status($post)); ?>">
                 <?php wp_nonce_field('mvx-product', 'mvx_product_nonce'); ?>
@@ -218,7 +218,7 @@ $product_fileds = MultiVendorX()->setting->get_setting('products_fields', array(
                         $visibility_options = wc_get_product_visibility_options();
                         ?>
                         <p class="cat-visiblity"><?php esc_html_e('Catalog visibility:', 'multivendorx'); ?>
-                            <strong id="catalog-visibility-display" class="primary-color">
+                            <strong id="catalog-visibility-display">
                                 <?php
 
                                 echo isset($visibility_options[$current_visibility]) ? esc_html($visibility_options[$current_visibility]) : esc_html($current_visibility);
@@ -246,10 +246,10 @@ $product_fileds = MultiVendorX()->setting->get_setting('products_fields', array(
                                     echo '<hr><div class="form-group"><label><input type="checkbox" name="_featured" class="mt-0" id="_featured" ' . checked($current_featured, 'yes', false) . ' data-label="' . __('Featured', 'multivendorx') . '" /> <span for="_featured">' . esc_html__('This is a featured product', 'multivendorx') . '</label></label></div>';
                                 }
                                 ?>
-                                <div class="form-group mt-15">
+                                <div class="buttons-wrapper">
                                     <button type="button"
-                                        class="btn btn-default btn-sm catalog-visiblity-btn"><?php esc_html_e('Ok', 'multivendorx'); ?></button>
-                                    <a href="javascript:void(0)" class="btn btn-default btn-sm" data-toggle="collapse"
+                                        class="admin-btn btn-green"><?php esc_html_e('Ok', 'multivendorx'); ?></button>
+                                    <a href="javascript:void(0)" class="admin-btn btn-red" data-toggle="collapse"
                                         data-target="#product_visiblity"><?php esc_html_e('Cancel', 'multivendorx'); ?></a>
                                 </div>
                             </div>

@@ -48,7 +48,7 @@ $post = $args['post'];
             </div>
         </div>
         <div class="row add-attribute-data">
-            <div class="col-md-12">
+            <div class="attribute-list">
                 <div class="product_attributes wc-metaboxes product-variations-wrapper">  
                     <?php
                     // Product attributes - taxonomies and custom, ordered, with visibility and variation attributes set

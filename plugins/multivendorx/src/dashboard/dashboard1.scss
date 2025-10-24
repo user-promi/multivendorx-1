@@ -546,11 +546,11 @@ a {
         }
     }
 
-    // cart header start
+    // cart header start  (common card-header style)
     .card-header {
         display: flex;
         justify-content: space-between;
-        padding-bottom: 2rem;
+        padding-bottom: 1rem;
 
         .left {
             .title {

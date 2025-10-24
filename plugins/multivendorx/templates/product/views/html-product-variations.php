@@ -59,7 +59,7 @@ $product_object = $args['product_object'];
             ?>
         </div>
         <div class="mvx-metabox-action variation-action">
-            <i class="mvx-font ico-up-arrow-icon"></i>
+            <i class="mvx-font adminlib-keyboard-arrow-down adminlib-keyboard-arrow-down" ></i>
             <a href="#" class="remove_variation delete" rel="<?php echo esc_attr( $variation_id ); ?>"><?php esc_html_e( 'Remove', 'multivendorx' ); ?></a>
         </div>
         <input type="hidden" name="variable_post_id[<?php echo esc_attr( $loop ); ?>]" value="<?php echo esc_attr( $variation_id ); ?>" />
@@ -186,16 +186,15 @@ $product_object = $args['product_object'];
             </div>
 
             <?php if ( 'yes' === get_option( 'woocommerce_manage_stock' ) ) : ?>
-                <div class="row show_if_variation_manage_stock">
-                    <div class="col-md-6">
+                <div class="show_if_variation_manage_stock">
                         <div class="form-group">
                             <label class="control-label col-md-6"><?php echo __( 'Stock quantity', 'multivendorx' ); ?></label>
                             <div class="col-md-6">
                                 <input type="number" class="form-control" id="variable_stock<?php echo esc_attr( $loop ); ?>" name="variable_stock[<?php echo esc_attr( $loop ); ?>]" value="<?php echo wc_stock_amount( $variation_object->get_stock_quantity( 'edit' ) ); ?>" step="any" />
                             </div>
+                        
+                        <input type="hidden" name="variable_original_stock[<?php echo esc_attr( $loop ); ?>]" class="basic-input" value="<?php echo esc_attr( wc_stock_amount( $variation_object->get_stock_quantity( 'edit' ) ) ); ?>" />
                         </div>
-                        <input type="hidden" name="variable_original_stock[<?php echo esc_attr( $loop ); ?>]" value="<?php echo esc_attr( wc_stock_amount( $variation_object->get_stock_quantity( 'edit' ) ) ); ?>" />
-                    </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             <label class="control-label col-md-6"><?php echo __( 'Allow backorders?', 'multivendorx' ); ?></label>

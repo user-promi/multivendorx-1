@@ -35,32 +35,34 @@ $post = $args['post'];
             if ( $self->mvx_is_allowed_product_type(...$manage_stock_visibility) ) :
                 $manage_stock_classes = apply_filters( 'inventory_tab_manage_stock_class_list', implode( ' ', preg_filter( '/^/', 'show_if_', $manage_stock_visibility ) ) );
                 ?>
-                <div class="form-group-row <?php echo $manage_stock_classes; ?>"> 
-                    <div class="form-group">
+                <!-- <div class="form-group-row ">  -->
+                    <div class="form-group <?php echo $manage_stock_classes; ?>">
                         <label class="control-label col-sm-3 col-md-3" for="_manage_stock">
                             <?php esc_html_e( 'Manage stock?', 'multivendorx' ); ?>
                             <?php do_action( 'mvx_frontend_dashboard_product_options_stock_description' ); ?>
                         </label>
                         <div class="input-wrapper">
-                            <input class="basic-input" type="checkbox" id="_manage_stock" name="_manage_stock" value="yes"<?php checked( isset($_POST['_manage_stock']) && $_POST['_manage_stock'] == 'yes' ? true : $product_object->get_manage_stock( 'edit' ), true ); ?>/>
+                            <input type="checkbox" id="_manage_stock" name="_manage_stock" value="yes"<?php checked( isset($_POST['_manage_stock']) && $_POST['_manage_stock'] == 'yes' ? true : $product_object->get_manage_stock( 'edit' ), true ); ?>/>
+                            <!-- <input class="form-control" type="checkbox" id="_sold_individually" name="_sold_individually" value="yes"<?php checked( isset($_POST['_sold_individually']) && $_POST['_sold_individually'] == 'yes' ? true : $product_object->get_sold_individually( 'edit' ), true ); ?>/> -->
+                    
                             <span class="form-text "><?php esc_html_e( 'Enable stock management at product level', 'multivendorx' ); ?> 
                         </div>
                     </div>  
-                </div>
+                <!-- </div> -->
                 <?php do_action( 'mvx_frontend_dashboard_product_options_stock', $post->ID, $product_object, $post ); ?>
                 <?php
                 $stock_fields_visibility = apply_filters( 'inventory_tab_stock_fields_section', array( 'simple', 'variable' ) );
                 if ( $self->mvx_is_allowed_product_type( ...$stock_fields_visibility ) ) :
                     $stock_fields_classes = apply_filters( 'inventory_tab_stock_fields_class_list', implode( ' ', preg_filter( '/^/', 'show_if_', $stock_fields_visibility ) ) );
                     ?>
-                    <div class = "form-group-row stock_fields <?php echo $stock_fields_classes; ?>">
+                    <div class = "stock_fields <?php echo $stock_fields_classes; ?>">
                         <div class="form-group">
                             <label class="control-label col-sm-3 col-md-3" for="_stock">
                                 <?php _e( 'Stock quantity', 'multivendorx' ); ?> 
                                 <span class="img_tip" data-desc="<?php esc_html_e( 'Stock quantity. If this is a variable product this value will be used to control stock for all variations, unless you define stock at variation level.', 'multivendorx' ); ?>"></span>
                             </label>
                             <div class="input-wrapper">
-                                <input class="form-control" type="text" id="_stock" name="_stock" value="<?php echo isset($_POST['_stock']) ? absint($_POST['_stock']) : wc_stock_amount( $product_object->get_stock_quantity( 'edit' ) ); ?>" /> 
+                                <input class="basic-input" type="text" id="_stock" name="_stock" value="<?php echo isset($_POST['_stock']) ? absint($_POST['_stock']) : wc_stock_amount( $product_object->get_stock_quantity( 'edit' ) ); ?>" /> 
                             </div>
                         </div>
                         <?php echo '<input type="hidden" name="_original_stock" value="' . esc_attr( wc_stock_amount( $product_object->get_stock_quantity( 'edit' ) ) ) . '" />'; ?>
@@ -83,7 +85,7 @@ $post = $args['post'];
                                 <span class="img_tip" data-desc="<?php esc_html_e( 'When product stock reaches this amount you will be notified by email', 'multivendorx' ); ?>"></span>
                             </label>
                             <div class="input-wrapper">
-                                <input class="form-control" type="text" id="_low_stock_amount" name="_low_stock_amount" value="<?php echo isset($_POST['_low_stock_amount']) ? absint($_POST['_low_stock_amount']) : $product_object->get_low_stock_amount( 'edit' ); ?>" placeholder="<?php echo esc_attr(get_option( 'woocommerce_notify_low_stock_amount') ); ?>" /> 
+                                <input class="basic-input" type="text" id="_low_stock_amount" name="_low_stock_amount" value="<?php echo isset($_POST['_low_stock_amount']) ? absint($_POST['_low_stock_amount']) : $product_object->get_low_stock_amount( 'edit' ); ?>" placeholder="<?php echo esc_attr(get_option( 'woocommerce_notify_low_stock_amount') ); ?>" /> 
                             </div>
                         </div>
                     </div>
@@ -96,18 +98,18 @@ $post = $args['post'];
             if ( $self->mvx_is_allowed_product_type( ...$stock_status_invisibility ) ) :
                 $hide_classes = implode( ' ', preg_filter( '/^/', 'hide_if_', $stock_status_invisibility ) );
             endif; ?> 
-            <div class="form-group-row stock_status_field <?php echo $hide_classes; ?>">
-                <div class="form-group">
+            <!-- <div class="form-group-row  ?>"> -->
+                <div class="form-group stock_status_field <?php echo $hide_classes; ?>">
                     <label class="control-label col-sm-3 col-md-3" for="_stock_status"><?php _e( 'Stock status', 'multivendorx' ); ?></label>
                     <div class="input-wrapper">
-                        <select id="_stock_status" name="_stock_status" class="form-control">
+                        <select id="_stock_status" name="_stock_status" class="basic-select">
                             <?php foreach ( wc_get_product_stock_status_options() as $key => $option ) : ?>
                                 <option value="<?php echo $key; ?>" <?php selected( isset($_POST['_stock_status']) ? wc_clean($_POST['_stock_status']) : $product_object->get_stock_status( 'edit' ), $key ); ?>><?php echo $option; ?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>
                 </div>    
-            </div>
+            <!-- </div> -->
             <?php do_action( 'mvx_frontend_dashboard_product_options_stock_status', $post->ID, $product_object, $post ); ?> 
             
         <?php endif; ?> 
@@ -116,8 +118,8 @@ $post = $args['post'];
         if ( $self->mvx_is_allowed_product_type( ...$sold_individually_visibility ) ) :
             $show_classes = implode( ' ', preg_filter( '/^/', 'show_if_', $sold_individually_visibility ) );
             ?>
-            <div class="form-group-row <?php echo $show_classes; ?>"> 
-                <div class="form-group">
+            <!-- <div class="form-group-row ">  -->
+                <div class="form-group <?php echo $show_classes; ?>">
                     <label class="control-label col-sm-3 col-md-3" for="_sold_individually"><?php esc_html_e( 'Sold individually', 'multivendorx' ); ?></label>
                     <div class="input-wrapper">
                         <input class="form-control" type="checkbox" id="_sold_individually" name="_sold_individually" value="yes"<?php checked( isset($_POST['_sold_individually']) && $_POST['_sold_individually'] == 'yes' ? true : $product_object->get_sold_individually( 'edit' ), true ); ?>/>
@@ -125,7 +127,7 @@ $post = $args['post'];
                     </div>
                 </div> 
                 <?php do_action( 'mvx_frontend_dashboard_product_options_sold_individually', $post->ID, $product_object, $post ); ?>
-            </div>
+            <!-- </div> -->
         <?php endif; ?>
         <?php do_action( 'mvx_frontend_dashboard_after_inventory_section_end', $post->ID, $product_object, $post ); ?>
     </div>

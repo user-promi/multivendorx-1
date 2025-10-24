@@ -19,7 +19,7 @@ $border-light-small: 0.063rem solid #e0e4e9;
     gap: 1rem;
     flex-wrap: wrap;
 
-     .form-group {
+    .form-group {
         position: relative;
         display: flex;
         width: 100%;
@@ -28,15 +28,16 @@ $border-light-small: 0.063rem solid #e0e4e9;
         label {
             width: 30%;
         }
-        .input-wrapper{
+
+        .input-wrapper {
             width: 70%;
         }
-     }
+    }
 }
 
 #general_product_data {
     .form-group {
-        
+
 
         .input-wrapper {
             .row {
@@ -66,12 +67,11 @@ $border-light-small: 0.063rem solid #e0e4e9;
             }
         }
 
-        &.stock_fields {
-            flex-wrap: nowrap;
-
-            .form-group {
-                height: 1.125rem;
-            }
+        .stock_fields {
+            width: 100%;
+            flex-direction: column;
+            display: flex;
+            gap: 1em;
         }
 
         &.show_if_variable {
@@ -107,12 +107,14 @@ $border-light-small: 0.063rem solid #e0e4e9;
     }
 }
 
-.add-attribute-data {
+.add-attribute-data,
+.attribute-list {
     width: 100%;
 }
 
 .product_attributes {
-    .mvx-metabox-title {
+    .mvx-metabox-title,
+    .wc-metabox-content {
         display: flex;
         justify-content: space-between;
         padding: 0.5rem;
@@ -120,6 +122,15 @@ $border-light-small: 0.063rem solid #e0e4e9;
 
         .remove_row {
             color: rgba(187, 14, 14, 0.767);
+        }
+
+        tr{
+            .attribute_name{
+                padding-right: 1rem;
+            }
+        }
+        .adminlib-drag{
+            cursor: move;
         }
     }
 
@@ -213,12 +224,11 @@ $border-light-small: 0.063rem solid #e0e4e9;
 // Category Styles
 
 .category {
-    ul {
         margin: 0;
         list-style: none;
 
         li {
-            margin-bottom: 0.45rem;
+            margin-bottom: 1rem;
 
             label {
                 font-size: 1rem;
@@ -226,14 +236,15 @@ $border-light-small: 0.063rem solid #e0e4e9;
 
             ul {
                 margin-left: 1rem;
-                margin-top: 0.45rem;
+                margin-top: 1rem;
+                list-style-type: none;
 
                 li {
-                    margin-bottom: 0.45rem;
+                    margin-bottom: 1rem;
                 }
             }
         }
-    }
+    
 }
 
 
@@ -265,8 +276,8 @@ $border-light-small: 0.063rem solid #e0e4e9;
     }
 
     select {
-        position: absolute;
-        bottom: -3rem;
+        // position: absolute;
+        // bottom: -3rem;
     }
 
     label {
