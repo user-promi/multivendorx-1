@@ -81,12 +81,56 @@ class MultiVendorX_REST_Zone_Shipping_Controller extends \WP_REST_Controller {
     
     
     public function create_item( $request ) {
-
+        // Verify nonce
+        $nonce = $request->get_header('X-WP-Nonce');
+        if ( ! wp_verify_nonce($nonce, 'wp_rest') ) {
+            return rest_ensure_response([
+                'success' => false,
+                'message' => __( 'Invalid nonce', 'multivendorx' )
+            ]);
+        }
+    
+        $store_id      = intval( $request->get_param('store_id') );
+        $zone_id       = intval( $request->get_param('zone_id') );
+        $shipping_data = $request->get_param('shipping_data');
+    
+        // Validate required fields
+        if ( empty($shipping_data['shippingMethod']) ) {
+            return rest_ensure_response([
+                'success' => false,
+                'message' => __( 'Shipping method is required', 'multivendorx' )
+            ]);
+        }
+    
+        // Prepare data for insertion
+        $data = [
+            'zone_id'   => $zone_id,
+            'method_id' => sanitize_text_field( $shipping_data['shippingMethod'] ),
+            'settings'  => isset($shipping_data['settings']) ? $shipping_data['settings'] : []
+        ];
+    
+        // Call your simplified add function
+        $result = Util::add_shipping_methods($data, $store_id);
+    
+        // Handle result
+        if ( is_wp_error($result) ) {
+            return rest_ensure_response([
+                'success' => false,
+                'message' => $result->get_error_message(),
+                'code'    => $result->get_error_code(),
+                'data'    => $result->get_error_data()
+            ]);
+        }
+    
+        return rest_ensure_response([
+            'success'   => true,
+            'message'   => __( 'Shipping method created successfully', 'multivendorx' ),
+            'insert_id' => $result
+        ]);
     }
+    
 
     public function get_item( $request ) {
-       
-        
         $zone_id = $request->get_param( 'zone_id' );
         $store_id = $request->get_param( 'store_id' );
 
@@ -96,26 +140,90 @@ class MultiVendorX_REST_Zone_Shipping_Controller extends \WP_REST_Controller {
     
     public function update_item( $request ) {
         // Verify nonce
-        $nonce = $request->get_header( 'X-WP-Nonce' );
-        if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
-            return new \WP_Error(
-                'invalid_nonce',
-                __( 'Invalid nonce', 'multivendorx' ),
-                [ 'status' => 403 ]
-            );
+        $nonce = $request->get_header('X-WP-Nonce');
+        if ( ! wp_verify_nonce($nonce, 'wp_rest') ) {
+            return rest_ensure_response([
+                'success' => false,
+                'message' => __( 'Invalid nonce', 'multivendorx' )
+            ]);
         }
     
-      
-        return rest_ensure_response( [ 'success' => true ] );
+        $store_id      = intval($request->get_param('store_id'));
+        $zone_id       = intval($request->get_param('zone_id'));
+        $shipping_data = $request->get_param('shipping_data');
+        $action        = $request->get_param('action');
+        
+        // Handle "add shipping"
+        if ($action === 'add_shipping' && !empty($shipping_data['shippingMethod'])) {
+            $data = [
+                'zone_id'   => $zone_id,
+                'method_id' => sanitize_text_field($shipping_data['shippingMethod']),
+            ];
+    
+            $result = Util::add_shipping_methods($data, $store_id);
+    
+            // Log result
+    
+            if (is_wp_error($result)) {
+                return rest_ensure_response([
+                    'success' => false,
+                    'message' => $result->get_error_message(),
+                    'code'    => $result->get_error_code(),
+                    'data'    => $result->get_error_data()
+                ]);
+            }
+    
+            return rest_ensure_response([
+                'success' => true,
+                'message' => __( 'Shipping method added successfully', 'multivendorx' ),
+                'insert_id' => $result
+            ]);
+        }
+    
+        // Normal update
+        return rest_ensure_response([ 'success' => true ]);
     }
     
     public function delete_item( $request ) {
         // Verify nonce
-     
-        return rest_ensure_response( [ 'success' => true ] );
+        $nonce = $request->get_header('X-WP-Nonce');
+        if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
+            return rest_ensure_response([
+                'success' => false,
+                'message' => __( 'Invalid nonce', 'multivendorx' )
+            ]);
+        }
+    
+        $store_id    = intval( $request->get_param('store_id') );
+        $zone_id     = intval( $request->get_param('zone_id') );
+        $instance_id = intval( $request->get_param('instance_id') );
+    
+        if ( ! $store_id || ! $zone_id || ! $instance_id ) {
+            return rest_ensure_response([
+                'success' => false,
+                'message' => __( 'Missing required parameters', 'multivendorx' )
+            ]);
+        }
+    
+        // Call delete function
+        $result = Util::delete_shipping_methods(
+            [
+                'zone_id'     => $zone_id,
+                'instance_id' => $instance_id,
+            ],
+            $store_id
+        );
+    
+        if ( is_wp_error( $result ) ) {
+            return rest_ensure_response([
+                'success' => false,
+                'message' => $result->get_error_message()
+            ]);
+        }
+    
+        return rest_ensure_response([
+            'success' => true,
+            'message' => __( 'Shipping method deleted successfully', 'multivendorx' )
+        ]);
     }
-    
-    
-    
-    
 }

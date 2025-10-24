@@ -8,11 +8,11 @@ import {
     ToggleSetting,
     BasicInput,
     getApiLink,
+    MultiCheckBox,
 } from "zyra";
 import type { ColumnDef, PaginationState } from "@tanstack/react-table";
 import { __ } from "@wordpress/i18n";
 
-// ✅ Type definition for each zone
 type Zone = {
     id: number;
     zone_name: string;
@@ -30,15 +30,21 @@ const DistanceByZoneShipping: React.FC = () => {
     const [totalRows, setTotalRows] = useState<number>(0);
     const [pageCount, setPageCount] = useState<number>(0);
     const [error, setError] = useState<string>();
-    const [editShipping, setEditShipping] = useState(false);
+    const [addShipping, setAddShipping] = useState<boolean>(false);
     const [selectedZone, setSelectedZone] = useState<Zone | null>(null);
-    const [formData, setFormData] = useState({
-        shippingMethod: "",
-        shippingCost: "",
+
+    const [formData, setFormData] = useState<any>({
+        shippingMethod: [],
         localPickupCost: "",
+        taxStatus: false,
+        freeShippingType: [],
+        minOrderCost: "",
+        flatRateCost: "",
+        flatRateTaxStatus: false,
+        flatRateClassCost: "",
+        flatRateCalculationType: [],
     });
 
-    // ✅ Fetch zones on mount
     useEffect(() => {
         fetchZones();
     }, []);
@@ -64,99 +70,49 @@ const DistanceByZoneShipping: React.FC = () => {
         }
     };
 
-    //Edit a zone
-    const handleEdit = async (zone: Zone) => {
-        try {
-            // Build the URL with zone ID
-            const url = getApiLink(appLocalizer, `zone-shipping/${zone.zone_id}`);
-
-            // Fetch the latest zone data from backend
-            const res = await axios.get(url, {
-                headers: { "X-WP-Nonce": appLocalizer.nonce },
-                params: {
-                    store_id: appLocalizer.store_id, // still pass store_id if required
-                    zone_id: zone.zone_id,
-                },
-            });
-
-            const fetchedZone: Zone = res.data; // should match your Zone type
-            setSelectedZone(fetchedZone);
-
-            // Extract first shipping method and local pickup
-            const firstMethod = fetchedZone.shipping_methods?.[0];
-            const localPickup = fetchedZone.shipping_methods?.find(
-                (m: any) => m.method_id === "local_pickup"
-            );
-
-            setFormData({
-                shippingMethod: firstMethod?.method_id || "flat_rate",
-                shippingCost: firstMethod?.settings?.cost || "",
-                localPickupCost: localPickup?.settings?.cost || "",
-            });
-
-            setEditShipping(true);
-        } catch (err) {
-            console.error("Failed to fetch zone details:", err);
-            alert("Failed to load zone details. Please try again.");
-        }
+    const handleAdd = (zone: Zone) => {
+        setSelectedZone(zone);
+        setAddShipping(true);
+        setFormData({
+            shippingMethod: [],
+            localPickupCost: "",
+            taxStatus: false,
+            freeShippingType: [],
+            minOrderCost: "",
+            flatRateCost: "",
+            flatRateTaxStatus: false,
+            flatRateClassCost: "",
+            flatRateCalculationType: "",
+        });
     };
 
-
-    const handleChange = (key: string, value: string) => {
-        setFormData((prev) => ({ ...prev, [key]: value }));
+    const handleChange = (key: string, value: any) => {
+        setFormData((prev: any) => ({ ...prev, [key]: value }));
     };
 
-    const handleSave = async () => {
-        if (!selectedZone) return;
-
-        try {
-            const res = await axios({
-                method: "POST",
-                url: getApiLink(appLocalizer, "zone-shipping/update"),
-                headers: { "X-WP-Nonce": appLocalizer.nonce },
-                data: {
-                    store_id: appLocalizer.store_id,
-                    zone_id: selectedZone.zone_id,
-                    shipping_data: formData,
-                },
-            });
-
-            const updated = data.map((zone) =>
-                zone.zone_id === selectedZone.zone_id
-                    ? { ...zone, shipping_methods: res.data.shipping_methods }
-                    : zone
-            );
-
-            setData(updated);
-            setEditShipping(false);
-        } catch (err) {
-            console.error("Failed to update shipping:", err);
-            alert("Failed to save shipping changes.");
-        }
+    const handleSave = () => {
+        console.log("Form Data for zone:", selectedZone, formData);
+        setAddShipping(false);
     };
-    //Define Table Columns
+
     const columns: ColumnDef<Zone>[] = [
         {
             header: __("Zone Name", "multivendorx"),
-            cell: ({ row }) => (
-                <TableCell>{row.original.zone_name || "—"}</TableCell>
-            ),
+            cell: ({ row }) => <TableCell>{row.original.zone_name || "—"}</TableCell>,
         },
         {
             header: __("Region(s)", "multivendorx"),
-            cell: ({ row }) => (
-                <TableCell>
-                    {row.original.formatted_zone_location || "—"}
-                </TableCell>
-            ),
+            cell: ({ row }) => <TableCell>{row.original.formatted_zone_location || "—"}</TableCell>,
         },
         {
             header: __("Shipping Method(s)", "multivendorx"),
             cell: ({ row }) => {
-                const methods = row.original.shipping_methods;
-                if (!methods || methods.length === 0)
-                    return <TableCell>No shipping methods</TableCell>;
-                const methodNames = methods.map((m: any) => m.title).join(", ");
+                const methodsObj = row.original.shipping_methods || {};
+                const methodsArray = Object.values(methodsObj);
+
+                if (methodsArray.length === 0) return <TableCell>No shipping methods</TableCell>;
+
+                const methodNames = methodsArray.map((m: any) => m.title).join(", ");
                 return <TableCell>{methodNames}</TableCell>;
             },
         },
@@ -168,9 +124,9 @@ const DistanceByZoneShipping: React.FC = () => {
                     header={{
                         actions: [
                             {
-                                label: __("Edit", "multivendorx"),
-                                icon: "adminlib-edit",
-                                onClick: () => handleEdit(row.original),
+                                label: __("Add", "multivendorx"),
+                                icon: "adminlib-plus",
+                                onClick: () => handleAdd(row.original),
                             },
                         ],
                     }}
@@ -200,24 +156,21 @@ const DistanceByZoneShipping: React.FC = () => {
                 />
             </div>
 
-            {editShipping && selectedZone && (
+            {addShipping && selectedZone && (
                 <CommonPopup
-                    open={editShipping}
-                    width="500px"
-                    height="auto"
+                    open={addShipping}
+                    width="800px"
+                    height="50%"
                     header={
                         <>
                             <div className="title flex items-center gap-2">
                                 <i className="adminlib-cart"></i>
-                                {__("Edit Shipping — ", "multivendorx")}
+                                {__("Add Shipping — ", "multivendorx")}
                                 {selectedZone.zone_name}
                             </div>
-                            <p>
-                                {__("Manage the pricing and methods for this zone.", "multivendorx")}
-                            </p>
                             <i
                                 className="icon adminlib-close cursor-pointer"
-                                onClick={() => setEditShipping(false)}
+                                onClick={() => setAddShipping(false)}
                             ></i>
                         </>
                     }
@@ -225,7 +178,7 @@ const DistanceByZoneShipping: React.FC = () => {
                         <div className="flex justify-end gap-2 p-3">
                             <button
                                 className="btn btn-default"
-                                onClick={() => setEditShipping(false)}
+                                onClick={() => setAddShipping(false)}
                             >
                                 {__("Cancel", "multivendorx")}
                             </button>
@@ -235,46 +188,159 @@ const DistanceByZoneShipping: React.FC = () => {
                         </div>
                     }
                 >
-                    <div className="content p-3">
-                        <div className="form-group">
-                            <label htmlFor="method">
-                                {__("Shipping Method", "multivendorx")}
-                            </label>
-                            <ToggleSetting
-                                wrapperClass="setting-form-input"
-                                value={formData.shippingMethod}
-                                onChange={(val) => handleChange("shippingMethod", val)}
-                                options={[
-                                    { key: "flat_rate", value: "Flat rate", label: "Flat rate" },
-                                    { key: "free_shipping", value: "Free shipping", label: "Free shipping" },
-                                    { key: "local_pickup", value: "Local pickup", label: "Local pickup" },
-                                ]}
-                            />
-                        </div>
+                    <div className="content p-3 space-y-4">
+                        {/* Select Shipping Method */}
+                        <label className="font-medium">{__("Shipping Method", "multivendorx")}</label>
+                        <ToggleSetting
+                            wrapperClass="setting-form-input"
+                            value={formData.shippingMethod}
+                            onChange={(val: string[]) => handleChange("shippingMethod", val)}
+                            options={[
+                                { key: "local_pickup", value: "local_pickup", label: "Local pickup" },
+                                { key: "free_shipping", value: "free_shipping", label: "Free shipping" },
+                                { key: "flat_rate", value: "flat_rate", label: "Flat Rate" },
+                            ]}
+                        />
 
-                        <div className="form-group mt-3">
-                            <label>{__("Shipping Cost ($)", "multivendorx")}</label>
-                            <BasicInput
-                                type="number"
-                                name="shippingCost"
-                                value={formData.shippingCost}
-                                onChange={(e: any) =>
-                                    handleChange("shippingCost", e.target.value)
-                                }
-                            />
-                        </div>
+                        {/* Local Pickup */}
+                        {formData.shippingMethod.includes("local_pickup") && (
+                            <>
+                                <p className="font-medium mb-2">{__("Local Pickup Options", "multivendorx")}</p>
 
-                        <div className="form-group mt-3">
-                            <label>{__("Local Pickup Cost ($)", "multivendorx")}</label>
-                            <BasicInput
-                                type="number"
-                                name="localPickupCost"
-                                value={formData.localPickupCost}
-                                onChange={(e: any) =>
-                                    handleChange("localPickupCost", e.target.value)
-                                }
-                            />
-                        </div>
+                                <div className="form-group">
+                                    <label className="font-medium">{__("Cost", "multivendorx")}</label>
+                                    <BasicInput
+                                        type="number"
+                                        name="localPickupCost"
+                                        placeholder="Enter cost"
+                                        value={formData.localPickupCost}
+                                        onChange={(e: any) => handleChange("localPickupCost", e.target.value)}
+                                    />
+                                </div>
+
+                                <div className="form-group">
+                                    <label className="font-medium">{__("Tax Status", "multivendorx")}</label>
+                                    <MultiCheckBox
+                                        wrapperClass="toggle-btn"
+                                        inputWrapperClass="toggle-checkbox-header"
+                                        inputInnerWrapperClass="toggle-checkbox"
+                                        inputClass="tax-checkbox"
+                                        idPrefix="tax-status-local"
+                                        type="checkbox"
+                                        options={[
+                                            {
+                                                key: "taxable",
+                                                value: "taxable",
+                                            },
+                                        ]}
+                                        value={formData.taxStatus ? ["taxable"] : []}
+                                        onChange={(e) => {
+                                            if (Array.isArray(e)) {
+                                                handleChange("taxStatus", e.includes("taxable"));
+                                            } else {
+                                                handleChange("taxStatus", e.target.checked);
+                                            }
+                                        }}
+                                    />
+                                </div>
+                            </>
+                        )}
+
+                        {/* Free Shipping */}
+                        {formData.shippingMethod.includes("free_shipping") && (
+                            <>
+                                <p className="font-medium mb-2">{__("Free Shipping Options", "multivendorx")}</p>
+                                <ToggleSetting
+                                    wrapperClass="setting-form-input"
+                                    value={formData.freeShippingType}
+                                    onChange={(val: string[]) => handleChange("freeShippingType", val)}
+                                    options={[
+                                        { key: "min_order", value: "min_order", label: "Min Order" },
+                                        { key: "coupon", value: "coupon", label: "Coupon" },
+                                    ]}
+                                />
+                                {formData.freeShippingType.includes("min_order") && (
+                                    <div className="form-group mt-2">
+                                        <label className="font-medium">{__("Minimum Order Cost", "multivendorx")}</label>
+                                        <BasicInput
+                                            type="number"
+                                            name="minOrderCost"
+                                            placeholder="Enter minimum order cost"
+                                            value={formData.minOrderCost}
+                                            onChange={(e: any) => handleChange("minOrderCost", e.target.value)}
+                                        />
+                                    </div>
+                                )}
+                            </>
+                        )}
+
+                        {/* Flat Rate */}
+                        {formData.shippingMethod.includes("flat_rate") && (
+                            <>
+                                <p className="font-medium mb-2">{__("Flat Rate Options", "multivendorx")}</p>
+
+                                <div className="form-group">
+                                    <label className="font-medium">{__("Cost", "multivendorx")}</label>
+                                    <BasicInput
+                                        type="number"
+                                        name="flatRateCost"
+                                        placeholder="Enter cost"
+                                        value={formData.flatRateCost}
+                                        onChange={(e: any) => handleChange("flatRateCost", e.target.value)}
+                                    />
+                                </div>
+
+                                <div className="form-group">
+                                    <label className="font-medium">{__("Tax Status", "multivendorx")}</label>
+                                    <MultiCheckBox
+                                        wrapperClass="toggle-btn"
+                                        inputWrapperClass="toggle-checkbox-header"
+                                        inputInnerWrapperClass="toggle-checkbox"
+                                        inputClass="tax-checkbox"
+                                        idPrefix="tax-status-flat"
+                                        type="checkbox"
+                                        options={[
+                                            {
+                                                key: "taxable",
+                                                value: "taxable",
+                                            },
+                                        ]}
+                                        value={formData.flatRateTaxStatus ? ["taxable"] : []}
+                                        onChange={(e) => {
+                                            if (Array.isArray(e)) {
+                                                handleChange("flatRateTaxStatus", e.includes("taxable"));
+                                            } else {
+                                                handleChange("flatRateTaxStatus", e.target.checked);
+                                            }
+                                        }}
+                                    />
+                                </div>
+
+                                <div className="form-group">
+                                    <label className="font-medium">{__("Cost of Shipping Class", "multivendorx")}</label>
+                                    <BasicInput
+                                        type="text"
+                                        name="flatRateClassCost"
+                                        placeholder="Enter class cost"
+                                        value={formData.flatRateClassCost}
+                                        onChange={(e: any) => handleChange("flatRateClassCost", e.target.value)}
+                                    />
+                                </div>
+
+                                <div className="form-group">
+                                    <label className="font-medium">{__("Calculation Type", "multivendorx")}</label>
+                                    <ToggleSetting
+                                        wrapperClass="setting-form-input"
+                                        value={formData.flatRateCalculationType}
+                                        onChange={(val: string[]) => handleChange("flatRateCalculationType", val)}
+                                        options={[
+                                            { key: "per_class", value: "per_class", label: "Per Class" },
+                                            { key: "per_order", value: "per_order", label: "Per Order" },
+                                        ]}
+                                    />
+                                </div>
+                            </>
+                        )}
                     </div>
                 </CommonPopup>
             )}
@@ -283,3 +349,7 @@ const DistanceByZoneShipping: React.FC = () => {
 };
 
 export default DistanceByZoneShipping;
+
+
+
+

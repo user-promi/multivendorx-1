@@ -71,42 +71,44 @@ class Util {
         return $zone;
     }
 
-    public static function add_shipping_methods( $data, $store_id = 0 ) {
+    public static function add_shipping_methods($data, $store_id = 0) {
+        global $wpdb;
+    
+        $table = $wpdb->prefix . Utill::TABLES['shipping_zone'];
+    
+        // Validate method_id
+        if (empty($data['method_id'])) {
+            return new \WP_Error('no-method-id', __('No shipping method found for adding', 'multivendorx'));
+        }
+    
+        // Prepare data
+        $insert_data = array(
+            'method_id' => $data['method_id'],
+            'zone_id'   => $data['zone_id'],
+            'store_id'  => $store_id,
+            'settings'  => !empty($data['settings']) ? maybe_serialize($data['settings']) : ''
+        );
+    
+        // Insert into database
+        $result = $wpdb->insert(
+            $table,
+            $insert_data,
+            array('%s', '%d', '%d', '%s') // format for method_id, zone_id, store_id, settings
+        );
+    
+        if (!$result) {
+            return new \WP_Error('method-not-added', __('Shipping method not added successfully', 'multivendorx'));
+        }
+    
+        return $wpdb->insert_id;
+    }
+    
+    
+    public static function delete_shipping_methods( $data, $store_id = 0 ) {
         global $wpdb;
 
         $table = $wpdb->prefix . Utill::TABLES['shipping_zone'];
-
-        if ( empty( $data['method_id'] ) ) {
-            return new WP_Error( 'no-method-id', __( 'No shipping method found for adding', 'multivendorx' ) );
-        }
-
-        $result = $wpdb->insert(
-            esc_sql($table),
-            array(
-                'method_id' => esc_sql($data['method_id']),
-                'zone_id'   => esc_sql($data['zone_id']),
-                'store_id' => $store_id
-            ),
-            array(
-                '%s',
-                '%d',
-                '%d'
-            )
-        );
-
-        if ( ! $result ) {
-            return new WP_Error( 'method-not-added', __( 'Shipping method not added successfully', 'multivendorx' ) );
-        }
-
-        return $wpdb->insert_id;
-    }
-
-    public static function delete_shipping_methods( $data, $vendor_id = 0 ) {
-        global $wpdb;
-
-        $table_name = "{$wpdb->prefix}mvx_shipping_zone_methods";
-        $vendor_id = $vendor_id ? $vendor_id : apply_filters( 'mvx_current_vendor_id', get_current_user_id() );
-        $result = $wpdb->query( $wpdb->prepare( "DELETE FROM {$table_name} WHERE zone_id=%d AND vendor_id=%d AND instance_id=%d", $data['zone_id'], $vendor_id, $data['instance_id'] ) );
+        $result = $wpdb->query( $wpdb->prepare( "DELETE FROM {$table} WHERE zone_id=%d AND store_id=%d AND instance_id=%d", $data['zone_id'], $store_id, $data['instance_id'] ) );
 
         if ( ! $result ) {
             return new WP_Error( 'method-not-deleted', __( 'Shipping method not deleted', 'multivendorx' ) );
@@ -164,7 +166,7 @@ class Util {
         $data = array(
             'method_id' => $args['method_id'],
             'zone_id'   => $args['zone_id'],
-            'vendor_id' => empty( $args['vendor_id'] ) ? apply_filters( 'mvx_current_vendor_id', get_current_user_id() ) : $args['vendor_id'],
+            'store_id'  => $args['store_id'],
             'settings'  => maybe_serialize( $args['settings'] )
         );
 
