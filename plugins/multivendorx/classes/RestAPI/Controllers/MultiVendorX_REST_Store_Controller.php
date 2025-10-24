@@ -663,7 +663,6 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
     
 
     public function get_states_by_country($request) {
-        file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":orders: : " . var_export('hi', true) . "\n", FILE_APPEND);
         $country_code = $request->get_param('country');
         $states = WC()->countries->get_states($country_code);
 

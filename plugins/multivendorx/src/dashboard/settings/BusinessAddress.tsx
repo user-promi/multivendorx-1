@@ -1,10 +1,12 @@
 import { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
-import { BasicInput, getApiLink } from 'zyra';
+import { BasicInput, getApiLink, SelectInput } from 'zyra';
 
 declare global {
     interface Window {
         google: any;
+        mapboxgl: any;
+        MapboxGeocoder: any;
     }
 }
 
@@ -25,6 +27,7 @@ const BusinessAddress = () => {
     const autocompleteInputRef = useRef<HTMLInputElement>(null);
     const [mapProvider, setMapProvider] = useState('');
     const [apiKey, setApiKey] = useState('');
+    const [stateOptions, setStateOptions] = useState<{ label: string; value: string }[]>([]);
     const appLocalizer = (window as any).appLocalizer;
 
     const [addressData, setAddressData] = useState({
@@ -88,6 +91,13 @@ const BusinessAddress = () => {
                 };
 
                 setAddressData(formattedData);
+                setFormData(data); // Also set formData for country/state management
+                
+                // Fetch states if country is already set
+                if (data.country) {
+                    fetchStatesByCountry(data.country);
+                }
+                
                 setLoading(false);
             } catch (error: any) {
                 console.error('Error loading store data:', error);
@@ -119,6 +129,64 @@ const BusinessAddress = () => {
             loadMapboxScript();
         }
     }, [mapProvider, googleLoaded, mapboxLoaded]);
+
+    // Fetch states when country changes
+    useEffect(() => {
+        if (formData.country) {
+            fetchStatesByCountry(formData.country);
+        }
+    }, [formData.country]);
+
+    const fetchStatesByCountry = (countryCode: string) => {
+        axios({
+            method: 'GET',
+            url: getApiLink(appLocalizer, `states/${countryCode}`),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+        }).then((res) => {
+            setStateOptions(res.data || []);
+        })
+    };
+
+    // Handle country select change (from old code)
+    const handleCountryChange = (newValue: any) => {
+        if (!newValue || Array.isArray(newValue)) return;
+        
+        const updatedAddressData = { 
+            ...addressData, 
+            country: newValue.value, 
+            state: '' // reset state when country changes
+        };
+        
+        const updatedFormData = { 
+            ...formData, 
+            country: newValue.value, 
+            state: '' 
+        };
+        
+        setAddressData(updatedAddressData);
+        setFormData(updatedFormData);
+        autoSave(updatedAddressData);
+        fetchStatesByCountry(newValue.value);
+    };
+
+    // Handle state select change (from old code)
+    const handleStateChange = (newValue: any) => {
+        if (!newValue || Array.isArray(newValue)) return;
+        
+        const updatedAddressData = { 
+            ...addressData, 
+            state: newValue.value 
+        };
+        
+        const updatedFormData = { 
+            ...formData, 
+            state: newValue.value 
+        };
+        
+        setAddressData(updatedAddressData);
+        setFormData(updatedFormData);
+        autoSave(updatedAddressData);
+    };
 
     const loadMapboxScript = () => {
         const mapboxGlScript = document.createElement('script');
@@ -316,7 +384,20 @@ const BusinessAddress = () => {
             newAddressData.address = formatted_address;
         }
 
+        // Also update formData for country/state
+        const newFormData = {
+            ...formData,
+            ...newAddressData
+        };
+
         setAddressData(newAddressData);
+        setFormData(newFormData);
+        
+        // Fetch states if country is set
+        if (newAddressData.country) {
+            fetchStatesByCountry(newAddressData.country);
+        }
+        
         autoSave(newAddressData);
     };
 
@@ -529,29 +610,6 @@ const BusinessAddress = () => {
                         />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="state">State</label>
-                        <BasicInput 
-                            name="state"
-                            value={addressData.state} 
-                            wrapperClass="setting-form-input" 
-                            descClass="settings-metabox-description" 
-                            onChange={(e) => handleChange('state', e.target.value)} 
-                        />
-                    </div>
-                </div>
-
-                <div className="form-group-wrapper">
-                    <div className="form-group">
-                        <label htmlFor="country">Country</label>
-                        <BasicInput 
-                            name="country"
-                            value={addressData.country} 
-                            wrapperClass="setting-form-input" 
-                            descClass="settings-metabox-description" 
-                            onChange={(e) => handleChange('country', e.target.value)} 
-                        />
-                    </div>
-                    <div className="form-group">
                         <label htmlFor="zip">Zip Code</label>
                         <BasicInput 
                             name="zip"
@@ -559,6 +617,30 @@ const BusinessAddress = () => {
                             wrapperClass="setting-form-input" 
                             descClass="settings-metabox-description" 
                             onChange={(e) => handleChange('zip', e.target.value)} 
+                        />
+                    </div>
+                </div>
+
+                {/* Country and State Select Inputs (from old code) */}
+                <div className="form-group-wrapper">
+                    <div className="form-group">
+                        <label htmlFor="country">Country</label>
+                        <SelectInput
+                            name="country"
+                            value={addressData.country}
+                            options={appLocalizer.country_list || []}
+                            type="single-select"
+                            onChange={handleCountryChange}
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="state">State</label>
+                        <SelectInput
+                            name="state"
+                            value={addressData.state}
+                            options={stateOptions}
+                            type="single-select"
+                            onChange={handleStateChange}
                         />
                     </div>
                 </div>
