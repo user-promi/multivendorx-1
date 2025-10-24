@@ -1,0 +1,144 @@
+@use '../components/config.scss' as *;
+
+#mvx-edit-product-form{
+    .featured-img{
+        img{
+            width: 100%;
+        }
+    }
+}
+
+ // product type style
+ .form-group-row {
+     display: flex;
+     gap: 1rem;
+     flex-wrap: wrap;
+
+     &.pricing {}
+ }
+
+ #general_product_data {
+     .form-group {
+         position: relative;
+          display: flex;
+         width: 100%;
+
+
+         label {
+             width: 30%;
+         }
+
+         .col-md-6 {
+             .row {
+                 padding-top: 0;
+             }
+
+             //  General tab
+             #_sale_price,
+             .cancel_sale_schedule {
+                 margin-bottom: 0.5rem;
+             }
+         }
+     }
+ }
+
+ #inventory_product_data {
+     .form-group {
+        //  width: 49%;
+     }
+
+     .form-group-row {
+         padding: 0.5rem 0;
+
+         &.stock_status_field {
+             .form-group {
+                 height: 1.125rem;
+             }
+         }
+
+         &.stock_fields {
+             flex-wrap: nowrap;
+
+             .form-group {
+                 height: 1.125rem;
+             }
+         }
+
+         &.show_if_variable {
+
+             .form-group {
+                 width: 80%;
+             }
+         }
+
+         &.stock_fields,
+         &.stock_status_field {
+             margin-bottom: 2.5rem;
+         }
+     }
+ }
+
+ #advanced_product_data {
+     .form-group:last-child {
+         margin-top: 0.313rem;
+     }
+ }
+
+
+ // attributes
+ .add-attribute {
+     justify-content: space-between;
+
+     .add-variation-wrapper {
+         display: flex;
+         gap: 0.625rem;
+     }
+ }
+
+ .add-attribute-data {
+     width: 100%;
+ }
+
+ .product_attributes {
+     .mvx-metabox-title {
+         display: flex;
+         justify-content: space-between;
+         padding: 0.5rem;
+         border: $border-light-small;
+
+         .remove_row {
+             color: rgba(187, 14, 14, 0.767);
+         }
+     }
+
+     .mvx-metabox-content {
+         border: $border-light-small;
+         border-top: none;
+         margin-bottom: 1rem;
+
+         table {
+             width: 100%;
+         }
+
+         table,
+         table td {
+             border: none;
+         }
+     }
+
+     .button-group {
+         display: flex;
+         gap: 0.625rem;
+         justify-content: space-between;
+         padding-top: 0.813rem;
+     }
+ }
+
+ //  linked-products
+
+ .linked-products {
+     .select2 {
+         width: 60%;
+
+     }
+ }

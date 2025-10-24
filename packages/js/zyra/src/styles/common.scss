@@ -852,7 +852,9 @@ input[type="checkbox"]:focus {
 .settings-input-content:has(.registration-from-wrapper) {
   width: 100%;
 }
-
+.settings-input-content:has(.payment-tabs-component){
+  width: 50%;
+}
 .select-deselect-trigger {
   margin-bottom: 1rem;
 }

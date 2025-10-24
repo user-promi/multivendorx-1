@@ -47,13 +47,13 @@ $post = $args['post'];
                 <div class="form-group">
                     <label class="control-label col-sm-3 col-md-3" for="_regular_price"><?php echo __( 'Regular price', 'multivendorx' ) . ' (' . get_woocommerce_currency_symbol() . ')'; ?></label>
                     <div class="col-md-6 col-sm-9">
-                        <input type="text" id="_regular_price" name="_regular_price" value="<?php echo isset($_POST['_regular_price']) ? wc_clean($_POST['_regular_price']) : ($product_object->get_regular_price( 'edit' ) ? $product_object->get_regular_price( 'edit' ) : ''); ?>" class="form-control">
+                        <input type="text" class="basic-input" id="_regular_price" name="_regular_price" value="<?php echo isset($_POST['_regular_price']) ? wc_clean($_POST['_regular_price']) : ($product_object->get_regular_price( 'edit' ) ? $product_object->get_regular_price( 'edit' ) : ''); ?>" class="form-control">
                     </div>
                 </div>  
                 <div class="form-group">
                     <label class="control-label col-sm-3 col-md-3" for="_sale_price"><?php echo __( 'Sale price', 'multivendorx' ) . ' (' . get_woocommerce_currency_symbol() . ')'; ?></label>
                     <div class="col-md-6 col-sm-9">
-                        <input type="text" id="_sale_price" name="_sale_price" value="<?php echo isset($_POST['_sale_price']) ? wc_clean($_POST['_sale_price']) : ($product_object->get_sale_price( 'edit' ) ? $product_object->get_sale_price( 'edit' ) : ''); ?>" class="form-control">
+                        <input type="text" id="_sale_price" class="basic-input" name="_sale_price" value="<?php echo isset($_POST['_sale_price']) ? wc_clean($_POST['_sale_price']) : ($product_object->get_sale_price( 'edit' ) ? $product_object->get_sale_price( 'edit' ) : ''); ?>" class="form-control">
                         <a href="#" class="pull-right sale_schedule form-text"><?php esc_html_e( 'Schedule', 'multivendorx' ); ?></a>
                     </div>
                 </div> 
