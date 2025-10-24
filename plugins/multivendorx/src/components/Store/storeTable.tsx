@@ -247,10 +247,12 @@ const StoreTable: React.FC = () => {
                                 <b><i className="adminlib-mail"></i></b> {row.original.email}
                             </div>
                         )}
+                        {row.original.phone && (
                         <div>
                             <b><i className="adminlib-form-phone"></i></b> 
                             {row.original.phone ? (row.original.phone) : '-'}
                         </div>
+                        )}
                     </div>
                 </TableCell>
             ),
@@ -316,9 +318,6 @@ const StoreTable: React.FC = () => {
                 return (
                     <TableCell title={`${status} - ${formattedDate}`}>
                         {getStatusBadge(status)}
-                        <div style={{ fontSize: '12px', color: '#666', marginTop: '4px' }}>
-                            {formattedDate}
-                        </div>
                     </TableCell>
                 );
             },

@@ -142,7 +142,7 @@ class Ajax {
                     $product = wc_get_product($id);
                     $product_map_id = get_post_meta($id, '_mvx_spmv_map_id', true);
                     if ($product && $product_map_id) {
-                        $results = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$wpdb->prefix}mvx_products_map WHERE product_map_id=%d", $product_map_id));
+                        $results = Util::fetch_products_map($product_map_id);
                         $product_ids = wp_list_pluck($results, 'product_id');
                         if($product_ids){
                             $include[] = min($product_ids);
@@ -287,6 +287,8 @@ class Ajax {
             wp_die(-1);
         }
         $product_id = isset($_POST['product_id']) ? absint($_POST['product_id']) : 0;
+        $tab        = sanitize_text_field($_POST['tab'] ?? '');
+        $subtab     = sanitize_text_field($_POST['subtab'] ?? '');
         $parent_post = get_post($product_id);
         $redirect_url = isset($_POST['redirect_url']) ? esc_url($_POST['redirect_url']) : esc_url(StoreUtil::get_endpoint_url('products', 'edit'));
         $product = wc_get_product($product_id);
@@ -335,14 +337,25 @@ class Ajax {
             update_post_meta($duplicate_product->get_id(), '_mvx_spmv_product', true);
             $duplicate_product->save();
             do_action('mvx_create_duplicate_product', $duplicate_product);
+
+            $product_id = $duplicate_product->get_id();
             $permalink_structure = get_option('permalink_structure');
+
             if (!empty($permalink_structure)) {
-                $redirect_url .= $duplicate_product->get_id();
+                $redirect_url = home_url("dashboard/{$tab}/{$subtab}/{$product_id}/");
             } else {
-                $redirect_url .= '/' . $duplicate_product->get_id();
+                $redirect_url = add_query_arg([
+                    'page_id'   => (int) MultiVendorX()->setting->get_setting( 'store_dashboard_page' ),
+                    'dashboard' => 1,
+                    'tab'       => $tab,
+                    'subtab'    => $subtab,
+                    'value'     => $product_id,
+                ], home_url('/'));
             }
+
             $response['status'] = true;
-            $response['redirect_url'] = htmlspecialchars_decode($redirect_url);
+            $response['redirect_url'] = esc_url_raw($redirect_url);
+
         }
         wp_send_json($response);
     }
