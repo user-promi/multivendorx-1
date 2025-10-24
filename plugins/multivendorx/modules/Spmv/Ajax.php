@@ -7,6 +7,9 @@
 
 namespace MultiVendorX\SPMV;
 
+use MultiVendorX\Store\StoreUtil;
+use MultiVendorX\Utill;
+
 /**
  * MultiVendorX SPMV Ajax class
  *
@@ -84,25 +87,24 @@ class Ajax {
         wp_send_json(array('html' => $html, 'results_count' => count($product_objects)));
     }
 
-    function single_product_multiple_vendors_sorting() {
+    public function single_product_multiple_vendors_sorting() {
         global $MVX;
         $sorting_value = isset($_POST['sorting_value']) ? wc_clean($_POST['sorting_value']) : 0;
         $attrid = isset($_POST['attrid']) ? absint($_POST['attrid']) : 0;
         $more_products = $this->get_multiple_vendors_array_for_single_product($attrid);
         $more_product_array = $more_products['more_product_array'];
-        $results = $more_products['results'];
-        $MVX->template->get_template('single-product/multiple-vendors-products-body.php', array('more_product_array' => $more_product_array, 'sorting' => $sorting_value));
+        MultiVendorX()->util->get_template('product/multiple-vendors-products-body.php', array('more_product_array' => $more_product_array, 'sorting' => $sorting_value));
         die;
     }
 
-    function get_multiple_vendors_array_for_single_product($post_id) {
+    public function get_multiple_vendors_array_for_single_product($post_id) {
         $product = wc_get_product( $post_id );
         $more_product_array = $mapped_products = array();
         $has_product_map_id = get_post_meta( $product->get_id(), '_mvx_spmv_map_id', true );
         if( $has_product_map_id ){
-            $products_map_data_ids = get_mvx_spmv_products_map_data( $has_product_map_id );
+            $products_map_data_ids = $this->get_mvx_spmv_products_map_data( $has_product_map_id );
             $mapped_products = array_diff( $products_map_data_ids, array( $product->get_id() ) );
-            $more_product_array = get_mvx_more_spmv_products( $product->get_id() );
+            $more_product_array = $this->get_mvx_more_spmv_products( $product->get_id() );
         }
         return array('results' => $mapped_products, 'more_product_array' => $more_product_array);
     }
@@ -112,22 +114,21 @@ class Ajax {
         $more_products = array();
         $has_product_map_id = get_post_meta( $product_id, '_mvx_spmv_map_id', true );
         if( $has_product_map_id ){
-            $products_map_data_ids = get_mvx_spmv_products_map_data( $has_product_map_id );
+            $products_map_data_ids = $this->get_mvx_spmv_products_map_data( $has_product_map_id );
             $mapped_products = array_diff( $products_map_data_ids, array( $product_id ) );
             if( $mapped_products && count( $mapped_products ) >= 1 ){
                 $i = 0;
                 foreach ( $mapped_products as $p_id ) {
-                    $p_author = absint( get_post_field( 'post_author', $p_id ) );
+                    $p_author = get_post_meta($p_id, 'multivendorx_store_id', true);
                     $p_obj = wc_get_product( $p_id );
                     if( $p_obj ){
                         if ( !$p_obj->is_visible() || get_post_status ( $p_id ) != 'publish' ) continue;
-                        if ( is_user_mvx_pending_vendor( $p_author ) || is_user_mvx_rejected_vendor( $p_author ) && absint( get_post_field( 'post_author', $product_id ) ) == $p_author ) continue;
-                        $product_vendor = get_mvx_product_vendors( $p_id );
+                        $product_vendor = StoreUtil::get_products_vendor( $p_id );
                         if ( $product_vendor ){
-                            $more_products[$i]['seller_name'] = $product_vendor->page_title;
+                            $more_products[$i]['seller_name'] = $product_vendor->get('name');
                             $more_products[$i]['is_vendor'] = 1;
-                            $more_products[$i]['shop_link'] = $product_vendor->permalink;
-                            $more_products[$i]['rating_data'] = mvx_get_vendor_review_info( $product_vendor->term_id );
+                            // $more_products[$i]['shop_link'] = $product_vendor->permalink;
+                            // $more_products[$i]['rating_data'] = mvx_get_vendor_review_info( $product_vendor->term_id );
                         } else {
                             $user_info = get_userdata($p_author);
                             $more_products[$i]['seller_name'] = isset( $user_info->data->display_name ) ? $user_info->data->display_name : '';
@@ -161,5 +162,24 @@ class Ajax {
             }
         }
         return apply_filters( 'mvx_more_spmv_products', $more_products, $product_id );
+    }
+
+    function get_mvx_spmv_products_map_data($map_id = '') {
+        global $wpdb;
+        $products_map_data = array();
+        $table = "{$wpdb->prefix}" . Utill::TABLES['products_map'];
+        $results = $wpdb->get_results($wpdb->prepare("SELECT product_map_id FROM {$table}"));
+        if ($results) {
+            $product_map_ids = array_unique(wp_list_pluck($results, 'product_map_id'));
+            foreach ($product_map_ids as $product_map_id) {
+                $product_ids = $wpdb->get_results($wpdb->prepare("SELECT product_id FROM {$table} WHERE product_map_id=%d", $product_map_id));
+                $products_map_data[$product_map_id] = wp_list_pluck($product_ids, 'product_id');
+            }
+        }
+        if ($map_id) {
+            return isset($products_map_data[$map_id]) ? $products_map_data[$map_id] : array();
+        }
+       
+        return $products_map_data;
     }
 }

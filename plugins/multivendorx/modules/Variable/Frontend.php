@@ -34,6 +34,6 @@ class Frontend {
     }
 
     public function mvx_product_variable_tab_content( $self, $product_object, $post ) {
-        MultiVendorX()->util->get_template('views/html-product-data-variations.php', array( 'self' => $self, 'product_object' => $product_object, 'post' => $post ) );        
+        MultiVendorX()->util->get_template('product/views/html-product-data-variations.php', array( 'self' => $self, 'product_object' => $product_object, 'post' => $post ) );        
     }
 }
