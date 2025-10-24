@@ -28,7 +28,7 @@ class Util {
     public static function mvx_spmv_products_map($data = array(), $action = 'insert') {
         global $wpdb;
         if ($data) {
-            $table = $wpdb->prefix . 'mvx_products_map';
+            $table = "{$wpdb->prefix}" . Utill::TABLES['products_map'];
             if ($action == 'insert') {
                 $wpdb->insert($table, $data);
                 if (!isset($data['product_map_id'])) {
