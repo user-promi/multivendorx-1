@@ -19,7 +19,7 @@ $post = $args['post'];
         <div class="row add-attribute">
             <div class="col-md-6">
                 <div class="add-variation-wrapper">
-                    <select name="attribute_taxonomy" class="attribute_taxonomy form-control inline-select">
+                    <select name="attribute_taxonomy" class="attribute_taxonomy basic-select">
                         <?php if ( apply_filters( 'vendor_can_add_custom_attribute', true ) ) : ?>
                             <option value=""><?php esc_html_e( 'Custom product attribute', 'multivendorx' ); ?></option>
                         <?php endif; ?>
@@ -36,7 +36,7 @@ $post = $args['post'];
                         }
                         ?>
                     </select>
-                    <button type="button" class="admin-btn btn-purple add_attribute"><i class="adminlib-plus"></i><?php esc_html_e( 'Add', 'multivendorx' ); ?></button>
+                    <button type="button" class="admin-btn btn-purple add_attribute"><i class="adminlib-plus-o"></i><?php esc_html_e( 'Add', 'multivendorx' ); ?></button>
                 </div>
             </div>
             <div class="col-md-6">
@@ -47,9 +47,8 @@ $post = $args['post'];
                 </div>
             </div>
         </div>
-        <hr>
         <div class="row add-attribute-data">
-            <div class="col-md-12">
+            <div class="attribute-list">
                 <div class="product_attributes wc-metaboxes product-variations-wrapper">  
                     <?php
                     // Product attributes - taxonomies and custom, ordered, with visibility and variation attributes set
@@ -70,8 +69,8 @@ $post = $args['post'];
                 </div>
             </div>
         </div> 
-        <div class="button-group">
-            <button type="button" class="btn btn-default save_attributes button-primary"><?php esc_html_e( 'Save attributes', 'multivendorx' ); ?></button>
+        <div class="buttons-wrapper">
+            <button type="button" class="admin-btn btn-purple save_attributes "><?php esc_html_e( 'Save attributes', 'multivendorx' ); ?></button>
 
             <!-- <button type="button" class="admin-btn btn-purple save_attributes"><?php esc_html_e( 'Save attributes', 'multivendorx' ); ?></button> -->
             <!-- <div class="toolbar float-right">

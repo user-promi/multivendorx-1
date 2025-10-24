@@ -10,7 +10,7 @@
             align-items: center;
             justify-content: space-between;
             gap: 0.5rem;
-            padding: 0.5rem 0.625rem;
+            padding: 0.45rem;
             // background: #f9f4f4b8;
             cursor: pointer;
             border: $border-light-small;
@@ -56,7 +56,7 @@
                     display: flex;
                     justify-content: center;
                     align-items: center;
-                    font-size: 1.5rem;
+                    font-size: 1.313rem;
                     font-weight: 500;
                     color: $theme-color;
 
@@ -237,6 +237,7 @@
             }
             .payment-description{
                 display: flex;
+                flex-wrap: wrap;
                 gap: 0.625rem;
                 margin: 0;
             }

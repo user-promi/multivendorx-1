@@ -263,6 +263,7 @@ a {
   font-size: 0.875rem;
   line-height: 1.5;
   box-shadow: none;
+  box-sizing: border-box;
 
   &:focus {
     outline: none;
@@ -399,6 +400,7 @@ input.minus-icon::before {
   margin: -0.063rem .3rem 0 0 !important;
   line-height: 1rem;
   border-radius: 0.25rem;
+  font-size: 1.063rem;
 }
 
 input[type="checkbox"]:checked::before {
@@ -498,6 +500,11 @@ input[type="checkbox"]:focus {
   gap: 0.125rem;
   z-index: 2;
   border-radius: 0.313rem;
+
+  &.module {
+    background: #d9f5f0;
+    color: #06be9f;
+  }
 }
 
 // pro tag end
@@ -851,6 +858,10 @@ input[type="checkbox"]:focus {
 .settings-input-content:has(.grid-table),
 .settings-input-content:has(.registration-from-wrapper) {
   width: 100%;
+}
+
+.settings-input-content:has(.payment-tabs-component) {
+  width: 50%;
 }
 
 .select-deselect-trigger {
@@ -1244,20 +1255,21 @@ input[type="checkbox"]:focus {
     }
   }
 }
- .search-section {
-        display: flex;
-        align-items: center;
-        padding-left: 0.5rem;
 
-        i {
-            font-size: 1.25rem;
-        }
+.search-section {
+  display: flex;
+  align-items: center;
+  padding-left: 0.5rem;
 
-        input {
-            padding-left: 0;
-            background: none;
-        }
-    }
+  i {
+    font-size: 1.25rem;
+  }
+
+  input {
+    padding-left: 0;
+    background: none;
+  }
+}
 
 // date picker start
 .date-picker-section-wrapper {

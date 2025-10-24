@@ -1,0 +1,393 @@
+@use '../components/config.scss' as *;
+$primary: #5007aa;
+$text-dark: #222;
+$text-light: #777;
+$border: #e0e0e0;
+$border-light-small: 0.063rem solid #e0e4e9;
+
+#mvx-edit-product-form {
+    .featured-img {
+        img {
+            width: 100%;
+        }
+    }
+}
+
+// product type style
+.form-group-row {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+
+    .form-group {
+        position: relative;
+        display: flex;
+        width: 100%;
+
+
+        label {
+            width: 30%;
+        }
+
+        .input-wrapper {
+            width: 70%;
+        }
+    }
+}
+
+#general_product_data {
+    .form-group {
+
+
+        .input-wrapper {
+            .row {
+                padding-top: 0;
+            }
+
+            //  General tab
+            #_sale_price,
+            .cancel_sale_schedule {
+                margin-bottom: 0.5rem;
+            }
+        }
+    }
+}
+
+#inventory_product_data {
+    .form-group {
+        //  width: 49%;
+    }
+
+    .form-group-row {
+        padding: 0.5rem 0;
+
+        &.stock_status_field {
+            .form-group {
+                height: 1.125rem;
+            }
+        }
+
+        .stock_fields {
+            width: 100%;
+            flex-direction: column;
+            display: flex;
+            gap: 1em;
+        }
+
+        &.show_if_variable {
+
+            .form-group {
+                width: 80%;
+            }
+        }
+
+        &.stock_fields,
+        &.stock_status_field {
+            margin-bottom: 2.5rem;
+        }
+    }
+}
+
+#advanced_product_data {
+    .form-group:last-child {
+        margin-top: 0.313rem;
+    }
+}
+
+
+// attributes
+.add-attribute {
+    justify-content: space-between;
+    border-bottom: $border-light-small;
+
+
+    .add-variation-wrapper {
+        display: flex;
+        gap: 0.625rem;
+    }
+}
+
+.add-attribute-data,
+.attribute-list {
+    width: 100%;
+}
+
+.product_attributes {
+    .mvx-metabox-title,
+    .wc-metabox-content {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.5rem;
+        border: $border-light-small;
+
+        .remove_row {
+            color: rgba(187, 14, 14, 0.767);
+        }
+
+        tr{
+            .attribute_name{
+                padding-right: 1rem;
+            }
+        }
+        .adminlib-drag{
+            cursor: move;
+        }
+    }
+
+    .mvx-metabox-content {
+        border: $border-light-small;
+        border-top: none;
+        margin-bottom: 1rem;
+
+        table {
+            width: 100%;
+        }
+
+        table,
+        table td {
+            border: none;
+        }
+    }
+
+    .button-group {
+        display: flex;
+        gap: 0.625rem;
+        justify-content: space-between;
+        padding-top: 0.813rem;
+    }
+}
+
+//  linked-products
+
+.linked-products {
+    .select2 {
+        width: 60%;
+
+    }
+}
+
+
+// Add Product Info Header
+
+.add-product-info-header {
+    display: flex;
+    justify-content: space-between;
+    //  flex-direction: column;
+    align-items: end;
+    gap: 0.813rem;
+    margin-bottom: 1.813rem;
+
+    .select-group {
+        width: 50%;
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+
+        label {
+            width: 50%;
+        }
+    }
+}
+
+
+// Product Info Tabs
+
+.product-info-tab-wrapper {
+    .nav.nav-tabs {
+        li {
+            padding-bottom: 0.5rem;
+            border-bottom: 0.125rem solid #fff;
+            font-weight: 600;
+            font-size: 1rem;
+
+            &.active {
+                border-bottom: 0.125rem solid $primary;
+                color: $primary;
+
+                a {
+                    color: $primary;
+                }
+            }
+        }
+    }
+
+    ul {
+        display: flex;
+        list-style: none;
+        gap: 0.813rem;
+        margin: 1rem 0;
+        font-size: 1rem;
+    }
+}
+
+
+// Category Styles
+
+.category {
+        margin: 0;
+        list-style: none;
+
+        li {
+            margin-bottom: 1rem;
+
+            label {
+                font-size: 1rem;
+            }
+
+            ul {
+                margin-left: 1rem;
+                margin-top: 1rem;
+                list-style-type: none;
+
+                li {
+                    margin-bottom: 1rem;
+                }
+            }
+        }
+    
+}
+
+
+// Tag Panel
+
+.tag-panel {
+    border: 1px solid $border;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    background: #fff;
+    padding: 16px;
+    margin-bottom: 20px;
+
+    &-body {
+        padding: 8px 0;
+    }
+}
+
+
+// Form Group
+
+.form-group {
+    position: relative;
+
+    ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    select {
+        // position: absolute;
+        // bottom: -3rem;
+    }
+
+    label {
+        font-size: 14px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 6px;
+        display: block;
+    }
+}
+
+
+// Select2 Styling
+
+.select2-container--default {
+    .select2-selection--multiple {
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        min-height: 42px;
+        display: flex;
+        flex-wrap: wrap;
+        padding: 4px 6px;
+        cursor: text;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+        .select2-selection__choice {
+            background-color: $primary;
+            border-radius: 16px;
+            padding: 4px 10px;
+            color: #fff;
+            font-size: 13px;
+            margin: 3px;
+            display: flex;
+            align-items: center;
+            border: none;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+
+            .select2-selection__choice__remove {
+                color: #fff;
+                margin-right: 6px;
+                font-weight: bold;
+                cursor: pointer;
+                transition: color 0.2s ease;
+
+                &:hover {
+                    color: #ffeb3b;
+                }
+            }
+        }
+
+        .select2-search__field {
+            border: none !important;
+            outline: none !important;
+            margin: 4px;
+            font-size: 14px;
+            min-width: 80px;
+        }
+    }
+
+    &.select2-container--focus {
+        .select2-selection--multiple {
+            border-color: $primary;
+            box-shadow: 0 0 0 2px rgba($primary, 0.2);
+        }
+    }
+
+    .select2-results__option {
+        padding: 10px 12px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: background 0.2s ease;
+
+        &--highlighted[aria-selected] {
+            background-color: $primary;
+            color: #fff;
+        }
+    }
+}
+
+
+// Form Card
+
+.form-card {
+    border: 1px solid $border;
+    border-radius: 12px;
+    background: #fff;
+    padding: 16px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+
+    &-header {
+        margin-bottom: 12px;
+
+        .form-card-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: $text-dark;
+            margin-bottom: 4px;
+        }
+
+        .form-card-desc {
+            font-size: 12px;
+            color: $text-light;
+        }
+    }
+
+    &-body {
+        .form-group {
+            margin: 0;
+        }
+    }
+}

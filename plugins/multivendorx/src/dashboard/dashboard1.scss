@@ -1,5 +1,10 @@
 @use './dashboardCommon.scss' as *;
+@use './product.scss' as *;
 
+
+ul{
+    padding: 0;
+}
 body:has(#store-dashboard) {
     background: #f8f7fa;
     font-family: "Figtree", sans-serif;
@@ -35,6 +40,12 @@ a {
         img {
             width: auto;
             height: 1.8rem;
+        }
+
+        .site-name {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--theme-color);
         }
 
         i {
@@ -535,11 +546,11 @@ a {
         }
     }
 
-    // cart header start
+    // cart header start  (common card-header style)
     .card-header {
         display: flex;
         justify-content: space-between;
-        padding-bottom: 2rem;
+        padding-bottom: 1rem;
 
         .left {
             .title {

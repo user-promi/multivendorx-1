@@ -68,7 +68,7 @@ export default {
             desc: __('Verify store identity using government-issued documents or facial recognition. Ensures authenticity of users.')
         },
         {
-            key: 'shipping_stage',
+            key: 'verification_methods',
             type: 'multi-string',
             label: __('Verification Methods', 'multivendorx'),
             placeholder: __('Enter Shipping stage', 'multivendorx'),

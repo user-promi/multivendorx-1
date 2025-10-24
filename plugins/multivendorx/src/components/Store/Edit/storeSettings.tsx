@@ -569,17 +569,6 @@ const StoreSettings = ({ id }: { id: string | null }) => {
     return (
         <>
             <SuccessNotice message={successMsg} />
-
-            {/* Debug Info - You can remove this in production */}
-            <div style={{ background: '#f5f5f5', padding: '10px', marginBottom: '15px', borderRadius: '4px', fontSize: '12px' }}>
-                <div>Debug Info:</div>
-                <div>Store ID: {id}</div>
-                <div>Map Provider: {mapProvider}</div>
-                <div>Google Maps: {googleLoaded ? 'Loaded' : 'Loading...'}</div>
-                <div>Mapbox: {mapboxLoaded ? 'Loaded' : 'Loading...'}</div>
-                <div>Map: {map ? 'Initialized' : 'Not initialized'}</div>
-                <div>Address: {formData.address || 'N/A'}</div>
-            </div>
             <div className="container-wrapper">
                 <div className="card-wrapper width-65">
                     <div className="card-content">
