@@ -21,7 +21,6 @@ if (!defined('ABSPATH')) {
 global $post;
 $results = $args['results'];
 $more_product_array = $args['more_product_array'];
-file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":more_product_array:  : " . var_export($more_product_array, true) . "\n", FILE_APPEND);
 if (count($more_product_array) > 0) {
     $i = 0;
     ?>

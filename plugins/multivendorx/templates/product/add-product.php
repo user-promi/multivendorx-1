@@ -31,7 +31,6 @@ if (is_user_logged_in() && !current_user_can('edit_products')) {
     <div class="select-product-cat-wrapper">
         <?php $is_new_listing = isset($_REQUEST['new_listing']) ? true : false;
         $is_cats_hier = isset($_REQUEST['cats_hier']) ? true : false;
-        file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":module:  : " . var_export(MultiVendorX()->modules->is_active('spmv'), true) . "\n", FILE_APPEND);
         if( ( $is_new_listing && $is_cats_hier ) || MultiVendorX()->modules->is_active('spmv') == false ) {
         ?> 
         <!-- New product list categories hierarchically -->
