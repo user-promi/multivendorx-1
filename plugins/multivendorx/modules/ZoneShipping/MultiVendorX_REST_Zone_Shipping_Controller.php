@@ -82,52 +82,69 @@ class MultiVendorX_REST_Zone_Shipping_Controller extends \WP_REST_Controller {
     
     public function create_item( $request ) {
         // Verify nonce
-        $nonce = $request->get_header('X-WP-Nonce');
-        if ( ! wp_verify_nonce($nonce, 'wp_rest') ) {
-            return rest_ensure_response([
+        $nonce = $request->get_header( 'X-WP-Nonce' );
+        if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
+            return rest_ensure_response( [
                 'success' => false,
-                'message' => __( 'Invalid nonce', 'multivendorx' )
-            ]);
+                'message' => __( 'Invalid nonce', 'multivendorx' ),
+            ] );
         }
     
-        $store_id      = intval( $request->get_param('store_id') );
-        $zone_id       = intval( $request->get_param('zone_id') );
-        $shipping_data = $request->get_param('shipping_data');
+        // Extract parameters from request
+        $store_id  = intval( $request->get_param( 'storeId' ) );
+        $zone_id   = intval( $request->get_param( 'zoneID' ) );
+        $method_id = sanitize_text_field( $request->get_param( 'method' ) );
+        $settings  = $request->get_param( 'settings' );
     
         // Validate required fields
-        if ( empty($shipping_data['shippingMethod']) ) {
-            return rest_ensure_response([
+        if ( empty( $method_id ) ) {
+            return rest_ensure_response( [
                 'success' => false,
-                'message' => __( 'Shipping method is required', 'multivendorx' )
-            ]);
+                'message' => __( 'Shipping method is required', 'multivendorx' ),
+            ] );
         }
     
-        // Prepare data for insertion
+        if ( empty( $zone_id ) ) {
+            return rest_ensure_response( [
+                'success' => false,
+                'message' => __( 'Zone ID is required', 'multivendorx' ),
+            ] );
+        }
+    
+        if ( empty( $store_id ) ) {
+            return rest_ensure_response( [
+                'success' => false,
+                'message' => __( 'Store ID is required', 'multivendorx' ),
+            ] );
+        }
+    
+        // Prepare clean data for insertion
         $data = [
             'zone_id'   => $zone_id,
-            'method_id' => sanitize_text_field( $shipping_data['shippingMethod'] ),
-            'settings'  => isset($shipping_data['settings']) ? $shipping_data['settings'] : []
+            'method_id' => $method_id,
+            'settings'  => is_array( $settings ) ? array_map( 'sanitize_text_field', $settings ) : [],
         ];
     
-        // Call your simplified add function
-        $result = Util::add_shipping_methods($data, $store_id);
+        // Call your helper to add the shipping method
+        $result = Util::add_shipping_methods( $data, $store_id );
     
-        // Handle result
-        if ( is_wp_error($result) ) {
-            return rest_ensure_response([
+        // Handle response
+        if ( is_wp_error( $result ) ) {
+            return rest_ensure_response( [
                 'success' => false,
                 'message' => $result->get_error_message(),
                 'code'    => $result->get_error_code(),
-                'data'    => $result->get_error_data()
-            ]);
+                'data'    => $result->get_error_data(),
+            ] );
         }
     
-        return rest_ensure_response([
+        return rest_ensure_response( [
             'success'   => true,
             'message'   => __( 'Shipping method created successfully', 'multivendorx' ),
-            'insert_id' => $result
-        ]);
+            'insert_id' => $result,
+        ] );
     }
+    
     
 
     public function get_item( $request ) {

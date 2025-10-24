@@ -90,9 +90,83 @@ const DistanceByZoneShipping: React.FC = () => {
         setFormData((prev: any) => ({ ...prev, [key]: value }));
     };
 
-    const handleSave = () => {
-        console.log("Form Data for zone:", selectedZone, formData);
-        setAddShipping(false);
+    const handleSave = async () => {
+        try {
+            // Prepare the data for API call
+            const shippingData = {
+                settings: {}
+            };
+            // Prepare settings based on selected shipping method
+            if (formData.shippingMethod.includes("local_pickup")) {
+                shippingData.settings = {
+                    title: "Local Pickup", // You might want to make this dynamic
+                    cost: formData.localPickupCost || '0',
+                    tax_status: formData.taxStatus ? 'taxable' : 'none',
+                    description: "Local pickup shipping method" // Add description field if needed
+                };
+            } else if (formData.shippingMethod.includes("free_shipping")) {
+                shippingData.settings = {
+                    title: "Free Shipping",
+                    requires: formData.freeShippingType.includes("min_order") ? 'min_amount' : 'coupon',
+                    min_amount: formData.minOrderCost || '0',
+                    description: "Free shipping method"
+                };
+            } else if (formData.shippingMethod.includes("flat_rate")) {
+                shippingData.settings = {
+                    title: "Flat Rate",
+                    cost: formData.flatRateCost || '0',
+                    tax_status: formData.flatRateTaxStatus ? 'taxable' : 'none',
+                    class_cost: formData.flatRateClassCost || '',
+                    calculation_type: formData.flatRateCalculationType || 'class', // Fixed: get first array element
+                    description: "Flat rate shipping method"
+                };
+            }
+    
+            console.log("Submitting shipping data:", shippingData);
+    
+            // Make API call to add shipping method
+            const response = await axios({
+                method: "POST",
+                url: getApiLink(appLocalizer, "zone-shipping"), // You'll need to check the exact API endpoint
+                headers: { 
+                    "X-WP-Nonce": appLocalizer.nonce,
+                    "Content-Type": "application/json"
+                },
+                params: {
+                    zoneID: selectedZone?.zone_id,
+                    method: formData.shippingMethod, // Fixed: get first array element
+                    storeId: appLocalizer.store_id,
+                    settings: shippingData.settings,
+                }
+            });
+    
+            if (response.data.success) {
+                console.log("Shipping method added successfully:", response.data);
+                // Refresh the zones data
+                await fetchZones();
+                // Close the popup
+                setAddShipping(false);
+                // Reset form data
+                setFormData({
+                    shippingMethod: [],
+                    localPickupCost: "",
+                    taxStatus: false,
+                    freeShippingType: [],
+                    minOrderCost: "",
+                    flatRateCost: "",
+                    flatRateTaxStatus: false,
+                    flatRateClassCost: "",
+                    flatRateCalculationType: [],
+                });
+            } else {
+                console.error("Failed to add shipping method:", response.data);
+                alert(__("Failed to add shipping method", "multivendorx"));
+            }
+    
+        } catch (err) {
+            console.error("Error adding shipping method:", err);
+            alert(__("Error adding shipping method", "multivendorx"));
+        }
     };
 
     const columns: ColumnDef<Zone>[] = [
