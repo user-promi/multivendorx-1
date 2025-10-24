@@ -101,7 +101,7 @@ export default {
             icon: 'adminlib-rules',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/variable-product',
             //settings_link: appLocalizer.site_url,
-            pro_module: false,
+            pro_module: true,
             category: 'product_type'
         },
         {
