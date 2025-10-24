@@ -200,22 +200,25 @@ class MultiVendorX_REST_Refund_Controller extends \WP_REST_Controller {
     /**
      * Get refund requests data with pagination and filters
      */
-    private function get_refund_requests_data( $args = [] ) {
-        global $wpdb;
+    /**
+ * Get refund requests data with pagination and filters
+ */
+private function get_refund_requests_data( $args = [] ) {
+    global $wpdb;
 
-        $limit = isset( $args['limit'] ) ? intval( $args['limit'] ) : 10;
-        $offset = isset( $args['offset'] ) ? intval( $args['offset'] ) : 0;
-        $search = isset( $args['search'] ) ? sanitize_text_field( $args['search'] ) : '';
-        $search_action = isset( $args['search_action'] ) ? sanitize_text_field( $args['search_action'] ) : 'all';
-        $status = isset( $args['status'] ) ? sanitize_text_field( $args['status'] ) : 'all';
-        $start_date = isset( $args['start_date'] ) ? sanitize_text_field( $args['start_date'] ) : '';
-        $end_date = isset( $args['end_date'] ) ? sanitize_text_field( $args['end_date'] ) : '';
+    $limit = isset( $args['limit'] ) ? intval( $args['limit'] ) : 10;
+    $offset = isset( $args['offset'] ) ? intval( $args['offset'] ) : 0;
+    $search = isset( $args['search'] ) ? sanitize_text_field( $args['search'] ) : '';
+    $search_action = isset( $args['search_action'] ) ? sanitize_text_field( $args['search_action'] ) : 'all';
+    $status = isset( $args['status'] ) ? sanitize_text_field( $args['status'] ) : 'all';
+    $start_date = isset( $args['start_date'] ) ? sanitize_text_field( $args['start_date'] ) : '';
+    $end_date = isset( $args['end_date'] ) ? sanitize_text_field( $args['end_date'] ) : '';
 
-        // Get the orders table name
-        $orders_table = $wpdb->prefix . 'wc_orders';
-        $orders_meta_table = $wpdb->prefix . 'wc_orders_meta';
+    // Get the orders table name
+    $orders_table = $wpdb->prefix . 'wc_orders';
+    $orders_meta_table = $wpdb->prefix . 'wc_orders_meta';
 
-        $query = "SELECT o.id, o.date_created_gmt, o.status,
+    $query = "SELECT o.id, o.date_created_gmt, o.status,
                          om1.meta_value as refund_reason,
                          om2.meta_value as refund_products,
                          om3.meta_value as refund_images,
@@ -317,16 +320,33 @@ class MultiVendorX_REST_Refund_Controller extends \WP_REST_Controller {
                 continue;
             }
 
-            // Get product names from product IDs
+            // Get product names and images from product IDs
             $product_names = [];
+            $product_images = [];
             $refund_products = maybe_unserialize( $refund_request['refund_products'] );
+            $refund_images = maybe_unserialize( $refund_request['refund_images'] );
+            
             if ( is_array( $refund_products ) ) {
-                foreach ( $refund_products as $product_id ) {
+                foreach ( $refund_products as $index => $product_id ) {
                     $product = wc_get_product( $product_id );
                     if ( $product ) {
                         $product_names[] = $product->get_name();
+                        
+                        // Get product image
+                        $image_id = $product->get_image_id();
+                        if ( $image_id ) {
+                            $image_url = wp_get_attachment_image_url( $image_id, 'thumbnail' );
+                        } else {
+                            $image_url = wc_placeholder_img_src( 'thumbnail' );
+                        }
+                        $product_images[] = $image_url;
                     }
                 }
+            }
+
+            // If we have refund images from meta, use them
+            if ( is_array( $refund_images ) && ! empty( $refund_images ) ) {
+                $product_images = $refund_images;
             }
 
             // Calculate refund amount (total of refunded products)
@@ -353,7 +373,7 @@ class MultiVendorX_REST_Refund_Controller extends \WP_REST_Controller {
             ];
 
             $status = isset( $status_map[ $refund_request['status'] ] ) ? 
-                     $status_map[ $refund_request['status'] ] : 'Pending';
+                    $status_map[ $refund_request['status'] ] : 'Pending';
 
             // Get customer name from meta or order object
             $customer_name = trim( ($refund_request['billing_first_name'] ?? '') . ' ' . ($refund_request['billing_last_name'] ?? '') );
@@ -382,6 +402,7 @@ class MultiVendorX_REST_Refund_Controller extends \WP_REST_Controller {
                 'date' => $refund_request['date_created_gmt'],
                 'status' => $status,
                 'products' => implode(', ', $product_names),
+                'product_images' => $product_images, // Add product images array
                 'store_name' => $store_name,
             ];
         }

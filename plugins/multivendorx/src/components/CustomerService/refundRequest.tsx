@@ -15,6 +15,7 @@ type RefundRow = {
     customer: string;
     email: string;
     products: string;
+    product_images: string[]; // Add product images array
     amount: string;
     reason: string;
     date: string;
@@ -196,6 +197,51 @@ const RefundRequest: React.FC = () => {
         });
     };
 
+    // Get product image URL - fallback to placeholder if not available
+    const getProductImage = (images: string[], productName: string, index: number) => {
+        if (images && images[index]) {
+            return images[index];
+        }
+        // Return placeholder or first available image
+        return 'https://via.placeholder.com/50?text=' + encodeURIComponent(productName.charAt(0).toUpperCase());
+    };
+
+    // Render products with images
+    const renderProductsWithImages = (row: RefundRow) => {
+        const productNames = row.products ? row.products.split(', ') : [];
+        const productImages = row.product_images || [];
+        
+        if (productNames.length === 0) {
+            return '-';
+        }
+
+        return (
+            <div className="products-with-images">
+                {productNames.map((productName, index) => (
+                    <div key={index} className="product-item" >
+                        <img 
+                            src={getProductImage(productImages, productName, index)}
+                            alt={productName}
+                            style={{ 
+                                width: 30, 
+                                height: 30, 
+                                objectFit: 'cover',
+                                borderRadius: '3px'
+                            }} 
+                            onError={(e) => {
+                                const target = e.target as HTMLImageElement;
+                                target.src = 'https://via.placeholder.com/30?text=' + encodeURIComponent(productName.charAt(0).toUpperCase());
+                            }}
+                        />
+                        <span className="product-name" style={{ fontSize: '12px' }}>
+                            {productName}
+                        </span>
+                    </div>
+                ))}
+            </div>
+        );
+    };
+
     // Column definitions
     const columns: ColumnDef<RefundRow>[] = [
         {
@@ -219,7 +265,7 @@ const RefundRequest: React.FC = () => {
             header: __('Product(s)', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell title={row.original.products || ''}>
-                    {row.original.products || '-'}
+                    {renderProductsWithImages(row.original)}
                 </TableCell>
             ),
         },
