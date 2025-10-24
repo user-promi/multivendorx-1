@@ -55,9 +55,9 @@ const Products: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
         const now = new Date();
         const formattedStartDate = formatDateToISO8601(startDate || new Date(now.getFullYear(), now.getMonth() - 1, now.getDate()));
         const formattedEndDate = formatDateToISO8601(endDate || now);
-
+    
         setData(null);
-
+    
         axios
             .get(`${appLocalizer.apiUrl}/wc/v3/products`, {
                 headers: { 'X-WP-Nonce': appLocalizer.nonce },
@@ -68,6 +68,8 @@ const Products: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
                     status: 'pending',
                     after: formattedStartDate,
                     before: formattedEndDate,
+                    // Ensure all fields are included
+                    _fields: 'id,name,sku,price,price_html,status,images,categories,meta_data,store_name,store_slug'
                 },
             })
             .then((response) => {
