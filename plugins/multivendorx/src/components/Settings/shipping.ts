@@ -37,14 +37,14 @@ export default {
                     icon: "adminlib-twitter",
                     label: 'Country-wise shipping',
                     openForm: true,
-                    desc: 'Connect and authenticate stores via Twitter accounts.',
+                    desc: 'Let store set specific shipping rates based on destination countries.',
                 },
                 {
                     id: 'distance-based-shipping',
                     icon: "adminlib-facebook",
                     label: 'Distance-based shipping',
                     openForm: true,
-                    desc: 'Connect and authenticate stores via Facebook accounts.',
+                    desc: 'Calculate shipping costs based on actual distance between locations.',
 
                 },
             ]
