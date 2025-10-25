@@ -43,7 +43,7 @@
       }
     }
 
-    .form-group:has(.pro-setting) {
+    .form-group.pro-setting {
       background: #e3504705;
       border: 0.063rem solid #6a2e2b1f;
       padding: 1rem 0;
@@ -51,7 +51,7 @@
       border-left: 0;
       border-right: 0;
     }
-    .form-group:has(.module-enabled) {
+    .form-group.module-enabled {
       background: #d9f5f059;
       border: 0.063rem solid #6a2e2b1f;
       padding: 1rem 0;
