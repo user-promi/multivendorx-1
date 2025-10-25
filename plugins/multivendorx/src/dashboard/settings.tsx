@@ -210,7 +210,6 @@ const settings = () => {
     const getCurrentTabFromUrl = () => {
         const hash = window.location.hash.replace(/^#/, "");
         const hashParams = new URLSearchParams(hash);
-        console.log(hashParams)
         return hashParams.get("subtab") || "general";
     };
 

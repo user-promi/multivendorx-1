@@ -164,7 +164,7 @@ const Store = () => {
                   </div>
 
                   <div className="form-group">
-                    <label htmlFor="store-url">Store Url</label>
+                    <label htmlFor="store-url">Store Slug</label>
                     <BasicInput
                       type="text"
                       name="slug"
