@@ -28,6 +28,7 @@ export default {
                     value: 'rank_math',
                 },
             ],
+            moduleEnabled: 'store-seo',
             //proSetting:true
         },
     ],

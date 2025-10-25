@@ -17,6 +17,7 @@ export default {
                 'Control the minimum and maximum number of units a customer is allowed to purchase for each product.',
                 'multivendorx'
             ),
+            moduleEnabled: 'min-max',
             nestedFields: [
                 {
                     key: 'mvx_commission_percentage_per_unit',

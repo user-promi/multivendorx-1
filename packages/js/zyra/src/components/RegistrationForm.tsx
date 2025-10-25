@@ -95,8 +95,8 @@ const DEFAULT_FORM_TITLE = 'Demo Form';
 
 // Example select options
 const selectOptions: SelectOption[] = [
-    { icon: 'adminlib-module icon-form-textbox', value: 'block-layout', label: 'Block Layout' },
-    { icon: 'adminlib-gallery icon-form-gallery', value: 'image-gallery', label: 'Image Gallery' },
+    // { icon: 'adminlib-module icon-form-textbox', value: 'block-layout', label: 'Block Layout' },
+    // { icon: 'adminlib-gallery icon-form-gallery', value: 'image-gallery', label: 'Image Gallery' },
     { icon: 'adminlib-t-letter-bold icon-form-textbox', value: 'text', label: 'Textbox' },
     { icon: 'adminlib-unread icon-form-email', value: 'email', label: 'Email' },
     { icon: 'adminlib-text icon-form-textarea', value: 'textarea', label: 'Textarea' },
@@ -334,7 +334,7 @@ const CustomForm: React.FC<CustomFormProps> = ({
             label: "Blocks",
             content: (
                 <>
-                    <Elements
+                    {/* <Elements
                         label="Layout"
                         selectOptions={selectOptions.filter(opt => 
                             ['block-layout', 'image-gallery', 'section', 'divider'].includes(opt.value)
@@ -345,12 +345,13 @@ const CustomForm: React.FC<CustomFormProps> = ({
                                 setOpendInput(newInput);
                             }
                         }}
-                    />
+                    /> */}
                     <Elements
                         label="General"
-                        selectOptions={selectOptions.filter(opt => 
-                            !['block-layout', 'image-gallery', 'section', 'divider'].includes(opt.value)
-                        )}
+                        // selectOptions={selectOptions.filter(opt => 
+                        //     !['block-layout', 'image-gallery', 'section', 'divider'].includes(opt.value)
+                        // )}
+                        selectOptions={selectOptions}
                         onClick={(type) => {
                             const newInput = appendNewFormField(formFieldList.length - 1, type);
                             if (newInput) {
@@ -368,29 +369,19 @@ const CustomForm: React.FC<CustomFormProps> = ({
                             setOpendInput(null);
                         }}
                     />
-                    <Elements
-                        label="MultivendorX Pro"
-                        selectOptions={selectOptionsStore}
-                        onClick={(type) => {
-                            const option = selectOptionsStore.find(o => o.value === type);
-                            const fixedName = option?.name;
-                            appendNewFormField(formFieldList.length - 1, type, fixedName, true);
-                            setOpendInput(null);
-                        }}
-                    />
                 </>
             ),
         },
-        { 
-            id: "templates", 
-            label: "Templates", 
-            content: <FormTemplates onTemplateSelect={applyTemplate} />
-        },
-        { 
-            id: "analytics", 
-            label: "Analytics", 
-            content: <FormAnalytics formFields={formFieldList} />
-        },
+        // { 
+        //     id: "templates", 
+        //     label: "Templates", 
+        //     content: <FormTemplates onTemplateSelect={applyTemplate} />
+        // },
+        // { 
+        //     id: "analytics", 
+        //     label: "Analytics", 
+        //     content: <FormAnalytics formFields={formFieldList} />
+        // },
     ];
 
     return (

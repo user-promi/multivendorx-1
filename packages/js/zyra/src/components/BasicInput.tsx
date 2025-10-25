@@ -37,7 +37,6 @@ interface BasicInputProps {
     postInsideText?: string;
     generate?: string;
     proSetting?: boolean;
-    moduleEnabled?: boolean;
     description?: string;
     descClass?: string;
     rangeUnit?: string;
@@ -74,7 +73,6 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
             postText,
             generate,
             proSetting,
-            moduleEnabled,
             description,
             descClass,
             rangeUnit,
@@ -131,7 +129,7 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
         return (
             <>
                 <div
-                    className={`${wrapperClass || ''} ${generate ? 'generate' : ''} ${proSetting ? 'pro-setting' : ''} ${(!proSetting && moduleEnabled) ? 'module-enabled' : ''} ${preInsideText || postInsideText ? 'inner-input' : ''}`}
+                    className={`${wrapperClass || ''} ${generate ? 'generate' : ''} ${preInsideText || postInsideText ? 'inner-input' : ''}`}
                 >
                     {inputLabel && (
                         <label htmlFor={id}>{inputLabel}</label>
@@ -255,7 +253,6 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
                 )}
 
                 {proSetting && <span className="admin-pro-tag"><i className="adminlib-pro-tag"></i>Pro</span>}
-                {(!proSetting && moduleEnabled) && <span className="admin-pro-tag module"><i className="adminlib-module"></i>Module</span>}
             </>
         );
     }

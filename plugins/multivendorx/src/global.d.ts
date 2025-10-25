@@ -53,6 +53,7 @@ declare global {
         payout_payment_options:any;
         shipping_methods:any;
         state_list:any;
+        module_page_url:any;
     }
     interface Color{
         color: any;

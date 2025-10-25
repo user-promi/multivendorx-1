@@ -20,6 +20,7 @@ export default {
                 'Customers can only request a refund when their order is in the selected status.',
                 'multivendorx'
             ),
+            moduleEnabled: 'marketplace-refund',
             options: [
                 {
                     key: 'pending',
@@ -53,6 +54,7 @@ export default {
                 'Set the number of days within which a customer can request a refund.',
                 'multivendorx'
             ),
+            moduleEnabled: 'marketplace-refund',
             size: '8rem',
             max: 365,
             postInsideText: 'days',
@@ -67,6 +69,14 @@ export default {
                 'Add one or more reasons that stores can select when handling refund requests.',
                 'multivendorx'
             ),
+            defaultValues: [
+                { value: "Damaged or Defective Product", },
+                { value: "Wrong Item Delivered", },
+                { value: "Product Not as Described", },
+                { value: "Late Delivery", },
+                { value: "Changed Mind", },
+            ],
+            moduleEnabled: 'marketplace-refund',
             name: 'abuse_report_reasons',
         }
     ],

@@ -331,14 +331,16 @@ const StoreTable: React.FC = () => {
                     rowData={row.original}
                     header={{
                         actions: [
-                            {
-                                label: __('Store Details', 'multivendorx'),
-                                icon: 'adminlib-eye',
-                                onClick: (rowData) => {
-                                    window.location.href = `?page=multivendorx#&tab=stores&view&id=${rowData.id}`;
-                                },
-                                hover: true,
-                            },
+                            ...(row.original.status === 'active'
+                                ? [{
+                                    label: __('Store Details', 'multivendorx'),
+                                    icon: 'adminlib-eye',
+                                    onClick: (rowData) => {
+                                        window.location.href = `?page=multivendorx#&tab=stores&view&id=${rowData.id}`;
+                                    },
+                                    hover: true,
+                                }]
+                                : []),
                             {
                                 label: __('Edit Store', 'multivendorx'),
                                 icon: 'adminlib-create',
