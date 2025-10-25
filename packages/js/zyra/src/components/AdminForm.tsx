@@ -657,9 +657,6 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             proSetting={isProSetting(
                                 inputField.proSetting ?? false
                             )}
-                            moduleEnabled={
-                                inputField.moduleEnabled ?? false
-                            }
                             onChange={(
                                 e: React.ChangeEvent<HTMLInputElement>
                             ) => {
@@ -940,7 +937,6 @@ const AdminForm: React.FC<AdminFormProps> = ({
                                     proSetting={isProSetting(
                                         inputField.proSetting ?? false
                                     )}
-                                // onChange={handleChange}
                                 />
                             </div>
                         </div>
@@ -1842,7 +1838,6 @@ const AdminForm: React.FC<AdminFormProps> = ({
                     );
                     break;
             }
-
             return inputField.type === 'section' ||
                 inputField.label === 'no_label' ? (
                 <>{input}</>
@@ -1850,7 +1845,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                 <div
                     key={'g' + inputField.key}
                     className={`form-group ${inputField.classes ? inputField.classes : ''
-                        }`}
+                        } ${inputField.proSetting ? 'pro-setting' : ''} ${(!inputField.proSetting && inputField.moduleEnabled) ? 'module-enabled' : ''}`}
                 >
                     {inputField.label && inputField.type !== 'catalog-customizer' &&
                         inputField.type !== 'form-customizer' && (
@@ -1865,6 +1860,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                         )}
 
                     <div className="settings-input-content">{input}</div>
+                    {(!inputField.proSetting && inputField.moduleEnabled) && <span className="admin-pro-tag module"><i className="adminlib-module"></i>Module</span>}
                 </div>
             );
         });

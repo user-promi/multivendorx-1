@@ -83,6 +83,7 @@ const proPopupContent = {
 };
 
 const ShowProPopup: React.FC< PopupProps > = (props) => {
+    console.log(appLocalizer);
     const modulePopupContent = {
         moduleName: props.moduleName,
         message: sprintf(
@@ -96,7 +97,7 @@ const ShowProPopup: React.FC< PopupProps > = (props) => {
         moduleButton: __( 'Enable Now', 'catalogx' ),
         modulePageUrl:
             typeof appLocalizer !== 'undefined'
-                ? `http://localhost:8889/wp-admin/admin.php?page=multivendorx#&tab=modules&module=${props.moduleName}`
+                ? `${appLocalizer.module_page_url}&module=${props.moduleName}`
                 : '#',
     };
 
