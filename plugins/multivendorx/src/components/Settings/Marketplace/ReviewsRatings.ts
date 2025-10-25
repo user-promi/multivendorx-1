@@ -29,6 +29,7 @@ export default {
                 },
             ],
             look: 'toggle',
+            moduleEnabled: 'store-review',
         },
         {
             key: 'product_review_sync',
@@ -42,6 +43,7 @@ export default {
                 },
             ],
             look: 'toggle',
+            moduleEnabled: 'store-review',
         },
         {
             key: 'ratings_parameters',
@@ -55,6 +57,7 @@ export default {
                 'multivendorx'
             ),
             name: 'abuse_report_reasons',
+            moduleEnabled: 'store-review',
             defaultValues: [
                 { value: "Product quality", },
                 { value: "Customer service", },
