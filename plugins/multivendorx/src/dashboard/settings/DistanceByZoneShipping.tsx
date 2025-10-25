@@ -12,7 +12,6 @@ import {
 import type { ColumnDef, PaginationState } from "@tanstack/react-table";
 import { __ } from "@wordpress/i18n";
 
-// ✅ Type definition for each zone
 type Zone = {
     id: number;
     zone_name: string;
@@ -30,15 +29,21 @@ const DistanceByZoneShipping: React.FC = () => {
     const [totalRows, setTotalRows] = useState<number>(0);
     const [pageCount, setPageCount] = useState<number>(0);
     const [error, setError] = useState<string>();
-    const [editShipping, setEditShipping] = useState(false);
+    const [addShipping, setAddShipping] = useState<boolean>(false);
     const [selectedZone, setSelectedZone] = useState<Zone | null>(null);
-    const [formData, setFormData] = useState({
+    const [isEditing, setIsEditing] = useState<boolean>(false);
+    const [editingMethod, setEditingMethod] = useState<any>(null);
+
+    const [formData, setFormData] = useState<any>({
         shippingMethod: "",
-        shippingCost: "",
         localPickupCost: "",
+        freeShippingType: "",
+        minOrderCost: "",
+        flatRateCost: "",
+        flatRateClassCost: "",
+        flatRateCalculationType: "",
     });
 
-    // ✅ Fetch zones on mount
     useEffect(() => {
         fetchZones();
     }, []);
@@ -64,118 +69,252 @@ const DistanceByZoneShipping: React.FC = () => {
         }
     };
 
-    //Edit a zone
-    const handleEdit = async (zone: Zone) => {
-        try {
-            // Build the URL with zone ID
-            const url = getApiLink(appLocalizer, `zone-shipping/${zone.zone_id}`);
+    const handleAdd = (zone: Zone) => {
+        setSelectedZone(zone);
+        setAddShipping(true);
+        setIsEditing(false);
+        setEditingMethod(null);
+        setFormData({
+            shippingMethod: "",
+            localPickupCost: "",
+            freeShippingType: "",
+            minOrderCost: "",
+            flatRateCost: "",
+            flatRateClassCost: "",
+            flatRateCalculationType: "",
+        });
+    };
 
-            // Fetch the latest zone data from backend
-            const res = await axios.get(url, {
+    const handleEdit = async (method: any) => {
+        setIsEditing(true);
+        setEditingMethod(method);
+
+        const zoneWithMethod = data.find(zone => {
+            const methods = Object.values(zone.shipping_methods || {});
+            return methods.some((m: any) => m.id === method.id);
+        });
+
+        setSelectedZone(zoneWithMethod || null);
+        setAddShipping(true);
+
+        if (!zoneWithMethod) return;
+
+        try {
+            const response = await axios({
+                method: "GET",
+                url: getApiLink(appLocalizer, `zone-shipping/${zoneWithMethod.zone_id}`),
                 headers: { "X-WP-Nonce": appLocalizer.nonce },
                 params: {
-                    store_id: appLocalizer.store_id, // still pass store_id if required
-                    zone_id: zone.zone_id,
+                    store_id: appLocalizer.store_id,
+                    method_id: method.id,
+                    zone_id: zoneWithMethod.zone_id,
                 },
             });
 
-            const fetchedZone: Zone = res.data; // should match your Zone type
-            setSelectedZone(fetchedZone);
+            if (response.data && response.data.settings) {
+                const data = response.data;
+                const methodConfig = data.settings;
 
-            // Extract first shipping method and local pickup
-            const firstMethod = fetchedZone.shipping_methods?.[0];
-            const localPickup = fetchedZone.shipping_methods?.find(
-                (m: any) => m.method_id === "local_pickup"
-            );
+                const form: any = {
+                    shippingMethod: data.method_id,
+                    localPickupCost: "",
+                    freeShippingType: "",
+                    minOrderCost: "",
+                    flatRateCost: "",
+                    flatRateClassCost: "",
+                    flatRateCalculationType: "",
+                };
 
-            setFormData({
-                shippingMethod: firstMethod?.method_id || "flat_rate",
-                shippingCost: firstMethod?.settings?.cost || "",
-                localPickupCost: localPickup?.settings?.cost || "",
-            });
+                if (data.method_id === "local_pickup") {
+                    form.localPickupCost = methodConfig.cost || "";
+                } else if (data.method_id === "free_shipping") {
+                    form.freeShippingType = methodConfig.requires === "min_amount" ? "min_order" : "coupon";
+                    form.minOrderCost = methodConfig.min_amount || "";
+                } else if (data.method_id === "flat_rate") {
+                    form.flatRateCost = methodConfig.cost || "";
+                    form.flatRateClassCost = methodConfig.class_cost || "";
+                    form.flatRateCalculationType = methodConfig.calculation_type;
+                }
 
-            setEditShipping(true);
+                setFormData(form);
+            }
         } catch (err) {
-            console.error("Failed to fetch zone details:", err);
-            alert("Failed to load zone details. Please try again.");
+            console.error("Error loading shipping method:", err);
+            alert("Error loading shipping method");
         }
     };
 
+    const handleDelete = async (method: any, zone: Zone) => {
+        if (!confirm(`Are you sure you want to delete "${method.title}"?`)) return;
 
-    const handleChange = (key: string, value: string) => {
-        setFormData((prev) => ({ ...prev, [key]: value }));
+        try {
+            const response = await axios({
+                method: "DELETE",
+                url: getApiLink(appLocalizer, `zone-shipping/${zone.zone_id}`),
+                headers: { "X-WP-Nonce": appLocalizer.nonce },
+                data: {
+                    store_id: appLocalizer.store_id,
+                    zone_id: zone.zone_id,
+                    method_id: method.id,
+                },
+            });
+
+            if (response.data.success) {
+                fetchZones();
+            } else {
+                alert(`Failed to delete "${method.title}".`);
+            }
+        } catch (err) {
+            console.error("Error deleting shipping method:", err);
+            alert(`Error deleting "${method.title}".`);
+        }
+    };
+
+    const handleChange = (key: string, value: any) => {
+        setFormData((prev: any) => ({ ...prev, [key]: value }));
     };
 
     const handleSave = async () => {
         if (!selectedZone) return;
 
         try {
-            const res = await axios({
-                method: "POST",
-                url: getApiLink(appLocalizer, "zone-shipping/update"),
-                headers: { "X-WP-Nonce": appLocalizer.nonce },
-                data: {
-                    store_id: appLocalizer.store_id,
-                    zone_id: selectedZone.zone_id,
-                    shipping_data: formData,
+            const shippingData: any = { settings: {} };
+
+            if (formData.shippingMethod === "local_pickup") {
+                shippingData.settings = {
+                    title: "Local Pickup",
+                    cost: formData.localPickupCost || '0',
+                    description: "Local pickup shipping method"
+                };
+            } else if (formData.shippingMethod === "free_shipping") {
+                shippingData.settings = {
+                    title: "Free Shipping",
+                    requires: formData.freeShippingType === "min_order" ? "min_amount" : "coupon",
+                    min_amount: formData.minOrderCost || '0',
+                    description: "Free shipping method"
+                };
+            } else if (formData.shippingMethod === "flat_rate") {
+                shippingData.settings = {
+                    title: "Flat Rate",
+                    cost: formData.flatRateCost || '0',
+                    class_cost: formData.flatRateClassCost || '',
+                    calculation_type: formData.flatRateCalculationType,
+                    description: "Flat rate shipping method"
+                };
+            }
+
+            const isUpdate = isEditing && editingMethod;
+            const method = isUpdate ? "PUT" : "POST";
+            const url = isUpdate
+                ? getApiLink(appLocalizer, `zone-shipping/${selectedZone.zone_id}`)
+                : getApiLink(appLocalizer, "zone-shipping");
+
+            const requestData: any = {
+                store_id: appLocalizer.store_id,
+                zone_id: selectedZone.zone_id,
+                method_id: isUpdate ? editingMethod.id : formData.shippingMethod,
+                settings: shippingData.settings
+            };
+
+            if (isUpdate) {
+                requestData.instance_id = editingMethod.instance_id;
+            }
+
+            const response = await axios({
+                method: method,
+                url: url,
+                headers: {
+                    "X-WP-Nonce": appLocalizer.nonce,
+                    "Content-Type": "application/json"
                 },
+                data: requestData
             });
 
-            const updated = data.map((zone) =>
-                zone.zone_id === selectedZone.zone_id
-                    ? { ...zone, shipping_methods: res.data.shipping_methods }
-                    : zone
-            );
-
-            setData(updated);
-            setEditShipping(false);
+            if (response.data.success) {
+                await fetchZones();
+                setAddShipping(false);
+                setFormData({
+                    shippingMethod: "",
+                    localPickupCost: "",
+                    freeShippingType: "",
+                    minOrderCost: "",
+                    flatRateCost: "",
+                    flatRateClassCost: "",
+                    flatRateCalculationType: "",
+                });
+                setEditingMethod(null);
+                setIsEditing(false);
+            } else {
+                alert(__("Failed to " + (isUpdate ? "update" : "add") + " shipping method", "multivendorx"));
+            }
         } catch (err) {
-            console.error("Failed to update shipping:", err);
-            alert("Failed to save shipping changes.");
+            console.error("Error " + (isEditing ? "updating" : "adding") + " shipping method:", err);
+            alert(__("Error " + (isEditing ? "updating" : "adding") + " shipping method", "multivendorx"));
         }
     };
-    //Define Table Columns
+
     const columns: ColumnDef<Zone>[] = [
         {
             header: __("Zone Name", "multivendorx"),
-            cell: ({ row }) => (
-                <TableCell>{row.original.zone_name || "—"}</TableCell>
-            ),
+            cell: ({ row }) => <TableCell>{row.original.zone_name || "—"}</TableCell>,
         },
         {
             header: __("Region(s)", "multivendorx"),
-            cell: ({ row }) => (
-                <TableCell>
-                    {row.original.formatted_zone_location || "—"}
-                </TableCell>
-            ),
+            cell: ({ row }) => <TableCell>{row.original.formatted_zone_location || "—"}</TableCell>,
         },
         {
             header: __("Shipping Method(s)", "multivendorx"),
             cell: ({ row }) => {
-                const methods = row.original.shipping_methods;
-                if (!methods || methods.length === 0)
-                    return <TableCell>No shipping methods</TableCell>;
-                const methodNames = methods.map((m: any) => m.title).join(", ");
-                return <TableCell>{methodNames}</TableCell>;
+                const methodsObj = row.original.shipping_methods || {};
+                const methodsArray = Object.values(methodsObj);
+
+                if (methodsArray.length === 0) {
+                    return (
+                        <TableCell>
+                            <div>No shipping methods</div>
+                            <button
+                                className="btn btn-default btn-sm mt-2"
+                                onClick={() => handleAdd(row.original)}
+                            >
+                                <i className="adminlib-plus"></i> {__("Add Shipping Method", "multivendorx")}
+                            </button>
+                        </TableCell>
+                    );
+                }
+
+                return (
+                    <TableCell>
+                        <div className="space-y-2">
+                            {methodsArray.map((method: any) => (
+                                <div key={method.instance_id} className="flex items-center justify-between border-b pb-2">
+                                    <div className="font-medium">{method.title}</div>
+                                    <div className="flex gap-2">
+                                        <button
+                                            className="btn btn-default btn-sm"
+                                            onClick={() => handleEdit(method)}
+                                        >
+                                            <i className="adminlib-edit"></i> {__("Edit", "multivendorx")}
+                                        </button>
+                                        <button
+                                            className="btn btn-danger btn-sm"
+                                            onClick={() => handleDelete(method, row.original)}
+                                        >
+                                            <i className="adminlib-trash"></i> {__("Delete", "multivendorx")}
+                                        </button>
+                                    </div>
+                                </div>
+                            ))}
+
+                            <button
+                                className="btn btn-default btn-sm mt-2"
+                                onClick={() => handleAdd(row.original)}
+                            >
+                                <i className="adminlib-plus"></i> {__("Add New Method", "multivendorx")}
+                            </button>
+                        </div>
+                    </TableCell>
+                );
             },
-        },
-        {
-            header: __("Actions", "multivendorx"),
-            cell: ({ row }) => (
-                <TableCell
-                    type="action-dropdown"
-                    header={{
-                        actions: [
-                            {
-                                label: __("Edit", "multivendorx"),
-                                icon: "adminlib-edit",
-                                onClick: () => handleEdit(row.original),
-                            },
-                        ],
-                    }}
-                />
-            ),
         },
     ];
 
@@ -200,24 +339,21 @@ const DistanceByZoneShipping: React.FC = () => {
                 />
             </div>
 
-            {editShipping && selectedZone && (
+            {addShipping && selectedZone && (
                 <CommonPopup
-                    open={editShipping}
-                    width="500px"
-                    height="auto"
+                    open={addShipping}
+                    width="800px"
+                    height="50%"
                     header={
                         <>
                             <div className="title flex items-center gap-2">
                                 <i className="adminlib-cart"></i>
-                                {__("Edit Shipping — ", "multivendorx")}
+                                {isEditing ? __("Edit Shipping — ", "multivendorx") : __("Add Shipping — ", "multivendorx")}
                                 {selectedZone.zone_name}
                             </div>
-                            <p>
-                                {__("Manage the pricing and methods for this zone.", "multivendorx")}
-                            </p>
                             <i
                                 className="icon adminlib-close cursor-pointer"
-                                onClick={() => setEditShipping(false)}
+                                onClick={() => setAddShipping(false)}
                             ></i>
                         </>
                     }
@@ -225,56 +361,117 @@ const DistanceByZoneShipping: React.FC = () => {
                         <div className="flex justify-end gap-2 p-3">
                             <button
                                 className="btn btn-default"
-                                onClick={() => setEditShipping(false)}
+                                onClick={() => setAddShipping(false)}
                             >
                                 {__("Cancel", "multivendorx")}
                             </button>
                             <button className="btn btn-primary" onClick={handleSave}>
-                                {__("Save", "multivendorx")}
+                                {isEditing ? __("Update", "multivendorx") : __("Save", "multivendorx")}
                             </button>
                         </div>
                     }
                 >
-                    <div className="content p-3">
-                        <div className="form-group">
-                            <label htmlFor="method">
-                                {__("Shipping Method", "multivendorx")}
-                            </label>
-                            <ToggleSetting
-                                wrapperClass="setting-form-input"
-                                value={formData.shippingMethod}
-                                onChange={(val) => handleChange("shippingMethod", val)}
-                                options={[
-                                    { key: "flat_rate", value: "Flat rate", label: "Flat rate" },
-                                    { key: "free_shipping", value: "Free shipping", label: "Free shipping" },
-                                    { key: "local_pickup", value: "Local pickup", label: "Local pickup" },
-                                ]}
-                            />
-                        </div>
+                    <div className="content p-3 space-y-4">
+                        {/* Select Shipping Method */}
+                        <label className="font-medium">{__("Shipping Method", "multivendorx")}</label>
+                        <ToggleSetting
+                            wrapperClass="setting-form-input"
+                            value={formData.shippingMethod}
+                            onChange={(val: string) => {
+                                if (!isEditing) handleChange("shippingMethod", val);
+                            }}
+                            options={
+                                isEditing
+                                    ? [{ key: formData.shippingMethod, value: formData.shippingMethod, label: formData.shippingMethod.replace('_', ' ').replace(/\b\w/g, c => c.toUpperCase()) }]
+                                    : [
+                                        { key: "local_pickup", value: "local_pickup", label: "Local pickup" },
+                                        { key: "free_shipping", value: "free_shipping", label: "Free shipping" },
+                                        { key: "flat_rate", value: "flat_rate", label: "Flat Rate" },
+                                    ]
+                            }
+                            disabled={isEditing}
+                        />
 
-                        <div className="form-group mt-3">
-                            <label>{__("Shipping Cost ($)", "multivendorx")}</label>
-                            <BasicInput
-                                type="number"
-                                name="shippingCost"
-                                value={formData.shippingCost}
-                                onChange={(e: any) =>
-                                    handleChange("shippingCost", e.target.value)
-                                }
-                            />
-                        </div>
+                        {/* Local Pickup */}
+                        {formData.shippingMethod === "local_pickup" && (
+                            <div className="form-group">
+                                <label className="font-medium">{__("Cost", "multivendorx")}</label>
+                                <BasicInput
+                                    type="number"
+                                    name="localPickupCost"
+                                    placeholder="Enter cost"
+                                    value={formData.localPickupCost}
+                                    onChange={(e: any) => handleChange("localPickupCost", e.target.value)}
+                                />
+                            </div>
+                        )}
 
-                        <div className="form-group mt-3">
-                            <label>{__("Local Pickup Cost ($)", "multivendorx")}</label>
-                            <BasicInput
-                                type="number"
-                                name="localPickupCost"
-                                value={formData.localPickupCost}
-                                onChange={(e: any) =>
-                                    handleChange("localPickupCost", e.target.value)
-                                }
-                            />
-                        </div>
+                        {/* Free Shipping */}
+                        {formData.shippingMethod === "free_shipping" && (
+                            <>
+                                <ToggleSetting
+                                    wrapperClass="setting-form-input"
+                                    value={formData.freeShippingType}
+                                    onChange={(val: string) => handleChange("freeShippingType", val)}
+                                    options={[
+                                        { key: "min_order", value: "min_order", label: "Min Order" },
+                                        { key: "coupon", value: "coupon", label: "Coupon" },
+                                    ]}
+                                />
+                                {formData.freeShippingType === "min_order" && (
+                                    <div className="form-group mt-2">
+                                        <label className="font-medium">{__("Minimum Order Cost", "multivendorx")}</label>
+                                        <BasicInput
+                                            type="number"
+                                            name="minOrderCost"
+                                            placeholder="Enter minimum order cost"
+                                            value={formData.minOrderCost}
+                                            onChange={(e: any) => handleChange("minOrderCost", e.target.value)}
+                                        />
+                                    </div>
+                                )}
+                            </>
+                        )}
+
+                        {/* Flat Rate */}
+                        {formData.shippingMethod === "flat_rate" && (
+                            <>
+                                <div className="form-group">
+                                    <label className="font-medium">{__("Cost", "multivendorx")}</label>
+                                    <BasicInput
+                                        type="number"
+                                        name="flatRateCost"
+                                        placeholder="Enter cost"
+                                        value={formData.flatRateCost}
+                                        onChange={(e: any) => handleChange("flatRateCost", e.target.value)}
+                                    />
+                                </div>
+
+                                <div className="form-group">
+                                    <label className="font-medium">{__("Cost of Shipping Class", "multivendorx")}</label>
+                                    <BasicInput
+                                        type="text"
+                                        name="flatRateClassCost"
+                                        placeholder="Enter class cost"
+                                        value={formData.flatRateClassCost}
+                                        onChange={(e: any) => handleChange("flatRateClassCost", e.target.value)}
+                                    />
+                                </div>
+
+                                <div className="form-group">
+                                    <label className="font-medium">{__("Calculation Type", "multivendorx")}</label>
+                                    <ToggleSetting
+                                        wrapperClass="setting-form-input"
+                                        value={formData.flatRateCalculationType}
+                                        onChange={(val: string) => handleChange("flatRateCalculationType", val)}
+                                        options={[
+                                            { key: "per_class", value: "per_class", label: "Per Class" },
+                                            { key: "per_order", value: "per_order", label: "Per Order" },
+                                        ]}
+                                    />
+                                </div>
+                            </>
+                        )}
                     </div>
                 </CommonPopup>
             )}
