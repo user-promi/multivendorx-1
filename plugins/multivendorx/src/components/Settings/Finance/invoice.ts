@@ -17,6 +17,7 @@ export default {
             classes: 'vertical width-50',
             label: __( 'Invoice number format', 'multivendorx' ),            
             placeholder: 'Invoice number format',
+            moduleEnabled: 'invoice',
             //proSetting:true
         },
         {
@@ -25,6 +26,7 @@ export default {
             classes: 'vertical width-50',
             label: __( 'Starting invoice number', 'multivendorx' ),            
             placeholder: 'Starting invoice number',
+            moduleEnabled: 'invoice',
             //proSetting:true
         },
         {
@@ -33,6 +35,7 @@ export default {
             label: __( 'Invoice PDF page size', 'multivendorx' ),
             classes: 'vertical width-50',
             desc: __( 'Choose the page size for generated invoice PDFs', 'multivendorx' ),
+            moduleEnabled: 'invoice',
             options: [
                 {
                     key: 'per_transaction',
@@ -58,6 +61,7 @@ export default {
             label: __( 'PDF layout orientation', 'multivendorx' ),
             classes: 'vertical width-50',
             desc: __( 'Choose whether invoices are generated in portrait or landscape mode', 'multivendorx' ),
+            moduleEnabled: 'invoice',
             options: [
                 {
                     key: 'portrait',
@@ -79,6 +83,7 @@ export default {
             label: __( 'Automatic email delivery', 'multivendorx' ),
             class: 'mvx-toggle-checkbox',
             desc: __( 'Choose how invoices are automatically sent to customers and stores', 'multivendorx' ),
+            moduleEnabled: 'invoice',
             options: [
                 {
                     key: 'virtual',
@@ -116,6 +121,7 @@ export default {
             classes: 'vertical width-50',
             label: __( 'GST number', 'multivendorx' ),            
             placeholder: 'Enter GST registration number',
+            moduleEnabled: 'invoice',
             //proSetting:true
         },
         {
@@ -124,6 +130,7 @@ export default {
             classes: 'vertical width-50',
             label: __( 'Tax ID number', 'multivendorx' ),            
             placeholder: 'Enter tax ID number',
+            moduleEnabled: 'invoice',
             //proSetting:true
         },
         {
@@ -147,6 +154,7 @@ export default {
             type: 'color-setting',
             label: 'Dashboard color scheme',
             settingDescription: 'Choose a dashboard color scheme from predefined sets or customize your own. Each scheme defines the button style, and hover effects for a consistent look.',
+            moduleEnabled: 'invoice',
             images: [
                 {
                     key: 'template1',

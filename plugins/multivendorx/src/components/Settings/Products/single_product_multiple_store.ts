@@ -20,6 +20,7 @@ export default {
                 'Choose which version of SPMV product will be shown as the main listing on the shop page (e.g., top-rated store, min / max priced product).',
                 'multivendorx'
             ),
+            moduleEnabled: 'spmv',
             options: [
                 {
                     key: 'min-price',
@@ -51,6 +52,7 @@ export default {
                 'Decide where additional SPMV offers should be displayed on the single product page to make them visible to customers.',
                 'multivendorx'
             ),
+            moduleEnabled: 'spmv',
             postText:__(' single page product tabs.', 'multivendorx'),
             options: [
                 {
