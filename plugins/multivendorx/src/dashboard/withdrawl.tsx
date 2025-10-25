@@ -229,7 +229,7 @@ const Withdrawl: React.FC = () => {
                 );
               }
 
-              if (field.type === "store-toggle") {
+              if (field.type === 'setting-toggle') {
                 return (
                   <ToggleSetting
                     key={field.key}

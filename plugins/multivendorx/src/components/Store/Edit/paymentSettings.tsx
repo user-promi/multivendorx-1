@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { BasicInput, ToggleSetting, getApiLink, SuccessNotice } from 'zyra';
+import { BasicInput, ToggleSetting, getApiLink, SuccessNotice, BlockText } from 'zyra';
 
 interface PaymentField {
+	key: any;
 	html: string | TrustedHTML;
 	name: string;
 	type?: string;
@@ -134,6 +135,8 @@ const PaymentSettings = ({ id }: { id: string|null }) => {
 		});
     };
 
+	
+
 	const autoSave = (updatedData: { [key: string]: string }) => {
 		axios({
 			method: 'PUT',
@@ -146,6 +149,18 @@ const PaymentSettings = ({ id }: { id: string|null }) => {
 			}
 		});
     };
+
+	const handleAccChange = (value: string, name?: string) => {
+		setFormData((prev) => {
+			const updated = {
+				...(prev || {}),
+				[name || '']: value,
+			};
+			
+			autoSave(updated);
+			return updated;
+		});
+	};
     
     // ✨ --- NEW: Helper functions to get disabled options --- ✨
     const getDynamicOptions = (fieldKey: string) => {
@@ -188,11 +203,9 @@ const PaymentSettings = ({ id }: { id: string|null }) => {
 			<div className="container-wrapper">
 				<div className="card-wrapper width-65">
 					<div className="card-content">
-						<div className="card-title">Payment information</div>
-
+						<div className="card-title">Withdrawal Methods</div>
 						<div className="form-group-wrapper">
 							<div className="form-group">
-								<label>Withdrawal Configuration</label>
 								<ToggleSetting
 									wrapperClass="setting-form-input"
 									descClass="settings-metabox-description"
@@ -219,31 +232,35 @@ const PaymentSettings = ({ id }: { id: string|null }) => {
                             // Render Toggle Settings
                             if (field.type === 'setting-toggle') {
                                 return (
-                                    <div className="form-group-wrapper" key={field.key}>
-                                        <div className="form-group">
-                                            <label>{field.label}</label>
-                                            <ToggleSetting
-                                                options={getDynamicOptions(field.key)}
-                                                value={formData[field.key] || ""}
-                                                onChange={(value) => handleToggleChange(value, field.key)}
-                                            />
-                                        </div>
-                                    </div>
-                                );
+									<ToggleSetting
+										key={field.key}
+										description={field.desc}
+										options={
+										Array.isArray(field.options)
+											? field.options.map((opt) => ({
+											...opt,
+											value: String(opt.value),
+											}))
+											: []
+										}
+										value={formData[field.key || ""] || ""}
+										onChange={(value) => handleToggleChange(value, field.key)}
+									/>
+									);
                             }
-
+							console.log(formData)
 							// Default input field rendering
 							return (
-								<div className="form-group-wrapper" key={field.name}>
+								<div className="form-group-wrapper" key={field.key}>
 									<div className="form-group">
-										<label htmlFor={field.name}>{field.label}</label>
+										<label htmlFor={field.key}>{field.label}</label>
 										<BasicInput
-											name={field.name}
+											name={field.key || ""}
 											type={field.type || "text"}
 											wrapperClass="setting-form-input"
 											descClass="settings-metabox-description"
 											placeholder={field.placeholder || ""}
-											value={formData[field.name] || ""}
+											value={formData[field.key]}
 											onChange={handleChange}
 										/>
 									</div>
@@ -258,6 +275,10 @@ const PaymentSettings = ({ id }: { id: string|null }) => {
 						<div className="card-title">
 							Store-specific Commission
 						</div>
+						<BlockText
+                            blockTextClass="settings-metabox-note"
+                            value="If no store-specific commission is set, the global commission will automatically apply."// Text or HTML content to display inside the block (safe HTML injected).
+                        />
 						<div className="form-group-wrapper">
 							<div className="form-group">
 								<label htmlFor="product-name">Fixed</label>
