@@ -51,8 +51,8 @@
      .banner-right {
          .social-profile {
              position: absolute;
-             top: 7%;
-             right: 3%;
+             top: 1.5rem;
+             right: 1.625rem;
              display: flex;
              gap: 0.813rem;
 
@@ -87,6 +87,7 @@
          .heading {
              font-size: 1.313rem;
              font-weight: 600;
+             line-height: 1;
          }
      }
 

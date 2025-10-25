@@ -349,6 +349,19 @@ const AdminForm: React.FC<AdminFormProps> = ({
             counterId.current = intervalId;
         }
     }, [setting, appLocalizer, submitUrl, id]);
+    useEffect(() => {
+        if (modelOpen === false) {
+            const timeout = setTimeout(() => {
+                setModulePopupData({
+                    moduleName: '',
+                    settings: '',
+                    plugin: '',
+                });
+            }, 100);
+
+            return () => clearTimeout(timeout);
+        }
+    }, [modelOpen]);
 
     const isProSetting = (proDependent: boolean): boolean => {
         return proDependent && !appLocalizer?.khali_dabba;
@@ -1567,11 +1580,6 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             }}
                             moduleChange={(moduleEnabled) => {
                                 setModelOpen(true);
-                                setModulePopupData({
-                                    moduleName: moduleEnabled,
-                                    settings: '',
-                                    plugin: '',
-                                });
                             }}
                         />
                     );
