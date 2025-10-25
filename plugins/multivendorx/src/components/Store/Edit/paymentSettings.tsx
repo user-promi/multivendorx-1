@@ -192,11 +192,11 @@ const PaymentSettings = ({ id }: { id: string|null }) => {
 
 						<div className="form-group-wrapper">
 							<div className="form-group">
-								<label>Payment Method</label>
+								<label>Withdrawal Configuration</label>
 								<ToggleSetting
 									wrapperClass="setting-form-input"
 									descClass="settings-metabox-description"
-									description="Choose your preferred payment method."
+									description="Select or update how this store will receive payouts."
 									options={paymentOptions}
 									value={formData.payment_method || ""}
 									onChange={(value) => handleToggleChange(value, 'payment_method')}
@@ -256,7 +256,7 @@ const PaymentSettings = ({ id }: { id: string|null }) => {
 				<div className="card-wrapper width-35">
 					<div className="card-content">
 						<div className="card-title">
-							Commission Value
+							Store-specific Commission
 						</div>
 						<div className="form-group-wrapper">
 							<div className="form-group">
