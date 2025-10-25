@@ -192,15 +192,20 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
         $ids        = $request->get_param( 'ids' );
         $start_date = sanitize_text_field( $request->get_param( 'startDate' ) );
         $end_date   = sanitize_text_field( $request->get_param( 'endDate' ) );
+        $page       = $request->get_param( 'page' );
+        $per_page   = $request->get_param( 'row' );
     
-        // Prepare filter for CommissionUtil
+        // Prepare filter for CommissionUtil - NO pagination by default
         $filter = array();
+        
         if ( ! empty( $storeId ) ) {
             $filter['store_id'] = intval( $storeId );
         }
+        
         if ( ! empty( $status ) ) {
             $filter['status'] = $status;
         }
+        
         if ( ! empty( $start_date ) && ! empty( $end_date ) ) {
             $filter['created_at'] = array(
                 'compare' => 'BETWEEN',
@@ -208,27 +213,49 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
             );
         }
     
-        // If specific IDs are requested
+        // If specific IDs are requested (selected rows from bulk action)
         if ( ! empty( $ids ) ) {
             $filter['id__in'] = array_map( 'intval', explode( ',', $ids ) );
+        } 
+        // If pagination parameters are provided (current page export from bulk action)
+        elseif ( ! empty( $page ) && ! empty( $per_page ) ) {
+            $filter['perpage'] = intval( $per_page );
+            $filter['page']    = intval( $page );
         }
+        // Otherwise, export ALL data with current filters (no pagination - from Export All button)
     
         // Fetch commissions
         $commissions = \MultiVendorX\Commission\CommissionUtil::get_commissions( $filter, false );
+        
         if ( empty( $commissions ) ) {
             return new \WP_Error( 'no_data', __( 'No commission data found.', 'multivendorx' ), array( 'status' => 404 ) );
         }
     
         // CSV headers
         $headers = array(
-            'ID', 'Order ID', 'Store Name', 'Total Order Amount', 'Commission Amount',
-            'Facilitator Fee', 'Gateway Fee', 'Shipping Amount', 'Tax Amount',
-            'Commission Total', 'Status', 'Created At'
+            'ID', 
+            'Order ID', 
+            'Store Name', 
+            'Total Order Amount', 
+            'Commission Amount',
+            'Facilitator Fee', 
+            'Gateway Fee', 
+            'Shipping Amount', 
+            'Tax Amount',
+            'Commission Total', 
+            'Status', 
+            'Created At',
+            'Commission Refunded',
+            'Currency'
         );
     
         // Build CSV data
         $csv_output = fopen( 'php://output', 'w' );
         ob_start();
+        
+        // Add BOM for UTF-8 compatibility
+        fwrite($csv_output, "\xEF\xBB\xBF");
+        
         fputcsv( $csv_output, $headers );
     
         foreach ( $commissions as $commission ) {
@@ -248,21 +275,34 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
                 $commission->commission_total,
                 $commission->status,
                 $commission->created_at,
+                $commission->commission_refunded,
+                $commission->currency,
             ));
         }
     
         fclose( $csv_output );
         $csv = ob_get_clean();
     
+        // Determine filename based on context
+        $filename = 'commissions_';
+        if ( ! empty( $ids ) ) {
+            $filename .= 'selected_';
+        } elseif ( ! empty( $page ) ) {
+            $filename .= 'page_' . $page . '_';
+        } else {
+            $filename .= 'all_';
+        }
+        $filename .= date( 'Y-m-d' ) . '.csv';
+    
         // Send headers for browser download
-        header( 'Content-Type: text/csv' );
-        header( 'Content-Disposition: attachment; filename="commissions_' . date( 'Y-m-d' ) . '.csv"' );
+        header( 'Content-Type: text/csv; charset=UTF-8' );
+        header( 'Content-Disposition: attachment; filename="' . $filename . '"' );
         header( 'Pragma: no-cache' );
         header( 'Expires: 0' );
     
         echo $csv;
         exit;
-    }    
+    }
     
     public function get_item( $request ) {
         // Verify nonce
