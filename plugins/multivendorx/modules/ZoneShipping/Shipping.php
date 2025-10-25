@@ -317,7 +317,7 @@ class Shipping extends \WC_Shipping_Method {
     public static function free_shipping_is_available( $package, $method ) {
         if (isset( $method['settings']['requires'] ) && $method['settings']['requires'] == 'coupon') {
             $coupon_code = $package['applied_coupons'] ? reset($package['applied_coupons']) : '';
-            $coupon = new WC_Coupon( $coupon_code );
+            $coupon = new \WC_Coupon( $coupon_code );
             $is_free_shipping_enabled = $coupon->get_free_shipping();
             if ($is_free_shipping_enabled) {
                 return true;

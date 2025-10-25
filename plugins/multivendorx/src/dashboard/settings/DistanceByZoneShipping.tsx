@@ -8,7 +8,6 @@ import {
     ToggleSetting,
     BasicInput,
     getApiLink,
-    MultiCheckBox,
 } from "zyra";
 import type { ColumnDef, PaginationState } from "@tanstack/react-table";
 import { __ } from "@wordpress/i18n";
@@ -38,11 +37,9 @@ const DistanceByZoneShipping: React.FC = () => {
     const [formData, setFormData] = useState<any>({
         shippingMethod: "",
         localPickupCost: "",
-        taxStatus: false,
         freeShippingType: "",
         minOrderCost: "",
         flatRateCost: "",
-        flatRateTaxStatus: false,
         flatRateClassCost: "",
         flatRateCalculationType: "",
     });
@@ -80,89 +77,90 @@ const DistanceByZoneShipping: React.FC = () => {
         setFormData({
             shippingMethod: "",
             localPickupCost: "",
-            taxStatus: false,
             freeShippingType: "",
             minOrderCost: "",
             flatRateCost: "",
-            flatRateTaxStatus: false,
             flatRateClassCost: "",
             flatRateCalculationType: "",
         });
     };
 
-
     const handleEdit = async (method: any) => {
         setIsEditing(true);
         setEditingMethod(method);
 
-        // Find the zone that contains this method
         const zoneWithMethod = data.find(zone => {
             const methods = Object.values(zone.shipping_methods || {});
-            return methods.some(m => m.instance_id === method.instance_id);
+            return methods.some((m: any) => m.id === method.id);
         });
 
         setSelectedZone(zoneWithMethod || null);
-        setAddShipping(true); // open popup
+        setAddShipping(true);
+
+        if (!zoneWithMethod) return;
 
         try {
             const response = await axios({
                 method: "GET",
-                url: getApiLink(appLocalizer, `zone-shipping/${method.instance_id}`),
+                url: getApiLink(appLocalizer, `zone-shipping/${zoneWithMethod.zone_id}`),
                 headers: { "X-WP-Nonce": appLocalizer.nonce },
-                params: { instanceId: method.instance_id },
+                params: {
+                    store_id: appLocalizer.store_id,
+                    method_id: method.id,
+                    zone_id: zoneWithMethod.zone_id,
+                },
             });
 
             if (response.data && response.data.settings) {
                 const data = response.data;
-                const methodConfig = response.data.settings;
+                const methodConfig = data.settings;
 
                 const form: any = {
                     shippingMethod: data.method_id,
                     localPickupCost: "",
-                    taxStatus: false,
                     freeShippingType: "",
                     minOrderCost: "",
                     flatRateCost: "",
-                    flatRateTaxStatus: false,
                     flatRateClassCost: "",
                     flatRateCalculationType: "",
                 };
+
                 if (data.method_id === "local_pickup") {
                     form.localPickupCost = methodConfig.cost || "";
-                    form.taxStatus = methodConfig.tax_status === "taxable";
                 } else if (data.method_id === "free_shipping") {
                     form.freeShippingType = methodConfig.requires === "min_amount" ? "min_order" : "coupon";
                     form.minOrderCost = methodConfig.min_amount || "";
                 } else if (data.method_id === "flat_rate") {
                     form.flatRateCost = methodConfig.cost || "";
-                    form.flatRateTaxStatus = methodConfig.tax_status === "taxable";
                     form.flatRateClassCost = methodConfig.class_cost || "";
                     form.flatRateCalculationType = methodConfig.calculation_type;
                 }
 
-                console.log(form)
-
                 setFormData(form);
             }
         } catch (err) {
-            console.error(err);
+            console.error("Error loading shipping method:", err);
             alert("Error loading shipping method");
         }
     };
 
-    const handleDelete = async (method: any) => {
+    const handleDelete = async (method: any, zone: Zone) => {
         if (!confirm(`Are you sure you want to delete "${method.title}"?`)) return;
-    
+
         try {
             const response = await axios({
                 method: "DELETE",
-                url: getApiLink(appLocalizer, `zone-shipping/${method.instance_id}`),
+                url: getApiLink(appLocalizer, `zone-shipping/${zone.zone_id}`),
                 headers: { "X-WP-Nonce": appLocalizer.nonce },
-                params: { instance_id: method.instance_id }
+                data: {
+                    store_id: appLocalizer.store_id,
+                    zone_id: zone.zone_id,
+                    method_id: method.id,
+                },
             });
-    
+
             if (response.data.success) {
-                fetchZones(); // Refresh table
+                fetchZones();
             } else {
                 alert(`Failed to delete "${method.title}".`);
             }
@@ -171,10 +169,6 @@ const DistanceByZoneShipping: React.FC = () => {
             alert(`Error deleting "${method.title}".`);
         }
     };
-    
-
-
-
 
     const handleChange = (key: string, value: any) => {
         setFormData((prev: any) => ({ ...prev, [key]: value }));
@@ -182,18 +176,14 @@ const DistanceByZoneShipping: React.FC = () => {
 
     const handleSave = async () => {
         if (!selectedZone) return;
-    
+
         try {
-            // Prepare shipping settings
-            const shippingData: any = {
-                settings: {}
-            };
-    
+            const shippingData: any = { settings: {} };
+
             if (formData.shippingMethod === "local_pickup") {
                 shippingData.settings = {
                     title: "Local Pickup",
                     cost: formData.localPickupCost || '0',
-                    tax_status: formData.taxStatus ? 'taxable' : 'none',
                     description: "Local pickup shipping method"
                 };
             } else if (formData.shippingMethod === "free_shipping") {
@@ -207,29 +197,29 @@ const DistanceByZoneShipping: React.FC = () => {
                 shippingData.settings = {
                     title: "Flat Rate",
                     cost: formData.flatRateCost || '0',
-                    tax_status: formData.flatRateTaxStatus ? 'taxable' : 'none',
                     class_cost: formData.flatRateClassCost || '',
                     calculation_type: formData.flatRateCalculationType,
                     description: "Flat rate shipping method"
                 };
             }
-    
-            console.log("Submitting shipping data:", shippingData);
-    
-            const method = isEditing ? "PUT" : "POST";
-            const url = isEditing && editingMethod
-                ? getApiLink(appLocalizer, `zone-shipping/${editingMethod.instance_id}`) // instance_id in URL
+
+            const isUpdate = isEditing && editingMethod;
+            const method = isUpdate ? "PUT" : "POST";
+            const url = isUpdate
+                ? getApiLink(appLocalizer, `zone-shipping/${selectedZone.zone_id}`)
                 : getApiLink(appLocalizer, "zone-shipping");
-    
-            // Send in request body
-            const requestData = {
-                zone_id: selectedZone.zone_id,
-                method_id: formData.shippingMethod,
+
+            const requestData: any = {
                 store_id: appLocalizer.store_id,
-                settings: shippingData.settings,
-                ...(isEditing && editingMethod && { instance_id: editingMethod.instance_id }) // send instance_id in body too
+                zone_id: selectedZone.zone_id,
+                method_id: isUpdate ? editingMethod.id : formData.shippingMethod,
+                settings: shippingData.settings
             };
-    
+
+            if (isUpdate) {
+                requestData.instance_id = editingMethod.instance_id;
+            }
+
             const response = await axios({
                 method: method,
                 url: url,
@@ -239,34 +229,30 @@ const DistanceByZoneShipping: React.FC = () => {
                 },
                 data: requestData
             });
-    
+
             if (response.data.success) {
-                console.log("Shipping method " + (isEditing ? "updated" : "added") + " successfully:", response.data);
                 await fetchZones();
                 setAddShipping(false);
                 setFormData({
                     shippingMethod: "",
                     localPickupCost: "",
-                    taxStatus: false,
                     freeShippingType: "",
                     minOrderCost: "",
                     flatRateCost: "",
-                    flatRateTaxStatus: false,
                     flatRateClassCost: "",
                     flatRateCalculationType: "",
                 });
+                setEditingMethod(null);
+                setIsEditing(false);
             } else {
-                console.error("Failed to " + (isEditing ? "update" : "add") + " shipping method:", response.data);
-                alert(__("Failed to " + (isEditing ? "update" : "add") + " shipping method", "multivendorx"));
+                alert(__("Failed to " + (isUpdate ? "update" : "add") + " shipping method", "multivendorx"));
             }
-    
         } catch (err) {
             console.error("Error " + (isEditing ? "updating" : "adding") + " shipping method:", err);
             alert(__("Error " + (isEditing ? "updating" : "adding") + " shipping method", "multivendorx"));
         }
     };
-    
-    
+
     const columns: ColumnDef<Zone>[] = [
         {
             header: __("Zone Name", "multivendorx"),
@@ -311,7 +297,7 @@ const DistanceByZoneShipping: React.FC = () => {
                                         </button>
                                         <button
                                             className="btn btn-danger btn-sm"
-                                            onClick={() => handleDelete(method)}
+                                            onClick={() => handleDelete(method, row.original)}
                                         >
                                             <i className="adminlib-trash"></i> {__("Delete", "multivendorx")}
                                         </button>
@@ -327,7 +313,6 @@ const DistanceByZoneShipping: React.FC = () => {
                             </button>
                         </div>
                     </TableCell>
-
                 );
             },
         },
@@ -392,62 +377,38 @@ const DistanceByZoneShipping: React.FC = () => {
                         <ToggleSetting
                             wrapperClass="setting-form-input"
                             value={formData.shippingMethod}
-                            onChange={(val: string) => handleChange("shippingMethod", val)}
-                            options={[
-                                { key: "local_pickup", value: "local_pickup", label: "Local pickup" },
-                                { key: "free_shipping", value: "free_shipping", label: "Free shipping" },
-                                { key: "flat_rate", value: "flat_rate", label: "Flat Rate" },
-                            ]}
+                            onChange={(val: string) => {
+                                if (!isEditing) handleChange("shippingMethod", val);
+                            }}
+                            options={
+                                isEditing
+                                    ? [{ key: formData.shippingMethod, value: formData.shippingMethod, label: formData.shippingMethod.replace('_', ' ').replace(/\b\w/g, c => c.toUpperCase()) }]
+                                    : [
+                                        { key: "local_pickup", value: "local_pickup", label: "Local pickup" },
+                                        { key: "free_shipping", value: "free_shipping", label: "Free shipping" },
+                                        { key: "flat_rate", value: "flat_rate", label: "Flat Rate" },
+                                    ]
+                            }
+                            disabled={isEditing}
                         />
 
                         {/* Local Pickup */}
                         {formData.shippingMethod === "local_pickup" && (
-                            <>
-                                <p className="font-medium mb-2">{__("Local Pickup Options", "multivendorx")}</p>
-
-                                <div className="form-group">
-                                    <label className="font-medium">{__("Cost", "multivendorx")}</label>
-                                    <BasicInput
-                                        type="number"
-                                        name="localPickupCost"
-                                        placeholder="Enter cost"
-                                        value={formData.localPickupCost}
-                                        onChange={(e: any) => handleChange("localPickupCost", e.target.value)}
-                                    />
-                                </div>
-
-                                <div className="form-group">
-                                    <label className="font-medium">{__("Tax Status", "multivendorx")}</label>
-                                    <MultiCheckBox
-                                        wrapperClass="toggle-btn"
-                                        inputWrapperClass="toggle-checkbox-header"
-                                        inputInnerWrapperClass="toggle-checkbox"
-                                        inputClass="tax-checkbox"
-                                        idPrefix="tax-status-local"
-                                        type="checkbox"
-                                        options={[
-                                            {
-                                                key: "taxable",
-                                                value: "taxable",
-                                            },
-                                        ]}
-                                        value={formData.taxStatus ? ["taxable"] : []}
-                                        onChange={(e) => {
-                                            if (Array.isArray(e)) {
-                                                handleChange("taxStatus", e.includes("taxable"));
-                                            } else {
-                                                handleChange("taxStatus", e.target.checked);
-                                            }
-                                        }}
-                                    />
-                                </div>
-                            </>
+                            <div className="form-group">
+                                <label className="font-medium">{__("Cost", "multivendorx")}</label>
+                                <BasicInput
+                                    type="number"
+                                    name="localPickupCost"
+                                    placeholder="Enter cost"
+                                    value={formData.localPickupCost}
+                                    onChange={(e: any) => handleChange("localPickupCost", e.target.value)}
+                                />
+                            </div>
                         )}
 
                         {/* Free Shipping */}
                         {formData.shippingMethod === "free_shipping" && (
                             <>
-                                <p className="font-medium mb-2">{__("Free Shipping Options", "multivendorx")}</p>
                                 <ToggleSetting
                                     wrapperClass="setting-form-input"
                                     value={formData.freeShippingType}
@@ -475,8 +436,6 @@ const DistanceByZoneShipping: React.FC = () => {
                         {/* Flat Rate */}
                         {formData.shippingMethod === "flat_rate" && (
                             <>
-                                <p className="font-medium mb-2">{__("Flat Rate Options", "multivendorx")}</p>
-
                                 <div className="form-group">
                                     <label className="font-medium">{__("Cost", "multivendorx")}</label>
                                     <BasicInput
@@ -485,32 +444,6 @@ const DistanceByZoneShipping: React.FC = () => {
                                         placeholder="Enter cost"
                                         value={formData.flatRateCost}
                                         onChange={(e: any) => handleChange("flatRateCost", e.target.value)}
-                                    />
-                                </div>
-
-                                <div className="form-group">
-                                    <label className="font-medium">{__("Tax Status", "multivendorx")}</label>
-                                    <MultiCheckBox
-                                        wrapperClass="toggle-btn"
-                                        inputWrapperClass="toggle-checkbox-header"
-                                        inputInnerWrapperClass="toggle-checkbox"
-                                        inputClass="tax-checkbox"
-                                        idPrefix="tax-status-flat"
-                                        type="checkbox"
-                                        options={[
-                                            {
-                                                key: "taxable",
-                                                value: "taxable",
-                                            },
-                                        ]}
-                                        value={formData.flatRateTaxStatus ? ["taxable"] : []}
-                                        onChange={(e) => {
-                                            if (Array.isArray(e)) {
-                                                handleChange("flatRateTaxStatus", e.includes("taxable"));
-                                            } else {
-                                                handleChange("flatRateTaxStatus", e.target.checked);
-                                            }
-                                        }}
                                     />
                                 </div>
 
