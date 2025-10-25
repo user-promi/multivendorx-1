@@ -285,7 +285,7 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
         $store_ids           = StoreUtil::get_stores_from_user_id( $current_user->ID );
         $active_store        = get_user_meta( $current_user->ID, 'multivendorx_active_store', true );
         $all_endpoints       = $this->all_endpoints();
-        $div_id              = '';
+        $div_id              = 'dashboard';
         $allowed             = true;
         $store               = new Store( $active_store );
         $store_status        = $store->get( 'status' );
@@ -361,9 +361,6 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
                 break;
             }
         }
-
-        file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":div_id:  : " . var_export($div_id, true) . "\n", FILE_APPEND);
-        file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":allowed:  : " . var_export($allowed, true) . "\n", FILE_APPEND);
 
         switch ( $store_status ) {
             case 'pending':

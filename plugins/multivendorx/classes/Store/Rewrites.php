@@ -123,11 +123,7 @@ class Rewrites {
 
         if ( ! empty( $store_name ) ) {
             $store = Store::get_store_by_slug($store_name);
-
-            // if ( get_query_var( 'store_review' ) ) {
-            //     return MultiVendorX()->util->get_template( 'store-review.php', [] );
-            // }
-
+            
             if ( $store ) {
                 MultiVendorX()->util->get_template( 'store/store.php', ['store_id' => $store->get_id()] );
                 exit;
