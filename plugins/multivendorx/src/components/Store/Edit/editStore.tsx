@@ -193,14 +193,16 @@ const EditStore = () => {
                                             <i className="adminlib-storefront"></i>
                                             <span className="tooltip">Store Details</span>
                                         </a>
-                                        <a
-                                            href={`${appLocalizer.site_url}/store/${data.slug}`}
-                                            target="_blank"
-                                            className="tooltip-btn admin-badge yellow"
-                                        >
-                                            <i className="adminlib-eye"></i>
-                                            <span className="tooltip">View Public Store</span>
-                                        </a>
+                                        {data.status == 'active' && 
+                                            <a
+                                                href={`${appLocalizer.site_url}/store/${data.slug}`}
+                                                target="_blank"
+                                                className="tooltip-btn admin-badge yellow"
+                                            >
+                                                <i className="adminlib-eye"></i>
+                                                <span className="tooltip">View Public Store</span>
+                                            </a>
+                                        }
                                     </>
                                 )}
                             </div>

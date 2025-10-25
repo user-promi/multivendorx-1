@@ -7,6 +7,7 @@ export default {
     desc: __( 'Decide whose share will be reduced when paying affiliate commissions. The payout can either be deducted from the admin’s commission or from the store’s earnings.', 'multivendorx' ),
     icon: 'adminlib-setting',
     submitUrl: 'settings',
+    moduleEnabled: 'wp-affiliate',
     modal: [
         {
             key: 'approve_store',

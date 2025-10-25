@@ -33,6 +33,7 @@ export default {
                     value: 'both',
                 },
             ],
+            moduleEnabled: 'geo-location',
         },
         {
             key: 'choose_map_api',
@@ -64,6 +65,7 @@ export default {
                 '<a href="https://developers.google.com/maps/documentation/javascript/get-api-key#get-an-api-key" target="_blank">Click here to generate key.</a>',
                 'multivendorx'
             ),
+            moduleEnabled: 'geo-location',
             dependent: {
                 key: 'choose_map_api',
                 set: true,
@@ -91,6 +93,7 @@ export default {
             single: true,
             settingDescription: __('Define how customers can control their search radius when looking for nearby stores.', 'multivendorx'),
             desc: __('<ul><li>Minimum distance - set the smallest possible radius a customer can select. For example, if set to 1 km, customers cannot search for anything closer than 1 km.<li>Maximum distance - set the largest radius available for search. For example, setting it to 500 km allows customers to expand their search across a wider region.</li><li>Units - decide whether distances are measured in kilometers or miles, depending on your store’s target region.</li></ul>', 'multivendorx'),
+            moduleEnabled: 'geo-location',
             nestedFields: [
                 {
                     key: 'radius_search_min_distance',

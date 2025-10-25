@@ -13,6 +13,7 @@ export default {
             type: 'setting-toggle',
             label: __('Chat button position', 'multivendorx'),
             desc: __('Choose where the chat button will appear on product pages.', 'multivendorx'),
+            moduleEnabled: 'live-chat',
             options: [
                 {
                     key: 'add_to_cart_button',
@@ -38,6 +39,7 @@ export default {
             type: 'setting-toggle',
             label: __('Chat platform integration', 'multivendorx'),
             desc: __('Select the chat provider you want to connect with your store.', 'multivendorx'),
+            moduleEnabled: 'live-chat',
             options: [
                 {
                     key: 'facebook',
@@ -62,6 +64,7 @@ export default {
             type: 'color',
             label: __('Messenger theme color', 'multivendorx'),
             desc: __('Pick a theme color for your Facebook Messenger chat window.', 'multivendorx'),
+            moduleEnabled: 'live-chat',
             value: '#5007aa',
             postText: 'hshhsh',
             preText: 'hhdhhd',

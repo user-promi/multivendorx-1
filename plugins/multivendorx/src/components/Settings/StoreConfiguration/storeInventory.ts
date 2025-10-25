@@ -27,6 +27,7 @@ export default {
                         },
                     ],
                     look: 'toggle',
+                    moduleEnabled: 'store-inventory',
                 },
                 {
                     key: 'low_stock_alert_threshold',
@@ -39,6 +40,7 @@ export default {
                         value: 'low_stock_alert',    // value that must be selected
                         set: true,                   // show when this value is selected
                     },
+                    moduleEnabled: 'store-inventory',
                 },
             ],
         },

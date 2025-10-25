@@ -7,12 +7,14 @@ export default {
     desc: __('Facilitators are users who assist stores and earn a commission or fee for their role. You can define a global facilitator, assign store-specific facilitators, and configure payment rules for each.', 'mvx-pro'),
     icon: 'adminlib-facilitator',
     submitUrl: 'settings',
+    moduleEnabled: 'min-max',
     modal: [
          {
             key: 'facilitator',
             type: 'select',
             label: __( 'Facilitators', 'multivendorx' ),
            settingDescription: __('Assign a user as a facilitator who will receive the facilitator fee', 'multivendorx'),
+           moduleEnabled: 'facilitator',
            className:"select-class",
            size: "40%",
             options: appLocalizer.facilitators_list,

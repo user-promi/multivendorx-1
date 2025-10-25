@@ -148,7 +148,7 @@ const ProPopup: React.FC<PopupProps> = (props) => {
                                 <h2>Activate {props.moduleName}</h2>
                                 <p>{props.message}</p>
 
-                                <div className="footer-button">
+                                <div className="buttons-wrapper center">
                                     <a
                                         className="admin-btn btn-purple"
                                         href={props.modulePageUrl}

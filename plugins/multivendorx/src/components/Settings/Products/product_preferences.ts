@@ -34,6 +34,7 @@ export default {
                 },
             ],
             selectDeselect: true,
+            moduleEnabled: 'advertisement',
         },
         {
             key: 'products_fields',

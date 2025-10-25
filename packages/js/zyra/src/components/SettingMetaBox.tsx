@@ -108,7 +108,6 @@ const FormFieldSelect: React.FC<FormFieldSelectProps> = ({ inputTypeList, formFi
     </FieldWrapper>
 );
 
-// ---------------- Main Component ----------------
 
 const SettingMetaBox: React.FC<SettingMetaBoxProps> = ({
     formField,

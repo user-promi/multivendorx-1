@@ -47,8 +47,9 @@ class Store {
         $table = "{$wpdb->prefix}" . Utill::TABLES['store'];
 
         $row = $wpdb->get_row( $wpdb->prepare(
-            "SELECT * FROM $table WHERE ID = %d",
-            $store_id
+            "SELECT * FROM $table WHERE ID = %d AND status = %s",
+            $store_id,
+            'active'
         ), ARRAY_A );
 
         if ( $row ) {
@@ -185,7 +186,7 @@ class Store {
         $table = "{$wpdb->prefix}" . Utill::TABLES['store'];
 
         $id = $wpdb->get_var( $wpdb->prepare(
-            "SELECT ID FROM $table WHERE slug = %s LIMIT 1", $slug
+            "SELECT ID FROM $table WHERE slug = %s AND status = %s LIMIT 1", $slug, 'active'
         ) );
 
         return $id ? new self( $id ) : null;

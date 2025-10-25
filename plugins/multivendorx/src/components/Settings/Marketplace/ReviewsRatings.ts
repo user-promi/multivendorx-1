@@ -29,6 +29,7 @@ export default {
                 },
             ],
             look: 'toggle',
+            moduleEnabled: 'store-review',
         },
         {
             key: 'product_review_sync',
@@ -42,33 +43,36 @@ export default {
                 },
             ],
             look: 'toggle',
+            moduleEnabled: 'store-review',
         },
         {
             key: 'ratings_parameters',
             type: 'multi-string',
             label: __('Rating parameters', 'multivendorx'),
+            //placeholder: __('Define the key milestones in a store’s delivery process. These stages help stores communicate order progress to customers', 'multivendorx'),
             iconEnable: false,
-            descEnable: false,
-            requiredEnable: false,
+            descEnable: true,
+            requiredEnable: true,
             settingDescription: __(
                 'Define rating parameters such as packaging, delivery, behaviour, policies, etc.',
                 'multivendorx'
             ),
             name: 'abuse_report_reasons',
             defaultValues: [
-                { value: "Product quality", },
-                { value: "Customer service", },
-                { value: "Delivery experience", },
+                { value: "Product quality",},
+                { value: "Customer service",},
+                { value: "Delivery experience",},
                 { value: "Value for money", },
-                { value: "Overall experience", },
+                { value: "Overall experience",},
             ],
-            iconOptions: ["adminlib-check", "adminlib-clock", "adminlib-cart", "adminlib-store"], // dropdown options
-            proSetting: false,
-            allowDuplicates: false,
             dependent: {
                 key: 'product_review_sync',
                 set: true,
             },
+            proSetting: false,
+            maxItems: 10,
+            allowDuplicates: false,
+            moduleEnabled: 'store-review',
         },
     ],
 };

@@ -18,6 +18,7 @@ export default {
                 'Select a badge from the list above. Once a store is verified, the chosen badge will appear beside its name.',
                 'multivendorx'
             ),
+            moduleEnabled: 'identity-verification',
             options: [
                 {
                     key: 'icon1',
@@ -72,6 +73,7 @@ export default {
             type: 'multi-string',
             label: __('Verification Methods', 'multivendorx'),
             placeholder: __('Enter Shipping stage', 'multivendorx'),
+            moduleEnabled: 'identity-verification',
             // iconEnable: true,
             // descEnable: true,
             requiredEnable: true,
@@ -96,6 +98,7 @@ export default {
             key: 'all_verification_methods',
             type: 'payment-tabs',
             label: 'Social Verification',
+            moduleEnabled: 'identity-verification',
             // settingDescription: __('Allow stores to verify their identity by connecting social media accounts.', 'multivendorx'),
             modal: [
                 {
@@ -166,6 +169,7 @@ export default {
                 'Policies created by the admin are displayed by default. Stores can edit and override their own policies.',
                 'multivendorx'
             ),
+            moduleEnabled: 'identity-verification',
             label: __('Registration Notice', 'multivendorx'),
             moduleEnabled: 'store-policy',
         },
@@ -177,7 +181,7 @@ export default {
                 'multivendorx'
             ),
             label: __('Login Notice', 'multivendorx'),
-            moduleEnabled: 'store-policy',
+            moduleEnabled: 'identity-verification',
         },
     ],
 };
