@@ -11,12 +11,12 @@ export default {
         {
             key: 'unverified_store_access',
             type: 'checkbox',
-            label: __('Enforcement actions', 'mvx-pro'),
+            label: __('What Happens If Sellers Donot Complete Requirements?', 'mvx-pro'),
             desc: __('Select the restrictions you want to apply to stores who have not yet completed their compliance.', 'mvx-pro'),
             options: [
                 {
                     key: 'endpoint_control',
-                    label: __('Restrict access to other pages', 'mvx-pro'),
+                    label: __('Restrict access to other dashbaord pages', 'mvx-pro'),
                     value: 'endpoint_control',
                     proSetting: true,
                 },
@@ -41,6 +41,12 @@ export default {
             ],
             //proSetting:true,
             selectDeselect: true,
+        },
+        {
+            key: 'separator_content',
+            type: 'section',
+            hint: __("What Must Sellers Complete Before Selling?", 'multivendorx'),
+            desc: __('Check all requirements sellers must finish to activate their store')
         },
         {
             key: 'store_compliance_management',
