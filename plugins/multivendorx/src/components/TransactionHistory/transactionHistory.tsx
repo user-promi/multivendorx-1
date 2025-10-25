@@ -183,7 +183,7 @@ export const TransactionHistory: React.FC = () => {
                         <div className="card-header">
                             <div className="left">
                                 <div className="title">
-                                    Available for Payout
+                                    Withdrawable Balance
                                 </div>
                             </div>
                         </div>
@@ -191,7 +191,7 @@ export const TransactionHistory: React.FC = () => {
                             <div className="price">
                                 {appLocalizer.currency_symbol}{Number(data.available_balance ?? 0).toFixed(2)}
                             </div>
-                            <div className="des">Current available balance ready for withdrawal</div>
+                            <div className="des">Current available balance ready to transfer to stores.</div>
                             <div className="admin-btn btn-purple" onClick={() => setRequestWithdrawal(true)}>
                                 Disburse payment
                             </div>
