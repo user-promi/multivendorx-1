@@ -8,11 +8,6 @@ $user          = wp_get_current_user();
 $store_ids     = StoreUtil::get_stores_from_user_id( $user->ID );
 $store_dashboard_logo = MultiVendorX()->setting->get_setting( 'store_dashboard_site_logo', array() );
 $page_info     = MultiVendorX()->rest->dashboard->get_current_page_and_submenu();
-$active_store  = $page_info['active_store'];
-$current_page  = $page_info['current_page'];
-$current_sub   = $page_info['current_sub'];
-$id            = $page_info['id'];
-$error_msg     = $page_info['error_msg'];
 
 ?>
 <!DOCTYPE html>
@@ -39,7 +34,7 @@ $error_msg     = $page_info['error_msg'];
                 <?php foreach ( $all_endpoints as $section ) : ?>
                     <?php
                     $has_submenu = ! empty( $section['submenu'] );
-                    $is_active   = ( $current_page === $section['slug'] && empty( $current_sub ) );
+                    $is_active   = ( $page_info['current_page'] === $section['slug'] && empty( $page_info['current_sub'] ) );
                     ?>
                     <li class="tab-name <?php echo $is_active ? 'active' : ''; ?>">
                         <a
@@ -57,7 +52,7 @@ $error_msg     = $page_info['error_msg'];
                             <ul class="subtabs">
                                 <?php foreach ( $section['submenu'] as $submenu ) : ?>
                                     <?php
-                                    $sub_active = ( $current_page === $section['slug'] && $current_sub === $submenu['slug'] );
+                                    $sub_active = ( $page_info['current_page'] === $section['slug'] && $page_info['current_sub'] === $submenu['slug'] );
                                     ?>
                                     <li class="<?php echo $sub_active ? 'active' : ''; ?>">
                                         <a href="<?php echo esc_url( StoreUtil::get_endpoint_url( $section['slug'], $submenu['slug'] ) ); ?>">
@@ -182,17 +177,17 @@ $error_msg     = $page_info['error_msg'];
             
             ?>
 
-            <div class="content-wrapper" id="<?php echo $id ? esc_attr( $id ) : ''; ?>"> 
+            <div class="content-wrapper" id="<?php echo $page_info['id'] ? esc_attr( $page_info['id'] ) : ''; ?>"> 
                 <div class="permission-wrapper">
                     <i class="adminlib-info red"></i>
-                    <div class="title"><?php echo esc_html( $error_msg ); ?></div>
+                    <div class="title"><?php echo esc_html( $page_info['error_msg'] ); ?></div>
                     <div class="admin-btn btn-purple"><?php echo esc_html__( 'Contact Admin', 'multivendorx' ); ?></div>
                 </div>
 
-                <?php if ( !$error_msg ) { ?>
+                <?php if ( !$page_info['error_msg'] ) { ?>
                     <div class="page-title-wrapper">
                         <div class="page-title">
-                            <div class="title"><?php echo esc_html( $id ); ?></div>
+                            <div class="title"><?php echo esc_html( $page_info['id'] ); ?></div>
                             <div class="des"><?php echo esc_html__( 'Manage your store information and preferences', 'multivendorx' ); ?></div>
                         </div>
                     </div>
