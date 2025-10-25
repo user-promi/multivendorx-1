@@ -63,9 +63,9 @@ class Frontend {
     public function add_shipping_options($existing_options) {
         $new_options = array(
             (object) array(
-                'key' => 'distance_by_shipping',
+                'key' => 'shipping_by_distance',
                 'label' => __('Shipping by Distance', 'multivendorx'),
-                'value' => 'distance_by_shipping'
+                'value' => 'shipping_by_distance'
             )
         );
         

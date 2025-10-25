@@ -134,7 +134,6 @@ class Shipping extends \WC_Shipping_Method {
                 $found_shipping_classes[ $found_class ][ $item_id ] = $values;
             }
         }
-
         return $found_shipping_classes;
     }
 
@@ -199,6 +198,11 @@ class Shipping extends \WC_Shipping_Method {
 
         // Loop through each store
         foreach ( $seller_products as $store_id => $products ) {
+            $store = new \MultiVendorX\Store\Store( $store_id );
+
+            $existing = $store->get_meta( 'shipping_options' );
+            if( 'shipping_by_zone' !== $existing ) continue;
+
             $zone = WC_Shipping_Zones::get_zone_matching_package( $package );
 
             // Get shipping methods for this store
@@ -232,11 +236,13 @@ class Shipping extends \WC_Shipping_Method {
     
                     // Shipping class costs
                     $shipping_classes = WC()->shipping->get_shipping_classes();
+                    file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":orders:shipping clastype : " . var_export($shipping_classes, true) . "\n", FILE_APPEND);
+
                     if ( ! empty( $shipping_classes ) ) {
                         $found_shipping_classes = $this->find_shipping_classes( $package );
                         $highest_class_cost = 0;
                         $calculation_type = ! empty( $method['settings']['calculation_type'] ) ? $method['settings']['calculation_type'] : 'class';
-    
+
                         foreach ( $found_shipping_classes as $shipping_class => $products_in_class ) {
                             $shipping_class_term = get_term_by( 'slug', $shipping_class, 'product_shipping_class' );
                             $class_cost_string = $shipping_class_term && $shipping_class_term->term_id

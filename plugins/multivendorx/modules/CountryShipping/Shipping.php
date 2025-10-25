@@ -87,39 +87,56 @@ class Shipping extends \WC_Shipping_Method {
         );
     }
 
-    public function calculate_shipping($packages = []) {
-        $products = $packages['contents'];
-        $destination_country = isset( $packages['destination']['country'] ) ? $packages['destination']['country'] : '';
-        $destination_state = isset( $packages['destination']['state'] ) ? $packages['destination']['state'] : '';
-        
-        $amount = 0.0;
-        
-        if ( ! $this->is_method_enabled() ) {
-           return;
+    public function calculate_shipping( $package = array() ) {
+        $products = $package['contents'];
+        $destination_country = $package['destination']['country'] ?? '';
+        $destination_state   = $package['destination']['state'] ?? '';
+    
+        if ( empty( $products ) ) {
+            return;
         }
-        
-        if ( $products ) {
-            $amount = $this->calculate_per_seller( $products, $destination_country, $destination_state );
-            $tax_rate  = ( $this->tax_status == 'none' ) ? false : '';
-            $tax_rate  = apply_filters( 'multivendorx_is_apply_tax_on_shipping_rates', $tax_rate );
-            
-            if( !$amount ) {
-              $this->title = __('Free Shipping', 'multivendorx');
+    
+        $seller_products = [];
+    
+        // Step 1: Group products per store and only include eligible sellers
+        foreach ( $products as $product ) {
+            $product_id = $product['product_id'];
+            $store_id   = get_post_meta( $product_id, 'multivendorx_store_id', true );
+    
+            if ( ! empty( $store_id ) && self::is_shipping_enabled_for_seller( $store_id ) ) {
+                $seller_products[ (int) $store_id ][] = $product;
             }
-       
+        }
+    
+        // Step 2: Stop if no eligible sellers found
+        if ( empty( $seller_products ) ) {
+            return;
+        }
+    
+        // Step 3: Loop through each store
+        foreach ( $seller_products as $store_id => $products ) {
+            // Calculate per-seller shipping cost
+            $amount = $this->calculate_per_seller( $products, $destination_country, $destination_state );
+    
+            // Calculate tax
+            $tax_rate = ( $this->tax_status == 'none' ) ? false : '';
+            $tax_rate = apply_filters( 'multivendorx_is_apply_tax_on_shipping_rates', $tax_rate );
+    
+            // Step 4: Add shipping rate
             $rate = array(
-                'id'    => $this->id . ':1',
+                'id'    => $this->id . ':' . $store_id,
                 'label' => $this->title,
                 'cost'  => $amount,
-                'taxes' => $tax_rate
+                'taxes' => $tax_rate,
             );
-       
-            // Register the rate
+    
             $this->add_rate( $rate );
-            
+    
+            // Step 5: Maybe add local pickup rate if available
             $this->maybe_add_local_pickup_rate( $products, $tax_rate );
-          }
+        }
     }
+    
 
     /**
     * Check if shipping for this product is enabled
@@ -129,21 +146,11 @@ class Shipping extends \WC_Shipping_Method {
     * @return boolean
     */
     public static function is_shipping_enabled_for_seller( $store_id ) {
-
-        // Load the store object
         $store = new \MultiVendorX\Store\Store( $store_id );
-    
-        // Check store meta for shipping options
         $shipping_options = $store->meta_data['shipping_options'] ?? '';
-    
-        if ( $shipping_options === 'shipping_by_country' ) {
-            return true;
-        }
-
-        return false;
+        return $shipping_options === 'shipping_by_country';
     }
     
-
     /**
      * Calculate shipping per seller
      *

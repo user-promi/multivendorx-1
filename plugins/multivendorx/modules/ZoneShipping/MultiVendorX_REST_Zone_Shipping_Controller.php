@@ -130,7 +130,10 @@ class MultiVendorX_REST_Zone_Shipping_Controller extends \WP_REST_Controller {
         // Save only the settings as meta value
         $store->update_meta( $meta_key, $clean_settings );
         $store->save();
-    
+        // Process settings in Shipping class
+        $shipping = new Shipping();
+        $shipping->set_post_data( $settings );
+        $shipping->process_admin_options();
         // Clear WooCommerce shipping cache
         \WC_Cache_Helper::get_transient_version( 'shipping', true );
     

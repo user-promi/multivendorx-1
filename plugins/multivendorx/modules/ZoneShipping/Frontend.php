@@ -31,9 +31,9 @@ class Frontend {
     public function add_shipping_options($existing_options) {
         $new_options = array(
             (object) array(
-                'key' => 'distance_by_zone',
+                'key' => 'shipping_by_zone',
                 'label' => __('Shipping by Zone', 'multivendorx'),
-                'value' => 'distance_by_zone'
+                'value' => 'shipping_by_zone'
             )
         );
         
