@@ -28,8 +28,8 @@ export default {
                     openForm: true,
                     desc: 'Stores set different rates for different regions (like "East Coast" or "California").',
                     formFields: [
-                        { key: 'client_id', type: 'description', label: 'Currently enabled zones' , des: '<span class="admin-badge yellow">North America</span>  <span class="admin-badge blue">North America</span>  <span class="admin-badge yellow">North America</span>  <span class="admin-badge red">North America</span>'},
-                        { key: 'client_id', type: 'description', label: ' ' , des: '<span class="admin-btn btn-purple"><i class="adminlib-plus-circle-o"></i>Add new Zone</span>'}
+                        { key: 'client_id', type: 'description', label: 'Currently enabled zones', des: '<span class="admin-badge yellow">North America</span>  <span class="admin-badge blue">North America</span>  <span class="admin-badge yellow">North America</span>  <span class="admin-badge red">North America</span>' },
+                        { key: 'client_id', type: 'description', label: ' ', des: '<span class="admin-btn btn-purple"><i class="adminlib-plus-circle-o"></i>Add new Zone</span>' }
                     ],
                 },
                 {
@@ -150,9 +150,8 @@ export default {
             ),
             name: 'abuse_report_reasons',
             defaultValues: [
-                { value: "Order Received", locked: true, iconClass: "adminlib-check", description: "Order is received by store", tag: "Primary", required: true },
-                { value: "Processing", locked: true, iconClass: "adminlib-clock", description: "Order is being processed", tag: "Primary", required: true },
-                { value: "Shipped", iconClass: "adminlib-truck", default: "Primary" } // editable
+                { value: "Order Received", locked: true, iconClass: "adminlib-check", description: "Order is received by store", required: true },
+                { value: "Processing", locked: true, iconClass: "adminlib-clock", description: "Order is being processed", required: true },
             ],
             iconOptions: ["adminlib-check", "adminlib-clock", "adminlib-cart", "adminlib-store"], // dropdown options
             proSetting: false,

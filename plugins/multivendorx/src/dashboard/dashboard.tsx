@@ -250,7 +250,7 @@ const Dashboard: React.FC = () => {
             <div className="card-header">
               <div className="left">
                 <div className="title">
-                  Store Activity Log
+                  Admin Announcements
                 </div>
                 <div className="des">Lorem ipsum dolor sit amet.</div>
               </div>
@@ -259,7 +259,41 @@ const Dashboard: React.FC = () => {
               </div>
             </div>
             <div className="card-body">
+              <div className="notification-wrapper">
+                <ul>
+                  <li>
+                    <div className="icon-wrapper">
+                      <i className="adminlib-form-paypal-email blue"></i>
+                    </div>
+                    <div className="details">
+                      <div className="notification-title">Holiday campaign materials uploaded.</div>
+                      <div className="des">Holiday campaign materials uploaded.</div>
+                      <span>1d ago</span>
+                    </div>
 
+                  </li>
+                  <li>
+                    <div className="icon-wrapper">
+                      <i className="adminlib-mail orange"></i>
+                    </div>
+                    <div className="details">
+                      <div className="notification-title">System maintenance Nov 5 (2–4 AM PST).</div>
+                      <div className="des">Lorem ipsum dolor sit amet, consectetur adipisicing elit</div>
+                      <span>34min ago</span>
+                    </div>
+                  </li>
+                  <li>
+                    <div className="icon-wrapper">
+                      <i className="adminlib-form-paypal-email green"></i>
+                    </div>
+                    <div className="details">
+                      <div className="notification-title">New shipping carrier integration live.</div>
+                      <div className="des">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</div>
+                      <span>34min ago</span>
+                    </div>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
@@ -269,7 +303,7 @@ const Dashboard: React.FC = () => {
             <div className="card-header">
               <div className="left">
                 <div className="title">
-                  Latest Questions
+                  Best-Selling Products
                 </div>
                 <div className="des">Lorem ipsum dolor sit amet.</div>
               </div>
@@ -285,8 +319,22 @@ const Dashboard: React.FC = () => {
                       <i className="adminlib-pro-tag admin-icon red"></i>
                     </div>
                     <div className="details">
-                      <div className="item-title">Lather & Loom</div>
-                      <div className="sub-text">3 orders</div>
+                      <div className="item-title">Wireless Headset</div>
+                      <div className="sub-text">180 units sold</div>
+                    </div>
+                  </div>
+                  <div className="right-side">
+                    <div className="price">$9230</div>
+                  </div>
+                </div>
+                <div className="items">
+                  <div className="left-side">
+                    <div className="icon">
+                      <i className="adminlib-pro-tag admin-icon green"></i>
+                    </div>
+                    <div className="details">
+                      <div className="item-title">Coffee Beans</div>
+                      <div className="sub-text">320 units sold</div>
                     </div>
                   </div>
                   <div className="right-side">
@@ -299,35 +347,7 @@ const Dashboard: React.FC = () => {
                       <i className="adminlib-pro-tag admin-icon green"></i>
                     </div>
                     <div className="details">
-                      <div className="item-title">Lather & Loom</div>
-                      <div className="sub-text">3 orders</div>
-                    </div>
-                  </div>
-                  <div className="right-side">
-                    <div className="price">$380</div>
-                  </div>
-                </div>
-                <div className="items">
-                  <div className="left-side">
-                    <div className="icon">
-                      <i className="adminlib-pro-tag admin-icon green"></i>
-                    </div>
-                    <div className="details">
-                      <div className="item-title">Lather & Loom</div>
-                      <div className="sub-text">3 orders</div>
-                    </div>
-                  </div>
-                  <div className="right-side">
-                    <div className="price">$380</div>
-                  </div>
-                </div>
-                <div className="items">
-                  <div className="left-side">
-                    <div className="icon">
-                      <i className="adminlib-pro-tag admin-icon green"></i>
-                    </div>
-                    <div className="details">
-                      <div className="item-title">Lather & Loom</div>
+                      <div className="item-title">Yoga Mat</div>
                       <div className="sub-text">3 orders</div>
                     </div>
                   </div>
@@ -340,7 +360,7 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
 
-        <div className="column width-35">
+        {/* <div className="column width-35">
           <div className="card">
             <div className="card-header">
               <div className="left">
@@ -388,7 +408,7 @@ const Dashboard: React.FC = () => {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
 
     </>

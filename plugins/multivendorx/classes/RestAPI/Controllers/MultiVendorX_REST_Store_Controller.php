@@ -299,13 +299,53 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                 $args['orderBy'] = $orderBy;
                 $args['order']   = $order;
             }
+
+            $filters   = $request->get_param( 'filters' );
+            
+            if (!empty($filters)) {
+                $args['orderBy'] = $filters['sort'];
+
+                if (!empty($filters['category'])) {
+
+                    $product_args = array(
+                        'return'      => 'ids',
+                        'numberposts' => -1,
+                        'tax_query'      => [
+                            [
+                                'taxonomy' => 'product_cat',
+                                'field'    => 'term_id',
+                                'terms'    => $filters['category'],
+                            ],
+                        ],
+                    );
     
+                    $product_ids = wc_get_products( $product_args );
+                    $store_ids = [];
+    
+                    foreach ( $product_ids as $product_id ) {
+                        $store_id = get_post_meta( $product_id, 'multivendorx_store_id', true );
+    
+                        if ( ! empty( $store_id ) ) {
+                           $store_ids[] = $store_id;
+                        }
+                    }
+    
+                    $store_ids = array_unique( array_filter( $store_ids ) );
+                    $args['ID'] = $store_ids;                            
+                }
+
+                if (!empty($filters['product'])) {
+                    $store_id = get_post_meta( $filters['product'], 'multivendorx_store_id', true );
+                    $args['ID'] = $store_id;
+                }
+
+            }
             $stores = StoreUtil::get_store_information( $args );
-    
+            
             $formatted_stores = array();
             foreach ( $stores as $store ) {
                 $store_meta = Store::get_store_by_id( (int) $store['ID'] );
-    
+
                 // Get primary owner information using Store object
                 $primary_owner_id = StoreUtil::get_primary_owner( $store['ID'] );
                 $primary_owner = $this->get_user_info( $primary_owner_id );
@@ -327,13 +367,16 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                         'applied_on' => $store['create_time'],
                         'store_image' => $store_image, // Add store image
                         'store_banner' => $store_banner, // Add store banner
+                        'address_1'   => $store_meta->meta_data['address_1'] ?? '',
+                        'image'     => $store_meta->meta_data['image'] ?? MultiVendorX()->plugin_url . 'assets/images/default-store.jpg',
+
                     )
                 );
             }
             $all = StoreUtil::get_store_information(['count' => true]);
             $active = StoreUtil::get_store_information(['status' => 'active','count' => true]);
             $pending = StoreUtil::get_store_information(['status' => 'pending','count' => true]);
-    
+
             $response = [
                 'stores'  => $formatted_stores,
                 'all'     => $all,
@@ -341,7 +384,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                 'pending' => $pending,
             ];
             return rest_ensure_response( $response);
-    
+
         } catch ( \Exception $e ) {
             MultiVendorX()->util->log(
                 "MVX REST Exception:\n" .
@@ -349,7 +392,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                 "\tFile: " . $e->getFile() . "\n" .
                 "\tLine: " . $e->getLine() . "\n"
             );
-    
+
             return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
         }
     }

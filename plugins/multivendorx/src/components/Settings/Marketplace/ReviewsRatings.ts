@@ -2,7 +2,7 @@ import { __ } from '@wordpress/i18n';
 
 export default {
     id: 'review-management',
-    priority: 2,
+    priority: 4,
     name: __( 'Reviews and Ratings', 'multivendorx' ),
     desc: __( 'Manage product and store review settings.', 'multivendorx' ),
     icon: 'adminlib-setting',
@@ -29,6 +29,7 @@ export default {
                 },
             ],
             look: 'toggle',
+            moduleEnabled: 'store-review',
         },
         {
             key: 'product_review_sync',
@@ -42,18 +43,35 @@ export default {
                 },
             ],
             look: 'toggle',
+            moduleEnabled: 'store-review',
         },
         {
             key: 'ratings_parameters',
             type: 'multi-string',
-            label: __( 'Rating parameters', 'multivendorx' ),
-            placeholder: __( 'Enter a parameter and click +', 'multivendorx' ),
-            desc: __( 'Define rating parameters such as packaging, delivery, behaviour, policies, etc.', 'multivendorx' ),
-            name: 'ratings_parameters',
+            label: __('Rating parameters', 'multivendorx'),
+            iconEnable: false,
+            descEnable: false,
+            requiredEnable: false,
+            settingDescription: __(
+                'Define rating parameters such as packaging, delivery, behaviour, policies, etc.',
+                'multivendorx'
+            ),
+            name: 'abuse_report_reasons',
+            moduleEnabled: 'store-review',
+            defaultValues: [
+                { value: "Product quality", },
+                { value: "Customer service", },
+                { value: "Delivery experience", },
+                { value: "Value for money", },
+                { value: "Overall experience", },
+            ],
+            iconOptions: ["adminlib-check", "adminlib-clock", "adminlib-cart", "adminlib-store"], // dropdown options
+            proSetting: false,
+            allowDuplicates: false,
             dependent: {
                 key: 'product_review_sync',
                 set: true,
             },
-        }
+        },
     ],
 };
