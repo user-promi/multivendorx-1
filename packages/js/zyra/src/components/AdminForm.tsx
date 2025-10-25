@@ -657,6 +657,9 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             proSetting={isProSetting(
                                 inputField.proSetting ?? false
                             )}
+                            moduleEnabled={
+                                inputField.moduleEnabled ?? false
+                            }
                             onChange={(
                                 e: React.ChangeEvent<HTMLInputElement>
                             ) => {

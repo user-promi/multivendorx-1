@@ -79,11 +79,11 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             ],
         ]);
 
-        // register_rest_route(MultiVendorX()->rest_namespace, '/states/(?P<country>[A-Z]{2})', [
-        //     'methods'               => \WP_REST_Server::READABLE,
-        //     'callback'              => [$this, 'get_states_by_country'],
-        //     'permission_callback'   => [$this, 'get_items_permissions_check'],
-        // ]);
+        register_rest_route(MultiVendorX()->rest_namespace, '/states/(?P<country>[A-Z]{2})', [
+            'methods'               => \WP_REST_Server::READABLE,
+            'callback'              => [$this, 'get_states_by_country'],
+            'permission_callback'   => [$this, 'get_items_permissions_check'],
+        ]);
 
     }
 
@@ -218,7 +218,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
 
     public function get_items( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
-
+    
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
             
@@ -231,10 +231,10 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                     "\tData: " . wp_json_encode( $error->get_error_data() ) . "\n"
                 );
             }
-
+    
             return $error;
         }
-
+    
         try {
             
             if ( $request->get_param( 'pending_withdraw' ) ) {
@@ -300,8 +300,48 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                 $args['order']   = $order;
             }
 
-            $stores = StoreUtil::get_store_information( $args );
+            $filters   = $request->get_param( 'filters' );
+            
+            if (!empty($filters)) {
+                $args['orderBy'] = $filters['sort'];
 
+                if (!empty($filters['category'])) {
+
+                    $product_args = array(
+                        'return'      => 'ids',
+                        'numberposts' => -1,
+                        'tax_query'      => [
+                            [
+                                'taxonomy' => 'product_cat',
+                                'field'    => 'term_id',
+                                'terms'    => $filters['category'],
+                            ],
+                        ],
+                    );
+    
+                    $product_ids = wc_get_products( $product_args );
+                    $store_ids = [];
+    
+                    foreach ( $product_ids as $product_id ) {
+                        $store_id = get_post_meta( $product_id, 'multivendorx_store_id', true );
+    
+                        if ( ! empty( $store_id ) ) {
+                           $store_ids[] = $store_id;
+                        }
+                    }
+    
+                    $store_ids = array_unique( array_filter( $store_ids ) );
+                    $args['ID'] = $store_ids;                            
+                }
+
+                if (!empty($filters['product'])) {
+                    $store_id = get_post_meta( $filters['product'], 'multivendorx_store_id', true );
+                    $args['ID'] = $store_id;
+                }
+
+            }
+            $stores = StoreUtil::get_store_information( $args );
+            
             $formatted_stores = array();
             foreach ( $stores as $store ) {
                 $store_meta = Store::get_store_by_id( (int) $store['ID'] );
@@ -309,7 +349,11 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                 // Get primary owner information using Store object
                 $primary_owner_id = StoreUtil::get_primary_owner( $store['ID'] );
                 $primary_owner = $this->get_user_info( $primary_owner_id );
-
+    
+                // Get store image and banner from meta
+                $store_image = $store_meta->meta_data['image'] ?? '';
+                $store_banner = $store_meta->meta_data['banner'] ?? '';
+    
                 $formatted_stores[] = apply_filters(
                     'multivendorx_stores',
                     array(
@@ -321,6 +365,11 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                         'phone'      => $store_meta->meta_data['phone'] ?? $store_meta->meta_data['_phone'] ?? $store_meta->meta_data['contact_number'] ?? '',
                         'primary_owner' => $primary_owner,
                         'applied_on' => $store['create_time'],
+                        'store_image' => $store_image, // Add store image
+                        'store_banner' => $store_banner, // Add store banner
+                        'address_1'   => $store_meta->meta_data['address_1'] ?? '',
+                        'image'     => $store_meta->meta_data['image'] ?? MultiVendorX()->plugin_url . 'assets/images/default-store.jpg',
+
                     )
                 );
             }

@@ -71,7 +71,7 @@ class CommissionManager {
                     if (array_key_exists('rule_type', $row)) {  
                         switch ($row['rule_type']) {
                             case 'order_value':
-                                $order_total = (float) $order->get_total();
+                                $order_total = (float) $order->get_subtotal();
     
                                 if (
                                     ($row['rule'] === 'less_than'  && $order_total <= (float) $row['order_value']) ||
@@ -130,7 +130,7 @@ class CommissionManager {
 
                 if ($commission_amount <= 0) {
                     $default_store_order_commission = reset($commission_per_store_order);                    
-                    $commission_amount = (float) $order->get_total() * ((float) $default_store_order_commission['commission_percentage'] / 100) + (float) $default_store_order_commission['commission_fixed'];
+                    $commission_amount = (float) $order->get_subtotal() * ((float) $default_store_order_commission['commission_percentage'] / 100) + (float) $default_store_order_commission['commission_fixed'];
                 }
 
             }

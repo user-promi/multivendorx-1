@@ -189,10 +189,11 @@
     display: flex;
     gap: 1.2rem;
     flex-direction: column;
+    // width: 100%;
 }
 
 .card-content {
-    box-shadow: 0 1px 3px #364a630d;
+    box-shadow: 0 0.063rem 0.25rem #364a630d;
     background: #fff;
     padding: 1.5rem;
 
