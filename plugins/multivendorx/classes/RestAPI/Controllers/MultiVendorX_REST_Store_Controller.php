@@ -79,11 +79,11 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             ],
         ]);
 
-        // register_rest_route(MultiVendorX()->rest_namespace, '/states/(?P<country>[A-Z]{2})', [
-        //     'methods'               => \WP_REST_Server::READABLE,
-        //     'callback'              => [$this, 'get_states_by_country'],
-        //     'permission_callback'   => [$this, 'get_items_permissions_check'],
-        // ]);
+        register_rest_route(MultiVendorX()->rest_namespace, '/states/(?P<country>[A-Z]{2})', [
+            'methods'               => \WP_REST_Server::READABLE,
+            'callback'              => [$this, 'get_states_by_country'],
+            'permission_callback'   => [$this, 'get_items_permissions_check'],
+        ]);
 
     }
 
@@ -216,26 +216,25 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
     }
 
 
-    // GET 
     public function get_items( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
-
+    
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
             
             // Log the error
             if ( is_wp_error( $error ) ) {
-				MultiVendorX()->util->log(
+                MultiVendorX()->util->log(
                     "MVX REST Error:\n" .
                     "\tCode: " . $error->get_error_code() . "\n" .
                     "\tMessage: " . $error->get_error_message() . "\n" .
                     "\tData: " . wp_json_encode( $error->get_error_data() ) . "\n"
                 );
             }
-
+    
             return $error;
         }
-
+    
         try {
             
             if ( $request->get_param( 'pending_withdraw' ) ) {
@@ -276,6 +275,8 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
 
             $start_date = $start_timestamp ? date( 'Y-m-d 00:00:00', $start_timestamp ) : '';
             $end_date   = $end_timestamp   ? date( 'Y-m-d 23:59:59', $end_timestamp )   : '';
+            $orderBy   = sanitize_text_field( $request->get_param( 'orderBy' ) );
+            $order     = sanitize_text_field( $request->get_param( 'order' ) );
 
             $args = [
                 'limit'  => $limit,
@@ -294,14 +295,65 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             if ( ! empty( $filter_status ) ) {
                 $args['status'] = $filter_status;
             }
+            if ( ! empty( $orderBy ) && ! empty( $order )) {
+                $args['orderBy'] = $orderBy;
+                $args['order']   = $order;
+            }
+
+            $filters   = $request->get_param( 'filters' );
             
+            if (!empty($filters)) {
+                $args['orderBy'] = $filters['sort'];
 
+                if (!empty($filters['category'])) {
+
+                    $product_args = array(
+                        'return'      => 'ids',
+                        'numberposts' => -1,
+                        'tax_query'      => [
+                            [
+                                'taxonomy' => 'product_cat',
+                                'field'    => 'term_id',
+                                'terms'    => $filters['category'],
+                            ],
+                        ],
+                    );
+    
+                    $product_ids = wc_get_products( $product_args );
+                    $store_ids = [];
+    
+                    foreach ( $product_ids as $product_id ) {
+                        $store_id = get_post_meta( $product_id, 'multivendorx_store_id', true );
+    
+                        if ( ! empty( $store_id ) ) {
+                           $store_ids[] = $store_id;
+                        }
+                    }
+    
+                    $store_ids = array_unique( array_filter( $store_ids ) );
+                    $args['ID'] = $store_ids;                            
+                }
+
+                if (!empty($filters['product'])) {
+                    $store_id = get_post_meta( $filters['product'], 'multivendorx_store_id', true );
+                    $args['ID'] = $store_id;
+                }
+
+            }
             $stores = StoreUtil::get_store_information( $args );
-
+            
             $formatted_stores = array();
             foreach ( $stores as $store ) {
                 $store_meta = Store::get_store_by_id( (int) $store['ID'] );
 
+                // Get primary owner information using Store object
+                $primary_owner_id = StoreUtil::get_primary_owner( $store['ID'] );
+                $primary_owner = $this->get_user_info( $primary_owner_id );
+    
+                // Get store image and banner from meta
+                $store_image = $store_meta->meta_data['image'] ?? '';
+                $store_banner = $store_meta->meta_data['banner'] ?? '';
+    
                 $formatted_stores[] = apply_filters(
                     'multivendorx_stores',
                     array(
@@ -310,7 +362,14 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                         'store_slug' => $store['slug'],
                         'status'     => $store['status'],
                         'email'      => $store_meta->meta_data['email'] ?? '',
+                        'phone'      => $store_meta->meta_data['phone'] ?? $store_meta->meta_data['_phone'] ?? $store_meta->meta_data['contact_number'] ?? '',
+                        'primary_owner' => $primary_owner,
                         'applied_on' => $store['create_time'],
+                        'store_image' => $store_image, // Add store image
+                        'store_banner' => $store_banner, // Add store banner
+                        'address_1'   => $store_meta->meta_data['address_1'] ?? '',
+                        'image'     => $store_meta->meta_data['image'] ?? MultiVendorX()->plugin_url . 'assets/images/default-store.jpg',
+
                     )
                 );
             }
@@ -336,6 +395,40 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
 
             return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
         }
+    }
+
+    /**
+     * Get user information by user ID
+     *
+     * @param int $user_id
+     * @return array|null
+     */
+    private function get_user_info( $user_id ) {
+        if ( ! $user_id ) {
+            return null;
+        }
+
+        $user = get_userdata( $user_id );
+        
+        if ( ! $user ) {
+            return null;
+        }
+
+        // Get user's first and last name
+        $first_name = get_user_meta( $user_id, 'first_name', true );
+        $last_name = get_user_meta( $user_id, 'last_name', true );
+        
+        // Combine names, fallback to display name if empty
+        $full_name = trim( $first_name . ' ' . $last_name );
+        if ( empty( $full_name ) ) {
+            $full_name = $user->display_name;
+        }
+
+        return [
+            'id'    => $user_id,
+            'name'  => $full_name,
+            'email' => $user->user_email,
+        ];
     }
 
     public function get_pending_stores( $request ) {

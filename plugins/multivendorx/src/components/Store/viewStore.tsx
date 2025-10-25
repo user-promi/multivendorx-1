@@ -229,24 +229,27 @@ const ViewStore = () => {
         description={data.description || ''}
         buttons={[
           {
-            label: 'All Store',
+            label: '',
             onClick: () => window.location.assign('?page=multivendorx#&tab=stores'),
-            iconClass: 'adminlib-eye',
-            className: 'admin-btn btn-purple',
+            iconClass: 'adminlib-storefront',
+            className: 'admin-badge blue',
+            tooltip: 'All Store'
           },
           {
-            label: 'Edit Store',
+            label: '',
             iconClass: 'adminlib-create',
             onClick: () =>
-              data.slug && window.open(`${appLocalizer.site_url}/store/${data.slug}/`, '_blank'),
-            className: 'admin-btn btn-purple',
+             window.location.href = `?page=multivendorx#&tab=stores&edit/${viewId}`,
+            className: 'admin-badge yellow',
+            tooltip: 'Edit'
           },
           {
-            label: 'View Public Store',
+            label: '',
             iconClass: 'adminlib-eye',
             onClick: () =>
               data.slug && window.open(`${appLocalizer.site_url}/store/${data.slug}/`, '_blank'),
-              className: 'admin-btn btn-purple',
+              className: 'admin-badge green',
+              tooltip: 'View Public Store'
           },
         ]}
       />

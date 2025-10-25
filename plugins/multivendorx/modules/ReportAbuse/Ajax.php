@@ -48,10 +48,20 @@ class Ajax {
     }
 
     public function get_report_reasons() {
-        // Fetch saved reasons from settings
-        $reasons = MultiVendorX()->setting->get_setting( 'abuse_report_reasons', [] );
-        $reasons[] = 'Other';
-        // Return JSON response
-        wp_send_json_success($reasons);
+        // Get the saved reasons from settings
+        $reasons = MultiVendorX()->setting->get_setting('abuse_report_reasons', []);
+    
+        // Extract reason values
+        $reason_list = [];
+        foreach ( $reasons as $reason ) {
+            $reason_list[] = $reason['value'];
+        }
+    
+        // Add an "Other" option at the end
+        $reason_list[] = 'Other';
+    
+        // Send the final list back as JSON
+        wp_send_json_success( $reason_list );
     }
+    
 }

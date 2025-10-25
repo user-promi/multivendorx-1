@@ -20,7 +20,7 @@ class OrderManager {
     public function __construct() {
         $this->init_classes();
         // Filter the query of order table before it is fetch.
-        if (is_admin() && is_account_page()) {
+        if (is_admin() || is_account_page()) {
             add_filter('woocommerce_order_query_args', [$this, 'set_filter_order_query']);
         }
     }

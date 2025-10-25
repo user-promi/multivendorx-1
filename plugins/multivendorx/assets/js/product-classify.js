@@ -256,7 +256,7 @@
             var $_this = $( this );
             var data = {
                 action: 'mvx_create_duplicate_product',
-                security: mvx_product_classify.types_nonce,
+                // security: mvx_product_classify.types_nonce,
                 product_id: $product_id
             };
             // Make ajax call.
@@ -291,10 +291,15 @@
         },
         create_product: function () {
             var product_id = $( this ).data( 'product_id' );
+            const currentTab = document.querySelector('body').dataset.tab || 'products';
+            const currentSubtab = document.querySelector('body').dataset.subtab || 'edit';
+
             var data = {
                 action: 'mvx_create_duplicate_product',
-                security: mvx_product_classify.types_nonce,
-                product_id: product_id
+                // security: mvx_product_classify.types_nonce,
+                product_id: product_id,
+                tab: currentTab,
+                subtab: currentSubtab
             };
             $.ajax({
                 type:  'post',
@@ -430,7 +435,7 @@
         var product_id = $(this).data('product_id');
         var data = {
             action: 'mvx_create_duplicate_product',
-            security: wcmp_product_classify_script_data.types_nonce,
+            // security: wcmp_product_classify_script_data.types_nonce,
             product_id: product_id
         };
         $.post(mvx_product_classify.ajaxurl, data, function (response) {

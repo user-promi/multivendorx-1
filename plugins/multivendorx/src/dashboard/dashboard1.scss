@@ -1,5 +1,10 @@
 @use './dashboardCommon.scss' as *;
+@use './product.scss' as *;
 
+
+ul{
+    padding: 0;
+}
 body:has(#store-dashboard) {
     background: #f8f7fa;
     font-family: "Figtree", sans-serif;
@@ -12,8 +17,6 @@ body:has(#store-dashboard) {
 a {
     text-decoration: none;
 }
-
-
 
 .dashboard-tabs-wrapper {
     width: 16rem;
@@ -37,6 +40,12 @@ a {
         img {
             width: auto;
             height: 1.8rem;
+        }
+
+        .site-name {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--theme-color);
         }
 
         i {
@@ -88,12 +97,16 @@ a {
                     gap: 0.875rem;
                     align-items: center;
                 }
+
+                &:hover {
+                    background: color-mix(in srgb, var(--themeColor) 15%, transparent);
+                    color: var(--themeColor);
+                }
             }
 
             // a.tab:hover {
             //     background-color: #f3f2f3;
             // }
-
             &.active {
                 a {
                     background-color: var(--themeColor);
@@ -101,37 +114,7 @@ a {
                 }
             }
         }
-
-        .subtabs {
-            margin: 0;
-
-            li a {
-                padding-left: 2rem;
-
-                &:hover {
-                    background-color: #f3f2f3;
-                }
-            }
-        }
     }
-
-    // .subtabs {
-    //     list-style-type: none;
-    //     padding: 0;
-
-    //     li {
-    //         padding: 0.063rem 0;
-    //         padding-left: 3rem;
-
-    //         a {
-    //             font-size: 0.875rem;
-    //             letter-spacing: .01em;
-    //             text-transform: none;
-    //             line-height: 1.25rem;
-    //             color: #526484;
-    //         }
-    //     }
-    // }
 }
 
 .tab-wrapper {
@@ -281,7 +264,7 @@ a {
                         }
 
                         .dropdown-body {
-                            padding: 0 1.75rem;
+                            // padding: 0 1.75rem;
 
                             ul {
                                 padding: 0.75rem 0;
@@ -300,6 +283,7 @@ a {
                             ul {
                                 // height: 7.5rem;
                                 overflow-y: auto;
+                                padding: 0;
                             }
                         }
 
@@ -319,7 +303,7 @@ a {
                                 font-size: 13px;
                                 line-height: 1.4rem;
                                 font-weight: 500;
-                                padding: .575rem 0;
+                                // padding: .575rem 1.625rem;
                                 position: relative;
                                 gap: 0.5rem;
 
@@ -562,11 +546,11 @@ a {
         }
     }
 
-    // cart header start
+    // cart header start  (common card-header style)
     .card-header {
         display: flex;
         justify-content: space-between;
-        padding-bottom: 2rem;
+        padding-bottom: 1rem;
 
         .left {
             .title {
@@ -924,8 +908,8 @@ a {
                     }
 
                     &:hover {
-                        color: #854fff;
-                        background: $theme-background-color;
+                        background: color-mix(in srgb, var(--themeColor) 15%, transparent);
+                        color: var(--themeColor);
                     }
                 }
             }
@@ -1078,14 +1062,14 @@ a {
         font-weight: 500;
         line-height: 1.313rem;
 
-        i{
+        i {
             color: $theme-color;
         }
     }
 }
 
 // last-withdradal-wrapper
-.last-withdradal-wrapper{
+.last-withdradal-wrapper {
     display: flex;
     justify-content: space-between;
     padding: 0.75rem;
@@ -1093,14 +1077,15 @@ a {
     border-radius: 0.313rem;
     margin-bottom: 0.625rem;
 
-    .left{
-        .price{
+    .left {
+        .price {
             font-size: 1.613rem;
             font-weight: 600;
             line-height: 1.5rem;
             margin-bottom: 0.45rem;
         }
-        .des{
+
+        .des {
             font-size: 1rem;
         }
     }

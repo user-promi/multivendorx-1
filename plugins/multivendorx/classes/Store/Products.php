@@ -104,7 +104,7 @@ class Products {
         $subtab = get_query_var('subtab');
         $value  = get_query_var('value');
 
-        if ($subtab === 'edit' && empty($value) && MultiVendorX()->setting->get_setting('category_pyramid_guide') == 'no' ) {
+        if ($subtab === 'edit' && empty($value) && MultiVendorX()->setting->get_setting('category_pyramid_guide') == 'no' && MultiVendorX()->modules->is_active('spmv') == false ) {
             $product_id =$this->create_product_draft('product');
             
             wp_safe_redirect( StoreUtil::get_endpoint_url('products', 'edit', $product_id) );
@@ -117,7 +117,7 @@ class Products {
         FrontendScripts::enqueue_script( 'multivendorx-product-classify-script' );
         FrontendScripts::localize_scripts( 'multivendorx-product-classify-script' );
 
-        MultiVendorX()->util->get_template('add-product.php', ['self' => $this] );
+        MultiVendorX()->util->get_template('product/add-product.php', ['self' => $this] );
     }
 
     public function call_edit_product() {
@@ -203,7 +203,7 @@ class Products {
         wp_localize_script( 'multivendorx-store-products-script', 'mvx_advance_product_params', $edit_product_params );
 
         // do_action( 'mvx_edit_product_template_load', $this->product_id, $this->product_object, $this->post_object );
-        MultiVendorX()->util->get_template('edit.php', array( 'self' => $this, 'product_object' => $this->product_object, 'post' => $this->post_object ) );
+        MultiVendorX()->util->get_template('product/edit-product.php', array( 'self' => $this, 'product_object' => $this->product_object, 'post' => $this->post_object ) );
             
     }
 
@@ -527,6 +527,24 @@ class Products {
 
         // Sort tabs based on priority.
         uasort( $tabs, array( __CLASS__, 'product_data_tabs_sort' ) );
+
+        $other_tabs = apply_filters('mvx_product_extra_tabs_added', array('shipping', 'variations'));
+        $product_fileds = MultiVendorX()->setting->get_setting('products_fields', array());
+        $default_types = array('general', 'inventory', 'linked_product', 'attribute', 'advanced', 'policies');
+        foreach ($tabs as $key_tabs => $value_tabs) {
+            if (is_array($other_tabs) && in_array($key_tabs, $other_tabs)) continue;
+        }
+
+        if ($default_types && !empty($default_types)) {
+            foreach ($default_types as $key_types => $value_types) {
+                if (!in_array($value_types, $product_fileds)) {
+                    unset($tabs[$value_types]);
+                }
+            }
+        } else {
+            unset($tabs['general'], $tabs['inventory'], $tabs['linked_product'], $tabs['attribute'], $tabs['advanced']);
+        }
+
         return $tabs;
     }
 
@@ -596,7 +614,7 @@ class Products {
     }
     function generate_hierarchical_taxonomy_html( $taxonomy, $terms, $post_terms, $add_cap, $level = 0, $max_depth = 2 ) {
         $max_depth = apply_filters( 'mvx_generate_hierarchical_taxonomy_html_max_depth', 5, $taxonomy, $terms, $post_terms, $level );
-        $tax_html_class = ($level == 0) ? 'taxonomy-widget ' . $taxonomy . ' level-' . $level : '';
+        $tax_html_class = ($level == 0) ? 'category taxonomy-widget ' . $taxonomy . ' level-' . $level : '';
         $tax_html = '<ul class="'.$tax_html_class.'">';
         foreach ( $terms as $term_id => $term_name ) {
             $child_html = '';

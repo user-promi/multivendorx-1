@@ -45,9 +45,9 @@ const ShippingRatesByCountry: React.FC = () => {
 
                 try {
                     // Parse string or use array directly
-                    shippingRates = typeof data.mvx_shipping_rates === "string"
-                        ? JSON.parse(data.mvx_shipping_rates)
-                        : data.mvx_shipping_rates || [];
+                    shippingRates = typeof data.multivendorx_shipping_rates === "string"
+                        ? JSON.parse(data.multivendorx_shipping_rates)
+                        : data.multivendorx_shipping_rates || [];
                 } catch (e) {
                     console.error("Failed to parse shipping rates:", e);
                     shippingRates = [];
@@ -77,7 +77,7 @@ const ShippingRatesByCountry: React.FC = () => {
         try {
             const saveData = {
                 // Always save as JSON string
-                mvx_shipping_rates: JSON.stringify(
+                multivendorx_shipping_rates: JSON.stringify(
                     updatedRates.map(rate => ({
                         country: rate.country || "",
                         cost: rate.cost || "0.00",
@@ -88,8 +88,6 @@ const ShippingRatesByCountry: React.FC = () => {
                     }))
                 ),
             };
-
-            console.log("Saving data:", saveData);
 
             const response = await axios.put(
                 getApiLink(appLocalizer, `store/${appLocalizer.store_id}`),
@@ -187,6 +185,7 @@ const ShippingRatesByCountry: React.FC = () => {
                                         value={countryItem.country}
                                         options={[
                                             { value: "", label: "Select Country" },
+                                            { value: "everywhere", label: "Everywhere Else" },
                                             ...Object.entries(countries).map(([value, label]) => ({ value, label })),
                                         ]}
                                         onChange={(opt: any) =>

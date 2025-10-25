@@ -188,6 +188,24 @@
           }
         }
       }
+
+      @keyframes animate4 {
+        0% {
+          transform: scale(1);
+        }
+
+        50% {
+          transform: scale(1.03);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+    }
+
+    .module-list-item.highlight {
+      animation: animate4 2.5s ease-in-out infinite;
+      border: $border-theme-small;
     }
   }
 }

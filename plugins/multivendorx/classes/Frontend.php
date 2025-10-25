@@ -92,8 +92,6 @@ class Frontend {
         }
     }
     
-    
-
     public function add_text_in_shop_and_single_product_page() {
         global $post;
 
@@ -151,7 +149,7 @@ class Frontend {
     }
 
     public function woocommerce_product_store_tab() {
-        MultiVendorX()->util->get_template( 'store-single-product-tab.php' );
+        MultiVendorX()->util->get_template( 'store/store-single-product-tab.php' );
     }
 
     /**
@@ -253,16 +251,18 @@ class Frontend {
     }
 
     public function vendor_dashboard_template($template) {
+        $user = wp_get_current_user();
+
         //checking change later when all function ready
-        if (  is_user_logged_in() && is_page() && has_shortcode(get_post()->post_content, 'multivendorx_store_dashboard') ) {
-            return MultiVendorX()->plugin_path . 'templates/store-dashboard.php';
+        if (  is_user_logged_in() && is_page() && has_shortcode(get_post()->post_content, 'multivendorx_store_dashboard') && in_array( 'store_owner', $user->roles, true ) ) {
+            return MultiVendorX()->plugin_path . 'templates/store/store-dashboard.php';
         }
         return $template;
     }
 
-    public function multivendorx_store_login() {
-        MultiVendorX()->plugin_path . 'templates/store-dashboard.php';
-    }
+    // public function multivendorx_store_login() {
+    //     MultiVendorX()->plugin_path . 'templates/store-dashboard.php';
+    // }
 
     public function save_product() {
         global $wp;
@@ -294,6 +294,7 @@ class Frontend {
             $title = isset( $_POST['post_title'] ) ? wc_clean( $_POST['post_title'] ) : '';
             // $title = ( ( is_product_mvx_spmv($product_id) && isset( $_POST['original_post_title'] ) ) ? wc_clean( $_POST['original_post_title'] ) : isset( $_POST['post_title'] ) ) ? wc_clean( $_POST['post_title'] ) : '';
             // $needs_admin_approval_for_publish = get_mvx_vendor_settings('is_publish_needs_admin_approval', 'capabilities', 'product') && get_mvx_vendor_settings('is_publish_needs_admin_approval', 'capabilities', 'product') == 'Enable' ? true : false;
+            
             if ( isset( $_POST['status'] ) && $_POST['status'] === 'draft' ) {
                 $status = 'draft';
             } elseif ( isset( $_POST['status'] ) && $_POST['status'] === 'publish' ) {
@@ -306,13 +307,13 @@ class Frontend {
                 wp_die( __( 'Invalid product status.', 'multivendorx' ) );
             }
 
-            if (isset($_POST['original_post_title']) && !empty($_POST['original_post_title']) ) {
-                if ( $post_object->post_status == 'publish' ) {
-                    $status = 'publish';
-                } else {
-                    $status = 'pending';
-                }
-            }
+            // if (isset($_POST['original_post_title']) && !empty($_POST['original_post_title']) ) {
+            //     if ( $post_object->post_status == 'publish' ) {
+            //         $status = 'publish';
+            //     } else {
+            //         $status = 'pending';
+            //     }
+            // }
 
             $post_data = apply_filters( 'mvx_submitted_products', array(
                 'ID'            => $product_id,

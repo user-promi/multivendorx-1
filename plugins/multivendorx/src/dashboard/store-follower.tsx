@@ -5,6 +5,7 @@ import { getApiLink, Table, TableCell } from "zyra";
 import { ColumnDef, PaginationState } from "@tanstack/react-table";
 
 type FollowerRow = {
+    date: any;
     id: number;
     name: string;
     email: string;
@@ -52,7 +53,7 @@ const StoreFollower: React.FC = () => {
     useEffect(() => {
         requestFollowers(pagination.pageSize, pagination.pageIndex + 1);
     }, [pagination]);
-
+    
     const columns: ColumnDef<FollowerRow>[] = [
         {
             id: 'select',
@@ -87,9 +88,15 @@ const StoreFollower: React.FC = () => {
             cell: ({ row }) => {
                 if (!row.original.date) return <TableCell>—</TableCell>;
         
-                const now = new Date();
                 const followed = new Date(row.original.date);
-                const diff = Math.floor((now - followed) / 1000); // difference in seconds
+        
+                // Check if the date is valid
+                if (isNaN(followed.getTime())) {
+                    return <TableCell>—</TableCell>;
+                }
+        
+                const now = new Date();
+                const diff = Math.floor((now.getTime() - followed.getTime()) / 1000);
         
                 let display = '';
         
@@ -100,14 +107,17 @@ const StoreFollower: React.FC = () => {
                 } else if (diff < 86400) {
                     display = `${Math.floor(diff / 3600)} hr ago`;
                 } else if (diff < 2592000) {
-                    display = `${Math.floor(diff / 86400)} day${Math.floor(diff / 86400) > 1 ? 's' : ''} ago`;
+                    const days = Math.floor(diff / 86400);
+                    display = `${days} day${days > 1 ? 's' : ''} ago`;
                 } else if (diff < 31536000) {
-                    display = `${Math.floor(diff / 2592000)} month${Math.floor(diff / 2592000) > 1 ? 's' : ''} ago`;
+                    const months = Math.floor(diff / 2592000);
+                    display = `${months} month${months > 1 ? 's' : ''} ago`;
                 } else {
-                    display = `${Math.floor(diff / 31536000)} year${Math.floor(diff / 31536000) > 1 ? 's' : ''} ago`;
+                    const years = Math.floor(diff / 31536000);
+                    display = `${years} year${years > 1 ? 's' : ''} ago`;
                 }
         
-                return <TableCell>{display}</TableCell>;
+                return <TableCell title={followed.toString()}>{display}</TableCell>;
             },
         },
     ];

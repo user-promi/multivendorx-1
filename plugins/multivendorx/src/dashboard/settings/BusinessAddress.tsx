@@ -467,7 +467,7 @@ const BusinessAddress = () => {
                                 id="location-autocomplete"
                                 type="text"
                                 className="setting-form-input"
-                                placeholder="Start typing your business address..."
+                                placeholder="Search your business address..."
                                 defaultValue={addressData.location_address}
                             />
                         </div>

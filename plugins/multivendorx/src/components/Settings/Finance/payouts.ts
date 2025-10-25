@@ -101,7 +101,7 @@ export default {
                 {
                     key: 'mannual',
                     label: __('Manual', 'multivendorx'),
-                    value: 'Mannual',
+                    value: 'mannual',
                 },
                 {
                     key: 'hourly',

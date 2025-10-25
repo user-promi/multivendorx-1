@@ -209,6 +209,16 @@ class FrontendScripts {
 					'deps'    => array( 'jquery' ),
 					'version' => $version,
 				),
+                'multivendorx-single-product-multiple-vendor-script' => array(
+					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'modules/Spmv/js/' . MULTIVENDORX_PLUGIN_SLUG . '-frontend.min.js',
+					'deps'    => array( 'jquery' ),
+					'version' => $version,
+				),
+                'multivendorx-stores-list-script'        => array(
+					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'js/blocks/stores-list/index.js',
+					'deps'    => array( 'jquery', 'jquery-blockui', 'wp-element', 'wp-i18n', 'wp-blocks' ),
+					'version' => $version,
+				),
 			)
         );
         foreach ( $register_scripts as $name => $props ) {
@@ -288,6 +298,11 @@ class FrontendScripts {
 					'deps'    => array( 'jquery', 'jquery-blockui', 'wp-element', 'wp-i18n', 'react-jsx-runtime' ),
 					'version' => $version,
 				),
+                'multivendorx-admin-product-auto-search-script' => array(
+					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'modules/Spmv/js/' . MULTIVENDORX_PLUGIN_SLUG . '-admin-product-auto-search.min.js',
+					'deps'    => array( 'jquery' ),
+					'version' => $version,
+				),
             )
         );
 		foreach ( $register_scripts as $name => $props ) {
@@ -361,6 +376,8 @@ class FrontendScripts {
                 'legal-compliance',
                 'product-compliance',
                 'tax-compliance',
+                'custom-css',
+                'single-product-multiple-store',
             )
 		);
 
@@ -435,7 +452,7 @@ class FrontendScripts {
         $payment_admin_settings = MultiVendorX()->setting->get_setting( 'payment_methods', [] );
         $settings = !empty($payment_admin_settings['custom-gateway']) ? $payment_admin_settings['custom-gateway'] : [];
         
-        $gateway_name = $settings && $settings['custom_gateway_name'] ? $settings['custom_gateway_name'] : 'Custom Gateway';
+        $gateway_name = $settings && !empty($settings['custom_gateway_name']) ? $settings['custom_gateway_name'] : 'Custom Gateway';
 
         $payout_payment_options = [
             [
@@ -482,6 +499,7 @@ class FrontendScripts {
                         'currency'                 => get_woocommerce_currency(),       // e.g., USD
                         'currency_symbol'          => get_woocommerce_currency_symbol(),
                         'payout_payment_options'   => $payout_payment_options,
+						'module_page_url'            => admin_url( 'admin.php?page=catalogx#&tab=modules' ),
                         'map_providor'             => MultiVendorX()->setting->get_setting( 'choose_map_api' ),
                         'google_api_key'           => MultiVendorX()->setting->get_setting( 'google_api_key' ),
                         'mapbox_api_key'           => MultiVendorX()->setting->get_setting( 'mapbox_api_key' ),
@@ -525,6 +543,20 @@ class FrontendScripts {
                         'nonce'    => wp_create_nonce('follow_store_ajax_nonce'),
 					),
 				),
+                'multivendorx-distance-shipping-frontend-script' => array(
+					'object_name' => 'distanceShippingFrontend',
+                    'data'        => array(
+                        'ajaxurl'           => admin_url('admin-ajax.php'),
+                        'nonce'             => wp_create_nonce('distance_shipping_ajax_nonce'),
+                        'mapbox_emable'     => \MultiVendorX\DistanceShipping\Frontend::mvx_mapbox_api_enabled(),
+                        'default_lat'       => MultiVendorX()->setting->get_setting('default_map_lat', '28.6139'), // example default lat
+                        'default_lng'       => MultiVendorX()->setting->get_setting('default_map_lng', '77.2090'), // example default lng
+                        'default_zoom'      => 13,
+                        'store_icon'        => plugin_dir_url(__FILE__) . 'assets/images/store-icon.png',
+                        'icon_width'        => 40,
+                        'icon_height'       => 40,
+                    ),
+				),
                 'multivendorx-report-abuse-frontend-script' => array(
 					'object_name' => 'reportAbuseFrontend',
 					'data'        => array(
@@ -537,6 +569,21 @@ class FrontendScripts {
 					'data'        => array(
 						'ajaxurl'     => admin_url( 'admin-ajax.php' ),
                         'nonce'    => wp_create_nonce('review_ajax_nonce'),
+					),
+				),
+                'multivendorx-admin-product-auto-search-script' => array(
+					'object_name' => 'admin_product_auto_search',
+					'data'        => array(
+						'ajaxurl'     => admin_url( 'admin-ajax.php' ),
+                        'search_products_nonce' => wp_create_nonce('search-products'),
+					),
+				),
+                'multivendorx-single-product-multiple-vendor-script' => array(
+					'object_name' => 'single_product_multiple_vendors',
+					'data'        => array(
+						'ajaxurl'     => admin_url( 'admin-ajax.php' ),
+                        'dashboard_nonce' => wp_create_nonce('mvx-dashboard'),
+                        'vendors_nonce' => wp_create_nonce('mvx-vendors'),
 					),
 				),
                 'multivendorx-dashboard-script' => array(
@@ -567,24 +614,39 @@ class FrontendScripts {
                     'messenger_color'            => MultiVendorX()->setting->get_setting(' messenger_color' ),
                     'whatsapp_opening_pattern'            => MultiVendorX()->setting->get_setting(' whatsapp_opening_pattern' ),
                     'whatsapp_pre_filled'            => MultiVendorX()->setting->get_setting(' whatsapp_pre_filled' ),
+                    ),
                 ),
-            ),
-
                 'multivendorx-registration-form-script'          => array(
-					'object_name' => 'registrationForm',
-					'data'        => array(
+                    'object_name' => 'registrationForm',
+                    'data'        => array(
                         'apiUrl'                   => untrailingslashit( get_rest_url() ),
-						'restUrl'                  => MultiVendorX()->rest_namespace,
-						'nonce'               => wp_create_nonce( 'wp_rest' ),
-						'settings'            => VendorUtil::get_vendor_registration_form() ?? array(),
-						'content_before_form' => apply_filters( 'multivendorx_add_content_before_form', '' ),
-						'content_after_form'  => apply_filters( 'multivendorx_add_content_after_form', '' ),
-						'error_strings'       => array(
-							'required' => __( 'This field is required', 'multivendorx' ),
-							'invalid'  => __( 'Invalid email format', 'multivendorx' ),
-						),
-					),
-				),
+                        'restUrl'                  => MultiVendorX()->rest_namespace,
+                        'nonce'               => wp_create_nonce( 'wp_rest' ),
+                        'settings'            => VendorUtil::get_vendor_registration_form() ?? array(),
+                        'content_before_form' => apply_filters( 'multivendorx_add_content_before_form', '' ),
+                        'content_after_form'  => apply_filters( 'multivendorx_add_content_after_form', '' ),
+                        'error_strings'       => array(
+                            'required' => __( 'This field is required', 'multivendorx' ),
+                            'invalid'  => __( 'Invalid email format', 'multivendorx' ),
+                        ),
+                    ),
+                ),
+                'multivendorx-stores-list-editor-script'  => array(
+                    'object_name' => 'storesList',
+                    'data'        => array(
+                        'apiUrl'    => untrailingslashit( get_rest_url() ),
+                        'restUrl'   => MultiVendorX()->rest_namespace,
+                        'nonce'     => wp_create_nonce( 'wp_rest' ),
+                    ),
+                ),
+                'multivendorx-stores-list-script'  => array(
+                    'object_name' => 'storesList',
+                    'data'        => array(
+                        'apiUrl'    => untrailingslashit( get_rest_url() ),
+                        'restUrl'   => MultiVendorX()->rest_namespace,
+                        'nonce'     => wp_create_nonce( 'wp_rest' ),
+                    ),
+                ),
 			)
         );
 

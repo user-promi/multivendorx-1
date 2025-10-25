@@ -273,6 +273,18 @@ class StoreUtil {
     
         return $stores ?: [];
     }
+
+    public static function get_primary_owner($store_id){
+        global $wpdb;
+        $table_name = $wpdb->prefix . Utill::TABLES['store_users'];
+        $primary_owner = $wpdb->get_var(
+            $wpdb->prepare(
+                "SELECT primary_owner FROM $table_name WHERE store_id = %d",
+                $store_id
+            )
+        );
+        return $primary_owner;
+    }
     
     public static function set_primary_owner( $user_id, $store_id ) {
         global $wpdb;
@@ -381,7 +393,7 @@ class StoreUtil {
                     $shipping_policy = $store->get_meta('shipping_policy');
                 }
                 if ( in_array ('refund_return', $privacy_override_settings) ) {
-                    $refund_policy = $store->get_meta('return_policy');
+                    $refund_policy = $store->get_meta('refund_policy');
                     $cancellation_policy = $store->get_meta('exchange_policy');
                 }
             }
@@ -404,28 +416,6 @@ class StoreUtil {
         return $policies;
     }
 
-    // public static function get_endpoint_url($page = '', $sub = '') {
-    //     if (get_option('permalink_structure')) {
-    //         $url = home_url('/dashboard');
-    //         if ($page && $page !== 'dashboard') {
-    //             $url .= '/' . $page;
-    //         }
-    //         if ($sub) {
-    //             $url .= '/' . $sub;
-    //         }
-    //     } else {
-    //         $url = add_query_arg(array('dashboard' => '1'), home_url('/'));
-    //         if ($page) {
-    //             $url = add_query_arg('tab', $page, $url);
-    //         }
-
-    //         if ($sub) {
-    //             $url = add_query_arg('subtab', $sub, $url);
-    //         }
-    //     }
-    //     return esc_url($url);
-    // }
-
     public static function get_endpoint_url($page = '', $sub = '', $value = '') {
         if (get_option('permalink_structure')) {
             $url = home_url('/dashboard');
@@ -439,7 +429,15 @@ class StoreUtil {
                 $url .= '/' . $value;
             }
         } else {
-            $url = add_query_arg(array('dashboard' => '1'), home_url('/'));
+            $page_id = isset($_GET['page_id']) ? (int) $_GET['page_id'] : 0;
+
+            if ($page_id) {
+                $base_url = add_query_arg(['page_id' => $page_id], home_url('/'));
+            } else {
+                $base_url = home_url('/');
+            }
+
+            $url = add_query_arg(['dashboard' => '1'], $base_url);
             if ($page) {
                 $url = add_query_arg('tab', $page, $url);
             }
@@ -450,6 +448,7 @@ class StoreUtil {
                 $url = add_query_arg('value', $value, $url);
             }
         }
+
         return esc_url($url);
     }
 
@@ -461,61 +460,73 @@ class StoreUtil {
      */
     public static function get_store_information( $args = [] ) {
         global $wpdb;
-
+    
         $where = [];
-
+    
         if ( isset( $args['ID'] ) ) {
             $ids     = is_array( $args['ID'] ) ? $args['ID'] : [ $args['ID'] ];
             $ids     = implode( ',', array_map( 'intval', $ids ) );
             $where[] = "ID IN ($ids)";
         }
-
+    
         if ( isset( $args['status'] ) ) {
             $where[] = "status = '" . esc_sql( $args['status'] ) . "'";
         }
-
+    
         if ( isset( $args['name'] ) ) {
             $where[] = "name LIKE '%" . esc_sql( $args['name'] ) . "%'";
         }
-
+    
         if ( isset( $args['slug'] ) ) {
             $where[] = "slug = '" . esc_sql( $args['slug'] ) . "'";
         }
-
+    
         if ( isset( $args['searchField'] ) ) {
             $search = esc_sql( $args['searchField'] );
             $where[] = "(name LIKE '%$search%')";
         }
-        
+    
         if ( isset( $args['start_date'] ) && isset( $args['end_date'] ) ) {
             $where[] = "create_time BETWEEN '" . esc_sql( $args['start_date'] ) . "' AND '" . esc_sql( $args['end_date'] ) . "'";
         }
-        
+    
         $table = $wpdb->prefix . Utill::TABLES['store'];
-
+    
         if ( isset( $args['count'] ) ) {
             $query = "SELECT COUNT(*) FROM {$table}";
         } else {
             $query = "SELECT * FROM {$table}";
         }
-
+    
         if ( ! empty( $where ) ) {
             $condition = $args['condition'] ?? ' AND ';
             $query    .= ' WHERE ' . implode( $condition, $where );
         }
-
+    
+        //ADD SORTING SUPPORT HERE
+        if ( ! empty( $args['orderBy'] ) ) {
+            // Only allow safe columns to sort by (avoid SQL injection)
+            $allowed_columns = ['ID', 'name', 'status', 'slug', 'create_time'];
+            $orderBy = in_array( $args['orderBy'], $allowed_columns, true ) ? $args['orderBy'] : 'ID';
+            $order   = ( isset( $args['order'] ) && strtolower( $args['order'] ) === 'desc' ) ? 'DESC' : 'ASC';
+            $query  .= " ORDER BY {$orderBy} {$order}";
+        }
+    
+        //Keep your pagination logic
         if ( isset( $args['limit'] ) && isset( $args['offset'] ) && empty( $args['count'] ) ) {
             $limit  = intval( $args['limit'] );
             $offset = intval( $args['offset'] );
             $query .= " LIMIT $limit OFFSET $offset";
         }
+    
         if ( isset( $args['count'] ) ) {
-            $results = $wpdb->get_var( $query ); // phpcs:ignore WordPress.DB.*
+            $results = $wpdb->get_var( $query );
             return $results ?? 0;
         } else {
-            $results = $wpdb->get_results( $query, ARRAY_A ); // phpcs:ignore WordPress.DB.*
+            $results = $wpdb->get_results( $query, ARRAY_A );
             return $results ?? [];
         }
     }
+    
 
 }

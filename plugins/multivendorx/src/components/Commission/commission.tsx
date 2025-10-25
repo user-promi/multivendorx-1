@@ -11,16 +11,19 @@ import {
 } from '@tanstack/react-table';
 import { useLocation } from 'react-router-dom';
 import ViewCommission from './viewCommission';
+
 export interface RealtimeFilter {
     name: string;
     render: (updateFilter: (key: string, value: any) => void, filterValue: any) => ReactNode;
 }
+
 // Type declarations
 type CommissionStatus = {
     key: string;
     name: string;
     count: number;
 };
+
 type CommissionRow = {
     id?: number;
     orderId?: number;
@@ -31,9 +34,16 @@ type CommissionRow = {
     tax?: string;
     commissionTotal?: string;
     commissionRefunded?: string;
-    paidStatus?: 'paid' | 'unpaid' | string; // enum-like if you want
+    paidStatus?: 'paid' | 'unpaid' | string;
     commissionNote?: string | null;
-    createTime?: string; // ISO datetime string
+    createTime?: string;
+    // Add other fields that might be needed for CSV
+    totalOrderAmount?: string;
+    facilitatorFee?: string;
+    gatewayFee?: string;
+    shippingAmount?: string;
+    taxAmount?: string;
+    status?: string;
 };
 
 type FilterData = {
@@ -41,19 +51,135 @@ type FilterData = {
     searchField?: string;
     typeCount?: any;
     store?: string;
+    order?: any;
+    orderBy?: any;
+    date?: {
+        start_date: Date;
+        end_date: Date;
+    };
+};
+
+// CSV Download Button Component
+const DownloadCSVButton: React.FC<{
+    selectedRows: RowSelectionState;
+    data: CommissionRow[] | null;
+    filterData: FilterData;
+    isLoading?: boolean;
+}> = ({ selectedRows, data, filterData, isLoading = false }) => {
+    const [isDownloading, setIsDownloading] = useState(false);
+
+    const handleDownload = async () => {
+        setIsDownloading(true);
+        try {
+            // Get selected row IDs
+            const selectedIds = Object.keys(selectedRows)
+                .filter(key => selectedRows[key])
+                .map(key => {
+                    const rowIndex = parseInt(key);
+                    return data?.[rowIndex]?.id;
+                })
+                .filter(id => id !== undefined);
+
+            // Prepare parameters for CSV download
+            const params: any = {
+                format: 'csv',
+                startDate: filterData?.date?.start_date ? filterData.date.start_date.toISOString().split('T')[0] : '',
+                endDate: filterData?.date?.end_date ? filterData.date.end_date.toISOString().split('T')[0] : '',
+            };
+
+            // Add filters if present
+            if (filterData?.store) {
+                params.store_id = filterData.store;
+            }
+            if (filterData?.typeCount && filterData.typeCount !== 'all') {
+                params.status = filterData.typeCount;
+            }
+
+            // If specific rows are selected, send their IDs
+            if (selectedIds.length > 0) {
+                params.ids = selectedIds.join(',');
+            }
+
+            // Make API request for CSV
+            const response = await axios({
+                method: 'GET',
+                url: getApiLink(appLocalizer, 'commission'),
+                headers: { 
+                    'X-WP-Nonce': appLocalizer.nonce,
+                    'Accept': 'text/csv'
+                },
+                params: params,
+                responseType: 'blob'
+            });
+
+            // Create download link
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            
+            // Generate filename with timestamp
+            const timestamp = new Date().toISOString().split('T')[0];
+            const filename = `commissions_${timestamp}.csv`;
+            link.setAttribute('download', filename);
+            
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            window.URL.revokeObjectURL(url);
+
+        } catch (error) {
+            console.error('Error downloading CSV:', error);
+            alert(__('Failed to download CSV. Please try again.', 'multivendorx'));
+        } finally {
+            setIsDownloading(false);
+        }
+    };
+
+    const hasSelectedRows = Object.keys(selectedRows).some(key => selectedRows[key]);
+
+    return (
+        <button
+            onClick={handleDownload}
+            disabled={isDownloading || isLoading || (!hasSelectedRows && !data)}
+            className="button button-secondary"
+            style={{ 
+                marginLeft: '10px',
+                opacity: (isDownloading || isLoading || (!hasSelectedRows && !data)) ? 0.6 : 1
+            }}
+        >
+            {isDownloading ? __('Downloading...', 'multivendorx') : __('Download CSV', 'multivendorx')}
+        </button>
+    );
+};
+
+// Bulk Actions Component
+const BulkActions: React.FC<{
+    selectedRows: RowSelectionState;
+    data: CommissionRow[] | null;
+    filterData: FilterData;
+    onActionComplete?: () => void;
+}> = ({ selectedRows, data, filterData, onActionComplete }) => {
+    return (
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <DownloadCSVButton 
+                selectedRows={selectedRows} 
+                data={data}
+                filterData={filterData}
+            />
+            {/* Add other bulk actions here if needed */}
+        </div>
+    );
 };
 
 const Commission: React.FC = () => {
-    const [openModal, setOpenModal] = useState(false);
-    const [modalDetails, setModalDetails] = useState<string>('');
     const [error, setError] = useState<String>();
     const [data, setData] = useState<CommissionRow[] | null>(null);
     const [store, setStore] = useState<any[] | null>(null);
-    const bulkSelectRef = useRef<HTMLSelectElement>(null);
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
     const [totalRows, setTotalRows] = useState<number>(0);
     const [viewCommission, setViewCommission] = useState(false);
     const [selectedCommissionId, setSelectedCommissionId] = useState<number | null>(null);
+    const [currentFilterData, setCurrentFilterData] = useState<FilterData>({});
 
     const [pagination, setPagination] = useState<PaginationState>({
         pageIndex: 0,
@@ -106,7 +232,7 @@ const Commission: React.FC = () => {
         currentPage = 1,
         typeCount = '',
         store = '',
-        startDate =new Date(0),
+        startDate = new Date(0),
         endDate = new Date(),
     ) {
         setData(null);
@@ -119,7 +245,7 @@ const Commission: React.FC = () => {
                 row: rowsPerPage,
                 status: typeCount === 'all' ? '' : typeCount,
                 store_id: store,
-                startDate ,
+                startDate,
                 endDate
             },
         })
@@ -152,7 +278,6 @@ const Commission: React.FC = () => {
                         count: response.data.cancelled || 0,
                     },
                 ]);
-                
             })
             .catch(() => {
                 setError(__('Failed to load stores', 'multivendorx'));
@@ -166,6 +291,8 @@ const Commission: React.FC = () => {
         currentPage: number,
         filterData: FilterData
     ) => {
+        console.log(filterData);
+        setCurrentFilterData(filterData);
         setData(null);
         requestData(
             rowsPerPage,
@@ -177,7 +304,7 @@ const Commission: React.FC = () => {
         );
     };
 
-    // Column definitions
+    // Column definitions (your existing columns remain the same)
     const columns: ColumnDef<CommissionRow>[] = [
         {
             id: 'select',
@@ -398,7 +525,13 @@ const Commission: React.FC = () => {
                     handlePagination={requestApiForData}
                     perPageOption={[10, 25, 50]}
                     typeCounts={commissionStatus as CommissionStatus}
-                    // bulkActionComp={() => <BulkAction />}
+                    bulkActionComp={() => (
+                        <BulkActions 
+                            selectedRows={rowSelection} 
+                            data={data}
+                            filterData={currentFilterData}
+                        />
+                    )}
                     totalCounts={totalRows}
                 />
             </div>

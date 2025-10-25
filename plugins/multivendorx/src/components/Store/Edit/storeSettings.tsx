@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
-import { BasicInput, TextArea, FileInput, getApiLink, SuccessNotice } from 'zyra';
+import { BasicInput, TextArea, FileInput, getApiLink, SuccessNotice, SelectInput } from 'zyra';
 
 declare global {
     interface Window {
@@ -476,6 +476,34 @@ const StoreSettings = ({ id }: { id: string | null }) => {
         autoSave(updatedFormData);
     };
 
+    // Handle country select change (from old code)
+    const handleCountryChange = (newValue: any) => {
+        if (!newValue || Array.isArray(newValue)) return;
+        
+        const updated = { 
+            ...formData, 
+            country: newValue.value, 
+            state: '' // reset state when country changes
+        };
+        
+        setFormData(updated);
+        autoSave(updated);
+        fetchStatesByCountry(newValue.value);
+    };
+
+    // Handle state select change (from old code)
+    const handleStateChange = (newValue: any) => {
+        if (!newValue || Array.isArray(newValue)) return;
+        
+        const updated = { 
+            ...formData, 
+            state: newValue.value 
+        };
+        
+        setFormData(updated);
+        autoSave(updated);
+    };
+
     const fetchStatesByCountry = (countryCode: string) => {
         axios({
             method: 'GET',
@@ -541,28 +569,6 @@ const StoreSettings = ({ id }: { id: string | null }) => {
     return (
         <>
             <SuccessNotice message={successMsg} />
-            {/* {successMsg && (
-                <>
-                    <div className="admin-notice-wrapper">
-                        <i className="admin-font adminlib-icon-yes"></i>
-                        <div className="notice-details">
-                            <div className="title">Great!</div>
-                            <div className="desc">{successMsg}</div>
-                        </div>
-                    </div>
-                </>
-            )} */}
-            
-            {/* Debug Info - You can remove this in production */}
-            <div style={{ background: '#f5f5f5', padding: '10px', marginBottom: '15px', borderRadius: '4px', fontSize: '12px' }}>
-                <div>Debug Info:</div>
-                <div>Store ID: {id}</div>
-                <div>Map Provider: {mapProvider}</div>
-                <div>Google Maps: {googleLoaded ? 'Loaded' : 'Loading...'}</div>
-                <div>Mapbox: {mapboxLoaded ? 'Loaded' : 'Loading...'}</div>
-                <div>Map: {map ? 'Initialized' : 'Not initialized'}</div>
-                <div>Address: {formData.address || 'N/A'}</div>
-            </div>
             <div className="container-wrapper">
                 <div className="card-wrapper width-65">
                     <div className="card-content">
@@ -620,7 +626,7 @@ const StoreSettings = ({ id }: { id: string | null }) => {
                                         id="store-location-autocomplete"
                                         type="text"
                                         className="setting-form-input"
-                                        placeholder="Start typing your store address..."
+                                        placeholder="Search your store address..."
                                         defaultValue={addressData.location_address}
                                     />
                                 </div>
@@ -700,25 +706,26 @@ const StoreSettings = ({ id }: { id: string | null }) => {
                             </div>
                         </div>
 
+                        {/* Country and State Select Inputs (from old code) */}
                         <div className="form-group-wrapper">
                             <div className="form-group">
                                 <label htmlFor="product-name">Country</label>
-                                <BasicInput
+                                <SelectInput
                                     name="country"
                                     value={formData.country}
                                     options={appLocalizer.country_list || []}
                                     type="single-select"
-                                    onChange={handleAddressChange} 
+                                    onChange={handleCountryChange}
                                 />
                             </div>
                             <div className="form-group">
                                 <label htmlFor="product-name">State</label>
-                                <BasicInput
+                                <SelectInput
                                     name="state"
                                     value={formData.state}
                                     options={stateOptions}
                                     type="single-select"
-                                    onChange={handleAddressChange} 
+                                    onChange={handleStateChange}
                                 />
                             </div>
                         </div>
@@ -754,6 +761,7 @@ const StoreSettings = ({ id }: { id: string | null }) => {
                                     }}
                                     onReplace={() => runUploader('image')}
                                 />
+                                <div className="settings-metabox-description">Upload Profile image max size 500px X 500px</div>
                             </div>
                         </div>
 
@@ -780,6 +788,7 @@ const StoreSettings = ({ id }: { id: string | null }) => {
                                     }}
                                     onReplace={() => runUploader('banner')}
                                 />
+                                <div className="settings-metabox-description">Upload banner image size 1200px X 390px</div>
                             </div>
                         </div>
                     </div>
@@ -863,5 +872,3 @@ const StoreSettings = ({ id }: { id: string | null }) => {
 };
 
 export default StoreSettings;
-
-

@@ -72,8 +72,8 @@ jQuery(document).ready(function ($) {
         if (!$(e.target).closest(".login-user").length) {
             $dropdown.hide();
         }
-    }); 
-    
+    });
+
     $notificationList.hide();
     $notificationIcon.on("click", function (e) {
         e.stopPropagation();
@@ -83,11 +83,11 @@ jQuery(document).ready(function ($) {
         if (!$(e.target).closest(".login-user").length) {
             $notificationList.hide();
         }
-    }); 
+    });
     // my acoount start
 
     // top header full screen icon strat
-    $('#fullscreenToggle').on('click', function() {
+    $('#fullscreenToggle').on('click', function () {
         if (!document.fullscreenElement) {
             document.documentElement.requestFullscreen().catch(err => {
                 console.warn(`Error attempting fullscreen: ${err.message}`);
@@ -114,36 +114,62 @@ jQuery(document).ready(function ($) {
 
 
     // General tab
-    $('.sale_price_dates_fields').hide();
-    $(document).on('click', '.sale_schedule', function (e) {
-        e.preventDefault();
-        $('.sale_price_dates_fields').slideDown();
-        $('.sale_schedule').hide();
-    });
+    // $('.sale_price_dates_fields').hide();
+    // $(document).on('click', '.sale_schedule', function (e) {
+    //     e.preventDefault();
+    //     $('.sale_price_dates_fields').slideDown();
+    //     $('.sale_schedule').hide();
+    // });
 
-    $(document).on('click', '.cancel_sale_schedule', function (e) {
-        e.preventDefault();
-        $('.sale_price_dates_fields').slideUp();
-        $('.sale_schedule').show();
-    });
+    // $(document).on('click', '.cancel_sale_schedule', function (e) {
+    //     e.preventDefault();
+    //     $('.sale_price_dates_fields').slideUp();
+    //     $('.sale_schedule').show();
+    // });
 
 
     // Inventory tab
-    function toggleStockFields() {
-        if ($('#_manage_stock').is(':checked')) {
-            $('.stock_fields').slideDown();
-            $('.stock_status_field').slideUp();
-        } else {
-            $('.stock_fields').slideUp();
-            $('.stock_status_field').slideDown();
-        }
-    }
-    toggleStockFields();
-    $(document).on('change', '#_manage_stock', function () {
-        toggleStockFields();
-    });
+    // function toggleStockFields() {
+    //     if ($('#_manage_stock').is(':checked')) {
+    //         $('.stock_fields').slideDown();
+    //         $('.stock_status_field').slideUp();
+    //     } else {
+    //         $('.stock_fields').slideUp();
+    //         $('.stock_status_field').slideDown();
+    //     }
+    // }
+    // toggleStockFields();
+    // $(document).on('change', '#_manage_stock', function () {
+    //     toggleStockFields();
+    // });
 
-//     // select 
-// mvxAfmLibrary.wcEnhancedSelectInit();
-    
+
+    //     // select 
+    // mvxAfmLibrary.wcEnhancedSelectInit();
+
+
+    // tabs for store policy tab
+    const items = document.querySelectorAll('.multivendorx-policies-accordion .accordion-item');
+
+    items.forEach(item => {
+        const header = item.querySelector('.accordion-header');
+        const body = item.querySelector('.accordion-body');
+
+        header.addEventListener('click', () => {
+            const isActive = header.classList.contains('active');
+
+            // Close all items
+            document.querySelectorAll('.multivendorx-policies-accordion .accordion-header')
+                .forEach(h => h.classList.remove('active'));
+            document.querySelectorAll('.multivendorx-policies-accordion .accordion-body')
+                .forEach(b => b.style.display = 'none');
+
+            // Toggle clicked item
+            if (!isActive) {
+                header.classList.add('active');
+                body.style.display = 'block';
+            }
+        });
+    });
+    // tabs for store policy end
 });

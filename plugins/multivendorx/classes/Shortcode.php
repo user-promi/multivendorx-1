@@ -19,6 +19,9 @@ class Shortcode {
         add_action( 'wp_enqueue_scripts', array($this, 'frontend_scripts'));
 
         add_action('wp_print_styles', array($this, 'dequeue_all_styles_on_page'), 99);
+        
+        add_shortcode( 'multivendorx_stores_list', array( $this, 'display_stores_list' ) );
+
     }
 
     public function frontend_scripts() {
@@ -38,11 +41,17 @@ class Shortcode {
         FrontendScripts::localize_scripts( 'multivendorx-store-dashboard-script' );
         FrontendScripts::enqueue_style( 'multivendorx-store-product-style' );
 
+        ?>
+        <style>
+            <?php 
+            echo MultiVendorX()->setting->get_setting('custom_css_product_page', []);?>
+        </style>
+        <?php
     }
 
     public static function dequeue_all_styles_on_page()
     {
-        if (is_page() && has_shortcode(get_post()->post_content, 'multivendorx_store_dashboard') && is_user_logged_in()) {
+        if (is_page() && has_shortcode(get_post()->post_content, 'multivendorx_store_dashboard') && is_user_logged_in() && in_array( 'store_owner', wp_get_current_user()->roles, true )) {
             global $wp_styles;
             $wp_styles->queue = array('multivendorx-dashboard-style', 'multivendorx-store-product-style');
             // print_r($wp_styles);
@@ -65,9 +74,11 @@ class Shortcode {
             wc_get_template('myaccount/form-login.php');
             echo '</div>';
         } else if ( in_array( 'store_owner', $user->roles, true ) ) {
-            MultiVendorX()->util->get_template( 'store-dashboard.php', [] );
+            MultiVendorX()->util->get_template( 'store/store-dashboard.php', [] );
         } else {
-            
+            echo '<div class="mvx-dashboard-message">';
+            echo esc_html__('Signup has been disabled.', 'multivendorx');
+            echo '</div>';
         }
 
         return ob_get_clean();
@@ -97,6 +108,15 @@ class Shortcode {
         }
     
         // Return the output buffer content
+        return ob_get_clean();
+    }
+
+    public function display_stores_list(){
+        ob_start();
+        ?>
+        <div id="multivendorx-stores-list">
+        </div>
+        <?php
         return ob_get_clean();
     }
     
