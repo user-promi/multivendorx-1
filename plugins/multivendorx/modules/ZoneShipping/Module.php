@@ -92,7 +92,7 @@ class Module {
      * Register the shipping method for WooCommerce
      */
     public function register_shipping_method( $methods ) {
-        $methods['multivendorx_vendor_shipping'] = Shipping::class;
+        $methods['multivendorx_store_shipping'] = Shipping::class;
         return $methods;
     }
 }
