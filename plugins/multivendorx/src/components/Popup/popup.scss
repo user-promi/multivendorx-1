@@ -1,3 +1,7 @@
+.MuiDialogContent-root {
+    padding: 0 !important;
+}
+
 .MuiDialog-container {
     .adminlib-cross {
         position: absolute;
@@ -9,101 +13,129 @@
     }
 }
 
-.popup-wrapper {
-    .top-section {
-        padding: 2.5rem 2rem;
-        align-items: center;
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
-        background: #5007aa;
+.pro-popup-content {
+    .popup-wrapper {
+        .top-section {
+            padding: 2.5rem 2rem;
+            align-items: center;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            background: #5007aa;
 
-        .heading {
-            font-size: 2.125rem;
-            font-weight: 600;
-            color: #fff;
+            .heading {
+                font-size: 2.125rem;
+                font-weight: 600;
+                color: #fff;
+            }
+
+            .description {
+                color: #fff;
+                font-size: 1.25rem;
+            }
+
+            .price {
+                font-size: 2.4rem;
+                color: #fff;
+                font-weight: 600;
+            }
+
+            .admin-btn {
+                background: #fff;
+                margin-top: 1rem;
+                color: #000;
+            }
+
+            .select-wrapper {
+                color: #fff;
+                font-size: 1.125rem;
+            }
+
+            select {
+                background: transparent;
+                font-size: 1.125rem;
+                border: none;
+                color: #fff;
+                appearance: none;
+                -webkit-appearance: none;
+                -moz-appearance: none;
+                background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'><path fill='%23fff' d='M5 7l5 5 5-5z'/></svg>");
+                background-repeat: no-repeat;
+                background-position: right 0.75rem center;
+                background-size: 1rem;
+                margin-bottom: 0.125rem;
+
+                option {
+                    color: #1a1a1aa4;
+                }
+
+                &:focus {
+                    box-shadow: none;
+                }
+            }
         }
 
-        .description {
-            color: #fff;
-            font-size: 1.25rem;
-        }
+        .popup-content {
+            padding: 1rem 0 1rem 2rem;
 
-        .price {
-            font-size: 2.4rem;
-            color: #fff;
-            font-weight: 600;
+            .heading-text {
+                font-size: 1.25rem;
+                color: #000000e3;
+                font-weight: 600;
+            }
+
+            ul {
+                max-height: 20vh;
+                overflow: auto;
+                padding-right: 2rem;
+
+                li {
+                    .title {
+                        font-size: 1.063rem;
+                        font-weight: 600;
+                        color: #000000e0;
+                    }
+
+                    .sub-text {
+                        font-size: 0.95rem;
+                        line-height: 1.313rem;
+                    }
+                }
+            }
         }
 
         .admin-btn {
-            background: #fff;
-            margin-top: 1rem;
-            color: #000;
-        }
+            font-size: 1.063rem;
+            font-weight: 500;
 
-        .select-wrapper {
-            color: #fff;
-            font-size: 1.125rem;
-        }
-
-        select {
-            background: transparent;
-            font-size: 1.125rem;
-            border: none;
-            color: #fff;
-            appearance: none;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'><path fill='%23fff' d='M5 7l5 5 5-5z'/></svg>");
-            background-repeat: no-repeat;
-            background-position: right 0.75rem center;
-            background-size: 1rem;
-            margin-bottom: 0.125rem;
-
-            option {
-                color: #1a1a1aa4;
-            }
-
-            &:focus{
-                box-shadow: none;
+            .arrow-icon {
+                transform: rotate(-45deg);
             }
         }
     }
+}
 
-    .popup-content {
-        padding: 1rem 0 1rem 2rem ;
-        .heading-text {
-            font-size: 1.25rem;
-            color: #000000e3;
-            font-weight: 600;
-        }
+.module-popup-content {
+    .popup-wrapper {
+        padding: 2.5rem;
 
-        ul {
-            max-height: 20vh;
-            overflow: auto;
-            padding-right: 2rem;
+        .module-icon {
+            text-align: center;
 
-            li {
-                .title {
-                    font-size: 1.063rem;
-                    font-weight: 600;
-                    color: #000000e0;
-                }
-
-                .sub-text {
-                    font-size: 0.95rem;
-                    line-height: 1.313rem;
-                }
+            i {
+                font-size: 2.5rem;
+                padding: 0.5rem;
+                border-radius: 0.313rem;
+                background: #bfdeed;
+                color: #003d66;
             }
         }
-    }
-
-    .admin-btn {
-        font-size: 1.063rem;
-        font-weight: 500;
-
-        .arrow-icon {
-            transform: rotate(-45deg);
+        h2{
+            margin-bottom: 0;
+            font-size: 1.5rem;
+        }
+        p{
+            margin-top: 0;
         }
     }
 }

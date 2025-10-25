@@ -40,6 +40,7 @@ interface CommonProps {
   requiredEnable?: boolean;
   maxItems?: number;
   allowDuplicates?: boolean;
+  moduleEnabled?: boolean;
 }
 
 type MultiInputProps = MultiStringProps & CommonProps;
@@ -59,6 +60,7 @@ const MultiInput: React.FC<MultiInputProps> = (props) => {
     id,
     name,
     proSetting,
+    moduleEnabled,
     iconEnable,
     descEnable = false,
     requiredEnable = false,
@@ -147,6 +149,7 @@ const MultiInput: React.FC<MultiInputProps> = (props) => {
       description: "",
       iconClass: iconOptions.length > 0 ? iconOptions[0] : "",
       required: false,
+
     };
     updatedValues.push(demoItem);
     const newIndex = updatedValues.length - 1;
@@ -158,6 +161,7 @@ const MultiInput: React.FC<MultiInputProps> = (props) => {
     setItemDescription(demoItem.description || "");
     setSelectedIcon(demoItem.iconClass || "");
     setRequiredChecked(demoItem.required || false);
+    handleEdit(newIndex);
   };
 
   // --- Keyboard Support ---
@@ -192,7 +196,9 @@ const MultiInput: React.FC<MultiInputProps> = (props) => {
   }, [inputValue, itemDescription, selectedIcon, requiredChecked]);
 
   return (
-    <div className={wrapperClass}>
+    <div
+      className={`${wrapperClass} ${(!proSetting && moduleEnabled) ? 'module-enabled' : ''}`}
+    >
       <ul className={listClass || "payment-tabs-component"}>
         {values.map((item, index) => (
           <li key={index} className={`${itemClass} payment-method-card`}>
@@ -331,7 +337,7 @@ const MultiInput: React.FC<MultiInputProps> = (props) => {
           <i className="adminlib-pro-tag"></i>Pro
         </span>
       )}
-
+      {(!proSetting && moduleEnabled) && <span className="admin-pro-tag module"><i className="adminlib-module"></i>Module</span>}
       {description && (
         <p
           className={`${descClass} settings-metabox-description`}
