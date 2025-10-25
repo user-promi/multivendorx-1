@@ -222,8 +222,10 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
         $ids = $request->get_param( 'ids' );
         $start_date = sanitize_text_field( $request->get_param( 'start_date' ) );
         $end_date = sanitize_text_field( $request->get_param( 'end_date' ) );
-    
-        // Prepare filter for Transaction
+        $page = $request->get_param( 'page' );
+        $per_page = $request->get_param( 'row' );
+
+        // Prepare filter for Transaction - NO pagination by default
         $args = array();
         if ( ! empty( $store_id ) ) {
             $args['store_id'] = $store_id;
@@ -241,19 +243,25 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
             $args['start_date'] = date('Y-m-d 00:00:00', strtotime($start_date));
             $args['end_date'] = date('Y-m-d 23:59:59', strtotime($end_date));
         }
-    
-        // If specific IDs are requested
+
+        // If specific IDs are requested (selected rows from bulk action)
         if ( ! empty( $ids ) ) {
             $args['id__in'] = array_map( 'intval', explode( ',', $ids ) );
+        } 
+        // If pagination parameters are provided (current page export from bulk action)
+        elseif ( ! empty( $page ) && ! empty( $per_page ) ) {
+            $args['limit'] = intval( $per_page );
+            $args['offset'] = ( intval( $page ) - 1 ) * intval( $per_page );
         }
-    
+        // Otherwise, export ALL data with current filters (no pagination - from Export All button)
+
         // Fetch transactions
         $transactions = Transaction::get_transaction_information( $args );
         
         if ( empty( $transactions ) ) {
             return new \WP_Error( 'no_data', __( 'No transaction data found.', 'multivendorx' ), array( 'status' => 404 ) );
         }
-    
+
         // CSV headers
         $headers = array(
             'Transaction ID',
@@ -267,12 +275,16 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
             'Status',
             'Payment Method'
         );
-    
+
         // Build CSV data
         $csv_output = fopen( 'php://output', 'w' );
         ob_start();
+        
+        // Add BOM for UTF-8 compatibility
+        fwrite($csv_output, "\xEF\xBB\xBF");
+        
         fputcsv( $csv_output, $headers );
-    
+
         foreach ( $transactions as $transaction ) {
             $store = new \MultiVendorX\Store\Store( $transaction['store_id'] );
             $store_name = $store ? $store->get('name') : '';
@@ -293,16 +305,33 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
                 $store->meta_data['payment_method'] ?? 'Not Saved',
             ));
         }
-    
+
         fclose( $csv_output );
         $csv = ob_get_clean();
-    
+
+        // Determine filename based on context
+        $filename = 'transactions_';
+        if ( ! empty( $ids ) ) {
+            $filename .= 'selected_';
+        } elseif ( ! empty( $page ) ) {
+            $filename .= 'page_' . $page . '_';
+        } else {
+            $filename .= 'all_';
+        }
+        
+        // Add store ID to filename if available
+        if ( ! empty( $store_id ) ) {
+            $filename .= 'store_' . $store_id . '_';
+        }
+        
+        $filename .= date( 'Y-m-d' ) . '.csv';
+
         // Send headers for browser download
-        header( 'Content-Type: text/csv' );
-        header( 'Content-Disposition: attachment; filename="transactions_' . date( 'Y-m-d' ) . '.csv"' );
+        header( 'Content-Type: text/csv; charset=UTF-8' );
+        header( 'Content-Disposition: attachment; filename="' . $filename . '"' );
         header( 'Pragma: no-cache' );
         header( 'Expires: 0' );
-    
+
         echo $csv;
         exit;
     }

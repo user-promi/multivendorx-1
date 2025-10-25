@@ -54,7 +54,7 @@ type FilterData = {
     transactionStatus?: string;
 };
 
-// CSV Download Button Component for Transactions
+// CSV Download Button Component for Transactions (Bulk Action)
 const DownloadTransactionCSVButton: React.FC<{
     selectedRows: RowSelectionState;
     data: StoreRow[] | null;
@@ -113,6 +113,10 @@ const DownloadTransactionCSVButton: React.FC<{
             // If specific rows are selected, send their IDs
             if (selectedIds.length > 0) {
                 params.ids = selectedIds.join(',');
+            } else {
+                // If no rows selected, export current page data
+                params.page = 1; // You might want to get current page from props
+                params.row = 10; // You might want to get current page size from props
             }
 
             // Make API request for CSV
@@ -134,7 +138,8 @@ const DownloadTransactionCSVButton: React.FC<{
             
             // Generate filename with timestamp and store ID
             const timestamp = new Date().toISOString().split('T')[0];
-            const filename = `transactions_store_${storeId}_${timestamp}.csv`;
+            const context = selectedIds.length > 0 ? 'selected' : 'page';
+            const filename = `transactions_${context}_store_${storeId}_${timestamp}.csv`;
             link.setAttribute('download', filename);
             
             document.body.appendChild(link);
@@ -163,6 +168,103 @@ const DownloadTransactionCSVButton: React.FC<{
             }}
         >
             {isDownloading ? __('Downloading...', 'multivendorx') : __('Download CSV', 'multivendorx')}
+        </button>
+    );
+};
+
+// Export All CSV Button Component for Transactions - Downloads ALL filtered data
+const ExportAllTransactionCSVButton: React.FC<{
+    filterData: FilterData;
+    storeId: number | null;
+}> = ({ filterData, storeId }) => {
+    const [isDownloading, setIsDownloading] = useState(false);
+
+    const handleExportAll = async () => {
+        if (!storeId) {
+            alert(__('Please select a store first.', 'multivendorx'));
+            return;
+        }
+
+        setIsDownloading(true);
+        try {
+            // Prepare parameters for CSV download - NO pagination params
+            const params: any = {
+                format: 'csv',
+                store_id: storeId,
+            };
+
+            // Add date filters if present
+            if (filterData?.date?.start_date) {
+                params.start_date = filterData.date.start_date.toISOString().split('T')[0];
+            }
+            if (filterData?.date?.end_date) {
+                params.end_date = filterData.date.end_date.toISOString().split('T')[0];
+            }
+
+            // Add transaction type filter
+            if (filterData?.transactionType) {
+                params.transaction_type = filterData.transactionType;
+            }
+
+            // Add transaction status filter
+            if (filterData?.transactionStatus) {
+                params.transaction_status = filterData.transactionStatus;
+            }
+
+            // Add status filter (Cr/Dr)
+            if (filterData?.typeCount && filterData.typeCount !== 'all') {
+                params.filter_status = filterData.typeCount;
+            }
+
+            // Note: We don't send page/row params to get ALL data
+            // Note: We don't send IDs since this is for all filtered data
+
+            // Make API request for CSV
+            const response = await axios({
+                method: 'GET',
+                url: getApiLink(appLocalizer, 'transaction'),
+                headers: { 
+                    'X-WP-Nonce': appLocalizer.nonce,
+                    'Accept': 'text/csv'
+                },
+                params: params,
+                responseType: 'blob'
+            });
+
+            // Create download link
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            
+            // Generate filename with timestamp and store ID
+            const timestamp = new Date().toISOString().split('T')[0];
+            const filename = `transactions_all_store_${storeId}_${timestamp}.csv`;
+            link.setAttribute('download', filename);
+            
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            window.URL.revokeObjectURL(url);
+
+        } catch (error) {
+            console.error('Error downloading CSV:', error);
+            alert(__('Failed to download CSV. Please try again.', 'multivendorx'));
+        } finally {
+            setIsDownloading(false);
+        }
+    };
+
+    return (
+        <button
+            onClick={handleExportAll}
+            disabled={isDownloading || !storeId}
+            className="admin-btn btn-purple"
+            style={{ 
+                opacity: (isDownloading || !storeId) ? 0.6 : 1
+            }}
+        >
+            <i className="adminlib-export"></i>
+            {isDownloading ? __('Exporting...', 'multivendorx') : __('Export All CSV', 'multivendorx')}
         </button>
     );
 };
@@ -204,6 +306,23 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
     const [overview, setOverview] = useState<any[]>([]);
     const [transactionStatus, setTransactionStatus] = useState<TransactionStatus[] | null>(null);
     const [currentFilterData, setCurrentFilterData] = useState<FilterData>({});
+
+    // Add search filter with export button
+    const searchFilter: RealtimeFilter[] = [
+        {
+            name: 'searchField',
+            render: (updateFilter, filterValue) => (
+                <>
+                    <div className="">
+                        <ExportAllTransactionCSVButton 
+                            filterData={currentFilterData}
+                            storeId={storeId}
+                        />
+                    </div>
+                </>
+            ),
+        },
+    ];
 
     // 🔹 Helper: get effective date range
     const getEffectiveDateRange = () => {
@@ -573,6 +692,7 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                     typeCounts={transactionStatus as TransactionStatus[]}
                     totalCounts={totalRows}
                     realtimeFilter={realtimeFilter}
+                    searchFilter={searchFilter}
                     bulkActionComp={() => (
                         <TransactionBulkActions 
                             selectedRows={rowSelection} 
