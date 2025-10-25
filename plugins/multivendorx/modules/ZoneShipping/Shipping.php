@@ -209,7 +209,6 @@ class Shipping extends \WC_Shipping_Method {
             }
             // Filter shipping methods (optional)
             $shipping_methods = apply_filters('mvx_get_shipping_methods_for_shipping_address', $shipping_methods, $package, $store_id );
-    
             foreach ( $shipping_methods as $key => $method ) {
                 $tax_rate = ( $method['settings']['tax_status'] == 'none' ) ? false : '';
                 $has_costs = false;
@@ -302,7 +301,7 @@ class Shipping extends \WC_Shipping_Method {
         // Send rates to WooCommerce
         if ( is_array( $rates ) && count( $rates ) > 0 ) {
             foreach ( $rates as $rate ) {
-                $this->add_rate( apply_filters( 'mvx_vendor_before_add_shipping_rates', $rate, $package ) );
+                $this->add_rate( apply_filters( 'multivendorx_store_before_add_shipping_rates', $rate, $package ) );
             }
         }
     }
@@ -316,7 +315,6 @@ class Shipping extends \WC_Shipping_Method {
     * @return bool
     */
     public static function free_shipping_is_available( $package, $method ) {
-        return true;
         if (isset( $method['settings']['requires'] ) && $method['settings']['requires'] == 'coupon') {
             $coupon_code = $package['applied_coupons'] ? reset($package['applied_coupons']) : '';
             $coupon = new WC_Coupon( $coupon_code );
@@ -359,83 +357,99 @@ class Shipping extends \WC_Shipping_Method {
     * @return void
     */
     public function is_available( $package ) {
-        return true;
-        $vendor_id = isset( $package['vendor_id'] ) ? $package['vendor_id'] : '';
-
-        $destination_country = isset( $package['destination']['country'] ) ? $package['destination']['country'] : '';
-        $destination_state = isset( $package['destination']['state'] ) ? $package['destination']['state'] : '';
-        $destination_city = isset( $package['destination']['city'] ) ? $package['destination']['city'] : '';
-        $destination_postcode = isset( $package['destination']['postcode'] ) ? $package['destination']['postcode'] : '';
-
-        if ( empty( $vendor_id ) ) {
+        //Extract products from the package
+        $products = isset( $package['contents'] ) ? $package['contents'] : [];
+    
+        if ( empty( $products ) ) {
             return false;
         }
-
+    
+        //Try to get the store ID from the first product in the package
+        $store_id = '';
+        foreach ( $products as $product ) {
+            $product_id = isset( $product['product_id'] ) ? $product['product_id'] : 0;
+            if ( $product_id ) {
+                $store_id = get_post_meta( $product_id, 'multivendorx_store_id', true );
+                if ( ! empty( $store_id ) ) {
+                    break; // found one
+                }
+            }
+        }
+    
+        //No store ID found → not available
+        if ( empty( $store_id ) ) {
+            return false;
+        }
+    
+        //Extract destination info
+        $destination = isset( $package['destination'] ) ? $package['destination'] : [];
+        $destination_country  = isset( $destination['country'] )  ? $destination['country']  : '';
+        $destination_state    = isset( $destination['state'] )    ? $destination['state']    : '';
+        $destination_city     = isset( $destination['city'] )     ? $destination['city']     : '';
+        $destination_postcode = isset( $destination['postcode'] ) ? trim( $destination['postcode'] ) : '';
+    
+        //Get matching shipping zone
         $zone = WC_Shipping_Zones::get_zone_matching_package( $package );
-
-        $locations = Util::get_locations( $zone->get_id(), $vendor_id );
-
+    
+        //Get location restrictions for this store in this zone
+        $locations = Util::get_locations( $zone->get_id(), (int) $store_id );
+    
+        //If no locations are set → available everywhere
         if ( empty( $locations ) ) {
             return true;
         }
-
-        $location_group = array();
-
+    
+        //Group locations by type
+        $location_group = [];
         foreach ( $locations as $location ) {
-            $location_group[$location['type']][] = $location;
+            if ( isset( $location['type'] ) && isset( $location['code'] ) ) {
+                $location_group[ $location['type'] ][] = $location;
+            }
         }
-        
+    
         $is_available = false;
-
+    
+        //Country check
         if ( isset( $location_group['country'] ) ) {
             $country_array = wp_list_pluck( $location_group['country'], 'code' );
-
-            if ( ! in_array( $destination_country, $country_array ) ) {
+            if ( ! in_array( $destination_country, $country_array, true ) ) {
                 return false;
             }
-
             $is_available = true;
         }
-
+    
+        //State check
         if ( isset( $location_group['state'] ) ) {
             $states = wp_list_pluck( $location_group['state'], 'code' );
-            $state_array = array_map( array( $this, 'split_state_code' ), $states );
-
-            if ( ! in_array( $destination_state, $state_array ) ) {
+            $state_array = array_map( [ $this, 'split_state_code' ], $states );
+            if ( ! in_array( $destination_state, $state_array, true ) ) {
                 return false;
             }
-
             $is_available = true;
         }
-
+    
+        //City check
         if ( isset( $location_group['city'] ) ) {
             $city_array = wp_list_pluck( $location_group['city'], 'code' );
-
-            if ( ! in_array( $destination_city, $city_array ) ) {
+            if ( ! in_array( $destination_city, $city_array, true ) ) {
                 return false;
             }
-
             $is_available = true;
         }
-
-
+    
+        //Postcode check
         if ( isset( $location_group['postcode'] ) ) {
             $postcode_array = wp_list_pluck( $location_group['postcode'], 'code' );
             $postcode_array = array_map( 'trim', $postcode_array );
-
-            if ( ! in_array( $destination_postcode, $postcode_array ) ) {
-              return false;
+            if ( ! in_array( $destination_postcode, $postcode_array, true ) ) {
+                return false;
             }
-
             $is_available = true;
         }
-
-        if ( $is_available ) {
-            return true;
-        }
-
-        return false;
+    
+        return $is_available;
     }
+    
 
     /**
     * Split state code from country:state string
@@ -539,34 +553,46 @@ class Shipping extends \WC_Shipping_Method {
     * @return void
     */
     public function get_method_rate_id( $method ) {
-        return apply_filters( 'mvx_get_vendor_shipping_method_id', $method['id'] . ':' . $method['instance_id'] );
+        return apply_filters( 'multivendorx_get_store_shipping_method_id', $method['id'] . ':' . $method['instance_id'] );
     }
 
-    /* @not used */
-    public static function is_shipping_enabled_for_seller( $vendor_id ) {
-        $vendor_shipping_details = get_user_meta( $vendor_id, '_mvx_shipping', true );
-        if( !empty($vendor_shipping_details) ) {
-            $enabled = $vendor_shipping_details['_mvx_user_shipping_enable'];
-            $type = $vendor_shipping_details['_mvx_user_shipping_type'];
-            if ( ( !empty($enabled) && $enabled == 'yes' ) && ( !empty($type) ) && 'by_zone' === $type ) {
-                return true;
-            }
-        }
-        return false;
-    }
+    public function woocommerce_package_rates( $rates, $package ) {
+
+        //Get products from the package
+        $products = isset( $package['contents'] ) ? $package['contents'] : [];
     
-    public function woocommerce_package_rates( $rates, $package ){
-        if( !isset( $package['vendor_id'] ) ) return $rates;
-        if( !apply_filters( 'mvx_allow_supported_shipping_in_vendor_shipping_package', true, $package ) && $rates ) {
-            foreach ( $rates as $key => $shipping_rate ) {
-                if( $shipping_rate->method_id != 'multivendorx_vendor_shipping' ) {
-                    unset( $rates[$key] );
-                }
-            }
+        if ( empty( $products ) ) {
             return $rates;
         }
+    
+        //Try to extract the store ID from any product in the package
+        $store_id = '';
+        foreach ( $products as $product ) {
+            if ( isset( $product['product_id'] ) ) {
+                $id = $product['product_id'];
+                $store_id = get_post_meta( $id, 'multivendorx_store_id', true );
+                if ( ! empty( $store_id ) ) {
+                    break;
+                }
+            }
+        }
+    
+        //If no store found, keep all rates (don’t modify)
+        if ( empty( $store_id ) ) {
+            return $rates;
+        }
+    
+        //Allow developers to disable filtering logic if needed
+        if ( ! apply_filters( 'multivendorx_allow_supported_shipping_in_store_shipping_package', true, $package, $store_id ) && $rates ) {
+    
+            //Keep only MultiVendorX store shipping methods
+            foreach ( $rates as $key => $shipping_rate ) {
+                if ( $shipping_rate->method_id !== 'multivendorx_store_shipping' ) {
+                    unset( $rates[ $key ] );
+                }
+            }
+        }
+    
         return $rates;
     }
-
-
 }

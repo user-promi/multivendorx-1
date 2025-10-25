@@ -100,7 +100,6 @@ class Shipping extends \WC_Shipping_Method {
         
         if ( $products ) {
             $amount = $this->calculate_per_seller( $products, $destination_country, $destination_state );
-            file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":orders: : " . var_export($amount, true) . "\n", FILE_APPEND);
             $tax_rate  = ( $this->tax_status == 'none' ) ? false : '';
             $tax_rate  = apply_filters( 'multivendorx_is_apply_tax_on_shipping_rates', $tax_rate );
             
