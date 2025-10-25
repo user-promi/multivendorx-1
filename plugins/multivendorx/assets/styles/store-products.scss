@@ -96,6 +96,9 @@
              width: 5rem;
              height: auto;
          }
+         .buttons-wrapper{
+            align-items: start;
+         }
      }
 
      .follow-wrapper {
@@ -104,7 +107,7 @@
          align-items: center;
          flex-direction: column;
          gap: 0.5rem;
-         padding-top: 0.313rem;
+        //  padding-top: 0.313rem;
 
          .follower-count {
              font-size: 0.9rem;
@@ -132,6 +135,10 @@
 
              .container {
                  flex-direction: column;
+             }
+
+             .buttons-wrapper{
+                justify-content: center;
              }
          }
      }
