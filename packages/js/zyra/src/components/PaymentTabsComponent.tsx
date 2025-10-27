@@ -269,7 +269,7 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
   return (
     <div className="payment-tabs-component">
       {methods.map((method) => {
-        const isEnabled = value?.[method.id]?.enable ?? true;
+        const isEnabled = value?.[method.id]?.enable ?? false;
         const isActive = activeTabs.includes(method.id);
         const isMenuOpen = openMenu === method.id;
 

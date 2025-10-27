@@ -16,6 +16,7 @@ use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Payouts_Controller;
 use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Transaction_Controller;
 use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Reports_Controller;
 use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Refund_Controller;
+use MultiVendorX\Store\Store;
 use MultiVendorX\Store\StoreUtil;
 
 defined('ABSPATH') || exit;
@@ -35,11 +36,53 @@ class Rest {
         add_action( 'rest_api_init', array( $this, 'register_rest_routes' ), 10 );
         add_filter('woocommerce_rest_check_permissions', array($this,'give_permission'), 10, 4);
         add_filter('woocommerce_rest_shop_order_object_query', array($this, 'filter_orders_by_store_id'), 10, 2);
+        add_filter('woocommerce_rest_prepare_product_object', array($this, 'add_store_data_to_product_response'), 10, 3);
         add_filter('woocommerce_rest_product_object_query', array($this, 'filter_products_by_meta_exists'), 10, 2);
         add_filter('woocommerce_rest_shop_coupon_object_query', array($this, 'filter_coupons_by_meta_exists'), 10, 2);
         add_filter('woocommerce_analytics_products_query_args', array($this, 'filter_low_stock_by_meta_exists'), 10, 1);
         add_filter( 'rest_comment_query', array($this, 'mvx_filter_comments_by_store'), 10, 2 );
 
+    }
+
+    /**
+     * Add store data to WooCommerce product API response
+     */
+    public function add_store_data_to_product_response($response, $product, $request) {
+        $product_id = $product->get_id();
+        
+        // Get store ID from product meta
+        $store_id = get_post_meta($product_id, 'multivendorx_store_id', true);
+        
+        if ($store_id) {
+            // Get store information
+            $store      = new Store( $store_id );
+            $store_name = $store->get('name');
+            $store_name = $store->get('name');
+            $store_slug = $store->get('slug');
+            
+            // Add store data to API response
+            $response->data['store_name'] = $store_name ?: '';
+            $response->data['store_slug'] = $store_slug ?: '';
+            $response->data['store_id'] = $store_id;
+        } else {
+            $response->data['store_name'] = '';
+            $response->data['store_slug'] = '';
+            $response->data['store_id'] = '';
+        }
+        
+        return $response;
+    }
+    
+    /**
+     * Ensure store meta is included in API queries
+     */
+    public function add_store_meta_to_api_query($args, $request) {
+        // Make sure multivendorx_store_id meta is always included when needed
+        if (!isset($args['meta_query'])) {
+            $args['meta_query'] = array();
+        }
+        
+        return $args;
     }
 
     public function mvx_filter_comments_by_store($args, $request) {

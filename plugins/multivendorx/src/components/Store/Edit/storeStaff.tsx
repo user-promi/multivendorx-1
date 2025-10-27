@@ -4,7 +4,6 @@ import { SuccessNotice, SelectInput, getApiLink } from 'zyra';
 
 const StoreSquad = ({ id }: { id: string|null }) => {
     const [formData, setFormData] = useState<{ [key: string]: any }>({});
-    
     const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
     useEffect(() => {
@@ -37,16 +36,47 @@ const StoreSquad = ({ id }: { id: string|null }) => {
             }
         })
     };
-    
-return (
-        <>
 
+    return (
+        <>
             <SuccessNotice message={successMsg} />
 
             <div className="container-wrapper">
                 <div className="card-wrapper width-65">
                     <div className="card-content">
 
+                        {/* FIXED: Corrected label typo and fixed primary_owner handling */}
+                        <div className="form-group-wrapper">
+                            <div className="form-group">
+                                <label>Primary Owners</label>
+                                <SelectInput
+                                    name="primary_owner"
+                                    options={appLocalizer.store_owners || []}
+                                    type="multi-select"
+                                    value={(formData.primary_owner || []).map((id: any) => {
+                                        const match = (appLocalizer.store_owners || []).find(
+                                            (opt: any) => String(opt.value) === String(id)
+                                        );
+                                        return match ? match.value : String(id);
+                                    })}
+                                    onChange={(selected: any) => {
+                                        const primary_owner =
+                                            (selected as any[])?.map(
+                                                (option) => option.value
+                                            ) || [];
+                                        const updated = {
+                                            ...formData,
+                                            primary_owner,
+                                            state: '',
+                                        };
+                                        setFormData(updated);
+                                        autoSave(updated);
+                                    }}
+                                />
+                            </div>
+                        </div>
+
+                        {/* Other form groups remain the same */}
                         <div className="form-group-wrapper">
                             <div className="form-group">
                                 <label>Store Owners</label>

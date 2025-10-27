@@ -285,6 +285,98 @@ const Commission: React.FC = () => {
             });
     }
 
+    const searchFilter: RealtimeFilter[] = [
+        {
+            name: 'searchField',
+            render: (updateFilter, filterValue) => (
+                <>
+                    <div className="">
+                        <ExportAllCSVButton 
+                            filterData={currentFilterData}
+                        />
+                    </div>
+                </>
+            ),
+        },
+    ];
+
+    // Export All CSV Button Component - Downloads ALL filtered data
+    const ExportAllCSVButton: React.FC<{
+        filterData: FilterData;
+    }> = ({ filterData }) => {
+        const [isDownloading, setIsDownloading] = useState(false);
+
+        const handleExportAll = async () => {
+            setIsDownloading(true);
+            try {
+                // Prepare parameters for CSV download - NO pagination params
+                const params: any = {
+                    format: 'csv',
+                    startDate: filterData?.date?.start_date ? filterData.date.start_date.toISOString().split('T')[0] : '',
+                    endDate: filterData?.date?.end_date ? filterData.date.end_date.toISOString().split('T')[0] : '',
+                };
+
+                // Add filters if present
+                if (filterData?.store) {
+                    params.store_id = filterData.store;
+                }
+                if (filterData?.typeCount && filterData.typeCount !== 'all') {
+                    params.status = filterData.typeCount;
+                }
+
+                // Note: We don't send page/row params to get ALL data
+                // Note: We don't send IDs since this is for all filtered data
+
+                // Make API request for CSV
+                const response = await axios({
+                    method: 'GET',
+                    url: getApiLink(appLocalizer, 'commission'),
+                    headers: { 
+                        'X-WP-Nonce': appLocalizer.nonce,
+                        'Accept': 'text/csv'
+                    },
+                    params: params,
+                    responseType: 'blob'
+                });
+
+                // Create download link
+                const url = window.URL.createObjectURL(new Blob([response.data]));
+                const link = document.createElement('a');
+                link.href = url;
+                
+                // Generate filename with timestamp
+                const timestamp = new Date().toISOString().split('T')[0];
+                const filename = `commissions_all_${timestamp}.csv`;
+                link.setAttribute('download', filename);
+                
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+                window.URL.revokeObjectURL(url);
+
+            } catch (error) {
+                console.error('Error downloading CSV:', error);
+                alert(__('Failed to download CSV. Please try again.', 'multivendorx'));
+            } finally {
+                setIsDownloading(false);
+            }
+        };
+
+        return (
+            <button
+                onClick={handleExportAll}
+                disabled={isDownloading}
+                className="admin-btn btn-purple"
+                style={{ 
+                    opacity: isDownloading ? 0.6 : 1
+                }}
+            >
+                <i className="adminlib-export"></i>
+                {isDownloading ? __('Exporting...', 'multivendorx') : __('Export All CSV', 'multivendorx')}
+            </button>
+        );
+    };
+
     // Handle pagination and filter changes
     const requestApiForData = (
         rowsPerPage: number,
@@ -533,6 +625,7 @@ const Commission: React.FC = () => {
                         />
                     )}
                     totalCounts={totalRows}
+                    searchFilter={searchFilter}
                 />
             </div>
 
