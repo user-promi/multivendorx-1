@@ -13,6 +13,7 @@ class Frontend {
         add_filter('multivendorx_store_tabs', [$this, 'add_store_tab'], 10, 2);
 
         add_action('wp_enqueue_scripts', [$this, 'enqueue_scripts']);
+        add_action( 'woocommerce_order_item_meta_end', [ $this, 'multivendorx_add_store_review_button' ], 10, 3 );
     }
 
     public function enqueue_scripts() {
@@ -46,4 +47,41 @@ class Frontend {
     public function get_store_review_url($store_id) {
         return MultiVendorX()->store->storeutil->get_store_url($store_id, 'reviews');
     }
+
+
+    public function multivendorx_add_store_review_button( $item_id, $item, $order ) {
+        static $printed_stores = []; // ✅ keeps track of already displayed store IDs
+    
+        $product_id = $item->get_product_id();
+        if ( ! $product_id ) {
+            return;
+        }
+    
+        // 🔹 Get store ID from product meta
+        $store_id = get_post_meta( $product_id, 'multivendorx_store_id', true );
+        if ( ! $store_id ) {
+            return;
+        }
+    
+        $store_id = absint( $store_id );
+    
+        // 🔹 Avoid showing duplicate buttons for same store
+        if ( in_array( $store_id, $printed_stores, true ) ) {
+            return;
+        }
+    
+        $printed_stores[] = $store_id;
+    
+        // 🔹 Generate review page link
+        $review_url = MultiVendorX()->store->storeutil->get_store_url( $store_id, 'reviews' );
+    
+        // 🔹 Output review button under order item
+        echo '<div class="multivendorx-order-review-link" style="margin-top:10px;">';
+        echo '<a href="' . esc_url( $review_url ) . '" target="_blank" class="button alt" style="display:inline-block; background:#6c63ff; color:#fff; border-radius:6px; padding:8px 16px; text-decoration:none;">' 
+            . esc_html__( 'Leave a Review', 'multivendorx' ) . 
+            '</a>';
+        echo '</div>';
+    }
+    
+
 }
