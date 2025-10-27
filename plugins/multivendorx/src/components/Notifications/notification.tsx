@@ -12,12 +12,12 @@ const Notification = () => {
     const [transactionCount, setTransactionCount] = useState<number>(0);
     const [storeCount, setStoreCount] = useState<number>(0);
 
-    const [activeTab, setActiveTab] = useState("products");
+    const [activeTab, setActiveTab] = useState("");
     const [tasks, setTasks] = useState<string[]>([]);
     const [showInput, setShowInput] = useState(false);
     const [task, setTask] = useState("");
     const [loading, setLoading] = useState(false);
-
+    console.log(appLocalizer)
     useEffect(() => {
         if (!appLocalizer.user_id) return;
 
@@ -101,20 +101,86 @@ const Notification = () => {
             url: getApiLink(appLocalizer, 'store'),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
             params: { pending_withdraw: true } //important: use this param
-          })
-          .then((response) => {
-            const count = response.data.length || 0; // response.data is an array of stores with pending withdraw
-            setTransactionCount(count);
-          })
-          .catch(() => setTransactionCount(0));
+        })
+            .then((response) => {
+                const count = response.data.length || 0; // response.data is an array of stores with pending withdraw
+                setTransactionCount(count);
+            })
+            .catch(() => setTransactionCount(0));
     };
 
     const tabs = [
-        { id: "products", label: "Products", content: <Products onUpdated={refreshCounts} /> },
-        { id: "stores", label: "Stores", content: <Vendors onUpdated={refreshCounts} /> },
-        { id: "coupons", label: "Coupons", content: <Coupons onUpdated={refreshCounts} /> },
-        { id: "transactions", label: "Withdrawal", content: <Transactions onUpdated={refreshCounts} /> },
-    ];
+        ...(appLocalizer.approve_store === "manually"
+            ? [{
+                id: "products",
+                label: "Store Approval",
+                icon: "adminlib-calendar",
+                count: storeCount,
+                content: <Products onUpdated={refreshCounts} />
+            }]
+            : []
+        ),
+        {
+            id: "stores",
+            label: "Store Verification",
+            icon: "adminlib-calendar",
+            count: 9,
+            content: <Vendors onUpdated={refreshCounts} />
+        },
+        ...(Array.isArray(appLocalizer.enable_profile_deactivation_request)
+            && appLocalizer.enable_profile_deactivation_request.includes("enable_profile_deactivation_request")
+            ? [{
+                id: "coupons",
+                label: "Store Deactivation Requests",
+                icon: "adminlib-calendar",
+                count: 9,
+                content: <Coupons onUpdated={refreshCounts} />
+            }]
+            : []
+        ),
+        ...(Array.isArray(appLocalizer.can_publish_products)
+            && appLocalizer.can_publish_products.includes("publish_products")
+            ? [{
+                id: "product-approval",
+                label: "Product Approval",
+                icon: "adminlib-calendar",
+                count: productCount,
+                content: <Transactions onUpdated={refreshCounts} />
+            }]
+            : []
+        ),
+        ...(Array.isArray(appLocalizer.can_publish_coupons)
+            && appLocalizer.can_publish_coupons.includes("publish_coupons")
+            ? [{
+                id: "coupon-approval",
+                label: "Coupon Approval",
+                icon: "adminlib-calendar",
+                count: couponCount,
+                content: <Transactions onUpdated={refreshCounts} />
+            }]
+            : []
+        ),
+        {
+            id: "wholesale-customer",
+            label: "Wholesale Customer Approval",
+            icon: "adminlib-calendar",
+            count: 9,
+            content: <Transactions onUpdated={refreshCounts} />
+        },
+        {
+            id: "withdrawal",
+            label: "Withdrawal Requests",
+            icon: "adminlib-calendar",
+            count: transactionCount,
+            content: <Transactions onUpdated={refreshCounts} />
+        }
+    ];    
+    useEffect(() => {
+        if (!tabs.find(tab => tab.id === activeTab)) {
+            setActiveTab(tabs[0]?.id || "");
+        }
+    }, [tabs, activeTab]);
+    
     // run once on mount
     useEffect(() => {
         refreshCounts();
@@ -130,7 +196,7 @@ const Notification = () => {
             {/* Workboard Stats */}
             <div className="work-board">
 
-                <div className="row">
+                {/* <div className="row">
                     <div className="column">
                         <div className="card-header">
                             <div className="left">
@@ -138,9 +204,9 @@ const Notification = () => {
                                     Review Store Submissions
                                 </div>
                             </div>
-                            {/* <div className="right">
+                            <div className="right">
                                 <span>Updated 1 month ago</span>
-                            </div> */}
+                            </div>
                         </div>
                         <div className="overview-card-wrapper">
                             <div className="action">
@@ -183,7 +249,7 @@ const Notification = () => {
                             </div>
                         </div>
                     </div>
-
+                    
                     <div className="column">
                         <div className="card-header">
                             <div className="left">
@@ -295,45 +361,48 @@ const Notification = () => {
                             </ul>
                         </div>
                     </div>
+                </div> */}
+
+
+                <div className="row">
+                    <div className="overview-card-wrapper tab">
+                        {/* {CustomerServicesStats.map(stat => (
+                            <div className="action" key={stat.id}>
+                                <div className="title">
+                                    {stat.count}
+                                    <i className={stat.icon}></i>
+                                </div>
+                                <div className="description">
+                                    {stat.label}
+                                </div>
+                            </div>
+                        ))} */}
+                        {tabs.map((tab) => (
+                            <div className={`tab-action ${activeTab === tab.id ? "active" : ""}`} key={tab.id} onClick={() => setActiveTab(tab.id)}>
+                                <div className="details-wrapper">
+                                    <i className={tab.icon}></i>
+                                    <div className="title">{tab.count} {tab.label}</div>
+                                </div>
+                                <div className="description">
+                                    {tab.des}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
 
                 <div className="row">
                     <div className="column">
-                        <div className="action-tab-wrapper">
-                            <div className="card-header">
-                                <div className="left">
-                                    <div className="title">
-                                        Account Overview
-                                    </div>
-                                </div>
-                                <div className="right">
-                                    <i className="adminlib-more-vertical"></i>
-                                </div>
-                            </div>
-                            {/* Tab Titles */}
-                            <div className="tab-titles">
-                                {tabs.map((tab) => (
-                                    <div
-                                        key={tab.id}
-                                        className={`title ${activeTab === tab.id ? "active" : ""}`}
-                                        onClick={() => setActiveTab(tab.id)}
-                                    >
-                                        <p><i className="adminlib-cart"></i>{tab.label}</p>
-                                    </div>
-                                ))}
-                            </div>
-
-                            {/* Tab Content */}
-                            <div className="tab-content">
-                                {tabs.map(
-                                    (tab) =>
-                                        activeTab === tab.id && (
-                                            <div key={tab.id} className="tab-panel">
-                                                {tab.content}
-                                            </div>
-                                        )
-                                )}
-                            </div>
+                        {/* Tab Content */}
+                        <div className="tab-content">
+                            {tabs.map(
+                                (tab) =>
+                                    activeTab === tab.id && (
+                                        <div key={tab.id} className="tab-panel">
+                                            {tab.content}
+                                        </div>
+                                    )
+                            )}
                         </div>
                     </div>
                 </div>

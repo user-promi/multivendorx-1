@@ -11,6 +11,7 @@ const Store = () => {
   const [addStore, setaddStore] = useState(false);
   const [formData, setFormData] = useState<Record<string, string>>({});
   const [imagePreview, setImagePreview] = useState<string>('');
+  const [error, setError] = useState<string>('');
   const hash = location.hash;
   const navigate = useNavigate();
 
@@ -27,6 +28,14 @@ const Store = () => {
   // Submit store data
   const handleSubmit = () => {
     if (!formData || Object.keys(formData).length === 0) return;
+
+    const { name, slug } = formData;
+
+    if (!name?.trim() || !slug?.trim()) {
+      setError("Store Name and Store Slug are required.");
+      return;
+    }
+
     formData.status='active';
 
     console.log(formData)
@@ -152,6 +161,8 @@ const Store = () => {
               }
             >
               <div className="content">
+                {error && <p className="error-text" style={{ color: "red", marginTop: "5px" }}>{error}</p>}
+
                 <div className="form-group-wrapper">
                   <div className="form-group">
                     <label htmlFor="store-name">Store Name</label>
@@ -160,6 +171,7 @@ const Store = () => {
                       name="name"
                       value={formData.name || ''}
                       onChange={handleChange}
+                      required={true}
                     />
                   </div>
 
@@ -170,6 +182,7 @@ const Store = () => {
                       name="slug"
                       value={formData.slug || ''}
                       onChange={handleChange}
+                      required={true}
                     />
                   </div>
 
@@ -184,21 +197,18 @@ const Store = () => {
                   </div>
 
                   <div className="form-group">
-                    <label htmlFor="store-owner">Store Owner</label>
+                    <label htmlFor="store-owner">Set Primary Owner</label>
                     <SelectInput
-                      name="store_owners"
-                      options={appLocalizer.store_owners || []}
-                      type="multi-select"
-                      value={(formData.store_owners ? [].concat(formData.store_owners) : []).map((id: any) => {
-                        const match = (appLocalizer.store_owners || []).find(
-                          (opt: any) => String(opt.value) === String(id)
-                        );
-                        return match ? match.value : String(id);
-                      })}
-                      onChange={(selected: any) => {
-                        const store_owners = (selected as any[])?.map(option => option.value) || [];
-                        setFormData({ ...formData, store_owners }); //correct key
-                      }}
+                        name="store_owners"
+                        options={appLocalizer?.store_owners || []}
+                        value={formData.store_owners}
+                        type="single-select"
+                        onChange={(newValue: any) => {
+                            if (!newValue || Array.isArray(newValue)) return;
+                            
+                            const updated = { ...formData, store_owners: newValue.value };
+                            setFormData(updated); 
+                        }}
                     />
                   </div>
 

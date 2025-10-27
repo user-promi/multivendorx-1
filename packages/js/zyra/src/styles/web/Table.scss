@@ -231,7 +231,8 @@
                 }
 
                 &.id {
-                    max-width: 2.5rem;
+                    max-width: 2rem;
+                    padding-right: 0;
                 }
             }
 
@@ -291,11 +292,11 @@
                         align-items: center;
                     }
 
-                    img {
-                        width: 3.125rem;
-                        height: -webkit-max-content;
-                        border: 0.063rem solid #e0e4e9;
-                    }
+                    // img {
+                    //     width: 3.125rem;
+                    //     height: -webkit-max-content;
+                    //     border: 0.063rem solid #e0e4e9;
+                    // }
 
                     .main-input {
                         background: transparent;

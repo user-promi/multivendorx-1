@@ -25,10 +25,11 @@ export default {
                     id: 'seller-verification',
                     icon: "adminlib-google",
                     label: 'Seller Verification',
-                    // connected: false,
-                    // disableBtn: true,
-                    // countBtn: true,
+                    connected: true,
+                    disableBtn: true,
+                    countBtn: true,
                     openForm: true,
+                    enableOption: true,
                     desc: 'Verify store identity and business legitimacy',
                     formFields: [
                         {
@@ -87,6 +88,8 @@ export default {
                     icon: "adminlib-product",
                     label: 'Product Compliance',
                     openForm: true,
+                    disableBtn: true,
+                    countBtn: true,
                     desc: 'Ensure product listings meet marketplace standards',
                     formFields: [
                         {
@@ -151,6 +154,8 @@ export default {
                     icon: "adminlib-verification3",
                     label: 'Legal & Policy',
                     openForm: true,
+                    disableBtn: true,
+                    countBtn: true,
                     desc: 'Require acceptance of platform terms and policies',
                     formFields: [
                         {
@@ -215,6 +220,8 @@ export default {
                     icon: "adminlib-import",
                     label: 'Financial Compliance',
                     openForm: true,
+                    disableBtn: true,
+                    countBtn: true,
                     desc: 'Verify tax information and monitor transactions',
                     formFields: [
                         {

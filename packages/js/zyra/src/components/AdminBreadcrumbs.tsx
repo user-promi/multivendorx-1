@@ -87,7 +87,7 @@ const AdminBreadcrumbs: React.FC<AdminBreadcrumbsProps> = ({
                   })}
               </div>
 
-              {customContent && <div className="extra-content">{customContent}</div>}
+              {customContent && <div className="custom-content">{customContent}</div>}
             </div>
 
             {description && <div className="description">{description}</div>}

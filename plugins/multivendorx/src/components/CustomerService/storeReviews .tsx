@@ -313,7 +313,6 @@ const StoreReviews: React.FC = () => {
                     perPageOption={[10, 25, 50]}
                     totalCounts={totalRows}
                 />
-            </div>
 
             {/* ✅ Reply/Edit Popup */}
             {selectedReview && (

@@ -435,6 +435,9 @@
     width: 100%;
     padding: 0.5rem 0;
 
+    &.tab{
+        cursor: pointer;
+    }
     .action {
         width: 100%;
         padding: 1rem;
@@ -1158,7 +1161,6 @@
 .product-wrapper {
     display: flex;
     gap: 0.625rem;
-    gap: 0.5rem;
     cursor: pointer;
 
     .details {
@@ -1176,6 +1178,12 @@
             margin-bottom: 0.25rem;
         }
 
+    }
+
+    img {
+        width: 2.5rem;
+        height: 2.5rem;
+        object-fit: cover;
     }
 }
 

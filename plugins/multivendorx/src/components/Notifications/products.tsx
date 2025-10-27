@@ -4,6 +4,7 @@ import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 import { CalendarInput, Table, TableCell, CommonPopup, TextArea } from 'zyra';
 import { ColumnDef, RowSelectionState, PaginationState } from '@tanstack/react-table';
+import DefaultStore from "../../../assets/images/default-store.jpg";
 
 type StoreRow = {
     id?: number;
@@ -55,9 +56,9 @@ const Products: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
         const now = new Date();
         const formattedStartDate = formatDateToISO8601(startDate || new Date(now.getFullYear(), now.getMonth() - 1, now.getDate()));
         const formattedEndDate = formatDateToISO8601(endDate || now);
-    
+
         setData(null);
-    
+
         axios
             .get(`${appLocalizer.apiUrl}/wc/v3/products`, {
                 headers: { 'X-WP-Nonce': appLocalizer.nonce },
@@ -80,7 +81,7 @@ const Products: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
             })
             .catch(() => setData([]));
     };
-console.log(data)
+    console.log(data)
     useEffect(() => {
         const currentPage = pagination.pageIndex + 1;
         requestData(pagination.pageSize, currentPage);
@@ -153,7 +154,7 @@ console.log(data)
             header: __('Product', 'multivendorx'),
             cell: ({ row }) => {
                 const product = row.original;
-                const image = product.images?.[0]?.src || 'https://via.placeholder.com/50';
+                const image = product.images?.[0]?.src || DefaultStore;
                 return (
                     <TableCell title={product.name || ''}>
                         <a
@@ -162,7 +163,7 @@ console.log(data)
                             rel="noreferrer"
                             className="product-wrapper"
                         >
-                            <img src={image} alt={product.name} style={{ width: 40, height: 40, objectFit: 'cover' }} />
+                            <img src={image} alt={product.name} />
                             <span>{product.name || '-'}</span>
                         </a>
                     </TableCell>
@@ -245,7 +246,7 @@ console.log(data)
     ];
 
     return (
-        <div className="admin-table-wrapper">
+        <>
             <Table
                 data={data}
                 columns={columns as ColumnDef<Record<string, any>, any>[]}
@@ -308,7 +309,7 @@ console.log(data)
                     </div>
                 </CommonPopup>
             )}
-        </div>
+        </>
     );
 };
 

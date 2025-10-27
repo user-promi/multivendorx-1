@@ -8,6 +8,7 @@ import {
     RowSelectionState,
     PaginationState,
 } from '@tanstack/react-table';
+import DefaultStore from "../../../assets/images/default-store.jpg";
 
 type StoreRow = {
     id?: number;
@@ -206,16 +207,9 @@ const StoreTable: React.FC = () => {
                                 window.location.href = `?page=multivendorx#&tab=stores&view&id=${row.original.id}`;
                             }}
                             className="product-wrapper"
-                            style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px' }}
                         >
                             <img 
                                 src={getStoreImage(row.original)}
-                                style={{ 
-                                    width: 40, 
-                                    height: 40, 
-                                    objectFit: 'cover',
-                                    borderRadius: '4px'
-                                }} 
                                 alt={row.original.store_name}
                                 onError={(e) => {
                                     const target = e.target as HTMLImageElement;
@@ -225,10 +219,10 @@ const StoreTable: React.FC = () => {
                                 }}
                             />
                             <div className="details">
-                                <span className="title" style={{ fontWeight: 'bold', display: 'block' }}>
+                                <span className="title">
                                     {row.original.store_name || '-'}
                                 </span>
-                                <span style={{ fontSize: '12px', color: '#666' }}>
+                                <span>
                                     Since {formattedDate}
                                 </span>
                             </div>
