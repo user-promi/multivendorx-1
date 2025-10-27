@@ -193,16 +193,6 @@ class Install {
             PRIMARY KEY (`ID`)
         ) $collate;";
 
-        $sql_shipping_zone = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}" . Utill::TABLES['shipping_zone'] . "` (
-            `instance_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-            `method_id` varchar(255) NOT NULL DEFAULT '',
-            `store_id` int(11) unsigned NOT NULL,
-            `vendor_id` int(11) NOT NULL,
-            `is_enabled` tinyint(1) NOT NULL DEFAULT '1',
-            `settings` longtext,
-            PRIMARY KEY (`instance_id`)
-        ) $collate;";
-
         $sql_shipping_zone_locations = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}" . Utill::TABLES['shipping_zone_locations'] . "` (
             `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
             `store_id` int(11) DEFAULT NULL,
@@ -233,7 +223,6 @@ class Install {
         dbDelta( $sql_real_time_transaction );
         dbDelta( $sql_qna );
         dbDelta( $sql_report_abuse );
-        dbDelta( $sql_shipping_zone );
         dbDelta( $sql_shipping_zone_locations );
         dbDelta( $sql_product_map );
     }

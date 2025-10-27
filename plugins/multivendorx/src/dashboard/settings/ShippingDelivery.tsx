@@ -89,7 +89,7 @@ const ShippingDelivery = () => {
                                 onChange={(value: any) => handleToggleChange(value, 'shipping_options')}
                             />
                             {/* //zone by shipping */}
-                            {formData.shipping_options === 'distance_by_zone' && <DistanceByZoneShipping />}
+                            {formData.shipping_options === 'shipping_by_zone' && <DistanceByZoneShipping />}
 
                             {/* country wise shipping */}
                             {formData.shipping_options === 'shipping_by_country' && (
@@ -194,7 +194,7 @@ const ShippingDelivery = () => {
                             )}
 
 
-                            {formData.shipping_options === 'distance_by_shipping' && (
+                            {formData.shipping_options === 'shipping_by_distance' && (
                                 <>
                                     <div className="card-title">Distance-wise Shipping Configuration</div>
 

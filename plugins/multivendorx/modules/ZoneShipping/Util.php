@@ -19,7 +19,7 @@ class Util {
             $enabled_methods    = $zone->get_shipping_methods( true );
             $methods_id         = wp_list_pluck( $enabled_methods, 'id' );
 
-            if ( in_array( 'multivendorx_vendor_shipping', $methods_id ) ) {
+            if ( in_array( 'multivendorx_store_shipping', $methods_id ) ) {
                 $zones[$zone->get_id()]                            = $zone->get_data();
                 $zones[$zone->get_id()]['zone_id']                 = $zone->get_id();
                 $zones[$zone->get_id()]['formatted_zone_location'] = $zone->get_formatted_location();
@@ -31,7 +31,7 @@ class Util {
         $enabled_methods    = $overall_zone->get_shipping_methods( true );
         $methods_id         = wp_list_pluck( $enabled_methods, 'id' );
 
-        if ( in_array( 'multivendorx_vendor_shipping', $methods_id ) ) {
+        if ( in_array( 'multivendorx_store_shipping', $methods_id ) ) {
             $zones[$overall_zone->get_id()]                            = $overall_zone->get_data();
             $zones[$overall_zone->get_id()]['zone_id']                 = $overall_zone->get_id();
             $zones[$overall_zone->get_id()]['formatted_zone_location'] = $overall_zone->get_formatted_location();
@@ -71,42 +71,11 @@ class Util {
         return $zone;
     }
 
-    public static function add_shipping_methods( $data, $store_id = 0 ) {
+    public static function delete_shipping_methods( $data, $store_id = 0 ) {
         global $wpdb;
 
         $table = $wpdb->prefix . Utill::TABLES['shipping_zone'];
-
-        if ( empty( $data['method_id'] ) ) {
-            return new WP_Error( 'no-method-id', __( 'No shipping method found for adding', 'multivendorx' ) );
-        }
-
-        $result = $wpdb->insert(
-            esc_sql($table),
-            array(
-                'method_id' => esc_sql($data['method_id']),
-                'zone_id'   => esc_sql($data['zone_id']),
-                'store_id' => $store_id
-            ),
-            array(
-                '%s',
-                '%d',
-                '%d'
-            )
-        );
-
-        if ( ! $result ) {
-            return new WP_Error( 'method-not-added', __( 'Shipping method not added successfully', 'multivendorx' ) );
-        }
-
-        return $wpdb->insert_id;
-    }
-
-    public static function delete_shipping_methods( $data, $vendor_id = 0 ) {
-        global $wpdb;
-
-        $table_name = "{$wpdb->prefix}mvx_shipping_zone_methods";
-        $vendor_id = $vendor_id ? $vendor_id : apply_filters( 'mvx_current_vendor_id', get_current_user_id() );
-        $result = $wpdb->query( $wpdb->prepare( "DELETE FROM {$table_name} WHERE zone_id=%d AND vendor_id=%d AND instance_id=%d", $data['zone_id'], $vendor_id, $data['instance_id'] ) );
+        $result = $wpdb->query( $wpdb->prepare( "DELETE FROM {$table} WHERE zone_id=%d AND store_id=%d AND instance_id=%d", $data['zone_id'], $store_id, $data['instance_id'] ) );
 
         if ( ! $result ) {
             return new WP_Error( 'method-not-deleted', __( 'Shipping method not deleted', 'multivendorx' ) );
@@ -116,68 +85,96 @@ class Util {
     }
 
     public static function get_shipping_methods( $zone_id, $store_id ) {
-        global $wpdb;
-        $table = $wpdb->prefix . Utill::TABLES['shipping_zone'];
-
-        $results = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $table WHERE `zone_id`=%d AND `store_id`=%d",$zone_id, $store_id ) );
-
-        $store_shipping_methods = self::multivendorx_get_shipping_methods();
-
-        $method = array();
-
-        $asc_order = get_user_meta($store_id, 'multivendorx_vendor_shipping_zone_order', true);
-        if ($asc_order) {
-            usort($results, function ($a, $b) use ($asc_order) {
-                $pos_a = array_search($a->instance_id, $asc_order);
-                $pos_b = array_search($b->instance_id, $asc_order);
-                return $pos_a - $pos_b;
-            });
+        $store = new \MultiVendorX\Store\Store( $store_id );
+    
+        $all_meta = $store->get_all_meta();
+    
+        $methods = [];
+    
+        foreach ( $all_meta as $key => $value ) {
+            // Match keys ending with _{zone_id}
+            if ( preg_match( '/_(\d+)$/', $key, $matches ) && intval($matches[1]) === $zone_id ) {
+                $method_id = str_replace( '_' . $zone_id, '', $key );
+    
+                // Ensure $value is array (decode if JSON)
+                if ( is_string( $value ) ) {
+                    $value = json_decode( $value, true );
+                }
+    
+                $methods[] = [
+                    'id'       => $method_id,
+                    'title'    => isset($value['title']) ? $value['title'] : $method_id,
+                    'settings' => $value,
+                    'enabled'  => 'yes',
+                ];
+            }
         }
-
-        foreach ( $results as $key => $result ) {
-            $shipping_method = isset( $store_shipping_methods[$result->method_id] ) ? $store_shipping_methods[$result->method_id] : array();
-            $default_settings = array(
-                'title'       => ( $shipping_method ) ? $shipping_method->get_method_title() : self::get_method_label( $result->method_id ),
-                'description' => ( $shipping_method ) ? $shipping_method->get_method_description() : __( 'Lets you charge a rate for shipping', 'multivendorx' ),
-                'cost'        => '0',
-                'tax_status'  => 'none'
-            );
-
-            $method_id = $result->method_id .':'. $result->instance_id;
-            $settings = ! empty( $result->settings ) ? maybe_unserialize( $result->settings ) : array();
-            // temp code
-            $settings['description'] = ( $shipping_method ) ? $shipping_method->get_method_description() : ( isset($settings['description']) ? $settings['description'] : '' );
-            $settings = wp_parse_args( $settings, $default_settings );
-
-            $method[$method_id]['instance_id'] = $result->instance_id;
-            $method[$method_id]['id']          = $result->method_id;
-            $method[$method_id]['enabled']     = ( $result->is_enabled ) ? 'yes' : 'no';
-            $method[$method_id]['title']       = $settings['title'];
-            $method[$method_id]['settings']    = array_map( 'stripslashes_deep', maybe_unserialize( $settings ) );
-        }
-        return $method;
+    
+        return $methods;
     }
-
+    
+    public static function get_shipping_method( $store_id, $method_id, $zone_id ) {
+        $store = new \MultiVendorX\Store\Store( $store_id );
+    
+        // Build the meta key
+        $meta_key = $method_id . '_' . $zone_id;
+    
+        // Get the meta value
+        $settings = $store->get_meta( $meta_key );
+    
+        if ( empty( $settings ) ) {
+            return new \WP_Error(
+                'shipping_method_not_found',
+                __( 'Shipping method not found.', 'multivendorx' ),
+                [ 'status' => 404 ]
+            );
+        }
+    
+        // Decode JSON if stored as string
+        if ( is_string( $settings ) ) {
+            $settings = json_decode( $settings, true );
+        }
+    
+        return [
+            'method_id' => $method_id,
+            'zone_id'   => $zone_id,
+            'settings'  => $settings,
+            'enabled'   => 'yes', // keep previous behavior
+        ];
+    }
+    
+    public static function delete_shipping_method( $store_id, $zone_id, $method_id ) {
+        $store = new \MultiVendorX\Store\Store( $store_id );
+        $meta_key = $method_id . '_' . $zone_id; // Same key format as update_shipping_method
+    
+        // Check if the shipping method exists
+        $existing = $store->get_meta( $meta_key );
+        if ( ! $existing ) {
+            return new \WP_Error(
+                'shipping_method_not_found',
+                __( 'Shipping method not found', 'multivendorx' ),
+                [ 'status' => 404 ]
+            );
+        }
+    
+        // Delete the method from store meta
+        $store->delete_meta( $meta_key );
+    
+        return true;
+    }
     public static function update_shipping_method( $args ) {
-        global $wpdb;
-
-        $data = array(
+        $store = new \MultiVendorX\Store\Store( $args['store_id'] );
+        $meta_key = $args['method_id'] . '_' . $args['zone_id']; // key format: methodId_zoneId
+        $store->update_meta( $meta_key, $args['settings'] );
+    
+        return [
             'method_id' => $args['method_id'],
             'zone_id'   => $args['zone_id'],
-            'vendor_id' => empty( $args['vendor_id'] ) ? apply_filters( 'mvx_current_vendor_id', get_current_user_id() ) : $args['vendor_id'],
-            'settings'  => maybe_serialize( $args['settings'] )
-        );
-
-        $table_name = "{$wpdb->prefix}mvx_shipping_zone_methods";
-        $updated = $wpdb->update( $table_name, $data, array( 'instance_id' => $args['instance_id' ] ), array( '%s', '%d', '%d', '%s' ) );
-
-        if ( $updated ) {
-            return $data;
-        }
-
-        return false;
+            'store_id'  => $args['store_id'],
+            'settings'  => $args['settings']
+        ];
     }
-
+    
     public static function toggle_shipping_method( $data, $vendor_id = 0 ) {
         global $wpdb;
         $table_name = "{$wpdb->prefix}mvx_shipping_zone_methods";
