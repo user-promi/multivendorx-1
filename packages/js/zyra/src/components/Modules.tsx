@@ -168,43 +168,44 @@ const Modules: React.FC<ModuleProps> = ({
         }
     };
     useEffect(() => {
-    let highlightedElement: HTMLElement | null = null;
+        let highlightedElement: HTMLElement | null = null;
 
-    const scrollToTargetSection = () => {
-        const hash = window.location.hash;
-        const params = new URLSearchParams(hash.replace('#&', ''));
-        const targetId = params.get('module'); // your dynamic module id
+        const scrollToTargetSection = () => {
+            const hash = window.location.hash;
+            const params = new URLSearchParams(hash.replace('#&', ''));
+            const targetId = params.get('module');
 
-        if (targetId) {
-            setTimeout(() => {
-                const targetElement = document.getElementById(targetId);
-                if (targetElement) {
-                    targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    targetElement.classList.add('highlight');
-                    highlightedElement = targetElement;
-                }
-            }, 500);
-        }
-    };
+            if (targetId) {
+                setTimeout(() => {
+                    const targetElement = document.getElementById(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        targetElement.classList.add('highlight');
+                        highlightedElement = targetElement;
+                    }
+                }, 500);
+            }
+        };
 
-    // Remove highlight if click is outside the element
-    const handleClickOutside = (event: MouseEvent) => {
-        if (highlightedElement && !highlightedElement.contains(event.target as Node)) {
-            highlightedElement.classList.remove('highlight');
-            highlightedElement = null;
-        }
-    };
+        // Remove highlight when clicking anywhere
+        const handleClickAnywhere = () => {
+            if (highlightedElement) {
+                highlightedElement.classList.remove('highlight');
+                highlightedElement = null;
+            }
+        };
 
-    scrollToTargetSection();
+        scrollToTargetSection();
 
-    window.addEventListener('hashchange', scrollToTargetSection);
-    document.addEventListener('click', handleClickOutside);
+        window.addEventListener('hashchange', scrollToTargetSection);
+        document.addEventListener('click', handleClickAnywhere);
 
-    return () => {
-        window.removeEventListener('hashchange', scrollToTargetSection);
-        document.removeEventListener('click', handleClickOutside);
-    };
-}, [filteredModules]);
+        return () => {
+            window.removeEventListener('hashchange', scrollToTargetSection);
+            document.removeEventListener('click', handleClickAnywhere);
+        };
+    }, [filteredModules]);
+
 
 
     return (
@@ -375,9 +376,9 @@ const Modules: React.FC<ModuleProps> = ({
                                     )}
                                     <div className="module-footer">
                                         <div className="buttons">
-                                            {module.doc_link && (<a href={module.doc_link}><i className="adminlib-book"></i></a>)}
-                                            {module.video_link && (<a href={module.video_link}><i className="adminlib-button-appearance"></i></a>)}
-                                            {module.settings_link && (<a href={module.settings_link}><i className="adminlib-setting"></i></a>)}
+                                            {module.doc_link && (<a href={module.doc_link} target="_blank"><i className="adminlib-book"></i></a>)}
+                                            {module.video_link && (<a href={module.video_link} target="_blank"><i className="adminlib-button-appearance"></i></a>)}
+                                            {module.settings_link && (<a href={module.settings_link} ><i className="adminlib-setting"></i></a>)}
                                         </div>
                                         <div
                                             className="toggle-checkbox"

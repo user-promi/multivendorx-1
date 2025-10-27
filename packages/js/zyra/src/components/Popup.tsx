@@ -48,6 +48,7 @@ const ProPopup: React.FC<PopupProps> = (props) => {
     useEffect(() => {
         setSelectedBtn(btnLink.length ? btnLink[0] : { site: '', price: '', link: proUrl });
     }, [btnLink, proUrl]);
+                        console.log(props);
 
     return (
         <DialogContent className={`${props.messages ? "pro-popup-content" : "module-popup-content"}`}>
@@ -141,7 +142,7 @@ const ProPopup: React.FC<PopupProps> = (props) => {
                         <>
                             <div className="module-left-section">
                                 <div className="module-icon">
-                                    <i className={`adminlib-${props.moduleName}`}></i>
+                                    <i className="adminlib-rules"></i>
                                 </div>
                             </div>
                             <div className="module-right-section">

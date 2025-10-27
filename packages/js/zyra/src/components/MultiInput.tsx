@@ -337,7 +337,7 @@ const MultiInput: React.FC<MultiInputProps> = (props) => {
           <i className="adminlib-pro-tag"></i>Pro
         </span>
       )}
-      {(!proSetting && moduleEnabled) && <span className="admin-pro-tag module"><i className="adminlib-module"></i>Module</span>}
+      
       {description && (
         <p
           className={`${descClass} settings-metabox-description`}

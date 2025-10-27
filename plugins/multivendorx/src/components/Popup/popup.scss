@@ -116,8 +116,9 @@
 }
 
 .module-popup-content {
+    width: 25rem;
     .popup-wrapper {
-        padding: 2.5rem;
+        padding: 2rem;
 
         .module-icon {
             text-align: center;
@@ -133,9 +134,12 @@
         h2{
             margin-bottom: 0;
             font-size: 1.5rem;
+            text-align: center;
         }
         p{
             margin-top: 0;
+            text-align: center;
+            font-size: 0.95rem;
         }
     }
 }

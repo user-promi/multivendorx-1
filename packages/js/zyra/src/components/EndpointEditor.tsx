@@ -201,7 +201,7 @@ const EndpointManager: React.FC<EndpointEditorProps> = ({
                 return (
                   <li
                     key={i}
-                    className="sub-menu cursor-move"
+                    className="sub-menu"
                     style={{ opacity: endpoint.visible === false ? 0.5 : 1 }}
                   >
                     {editKey === subKey ? (
@@ -262,9 +262,9 @@ const EndpointManager: React.FC<EndpointEditorProps> = ({
       >
         <div>
           {endpoints.map(([key, endpoint], index) => (
-            <div key={key} className="endpoint drag-row cursor-move">
+            <div key={key} className="endpoint drag-row">
               {key === 'dashboard' ? (
-                <div>{renderRow([key, endpoint], index)}</div>
+                <div className="dashboard">{renderRow([key, endpoint], index)}</div>
               ) : (
                 <div className="drag-handle menu-wrapper">
                   {renderRow([key, endpoint], index)}

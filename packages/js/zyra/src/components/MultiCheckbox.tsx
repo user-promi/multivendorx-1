@@ -152,6 +152,7 @@ const MultiCheckBox: React.FC<MultiCheckBoxProps> = (props) => {
                                 <label htmlFor={`${props.idPrefix}-${option.key}`}>
                                     {option.label}
                                 </label>
+                                {/* <div className="des">Lorem ipsum dolor sit amet.</div> */}
                             </div>
                         </div>
                     );
