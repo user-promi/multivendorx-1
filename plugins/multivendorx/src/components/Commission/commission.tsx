@@ -367,12 +367,9 @@ const Commission: React.FC = () => {
                 onClick={handleExportAll}
                 disabled={isDownloading}
                 className="admin-btn btn-purple"
-                style={{ 
-                    opacity: isDownloading ? 0.6 : 1
-                }}
             >
                 <i className="adminlib-export"></i>
-                {isDownloading ? __('Exporting...', 'multivendorx') : __('Export All CSV', 'multivendorx')}
+                 Export Commissions
             </button>
         );
     };
