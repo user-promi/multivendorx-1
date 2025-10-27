@@ -51,16 +51,12 @@ const Qna: React.FC = () => {
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
     const [totalRows, setTotalRows] = useState<number>(0);
 
-    const [viewQna, setViewQna] = useState(false);
-    const [selectedQnaId, setSelectedQnaId] = useState<number | null>(null);
-
     const [pagination, setPagination] = useState<PaginationState>({
         pageIndex: 0,
         pageSize: 10,
     });
     const [pageCount, setPageCount] = useState(0);
 
-    const [showDropdown, setShowDropdown] = useState(false);
 
     // Fetch total rows on mount
     useEffect(() => {
@@ -86,18 +82,6 @@ const Qna: React.FC = () => {
         setPageCount(Math.ceil(totalRows / rowsPerPage));
     }, [pagination]);
 
-    useEffect(() => {
-        const handleClickOutside = (e: MouseEvent) => {
-            // if click is not on dropdown toggle or inside dropdown → close it
-            if (!(e.target as HTMLElement).closest(".action-dropdown") &&
-                !(e.target as HTMLElement).closest(".adminlib-more-vertical")) {
-                setShowDropdown(false);
-            }
-        };
-
-        document.addEventListener("click", handleClickOutside);
-        return () => document.removeEventListener("click", handleClickOutside);
-    }, []);
 
     // Fetch data from backend.
     function requestData(

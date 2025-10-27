@@ -192,4 +192,180 @@ class Util {
         ));
     }
     
+    /**
+     * Fetch review information from database.
+     * Supports filtering by ID, store, customer, date range, pagination, and count.
+     */
+    public static function get_review_information( $args ) {
+        global $wpdb;
+        $where = [];
+
+        // 🔹 Filter by review IDs
+        if ( isset( $args['review_id'] ) ) {
+            $ids = is_array( $args['review_id'] ) ? $args['review_id'] : [ $args['review_id'] ];
+            $ids = implode( ',', array_map( 'intval', $ids ) );
+            $where[] = "review_id IN ($ids)";
+        }
+
+        // 🔹 Filter by store_id
+        if ( isset( $args['store_id'] ) ) {
+            $where[] = "store_id = " . intval( $args['store_id'] );
+        }
+
+        // 🔹 Filter by customer_id
+        if ( isset( $args['customer_id'] ) ) {
+            $where[] = "customer_id = " . intval( $args['customer_id'] );
+        }
+
+        // 🔹 Filter by order_id
+        if ( isset( $args['order_id'] ) ) {
+            $where[] = "order_id = " . intval( $args['order_id'] );
+        }
+
+        // 🔹 Filter by review status (pending, approved, rejected, etc.)
+        if ( isset( $args['status'] ) && $args['status'] !== '' ) {
+            $where[] = "status = '" . esc_sql( $args['status'] ) . "'";
+        }
+
+        // 🔹 Filter by reported flag
+        if ( isset( $args['reported'] ) ) {
+            $where[] = "reported = " . intval( $args['reported'] );
+        }
+
+        // 🔹 Filter by start_date
+        if ( !empty( $args['start_date'] ) ) {
+            $where[] = "date_created >= '" . esc_sql( $args['start_date'] ) . "'";
+        }
+
+        // 🔹 Filter by end_date
+        if ( !empty( $args['end_date'] ) ) {
+            $where[] = "date_created <= '" . esc_sql( $args['end_date'] ) . "'";
+        }
+
+        // 🔹 Table name (update according to your DB structure)
+        $table = $wpdb->prefix . Utill::TABLES['review'];
+
+        // 🔹 Build query
+        if ( isset( $args['count'] ) ) {
+            $query = "SELECT COUNT(*) FROM $table";
+        } else {
+            $query = "SELECT * FROM $table";
+        }
+
+        // 🔹 Add WHERE conditions
+        if ( !empty( $where ) ) {
+            $condition = $args['condition'] ?? ' AND ';
+            $query .= ' WHERE ' . implode( $condition, $where );
+        }
+
+        // 🔹 Order results
+        if ( !isset( $args['count'] ) ) {
+            $order_by  = $args['order_by']  ?? 'date_created';
+            $order_dir = $args['order_dir'] ?? 'DESC';
+            $query .= " ORDER BY " . esc_sql( $order_by ) . " " . esc_sql( $order_dir );
+        }
+
+        // 🔹 Limit & offset
+        if ( isset( $args['limit'] ) && isset( $args['offset'] ) && !isset( $args['count'] ) ) {
+            $query .= " LIMIT " . intval( $args['limit'] ) . " OFFSET " . intval( $args['offset'] );
+        }
+
+        // 🔹 Execute query
+        if ( isset( $args['count'] ) ) {
+            return (int) $wpdb->get_var( $query );
+        } else {
+            return $wpdb->get_results( $query, ARRAY_A ) ?? [];
+        }
+    }
+    public static function update_review( $id, $data ) {
+        global $wpdb;
+    
+        // Define main review table
+        $table = $wpdb->prefix . Utill::TABLES['review'];
+    
+        // Nothing to update
+        if ( empty( $data ) ) {
+            return false;
+        }
+    
+        // Sanitize & prepare update data
+        $update_data   = [];
+        $update_format = [];
+    
+        if ( isset( $data['reply'] ) ) {
+            $update_data['reply'] = sanitize_textarea_field( $data['reply'] );
+            $update_format[] = '%s';
+        }
+    
+        if ( isset( $data['reply_date'] ) ) {
+            $update_data['reply_date'] = sanitize_text_field( $data['reply_date'] );
+            $update_format[] = '%s';
+        }
+    
+        if ( isset( $data['status'] ) ) {
+            $update_data['status'] = sanitize_text_field( $data['status'] );
+            $update_format[] = '%s';
+        }
+    
+        // No valid data
+        if ( empty( $update_data ) ) {
+            return false;
+        }
+    
+        $where         = [ 'review_id' => intval( $id ) ];
+        $where_format  = [ '%d' ];
+    
+        $updated = $wpdb->update(
+            $table,
+            $update_data,
+            $where,
+            $update_format,
+            $where_format
+        );
+    
+        // $wpdb->update returns number of rows updated, or false on error
+        if ( $updated === false ) {
+            return false; // DB error
+        }
+    
+        return true; // success, even if no change
+    }
+
+    public static function delete_review( $id ) {
+        global $wpdb;
+    
+        $review_table = $wpdb->prefix . Utill::TABLES['review'];
+        $rating_table = $wpdb->prefix . Utill::TABLES['rating'];
+    
+        $id = intval( $id );
+        if ( ! $id ) {
+            return false;
+        }
+    
+        // Begin transaction (optional but good practice if supported)
+        $wpdb->query( 'START TRANSACTION' );
+    
+        //Delete from ratings first
+        $wpdb->delete(
+            $rating_table,
+            [ 'review_id' => $id ],
+            [ '%d' ]
+        );
+    
+        //Delete from main review table
+        $deleted = $wpdb->delete(
+            $review_table,
+            [ 'review_id' => $id ],
+            [ '%d' ]
+        );
+    
+        if ( $deleted === false ) {
+            $wpdb->query( 'ROLLBACK' );
+            return false;
+        }
+    
+        $wpdb->query( 'COMMIT' );
+        return true;
+    }
+    
 }
