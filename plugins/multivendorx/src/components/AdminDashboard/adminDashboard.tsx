@@ -155,11 +155,11 @@ const AdminDashboard = () => {
     {
       title: 'Product & Store Tools',
       features: [
-        { name: "Multiple Vendors per Product (SPMV)", free: true, pro: true },
-        { name: "Store Policies", free: true, pro: true },
-        { name: "Store Reviews", free: true, pro: true },
-        { name: "Follow Store", free: true, pro: true },
-        { name: "Privacy Controls (Hide details)", free: true, pro: true },
+        { name: "Multiple vendors per product (SPMV)", free: true, pro: true },
+        { name: "Store policies", free: true, pro: true },
+        { name: "Store reviews", free: true, pro: true },
+        { name: "Follow store", free: true, pro: true },
+        { name: "Privacy controls (hide details)", free: true, pro: true },
         { name: "Confirm vendor identity with documents", free: false, pro: true },
         { name: "Bulk upload/download product via CSV", free: false, pro: true },
         { name: "Display store opening/closing times", free: false, pro: true },
@@ -181,23 +181,23 @@ const AdminDashboard = () => {
       title: ' Deliver Seamless Shopping Experiences',
       features: [
         { name: "Product Q&A", free: true, pro: true },
-        { name: "Marketplace Refunds", free: true, pro: true },
+        { name: "Marketplace refunds", free: true, pro: true },
         { name: "Announcements", free: true, pro: true },
-        { name: "Report Abuse", free: true, pro: true },
-        { name: "Invoices & Packing Slips", free: false, pro: true },
-        { name: "Live Chat", free: false, pro: true },
-        { name: "Customer Support", free: false, pro: true },
+        { name: "Product abuse report", free: true, pro: true },
+        { name: "Invoices & packing slips", free: false, pro: true },
+        { name: "Live chat", free: false, pro: true },
+        { name: "Customer support", free: false, pro: true },
         { name: "Enquiry", free: false, pro: true },
       ],
     },
     {
       title: ' Ship the Way You Want',
       features: [
-        { name: "Zone-Based Shipping", free: true, pro: true },
-        { name: "Distance-Based Shipping", free: true, pro: true },
-        { name: "Country Restrictions", free: true, pro: true },
-        { name: "Weight-Based Shipping", free: true, pro: true },
-        { name: "Per-Product Shipping", free: false, pro: true },
+        { name: "Zone-based shipping", free: true, pro: true },
+        { name: "Distance-based shipping", free: true, pro: true },
+        { name: "Country restrictions", free: true, pro: true },
+        { name: "Weight-based shipping", free: true, pro: true },
+        { name: "Per-product shipping", free: false, pro: true },
       ],
     },
     {
@@ -214,9 +214,10 @@ const AdminDashboard = () => {
     {
       title: 'Automate Rules and Commissions',
       features: [
-        { name: "Payment Gateway Fees", free: true, pro: true },
-        { name: "Min/Max Quantities", free: true, pro: true },
-        { name: "Facilitator Fees", free: false, pro: true },
+        { name: "Payment gateway fees", free: true, pro: true },
+        { name: "Min/Max quantities", free: true, pro: true },
+        { name: "Facilitator fees", free: false, pro: true },
+        { name: "Marketplace fees", free: false, pro: true },
       ],
     },
   ];
@@ -232,18 +233,18 @@ const AdminDashboard = () => {
     return value; // text like "Basic" or "Advanced"
   };
   const demoModules: Module[] = [
-    { id: 1, name: 'Identity Verification', iconClass: 'adminlib-booking', hasToggle: true },
-    { id: 2, name: 'Staff Manager', iconClass: 'adminlib-booking', pro: true },
-    { id: 3, name: 'Vacation Mode', iconClass: 'adminlib-report', hasToggle: true },
-    { id: 4, name: 'Business Hours', iconClass: 'adminlib-analytics', pro: true },
-    { id: 5, name: 'Store Inventory', iconClass: 'adminlib-analytics', hasToggle: true },
-    { id: 6, name: 'Min/Max Quantities', iconClass: 'adminlib-analytics', pro: true },
+    { id: 1, name: 'Identity verification', iconClass: 'adminlib-booking', hasToggle: true },
+    { id: 2, name: 'Staff manager', iconClass: 'adminlib-booking', pro: true },
+    { id: 3, name: 'Vacation mode', iconClass: 'adminlib-report', hasToggle: true },
+    { id: 4, name: 'Business hours', iconClass: 'adminlib-analytics', pro: true },
+    { id: 5, name: 'Store inventory', iconClass: 'adminlib-analytics', hasToggle: true },
+    { id: 6, name: 'Min/Max quantities', iconClass: 'adminlib-analytics', pro: true },
     { id: 7, name: 'Wholesale', iconClass: 'adminlib-analytics', hasToggle: true },
-    { id: 8, name: 'PayPal Marketplace (Real-time Split)', iconClass: 'adminlib-analytics', pro: true },
-    { id: 9, name: 'Stripe Marketplace (Real-time Split)', iconClass: 'adminlib-booking', hasToggle: true },
+    { id: 8, name: 'PayPal marketplace (Real-time Split)', iconClass: 'adminlib-analytics', pro: true },
+    { id: 9, name: 'Stripe marketplace (Real-time Split)', iconClass: 'adminlib-booking', hasToggle: true },
     { id: 10, name: 'Facilitator', iconClass: 'adminlib-booking', pro: true },
     { id: 11, name: 'Notifications', iconClass: 'adminlib-booking', hasToggle: true },
-    { id: 12, name: 'Invoice & Packing Slip', iconClass: 'adminlib-setting', pro: true },
+    { id: 12, name: 'Invoice & packing slip', iconClass: 'adminlib-setting', pro: true },
   ];
 
   const [activeTab, setActiveTab] = useState("dashboard");
