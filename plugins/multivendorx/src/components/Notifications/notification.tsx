@@ -180,66 +180,7 @@ const Notification = () => {
             setActiveTab(tabs[0]?.id || "");
         }
     }, [tabs, activeTab]);
-        {
-            id: "products", label: "Store", icon: "adminlib-calendar red", count: storeCount, des: "Waitng for Wholesale Customer Approval", content:
-                <><div className="card-header">
-                    <div className="left">
-                        <div className="title">
-                            Store
-                        </div>
-                        <div className="des">Track and handle customer refund requests.</div>
-                    </div>
-                    <div className="right">
-                        <i className="adminlib-more-vertical"></i>
-                    </div>
-                </div>
-                    <Products onUpdated={refreshCounts} />
-                </>
-        },
-        {
-            id: "stores", label: "Verification", icon: "adminlib-calendar green", count: 9, des: "Waitng for Wholesale Customer Approval", content: <><div className="card-header">
-                <div className="left">
-                    <div className="title">
-                        Verification
-                    </div>
-                    <div className="des">Track and handle customer refund requests.</div>
-                </div>
-                <div className="right">
-                    <i className="adminlib-more-vertical"></i>
-                </div>
-            </div><Vendors onUpdated={refreshCounts} /> </>
-        },
-        {
-            id: "coupons", label: "Requests", icon: "adminlib-calendar blue", count: 9, des: "Waitng for Wholesale Customer Approval", content: <><div className="card-header">
-                <div className="left">
-                    <div className="title">
-                        Refund Requests
-                    </div>
-                    <div className="des">Track and handle customer refund requests.</div>
-                </div>
-                <div className="right">
-                    <i className="adminlib-more-vertical"></i>
-                </div>
-            </div> <Coupons onUpdated={refreshCounts} /> </>
-        },
-        {
-            id: "product-approval", label: "Product", icon: "adminlib-calendar yellow", count: productCount, des: "Waitng for Wholesale Customer Approval", content: <><div className="card-header">
-                <div className="left">
-                    <div className="title">
-                        Refund Requests
-                    </div>
-                    <div className="des">Track and handle customer refund requests.</div>
-                </div>
-                <div className="right">
-                    <i className="adminlib-more-vertical"></i>
-                </div>
-            </div> <Transactions onUpdated={refreshCounts} /> </>
-        },
-        { id: "Coupon", label: "Coupon", icon: "adminlib-calendar green", count: couponCount, des: "Waitng for Wholesale Customer Approval", content: <Transactions onUpdated={refreshCounts} /> },
-        { id: "wholesale-customer", label: "Wholesale", icon: "adminlib-calendar red", count: 9, des: "Waitng for Wholesale Customer Approval", content: <Transactions onUpdated={refreshCounts} /> },
-        { id: "Withdrawal", label: "Withdrawal", icon: "adminlib-calendar yellow", count: transactionCount, des: "Waitng for Wholesale Customer Approval", content: <Transactions onUpdated={refreshCounts} /> },
-
-    ];
+    
     // run once on mount
     useEffect(() => {
         refreshCounts();
