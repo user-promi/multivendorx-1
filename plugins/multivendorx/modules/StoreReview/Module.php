@@ -46,6 +46,7 @@ class Module {
         $this->container['frontend'] = new Frontend();
         $this->container['admin'] = new Admin();
         $this->container['ajax'] = new Ajax();
+        $this->container['rest'] = new MultiVendorX_REST_Store_Review_Controller();
     }
 
     /**
