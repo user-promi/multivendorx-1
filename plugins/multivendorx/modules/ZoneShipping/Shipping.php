@@ -236,7 +236,6 @@ class Shipping extends \WC_Shipping_Method {
     
                     // Shipping class costs
                     $shipping_classes = WC()->shipping->get_shipping_classes();
-                    file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":orders:shipping clastype : " . var_export($shipping_classes, true) . "\n", FILE_APPEND);
 
                     if ( ! empty( $shipping_classes ) ) {
                         $found_shipping_classes = $this->find_shipping_classes( $package );
