@@ -94,7 +94,7 @@ const CustomerServices = () => {
     ];
     const tabs = [
         {
-            id: "products", label: "Question & Answer", icon: "adminlib-calendar", count: qnaCount, content:
+            id: "products", label: "Question & Answer", icon: "adminlib-calendar red",  des: "Waitng for Wholesale Customer Approval", count: qnaCount, content:
                 <>
                     <div className="card-header">
                         <div className="left">
@@ -110,7 +110,7 @@ const CustomerServices = () => {
                     <Qna /></>
         },
         {
-            id: "review", label: "Review Flag", icon: "adminlib-calendar", count: 9, content:
+            id: "review", label: "Review Flag", icon: "adminlib-calendar green", count: 9,  des: "Waitng for Wholesale Customer Approval", content:
                 <>
                     <div className="card-header">
                         <div className="left">
@@ -127,7 +127,7 @@ const CustomerServices = () => {
                 </>
         },
         {
-            id: "reports", label: "Abuse Reports", icon: "adminlib-calendar", count: abuseCount, content:
+            id: "reports", label: "Abuse Reports", icon: "adminlib-calendar yellow",  des: "Waitng for Wholesale Customer Approval", count: abuseCount, content:
                 <>
                     <div className="card-header">
                         <div className="left">
@@ -144,7 +144,7 @@ const CustomerServices = () => {
                 </>
         },
         {
-            id: "refund-requests", label: "Refund Requests", icon: "adminlib-calendar", count: 3, content:
+            id: "refund-requests", label: "Refund Requests", icon: "adminlib-calendar blue",  des: "Waitng for Wholesale Customer Approval", count: 3, content:
                 <>
                     <div className="card-header">
                         <div className="left">
@@ -186,13 +186,13 @@ const CustomerServices = () => {
                             </div>
                         ))} */}
                         {tabs.map((tab) => (
-                            <div className={`action ${activeTab === tab.id ? "active" : ""}`} key={tab.id} onClick={() => setActiveTab(tab.id)}>
-                                <div className="title">
-                                    {tab.count}
+                            <div className={`tab-action ${activeTab === tab.id ? "active" : ""}`} key={tab.id} onClick={() => setActiveTab(tab.id)}>
+                                <div className="details-wrapper">
                                     <i className={tab.icon}></i>
+                                    <div className="title">{tab.count} {tab.label}</div>
                                 </div>
                                 <div className="description">
-                                    {tab.label}
+                                    {tab.des}
                                 </div>
                             </div>
                         ))}

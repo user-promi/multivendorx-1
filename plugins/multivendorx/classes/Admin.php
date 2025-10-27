@@ -112,8 +112,8 @@ class Admin {
                     'name'   => __( 'Transaction History', 'multivendorx' ),
                     'subtab' => '',
                 ),
-                'actions-items' => array(
-                    'name'   => __( 'Actions Items', 'multivendorx' ),
+                'approval-queue' => array(
+                    'name'   => __( 'Approval Queue', 'multivendorx' ),
                     'subtab' => '',
                 ),
                 'customer-support' => array(
