@@ -12,7 +12,7 @@ const Notification = () => {
     const [transactionCount, setTransactionCount] = useState<number>(0);
     const [storeCount, setStoreCount] = useState<number>(0);
 
-    const [activeTab, setActiveTab] = useState("products");
+    const [activeTab, setActiveTab] = useState("");
     const [tasks, setTasks] = useState<string[]>([]);
     const [showInput, setShowInput] = useState(false);
     const [task, setTask] = useState("");
@@ -110,15 +110,64 @@ const Notification = () => {
     };
 
     const tabs = [
-        { id: "products", label: "Store Approval", icon: "adminlib-calendar", count: storeCount, content: <Products onUpdated={refreshCounts} /> },
-        { id: "stores", label: "Store Verification", icon: "adminlib-calendar", count: 9, content: <Vendors onUpdated={refreshCounts} /> },
-        { id: "coupons", label: "Store Deactivation Requests", icon: "adminlib-calendar", count: 9, content: <Coupons onUpdated={refreshCounts} /> },
-        { id: "product-approval", label: "Product Approval", icon: "adminlib-calendar", count: productCount, content: <Transactions onUpdated={refreshCounts} /> },
-        { id: "Coupon", label: "Coupon Approval", icon: "adminlib-calendar", count: couponCount, content: <Transactions onUpdated={refreshCounts} /> },
-        { id: "wholesale-customer", label: "Wholesale Customer Approval", icon: "adminlib-calendar", count: 9, content: <Transactions onUpdated={refreshCounts} /> },
-        { id: "Withdrawal", label: "Withdrawal Requests", icon: "adminlib-calendar", count: transactionCount, content: <Transactions onUpdated={refreshCounts} /> },
-
-    ];
+        ...(appLocalizer.approve_store === "manually"
+            ? [{
+                id: "products",
+                label: "Store Approval",
+                icon: "adminlib-calendar",
+                count: storeCount,
+                content: <Products onUpdated={refreshCounts} />
+            }]
+            : []
+        ),
+        {
+            id: "stores",
+            label: "Store Verification",
+            icon: "adminlib-calendar",
+            count: 9,
+            content: <Vendors onUpdated={refreshCounts} />
+        },
+        {
+            id: "coupons",
+            label: "Store Deactivation Requests",
+            icon: "adminlib-calendar",
+            count: 9,
+            content: <Coupons onUpdated={refreshCounts} />
+        },
+        {
+            id: "product-approval",
+            label: "Product Approval",
+            icon: "adminlib-calendar",
+            count: productCount,
+            content: <Transactions onUpdated={refreshCounts} />
+        },
+        {
+            id: "coupon-approval",
+            label: "Coupon Approval",
+            icon: "adminlib-calendar",
+            count: couponCount,
+            content: <Transactions onUpdated={refreshCounts} />
+        },
+        {
+            id: "wholesale-customer",
+            label: "Wholesale Customer Approval",
+            icon: "adminlib-calendar",
+            count: 9,
+            content: <Transactions onUpdated={refreshCounts} />
+        },
+        {
+            id: "withdrawal",
+            label: "Withdrawal Requests",
+            icon: "adminlib-calendar",
+            count: transactionCount,
+            content: <Transactions onUpdated={refreshCounts} />
+        }
+    ];    
+    useEffect(() => {
+        if (!tabs.find(tab => tab.id === activeTab)) {
+            setActiveTab(tabs[0]?.id || "");
+        }
+    }, [tabs, activeTab]);
     // run once on mount
     useEffect(() => {
         refreshCounts();
