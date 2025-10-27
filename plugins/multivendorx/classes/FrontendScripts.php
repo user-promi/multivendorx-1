@@ -505,6 +505,7 @@ class FrontendScripts {
                         'currency_symbol'          => get_woocommerce_currency_symbol(),
                         'payout_payment_options'   => $payout_payment_options,
 						'module_page_url'          => admin_url( 'admin.php?page=multivendorx#&tab=modules' ),
+						'store_page_url'           => trailingslashit( site_url() ) . untrailingslashit( MultiVendorX()->setting->get_setting( 'store_url', 'store' ) ),
                         'map_providor'             => MultiVendorX()->setting->get_setting( 'choose_map_api' ),
                         'google_api_key'           => MultiVendorX()->setting->get_setting( 'google_api_key' ),
                         'mapbox_api_key'           => MultiVendorX()->setting->get_setting( 'mapbox_api_key' ),

@@ -24,6 +24,7 @@ const StoreSettings = ({ id }: { id: string | null }) => {
     const [imagePreviews, setImagePreviews] = useState<{ [key: string]: string }>({});
     const [stateOptions, setStateOptions] = useState<{ label: string; value: string }[]>([]);
     const [successMsg, setSuccessMsg] = useState<string | null>(null);
+    const [errorMsg, setErrorMsg] = useState<string | null>(null);
     
     // Map states
     const [map, setMap] = useState<any>(null);
@@ -518,9 +519,30 @@ const StoreSettings = ({ id }: { id: string | null }) => {
         const { name, value } = e.target;
         const updated = { ...formData, [name]: value };
         setFormData(updated);
-        autoSave(updated);
-    };
 
+        if (name === "email") {
+            const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+            if (isValidEmail) {
+                autoSave(updated);
+                setErrorMsg(null);
+            } else {
+                setErrorMsg("Invalid email");
+            }
+        } else if (name === "phone") {
+            // ✅ Basic international phone pattern: allows +, spaces, hyphens, and digits (7–15 length)
+            const isValidPhone = /^\+?[0-9\s\-]{7,15}$/.test(value);
+            if (isValidPhone) {
+                autoSave(updated);
+                setErrorMsg(null);
+            } else {
+                setErrorMsg("Invalid phone number");
+            }
+        } else {
+            autoSave(updated);
+        }
+
+    };
+    
     const runUploader = (key: string) => {
         const frame = (window as any).wp.media({
             title: 'Select or Upload Image',
@@ -573,8 +595,10 @@ const StoreSettings = ({ id }: { id: string | null }) => {
                 <div className="card-wrapper width-65">
                     <div className="card-content">
                         <div className="card-title">
-                            Store information
+                            General information
                         </div>
+
+                        {errorMsg && <p className="error-text" style={{ color: "red", marginTop: "5px" }}>{errorMsg}</p>}
 
                         <div className="form-group-wrapper">
                             <div className="form-group">
@@ -586,7 +610,14 @@ const StoreSettings = ({ id }: { id: string | null }) => {
                         <div className="form-group-wrapper">
                             <div className="form-group">
                                 <label htmlFor="product-name">Slug</label>
-                                <BasicInput name="slug" wrapperClass="setting-form-input" descClass="settings-metabox-description" value={formData.slug} onChange={handleChange} />
+                                <BasicInput 
+                                    name="slug" 
+                                    wrapperClass="setting-form-input" 
+                                    descClass="settings-metabox-description" 
+                                    value={formData.slug} 
+                                    onChange={handleChange} 
+                                    />
+                                <p>Your Site Url : {appLocalizer.store_page_url + '/' + formData.slug}</p>
                             </div>
                         </div>
                         <div className="form-group-wrapper">
@@ -595,41 +626,20 @@ const StoreSettings = ({ id }: { id: string | null }) => {
                                 <BasicInput type="email" name="email" wrapperClass="setting-form-input" descClass="settings-metabox-description" value={formData.email} onChange={handleChange} />
                             </div>
                         </div>
-                    </div>
 
-                    <div className="card-content">
-                        <div className="card-title">
-                            Description
+                        <div className="form-group-wrapper">
+                            <div className="form-group">
+                                <label htmlFor="product-name">Phone</label>
+                                <BasicInput name="phone" value={formData.phone} wrapperClass="setting-form-input" descClass="settings-metabox-description" onChange={handleChange} />
+                            </div>
                         </div>
 
                         <div className="form-group-wrapper">
                             <div className="form-group">
+                                <label htmlFor="description">Description</label>
                                 <TextArea name="description" wrapperClass="setting-from-textarea"
                                     inputClass="textarea-input"
                                     descClass="settings-metabox-description" value={formData.description} onChange={handleChange} />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="card-content">
-                        <div className="card-title">
-                            Location & Map
-                        </div>
-
-                        {/* Location Search */}
-                        <div className="form-group-wrapper">
-                            <div className="form-group">
-                                <label htmlFor="store-location-autocomplete">Search Location</label>
-                                <div id="store-location-autocomplete-container">
-                                    <input
-                                        ref={autocompleteInputRef}
-                                        id="store-location-autocomplete"
-                                        type="text"
-                                        className="setting-form-input"
-                                        placeholder="Search your store address..."
-                                        defaultValue={addressData.location_address}
-                                    />
-                                </div>
                             </div>
                         </div>
 
@@ -653,14 +663,7 @@ const StoreSettings = ({ id }: { id: string | null }) => {
 
                     <div className="card-content">
                         <div className="card-title">
-                            Basic information
-                        </div>
-
-                        <div className="form-group-wrapper">
-                            <div className="form-group">
-                                <label htmlFor="product-name">Phone</label>
-                                <BasicInput name="phone" value={formData.phone} wrapperClass="setting-form-input" descClass="settings-metabox-description" onChange={handleChange} />
-                            </div>
+                            Address & Location
                         </div>
 
                         <div className="form-group-wrapper">
@@ -722,6 +725,45 @@ const StoreSettings = ({ id }: { id: string | null }) => {
                                 />
                             </div>
                         </div>
+
+                        <div className="form-group-wrapper">
+                            <div className="form-group">
+                                <label htmlFor="store-location-autocomplete">Search Location</label>
+                                <div id="store-location-autocomplete-container">
+                                    <input
+                                        ref={autocompleteInputRef}
+                                        id="store-location-autocomplete"
+                                        type="text"
+                                        className="setting-form-input"
+                                        placeholder="Search your store address..."
+                                        defaultValue={addressData.location_address}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Map Display */}
+						<div className="form-group-wrapper">
+							<div className="form-group">
+								<label>Location Map *</label>
+								<div
+									id="location-map"
+									style={{
+										height: '300px',
+										width: '100%',
+										borderRadius: '8px',
+										border: '1px solid #ddd',
+										marginTop: '8px'
+									}}
+								></div>
+								<small style={{ color: '#666', marginTop: '5px', display: 'block' }}>
+									Click on the map or drag the marker to set your exact location
+								</small>
+							</div>
+                            {/* Hidden coordinates */}
+                            <input type="hidden" name="location_lat" value={addressData.location_lat} />
+                            <input type="hidden" name="location_lng" value={addressData.location_lng} />
+						</div>
                     </div>
                 </div>
 

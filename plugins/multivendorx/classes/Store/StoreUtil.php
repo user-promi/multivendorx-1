@@ -53,9 +53,13 @@ class StoreUtil {
     public static function get_store_users($store_id) {
         global $wpdb;
         $table = "{$wpdb->prefix}" . Utill::TABLES['store_users'];
-
+        
+        $primary_owner_id = StoreUtil::get_primary_owner( $store_id );
         $users = $wpdb->get_results( $wpdb->prepare( "SELECT user_id FROM $table WHERE store_id = %d", $store_id), ARRAY_A );
-        return wp_list_pluck($users, 'user_id');
+        return [
+            'users' => wp_list_pluck($users, 'user_id'),
+            'primary_owner' => $primary_owner_id
+        ];
       
     }
 
@@ -303,11 +307,17 @@ class StoreUtil {
             // Insert
             $wpdb->insert(
                 $table_name,
+                // [
+                //     'store_id'      => $store_id,
+                //     'user_id'       => $user_id,
+                //     'role_id'       => MultiVendorX()->setting->get_setting( 'approve_store' ) == 'automatically' ? 'store_owner' : null,
+                //     'primary_owner' => MultiVendorX()->setting->get_setting( 'approve_store' ) == 'automatically' ? $user_id : null,
+                // ],
                 [
                     'store_id'      => $store_id,
                     'user_id'       => $user_id,
-                    'role_id'       => MultiVendorX()->setting->get_setting( 'approve_store' ) == 'automatically' ? 'store_owner' : null,
-                    'primary_owner' => MultiVendorX()->setting->get_setting( 'approve_store' ) == 'automatically' ? $user_id : null,
+                    'role_id'       => 'store_owner',
+                    'primary_owner' => $user_id,
                 ],
                 [ '%d', '%d', '%s', '%d' ]
             );

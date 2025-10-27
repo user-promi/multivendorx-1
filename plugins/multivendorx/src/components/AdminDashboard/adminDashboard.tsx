@@ -292,7 +292,7 @@ const AdminDashboard = () => {
                 <div className="card-header">
                   <div className="left">
                     <div className="title">
-                      Build a Professional Marketplace
+                      Build a professional marketplace
                       <span className="admin-badge blue">
                         Starting at $299/year
                       </span>
@@ -320,7 +320,7 @@ const AdminDashboard = () => {
                   </div>
                   <div className="des">Create, manage, and grow your marketplace with confidence. Trusted by thousands of entrepreneurs worldwide.</div>
                   <a href='https://multivendorx.com/pricing/' className="admin-btn btn-purple">
-                    Upgrade Now - 15 Days Refund*
+                    Upgrade Now - 15-Day Money-Back Guarantee*
                     <i className="adminlib-arrow-right icon-pro-btn"></i>
                   </a>
                 </div>

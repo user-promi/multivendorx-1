@@ -4,7 +4,7 @@ jQuery(document).ready(function ($) {
     // Load Average Ratings
     function loadAverageRatings() {
         $.post(review.ajaxurl, {
-            action: 'store_review_avg',
+            action: 'multivendorx_store_review_avg',
             store_id: store_id,
             nonce: review.nonce,
         }, function (res) {
@@ -14,9 +14,9 @@ jQuery(document).ready(function ($) {
                     html += `<li>${p}: ${res.data.averages[p]} ★</li>`;
                 }
                 html += '</ul></div>';
-                $('#mvx_avg_rating').html(html);
+                $('#multivendorx_avg_rating').html(html);
             } else {
-                $('#mvx_avg_rating').html('<p>No ratings yet.</p>');
+                $('#multivendorx_avg_rating').html('<p>No ratings yet.</p>');
             }
         });
     }
@@ -24,12 +24,12 @@ jQuery(document).ready(function ($) {
     // Load Reviews
     function loadReviews() {
         $.post(review.ajaxurl, {
-            action: 'store_review_list',
+            action: 'multivendorx_store_review_list',
             store_id: store_id,
             nonce: review.nonce,
         }, function (res) {
             if (res.success) {
-                $('#mvx_vendor_reviews_list').html(res.data.html);
+                $('#multivendorx_vendor_reviews_list').html(res.data.html);
             }
         });
     }
@@ -39,13 +39,13 @@ jQuery(document).ready(function ($) {
         e.preventDefault();
 
         let ratings = {};
-        $('.mvx-rating-select').each(function () {
+        $('.multivendorx-rating-select').each(function () {
             const key = $(this).attr('name').replace('rating[', '').replace(']', '');
             ratings[key] = $(this).val();
         });
 
         const data = {
-            action: 'store_review_submit',
+            action: 'multivendorx_store_review_submit',
             nonce: review.nonce,
             store_id: store_id,
             review_title: $('#review_title').val(),
