@@ -34,7 +34,8 @@ class Utill {
         'report_abuse'   => 'multivendorx_report_abuse',
         'shipping_zone'   => 'multivendorx_shipping_zone_methods',
         'shipping_zone_locations'   => 'multivendorx_shipping_zone_locations',
-        
+        'review'   => 'multivendorx_store_reviews',
+        'rating'   => 'multivendorx_store_review_ratings',
         'products_map'   => 'multivendorx_products_map',
     );
 
