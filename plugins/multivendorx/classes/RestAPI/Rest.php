@@ -40,8 +40,6 @@ class Rest {
         add_filter('woocommerce_rest_product_object_query', array($this, 'filter_products_by_meta_exists'), 10, 2);
         add_filter('woocommerce_rest_shop_coupon_object_query', array($this, 'filter_coupons_by_meta_exists'), 10, 2);
         add_filter('woocommerce_analytics_products_query_args', array($this, 'filter_low_stock_by_meta_exists'), 10, 1);
-        add_filter( 'rest_comment_query', array($this, 'mvx_filter_comments_by_store'), 10, 2 );
-
     }
 
     /**
@@ -82,25 +80,6 @@ class Rest {
             $args['meta_query'] = array();
         }
         
-        return $args;
-    }
-
-    public function mvx_filter_comments_by_store($args, $request) {
-        // Get query parameters from REST request
-        $store_id = $request->get_param('meta_value');
-        $meta_key = $request->get_param('meta_key');
-    
-        // Only modify if the meta_key is store_rating_id and store_id is provided
-        if ($meta_key === 'store_rating_id' && !empty($store_id)) {
-            $args['meta_query'] = [
-                [
-                    'key'     => 'store_rating_id',
-                    'value'   => $store_id,
-                    'compare' => '=',
-                ]
-            ];
-            $args['type'] = 'multivendorx_review';
-        }
         return $args;
     }
 
