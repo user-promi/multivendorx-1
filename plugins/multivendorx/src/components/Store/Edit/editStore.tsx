@@ -66,7 +66,7 @@ const EditStore = () => {
             type: 'file',
             content: {
                 id: 'store',
-                name: 'Basic Info',
+                name: 'General',
                 desc: 'Store Info',
                 hideTabHeader: true,
                 icon: 'adminlib-credit-card',
