@@ -56,34 +56,6 @@ class Util {
         return $zone;
     }
 
-    public static function get_vendor_zone( $zone_id = 0, $store_id = 0 ) {
-        $zone = array();
-        $zone_obj = WC_Shipping_Zones::get_zone_by( 'zone_id', $zone_id );
-        $enabled_methods    = $zone_obj->get_shipping_methods( true );
-        $methods_ids        = wp_list_pluck( $enabled_methods, 'id' );
-
-        if ( in_array( 'multivendorx_vendor_shipping', $methods_ids ) ) {
-            $zone['data']                    = $zone_obj->get_data();
-            $zone['formatted_zone_location'] = $zone_obj->get_formatted_location();
-            $zone['shipping_methods']        = self::get_shipping_methods( $zone_id, $store_id );
-            $zone['locations']               = self::get_locations( $zone_id, $store_id );
-        }
-        return $zone;
-    }
-
-    public static function delete_shipping_methods( $data, $store_id = 0 ) {
-        global $wpdb;
-
-        $table = $wpdb->prefix . Utill::TABLES['shipping_zone'];
-        $result = $wpdb->query( $wpdb->prepare( "DELETE FROM {$table} WHERE zone_id=%d AND store_id=%d AND instance_id=%d", $data['zone_id'], $store_id, $data['instance_id'] ) );
-
-        if ( ! $result ) {
-            return new WP_Error( 'method-not-deleted', __( 'Shipping method not deleted', 'multivendorx' ) );
-        }
-
-        return $result;
-    }
-
     public static function get_shipping_methods( $zone_id, $store_id ) {
         $store = new \MultiVendorX\Store\Store( $store_id );
     
@@ -175,29 +147,6 @@ class Util {
         ];
     }
     
-    public static function toggle_shipping_method( $data, $vendor_id = 0 ) {
-        global $wpdb;
-        $table_name = "{$wpdb->prefix}mvx_shipping_zone_methods";
-        $updated    = $wpdb->update( 
-            esc_sql($table_name), 
-            array( 
-                'is_enabled' => esc_sql($data['checked'])  
-            ), 
-            array( 
-                'instance_id' => esc_sql($data['instance_id' ]), 
-                'zone_id' => esc_sql($data['zone_id']), 
-                'vendor_id' => $vendor_id ? $vendor_id : apply_filters( 'mvx_current_vendor_id', esc_sql(get_current_user_id()) ) 
-            ), 
-            array( '%d' ) 
-        );
-
-        if ( ! $updated ) {
-            return new WP_Error( 'method-not-toggled', __( 'Method enable or disable not working', 'multivendorx' ) );
-        }
-
-        return true;
-    }
-
     public static function get_locations( $zone_id, $store_id = 0 ) {
         global $wpdb;
         $table = $wpdb->prefix . Utill::TABLES['shipping_zone_locations'];
@@ -249,27 +198,5 @@ class Util {
         }
 
         return false;
-    }
-
-    public static function get_method_label( $method_id ) {
-        $store_shipping_methods = self::multivendorx_get_shipping_methods();
-        if(isset($store_shipping_methods[$method_id])){
-            return $store_shipping_methods[$method_id]->get_method_title();
-        }
-    }
-    public static function multivendorx_get_shipping_methods() {
-        $store_shippings = array();
-
-        foreach ( WC()->shipping->load_shipping_methods() as $method ) {
-            if ( ! array_key_exists( $method->id, apply_filters( 'multivendorx_store_shipping_methods', array(
-                'flat_rate' => __('Flat Rate', 'multivendorx'),
-                'local_pickup' => __('Local Pickup', 'multivendorx'),
-                'free_shipping' => __('Free Shipping', 'multivendorx')
-            ) ) ) ) {
-                    continue;
-            }
-            $store_shippings[$method->id] = $method;
-        }
-        return $store_shippings;
     }
 }

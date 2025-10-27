@@ -209,6 +209,32 @@ class Install {
             `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
             PRIMARY KEY (`ID`)
         ) $collate;";
+
+        $sql_review = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}" . Utill::TABLES['review'] . "` (
+            `review_id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+            `store_id` BIGINT(20) NOT NULL,
+            `customer_id` BIGINT(20) NOT NULL,
+            `order_id` BIGINT(20) NULL DEFAULT NULL,
+            `overall_rating` DECIMAL(3,2) NOT NULL DEFAULT 0.00,
+            `review_title` VARCHAR(255) NULL DEFAULT NULL,
+            `review_content` TEXT NULL DEFAULT NULL,
+            `review_images` LONGTEXT NULL DEFAULT NULL,
+            `status` ENUM('pending','approved','rejected') NOT NULL DEFAULT 'pending',
+            `admin_reply` TEXT NULL DEFAULT NULL,
+            `reply_date` DATETIME NULL DEFAULT NULL,
+            `reported` TINYINT(1) NOT NULL DEFAULT 0,
+            `date_created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            `date_modified` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            PRIMARY KEY (`review_id`)
+        ) $collate;";
+        
+        $sql_ratings = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}" . Utill::TABLES['rating'] . "` (
+            `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+            `review_id` BIGINT(20) NOT NULL,
+            `parameter` VARCHAR(100) NOT NULL,
+            `rating_value` TINYINT(1) NOT NULL DEFAULT 0,
+            PRIMARY KEY (`id`)
+        ) $collate;";
         
         // Include upgrade functions if not loaded.
         if ( ! function_exists( 'dbDelta' ) ) {
@@ -225,6 +251,8 @@ class Install {
         dbDelta( $sql_report_abuse );
         dbDelta( $sql_shipping_zone_locations );
         dbDelta( $sql_product_map );
+        dbDelta( $sql_review );
+        dbDelta( $sql_ratings );
     }
 
     public function create_database_triggers() {
@@ -304,7 +332,6 @@ class Install {
         // 1. Get the existing option from DB
         $settings = get_option('multivendorx_identity_verification_settings', []);
 
-        $review_settings = get_option('multivendorx_review_management_settings', []);
         $order_settings  = get_option('multivendorx_order_actions_refunds_settings', []);
 
 
@@ -321,18 +348,6 @@ class Install {
                 'required' => true,
                 'active'   => false,
             ],
-        ];
-    
-        // 3. Set default review ratings & abuse report reasons parameters
-        $review_settings['ratings_parameters'] = [
-            'Shipping',
-            'Product quality',
-            'Reliability',
-        ];
-        
-        // 4. Set default product review sync
-        $review_settings['product_review_sync'] = [
-            'product_review_sync',
         ];
     
         $legal_settings = [
@@ -448,7 +463,6 @@ By signing and submitting, the Seller accepts all terms above.
         ];
         // 6. Save back to DB
         update_option('multivendorx_identity_verification_settings', $settings);
-        update_option('multivendorx_review_management_settings', $review_settings);
         update_option('multivendorx_order_actions_refunds_settings', $order_settings);
         update_option('multivendorx_legal_compliance_settings', $legal_settings);
         update_option('multivendorx_product_compliance_settings', $product_compliance_settings);        

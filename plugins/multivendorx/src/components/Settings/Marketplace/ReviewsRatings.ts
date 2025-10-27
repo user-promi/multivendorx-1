@@ -65,14 +65,14 @@ export default {
                 { value: "Value for money", },
                 { value: "Overall experience",},
             ],
-            dependent: {
-                key: 'product_review_sync',
-                set: true,
-            },
+            // dependent: {
+            //     key: 'product_review_sync',
+            //     set: true,
+            // },
             proSetting: false,
             maxItems: 10,
             allowDuplicates: false,
-            moduleEnabled: 'store-review',
+            // moduleEnabled: 'store-review',
         },
     ],
 };
