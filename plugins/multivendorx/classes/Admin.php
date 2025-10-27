@@ -475,12 +475,12 @@ class Admin {
         ?>
         <tr class="form-field">
             <th scope="row" valign="top"><label for="category_percentage_commission"><?php _e('Commission Percentage', 'multivendorx'); ?></label></th>
-            <td><input type="number" class="short" style="" name="category_percentage_commission" id="category_percentage_commission" value="<?php echo $commission_percentage; ?>" placeholder=""></td>
+            <td><input type="number" class="short" name="category_percentage_commission" id="category_percentage_commission" value="<?php echo $commission_percentage; ?>" placeholder=""></td>
         </tr>
     
         <tr class="form-field">
             <th scope="row" valign="top"><label for="category_fixed_commission"><?php _e('Commission Fixed per transaction', 'multivendorx'); ?></label></th>
-            <td><input type="number" class="short" style="" name="category_fixed_commission" id="category_fixed_commission" value="<?php echo $commision_fixed; ?>" placeholder=""></td>
+            <td><input type="number" class="short" name="category_fixed_commission" id="category_fixed_commission" value="<?php echo $commision_fixed; ?>" placeholder=""></td>
         </tr>
        
         <?php

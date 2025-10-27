@@ -155,7 +155,7 @@ const StoreOrders: React.FC = () => {
           {row.original.status !== "completed" &&
            row.original.status !== "processing" &&
            row.original.status !== "refunded" && (
-            <span className="admin-badge gray">{row.original.status}</span>
+            <span className="admin-badge yellow">{row.original.status}</span>
           )}
         </TableCell>
       ),
@@ -168,7 +168,7 @@ const StoreOrders: React.FC = () => {
         <div className="card-header">
           <div className="left">
             <div className="title">Revenue Distribution</div>
-            <div className="total-orders" style={{ marginTop: '4px', fontSize: '14px', color: '#555' }}>
+            <div className="des">
               {__('Total Orders:', 'multivendorx')} {totalRows}
             </div>
           </div>

@@ -220,7 +220,7 @@ const Transactions: React.FC = () => {
                     <TableCell>
                         {credit ? (
                             <>
-                                {iconClass && <i className={iconClass} style={{ marginRight: '4px' }}></i>}
+                                {iconClass && <i className={iconClass}></i>}
                                 {`${appLocalizer.currency_symbol}${credit}`}
                             </>
                         ) : (
@@ -259,7 +259,7 @@ const Transactions: React.FC = () => {
                     <TableCell>
                         {debit ? (
                             <>
-                                {iconClass && <i className={iconClass} style={{ marginRight: '4px' }}></i>}
+                                {iconClass && <i className={iconClass}></i>}
                                 {`${appLocalizer.currency_symbol}${debit}`}
                             </>
                         ) : (
@@ -298,7 +298,7 @@ const Transactions: React.FC = () => {
                     <TableCell>
                         {balance ? (
                             <>
-                                {iconClass && <i className={iconClass} style={{ marginRight: '4px' }}></i>}
+                                {iconClass && <i className={iconClass}></i>}
                                 {`${appLocalizer.currency_symbol}${balance}`}
                             </>
                         ) : (

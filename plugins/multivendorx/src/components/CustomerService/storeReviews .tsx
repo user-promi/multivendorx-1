@@ -219,19 +219,19 @@ const StoreReviews: React.FC = () => {
 
     return (
         <>
-                <Table
-                    data={data || []}
-                    columns={columns as ColumnDef<Record<string, any>, any>[]}
-                    rowSelection={rowSelection}
-                    onRowSelectionChange={setRowSelection}
-                    defaultRowsPerPage={10}
-                    pageCount={pageCount}
-                    pagination={pagination}
-                    onPaginationChange={setPagination}
-                    handlePagination={fetchReviews}
-                    perPageOption={[10, 25, 50]}
-                    totalCounts={totalRows}
-                />
+            <Table
+                data={data || []}
+                columns={columns as ColumnDef<Record<string, any>, any>[]}
+                rowSelection={rowSelection}
+                onRowSelectionChange={setRowSelection}
+                defaultRowsPerPage={10}
+                pageCount={pageCount}
+                pagination={pagination}
+                onPaginationChange={setPagination}
+                handlePagination={fetchReviews}
+                perPageOption={[10, 25, 50]}
+                totalCounts={totalRows}
+            />
 
             {editModalOpen && selectedReview && (
                 <CommonPopup
@@ -257,25 +257,25 @@ const StoreReviews: React.FC = () => {
                                 value={editContent}
                                 onChange={(e) => setEditContent(e.target.value)}
                                 rows={5}
-                                style={{ width: '100%' }}
+                                className="textarea-input"
                             />
                         </div>
 
-                        <div className="form-group" style={{ marginTop: '1rem' }}>
+                        <div className="form-group">
                             <label>{__('Add Reply', 'multivendorx')}</label>
                             <textarea
                                 value={newReply}
                                 onChange={(e) => setNewReply(e.target.value)}
                                 rows={3}
-                                style={{ width: '100%' }}
+                                className="textarea-input"
                             />
                         </div>
 
                         {selectedReview.replies && selectedReview.replies.length > 0 && (
-                            <div style={{ marginTop: '1rem' }}>
+                            <div>
                                 <strong>{__('Existing Replies:', 'multivendorx')}</strong>
                                 {selectedReview.replies.map((rep) => (
-                                    <div key={rep.comment_ID} style={{ padding: '0.5rem', borderBottom: '1px solid #eee' }}>
+                                    <div key={rep.comment_ID}>
                                         <strong>{rep.comment_author}:</strong> {rep.comment_content}
                                         <br />
                                         <small>{new Date(rep.comment_date).toLocaleString()}</small>

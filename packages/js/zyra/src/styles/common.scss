@@ -504,6 +504,7 @@ input[type="checkbox"]:focus {
   &.module {
     background: #d9f5f0;
     color: #06be9f;
+    gap: 0.813rem
   }
 }
 
@@ -1029,6 +1030,12 @@ input[type="checkbox"]:focus {
       right: 3rem;
     }
   }
+
+  iframe {
+    border: none;
+    width: 100%;
+    height: 35rem;
+  }
 }
 
 // live chart
@@ -1260,6 +1267,7 @@ input[type="checkbox"]:focus {
 .search-field:has(.admin-btn) {
   border: none
 }
+
 // end delete and add table top action btn section 
 
 .search-section {

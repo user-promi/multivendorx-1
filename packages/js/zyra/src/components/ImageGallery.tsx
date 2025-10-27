@@ -113,7 +113,7 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({
             multiple
             accept="image/*"
             onChange={handleImageUpload}
-            style={{ display: 'none' }}
+            // style={{ display: 'none' }}
           />
         </div>
       </div>

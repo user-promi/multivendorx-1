@@ -397,6 +397,7 @@ const StoreTable: React.FC = () => {
             ),
         },
     ];
+    
 
     return (
         <div className="admin-table-wrapper">

@@ -636,20 +636,13 @@ const StoreSettings = ({ id }: { id: string | null }) => {
                         {/* Map Display */}
 						<div className="form-group-wrapper">
 							<div className="form-group">
-								<label>Location Map *</label>
+								<label>Location Map</label>
 								<div
 									id="location-map"
-									style={{
-										height: '300px',
-										width: '100%',
-										borderRadius: '8px',
-										border: '1px solid #ddd',
-										marginTop: '8px'
-									}}
 								></div>
-								<small style={{ color: '#666', marginTop: '5px', display: 'block' }}>
+								<div className="settings-metabox-description">
 									Click on the map or drag the marker to set your exact location
-								</small>
+								</div>
 							</div>
 						</div>
 
