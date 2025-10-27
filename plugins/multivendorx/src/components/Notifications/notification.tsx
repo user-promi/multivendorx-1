@@ -17,7 +17,7 @@ const Notification = () => {
     const [showInput, setShowInput] = useState(false);
     const [task, setTask] = useState("");
     const [loading, setLoading] = useState(false);
-
+    console.log(appLocalizer)
     useEffect(() => {
         if (!appLocalizer.user_id) return;
 
@@ -127,27 +127,39 @@ const Notification = () => {
             count: 9,
             content: <Vendors onUpdated={refreshCounts} />
         },
-        {
-            id: "coupons",
-            label: "Store Deactivation Requests",
-            icon: "adminlib-calendar",
-            count: 9,
-            content: <Coupons onUpdated={refreshCounts} />
-        },
-        {
-            id: "product-approval",
-            label: "Product Approval",
-            icon: "adminlib-calendar",
-            count: productCount,
-            content: <Transactions onUpdated={refreshCounts} />
-        },
-        {
-            id: "coupon-approval",
-            label: "Coupon Approval",
-            icon: "adminlib-calendar",
-            count: couponCount,
-            content: <Transactions onUpdated={refreshCounts} />
-        },
+        ...(Array.isArray(appLocalizer.enable_profile_deactivation_request)
+            && appLocalizer.enable_profile_deactivation_request.includes("enable_profile_deactivation_request")
+            ? [{
+                id: "coupons",
+                label: "Store Deactivation Requests",
+                icon: "adminlib-calendar",
+                count: 9,
+                content: <Coupons onUpdated={refreshCounts} />
+            }]
+            : []
+        ),
+        ...(Array.isArray(appLocalizer.can_publish_products)
+            && appLocalizer.can_publish_products.includes("publish_products")
+            ? [{
+                id: "product-approval",
+                label: "Product Approval",
+                icon: "adminlib-calendar",
+                count: productCount,
+                content: <Transactions onUpdated={refreshCounts} />
+            }]
+            : []
+        ),
+        ...(Array.isArray(appLocalizer.can_publish_coupons)
+            && appLocalizer.can_publish_coupons.includes("publish_coupons")
+            ? [{
+                id: "coupon-approval",
+                label: "Coupon Approval",
+                icon: "adminlib-calendar",
+                count: couponCount,
+                content: <Transactions onUpdated={refreshCounts} />
+            }]
+            : []
+        ),
         {
             id: "wholesale-customer",
             label: "Wholesale Customer Approval",

@@ -145,6 +145,7 @@ class StoreUtil {
                     'read_shop_coupons' => 'View Coupons',
                     'edit_shop_coupons' => 'Edit Coupons',
                     'delete_shop_coupons' => 'Delete Coupons',
+                    'publish_coupons' => 'Publish Coupons',
                 ],
             ],
             'analytics' => [
