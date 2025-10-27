@@ -54,6 +54,7 @@ declare global {
         shipping_methods:any;
         state_list:any;
         module_page_url:any;
+        store_page_url:string;
     }
     interface Color{
         color: any;

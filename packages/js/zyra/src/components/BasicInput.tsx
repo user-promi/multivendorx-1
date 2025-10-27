@@ -46,6 +46,7 @@ interface BasicInputProps {
     preText?: string;
     postText?: string;
     preInsideText?: string;
+    required?: boolean;
 }
 
 const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
@@ -78,7 +79,8 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
             rangeUnit,
             disabled = false,
             readOnly = false,
-            preInsideText
+            preInsideText,
+            required = false
         },
         ref
     ) => {
@@ -175,6 +177,7 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
                                     onBlur={onBlur}
                                     disabled={disabled}
                                     readOnly={readOnly}
+                                    required={required}
                                 />
                                 {postInsideText && (
                                     <span

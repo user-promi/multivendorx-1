@@ -581,13 +581,14 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             update_user_meta($current_user->ID, 'multivendorx_active_store', $insert_id);
         }
     
-        // ✅ New: Handle store_owners array if provided
-        if ( ! empty( $store_data['store_owners'] ) && is_array( $store_data['store_owners'] ) ) {
-            StoreUtil::add_store_users([
-                'store_id' => $insert_id,
-                'users'    => $store_data['store_owners'],
-                'role_id'  => 'store_owner',
-            ]);
+        // Handle store_owners array if provided
+        if ( !empty( $store_data['store_owners'] ) ) {
+            StoreUtil::set_primary_owner($store_data['store_owners'], $insert_id);
+            // StoreUtil::add_store_users([
+            //     'store_id' => $insert_id,
+            //     'users'    => $store_data['store_owners'],
+            //     'role_id'  => 'store_owner',
+            // ]);
         }
     
         return rest_ensure_response( [
