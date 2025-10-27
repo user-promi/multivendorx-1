@@ -76,21 +76,21 @@ const AdminDashboard = () => {
       href: "https://multivendorx.com/docs/knowledgebase/",
     },
     {
-      title: "Expert Consultation",
+      title: "Expert consultation",
       desc: "Get tailored advice from our marketplace specialists.",
       iconClass: "adminlib-preview",
       linkText: "Book Consultation",
       href: "https://multivendorx.com/custom-development/",
     },
     {
-      title: "Developer Community",
+      title: "Developer community",
       desc: "Connect with our team and fellow builders on Discord.",
       iconClass: "adminlib-global-community",
       linkText: "Join Discord",
       href: "https://discord.com/channels/1376811097134469191/1376811102020829258",
     },
     {
-      title: "Facebook Group",
+      title: "Facebook group",
       desc: "Share experiences and tips with other marketplace owners.",
       iconClass: "adminlib-user-circle",
       linkText: "Join Group",
@@ -99,42 +99,42 @@ const AdminDashboard = () => {
   ];
   const featuresList = [
     {
-      title: "Diversified Marketplace",
+      title: "Diversified marketplace",
       desc: "Enable bookings, subscriptions, and auctions to boost sales and engagement.",
       iconClass: "adminlib-book",
       linkText: "Explore Docs",
       href: "#",
     },
     {
-      title: "Vacation Mode for Stores",
+      title: "Vacation mode for stores",
       desc: "Stores can pause their stores temporarily with automatic buyer notifications – no missed messages.",
       iconClass: "adminlib-book",
       linkText: "Explore Docs",
       href: "#",
     },
     {
-      title: "Never Run Out of Stock",
+      title: "Never run out of stock",
       desc: "Real-time inventory tracking with automatic low-stock alerts keeps sellers prepared and buyers happy.",
       iconClass: "adminlib-preview",
       linkText: "Book Consultation",
       href: "#",
     },
     {
-      title: "Autopilot Notifications",
+      title: "Autopilot notifications",
       desc: "Automatic emails and alerts for every order, refund, and payout – everyone stays in the loop.",
       iconClass: "adminlib-global-community",
       linkText: "Join Discord",
       href: "#",
     },
     {
-      title: "Verified Stores Only",
+      title: "Verified stores only",
       desc: "Screen stores with document verification and approval – build a trusted marketplace from day one.",
       iconClass: "adminlib-global-community",
       linkText: "Join Discord",
       href: "#",
     },
     {
-      title: "Membership Rewards & Commission",
+      title: "Membership rewards & commission",
       desc: "Charge your sellers a monthly or yearly membership fee to sell on your marketplace – predictable revenue every month.",
       iconClass: "adminlib-global-community",
       linkText: "Join Discord",
@@ -153,7 +153,7 @@ const AdminDashboard = () => {
 
   const sections: Section[] = [
     {
-      title: 'Product & Store Tools',
+      title: 'Product & store tools',
       features: [
         { name: "Multiple vendors per product (SPMV)", free: true, pro: true },
         { name: "Store policies", free: true, pro: true },
@@ -168,7 +168,7 @@ const AdminDashboard = () => {
       ],
     },
     {
-      title: ' Get Paid Without Hassle',
+      title: ' Get paid without hassle',
       features: [
         { name: "Bank Transfer", free: true, pro: true },
         { name: "PayPal Payout", free: true, pro: true },
@@ -178,7 +178,7 @@ const AdminDashboard = () => {
       ],
     },
     {
-      title: ' Deliver Seamless Shopping Experiences',
+      title: ' Deliver seamless shopping experiences',
       features: [
         { name: "Product Q&A", free: true, pro: true },
         { name: "Marketplace refunds", free: true, pro: true },
@@ -191,7 +191,7 @@ const AdminDashboard = () => {
       ],
     },
     {
-      title: ' Ship the Way You Want',
+      title: ' Ship the way you want',
       features: [
         { name: "Zone-based shipping", free: true, pro: true },
         { name: "Distance-based shipping", free: true, pro: true },
@@ -201,7 +201,7 @@ const AdminDashboard = () => {
       ],
     },
     {
-      title: ' Sell in Different Ways',
+      title: ' Sell in different ways',
       features: [
         { name: "Optimize stores/products with Yoast or Rank Math", free: false, pro: true },
         { name: "Sales, revenue, and order reports", free: false, pro: true },
@@ -212,7 +212,7 @@ const AdminDashboard = () => {
       ],
     },
     {
-      title: 'Automate Rules and Commissions',
+      title: 'Automate rules and commissions',
       features: [
         { name: "Payment gateway fees", free: true, pro: true },
         { name: "Min/Max quantities", free: true, pro: true },
@@ -321,7 +321,7 @@ const AdminDashboard = () => {
                   </div>
                   <div className="des">Create, manage, and grow your marketplace with confidence. Trusted by thousands of entrepreneurs worldwide.</div>
                   <a href='https://multivendorx.com/pricing/' className="admin-btn btn-purple">
-                    Upgrade Now - 15-Day Money-Back Guarantee*
+                    Upgrade now - 15-day money-back guarantee*
                     <i className="adminlib-arrow-right icon-pro-btn"></i>
                   </a>
                 </div>
