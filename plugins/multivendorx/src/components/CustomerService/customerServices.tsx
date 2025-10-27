@@ -12,6 +12,7 @@ const CustomerServices = () => {
     const [abuseCount, setAbuseCount] = useState(0);
     const [qnaCount, setQnaCount] = useState(0);
     const [withdrawCount, setWithdrawCount] = useState(0);
+    const [activeTab, setActiveTab] = useState("products");
 
     // Fetch total count on mount
     useEffect(() => {
@@ -91,6 +92,35 @@ const CustomerServices = () => {
             icon: 'adminlib-calendar',
         },
     ];
+    const tabs = [
+        {
+            id: "products", label: "Products", content:
+                <StoreReviews />
+        },
+        {
+            id: "stores", label: "Stores", content:
+                <>
+                    <div className="row">
+                        <div className="column">
+                            <div className="card-header">
+                                <div className="left">
+                                    <div className="title">
+                                        Refund Requests
+                                    </div>
+                                    <div className="des">Track and handle customer refund requests.</div>
+                                </div>
+                                <div className="right">
+                                    <i className="adminlib-more-vertical"></i>
+                                </div>
+                            </div>
+                            <RefundRequest />
+                        </div>
+                    </div>
+                </>
+        },
+        // { id: "coupons", label: "Coupons", content: <Coupons onUpdated={refreshCounts} /> },
+        // { id: "transactions", label: "Withdrawal", content: <Transactions onUpdated={refreshCounts} /> },
+    ];
 
     return (
         <>
@@ -117,6 +147,33 @@ const CustomerServices = () => {
                 </div>
 
                 <div className="row">
+                    <div className="tabs-wrapper">
+                        <div className="tab-titles">
+                            {tabs.map((tab) => (
+                                <div
+                                    key={tab.id}
+                                    className={`title ${activeTab === tab.id ? "active" : ""}`}
+                                    onClick={() => setActiveTab(tab.id)}
+                                >
+                                    <p><i className="adminlib-cart"></i>{tab.label}</p>
+                                </div>
+                            ))}
+                        </div>
+                        {/* Tab Content */}
+                        <div className="tab-content">
+                            {tabs.map(
+                                (tab) =>
+                                    activeTab === tab.id && (
+                                        <div key={tab.id} className="tab-panel">
+                                            {tab.content}
+                                        </div>
+                                    )
+                            )}
+                        </div>
+                    </div>
+                </div>
+
+                {/* <div className="row">
                     <div className="column">
                         <div className="card-header">
                             <div className="left">
@@ -166,7 +223,7 @@ const CustomerServices = () => {
                         <AbuseReports />
                     </div>
                 </div>
-                
+
 
                 <div className="row">
                     <div className="column">
@@ -183,7 +240,7 @@ const CustomerServices = () => {
                         </div>
                         <Qna />
                     </div>
-                </div>
+                </div> */}
             </div>
         </>
     );

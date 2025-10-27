@@ -4,6 +4,7 @@ import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 import { CalendarInput, Table, TableCell, CommonPopup, TextArea } from 'zyra';
 import { ColumnDef, RowSelectionState, PaginationState } from '@tanstack/react-table';
+import DefaultStore from "../../../assets/images/default-store.jpg";
 
 type StoreRow = {
     id?: number;
@@ -153,7 +154,7 @@ console.log(data)
             header: __('Product', 'multivendorx'),
             cell: ({ row }) => {
                 const product = row.original;
-                const image = product.images?.[0]?.src || 'https://via.placeholder.com/50';
+                const image = product.images?.[0]?.src || DefaultStore;
                 return (
                     <TableCell title={product.name || ''}>
                         <a
@@ -162,7 +163,7 @@ console.log(data)
                             rel="noreferrer"
                             className="product-wrapper"
                         >
-                            <img src={image} alt={product.name} style={{ width: 40, height: 40, objectFit: 'cover' }} />
+                            <img src={image} alt={product.name} />
                             <span>{product.name || '-'}</span>
                         </a>
                     </TableCell>
