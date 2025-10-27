@@ -574,6 +574,7 @@ class FrontendScripts {
 					'data'        => array(
 						'ajaxurl'     => admin_url( 'admin-ajax.php' ),
                         'nonce'    => wp_create_nonce('review_ajax_nonce'),
+                        'parameters' => MultiVendorX()->setting->get_setting('ratings_parameters', []),
 					),
 				),
                 'multivendorx-admin-product-auto-search-script' => array(

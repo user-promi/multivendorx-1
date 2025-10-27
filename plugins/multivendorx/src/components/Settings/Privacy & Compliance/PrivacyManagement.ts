@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 export default {
     id: 'privacy-settings',
     priority: 1,
-    name: __( 'Privacy', 'multivendorx' ),
+    name: __( 'Privacy Management', 'multivendorx' ),
     desc: __('Manage how store details are shared with customers, from branding and contact info to policies and profile visibility.','multivendorx'),
     icon: 'adminlib-privacy',
     submitUrl: 'settings',
@@ -111,7 +111,50 @@ export default {
             ],
             selectDeselect: true,
         },
-        
+         {
+            key: 'separator_store_policy_override',
+            type: 'section',
+            desc: __( 'Protect your shoppers by deciding how much of their information stores can access.', 'multivendorx' ),
+            hint: __(
+                'Customer privacy',
+                'multivendorx'
+            ),
+        },
+        {
+            key: 'store_policy_override',
+            type: 'checkbox',
+            label: __( 'Customer information access', 'multivendorx' ),
+            settingDescription: __( 'Choose what stores can see about customers', 'multivendorx' ),
+            class: 'mvx-toggle-checkbox',
+            options: [
+                {
+                    key: 'name',
+                    label: __( 'Name', 'multivendorx' ),
+                    value: 'name',
+                },
+                {
+                    key: 'email_address',
+                    label: __( 'Email address', 'multivendorx' ),
+                    value: 'email_address',
+                },
+                {
+                    key: 'phone_number',
+                    label: __( 'Phone number', 'multivendorx' ),
+                    value: 'phone_number',
+                },
+                {
+                    key: 'shipping_address',
+                    label: __( 'Shipping address', 'multivendorx' ),
+                    value: 'shipping_address',
+                },
+                {
+                    key: 'order_notes',
+                    label: __( 'Order notes', 'multivendorx' ),
+                    value: 'order_notes',
+                },
+            ],
+            selectDeselect: true,
+        },
         {
             key: 'separator_store_policy_override',
             type: 'section',
