@@ -281,7 +281,7 @@ export default {
         {
             key: 'separator_content',
             type: 'section',
-            hint: __("What's excluded along with store commission", 'multivendorx'),
+            hint: __("What's deducted along with store commission", 'multivendorx'),
             desc: __('Determine which fees to deduct from the commission amount.', 'multivendorx')
         },
         {
