@@ -50,7 +50,7 @@ class Frontend {
 
 
     public function multivendorx_add_store_review_button( $item_id, $item, $order ) {
-        static $printed_stores = []; // ✅ keeps track of already displayed store IDs
+        static $printed_stores = []; // track already printed store IDs
     
         $product_id = $item->get_product_id();
         if ( ! $product_id ) {
@@ -75,9 +75,9 @@ class Frontend {
         // 🔹 Generate review page link
         $review_url = MultiVendorX()->store->storeutil->get_store_url( $store_id, 'reviews' );
     
-        // 🔹 Output review button under order item
-        echo '<div class="multivendorx-order-review-link" style="margin-top:10px;">';
-        echo '<a href="' . esc_url( $review_url ) . '" target="_blank" class="button alt" style="display:inline-block; background:#6c63ff; color:#fff; border-radius:6px; padding:8px 16px; text-decoration:none;">' 
+        // 🔹 Output default WooCommerce button
+        echo '<div class="multivendorx-order-review-link">';
+        echo '<a href="' . esc_url( $review_url ) . '" target="_blank" class="button alt">' 
             . esc_html__( 'Leave a Review', 'multivendorx' ) . 
             '</a>';
         echo '</div>';
