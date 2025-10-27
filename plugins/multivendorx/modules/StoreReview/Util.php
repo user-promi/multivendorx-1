@@ -6,48 +6,53 @@ use MultiVendorX\Utill;
 if (!defined('ABSPATH')) exit;
 
 class Util {
-    
+
     /**
      * Check if a user has purchased from a specific store
      */
     public static function is_verified_buyer($store_id, $user_id) {
-        if (!$store_id || !$user_id) {
-            return false;
+        if (empty($store_id) || empty($user_id)) {
+            return 0;
         }
-
-        // Get all customer orders
+    
+        //Fetch all relevant orders for this user
         $orders = wc_get_orders([
             'customer_id' => $user_id,
-            'status'      => array('completed', 'processing', 'on-hold'),
+            'status'      => ['completed', 'processing', 'on-hold'],
             'limit'       => -1,
             'return'      => 'ids',
         ]);
-
+    
         if (empty($orders)) {
-            return false;
+            return 0;
         }
-
+    
         foreach ($orders as $order_id) {
-            $store_ids = [];
-
-            // Loop through order items and get store_id meta
             $order = wc_get_order($order_id);
-            if (!$order) continue;
-
-            foreach ($order->get_items('line_item') as $item) {
-                $item_store_id = $item->get_meta('multivendorx_store_id');
-                if ($item_store_id) {
-                    $store_ids[] = (int) $item_store_id;
+            if (!$order) {
+                continue;
+            }
+    
+            //Loop through all products in the order
+            foreach ($order->get_items('line_item') as $item_id => $item) {
+                $product_id = $item->get_product_id();
+                $product    = wc_get_product($product_id);
+                if (!$product) continue;
+    
+                // Get store ID from product meta or item meta
+                $product_store_id = get_post_meta($product_id, 'multivendorx_store_id', true);
+                if (empty($product_store_id)) {
+                    $product_store_id = $item->get_meta('multivendorx_store_id');
+                }
+    
+                // Match store ID
+                if ((int) $product_store_id === (int) $store_id) {
+                    return (int) $order_id; // Verified buyer — return that order ID
                 }
             }
-
-            // If this store_id found in any order items, verified ✅
-            if (in_array((int) $store_id, $store_ids, true)) {
-                return true;
-            }
         }
-
-        return false;
+    
+        return 0; //Not a verified buyer
     }
 
     /**
@@ -66,22 +71,24 @@ class Util {
     /**
      * Insert a new review
      */
-    public static function insert_review($store_id, $user_id, $title, $content, $overall) {
+    public static function insert_review($store_id, $user_id, $title, $content, $overall, $order_id = 0) {
         global $wpdb;
         $table_review = $wpdb->prefix . Utill::TABLES['review'];
-
+    
         $wpdb->insert($table_review, [
             'store_id'       => $store_id,
             'customer_id'    => $user_id,
+            'order_id'       => intval($order_id), // ✅ store order ID
             'overall_rating' => $overall,
             'review_title'   => $title,
             'review_content' => $content,
             'status'         => 'pending',
             'date_created'   => current_time('mysql'),
         ]);
-
+    
         return $wpdb->insert_id;
     }
+    
 
     /**
      * Insert multiple parameter ratings for a review

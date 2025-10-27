@@ -19,8 +19,7 @@ class Ajax {
 
     public function submit_review() {
         check_ajax_referer('review_ajax_nonce', 'nonce');
-
-        // Securely collect all inputs at once
+    
         $data = filter_input_array(INPUT_POST, [
             'store_id'       => FILTER_SANITIZE_NUMBER_INT,
             'review_title'   => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
@@ -30,29 +29,33 @@ class Ajax {
                 'flags'  => FILTER_REQUIRE_ARRAY
             ],
         ]);
-
+    
         $store_id       = intval($data['store_id'] ?? 0);
         $user_id        = get_current_user_id();
         $review_title   = $data['review_title'] ?? '';
         $review_content = $data['review_content'] ?? '';
         $ratings        = $data['rating'] ?? [];
-
+    
         if (!$user_id || !$store_id || empty($ratings)) {
             wp_send_json_error(['message' => __('Missing required fields.', 'multivendorx')]);
         }
-
-        //Check if already reviewed
+    
+        // Check if already reviewed
         if (Util::has_reviewed($store_id, $user_id)) {
             wp_send_json_error(['message' => __('You have already reviewed this store.', 'multivendorx')]);
         }
-
-        //Insert new review
+    
+        //Detect if verified buyer and get their order ID
+        $order_id = Util::is_verified_buyer($store_id, $user_id);
+    
+        // Insert new review
         $overall   = array_sum($ratings) / count($ratings);
-        $review_id = Util::insert_review($store_id, $user_id, $review_title, $review_content, $overall);
+        $review_id = Util::insert_review($store_id, $user_id, $review_title, $review_content, $overall, $order_id);
         Util::insert_ratings($review_id, $ratings);
-
+    
         wp_send_json_success(['message' => __('Review submitted successfully!', 'multivendorx')]);
     }
+    
 
     public function get_reviews() {
         $store_id = filter_input(INPUT_POST, 'store_id', FILTER_SANITIZE_NUMBER_INT);

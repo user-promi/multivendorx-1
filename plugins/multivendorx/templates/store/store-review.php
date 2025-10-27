@@ -8,7 +8,7 @@ $parameters = MultiVendorX()->setting->get_setting('ratings_parameters', []);
 
 // Default values
 $review_status = '';
-$is_verified_buyer = true; // Default true
+$is_verified_buyer = 0; // Default true
 $is_verified_buyer_only = reset(MultiVendorX()->setting->get_setting('is_storereview_varified',[])) ?? false;
 
 if ($is_logged_in && $store_id) {
