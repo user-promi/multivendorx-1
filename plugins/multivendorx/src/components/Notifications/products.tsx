@@ -56,9 +56,9 @@ const Products: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
         const now = new Date();
         const formattedStartDate = formatDateToISO8601(startDate || new Date(now.getFullYear(), now.getMonth() - 1, now.getDate()));
         const formattedEndDate = formatDateToISO8601(endDate || now);
-    
+
         setData(null);
-    
+
         axios
             .get(`${appLocalizer.apiUrl}/wc/v3/products`, {
                 headers: { 'X-WP-Nonce': appLocalizer.nonce },
@@ -81,7 +81,7 @@ const Products: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
             })
             .catch(() => setData([]));
     };
-console.log(data)
+    console.log(data)
     useEffect(() => {
         const currentPage = pagination.pageIndex + 1;
         requestData(pagination.pageSize, currentPage);
@@ -246,7 +246,7 @@ console.log(data)
     ];
 
     return (
-        <div className="admin-table-wrapper">
+        <>
             <Table
                 data={data}
                 columns={columns as ColumnDef<Record<string, any>, any>[]}
@@ -309,7 +309,7 @@ console.log(data)
                     </div>
                 </CommonPopup>
             )}
-        </div>
+        </>
     );
 };
 
