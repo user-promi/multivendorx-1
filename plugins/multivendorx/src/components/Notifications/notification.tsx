@@ -12,12 +12,12 @@ const Notification = () => {
     const [transactionCount, setTransactionCount] = useState<number>(0);
     const [storeCount, setStoreCount] = useState<number>(0);
 
-    const [activeTab, setActiveTab] = useState("products");
+    const [activeTab, setActiveTab] = useState("");
     const [tasks, setTasks] = useState<string[]>([]);
     const [showInput, setShowInput] = useState(false);
     const [task, setTask] = useState("");
     const [loading, setLoading] = useState(false);
-
+    console.log(appLocalizer)
     useEffect(() => {
         if (!appLocalizer.user_id) return;
 
@@ -110,66 +110,77 @@ const Notification = () => {
     };
 
     const tabs = [
+        ...(appLocalizer.approve_store === "manually"
+            ? [{
+                id: "products",
+                label: "Store Approval",
+                icon: "adminlib-calendar",
+                count: storeCount,
+                content: <Products onUpdated={refreshCounts} />
+            }]
+            : []
+        ),
         {
-            id: "products", label: "Store", icon: "adminlib-calendar red", count: storeCount, des: "Waitng for Wholesale Customer Approval", content:
-                <><div className="card-header">
-                    <div className="left">
-                        <div className="title">
-                            Store
-                        </div>
-                        <div className="des">Track and handle customer refund requests.</div>
-                    </div>
-                    <div className="right">
-                        <i className="adminlib-more-vertical"></i>
-                    </div>
-                </div>
-                    <Products onUpdated={refreshCounts} />
-                </>
+            id: "stores",
+            label: "Store Verification",
+            icon: "adminlib-calendar",
+            count: 9,
+            content: <Vendors onUpdated={refreshCounts} />
+        },
+        ...(Array.isArray(appLocalizer.enable_profile_deactivation_request)
+            && appLocalizer.enable_profile_deactivation_request.includes("enable_profile_deactivation_request")
+            ? [{
+                id: "coupons",
+                label: "Store Deactivation Requests",
+                icon: "adminlib-calendar",
+                count: 9,
+                content: <Coupons onUpdated={refreshCounts} />
+            }]
+            : []
+        ),
+        ...(Array.isArray(appLocalizer.can_publish_products)
+            && appLocalizer.can_publish_products.includes("publish_products")
+            ? [{
+                id: "product-approval",
+                label: "Product Approval",
+                icon: "adminlib-calendar",
+                count: productCount,
+                content: <Transactions onUpdated={refreshCounts} />
+            }]
+            : []
+        ),
+        ...(Array.isArray(appLocalizer.can_publish_coupons)
+            && appLocalizer.can_publish_coupons.includes("publish_coupons")
+            ? [{
+                id: "coupon-approval",
+                label: "Coupon Approval",
+                icon: "adminlib-calendar",
+                count: couponCount,
+                content: <Transactions onUpdated={refreshCounts} />
+            }]
+            : []
+        ),
+        {
+            id: "wholesale-customer",
+            label: "Wholesale Customer Approval",
+            icon: "adminlib-calendar",
+            count: 9,
+            content: <Transactions onUpdated={refreshCounts} />
         },
         {
-            id: "stores", label: "Verification", icon: "adminlib-calendar green", count: 9, des: "Waitng for Wholesale Customer Approval", content: <><div className="card-header">
-                <div className="left">
-                    <div className="title">
-                        Verification
-                    </div>
-                    <div className="des">Track and handle customer refund requests.</div>
-                </div>
-                <div className="right">
-                    <i className="adminlib-more-vertical"></i>
-                </div>
-            </div><Vendors onUpdated={refreshCounts} /> </>
-        },
-        {
-            id: "coupons", label: "Requests", icon: "adminlib-calendar blue", count: 9, des: "Waitng for Wholesale Customer Approval", content: <><div className="card-header">
-                <div className="left">
-                    <div className="title">
-                        Refund Requests
-                    </div>
-                    <div className="des">Track and handle customer refund requests.</div>
-                </div>
-                <div className="right">
-                    <i className="adminlib-more-vertical"></i>
-                </div>
-            </div> <Coupons onUpdated={refreshCounts} /> </>
-        },
-        {
-            id: "product-approval", label: "Product", icon: "adminlib-calendar yellow", count: productCount, des: "Waitng for Wholesale Customer Approval", content: <><div className="card-header">
-                <div className="left">
-                    <div className="title">
-                        Refund Requests
-                    </div>
-                    <div className="des">Track and handle customer refund requests.</div>
-                </div>
-                <div className="right">
-                    <i className="adminlib-more-vertical"></i>
-                </div>
-            </div> <Transactions onUpdated={refreshCounts} /> </>
-        },
-        { id: "Coupon", label: "Coupon", icon: "adminlib-calendar green", count: couponCount, des: "Waitng for Wholesale Customer Approval", content: <Transactions onUpdated={refreshCounts} /> },
-        { id: "wholesale-customer", label: "Wholesale", icon: "adminlib-calendar red", count: 9, des: "Waitng for Wholesale Customer Approval", content: <Transactions onUpdated={refreshCounts} /> },
-        { id: "Withdrawal", label: "Withdrawal", icon: "adminlib-calendar yellow", count: transactionCount, des: "Waitng for Wholesale Customer Approval", content: <Transactions onUpdated={refreshCounts} /> },
-
-    ];
+            id: "withdrawal",
+            label: "Withdrawal Requests",
+            icon: "adminlib-calendar",
+            count: transactionCount,
+            content: <Transactions onUpdated={refreshCounts} />
+        }
+    ];    
+    useEffect(() => {
+        if (!tabs.find(tab => tab.id === activeTab)) {
+            setActiveTab(tabs[0]?.id || "");
+        }
+    }, [tabs, activeTab]);
+    
     // run once on mount
     useEffect(() => {
         refreshCounts();
