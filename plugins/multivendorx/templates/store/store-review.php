@@ -1,32 +1,19 @@
 <?php
 if (!defined('ABSPATH')) exit;
 
-use MultiVendorX\Utill;
-
 $store_id = $args['store_id'];
 $is_logged_in = is_user_logged_in();
 $current_user = wp_get_current_user();
 $parameters = MultiVendorX()->setting->get_setting('ratings_parameters', []);
 
-global $wpdb;
-$table_review = $wpdb->prefix . Utill::TABLES['review'];
-
 $review_status = '';
 if ($is_logged_in && $store_id) {
-    $review_status = $wpdb->get_var($wpdb->prepare(
-        "SELECT status FROM {$table_review} 
-         WHERE store_id = %d 
-         AND customer_id = %d 
-         ORDER BY date_created DESC 
-         LIMIT 1",
-        $store_id,
-        $current_user->ID
-    ));
+    $review_status = \MultiVendorX\StoreReview\Util::get_user_review_status($store_id, $current_user->ID);
 }
 ?>
 <div class="woocommerce">
-    <div id="mvx_vendor_reviews">
-        <div id="mvx_avg_rating"></div>
+    <div id="multivendorx_vendor_reviews">
+        <div id="multivendorx_avg_rating"></div>
 
         <div id="review_form_wrapper">
             <?php if (!$is_logged_in): ?>
@@ -61,7 +48,7 @@ if ($is_logged_in && $store_id) {
                     ?>
                         <p>
                             <label><?php echo esc_html($param_value); ?></label>
-                            <select name="rating[<?php echo esc_attr($param_value); ?>]" class="mvx-rating-select">
+                            <select name="rating[<?php echo esc_attr($param_value); ?>]" class="multivendorx-rating-select">
                                 <option value=""><?php esc_html_e('Rate...', 'multivendorx'); ?></option>
                                 <?php for ($i = 1; $i <= 5; $i++): ?>
                                     <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
@@ -85,6 +72,6 @@ if ($is_logged_in && $store_id) {
         <input type="hidden" id="store_for_rating" value="<?php echo esc_attr($store_id); ?>">
 
         <!-- ✅ Always show the reviews list -->
-        <div id="mvx_vendor_reviews_list"></div>
+        <div id="multivendorx_vendor_reviews_list"></div>
     </div>
 </div>
