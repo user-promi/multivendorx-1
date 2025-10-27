@@ -164,7 +164,7 @@ export const TransactionHistory: React.FC = () => {
                 }
                 customContent={
                     <>
-                        <div>Switch Store</div>
+                        <label><i className="adminlib-tools"></i>Switch Store</label>
                         <SelectInput
                             name="store"
                             value={selectedStore?.value || ""}

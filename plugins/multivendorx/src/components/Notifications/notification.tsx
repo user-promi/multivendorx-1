@@ -110,10 +110,14 @@ const Notification = () => {
     };
 
     const tabs = [
-        { id: "products", label: "Products", content: <Products onUpdated={refreshCounts} /> },
-        { id: "stores", label: "Stores", content: <Vendors onUpdated={refreshCounts} /> },
-        { id: "coupons", label: "Coupons", content: <Coupons onUpdated={refreshCounts} /> },
-        { id: "transactions", label: "Withdrawal", content: <Transactions onUpdated={refreshCounts} /> },
+        { id: "products", label: "Store Approval", icon: "adminlib-calendar", count: storeCount, content: <Products onUpdated={refreshCounts} /> },
+        { id: "stores", label: "Store Verification", icon: "adminlib-calendar", count: 9, content: <Vendors onUpdated={refreshCounts} /> },
+        { id: "coupons", label: "Store Deactivation Requests", icon: "adminlib-calendar", count: 9, content: <Coupons onUpdated={refreshCounts} /> },
+        { id: "product-approval", label: "Product Approval", icon: "adminlib-calendar", count: productCount, content: <Transactions onUpdated={refreshCounts} /> },
+        { id: "Coupon", label: "Coupon Approval", icon: "adminlib-calendar", count: couponCount, content: <Transactions onUpdated={refreshCounts} /> },
+        { id: "wholesale-customer", label: "Wholesale Customer Approval", icon: "adminlib-calendar", count: 9, content: <Transactions onUpdated={refreshCounts} /> },
+        { id: "Withdrawal", label: "Withdrawal Requests", icon: "adminlib-calendar", count: transactionCount, content: <Transactions onUpdated={refreshCounts} /> },
+
     ];
     // run once on mount
     useEffect(() => {
@@ -130,7 +134,7 @@ const Notification = () => {
             {/* Workboard Stats */}
             <div className="work-board">
 
-                <div className="row">
+                {/* <div className="row">
                     <div className="column">
                         <div className="card-header">
                             <div className="left">
@@ -138,9 +142,9 @@ const Notification = () => {
                                     Review Store Submissions
                                 </div>
                             </div>
-                            {/* <div className="right">
+                            <div className="right">
                                 <span>Updated 1 month ago</span>
-                            </div> */}
+                            </div>
                         </div>
                         <div className="overview-card-wrapper">
                             <div className="action">
@@ -183,7 +187,7 @@ const Notification = () => {
                             </div>
                         </div>
                     </div>
-
+                    
                     <div className="column">
                         <div className="card-header">
                             <div className="left">
@@ -295,45 +299,48 @@ const Notification = () => {
                             </ul>
                         </div>
                     </div>
+                </div> */}
+
+
+                <div className="row">
+                    <div className="overview-card-wrapper tab">
+                        {/* {CustomerServicesStats.map(stat => (
+                            <div className="action" key={stat.id}>
+                                <div className="title">
+                                    {stat.count}
+                                    <i className={stat.icon}></i>
+                                </div>
+                                <div className="description">
+                                    {stat.label}
+                                </div>
+                            </div>
+                        ))} */}
+                        {tabs.map((tab) => (
+                            <div className={`action ${activeTab === tab.id ? "active" : ""}`} key={tab.id} onClick={() => setActiveTab(tab.id)}>
+                                <div className="title">
+                                    {tab.count}
+                                    <i className={tab.icon}></i>
+                                </div>
+                                <div className="description">
+                                    {tab.label}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
 
                 <div className="row">
                     <div className="column">
-                        <div className="action-tab-wrapper">
-                            <div className="card-header">
-                                <div className="left">
-                                    <div className="title">
-                                        Account Overview
-                                    </div>
-                                </div>
-                                <div className="right">
-                                    <i className="adminlib-more-vertical"></i>
-                                </div>
-                            </div>
-                            {/* Tab Titles */}
-                            <div className="tab-titles">
-                                {tabs.map((tab) => (
-                                    <div
-                                        key={tab.id}
-                                        className={`title ${activeTab === tab.id ? "active" : ""}`}
-                                        onClick={() => setActiveTab(tab.id)}
-                                    >
-                                        <p><i className="adminlib-cart"></i>{tab.label}</p>
-                                    </div>
-                                ))}
-                            </div>
-
-                            {/* Tab Content */}
-                            <div className="tab-content">
-                                {tabs.map(
-                                    (tab) =>
-                                        activeTab === tab.id && (
-                                            <div key={tab.id} className="tab-panel">
-                                                {tab.content}
-                                            </div>
-                                        )
-                                )}
-                            </div>
+                        {/* Tab Content */}
+                        <div className="tab-content">
+                            {tabs.map(
+                                (tab) =>
+                                    activeTab === tab.id && (
+                                        <div key={tab.id} className="tab-panel">
+                                            {tab.content}
+                                        </div>
+                                    )
+                            )}
                         </div>
                     </div>
                 </div>

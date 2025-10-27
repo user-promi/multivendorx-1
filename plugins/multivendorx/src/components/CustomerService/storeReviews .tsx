@@ -219,7 +219,6 @@ const StoreReviews: React.FC = () => {
 
     return (
         <>
-            <div className="admin-table-wrapper">
                 <Table
                     data={data || []}
                     columns={columns as ColumnDef<Record<string, any>, any>[]}
@@ -233,7 +232,6 @@ const StoreReviews: React.FC = () => {
                     perPageOption={[10, 25, 50]}
                     totalCounts={totalRows}
                 />
-            </div>
 
             {editModalOpen && selectedReview && (
                 <CommonPopup
