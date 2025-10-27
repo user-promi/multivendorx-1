@@ -71,7 +71,7 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
                 array( 'status' => 403 )
             );
         }
-
+    
         // Check if CSV download is requested
         $format = $request->get_param( 'format' );
         if ( $format === 'csv' ) {
@@ -87,6 +87,10 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
         $start_date = date('Y-m-d 00:00:00', strtotime(sanitize_text_field($request->get_param('startDate'))));
         $end_date   = date('Y-m-d 23:59:59', strtotime(sanitize_text_field($request->get_param('endDate'))));
         
+        // ADD THESE LINES FOR SORTING
+        $orderBy   = sanitize_text_field( $request->get_param( 'orderBy' ) );
+        $order     = sanitize_text_field( $request->get_param( 'order' ) );
+    
         // Prepare filter for CommissionUtil
         $filter = array(
             'perpage' => $limit,
@@ -96,18 +100,24 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
         if ( ! empty( $storeId ) ) {
             $filter['store_id'] = intval( $storeId );
         }
-
+    
         if ( ! empty( $status ) ) {
             $filter['status'] = $status;
         }
-
+    
         if ( ! empty( $start_date ) && ! empty( $end_date ) ) {
             $filter['created_at'] = array(
                 'compare' => 'BETWEEN',
                 'value'   => array( $start_date, $end_date ),
             );
         }
-
+    
+        // ADD SORTING TO FILTER
+        if ( ! empty( $orderBy ) && ! empty( $order ) ) {
+            $filter['orderBy'] = $orderBy;
+            $filter['order']   = $order;
+        }
+    
         if ( $count ) {
             global $wpdb;
             $table_name  = "{$wpdb->prefix}" . Utill::TABLES['commission'];
@@ -123,12 +133,13 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
     
             return rest_ensure_response( (int) $total_count );
         }
-
-        // Fetch commissions
+    
+        // Rest of your existing code remains the same...
         $commissions = CommissionUtil::get_commissions(
             $filter,
             false
         );
+    
     
         $formatted_commissions = array();
     

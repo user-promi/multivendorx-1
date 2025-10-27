@@ -66,6 +66,13 @@ interface SearchFilter {
         filterValue: any
     ) => ReactNode;
 }
+interface actionButton {
+    name: string;
+    render: (
+        updateFilter: (key: string, value: any) => void,
+        filterValue: any
+    ) => ReactNode;
+}
 export const TableCell: React.FC<TableCellProps> = ({
     title,
     fieldValue,
@@ -305,6 +312,7 @@ interface TableProps {
     defaultRowsPerPage?: number;
     realtimeFilter?: RealtimeFilter[];
     searchFilter?: SearchFilter[];
+    actionButton?: actionButton[];
     bulkActionComp?: () => React.ReactNode;
     pageCount: number;
     pagination: PaginationState;
@@ -333,6 +341,7 @@ const Table: React.FC<TableProps> = ({
     bulkActionComp,
     realtimeFilter,
     searchFilter,
+    actionButton,
     pageCount,
     pagination,
     onPaginationChange,
@@ -509,6 +518,7 @@ const Table: React.FC<TableProps> = ({
                         </div>
 
                     )}
+                    <div>
                     {searchFilter && (
                         <div className="search-field">
                             {searchFilter?.map((filter) => (
@@ -518,6 +528,16 @@ const Table: React.FC<TableProps> = ({
                             ))}
                         </div>
                     )}
+                    {actionButton && (
+                        <div className="search-field">
+                            {actionButton?.map((filter) => (
+                                <React.Fragment key={filter.name}>
+                                    {filter.render(handleFilterChange, filterData[filter.name])}
+                                </React.Fragment>
+                            ))}
+                        </div>
+                    )}
+                    </div>
                 </div>
             )}
             {loading ? (

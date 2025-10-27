@@ -25,6 +25,7 @@ type CommissionStatus = {
 };
 
 type CommissionRow = {
+    createdAt: string;
     id?: number;
     orderId?: number;
     storeId?: number;
@@ -296,6 +297,23 @@ const Commission: React.FC = () => {
         },
     ];
 
+    const actionButton: RealtimeFilter[] = [
+        {
+            name: 'actionButton',
+            render: (updateFilter, filterValue) => (
+                <>
+                    <div className="">
+                        <ExportAllCSVButton 
+                            filterData={currentFilterData}
+                        />
+                    </div>
+                </>
+            ),
+        },
+    ];
+
+    
+
     // Export All CSV Button Component - Downloads ALL filtered data
     const ExportAllCSVButton: React.FC<{
         filterData: FilterData;
@@ -510,6 +528,31 @@ const Commission: React.FC = () => {
             ),
         },
         {
+            id: 'createdAt',
+
+            accessorKey: 'createdAt',
+            enableSorting: true,
+            header: __('Date', 'multivendorx'),
+            cell: ({ row }) => {
+                const date = row.original.createdAt;
+                if (!date) return <TableCell>-</TableCell>;
+                
+                // Format the date for display
+                const formattedDate = new Date(date).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                });
+                
+                return (
+                    <TableCell title={`${formattedDate}` }>
+                        {formattedDate}
+                        
+                    </TableCell>
+                );
+            },
+        },
+        {
             id: 'action',
             header: __('Action', 'multivendorx'),
             cell: ({ row }) => (
@@ -619,6 +662,7 @@ const Commission: React.FC = () => {
                     )}
                     totalCounts={totalRows}
                     searchFilter={searchFilter}
+                    actionButton={actionButton}
                 />
             </div>
 

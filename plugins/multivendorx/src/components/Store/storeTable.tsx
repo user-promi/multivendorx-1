@@ -23,7 +23,8 @@ type StoreRow = {
         email: string;
     };
     applied_on?: string;
-    store_image?: string; // Add store image field
+    store_image?: string;
+    date?: string; // Add date field
 };
 
 type StoreStatus = {
@@ -150,6 +151,20 @@ const StoreTable: React.FC = () => {
             filterData?.date?.start_date,
             filterData?.date?.end_date,
         );
+    };
+
+    // Format date function
+    const formatDate = (dateString: string) => {
+        if (!dateString) return '-';
+        
+        const dateObj = new Date(dateString);
+        if (isNaN(dateObj.getTime())) return '-';
+        
+        return new Intl.DateTimeFormat('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+        }).format(dateObj);
     };
 
     // Get store image with fallback
