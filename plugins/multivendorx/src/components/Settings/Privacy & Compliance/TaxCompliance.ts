@@ -21,13 +21,8 @@ export default {
                 },
                 {
                     key: 'tax_identification_documents',
-                    label: __('Tax Identification Documents (PAN/GST/VAT/TIN)', 'mvx-pro'),
+                    label: __('Tax Identification Documents (TINs/VAT/GST/EIN/SSN/ITIN. etc.)', 'mvx-pro'),
                     value: 'tax_identification_documents',
-                },
-                {
-                    key: 'payment_processor_verification',
-                    label: __('Payment Processor Verification', 'mvx-pro'),
-                    value: 'payment_processor_verification',
                 },
             ],
             selectDeselect: true,
