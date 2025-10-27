@@ -353,6 +353,15 @@
     &.quick-link {
         flex-direction: column;
         gap: 0;
+
+        .header a{
+            display: flex;
+            gap: 0.313rem;
+
+            i{
+                font-size: 0.813rem;
+            }
+        }
     }
 }
 

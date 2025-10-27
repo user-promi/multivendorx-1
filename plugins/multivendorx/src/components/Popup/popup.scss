@@ -1,3 +1,6 @@
+@use '../config.scss' as *;
+
+
 .MuiDialogContent-root {
     padding: 0 !important;
 }
@@ -116,30 +119,41 @@
 }
 
 .module-popup-content {
-    width: 25rem;
-    .popup-wrapper {
-        padding: 2rem;
+    width: 30rem;
 
-        .module-icon {
-            text-align: center;
+    .popup-wrapper {
+
+        .popup-header {
+            height: 12rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: $theme-color;
 
             i {
-                font-size: 2.5rem;
-                padding: 0.5rem;
-                border-radius: 0.313rem;
-                background: #bfdeed;
-                color: #003d66;
+                color: #fff;
+                font-size: 6rem;
             }
         }
-        h2{
-            margin-bottom: 0;
-            font-size: 1.5rem;
+
+        .popup-body {
+            padding: 2rem;
+        }
+
+        h2 {
+            margin: 0;
+            font-size: 1.75rem;
             text-align: center;
         }
-        p{
+
+        p {
             margin-top: 0;
             text-align: center;
-            font-size: 0.95rem;
+            font-size: 1.063rem;
         }
+    }
+
+    .adminlib-cross {
+        color: #000;
     }
 }

@@ -101,42 +101,42 @@ const AdminDashboard = () => {
     {
       title: "Diversified marketplace",
       desc: "Enable bookings, subscriptions, and auctions to boost sales and engagement.",
-      iconClass: "adminlib-book",
+      iconClass: "adminlib-marketplace",
       linkText: "Explore Docs",
       href: "#",
     },
     {
       title: "Vacation mode for stores",
       desc: "Stores can pause their stores temporarily with automatic buyer notifications – no missed messages.",
-      iconClass: "adminlib-book",
+      iconClass: "adminlib-vacation",
       linkText: "Explore Docs",
       href: "#",
     },
     {
       title: "Never run out of stock",
       desc: "Real-time inventory tracking with automatic low-stock alerts keeps sellers prepared and buyers happy.",
-      iconClass: "adminlib-preview",
+      iconClass: "adminlib-global-community",
       linkText: "Book Consultation",
       href: "#",
     },
     {
       title: "Autopilot notifications",
       desc: "Automatic emails and alerts for every order, refund, and payout – everyone stays in the loop.",
-      iconClass: "adminlib-global-community",
+      iconClass: "adminlib-notification",
       linkText: "Join Discord",
       href: "#",
     },
     {
       title: "Verified stores only",
       desc: "Screen stores with document verification and approval – build a trusted marketplace from day one.",
-      iconClass: "adminlib-global-community",
+      iconClass: "adminlib-verification3",
       linkText: "Join Discord",
       href: "#",
     },
     {
       title: "Membership rewards & commission",
       desc: "Charge your sellers a monthly or yearly membership fee to sell on your marketplace – predictable revenue every month.",
-      iconClass: "adminlib-global-community",
+      iconClass: "adminlib-commission",
       linkText: "Join Discord",
       href: "#",
     },
@@ -252,6 +252,7 @@ const AdminDashboard = () => {
     {
       id: "dashboard",
       label: "Dashboard",
+      icon: "adminlib-module",
       content:
         <>
           <div className="card-wrapper width-65">
@@ -426,6 +427,7 @@ const AdminDashboard = () => {
                         <i className={res.iconClass}></i>
                         <a href={res.href} target="blank">
                           {res.linkText}
+                          <i className="adminlib-external"></i>
                         </a>
                       </div>
                       <h3>{res.title}</h3>
@@ -442,6 +444,7 @@ const AdminDashboard = () => {
     {
       id: "free-vs-pro",
       label: "Free vs Pro",
+      icon: "adminlib-pros-and-cons",
       content:
         <>
           <div className="card-wrapper width-65">
@@ -557,7 +560,7 @@ const AdminDashboard = () => {
                     className={`title ${activeTab === tab.id ? "active" : ""}`}
                     onClick={() => setActiveTab(tab.id)}
                   >
-                    <p><i className="adminlib-module"></i>{tab.label}</p>
+                    <p><i className={tab.icon}></i>{tab.label}</p>
                   </div>
                 ))}
               </div>

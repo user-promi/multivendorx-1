@@ -1870,11 +1870,12 @@ const AdminForm: React.FC<AdminFormProps> = ({
                     <div className="settings-input-content">{input}</div>
                     {(!inputField.proSetting && inputField.moduleEnabled) && (
                         <span className="admin-pro-tag module">
-                            <i className="adminlib-lock"></i>
+                            <i className={`adminlib-${inputField.moduleEnabled}`}></i>
                             {String(inputField.moduleEnabled)
                                 .split('-')
                                 .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
                                 .join(' ')}
+                            <i className="adminlib-lock"></i>
                         </span>
                     )}
                 </div>
