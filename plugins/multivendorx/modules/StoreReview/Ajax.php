@@ -79,10 +79,10 @@ class Ajax {
                     echo '</ul>';
                 }
 
-                if (!empty($review->admin_reply)) {
+                if (!empty($review->reply)) {
                     echo '<div class="mvx-review-reply">';
                     echo '<strong>' . esc_html__('Reply:', 'multivendorx') . '</strong> ';
-                    echo '<p>' . esc_html($review->admin_reply) . '</p>';
+                    echo '<p>' . esc_html($review->reply) . '</p>';
                     echo '</div>';
                 }
 
