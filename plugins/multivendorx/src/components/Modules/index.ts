@@ -138,7 +138,7 @@ export default {
         { type: 'separator', id: 'store_management', label: 'Store Management' },
         {
             id: 'identity-verification',
-            name: __('Seller Identity Verification', 'multivendorx'),
+            name: __('Store Identity Verification', 'multivendorx'),
             desc: "Confirms store owner identity using documents, address proof, or social profiles.",
             icon: 'adminlib-rules',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/identity-verification/',
