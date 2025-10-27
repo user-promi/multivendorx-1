@@ -51,6 +51,19 @@ const StoreSquad = ({ id }: { id: string|null }) => {
                                 <label>Primary Owners</label>
                                 <SelectInput
                                     name="primary_owner"
+                                    options={appLocalizer?.store_owners || []}
+                                    value={formData.primary_owner}
+                                    type="single-select"
+                                    onChange={(newValue: any) => {
+                                        if (!newValue || Array.isArray(newValue)) return;
+                                        
+                                        const updated = { ...formData, primary_owner: newValue.value };
+                                        setFormData(updated); 
+                                        autoSave(updated);
+                                    }}
+                                />
+                                {/* <SelectInput
+                                    name="primary_owner"
                                     options={appLocalizer.store_owners || []}
                                     type="multi-select"
                                     value={(formData.primary_owner || []).map((id: any) => {
@@ -72,7 +85,7 @@ const StoreSquad = ({ id }: { id: string|null }) => {
                                         setFormData(updated);
                                         autoSave(updated);
                                     }}
-                                />
+                                /> */}
                             </div>
                         </div>
 
