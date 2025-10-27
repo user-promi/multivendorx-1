@@ -162,12 +162,8 @@ const DownloadTransactionCSVButton: React.FC<{
             onClick={handleDownload}
             disabled={isDownloading || isLoading || !storeId || (!hasSelectedRows && !data)}
             className="button button-secondary"
-            style={{ 
-                marginLeft: '10px',
-                opacity: (isDownloading || isLoading || !storeId || (!hasSelectedRows && !data)) ? 0.6 : 1
-            }}
         >
-            {isDownloading ? __('Downloading...', 'multivendorx') : __('Download CSV', 'multivendorx')}
+            Download CSV
         </button>
     );
 };
@@ -259,12 +255,9 @@ const ExportAllTransactionCSVButton: React.FC<{
             onClick={handleExportAll}
             disabled={isDownloading || !storeId}
             className="admin-btn btn-purple"
-            style={{ 
-                opacity: (isDownloading || !storeId) ? 0.6 : 1
-            }}
         >
             <i className="adminlib-export"></i>
-            {isDownloading ? __('Exporting...', 'multivendorx') : __('Export All CSV', 'multivendorx')}
+            Export All CSV
         </button>
     );
 };
@@ -278,7 +271,7 @@ const TransactionBulkActions: React.FC<{
     onActionComplete?: () => void;
 }> = ({ selectedRows, data, filterData, storeId, onActionComplete }) => {
     return (
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+        <div>
             <DownloadTransactionCSVButton 
                 selectedRows={selectedRows} 
                 data={data}

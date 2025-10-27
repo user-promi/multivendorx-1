@@ -94,7 +94,7 @@ const CustomerServices = () => {
     ];
     const tabs = [
         {
-            id: "products", label: "Question & Answer", icon: "adminlib-calendar red",  des: "Waitng for Wholesale Customer Approval", count: qnaCount, content:
+            id: "products", label: "Questions", icon: "adminlib-calendar red",  des: "Waiting for your response", count: qnaCount, content:
                 <>
                     <div className="card-header">
                         <div className="left">
@@ -110,7 +110,7 @@ const CustomerServices = () => {
                     <Qna /></>
         },
         {
-            id: "review", label: "Review Flag", icon: "adminlib-calendar green", count: 9,  des: "Waitng for Wholesale Customer Approval", content:
+            id: "review", label: "Store Reviews", icon: "adminlib-calendar green", count: 9,  des: "Shared by customers", content:
                 <>
                     <div className="card-header">
                         <div className="left">
@@ -127,7 +127,7 @@ const CustomerServices = () => {
                 </>
         },
         {
-            id: "reports", label: "Abuse Reports", icon: "adminlib-calendar yellow",  des: "Waitng for Wholesale Customer Approval", count: abuseCount, content:
+            id: "reports", label: "Abuse Reports", icon: "adminlib-calendar yellow",  des: "Flagged for review", count: abuseCount, content:
                 <>
                     <div className="card-header">
                         <div className="left">
@@ -144,7 +144,7 @@ const CustomerServices = () => {
                 </>
         },
         {
-            id: "refund-requests", label: "Refund Requests", icon: "adminlib-calendar blue",  des: "Waitng for Wholesale Customer Approval", count: 3, content:
+            id: "refund-requests", label: "Refund Requests", icon: "adminlib-calendar blue",  des: "Need your decision", count: 3, content:
                 <>
                     <div className="card-header">
                         <div className="left">

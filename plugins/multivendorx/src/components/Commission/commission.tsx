@@ -105,7 +105,7 @@ const DownloadCSVButton: React.FC<{
             const response = await axios({
                 method: 'GET',
                 url: getApiLink(appLocalizer, 'commission'),
-                headers: { 
+                headers: {
                     'X-WP-Nonce': appLocalizer.nonce,
                     'Accept': 'text/csv'
                 },
@@ -117,12 +117,12 @@ const DownloadCSVButton: React.FC<{
             const url = window.URL.createObjectURL(new Blob([response.data]));
             const link = document.createElement('a');
             link.href = url;
-            
+
             // Generate filename with timestamp
             const timestamp = new Date().toISOString().split('T')[0];
             const filename = `commissions_${timestamp}.csv`;
             link.setAttribute('download', filename);
-            
+
             document.body.appendChild(link);
             link.click();
             link.remove();
@@ -142,13 +142,9 @@ const DownloadCSVButton: React.FC<{
         <button
             onClick={handleDownload}
             disabled={isDownloading || isLoading || (!hasSelectedRows && !data)}
-            className="button button-secondary"
-            style={{ 
-                marginLeft: '10px',
-                opacity: (isDownloading || isLoading || (!hasSelectedRows && !data)) ? 0.6 : 1
-            }}
+            className="button"
         >
-            {isDownloading ? __('Downloading...', 'multivendorx') : __('Download CSV', 'multivendorx')}
+            Download CSV
         </button>
     );
 };
@@ -161,9 +157,9 @@ const BulkActions: React.FC<{
     onActionComplete?: () => void;
 }> = ({ selectedRows, data, filterData, onActionComplete }) => {
     return (
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <DownloadCSVButton 
-                selectedRows={selectedRows} 
+        <div>
+            <DownloadCSVButton
+                selectedRows={selectedRows}
                 data={data}
                 filterData={filterData}
             />
@@ -292,7 +288,7 @@ const Commission: React.FC = () => {
             render: (updateFilter, filterValue) => (
                 <>
                     <div className="">
-                        <ExportAllCSVButton 
+                        <ExportAllCSVButton
                             filterData={currentFilterData}
                         />
                     </div>
@@ -349,7 +345,7 @@ const Commission: React.FC = () => {
                 const response = await axios({
                     method: 'GET',
                     url: getApiLink(appLocalizer, 'commission'),
-                    headers: { 
+                    headers: {
                         'X-WP-Nonce': appLocalizer.nonce,
                         'Accept': 'text/csv'
                     },
@@ -361,12 +357,12 @@ const Commission: React.FC = () => {
                 const url = window.URL.createObjectURL(new Blob([response.data]));
                 const link = document.createElement('a');
                 link.href = url;
-                
+
                 // Generate filename with timestamp
                 const timestamp = new Date().toISOString().split('T')[0];
                 const filename = `commissions_all_${timestamp}.csv`;
                 link.setAttribute('download', filename);
-                
+
                 document.body.appendChild(link);
                 link.click();
                 link.remove();
@@ -387,7 +383,7 @@ const Commission: React.FC = () => {
                 className="admin-btn btn-purple"
             >
                 <i className="adminlib-export"></i>
-                 Export Commissions
+                Export Commissions
             </button>
         );
     };
@@ -568,7 +564,7 @@ const Commission: React.FC = () => {
                             {
                                 label: __('View Commission', 'multivendorx'),
                                 icon: 'adminlib-eye',
-                                onClick: (rowData:any) => {
+                                onClick: (rowData: any) => {
                                     setSelectedCommissionId(rowData.id ?? null);
                                     setViewCommission(true);
                                 },
@@ -577,7 +573,7 @@ const Commission: React.FC = () => {
                             {
                                 label: __('Regenerate Commission', 'multivendorx'),
                                 icon: 'adminlib-refresh',
-                                onClick: (rowData:any) => {
+                                onClick: (rowData: any) => {
                                     if (rowData?.orderId) {
                                         const url = `${appLocalizer.site_url.replace(/\/$/, '')}/wp-admin/admin.php?page=wc-orders&action=edit&id=${rowData.orderId}`;
                                         window.open(url, '_blank');
@@ -624,7 +620,7 @@ const Commission: React.FC = () => {
                     <CalendarInput
                         wrapperClass=""
                         inputClass=""
-                        onChange={(range:any) => {
+                        onChange={(range: any) => {
                             updateFilter('date', {
                                 start_date: range.startDate,
                                 end_date: range.endDate,
@@ -658,8 +654,8 @@ const Commission: React.FC = () => {
                     perPageOption={[10, 25, 50]}
                     typeCounts={commissionStatus as CommissionStatus}
                     bulkActionComp={() => (
-                        <BulkActions 
-                            selectedRows={rowSelection} 
+                        <BulkActions
+                            selectedRows={rowSelection}
                             data={data}
                             filterData={currentFilterData}
                         />

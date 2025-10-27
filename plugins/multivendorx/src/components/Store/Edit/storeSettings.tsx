@@ -642,6 +642,23 @@ const StoreSettings = ({ id }: { id: string | null }) => {
                                     descClass="settings-metabox-description" value={formData.description} onChange={handleChange} />
                             </div>
                         </div>
+
+                        {/* Map Display */}
+						<div className="form-group-wrapper">
+							<div className="form-group">
+								<label>Location Map</label>
+								<div
+									id="location-map"
+								></div>
+								<div className="settings-metabox-description">
+									Click on the map or drag the marker to set your exact location
+								</div>
+							</div>
+						</div>
+
+                        {/* Hidden coordinates */}
+                        <input type="hidden" name="location_lat" value={addressData.location_lat} />
+                        <input type="hidden" name="location_lng" value={addressData.location_lng} />
                     </div>
 
                     <div className="card-content">

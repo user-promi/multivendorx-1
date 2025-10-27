@@ -353,6 +353,15 @@
     &.quick-link {
         flex-direction: column;
         gap: 0;
+
+        .header a{
+            display: flex;
+            gap: 0.313rem;
+
+            i{
+                font-size: 0.813rem;
+            }
+        }
     }
 }
 
@@ -1155,8 +1164,6 @@
 
 // no data found end
 
-
-
 // table style   common and delete 
 .product-wrapper {
     display: flex;
@@ -1173,11 +1180,9 @@
 
         .title {
             font-size: 1rem;
-            font-weight: 500;
             line-height: 1.2rem;
             margin-bottom: 0.25rem;
         }
-
     }
 
     img {

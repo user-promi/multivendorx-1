@@ -107,7 +107,6 @@ const EditQna: React.FC<EditQnaProps> = ({ open, onClose, qnaId, onUpdated }) =>
                   <img
                     src={qna.product_image}
                     alt={qna.product_name}
-                    style={{ maxWidth: "80px", borderRadius: "6px", marginBottom: "8px" }}
                   />
                 </div>
               )}
@@ -139,7 +138,7 @@ const EditQna: React.FC<EditQnaProps> = ({ open, onClose, qnaId, onUpdated }) =>
               onChange={(e) => setQna({ ...qna, answer_text: e.target.value })}
               placeholder={__("Type your answer here...", "multivendorx")}
               rows={4}
-              style={{ width: "100%" }}
+              className="textarea-input"
             />
           </div>
 
@@ -167,7 +166,7 @@ const EditQna: React.FC<EditQnaProps> = ({ open, onClose, qnaId, onUpdated }) =>
               <div className="items">
                 <div className="text">{__("Visibility", "multivendorx")}</div>
                 <div className="value">
-                  <label style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                  <label>
                     <input
                       type="checkbox"
                       checked={qna.question_visibility === "Public"}

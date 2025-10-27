@@ -117,245 +117,230 @@ const ColorSettingInput: React.FC<ColorSettingProps> = (props) => {
 
     return (
         <>
-    
-        <div className={props.wrapperClass}>
-            {/* Toggle Mode */}
-            {!selectedImage && (
-            <div style={{ display: 'flex', gap: '12px', marginBottom: '12px' }}>
-                <button
-                    type="button"
-                    onClick={() => setMode('predefined')}
-                    className="admin-btn btn-purple"
-                >
-                    Pre-defined Palette
-                </button>
-                <button
-                    type="button"
-                    onClick={() => setMode('custom')}
-                    className="admin-btn btn-purple"
-                >
-                    Custom Palette
-                </button>
-            </div>
-            )}
-        </div>
-        
-        <div className="color-setting">
-            <div className="color-palette-wrapper">
-                <div className="predefined">
-                    {/* Predefined Palettes */}
-                    {mode === 'predefined' && props.predefinedOptions.map(option => {
-                        
-                        const checked = selectedPalette === option.value;
-                        return (
-                            <div key={option.key} className="palette">
-                                <input
-                                    className={props.inputClass}
-                                    id={`${props.idPrefix}-${option.key}`}
-                                    type="radio"
-                                    name="vendor_color_scheme_picker"
-                                    checked={checked}
-                                    value={option.value}
-                                    onChange={handlePaletteChange}
-                                />
-                                <label
-                                    htmlFor={`${props.idPrefix}-${option.key}`}
-                                >   
-                                    {option.colors && (
-                                    <div className="color">
-                                        {option.colors && Object.values(option.colors).map((c, i) => (
-                                            <div key={i} style={{ backgroundColor: c }}></div>
-                                        ))}
-                                    </div>
-                                    )}
-                                    {option.image && (
-                                    <div className="color">
-                                        <img src={option.image} alt="" />
-                                    </div>
-                                    )}
 
-                                    <span >{option.label}</span>
-                                </label>
-                            </div>
-                        );
-                    })}
-                </div>
-                <div className="custom">
-                    {/* Custom Palette */}
-                    {mode === 'custom' && (
-                        <div className="palette">
-                            {Object.entries(customColors).map(([key, val]) => (
-                                <div className="color-wrapper" key={key}>                                        
-                                    <input
-                                        type="color"
-                                        value={val}
-                                        onChange={(e) => handleCustomChange(key as keyof CustomColors, e.target.value)}
-                                    />
-                                    <label >
-                                        <div>{key.replace(/([A-Z])/g, ' $1').replace(/^./, s => s.toUpperCase())}</div>
-                                        <span>{val}</span>
-                                    </label>
-                                </div>
-                            ))}
-                        </div>
-                    )}
-                    
-                </div>
-            </div>
-            
-            {/* Live Preview */}
-            {props.showPreview &&  (
-                <div className="preview-wrapper">
-                    {/* Sidebar */}
-                    <div className="tabs-wrapper">
-                        <div className="logo-wrapper">
-                            <img src="https://multivendorx.com/wp-content/uploads/2025/06/multivendorx-logo-180x40.png" alt="" />
-                            <i className="adminlib-menu"></i>
-                        </div>
-                        <ul className="dashboard-tabs">
-                            <li className="tab-name active">
-                                <a className="tab" style={{color: selectedColors.themeColor}}>
-                                    <i className="adminlib-cart"></i>
-                                    Dashboard
-                                </a>
-                            </li>
-
-                            <li className="tab-name ">
-                                <a className="tab" >
-                                    <i className="adminlib-cart"></i>
-                                    Products
-                                </a>
-                                <i className="admin-arrow adminlib-pagination-right-arrow"></i>
-                            </li>
-
-                            <ul className="subtabs">
-                                <li >
-                                    <a >All Products</a>
-                                </li>
-                                <li>
-                                    <a >Add Product</a>
-                                </li>
-                            </ul>
-                            <li className="tab-name ">
-                                <a href="#" className="tab" >
-                                    <i className="adminlib-cart"></i>
-                                    Orders                            </a>
-                                <i className="admin-arrow adminlib-pagination-right-arrow"></i>
-                            </li>
-
-                            <ul className="subtabs">
-                                <li className="">
-                                    <a href="#">
-                                        All Orders</a>
-                                </li>
-                            </ul>
-                            <li className="tab-name ">
-                                <a className="tab" >
-                                    <i className=""></i>
-                                    Coupons
-                                </a>
-                                <i className="admin-arrow adminlib-pagination-right-arrow"></i>
-                            </li>
-
-                            <ul className="subtabs">
-                                <li className="">
-                                    <a >All Coupons</a>
-                                </li>
-                                <li className="">
-                                    <a >Add Coupons</a>
-                                </li>
-                            </ul>
-                        </ul>
-                    </div>
-
-                    {/* Content Area */}
-                    <div className="tab-wrapper">
-                        <div className="top-navbar">
-                            <div className="navbar-leftside">
-                            </div>
-                            <div className="navbar-rightside">
-                                <ul className="navbar-right">
-                                    <li>
-                                        <div className="adminlib-icon adminlib-vendor-form-add"></div>
-                                    </li>
-                                    <li>
-                                        <div className="adminlib-icon adminlib-alarm"></div>
-                                    </li>
-                                    <li>
-                                        <div className="adminlib-icon adminlib-crop-free"></div>
-                                    </li>
-                                    <li>
-                                        <div className="adminlib-icon adminlib-contact-form"></div>
-                                    </li>
-
-
-                                    <li className="dropdown login-user">
-                                        <a href="" className="dropdown-toggle">
-                                            <div className="avatar-wrapper" style={{backgroundColor: selectedColors.themeColor}}>
-                                                <i className="adminlib-person"></i>
-                                            </div>
-                                        </a>
-                                    </li>
-
-                                </ul>
-                            </div>
-
-                        </div>
-                        
-                    </div>
-                    {/* <div style={{ flex: 1, padding: '20px', backgroundColor: '#f9f9f9' }}>
-                        <h4 style={{ marginBottom: '10px' }}>Dashboard</h4>
+            <div className={props.wrapperClass}>
+                {/* Toggle Mode */}
+                {!selectedImage && (
+                    <>
                         <button
-                            style={{
-                                backgroundColor: selectedColors.buttonBg,
-                                color: selectedColors.buttonText,
-                                // border: `1px solid ${selectedColors.buttonBorder}`,
-                                padding: '8px 14px',
-                                borderRadius: '4px',
-                                cursor: 'pointer'
-                            }}
+                            type="button"
+                            onClick={() => setMode('predefined')}
+                            className="admin-btn btn-purple"
                         >
-                            Button
+                            Pre-defined Palette
                         </button>
-                    </div> */}
-                </div>
-            )}
-        </div>
-
-        {/* Image Palette List */}
-        <div className="color-setting two-column-layout">
-            <div className="image-list">
-                {props.images && props.images.map((imgOption) => (
-                <div
-                    key={imgOption.key}
-                    className={`image-thumbnail ${selectedPalette === imgOption.value ? 'active' : ''}`}
-                    onClick={() => {
-                        setSelectedPalette(imgOption.value || '');
-                        setSelectedImage(imgOption.img || null);
-                        props.onChange?.({
-                            target: {
-                            name: imgOption.key as string,
-                            value: {
-                                selectedPalette: imgOption.value,
-                                colors: {},
-                            }
-                            }
-                        });
-                    }}
-                >
-                    <img src={imgOption.img} alt={imgOption.label} />
-                    <p>{imgOption.label}</p>
-                </div>
-                ))}
-            </div>
-
-            {/* Right side: preview */}
-            <div className="image-preview">
-                {selectedImage && (
-                    <img src={selectedImage} alt="Selected Template" />
+                        <button
+                            type="button"
+                            onClick={() => setMode('custom')}
+                            className="admin-btn btn-purple"
+                        >
+                            Custom Palette
+                        </button>
+                    </>
                 )}
             </div>
-        </div>
+
+            <div className="color-setting">
+                <div className="color-palette-wrapper">
+                    <div className="predefined">
+                        {/* Predefined Palettes */}
+                        {mode === 'predefined' && props.predefinedOptions.map(option => {
+
+                            const checked = selectedPalette === option.value;
+                            return (
+                                <div key={option.key} className="palette">
+                                    <input
+                                        className={props.inputClass}
+                                        id={`${props.idPrefix}-${option.key}`}
+                                        type="radio"
+                                        name="vendor_color_scheme_picker"
+                                        checked={checked}
+                                        value={option.value}
+                                        onChange={handlePaletteChange}
+                                    />
+                                    <label
+                                        htmlFor={`${props.idPrefix}-${option.key}`}
+                                    >
+                                        {option.colors && (
+                                            <div className="color">
+                                                {option.colors && Object.values(option.colors).map((c, i) => (
+                                                    <div key={i} style={{ backgroundColor: c }}></div>
+                                                ))}
+                                            </div>
+                                        )}
+                                        {option.image && (
+                                            <div className="color">
+                                                <img src={option.image} alt="" />
+                                            </div>
+                                        )}
+
+                                        <span >{option.label}</span>
+                                    </label>
+                                </div>
+                            );
+                        })}
+                    </div>
+                    <div className="custom">
+                        {/* Custom Palette */}
+                        {mode === 'custom' && (
+                            <div className="palette">
+                                {Object.entries(customColors).map(([key, val]) => (
+                                    <div className="color-wrapper" key={key}>
+                                        <input
+                                            type="color"
+                                            value={val}
+                                            onChange={(e) => handleCustomChange(key as keyof CustomColors, e.target.value)}
+                                        />
+                                        <label >
+                                            <div>{key.replace(/([A-Z])/g, ' $1').replace(/^./, s => s.toUpperCase())}</div>
+                                            <span>{val}</span>
+                                        </label>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+
+                    </div>
+                </div>
+
+                {/* Live Preview */}
+                {props.showPreview && (
+                    <div className="preview-wrapper">
+                        {/* Sidebar */}
+                        <div className="tabs-wrapper">
+                            <div className="logo-wrapper">
+                                <img src="https://multivendorx.com/wp-content/uploads/2025/06/multivendorx-logo-180x40.png" alt="" />
+                                <i className="adminlib-menu"></i>
+                            </div>
+                            <ul className="dashboard-tabs">
+                                <li className="tab-name active">
+                                    <a className="tab" style={{ color: selectedColors.themeColor }}>
+                                        <i className="adminlib-cart"></i>
+                                        Dashboard
+                                    </a>
+                                </li>
+
+                                <li className="tab-name ">
+                                    <a className="tab" >
+                                        <i className="adminlib-cart"></i>
+                                        Products
+                                    </a>
+                                    <i className="admin-arrow adminlib-pagination-right-arrow"></i>
+                                </li>
+
+                                <ul className="subtabs">
+                                    <li >
+                                        <a >All Products</a>
+                                    </li>
+                                    <li>
+                                        <a >Add Product</a>
+                                    </li>
+                                </ul>
+                                <li className="tab-name ">
+                                    <a href="#" className="tab" >
+                                        <i className="adminlib-cart"></i>
+                                        Orders                            </a>
+                                    <i className="admin-arrow adminlib-pagination-right-arrow"></i>
+                                </li>
+
+                                <ul className="subtabs">
+                                    <li className="">
+                                        <a href="#">
+                                            All Orders</a>
+                                    </li>
+                                </ul>
+                                <li className="tab-name ">
+                                    <a className="tab" >
+                                        <i className=""></i>
+                                        Coupons
+                                    </a>
+                                    <i className="admin-arrow adminlib-pagination-right-arrow"></i>
+                                </li>
+
+                                <ul className="subtabs">
+                                    <li className="">
+                                        <a >All Coupons</a>
+                                    </li>
+                                    <li className="">
+                                        <a >Add Coupons</a>
+                                    </li>
+                                </ul>
+                            </ul>
+                        </div>
+
+                        {/* Content Area */}
+                        <div className="tab-wrapper">
+                            <div className="top-navbar">
+                                <div className="navbar-leftside">
+                                </div>
+                                <div className="navbar-rightside">
+                                    <ul className="navbar-right">
+                                        <li>
+                                            <div className="adminlib-icon adminlib-vendor-form-add"></div>
+                                        </li>
+                                        <li>
+                                            <div className="adminlib-icon adminlib-alarm"></div>
+                                        </li>
+                                        <li>
+                                            <div className="adminlib-icon adminlib-crop-free"></div>
+                                        </li>
+                                        <li>
+                                            <div className="adminlib-icon adminlib-contact-form"></div>
+                                        </li>
+
+
+                                        <li className="dropdown login-user">
+                                            <a href="" className="dropdown-toggle">
+                                                <div className="avatar-wrapper" style={{ backgroundColor: selectedColors.themeColor }}>
+                                                    <i className="adminlib-person"></i>
+                                                </div>
+                                            </a>
+                                        </li>
+
+                                    </ul>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                )}
+            </div>
+
+            {/* Image Palette List */}
+            <div className="color-setting two-column-layout">
+                <div className="image-list">
+                    {props.images && props.images.map((imgOption) => (
+                        <div
+                            key={imgOption.key}
+                            className={`image-thumbnail ${selectedPalette === imgOption.value ? 'active' : ''}`}
+                            onClick={() => {
+                                setSelectedPalette(imgOption.value || '');
+                                setSelectedImage(imgOption.img || null);
+                                props.onChange?.({
+                                    target: {
+                                        name: imgOption.key as string,
+                                        value: {
+                                            selectedPalette: imgOption.value,
+                                            colors: {},
+                                        }
+                                    }
+                                });
+                            }}
+                        >
+                            <img src={imgOption.img} alt={imgOption.label} />
+                            <p>{imgOption.label}</p>
+                        </div>
+                    ))}
+                </div>
+
+                {/* Right side: preview */}
+                <div className="image-preview">
+                    {selectedImage && (
+                        <img src={selectedImage} alt="Selected Template" />
+                    )}
+                </div>
+            </div>
 
             {props.description && (
                 <p className={props.descClass} dangerouslySetInnerHTML={{ __html: props.description }}></p>

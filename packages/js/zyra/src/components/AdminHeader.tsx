@@ -340,11 +340,6 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
         <iframe
           src={chatUrl}
           title="Support Chat"
-          style={{
-            border: 'none',
-            width: '100%',
-            height: '35rem',
-          }}
           allow="microphone; camera"
         />
       </div>

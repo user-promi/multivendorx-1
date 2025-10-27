@@ -114,7 +114,21 @@ const ApprovalQueue = () => {
                 icon: "adminlib-calendar red",
                 des: "Eager to join the marketplace",
                 count: storeCount,
-                content: <Products onUpdated={refreshCounts} />
+                content:
+                    <>
+                        <div className="card-header">
+                            <div className="left">
+                                <div className="title">
+                                    Questions
+                                </div>
+                                <div className="des">Waiting for your response</div>
+                            </div>
+                            <div className="right">
+                                <i className="adminlib-more-vertical"></i>
+                            </div>
+                        </div>
+                        <Products onUpdated={refreshCounts} />
+                    </>
             }]
             : []
         ),
@@ -124,7 +138,21 @@ const ApprovalQueue = () => {
             icon: "adminlib-calendar yellow",
             count: 9,
             des: "Awaiting verification check",
-            content: <Vendors onUpdated={refreshCounts} />
+            content:
+                <>
+                    <div className="card-header">
+                        <div className="left">
+                            <div className="title">
+                                Stores
+                            </div>
+                            <div className="des">Waiting for your response</div>
+                        </div>
+                        <div className="right">
+                            <i className="adminlib-more-vertical"></i>
+                        </div>
+                    </div>
+                    <Vendors onUpdated={refreshCounts} />
+                </>
         },
         ...(Array.isArray(appLocalizer.enable_profile_deactivation_request)
             && appLocalizer.enable_profile_deactivation_request.includes("enable_profile_deactivation_request")
@@ -134,7 +162,21 @@ const ApprovalQueue = () => {
                 icon: "adminlib-calendar green",
                 count: 9,
                 des: "Requested deactivation",
-                content: <Coupons onUpdated={refreshCounts} />
+                content:
+                    <>
+                        <div className="card-header">
+                            <div className="left">
+                                <div className="title">
+                                    Stores
+                                </div>
+                                <div className="des">Waiting for your response</div>
+                            </div>
+                            <div className="right">
+                                <i className="adminlib-more-vertical"></i>
+                            </div>
+                        </div>
+                        <Coupons onUpdated={refreshCounts} />
+                    </>
             }]
             : []
         ),
@@ -147,7 +189,21 @@ const ApprovalQueue = () => {
                 count: productCount,
                 des: "Waiting for your green light",
 
-                content: <Transactions onUpdated={refreshCounts} />
+                content:
+                    <>
+                        <div className="card-header">
+                            <div className="left">
+                                <div className="title">
+                                    Products
+                                </div>
+                                <div className="des">Waiting for your response</div>
+                            </div>
+                            <div className="right">
+                                <i className="adminlib-more-vertical"></i>
+                            </div>
+                        </div>
+                        <Transactions onUpdated={refreshCounts} />
+                    </>
             }]
             : []
         ),
@@ -160,7 +216,21 @@ const ApprovalQueue = () => {
                 des: "Need a quick approval",
 
                 count: couponCount,
-                content: <Transactions onUpdated={refreshCounts} />
+                content:
+                    <>
+                        <div className="card-header">
+                            <div className="left">
+                                <div className="title">
+                                    Coupons
+                                </div>
+                                <div className="des">Waiting for your response</div>
+                            </div>
+                            <div className="right">
+                                <i className="adminlib-more-vertical"></i>
+                            </div>
+                        </div>
+                        <Transactions onUpdated={refreshCounts} />
+                    </>
             }]
             : []
         ),
@@ -171,7 +241,21 @@ const ApprovalQueue = () => {
             des: "Ready to become wholesale customer",
 
             count: 9,
-            content: <Transactions onUpdated={refreshCounts} />
+            content:
+                <>
+                    <div className="card-header">
+                        <div className="left">
+                            <div className="title">
+                                Customers
+                            </div>
+                            <div className="des">Waiting for your response</div>
+                        </div>
+                        <div className="right">
+                            <i className="adminlib-more-vertical"></i>
+                        </div>
+                    </div>
+                    <Transactions onUpdated={refreshCounts} />
+                </>
         },
         {
             id: "withdrawal",
@@ -180,7 +264,21 @@ const ApprovalQueue = () => {
             des: "Queued for disbursement",
 
             count: transactionCount,
-            content: <Transactions onUpdated={refreshCounts} />
+            content:
+                <>
+                    <div className="card-header">
+                        <div className="left">
+                            <div className="title">
+                                Withdrawals
+                            </div>
+                            <div className="des">Waiting for your response</div>
+                        </div>
+                        <div className="right">
+                            <i className="adminlib-more-vertical"></i>
+                        </div>
+                    </div>
+                    <Transactions onUpdated={refreshCounts} />
+                </>
         }
     ];
     useEffect(() => {
@@ -197,7 +295,7 @@ const ApprovalQueue = () => {
         <>
             <AdminBreadcrumbs
                 activeTabIcon="adminlib-bar-chart"
-                tabTitle="Actions Dashboard"
+                tabTitle="Approval Queue"
                 description={'Manage all pending administrative actions including approvals, payouts, and notifications.'}
             />
 

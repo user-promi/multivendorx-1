@@ -618,7 +618,6 @@ const Table: React.FC<TableProps> = ({
                                                 key={productId}
                                                 className={`admin-row ${isVariation ? 'variation-row' : ''} ${product.type === 'Variable' ? 'variable' : 'simple'} ${expandElement?.[productId] ? 'active' : ''} ${productId ? `row-${productId}` : ''}`}
                                                 onClick={() => onRowClick?.(row.original)}
-                                                style={{ cursor: onRowClick ? 'pointer' : 'default' }}
                                             >
                                                 {row.getVisibleCells()
                                                     .filter((cell) =>

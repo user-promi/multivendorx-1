@@ -513,7 +513,7 @@ export const Announcements: React.FC = () => {
     return (
         <>
             <AdminBreadcrumbs
-                activeTabIcon="adminlib-cart"
+                activeTabIcon="adminlib-announcement"
                 description={'Central hub for managing marketplace announcements. Review past updates and create new ones to keep stores informed.'}
                 tabTitle="Announcements"
                 buttons={[
@@ -538,7 +538,7 @@ export const Announcements: React.FC = () => {
                     header={
                         <>
                             <div className="title">
-                                <i className="adminlib-cart"></i>
+                                <i className="adminlib-announcement"></i>
                                 {editId ? __('Edit Announcement', 'multivendorx') : __('Add Announcement', 'multivendorx')}
                             </div>
                             <p>Publish important news, updates, or alerts that appear directly in store dashboards, ensuring sellers never miss critical information.</p>
