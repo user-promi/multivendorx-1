@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { ReactSortable } from 'react-sortablejs';
 
 /**
@@ -47,6 +47,11 @@ const MultipleOptions: React.FC< MultipleOptionsProps > = ( {
             ? formField.options
             : [];
     } );
+
+    useEffect(() => {
+        setOptions(Array.isArray(formField.options) ? formField.options : []);
+    }, [formField.options]);
+
 
     const renderInputFields = ( fieldType: string ) => {
         switch ( fieldType ) {

@@ -67,13 +67,18 @@ class Frontend {
             }
 
             // Reuse same HTML pattern
-            $html  = '<div class="follow-wrapper"> <div class="follow-btn admin-btn btn-purple" 
+            $html  = '<div class="buttons-wrapper">
+                        <div class="follow-wrapper"> <div class="follow-btn admin-btn btn-purple" 
                         data-store-id="' . esc_attr($store_id) . '" 
                         data-user-id="' . esc_attr($user_id) . '">
                         <i class="adminlib-plus-circle-o"></i>
                         Loading...
-                      </div>';
-            $html .= ' <span class="follower-count" id="followers-count-' . esc_attr($store_id) . '">...</span> </div>';
+                      </div>
+                      ';
+            $html .= ' <span class="follower-count" id="followers-count-' . esc_attr($store_id) . '">...</span> </div> 
+                        <div class="admin-btn btn-purple">Live Chat</div>
+                        <div class="admin-btn btn-purple">Support</div>
+                        </div>';
 
             return $html;
         }, 10, 3);

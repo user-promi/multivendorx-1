@@ -63,7 +63,12 @@ const ordersByCountry = [
   { country: "Germany", orders: 3100, lat: 51.1657, lng: 10.4515 },
   { country: "Australia", orders: 1900, lat: -25.2744, lng: 133.7751 },
 ];
-
+const activities = [
+  { icon: 'adminlib-cart', text: 'New order #10023 by Alex Doe.' },
+  { icon: 'adminlib-star', text: 'Inventory updated: "Coffee Beans"' },
+  { icon: 'adminlib-global-community', text: 'Customer "davidchen" updated account.' },
+  { icon: 'adminlib-cart', text: 'New product "Wireless Headset"' },
+];
 const tabs = [
   { id: "transaction", label: "All transaction", content: "ffff" },
   { id: "success", label: "Success", content: "ff " },
@@ -159,6 +164,104 @@ const Dashboard: React.FC = () => {
             <div className="card-header">
               <div className="left">
                 <div className="title">
+                  Store Activity Log
+                </div>
+                <div className="des">Lorem ipsum dolor sit amet.</div>
+              </div>
+              <div className="right">
+                <i className="adminlib-more-vertical"></i>
+              </div>
+            </div>
+            <div className="card-body">
+              <div className="top-items">
+                <div className="items">
+                  <div className="left-side">
+                    <div className="icon">
+                      <i className="admin-icon red">1</i>
+                    </div>
+                    <div className="details">
+                      <div className="item-title">David Chen</div>
+                      <div className="sub-text">180 units sold</div>
+                    </div>
+                  </div>
+                  <div className="right-side">
+                    <div className="price">$9230</div>
+                  </div>
+                </div>
+                <div className="items">
+                  <div className="left-side">
+                    <div className="icon">
+                      <i className="admin-icon green">2</i>
+                    </div>
+                    <div className="details">
+                      <div className="item-title">Emily White</div>
+                      <div className="sub-text">320 units sold</div>
+                    </div>
+                  </div>
+                  <div className="right-side">
+                    <div className="price">$380</div>
+                  </div>
+                </div>
+                <div className="items">
+                  <div className="left-side">
+                    <div className="icon">
+                      <i className="admin-icon blue">3</i>
+                    </div>
+                    <div className="details">
+                      <div className="item-title">Mark Johnson</div>
+                      <div className="sub-text">3 orders</div>
+                    </div>
+                  </div>
+                  <div className="right-side">
+                    <div className="price">$380</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div className="column">
+          <div className="card">
+            <div className="card-header">
+              <div className="left">
+                <div className="title">
+                  Store Activity Log
+                </div>
+                <div className="des">Lorem ipsum dolor sit amet.</div>
+              </div>
+              <div className="right">
+                <i className="adminlib-more-vertical"></i>
+              </div>
+            </div>
+            <div className="card-body">
+              <div className="activity-wrapper">
+                {activities.map((a, i) => (
+                  <div key={i} className="activity">
+                    <span className="icon">
+                      <i className={a.icon}></i>
+                    </span>
+                    <div className="details">
+                      {a.text}
+                      <span>2 minutes ago</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+
+      <div className="row">
+        <div className="column">
+          <div className="card">
+            <div className="card-header">
+              <div className="left">
+                <div className="title">
                   Sales Overview (7 Days)
                 </div>
                 <div className="des">Lorem ipsum dolor sit amet.</div>
@@ -176,8 +279,8 @@ const Dashboard: React.FC = () => {
                   <Tooltip />
                   <Legend />
                   <Line type="monotone" dataKey="revenue" stroke="#5007aa" strokeWidth={3} name="Top Category" />
-                  <Line type="monotone" dataKey="net_sale" stroke="#ff7300" strokeWidth={3} name="Top Brand" />
-                  <Line type="monotone" dataKey="admin_amount" stroke="#00c49f" strokeWidth={3} name="Top Store" />
+                  <Line type="monotone" dataKey="net_sale" stroke="#250250ff" strokeWidth={3} name="Top Brand" />
+                  <Line type="monotone" dataKey="admin_amount" stroke="#9b69d8ff" strokeWidth={3} name="Top Store" />
                 </LineChart>
               </ResponsiveContainer>
             </div>
@@ -217,9 +320,9 @@ const Dashboard: React.FC = () => {
                     }}
                   />
                   <Legend />
-                  <Bar dataKey="orders" fill="#5007aa98" radius={[6, 6, 0, 0]} name="Orders" />
+                  <Bar dataKey="orders" fill="#5007aa98" radius={[6, 6, 0, 0]} name="Sales" />
                   <Bar dataKey="earnings" fill="#5007aa" radius={[6, 6, 0, 0]} name="Earnings" />
-                  <Bar dataKey="refunds" fill="#5007aaa1" radius={[6, 6, 0, 0]} name="Refunds" />
+                  <Bar dataKey="refunds" fill="#5007aaa1" radius={[6, 6, 0, 0]} name="Orders" />
                   <Line
                     type="monotone"
                     dataKey="conversion"

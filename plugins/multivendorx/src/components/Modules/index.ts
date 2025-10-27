@@ -15,7 +15,7 @@ export default {
                 { name: 'WooCommerce Booking', link: 'https://woocommerce.com/products/woocommerce-bookings/' }
             ],
             pro_module: true,
-            category: ['marketplace_types', 'product_type'],
+            category: ['marketplace_types', 'product_types'],
         },
         {
             id: 'appointment',
@@ -26,7 +26,7 @@ export default {
             //settings_link: appLocalizer.site_url,
             pro_module: true,
             req_pluging: [{ name: 'WooCommerce Appointment', link: 'https://bookingwp.com/plugins/woocommerce-appointments/' }],
-            category: ['marketplace_types', 'product_type'],
+            category: ['marketplace_types', 'product_types'],
         },
         {
             id: 'subscription',
@@ -37,7 +37,7 @@ export default {
             //settings_link: appLocalizer.site_url,
             pro_module: true,
             req_pluging: [{ name: 'WooCommerce Subscription', link: 'https://woocommerce.com/products/woocommerce-subscriptions/' }],
-            category: ['marketplace_types', 'product_type'],
+            category: ['marketplace_types', 'product_types'],
         },
         {
             id: 'accommodation',
@@ -49,7 +49,7 @@ export default {
             pro_module: true,
             req_pluging: [{ name: 'WooCommerce Booking', link: 'https://woocommerce.com/products/woocommerce-bookings/' }
                 , { name: 'WooCommerce Accommodation Booking', link: 'https://woocommerce.com/products/woocommerce-accommodation-bookings/' }],
-            category: ['marketplace_types', 'product_type'],
+            category: ['marketplace_types', 'product_types'],
         },
         {
             id: 'bundle',
@@ -70,7 +70,7 @@ export default {
             pro_module: true,
             req_pluging: [{ name: 'WooCommerce Simple Auction', link: 'https://codecanyon.net/item/woocommerce-simple-auctions-wordpress-auctions/6811382' }
                 , { name: 'YITH WooCommerce Auction', link: 'https://yithemes.com/themes/plugins/yith-woocommerce-auctions/' }],
-            category: ['marketplace_types', 'product_type'],
+            category: ['marketplace_types', 'product_types'],
         },
         {
             id: 'rental-pro',
@@ -81,9 +81,9 @@ export default {
             //settings_link: appLocalizer.site_url,
             pro_module: true,
             req_pluging: [{ name: 'RnB WooCommerce Booking & Rental', link: 'https://codecanyon.net/item/rnb-woocommerce-rental-booking-system/14835145?ref=redqteam' }],
-            category: ['marketplace_types', 'product_type'],
+            category: ['marketplace_types', 'product_types'],
         },
-        { type: 'separator', id: 'product_type', label: 'Product Types' },
+        { type: 'separator', id: 'product_types', label: 'Product Types' },
         {
             id: 'simple',
             name: __('Simple', 'multivendorx'),
@@ -92,7 +92,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/simple-product',
             //settings_link: appLocalizer.site_url,
             pro_module: false,
-            category: 'product_type'
+            category: 'product_types'
         },
         {
             id: 'variable',
@@ -102,7 +102,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/variable-product',
             //settings_link: appLocalizer.site_url,
             pro_module: true,
-            category: 'product_type'
+            category: 'product_types'
         },
         {
             id: 'external',
@@ -112,7 +112,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/external-product/',
             //settings_link: appLocalizer.site_url,
             pro_module: true,
-            category: 'product_type'
+            category: 'product_types'
         },
         {
             id: 'grouped',
@@ -122,7 +122,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/grouped-product',
             //settings_link: appLocalizer.site_url,
             pro_module: true,
-            category: 'product_type'
+            category: 'product_types'
         },
         {
             id: 'gift-card',
@@ -133,7 +133,7 @@ export default {
             //settings_link: appLocalizer.site_url,
             pro_module: true,
             req_pluging: [{ name: 'YITH WooCommerce Gift Cards', link: 'https://wordpress.org/plugins/yith-woocommerce-gift-cards/' }],
-            category: 'product_type'
+            category: 'product_types'
         },
         { type: 'separator', id: 'store_management', label: 'Store Management' },
         {
@@ -451,6 +451,15 @@ export default {
         },
         { type: 'separator', id: 'marketplace_boosters', label: 'Marketplace Boosters' },
         {
+            id: 'marketplace-compliance',
+            name: __('Compliance', 'multivendorx'),
+            desc: "Ensure stores meet marketplace requirements with automated policy checks.",
+            icon: 'adminlib-rules',
+            doc_link: 'https://multivendorx.com/docs/knowledgebase/marketplace-memberhsip',
+            settings_link: '${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=memberships&subtab=payment-membership-message',
+            pro_module: true,
+            category: 'marketplace_boosters'
+        },{
             id: 'marketplace-membership',
             name: __('Marketplace Membership', 'multivendorx'),
             desc: "Admin defines membership levels with specific capabilities for different stores.",
@@ -468,8 +477,16 @@ export default {
             doc_link: "/admin.php?page=multivendorx#&tab=settings&subtab=store-commissions",
             pro_module: true,
             category: 'marketplace_boosters'
+        },        
+        {
+            id: 'Marketplace Fee',
+            name: __('Marketplace Fee', 'multivendorx'),
+            desc: "Set and manage platform fees for each order or store to cover operational costs",
+            icon: 'adminlib-dynamic-pricing',
+            doc_link: "/admin.php?page=multivendorx#&tab=settings&subtab=store-commissions",
+            pro_module: true,
+            category: 'marketplace_boosters'
         },
-        
         {
             id: 'marketplace-gateway',
             name: __('Payment Gateway Charge', 'multivendorx'),
@@ -532,7 +549,7 @@ export default {
         },
         {
             id: 'report-abuse',
-            name: __('Report Abuse', 'multivendorx'),
+            name: __('Product Report Abuse', 'multivendorx'),
             desc: "Customers flag products they believe are fake, misleading, or inappropriate.",
             icon: 'adminlib-rules',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/report-abuse',
