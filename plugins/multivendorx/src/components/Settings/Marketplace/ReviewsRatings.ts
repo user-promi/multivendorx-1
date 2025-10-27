@@ -32,20 +32,6 @@ export default {
             moduleEnabled: 'store-review',
         },
         {
-            key: 'product_review_sync',
-            type: 'checkbox',
-            label: __( 'Sync product ratings', 'multivendorx' ),
-            desc: __( 'Store ratings will be calculated based on both store ratings and product ratings.', 'multivendorx' ),
-            options: [
-                {
-                    key: 'product_review_sync',
-                    value: 'product_review_sync',
-                },
-            ],
-            look: 'toggle',
-            moduleEnabled: 'store-review',
-        },
-        {
             key: 'ratings_parameters',
             type: 'multi-string',
             label: __('Rating parameters', 'multivendorx'),

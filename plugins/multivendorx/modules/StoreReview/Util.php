@@ -6,6 +6,49 @@ use MultiVendorX\Utill;
 if (!defined('ABSPATH')) exit;
 
 class Util {
+    
+    /**
+     * Check if a user has purchased from a specific store
+     */
+    public static function is_verified_buyer($store_id, $user_id) {
+        if (!$store_id || !$user_id) {
+            return false;
+        }
+
+        // Get all customer orders
+        $orders = wc_get_orders([
+            'customer_id' => $user_id,
+            'status'      => array('completed', 'processing', 'on-hold'),
+            'limit'       => -1,
+            'return'      => 'ids',
+        ]);
+
+        if (empty($orders)) {
+            return false;
+        }
+
+        foreach ($orders as $order_id) {
+            $store_ids = [];
+
+            // Loop through order items and get store_id meta
+            $order = wc_get_order($order_id);
+            if (!$order) continue;
+
+            foreach ($order->get_items('line_item') as $item) {
+                $item_store_id = $item->get_meta('multivendorx_store_id');
+                if ($item_store_id) {
+                    $store_ids[] = (int) $item_store_id;
+                }
+            }
+
+            // If this store_id found in any order items, verified ✅
+            if (in_array((int) $store_id, $store_ids, true)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 
     /**
      * Check if user has already submitted a review for a store
@@ -126,7 +169,7 @@ class Util {
 
         return round($overall, 2);
     }
-    
+
     public static function get_user_review_status($store_id, $user_id) {
         global $wpdb;
         $table_review = $wpdb->prefix . Utill::TABLES['review'];
