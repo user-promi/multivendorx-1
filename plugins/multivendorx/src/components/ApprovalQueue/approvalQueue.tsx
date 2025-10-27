@@ -6,7 +6,7 @@ import Transactions from './transaction';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
-const ApprovalQueue = () => {
+const Notification = () => {
     const [productCount, setProductCount] = useState<number>(0);
     const [couponCount, setCouponCount] = useState<number>(0);
     const [transactionCount, setTransactionCount] = useState<number>(0);
@@ -63,6 +63,9 @@ const ApprovalQueue = () => {
         saveTasks(updatedTasks);
     };
 
+
+
+    // In Notification.tsx
     const refreshCounts = () => {
         axios({
             method: 'GET',
@@ -118,7 +121,10 @@ const ApprovalQueue = () => {
             : []
         ),
         {
+<<<<<<< HEAD
 <<<<<<< HEAD:plugins/multivendorx/src/components/Notifications/notification.tsx
+=======
+>>>>>>> 85a2a3c6 (notification)
             id: "stores",
             label: "Store Verification",
             icon: "adminlib-calendar",
@@ -164,6 +170,7 @@ const ApprovalQueue = () => {
             icon: "adminlib-calendar",
             count: 9,
             content: <Transactions onUpdated={refreshCounts} />
+<<<<<<< HEAD
         },
         {
             id: "withdrawal",
@@ -240,6 +247,23 @@ const ApprovalQueue = () => {
 
     ];
 >>>>>>> 9d08c789 (notification):plugins/multivendorx/src/components/ApprovalQueue/approvalQueue.tsx
+=======
+        },
+        {
+            id: "withdrawal",
+            label: "Withdrawal Requests",
+            icon: "adminlib-calendar",
+            count: transactionCount,
+            content: <Transactions onUpdated={refreshCounts} />
+        }
+    ];    
+    useEffect(() => {
+        if (!tabs.find(tab => tab.id === activeTab)) {
+            setActiveTab(tabs[0]?.id || "");
+        }
+    }, [tabs, activeTab]);
+    
+>>>>>>> 85a2a3c6 (notification)
     // run once on mount
     useEffect(() => {
         refreshCounts();
@@ -248,7 +272,7 @@ const ApprovalQueue = () => {
         <>
             <AdminBreadcrumbs
                 activeTabIcon="adminlib-bar-chart"
-                tabTitle="Approval Queue"
+                tabTitle="Actions Dashboard"
                 description={'Manage all pending administrative actions including approvals, payouts, and notifications.'}
             />
 
@@ -471,4 +495,4 @@ const ApprovalQueue = () => {
     );
 };
 
-export default ApprovalQueue;
+export default Notification;
