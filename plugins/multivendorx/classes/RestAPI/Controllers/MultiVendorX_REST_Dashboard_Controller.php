@@ -290,8 +290,15 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
         $store               = new Store( $active_store );
         $store_status        = $store->get( 'status' );
 
-        if ( empty( $active_store ) ) {
-            update_user_meta( $current_user->ID, 'multivendorx_active_store', reset( $store_ids ) );
+        if (empty($store_ids)) {
+            $error_msg = "No active store select for this user.";
+            return array(
+                'error_msg'    => $error_msg,
+            );
+        } else {
+            if ( empty( $active_store ) ) {
+                update_user_meta( $current_user->ID, 'multivendorx_active_store', reset( $store_ids ) );
+            }
         }
 
         if ( get_option( 'permalink_structure' ) ) {
