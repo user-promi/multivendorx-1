@@ -94,14 +94,14 @@ const CustomerServices = () => {
     ];
     const tabs = [
         {
-            id: "products", label: "Question & Answer", icon: "adminlib-calendar", count: qnaCount, content:
+            id: "products", label: "Question & Answer", icon: "adminlib-calendar red",  des: "Waitng for Wholesale Customer Approval", count: qnaCount, content:
                 <>
                     <div className="card-header">
                         <div className="left">
                             <div className="title">
-                                Customer Questions
+                                Questions
                             </div>
-                            <div className="des">View, manage, and respond to customer questions about products.</div>
+                            <div className="des">Waiting for your response</div>
                         </div>
                         <div className="right">
                             <i className="adminlib-more-vertical"></i>
@@ -110,14 +110,14 @@ const CustomerServices = () => {
                     <Qna /></>
         },
         {
-            id: "review", label: "Review Flag", icon: "adminlib-calendar", count: 9, content:
+            id: "review", label: "Review Flag", icon: "adminlib-calendar green", count: 9,  des: "Waitng for Wholesale Customer Approval", content:
                 <>
                     <div className="card-header">
                         <div className="left">
                             <div className="title">
                                 Store Reviews
                             </div>
-                            <div className="des">View and manage all customer reviews for stores.</div>
+                            <div className="des">Shared by customers</div>
                         </div>
                         <div className="right">
                             <i className="adminlib-more-vertical"></i>
@@ -127,14 +127,14 @@ const CustomerServices = () => {
                 </>
         },
         {
-            id: "reports", label: "Abuse Reports", icon: "adminlib-calendar", count: abuseCount, content:
+            id: "reports", label: "Abuse Reports", icon: "adminlib-calendar yellow",  des: "Waitng for Wholesale Customer Approval", count: abuseCount, content:
                 <>
                     <div className="card-header">
                         <div className="left">
                             <div className="title">
                                 Abuse Reports
                             </div>
-                            <div className="des">Monitor reported issues or complaints about products or stores.</div>
+                            <div className="des">Flagged for review</div>
                         </div>
                         <div className="right">
                             <i className="adminlib-more-vertical"></i>
@@ -144,14 +144,14 @@ const CustomerServices = () => {
                 </>
         },
         {
-            id: "refund-requests", label: "Refund Requests", icon: "adminlib-calendar", count: 3, content:
+            id: "refund-requests", label: "Refund Requests", icon: "adminlib-calendar blue",  des: "Waitng for Wholesale Customer Approval", count: 3, content:
                 <>
                     <div className="card-header">
                         <div className="left">
                             <div className="title">
                                 Refund Requests
                             </div>
-                            <div className="des">Track and handle customer refund requests.</div>
+                            <div className="des">Need your decision</div>
                         </div>
                         <div className="right">
                             <i className="adminlib-more-vertical"></i>
@@ -186,13 +186,13 @@ const CustomerServices = () => {
                             </div>
                         ))} */}
                         {tabs.map((tab) => (
-                            <div className={`action ${activeTab === tab.id ? "active" : ""}`} key={tab.id} onClick={() => setActiveTab(tab.id)}>
-                                <div className="title">
-                                    {tab.count}
+                            <div className={`tab-action ${activeTab === tab.id ? "active" : ""}`} key={tab.id} onClick={() => setActiveTab(tab.id)}>
+                                <div className="details-wrapper">
                                     <i className={tab.icon}></i>
+                                    <div className="title">{tab.count} {tab.label}</div>
                                 </div>
                                 <div className="description">
-                                    {tab.label}
+                                    {tab.des}
                                 </div>
                             </div>
                         ))}

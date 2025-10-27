@@ -6,7 +6,7 @@ import Transactions from './transaction';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
-const Notification = () => {
+const ApprovalQueue = () => {
     const [productCount, setProductCount] = useState<number>(0);
     const [couponCount, setCouponCount] = useState<number>(0);
     const [transactionCount, setTransactionCount] = useState<number>(0);
@@ -63,9 +63,6 @@ const Notification = () => {
         saveTasks(updatedTasks);
     };
 
-
-
-    // In Notification.tsx
     const refreshCounts = () => {
         axios({
             method: 'GET',
@@ -113,8 +110,9 @@ const Notification = () => {
         ...(appLocalizer.approve_store === "manually"
             ? [{
                 id: "products",
-                label: "Store Approval",
-                icon: "adminlib-calendar",
+                label: "Stores",
+                icon: "adminlib-calendar red",
+                des: "Eager to join the marketplace",
                 count: storeCount,
                 content: <Products onUpdated={refreshCounts} />
             }]
@@ -122,18 +120,20 @@ const Notification = () => {
         ),
         {
             id: "stores",
-            label: "Store Verification",
-            icon: "adminlib-calendar",
+            label: "Stores",
+            icon: "adminlib-calendar yellow",
             count: 9,
+            des: "Awaiting verification check",
             content: <Vendors onUpdated={refreshCounts} />
         },
         ...(Array.isArray(appLocalizer.enable_profile_deactivation_request)
             && appLocalizer.enable_profile_deactivation_request.includes("enable_profile_deactivation_request")
             ? [{
                 id: "coupons",
-                label: "Store Deactivation Requests",
-                icon: "adminlib-calendar",
+                label: "Stores",
+                icon: "adminlib-calendar green",
                 count: 9,
+                des: "Requested deactivation",
                 content: <Coupons onUpdated={refreshCounts} />
             }]
             : []
@@ -142,9 +142,11 @@ const Notification = () => {
             && appLocalizer.can_publish_products.includes("publish_products")
             ? [{
                 id: "product-approval",
-                label: "Product Approval",
-                icon: "adminlib-calendar",
+                label: "Products",
+                icon: "adminlib-calendar blue",
                 count: productCount,
+                des: "Waiting for your green light",
+
                 content: <Transactions onUpdated={refreshCounts} />
             }]
             : []
@@ -153,8 +155,10 @@ const Notification = () => {
             && appLocalizer.can_publish_coupons.includes("publish_coupons")
             ? [{
                 id: "coupon-approval",
-                label: "Coupon Approval",
-                icon: "adminlib-calendar",
+                label: "Coupons",
+                icon: "adminlib-calendar red",
+                des: "Need a quick approval",
+
                 count: couponCount,
                 content: <Transactions onUpdated={refreshCounts} />
             }]
@@ -162,25 +166,29 @@ const Notification = () => {
         ),
         {
             id: "wholesale-customer",
-            label: "Wholesale Customer Approval",
-            icon: "adminlib-calendar",
+            label: "Customers",
+            icon: "adminlib-calendar yellow",
+            des: "Ready to become wholesale customer",
+
             count: 9,
             content: <Transactions onUpdated={refreshCounts} />
         },
         {
             id: "withdrawal",
-            label: "Withdrawal Requests",
-            icon: "adminlib-calendar",
+            label: "Withdrawals",
+            icon: "adminlib-calendar blue",
+            des: "Queued for disbursement",
+
             count: transactionCount,
             content: <Transactions onUpdated={refreshCounts} />
         }
-    ];    
+    ];
     useEffect(() => {
         if (!tabs.find(tab => tab.id === activeTab)) {
             setActiveTab(tabs[0]?.id || "");
         }
     }, [tabs, activeTab]);
-    
+
     // run once on mount
     useEffect(() => {
         refreshCounts();
@@ -412,4 +420,4 @@ const Notification = () => {
     );
 };
 
-export default Notification;
+export default ApprovalQueue;

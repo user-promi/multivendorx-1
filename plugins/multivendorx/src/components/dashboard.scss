@@ -921,12 +921,12 @@
 
 // tab action cart start
 .tab-action {
-    width: 100%;
-    padding: 1.313rem;
+    width: 13rem;
+    padding: 1rem 1.313rem;
     background: #fff;
     border-radius: 0.313rem;
-    box-shadow: 0 0.125rem 0.5rem 0 rgba(223, 222, 225, 0.43);
-    border-bottom: 0.125rem solid;
+    // box-shadow: 0 0.125rem 0.5rem 0 rgba(223, 222, 225, 0.43);
+    border: 0.063rem solid transparent;
 
     .details-wrapper {
         display: flex;
@@ -952,20 +952,24 @@
         line-height: 1.125;
     }
 
-    &:has(.red) {
-        border-color: #f06b4f;
-    }
+    &.active {
+        border: 0.063rem solid;
 
-    &:has(.green) {
-        border-color: #06be9f;
-    }
+        &:has(.red) {
+            border-color: #f06b4f;
+        }
 
-    &:has(.yellow) {
-        border-color: #ff9f43;
-    }
+        &:has(.green) {
+            border-color: #06be9f;
+        }
 
-    &:has(.blue) {
-        border-color: #003d66de;
+        &:has(.yellow) {
+            border-color: #ff9f43;
+        }
+
+        &:has(.blue) {
+            border-color: #003d66de;
+        }
     }
 }
 
