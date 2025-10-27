@@ -64,7 +64,6 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
             data: { payload }
         })
             .then((response) => {
-                console.log(response)
                 if (response.data.success) {
 
                 }
@@ -97,7 +96,7 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 
         fetchOrder();
     }, [orderId]);
-
+    console.log("od",orderData)
     const handleChange = (field: keyof typeof values, val: number) => {
         const newVals = { ...values, [field]: val };
         const baseTotal = 100; // example base price
