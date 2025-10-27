@@ -284,39 +284,7 @@ export default {
             hint: __("What's deducted along with store commission", 'multivendorx'),
             desc: __('Determine which fees to deduct from the commission amount.', 'multivendorx')
         },
-        {
-            key: 'gateway_fees',
-            type: 'nested',
-            label: __('Gateway Fees', 'multivendorx'),
-			settingDescription: __('Define the default fee that will be deducted from the store commission. If you want to charge different fees for each payment method, set the amounts here for gateways, bank transfers, or cash on delivery.', 'multivendorx'),
-            rowClass: 'single-line',            
-            single: true,
-            desc: __('', 'multivendorx'),
-            nestedFields
-        },       
-        {
-            key: 'facilitator_fees',
-            type: 'nested',
-            label: 'Facilitator Fees',
-            single: true,
-            settingDescription: __('Set the facilitator fee as a fixed amount, a percentage, or both, deducted from the store commission. Store-wise fees can also be configured from the store edit page.', 'multivendorx'),
-            nestedFields: [
-                {
-                    key: 'facilitator_fixed',
-                    type: 'number',
-                    preInsideText: __('$', 'multivendorx'),
-                    size: "8rem",
-                    preText: 'Fixed',
-                    postText: "+",
-                },
-                {
-                    key: 'facilitator_percentage',
-                    type: 'number',
-                    postInsideText: __('%', 'multivendorx'),
-                    size: "8rem",
-                },
-            ],
-        },
+        
         {
             key: 'marketplace_fees',
             type: 'nested',
@@ -362,6 +330,39 @@ export default {
                 },
             ],
         },
-       
+              
+        {
+            key: 'facilitator_fees',
+            type: 'nested',
+            label: 'Facilitator Fees',
+            single: true,
+            settingDescription: __('Set the facilitator fee as a fixed amount, a percentage, or both, deducted from the store commission. Store-wise fees can also be configured from the store edit page.', 'multivendorx'),
+            nestedFields: [
+                {
+                    key: 'facilitator_fixed',
+                    type: 'number',
+                    preInsideText: __('$', 'multivendorx'),
+                    size: "8rem",
+                    preText: 'Fixed',
+                    postText: "+",
+                },
+                {
+                    key: 'facilitator_percentage',
+                    type: 'number',
+                    postInsideText: __('%', 'multivendorx'),
+                    size: "8rem",
+                },
+            ],
+        },  
+        {
+            key: 'gateway_fees',
+            type: 'nested',
+            label: __('Gateway Fees', 'multivendorx'),
+			settingDescription: __('Define the default fee that will be deducted from the store commission. If you want to charge different fees for each payment method, set the amounts here for gateways, bank transfers, or cash on delivery.', 'multivendorx'),
+            rowClass: 'single-line',            
+            single: true,
+            desc: __('', 'multivendorx'),
+            nestedFields
+        },      
     ],
 };
