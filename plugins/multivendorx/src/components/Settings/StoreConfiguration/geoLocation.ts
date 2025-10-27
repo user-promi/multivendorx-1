@@ -56,6 +56,7 @@ export default {
                     img: mapbox,
                 },
             ],
+            moduleEnabled: 'geo-location',
         },
         {
             key: 'google_api_key',

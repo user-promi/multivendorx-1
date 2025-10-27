@@ -318,29 +318,19 @@ export default {
             ],
         },
         {
-            key: 'marketplace_fee',
-            label: __('Marketplace Fee', 'multivendorx'),
-            settingDescription: __('', 'multivendorx'),
-            desc: __('Marketplace fees help cover platform costs and ensure smooth operation of your multi-vendor marketplace.', 'multivendorx'),
-            type: 'checkbox',
-            options: [
-                {
-                    key: 'enable_marketplace_fee',
-                    value: 'enable_marketplace_fee',
-                },
-            ],
-            look: 'toggle',
-        },
-        {
-            key: 'commission_type',
-            type: 'setting-toggle',
-            label: __('Fee Responsibility', 'multivendorx'),
-            settingDescription: __("Who pays the marketplace fee?", 'multivendorx'),
-            desc: __(
-                '<ul><li>Customer - the marketplace fee will be added to the customer’s order total, so the customer pays it at checkout.</li><li>Store - the fee will be deducted from the store’s earnings, meaning the store bears the cost.</li></ul>',
+            key: 'marketplace_fees',
+            type: 'nested',
+            label: __('Marketplace fee', 'multivendorx'),
+            single: true,
+            settingDescription: __(
+                'Marketplace fees help cover platform costs and ensure smooth operation of your multi-vendor marketplace.',
                 'multivendorx'
             ),
-            options: [
+            nestedFields: [
+                {
+                key: 'commission_type',
+                type: 'setting-toggle',
+                options: [
                 {
                     key: 'store_order',
                     label: __('Customer', 'multivendorx'),
@@ -351,30 +341,27 @@ export default {
                     label: __('Store', 'multivendorx'),
                     value: 'per_item',
                 },
-            ],
-        },
-        {
-            key: 'marketplace_fees',
-            type: 'nested',
-            label: 'Marketplace Fees',
-            single: true,
-            settingDescription: __('Set the marketplae fee as a fixed amount, a percentage, or both, deducted from the store commission. Store-wise fees can also be configured from the store edit page.', 'multivendorx'),
-            nestedFields: [
+               ],
+                    preText: __('Decide who pays the marketplace fee', 'multivendorx'),
+                    postText: __('.The fee is applied as', 'multivendorx'),
+                },
                 {
-                    key: 'facilitator_fixed',
+                    key: 'marketplace_fixed', // updated key
                     type: 'number',
+                    size: '5rem',
                     preInsideText: __('$', 'multivendorx'),
-                    size: "8rem",
-                    preText: 'Fixed',
+                    preText: 'fixed',
                     postText: "+",
                 },
                 {
-                    key: 'facilitator_percentage',
+                    key: 'marketplace_percentage', // updated key
                     type: 'number',
+                    size: '5rem',
+                    postText: __('.', 'multivendorx'),
                     postInsideText: __('%', 'multivendorx'),
-                    size: "8rem",
                 },
             ],
         },
+       
     ],
 };
