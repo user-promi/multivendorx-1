@@ -94,6 +94,8 @@ class Install {
             `commission_note`  longtext NULL,
             `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
             `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            `marketplace_fee` float(20, 2) NOT NULL DEFAULT 0,
+            `rules_applied` LONGTEXT,
             PRIMARY KEY (`ID`)
         ) $collate;";
 
