@@ -3,45 +3,12 @@ import { __ } from '@wordpress/i18n';
 export default {
     id: 'non-compliance',
     priority: 2,
-    name: __('Compliance Configuration', 'mvx-pro'),
+    name: __('Compliance Management', 'mvx-pro'),
     desc: __('Control store access based on verification status. Ensure only compliant stores can operate fully on your marketplace.', 'mvx-pro'),
     icon: 'adminlib-wholesale',
     submitUrl: 'settings',
     modal: [
-        {
-            key: 'unverified_store_access',
-            type: 'checkbox',
-            label: __('What Happens If Sellers Donot Complete Requirements?', 'mvx-pro'),
-            desc: __('Select the restrictions you want to apply to stores who have not yet completed their compliance.', 'mvx-pro'),
-            options: [
-                {
-                    key: 'endpoint_control',
-                    label: __('Restrict access to other dashbaord pages', 'mvx-pro'),
-                    value: 'endpoint_control',
-                    proSetting: true,
-                },
-                {
-                    key: 'redirect_verification_page',
-                    label: __('Redirect to compliance checklist page', 'mvx-pro'),
-                    value: 'redirect_verification_page',
-                    proSetting: true,
-                },
-                {
-                    key: 'disable_add_product_endpoint',
-                    label: __('Prevent product upload', 'mvx-pro'),
-                    value: 'disable_add_product_endpoint',
-                    proSetting: true,
-                },
-                {
-                    key: 'hide_store_from_customers',
-                    label: __('Hide store from customers ', 'mvx-pro'),
-                    value: 'hide_store_from_customers',
-                    proSetting: true,
-                },
-            ],
-            //proSetting:true,
-            selectDeselect: true,
-        },
+        
         {
             key: 'separator_content',
             type: 'section',
@@ -77,20 +44,14 @@ export default {
                                     desc: __('Allow stores to advertise products at no extra cost if included in their subscription plan.', 'multivendorx'),
                                 },
                                 {
-                                    key: 'mark_advertised_product_as_featured',
-                                    label: __('Mark advertised products as featured', 'multivendorx'),
-                                    value: 'Business Registration',
-                                    desc: __('Automatically mark advertised products as featured. They will be removed from the featured list once advertising expires.', 'multivendorx'),
-                                },
-                                {
                                     key: 'display_advertised_product_on_top',
-                                    label: __('Bank Account Verification', 'multivendorx'),
+                                    label: __('Social Verification', 'multivendorx'),
                                     value: 'display_advertised_product_on_top',
                                     desc: __('Display advertised products at the top of catalog pages such as the shop or store page.', 'multivendorx'),
                                 },
                                 {
                                     key: 'out_of_stock_visibility',
-                                    label: __('Address Verification', 'multivendorx'),
+                                    label: __('Email Verification', 'multivendorx'),
                                     value: 'out_of_stock_visibility',
                                     desc: __('Hide advertised products that are out of stock. Note: if WooCommerce’s out-of-stock visibility setting is enabled, products will be hidden regardless of this setting.', 'multivendorx'),
                                 },
@@ -103,19 +64,19 @@ export default {
                             label: __('Non-Compliance Action', 'multivendorx'),
                             options: [
                                 {
-                                    key: 'store_order',
-                                    label: __('Block Store Access', 'multivendorx'),
-                                    value: 'store_order',
+                                    key: 'block_dashboard_access',
+                                    label: __('Block dashboard access', 'multivendorx'),
+                                    value: 'block_dashboard_access',
                                 },
                                 {
-                                    key: 'prevent_product_uploads',
-                                    label: __('Prevent Product Uploads', 'multivendorx'),
-                                    value: 'per_item',
+                                    key: 'hide_store_from_view',
+                                    label: __('Hide store from view', 'multivendorx'),
+                                    value: 'hide_store_from_view',
                                 },
                                 {
-                                    key: 'notify_admin_only',
-                                    label: __('Notify Admin Only', 'multivendorx'),
-                                    value: 'notify_admin_only',
+                                    key: 'disable_product upload',
+                                    label: __('Disable product upload', 'multivendorx'),
+                                    value: 'disable_product upload',
                                 },
                             ],
                         },
