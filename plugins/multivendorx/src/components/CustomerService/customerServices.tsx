@@ -99,9 +99,9 @@ const CustomerServices = () => {
                     <div className="card-header">
                         <div className="left">
                             <div className="title">
-                                Customer Questions
+                                Questions
                             </div>
-                            <div className="des">View, manage, and respond to customer questions about products.</div>
+                            <div className="des">Waiting for your response</div>
                         </div>
                         <div className="right">
                             <i className="adminlib-more-vertical"></i>
@@ -117,7 +117,7 @@ const CustomerServices = () => {
                             <div className="title">
                                 Store Reviews
                             </div>
-                            <div className="des">View and manage all customer reviews for stores.</div>
+                            <div className="des">Shared by customers</div>
                         </div>
                         <div className="right">
                             <i className="adminlib-more-vertical"></i>
@@ -134,7 +134,7 @@ const CustomerServices = () => {
                             <div className="title">
                                 Abuse Reports
                             </div>
-                            <div className="des">Monitor reported issues or complaints about products or stores.</div>
+                            <div className="des">Flagged for review</div>
                         </div>
                         <div className="right">
                             <i className="adminlib-more-vertical"></i>
@@ -151,7 +151,7 @@ const CustomerServices = () => {
                             <div className="title">
                                 Refund Requests
                             </div>
-                            <div className="des">Track and handle customer refund requests.</div>
+                            <div className="des">Need your decision</div>
                         </div>
                         <div className="right">
                             <i className="adminlib-more-vertical"></i>
