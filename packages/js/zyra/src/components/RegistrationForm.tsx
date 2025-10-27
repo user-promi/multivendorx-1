@@ -154,14 +154,14 @@ const CustomForm: React.FC<CustomFormProps> = ({
     const [selectedFieldForGallery, setSelectedFieldForGallery] = useState<FormField | null>(null);
 
     // Close meta modal if clicked outside
-    useEffect(() => {
-        const closePopup = (event: MouseEvent) => {
-            if ((event.target as HTMLElement).closest('.meta-menu, .meta-setting-modal, .react-draggable, .modal-overlay')) return;
-            setOpendInput(null);
-        };
-        document.body.addEventListener('click', closePopup);
-        return () => document.body.removeEventListener('click', closePopup);
-    }, []);
+    // useEffect(() => {
+    //     const closePopup = (event: MouseEvent) => {
+    //         if ((event.target as HTMLElement).closest('.meta-menu, .meta-setting-modal, .react-draggable, .modal-overlay')) return;
+    //         setOpendInput(null);
+    //     };
+    //     document.body.addEventListener('click', closePopup);
+    //     return () => document.body.removeEventListener('click', closePopup);
+    // }, []);
 
     useEffect(() => {
         setRendMaxId(formFieldList.reduce((maxId, field) => Math.max(maxId, field.id), 0) + 1);
@@ -210,9 +210,15 @@ const CustomForm: React.FC<CustomFormProps> = ({
         if (proSettingChange()) return;
         const newField: FormField = getNewFormField(type, fixedName);
         if (readonly) newField.readonly = true;
-        const newFormFieldList = [...formFieldList.slice(0, index + 1), newField, ...formFieldList.slice(index + 1)];
+        // const newFormFieldList = [...formFieldList.slice(0, index + 1), newField, ...formFieldList.slice(index + 1)];
+        
+        const currentIndex = opendInput ? formFieldList.findIndex((field) => field.id === opendInput.id) : -1;
+        const insertIndex = currentIndex !== -1 ? currentIndex + 1 : formFieldList.length;
+        const newFormFieldList = [...formFieldList.slice(0, insertIndex), newField, ...formFieldList.slice(insertIndex)];
+        
         settingHasChanged.current = true;
         setFormFieldList(newFormFieldList);
+        setOpendInput(newField);
         return newField;
     };
 
@@ -221,6 +227,8 @@ const CustomForm: React.FC<CustomFormProps> = ({
         const newFormFieldList = formFieldList.filter((_, i) => i !== index);
         settingHasChanged.current = true;
         setFormFieldList(newFormFieldList);
+        console.log('opendInput id', opendInput?.id)
+        console.log('formFieldList id', formFieldList[index].id)
         if (opendInput?.id === formFieldList[index].id) {
             setOpendInput(null);
         }
@@ -383,6 +391,7 @@ const CustomForm: React.FC<CustomFormProps> = ({
         //     content: <FormAnalytics formFields={formFieldList} />
         // },
     ];
+console.log('opendInput', opendInput)
 
     return (
         <div className="registration-from-wrapper">

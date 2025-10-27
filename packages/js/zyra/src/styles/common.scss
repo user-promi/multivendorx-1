@@ -1256,6 +1256,12 @@ input[type="checkbox"]:focus {
   }
 }
 
+// delete and add table top action btn section
+.search-field:has(.admin-btn) {
+  border: none
+}
+// end delete and add table top action btn section 
+
 .search-section {
   display: flex;
   align-items: center;

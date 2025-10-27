@@ -251,11 +251,12 @@
 
     .title {
       font-size: 1.4rem;
+
       i {
-      margin-right: 0.5rem;
-      color: $theme-color;
-      font-size: 1.8rem;
-    }
+        margin-right: 0.5rem;
+        color: $theme-color;
+        font-size: 1.8rem;
+      }
     }
 
     .buttons {
@@ -295,6 +296,20 @@
   .admin-btn.tooltip-btn {
     padding: 0.5rem;
     border-radius: 50%;
+  }
+
+  .custom-content {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+
+    div{
+      width: fit-content;
+    }
+    label{
+      
+    }
+
   }
 }
 

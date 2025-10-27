@@ -481,7 +481,6 @@ const RefundRequest: React.FC = () => {
 
     return (
         <>
-            <div className="column">
                 {error && (
                     <div className="admin-notice admin-notice-error">
                         {error}
@@ -565,7 +564,7 @@ const RefundRequest: React.FC = () => {
                         </div>
                     </CommonPopup>
                 )}
-            </div>
+            
         </>
     );
 };

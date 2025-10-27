@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 export default {
     id: 'review-management',
     priority: 4,
-    name: __( 'Reviews and Ratings', 'multivendorx' ),
+    name: __( 'Store Reviews', 'multivendorx' ),
     desc: __( 'Manage product and store review settings.', 'multivendorx' ),
     icon: 'adminlib-setting',
     submitUrl: 'settings',
@@ -26,20 +26,6 @@ export default {
                 {
                     key: 'is_storereview_varified',
                     value: 'is_storereview_varified',
-                },
-            ],
-            look: 'toggle',
-            moduleEnabled: 'store-review',
-        },
-        {
-            key: 'product_review_sync',
-            type: 'checkbox',
-            label: __( 'Sync product ratings', 'multivendorx' ),
-            desc: __( 'Store ratings will be calculated based on both store ratings and product ratings.', 'multivendorx' ),
-            options: [
-                {
-                    key: 'product_review_sync',
-                    value: 'product_review_sync',
                 },
             ],
             look: 'toggle',

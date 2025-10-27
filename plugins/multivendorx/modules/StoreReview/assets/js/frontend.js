@@ -1,77 +1,69 @@
-/* global review */
-jQuery(document).ready(function($) {
+jQuery(document).ready(function ($) {
+    const store_id = $('#store_for_rating').val();
 
-    function load_reviews(store_id, page = 1) {
-        if (!store_id) return;
-
-        $.ajax({
-            url: review.ajaxurl,
-            type: 'POST',
-            data: {
-                action: 'store_review_list',
-                store_id: store_id,
-                page: page,
-                nonce: review.nonce
-            },
-            success: function(response) {
-                if (response.success) {
-                    $('#mvx_vendor_reviews_list').html(response.data.html);
-                    $('#review_pagination').html(response.data.pagination);
-
-                    // Attach pagination click events
-                    $('.mvx-review-page').off('click').on('click', function() {
-                        let page = $(this).data('page');
-                        load_reviews(store_id, page);
-                    });
+    // Load Average Ratings
+    function loadAverageRatings() {
+        $.post(review.ajaxurl, {
+            action: 'multivendorx_store_review_avg',
+            store_id: store_id,
+            nonce: review.nonce,
+        }, function (res) {
+            if (res.success) {
+                let html = `<div class="avg-rating-summary"><strong>Overall: ${res.data.overall} ★</strong><ul>`;
+                for (let p in res.data.averages) {
+                    html += `<li>${p}: ${res.data.averages[p]} ★</li>`;
                 }
+                html += '</ul></div>';
+                $('#multivendorx_avg_rating').html(html);
+            } else {
+                $('#multivendorx_avg_rating').html('<p>No ratings yet.</p>');
             }
         });
     }
 
-    // Submit review
-    $('#review_submit').on('click', function(e) {
+    // Load Reviews
+    function loadReviews() {
+        $.post(review.ajaxurl, {
+            action: 'multivendorx_store_review_list',
+            store_id: store_id,
+            nonce: review.nonce,
+        }, function (res) {
+            if (res.success) {
+                $('#multivendorx_vendor_reviews_list').html(res.data.html);
+            }
+        });
+    }
+
+    // Submit Review
+    $('#review_submit').on('click', function (e) {
         e.preventDefault();
 
-        let rating  = $('#rating').val();
-        let comment = $('#comment').val();
-        let store   = $('#store_for_rating').val();
+        let ratings = {};
+        $('.multivendorx-rating-select').each(function () {
+            const key = $(this).attr('name').replace('rating[', '').replace(']', '');
+            ratings[key] = $(this).val();
+        });
 
-        if (!rating || !comment) {
-            alert('Please provide both rating and review.');
-            return;
-        }
+        const data = {
+            action: 'multivendorx_store_review_submit',
+            nonce: review.nonce,
+            store_id: store_id,
+            review_title: $('#review_title').val(),
+            review_content: $('#review_content').val(),
+            rating: ratings
+        };
 
-        $.ajax({
-            url: review.ajaxurl,
-            type: 'POST',
-            data: {
-                action: 'store_review_submit',
-                rating: rating,
-                comment: comment,
-                store_id: store,
-                nonce: review.nonce
-            },
-            beforeSend: function() {
-                $('#review_submit').attr('disabled', true).val('Submitting...');
-            },
-            success: function(response) {
-                $('#review_submit').attr('disabled', false).val('Submit');
-                if (response.success) {
-                    alert(response.data.message);
-                    $('#commentform')[0].reset();
-                    $('#review_form_wrapper').html('<div class="woocommerce-info">You have already reviewed this store.</div>');
-                    load_reviews(store); // reload reviews including replies
-                } else {
-                    alert(response.data.message);
-                }
-            },
-            error: function() {
-                $('#review_submit').attr('disabled', false).val('Submit');
-                alert('Something went wrong. Please try again.');
+        $.post(review.ajaxurl, data, function (res) {
+            alert(res.data.message);
+            if (res.success) {
+                $('#review_form_wrapper').html('<div class="woocommerce-info">Thank you for your review!</div>');
+                loadAverageRatings();
+                loadReviews();
             }
         });
     });
 
-    // Load reviews on page load for everyone (logged-in or guest)
-    load_reviews($('#store_for_rating').val());
+    // Initial Load
+    loadAverageRatings();
+    loadReviews();
 });

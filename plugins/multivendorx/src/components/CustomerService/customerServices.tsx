@@ -12,6 +12,7 @@ const CustomerServices = () => {
     const [abuseCount, setAbuseCount] = useState(0);
     const [qnaCount, setQnaCount] = useState(0);
     const [withdrawCount, setWithdrawCount] = useState(0);
+    const [activeTab, setActiveTab] = useState("products");
 
     // Fetch total count on mount
     useEffect(() => {
@@ -91,6 +92,77 @@ const CustomerServices = () => {
             icon: 'adminlib-calendar',
         },
     ];
+    const tabs = [
+        {
+            id: "products", label: "Question & Answer", icon: "adminlib-calendar red",  des: "Waitng for Wholesale Customer Approval", count: qnaCount, content:
+                <>
+                    <div className="card-header">
+                        <div className="left">
+                            <div className="title">
+                                Questions
+                            </div>
+                            <div className="des">Waiting for your response</div>
+                        </div>
+                        <div className="right">
+                            <i className="adminlib-more-vertical"></i>
+                        </div>
+                    </div>
+                    <Qna /></>
+        },
+        {
+            id: "review", label: "Review Flag", icon: "adminlib-calendar green", count: 9,  des: "Waitng for Wholesale Customer Approval", content:
+                <>
+                    <div className="card-header">
+                        <div className="left">
+                            <div className="title">
+                                Store Reviews
+                            </div>
+                            <div className="des">Shared by customers</div>
+                        </div>
+                        <div className="right">
+                            <i className="adminlib-more-vertical"></i>
+                        </div>
+                    </div>
+                    <StoreReviews />
+                </>
+        },
+        {
+            id: "reports", label: "Abuse Reports", icon: "adminlib-calendar yellow",  des: "Waitng for Wholesale Customer Approval", count: abuseCount, content:
+                <>
+                    <div className="card-header">
+                        <div className="left">
+                            <div className="title">
+                                Abuse Reports
+                            </div>
+                            <div className="des">Flagged for review</div>
+                        </div>
+                        <div className="right">
+                            <i className="adminlib-more-vertical"></i>
+                        </div>
+                    </div>
+                    <AbuseReports />
+                </>
+        },
+        {
+            id: "refund-requests", label: "Refund Requests", icon: "adminlib-calendar blue",  des: "Waitng for Wholesale Customer Approval", count: 3, content:
+                <>
+                    <div className="card-header">
+                        <div className="left">
+                            <div className="title">
+                                Refund Requests
+                            </div>
+                            <div className="des">Need your decision</div>
+                        </div>
+                        <div className="right">
+                            <i className="adminlib-more-vertical"></i>
+                        </div>
+                    </div>
+                    <RefundRequest />
+                </>
+        },
+        // { id: "coupons", label: "Coupons", content: <Coupons onUpdated={refreshCounts} /> },
+        // { id: "transactions", label: "Withdrawal", content: <Transactions onUpdated={refreshCounts} /> },
+    ];
 
     return (
         <>
@@ -101,8 +173,8 @@ const CustomerServices = () => {
             />
             <div className="work-board">
                 <div className="row">
-                    <div className="overview-card-wrapper">
-                        {CustomerServicesStats.map(stat => (
+                    <div className="overview-card-wrapper tab">
+                        {/* {CustomerServicesStats.map(stat => (
                             <div className="action" key={stat.id}>
                                 <div className="title">
                                     {stat.count}
@@ -112,11 +184,38 @@ const CustomerServices = () => {
                                     {stat.label}
                                 </div>
                             </div>
+                        ))} */}
+                        {tabs.map((tab) => (
+                            <div className={`tab-action ${activeTab === tab.id ? "active" : ""}`} key={tab.id} onClick={() => setActiveTab(tab.id)}>
+                                <div className="details-wrapper">
+                                    <i className={tab.icon}></i>
+                                    <div className="title">{tab.count} {tab.label}</div>
+                                </div>
+                                <div className="description">
+                                    {tab.des}
+                                </div>
+                            </div>
                         ))}
                     </div>
                 </div>
 
                 <div className="row">
+                    <div className="column">
+                        {/* Tab Content */}
+                        <div className="tab-content">
+                            {tabs.map(
+                                (tab) =>
+                                    activeTab === tab.id && (
+                                        <div key={tab.id} className="tab-panel">
+                                            {tab.content}
+                                        </div>
+                                    )
+                            )}
+                        </div>
+                    </div>
+                </div>
+
+                {/* <div className="row">
                     <div className="column">
                         <div className="card-header">
                             <div className="left">
@@ -166,7 +265,7 @@ const CustomerServices = () => {
                         <AbuseReports />
                     </div>
                 </div>
-                
+
 
                 <div className="row">
                     <div className="column">
@@ -183,7 +282,7 @@ const CustomerServices = () => {
                         </div>
                         <Qna />
                     </div>
-                </div>
+                </div> */}
             </div>
         </>
     );

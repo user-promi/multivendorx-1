@@ -14,7 +14,6 @@ import Memberships from './components/Membership/membership';
 import Brand from './assets/images/mvx-brand-logo.png';
 import { searchIndex, SearchItem } from './searchIndex';
 import { __ } from '@wordpress/i18n';
-import Notification from './components/Notifications/notification';
 import Announcements from './components/Announcements/announcements';
 import Knowledgebase from './components/Knowledgebase/knowledgebase';
 import Blogs from './components/Blogs/blogs';
@@ -23,6 +22,7 @@ import TransactionHistory from './components/TransactionHistory/transactionHisto
 import Analytics from './components/Reports/Reports';
 import Advertisement from './components/Advertisement/Advertisement';
 import HelpSupport from './components/HelpSupport/HelpSupport';
+import ApprovalQueue from './components/ApprovalQueue/approvalQueue';
 
 localStorage.setItem('force_multivendorx_context_reload', 'true');
 
@@ -55,7 +55,7 @@ const Route = () => {
       {tab === 'stores' && <Store />}
       {tab === 'commissions' && <Commission />}
       {tab === 'customer-support' && <CustomerServices />}
-      {tab === 'actions-items' && <Notification />}
+      {tab === 'approval-queue' && <ApprovalQueue />}
       {tab === 'dashboard' && <AdminDashboard />}
       {tab === 'announcement' && <Announcements />}
       {tab === 'knowledgebase' && <Knowledgebase />}
