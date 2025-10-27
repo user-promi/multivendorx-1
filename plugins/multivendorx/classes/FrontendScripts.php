@@ -513,7 +513,8 @@ class FrontendScripts {
                         'approve_store'            => MultiVendorX()->setting->get_setting( 'approve_store' ),
                         'enable_profile_deactivation_request' => MultiVendorX()->setting->get_setting( 'enable_profile_deactivation_request' ),
                         'can_publish_products'     => MultiVendorX()->setting->get_setting( 'products' ),
-                        'can_publish_coupons'     => MultiVendorX()->setting->get_setting( 'coupons' ),
+                        'can_publish_coupons'      => MultiVendorX()->setting->get_setting( 'coupons' ),
+                        'withdrawals'              => MultiVendorX()->setting->get_setting( 'withdrawals' ),
 					) ),
                 ),
                 'multivendorx-product-tab-script' => array(
