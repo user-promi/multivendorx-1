@@ -224,14 +224,9 @@ const StoreTable: React.FC = () => {
                             className="product-wrapper"
                         >
                             <img 
-                                src={getStoreImage(row.original)}
+                                src={row.original.image}
                                 alt={row.original.store_name}
-                                onError={(e) => {
-                                    const target = e.target as HTMLImageElement;
-                                    const storeName = row.original.store_name || 'Store';
-                                    const initial = storeName.charAt(0).toUpperCase();
-                                    target.src = `https://via.placeholder.com/50/007cba/ffffff?text=${initial}`;
-                                }}
+                               
                             />
                             <div className="details">
                                 <span className="title">
@@ -412,7 +407,6 @@ const StoreTable: React.FC = () => {
             ),
         },
     ];
-    
 
     return (
         <div className="admin-table-wrapper">
