@@ -584,11 +584,11 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
         // Handle store_owners array if provided
         if ( !empty( $store_data['store_owners'] ) ) {
             StoreUtil::set_primary_owner($store_data['store_owners'], $insert_id);
-            // StoreUtil::add_store_users([
-            //     'store_id' => $insert_id,
-            //     'users'    => $store_data['store_owners'],
-            //     'role_id'  => 'store_owner',
-            // ]);
+            StoreUtil::add_store_users([
+                'store_id' => $insert_id,
+                'users'    => [$store_data['store_owners']],
+                'role_id'  => 'store_owner',
+            ]);
         }
     
         return rest_ensure_response( [
@@ -611,7 +611,8 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
 
             $response = [
                 'id'           => $id,
-                'store_owners' => $users,
+                'store_owners' => $users['users'],
+                'primary_owner' => (int) $users['primary_owner'],
             ];
             return rest_ensure_response( $response );
         }
@@ -643,7 +644,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
     public function update_item( $request ) {
         $id   = absint( $request->get_param( 'id' ) );
         $data = $request->get_json_params();
-    
+
         $store = new \MultiVendorX\Store\Store( $id );
     
         // Handle registration & core data
@@ -671,12 +672,14 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
         }
     
         // Handle adding store owners
-        if (!empty($data['store_owners'])) {
+        if (!empty($data['store_owners']) || !empty($data['primary_owner'])) {
             StoreUtil::add_store_users([
                 'store_id' => $data['id'],
                 'users'    => $data['store_owners'],
                 'role_id'  => 'store_owner',
             ]);
+
+            StoreUtil::set_primary_owner($data['primary_owner'], $data['id']);
     
             return rest_ensure_response([ 'success' => true ]);
         }
