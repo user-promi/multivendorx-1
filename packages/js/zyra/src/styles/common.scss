@@ -1327,3 +1327,12 @@ input[type="checkbox"]:focus {
 }
 
 // tooltip style end
+
+// rating wrapper start
+.rating-wrapper{
+  display: flex;
+  gap: 0.313rem;
+  i{
+    color: rgb(202, 172, 1);
+  }
+}

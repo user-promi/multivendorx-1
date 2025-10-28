@@ -352,12 +352,12 @@ a {
 .content-wrapper {
     .container-wrapper {
         display: flex;
-        gap: 1.2rem;
+        gap: 2rem;
     }
 
     .card-wrapper {
         display: flex;
-        gap: 1.2rem;
+        gap: 2rem;
         flex-direction: column;
     }
 
@@ -370,7 +370,7 @@ a {
     .row {
         display: flex;
         gap: 1.25rem;
-        padding: 0.625rem 0;
+        padding-bottom: 2rem;
     }
 
     .column {

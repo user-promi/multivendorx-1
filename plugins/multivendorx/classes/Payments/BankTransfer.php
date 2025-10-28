@@ -18,7 +18,7 @@ class BankTransfer {
 
     public function get_settings() {
         return [
-            'icon'      => 'adminlib-payment',
+            'icon'      => 'adminlib-bank',
             'id'        => $this->get_id(),
             'label'     => 'Bank Transfer',
             'enableOption' => true,
