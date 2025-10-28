@@ -180,6 +180,25 @@
 .table-action-wrapper{
     display: flex;
     gap: 0.5rem;
+
+    .action-wrapper{
+        display: flex;
+        gap: 0.5rem;
+
+        // common this like .card-header .right i
+        i {
+            font-size: 1.25rem;
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: all 0.4s ease;
+            cursor: pointer;
+
+            &:hover {
+                background: #5a59591a;
+            }
+        }
+        // common end
+    }
 }
 .table-wrapper {
     .admin-table {
@@ -279,7 +298,6 @@
                 align-items: center;
                 width: 100%;
                 border-bottom: $border-light-small;
-                cursor: pointer;
 
 
                 .admin-column {

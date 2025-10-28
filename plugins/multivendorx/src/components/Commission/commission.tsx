@@ -293,6 +293,12 @@ const Commission: React.FC = () => {
                 </>
             ),
         },
+        {
+        name: 'exportAll',
+        render: () => (
+            <i className="adminlib-more-vertical"></i>
+        ),
+    },
     ];
 
     
