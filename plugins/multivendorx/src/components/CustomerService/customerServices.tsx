@@ -127,14 +127,14 @@ const CustomerServices = () => {
                 </>
         },
         {
-            id: "reports", label: "Abuse Reports", icon: "adminlib-calendar yellow",  des: "Flagged for review", count: abuseCount, content:
+            id: "reports", label: "Products Reported", icon: "adminlib-calendar yellow",  des: "Flagged for abuse review", count: abuseCount, content:
                 <>
                     <div className="card-header">
                         <div className="left">
                             <div className="title">
-                                Abuse Reports
+                                Products Reported
                             </div>
-                            <div className="des">Flagged for review</div>
+                            <div className="des">Flagged for abuse review</div>
                         </div>
                         <div className="right">
                             <i className="adminlib-more-vertical"></i>
