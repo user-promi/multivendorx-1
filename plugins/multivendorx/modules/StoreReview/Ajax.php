@@ -35,7 +35,6 @@ class Ajax {
         $review_title   = $data['review_title'] ?? '';
         $review_content = $data['review_content'] ?? '';
         $ratings        = $data['rating'] ?? [];
-    
         if (!$user_id || !$store_id || empty($ratings)) {
             wp_send_json_error(['message' => __('Missing required fields.', 'multivendorx')]);
         }
@@ -75,19 +74,6 @@ class Ajax {
                 echo ' <div class="rating"><i class="adminlib-star-o"></i> <i class="adminlib-star-o"></i> <i class="adminlib-star-o"></i> <i class="adminlib-star-o"></i> <i class="adminlib-star-o"></i> <span class="title">'. esc_html($review->review_title) . '</span></div> ';
                 echo ' <div class="content">' . esc_html($review->review_content) . '</div> </div>';
 
-                // echo '<strong>' . esc_html($reviewer_name) . '</strong>';
-                // echo '<p><strong>' . esc_html($review->review_title) . '</strong></p>';
-                // echo '<p>' . esc_html($review->review_content) . '</p>';
-
-                // $ratings = Util::get_ratings_for_review($review->review_id);
-                // if ($ratings) {
-                //     echo '<ul class="mvx-review-params">';
-                //     foreach ($ratings as $r) {
-                //         echo '<li>' . esc_html($r->parameter) . ': ' . intval($r->rating_value) . '★</li>';
-                //     }
-                //     echo '</ul>';
-                // }
-
                 if (!empty($review->reply)) {
                     echo '<div class="mvx-review-reply">';
                     echo '<strong>' . esc_html__('Admin reply:', 'multivendorx') . '</strong> ';
@@ -108,13 +94,36 @@ class Ajax {
     public function get_avg_ratings() {
         $store_id   = filter_input(INPUT_POST, 'store_id', FILTER_SANITIZE_NUMBER_INT);
         $parameters = MultiVendorX()->setting->get_setting('ratings_parameters', []);
-
+    
         $averages = Util::get_avg_ratings($store_id, $parameters);
         $overall  = Util::get_overall_rating($store_id);
-
+    
+        //Get all reviews
+        $reviews = Util::get_reviews_by_store($store_id);
+        $total_reviews = count($reviews);
+    
+        //Initialize breakdown
+        $breakdown = [
+            5 => 0,
+            4 => 0,
+            3 => 0,
+            2 => 0,
+            1 => 0,
+        ];
+    
+        foreach ($reviews as $review) {
+            $rating = round(floatval($review->overall_rating)); // Round to nearest star
+            if (isset($breakdown[$rating])) {
+                $breakdown[$rating]++;
+            }
+        }
+    
         wp_send_json_success([
-            'averages' => $averages,
-            'overall'  => $overall,
+            'averages'      => $averages,
+            'overall'       => round($overall, 1),
+            'total_reviews' => $total_reviews,
+            'breakdown'     => $breakdown,
         ]);
     }
+    
 }

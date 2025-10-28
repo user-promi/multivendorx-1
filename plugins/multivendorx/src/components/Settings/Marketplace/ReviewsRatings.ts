@@ -43,7 +43,6 @@ export default {
                 'Define rating parameters such as packaging, delivery, behaviour, policies, etc.',
                 'multivendorx'
             ),
-            name: 'abuse_report_reasons',
             defaultValues: [
                 { value: "Product quality",},
                 { value: "Customer service",},
