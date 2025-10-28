@@ -217,6 +217,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
 
 
     public function get_items( $request ) {
+        global $wpdb;
         $nonce = $request->get_header( 'X-WP-Nonce' );
     
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
@@ -236,6 +237,17 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
         }
     
         try {
+
+            $slug = $request->get_param( 'slug' );
+            if ($request->get_param( 'slug' )) {
+                $table = "{$wpdb->prefix}"  . Utill::TABLES['store'];
+
+                $exists = $wpdb->get_var(
+                    $wpdb->prepare("SELECT COUNT(*) FROM {$table} WHERE slug = %s", $slug)
+                );
+
+                return rest_ensure_response(['exists' => $exists > 0]);
+            }
             
             if ( $request->get_param( 'pending_withdraw' ) ) {
                 return rest_ensure_response( $this->get_stores_with_pending_withdraw() );
