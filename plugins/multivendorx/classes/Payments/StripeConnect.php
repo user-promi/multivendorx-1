@@ -27,7 +27,7 @@ class StripeConnect
             wp_send_json_error(['message' => __('You must be logged in.', 'multivendorx')]);
         }
         
-        $vendor_id = get_current_user_id();
+        $store_id = get_user_meta( get_current_user_id(), "multivendorx_active_store", true);
         $payment_admin_settings = MultiVendorX()->setting->get_setting('payment_methods', []);
         $stripe_settings = $payment_admin_settings['stripe-connect'] ?? [];
         $client_id = $stripe_settings['client_id'] ?? '';
@@ -41,7 +41,7 @@ class StripeConnect
         $state = wp_generate_password(24, false, false);
         
         // Store vendor ID in transient for verification
-        set_transient('mvx_stripe_oauth_state_' . $state, $vendor_id, 5 * MINUTE_IN_SECONDS);
+        set_transient('mvx_stripe_oauth_state_' . $state, $store_id, 5 * MINUTE_IN_SECONDS);
         
         $onboarding_url = add_query_arg([
             'response_type' => 'code',
@@ -249,8 +249,8 @@ class StripeConnect
         $stripe_settings = $payment_admin_settings['stripe-connect'] ?? [];
         
         if ($stripe_settings && $stripe_settings['enable']) {
-            $vendor_id = get_current_user_id();
-            $store = new Store($vendor_id);
+            $store_id = get_user_meta( get_current_user_id(), "multivendorx_active_store", true);
+            $store = new Store($store_id);
             $stripe_account_id = $store->get_meta('_stripe_connect_account_id');
             $onboarding_status = 'Not Connected';
             $is_onboarded = false;
@@ -302,29 +302,54 @@ class StripeConnect
 
     public function process_payment($store_id, $amount, $order_id = null, $transaction_id = null, $note = null)
     {
+        $log_file = plugin_dir_path(__FILE__) . "/payment_processing.log";
+        
+        // Log payment process start
+        file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": PAYMENT_PROCESS_STARTED\n", FILE_APPEND);
+        file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": PARAMETERS - Store ID: {$store_id}, Amount: {$amount}, Order ID: {$order_id}, Transaction ID: {$transaction_id}, Note: {$note}\n", FILE_APPEND);
+        
         $store = new Store($store_id);
         $stripe_account_id = $store->get_meta('_stripe_connect_account_id');
         
+        file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": STORE_META_RETRIEVED - Stripe Account ID: " . ($stripe_account_id ?: 'NOT_FOUND') . "\n", FILE_APPEND);
+        
         if (!$stripe_account_id) {
+            $error_message = __('Vendor is not connected to Stripe.', 'multivendorx');
+            file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": PAYMENT_FAILED - " . $error_message . "\n", FILE_APPEND);
             return [
                 'success' => false,
-                'message' => __('Vendor is not connected to Stripe.', 'multivendorx')
+                'message' => $error_message
             ];
         }
+        
+        // Log before creating transfer
+        file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": CREATING_TRANSFER - Amount: {$amount}, Destination: {$stripe_account_id}, Order ID: {$order_id}\n", FILE_APPEND);
         
         $transfer = $this->create_transfer($amount, $stripe_account_id, $order_id);
         
         if ($transfer) {
+            file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": TRANSFER_SUCCESS - Transfer ID: " . $transfer->id . ", Status: " . $transfer->status . "\n", FILE_APPEND);
+            file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": TRANSFER_DETAILS - Amount: " . ($transfer->amount / 100) . " " . $transfer->currency . ", Created: " . date("d/m/Y H:i:s", $transfer->created) . "\n", FILE_APPEND);
+            
+            // Trigger after payment complete action
             do_action('multivendorx_after_payment_complete', $store_id, 'Stripe Connect', 'success', $order_id, $transaction_id, $note, $amount);
+            
+            file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": PAYMENT_COMPLETE_ACTION_TRIGGERED\n", FILE_APPEND);
+            
+            $success_message = __('Payout successful', 'multivendorx');
+            file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": PAYMENT_SUCCESS - " . $success_message . "\n", FILE_APPEND);
+            
             return [
                 'success'  => true,
-                'message'  => __('Payout successful', 'multivendorx'),
+                'message'  => $success_message,
                 'response' => $transfer
             ];
         } else {
+            $error_message = __('Could not create transfer.', 'multivendorx');
+            file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": PAYMENT_FAILED - " . $error_message . "\n", FILE_APPEND);
             return [
                 'success' => false,
-                'message' => __('Could not create transfer.', 'multivendorx')
+                'message' => $error_message
             ];
         }
     }
@@ -348,15 +373,38 @@ class StripeConnect
     }
 
     public function create_transfer($amount, $destination, $order_id) {
+        $log_file = plugin_dir_path(__FILE__) . "/payment_processing.log";
+        
         try {
-            return Transfer::create([
+            file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": TRANSFER_CREATION_STARTED - Amount: {$amount}, Destination: {$destination}, Order ID: {$order_id}\n", FILE_APPEND);
+            
+            $transfer_data = [
                 'amount' => $amount * 100,
                 'currency' => 'usd',
                 'destination' => $destination,
                 'transfer_group' => $order_id,
-            ]);
+            ];
+            
+            file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": TRANSFER_DATA - " . var_export($transfer_data, true) . "\n", FILE_APPEND);
+            
+            $transfer = Transfer::create($transfer_data);
+            
+            file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": TRANSFER_CREATION_SUCCESS - Transfer ID: " . $transfer->id . "\n", FILE_APPEND);
+            
+            return $transfer;
+        } catch (\Stripe\Exception\ApiErrorException $e) {
+            file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": STRIPE_TRANSFER_ERROR - " . $e->getMessage() . "\n", FILE_APPEND);
+            file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": STRIPE_ERROR_TYPE - " . get_class($e) . "\n", FILE_APPEND);
+            
+            // Log additional Stripe error details if available
+            if (method_exists($e, 'getError')) {
+                $stripe_error = $e->getError();
+                file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": STRIPE_ERROR_DETAILS - Code: " . ($stripe_error->code ?? 'N/A') . ", Param: " . ($stripe_error->param ?? 'N/A') . "\n", FILE_APPEND);
+            }
+            
+            return null;
         } catch (\Exception $e) {
-            error_log('Stripe Transfer Error: ' . $e->getMessage());
+            file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": GENERAL_TRANSFER_ERROR - " . $e->getMessage() . "\n", FILE_APPEND);
             return null;
         }
     }
