@@ -259,7 +259,6 @@ export default {
             label: __('Tax amount', 'multivendorx'),
             settingDescription: __('Configure how taxes are treated in commission calculations.', 'multivendorx'),
             desc: __('<li>No tax - Calculate commission on pre-tax amount only.<li>Full tax - Include 100% tax in commission base.<li>Commision based tax - Calculate commission on total order value including taxes, not just product price.', 'multivendorx'),
-
             options: [
                 {
                     key: 'no_tax',
@@ -284,7 +283,6 @@ export default {
             hint: __("What's deducted along with store commission", 'multivendorx'),
             desc: __('Determine which fees to deduct from the commission amount.', 'multivendorx')
         },
-        
         {
             key: 'marketplace_fees',
             type: 'nested',
@@ -296,41 +294,68 @@ export default {
             ),
             nestedFields: [
                 {
-                key: 'commission_type',
-                type: 'setting-toggle',
-                options: [
-                {
-                    key: 'store_order',
-                    label: __('Customer', 'multivendorx'),
-                    value: 'store_order',
-                },
-                {
-                    key: 'per_item',
-                    label: __('Store', 'multivendorx'),
-                    value: 'per_item',
-                },
-               ],
-                    preText: __('Decide who pays the marketplace fee', 'multivendorx'),
-                    postText: __('.The fee is applied as', 'multivendorx'),
-                },
-                {
-                    key: 'marketplace_fixed', // updated key
-                    type: 'number',
-                    size: '5rem',
+                    key: 'commission_fixed',
+                    type: 'text',
                     preInsideText: __('$', 'multivendorx'),
-                    preText: 'fixed',
+                    size: "8rem",
+                    preText: 'The fee is applied as fixed',
                     postText: "+",
                 },
                 {
-                    key: 'marketplace_percentage', // updated key
+                    key: 'commission_percentage',
                     type: 'number',
-                    size: '5rem',
-                    postText: __('.', 'multivendorx'),
+                    size: '8rem',
                     postInsideText: __('%', 'multivendorx'),
                 },
+                {
+                    key: 'rule',
+                    type: 'select',
+                    label: 'Decide who pays the marketplace fee',
+                    options: [
+                        { value: 'less_than', label: 'Customer' },
+                        { value: 'more_than', label: 'Store' },
+                    ],
+                    // postText: "",
+                },
+                
             ],
+            // nestedFields: [
+            //     {
+            //     key: 'commission_type',
+            //     type: 'setting-toggle',
+            //     options: [
+            //     {
+            //         key: 'store_order',
+            //         label: __('Customer', 'multivendorx'),
+            //         value: 'store_order',
+            //     },
+            //     {
+            //         key: 'per_item',
+            //         label: __('Store', 'multivendorx'),
+            //         value: 'per_item',
+            //     },
+            //    ],
+            //         preText: __('Decide who pays the marketplace fee', 'multivendorx'),
+            //         postText: __('.The fee is applied as', 'multivendorx'),
+            //     },
+            //     {
+            //         key: 'marketplace_fixed', // updated key
+            //         type: 'number',
+            //         size: '5rem',
+            //         preInsideText: __('$', 'multivendorx'),
+            //         preText: 'fixed',
+            //         postText: "+",
+            //     },
+            //     {
+            //         key: 'marketplace_percentage', // updated key
+            //         type: 'number',
+            //         size: '5rem',
+            //         postText: __('.', 'multivendorx'),
+            //         postInsideText: __('%', 'multivendorx'),
+            //     },
+            // ],
         },
-              
+        
         {
             key: 'facilitator_fees',
             type: 'nested',

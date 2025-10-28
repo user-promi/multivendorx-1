@@ -194,8 +194,19 @@ class CommissionManager {
                 $gateway_fee = (float) $commission_amount * ((float) $percentage_fee / 100) + (float) $fixed_fee;
             }
 
+            if (!empty( MultiVendorX()->setting->get_setting('marketplace_fees') )) {
+                $fixed_fee      = 0;
+                $percentage_fee = 0;
+                $gateway_settings = reset(MultiVendorX()->setting->get_setting('marketplace_fees', []));
+                $parent_order = wc_get_order($order->get_parent_id());
+
+                
+
+                $marketplace_fees = (float) $commission_amount * ((float) $percentage_fee / 100) + (float) $fixed_fee;
+            }
+
             // in commission total add facilitator_fee and gateway fee.
-            $commission_total = (float) $commission_amount + (float) $shipping_amount + (float) $tax_amount + (float) $shipping_tax_amount - (float) $gateway_fee;
+            $commission_total = (float) $commission_amount + (float) $shipping_amount + (float) $tax_amount + (float) $shipping_tax_amount - (float) $gateway_fee - (float) $marketplace_fees;
             $commission_total = apply_filters( 'mvx_commission_total_amount', $commission_total, $commission_id );
 
             // insert | update commission into commission table.
@@ -206,6 +217,7 @@ class CommissionManager {
                 'total_order_amount'    => $order->get_total(),
                 'commission_amount'     => $commission_amount,
                 'gateway_fee'           => $gateway_fee ?? 0,
+                'marketplace_fees'      => $marketplace_fees ?? 0,
                 'shipping_amount'       => $shipping_amount,
                 'tax_amount'            => $tax_amount,
                 'shipping_tax_amount'   => $shipping_tax_amount,
