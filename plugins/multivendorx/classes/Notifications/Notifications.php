@@ -19,6 +19,7 @@ class Notifications {
 
     public function __construct() {
         $this->register_notification_hooks();
+        $this->insert_system_events();
     }
 
     public function register_notification_hooks() {
@@ -45,8 +46,31 @@ class Notifications {
                     'email_body'  => 'Store approved successfully',
                     'sms_content'  => 'Store approved successfully',
                     'system_message'  => 'New Store Approval',
+                    'tag'   => 'Store',
+                    'category'  => 'activity'
+                ],
+            'new_store_reject' => 
+                [
+                    'name'  => 'New Store Reject',
+                    'desc'  => 'Notify stores and admins when a new store is rejected.',
+                    'admin_enabled'  => True,
+                    'store_enabled'  => True,
+                    'email_subject'  => 'New Store Rejected',
+                    'email_body'  => 'Store Rejected successfully',
+                    'sms_content'  => 'Store Rejected successfully',
+                    'system_message'  => 'New Store Rejected',
+                    'tag'   => 'Store',
+                    'category'  => 'activity'
                 ]
         ];
+
+        $count = $wpdb->get_var(
+            "SELECT COUNT(*) FROM {$wpdb->prefix}" . Utill::TABLES['system_events']
+        );
+
+        if ($count > 0) {
+            return;
+        }
 
         foreach ($this->events as $key => $event) {
 
@@ -66,15 +90,19 @@ class Notifications {
                     'system_message'   => $event['system_message'] ?? '',
                     'status'           => 'active',
                     'custom_emails'    => wp_json_encode([]), // empty array
+                    'tag'    => $event['tag'] ?? '',
+                    'category'    => $event['category'] ?? '',
                 ],
                 [
-                    '%s', '%s', '%d', '%d', '%d', '%d', '%s', '%s', '%s', '%s', '%s', '%s', '%s'
+                    '%s', '%s', '%d', '%d', '%d', '%d', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s'
                 ]
             );
 
         }
 
     }
+
+
     public function trigger_notifications($event_name, $parameters) {
 
         global $wpdb;
@@ -125,5 +153,14 @@ class Notifications {
         );
 
     }
+
+    public function get_all_events() {
+        global $wpdb;
+        $table = "{$wpdb->prefix}" . Utill::TABLES['system_events'];
+        
+        $events = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $table" ) );
+
+        return $events;
+    } 
     
 }
