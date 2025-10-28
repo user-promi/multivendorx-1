@@ -77,31 +77,43 @@ jQuery(document).ready(function ($) {
     // Submit Review
     $('#review_submit').on('click', function (e) {
         e.preventDefault();
-
-        let ratings = {};
+    
+        const formData = new FormData();
+        formData.append('action', 'multivendorx_store_review_submit');
+        formData.append('nonce', review.nonce);
+        formData.append('store_id', store_id);
+        formData.append('review_title', $('#review_title').val());
+        formData.append('review_content', $('#review_content').val());
+    
+        // Ratings
         $('.multivendorx-rating-select').each(function () {
-            const key = $(this).attr('name').replace('rating[', '').replace(']', '');
-            ratings[key] = $(this).val();
+            const key = $(this).attr('name');
+            formData.append(key, $(this).val());
         });
-
-        const data = {
-            action: 'multivendorx_store_review_submit',
-            nonce: review.nonce,
-            store_id: store_id,
-            review_title: $('#review_title').val(),
-            review_content: $('#review_content').val(),
-            rating: ratings
-        };
-
-        $.post(review.ajaxurl, data, function (res) {
-            alert(res.data.message);
-            if (res.success) {
-                $('#review-form-wrapper').html('<div class="woocommerce-info">Thank you for your review!</div>');
-                loadAverageRatings();
-                loadReviews();
+    
+        // Images
+        const files = $('#review_images')[0].files;
+        for (let i = 0; i < files.length; i++) {
+            formData.append('review_images[]', files[i]);
+        }
+    
+        $.ajax({
+            url: review.ajaxurl,
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (res) {
+                alert(res.data.message);
+                if (res.success) {
+                    $('#review-form-wrapper').html('<div class="woocommerce-info">Thank you for your review!</div>');
+                    loadAverageRatings();
+                    loadReviews();
+                }
             }
         });
     });
+    
 
     // hover star
     $('.rating i').on('mouseenter', function () {

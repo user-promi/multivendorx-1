@@ -88,6 +88,10 @@ if ($is_logged_in && $store_id) {
 
                             <?php endforeach; ?>
                         <?php endif; ?>
+                        <div class="form-wrapper">
+                            <label><?php esc_html_e('Upload Images', 'multivendorx'); ?></label>
+                            <input type="file" id="review_images" name="review_images[]" multiple accept="image/*" />
+                        </div>
 
                         <p>
                             <button id="review_submit" type="button">
