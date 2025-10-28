@@ -68,23 +68,29 @@ class Ajax {
                 echo '<li class="mvx-review-item">';
                 $user_info     = get_userdata($review->customer_id);
                 $reviewer_name = $user_info ? $user_info->display_name : __('Anonymous', 'multivendorx');
+                echo '<div class="header"> <div class="details-wrapper">';
+                echo '<div class="avater">B</div> <div class="name">'. esc_html($reviewer_name) .'</div> <span class="time">1 day ago</span></div> ';
+                echo '</div>';
+                echo '<div class="body">';
+                echo ' <div class="rating"><i class="adminlib-star-o"></i> <i class="adminlib-star-o"></i> <i class="adminlib-star-o"></i> <i class="adminlib-star-o"></i> <i class="adminlib-star-o"></i> <span class="title">'. esc_html($review->review_title) . '</span></div> ';
+                echo ' <div class="content">' . esc_html($review->review_content) . '</div> </div>';
 
-                echo '<strong>' . esc_html($reviewer_name) . '</strong>';
-                echo '<p><strong>' . esc_html($review->review_title) . '</strong></p>';
-                echo '<p>' . esc_html($review->review_content) . '</p>';
+                // echo '<strong>' . esc_html($reviewer_name) . '</strong>';
+                // echo '<p><strong>' . esc_html($review->review_title) . '</strong></p>';
+                // echo '<p>' . esc_html($review->review_content) . '</p>';
 
-                $ratings = Util::get_ratings_for_review($review->review_id);
-                if ($ratings) {
-                    echo '<ul class="mvx-review-params">';
-                    foreach ($ratings as $r) {
-                        echo '<li>' . esc_html($r->parameter) . ': ' . intval($r->rating_value) . '★</li>';
-                    }
-                    echo '</ul>';
-                }
+                // $ratings = Util::get_ratings_for_review($review->review_id);
+                // if ($ratings) {
+                //     echo '<ul class="mvx-review-params">';
+                //     foreach ($ratings as $r) {
+                //         echo '<li>' . esc_html($r->parameter) . ': ' . intval($r->rating_value) . '★</li>';
+                //     }
+                //     echo '</ul>';
+                // }
 
                 if (!empty($review->reply)) {
                     echo '<div class="mvx-review-reply">';
-                    echo '<strong>' . esc_html__('Reply:', 'multivendorx') . '</strong> ';
+                    echo '<strong>' . esc_html__('Admin reply:', 'multivendorx') . '</strong> ';
                     echo '<p>' . esc_html($review->reply) . '</p>';
                     echo '</div>';
                 }
