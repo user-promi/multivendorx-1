@@ -37,6 +37,8 @@ class Utill {
         'review'   => 'multivendorx_store_reviews',
         'rating'   => 'multivendorx_store_review_ratings',
         'products_map'   => 'multivendorx_products_map',
+        'notifications'   => 'multivendorx_store_activity_notifications',
+        'system_events'   => 'multivendorx_system_events',
     );
 
     /**

@@ -237,6 +237,44 @@ class Install {
             `rating_value` TINYINT(1) NOT NULL DEFAULT 0,
             PRIMARY KEY (`id`)
         ) $collate;";
+
+        $sql_notifications = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}" . Utill::TABLES['notifications'] . "` (
+            `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+            `store_id` BIGINT(20) DEFAULT NULL,
+            `category` ENUM('activity', 'notification') NOT NULL DEFAULT 'activity',
+            `type` ENUM(
+                'new_store_approval'
+            ) NOT NULL,
+            `title` VARCHAR(255) NOT NULL,
+            `message` TEXT NOT NULL,
+            `is_read` BOOLEAN DEFAULT 0,
+            `is_dismissed` BOOLEAN DEFAULT 0,
+            `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+            `expires_at` DATETIME NULL
+            PRIMARY KEY (`id`)
+        ) $collate;";
+
+        $sql_system_events = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}" . Utill::TABLES['system_events'] . "` (
+            `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+            `event_name` VARCHAR(255) NOT NULL,
+            `description` TEXT NULL,
+            `admin_enabled` BOOLEAN DEFAULT FALSE,
+            `customer_enabled` BOOLEAN DEFAULT FALSE,
+            `store_enabled` BOOLEAN DEFAULT FALSE,
+            `sms_enabled` BOOLEAN DEFAULT FALSE,
+            `email_enabled` BOOLEAN DEFAULT FALSE,
+            `system_enabled` BOOLEAN DEFAULT FALSE,
+            `custom_emails` JSON NULL,
+            `email_subject` VARCHAR(255) NULL,
+            `email_body` TEXT NULL,
+            `sms_content` VARCHAR(500) NULL,
+            `system_message` TEXT NULL,
+            `system_action` VARCHAR(255) NULL,
+            `status` ENUM('active', 'inactive') DEFAULT 'active',
+            `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+            PRIMARY KEY (`id`)
+        ) $collate;";
         
         // Include upgrade functions if not loaded.
         if ( ! function_exists( 'dbDelta' ) ) {
@@ -255,6 +293,9 @@ class Install {
         dbDelta( $sql_product_map );
         dbDelta( $sql_review );
         dbDelta( $sql_ratings );
+        dbDelta( $sql_notifications );
+        dbDelta( $sql_system_events );
+
     }
 
     public function create_database_triggers() {
