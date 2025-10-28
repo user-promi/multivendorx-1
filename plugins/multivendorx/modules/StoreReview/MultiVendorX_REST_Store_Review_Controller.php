@@ -177,52 +177,7 @@ class MultiVendorX_REST_Store_Review_Controller extends \WP_REST_Controller {
             );
         }
         
-        $current_user_id = get_current_user_id();
-        $current_user    = wp_get_current_user();
-    
-        $id = absint( $request->get_param( 'id' ) );
-        if ( ! $id ) {
-            return new \WP_Error( 'invalid_id', __( 'Invalid ID', 'multivendorx' ), [ 'status' => 400 ] );
-        }
-    
-        $q = reset( Util::get_question_information( [ 'id' => $id ] ) );
-        if ( ! $q ) {
-            return new \WP_Error( 'not_found', __( 'Question not found', 'multivendorx' ), [ 'status' => 404 ] );
-        }
-    
-        // Permission check
-        if ( ! in_array( 'administrator', $current_user->roles ) ) {
-            if ( in_array( 'store_owner', $current_user->roles ) ) {
-                $product = wc_get_product( $q['product_id'] );
-                if ( ! $product || $product->get_author() != $current_user_id ) {
-                    return new \WP_Error( 'forbidden', __( 'You are not allowed to view this question', 'multivendorx' ), [ 'status' => 403 ] );
-                }
-            } else {
-                return new \WP_Error( 'forbidden', __( 'You are not allowed to view this question', 'multivendorx' ), [ 'status' => 403 ] );
-            }
-        }
-    
-        $product       = wc_get_product( $q['product_id'] );
-        $product_name  = $product ? $product->get_name() : '';
-        $product_link  = $product ? get_permalink( $product->get_id() ) : '';
-        $product_image = $product ? wp_get_attachment_url( $product->get_image_id() ) : '';
-    
-        $data = [
-            'id'                  => (int) $q['id'],
-            'product_id'          => (int) $q['product_id'],
-            'product_name'        => $product_name,
-            'product_link'        => $product_link,
-            'product_image'       => $product_image,
-            'question_text'       => $q['question_text'],
-            'answer_text'         => $q['answer_text'],
-            'question_by'         => (int) $q['question_by'],
-            'author_name'         => get_the_author_meta( 'display_name', $q['question_by'] ),
-            'question_date'       => $q['question_date'],
-            'time_ago'            => human_time_diff( strtotime( $q['question_date'] ), current_time( 'timestamp' ) ) . ' ago',
-            'total_votes'         => (int) $q['total_votes'],
-            'question_visibility' => $q['question_visibility'],
-        ];
-    
+       
         return rest_ensure_response( $data );
     }
     

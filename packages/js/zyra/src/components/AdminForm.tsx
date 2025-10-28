@@ -957,6 +957,18 @@ const AdminForm: React.FC<AdminFormProps> = ({
                     break;
 
                 case 'multi-string':
+                    const existingValues = setting[inputField.key];
+                    const defaultValues = inputField.defaultValues || [];
+
+                    //Auto-save default values when not yet saved
+                    useEffect(() => {
+                        if ((!existingValues || existingValues.length === 0) && defaultValues.length > 0) {
+                            handleChange(
+                                { target: { name: inputField.key, value: defaultValues } },
+                                inputField.key
+                            );
+                        }
+                    }, [existingValues, defaultValues, inputField.key]);
                     input = (
                         <MultiInput
                             inputType="multi-string"

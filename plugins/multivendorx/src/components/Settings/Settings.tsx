@@ -18,7 +18,7 @@ import {
 } from 'zyra';
 import ShowProPopup from '../Popup/popup';
 import { useLocation, Link } from 'react-router-dom';
-import Notifications from './Notifications';
+import Notifications from './Notification';
 
 // Types
 type SettingItem = Record< string, any >;

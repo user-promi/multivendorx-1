@@ -55,6 +55,7 @@ declare global {
         state_list:any;
         module_page_url:any;
         store_page_url:string;
+        pro_data: any;
     }
     interface Color{
         color: any;

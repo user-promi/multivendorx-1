@@ -53,10 +53,23 @@ export const KnowledgeBase: React.FC = () => {
         status: 'draft',
     });
     const bulkSelectRef = useRef<HTMLSelectElement>(null);
-    const [modalDetails, setModalDetails] = useState<string>('');
-    const [openModal, setOpenModal] = useState(false);
     const [totalRows, setTotalRows] = useState<number>(0);
+    const [validationErrors, setValidationErrors] = useState<{ [key: string]: string }>({});
 
+    const validateForm = () => {
+        const errors: { [key: string]: string } = {};
+
+        if (!formData.title.trim()) {
+            errors.title = __('Title is required', 'multivendorx');
+        }
+
+        if (!formData.content.trim()) {
+            errors.content = __('Content is required', 'multivendorx');
+        }
+
+        setValidationErrors(errors);
+        return Object.keys(errors).length === 0;
+    };
 
 
     const handleCloseForm = () => {
@@ -64,11 +77,20 @@ export const KnowledgeBase: React.FC = () => {
         setFormData({ title: '', content: '', status: 'pending' }); // reset form
         setEditId(null); // reset edit mode
         setError(null); // clear any error
+        setValidationErrors({});
     };
     // Handle input changes
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
+        // Clear field error when user types
+        if (validationErrors[name]) {
+            setValidationErrors((prev) => {
+                const updated = { ...prev };
+                delete updated[name];
+                return updated;
+            });
+        }
     };
 
     const handleBulkAction = async () => {
@@ -130,6 +152,9 @@ export const KnowledgeBase: React.FC = () => {
     // Submit form
     const handleSubmit = async (status: 'publish' | 'pending' | 'draft') => {
         if (submitting) return;
+        if (!validateForm()) {
+            return; // Stop submission if errors exist
+        }
         setSubmitting(true);
 
         try {
@@ -175,12 +200,12 @@ export const KnowledgeBase: React.FC = () => {
             setError(__('Failed to load total rows', 'multivendorx'));
         }
     };
-    
+
     // Fetch total rows on mount
     useEffect(() => {
         fetchTotalRows();
     }, []);
-    
+
 
     useEffect(() => {
         const currentPage = pagination.pageIndex + 1;
@@ -280,7 +305,7 @@ export const KnowledgeBase: React.FC = () => {
             ),
         },
     ];
-    
+
     const truncateText = (text: string, maxLength: number) => {
         if (!text) return '-';
         return text.length > maxLength ? text.slice(0, maxLength) + '...' : text;
@@ -356,7 +381,7 @@ export const KnowledgeBase: React.FC = () => {
             ),
         },
         {
-            id:'action',
+            id: 'action',
             header: __('Action', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell
@@ -438,7 +463,10 @@ export const KnowledgeBase: React.FC = () => {
                 tabTitle="Knowledge Base"
                 description={"Build your knowledge base: add new guides or manage existing ones in one place."}
                 buttons={[
-                    <div className="admin-btn btn-purple" onClick={() => setAddEntry(true)}>
+                    <div className="admin-btn btn-purple" onClick={() => {
+                        setValidationErrors({});
+                        setAddEntry(true);
+                    }}>
                         <i className="adminlib-plus-circle-o"></i>
                         Add New
                     </div>,
@@ -449,8 +477,8 @@ export const KnowledgeBase: React.FC = () => {
                 <CommonPopup
                     open={addEntry}
                     onClose={handleCloseForm}
-                    width="500px"
-                    height='60%'
+                    width="700px"
+                    height='80%'
                     header={
                         <>
                             <div className="title">
@@ -488,6 +516,7 @@ export const KnowledgeBase: React.FC = () => {
                             <div className="form-group">
                                 <label htmlFor="title">Title</label>
                                 <BasicInput type="text" name="title" value={formData.title} onChange={handleChange} />
+                                {validationErrors.title && <p className="error-text red">{validationErrors.title}</p>}
                             </div>
                             <div className="form-group">
                                 <label htmlFor="content">Content</label>
@@ -497,6 +526,7 @@ export const KnowledgeBase: React.FC = () => {
                                     value={formData.content}
                                     onChange={handleChange}
                                 />
+                                {validationErrors.content && <p className="error-text red">{validationErrors.content}</p>}
                             </div>
                             <div className="form-group">
                                 <label htmlFor="status">Status</label>
