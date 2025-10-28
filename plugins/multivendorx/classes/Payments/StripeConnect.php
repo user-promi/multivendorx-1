@@ -201,7 +201,7 @@ class StripeConnect
 
     public function get_settings() {
         return [
-            'icon'      => 'adminlib-form-url',
+            'icon'      => 'adminlib-stripe-connect',
             'id'        => $this->get_id(),
             'label'     => 'Stripe Connect',
             'enableOption' => true,

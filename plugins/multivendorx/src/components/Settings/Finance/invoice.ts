@@ -8,7 +8,7 @@ export default {
     priority: 6,
     name: __('Invoices', 'mvx-pro'),
     desc: __('Set up when and how invoices are generated in your marketplace.', 'mvx-pro'),
-    icon: 'adminlib-clock',
+    icon: 'adminlib-invoice',
     submitUrl: 'settings',
     modal: [
         {

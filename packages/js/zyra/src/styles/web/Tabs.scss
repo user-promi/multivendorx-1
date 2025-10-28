@@ -212,9 +212,10 @@
 }
 
 .title-section {
-  margin: 0 2rem;
+  margin: 0 2rem 2rem;
   padding: 1.5rem;
   background: #fff;
+  border-radius: 0.313rem;
 
   .title-wrapper {
     font-weight: 500;
@@ -365,6 +366,7 @@
 
 .general-wrapper {
   padding: 2rem;
+  border-radius: 0.313rem;
 }
 
 .tab-content {
