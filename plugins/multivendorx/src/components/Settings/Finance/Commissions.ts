@@ -284,32 +284,6 @@ export default {
             desc: __('Determine which fees to deduct from the commission amount.', 'multivendorx')
         },
         {
-            key: 'give',
-            type: 'setting-toggle',
-            label: __('Tax amount', 'multivendorx'),
-            settingDescription: __('Configure how taxes are treated in commission calculations.', 'multivendorx'),
-            desc: __('<li>No tax - Calculate commission on pre-tax amount only.<li>Full tax - Include 100% tax in commission base.<li>Commision based tax - Calculate commission on total order value including taxes, not just product price.', 'multivendorx'),
-            preText: "jsjsjs",
-            postText: "djdjdjdj",
-            options: [
-                {
-                    key: 'no_tax',
-                    label: __('No tax', 'multivendorx'),
-                    value: 'no_tax',
-                },
-                {
-                    key: 'full_tax',
-                    label: __('Full tax', 'multivendorx'),
-                    value: 'full_tax',
-                },
-                {
-                    key: 'commision_based_tax',
-                    label: __('Commision based tax', 'multivendorx'),
-                    value: 'commision_based_tax',
-                },
-            ],
-        },
-        {
             key: 'marketplace_fees',
             type: 'nested',
             label: __('Marketplace fee', 'multivendorx'),
@@ -320,25 +294,31 @@ export default {
             ),
             nestedFields: [
                 {
-                    key: 'rule_type',
-                    type: 'select',
-                    label: 'If',
-                    options: [
-                        { value: 'price', label: 'Product price' },
-                        { value: 'quantity', label: 'Product quantity' },
-                        { value: 'order_value', label: 'Order value' },
-                    ],
+                    key: 'commission_fixed',
+                    type: 'text',
+                    preInsideText: __('$', 'multivendorx'),
+                    size: "8rem",
+                    preText: 'The fee is applied as fixed',
+                    postText: "+",
+                },
+                {
+                    key: 'commission_percentage',
+                    type: 'number',
+                    size: '8rem',
+                    postInsideText: __('%', 'multivendorx'),
                 },
                 {
                     key: 'rule',
                     type: 'select',
-                    label: 'is',
+                    label: 'Decide who pays the marketplace fee',
                     options: [
-                        { value: 'less_than', label: 'up to' },
-                        { value: 'more_than', label: 'more than' },
+                        { value: 'less_than', label: 'Customer' },
+                        { value: 'more_than', label: 'Store' },
                     ],
+                    // postText: "",
                 },
-            ]
+                
+            ],
             // nestedFields: [
             //     {
             //     key: 'commission_type',

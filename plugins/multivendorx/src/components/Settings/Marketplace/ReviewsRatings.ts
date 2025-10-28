@@ -38,6 +38,7 @@ export default {
             //placeholder: __('Define the key milestones in a store’s delivery process. These stages help stores communicate order progress to customers', 'multivendorx'),
             iconEnable: false,
             descEnable: true,
+            moduleEnabled: 'store-review',
             requiredEnable: true,
             settingDescription: __(
                 'Define rating parameters such as packaging, delivery, behaviour, policies, etc.',
@@ -57,7 +58,6 @@ export default {
             proSetting: false,
             maxItems: 10,
             allowDuplicates: false,
-            // moduleEnabled: 'store-review',
         },
     ],
 };

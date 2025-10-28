@@ -107,7 +107,7 @@ const ApprovalQueue = () => {
     };
 
     const tabs = [
-        ...(appLocalizer.approve_store === "manually"
+        ...(appLocalizer.settings_databases_value['general']['approve_store'] === "manually"
             ? [{
                 id: "products",
                 label: "Stores",
@@ -154,8 +154,8 @@ const ApprovalQueue = () => {
                     <Vendors onUpdated={refreshCounts} />
                 </>
         },
-        ...(Array.isArray(appLocalizer.enable_profile_deactivation_request)
-            && appLocalizer.enable_profile_deactivation_request.includes("enable_profile_deactivation_request")
+        ...(Array.isArray(appLocalizer.settings_databases_value['privacy-settings'] ['enable_profile_deactivation_request'])
+            && appLocalizer.settings_databases_value['privacy-settings']['enable_profile_deactivation_request'].includes("enable_profile_deactivation_request")
             ? [{
                 id: "coupons",
                 label: "Stores",
@@ -180,14 +180,14 @@ const ApprovalQueue = () => {
             }]
             : []
         ),
-        ...(Array.isArray(appLocalizer.can_publish_products)
-            && appLocalizer.can_publish_products.includes("publish_products")
+        ...(Array.isArray(appLocalizer.settings_databases_value['store-capability'] ['products'])
+            && appLocalizer.settings_databases_value['store-capability'] ['products'].includes("publish_products")
             ? [{
                 id: "product-approval",
                 label: "Products",
                 icon: "adminlib-calendar blue",
                 count: productCount,
-                des: "Waiting for your green light",
+                des: "Waiting to be published",
 
                 content:
                     <>
@@ -207,8 +207,8 @@ const ApprovalQueue = () => {
             }]
             : []
         ),
-        ...(Array.isArray(appLocalizer.can_publish_coupons)
-            && appLocalizer.can_publish_coupons.includes("publish_coupons")
+        ...(Array.isArray(appLocalizer.settings_databases_value['store-capability'] ['coupons'])
+            && appLocalizer.settings_databases_value['store-capability'] ['coupons'].includes("publish_coupons")
             ? [{
                 id: "coupon-approval",
                 label: "Coupons",
@@ -238,7 +238,7 @@ const ApprovalQueue = () => {
             id: "wholesale-customer",
             label: "Customers",
             icon: "adminlib-calendar yellow",
-            des: "Ready to become wholesale customer",
+            des: "Ready to become wholesalers",
 
             count: 9,
             content:
@@ -248,7 +248,7 @@ const ApprovalQueue = () => {
                             <div className="title">
                                 Customers
                             </div>
-                            <div className="des">Waiting for your response</div>
+                            <div className="des">Ready to become wholesalers</div>
                         </div>
                         <div className="right">
                             <i className="adminlib-more-vertical"></i>

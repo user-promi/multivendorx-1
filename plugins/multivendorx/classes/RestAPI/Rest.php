@@ -11,7 +11,7 @@ use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Status_Controller;
 use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Announcement_Controller;
 use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Knowledge_Controller;
 use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Products_Controller;
-use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Coupons_Controller;
+use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Notifications_Controller;
 use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Payouts_Controller;
 use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Transaction_Controller;
 use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Reports_Controller;
@@ -251,6 +251,7 @@ class Rest {
             'transaction'=> new MultiVendorX_REST_Transaction_Controller(),
             'report'=> new MultiVendorX_REST_Reports_Controller(),
             'refund'=> new MultiVendorX_REST_Refund_Controller(),
+            'notifications'=> new MultiVendorX_REST_Notifications_Controller(),
         );
     }
 

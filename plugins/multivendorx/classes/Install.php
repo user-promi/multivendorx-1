@@ -94,6 +94,8 @@ class Install {
             `commission_note`  longtext NULL,
             `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
             `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            `marketplace_fee` float(20, 2) NOT NULL DEFAULT 0,
+            `rules_applied` LONGTEXT,
             PRIMARY KEY (`ID`)
         ) $collate;";
 
@@ -248,7 +250,7 @@ class Install {
             `is_read` BOOLEAN DEFAULT 0,
             `is_dismissed` BOOLEAN DEFAULT 0,
             `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
-            `expires_at` DATETIME NULL
+            `expires_at` DATETIME NULL,
             PRIMARY KEY (`id`)
         ) $collate;";
 
@@ -256,6 +258,8 @@ class Install {
             `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
             `event_name` VARCHAR(255) NOT NULL,
             `description` TEXT NULL,
+            `category` ENUM('activity', 'notification') NOT NULL DEFAULT 'activity',
+            `tag` TEXT NOT NULL,
             `admin_enabled` BOOLEAN DEFAULT FALSE,
             `customer_enabled` BOOLEAN DEFAULT FALSE,
             `store_enabled` BOOLEAN DEFAULT FALSE,
@@ -270,7 +274,7 @@ class Install {
             `system_action` VARCHAR(255) NULL,
             `status` ENUM('active', 'inactive') DEFAULT 'active',
             `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+            `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             PRIMARY KEY (`id`)
         ) $collate;";
         
