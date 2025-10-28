@@ -11,6 +11,7 @@ namespace MultiVendorX;
  */
 defined('ABSPATH') || exit;
 use Automattic\WooCommerce\Utilities\FeaturesUtil;
+use MultiVendorX\Notifications\Notifications;
 
 final class MultiVendorX
 {
@@ -141,6 +142,7 @@ final class MultiVendorX
         $this->container['product'] = new Product();
         $this->container['cron'] = new Cron();
         $this->container['block'] = new Block();
+        $this->container['notifications'] = new Notifications();
 
         // Load all active modules.
         $this->container['modules']->load_active_modules();

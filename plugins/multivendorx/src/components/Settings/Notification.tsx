@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import "./Notifications.scss";
-import { CommonPopup } from 'zyra';
+import { CommonPopup, getApiLink } from 'zyra';
+import axios from 'axios';
 
 // ------------------ RecipientBadge Component ------------------
 interface Recipient {
@@ -38,120 +39,134 @@ const RecipientBadge: React.FC<RecipientBadgeProps> = ({ recipient, onToggle, on
 
 // ------------------ Notification Component ------------------
 const Notification = () => {
-    const [notifications, setNotifications] = useState([
-        {
-            id: 1,
-            icon: 'adminlib-cart',
-            event: 'New Store Approval',
-            description: 'Notify vendors and admins when a new store is approved.',
-            recipients: [
-                { id: 1, type: 'Vendor', label: 'Vendor', enabled: true, canDelete: false },
-                { id: 2, type: 'Admin', label: 'Admin', enabled: false, canDelete: false },
-                { id: 3, type: 'extra', label: 'admin@marketplace.com', enabled: true, canDelete: true }
-            ],
-            channels: { mail: true, sms: false, system: true }
-        },
-        {
-            id: 2,
-            icon: 'adminlib-cart',
-            event: 'New Order Placed',
-            description: 'Notify vendors and customers when a new order is placed.',
-            recipients: [
-                { id: 1, type: 'Vendor', label: 'Vendor', enabled: true, canDelete: false },
-                { id: 2, type: 'Customer', label: 'Customer', enabled: true, canDelete: false },
-                { id: 3, type: 'extra', label: 'sales@marketplace.com', enabled: false, canDelete: true }
-            ],
-            channels: { mail: true, sms: true, system: true }
-        },
-        {
-            id: 3,
-            icon: 'adminlib-credit-card',
-            event: 'Transaction Details',
-            description: 'Send transaction details to vendors and finance team.',
-            recipients: [
-                { id: 1, type: 'Vendor', label: 'Vendor', enabled: true, canDelete: false },
-                { id: 2, type: 'extra', label: 'finance@marketplace.com', enabled: true, canDelete: true }
-            ],
-            channels: { mail: true, sms: false, system: true }
-        },
-        {
-            id: 4,
-            icon: 'adminlib-contact-form',
-            event: 'Order Shipped',
-            description: 'Notify customers and admins when an order is shipped.',
-            recipients: [
-                { id: 1, type: 'Customer', label: 'Customer', enabled: true, canDelete: false },
-                { id: 2, type: 'Admin', label: 'Admin', enabled: false, canDelete: false },
-                { id: 3, type: 'extra', label: 'support@marketplace.com', enabled: true, canDelete: true }
-            ],
-            channels: { mail: true, sms: true, system: true }
-        },
-        {
-            id: 5,
-            icon: 'adminlib-verification3',
-            event: 'Refund Request',
-            description: 'Notify admins and vendors about refund requests.',
-            recipients: [
-                { id: 1, type: 'Admin', label: 'Admin', enabled: true, canDelete: false },
-                { id: 2, type: 'Vendor', label: 'Vendor', enabled: true, canDelete: false },
-                { id: 3, type: 'extra', label: 'refunds@marketplace.com', enabled: true, canDelete: true }
-            ],
-            channels: { mail: true, sms: false, system: true }
-        },
-        {
-            id: 6,
-            icon: 'adminlib-contact-form',
-            event: 'Vendor Commission Paid',
-            description: 'Notify vendors and accounts team after commission is paid.',
-            recipients: [
-                { id: 1, type: 'Vendor', label: 'Vendor', enabled: true, canDelete: false },
-                { id: 2, type: 'extra', label: 'accounts@marketplace.com', enabled: true, canDelete: true }
-            ],
-            channels: { mail: true, sms: false, system: true }
-        },
-        {
-            id: 7,
-            icon: 'adminlib-multi-product',
-            event: 'Password Reset',
-            description: 'Notify users when their password is reset.',
-            recipients: [
-                { id: 1, type: 'User', label: 'User', enabled: true, canDelete: false }
-            ],
-            channels: { mail: true, sms: true, system: false }
-        },
-        {
-            id: 8,
-            icon: 'adminlib-marketplace',
-            event: 'Invoice Generated',
-            description: 'Send invoice details to customers and billing team.',
-            recipients: [
-                { id: 1, type: 'Customer', label: 'Customer', enabled: true, canDelete: false },
-                { id: 2, type: 'extra', label: 'billing@marketplace.com', enabled: false, canDelete: true }
-            ],
-            channels: { mail: true, sms: false, system: true }
-        },
-        {
-            id: 9,
-            icon: 'adminlib-star',
-            event: 'Review Submitted',
-            description: 'Notify vendors when a new review is submitted.',
-            recipients: [
-                { id: 1, type: 'Vendor', label: 'Vendor', enabled: true, canDelete: false }
-            ],
-            channels: { mail: true, sms: false, system: true }
-        },
-        {
-            id: 10,
-            icon: 'adminlib-marketplace',
-            event: 'Low Stock Alert',
-            description: 'Notify vendors and warehouse team when stock is low.',
-            recipients: [
-                { id: 1, type: 'Vendor', label: 'Vendor', enabled: true, canDelete: false },
-                { id: 2, type: 'extra', label: 'warehouse@marketplace.com', enabled: true, canDelete: true }
-            ],
-            channels: { mail: true, sms: false, system: true }
-        },
-    ]);
+
+    const [notifications, setNotifications] = useState<[] | null>(null);
+
+    useEffect(() => {
+        axios({
+            method: 'GET',
+            url: getApiLink(appLocalizer, 'notifications'),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+        })
+        .then((response) => {
+            setNotifications(response.data || []);
+        });
+    }, []);
+
+    // const [notifications, setNotifications] = useState([
+    //     {
+    //         id: 1,
+    //         icon: 'adminlib-cart',
+    //         event: 'New Store Approval',
+    //         description: 'Notify vendors and admins when a new store is approved.',
+    //         recipients: [
+    //             { id: 1, type: 'Vendor', label: 'Vendor', enabled: true, canDelete: false },
+    //             { id: 2, type: 'Admin', label: 'Admin', enabled: false, canDelete: false },
+    //             { id: 3, type: 'extra', label: 'admin@marketplace.com', enabled: true, canDelete: true }
+    //         ],
+    //         channels: { mail: true, sms: false, system: true }
+    //     },
+    //     {
+    //         id: 2,
+    //         icon: 'adminlib-cart',
+    //         event: 'New Order Placed',
+    //         description: 'Notify vendors and customers when a new order is placed.',
+    //         recipients: [
+    //             { id: 1, type: 'Vendor', label: 'Vendor', enabled: true, canDelete: false },
+    //             { id: 2, type: 'Customer', label: 'Customer', enabled: true, canDelete: false },
+    //             { id: 3, type: 'extra', label: 'sales@marketplace.com', enabled: false, canDelete: true }
+    //         ],
+    //         channels: { mail: true, sms: true, system: true }
+    //     },
+    //     {
+    //         id: 3,
+    //         icon: 'adminlib-credit-card',
+    //         event: 'Transaction Details',
+    //         description: 'Send transaction details to vendors and finance team.',
+    //         recipients: [
+    //             { id: 1, type: 'Vendor', label: 'Vendor', enabled: true, canDelete: false },
+    //             { id: 2, type: 'extra', label: 'finance@marketplace.com', enabled: true, canDelete: true }
+    //         ],
+    //         channels: { mail: true, sms: false, system: true }
+    //     },
+    //     {
+    //         id: 4,
+    //         icon: 'adminlib-contact-form',
+    //         event: 'Order Shipped',
+    //         description: 'Notify customers and admins when an order is shipped.',
+    //         recipients: [
+    //             { id: 1, type: 'Customer', label: 'Customer', enabled: true, canDelete: false },
+    //             { id: 2, type: 'Admin', label: 'Admin', enabled: false, canDelete: false },
+    //             { id: 3, type: 'extra', label: 'support@marketplace.com', enabled: true, canDelete: true }
+    //         ],
+    //         channels: { mail: true, sms: true, system: true }
+    //     },
+    //     {
+    //         id: 5,
+    //         icon: 'adminlib-verification3',
+    //         event: 'Refund Request',
+    //         description: 'Notify admins and vendors about refund requests.',
+    //         recipients: [
+    //             { id: 1, type: 'Admin', label: 'Admin', enabled: true, canDelete: false },
+    //             { id: 2, type: 'Vendor', label: 'Vendor', enabled: true, canDelete: false },
+    //             { id: 3, type: 'extra', label: 'refunds@marketplace.com', enabled: true, canDelete: true }
+    //         ],
+    //         channels: { mail: true, sms: false, system: true }
+    //     },
+    //     {
+    //         id: 6,
+    //         icon: 'adminlib-contact-form',
+    //         event: 'Vendor Commission Paid',
+    //         description: 'Notify vendors and accounts team after commission is paid.',
+    //         recipients: [
+    //             { id: 1, type: 'Vendor', label: 'Vendor', enabled: true, canDelete: false },
+    //             { id: 2, type: 'extra', label: 'accounts@marketplace.com', enabled: true, canDelete: true }
+    //         ],
+    //         channels: { mail: true, sms: false, system: true }
+    //     },
+    //     {
+    //         id: 7,
+    //         icon: 'adminlib-multi-product',
+    //         event: 'Password Reset',
+    //         description: 'Notify users when their password is reset.',
+    //         recipients: [
+    //             { id: 1, type: 'User', label: 'User', enabled: true, canDelete: false }
+    //         ],
+    //         channels: { mail: true, sms: true, system: false }
+    //     },
+    //     {
+    //         id: 8,
+    //         icon: 'adminlib-marketplace',
+    //         event: 'Invoice Generated',
+    //         description: 'Send invoice details to customers and billing team.',
+    //         recipients: [
+    //             { id: 1, type: 'Customer', label: 'Customer', enabled: true, canDelete: false },
+    //             { id: 2, type: 'extra', label: 'billing@marketplace.com', enabled: false, canDelete: true }
+    //         ],
+    //         channels: { mail: true, sms: false, system: true }
+    //     },
+    //     {
+    //         id: 9,
+    //         icon: 'adminlib-star',
+    //         event: 'Review Submitted',
+    //         description: 'Notify vendors when a new review is submitted.',
+    //         recipients: [
+    //             { id: 1, type: 'Vendor', label: 'Vendor', enabled: true, canDelete: false }
+    //         ],
+    //         channels: { mail: true, sms: false, system: true }
+    //     },
+    //     {
+    //         id: 10,
+    //         icon: 'adminlib-marketplace',
+    //         event: 'Low Stock Alert',
+    //         description: 'Notify vendors and warehouse team when stock is low.',
+    //         recipients: [
+    //             { id: 1, type: 'Vendor', label: 'Vendor', enabled: true, canDelete: false },
+    //             { id: 2, type: 'extra', label: 'warehouse@marketplace.com', enabled: true, canDelete: true }
+    //         ],
+    //         channels: { mail: true, sms: false, system: true }
+    //     },
+    // ]);
 
 
     const [addingRecipient, setAddingRecipient] = useState<number | null>(null);
@@ -160,6 +175,21 @@ const Notification = () => {
     const [editingNotification, setEditingNotification] = useState<number | null>(null);
 
     // ------------------ Handlers ------------------
+
+    const handleSave = () => {
+        axios({
+            method: 'POST',
+            url: getApiLink(appLocalizer, 'notifications'),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            data: { 
+                notifications: notifications
+            }
+        })
+        .then((response) => {
+            setNotifications(response.data || []);
+        });
+    };
+
     const toggleRecipient = (notifId: number, recipientId: number) => {
         setNotifications(prev =>
             prev.map(n =>
@@ -168,7 +198,11 @@ const Notification = () => {
                     : n
             )
         );
+
+        // handleSave();
     };
+// console.log('notifications', notifications)
+// console.log('editingNotification', editingNotification)
 
     const deleteRecipient = (notifId: number, recipientId: number) => {
         setNotifications(prev =>
@@ -253,13 +287,13 @@ const Notification = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {notifications.map(notif => (
+                        {notifications && notifications.map(notif => (
                             <tr key={notif.id} onClick={() => setEditingNotification(notif.id)}>
                                 <td>
                                     <div className="title-wrapper">
                                         <i className={`notification-icon ${notif.icon}`}></i>
                                         <div className="details">
-                                            <div className="title">{notif.event}</div>
+                                            <div className="title">{notif.event} {notif.tag} {notif.category}</div>
                                             <div className="description">{notif.description}</div>
                                         </div>
                                     </div>
@@ -367,7 +401,7 @@ const Notification = () => {
                         </div>
 
                         <div className="drawer-recipients">
-                            {notifications.find(n => n.id === editingNotification)?.recipients.map(r => (
+                            {notifications && notifications.find(n => n.id === editingNotification)?.recipients.map(r => (
                                 <div key={r.id} className={`recipient ${r.enabled ? '' : 'disable'}`}>
                                     <span className="icon">
                                         <i className={
@@ -394,7 +428,7 @@ const Notification = () => {
                             System
                         </div>
                         <div className="drawer-recipients">
-                            {Object.entries(notifications.find(n => n.id === editingNotification)?.channels || {}).map(
+                            {Object.entries(notifications && notifications.find(n => n.id === editingNotification)?.channels || {}).map(
                                 ([channel, enabled]) => {
                                     let label = '';
                                     switch (channel) {
@@ -431,7 +465,7 @@ const Notification = () => {
             {/* Grid View */}
             {viewMode === 'grid' && (
                 <div className="notification-grid">
-                    {notifications.map(notif => (
+                    {notifications && notifications.map(notif => (
                         <div key={notif.id} className="notification-card">
                             <div className="card-body">
                                 <div className="title-wrapper">
@@ -485,6 +519,7 @@ const Notification = () => {
                                         );
                                     })}
                                 </div>
+
                                 <div className="admin-btn btn-purple" onClick={() => setEditingNotification(notif.id)}>
                                     Manage <i className="adminlib-create"></i>
                                 </div>
