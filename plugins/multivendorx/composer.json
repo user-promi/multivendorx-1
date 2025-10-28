@@ -21,8 +21,7 @@
     },
     "require": {
         "php": ">=8.0",
-        "paypal/paypal-payouts-sdk": "~1.0.0",
-        "stripe/stripe-php": "^17.7@beta"
+        "paypal/paypal-payouts-sdk": "~1.0.0"
     },
     "config": {
         "platform": {
