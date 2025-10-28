@@ -512,7 +512,7 @@ const ViewStore = () => {
 
         {/* Activity + Chart */}
         <div className="row">
-          <div className="column">
+          <div className="column w-40">
             <h3>Recent Activity (Static)</h3>
             <div className="activity-wrapper">
               {activities.map((a, i) => (
@@ -529,7 +529,7 @@ const ViewStore = () => {
             </div>
           </div>
 
-          <div className="column">
+          <div className="column w-40">
             <div className="top-items">
               <div className="items">
                 <div className="left-side">
