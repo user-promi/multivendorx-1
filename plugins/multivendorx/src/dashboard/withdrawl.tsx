@@ -253,7 +253,7 @@ const Withdrawl: React.FC = () => {
                   <div className="form-group">
                     {field.label && <label htmlFor={field.key}>{field.label}</label>}
                     <BasicInput
-                      name={field.key || ""}
+                      key={field.key || ""}
                       type={field.type || "text"}
                       wrapperClass="setting-form-input"
                       descClass="settings-metabox-description"
