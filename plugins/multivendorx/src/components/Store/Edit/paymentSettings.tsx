@@ -209,7 +209,7 @@ const PaymentSettings = ({ id }: { id: string|null }) => {
 								<ToggleSetting
 									wrapperClass="setting-form-input"
 									descClass="settings-metabox-description"
-									description="Select or update how this store will receive payouts."
+									description="You haven’t enabled any payment methods yet. Configure payout options to allow stores to receive their earnings.."
 									options={paymentOptions}
 									value={formData.payment_method || ""}
 									onChange={(value) => handleToggleChange(value, 'payment_method')}

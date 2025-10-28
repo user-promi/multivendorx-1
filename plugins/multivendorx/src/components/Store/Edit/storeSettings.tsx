@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
-import { BasicInput, TextArea, FileInput, getApiLink, SuccessNotice, SelectInput } from 'zyra';
+import { BasicInput, TextArea, FileInput, getApiLink, SuccessNotice, SelectInput, useModules } from 'zyra';
 
 declare global {
     interface Window {
@@ -45,6 +45,9 @@ const StoreSettings = ({ id }: { id: string | null }) => {
     const [mapProvider, setMapProvider] = useState('');
     const [apiKey, setApiKey] = useState('');
     const appLocalizer = (window as any).appLocalizer;
+
+
+    const { modules } = useModules.getState();
 
     const [addressData, setAddressData] = useState({
         location_address: '',
@@ -726,7 +729,7 @@ const StoreSettings = ({ id }: { id: string | null }) => {
                 <div className="card-wrapper width-65">
                     <div className="card-content">
                         <div className="card-title">
-                            General information
+                            Basic Details
                         </div>
 
                         {errorMsg && <p className="error-text" style={{ color: "red", marginTop: "5px" }}>{errorMsg}</p>}
@@ -751,6 +754,22 @@ const StoreSettings = ({ id }: { id: string | null }) => {
                                 <p>Your Site Url : {appLocalizer.store_page_url + '/' + formData.slug}</p>
                             </div>
                         </div>
+                        <div className="form-group-wrapper">
+                            <div className="form-group">
+                                <label htmlFor="description">Description</label>
+                                <TextArea name="description" wrapperClass="setting-from-textarea"
+                                    inputClass="textarea-input"
+                                    descClass="settings-metabox-description" value={formData.description} onChange={handleChange} />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="card-content">
+                        <div className="card-title">
+                            Contact Information
+                        </div>
+
+                        {errorMsg && <p className="error-text" style={{ color: "red", marginTop: "5px" }}>{errorMsg}</p>}
 
                         {/* Updated Email Section */}
                         <div className="form-group-wrapper">
@@ -799,28 +818,6 @@ const StoreSettings = ({ id }: { id: string | null }) => {
                             </div>
                         </div>
 
-                        <div className="form-group-wrapper">
-                            <div className="form-group">
-                                <label htmlFor="description">Description</label>
-                                <TextArea name="description" wrapperClass="setting-from-textarea"
-                                    inputClass="textarea-input"
-                                    descClass="settings-metabox-description" value={formData.description} onChange={handleChange} />
-                            </div>
-                        </div>
-
-                        {/* Map Display */}
-						<div className="form-group-wrapper">
-							<div className="form-group">
-								<label>Location Map</label>
-								<div
-									id="location-map"
-								></div>
-								<div className="settings-metabox-description">
-									Click on the map or drag the marker to set your exact location
-								</div>
-							</div>
-						</div>
-
                         {/* Hidden coordinates */}
                         <input type="hidden" name="location_lat" value={addressData.location_lat} />
                         <input type="hidden" name="location_lng" value={addressData.location_lng} />
@@ -828,7 +825,7 @@ const StoreSettings = ({ id }: { id: string | null }) => {
 
                     <div className="card-content">
                         <div className="card-title">
-                            Address & Location
+                            Communication Address
                         </div>
 
                         <div className="form-group-wrapper">
@@ -891,7 +888,9 @@ const StoreSettings = ({ id }: { id: string | null }) => {
                             </div>
                         </div>
 
-                        <div className="form-group-wrapper">
+                        {modules.includes( 'geo-location' ) && 
+                        <div>
+                            <div className="form-group-wrapper">
                             <div className="form-group">
                                 <label htmlFor="store-location-autocomplete">Search Location</label>
                                 <div id="store-location-autocomplete-container">
@@ -906,9 +905,7 @@ const StoreSettings = ({ id }: { id: string | null }) => {
                                 </div>
                             </div>
                         </div>
-
-                        {/* Map Display */}
-						<div className="form-group-wrapper">
+                        <div className="form-group-wrapper">
 							<div className="form-group">
 								<label>Location Map *</label>
 								<div
@@ -928,6 +925,30 @@ const StoreSettings = ({ id }: { id: string | null }) => {
                             {/* Hidden coordinates */}
                             <input type="hidden" name="location_lat" value={addressData.location_lat} />
                             <input type="hidden" name="location_lng" value={addressData.location_lng} />
+						</div>
+                        </div>
+                        }
+                        {/* Map Display */}
+						<div className="form-group-wrapper">
+							{/* <div className="form-group">
+								<label>Location Map *</label>
+								<div
+									id="location-map"
+									style={{
+										height: '300px',
+										width: '100%',
+										borderRadius: '8px',
+										border: '1px solid #ddd',
+										marginTop: '8px'
+									}}
+								></div>
+								<small style={{ color: '#666', marginTop: '5px', display: 'block' }}>
+									Click on the map or drag the marker to set your exact location
+								</small>
+							</div> */}
+                            {/* Hidden coordinates */}
+                            {/* <input type="hidden" name="location_lat" value={addressData.location_lat} />
+                            <input type="hidden" name="location_lng" value={addressData.location_lng} /> */}
 						</div>
                     </div>
                 </div>
