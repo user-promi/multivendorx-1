@@ -9,14 +9,32 @@ jQuery(document).ready(function ($) {
             nonce: review.nonce,
         }, function (res) {
             if (res.success) {
-                let html = `<div class="avg-rating-summary"><strong>Overall: ${res.data.overall} ★</strong><ul>`;
+                let html = `<div class="avg-rating-summary">
+
+                                <div class="overall-wrapper"> 
+                                    <div class="overall-rating">
+                                        <div class="total">${res.data.overall}</div> 
+                                        <div class="stars">
+                                            <i class="adminlib-star"></i><i class="adminlib-star"></i><i class="adminlib-star"></i><i class="adminlib-star"></i> <i class="adminlib-star"></i>
+                                        </div>
+                                        <div class="total-number">35k rating</div>
+                                    </div>
+                                    <div class="rating-breakdown">
+                                        <div class="rating">5 <i class="adminlib-star"></i> <div class="bar"></div> <span>6 Reviews</span></div>
+                                        <div class="rating">4 <i class="adminlib-star"></i> <div class="bar"></div> <span>51 Reviews</span></div>
+                                        <div class="rating">3 <i class="adminlib-star"></i> <div class="bar"></div> <span>5 Reviews</span></div>
+                                        <div class="rating">2 <i class="adminlib-star"></i> <div class="bar"></div> <span>63 Reviews</span></div>
+                                        <div class="rating">1 <i class="adminlib-star"></i> <div class="bar"></div> <span>9 Reviews</span></div>
+                                    </div>
+                                </div>
+                                <ul>`;
                 for (let p in res.data.averages) {
-                    html += `<li>${p}: ${res.data.averages[p]} ★</li>`;
+                    html += `<li><span>${res.data.averages[p]} </span>${p}</li>`;
                 }
                 html += '</ul></div>';
-                $('#multivendorx_avg_rating').html(html);
+                $('#avg-rating').html(html);
             } else {
-                $('#multivendorx_avg_rating').html('<p>No ratings yet.</p>');
+                $('#avg-rating').html('<p>No ratings yet.</p>');
             }
         });
     }
@@ -29,7 +47,7 @@ jQuery(document).ready(function ($) {
             nonce: review.nonce,
         }, function (res) {
             if (res.success) {
-                $('#multivendorx_vendor_reviews_list').html(res.data.html);
+                $('#multivendorx-vendor-reviews-list').html(res.data.html);
             }
         });
     }
@@ -56,13 +74,41 @@ jQuery(document).ready(function ($) {
         $.post(review.ajaxurl, data, function (res) {
             alert(res.data.message);
             if (res.success) {
-                $('#review_form_wrapper').html('<div class="woocommerce-info">Thank you for your review!</div>');
+                $('#review-form-wrapper').html('<div class="woocommerce-info">Thank you for your review!</div>');
                 loadAverageRatings();
                 loadReviews();
             }
         });
     });
 
+    // hover star
+    $('.rating i').on('mouseenter', function () {
+        var value = $(this).data('value');
+        var $rating = $(this).closest('.rating');
+
+        $rating.find('i').each(function () {
+            $(this).toggleClass('hover', $(this).data('value') <= value);
+        });
+    });
+
+    $('.rating').on('mouseleave', function () {
+        $(this).find('i').removeClass('hover');
+    });
+
+    $('.rating i').on('click', function () {
+        var value = $(this).data('value');
+        var $rating = $(this).closest('.rating');
+
+        $rating.attr('data-selected', value);
+
+        $rating.find('i').each(function () {
+            $(this).toggleClass('active', $(this).data('value') <= value);
+            $(this).toggleClass('inactive', $(this).data('value') > value);
+        });
+
+        // update hidden input value
+        $rating.find('input[type="hidden"]').val(value);
+    });
     // Initial Load
     loadAverageRatings();
     loadReviews();
