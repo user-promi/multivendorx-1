@@ -515,6 +515,13 @@ class FrontendScripts {
                         'can_publish_products'     => MultiVendorX()->setting->get_setting( 'products' ),
                         'can_publish_coupons'      => MultiVendorX()->setting->get_setting( 'coupons' ),
                         'withdrawals'              => MultiVendorX()->setting->get_setting( 'withdrawals' ),
+                        'pro_data'                 => apply_filters(
+                                                            'multivendorx_update_pro_data',
+                                                            array(
+                                                                'version'         => false,
+                                                                'manage_plan_url' => MULTIVENDORX_PRO_SHOP_URL,
+                                                            )
+                                                        ),
 					) ),
                 ),
                 'multivendorx-product-tab-script' => array(

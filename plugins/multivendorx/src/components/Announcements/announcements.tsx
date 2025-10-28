@@ -10,7 +10,6 @@ import {
     PaginationState,
 } from '@tanstack/react-table';
 import "./announcements.scss";
-import { DateRangePicker, RangeKeyDict } from 'react-date-range';
 
 type StoreRow = {
     stores: any;
@@ -56,15 +55,10 @@ export const Announcements: React.FC = () => {
         pageIndex: 0,
         pageSize: 10,
     });
-    const dateRef = useRef<HTMLDivElement | null>(null);
-    const [openDatePicker, setOpenDatePicker] = useState(false);
 
     const [pageCount, setPageCount] = useState(0);
-    const [page, setPage] = useState('');
     const [error, setError] = useState<string | null>(null);
     const bulkSelectRef = useRef<HTMLSelectElement>(null);
-    const [openModal, setOpenModal] = useState(false);
-    const [modalDetails, setModalDetails] = useState<string>('');
 
     const [editId, setEditId] = useState<number | null>(null);
 
@@ -83,10 +77,13 @@ export const Announcements: React.FC = () => {
                 headers: { 'X-WP-Nonce': appLocalizer.nonce },
             });
             const stores = response.data?.stores || [];
-            const options = stores.map((store: any) => ({
-                value: store.id.toString(), // <-- convert to string
-                label: store.store_name,
-            }));
+            const options = [
+                { value: "0", label: __('All Stores', 'multivendorx') },
+                ...stores.map((store: any) => ({
+                    value: store.id.toString(),
+                    label: store.store_name,
+                })),
+            ];
             setStoreOptions(options);
         } catch {
             setError(__('Failed to load stores', 'multivendorx'));
@@ -99,6 +96,26 @@ export const Announcements: React.FC = () => {
 
     const [announcementStatus, setAnnouncementStatus] = useState<AnnouncementStatus[] | null>(null);
     const [storeOptions, setStoreOptions] = useState<{ value: string; label: string }[]>([]);
+    const [validationErrors, setValidationErrors] = useState<{ [key: string]: string }>({});
+
+    const validateForm = () => {
+        const errors: { [key: string]: string } = {};
+
+        if (!formData.title.trim()) {
+            errors.title = __('Title is required', 'multivendorx');
+        }
+
+        if (!formData.content.trim()) {
+            errors.content = __('Content is required', 'multivendorx');
+        }
+
+        if (!formData.stores || formData.stores.length === 0) {
+            errors.stores = __('Please select at least one store', 'multivendorx');
+        }
+
+        setValidationErrors(errors);
+        return Object.keys(errors).length === 0;
+    };
 
     const handleCloseForm = () => {
         setAddAnnouncements(false);
@@ -111,6 +128,7 @@ export const Announcements: React.FC = () => {
         });
         setEditId(null);
         setError(null);
+        setValidationErrors({});
     };
 
     // Handle form input change
@@ -119,6 +137,15 @@ export const Announcements: React.FC = () => {
     ) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
+        
+        // Clear field error when user types
+        if (validationErrors[name]) {
+            setValidationErrors((prev) => {
+                const updated = { ...prev };
+                delete updated[name];
+                return updated;
+            });
+        }
     };
 
     const handleBulkAction = async () => {
@@ -129,14 +156,10 @@ export const Announcements: React.FC = () => {
         }).filter((id): id is number => id !== null);
 
         if (!selectedIds.length) {
-            setModalDetails('Select rows.');
-            setOpenModal(true);
             return;
         }
 
         if (!action) {
-            setModalDetails('Please select an action.');
-            setOpenModal(true);
             return;
         }
 
@@ -188,6 +211,11 @@ export const Announcements: React.FC = () => {
 
     const handleSubmit = async () => {
         if (submitting) return;
+
+        if (!validateForm()) {
+            return; // Stop submission if errors exist
+        }
+
         setSubmitting(true);
 
         try {
@@ -520,6 +548,7 @@ export const Announcements: React.FC = () => {
                     <div
                         className="admin-btn btn-purple"
                         onClick={async () => {
+                            setValidationErrors({});
                             await fetchStoreOptions(); // fetch stores when Add form opens
                             setAddAnnouncements(true);
                         }}
@@ -579,6 +608,7 @@ export const Announcements: React.FC = () => {
                                     value={formData.title}
                                     onChange={handleChange}
                                 />
+                                {validationErrors.title && <p className="error-text red">{validationErrors.title}</p>}
                             </div>
                             <div className="form-group">
                                 <label htmlFor="content">Enter Content</label>
@@ -588,6 +618,7 @@ export const Announcements: React.FC = () => {
                                     value={formData.content}
                                     onChange={handleChange}
                                 />
+                                {validationErrors.content && <p className="error-text red">{validationErrors.content}</p>}
                             </div>
 
                             <div className="form-group">
@@ -608,8 +639,7 @@ export const Announcements: React.FC = () => {
                                         }));
                                     }}
                                 />
-
-
+                                {validationErrors.stores && <p className="error-text red">{validationErrors.stores}</p>}
                             </div>
 
                             <div className="form-group">
