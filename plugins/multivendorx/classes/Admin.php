@@ -94,7 +94,7 @@ class Admin {
 
             $commission_count = CommissionUtil::get_commissions(['status' => 'unpaid'], true, true);
             // Array contain multivendorx submenu.
-            $submenus = array(
+            $submenus = apply_filters('multivendorx_submenus',array(
                 'dashboard' => array(
                     'name'   => __( 'Dashboard', 'multivendorx' ),
                     'subtab' => '',
@@ -128,19 +128,18 @@ class Admin {
                     'name'   => __( 'Knowledgebase', 'multivendorx' ),
                     'subtab' => '',
                 ),
-                'advertisement' => array(
-                    'name'   => __( 'Advertisement', 'multivendorx' ),
-                    'subtab' => '',
-                ),
+                // 'advertisement' => array(
+                //     'name'   => __( 'Advertisement', 'multivendorx' ),
+                //     'subtab' => '',
+                // ),
                 'reports' => array(
                     'name'   => __( 'Reports', 'multivendorx' ),
                     'subtab' => '',
                 ),
-                'memberships' => array(
-                    'name'   => __( 'Memberships', 'multivendorx' ),
-                    'subtab' => 'payment-membership-message',
-                ),
-                
+                // 'memberships' => array(
+                //     'name'   => __( 'Memberships', 'multivendorx' ),
+                //     'subtab' => 'payment-membership-message',
+                // ),
                 'settings' => array(
                     'name'   => __( 'Settings', 'multivendorx' ),
                     'subtab' => 'marketplace-settings',
@@ -174,7 +173,7 @@ class Admin {
                     'name'   => __( 'Setup', 'multivendorx' ),
                     'subtab' => '',
                 ),
-            );
+            ));
             
             foreach ( $submenus as $slug => $submenu ) {
                 // prepare subtab if subtab is exist.
