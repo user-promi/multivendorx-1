@@ -158,6 +158,8 @@ const App = () => {
         onSelectChange={handleSelectChange}
         selectValue={selectValue}
         free={appLocalizer.freeVersion}
+        pro={ appLocalizer.pro_data.version }
+        managePlanUrl={ appLocalizer.pro_data.manage_plan_url }
         chatUrl= "https://tawk.to/chat/6504346eb1aaa13b7a77026c/1hac6pkpm"
         showProfile={ true }
         showDropdown={true} 

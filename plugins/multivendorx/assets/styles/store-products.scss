@@ -391,7 +391,7 @@
                          border-radius: 0.5rem;
                          position: relative;
 
-                         &:after {
+                         span {
                              position: absolute;
                              content: "";
                              width: 50%;
@@ -549,3 +549,7 @@
  }
 
  //  review page end
+ #commentform {
+    display: none;
+  }
+  

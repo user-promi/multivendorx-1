@@ -32,7 +32,7 @@ import "./adminDashboard.scss";
 import "../dashboard.scss";
 import BestSellingProducts from './bestSellingProducts';
 import TopSellers from './topSellers';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const AdminDashboard = () => {
   const location = useLocation();
@@ -248,7 +248,7 @@ const AdminDashboard = () => {
   ];
 
   const [activeTab, setActiveTab] = useState("dashboard");
-  const tabs = [
+  let tabs = [
     {
       id: "dashboard",
       label: "Dashboard",
@@ -547,6 +547,11 @@ const AdminDashboard = () => {
         </>
     },
   ];
+
+  tabs = appLocalizer.khali_dabba
+    ? tabs.filter(tab => tab.id !== 'free-vs-pro')
+    : tabs;
+
   return (
     <>
       <div className="admin-dashboard">
