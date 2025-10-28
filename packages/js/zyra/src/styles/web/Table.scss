@@ -177,7 +177,10 @@
         }
     }
 }
-
+.table-action-wrapper{
+    display: flex;
+    gap: 0.5rem;
+}
 .table-wrapper {
     .admin-table {
         width: 100%;

@@ -608,7 +608,7 @@ export const Announcements: React.FC = () => {
                                     value={formData.title}
                                     onChange={handleChange}
                                 />
-                                {validationErrors.title && <p className="error-text red">{validationErrors.title}</p>}
+                                {validationErrors.title && <div className="error-text red">{validationErrors.title}</div>}
                             </div>
                             <div className="form-group">
                                 <label htmlFor="content">Enter Content</label>
@@ -618,7 +618,7 @@ export const Announcements: React.FC = () => {
                                     value={formData.content}
                                     onChange={handleChange}
                                 />
-                                {validationErrors.content && <p className="error-text red">{validationErrors.content}</p>}
+                                {validationErrors.content && <div className="error-text red">{validationErrors.content}</div>}
                             </div>
 
                             <div className="form-group">

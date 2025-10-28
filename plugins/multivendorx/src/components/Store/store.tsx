@@ -248,10 +248,6 @@ const Store = () => {
                                         {error && (
                                             <p
                                                 className="error-text"
-                                                style={{
-                                                    color: 'red',
-                                                    marginTop: '5px',
-                                                }}
                                             >
                                                 {error}
                                             </p>
