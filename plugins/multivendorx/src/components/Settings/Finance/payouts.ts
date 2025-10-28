@@ -306,6 +306,28 @@ export default {
             },
         },
         {
+            key: 'withdraw_type',
+            type: 'setting-toggle',
+            label: __('Withdrawal approval', 'multivendorx'),
+            settingDescription: __("Choose whether withdrawal requests are auto-approved or require admin review.", 'multivendorx'),
+            desc: __(
+                '<ul><li>Automatic - All withdrawal requests are automatically approved and paid when requested, if the payment method is Stripe or PayPal.</li><li>Manual: Admin must review and approve each request.</li></ul>',
+                'multivendorx'
+            ),
+            options: [
+                {
+                    key: 'automatic_withdraw',
+                    label: __('Automatic', 'multivendorx'),
+                    value: 'store_order',
+                },
+                {
+                    key: 'manual_manual',
+                    label: __('Manual', 'multivendorx'),
+                    value: 'per_item',
+                },
+            ],
+        },
+        {
             key: 'withdrawals_fees',
             type: 'nested',
             label: __('Free withdrawals and fees', 'multivendorx'),
