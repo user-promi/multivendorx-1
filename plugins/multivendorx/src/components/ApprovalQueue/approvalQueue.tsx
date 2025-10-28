@@ -187,7 +187,7 @@ const ApprovalQueue = () => {
                 label: "Products",
                 icon: "adminlib-calendar blue",
                 count: productCount,
-                des: "Waiting for your green light",
+                des: "Waiting to be published",
 
                 content:
                     <>
@@ -238,7 +238,7 @@ const ApprovalQueue = () => {
             id: "wholesale-customer",
             label: "Customers",
             icon: "adminlib-calendar yellow",
-            des: "Ready to become wholesale customer",
+            des: "Ready to become wholesalers",
 
             count: 9,
             content:
@@ -248,7 +248,7 @@ const ApprovalQueue = () => {
                             <div className="title">
                                 Customers
                             </div>
-                            <div className="des">Waiting for your response</div>
+                            <div className="des">Ready to become wholesalers</div>
                         </div>
                         <div className="right">
                             <i className="adminlib-more-vertical"></i>
