@@ -17,7 +17,6 @@ export default {
             ),
             label: __( 'Store policy', 'multivendorx' ),
             moduleEnabled: 'store-policy',
-            // moduleEnabled: 'store-policy',
         },
         {
             key: 'shipping_policy',
@@ -28,7 +27,6 @@ export default {
             ),
             label: __( 'Shipping policy', 'multivendorx' ),
             moduleEnabled: 'store-policy',
-            // moduleEnabled: 'store-policy',
         },
         {
             key: 'refund_policy',
@@ -39,7 +37,6 @@ export default {
             ),
             label: __( 'Refund policy', 'multivendorx' ),
             moduleEnabled: 'store-policy',
-            // moduleEnabled: 'store-policy',
         },
         {
             key: 'cancellation_policy',
@@ -50,7 +47,6 @@ export default {
             ),
             label: __( 'Cancellation / return / exchange policy', 'multivendorx' ),
             moduleEnabled: 'store-policy',
-            // moduleEnabled: 'store-policy',
         },
     ],
 };
