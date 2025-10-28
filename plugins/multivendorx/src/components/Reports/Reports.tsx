@@ -70,25 +70,25 @@ const Reports = () => {
       id: 'earnings',
       label: 'No. of orders',
       count: "7896",
-      icon: 'adminlib-support green',
+      icon: 'adminlib-order green',
     },
     {
       id: 'Vendors',
       label: 'Admin Commission',
       count: "85669",
-      icon: 'adminlib-global-community blue',
+      icon: 'adminlib-commission blue',
     },
     {
       id: 'Pending Withdrawals',
       label: 'Vendor Payout Pending',
       count: "88200",
-      icon: 'adminlib-calendar red',
+      icon: 'adminlib-vendor-shipping red',
     },
     {
       id: 'Pending Withdrawals',
       label: 'Amount Refunds',
       count: "600",
-      icon: 'adminlib-calendar green',
+      icon: 'adminlib-marketplace-refund green',
     },
     {
       id: 'Pending Withdrawals',
@@ -133,7 +133,7 @@ const Reports = () => {
 
     <>
       <AdminBreadcrumbs
-        activeTabIcon="adminlib-analytics"
+        activeTabIcon="adminlib-report"
         tabTitle="Reports"
         description={'Manage all pending administrative actions including approvals, payouts, and notifications.'}
 

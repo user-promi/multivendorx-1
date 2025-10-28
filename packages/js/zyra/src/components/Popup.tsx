@@ -10,9 +10,9 @@ import { DialogContent, DialogContentText } from '@mui/material';
 import '../styles/web/Popup.scss';
 
 export interface PopupMessage {
-  text: string;   
-  des?: string;    
-  icon?: string; 
+    text: string;
+    des?: string;
+    icon?: string;
 }
 export interface BtnLink {
     site: string;
@@ -48,7 +48,7 @@ const ProPopup: React.FC<PopupProps> = (props) => {
     useEffect(() => {
         setSelectedBtn(btnLink.length ? btnLink[0] : { site: '', price: '', link: proUrl });
     }, [btnLink, proUrl]);
-                        console.log(props);
+    console.log(props);
 
     return (
         <DialogContent className={`${props.messages ? "pro-popup-content" : "module-popup-content"}`}>
@@ -140,18 +140,16 @@ const ProPopup: React.FC<PopupProps> = (props) => {
                     )}
                     {props.moduleName && (
                         <>
-                            <div className="module-left-section">
-                                <div className="module-icon">
-                                    <i className="adminlib-rules"></i>
-                                </div>
+                            <div className="popup-header">
+                                <i className={`adminlib-${props.moduleName}`}></i>
                             </div>
-                            <div className="module-right-section">
+                            <div className="popup-body">
                                 <h2>Activate {props.moduleName}</h2>
                                 <p>{props.message}</p>
 
                                 <div className="buttons-wrapper center">
                                     <a
-                                        className="admin-btn btn-purple"
+                                        className="admin-btn btn-green"
                                         href={props.modulePageUrl}
                                     >
                                         {props.moduleButton}

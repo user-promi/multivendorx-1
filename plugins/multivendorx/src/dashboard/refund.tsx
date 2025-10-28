@@ -207,24 +207,18 @@ const Refund: React.FC = () => {
         }
 
         return (
-            <div className="products-with-images">
+            <div className="product-wrapper">
                 {productNames.map((productName, index) => (
                     <div key={index} className="product-item">
                         <img 
                             src={getProductImage(productImages, productName, index)}
                             alt={productName}
-                            style={{ 
-                                width: 30, 
-                                height: 30, 
-                                objectFit: 'cover',
-                                borderRadius: '3px'
-                            }} 
                             onError={(e) => {
                                 const target = e.target as HTMLImageElement;
                                 target.src = 'https://via.placeholder.com/30?text=' + encodeURIComponent(productName.charAt(0).toUpperCase());
                             }}
                         />
-                        <span className="product-name" style={{ fontSize: '12px' }}>
+                        <span className="product-name">
                             {productName}
                         </span>
                     </div>

@@ -58,7 +58,7 @@
 }
 
 .column {
-    padding: 1.625rem;
+    padding: 2rem;
     border-radius: 0.313rem;
     box-shadow: 0 0.125rem 0.5rem 0 rgb(223 222 225 / 43%);
     background: #fff;
@@ -974,3 +974,12 @@
 }
 
 // tab action cart end
+
+
+// location map box style start
+#location-map {
+    height: 18.75rem;
+    width: 100%;
+    border-radius: 0.25rem;
+    margin-top: 0.5rem;
+}

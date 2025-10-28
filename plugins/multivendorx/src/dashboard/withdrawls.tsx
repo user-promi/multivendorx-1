@@ -296,7 +296,7 @@ const History: React.FC = () => {
                                     value={amount}
                                     onChange={(e) => handleAmountChange(Number(e.target.value))}
                                 />
-                                {error && <p className="error-message" style={{ color: "red" }}>{error}</p>}
+                                {error && <p className="error-message">{error}</p>}
                             </div>
                         </div>
                     </div>

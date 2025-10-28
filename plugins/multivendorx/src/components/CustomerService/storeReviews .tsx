@@ -298,7 +298,6 @@ const StoreReviews: React.FC = () => {
 
     return (
         <>
-            <div className="admin-table-wrapper">
                 {error && <div className="error">{error}</div>}
                 <Table
                     data={data || []}
@@ -313,7 +312,6 @@ const StoreReviews: React.FC = () => {
                     perPageOption={[10, 25, 50]}
                     totalCounts={totalRows}
                 />
-            </div>
 
             {/* ✅ Reply/Edit Popup */}
             {selectedReview && (
@@ -357,12 +355,7 @@ const StoreReviews: React.FC = () => {
                                 value={replyText}
                                 onChange={(e) => setReplyText(e.target.value)}
                                 rows={5}
-                                style={{
-                                    width: '100%',
-                                    border: '1px solid #ccc',
-                                    borderRadius: '6px',
-                                    padding: '8px',
-                                }}
+                              className="textarea-input"
                             />
                         </div>
 

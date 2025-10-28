@@ -112,7 +112,7 @@ const BlockLayout: React.FC<BlockLayoutProps> = ({ formField, onChange }) => {
               <img 
                 src={block.image.url} 
                 alt={block.image.alt}
-                style={{ maxWidth: '100%', height: 'auto' }}
+                // style={{ maxWidth: '100%', height: 'auto' }}
               />
             ) : (
               <div 

@@ -29,6 +29,7 @@ export default {
                 },
             ],
             moduleEnabled: 'store-seo',
+            proSetting: true,
             //proSetting:true
         },
     ],

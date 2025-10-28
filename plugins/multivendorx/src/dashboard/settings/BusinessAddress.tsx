@@ -528,13 +528,13 @@ const BusinessAddress = () => {
                 <div className="card-title">Business Address & Location</div>
 
                 {successMsg && (
-                    <div className="success-message" style={{ color: 'green', marginBottom: '15px', padding: '10px', background: '#f0fff0', border: '1px solid green' }}>
+                    <div className="success-message">
                         {successMsg}
                     </div>
                 )}
 
                 {errorMsg && (
-                    <div className="error-message" style={{ color: 'red', marginBottom: '15px', padding: '10px', background: '#fff0f0', border: '1px solid red' }}>
+                    <div className="error-message">
                         {errorMsg}
                     </div>
                 )}
@@ -552,9 +552,9 @@ const BusinessAddress = () => {
                                 defaultValue={addressData.location_address}
                             />
                         </div>
-                        <small style={{ color: '#666', marginTop: '5px', display: 'block' }}>
+                         <div className="settings-metabox-description" >
                             Type your business name or address and select from suggestions
-                        </small>
+                        </div>
                     </div>
                 </div>
 
@@ -564,17 +564,10 @@ const BusinessAddress = () => {
                         <label>Location Map *</label>
                         <div
                             id="location-map"
-                            style={{
-                                height: '300px',
-                                width: '100%',
-                                borderRadius: '8px',
-                                border: '1px solid #ddd',
-                                marginTop: '8px'
-                            }}
                         ></div>
-                        <small style={{ color: '#666', marginTop: '5px', display: 'block' }}>
+                         <div className="settings-metabox-description" >
                             Click on the map or drag the marker to set your exact location
-                        </small>
+                        </div>
                     </div>
                 </div>
 
@@ -590,9 +583,9 @@ const BusinessAddress = () => {
                             onChange={(e) => handleChange('location_address', e.target.value)} 
                         />
                         {!addressData.location_address && (
-                            <small style={{ color: 'orange', marginTop: '5px', display: 'block' }}>
+                             <div class="settings-metabox-description" >
                                 Address is required. Please select a location from the map or search.
-                            </small>
+                            </div>
                         )}
                     </div>
                 </div>

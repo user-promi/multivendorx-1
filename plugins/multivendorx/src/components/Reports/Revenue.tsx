@@ -187,7 +187,7 @@ const Revenue: React.FC = () => {
           </div>
           {bestSellingCategories.map((category) => (
             <div className="column" key={category}>
-              <div className="card-header" onClick={() => toggleCard(category)} style={{ cursor: "pointer" }}>
+              <div className="card-header" onClick={() => toggleCard(category)}>
                 <div className="left"><div className="product-name">{category}</div><div className="price"><b>Total Sales:</b> $125,000</div></div>
                 <div className="right"><i className="adminlib-pagination-right-arrow"></i></div>
               </div>
@@ -204,7 +204,7 @@ const Revenue: React.FC = () => {
           </div>
           {leadingBrands.map((brand) => (
             <div className="column" key={brand}>
-              <div className="card-header" onClick={() => toggleCard(brand)} style={{ cursor: "pointer" }}>
+              <div className="card-header" onClick={() => toggleCard(brand)}>
                 <div className="left"><div className="product-name">{brand}</div><div className="price"><b>Total Sales:</b> $125,000</div></div>
                 <div className="right"><i className="adminlib-pagination-right-arrow"></i></div>
               </div>
