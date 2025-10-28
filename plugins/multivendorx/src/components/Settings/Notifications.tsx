@@ -485,7 +485,6 @@ const Notification = () => {
                                         );
                                     })}
                                 </div>
-
                                 <div className="admin-btn btn-purple" onClick={() => setEditingNotification(notif.id)}>
                                     Manage <i className="adminlib-create"></i>
                                 </div>
