@@ -139,6 +139,15 @@
             }
         }
     }
+
+    // admin Wallet Transaction table(common)
+    &.wallet {
+        padding: 1rem 0;
+        margin-bottom: 1rem;
+        border-bottom: $border-light-small;
+    }
+
+    // Wallet Transaction table
 }
 
 .red {
@@ -271,7 +280,6 @@
 
 // card styles start
 
-
 // form start
 .registration-from-wrapper {
 
@@ -281,6 +289,19 @@
 
         .form-heading input {
             font-size: 1.75rem;
+        }
+
+        .form-heading {
+            position: relative;
+
+            i {
+                position: absolute;
+                top: 0.313rem;
+                right: 0.313rem;
+                font-size: 1.063rem;
+                cursor: pointer;
+                color: rgb(5, 5, 226);
+            }
         }
 
         .addnew {

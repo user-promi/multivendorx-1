@@ -272,6 +272,11 @@ a {
   }
 }
 
+.error-input:has(.basic-input) .basic-input{
+  border-color: red !important;
+  box-shadow: 0 0 0 3px #ff00001f !important;
+}
+
 .react-select input:focus {
   box-shadow: none;
 }
@@ -770,7 +775,7 @@ input[type="checkbox"]:focus {
 // admin save notice popup end
 .settings-input-content {
   // position: relative;
-  width: 70%;
+  width: 72%;
 
   // multi input style start
   .settings-basic-child-wrap {
@@ -1325,10 +1330,16 @@ input[type="checkbox"]:focus {
 // tooltip style end
 
 // rating wrapper start
-.rating-wrapper{
+.rating-wrapper {
   display: flex;
   gap: 0.313rem;
-  i{
+
+  i {
     color: rgb(202, 172, 1);
   }
+}
+
+// input invalid error
+.invalid-feedback {
+  color: red;
 }

@@ -123,7 +123,7 @@ const DownloadTransactionCSVButton: React.FC<{
             const response = await axios({
                 method: 'GET',
                 url: getApiLink(appLocalizer, 'transaction'),
-                headers: { 
+                headers: {
                     'X-WP-Nonce': appLocalizer.nonce,
                     'Accept': 'text/csv'
                 },
@@ -135,13 +135,13 @@ const DownloadTransactionCSVButton: React.FC<{
             const url = window.URL.createObjectURL(new Blob([response.data]));
             const link = document.createElement('a');
             link.href = url;
-            
+
             // Generate filename with timestamp and store ID
             const timestamp = new Date().toISOString().split('T')[0];
             const context = selectedIds.length > 0 ? 'selected' : 'page';
             const filename = `transactions_${context}_store_${storeId}_${timestamp}.csv`;
             link.setAttribute('download', filename);
-            
+
             document.body.appendChild(link);
             link.click();
             link.remove();
@@ -219,7 +219,7 @@ const ExportAllTransactionCSVButton: React.FC<{
             const response = await axios({
                 method: 'GET',
                 url: getApiLink(appLocalizer, 'transaction'),
-                headers: { 
+                headers: {
                     'X-WP-Nonce': appLocalizer.nonce,
                     'Accept': 'text/csv'
                 },
@@ -231,12 +231,12 @@ const ExportAllTransactionCSVButton: React.FC<{
             const url = window.URL.createObjectURL(new Blob([response.data]));
             const link = document.createElement('a');
             link.href = url;
-            
+
             // Generate filename with timestamp and store ID
             const timestamp = new Date().toISOString().split('T')[0];
             const filename = `transactions_all_store_${storeId}_${timestamp}.csv`;
             link.setAttribute('download', filename);
-            
+
             document.body.appendChild(link);
             link.click();
             link.remove();
@@ -256,7 +256,7 @@ const ExportAllTransactionCSVButton: React.FC<{
             disabled={isDownloading || !storeId}
             className="admin-btn btn-purple"
         >
-            <i className="adminlib-export"></i>
+            <span className="adminlib-export"></span>
             Export All CSV
         </button>
     );
@@ -272,8 +272,8 @@ const TransactionBulkActions: React.FC<{
 }> = ({ selectedRows, data, filterData, storeId, onActionComplete }) => {
     return (
         <div>
-            <DownloadTransactionCSVButton 
-                selectedRows={selectedRows} 
+            <DownloadTransactionCSVButton
+                selectedRows={selectedRows}
                 data={data}
                 filterData={filterData}
                 storeId={storeId}
@@ -301,22 +301,19 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
     const [currentFilterData, setCurrentFilterData] = useState<FilterData>({});
 
     // Add search filter with export button
-    const searchFilter: RealtimeFilter[] = [
+    const actionButton: RealtimeFilter[] = [
         {
-            name: 'searchField',
-            render: (updateFilter, filterValue) => (
+            name: 'actionButton',
+            render: () => (
                 <>
-                    <div className="">
-                        <ExportAllTransactionCSVButton 
-                            filterData={currentFilterData}
-                            storeId={storeId}
-                        />
-                    </div>
+                    <ExportAllTransactionCSVButton
+                        filterData={currentFilterData}
+                        storeId={storeId}
+                    />
                 </>
             ),
         },
     ];
-
     // 🔹 Helper: get effective date range
     const getEffectiveDateRange = () => {
         if (dateRange.startDate && dateRange.endDate) return dateRange;
@@ -657,7 +654,7 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
 
     return (
         <>
-            <div className="analytics-container">
+            <div className="analytics-container wallet">
                 {overview.map((item, idx) => (
                     <div key={idx} className="analytics-item">
                         <div className="analytics-icon">
@@ -685,10 +682,10 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                     typeCounts={transactionStatus as TransactionStatus[]}
                     totalCounts={totalRows}
                     realtimeFilter={realtimeFilter}
-                    searchFilter={searchFilter}
+                    actionButton={actionButton}
                     bulkActionComp={() => (
-                        <TransactionBulkActions 
-                            selectedRows={rowSelection} 
+                        <TransactionBulkActions
+                            selectedRows={rowSelection}
                             data={data}
                             filterData={currentFilterData}
                             storeId={storeId}

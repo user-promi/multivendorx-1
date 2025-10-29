@@ -212,7 +212,7 @@
 }
 
 .title-section {
-  margin: 0 1rem 1rem;
+  margin: 0 1rem;
   padding: 1.5rem;
   background: #fff;
   border-radius: 0.313rem;
@@ -278,6 +278,16 @@
     display: flex;
     gap: 0.5rem;
     align-items: center;
+    
+    label{
+      font-size: 1rem;
+
+      i{
+        font-size: 1.063rem;
+        color: $theme-color;
+        padding-right: 0.45rem;
+      }
+    }
   }
 }
 

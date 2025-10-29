@@ -27,26 +27,26 @@ const EditStore = () => {
     const [bannerMenu, setBannerMenu] = useState(false);
     const [actionMenu, setActionMenu] = useState(false);
     const [logoMenu, setLogoMenu] = useState(false);
+    const wrapperRef = useRef<HTMLDivElement>(null);
 
     const bannerRef = useRef(null);
     const logoRef = useRef(null);
     const actionRef = useRef(null);
 
-    // Close menus on outside click
+    // Close dropdown on click outside
     useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (bannerRef.current && !bannerRef.current.contains(event.target)) {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
                 setBannerMenu(false);
-            }
-            if (logoRef.current && !logoRef.current.contains(event.target)) {
+                setActionMenu(false);
                 setLogoMenu(false);
             }
-            if (actionRef.current && !actionRef.current.contains(event.target)) {
-                setActionMenu(false);
-            }
         };
-        document.addEventListener("click", handleClickOutside);
-        return () => document.removeEventListener("click", handleClickOutside);
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
     }, []);
 
     const location = useLocation();
@@ -201,27 +201,14 @@ const EditStore = () => {
                 appLocalizer={appLocalizer}
                 tabTitleSection={
                     <>
-                        <div className="tab-title">
+                        {/* <div className="tab-title">
                             <div className="content">
                                 <div className="tab-wrapper">
                                     <div className="title"><i className="adminlib-storefront"></i>{data.name}</div>
                                     <div className="dsc">{data.description}</div>
                                 </div>
                                 <div className="status-wrapper">
-                                    <span>Status: </span>
-                                    <SelectInput
-                                        name="status"
-                                        value={data.status}
-                                        options={statusOptions}
-                                        type="single-select"
-                                        onChange={(newValue: any) => {
-                                            if (!newValue || Array.isArray(newValue)) return;
-
-                                            const updated = { ...data, status: newValue.value };
-                                            setData(updated);
-                                            autoSave(updated);
-                                        }}
-                                    />
+                                    
                                     {editId && (
                                         <>
                                             <a
@@ -245,7 +232,7 @@ const EditStore = () => {
                                     )}
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
                         <div className="general-wrapper">
                             <div className="store-header">
                                 <div className="banner" style={{ background: `url("http://localhost:8889/wp-content/uploads/2025/10/1600w-6F7OhzOb6W8.webp")` }}>
@@ -306,11 +293,22 @@ const EditStore = () => {
                                             </ul>
                                         </div>
                                     </div>
-                                    {/* <div className="right-section">
-                                        <div className="admin-badge green"><i className="adminlib-eye"></i></div>
-                                        <div className="admin-badge yellow"><i className="adminlib-create"></i></div>
-                                        <div className="admin-btn btn-purple"><i className="adminlib-mail"></i>Send Mail</div>
-                                    </div> */}
+                                    <div className="right-section">
+                                        <span>Status: </span>
+                                        <SelectInput
+                                            name="status"
+                                            value={data.status}
+                                            options={statusOptions}
+                                            type="single-select"
+                                            onChange={(newValue: any) => {
+                                                if (!newValue || Array.isArray(newValue)) return;
+
+                                                const updated = { ...data, status: newValue.value };
+                                                setData(updated);
+                                                autoSave(updated);
+                                            }}
+                                        />
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -323,7 +321,7 @@ const EditStore = () => {
                 action={
 
                     <>
-                        <div className="edit-wrapper">
+                        <div className="edit-wrapper" ref={wrapperRef}>
                             <span className="" onClick={(e) => {
                                 e.stopPropagation();
                                 setActionMenu((prev) => !prev);

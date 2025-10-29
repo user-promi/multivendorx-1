@@ -67,8 +67,9 @@
     }
 
     &.tab {
-        margin: 2rem;
+        margin: 1rem;
         background: #fff;
+        border-radius: 0.313rem;
 
         .column {
             border: $border-light-small;
@@ -123,7 +124,7 @@
 
 .row {
     display: flex;
-    gap: 2rem;
+    gap: 1rem;
     padding-bottom: 1rem;
 
     .header {
@@ -449,6 +450,7 @@
 
     &.tab {
         cursor: pointer;
+        padding-top: 1rem;
     }
 
     .action {

@@ -287,20 +287,27 @@ const Commission: React.FC = () => {
             name: 'actionButton',
             render: () => (
                 <>
-                        <ExportAllCSVButton 
-                            filterData={currentFilterData}
-                        />
+                    <ExportAllCSVButton
+                        filterData={currentFilterData}
+                    />
                 </>
             ),
         },
         {
-        name: 'exportAll',
-        render: () => (
-            <i className="adminlib-more-vertical"></i>
-        ),
-    },
+            name: 'exportAll',
+            render: () => (
+                <div className="action-icons">
+                    <i className="adminlib-more-vertical"></i>
+                </div>
+            ),
+        },
     ];
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 097d5a99 (store)
     // Export All CSV Button Component - Downloads ALL filtered data
     const ExportAllCSVButton: React.FC<{
         filterData: FilterData;
@@ -522,17 +529,23 @@ const Commission: React.FC = () => {
             cell: ({ row }) => {
                 const date = row.original.createdAt;
                 if (!date) return <TableCell>-</TableCell>;
-                
+
                 // Format the date for display
                 const formattedDate = new Date(date).toLocaleDateString('en-US', {
                     year: 'numeric',
                     month: 'short',
                     day: 'numeric'
                 });
-                
+
                 return (
+<<<<<<< HEAD
                     <TableCell title={`${formattedDate}` }>
                         {formattedDate}  
+=======
+                    <TableCell title={`${formattedDate}`}>
+                        {formattedDate}
+
+>>>>>>> 097d5a99 (store)
                     </TableCell>
                 );
             },

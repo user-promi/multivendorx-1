@@ -676,13 +676,13 @@ const Table: React.FC<TableProps> = ({
                                 <>
                                     <div className="table-pagination">
                                         <div className="pagination-number-wrapper">
-                                            {`Showing ${pagination.pageIndex * pagination.pageSize + 1} to ${Math.min(
-                                                (pagination.pageIndex + 1) * pagination.pageSize,
-                                                totalCounts
-                                            )} of ${totalCounts} entries`}
-
                                             <div className="show-section">
-                                                Show
+                                                {`Showing ${pagination.pageIndex * pagination.pageSize + 1} to ${Math.min(
+                                                    (pagination.pageIndex + 1) * pagination.pageSize,
+                                                    totalCounts
+                                                )} of ${totalCounts} entries `}
+
+                                                 Show
                                                 <select
                                                     className='basic-select'
                                                     value={

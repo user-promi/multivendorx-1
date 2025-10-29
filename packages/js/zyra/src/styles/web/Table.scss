@@ -476,10 +476,13 @@
     .pagination-number-wrapper {
         font-size: 1.063rem;
         color: #00000094;
+        display: flex;
+        align-items: center;
 
         select {
-            width: 3.5rem;
+            width: 2.5rem;
             margin: 0 0.625rem;
+            padding: 0 0.313rem 0 0.5rem;
         }
         .show-section{
             margin-left: 0.5rem;

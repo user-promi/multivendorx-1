@@ -282,17 +282,6 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
             <div className="payment-method">
               {!method.openForm && (
                 <div className="toggle-icon">
-                  {/* {isEnabled ? (
-                  <i
-                    className="adminlib-keyboard-arrow-down"
-                    onClick={() => toggleActiveTab(method.id)}
-                  />
-                ) : (
-                  <i
-                    className="adminlib-pagination-right-arrow"
-                    onClick={() => toggleActiveTab(method.id)}
-                  />
-                )} */}
                   <i
                     className={`adminlib-${isEnabled && isActive ? "keyboard-arrow-down" : "pagination-right-arrow"}`}
                     onClick={() => toggleActiveTab(method.id)}
@@ -314,7 +303,6 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
 
                       {method.disableBtn ? (
                         <>
-                          {/* <div className="admin-badge red">1/3</div> */}
                           <div
                             className={`admin-badge ${isEnabled ? "green" : "red"
                               }`}
@@ -340,21 +328,23 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
               <div className="right-section" ref={menuRef}>
                 {method.disableBtn ? (
                   <ul>
-                    <li
-                      onClick={() => toggleActiveTab(method.id)}
-                    >
-                      <i className="adminlib-setting"></i>
-                      <span>Settings</span>
-                    </li>
                     {isEnabled ? (
-                      <li
-                        onClick={() =>
-                          toggleEnable(method.id, false, method.icon)
-                        }
-                      >
-                        <i className="eye-icon adminlib-eye-blocked"></i>
-                        <span>Enabled</span>
-                      </li>
+                      <>
+                        <li
+                          onClick={() => toggleActiveTab(method.id)}
+                        >
+                          <i className="adminlib-setting"></i>
+                          <span>Settings</span>
+                        </li>
+                        <li
+                          onClick={() =>
+                            toggleEnable(method.id, false, method.icon)
+                          }
+                        >
+                          <i className="disable-icon adminlib-eye-blocked"></i>
+                          <span>Disable</span>
+                        </li>
+                      </>
                     ) : (
                       <li
                         onClick={() =>
@@ -362,7 +352,7 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
                         }
                       >
                         <i className="eye-icon adminlib-eye"></i>
-                        <span>Disable</span>
+                        <span>Enable</span>
                       </li>
                     )}
                   </ul>

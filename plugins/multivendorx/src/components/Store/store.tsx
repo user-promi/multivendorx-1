@@ -178,7 +178,7 @@ const Store = () => {
                             header={
                                 <>
                                     <div className="title">
-                                        <i className="adminlib-cart"></i>
+                                        <i className="adminlib-storefront"></i>
                                         Add Store
                                     </div>
                                     <p>
@@ -233,7 +233,7 @@ const Store = () => {
                                         />
                                     </div>
 
-                                    <div className="form-group">
+                                    <div className={`form-group ${error ? 'error-input' : ''}`}>
                                         <label htmlFor="store-url">
                                             Store Slug
                                         </label>
@@ -243,14 +243,15 @@ const Store = () => {
                                             value={formData.slug || ''}
                                             onChange={handleChange}
                                             required={true}
+                                            generate="submit"
                                         />
 
                                         {error && (
-                                            <p
-                                                className="error-text"
+                                            <div
+                                                className="invalid-feedback"
                                             >
                                                 {error}
-                                            </p>
+                                            </div>
                                         )}
                                     </div>
 

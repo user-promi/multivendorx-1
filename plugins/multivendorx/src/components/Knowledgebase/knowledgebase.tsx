@@ -516,7 +516,7 @@ export const KnowledgeBase: React.FC = () => {
                             <div className="form-group">
                                 <label htmlFor="title">Title</label>
                                 <BasicInput type="text" name="title" value={formData.title} onChange={handleChange} />
-                                {validationErrors.title && <p className="error-text red">{validationErrors.title}</p>}
+                                {validationErrors.title && <p className="invalid-feedback">{validationErrors.title}</p>}
                             </div>
                             <div className="form-group">
                                 <label htmlFor="content">Content</label>
@@ -526,7 +526,7 @@ export const KnowledgeBase: React.FC = () => {
                                     value={formData.content}
                                     onChange={handleChange}
                                 />
-                                {validationErrors.content && <p className="error-text red">{validationErrors.content}</p>}
+                                {validationErrors.content && <p className="invalid-feedback">{validationErrors.content}</p>}
                             </div>
                             <div className="form-group">
                                 <label htmlFor="status">Status</label>
