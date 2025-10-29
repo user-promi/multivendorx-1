@@ -389,7 +389,9 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
                 }
 
                 if ( $div_id === 'edit' ) {
-                    MultiVendorX()->rest->dashboard->call_edit_product_template();
+                    ob_start();
+                    $this->call_edit_product_template();
+                    $content = ob_get_clean();
                 } else {
                     $id = $div_id;
                 }
@@ -401,7 +403,8 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
             'current_page' => $current_page,
             'current_sub'  => $current_sub,
             'error_msg'    => $error_msg,
-            'id'            => $id,
+            'id'           => $id,
+            'content'      => $content,
         );
     }
 

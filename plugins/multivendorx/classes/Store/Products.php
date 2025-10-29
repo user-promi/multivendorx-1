@@ -199,7 +199,9 @@ class Products {
         // Support for media
         wp_enqueue_media();
         wp_enqueue_script( 'selectWoo' );
-        FrontendScripts::enqueue_script( 'multivendorx-store-products-script' );
+       
+        wp_enqueue_script( 'multivendorx-store-products-script', MultiVendorX()->plugin_url . FrontendScripts::get_build_path_name() . 'js/' . MULTIVENDORX_PLUGIN_SLUG . '-store-products.min.js', array( 'jquery', 'jquery-blockui', 'wp-element', 'wp-i18n', 'react-jsx-runtime', 'jquery-ui-datepicker' ), MultiVendorX()->version );
+        
         wp_localize_script( 'multivendorx-store-products-script', 'mvx_advance_product_params', $edit_product_params );
 
         // do_action( 'mvx_edit_product_template_load', $this->product_id, $this->product_object, $this->post_object );

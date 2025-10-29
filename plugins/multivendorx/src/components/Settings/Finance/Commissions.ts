@@ -280,7 +280,7 @@ export default {
         {
             key: 'separator_content',
             type: 'section',
-            hint: __("What's deducted along with store commission", 'multivendorx'),
+            hint: __("What gets deducted from store commission", 'multivendorx'),
             desc: __('Determine which fees to deduct from the commission amount.', 'multivendorx')
         },
         {
@@ -289,7 +289,7 @@ export default {
             label: __('Marketplace fee', 'multivendorx'),
             single: true,
             settingDescription: __(
-                'Marketplace fees help cover platform costs and ensure smooth operation of your multi-vendor marketplace.',
+                'Define a fee to cover platform costs. Apply a fixed, percentage, or combined rate. Choose whether it’s paid by the customer at checkout or deducted from the store’s commission.',
                 'multivendorx'
             ),
             nestedFields: [
@@ -298,7 +298,7 @@ export default {
                     type: 'text',
                     preInsideText: __('$', 'multivendorx'),
                     size: "8rem",
-                    preText: 'The fee is applied as fixed',
+                    preText: 'Charge a',
                     postText: "+",
                 },
                 {
@@ -310,7 +310,7 @@ export default {
                 {
                     key: 'rule',
                     type: 'select',
-                    label: 'Decide who pays the marketplace fee',
+                    label: 'and select who pays it,',
                     options: [
                         { value: 'less_than', label: 'Customer' },
                         { value: 'more_than', label: 'Store' },
@@ -362,6 +362,7 @@ export default {
             label: 'Facilitator Fees',
             single: true,
             settingDescription: __('Set the facilitator fee as a fixed amount, a percentage, or both, deducted from the store commission. Store-wise fees can also be configured from the store edit page.', 'multivendorx'),
+            desc: __('Please make sure to assign a facilitator for your store from the <a href="#">Facilitator Settings</a> section before configuring fees.','multivendorx'),
             nestedFields: [
                 {
                     key: 'facilitator_fixed',

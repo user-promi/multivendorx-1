@@ -2,7 +2,7 @@ import { __ } from '@wordpress/i18n';
 
 export default {
     id: 'seo',
-    priority: 6,
+    priority: 7,
     name: __( 'SEO', 'mvx-pro' ),
     desc: __( 'Enable stores to enhance their product visibility using advanced third-party SEO plugins.', 'mvx-pro' ),
     icon: 'adminlib-store-seo',

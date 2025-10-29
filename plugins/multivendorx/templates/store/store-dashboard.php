@@ -178,18 +178,24 @@ $page_info     = MultiVendorX()->rest->dashboard->get_current_page_and_submenu()
             ?>
 
             <div class="content-wrapper" id="<?php echo $page_info['id'] ? esc_attr( $page_info['id'] ) : ''; ?>"> 
-                <div class="permission-wrapper">
-                    <i class="adminlib-info red"></i>
-                    <div class="title"><?php echo esc_html( $page_info['error_msg'] ); ?></div>
-                    <div class="admin-btn btn-purple"><?php echo esc_html__( 'Contact Admin', 'multivendorx' ); ?></div>
-                </div>
+                 <?php if ( $page_info['error_msg'] ) { ?>
+                    <div class="permission-wrapper">
+                        <i class="adminlib-info red"></i>
+                        <div class="title"><?php echo esc_html( $page_info['error_msg'] ); ?></div>
+                        <div class="admin-btn btn-purple"><?php echo esc_html__( 'Contact Admin', 'multivendorx' ); ?></div>
+                    </div>
 
-                <?php if ( !$page_info['error_msg'] ) { ?>
+                <?php } else { ?>
                     <div class="page-title-wrapper">
                         <div class="page-title">
                             <div class="title"><?php echo esc_html( $page_info['id'] ); ?></div>
                             <div class="des"><?php echo esc_html__( 'Manage your store information and preferences', 'multivendorx' ); ?></div>
                         </div>
+                        <?php 
+                        if ( ! empty( $page_info['content'] ) ) {
+                            echo $page_info['content'];
+                        }
+                        ?>
                     </div>
                 <?php } ?>
             </div>
