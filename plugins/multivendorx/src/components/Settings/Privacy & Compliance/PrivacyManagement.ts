@@ -163,19 +163,6 @@ export default {
                 'Store profile controls',
                 'multivendorx'
             ),
-        },
-        {
-            key: 'enable_profile_deactivation_request',
-            type: 'checkbox',
-            label: __( 'Store profile deactivation requests', 'multivendorx' ),
-			desc: __( 'Store owners will submit requests for temporary store hiding. <br><b>Note</b>: When a store is deactivated, both the store page and all its products become invisible to customers until the store is reactivated by an administrator. If a store is permanently deleted by admin, the admin can decide whether to allocate all the products to another store or take ownership of them.', 'multivendorx' ),
-            options: [
-                {
-                    key: 'enable_profile_deactivation_request',
-                    value: 'enable_profile_deactivation_request',
-                },
-            ],
-            look: 'toggle',
         },  
     ],
 };

@@ -16,7 +16,7 @@ export default {
             type: 'blocktext',
             label: __('no_label', 'multivendorx'),
             blocktext: __(
-                'Username and Password fileds display as per WooCommerce settings',
+                'Only store owners can apply for store registration. Applicants must log in or create an account before proceeding. So, Make sure WooCommerce’s Account & Privacy settings are configured to allow user registration.',
                 'multivendorx'
             ),
         },
