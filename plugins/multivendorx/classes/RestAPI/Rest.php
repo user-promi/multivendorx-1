@@ -15,7 +15,6 @@ use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Notifications_Controller;
 use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Payouts_Controller;
 use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Transaction_Controller;
 use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Reports_Controller;
-use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Refund_Controller;
 use MultiVendorX\Store\Store;
 use MultiVendorX\Store\StoreUtil;
 
@@ -227,7 +226,7 @@ class Rest {
         // Get all users for that store
         $users = StoreUtil::get_store_users($active_store);
     
-        if (is_array($users) && in_array($user_id, $users)) {
+        if (is_array($users) && in_array($user_id, $users['users'])) {
             return true;
         }
     
@@ -250,7 +249,6 @@ class Rest {
             'payouts'   => new MultiVendorX_REST_Payouts_Controller(),
             'transaction'=> new MultiVendorX_REST_Transaction_Controller(),
             'report'=> new MultiVendorX_REST_Reports_Controller(),
-            'refund'=> new MultiVendorX_REST_Refund_Controller(),
             'notifications'=> new MultiVendorX_REST_Notifications_Controller(),
         );
     }
