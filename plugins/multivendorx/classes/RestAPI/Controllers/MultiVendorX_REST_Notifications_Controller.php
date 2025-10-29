@@ -1,6 +1,7 @@
 <?php
 
 namespace MultiVendorX\RestAPI\Controllers;
+use MultiVendorX\Utill;
 
 defined('ABSPATH') || exit;
 
@@ -27,7 +28,7 @@ class MultiVendorX_REST_Notifications_Controller extends \WP_REST_Controller {
             // ],
         ] );
 
-        // register_rest_route(MultiVendorX()->rest_namespace, '/' . $this->rest_base . '/(?P<id>[\d]+)', [
+        register_rest_route(MultiVendorX()->rest_namespace, '/' . $this->rest_base . '/(?P<id>[\d]+)', [
         //     [
         //         'methods'             => \WP_REST_Server::READABLE,
         //         'callback'            => [$this, 'get_item'],
@@ -36,12 +37,12 @@ class MultiVendorX_REST_Notifications_Controller extends \WP_REST_Controller {
         //             'id' => ['required' => true],
         //         ],
         //     ],
-        //     [
-        //         'methods'             => \WP_REST_Server::EDITABLE,
-        //         'callback'            => [$this, 'update_item'],
-        //         'permission_callback' => [$this, 'update_item_permissions_check'],
-        //     ],
-        // ]);
+            [
+                'methods'             => \WP_REST_Server::EDITABLE,
+                'callback'            => [$this, 'update_item'],
+                'permission_callback' => [$this, 'update_item_permissions_check'],
+            ],
+        ]);
     }
 
     public function get_items_permissions_check($request) {
@@ -65,6 +66,26 @@ class MultiVendorX_REST_Notifications_Controller extends \WP_REST_Controller {
                 array( 'status' => 403 )
             );
         }
+        $header_notifications = $request->get_param('header');
+
+        if ($header_notifications) {
+            $results = MultiVendorX()->notifications->get_all_notifications();
+
+            $formated_notifications = [];
+
+            foreach ($results as $row) {
+
+                $formated_notifications[] = [
+                    'id'          => (int) $row->id,
+                    'icon'        => 'adminlib-cart',
+                    'title'       => $row->title,
+                    'message'     => $row->message,
+                    'time'        => $this->time_ago($row->created_at)
+                ];
+            }
+
+            return rest_ensure_response( $formated_notifications);
+        }
 
         $results = MultiVendorX()->notifications->get_all_events();
 
@@ -80,25 +101,21 @@ class MultiVendorX_REST_Notifications_Controller extends \WP_REST_Controller {
             $recipients = [];
             $id = 1;
 
-            if (!empty($row->store_enabled)) {
-                $recipients[] = [
-                    'id' => $id++,
-                    'type' => 'Vendor',
-                    'label' => 'Vendor',
-                    'enabled' => (bool) $row->store_enabled,
-                    'canDelete' => false,
-                ];
-            }
-
-            if (!empty($row->admin_enabled)) {
-                $recipients[] = [
-                    'id' => $id++,
-                    'type' => 'Admin',
-                    'label' => 'Admin',
-                    'enabled' => (bool) $row->admin_enabled,
-                    'canDelete' => false,
-                ];
-            }
+            $recipients[] = [
+                'id' => $id++,
+                'type' => 'Store',
+                'label' => 'Store',
+                'enabled' => (bool) $row->store_enabled,
+                'canDelete' => false,
+            ];
+        
+            $recipients[] = [
+                'id' => $id++,
+                'type' => 'Admin',
+                'label' => 'Admin',
+                'enabled' => (bool) $row->admin_enabled,
+                'canDelete' => false,
+            ];
 
             // Add any custom emails
             foreach ($custom_emails as $email) {
@@ -130,5 +147,107 @@ class MultiVendorX_REST_Notifications_Controller extends \WP_REST_Controller {
         }
 
         return rest_ensure_response( $formated_notifications);
+    }
+
+    public function time_ago($datetime) {
+        if (empty($datetime)) return '';
+
+        $timestamp = strtotime($datetime);
+        $diff = time() - $timestamp;
+
+        if ($diff < 60) {
+            return $diff . ' seconds ago';
+        } elseif ($diff < 3600) {
+            return floor($diff / 60) . ' minutes ago';
+        } elseif ($diff < 86400) {
+            return floor($diff / 3600) . ' hours ago';
+        } elseif ($diff < 604800) {
+            return floor($diff / 86400) . ' days ago';
+        } else {
+            return date('M j, Y', $timestamp);
+        }
+    }
+
+    public function update_item($request) {
+        global $wpdb;
+        $notification_data = $request->get_param('notifications');   
+
+        $is_dismissed = $request->get_param('is_dismissed');
+        $id = $request->get_param('id');
+
+        if ($is_dismissed) {
+            $data = [
+                'is_dismissed'  => $is_dismissed
+            ];
+
+            $updated = $wpdb->update(
+                        "{$wpdb->prefix}" . Utill::TABLES['notifications'],
+                        $data,
+                        ['id' => $id],
+                        null,
+                        ['%s']
+                    );
+
+            return rest_ensure_response([
+                'success' => true,
+            ]);
+        }
+
+        if ( empty( $notification_data ) || ! is_array( $notification_data ) ) {
+            return new \WP_Error( 'invalid_data', __( 'Invalid notification data', 'multivendorx' ), [ 'status' => 400 ] );
+        }
+
+        foreach ( $notification_data as $notification ) {
+            $id = intval( $notification['id'] );
+
+            $channels = $notification['channels'] ?? [];
+            if (!empty($channels)) {
+                $email_enabled   = $channels['mail'] ?? false;
+                $sms_enabled     = $channels['sms'] ?? false;
+                $system_enabled  = $channels['system'] ?? false;
+            }
+
+            $store_enabled = 0;
+            $admin_enabled = 0;
+            $custom_emails = [];
+
+            if ( ! empty( $notification['recipients'] ) && is_array( $notification['recipients'] ) ) {
+                foreach ( $notification['recipients'] as $recipient ) {
+                    if ( $recipient['type'] === 'Store' ) {
+                        $store_enabled = $recipient['enabled'] ?? false;
+                    } elseif ( $recipient['type'] === 'Admin' ) {
+                        $admin_enabled = $recipient['enabled'] ?? false;
+                    } elseif ( $recipient['type'] === 'extra' ) {
+                        $custom_emails[] = sanitize_email( $recipient['label'] );
+                    }
+                }
+            }
+
+            $custom_emails_json = ! empty( $custom_emails ) ? wp_json_encode( $custom_emails ) : null;
+
+            $update_data = [
+                'email_enabled'   => $email_enabled,
+                'sms_enabled'     => $sms_enabled,
+                'system_enabled'  => $system_enabled,
+                'store_enabled'   => $store_enabled,
+                'admin_enabled'   => $admin_enabled,
+                'custom_emails'   => $custom_emails_json,
+            ];
+
+            $where = [ 'id' => $id ];
+
+            $updated = $wpdb->update( "{$wpdb->prefix}" . Utill::TABLES['system_events'], $update_data, $where, null, [ '%d' ] );
+
+        }
+
+        if ($updated) {
+
+            return rest_ensure_response([
+                'success' => true,
+                'message' => __( 'Notification(s) updated successfully.', 'multivendorx' ),
+            ]);
+        }
+    
+    
     }
 }

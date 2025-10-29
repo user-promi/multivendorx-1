@@ -27,6 +27,9 @@ if ($is_logged_in && $store_id) {
         <div id="avg-rating"></div>
 
         <div id="review-form-wrapper">
+            <button id="write-review-btn" type="button">
+                <?php esc_html_e('Write a review', 'multivendorx'); ?>
+            </button>
             <?php if (!$is_logged_in): ?>
                 <div class="woocommerce-info">
                     <?php esc_html_e('Please login to submit a review.', 'multivendorx'); ?>
@@ -43,9 +46,6 @@ if ($is_logged_in && $store_id) {
                         <?php esc_html_e('Only verified buyers can leave a review for this store.', 'multivendorx'); ?>
                     </div>
                 <?php else: ?>
-                    <button id="write-review-btn" type="button">
-                        <?php esc_html_e('Write a review', 'multivendorx'); ?>
-                    </button>
                     <!--Show form only if no review submitted and verified -->
                     <form id="commentform" class="comment-form">
                         <div class="form-wrapper">
@@ -83,15 +83,10 @@ if ($is_logged_in && $store_id) {
                                     <i class="adminlib-star-o" data-value="4"></i>
                                     <i class="adminlib-star-o" data-value="5"></i>
                                     <span class="title"><?php echo esc_html($param_value); ?></span>
-                                    <input type="hidden" name="rating[<?php echo esc_attr($param_value); ?>]" value="0" class="multivendorx-rating-select" />
                                 </div>
 
                             <?php endforeach; ?>
                         <?php endif; ?>
-                        <div class="form-wrapper">
-                            <label><?php esc_html_e('Upload Images', 'multivendorx'); ?></label>
-                            <input type="file" id="review_images" name="review_images[]" multiple accept="image/*" />
-                        </div>
 
                         <p>
                             <button id="review_submit" type="button">
