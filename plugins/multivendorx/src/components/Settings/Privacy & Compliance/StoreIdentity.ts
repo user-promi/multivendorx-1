@@ -72,17 +72,16 @@ export default {
             key: 'verification_methods',
             type: 'multi-string',
             label: __('Verification Methods', 'multivendorx'),
-            placeholder: __('Enter Shipping stage', 'multivendorx'),
+            placeholder: __('', 'multivendorx'),
             moduleEnabled: 'identity-verification',
             // iconEnable: true,
             // descEnable: true,
             requiredEnable: true,
             name: 'abuse_report_reasons',
-            // defaultValues: [
-            //     { value: "Order Received", locked: true, iconClass: "adminlib-check", description: "Order is received by store", tag:"Primary",required: true },
-            //     { value: "Processing", locked: true, iconClass: "adminlib-clock", description: "Order is being processed",tag:"Primary",required: true },
-            //     { value: "Shipped", iconClass: "adminlib-truck",default:"Primary" } // editable
-            // ],
+            defaultValues: [
+                { value: "Passport", locked: true, iconClass: "adminlib-check", description: "Order is received by store", tag:"Primary",required: true },
+                { value: "Driving licence", locked: true, iconClass: "adminlib-clock", description: "Order is being processed",tag:"Primary",required: true },
+            ],
             iconOptions: ["adminlib-check", "adminlib-clock", "adminlib-cart", "adminlib-store"], // dropdown options
             proSetting: false,
             maxItems: 10,
