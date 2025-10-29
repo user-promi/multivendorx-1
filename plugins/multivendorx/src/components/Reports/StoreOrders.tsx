@@ -1,21 +1,37 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
-import { Table, TableCell } from "zyra";
+import { CalendarInput, getApiLink, Table, TableCell } from 'zyra';
 import { ColumnDef, RowSelectionState, PaginationState } from '@tanstack/react-table';
 
-type StoreRow = {
+interface StoreRow {
   id: number;
-  vendor: string;
+  store_name: string;
   amount: string;
-  commission: string;
+  commission_amount: string;
   date: string;
   status: string;
-  currency: string;
-};
+  currency_symbol: string;
+}
 
-const getApiLink = (appLocalizer: any, endpoint: string) => {
-  return `${appLocalizer.apiUrl}/${endpoint}`;
+export interface RealtimeFilter {
+  name: string;
+  render: (
+    updateFilter: (key: string, value: any) => void,
+    filterValue: any
+  ) => React.ReactNode;
+}
+
+type FilterData = {
+  searchAction?: string;
+  searchField?: string;
+  store_id?: string;
+  orderBy?: any;
+  order?: any;
+  date?: {
+    start_date?: string;
+    end_date?: string;
+  };
 };
 
 const StoreOrders: React.FC = () => {
@@ -26,98 +42,220 @@ const StoreOrders: React.FC = () => {
     pageSize: 10,
   });
   const [totalRows, setTotalRows] = useState<number>(0);
-  const [pageCount, setPageCount] = useState(0);
+  const [pageCount, setPageCount] = useState<number>(0);
+  const [store, setStore] = useState<any[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
-  const fetchCommissionAmount = async (commissionId: string, currencySymbol: string) => {
-    if (!commissionId) return `${currencySymbol}0`;
-
-    try {
-      const response = await axios({
-        method: "GET",
-        url: getApiLink(appLocalizer, `commission/${commissionId}`),
-        headers: { "X-WP-Nonce": appLocalizer.nonce },
-      });
-      return `${currencySymbol}${response.data.commission_amount || 0}`;
-    } catch (err) {
-      console.error(`Error fetching commission for ID ${commissionId}:`, err);
-      return `${currencySymbol}0`;
-    }
-  };
-
-  const requestApiForData = async (rowsPerPage: number, currentPage: number) => {
-    try {
-      const response = await axios({
-        method: 'GET',
-        url: `${appLocalizer.apiUrl}/wc/v3/orders`,
+  /**
+   * Fetch store list on mount
+   */
+  useEffect(() => {
+    // Fetch store list
+    axios
+      .get(getApiLink(appLocalizer, 'store'), {
         headers: { 'X-WP-Nonce': appLocalizer.nonce },
-        params: {
-          per_page: rowsPerPage,
-          page: currentPage + 1,
-          key: 'multivendorx_store_id',
-        },
+      })
+      .then((response) => setStore(response.data.stores || []))
+      .catch(() => {
+        setError(__('Failed to load stores', 'multivendorx'));
+        setStore([]);
       });
 
-      const total = Number(response.headers['x-wp-total']) || 0;
-      setTotalRows(total);
-
-      // Fetch orders and their commission dynamically
-      const orders: StoreRow[] = await Promise.all(response.data.map(async (order: any) => {
-        const lineItem = order.line_items[0] || {};
-        const storeMeta = lineItem.meta_data.find((meta: any) => meta.key === 'multivendorx_sold_by');
-        const commissionMeta = order.meta_data.find((meta: any) => meta.key === 'multivendorx_commission_id');
-
-        const commission = commissionMeta 
-          ? await fetchCommissionAmount(commissionMeta.value, order.currency_symbol)
-          : `${order.currency_symbol}0`;
-
-        return {
-          id: order.id,
-          vendor: storeMeta ? storeMeta.value : '-',
-          amount: `${order.currency_symbol}${order.total}`,
-          commission,
-          date: order.date_created.split('T')[0],
-          status: order.status,
-          currency: order.currency_symbol,
-        };
-      }));
-
-      setData(orders);
-      setPageCount(Math.ceil(total / rowsPerPage));
-
-    } catch (error) {
-      console.error('Error fetching orders:', error);
-    }
-  };
+    // Fetch total orders count
+    axios({
+      method: 'GET',
+      url: `${appLocalizer.apiUrl}/wc/v3/orders`,
+      headers: { 'X-WP-Nonce': appLocalizer.nonce },
+      params: { meta_key: 'multivendorx_store_id' },
+    })
+      .then((response) => {
+        const total = Number(response.headers['x-wp-total']) || 0;
+        setTotalRows(total);
+        setPageCount(Math.ceil(total / pagination.pageSize));
+      })
+      .catch(() => {
+        setError(__('Failed to load total rows', 'multivendorx'));
+      });
+  }, []);
 
   useEffect(() => {
-    requestApiForData(pagination.pageSize, pagination.pageIndex);
-  }, [pagination.pageSize, pagination.pageIndex]);
+    const currentPage = pagination.pageIndex + 1;
+    const rowsPerPage = pagination.pageSize;
+    requestData(rowsPerPage, currentPage);
+    setPageCount(Math.ceil(totalRows / rowsPerPage));
+  }, [pagination.pageIndex, pagination.pageSize, totalRows]);
 
-  const columns: ColumnDef<StoreRow>[] = [
+  /**
+   * Fetch data from backend
+   */
+  const requestData = (
+    rowsPerPage = 10,
+    currentPage = 1,
+    searchField = '',
+    store_id = '',
+    orderBy = '',
+    order = '',
+    startDate?: string,
+    endDate?: string
+  ) => {
+    setData([]);
+    axios({
+      method: 'GET',
+      url: `${appLocalizer.apiUrl}/wc/v3/orders`,
+      headers: { 'X-WP-Nonce': appLocalizer.nonce },
+      params: {
+        page: currentPage,
+        per_page: rowsPerPage,
+        meta_key: 'multivendorx_store_id',
+        value:store_id,
+        search:searchField,
+        // orderBy,
+        // order,
+        // startDate,
+        // endDate,
+      },
+    })
+      .then((response) => {
+        const orders: StoreRow[] = response.data.map((order: any) => ({
+          id: order.id,
+          store_name: order.store_name || '-',
+          amount: `${order.currency_symbol || ''}${order.total}`,
+          commission_amount: order.commission_amount
+            ? `${order.currency_symbol || ''}${order.commission_amount}`
+            : '-',
+          date: new Date(order.date_created).toLocaleDateString(undefined, {
+            year: 'numeric',
+            month: 'short',
+            day: '2-digit',
+          }),
+          status: order.status,
+          currency_symbol: order.currency_symbol,
+        }));
+        setData(orders);
+      })
+      .catch(() => {
+        setError(__('Failed to load order data', 'multivendorx'));
+        setData([]);
+      });
+  };
+
+  /**
+   * Handle pagination & filter
+   */
+  const requestApiForData = (
+    rowsPerPage: number,
+    currentPage: number,
+    filterData: FilterData
+  ) => {
+    requestData(
+      rowsPerPage,
+      currentPage,
+      filterData?.searchField,
+      filterData?.store_id,
+      filterData?.orderBy,
+      filterData?.order,
+      filterData?.date?.start_date,
+      filterData?.date?.end_date
+    );
+  };
+
+  /**
+   * Realtime Filters
+   */
+  const realtimeFilter: RealtimeFilter[] = [
     {
-      id: 'select',
-      header: ({ table }) => (
-        <input
-          type="checkbox"
-          checked={table.getIsAllRowsSelected()}
-          onChange={table.getToggleAllRowsSelectedHandler()}
-        />
-      ),
-      cell: ({ row }) => (
-        <input
-          type="checkbox"
-          checked={row.getIsSelected()}
-          onChange={row.getToggleSelectedHandler()}
-        />
+      name: 'store_id',
+      render: (updateFilter, filterValue) => (
+        <div className="group-field">
+          <select
+            name="store_id"
+            onChange={(e) => updateFilter(e.target.name, e.target.value)}
+            value={filterValue || ''}
+            className="basic-select"
+          >
+            <option value="">{__('All Stores', 'multivendorx')}</option>
+            {store.map((s: any) => (
+              <option key={s.id} value={s.id}>
+                {s.store_name.charAt(0).toUpperCase() + s.store_name.slice(1)}
+              </option>
+            ))}
+          </select>
+        </div>
       ),
     },
     {
-      header: __('Order Id', 'multivendorx'),
-      cell: ({ row }) => <TableCell>#{row.original.id}</TableCell>,
+      name: 'date',
+      render: (updateFilter) => (
+        <div className="right">
+          <CalendarInput
+            onChange={(range: any) => {
+              updateFilter('date', {
+                start_date: range.startDate,
+                end_date: range.endDate,
+              });
+            }}
+          />
+        </div>
+      ),
+    },
+  ];
+
+  const searchFilter: RealtimeFilter[] = [
+    {
+      name: 'searchAction',
+      render: (updateFilter, filterValue) => (
+        <div className="search-action">
+          <select
+            className="basic-select"
+            value={filterValue || 'order_id'}
+            onChange={(e) => updateFilter('searchAction', e.target.value)}
+          >
+            <option value="order_id">{__('Order ID', 'multivendorx')}</option>
+            <option value="customer">{__('Customer', 'multivendorx')}</option>
+          </select>
+        </div>
+      ),
+    },
+    {
+      name: 'searchField',
+      render: (updateFilter, filterValue) => (
+        <div className="search-section">
+          <input
+            name="searchField"
+            type="text"
+            placeholder={__('Search', 'multivendorx')}
+            onChange={(e) => updateFilter(e.target.name, e.target.value)}
+            value={filterValue || ''}
+            className="basic-select"
+          />
+          <i className="adminlib-search"></i>
+        </div>
+      ),
+    },
+  ];
+
+  /**
+   * Table Columns
+   */
+  const columns: ColumnDef<StoreRow>[] = [
+    {
+      id: 'order_id',
+      header: __('Order', 'multivendorx'),
+      cell: ({ row }) => {
+        const id = row.original.id;
+        const url = `${appLocalizer.site_url.replace(/\/$/, '')}/wp-admin/post.php?post=${id}&action=edit`;
+        return (
+          <TableCell>
+            <a href={url} target="_blank" rel="noopener noreferrer">
+              #{id}
+            </a>
+          </TableCell>
+        );
+      },
     },
     {
       header: __('Store', 'multivendorx'),
-      cell: ({ row }) => <TableCell>{row.original.vendor}</TableCell>,
+      cell: ({ row }) => <TableCell>{row.original.store_name}</TableCell>,
     },
     {
       header: __('Amount', 'multivendorx'),
@@ -125,40 +263,32 @@ const StoreOrders: React.FC = () => {
     },
     {
       header: __('Commission', 'multivendorx'),
-      cell: ({ row }) => <TableCell>{row.original.commission}</TableCell>,
+      cell: ({ row }) => <TableCell>{row.original.commission_amount}</TableCell>,
     },
     {
       header: __('Date', 'multivendorx'),
-      cell: ({ row }) => {
-        const date = new Date(row.original.date);
-        const formattedDate = date.toLocaleDateString(undefined, {
-          year: 'numeric',
-          month: 'short',
-          day: '2-digit',
-        });
-        return <TableCell>{formattedDate}</TableCell>;
-      },
+      cell: ({ row }) => <TableCell>{row.original.date}</TableCell>,
     },
     {
       header: __('Status', 'multivendorx'),
-      cell: ({ row }) => (
-        <TableCell>
-          {row.original.status === "completed" && (
-            <span className="admin-badge green">Completed</span>
-          )}
-          {row.original.status === "processing" && (
-            <span className="admin-badge blue">Processing</span>
-          )}
-          {row.original.status === "refunded" && (
-            <span className="admin-badge red">Refunded</span>
-          )}
-          {row.original.status !== "completed" &&
-           row.original.status !== "processing" &&
-           row.original.status !== "refunded" && (
-            <span className="admin-badge yellow">{row.original.status}</span>
-          )}
-        </TableCell>
-      ),
+      cell: ({ row }) => {
+        const status = row.original.status;
+        const badgeClass =
+          status === 'completed'
+            ? 'green'
+            : status === 'processing'
+              ? 'blue'
+              : status === 'refunded'
+                ? 'red'
+                : 'yellow';
+        return (
+          <TableCell>
+            <span className={`admin-badge ${badgeClass}`}>
+              {status.charAt(0).toUpperCase() + status.slice(1)}
+            </span>
+          </TableCell>
+        );
+      },
     },
   ];
 
@@ -167,24 +297,28 @@ const StoreOrders: React.FC = () => {
       <div className="column">
         <div className="card-header">
           <div className="left">
-            <div className="title">Revenue Distribution</div>
+            <div className="title">
+              {__('Revenue Distribution', 'multivendorx')}
+            </div>
             <div className="des">
               {__('Total Orders:', 'multivendorx')} {totalRows}
             </div>
           </div>
         </div>
+
         <Table
           data={data}
           columns={columns as ColumnDef<Record<string, any>, any>[]}
           rowSelection={rowSelection}
           onRowSelectionChange={setRowSelection}
-          defaultRowsPerPage={10}
+          defaultRowsPerPage={pagination.pageSize}
           pageCount={pageCount}
           pagination={pagination}
           onPaginationChange={setPagination}
           handlePagination={requestApiForData}
           perPageOption={[10, 25, 50]}
-          typeCounts={[]}
+          realtimeFilter={realtimeFilter}
+          searchFilter={searchFilter}
           totalCounts={totalRows}
         />
       </div>

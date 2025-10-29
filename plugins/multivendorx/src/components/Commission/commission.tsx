@@ -301,8 +301,6 @@ const Commission: React.FC = () => {
     },
     ];
 
-    
-
     // Export All CSV Button Component - Downloads ALL filtered data
     const ExportAllCSVButton: React.FC<{
         filterData: FilterData;
@@ -518,7 +516,6 @@ const Commission: React.FC = () => {
         },
         {
             id: 'createdAt',
-
             accessorKey: 'createdAt',
             enableSorting: true,
             header: __('Date', 'multivendorx'),
@@ -535,8 +532,7 @@ const Commission: React.FC = () => {
                 
                 return (
                     <TableCell title={`${formattedDate}` }>
-                        {formattedDate}
-                        
+                        {formattedDate}  
                     </TableCell>
                 );
             },
