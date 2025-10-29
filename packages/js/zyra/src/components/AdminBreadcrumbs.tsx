@@ -22,6 +22,7 @@ interface AdminBreadcrumbsProps {
   goPremiumLink?: string;
   description?: string;
   customContent?: React.ReactNode;
+  action?: React.ReactNode;
 }
 
 const AdminBreadcrumbs: React.FC<AdminBreadcrumbsProps> = ({
@@ -37,7 +38,8 @@ const AdminBreadcrumbs: React.FC<AdminBreadcrumbsProps> = ({
   description,
   customContent ,
   hideBreadcrumb = false,
-  hideTitle = false
+  hideTitle = false,
+  action
 }) => {
   const [notices, setNotices] = useState<string[]>([]);
 
@@ -103,8 +105,6 @@ const AdminBreadcrumbs: React.FC<AdminBreadcrumbsProps> = ({
             )}
           </>
         )}
-
-
         {renderMenuItems && tabData.length > 0 && (
           <div className="tabs-wrapper">
             {submenuRender && (
@@ -118,7 +118,7 @@ const AdminBreadcrumbs: React.FC<AdminBreadcrumbsProps> = ({
                 <i className="adminlib-pro-tag"></i> Upgrade<i className="adminlib-arrow-right"></i>
               </a>
             )}
-
+            {action && <div className="action-wrapper">{action}</div>}
           </div>
         )}
       </div>

@@ -17,43 +17,6 @@
         position: absolute;
         right: 1rem;
         bottom: 1rem;
-
-        .edit-wrapper {
-            position: relative;
-
-            ul {
-                position: absolute;
-                top: 100%;
-                background: #fff;
-                box-shadow: 0 0.125rem 0.5rem 0 rgb(66 62 78 / 12%);
-                width: 11rem;
-                right: 0;
-                margin-top: 0.313rem;
-                padding: 0.5rem 0;
-
-                li {
-                    padding: 0.5rem 1rem;
-                    font-size: 1rem;
-                    margin: 0;
-                    cursor: pointer;
-                    transition: all 0.4s ease;
-
-                    i {
-                        font-size: 1.25rem;
-                        margin-right: 0.313rem;
-                    }
-
-
-                    &:hover {
-                        background: #ece2f9c7;
-                    }
-
-                    &.delete {
-                        color: rgb(199, 7, 7);
-                    }
-                }
-            }
-        }
     }
 
     .details-wrapper {
@@ -76,19 +39,21 @@
                 z-index: 1;
                 position: relative;
 
-                .edit-section{
+                .edit-section {
                     right: -0.5rem;
                     bottom: 0;
 
-                    .edit-wrapper{
-                        ul{
+                    .edit-wrapper {
+                        ul {
                             left: 0;
                         }
                     }
-                    .admin-btn{
+
+                    .admin-btn {
                         padding: 0.5rem;
                     }
                 }
+
                 img {
                     width: 100%;
                 }
@@ -139,7 +104,42 @@
     }
 }
 
+.edit-wrapper {
+    position: relative;
 
+    ul {
+        position: absolute;
+        top: 100%;
+        background: #fff;
+        box-shadow: 0 0.125rem 0.5rem 0 rgb(66 62 78 / 12%);
+        width: 11rem;
+        right: 0;
+        margin-top: 0.313rem;
+        padding: 0.5rem 0;
+
+        li {
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            margin: 0;
+            cursor: pointer;
+            transition: all 0.4s ease;
+
+            i {
+                font-size: 1.25rem;
+                margin-right: 0.313rem;
+            }
+
+
+            &:hover {
+                background: #ece2f9c7;
+            }
+
+            &.delete {
+                color: rgb(199, 7, 7);
+            }
+        }
+    }
+}
 
 
 // old store style (delete)

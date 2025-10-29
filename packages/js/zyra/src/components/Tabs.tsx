@@ -32,10 +32,11 @@ type TabsProps = {
   Link: React.ElementType<LinkProps>;
   settingName?: string;
   onNavigate?: (url: string) => void;
-  action?: React.ReactNode;
+  tabTitleSection?: React.ReactNode;
   appLocalizer?:any;
   submenuRender?: boolean;
   hideBreadcrumb?: boolean;
+  action?: React.ReactNode;
   hideTitle?: boolean;
 };
 
@@ -171,6 +172,7 @@ const Tabs: React.FC<TabsProps> = ({
   appLocalizer,
   submenuRender,
   hideBreadcrumb,
+  action,
   hideTitle
 }) => {
   const [activeTab, setActiveTab] = useState(currentTab);
@@ -428,6 +430,7 @@ const Tabs: React.FC<TabsProps> = ({
         goPremiumLink={appLocalizer.shop_url}
         hideBreadcrumb={hideBreadcrumb}
         hideTitle={hideTitle}
+        action={action}
       />
 
       <div className="general-wrapper">

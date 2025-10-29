@@ -12,6 +12,7 @@ import StoreRegistration from './storeRegistrationForm';
 import Facilitator from './facilitator';
 import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
+import Overview from './overview';
 
 const statusOptions = [
     { label: "Active", value: "active" },
@@ -24,10 +25,12 @@ const EditStore = () => {
     const [data, setData] = useState({});
     const [successMsg, setSuccessMsg] = useState<string | null>(null);
     const [bannerMenu, setBannerMenu] = useState(false);
+    const [actionMenu, setActionMenu] = useState(false);
     const [logoMenu, setLogoMenu] = useState(false);
 
     const bannerRef = useRef(null);
     const logoRef = useRef(null);
+    const actionRef = useRef(null);
 
     // Close menus on outside click
     useEffect(() => {
@@ -37,6 +40,9 @@ const EditStore = () => {
             }
             if (logoRef.current && !logoRef.current.contains(event.target)) {
                 setLogoMenu(false);
+            }
+            if (actionRef.current && !actionRef.current.contains(event.target)) {
+                setActionMenu(false);
             }
         };
         document.addEventListener("click", handleClickOutside);
@@ -81,6 +87,16 @@ const EditStore = () => {
     }, [editId]);
 
     const tabData = [
+        {
+            type: 'file',
+            content: {
+                id: 'overview',
+                name: 'Overview',
+                desc: 'Store Info',
+                hideTabHeader: true,
+                icon: 'adminlib-credit-card',
+            },
+        },
         {
             type: 'file',
             content: {
@@ -155,6 +171,8 @@ const EditStore = () => {
 
     const getForm = (tabId: string) => {
         switch (tabId) {
+            case 'overview':
+                return <Overview id={editId} />;
             case 'store':
                 return <StoreSettings id={editId} />;
             case 'staff':
@@ -288,11 +306,11 @@ const EditStore = () => {
                                             </ul>
                                         </div>
                                     </div>
-                                    <div className="right-section">
+                                    {/* <div className="right-section">
                                         <div className="admin-badge green"><i className="adminlib-eye"></i></div>
                                         <div className="admin-badge yellow"><i className="adminlib-create"></i></div>
                                         <div className="admin-btn btn-purple"><i className="adminlib-mail"></i>Send Mail</div>
-                                    </div>
+                                    </div> */}
                                 </div>
                             </div>
                         </div>
@@ -302,7 +320,29 @@ const EditStore = () => {
                 settingName={'Store'}
                 hideTitle={true}
                 hideBreadcrumb={true}
-                action={action}
+                action={
+
+                    <>
+                        <div className="edit-wrapper">
+                            <span className="" onClick={(e) => {
+                                e.stopPropagation();
+                                setActionMenu((prev) => !prev);
+                                setLogoMenu(false);
+                                setBannerMenu(false);
+                            }}><i className="adminlib-more-vertical"></i></span>
+                            {actionMenu && (
+                                <ul>
+                                    {data.status == 'active' &&
+                                        <li>
+                                            <a href={`${appLocalizer.site_url}/store/${data.slug}`}><i className="adminlib-eye"></i> View Store</a>
+                                        </li>
+                                    }
+                                    <li><i className="adminlib-mail"></i> Send Mail</li>
+                                </ul>
+                            )}
+                        </div>
+                    </>
+                }
             />
 
         </>
