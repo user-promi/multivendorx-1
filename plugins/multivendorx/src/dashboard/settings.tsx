@@ -364,7 +364,7 @@ const settings = () => {
                 settingName="Settings"
                 supprot={[]}
                 Link={SimpleLink}
-                submenuRender={true}           />
+                submenuRender={true} />
 
 
         </>

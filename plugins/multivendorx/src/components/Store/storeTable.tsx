@@ -339,31 +339,34 @@ const StoreTable: React.FC = () => {
                     header={{
                         actions: [
                             ...(row.original.status === 'active'
-                                ? [{
-                                    label: __('Store Details', 'multivendorx'),
-                                    icon: 'adminlib-eye',
-                                    onClick: (rowData) => {
-                                        window.location.href = `?page=multivendorx#&tab=stores&view&id=${rowData.id}`;
-                                    },
-                                    hover: true,
-                                }]
+                                ? [
+                                    {
+                                        label: __('View Store', 'multivendorx'),
+                                        icon: 'adminlib-eye',
+                                        onClick: ({ slug }) => {
+                                            if (!slug) return;
+                                            window.open(`${appLocalizer.site_url}/store/${slug}/`, '_blank');
+                                        },
+                                        hover: true,
+                                    }
+                                ]
                                 : []),
                             {
-                                label: __('Edit Store', 'multivendorx'),
-                                icon: 'adminlib-create',
+                                label: __('Store Details', 'multivendorx'),
+                                icon: 'adminlib-store-support',
                                 onClick: (rowData) => {
                                     window.location.href = `?page=multivendorx#&tab=stores&edit/${rowData.id}`;
                                 },
                                 hover: true
                             },
-                            {
-                                label: __('Delete', 'multivendorx'),
-                                icon: 'adminlib-vendor-form-delete',
-                                onClick: (rowData) => {
-                                    window.location.href = `?page=multivendorx#&tab=stores&edit/${rowData.id}`;
-                                },
-                                hover: true
-                            },
+                            // {
+                            //     label: __('Delete', 'multivendorx'),
+                            //     icon: 'adminlib-vendor-form-delete',
+                            //     onClick: (rowData) => {
+                            //         window.location.href = `?page=multivendorx#&tab=stores&edit/${rowData.id}`;
+                            //     },
+                            //     hover: true
+                            // },
                         ],
                     }}
                 />
@@ -390,7 +393,7 @@ const StoreTable: React.FC = () => {
             ),
         },
     ];
-
+    
     const realtimeFilter: RealtimeFilter[] = [
         {
             name: 'date',

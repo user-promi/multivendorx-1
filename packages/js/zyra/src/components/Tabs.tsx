@@ -35,6 +35,9 @@ type TabsProps = {
   tabTitleSection?: React.ReactNode;
   appLocalizer?:any;
   submenuRender?: boolean;
+  hideBreadcrumb?: boolean;
+  action?: React.ReactNode;
+  hideTitle?: boolean;
 };
 
 // Helper functions outside component to avoid recreation on every render
@@ -168,6 +171,9 @@ const Tabs: React.FC<TabsProps> = ({
   tabTitleSection,
   appLocalizer,
   submenuRender,
+  hideBreadcrumb,
+  action,
+  hideTitle
 }) => {
   const [activeTab, setActiveTab] = useState(currentTab);
   const [menuStack, setMenuStack] = useState<TabData[][]>([tabData]);
@@ -422,6 +428,9 @@ const Tabs: React.FC<TabsProps> = ({
         tabData={tabData}
         goPremium={!appLocalizer.khali_dabba}
         goPremiumLink={appLocalizer.shop_url}
+        hideBreadcrumb={hideBreadcrumb}
+        hideTitle={hideTitle}
+        action={action}
       />
 
       <div className="general-wrapper">

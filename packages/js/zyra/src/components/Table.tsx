@@ -463,17 +463,17 @@ const Table: React.FC<TableProps> = ({
         getSortedRowModel: getSortedRowModel(),
         onSortingChange: (newSorting: Updater<SortingState>) => {
             setSorting(newSorting);
-            
+
             // Extract sorting information and update filterData
             // This will trigger the existing useEffect that handles API calls
-            const sortingArray = typeof newSorting === 'function' 
-                ? newSorting(table.getState().sorting) 
+            const sortingArray = typeof newSorting === 'function'
+                ? newSorting(table.getState().sorting)
                 : newSorting;
-            
+
             const sortingObj = sortingArray[0];
             const orderBy = sortingObj?.id || '';
             const order = sortingObj?.desc ? 'desc' : 'asc';
-            
+
             // Update filterData with sorting parameters
             // This will trigger the existing useEffect that calls handlePagination
             setFilterData(prevData => ({
@@ -519,24 +519,24 @@ const Table: React.FC<TableProps> = ({
 
                     )}
                     <div className="table-action-wrapper">
-                    {searchFilter && (
-                        <div className="search-field">
-                            {searchFilter?.map((filter) => (
-                                <React.Fragment key={filter.name}>
-                                    {filter.render(handleFilterChange, filterData[filter.name])}
-                                </React.Fragment>
-                            ))}
-                        </div>
-                    )}
-                    {actionButton && (
-                        <div className="action-wrapper">
-                            {actionButton?.map((filter) => (
-                                <React.Fragment key={filter.name}>
-                                    {filter.render(handleFilterChange, filterData[filter.name])}
-                                </React.Fragment>
-                            ))}
-                        </div>
-                    )}
+                        {searchFilter && (
+                            <div className="search-field">
+                                {searchFilter?.map((filter) => (
+                                    <React.Fragment key={filter.name}>
+                                        {filter.render(handleFilterChange, filterData[filter.name])}
+                                    </React.Fragment>
+                                ))}
+                            </div>
+                        )}
+                        {actionButton && (
+                            <div className="action-wrapper">
+                                {actionButton?.map((filter) => (
+                                    <React.Fragment key={filter.name}>
+                                        {filter.render(handleFilterChange, filterData[filter.name])}
+                                    </React.Fragment>
+                                ))}
+                            </div>
+                        )}
                     </div>
                 </div>
             )}
@@ -676,32 +676,33 @@ const Table: React.FC<TableProps> = ({
                                 <>
                                     <div className="table-pagination">
                                         <div className="pagination-number-wrapper">
+                                            <div className="show-section">
+                                                {`Showing ${pagination.pageIndex * pagination.pageSize + 1} to ${Math.min(
+                                                    (pagination.pageIndex + 1) * pagination.pageSize,
+                                                    totalCounts
+                                                )} of ${totalCounts} entries `}
 
-                                            Rows per page:
-                                            <select
-                                                className='basic-select'
-                                                value={
-                                                    table.getState().pagination.pageSize
-                                                }
-                                                onChange={(e) =>
-                                                    table.setPageSize(
-                                                        Number(e.target.value)
-                                                    )
-                                                }
-                                            >
-                                                {perPageOption.map((size) => (
-                                                    <option key={size} value={size}>
-                                                        {size}
-                                                    </option>
-                                                ))}
-                                            </select>
-
-                                            {`Showing ${pagination.pageIndex * pagination.pageSize + 1} to ${Math.min(
-                                                (pagination.pageIndex + 1) * pagination.pageSize,
-                                                totalCounts
-                                            )} of ${totalCounts} entries`}
+                                                 Show
+                                                <select
+                                                    className='basic-select'
+                                                    value={
+                                                        table.getState().pagination.pageSize
+                                                    }
+                                                    onChange={(e) =>
+                                                        table.setPageSize(
+                                                            Number(e.target.value)
+                                                        )
+                                                    }
+                                                >
+                                                    {perPageOption.map((size) => (
+                                                        <option key={size} value={size}>
+                                                            {size}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                                entries
+                                            </div>
                                         </div>
-
                                         {totalCounts > pagination.pageSize && (
                                             <div className="pagination-arrow">
                                                 <span

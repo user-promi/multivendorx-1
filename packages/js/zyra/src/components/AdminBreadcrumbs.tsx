@@ -12,6 +12,8 @@ interface AdminBreadcrumbsProps {
   activeTabIcon?: string;
   tabTitle?: string;
   submenuRender?: boolean;
+  hideTitle?: boolean;
+  hideBreadcrumb?: boolean;
   renderBreadcrumb?: () => React.ReactNode;
   renderMenuItems?: (items: any[]) => React.ReactNode;
   tabData?: any[];
@@ -20,6 +22,7 @@ interface AdminBreadcrumbsProps {
   goPremiumLink?: string;
   description?: string;
   customContent?: React.ReactNode;
+  action?: React.ReactNode;
 }
 
 const AdminBreadcrumbs: React.FC<AdminBreadcrumbsProps> = ({
@@ -33,7 +36,10 @@ const AdminBreadcrumbs: React.FC<AdminBreadcrumbsProps> = ({
   goPremium = false,
   goPremiumLink,
   description,
-  customContent,
+  customContent ,
+  hideBreadcrumb = false,
+  hideTitle = false,
+  action
 }) => {
   const [notices, setNotices] = useState<string[]>([]);
 
@@ -62,11 +68,12 @@ const AdminBreadcrumbs: React.FC<AdminBreadcrumbsProps> = ({
         {!submenuRender && (
           <>
             <div className={submenuRender ? "horizontal-title-wrapper" : "title-wrapper"}>
-              <div className="title">
-                {activeTabIcon && <i className={activeTabIcon}></i>}
-                {tabTitle}
-              </div>
-
+              {!hideTitle && (
+                <div className="title">
+                  {activeTabIcon && <i className={activeTabIcon}></i>}
+                  {tabTitle}
+                </div>
+              )}
               <div className="buttons">
                 {buttons.length > 0 &&
                   buttons.map((btn, index) => {
@@ -81,7 +88,7 @@ const AdminBreadcrumbs: React.FC<AdminBreadcrumbsProps> = ({
                       >
                         {iconClass && <i className={iconClass}></i>}
                         {label}
-                       {tooltip && <span className="tooltip">{tooltip}</span> }
+                        {tooltip && <span className="tooltip">{tooltip}</span>}
                       </button>
                     );
                   })}
@@ -91,12 +98,13 @@ const AdminBreadcrumbs: React.FC<AdminBreadcrumbsProps> = ({
             </div>
 
             {description && <div className="description">{description}</div>}
-            {renderBreadcrumb && <div className="breadcrumbs">{renderBreadcrumb()}</div>}
-
+            {!hideBreadcrumb && (
+              <>
+                {renderBreadcrumb && <div className="breadcrumbs">{renderBreadcrumb()}</div>}
+              </>
+            )}
           </>
         )}
-
-
         {renderMenuItems && tabData.length > 0 && (
           <div className="tabs-wrapper">
             {submenuRender && (
@@ -110,7 +118,7 @@ const AdminBreadcrumbs: React.FC<AdminBreadcrumbsProps> = ({
                 <i className="adminlib-pro-tag"></i> Upgrade<i className="adminlib-arrow-right"></i>
               </a>
             )}
-
+            {action && <div className="action-wrapper">{action}</div>}
           </div>
         )}
       </div>

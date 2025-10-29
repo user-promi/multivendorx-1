@@ -287,7 +287,7 @@ const ViewStore = () => {
       />
 
       <div className="store-view-wrapper">
-        {/* <div className='container-wrapper'>
+        <div className='container-wrapper'>
           <div className="card-wrapper width-65">
             <div className="row">
               <div className="column">
@@ -470,11 +470,11 @@ const ViewStore = () => {
               </div>
             </div>
           </div>
-        </div> */}
+        </div>
 
 
         {/* Profile Section */}
-        <div className="store-header row">
+        {/* <div className="store-header row">
           <div className="column profile-section">
             <span className="avater">
               <img src={data.image || ''} alt={data.name || 'Store'} />
@@ -508,7 +508,7 @@ const ViewStore = () => {
             className="column store-image"
             style={{ backgroundImage: `url(${data.banner || ''})` }}
           />
-        </div>
+        </div> */}
 
         {/* Activity + Chart */}
         <div className="row">
