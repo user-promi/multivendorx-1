@@ -371,7 +371,7 @@ const Commission: React.FC = () => {
                 disabled={isDownloading}
                 className="admin-btn btn-purple"
             >
-                <i className="adminlib-export"></i>
+                <span className="adminlib-export"></span>
                 Export Commissions
             </button>
         );

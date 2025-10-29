@@ -6,7 +6,7 @@
 
 .admin-table-wrapper {
     padding: 2rem;
-    margin: 2rem;
+    margin: 1rem;
     background: #fff;
     border-radius: 0.313rem;
 }
@@ -480,6 +480,9 @@
         select {
             width: 3.5rem;
             margin: 0 0.625rem;
+        }
+        .show-section{
+            margin-left: 0.5rem;
         }
     }
 }
