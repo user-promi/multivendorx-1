@@ -15,8 +15,8 @@ use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Notifications_Controller;
 use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Payouts_Controller;
 use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Transaction_Controller;
 use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Reports_Controller;
-use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Refund_Controller;
 use MultiVendorX\Store\Store;
+use MultiVendorX\Commission\CommissionUtil;
 use MultiVendorX\Store\StoreUtil;
 
 defined('ABSPATH') || exit;
@@ -40,6 +40,7 @@ class Rest {
         add_filter('woocommerce_rest_product_object_query', array($this, 'filter_products_by_meta_exists'), 10, 2);
         add_filter('woocommerce_rest_shop_coupon_object_query', array($this, 'filter_coupons_by_meta_exists'), 10, 2);
         add_filter('woocommerce_analytics_products_query_args', array($this, 'filter_low_stock_by_meta_exists'), 10, 1);
+        add_filter('woocommerce_rest_prepare_shop_order_object', array($this, 'filter_orders_by_meta_exists'), 10, 3);
     }
 
     /**
@@ -54,7 +55,6 @@ class Rest {
         if ($store_id) {
             // Get store information
             $store      = new Store( $store_id );
-            $store_name = $store->get('name');
             $store_name = $store->get('name');
             $store_slug = $store->get('slug');
             
@@ -101,9 +101,6 @@ class Rest {
         return $args;
     }
 
-    /**
-     * Filter orders dynamically by meta key and optionally by value
-     */
     public function filter_orders_by_store_id( $args, $request ) {
         $meta_key   = $request->get_param('meta_key');
         $meta_value = $request->get_param('value');
@@ -127,9 +124,9 @@ class Rest {
         } else {
             $args['meta_query'] = [ $store_meta_query ];
         }
-    
         return $args;
     }
+    
 
     /**
      * Filter WooCommerce products by meta key existence.
@@ -227,13 +224,43 @@ class Rest {
         // Get all users for that store
         $users = StoreUtil::get_store_users($active_store);
     
-        if (is_array($users) && in_array($user_id, $users)) {
+        if (is_array($users) && in_array($user_id, $users['users'])) {
             return true;
         }
     
         return $permission; // fallback to default
     }
-    
+
+    public function filter_orders_by_meta_exists( $response, $object, $request ) {
+        $store_id = $object->get_meta('multivendorx_store_id');
+
+        if ($store_id) {
+            // Get store information
+            $store      = new Store( $store_id );
+            $store_name = $store->get('name');
+            $store_slug = $store->get('slug');
+            
+            // Add store data to API response
+            $response->data['store_name'] = $store_name ?: '';
+            $response->data['store_slug'] = $store_slug ?: '';
+            $response->data['store_id'] = $store_id;
+
+        }
+
+        $commission_id = $object->get_meta('multivendorx_commission_id');
+
+        if ( $commission_id ) {
+            $commission = CommissionUtil::get_commission_db( $commission_id );
+        
+            if ( $commission && ! empty( $commission->ID ) ) {
+                // Add only commission amounts to API response
+                $response->data['commission_amount'] = (float) $commission->commission_amount;
+                $response->data['commission_total']  = (float) $commission->commission_total;
+            }
+        }
+        
+        return $response;
+    }
     
     /**
      * Initialize all REST API controller classes.
@@ -250,7 +277,6 @@ class Rest {
             'payouts'   => new MultiVendorX_REST_Payouts_Controller(),
             'transaction'=> new MultiVendorX_REST_Transaction_Controller(),
             'report'=> new MultiVendorX_REST_Reports_Controller(),
-            'refund'=> new MultiVendorX_REST_Refund_Controller(),
             'notifications'=> new MultiVendorX_REST_Notifications_Controller(),
         );
     }

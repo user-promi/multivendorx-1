@@ -12,13 +12,13 @@ import axios from 'axios';
 const Reports = () => {
 
   function requestOrders() {
-    axios({
-      method: "GET",
-      url: `${appLocalizer.apiUrl}/wc-analytics/`,
-      headers: { "X-WP-Nonce": appLocalizer.nonce },
-    })
-      .then(response => console.log("analytics", response.data))
-      .catch(error => console.error(error));
+    // axios({
+    //   method: "GET",
+    //   url: `${appLocalizer.apiUrl}/wc-analytics/`,
+    //   headers: { "X-WP-Nonce": appLocalizer.nonce },
+    // })
+    //   .then(response => console.log("analytics", response.data))
+    //   .catch(error => console.error(error));
 
       axios({
         method: 'GET',

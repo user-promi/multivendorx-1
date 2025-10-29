@@ -11,7 +11,8 @@ import axios from 'axios';
 const CustomerServices = () => {
     const [abuseCount, setAbuseCount] = useState(0);
     const [qnaCount, setQnaCount] = useState(0);
-    const [withdrawCount, setWithdrawCount] = useState(0);
+    const [refundCount, setRefundCount] = useState(0);
+    const [storeCount, setStoreCount] = useState(0);
     const [activeTab, setActiveTab] = useState("products");
 
     // Fetch total count on mount
@@ -40,7 +41,18 @@ const CustomerServices = () => {
             .catch(() => {
                 console.error('Failed to load total rows');
             });
-
+        axios({
+            method: 'GET',
+            url: getApiLink(appLocalizer, 'refund'),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            params: { count: true },
+        })
+            .then((response) => {
+                setRefundCount(response.data || 0);
+            })
+            .catch(() => {
+                console.error('Failed to load total rows');
+            });
         axios({
             method: 'GET',
             url: getApiLink(appLocalizer, 'store'),
@@ -49,52 +61,15 @@ const CustomerServices = () => {
         })
             .then((response) => {
                 const count = response.data.length || 0; // response.data is an array of stores with pending withdraw
-                setWithdrawCount(count);
+                setStoreCount(count);
             })
-            .catch(() => setWithdrawCount(0));
+            .catch(() => setStoreCount(0));
     }, []);
 
-    const CustomerServicesStats = [
-        {
-            id: 'reviews',
-            label: 'Pending Reviews(static)',
-            count: 12,
-            icon: 'adminlib-star',
-        },
-        {
-            id: 'support',
-            label: 'Open Support Tickets(static)',
-            count: 5,
-            icon: 'adminlib-support',
-        },
-        {
-            id: 'withdrawals',
-            label: 'Withdrawal Requests',
-            count: withdrawCount,
-            icon: 'adminlib-global-community',
-        },
-        {
-            id: 'refunds',
-            label: 'Refund Requests(static)',
-            count: 3,
-            icon: 'adminlib-catalog',
-        },
-        {
-            id: 'abuse',
-            label: 'Abuse Reports',
-            count: abuseCount,
-            icon: 'adminlib-calendar',
-        },
-        {
-            id: 'qna',
-            label: 'Customer qna',
-            count: qnaCount,
-            icon: 'adminlib-calendar',
-        },
-    ];
+
     const tabs = [
         {
-            id: "products", label: "Questions", icon: "adminlib-calendar red",  des: "Waiting for your response", count: qnaCount, content:
+            id: "products", label: "Questions", icon: "adminlib-calendar red", des: "Waiting for your response", count: qnaCount, content:
                 <>
                     <div className="card-header">
                         <div className="left">
@@ -110,7 +85,7 @@ const CustomerServices = () => {
                     <Qna /></>
         },
         {
-            id: "review", label: "Store Reviews", icon: "adminlib-calendar green", count: 9,  des: "Shared by customers", content:
+            id: "review", label: "Store Reviews", icon: "adminlib-calendar green", count: 9, des: "Shared by customers", content:
                 <>
                     <div className="card-header">
                         <div className="left">
@@ -127,7 +102,7 @@ const CustomerServices = () => {
                 </>
         },
         {
-            id: "reports", label: "Products Reported", icon: "adminlib-calendar yellow",  des: "Flagged for abuse review", count: abuseCount, content:
+            id: "reports", label: "Products Reported", icon: "adminlib-calendar yellow", des: "Flagged for abuse review", count: abuseCount, content:
                 <>
                     <div className="card-header">
                         <div className="left">
@@ -144,7 +119,7 @@ const CustomerServices = () => {
                 </>
         },
         {
-            id: "refund-requests", label: "Refund Requests", icon: "adminlib-calendar blue",  des: "Need your decision", count: 3, content:
+            id: "refund-requests", label: "Refund Requests", icon: "adminlib-calendar blue", des: "Need your decision", count: refundCount, content:
                 <>
                     <div className="card-header">
                         <div className="left">

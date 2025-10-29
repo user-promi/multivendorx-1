@@ -26,7 +26,6 @@ class Hooks {
      * @return  void
      */
     public function create_commission( $vendor_order, $main_order ) {
-
         $processed = $vendor_order->get_meta( 'multivendorx_commissions_processed', true );
 
         if ( ! $processed ) {
@@ -60,6 +59,12 @@ class Hooks {
 
         if ($commission_id) {
             $refund->update_meta_data( '_commission_refund_processed', true );
+
+            $store_id = $order->get_meta('multivendorx_store_id');
+            if( $store_id ){
+                $refund->update_meta_data( 'multivendorx_store_id', $store_id );
+            }
+            
             $refund->save();
 
             /**
