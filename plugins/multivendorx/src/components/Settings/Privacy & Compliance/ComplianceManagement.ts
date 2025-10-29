@@ -10,16 +10,10 @@ export default {
     modal: [
         
         {
-            key: 'separator_content',
-            type: 'section',
-            hint: __("What Must Sellers Complete Before Selling?", 'multivendorx'),
-            desc: __('Check all requirements sellers must finish to activate their store')
-        },
-        {
             key: 'store_compliance_management',
             type: 'payment-tabs',
-            label: 'Store Compliance Management',
-            // settingDescription: __('Allow stores to verify their identity by connecting social media accounts.', 'multivendorx'),
+            label: 'What Must Sellers Complete Before Selling?',
+            settingDescription: __('Check all requirements sellers must finish to activate their store', 'multivendorx'),
             modal: [
                 {
                     id: 'seller-verification',
