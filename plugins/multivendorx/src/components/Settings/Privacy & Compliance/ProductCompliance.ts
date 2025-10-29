@@ -17,6 +17,12 @@ export default {
                 'Define one or more product categories that are not allowed to be listed on your marketplace.',
                 'multivendorx'
             ),
+            defaultValues: [
+                { value: "Weapons & ammunition", locked: true, iconClass: "adminlib-check", description: "", tag:"Primary",required: true },
+                { value: "Illegal drugs & substances", locked: true, iconClass: "adminlib-clock", description: "",tag:"Primary",required: true },
+                { value: "Counterfeit products", locked: true, iconClass: "adminlib-clock", description: "",tag:"Primary",required: true },
+                { value: "Stolen goods", locked: true, iconClass: "adminlib-clock", description: "",tag:"Primary",required: true },
+            ],
             desc: __(
                 '<b>Note:</b> Ensure sellers are informed about disallowed items before publishing. Violations may result in product removal or account penalties.',
                 'multivendorx'
