@@ -145,7 +145,7 @@ interface InputField {
     preText?: string;
     postText?: string;
     proSetting?: boolean;
-    moduleEnabled?: boolean;
+    moduleEnabled?: string;
     postInsideText?: string;
     parameter?: string;
     generate?: string;
@@ -622,7 +622,49 @@ const AdminForm: React.FC<AdminFormProps> = ({
         }
         return true;
     };
+    // NEW: Click handler for the entire .form-group
+    const handleGroupClick = (
+        e: React.MouseEvent<HTMLDivElement>,
+        field: InputField
+    ) => {
+        // Stop if already handled by inner elements (optional)
+        // But we want to trigger popup on ANY click inside the group
 
+        // 1. Pro Setting
+        if (field.proSetting && !appLocalizer?.khali_dabba) {
+            setModelOpen(true);
+            e.stopPropagation();
+            return;
+        }
+
+        // 2. Module Enabled but not active
+        if (field.moduleEnabled && !modules.includes(field.moduleEnabled)) {
+            setModulePopupData({
+                moduleName: field.moduleEnabled,
+                settings: '',
+                plugin: '',
+            });
+            setModelOpen(true);
+            e.stopPropagation();
+            return;
+        }
+
+        // 3. Dependent Setting (empty array)
+        if (
+            field.dependentSetting &&
+            Array.isArray(setting[field.dependentSetting]) &&
+            setting[field.dependentSetting].length === 0
+        ) {
+            setModulePopupData({
+                moduleName: '',
+                settings: field.dependentSetting,
+                plugin: '',
+            });
+            setModelOpen(true);
+            e.stopPropagation();
+            return;
+        }
+    };
     const renderForm = () => {
         return modal.map((inputField: InputField) => {
             const value: any = setting[inputField.key] ?? '';
@@ -957,6 +999,18 @@ const AdminForm: React.FC<AdminFormProps> = ({
                     break;
 
                 case 'multi-string':
+                    const existingValues = setting[inputField.key];
+                    const defaultValues = inputField.defaultValues || [];
+
+                    //Auto-save default values when not yet saved
+                    useEffect(() => {
+                        if ((!existingValues || existingValues.length === 0) && defaultValues.length > 0) {
+                            handleChange(
+                                { target: { name: inputField.key, value: defaultValues } },
+                                inputField.key
+                            );
+                        }
+                    }, [existingValues, defaultValues, inputField.key]);
                     input = (
                         <MultiInput
                             inputType="multi-string"
@@ -1846,7 +1900,16 @@ const AdminForm: React.FC<AdminFormProps> = ({
                     );
                     break;
             }
-            return inputField.type === 'section' ||
+            const isLocked =
+                (inputField.proSetting && !appLocalizer?.khali_dabba) ||
+                (inputField.moduleEnabled && !modules.includes(inputField.moduleEnabled)) ||
+                (inputField.dependentSetting &&
+                    Array.isArray(setting[inputField.dependentSetting]) &&
+                    setting[inputField.dependentSetting].length === 0) ||
+                (inputField.dependentPlugin &&
+                    !appLocalizer[`${inputField.dependentPlugin}_active`]);
+
+            const fieldContent = inputField.type === 'section' ||
                 inputField.label === 'no_label' ? (
                 <>{input}</>
             ) : (
@@ -1854,6 +1917,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                     key={'g' + inputField.key}
                     className={`form-group ${inputField.classes ? inputField.classes : ''
                         } ${inputField.proSetting ? 'pro-setting' : ''} ${(!inputField.proSetting && inputField.moduleEnabled) ? 'module-enabled' : ''}`}
+                    onClick={(e) => handleGroupClick(e, inputField)}
                 >
                     {inputField.label && inputField.type !== 'catalog-customizer' &&
                         inputField.type !== 'form-customizer' && (
@@ -1866,8 +1930,16 @@ const AdminForm: React.FC<AdminFormProps> = ({
                                 <div className="settings-metabox-description">{inputField.settingDescription}</div>
                             </label>
                         )}
-
-                    <div className="settings-input-content">{input}</div>
+                    <div className="settings-input-content">
+                        {/* If locked, prevent inner clicks from bubbling */}
+                        {isLocked && input ? React.cloneElement(input as React.ReactElement, {
+                            onClick: (e: React.MouseEvent) => {
+                                e.stopPropagation();
+                                // Optional: still allow copy/generate if needed
+                                // Or fully block interaction
+                            },
+                        }) : input}
+                    </div>
                     {(!inputField.proSetting && inputField.moduleEnabled) && (
                         <span className="admin-pro-tag module">
                             <i className={`adminlib-${inputField.moduleEnabled}`}></i>
@@ -1880,6 +1952,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                     )}
                 </div>
             );
+            return fieldContent;
         });
     };
 

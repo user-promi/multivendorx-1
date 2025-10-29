@@ -380,8 +380,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                         'store_image' => $store_image, // Add store image
                         'store_banner' => $store_banner, // Add store banner
                         'address_1'   => $store_meta->meta_data['address_1'] ?? '',
-                        'image'     => $store_meta->meta_data['image'] ?? MultiVendorX()->plugin_url . 'assets/images/default-store.jpg',
-
+                        'image' => ! empty( $store_meta->meta_data['image'] ) ? $store_meta->meta_data['image'] : null,
                     )
                 );
             }

@@ -61,7 +61,7 @@
       box-shadow: -0.313rem 0 0 0 #d9f5f059, 0.313rem 0 0 0 #d9f5f059;
 
       .adminlib-lock{
-        color: red;
+        color: blue;
       }
     }
   }
@@ -141,6 +141,7 @@
   color: $sub-text-color;
   width: 100%;
   line-height: 1.5;
+  margin: 0;
 
   b {
     color: #000000b7;

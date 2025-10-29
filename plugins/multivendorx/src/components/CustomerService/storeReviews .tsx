@@ -33,7 +33,6 @@ const StoreReviews: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(false);
     const [selectedReview, setSelectedReview] = useState<Review | null>(null);
     const [replyText, setReplyText] = useState<string>('');
-    const [saving, setSaving] = useState<boolean>(false);
 
     const [pagination, setPagination] = useState<PaginationState>({
         pageIndex: 0,
@@ -111,7 +110,6 @@ const StoreReviews: React.FC = () => {
     // 🔹 Handle reply saving
     const handleSaveReply = async () => {
         if (!selectedReview) return;
-        setSaving(true);
         try {
             await axios.put(
                 getApiLink(appLocalizer, `review/${selectedReview.review_id}`),
@@ -121,7 +119,7 @@ const StoreReviews: React.FC = () => {
                 },
                 { headers: { 'X-WP-Nonce': appLocalizer.nonce } }
             );
-    
+
             setData((prev) =>
                 prev.map((r) =>
                     r.review_id === selectedReview.review_id
@@ -129,16 +127,16 @@ const StoreReviews: React.FC = () => {
                         : r
                 )
             );
-    
+
             setSelectedReview(null);
             setReplyText('');
         } catch {
             alert(__('Failed to save reply', 'multivendorx'));
         } finally {
-            setSaving(false);
+            // setSaving(false);
         }
     };
-    
+
     console.log(appLocalizer)
     // 🔹 Table Columns
     const columns: ColumnDef<Review>[] = [
@@ -188,10 +186,20 @@ const StoreReviews: React.FC = () => {
                 const rating = row.original.overall_rating ?? 0;
                 return (
                     <TableCell title={rating.toString()}>
-                        {rating > 0
-                            ? '★'.repeat(Math.round(rating)) +
-                            '☆'.repeat(5 - Math.round(rating))
-                            : '-'}
+                        <div className="rating-wrapper">
+                            {rating > 0 ? (
+                                <>
+                                    {[...Array(Math.round(rating))].map((_, i) => (
+                                        <i key={`filled-${i}`} className="adminlib-star"></i>
+                                    ))}
+                                    {[...Array(5 - Math.round(rating))].map((_, i) => (
+                                        <i key={`empty-${i}`} className="adminlib-star-o"></i>
+                                    ))}
+                                </>
+                            ) : (
+                                '-'
+                            )}
+                        </div>
                     </TableCell>
                 );
             },
@@ -208,18 +216,31 @@ const StoreReviews: React.FC = () => {
         {
             id: 'content',
             header: __('Review', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.review_content}>
-                    {row.original.review_content || '-'}
-                </TableCell>
-            ),
+            cell: ({ row }) => {
+                const content = row.original.review_content || '';
+                const shortText = content.length > 40 ? content.substring(0, 40) + '...' : content;
+
+                return (
+                    <TableCell title={content}>
+                        {shortText || '-'}
+                    </TableCell>
+                );
+            },
         },
         {
             id: 'status',
             header: __('Status', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell title={row.original.status}>
-                    {row.original.status}
+                    {row.original.status === "Approved" && (
+                        <span className="admin-badge green">Active</span>
+                    )}
+                    {row.original.status === "Pending" && (
+                        <span className="admin-badge yellow">Pending</span>
+                    )}
+                    {row.original.status === "Rejected" && (
+                        <span className="admin-badge red">Rejected</span>
+                    )}
                 </TableCell>
             ),
         },
@@ -243,7 +264,7 @@ const StoreReviews: React.FC = () => {
                         actions: [
                             {
                                 label: __('Reply / Edit', 'multivendorx'),
-                                icon: 'adminlib-eye',
+                                icon: 'adminlib-create',
                                 onClick: () => {
                                     setSelectedReview(row.original);
                                     setReplyText(row.original.reply || '');
@@ -274,7 +295,7 @@ const StoreReviews: React.FC = () => {
                                                     },
                                                 }
                                             );
-                            
+
                                             // ✅ Refresh the table after delete
                                             requestData(
                                                 pagination.pageSize,
@@ -288,7 +309,7 @@ const StoreReviews: React.FC = () => {
                                 },
                                 hover: true,
                             }
-                            
+
                         ],
                     }}
                 />
@@ -298,32 +319,37 @@ const StoreReviews: React.FC = () => {
 
     return (
         <>
-                {error && <div className="error">{error}</div>}
-                <Table
-                    data={data || []}
-                    columns={columns as ColumnDef<Record<string, any>, any>[]}
-                    rowSelection={rowSelection}
-                    onRowSelectionChange={setRowSelection}
-                    defaultRowsPerPage={10}
-                    pageCount={pageCount}
-                    pagination={pagination}
-                    onPaginationChange={setPagination}
-                    handlePagination={requestApiForData}
-                    perPageOption={[10, 25, 50]}
-                    totalCounts={totalRows}
-                />
-
-            {/* ✅ Reply/Edit Popup */}
+            {error && <div className="error">{error}</div>}
+            <Table
+                data={data || []}
+                columns={columns as ColumnDef<Record<string, any>, any>[]}
+                rowSelection={rowSelection}
+                onRowSelectionChange={setRowSelection}
+                defaultRowsPerPage={10}
+                pageCount={pageCount}
+                pagination={pagination}
+                onPaginationChange={setPagination}
+                handlePagination={requestApiForData}
+                perPageOption={[10, 25, 50]}
+                totalCounts={totalRows}
+            />
             {selectedReview && (
                 <CommonPopup
                     open={!!selectedReview}
                     onClose={() => setSelectedReview(null)}
-                    width="600px"
+                    width="500px"
                     header={
-                        <div className="title">
-                            <i className="adminlib-comment"></i>{' '}
-                            {__('Reply to Review', 'multivendorx')} — {selectedReview.customer_name}
-                        </div>
+                        <>
+                            <div className="title">
+                                <i className="adminlib-store-review"></i>
+                                {__('Reply to Review', 'multivendorx')} — {selectedReview.customer_name}
+                            </div>
+                            <p>Publish important news, updates, or alerts that appear directly in store dashboards, ensuring sellers never miss critical information.</p>
+                            <i
+                                onClick={() => setSelectedReview(null)}
+                                className="icon adminlib-close"
+                            ></i>
+                        </>
                     }
                     footer={
                         <>
@@ -336,48 +362,47 @@ const StoreReviews: React.FC = () => {
                             </button>
                             <button
                                 onClick={handleSaveReply}
-                                disabled={saving}
                                 className="admin-btn btn-purple"
                             >
-                                {saving
-                                    ? __('Saving...', 'multivendorx')
-                                    : __('Save Reply', 'multivendorx')}
+                                Save
                             </button>
                         </>
                     }
                 >
                     <div className="content">
-                        {/* Reply Text */}
-                        <div className="form-group">
-                            <label htmlFor="reply">{__('Your Reply', 'multivendorx')}</label>
-                            <textarea
-                                id="reply"
-                                value={replyText}
-                                onChange={(e) => setReplyText(e.target.value)}
-                                rows={5}
-                              className="textarea-input"
-                            />
-                        </div>
+                        <div className="form-group-wrapper">
+                            <div className="form-group">
+                                <label htmlFor="reply">{__('Your Reply', 'multivendorx')}</label>
+                                <textarea
+                                    id="reply"
+                                    value={replyText}
+                                    onChange={(e) => setReplyText(e.target.value)}
+                                    rows={5}
+                                    className="textarea-input"
+                                />
+                            </div>
 
-                        {/* Status Toggle */}
-                        <div className="form-group">
-                            <label htmlFor="status">{__('Review Status', 'multivendorx')}</label>
-                            <ToggleSetting
-                                wrapperClass="setting-form-input"
-                                descClass="settings-metabox-description"
-                                description={__('Change review status', 'multivendorx')}
-                                options={[
-                                    { key: 'pending', value: 'Pending', label: __('Pending', 'multivendorx') },
-                                    { key: 'approved', value: 'Approved', label: __('Approved', 'multivendorx') },
-                                    { key: 'rejected', value: 'Rejected', label: __('Rejected', 'multivendorx') },
-                                ]}
-                                value={selectedReview.status}
-                                onChange={(val) => {
-                                    setSelectedReview((prev) =>
-                                        prev ? { ...prev, status: val } : prev
-                                    );
-                                }}
-                            />
+                            {/* Status Toggle */}
+                            <div className="form-group">
+                                <label htmlFor="status">{__('Review Status', 'multivendorx')}</label>
+                                <ToggleSetting
+                                    wrapperClass="setting-form-input"
+                                    descClass="settings-metabox-description"
+                                    description={__('Change review status', 'multivendorx')}
+                                    options={[
+                                        { key: 'pending', value: 'Pending', label: __('Pending', 'multivendorx') },
+                                        { key: 'approved', value: 'Approved', label: __('Approved', 'multivendorx') },
+                                        { key: 'rejected', value: 'Rejected', label: __('Rejected', 'multivendorx') },
+                                    ]}
+                                    value={selectedReview.status}
+                                    onChange={(val) => {
+                                        setSelectedReview((prev) =>
+                                            prev ? { ...prev, status: val } : prev
+                                        );
+                                    }}
+                                />
+                            </div>
+                            <div className="space"></div>
                         </div>
                     </div>
                 </CommonPopup>

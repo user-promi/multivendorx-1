@@ -30,6 +30,11 @@ interface Transaction {
   withdraw_amount?: string;
 }
 
+type Product = {
+  id: number;
+  title: string;
+  price: string;
+};
 const COLORS = ['#4CAF50', '#FF9800', '#F44336', '#2196F3'];
 
 const ViewStore = () => {
@@ -43,6 +48,33 @@ const ViewStore = () => {
   const location = useLocation();
   const viewId = new URLSearchParams(location.hash.replace(/^#/, '')).get('id');
   const headers = { 'X-WP-Nonce': appLocalizer.nonce };
+  const products: Product[] = [
+    {
+      id: 1,
+      title: "Admin Net Earning",
+      price: "$5,072.31",
+    },
+    {
+      id: 1,
+      title: "Store Net Earning",
+      price: "$1,713.85",
+    },
+    {
+      id: 1,
+      title: "Shipping",
+      price: "$75",
+    },
+    {
+      id: 1,
+      title: "Tax",
+      price: "$1,713.85",
+    },
+    {
+      id: 1,
+      title: "Total",
+      price: "$855552",
+    },
+  ];
 
   // 🔹 Helper for GET calls
   const fetchAPI = async (endpoint: string) => {
@@ -176,8 +208,8 @@ const ViewStore = () => {
           i < Math.floor(rating)
             ? "adminlib-star"
             : i < rating
-            ? "adminlib-star half"
-            : "adminlib-star-o"
+              ? "adminlib-star half"
+              : "adminlib-star-o"
         }
       ></i>
     ));
@@ -239,7 +271,7 @@ const ViewStore = () => {
             label: '',
             iconClass: 'adminlib-create',
             onClick: () =>
-             window.location.href = `?page=multivendorx#&tab=stores&edit/${viewId}`,
+              window.location.href = `?page=multivendorx#&tab=stores&edit/${viewId}`,
             className: 'admin-badge yellow',
             tooltip: 'Edit'
           },
@@ -248,13 +280,199 @@ const ViewStore = () => {
             iconClass: 'adminlib-eye',
             onClick: () =>
               data.slug && window.open(`${appLocalizer.site_url}/store/${data.slug}/`, '_blank'),
-              className: 'admin-badge green',
-              tooltip: 'View Public Store'
+            className: 'admin-badge green',
+            tooltip: 'View Public Store'
           },
         ]}
       />
 
       <div className="store-view-wrapper">
+        {/* <div className='container-wrapper'>
+          <div className="card-wrapper width-65">
+            <div className="row">
+              <div className="column">
+                <div className="multivendorx-banner template3">
+                  <div className="banner-img">
+                    <img src={data.banner || ''} alt={data.name || 'Store'} />
+                  </div>
+                  <div className="details-wrapper">
+                    <div className="store-details">
+
+                      <div className="profile">
+                        <img src={data.image || ''} alt={data.name || 'Store'} className="multivendorx-profile-imgcls" />
+                      </div>
+                      <div className="details">
+                        <div className="heading">store 1fgfgfghhghghh</div>
+                        <div className="container">
+
+                          <div className="contact-details">
+                            <div className="row">
+                              <div className="store-email"><i className="adminlib-mail"></i> info@phoenixcoded.co</div><div className="store-phone"> <i className="adminlib-form-phone"></i>987466310.6</div>                    </div>
+                            <div className="store-address"> <i className="adminlib-location"></i>Basic information Basic information Basic information</div>                </div>
+
+                        </div>
+                      </div>
+                    </div>
+                    <div className="store-details">
+
+                      <div className="profile">
+                        <img src={data.image || ''} alt={data.name || 'Store'} className="multivendorx-profile-imgcls" />
+                      </div>
+                      <div className="details">
+                        <div className="heading">store 1fgfgfghhghghh</div>
+                        <div className="container">
+
+                          <div className="contact-details">
+                            <div className="row">
+                              <div className="store-email"><i className="adminlib-mail"></i> info@phoenixcoded.co</div><div className="store-phone"> <i className="adminlib-form-phone"></i>987466310.6</div>                    </div>
+                            <div className="store-address"> <i className="adminlib-location"></i>Basic information Basic information Basic information</div>
+                            <div className="store-address"> <i className="adminlib-Export-import-Stock-01"></i>Since Oct 10, 2025</div>                </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="row">
+              <div className="column">
+                <div className="chart-box">
+                  <h3>Products</h3>
+                  <ResponsiveContainer width="100%" height={250}>
+                    <PieChart>
+                      <Pie data={productCounts} cx="50%" cy="50%" outerRadius={80} dataKey="value" label>
+                        {productCounts.map((entry, index) => (
+                          <Cell key={index} fill={COLORS[index % COLORS.length]} />
+                        ))}
+                      </Pie>
+                      <Tooltip />
+                      <Legend />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+              <div className="column">
+                <h3>Top Products</h3>
+                <div className="top-items">
+                  <div className="items">
+                    <div className="left-side">
+                      <div className="icon">
+                        <i className="adminlib-pro-tag admin-icon red"></i>
+                      </div>
+                      <div className="details">
+                        <div className="item-title">Lather & Loom</div>
+                        <div className="sub-text">3 orders</div>
+                      </div>
+                    </div>
+                    <div className="right-side">
+                      <div className="price">$380</div>
+                    </div>
+                  </div>
+                  <div className="items">
+                    <div className="left-side">
+                      <div className="icon">
+                        <i className="adminlib-pro-tag admin-icon red"></i>
+                      </div>
+                      <div className="details">
+                        <div className="item-title">Lather & Loom</div>
+                        <div className="sub-text">3 orders</div>
+                      </div>
+                    </div>
+                    <div className="right-side">
+                      <div className="price">$380</div>
+                    </div>
+                  </div>
+                  <div className="items">
+                    <div className="left-side">
+                      <div className="icon">
+                        <i className="adminlib-pro-tag admin-icon red"></i>
+                      </div>
+                      <div className="details">
+                        <div className="item-title">Lather & Loom</div>
+                        <div className="sub-text">3 orders</div>
+                      </div>
+                    </div>
+                    <div className="right-side">
+                      <div className="price">$380</div>
+                    </div>
+                  </div>
+                  <div className="items">
+                    <div className="left-side">
+                      <div className="icon">
+                        <i className="adminlib-pro-tag admin-icon red"></i>
+                      </div>
+                      <div className="details">
+                        <div className="item-title">Lather & Loom</div>
+                        <div className="sub-text">3 orders</div>
+                      </div>
+                    </div>
+                    <div className="right-side">
+                      <div className="price">$380</div>
+                    </div>
+                  </div>
+                  <div className="items">
+                    <div className="left-side">
+                      <div className="icon">
+                        <i className="adminlib-pro-tag admin-icon green"></i>
+                      </div>
+                      <div className="details">
+                        <div className="item-title">Lather & Loom</div>
+                        <div className="sub-text">3 orders</div>
+                      </div>
+                    </div>
+                    <div className="right-side">
+                      <div className="price">$380</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="card-wrapper width-35">
+            <div className="row">
+              <div className="column">
+                <h3>Recent Activity (Static)</h3>
+                <div className="activity-wrapper">
+                  {activities.map((a, i) => (
+                    <div key={i} className="activity">
+                      <span className="icon">
+                        <i className={a.icon}></i>
+                      </span>
+                      <div className="details">
+                        {a.text}
+                        <span>2 minutes ago</span>
+                      </div>
+                    </div>
+                  ))}
+                  {activities.map((a, i) => (
+                    <div key={i} className="activity">
+                      <span className="icon">
+                        <i className={a.icon}></i>
+                      </span>
+                      <div className="details">
+                        {a.text}
+                        <span>2 minutes ago</span>
+                      </div>
+                    </div>
+                  ))}
+                  {activities.map((a, i) => (
+                    <div key={i} className="activity">
+                      <span className="icon">
+                        <i className={a.icon}></i>
+                      </span>
+                      <div className="details">
+                        {a.text}
+                        <span>2 minutes ago</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> */}
+
+
         {/* Profile Section */}
         <div className="store-header row">
           <div className="column profile-section">
@@ -292,32 +510,9 @@ const ViewStore = () => {
           />
         </div>
 
-        {/* Cards */}
-        <div className="row">
-          {cards.map((card, i) => (
-            <div key={i} className="column">
-              <div className="cards">
-                <div className="title-wrapper">
-                  <div>{card.title}</div>
-                  <span className={card.color}>{card.trend}</span>
-                </div>
-                <div className="card-body">
-                  <div className="value">
-                    <span>{card.value}</span>
-                    <a href={card.link}>View Details</a>
-                  </div>
-                  <span className="icon">
-                    <i className="adminlib-rules"></i>
-                  </span>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-
         {/* Activity + Chart */}
         <div className="row">
-          <div className="column">
+          <div className="column w-40">
             <h3>Recent Activity (Static)</h3>
             <div className="activity-wrapper">
               {activities.map((a, i) => (
@@ -334,21 +529,105 @@ const ViewStore = () => {
             </div>
           </div>
 
-          <div className="column">
-            <div className="chart-box">
-              <h3>Products</h3>
-              <ResponsiveContainer width="100%" height={250}>
-                <PieChart>
-                  <Pie data={productCounts} cx="50%" cy="50%" outerRadius={80} dataKey="value" label>
-                    {productCounts.map((entry, index) => (
-                      <Cell key={index} fill={COLORS[index % COLORS.length]} />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                  <Legend />
-                </PieChart>
-              </ResponsiveContainer>
+          <div className="column w-40">
+            <div className="top-items">
+              <div className="items">
+                <div className="left-side">
+                  <div className="icon">
+                    <i className="adminlib-pro-tag admin-icon red"></i>
+                  </div>
+                  <div className="details">
+                    <div className="item-title">Lather & Loom</div>
+                    <div className="sub-text">3 orders</div>
+                  </div>
+                </div>
+                <div className="right-side">
+                  <div className="price">$380</div>
+                </div>
+              </div>
+              <div className="items">
+                <div className="left-side">
+                  <div className="icon">
+                    <i className="adminlib-pro-tag admin-icon red"></i>
+                  </div>
+                  <div className="details">
+                    <div className="item-title">Lather & Loom</div>
+                    <div className="sub-text">3 orders</div>
+                  </div>
+                </div>
+                <div className="right-side">
+                  <div className="price">$380</div>
+                </div>
+              </div>
+              <div className="items">
+                <div className="left-side">
+                  <div className="icon">
+                    <i className="adminlib-pro-tag admin-icon red"></i>
+                  </div>
+                  <div className="details">
+                    <div className="item-title">Lather & Loom</div>
+                    <div className="sub-text">3 orders</div>
+                  </div>
+                </div>
+                <div className="right-side">
+                  <div className="price">$380</div>
+                </div>
+              </div>
+              <div className="items">
+                <div className="left-side">
+                  <div className="icon">
+                    <i className="adminlib-pro-tag admin-icon red"></i>
+                  </div>
+                  <div className="details">
+                    <div className="item-title">Lather & Loom</div>
+                    <div className="sub-text">3 orders</div>
+                  </div>
+                </div>
+                <div className="right-side">
+                  <div className="price">$380</div>
+                </div>
+              </div>
+              <div className="items">
+                <div className="left-side">
+                  <div className="icon">
+                    <i className="adminlib-pro-tag admin-icon green"></i>
+                  </div>
+                  <div className="details">
+                    <div className="item-title">Lather & Loom</div>
+                    <div className="sub-text">3 orders</div>
+                  </div>
+                </div>
+                <div className="right-side">
+                  <div className="price">$380</div>
+                </div>
+              </div>
             </div>
+          </div>
+          <div className="column profile-section">
+            <span className="avater">
+              <img src={data.image || ''} alt={data.name || 'Store'} />
+            </span>
+            <div className="name">{data.name || 'Unnamed Store'}</div>
+            <div className="des">{data.description || ''}</div>
+            {data.phone && (
+              <div className="details">
+                <i className="adminlib-form-phone"></i>
+                {data.phone}
+              </div>
+            )}
+            {data.email && (
+              <div className="details">
+                <i className="adminlib-mail"></i>
+                {data.email}
+              </div>
+            )}
+            {data.email && (
+              <div className="details">
+                <i className="adminlib-Export-import-Stock-01"></i>
+                Since Oct 10, 2025
+              </div>
+            )}
+            
           </div>
         </div>
 

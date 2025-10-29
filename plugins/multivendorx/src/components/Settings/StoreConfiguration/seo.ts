@@ -5,7 +5,7 @@ export default {
     priority: 6,
     name: __( 'SEO', 'mvx-pro' ),
     desc: __( 'Enable stores to enhance their product visibility using advanced third-party SEO plugins.', 'mvx-pro' ),
-    icon: 'adminlib-support',
+    icon: 'adminlib-store-seo',
     submitUrl: 'settings',
     modal: [       
         {

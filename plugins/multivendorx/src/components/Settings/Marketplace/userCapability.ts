@@ -12,7 +12,7 @@ export default {
     priority: 3,
     name: __('User Capabilities', 'multivendorx'),
     desc: __('Define what each store role can access and manage within the marketplace.', 'multivendorx'),
-    icon: 'adminlib-wholesale',
+    icon: 'adminlib-user-network-icon',
     submitUrl: 'settings',
     modal: [
         {

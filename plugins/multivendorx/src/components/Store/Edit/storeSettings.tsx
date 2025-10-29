@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
-import { BasicInput, TextArea, FileInput, getApiLink, SuccessNotice, SelectInput } from 'zyra';
+import { BasicInput, TextArea, FileInput, getApiLink, SuccessNotice, SelectInput, useModules } from 'zyra';
 
 declare global {
     interface Window {
@@ -14,8 +14,16 @@ interface FormData {
     [key: string]: string;
 }
 
+interface EmailBadge {
+    id: number;
+    email: string;
+    isValid: boolean;
+}
+
 const StoreSettings = ({ id }: { id: string | null }) => {
     const [formData, setFormData] = useState<FormData>({});
+    const [emailBadges, setEmailBadges] = useState<EmailBadge[]>([]);
+    const [newEmailValue, setNewEmailValue] = useState('');
     const statusOptions = [
         { label: "Active", value: "active" },
         { label: "Inactive", value: "inactive" },
@@ -33,9 +41,13 @@ const StoreSettings = ({ id }: { id: string | null }) => {
     const [mapboxLoaded, setMapboxLoaded] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(true);
     const autocompleteInputRef = useRef<HTMLInputElement>(null);
+    const emailInputRef = useRef<HTMLInputElement>(null);
     const [mapProvider, setMapProvider] = useState('');
     const [apiKey, setApiKey] = useState('');
     const appLocalizer = (window as any).appLocalizer;
+
+
+    const { modules } = useModules.getState();
 
     const [addressData, setAddressData] = useState({
         location_address: '',
@@ -49,22 +61,26 @@ const StoreSettings = ({ id }: { id: string | null }) => {
         timezone: ''
     });
 
-    // Log function for debugging
-    const log = (message: string, data?: any) => {
-        console.log(`[StoreSettings] ${message}`, data || '');
-    };
-
-    // Get map provider and API key
+    // Initialize email badges from form data
     useEffect(() => {
-        if (appLocalizer) {
-            setMapProvider(appLocalizer.map_providor);
-            if (appLocalizer.map_providor === 'google_map_set') {
-                setApiKey(appLocalizer.google_api_key);
-            } else {
-                setApiKey(appLocalizer.mapbox_api_key);
-            }
+        if (formData.email) {
+            // Parse existing emails - handle both comma-separated and newline-separated
+            const emailString = formData.email;
+            const emails = emailString.split(/[,\n]/)
+                .map(email => email.trim())
+                .filter(email => email !== '');
+            
+            const badges = emails.map((email, index) => ({
+                id: index + 1,
+                email: email,
+                isValid: /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+            }));
+            
+            setEmailBadges(badges);
+        } else {
+            setEmailBadges([]);
         }
-    }, []);
+    }, [formData.email]);
 
     // Load store data
     useEffect(() => {
@@ -76,39 +92,105 @@ const StoreSettings = ({ id }: { id: string | null }) => {
     
         axios({
             method: 'GET',
-            url: getApiLink(appLocalizer, `store/${id}`), // Use main store endpoint
+            url: getApiLink(appLocalizer, `store/${id}`),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
         })
         .then((res) => {
             const data = res.data || {};   
                 
-                // Set all form data
-                setFormData((prev) => ({ ...prev, ...data }));
-                
-                // Set address-specific data
-                setAddressData({
-                    location_address: data.location_address || data.address || '',
-                    location_lat: data.location_lat || '',
-                    location_lng: data.location_lng || '',
-                    address: data.address || data.location_address || '',
-                    city: data.city || '',
-                    state: data.state || '',
-                    country: data.country || '',
-                    zip: data.zip || '',
-                    timezone: data.timezone || ''
-                });
-                
-                setImagePreviews({
-                    image: data.image || '',
-                    banner: data.banner || '',
-                });
-                setLoading(false);
-            })
-            .catch((error) => {
-                console.error('Error loading store data:', error);
-                setLoading(false);
+            // Set all form data
+            setFormData((prev) => ({ ...prev, ...data }));
+            
+            // Set address-specific data
+            setAddressData({
+                location_address: data.location_address || data.address || '',
+                location_lat: data.location_lat || '',
+                location_lng: data.location_lng || '',
+                address: data.address || data.location_address || '',
+                city: data.city || '',
+                state: data.state || '',
+                country: data.country || '',
+                zip: data.zip || '',
+                timezone: data.timezone || ''
             });
+            
+            setImagePreviews({
+                image: data.image || '',
+                banner: data.banner || '',
+            });
+            setLoading(false);
+        })
+        .catch((error) => {
+            console.error('Error loading store data:', error);
+            setLoading(false);
+        });
     }, [id]);
+
+    // Add email function
+    const addEmail = () => {
+        if (!newEmailValue.trim()) return;
+        
+        const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newEmailValue.trim());
+        
+        if (!isValidEmail) {
+            setErrorMsg("Invalid email format");
+            return;
+        }
+
+        const newBadge: EmailBadge = {
+            id: Math.max(...emailBadges.map(b => b.id), 0) + 1,
+            email: newEmailValue.trim(),
+            isValid: true
+        };
+
+        const updatedBadges = [...emailBadges, newBadge];
+        setEmailBadges(updatedBadges);
+        
+        // Update form data with newline-separated emails
+        const emailString = updatedBadges.map(badge => badge.email).join('\n');
+        const updatedFormData = { ...formData, email: emailString };
+        setFormData(updatedFormData);
+        
+        setNewEmailValue('');
+        setErrorMsg(null);
+        autoSave(updatedFormData);
+    };
+
+    // Remove email function
+    const removeEmail = (id: number) => {
+        const updatedBadges = emailBadges.filter(badge => badge.id !== id);
+        setEmailBadges(updatedBadges);
+        
+        // Update form data
+        const emailString = updatedBadges.map(badge => badge.email).join('\n');
+        const updatedFormData = { ...formData, email: emailString };
+        setFormData(updatedFormData);
+        
+        autoSave(updatedFormData);
+    };
+
+    // Handle Enter key in email input
+    const handleEmailKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            addEmail();
+        }
+    };
+
+    // Email Badge Component
+    const EmailBadge: React.FC<{ badge: EmailBadge; onRemove: (id: number) => void }> = ({ badge, onRemove }) => {
+        return (
+            <div className={`admin-badge ${badge.isValid ? 'green' : 'red'}`}>
+                <i className="adminlib-mail"></i>
+                <span>{badge.email}</span>
+                <i 
+                    className="adminlib-close remove-btn" 
+                    onClick={() => onRemove(badge.id)}
+                    // style={{ cursor: 'pointer', marginLeft: '8px' }}
+                ></i>
+            </div>
+        );
+    };
 
     useEffect(() => {
         if (successMsg) {
@@ -515,21 +597,63 @@ const StoreSettings = ({ id }: { id: string | null }) => {
         })
     };
 
+    // const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    //     const { name, value } = e.target;
+    //     const updated = { ...formData, [name]: value };
+    //     setFormData(updated);
+
+    //     // if (name === "email") {
+    //     //     const emails = value.split(',').map(email => email.trim());
+            
+    //     //     // Allow empty field (when user is deleting)
+    //     //     if (value === '' || emails.length === 0) {
+    //     //         updated.email = '';
+    //     //         autoSave(updated);
+    //     //         setErrorMsg(null);
+    //     //         return;
+    //     //     }
+            
+    //     //     const isValidEmail = emails.every(email => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email));
+            
+    //     //     if (isValidEmail && emails.length > 0) {
+    //     //         // Update the email field with the validated comma-separated emails
+    //     //         updated.email = emails.join(', ');
+    //     //         autoSave(updated);
+    //     //         setErrorMsg(null);
+    //     //     } else {
+    //     //         setErrorMsg("Invalid email format. Please enter valid email(s) separated by commas.");
+    //     //     }
+    //     // }
+    //     if (name === "email") {
+    //         const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+    //         if (isValidEmail) {
+    //             autoSave(updated);
+    //             setErrorMsg(null);
+    //         } else {
+    //             setErrorMsg("Invalid email");
+    //         }
+    //     } 
+    //     else if (name === "phone") {
+    //         // ✅ Basic international phone pattern: allows +, spaces, hyphens, and digits (7–15 length)
+    //         const isValidPhone = /^\+?[0-9\s\-]{7,15}$/.test(value);
+    //         if (isValidPhone) {
+    //             autoSave(updated);
+    //             setErrorMsg(null);
+    //         } else {
+    //             setErrorMsg("Invalid phone number");
+    //         }
+    //     } else {
+    //         autoSave(updated);
+    //     }
+
+    // };
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         const updated = { ...formData, [name]: value };
         setFormData(updated);
 
-        if (name === "email") {
-            const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-            if (isValidEmail) {
-                autoSave(updated);
-                setErrorMsg(null);
-            } else {
-                setErrorMsg("Invalid email");
-            }
-        } else if (name === "phone") {
-            // ✅ Basic international phone pattern: allows +, spaces, hyphens, and digits (7–15 length)
+        if (name === "phone") {
             const isValidPhone = /^\+?[0-9\s\-]{7,15}$/.test(value);
             if (isValidPhone) {
                 autoSave(updated);
@@ -537,10 +661,9 @@ const StoreSettings = ({ id }: { id: string | null }) => {
             } else {
                 setErrorMsg("Invalid phone number");
             }
-        } else {
+        } else if (name !== "email") { // Skip auto-save for email as we handle it separately
             autoSave(updated);
         }
-
     };
     
     const runUploader = (key: string) => {
@@ -564,11 +687,22 @@ const StoreSettings = ({ id }: { id: string | null }) => {
 
 	// Then update your autoSave function:
 	const autoSave = (updatedData: any) => {
+        // Format email data for backend
+        const formattedData = { ...updatedData };
+        
+        if (formattedData.email && typeof formattedData.email === 'string') {
+            // Convert newline-separated emails to array for backend
+            formattedData.emails = formattedData.email
+                .split('\n')
+                .map((email: string) => email.trim())
+                .filter((email: string) => email !== '');
+        }
+        
         axios({
             method: 'PUT',
-            url: getApiLink(appLocalizer, `store/${id}`), // Use main store endpoint
+            url: getApiLink(appLocalizer, `store/${id}`),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            data: updatedData,
+            data: formattedData,
         }).then((res) => {
             if (res.data.success) {
                 setSuccessMsg('Store saved successfully!');
@@ -595,7 +729,7 @@ const StoreSettings = ({ id }: { id: string | null }) => {
                 <div className="card-wrapper width-65">
                     <div className="card-content">
                         <div className="card-title">
-                            General information
+                            Basic Details
                         </div>
 
                         {errorMsg && <p className="error-text" style={{ color: "red", marginTop: "5px" }}>{errorMsg}</p>}
@@ -616,14 +750,64 @@ const StoreSettings = ({ id }: { id: string | null }) => {
                                     descClass="settings-metabox-description" 
                                     value={formData.slug} 
                                     onChange={handleChange} 
-                                    />
+                                />
                                 <p>Your Site Url : {appLocalizer.store_page_url + '/' + formData.slug}</p>
                             </div>
                         </div>
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <label htmlFor="product-name">Store Email</label>
-                                <BasicInput type="email" name="email" wrapperClass="setting-form-input" descClass="settings-metabox-description" value={formData.email} onChange={handleChange} />
+                                <label htmlFor="description">Description</label>
+                                <TextArea name="description" wrapperClass="setting-from-textarea"
+                                    inputClass="textarea-input"
+                                    descClass="settings-metabox-description" value={formData.description} onChange={handleChange} />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="card-content">
+                        <div className="card-title">
+                            Contact Information
+                        </div>
+
+                        {errorMsg && <p className="error-text" style={{ color: "red", marginTop: "5px" }}>{errorMsg}</p>}
+
+                        {/* Updated Email Section */}
+                        <div className="form-group-wrapper">
+                            <div className="form-group">
+                                <label htmlFor="store-email">Store Email(s)</label>
+                                <div className="email-input-container">
+                                    <div className="email-badges-container" >
+                                        {emailBadges.map(badge => (
+                                            <EmailBadge 
+                                                key={badge.id} 
+                                                badge={badge} 
+                                                onRemove={removeEmail} 
+                                            />
+                                        ))}
+                                    </div>
+                                    <div className="drawer-add-recipient" >
+                                        <input
+                                            ref={emailInputRef}
+                                            type="email"
+                                            className="basic-input"
+                                            placeholder="Enter email and press Enter"
+                                            value={newEmailValue}
+                                            onChange={(e) => setNewEmailValue(e.target.value)}
+                                            onKeyPress={handleEmailKeyPress}
+                                        />
+                                        <button 
+                                            className="admin-btn btn-purple" 
+                                            onClick={addEmail}
+                                            type="button"
+                                        >
+                                            <i className="adminlib-plus-circle-o"></i>
+                                            Add
+                                        </button>
+                                    </div>
+                                </div>
+                                <div className="settings-metabox-description">
+                                    Add multiple email addresses. Press Enter or click Add after each email.
+                                </div>
                             </div>
                         </div>
 
@@ -634,28 +818,6 @@ const StoreSettings = ({ id }: { id: string | null }) => {
                             </div>
                         </div>
 
-                        <div className="form-group-wrapper">
-                            <div className="form-group">
-                                <label htmlFor="description">Description</label>
-                                <TextArea name="description" wrapperClass="setting-from-textarea"
-                                    inputClass="textarea-input"
-                                    descClass="settings-metabox-description" value={formData.description} onChange={handleChange} />
-                            </div>
-                        </div>
-
-                        {/* Map Display */}
-						<div className="form-group-wrapper">
-							<div className="form-group">
-								<label>Location Map</label>
-								<div
-									id="location-map"
-								></div>
-								<div className="settings-metabox-description">
-									Click on the map or drag the marker to set your exact location
-								</div>
-							</div>
-						</div>
-
                         {/* Hidden coordinates */}
                         <input type="hidden" name="location_lat" value={addressData.location_lat} />
                         <input type="hidden" name="location_lng" value={addressData.location_lng} />
@@ -663,7 +825,7 @@ const StoreSettings = ({ id }: { id: string | null }) => {
 
                     <div className="card-content">
                         <div className="card-title">
-                            Address & Location
+                            Communication Address
                         </div>
 
                         <div className="form-group-wrapper">
@@ -726,7 +888,9 @@ const StoreSettings = ({ id }: { id: string | null }) => {
                             </div>
                         </div>
 
-                        <div className="form-group-wrapper">
+                        {modules.includes( 'geo-location' ) && 
+                        <div>
+                            <div className="form-group-wrapper">
                             <div className="form-group">
                                 <label htmlFor="store-location-autocomplete">Search Location</label>
                                 <div id="store-location-autocomplete-container">
@@ -741,9 +905,7 @@ const StoreSettings = ({ id }: { id: string | null }) => {
                                 </div>
                             </div>
                         </div>
-
-                        {/* Map Display */}
-						<div className="form-group-wrapper">
+                        <div className="form-group-wrapper">
 							<div className="form-group">
 								<label>Location Map *</label>
 								<div
@@ -763,6 +925,30 @@ const StoreSettings = ({ id }: { id: string | null }) => {
                             {/* Hidden coordinates */}
                             <input type="hidden" name="location_lat" value={addressData.location_lat} />
                             <input type="hidden" name="location_lng" value={addressData.location_lng} />
+						</div>
+                        </div>
+                        }
+                        {/* Map Display */}
+						<div className="form-group-wrapper">
+							{/* <div className="form-group">
+								<label>Location Map *</label>
+								<div
+									id="location-map"
+									style={{
+										height: '300px',
+										width: '100%',
+										borderRadius: '8px',
+										border: '1px solid #ddd',
+										marginTop: '8px'
+									}}
+								></div>
+								<small style={{ color: '#666', marginTop: '5px', display: 'block' }}>
+									Click on the map or drag the marker to set your exact location
+								</small>
+							</div> */}
+                            {/* Hidden coordinates */}
+                            {/* <input type="hidden" name="location_lat" value={addressData.location_lat} />
+                            <input type="hidden" name="location_lng" value={addressData.location_lng} /> */}
 						</div>
                     </div>
                 </div>

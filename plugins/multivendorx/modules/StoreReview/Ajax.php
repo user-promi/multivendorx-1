@@ -40,22 +40,43 @@ class Ajax {
             wp_send_json_error(['message' => __('Missing required fields.', 'multivendorx')]);
         }
     
-        // Check if already reviewed
         if (Util::has_reviewed($store_id, $user_id)) {
             wp_send_json_error(['message' => __('You have already reviewed this store.', 'multivendorx')]);
         }
     
-        //Detect if verified buyer and get their order ID
         $order_id = Util::is_verified_buyer($store_id, $user_id);
+        $overall  = array_sum($ratings) / count($ratings);
     
-        // Insert new review
-        $overall   = array_sum($ratings) / count($ratings);
-        $review_id = Util::insert_review($store_id, $user_id, $review_title, $review_content, $overall, $order_id);
+        //Handle image uploads
+        $uploaded_images = [];
+        if (!empty($_FILES['review_images']['name'][0])) {
+            require_once ABSPATH . 'wp-admin/includes/file.php';
+            $files = $_FILES['review_images'];
+    
+            foreach ($files['name'] as $key => $value) {
+                if ($files['name'][$key]) {
+                    $file = [
+                        'name'     => $files['name'][$key],
+                        'type'     => $files['type'][$key],
+                        'tmp_name' => $files['tmp_name'][$key],
+                        'error'    => $files['error'][$key],
+                        'size'     => $files['size'][$key],
+                    ];
+    
+                    $upload = wp_handle_upload($file, ['test_form' => false]);
+                    if (!isset($upload['error']) && isset($upload['url'])) {
+                        $uploaded_images[] = esc_url_raw($upload['url']);
+                    }
+                }
+            }
+        }
+    
+        //Insert review with image data
+        $review_id = Util::insert_review($store_id, $user_id, $review_title, $review_content, $overall, $order_id, $uploaded_images);
         Util::insert_ratings($review_id, $ratings);
     
         wp_send_json_success(['message' => __('Review submitted successfully!', 'multivendorx')]);
     }
-    
 
     public function get_reviews() {
         $store_id = filter_input(INPUT_POST, 'store_id', FILTER_SANITIZE_NUMBER_INT);
@@ -72,21 +93,35 @@ class Ajax {
                 echo '<div class="avater">B</div> <div class="name">'. esc_html($reviewer_name) .'</div> <span class="time">1 day ago</span></div> ';
                 echo '</div>';
                 echo '<div class="body">';
-                echo ' <div class="rating"><i class="adminlib-star-o"></i> <i class="adminlib-star-o"></i> <i class="adminlib-star-o"></i> <i class="adminlib-star-o"></i> <i class="adminlib-star-o"></i> <span class="title">'. esc_html($review->review_title) . '</span></div> ';
+                $overall_rating = round(floatval($review->overall_rating)); // assuming your review object has overall_rating
+
+                echo '<div class="rating">';
+                for ($i = 1; $i <= 5; $i++) {
+                    if ($i <= $overall_rating) {
+                        echo '<i class="adminlib-star"></i>';
+                    } else {
+                        echo '<i class="adminlib-star-o"></i>';
+                    }
+                }
+                echo '<span class="title">' . esc_html($review->review_title) . '</span></div>';
+
                 echo ' <div class="content">' . esc_html($review->review_content) . '</div> </div>';
+                if (!empty($review->review_images)) {
 
-                // echo '<strong>' . esc_html($reviewer_name) . '</strong>';
-                // echo '<p><strong>' . esc_html($review->review_title) . '</strong></p>';
-                // echo '<p>' . esc_html($review->review_content) . '</p>';
+                    $images = json_decode(stripslashes($review->review_images), true);
 
-                // $ratings = Util::get_ratings_for_review($review->review_id);
-                // if ($ratings) {
-                //     echo '<ul class="mvx-review-params">';
-                //     foreach ($ratings as $r) {
-                //         echo '<li>' . esc_html($r->parameter) . ': ' . intval($r->rating_value) . '★</li>';
-                //     }
-                //     echo '</ul>';
-                // }
+                    if (is_array($images) && !empty($images)) {
+                        echo '<div class="review-images">';
+                        foreach ($images as $img_url) {
+                            echo '<a href="' . esc_url($img_url) . '" target="_blank">';
+                            echo '<img src="' . esc_url($img_url) . '" alt="Review Image" />';
+                            echo '</a>';
+                        }
+                        echo '</div>';
+                    }
+                }
+                
+                echo '</div>';
 
                 if (!empty($review->reply)) {
                     echo '<div class="mvx-review-reply">';
@@ -108,13 +143,36 @@ class Ajax {
     public function get_avg_ratings() {
         $store_id   = filter_input(INPUT_POST, 'store_id', FILTER_SANITIZE_NUMBER_INT);
         $parameters = MultiVendorX()->setting->get_setting('ratings_parameters', []);
-
+    
         $averages = Util::get_avg_ratings($store_id, $parameters);
         $overall  = Util::get_overall_rating($store_id);
-
+    
+        //Get all reviews
+        $reviews = Util::get_reviews_by_store($store_id);
+        $total_reviews = count($reviews);
+    
+        //Initialize breakdown
+        $breakdown = [
+            5 => 0,
+            4 => 0,
+            3 => 0,
+            2 => 0,
+            1 => 0,
+        ];
+    
+        foreach ($reviews as $review) {
+            $rating = round(floatval($review->overall_rating)); // Round to nearest star
+            if (isset($breakdown[$rating])) {
+                $breakdown[$rating]++;
+            }
+        }
+    
         wp_send_json_success([
-            'averages' => $averages,
-            'overall'  => $overall,
+            'averages'      => $averages,
+            'overall'       => round($overall, 1),
+            'total_reviews' => $total_reviews,
+            'breakdown'     => $breakdown,
         ]);
     }
+    
 }

@@ -5,7 +5,7 @@ export default {
     priority: 8,
     name: __( 'Policies', 'mvx-pro' ),
     desc: __( 'Define and publish the rules and guidelines that apply to your marketplace.', 'mvx-pro' ),
-    icon: 'adminlib-support',
+    icon: 'adminlib-store-policy',
     submitUrl: 'settings',
     modal: [
         {

@@ -510,22 +510,6 @@ input[type="checkbox"]:focus {
 
 // pro tag end
 
-// admin form start
-// .main-input-wrapper {
-//   padding: 0.625rem;
-//   border: 0.063rem solid transparent;
-//   border-radius: $border-radius-medium;
-//   display: flex;
-//   gap: 0.5rem;
-//   flex-direction: column;
-
-//   &:hover,
-//   &.active {
-//     border-color: #8c8c8c;
-//   }
-
-// }
-
 // page title start
 .admin-page-title {
   display: flex;
@@ -1263,12 +1247,6 @@ input[type="checkbox"]:focus {
   }
 }
 
-// delete and add table top action btn section
-.search-field:has(.admin-btn) {
-  border: none
-}
-
-// end delete and add table top action btn section 
 
 .search-section {
   display: flex;
@@ -1349,3 +1327,12 @@ input[type="checkbox"]:focus {
 }
 
 // tooltip style end
+
+// rating wrapper start
+.rating-wrapper{
+  display: flex;
+  gap: 0.313rem;
+  i{
+    color: rgb(202, 172, 1);
+  }
+}

@@ -5,7 +5,7 @@ export default {
     priority: 4,
     name: __( 'Store Reviews', 'multivendorx' ),
     desc: __( 'Manage product and store review settings.', 'multivendorx' ),
-    icon: 'adminlib-setting',
+    icon: 'adminlib-store-review',
     submitUrl: 'settings',
     modal: [
         {
@@ -44,7 +44,6 @@ export default {
                 'Define rating parameters such as packaging, delivery, behaviour, policies, etc.',
                 'multivendorx'
             ),
-            name: 'abuse_report_reasons',
             defaultValues: [
                 { value: "Product quality",},
                 { value: "Customer service",},

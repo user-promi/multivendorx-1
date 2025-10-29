@@ -518,7 +518,7 @@ const Table: React.FC<TableProps> = ({
                         </div>
 
                     )}
-                    <div>
+                    <div className="table-action-wrapper">
                     {searchFilter && (
                         <div className="search-field">
                             {searchFilter?.map((filter) => (
@@ -529,7 +529,7 @@ const Table: React.FC<TableProps> = ({
                         </div>
                     )}
                     {actionButton && (
-                        <div className="search-field">
+                        <div className="action-wrapper">
                             {actionButton?.map((filter) => (
                                 <React.Fragment key={filter.name}>
                                     {filter.render(handleFilterChange, filterData[filter.name])}
