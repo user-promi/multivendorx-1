@@ -23,7 +23,6 @@ import Analytics from './components/Reports/Reports';
 import Advertisement from './components/Advertisement/Advertisement';
 import HelpSupport from './components/HelpSupport/HelpSupport';
 import ApprovalQueue from './components/ApprovalQueue/approvalQueue';
-import HeaderNotification from './components/Notifications/HeaderNotifications';
 
 localStorage.setItem('force_multivendorx_context_reload', 'true');
 
@@ -170,7 +169,25 @@ const App = () => {
           { value: 'settings', label: 'Settings' },
         ]}
         showMessages={true}
-        notifications={<HeaderNotification/>}
+        notifications={[
+          {
+            heading: "New Order Received",
+            message: "Order #1024 has been placed",
+            time: "1 hour ago",
+            icon: "adminlib-cart-icon",
+            color: "blue",
+            link: "/orders"
+          },
+          {
+            heading: "New Review",
+            message: "John left a 5-star review",
+            time: "30 mins ago",
+            icon: "adminlib-star-icon",
+            color: "yellow",
+            link: "/reviews"
+          }
+        ]}
+        notificationsLink="/notifications"
         showNotifications={true}
         messages={[
           {

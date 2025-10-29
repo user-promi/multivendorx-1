@@ -18,7 +18,7 @@ class Notifications {
     public $events = [];
 
     public function __construct() {
-        add_action('init', [$this, 'register_notification_hooks']);
+        $this->register_notification_hooks();
         $this->insert_system_events();
     }
 
@@ -103,10 +103,11 @@ class Notifications {
     }
 
 
-    public function trigger_notifications($action_name, $parameters) {
+    public function trigger_notifications($event_name, $parameters) {
+
         global $wpdb;
         $event = $wpdb->get_row(
-            $wpdb->prepare( "SELECT * FROM `" . $wpdb->prefix . Utill::TABLES['system_events'] . "` WHERE system_action = %s", $action_name )
+            $wpdb->prepare( "SELECT * FROM `" . $wpdb->prefix . Utill::TABLES['system_events'] . "` WHERE event_name = %s", $event_name )
         );
 
         if ($event->admin_enabled) {
@@ -158,16 +159,6 @@ class Notifications {
         $table = "{$wpdb->prefix}" . Utill::TABLES['system_events'];
         
         $events = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $table" ) );
-
-        return $events;
-    } 
-
-
-    public function get_all_notifications() {
-        global $wpdb;
-        $table = "{$wpdb->prefix}" . Utill::TABLES['notifications'];
-        
-        $events = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $table WHERE is_dismissed = %d", 0 ) );
 
         return $events;
     } 

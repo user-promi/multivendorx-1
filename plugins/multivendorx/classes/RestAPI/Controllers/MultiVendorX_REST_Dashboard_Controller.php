@@ -279,134 +279,134 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
     }
 
 
-    // public function get_current_page_and_submenu() {
-    //     $current_user        = wp_get_current_user();
-    //     $capability_settings = MultiVendorX()->setting->get_setting( reset( $current_user->roles ), array() );
-    //     $store_ids           = StoreUtil::get_stores_from_user_id( $current_user->ID );
-    //     $active_store        = get_user_meta( $current_user->ID, 'multivendorx_active_store', true );
-    //     $all_endpoints       = $this->all_endpoints();
-    //     $div_id              = 'dashboard';
-    //     $allowed             = true;
-    //     $store               = new Store( $active_store );
-    //     $store_status        = $store->get( 'status' );
+    public function get_current_page_and_submenu() {
+        $current_user        = wp_get_current_user();
+        $capability_settings = MultiVendorX()->setting->get_setting( reset( $current_user->roles ), array() );
+        $store_ids           = StoreUtil::get_stores_from_user_id( $current_user->ID );
+        $active_store        = get_user_meta( $current_user->ID, 'multivendorx_active_store', true );
+        $all_endpoints       = $this->all_endpoints();
+        $div_id              = 'dashboard';
+        $allowed             = true;
+        $store               = new Store( $active_store );
+        $store_status        = $store->get( 'status' );
 
-    //     if (empty($store_ids)) {
-    //         $error_msg = "No active store select for this user.";
-    //         return array(
-    //             'error_msg'    => $error_msg,
-    //         );
-    //     } else {
-    //         if ( empty( $active_store ) ) {
-    //             update_user_meta( $current_user->ID, 'multivendorx_active_store', reset( $store_ids ) );
-    //         }
-    //     }
+        if (empty($store_ids)) {
+            $error_msg = "No active store select for this user.";
+            return array(
+                'error_msg'    => $error_msg,
+            );
+        } else {
+            if ( empty( $active_store ) ) {
+                update_user_meta( $current_user->ID, 'multivendorx_active_store', reset( $store_ids ) );
+            }
+        }
 
-    //     if ( get_option( 'permalink_structure' ) ) {
-    //         $current_page = get_query_var( 'tab' ) ?? 'dashboard';
-    //         $current_sub  = get_query_var( 'subtab' );
-    //     } else {
-    //         $current_page = filter_input( INPUT_GET, 'tab', FILTER_DEFAULT ) ?? 'dashboard';
-    //         $current_sub  = filter_input( INPUT_GET, 'subtab', FILTER_DEFAULT );
-    //     }
+        if ( get_option( 'permalink_structure' ) ) {
+            $current_page = get_query_var( 'tab' ) ?? 'dashboard';
+            $current_sub  = get_query_var( 'subtab' );
+        } else {
+            $current_page = filter_input( INPUT_GET, 'tab', FILTER_DEFAULT ) ?? 'dashboard';
+            $current_sub  = filter_input( INPUT_GET, 'subtab', FILTER_DEFAULT );
+        }
 
-    //     // Auto-redirect if submenu exists
-    //     if ( $current_page && empty( $current_sub ) ) {
-    //         foreach ( $all_endpoints as $section ) {
-    //             if ( $section['slug'] === $current_page && ! empty( $section['submenu'] ) ) {
-    //                 $first_sub = $section['submenu'][0]['slug'];
-    //                 wp_safe_redirect( StoreUtil::get_endpoint_url( $current_page, $first_sub ) );
-    //                 exit;
-    //             }
-    //         }
-    //     }
+        // Auto-redirect if submenu exists
+        if ( $current_page && empty( $current_sub ) ) {
+            foreach ( $all_endpoints as $section ) {
+                if ( $section['slug'] === $current_page && ! empty( $section['submenu'] ) ) {
+                    $first_sub = $section['submenu'][0]['slug'];
+                    wp_safe_redirect( StoreUtil::get_endpoint_url( $current_page, $first_sub ) );
+                    exit;
+                }
+            }
+        }
 
-    //     if ( $current_page ) {
-    //         foreach ( $all_endpoints as $key => $section ) {
-    //             if ( $section['slug'] !== $current_page ) {
-    //                 continue;
-    //             }
+        if ( $current_page ) {
+            foreach ( $all_endpoints as $key => $section ) {
+                if ( $section['slug'] !== $current_page ) {
+                    continue;
+                }
 
-    //             // Helper function to check user capability.
-    //             $has_capability = function( $caps ) use ( $capability_settings ) {
-    //                 foreach ( (array) $caps as $cap ) {
-    //                     if ( current_user_can( $cap ) && in_array( $cap, $capability_settings, true ) ) {
-    //                         return true;
-    //                     }
-    //                 }
-    //                 return false;
-    //             };
+                // Helper function to check user capability.
+                $has_capability = function( $caps ) use ( $capability_settings ) {
+                    foreach ( (array) $caps as $cap ) {
+                        if ( current_user_can( $cap ) && in_array( $cap, $capability_settings, true ) ) {
+                            return true;
+                        }
+                    }
+                    return false;
+                };
 
-    //             if ( ! empty( $section['capability'] ) ) {
-    //                 $allowed = $has_capability( $section['capability'] );
-    //             }
+                if ( ! empty( $section['capability'] ) ) {
+                    $allowed = $has_capability( $section['capability'] );
+                }
 
-    //             // Handle submenu.
-    //             if ( $current_sub ) {
-    //                 if ( empty( $section['submenu'] ) ) {
-    //                     // Capability defined at section-sub level.
-    //                     $sub_caps_key = 'capability-' . $current_sub;
-    //                     if ( ! empty( $section[ $sub_caps_key ] ) ) {
-    //                         $allowed = $has_capability( $section[ $sub_caps_key ] );
-    //                     }
-    //                     $div_id = $current_sub;
-    //                 } else {
-    //                     // Find matching submenu.
-    //                     foreach ( $section['submenu'] as $submenu ) {
-    //                         if ( $submenu['slug'] === $current_sub ) {
-    //                             if ( ! empty( $submenu['capability'] ) ) {
-    //                                 $allowed = $has_capability( $submenu['capability'] );
-    //                             }
-    //                             $div_id = $submenu['key'];
-    //                             break;
-    //                         }
-    //                     }
-    //                 }
-    //             } else {
-    //                 $div_id = $key;
-    //             }
+                // Handle submenu.
+                if ( $current_sub ) {
+                    if ( empty( $section['submenu'] ) ) {
+                        // Capability defined at section-sub level.
+                        $sub_caps_key = 'capability-' . $current_sub;
+                        if ( ! empty( $section[ $sub_caps_key ] ) ) {
+                            $allowed = $has_capability( $section[ $sub_caps_key ] );
+                        }
+                        $div_id = $current_sub;
+                    } else {
+                        // Find matching submenu.
+                        foreach ( $section['submenu'] as $submenu ) {
+                            if ( $submenu['slug'] === $current_sub ) {
+                                if ( ! empty( $submenu['capability'] ) ) {
+                                    $allowed = $has_capability( $submenu['capability'] );
+                                }
+                                $div_id = $submenu['key'];
+                                break;
+                            }
+                        }
+                    }
+                } else {
+                    $div_id = $key;
+                }
 
-    //             break;
-    //         }
-    //     }
+                break;
+            }
+        }
 
-    //     switch ( $store_status ) {
-    //         case 'pending':
-    //             $error_msg = 'Waiting for approval your store is pending';
-    //             break;
+        switch ( $store_status ) {
+            case 'pending':
+                $error_msg = 'Waiting for approval your store is pending';
+                break;
     
-    //         case 'locked':
-    //             $error_msg = 'Your account has been suspended by the admin';
-    //             break;
+            case 'locked':
+                $error_msg = 'Your account has been suspended by the admin';
+                break;
 
-    //         case 'reject':
-    //             $error_msg = 'The application is rejected';
-    //             break;
+            case 'reject':
+                $error_msg = 'The application is rejected';
+                break;
 
-    //         default:
-    //             if ( ! $div_id || ! $allowed ) {
-    //                 $error_msg = 'You do not have permission to access this section.';
-    //                 break;
-    //             }
+            default:
+                if ( ! $div_id || ! $allowed ) {
+                    $error_msg = 'You do not have permission to access this section.';
+                    break;
+                }
 
-    //             if ( $div_id === 'edit' ) {
-    //                 ob_start();
-    //                 $this->call_edit_product_template();
-    //                 $content = ob_get_clean();
-    //             } else {
-    //                 $id = $div_id;
-    //             }
-    //             break;
-    //     }
+                if ( $div_id === 'edit' ) {
+                    ob_start();
+                    $this->call_edit_product_template();
+                    $content = ob_get_clean();
+                } else {
+                    $id = $div_id;
+                }
+                break;
+        }
 
-    //     return array(
-    //         'active_store' => $active_store,
-    //         'current_page' => $current_page,
-    //         'current_sub'  => $current_sub,
-    //         'error_msg'    => $error_msg,
-    //         'id'           => $id,
-    //         'content'      => $content,
-    //     );
-    // }
+        return array(
+            'active_store' => $active_store,
+            'current_page' => $current_page,
+            'current_sub'  => $current_sub,
+            'error_msg'    => $error_msg,
+            'id'           => $id,
+            'content'      => $content,
+        );
+    }
 
     public function call_edit_product_template(): void {
         $subtab = get_query_var( 'subtab' );
@@ -420,208 +420,4 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
             }
         }
     }
-
-    public function get_current_page_and_submenu(): array {
-        $current_user        = wp_get_current_user();
-        $store_ids           = StoreUtil::get_stores_from_user_id($current_user->ID);
-        $active_store        = get_user_meta($current_user->ID, 'multivendorx_active_store', true);
-        $store               = new Store($active_store);
-        $store_status        = $store->get('status');
-        $capability_settings = MultiVendorX()->setting->get_setting(reset($current_user->roles), []);
-        $all_endpoints       = $this->all_endpoints();
-
-        // Early exit if no store found.
-        if (empty($store_ids)) {
-            return ['error_msg' => esc_html__('No active store selected for this user.', 'multivendorx')];
-        }
-
-        // Ensure active store is set.
-        if (empty($active_store)) {
-            update_user_meta($current_user->ID, 'multivendorx_active_store', reset($store_ids));
-            $active_store = reset($store_ids);
-        }
-
-        // Get sanitized current page and subtab.
-        [$current_page, $current_sub] = $this->get_tab_and_subtab();
-
-        // Auto-redirect if submenu exists but not specified.
-        if ($current_page && empty($current_sub)) {
-            foreach ($all_endpoints as $section) {
-                if ($section['slug'] === $current_page && !empty($section['submenu'])) {
-                    $first_sub = $section['submenu'][0]['slug'];
-                    wp_safe_redirect(StoreUtil::get_endpoint_url($current_page, $first_sub));
-                    exit;
-                }
-            }
-        }
-
-        $div_id      = 'dashboard';
-        $allowed = true;
-        $error_msg = '';
-        $content = '';
-
-        // Resolve the current section and capability check.
-        foreach ($all_endpoints as $key => $section) {
-            if ($section['slug'] !== $current_page) {
-                continue;
-            }
-
-            $allowed = $this->user_has_section_capability($section, $capability_settings);
-
-            if ($current_sub) {
-                [$div_id, $allowed] = $this->resolve_submenu_access($section, $current_sub, $capability_settings);
-            } else {
-                $div_id = $key;
-            }
-
-            break;
-        }
-
-        // Handle store status restrictions.
-        // $error_msg = $this->get_store_status_message($store_status, $allowed, $div_id);
-
-        // // Load page content for special pages like 'edit'.
-        // if (empty($error_msg) ) {
-        //     $content = $this->get_page_content($div_id);
-        // } else {
-        //     $id = $div_id;
-        // }
-
-        // return [
-        //     'active_store' => $active_store,
-        //     'current_page' => $current_page,
-        //     'current_sub'  => $current_sub,
-        //     'error_msg'    => $error_msg,
-        //     'id'           => $id,
-        //     'content'      => $content,
-        // ];
-
-        switch ($store_status) {
-            case 'pending':
-                $error_msg = 'Waiting for approval. Your store is pending.';
-                break;
-
-            case 'locked':
-                $error_msg = 'Your account has been suspended by the admin.';
-                break;
-
-            case 'reject':
-                $error_msg = 'The application has been rejected.';
-                break;
-
-            default:
-                if (!$allowed) {
-                    $error_msg = 'You do not have permission to access this section.';
-                    break;
-                }
-
-                if ($div_id === 'edit') {
-                    $content = $this->get_page_content($div_id);
-                } else {
-                    $id = $div_id;
-                }
-                break;
-        }
-
-        return [
-            'active_store' => $active_store,
-            'current_page' => $current_page,
-            'current_sub'  => $current_sub,
-            'error_msg'    => $error_msg,
-            'id'           => $id,
-            'content'      => $content,
-        ];
-        
-    }
-
-    /**
-     * Retrieve sanitized tab and subtab.
-     */
-    private function get_tab_and_subtab(): array {
-        if (get_option('permalink_structure')) {
-            $tab = sanitize_key(get_query_var('tab') ?: 'dashboard');
-            $sub = sanitize_key(get_query_var('subtab'));
-        } else {
-            $tab = sanitize_key(wp_unslash($_REQUEST['tab'] ?? 'dashboard'));
-            $sub = sanitize_key(wp_unslash($_REQUEST['subtab'] ?? ''));
-        }
-        return [$tab, $sub];
-    }
-
-    /**
-     * Check user capability for a section.
-     */
-    private function user_has_section_capability(array $section, array $capability_settings): bool {
-        if (empty($section['capability'])) {
-            return true;
-        }
-
-        foreach ((array) $section['capability'] as $cap) {
-            if (current_user_can($cap) && in_array($cap, $capability_settings, true)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Resolve submenu access and ID.
-     */
-    private function resolve_submenu_access(array $section, string $current_sub, array $capability_settings): array {
-        $id      = $current_sub;
-        $allowed = true;
-
-        if (!empty($section['submenu'])) {
-            foreach ($section['submenu'] as $submenu) {
-                if ($submenu['slug'] === $current_sub) {
-                    $allowed = empty($submenu['capability'])
-                        ? true
-                        : $this->user_has_section_capability($submenu, $capability_settings);
-                    $id = $submenu['key'] ?? $current_sub;
-                    break;
-                }
-            }
-        } else {
-            $sub_cap_key = 'capability-' . $current_sub;
-            if (!empty($section[$sub_cap_key])) {
-                $allowed = $this->user_has_section_capability(['capability' => $section[$sub_cap_key]], $capability_settings);
-            }
-        }
-
-        return [$id, $allowed];
-    }
-
-    /**
-     * Get store status error message.
-     */
-    private function get_store_status_message(string $status, bool $allowed, string $id): string {
-        switch ($status) {
-            case 'pending':
-                return esc_html__('Waiting for approval, your store is pending.', 'multivendorx');
-            case 'locked':
-                return esc_html__('Your account has been suspended by the admin.', 'multivendorx');
-            case 'reject':
-                return esc_html__('The application has been rejected.', 'multivendorx');
-            default:
-                if (!$allowed) {
-                    return esc_html__('You do not have permission to access this section.', 'multivendorx');
-                }
-                return '';
-        }
-    }
-
-    /**
-     * Load content for special pages.
-     */
-    private function get_page_content(string $id): ?string {
-        if ('edit' === $id) {
-            ob_start();
-            $this->call_edit_product_template();
-            return ob_get_clean();
-        }
-
-        return null;
-    }
-
 }

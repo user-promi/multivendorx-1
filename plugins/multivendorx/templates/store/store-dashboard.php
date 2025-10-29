@@ -178,7 +178,7 @@ $page_info     = MultiVendorX()->rest->dashboard->get_current_page_and_submenu()
             ?>
 
             <div class="content-wrapper" id="<?php echo $page_info['id'] ? esc_attr( $page_info['id'] ) : ''; ?>"> 
-                 <?php if ( !empty($page_info['error_msg']) ) { ?>
+                 <?php if ( $page_info['error_msg'] ) { ?>
                     <div class="permission-wrapper">
                         <i class="adminlib-info red"></i>
                         <div class="title"><?php echo esc_html( $page_info['error_msg'] ); ?></div>
