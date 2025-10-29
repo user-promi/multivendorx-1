@@ -16,7 +16,9 @@ interface PaymentFormField {
   | "payment-tabs"
   | "multi-checkbox"
   | "description"
+  | "setup"
   | "setting-toggle";
+
   label: string;
   placeholder?: string;
   nestedFields?: any[];
@@ -37,6 +39,8 @@ interface PaymentFormField {
   moduleEnabled?: string;
   dependentSetting?: string;
   dependentPlugin?: string;
+  title?: string;
+  link?: string;
 }
 
 interface PaymentMethod {
@@ -243,12 +247,36 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
       case "description":
         return (
           <>
-            {field.des && (
-              <p
-                className="payment-description"
-                dangerouslySetInnerHTML={{ __html: field.des }}
-              ></p>
-            )}
+            <div className="description-wrapper">
+              <div className="title">
+                <i className="adminlib-error"></i>{field.title}
+              </div>
+              {field.des && (
+                <p
+                  className="payment-description"
+                  dangerouslySetInnerHTML={{ __html: field.des }}
+                ></p>
+              )}
+            </div>
+
+          </>
+        );
+      case "setup":
+        return (
+          <>
+            <div className="wizard-step">
+              <div className="step-info">
+                <div className="default-checkbox">
+                  <input type="checkbox" className="mvx-toggle-checkbox" id="step-checkbox-0-0" />
+                  <label htmlFor="step-checkbox-0-0"></label>
+                </div>
+                <div className="step-text">
+                  <span className="step-title">{field.title}</span>
+                  <span className="step-desc">{field.des}</span>
+                </div>
+              </div>
+              <a href={field.link} className="admin-btn btn-purple">Set Up <i className="adminlib-arrow-right"></i> </a>
+            </div>
           </>
         );
       default:
@@ -283,9 +311,14 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
               {!method.openForm && (
                 <div className="toggle-icon">
                   <i
-                    className={`adminlib-${isEnabled && isActive ? "keyboard-arrow-down" : "pagination-right-arrow"}`}
-                    onClick={() => toggleActiveTab(method.id)}
+                    className={`adminlib-${isEnabled && isActive ? "keyboard-arrow-down" : "pagination-right-arrow"
+                      }`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (isEnabled) toggleActiveTab(method.id);
+                    }}
                   />
+
                 </div>
               )}
 
@@ -365,7 +398,7 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
 
             {method.formFields && method.formFields.length > 0 && (
               <div
-                className={`${method.wrapperClass || ""} payment-method-form ${isEnabled && (isActive || method.openForm) ? "open" : ""}`}
+                className={`${method.wrapperClass || ""} payment-method-form open ${isEnabled && (isActive || method.openForm) ? "open" : ""}`}
               >
                 {method.formFields.map((field) => (
                   <div key={field.key} className="form-group">

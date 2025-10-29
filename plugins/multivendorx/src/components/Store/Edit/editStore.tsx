@@ -235,7 +235,7 @@ const EditStore = () => {
                         </div> */}
                         <div className="general-wrapper">
                             <div className="store-header">
-                                <div className="banner" style={{ background: `url("http://localhost:8889/wp-content/uploads/2025/10/1600w-6F7OhzOb6W8.webp")` }}>
+                                <div className="banner" style={{ background: `url("https://cus.dualcube.com/mvx1/wp-content/uploads/2025/10/images-4.jpg")` }}>
                                     <div className="edit-section">
                                         <div className="edit-wrapper">
                                             <span className="admin-btn btn-purple" onClick={(e) => {
@@ -256,7 +256,7 @@ const EditStore = () => {
                                 <div className="details-wrapper">
                                     <div className="left-section">
                                         <div className="store-logo">
-                                            <img src="http://localhost:8889/wp-content/uploads/2025/10/catalogx.png" alt="" />
+                                            <img src="https://cus.dualcube.com/mvx1/wp-content/uploads/2025/10/download-1-1.png" alt="" />
                                             <div className="edit-section">
                                                 <div className="edit-wrapper">
                                                     <span className="admin-btn btn-purple" onClick={(e) => {

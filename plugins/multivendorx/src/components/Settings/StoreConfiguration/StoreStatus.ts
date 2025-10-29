@@ -19,62 +19,87 @@ export default {
             modal: [
                 {
                     id: 'Verify store identity and business legitimacy',
-                    icon: "adminlib-google",
-                    label: 'Seller Verification',
+                    icon: "adminlib-store-analytics",
+                    label: 'Pending Status',
                     connected: true,
                     // disableBtn: true,
                     enableOption: true,
                     // openForm: ,
+                    // countBtn: true,
                     desc: 'Stores awaiting approval',
                     formFields: [
+
                         {
                             key: 'required_tasks',
-                            type: 'multi-checkbox',
-                            label: __('Required Tasks', 'multivendorx'),
-                            class: 'mvx-toggle-checkbox',
-                            options: [
-                                {
-                                    key: 'enable_advertisement_in_subscription',
-                                    label: __('Identity Verification', 'multivendorx'),
-                                    value: 'enable_advertisement_in_subscription',
-                                    desc: __('Allow stores to advertise products at no extra cost if included in their subscription plan.', 'multivendorx'),
-                                },
-                                {
-                                    key: 'display_advertised_product_on_top',
-                                    label: __('Social Verification', 'multivendorx'),
-                                    value: 'display_advertised_product_on_top',
-                                    desc: __('Display advertised products at the top of catalog pages such as the shop or store page.', 'multivendorx'),
-                                },
-                                {
-                                    key: 'out_of_stock_visibility',
-                                    label: __('Email Verification', 'multivendorx'),
-                                    value: 'out_of_stock_visibility',
-                                    desc: __('Hide advertised products that are out of stock. Note: if WooCommerce’s out-of-stock visibility setting is enabled, products will be hidden regardless of this setting.', 'multivendorx'),
-                                },
-                            ],
-                            selectDeselect: true,
+                            type: 'description',
+                            // label: __('Show Products on Storefront', 'multivendorx'),
+                            title: "Access Permissions",
+                            des: "Pending stores can log in to their dashboard but cannot configure any settings.",
                         },
+                    ],
+                },
+                {
+                    id: 'Verify store identity and business legitimacy',
+                    icon: "adminlib-like",
+                    label: 'Rejected Status',
+                    connected: true,
+                    // disableBtn: true,
+                    enableOption: true,
+                    // openForm: ,
+                    // countBtn: true,
+                    desc: 'Stores denied approval',
+                    formFields: [
+
                         {
-                            key: 'non_compliance_action',
-                            type: 'setting-toggle',
-                            label: __('Non-Compliance Action', 'multivendorx'),
-                            options: [
-                                {
-                                    key: 'block_dashboard_access',
-                                    label: __('Block dashboard access', 'multivendorx'),
-                                    value: 'block_dashboard_access',
-                                },
-                                {
-                                    key: 'hide_store_from_view',
-                                    label: __('Hide store from view', 'multivendorx'),
-                                    value: 'hide_store_from_view',
-                                },
-                                {
-                                    key: 'disable_product upload',
-                                    label: __('Disable product upload', 'multivendorx'),
-                                    value: 'disable_product upload',
-                                },
-                            ],
+                            key: 'required_tasks',
+                            type: 'description',
+                            // label: __('Show Products on Storefront', 'multivendorx'),
+                            title: "Access Permissions",
+                            des: "Rejected stores can log in to their dashboard and reapply for approval.",
+                        },
+                    ],
+                },
+                {
+                    id: 'Verify store identity and business legitimacy',
+                    icon: "adminlib-error",
+                    label: 'Suspended Status',
+                    connected: true,
+                    // disableBtn: true,
+                    enableOption: true,
+                    // openForm: ,
+                    // countBtn: true,
+                    desc: 'Temporarily inactive stores',
+                    formFields: [
+
+                        {
+                            key: 'required_tasks',
+                            type: 'setup',
+                            // label: __('Show Products on Storefront', 'multivendorx'),
+                            title: "Show Products on Storefront",
+                            des: "Keep suspended store products visible to customers (non-purchasable).",
+                            link: "#"
+                        },
+                    ],
+                },
+                {
+                    id: 'Verify store identity and business legitimacy',
+                    icon: "adminlib-store-support",
+                    label: 'Approved Status',
+                    connected: true,
+                    // disableBtn: true,
+                    enableOption: true,
+                    // openForm: ,
+                    // countBtn: true,
+                    desc: 'Active and operational stores',
+                    formFields: [
+
+                        {
+                            key: 'required_tasks',
+                            type: 'setup',
+                            // label: __('Show Products on Storefront', 'multivendorx'),
+                            title: "Dashboard Access Control",
+                            des: "Manage dashboard menu items and capabilities for approved stores",
+                            link: "#"
                         },
                     ],
                 },

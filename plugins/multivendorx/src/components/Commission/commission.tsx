@@ -303,11 +303,6 @@ const Commission: React.FC = () => {
         },
     ];
 
-<<<<<<< HEAD
-=======
-
-
->>>>>>> 097d5a99 (store)
     // Export All CSV Button Component - Downloads ALL filtered data
     const ExportAllCSVButton: React.FC<{
         filterData: FilterData;
@@ -538,14 +533,9 @@ const Commission: React.FC = () => {
                 });
 
                 return (
-<<<<<<< HEAD
-                    <TableCell title={`${formattedDate}` }>
-                        {formattedDate}  
-=======
                     <TableCell title={`${formattedDate}`}>
                         {formattedDate}
 
->>>>>>> 097d5a99 (store)
                     </TableCell>
                 );
             },

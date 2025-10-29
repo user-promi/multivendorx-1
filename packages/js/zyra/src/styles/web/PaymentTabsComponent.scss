@@ -108,9 +108,11 @@
                 i {
                     font-size: 1.25rem;
                 }
-                .disable-icon{
+
+                .disable-icon {
                     color: gray;
                 }
+
                 ul {
                     display: flex;
                     gap: 0.625rem;
@@ -148,7 +150,8 @@
                                 transform: translate(-2rem, -2.313rem);
                             }
                         }
-                        .eye-icon{
+
+                        .eye-icon {
                             color: $theme-color;
                         }
                     }
@@ -237,11 +240,29 @@
                     }
                 }
             }
-            .payment-description{
+
+            .payment-description {
                 display: flex;
                 flex-wrap: wrap;
                 gap: 0.625rem;
                 margin: 0;
+            }
+
+            .description-wrapper {
+                padding: 1rem 1.5rem;
+                background: #a7a6a62b;
+                border-radius: 0.313rem;
+
+                .title {
+                    font-size: 1.063rem;
+                    font-weight: 500;
+
+                    i {
+                        font-size: 1.313rem;
+                        padding-right: 0.313rem;
+                        color: $theme-color;
+                    }
+                }
             }
         }
 
@@ -252,6 +273,7 @@
         }
 
         &.disable {
+
             .details,
             .toggle-icon {
                 filter: grayscale(1);
@@ -259,15 +281,15 @@
             }
         }
 
-        &.open-form{
+        &.open-form {
             cursor: default;
 
-            .payment-method{
+            .payment-method {
                 cursor: default;
             }
         }
 
-        
+
     }
 }
 
