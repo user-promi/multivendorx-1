@@ -333,7 +333,7 @@ const AllProduct: React.FC = () => {
                                 label: __('Edit', 'multivendorx'),
                                 icon: 'adminlib-create',
                                 onClick: (rowData) => {
-                                    window.location.href = `?page=multivendorx#&tab=stores&edit/${rowData.id}`;
+                                    window.location.href = `${appLocalizer.add_product_link}/${rowData.id}`;
                                 },
                                 hover: true
                             },
@@ -341,14 +341,15 @@ const AllProduct: React.FC = () => {
                                 label: __('View', 'multivendorx'),
                                 icon: 'adminlib-eye',
                                 onClick: (rowData) => {
-                                    window.location.href = `?page=multivendorx#&tab=stores&edit/${rowData.id}`;
+                                    window.location.href = `${row.original.permalink}`;
                                 },
                             },
                             {
                                 label: __('Copy URL', 'multivendorx'),
                                 icon: 'adminlib-vendor-form-copy',
                                 onClick: (rowData) => {
-                                    window.location.href = `?page=multivendorx#&tab=stores&edit/${rowData.id}`;
+                                    const url = rowData.original.permalink;
+                                    navigator.clipboard.writeText(url).catch(() => {});
                                 },
                             },
                             {
