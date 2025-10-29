@@ -4,7 +4,7 @@ import mapbox from '../../../assets/images/mapbox-logo.png';
 
 export default {
     id: 'geolocation',
-    priority: 7,
+    priority: 8,
     name: 'Geolocation',
     desc: __('Help customers discover stores and products near them by enabling location-based search and maps.', 'multivendorx'),
     icon: 'adminlib-location',

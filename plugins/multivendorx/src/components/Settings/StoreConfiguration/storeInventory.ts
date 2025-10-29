@@ -2,7 +2,7 @@ import { __ } from '@wordpress/i18n';
 
 export default {
     id: 'store-inventory',
-    priority: 5,
+    priority: 6,
     name: __('Inventory', 'multivendorx'),
     desc: __(
         'Manage inventory alerts and stock monitoring settings for stores in your marketplace.',
