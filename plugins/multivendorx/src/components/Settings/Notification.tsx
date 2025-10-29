@@ -177,12 +177,19 @@ const Notification = () => {
     // ------------------ Handlers ------------------
 
     const handleSave = () => {
+        if (!notifications || !editingNotification) return;
+
+        const filtered = notifications.filter(
+            (item) => item.id === editingNotification
+        );
+
+console.log(filtered)
         axios({
             method: 'POST',
             url: getApiLink(appLocalizer, 'notifications'),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
             data: { 
-                notifications: notifications
+                notifications: filtered
             }
         })
         .then((response) => {

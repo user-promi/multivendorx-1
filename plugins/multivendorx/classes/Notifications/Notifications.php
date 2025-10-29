@@ -15,7 +15,7 @@ defined('ABSPATH') || exit;
 
 class Notifications {
 
-    public $events;
+    public $events = [];
 
     public function __construct() {
         $this->register_notification_hooks();
