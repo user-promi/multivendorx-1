@@ -282,34 +282,23 @@ const Commission: React.FC = () => {
             });
     }
 
-    const searchFilter: RealtimeFilter[] = [
-        {
-            name: 'searchField',
-            render: (updateFilter, filterValue) => (
-                <>
-                    <div className="">
-                        <ExportAllCSVButton
-                            filterData={currentFilterData}
-                        />
-                    </div>
-                </>
-            ),
-        },
-    ];
-
     const actionButton: RealtimeFilter[] = [
         {
             name: 'actionButton',
-            render: (updateFilter, filterValue) => (
+            render: () => (
                 <>
-                    <div className="">
                         <ExportAllCSVButton 
                             filterData={currentFilterData}
                         />
-                    </div>
                 </>
             ),
         },
+        {
+        name: 'exportAll',
+        render: () => (
+            <i className="adminlib-more-vertical"></i>
+        ),
+    },
     ];
 
     
@@ -661,7 +650,6 @@ const Commission: React.FC = () => {
                         />
                     )}
                     totalCounts={totalRows}
-                    searchFilter={searchFilter}
                     actionButton={actionButton}
                 />
             </div>

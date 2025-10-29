@@ -8,7 +8,6 @@ import {
     RowSelectionState,
     PaginationState,
 } from '@tanstack/react-table';
-import DefaultStore from "../../../assets/images/default-store.jpg";
 
 type StoreRow = {
     id?: number;
@@ -156,10 +155,10 @@ const StoreTable: React.FC = () => {
     // Format date function
     const formatDate = (dateString: string) => {
         if (!dateString) return '-';
-        
+
         const dateObj = new Date(dateString);
         if (isNaN(dateObj.getTime())) return '-';
-        
+
         return new Intl.DateTimeFormat('en-US', {
             year: 'numeric',
             month: 'short',
@@ -223,11 +222,15 @@ const StoreTable: React.FC = () => {
                             }}
                             className="product-wrapper"
                         >
-                            <img 
-                                src={row.original.image}
-                                alt={row.original.store_name}
-                               
-                            />
+                            {row.original.image ? (
+                                <img
+                                    src={row.original.image}
+                                    alt={row.original.store_name}
+                                />
+                            ) : (
+                                <i className="adminlib-store-inventory"></i>
+                            )}
+
                             <div className="details">
                                 <span className="title">
                                     {row.original.store_name || '-'}
@@ -252,10 +255,10 @@ const StoreTable: React.FC = () => {
                             </div>
                         )}
                         {row.original.phone && (
-                        <div>
-                            <b><i className="adminlib-form-phone"></i></b> 
-                            {row.original.phone ? (row.original.phone) : '-'}
-                        </div>
+                            <div>
+                                <b><i className="adminlib-form-phone"></i></b>
+                                {row.original.phone ? (row.original.phone) : '-'}
+                            </div>
                         )}
                     </div>
                 </TableCell>
@@ -272,7 +275,7 @@ const StoreTable: React.FC = () => {
                 return (
                     <TableCell title={primaryOwner?.name || primaryOwner?.email || ''}>
                         {primaryOwner ? (
-                            <a 
+                            <a
                                 href={`/wp-admin/user-edit.php?user_id=${primaryOwner.id}`}
                                 onClick={(e) => {
                                     e.preventDefault();

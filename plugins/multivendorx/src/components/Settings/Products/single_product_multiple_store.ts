@@ -8,7 +8,7 @@ export default {
         'Manage how multiple vendors (stores) can list and sell the same product in your marketplace.',
         'multivendorx'
     ),
-    icon: 'adminlib-general-tab',
+    icon: 'adminlib-spmv',
     submitUrl: 'settings',
     modal: [
         

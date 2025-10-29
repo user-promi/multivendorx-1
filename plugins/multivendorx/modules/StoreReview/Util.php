@@ -71,23 +71,25 @@ class Util {
     /**
      * Insert a new review
      */
-    public static function insert_review($store_id, $user_id, $title, $content, $overall, $order_id = 0) {
+    public static function insert_review($store_id, $user_id, $title, $content, $overall, $order_id = 0, $images = []) {
         global $wpdb;
         $table_review = $wpdb->prefix . Utill::TABLES['review'];
     
         $wpdb->insert($table_review, [
             'store_id'       => $store_id,
             'customer_id'    => $user_id,
-            'order_id'       => intval($order_id), // ✅ store order ID
+            'order_id'       => intval($order_id),
             'overall_rating' => $overall,
             'review_title'   => $title,
             'review_content' => $content,
+            'review_images'  => !empty($images) ? wp_json_encode($images) : null,
             'status'         => 'pending',
             'date_created'   => current_time('mysql'),
         ]);
     
         return $wpdb->insert_id;
     }
+    
     
 
     /**

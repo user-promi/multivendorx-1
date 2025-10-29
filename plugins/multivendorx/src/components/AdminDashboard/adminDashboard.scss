@@ -123,8 +123,8 @@
 
 .row {
     display: flex;
-    gap: 1.25rem;
-    padding: 0.625rem 0;
+    gap: 2rem;
+    padding-bottom: 2rem;
 
     .header {
         // margin-top: 0.5rem;
@@ -181,6 +181,10 @@
 
 .w-45 {
     width: 45%;
+}
+
+.w-40 {
+    width: 40% !important;
 }
 
 .header {
@@ -354,11 +358,11 @@
         flex-direction: column;
         gap: 0;
 
-        .header a{
+        .header a {
             display: flex;
             gap: 0.313rem;
 
-            i{
+            i {
                 font-size: 0.813rem;
             }
         }
@@ -371,7 +375,7 @@
         align-items: center;
         gap: 0.5rem;
         padding: 0.313rem;
-        margin-bottom: 0.313rem;
+        margin-bottom: 0.5rem;
         transition: all 0.5s ease;
         border-radius: 0.313rem;
 
@@ -442,11 +446,11 @@
     display: flex;
     gap: 1rem;
     width: 100%;
-    padding: 0.5rem 0;
 
-    &.tab{
+    &.tab {
         cursor: pointer;
     }
+
     .action {
         width: 100%;
         padding: 1rem;
@@ -1189,6 +1193,17 @@
         width: 2.5rem;
         height: 2.5rem;
         object-fit: cover;
+    }
+
+    i {
+        width: 2.5rem;
+        height: 2.5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #e5e4e496;
+        font-size: 1.25rem;
+        color: #444141;
     }
 }
 
