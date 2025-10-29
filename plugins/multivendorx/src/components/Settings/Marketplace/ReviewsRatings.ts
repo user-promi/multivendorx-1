@@ -13,7 +13,7 @@ export default {
             type: 'blocktext',
             label: __( 'no_label', 'multivendorx' ),
             blocktext: __(
-                '<b>Admin must enable product reviews from <a href="/wp-admin/admin.php?page=wc-settings&tab=products" target="_blank">WooCommerce settings</a>.</b>',
+                '<b>Store and product reviews are separate. Enable product reviews from <a href="/wp-admin/admin.php?page=wc-settings&tab=products" target="_blank">WooCommerce settings</a>.</b>',
                 'multivendorx'
             ),            
         },

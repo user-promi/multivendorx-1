@@ -150,8 +150,8 @@ export default {
             ),
             name: 'abuse_report_reasons',
             defaultValues: [
-                { value: "Order Received", locked: true, iconClass: "adminlib-check", description: "Order is received by store", required: true },
-                { value: "Processing", locked: true, iconClass: "adminlib-clock", description: "Order is being processed", required: true },
+                { value: "Delivered", locked: true, iconClass: "adminlib-check", description: "Order is received by store", required: true },
+                { value: "Cancelled", locked: true, iconClass: "adminlib-clock", description: "Order is cancelled", required: true },
             ],
             iconOptions: ["adminlib-check", "adminlib-clock", "adminlib-cart", "adminlib-store"], // dropdown options
             proSetting: false,
