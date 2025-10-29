@@ -14,6 +14,7 @@ export default {
             type: 'select',
             label: __( 'Facilitators', 'multivendorx' ),
            settingDescription: __('Assign a user as a facilitator who will receive the facilitator fee', 'multivendorx'),
+           desc: __('Configure the facilitator fee structure directly from <a href="#">this section</a>.', 'multivendorx'),
            moduleEnabled: 'facilitator',
            className:"select-class",
            size: "40%",
