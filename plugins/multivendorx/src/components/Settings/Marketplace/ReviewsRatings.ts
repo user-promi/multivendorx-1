@@ -35,11 +35,8 @@ export default {
             key: 'ratings_parameters',
             type: 'multi-string',
             label: __('Rating parameters', 'multivendorx'),
-            //placeholder: __('Define the key milestones in a store’s delivery process. These stages help stores communicate order progress to customers', 'multivendorx'),
             iconEnable: false,
-            descEnable: true,
             moduleEnabled: 'store-review',
-            requiredEnable: true,
             settingDescription: __(
                 'Define rating parameters such as packaging, delivery, behaviour, policies, etc.',
                 'multivendorx'
@@ -51,10 +48,6 @@ export default {
                 { value: "Value for money", },
                 { value: "Overall experience",},
             ],
-            // dependent: {
-            //     key: 'product_review_sync',
-            //     set: true,
-            // },
             proSetting: false,
             maxItems: 10,
             allowDuplicates: false,

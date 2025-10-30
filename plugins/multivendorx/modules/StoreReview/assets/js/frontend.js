@@ -75,45 +75,128 @@ jQuery(document).ready(function ($) {
     }
 
     // Submit Review
+    // $('#review_submit').on('click', function (e) {
+    //     e.preventDefault();
+
+    //     const formData = new FormData();
+    //     formData.append('action', 'multivendorx_store_review_submit');
+    //     formData.append('nonce', review.nonce);
+    //     formData.append('store_id', store_id);
+    //     formData.append('review_title', $('#review_title').val());
+    //     formData.append('review_content', $('#review_content').val());
+
+    //     // Ratings
+    //     $('.multivendorx-rating-select').each(function () {
+    //         const key = $(this).attr('name');
+    //         formData.append(key, $(this).val());
+    //     });
+
+    //     // Images
+    //     const files = $('#review_images')[0].files;
+    //     for (let i = 0; i < files.length; i++) {
+    //         formData.append('review_images[]', files[i]);
+    //     }
+
+    //     $.ajax({
+    //         url: review.ajaxurl,
+    //         type: 'POST',
+    //         data: formData,
+    //         processData: false,
+    //         contentType: false,
+    //         success: function (res) {
+    //             alert(res.data.message);
+    //             if (res.success) {
+    //                 $('#review-form-wrapper').html('<div class="woocommerce-info">Thank you for your review!</div>');
+    //                 loadAverageRatings();
+    //                 loadReviews();
+    //             }
+    //         }
+    //     });
+    // });
+    // Submit Review
     $('#review_submit').on('click', function (e) {
         e.preventDefault();
-    
+
+        // Clear previous messages
+        $('.review-message').remove();
+
+        const title = $('#review_title').val().trim();
+        const content = $('#review_content').val().trim();
+
+        // Inline validation
+        if (!title || !content) {
+            $('#commentform').prepend(`
+            <div class="woocommerce-error review-message">
+                ${!title && !content
+                    ? 'Please enter both the Review Title and Review Content.'
+                    : !title
+                        ? 'Please enter a Review Title.'
+                        : 'Please enter your Review Content.'}
+            </div>
+        `);
+            return;
+        }
+
         const formData = new FormData();
         formData.append('action', 'multivendorx_store_review_submit');
         formData.append('nonce', review.nonce);
         formData.append('store_id', store_id);
-        formData.append('review_title', $('#review_title').val());
-        formData.append('review_content', $('#review_content').val());
-    
+        formData.append('review_title', title);
+        formData.append('review_content', content);
+
         // Ratings
         $('.multivendorx-rating-select').each(function () {
             const key = $(this).attr('name');
             formData.append(key, $(this).val());
         });
-    
+
         // Images
         const files = $('#review_images')[0].files;
         for (let i = 0; i < files.length; i++) {
             formData.append('review_images[]', files[i]);
         }
-    
+
         $.ajax({
             url: review.ajaxurl,
             type: 'POST',
             data: formData,
             processData: false,
             contentType: false,
+            beforeSend: function () {
+                $('#review_submit').prop('disabled', true).text('Submitting...');
+            },
             success: function (res) {
-                alert(res.data.message);
+                $('#review_submit').prop('disabled', false).text('Submit Review');
+                $('.review-message').remove();
+
                 if (res.success) {
-                    $('#review-form-wrapper').html('<div class="woocommerce-info">Thank you for your review!</div>');
+                    $('#review-form-wrapper').html(`
+                    <div class="woocommerce-message review-message">
+                        Thank you for your review!
+                    </div>
+                `);
                     loadAverageRatings();
                     loadReviews();
+                } else {
+                    const message = res.data && res.data.message
+                        ? res.data.message
+                        : 'Something went wrong. Please try again.';
+                    $('#commentform').prepend(`
+                    <div class="woocommerce-error review-message">${message}</div>
+                `);
                 }
+            },
+            error: function () {
+                $('#review_submit').prop('disabled', false).text('Submit Review');
+                $('#commentform').prepend(`
+                <div class="woocommerce-error review-message">
+                    Unable to submit review. Please try again later.
+                </div>
+            `);
             }
         });
     });
-    
+
 
     // hover star
     $('.rating i').on('mouseenter', function () {

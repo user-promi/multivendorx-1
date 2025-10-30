@@ -503,8 +503,6 @@ export const Announcements: React.FC = () => {
                 />
             ),
         },
-
-
     ];
 
     const BulkAction: React.FC = () => (
