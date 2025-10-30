@@ -617,6 +617,8 @@ export const Announcements: React.FC = () => {
                                     inputClass="textarea-input"
                                     value={formData.content}
                                     onChange={handleChange}
+                                    usePlainText={false}
+                                    tinymceApiKey={appLocalizer.settings_databases_value['marketplace-settings']['tinymce_api_section'] ?? ''}
                                 />
                                 {validationErrors.content && <div className="invalid-feedback">{validationErrors.content}</div>}
                             </div>

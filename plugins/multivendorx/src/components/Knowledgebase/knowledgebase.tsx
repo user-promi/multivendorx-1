@@ -525,6 +525,8 @@ export const KnowledgeBase: React.FC = () => {
                                     inputClass="textarea-input"
                                     value={formData.content}
                                     onChange={handleChange}
+                                    usePlainText={false}
+                                    tinymceApiKey={appLocalizer.settings_databases_value['marketplace-settings']['tinymce_api_section'] ?? ''}
                                 />
                                 {validationErrors.content && <p className="invalid-feedback">{validationErrors.content}</p>}
                             </div>

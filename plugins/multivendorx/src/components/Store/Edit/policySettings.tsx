@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { BasicInput, TextArea, SuccessNotice, getApiLink } from 'zyra';
 
-const PolicySettings = ({ id }: { id: string|null }) => {
+const PolicySettings = ({ id }: { id: string | null }) => {
 	const [formData, setFormData] = useState<{ [key: string]: string }>({});
 	const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
@@ -28,7 +28,7 @@ const PolicySettings = ({ id }: { id: string|null }) => {
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
 		const { name, value } = e?.target;
-		console.log(name,value);
+		console.log(name, value);
 
 		setFormData((prev) => {
 			const updated = {
@@ -66,9 +66,14 @@ const PolicySettings = ({ id }: { id: string|null }) => {
 
 						<div className="form-group-wrapper">
 							<div className="form-group">
-								<TextArea tinymceApiKey={appLocalizer.tinymceApiKey} usePlainText={true} name="shipping_policy" wrapperClass="setting-from-textarea"
+								<TextArea name="shipping_policy" wrapperClass="setting-from-textarea"
 									inputClass="textarea-input"
-									descClass="settings-metabox-description" value={formData.shipping_policy} onChange={handleChange} />
+									descClass="settings-metabox-description"
+									value={formData.shipping_policy}
+									onChange={handleChange}
+									usePlainText={false}
+									tinymceApiKey={appLocalizer.settings_databases_value['marketplace-settings']['tinymce_api_section'] ?? ''}
+								/>
 							</div>
 						</div>
 
@@ -80,9 +85,14 @@ const PolicySettings = ({ id }: { id: string|null }) => {
 
 						<div className="form-group-wrapper">
 							<div className="form-group">
-								<TextArea tinymceApiKey={appLocalizer.tinymceApiKey} name="refund_policy" wrapperClass="setting-from-textarea"
+								<TextArea name="refund_policy" wrapperClass="setting-from-textarea"
 									inputClass="textarea-input"
-									descClass="settings-metabox-description" value={formData.refund_policy} onChange={handleChange} />
+									descClass="settings-metabox-description"
+									value={formData.refund_policy}
+									onChange={handleChange}
+									usePlainText={false}
+									tinymceApiKey={appLocalizer.settings_databases_value['marketplace-settings']['tinymce_api_section'] ?? ''}
+								/>
 							</div>
 						</div>
 
@@ -94,9 +104,14 @@ const PolicySettings = ({ id }: { id: string|null }) => {
 
 						<div className="form-group-wrapper">
 							<div className="form-group">
-								<TextArea tinymceApiKey={appLocalizer.tinymceApiKey} name="exchange_policy" wrapperClass="setting-from-textarea"
+								<TextArea name="exchange_policy" wrapperClass="setting-from-textarea"
 									inputClass="textarea-input"
-									descClass="settings-metabox-description" value={formData.exchange_policy} onChange={handleChange} />
+									descClass="settings-metabox-description"
+									value={formData.exchange_policy}
+									onChange={handleChange}
+									usePlainText={false}
+									tinymceApiKey={appLocalizer.settings_databases_value['marketplace-settings']['tinymce_api_section'] ?? ''}
+								/>
 							</div>
 						</div>
 

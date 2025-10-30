@@ -28,10 +28,6 @@ type FilterData = {
   store_id?: string;
   orderBy?: any;
   order?: any;
-  date?: {
-    start_date?: string;
-    end_date?: string;
-  };
 };
 
 const StoreOrders: React.FC = () => {
@@ -86,7 +82,7 @@ const StoreOrders: React.FC = () => {
   }, [pagination.pageIndex, pagination.pageSize, totalRows]);
 
   /**
-   * Fetch data from backend
+   * Fetch data from backend (WooCommerce Orders)
    */
   const requestData = (
     rowsPerPage = 10,
@@ -95,25 +91,38 @@ const StoreOrders: React.FC = () => {
     store_id = '',
     orderBy = '',
     order = '',
-    startDate?: string,
-    endDate?: string
+    startDate = new Date(0),
+    endDate = new Date(),
   ) => {
     setData([]);
+
+    // 🧾 Base WooCommerce query params
+    const params: any = {
+      page: currentPage,
+      per_page: rowsPerPage,
+      meta_key: 'multivendorx_store_id',
+      value: store_id,
+      search: searchField,
+    };
+
+    //Add Date Filtering — only if both are valid Date objects
+    if (startDate && endDate ){
+      // Convert to UTC ISO8601 format (WooCommerce expects this)
+      params.after =startDate.toISOString();
+      params.before = endDate.toISOString();
+    }
+
+    //Add Sorting
+    if (orderBy) {
+      params.orderby = orderBy;
+      params.order = order || 'asc';
+    }
+
     axios({
       method: 'GET',
       url: `${appLocalizer.apiUrl}/wc/v3/orders`,
       headers: { 'X-WP-Nonce': appLocalizer.nonce },
-      params: {
-        page: currentPage,
-        per_page: rowsPerPage,
-        meta_key: 'multivendorx_store_id',
-        value:store_id,
-        search:searchField,
-        // orderBy,
-        // order,
-        // startDate,
-        // endDate,
-      },
+      params,
     })
       .then((response) => {
         const orders: StoreRow[] = response.data.map((order: any) => ({
@@ -131,9 +140,11 @@ const StoreOrders: React.FC = () => {
           status: order.status,
           currency_symbol: order.currency_symbol,
         }));
+
         setData(orders);
       })
-      .catch(() => {
+      .catch((error) => {
+        console.error('❌ Order fetch failed:', error);
         setError(__('Failed to load order data', 'multivendorx'));
         setData([]);
       });
@@ -202,21 +213,6 @@ const StoreOrders: React.FC = () => {
 
   const searchFilter: RealtimeFilter[] = [
     {
-      name: 'searchAction',
-      render: (updateFilter, filterValue) => (
-        <div className="search-action">
-          <select
-            className="basic-select"
-            value={filterValue || 'order_id'}
-            onChange={(e) => updateFilter('searchAction', e.target.value)}
-          >
-            <option value="order_id">{__('Order ID', 'multivendorx')}</option>
-            <option value="customer">{__('Customer', 'multivendorx')}</option>
-          </select>
-        </div>
-      ),
-    },
-    {
       name: 'searchField',
       render: (updateFilter, filterValue) => (
         <div className="search-section">
@@ -266,6 +262,9 @@ const StoreOrders: React.FC = () => {
       cell: ({ row }) => <TableCell>{row.original.commission_amount}</TableCell>,
     },
     {
+      id: 'date',
+      accessorKey: 'date',
+      enableSorting: true,
       header: __('Date', 'multivendorx'),
       cell: ({ row }) => <TableCell>{row.original.date}</TableCell>,
     },

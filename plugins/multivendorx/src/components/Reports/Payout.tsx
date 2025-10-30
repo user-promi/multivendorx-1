@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { __ } from '@wordpress/i18n';
-import { Table, TableCell } from "zyra";
+import { CalendarInput, getApiLink, Table, TableCell } from "zyra";
 import { Bar, BarChart, CartesianGrid, Cell, Legend, Line, LineChart, Pie, PieChart, ResponsiveContainer, XAxis, YAxis } from 'recharts';
 import { Tooltip } from 'react-leaflet';
+import axios from 'axios';
+import { PaginationState, RowSelectionState } from '@tanstack/react-table';
 
 const overview = [
   {
@@ -30,71 +32,191 @@ const overview = [
     icon: 'adminlib-global-community yellow',
   },
 ];
-const data = [
-  { month: "Jan", revenue: 4000, net_sale: 2400, admin_amount: 1200 },
-  { month: "Feb", revenue: 3000, net_sale: 2000, admin_amount: 1000 },
-  { month: "Mar", revenue: 4500, net_sale: 2800, admin_amount: 1300 },
-  { month: "Apr", revenue: 5000, net_sale: 3200, admin_amount: 1500 },
-  { month: "May", revenue: 4200, net_sale: 2500, admin_amount: 1400 },
-  { month: "Jun", revenue: 4800, net_sale: 3000, admin_amount: 1600 },
-  { month: "Jul", revenue: 5200, net_sale: 3400, admin_amount: 1700 },
-  { month: "Aug", revenue: 4700, net_sale: 2900, admin_amount: 1500 },
+type StoreRow = {
+  id: number;
+  vendor: string;
+  amount: string;
+  commission: string;
+  date: string;
+  status: "Paid" | "Unpaid";
+};
+const pieData = [
+  { name: "Store 1(300)", value: 300 },
+  { name: "Store 2(2400)", value: 2400 },
+  { name: "Store 3(800)", value: 800 },
+  { name: "Store 4(200)", value: 200 },
+  { name: "Store 5(400)", value: 400 },
 ];
-const overviewData = [
-  { name: "Jan", orders: 120, sold_out: 30 },
-  { name: "Feb", orders: 90, sold_out: 20 },
-  { name: "Mar", orders: 150, sold_out: 40 },
-  { name: "Apr", orders: 170, sold_out: 35 },
-  { name: "May", orders: 140, sold_out: 25 },
-  { name: "Jun", orders: 180, sold_out: 50 },
-  { name: "Jul", orders: 200, sold_out: 45 },
-  { name: "Aug", orders: 160, sold_out: 30 },
-];
+
+const COLORS = ["#5007aa", "#00c49f", "#ff7300", "#d400ffff", "#00ff88ff"];
+
+export interface RealtimeFilter {
+  name: string;
+  render: (
+    updateFilter: (key: string, value: any) => void,
+    filterValue: any
+  ) => React.ReactNode;
+}
+type StoreStatus = {
+  key: string;
+  name: string;
+  count: number;
+};
+type FilterData = {
+  typeCount?: any;
+  searchField?: any;
+  orderBy?: any;
+  order?: any;
+};
 const Transactions: React.FC = () => {
-  const [data, setData] = useState<StoreRow[] | null>(null);
+  const [data, setData] = useState<any[] | null>(null);
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+  const [storeStatus, setStoreStatus] = useState<StoreStatus[] | null>(null);
+
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: 10,
   });
-  const [pageCount, setPageCount] = useState(0);
-    // Handle pagination and filter changes
-    const requestApiForData = (
-      rowsPerPage: number,
-      currentPage: number,
-    ) => {
-  
-    };
-  type StoreRow = {
-    id: number;
-    vendor: string;
-    amount: string;
-    commission: string;
-    date: string;
-    status: "Paid" | "Unpaid";
+  const [totalRows, setTotalRows] = useState<number>(0);
+  const [pageCount, setPageCount] = useState<number>(0);
+  const [error, setError] = useState<string | null>(null);
+  // Fetch total rows on mount
+  useEffect(() => {
+    axios({
+      method: 'GET',
+      url: getApiLink(appLocalizer, 'store'),
+      headers: { 'X-WP-Nonce': appLocalizer.nonce },
+      params: { count: true },
+    })
+      .then((response) => {
+        setTotalRows(response.data || 0);
+        setPageCount(Math.ceil(response.data / pagination.pageSize));
+      })
+      .catch(() => {
+        setError(__('Failed to load total rows', 'multivendorx'));
+      });
+  }, []);
+
+  useEffect(() => {
+    const currentPage = pagination.pageIndex + 1;
+    const rowsPerPage = pagination.pageSize;
+    requestData(rowsPerPage, currentPage);
+    setPageCount(Math.ceil(totalRows / rowsPerPage));
+  }, [pagination]);
+
+  // Fetch data from backend.
+  function requestData(
+    rowsPerPage = 10,
+    currentPage = 1,
+    typeCount = '',
+    searchField = '',
+    orderBy = '',
+    order = '',
+    startDate = new Date(new Date().getFullYear(), new Date().getMonth() - 1, 1),
+    endDate = new Date()
+  ) {
+    setData(null);
+    axios({
+      method: 'GET',
+      url: getApiLink(appLocalizer, 'store'),
+      headers: { 'X-WP-Nonce': appLocalizer.nonce },
+      params: {
+        page: currentPage,
+        row: rowsPerPage,
+        filter_status: typeCount === 'all' ? '' : typeCount,
+        searchField,
+        orderBy,
+        order,
+        startDate,
+        endDate
+      },
+    })
+      .then((response) => {
+        setData(response.data.stores || []);
+        setStoreStatus([
+          {
+            key: 'all',
+            name: 'All',
+            count: response.data.all || 0,
+          },
+          {
+            key: 'active',
+            name: 'Active',
+            count: response.data.active || 0,
+          },
+          {
+            key: 'pending',
+            name: 'Pending',
+            count: response.data.pending || 0,
+          },
+        ]);
+      })
+      .catch(() => {
+        setError(__('Failed to load stores', 'multivendorx'));
+        setData([]);
+      });
+  }
+
+  // Handle pagination and filter changes
+  const requestApiForData = (
+    rowsPerPage: number,
+    currentPage: number,
+    filterData: FilterData
+  ) => {
+    setData(null);
+    requestData(
+      rowsPerPage,
+      currentPage,
+      filterData?.typeCount,
+      filterData?.searchField,
+      filterData?.orderBy,
+      filterData?.order,
+      filterData?.date?.start_date,
+      filterData?.date?.end_date,
+    );
   };
-  const chart = [
-    { month: "Jan", revenue: 4000, net_sale: 2400, admin_amount: 1200 },
-    { month: "Feb", revenue: 3000, net_sale: 2000, admin_amount: 1000 },
-    { month: "Mar", revenue: 4500, net_sale: 2800, admin_amount: 1300 },
-    { month: "Apr", revenue: 5000, net_sale: 3200, admin_amount: 1500 },
-    { month: "May", revenue: 4200, net_sale: 2500, admin_amount: 1400 },
-    { month: "Jun", revenue: 4800, net_sale: 3000, admin_amount: 1600 },
-    { month: "Jul", revenue: 5200, net_sale: 3400, admin_amount: 1700 },
-    { month: "Aug", revenue: 4700, net_sale: 2900, admin_amount: 1500 },
+
+  const searchFilter: RealtimeFilter[] = [
+    {
+      name: 'searchField',
+      render: (updateFilter, filterValue) => (
+        <div className="search-section">
+          <input
+            name="searchField"
+            type="text"
+            placeholder={__('Search', 'multivendorx')}
+            onChange={(e) => {
+              updateFilter(e.target.name, e.target.value);
+            }}
+            value={filterValue || ''}
+          />
+          <i className="adminlib-search"></i>
+        </div>
+      ),
+    },
   ];
-  const demoData: StoreRow[] = [
-    { id: 54211, vendor: "John's Electronics", amount: "$1200", commission: "$120", date: "2025-09-01", status: "Paid" },
-    { id: 84211, vendor: "Jane's Apparel", amount: "$850", commission: "$85", date: "2025-09-02", status: "Unpaid" },
-    { id: 84211, vendor: "Tech Hub", amount: "$2300", commission: "$230", date: "2025-09-03", status: "Paid" },
-    { id: 84211, vendor: "Gadget World", amount: "$670", commission: "$67", date: "2025-09-04", status: "Unpaid" },
-    { id: 84211, vendor: "Fashion Store", amount: "$980", commission: "$98", date: "2025-09-05", status: "Paid" },
-    { id: 64211, vendor: "Mobile Planet", amount: "$1500", commission: "$150", date: "2025-09-06", status: "Unpaid" },
-    { id: 54211, vendor: "Home Essentials", amount: "$720", commission: "$72", date: "2025-09-07", status: "Paid" },
-    { id: 8211, vendor: "Office Supplies Co.", amount: "$430", commission: "$43", date: "2025-09-08", status: "Unpaid" },
-    { id: 4211, vendor: "Luxury Bags", amount: "$1250", commission: "$125", date: "2025-09-09", status: "Paid" },
-    { id: 84211, vendor: "Kitchen King", amount: "$980", commission: "$98", date: "2025-09-10", status: "Unpaid" },
+
+  const realtimeFilter: RealtimeFilter[] = [
+    {
+      name: 'date',
+      render: (updateFilter) => (
+        <div className="right">
+          <CalendarInput
+            wrapperClass=""
+            inputClass=""
+            onChange={(range: any) => {
+              updateFilter('date', {
+                start_date: range.startDate,
+                end_date: range.endDate,
+              });
+            }}
+          />
+        </div>
+      ),
+    },
   ];
+
+  const currencySymbol = appLocalizer?.currency_symbol;
 
   const columns: ColumnDef<StoreRow>[] = [
     {
@@ -114,97 +236,195 @@ const Transactions: React.FC = () => {
         />
       ),
     },
-
     {
+      id: 'store_name',
+      accessorKey: 'store_name',
+      enableSorting: true,
       header: __('Store', 'multivendorx'),
+      cell: ({ row }) => {
+        const status = row.original.status || '';
+        const rawDate = row.original.applied_on;
+        let formattedDate = '-';
+        if (rawDate) {
+          const dateObj = new Date(rawDate);
+          formattedDate = new Intl.DateTimeFormat('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric',
+          }).format(dateObj);
+        }
+
+        return (
+          <TableCell title={row.original.store_name || ''}>
+            <a
+              onClick={() => {
+                window.location.href = `?page=multivendorx#&tab=stores&view&id=${row.original.id}`;
+              }}
+              className="product-wrapper"
+            >
+              {row.original.image ? (
+                <img
+                  src={row.original.image}
+                  alt={row.original.store_name}
+                />
+              ) : (
+                <i className="adminlib-store-inventory"></i>
+              )}
+
+              <div className="details">
+                <span className="title">{row.original.store_name || '-'}</span>
+                <span>Since {formattedDate}</span>
+              </div>
+            </a>
+          </TableCell>
+        );
+      },
+    },
+    {
+      header: __('Contact', 'multivendorx'),
       cell: ({ row }) => (
-        <TableCell title={row.original.store_name || ''}>
-          {row.original.vendor || '-'}
+        <TableCell title={row.original.email || ''}>
+          <div className="table-content">
+            {row.original.email && (
+              <div>
+                <b><i className="adminlib-mail"></i></b> {row.original.email}
+              </div>
+            )}
+            {row.original.phone && (
+              <div>
+                <b><i className="adminlib-form-phone"></i></b>
+                {row.original.phone ? row.original.phone : '-'}
+              </div>
+            )}
+          </div>
         </TableCell>
       ),
     },
     {
+      id: 'primary_owner',
+      accessorKey: 'primary_owner',
+      enableSorting: true,
+      accessorFn: (row) => row.primary_owner?.name || row.primary_owner?.email || '',
+      header: __('Primary Owner', 'multivendorx'),
+      cell: ({ row }) => {
+        const primaryOwner = row.original.primary_owner;
+        return (
+          <TableCell title={primaryOwner?.name || primaryOwner?.email || ''}>
+            {primaryOwner ? (
+              <a
+                href={`/wp-admin/user-edit.php?user_id=${primaryOwner.id}`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.location.href = `/wp-admin/user-edit.php?user_id=${primaryOwner.id}`;
+                }}
+              >
+                {primaryOwner.name || primaryOwner.email}
+              </a>
+            ) : (
+              <span>-</span>
+            )}
+          </TableCell>
+        );
+      },
+    },
+    {
+      id: 'status',
+      header: __('Status', 'multivendorx'),
+      cell: ({ row }) => {
+        const status = row.original.status || '';
+        const rawDate = row.original.applied_on;
+        let formattedDate = '-';
+        if (rawDate) {
+          const dateObj = new Date(rawDate);
+          formattedDate = new Intl.DateTimeFormat('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric',
+          }).format(dateObj);
+        }
+
+        const getStatusBadge = (status: string) => {
+          switch (status) {
+            case 'active':
+              return <span className="admin-badge green">Active</span>;
+            case 'pending':
+              return <span className="admin-badge yellow">Pending</span>;
+            case 'rejected':
+              return <span className="admin-badge red">Rejected</span>;
+            case 'locked':
+              return <span className="admin-badge blue">Locked</span>;
+            default:
+              return <span className="admin-badge gray">{status}</span>;
+          }
+        };
+
+        return (
+          <TableCell title={`${status} - ${formattedDate}`}>
+            {getStatusBadge(status)}
+          </TableCell>
+        );
+      },
+    },
+    {
       header: __('Order Total', 'multivendorx'),
       cell: ({ row }) => (
-        <TableCell title={row.original.store_slug || ''}>
-          {row.original.amount || '-'}
+        <TableCell title={`${currencySymbol}${row.original.commission.total_order_amount || ''}`}>
+          {row.original.commission.total_order_amount
+            ? `${currencySymbol}${row.original.commission.total_order_amount}`
+            : '-'}
         </TableCell>
       ),
     },
     {
       header: __('Shipping', 'multivendorx'),
       cell: ({ row }) => (
-        <TableCell title={row.original.store_slug || ''}>
-          {row.original.amount || '-'}
+        <TableCell title={`${currencySymbol}${row.original.commission.shipping_amount || ''}`}>
+          {row.original.commission.shipping_amount
+            ? `${currencySymbol}${row.original.commission.shipping_amount}`
+            : '-'}
         </TableCell>
       ),
     },
     {
       header: __('Tax', 'multivendorx'),
       cell: ({ row }) => (
-        <TableCell title={row.original.store_slug || ''}>
-          {row.original.amount || '-'}
+        <TableCell title={`${currencySymbol}${row.original.commission.tax_amount || ''}`}>
+          {row.original.commission.tax_amount
+            ? `${currencySymbol}${row.original.commission.tax_amount}`
+            : '-'}
         </TableCell>
       ),
     },
     {
       header: __('Store Commission', 'multivendorx'),
       cell: ({ row }) => (
-        <TableCell title={row.original.store_slug || ''}>
-          {row.original.commission || '-'}
-        </TableCell>
-      ),
-    },
-    {
-      header: __('Store Net Earnings', 'multivendorx'),
-      cell: ({ row }) => (
-        <TableCell title={row.original.store_slug || ''}>
-          {row.original.commission || '-'}
+        <TableCell title={`${currencySymbol}${row.original.commission.commission_total || ''}`}>
+          {row.original.commission.commission_total
+            ? `${currencySymbol}${row.original.commission.commission_total}`
+            : '-'}
         </TableCell>
       ),
     },
     {
       header: __('Admin Earnings', 'multivendorx'),
-      cell: ({ row }) => (
-        <TableCell title={row.original.store_slug || ''}>
-          {row.original.commission || '-'}
-        </TableCell>
-      ),
+      cell: ({ row }) => {
+        const adminEarnings =
+          (Number(row.original.commission.total_order_amount || 0) -
+            Number(row.original.commission.commission_total || 0)) || 0;
+
+        return (
+          <TableCell title={`${currencySymbol}${adminEarnings}`}>
+            {`${currencySymbol}${adminEarnings}`}
+          </TableCell>
+        );
+      },
     },
   ];
-  const analyticsData = [
-    { icon: "adminlib-tools red", number: "230k", text: "Total Earnings" },
-    { icon: "adminlib-book green", number: "45k", text: "Awaiting Disbursement" },
-    { icon: "adminlib-global-community yellow", number: "1.2M", text: "Pending Withdrawal" },
-    { icon: "adminlib-wholesale blue", number: "500k", text: "Completed / Paid Disbursement" },
-    { icon: "adminlib-tools red", number: "230k", text: "Refund / Chargeback Impact" },
-    { icon: "adminlib-book green", number: "45k", text: "Manual Adjustments" },
-    { icon: "adminlib-global-community yellow", number: "1.2M", text: "Upcoming Unlock" },
-  ];
-  const pieData = [
-    { name: "Store 1(300)", value: 300 },
-    { name: "Store 2(2400)", value: 2400 },
-    { name: "Store 3(800)", value: 800 },
-    { name: "Store 4(200)", value: 200 },
-    { name: "Store 5(400)", value: 400 },
-  ];
 
-  const COLORS = ["#5007aa", "#00c49f", "#ff7300", "#d400ffff", "#00ff88ff"];
+
+
   return (
     <>
-      {/* <div className="row">
-        <div className="overview-card-wrapper">
-          {overview.map((stat) => (
-            <div className="action" key={stat.id}>
-              <div className="title">
-                {stat.count}
-                <i className={stat.icon}></i>
-              </div>
-              <div className="description">{stat.label}</div>
-            </div>
-          ))}
-        </div>
-      </div> */}
       <div className="row">
         <div className="column">
           <div className="card-header">
@@ -268,17 +488,20 @@ const Transactions: React.FC = () => {
             </div>
           </div>
           <Table
-            data={demoData}
+            data={data}
             columns={columns as ColumnDef<Record<string, any>, any>[]}
             rowSelection={rowSelection}
             onRowSelectionChange={setRowSelection}
             defaultRowsPerPage={10}
-            pageCount={1}
+            pageCount={pageCount}
             pagination={pagination}
             onPaginationChange={setPagination}
             handlePagination={requestApiForData}
             perPageOption={[10, 25, 50]}
-            typeCounts={[]}
+            typeCounts={storeStatus as StoreStatus[]}
+            totalCounts={totalRows}
+            searchFilter={searchFilter}
+            realtimeFilter={realtimeFilter}
           />
         </div>
       </div>

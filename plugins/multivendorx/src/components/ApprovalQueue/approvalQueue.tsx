@@ -17,7 +17,6 @@ const ApprovalQueue = () => {
     const [showInput, setShowInput] = useState(false);
     const [task, setTask] = useState("");
     const [loading, setLoading] = useState(false);
-    console.log(appLocalizer)
     useEffect(() => {
         if (!appLocalizer.user_id) return;
 
@@ -105,7 +104,6 @@ const ApprovalQueue = () => {
             })
             .catch(() => setTransactionCount(0));
     };
-
     const tabs = [
         ...(appLocalizer.settings_databases_value['general']['approve_store'] === "manually"
             ? [{
@@ -214,7 +212,6 @@ const ApprovalQueue = () => {
                 label: "Coupons",
                 icon: "adminlib-calendar red",
                 des: "Need a quick approval",
-
                 count: couponCount,
                 content:
                     <>
@@ -257,29 +254,31 @@ const ApprovalQueue = () => {
                     <Transactions onUpdated={refreshCounts} />
                 </>
         },
-        {
-            id: "withdrawal",
-            label: "Withdrawals",
-            icon: "adminlib-calendar blue",
-            des: "Queued for disbursement",
-
-            count: transactionCount,
-            content:
-                <>
-                    <div className="card-header">
-                        <div className="left">
-                            <div className="title">
-                                Withdrawals
+        ...(appLocalizer.settings_databases_value['disbursement']['withdraw_type'] === "manual"
+            ? [        {
+                id: "withdrawal",
+                label: "Withdrawals",
+                icon: "adminlib-calendar blue",
+                des: "Queued for disbursement",
+                count: transactionCount,
+                content:
+                    <>
+                        <div className="card-header">
+                            <div className="left">
+                                <div className="title">
+                                    Withdrawals
+                                </div>
+                                <div className="des">Waiting for your response</div>
                             </div>
-                            <div className="des">Waiting for your response</div>
+                            <div className="right">
+                                <i className="adminlib-more-vertical"></i>
+                            </div>
                         </div>
-                        <div className="right">
-                            <i className="adminlib-more-vertical"></i>
-                        </div>
-                    </div>
-                    <Transactions onUpdated={refreshCounts} />
-                </>
-        }
+                        <Transactions onUpdated={refreshCounts} />
+                    </>
+            }]
+            : []
+        ),
     ];
     useEffect(() => {
         if (!tabs.find(tab => tab.id === activeTab)) {
