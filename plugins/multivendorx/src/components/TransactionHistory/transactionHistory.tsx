@@ -178,7 +178,7 @@ export const TransactionHistory: React.FC = () => {
                 }
             />
 
-            <div className="admin-dashboard">
+            <div className="general-wrapper">
                 <div className="row">
                      <div className="column">
                         <div className="card-header">

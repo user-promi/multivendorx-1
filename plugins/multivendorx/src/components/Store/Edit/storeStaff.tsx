@@ -42,7 +42,7 @@ const StoreSquad = ({ id }: { id: string|null }) => {
             <SuccessNotice message={successMsg} />
 
             <div className="container-wrapper">
-                <div className="card-wrapper width-65">
+                <div className="card-wrapper w-65">
                     <div className="card-content">
 
                         {/* FIXED: Corrected label typo and fixed primary_owner handling */}

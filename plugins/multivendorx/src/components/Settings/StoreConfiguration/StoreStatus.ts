@@ -16,11 +16,12 @@ export default {
             type: 'payment-tabs',
             modal: [
                 {
-                    id: 'store_pending_status',
+                    id: 'Pending Status',
                     icon: "adminlib-store-analytics",
                     label: 'Pending Approval',
                     connected: true,
-                    enableOption: true,
+                    // disableBtn: true,
+                    // countBtn: true,
                     desc: 'Stores awaiting approval',
                     formFields: [
                         {
@@ -42,7 +43,7 @@ export default {
                     ],
                 },
                 {
-                    id: 'store_denied_status',
+                    id: 'Rejected Status',
                     icon: "adminlib-like",
                     label: 'Declined',
                     connected: true,
@@ -69,41 +70,7 @@ export default {
                     ],
                 },
                 {
-                    id: 'store_under_review_status',
-                    icon: "adminlib-shield",
-                    label: 'Under Review',
-                    connected: true,
-                    enableOption: true,
-                    desc: 'Stores being checked for compliance',
-                    formFields: [
-                        {
-                            key: 'review_description',
-                            type: 'description',
-                            title: "About under review stores",
-                            des: "Stores temporarily restricted while under compliance or document review. Configure what they can do during this period.",
-                        },
-                        {
-                            key: 'review_allow_selling',
-                            type: 'setup',
-                            title: "Allow selling during review",
-                            des: "Let stores continue selling and fulfilling orders while under review. Turn off to pause all sales activities.",
-                        },
-                        {
-                            key: 'review_withhold_payments',
-                            type: 'setup',
-                            title: "Hold payments until review complete",
-                            des: "Keep earnings on hold until the review concludes. Payments will release once compliance is cleared.",
-                        },
-                        {
-                            key: 'review_restrict_listings',
-                            type: 'setup',
-                            title: "Restrict adding new products",
-                            des: "Prevent stores from listing new products during review. Existing listings stay active unless selling is disabled.",
-                        },
-                    ],
-                },
-                {
-                    id: 'store_suspended_status',
+                    id: 'Suspended Status',
                     icon: "adminlib-error",
                     label: 'Suspended',
                     connected: true,
@@ -137,7 +104,7 @@ export default {
                     ],
                 },
                 {
-                    id: 'store_active_status',
+                    id: 'Approved Status',
                     icon: "adminlib-store-support",
                     label: 'Active',
                     connected: true,
@@ -162,7 +129,7 @@ export default {
                 },
                 {
                     id: 'store_deactivated_status',
-                    icon: "adminlib-ban",
+                    icon: 'adminlib-ban',
                     label: 'Deactivated',
                     connected: true,
                     enableOption: true,
@@ -171,13 +138,19 @@ export default {
                         {
                             key: 'deactivated_description',
                             type: 'description',
-                            title: "What deactivated stores can do",
-                            des: "Permanently banned stores lose all access due to severe violations such as fraud or repeated policy breaches. This action is irreversible.",
+                            title: 'What deactivated stores can do',
+                            des: 'Permanently banned stores lose all access due to severe violations such as fraud or repeated policy breaches. This action is irreversible.',
                         },
                         {
-                            key: 'deactivated_warning',
-                            type: 'note',
-                            des: "Warning: Deactivated stores may have their data and inventory permanently deleted after a grace period. This cannot be undone.",
+                            key: 'denied_permissions',
+                            type: 'check-list',
+                            options: [
+                                { desc: __('Log in to dashboard', 'multivendorx'), check: false },
+                                { desc: __('Access selling privileges', 'multivendorx'), check: false },
+                                { desc: __('View or manage product listings', 'multivendorx'), check: false },
+                                { desc: __('Submit reapplication or appeal', 'multivendorx'), check: false },
+                                { desc: __('Retain any marketplace privileges', 'multivendorx'), check: false },
+                            ],
                         },
                     ],
                 },

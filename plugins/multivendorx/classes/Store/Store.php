@@ -191,6 +191,16 @@ class Store {
         return $id ? new self( $id ) : null;
     }
 
+    public static function store_slug_exists($slug) {
+        global $wpdb;
+        $table = "{$wpdb->prefix}"  . Utill::TABLES['store'];
+
+        $exists = $wpdb->get_var(
+            $wpdb->prepare("SELECT COUNT(*) FROM {$table} WHERE slug = %s", $slug)
+        );
+        return $exists;
+    }
+
     public static function get_store_by_name( $name ) {
         global $wpdb;
         if ( empty( $name ) ) return false;

@@ -167,7 +167,7 @@ const CustomerServices = () => {
                 tabTitle="Customer Service"
                 description={'Manage store reviews, support requests, financial transactions, and reported issues.'}
             />
-            <div className="work-board">
+            <div className="general-wrapper">
                 <div className="row">
                     <div className="overview-card-wrapper tab">
                         {tabs.map((tab) => (

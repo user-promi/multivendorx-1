@@ -221,7 +221,7 @@ const Overview: React.FC<OverviewProps> = ({
   return (
     <div className="dashboard-overview">
       <div className="row">
-        <div className="column width-65">
+        <div className="column w-65">
           <div className="card-header">
             <div className="left">
               <div className="title">
@@ -248,7 +248,7 @@ const Overview: React.FC<OverviewProps> = ({
             </div>
           </div>
         </div>
-        <div className="column width-35">
+        <div className="column w-35">
           <div className="card-header">
             <div className="left">
               <div className="title">
@@ -273,7 +273,7 @@ const Overview: React.FC<OverviewProps> = ({
         </div>
       </div>
       <div className="row">
-        <div className="column width-65">
+        <div className="column w-65">
           <div className="card-header">
             <div className="left">
               <div className="title">
@@ -294,7 +294,7 @@ const Overview: React.FC<OverviewProps> = ({
             </LineChart>
           </ResponsiveContainer>
         </div>
-        <div className="column width-35">
+        <div className="column w-35">
           <div className="card-header">
             <div className="left">
               <div className="title">

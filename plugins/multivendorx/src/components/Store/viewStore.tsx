@@ -288,7 +288,7 @@ const ViewStore = () => {
 
       <div className="store-view-wrapper">
         <div className='container-wrapper'>
-          <div className="card-wrapper width-65">
+          <div className="card-wrapper w-65">
             <div className="row">
               <div className="column">
                 <div className="multivendorx-banner template3">
@@ -428,7 +428,7 @@ const ViewStore = () => {
               </div>
             </div>
           </div>
-          <div className="card-wrapper width-35">
+          <div className="card-wrapper w-35">
             <div className="row">
               <div className="column">
                 <h3>Recent Activity (Static)</h3>

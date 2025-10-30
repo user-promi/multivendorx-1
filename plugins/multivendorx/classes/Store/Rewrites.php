@@ -26,8 +26,6 @@ class Rewrites {
         add_action( 'init', [ $this, 'register_rule' ] );
         add_filter( 'query_vars', [ $this, 'register_query_var' ] );
         add_filter( 'template_include', [ $this, 'store_template' ], 10 );
-        // add_filter( 'template_include', [ $this, 'dashboard_template' ], 10 );
-
         add_action( 'wp', [ $this, 'flash_rewrite_rules' ], 10 );
         add_action( 'pre_get_posts', [ $this, 'store_query_filter' ] );
 
@@ -128,16 +126,6 @@ class Rewrites {
                 MultiVendorX()->util->get_template( 'store/store.php', ['store_id' => $store->get_id()] );
                 exit;
             }
-        }
-
-        return $template;
-    }
-
-    public function dashboard_template( $template ) {
-        $page     = get_query_var( 'tab' );
-
-        if ( ! empty( $page ) ) {
-            return MultiVendorX()->util->get_template( 'store/store-dashboard.php', [] );
         }
 
         return $template;
