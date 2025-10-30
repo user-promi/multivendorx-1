@@ -30,20 +30,19 @@ const EditStore = () => {
     const wrapperRef = useRef<HTMLDivElement>(null);
 
     // Close dropdown on click outside
-    // useEffect(() => {
-    //     const handleClickOutside = (event: MouseEvent) => {
-    //         if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
-    //             setBannerMenu(false);
-    //             setActionMenu(false);
-    //             setLogoMenu(false);
-    //         }
-    //     };
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if ((event.target as HTMLElement).closest('.edit-section')) return;
+            setBannerMenu(false);
+            setActionMenu(false);
+            setLogoMenu(false);
+        };
 
-    //     document.addEventListener("mousedown", handleClickOutside);
-    //     return () => {
-    //         document.removeEventListener("mousedown", handleClickOutside);
-    //     };
-    // }, []);
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
 
     const location = useLocation();
     const hash = location.hash.replace(/^#/, '');

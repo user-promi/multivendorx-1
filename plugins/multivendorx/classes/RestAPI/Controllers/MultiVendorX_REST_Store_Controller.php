@@ -713,7 +713,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
         if (!empty($data['store_owners']) || !empty($data['primary_owner'])) {
             StoreUtil::add_store_users([
                 'store_id' => $data['id'],
-                'users'    => $data['store_owners'],
+                'users'    => (array)$data['store_owners'],
                 'role_id'  => 'store_owner',
             ]);
 
