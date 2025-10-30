@@ -59,24 +59,23 @@
     }
 }
 
-.admin-dashboard {
-    padding: 0 1rem;
+// .admin-dashboard {
+//     padding: 0 1rem;
 
-    .admin-table-wrapper {
-        margin: 0;
-    }
+//     .admin-table-wrapper {
+//         margin: 0;
+//     }
 
-    &.tab {
-        margin: 1rem;
-        background: #fff;
-        border-radius: 0.313rem;
+//     &.tab {
+//         margin: 1rem;
+//         background: #fff;
+//         border-radius: 0.313rem;
 
-        .column {
-            border: $border-light-small;
-        }
-    }
-
-}
+//         .column {
+//             border: $border-light-small;
+//         }
+//     }
+// }
 
 .tab-titles {
     display: flex;
@@ -429,17 +428,6 @@
     }
 }
 
-.quick-links-wrapper {
-    a {
-        display: block;
-        padding: 0.625rem 0;
-        font-size: 0.9rem;
-
-        i {
-            padding-right: 0.125rem;
-        }
-    }
-}
 
 
 // action start
@@ -575,7 +563,6 @@
         }
     }
 }
-
 // top items end
 
 
@@ -934,7 +921,6 @@
         }
     }
 }
-
 // review end
 
 

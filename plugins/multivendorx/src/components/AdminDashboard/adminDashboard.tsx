@@ -30,8 +30,6 @@ interface Feature {
 
 import "./adminDashboard.scss";
 import "../dashboard.scss";
-import BestSellingProducts from './bestSellingProducts';
-import TopSellers from './topSellers';
 import { useEffect, useState } from 'react';
 
 const AdminDashboard = () => {
@@ -140,15 +138,6 @@ const AdminDashboard = () => {
       linkText: "Join Discord",
       href: "#",
     },
-  ];
-
-  const quickLinks = [
-    { text: "Stores", iconClass: "adminlib-cart", href: "#" },
-    { text: "Commissions", iconClass: "adminlib-exclude", href: "#" },
-    { text: "Products", iconClass: "adminlib-cart", href: "#" },
-    { text: "Payouts", iconClass: "adminlib-appointments", href: "#" },
-    { text: "Disbursements", iconClass: "adminlib-folder-open", href: "#" },
-    { text: "Customer Support", iconClass: "adminlib-multi-product", href: "#" },
   ];
 
   const sections: Section[] = [
@@ -554,7 +543,7 @@ const AdminDashboard = () => {
 
   return (
     <>
-      <div className="admin-dashboard">
+      <div className="general-wrapper">
         <div className="row">
           <div className="column admin-tab">
             <div className="card-header">
