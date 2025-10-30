@@ -20,6 +20,9 @@ class Notifications {
     public function __construct() {
         add_action('init', [$this, 'register_notification_hooks']);
         $this->insert_system_events();
+
+        add_action( 'multivendorx_clear_notifications', array($this, 'multivendorx_clear_notifications'));
+
     }
 
     public function register_notification_hooks() {
@@ -197,5 +200,29 @@ class Notifications {
         return $events;
     }
 
-    
+    public function multivendorx_clear_notifications() {
+        global $wpdb;
+
+        $days = MultiVendorX()->setting->get_setting( 'clear_notifications' );
+
+        $table = "{$wpdb->prefix}" . Utill::TABLES['notifications'];
+
+        $current_date = current_time('mysql');
+
+        // Delete data older than N days or already expired
+        $query = $wpdb->prepare(
+            "
+            DELETE FROM $table
+            WHERE (expires_at IS NOT NULL AND expires_at < %s)
+            OR (created_at < DATE_SUB(%s, INTERVAL %d DAY))
+            ",
+            $current_date,
+            $current_date,
+            $days
+        );
+
+        $wpdb->query( $query );
+
+    }
+
 }
