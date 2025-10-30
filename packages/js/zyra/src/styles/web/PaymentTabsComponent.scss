@@ -229,7 +229,11 @@
 
                 }
             }
-
+            .form-group:has(.description-wrapper){
+                .input-content{
+                    width: 100%;
+                }
+            }
             &.social-verification {
                 padding-top: 0.5rem;
 

@@ -333,7 +333,7 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
   return (
     <div className="payment-tabs-component">
       {methods.map((method) => {
-        const isEnabled = value?.[method.id]?.enable ?? false;
+        const isEnabled = value?.[method.id]?.enable ?? true;
         const isActive = activeTabs.includes(method.id);
         const isMenuOpen = openMenu === method.id;
 
@@ -349,12 +349,8 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
                   <i
                     className={`adminlib-${isEnabled && isActive ? "keyboard-arrow-down" : "pagination-right-arrow"
                       }`}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      if (isEnabled) toggleActiveTab(method.id);
-                    }}
+                    onClick={() => toggleActiveTab(method.id)}
                   />
-
                 </div>
               )}
 
@@ -434,7 +430,7 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
 
             {method.formFields && method.formFields.length > 0 && (
               <div
-                className={`${method.wrapperClass || ""} payment-method-form open ${isEnabled && (isActive || method.openForm) ? "open" : ""}`}
+                className={`${method.wrapperClass || ""} payment-method-form ${isEnabled && (isActive || method.openForm) ? "open" : ""}`}
               >
                 {method.formFields.map((field) => (
                   <div key={field.key} className="form-group">

@@ -18,13 +18,11 @@ export default {
             // settingDescription: __('Check all requirements sellers must finish to activate their store', 'multivendorx'),
             modal: [
                 {
-                    id: 'Verify store identity and business legitimacy',
+                    id: 'Pending Status',
                     icon: "adminlib-store-analytics",
                     label: 'Pending Status',
                     connected: true,
                     // disableBtn: true,
-                    enableOption: true,
-                    // openForm: ,
                     // countBtn: true,
                     desc: 'Stores awaiting approval',
                     formFields: [
@@ -64,7 +62,7 @@ export default {
                     ],
                 },
                 {
-                    id: 'Verify store identity and business legitimacy',
+                    id: 'Rejected Status',
                     icon: "adminlib-like",
                     label: 'Rejected Status',
                     connected: true,
@@ -85,7 +83,7 @@ export default {
                     ],
                 },
                 {
-                    id: 'Verify store identity and business legitimacy',
+                    id: 'Suspended Status',
                     icon: "adminlib-error",
                     label: 'Suspended Status',
                     connected: true,
@@ -138,7 +136,7 @@ export default {
                     ],
                 },
                 {
-                    id: 'Verify store identity and business legitimacy',
+                    id: 'Approved Status',
                     icon: "adminlib-store-support",
                     label: 'Approved Status',
                     connected: true,
