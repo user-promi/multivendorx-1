@@ -9,7 +9,7 @@ const HelpSupport: React.FC = () => {
                 description={'Get fast help, expert guidance, and easy-to-follow resources - all in one place.'}
             />
 
-            <div className="admin-dashboard">
+            <div className="general-wrapper">
                 <div className="row">
                     <div className="column">
                         <div className="card-header">

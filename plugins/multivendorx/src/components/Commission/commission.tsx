@@ -627,32 +627,33 @@ const Commission: React.FC = () => {
                 tabTitle="Commissions"
                 description={'Details of commissions earned by each store for every order, including order amount, commission rate, and payout status.'}
             />
-            <div className="admin-table-wrapper">
-                <Table
-                    data={data}
-                    columns={columns as ColumnDef<Record<string, any>, any>[]}
-                    rowSelection={rowSelection}
-                    onRowSelectionChange={setRowSelection}
-                    defaultRowsPerPage={10}
-                    realtimeFilter={realtimeFilter}
-                    pageCount={pageCount}
-                    pagination={pagination}
-                    onPaginationChange={setPagination}
-                    handlePagination={requestApiForData}
-                    perPageOption={[10, 25, 50]}
-                    typeCounts={commissionStatus as CommissionStatus}
-                    bulkActionComp={() => (
-                        <BulkActions
-                            selectedRows={rowSelection}
-                            data={data}
-                            filterData={currentFilterData}
-                        />
-                    )}
-                    totalCounts={totalRows}
-                    actionButton={actionButton}
-                />
+            <div className="general-wrapper bg-wrapper">
+                <div className="admin-table-wrapper">
+                    <Table
+                        data={data}
+                        columns={columns as ColumnDef<Record<string, any>, any>[]}
+                        rowSelection={rowSelection}
+                        onRowSelectionChange={setRowSelection}
+                        defaultRowsPerPage={10}
+                        realtimeFilter={realtimeFilter}
+                        pageCount={pageCount}
+                        pagination={pagination}
+                        onPaginationChange={setPagination}
+                        handlePagination={requestApiForData}
+                        perPageOption={[10, 25, 50]}
+                        typeCounts={commissionStatus as CommissionStatus}
+                        bulkActionComp={() => (
+                            <BulkActions
+                                selectedRows={rowSelection}
+                                data={data}
+                                filterData={currentFilterData}
+                            />
+                        )}
+                        totalCounts={totalRows}
+                        actionButton={actionButton}
+                    />
+                </div>
             </div>
-
             {viewCommission && selectedCommissionId !== null && (
                 <ViewCommission
                     open={viewCommission}

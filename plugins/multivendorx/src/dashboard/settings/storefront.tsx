@@ -111,7 +111,7 @@ const Storefront = () => {
 
             <div className="container-wrapper">
                 {/* LEFT PANEL */}
-                <div className="card-wrapper width-65">
+                <div className="card-wrapper w-65">
                     <div className="card-content">
                         <div className="card-title">Store information</div>
 
@@ -160,7 +160,7 @@ const Storefront = () => {
                 </div>
 
                 {/* RIGHT PANEL */}
-                <div className="card-wrapper width-35">
+                <div className="card-wrapper w-35">
                     <div className="card-content">
                         <div className="form-group-wrapper">
                             <div className="form-group">

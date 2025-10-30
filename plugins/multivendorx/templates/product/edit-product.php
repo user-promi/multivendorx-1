@@ -54,7 +54,7 @@ $product_fileds = MultiVendorX()->setting->get_setting('products_fields', array(
         </div>
 
         <div class="container-wrapper">
-            <div class="card-wrapper width-65">
+            <div class="card-wrapper w-65">
                 <div class="card-content">
                     <div class="card-title">Product Title</div>
 
@@ -209,7 +209,7 @@ $product_fileds = MultiVendorX()->setting->get_setting('products_fields', array(
             </div>
 
             <!-- right section start -->
-            <div class="card-wrapper width-35">
+            <div class="card-wrapper w-35">
                 <div class="card-content">
                     <div class="pull-right full-1080">
                         <?php

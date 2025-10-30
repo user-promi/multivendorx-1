@@ -146,20 +146,9 @@ const CustomerServices = () => {
                 tabTitle="Customer Service"
                 description={'Manage store reviews, support requests, financial transactions, and reported issues.'}
             />
-            <div className="work-board">
+            <div className="general-wrapper">
                 <div className="row">
                     <div className="overview-card-wrapper tab">
-                        {/* {CustomerServicesStats.map(stat => (
-                            <div className="action" key={stat.id}>
-                                <div className="title">
-                                    {stat.count}
-                                    <i className={stat.icon}></i>
-                                </div>
-                                <div className="description">
-                                    {stat.label}
-                                </div>
-                            </div>
-                        ))} */}
                         {tabs.map((tab) => (
                             <div className={`tab-action ${activeTab === tab.id ? "active" : ""}`} key={tab.id} onClick={() => setActiveTab(tab.id)}>
                                 <div className="details-wrapper">
@@ -189,75 +178,6 @@ const CustomerServices = () => {
                         </div>
                     </div>
                 </div>
-
-                {/* <div className="row">
-                    <div className="column">
-                        <div className="card-header">
-                            <div className="left">
-                                <div className="title">
-                                    Store Reviews
-                                </div>
-                                <div className="des">View and manage all customer reviews for stores.</div>
-                            </div>
-                            <div className="right">
-                                <i className="adminlib-more-vertical"></i>
-                            </div>
-                        </div>
-                        <StoreReviews />
-                    </div>
-                </div>
-
-                <div className="row">
-                    <div className="column">
-                        <div className="card-header">
-                            <div className="left">
-                                <div className="title">
-                                    Refund Requests
-                                </div>
-                                <div className="des">Track and handle customer refund requests.</div>
-                            </div>
-                            <div className="right">
-                                <i className="adminlib-more-vertical"></i>
-                            </div>
-                        </div>
-                        <RefundRequest />
-                    </div>
-                </div>
-
-                <div className="row">
-                    <div className="column">
-                        <div className="card-header">
-                            <div className="left">
-                                <div className="title">
-                                    Abuse Reports
-                                </div>
-                                <div className="des">Monitor reported issues or complaints about products or stores.</div>
-                            </div>
-                            <div className="right">
-                                <i className="adminlib-more-vertical"></i>
-                            </div>
-                        </div>
-                        <AbuseReports />
-                    </div>
-                </div>
-
-
-                <div className="row">
-                    <div className="column">
-                        <div className="card-header">
-                            <div className="left">
-                                <div className="title">
-                                    Customer Questions
-                                </div>
-                                <div className="des">View, manage, and respond to customer questions about products.</div>
-                            </div>
-                            <div className="right">
-                                <i className="adminlib-more-vertical"></i>
-                            </div>
-                        </div>
-                        <Qna />
-                    </div>
-                </div> */}
             </div>
         </>
     );
