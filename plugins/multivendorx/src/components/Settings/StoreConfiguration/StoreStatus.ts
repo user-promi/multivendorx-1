@@ -20,7 +20,7 @@ export default {
                 {
                     id: 'Verify store identity and business legitimacy',
                     icon: "adminlib-store-analytics",
-                    label: 'Pending Status',
+                    label: 'Pending',
                     connected: true,
                     // disableBtn: true,
                     enableOption: true,
@@ -32,31 +32,27 @@ export default {
                             key: 'required_tasks',
                             type: 'description',
                             // label: __('Show Products on Storefront', 'multivendorx'),
-                            title: "Access Permissions",
-                            des: "Pending stores can log in to their dashboard but cannot configure any settings.",
+                            title: "What pending stores can do",
+                            des: "Pending stores can log in and see their application status, but they cannot add products, change settings, or start selling until you approve them.",
                         },
                         {
                             key: 'required_tasks',
                             type: 'check-list',
                             options: [
                                 {
-                                    desc: __('Block restricted or banned products.', 'multivendorx'),
+                                    desc: __('Can log in to dashboard.', 'multivendorx'),
                                     check: true,
                                 },
                                 {
-                                    desc: __('Block restricted or banned products.', 'multivendorx'),
+                                    desc: __('Modify store settings.', 'multivendorx'),
                                     check: false,
                                 },
                                 {
-                                    desc: __('Block restricted or banned products.', 'multivendorx'),
+                                    desc: __('Add or edit products.', 'multivendorx'),
                                     check: true,
                                 },
                                 {
-                                    desc: __('Block restricted or banned products.', 'multivendorx'),
-                                    check: false,
-                                },
-                                {
-                                    desc: __('Block restricted or banned products.', 'multivendorx'),
+                                    desc: __('Process orders.', 'multivendorx'),
                                     check: false,
                                 },
                             ]
@@ -66,7 +62,7 @@ export default {
                 {
                     id: 'Verify store identity and business legitimacy',
                     icon: "adminlib-like",
-                    label: 'Rejected Status',
+                    label: 'Rejected',
                     connected: true,
                     // disableBtn: true,
                     enableOption: true,
@@ -79,15 +75,37 @@ export default {
                             key: 'required_tasks',
                             type: 'description',
                             // label: __('Show Products on Storefront', 'multivendorx'),
-                            title: "Access Permissions",
-                            des: "Rejected stores can log in to their dashboard and reapply for approval.",
+                            title: "What rejected stores can do",
+                            des: "Rejected stores can still log in to see why they were rejected and submit a new application with updated information.",
+                        },
+                        {
+                            key: 'required_tasks',
+                            type: 'check-list',
+                            options: [
+                                {
+                                    desc: __('Log in to dashboard.', 'multivendorx'),
+                                    check: true,
+                                },
+                                {
+                                    desc: __('See why they were rejected.', 'multivendorx'),
+                                    check: true,
+                                },
+                                {
+                                    desc: __('Submit a new application with updated information.', 'multivendorx'),
+                                    check: true,
+                                },
+                                {
+                                    desc: __('Add products or start selling', 'multivendorx'),
+                                    check: false,
+                                },
+                            ]
                         },
                     ],
                 },
                 {
                     id: 'Verify store identity and business legitimacy',
                     icon: "adminlib-error",
-                    label: 'Suspended Status',
+                    label: 'Suspended',
                     connected: true,
                     // disableBtn: true,
                     enableOption: true,
@@ -99,40 +117,16 @@ export default {
                             key: 'required_tasks',
                             type: 'setup',
                             // label: __('Show Products on Storefront', 'multivendorx'),
-                            title: "Show Products on Storefront",
-                            des: "Keep suspended store products visible to customers (non-purchasable).",
+                            title: "Show products on storefront",
+                            des: "Customers can see products from suspended stores, but they won't be able to buy anything. A message will show that the store is temporarily closed.",
                             // link: "#"
                         },
                         {
                             key: 'required_tasks',
                             type: 'setup',
                             // label: __('Show Products on Storefront', 'multivendorx'),
-                            title: "Show Products on Storefront",
-                            des: "Keep suspended store products visible to customers (non-purchasable).",
-                            // link: "#"
-                        },
-                        {
-                            key: 'required_tasks',
-                            type: 'setup',
-                            // label: __('Show Products on Storefront', 'multivendorx'),
-                            title: "Show Products on Storefront",
-                            des: "Keep suspended store products visible to customers (non-purchasable).",
-                            // link: "#"
-                        },
-                        {
-                            key: 'required_tasks',
-                            type: 'setup',
-                            // label: __('Show Products on Storefront', 'multivendorx'),
-                            title: "Show Products on Storefront",
-                            des: "Keep suspended store products visible to customers (non-purchasable).",
-                            // link: "#"
-                        },
-                        {
-                            key: 'required_tasks',
-                            type: 'setup',
-                            // label: __('Show Products on Storefront', 'multivendorx'),
-                            title: "Show Products on Storefront",
-                            des: "Keep suspended store products visible to customers (non-purchasable).",
+                            title: "Allow dashboard access",
+                            des: "Store owners can log in to see why they were suspended and contact support. They can't add products or sell anything during suspension.",
                             // link: "#"
                         },
                     ],
@@ -140,7 +134,7 @@ export default {
                 {
                     id: 'Verify store identity and business legitimacy',
                     icon: "adminlib-store-support",
-                    label: 'Approved Status',
+                    label: 'Approved',
                     connected: true,
                     // disableBtn: true,
                     enableOption: true,
