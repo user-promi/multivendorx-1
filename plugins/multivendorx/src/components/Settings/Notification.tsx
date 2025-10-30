@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import "./Notifications.scss";
-import { CommonPopup, getApiLink } from 'zyra';
+import { CommonPopup, getApiLink, TextArea, BasicInput } from 'zyra';
 import axios from 'axios';
 
 // ------------------ RecipientBadge Component ------------------
@@ -20,7 +20,7 @@ interface RecipientBadgeProps {
 
 const RecipientBadge: React.FC<RecipientBadgeProps> = ({ recipient, onToggle, onDelete }) => {
     let iconClass = 'adminlib-mail';
-    if (recipient.label === 'Vendor') iconClass = 'adminlib-storefront';
+    if (recipient.label === 'Store') iconClass = 'adminlib-storefront';
     else if (recipient.label === 'Admin') iconClass = 'adminlib-person';
     else if (recipient.label === 'Customer') iconClass = 'adminlib-user-circle';
 
@@ -41,6 +41,8 @@ const RecipientBadge: React.FC<RecipientBadgeProps> = ({ recipient, onToggle, on
 const Notification = () => {
 
     const [notifications, setNotifications] = useState<[] | null>(null);
+    const [systemTags, setSystemTags] = useState([]);
+    const [openChannel, setOpenChannel] = useState<[] | null>(null);
 
     useEffect(() => {
         axios({
@@ -53,149 +55,36 @@ const Notification = () => {
         });
     }, []);
 
-    // const [notifications, setNotifications] = useState([
-    //     {
-    //         id: 1,
-    //         icon: 'adminlib-cart',
-    //         event: 'New Store Approval',
-    //         description: 'Notify vendors and admins when a new store is approved.',
-    //         recipients: [
-    //             { id: 1, type: 'Vendor', label: 'Vendor', enabled: true, canDelete: false },
-    //             { id: 2, type: 'Admin', label: 'Admin', enabled: false, canDelete: false },
-    //             { id: 3, type: 'extra', label: 'admin@marketplace.com', enabled: true, canDelete: true }
-    //         ],
-    //         channels: { mail: true, sms: false, system: true }
-    //     },
-    //     {
-    //         id: 2,
-    //         icon: 'adminlib-cart',
-    //         event: 'New Order Placed',
-    //         description: 'Notify vendors and customers when a new order is placed.',
-    //         recipients: [
-    //             { id: 1, type: 'Vendor', label: 'Vendor', enabled: true, canDelete: false },
-    //             { id: 2, type: 'Customer', label: 'Customer', enabled: true, canDelete: false },
-    //             { id: 3, type: 'extra', label: 'sales@marketplace.com', enabled: false, canDelete: true }
-    //         ],
-    //         channels: { mail: true, sms: true, system: true }
-    //     },
-    //     {
-    //         id: 3,
-    //         icon: 'adminlib-credit-card',
-    //         event: 'Transaction Details',
-    //         description: 'Send transaction details to vendors and finance team.',
-    //         recipients: [
-    //             { id: 1, type: 'Vendor', label: 'Vendor', enabled: true, canDelete: false },
-    //             { id: 2, type: 'extra', label: 'finance@marketplace.com', enabled: true, canDelete: true }
-    //         ],
-    //         channels: { mail: true, sms: false, system: true }
-    //     },
-    //     {
-    //         id: 4,
-    //         icon: 'adminlib-contact-form',
-    //         event: 'Order Shipped',
-    //         description: 'Notify customers and admins when an order is shipped.',
-    //         recipients: [
-    //             { id: 1, type: 'Customer', label: 'Customer', enabled: true, canDelete: false },
-    //             { id: 2, type: 'Admin', label: 'Admin', enabled: false, canDelete: false },
-    //             { id: 3, type: 'extra', label: 'support@marketplace.com', enabled: true, canDelete: true }
-    //         ],
-    //         channels: { mail: true, sms: true, system: true }
-    //     },
-    //     {
-    //         id: 5,
-    //         icon: 'adminlib-verification3',
-    //         event: 'Refund Request',
-    //         description: 'Notify admins and vendors about refund requests.',
-    //         recipients: [
-    //             { id: 1, type: 'Admin', label: 'Admin', enabled: true, canDelete: false },
-    //             { id: 2, type: 'Vendor', label: 'Vendor', enabled: true, canDelete: false },
-    //             { id: 3, type: 'extra', label: 'refunds@marketplace.com', enabled: true, canDelete: true }
-    //         ],
-    //         channels: { mail: true, sms: false, system: true }
-    //     },
-    //     {
-    //         id: 6,
-    //         icon: 'adminlib-contact-form',
-    //         event: 'Vendor Commission Paid',
-    //         description: 'Notify vendors and accounts team after commission is paid.',
-    //         recipients: [
-    //             { id: 1, type: 'Vendor', label: 'Vendor', enabled: true, canDelete: false },
-    //             { id: 2, type: 'extra', label: 'accounts@marketplace.com', enabled: true, canDelete: true }
-    //         ],
-    //         channels: { mail: true, sms: false, system: true }
-    //     },
-    //     {
-    //         id: 7,
-    //         icon: 'adminlib-multi-product',
-    //         event: 'Password Reset',
-    //         description: 'Notify users when their password is reset.',
-    //         recipients: [
-    //             { id: 1, type: 'User', label: 'User', enabled: true, canDelete: false }
-    //         ],
-    //         channels: { mail: true, sms: true, system: false }
-    //     },
-    //     {
-    //         id: 8,
-    //         icon: 'adminlib-marketplace',
-    //         event: 'Invoice Generated',
-    //         description: 'Send invoice details to customers and billing team.',
-    //         recipients: [
-    //             { id: 1, type: 'Customer', label: 'Customer', enabled: true, canDelete: false },
-    //             { id: 2, type: 'extra', label: 'billing@marketplace.com', enabled: false, canDelete: true }
-    //         ],
-    //         channels: { mail: true, sms: false, system: true }
-    //     },
-    //     {
-    //         id: 9,
-    //         icon: 'adminlib-star',
-    //         event: 'Review Submitted',
-    //         description: 'Notify vendors when a new review is submitted.',
-    //         recipients: [
-    //             { id: 1, type: 'Vendor', label: 'Vendor', enabled: true, canDelete: false }
-    //         ],
-    //         channels: { mail: true, sms: false, system: true }
-    //     },
-    //     {
-    //         id: 10,
-    //         icon: 'adminlib-marketplace',
-    //         event: 'Low Stock Alert',
-    //         description: 'Notify vendors and warehouse team when stock is low.',
-    //         recipients: [
-    //             { id: 1, type: 'Vendor', label: 'Vendor', enabled: true, canDelete: false },
-    //             { id: 2, type: 'extra', label: 'warehouse@marketplace.com', enabled: true, canDelete: true }
-    //         ],
-    //         channels: { mail: true, sms: false, system: true }
-    //     },
-    // ]);
-
-
     const [addingRecipient, setAddingRecipient] = useState<number | null>(null);
     const [newRecipientValue, setNewRecipientValue] = useState('');
     const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
     const [editingNotification, setEditingNotification] = useState<number | null>(null);
+    const [notificationId, setNotificationId] = useState<number | null>(null);
+    const [formData, setFormData] = useState<Record<string, string>>({});
+    
 
     // ------------------ Handlers ------------------
 
-    const handleSave = () => {
-        if (!notifications || !editingNotification) return;
+    useEffect(() => {
+        if (!notifications || !notificationId) return;
 
-        const filtered = notifications.filter(
-            (item) => item.id === editingNotification
-        );
+        const filtered = notifications.filter(item => item.id === notificationId);
 
-console.log(filtered)
         axios({
             method: 'POST',
-            url: getApiLink(appLocalizer, 'notifications'),
+            url: getApiLink(appLocalizer, `notifications/${notificationId}`),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
             data: { 
                 notifications: filtered
             }
         })
         .then((response) => {
-            setNotifications(response.data || []);
+            if (response.data.success) {
+                setEditingNotification(null);
+            }
         });
-    };
+
+    }, [notifications]);
 
     const toggleRecipient = (notifId: number, recipientId: number) => {
         setNotifications(prev =>
@@ -206,10 +95,8 @@ console.log(filtered)
             )
         );
 
-        // handleSave();
     };
-// console.log('notifications', notifications)
-// console.log('editingNotification', editingNotification)
+
 
     const deleteRecipient = (notifId: number, recipientId: number) => {
         setNotifications(prev =>
@@ -246,11 +133,57 @@ console.log(filtered)
     };
 
     const toggleChannel = (notifId: number, channel: keyof typeof notifications[0]['channels']) => {
+
         setNotifications(prev =>
             prev.map(n =>
                 n.id === notifId ? { ...n, channels: { ...n.channels, [channel]: !n.channels[channel] } } : n
             )
         );
+    };
+
+    const openEditPannel = (notifId: number, channel: keyof typeof notifications[0]['channels']) => {
+        console.log('id', notifId)
+        console.log('channel', channel)
+        axios({
+            method: 'GET',
+            url: getApiLink(appLocalizer, `notifications/${notifId}`),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+        })
+        .then((response) => {
+            console.log('response', response.data)
+            const notifData = Array.isArray(response.data)
+                ? response.data[0]
+                : response.data;
+
+            setFormData(notifData || {});
+            // setFormData(response.data || []);
+        });
+
+        setOpenChannel(channel)
+
+    };
+
+    useEffect(() => {
+        if (formData.system_message) {
+            const matches = formData.system_message.match(/\[[^\]]+\]/g) || [];
+            setSystemTags(matches);
+        } else {
+            setSystemTags([]);
+        }
+    }, [formData.system_message]);
+
+    const handleAutoSave = (id: number) => {
+        
+        axios({
+            method: "POST",
+            url: getApiLink(appLocalizer, `notifications/${id}`), // your REST endpoint
+            headers: { "X-WP-Nonce": appLocalizer.nonce },
+            data: {
+                formData,
+            },
+        }).then(() => {
+            setOpenChannel(null);
+        })
     };
 
     // ------------------ Render ------------------
@@ -295,7 +228,10 @@ console.log(filtered)
                     </thead>
                     <tbody>
                         {notifications && notifications.map(notif => (
-                            <tr key={notif.id} onClick={() => setEditingNotification(notif.id)}>
+                            <tr key={notif.id} onClick={() => {
+                                setEditingNotification(notif.id);
+                                setNotificationId(notif.id);
+                            }}>
                                 <td>
                                     <div className="title-wrapper">
                                         <i className={`notification-icon ${notif.icon}`}></i>
@@ -339,15 +275,22 @@ console.log(filtered)
                                             }
 
                                             return (
-                                                <i
-                                                    key={channel}
-                                                    className={`${iconClass} ${badgeClass} ${!enabled ? 'disable' : ''}`}
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        toggleChannel(notif.id, channel as keyof typeof notif.channels);
-                                                    }}
-                                                ></i>
+                                                <>
+                                                    {enabled && (
+                                                        <i
+                                                            key={channel}
+                                                            className={`${iconClass} ${badgeClass} ${!enabled ? 'disable' : ''}`}
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                setNotificationId(notif.id);
+                                                                openEditPannel(notif.id, channel as keyof typeof notif.channels);
+                                                                // toggleChannel(notif.id, channel as keyof typeof notif.channels);
+                                                            }}
+                                                        ></i>
+                                                    )}
+                                                </>
                                             );
+
                                         })}
                                     </div>
                                 </td>
@@ -361,6 +304,146 @@ console.log(filtered)
                         ))}
                     </tbody>
                 </table>
+            )}
+
+            {openChannel && (
+                <CommonPopup
+                    open={!!openChannel}
+                    onClose={() => setOpenChannel(null)}
+                    width="500px"
+                    height="70%"
+                    header={
+                        <>
+                            <div className="title">
+                                <i className="adminlib-cart"></i>
+                                Manage Contents
+                            </div>
+                            <p>Edit this event.</p>
+                            <i
+                                className="icon adminlib-close"
+                                onClick={() => setOpenChannel(null)}
+                            ></i>
+                        </>
+                    }
+                    footer={
+                        <div className="drawer-footer">
+                            <button className="admin-btn btn-red" onClick={() => setOpenChannel(null)}>
+                                Cancel
+                            </button>
+                        </div>
+                    }
+                >
+                    <div className="content">
+                        
+                        <div className="title">
+                            {openChannel === "system" && "System Notification"}
+                            {openChannel === "sms" && "SMS Message"}
+                            {openChannel === "mail" && "Email Message"}
+                        </div>
+
+                        {openChannel === "system" && (
+                            <>
+                                <label>System Message</label>
+                                <TextArea
+                                    name="system_message"
+                                    inputClass="textarea-input"
+                                    value={formData.system_message || ""}
+                                    onChange={(e) => {
+                                        setFormData({
+                                            ...formData,
+                                            system_message: e.target.value,
+                                        })
+
+                                        // handleAutoSave(formData.id);
+                                    }}
+                                    onBlur={() => {
+                                        handleAutoSave(formData.id);
+                                    }}
+                                    />
+                            </>
+                        )}
+
+                        {openChannel === "sms" && (
+                            <>
+                                <label>SMS Content</label>
+                                <TextArea
+                                    name="sms_content"
+                                    inputClass="textarea-input"
+                                    value={formData.sms_content || ""}
+                                    onChange={(e) => {
+                                        setFormData({
+                                            ...formData,
+                                            sms_content: e.target.value,
+                                        })
+
+                                        handleAutoSave(formData.id)
+                                    }}
+                                    onBlur={() => {
+                                        handleAutoSave(formData.id);
+                                    }}
+                                />
+                            </>
+                        )}
+
+                        {/* EMAIL MESSAGE EDITOR */}
+                        {openChannel === "mail" && (
+                            <>
+                                <label>Email Subject</label>
+                                <BasicInput
+                                    type="text"
+                                    name="title"
+                                    value={formData.email_subject || ""}
+                                    onChange={(e) => {
+
+                                        setFormData({
+                                            ...formData,
+                                            email_subject: e.target.value,
+                                        })
+
+                                        handleAutoSave(formData.id)
+                                    }}
+                                    onBlur={() => {
+                                        handleAutoSave(formData.id);
+                                    }}
+                                />
+
+                                <label>Email Body</label>
+                                <TextArea
+                                    name="sms_content"
+                                    inputClass="textarea-input"
+                                    value={formData.email_body || ""}
+                                    onChange={(e) => {
+                                        setFormData({
+                                            ...formData,
+                                            email_body: e.target.value,
+                                        })
+
+                                        handleAutoSave(formData.id)
+                                    }}
+                                    onBlur={() => {
+                                        handleAutoSave(formData.id);
+                                    }}
+                                />
+                            </>
+                        )}
+
+                        {systemTags?.length > 0 && (
+                            <div className="tag-list">
+                                <p>You can use these tags:</p>
+                                {systemTags.map((tag, idx) => (
+                                    <span
+                                        key={idx}
+                                        className="tag-item"
+                                        onClick={() => navigator.clipboard.writeText(tag)}
+                                    >
+                                        {tag}
+                                    </span>
+                                ))}
+                            </div>
+                        )}
+                        
+                    </div>
+                </CommonPopup>
             )}
 
             {/* Edit Recipients Popup */}
@@ -392,45 +475,6 @@ console.log(filtered)
                     }
                 >
                     <div className="content">
-                        <div className="drawer-add-recipient">
-                            <input
-                                type="text"
-                                className="basic-input"
-                                placeholder="email@domain.com or +1234567890"
-                                value={newRecipientValue}
-                                onChange={(e) => setNewRecipientValue(e.target.value)}
-                                onKeyPress={(e) => e.key === 'Enter' && addRecipient(editingNotification)}
-                            />
-                            <button className="admin-btn btn-purple" onClick={() => addRecipient(editingNotification)}>
-                                <i className="adminlib-plus-circle-o"></i>
-                                Add
-                            </button>
-                        </div>
-
-                        <div className="drawer-recipients">
-                            {notifications && notifications.find(n => n.id === editingNotification)?.recipients.map(r => (
-                                <div key={r.id} className={`recipient ${r.enabled ? '' : 'disable'}`}>
-                                    <span className="icon">
-                                        <i className={
-                                            r.label === 'Vendor' ? 'adminlib-storefront' :
-                                                r.label === 'Admin' ? 'adminlib-person' :
-                                                    r.label === 'Customer' ? 'adminlib-user-circle' : 'adminlib-mail'
-                                        }></i>
-                                    </span>
-                                    <div className="details">
-                                        <span>{r.label}</span>
-                                        <div className="description">Lorem, ipsum.</div>
-                                    </div>
-                                    {r.canDelete && (
-                                        <i className="delete-btn adminlib-delete" onClick={() => deleteRecipient(editingNotification, r.id)}></i>
-                                    )}
-                                    {!r.canDelete && (
-                                        <i onClick={() => toggleRecipient(editingNotification, r.id)} className={r.enabled ? 'adminlib-eye' : 'adminlib-eye-blocked'}></i>
-                                    )}
-                                </div>
-                            ))}
-
-                        </div>
                         <div className="title">
                             System
                         </div>
@@ -464,6 +508,50 @@ console.log(filtered)
                                     );
                                 }
                             )}
+                        </div>
+
+                        <div className="title">
+                            Recipients
+                        </div>
+
+                        <div className="drawer-recipients">
+                            {notifications && notifications.find(n => n.id === editingNotification)?.recipients.map(r => (
+                                <div key={r.id} className={`recipient ${r.enabled ? '' : 'disable'}`}>
+                                    <span className="icon">
+                                        <i className={
+                                            r.label === 'Store' ? 'adminlib-storefront' :
+                                                r.label === 'Admin' ? 'adminlib-person' :
+                                                    r.label === 'Customer' ? 'adminlib-user-circle' : 'adminlib-mail'
+                                        }></i>
+                                    </span>
+                                    <div className="details">
+                                        <span>{r.label}</span>
+                                        <div className="description">Lorem, ipsum.</div>
+                                    </div>
+                                    {r.canDelete && (
+                                        <i className="delete-btn adminlib-delete" onClick={() => deleteRecipient(editingNotification, r.id)}></i>
+                                    )}
+                                    {!r.canDelete && (
+                                        <i onClick={() => toggleRecipient(editingNotification, r.id)} className={r.enabled ? 'adminlib-eye' : 'adminlib-eye-blocked'}></i>
+                                    )}
+                                </div>
+                            ))}
+
+                        </div>
+
+                        <div className="drawer-add-recipient">
+                            <input
+                                type="text"
+                                className="basic-input"
+                                placeholder="email@domain.com or +1234567890"
+                                value={newRecipientValue}
+                                onChange={(e) => setNewRecipientValue(e.target.value)}
+                                onKeyPress={(e) => e.key === 'Enter' && addRecipient(editingNotification)}
+                            />
+                            <button className="admin-btn btn-purple" onClick={() => addRecipient(editingNotification)}>
+                                <i className="adminlib-plus-circle-o"></i>
+                                Add
+                            </button>
                         </div>
                     </div>
                 </CommonPopup>

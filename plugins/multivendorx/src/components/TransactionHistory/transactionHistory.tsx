@@ -137,12 +137,12 @@ export const TransactionHistory: React.FC = () => {
     const tabs = [
         {
             id: "products",
-            label: "Wallet Transaction",
+            label: "Wallet transaction",
             content: <TransactionHistoryTable storeId={selectedStore?.value} dateRange={dateRange} />
         },
         {
             id: "stores",
-            label: "Direct Transaction",
+            label: "Direct transaction",
             content: <TransactionDataTable storeId={selectedStore?.value} dateRange={dateRange} />
         },
     ];
@@ -164,7 +164,7 @@ export const TransactionHistory: React.FC = () => {
                 }
                 customContent={
                     <>
-                        <label><i className="adminlib-switch-store"></i>Switch Store :</label>
+                        <label><i className="adminlib-tools"></i>Switch store</label>
                         <SelectInput
                             name="store"
                             value={selectedStore?.value || ""}
@@ -184,7 +184,7 @@ export const TransactionHistory: React.FC = () => {
                         <div className="card-header">
                             <div className="left">
                                 <div className="title">
-                                    Withdrawable Balance
+                                    Withdrawable balance
                                 </div>
                             </div>
                         </div>
@@ -202,7 +202,7 @@ export const TransactionHistory: React.FC = () => {
                         <div className="card-header">
                             <div className="left">
                                 <div className="title">
-                                    Balance Breakdown
+                                    Wallet details
                                 </div>
                             </div>
                         </div>
@@ -215,7 +215,7 @@ export const TransactionHistory: React.FC = () => {
                                     </div>
                                     <div className="details">
                                         <div className="number">{appLocalizer.currency_symbol}{Number(data.wallet_balance ?? 0).toFixed(2)}</div>
-                                        <div className="text">Wallet Balance</div>
+                                        <div className="text">Available balance</div>
                                     </div>
                                 </div>
                                 <div className="analytics-item">
@@ -224,7 +224,7 @@ export const TransactionHistory: React.FC = () => {
                                     </div>
                                     <div className="details">
                                         <div className="number">{appLocalizer.currency_symbol}{Number(data.reserve_balance ?? 0).toFixed(2)}</div>
-                                        <div className="text">Reserve Balance</div>
+                                        <div className="text">Reserve balance</div>
                                     </div>
                                 </div>
                                 <div className="analytics-item">
@@ -233,7 +233,7 @@ export const TransactionHistory: React.FC = () => {
                                     </div>
                                     <div className="details">
                                         <div className="number">{appLocalizer.currency_symbol}{Number(data.locking_balance ?? 0).toFixed(2)}</div>
-                                        <div className="text">Locked Balance</div>
+                                        <div className="text">Locked balance</div>
                                     </div>
                                 </div>
                             </div>
@@ -249,7 +249,7 @@ export const TransactionHistory: React.FC = () => {
                             <>
                                 <div className="title">
                                     <i className="adminlib-cart"></i>
-                                    Request Withdrawal
+                                    Request withdrawal
                                 </div>
                                 <i
                                     className="icon adminlib-close"
