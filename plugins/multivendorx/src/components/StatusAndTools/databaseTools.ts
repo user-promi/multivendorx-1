@@ -52,6 +52,19 @@ export default {
                 'multivendorx'
             ),
         },
+
+        {
+            key: 'separator_content',
+            type: 'section',
+            hint: __("Danger Zone", 'multivendorx'),
+            desc: __('', 'multivendorx')
+        },
+
+        {
+            key: 'clear_notifications',
+            type: 'number',
+            label: __( 'Clear Notifications', 'multivendorx' ),
+        },
         
     ],
 };

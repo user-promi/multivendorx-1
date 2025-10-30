@@ -18,8 +18,11 @@ class Notifications {
     public $events = [];
 
     public function __construct() {
-        $this->register_notification_hooks();
+        add_action('init', [$this, 'register_notification_hooks']);
         $this->insert_system_events();
+
+        add_action( 'multivendorx_clear_notifications', array($this, 'multivendorx_clear_notifications'));
+
     }
 
     public function register_notification_hooks() {
@@ -45,7 +48,7 @@ class Notifications {
                     'email_subject'  => 'New Store Approval',
                     'email_body'  => 'Store approved successfully',
                     'sms_content'  => 'Store approved successfully',
-                    'system_message'  => 'New Store Approval',
+                    'system_message'  => 'New Store Approval [store_name]',
                     'tag'   => 'Store',
                     'category'  => 'activity'
                 ],
@@ -103,11 +106,10 @@ class Notifications {
     }
 
 
-    public function trigger_notifications($event_name, $parameters) {
-
+    public function trigger_notifications($action_name, $parameters) {
         global $wpdb;
         $event = $wpdb->get_row(
-            $wpdb->prepare( "SELECT * FROM `" . $wpdb->prefix . Utill::TABLES['system_events'] . "` WHERE event_name = %s", $event_name )
+            $wpdb->prepare( "SELECT * FROM `" . $wpdb->prefix . Utill::TABLES['system_events'] . "` WHERE system_action = %s", $action_name )
         );
 
         if ($event->admin_enabled) {
@@ -154,13 +156,73 @@ class Notifications {
 
     }
 
-    public function get_all_events() {
+    public function get_all_events( $id = null ) {
         global $wpdb;
         $table = "{$wpdb->prefix}" . Utill::TABLES['system_events'];
         
         $events = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $table" ) );
 
+        if ( ! empty( $id ) ) {
+            $events = $wpdb->get_results(
+                $wpdb->prepare(
+                    "SELECT * FROM $table WHERE id = %d",
+                    $id )
+            );
+        } else {
+            $events = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $table" ) );
+        }
+
         return $events;
     } 
-    
+
+
+    public function get_all_notifications( $store_id = null ) {
+        global $wpdb;
+        $table = "{$wpdb->prefix}" . Utill::TABLES['notifications'];
+
+        if ( ! empty( $store_id ) ) {
+            $events = $wpdb->get_results(
+                $wpdb->prepare(
+                    "SELECT * FROM $table WHERE store_id = %d AND is_dismissed = %d",
+                    $store_id,
+                    0
+                )
+            );
+        } else {
+            $events = $wpdb->get_results(
+                $wpdb->prepare(
+                    "SELECT * FROM $table WHERE is_dismissed = %d",
+                    0
+                )
+            );
+        }
+
+        return $events;
+    }
+
+    public function multivendorx_clear_notifications() {
+        global $wpdb;
+
+        $days = MultiVendorX()->setting->get_setting( 'clear_notifications' );
+
+        $table = "{$wpdb->prefix}" . Utill::TABLES['notifications'];
+
+        $current_date = current_time('mysql');
+
+        // Delete data older than N days or already expired
+        $query = $wpdb->prepare(
+            "
+            DELETE FROM $table
+            WHERE (expires_at IS NOT NULL AND expires_at < %s)
+            OR (created_at < DATE_SUB(%s, INTERVAL %d DAY))
+            ",
+            $current_date,
+            $current_date,
+            $days
+        );
+
+        $wpdb->query( $query );
+
+    }
+
 }

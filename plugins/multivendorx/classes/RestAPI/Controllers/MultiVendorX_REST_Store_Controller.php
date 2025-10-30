@@ -601,7 +601,18 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                 'role_id'  => 'store_owner',
             ]);
         }
+        
+        $admin_email = get_option('admin_email');
+        $store_email = 'test@gmail.com';
+        $parameters = [
+            'admin_email'   => $admin_email,
+            'store_email'   => $store_email,
+            'store_id'      => $insert_id,
+            'category'   => 'activity'
+        ];
     
+        do_action('multivendorx_notify_new_store_approval', 'new_store_approval', $parameters);
+
         return rest_ensure_response( [
             'success' => true,
             'id'      => $insert_id,

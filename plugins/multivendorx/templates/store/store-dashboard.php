@@ -81,7 +81,8 @@ $page_info     = MultiVendorX()->rest->dashboard->get_current_page_and_submenu()
                             <li>
                                 <div class="adminlib-icon notification adminlib-notification"></div>
 
-                                <div class="dropdown-menu notification"><div class="title">Notifications <span class="admin-badge green">2 New</span></div><div class="notification"><ul><li><a href="/orders"><div class="icon admin-badge blue"><i class="adminlib-cart-icon"></i></div><div class="details"><span class="heading">New Order Received</span><span class="message">Order #1024 has been placed</span><span class="time">1 hour ago</span></div></a></li><li><a href="/reviews"><div class="icon admin-badge yellow"><i class="adminlib-star-icon"></i></div><div class="details"><span class="heading">New Review</span><span class="message">John left a 5-star review</span><span class="time">30 mins ago</span></div></a></li></ul></div><div class="footer"><a href="/notifications" class="admin-btn btn-purple"><i class="adminlib-eye"></i> View all notifications</a></div></div>
+                                <div id="notifications"></div>
+                                <!-- <div class="dropdown-menu notification"><div class="title">Notifications <span class="admin-badge green">2 New</span></div><div class="notification"><ul><li><a href="/orders"><div class="icon admin-badge blue"><i class="adminlib-cart-icon"></i></div><div class="details"><span class="heading">New Order Received</span><span class="message">Order #1024 has been placed</span><span class="time">1 hour ago</span></div></a></li><li><a href="/reviews"><div class="icon admin-badge yellow"><i class="adminlib-star-icon"></i></div><div class="details"><span class="heading">New Review</span><span class="message">John left a 5-star review</span><span class="time">30 mins ago</span></div></a></li></ul></div><div class="footer"><a href="/notifications" class="admin-btn btn-purple"><i class="adminlib-eye"></i> View all notifications</a></div></div> -->
                             </li>
                             <li id="fullscreenToggle">
                                 <div class="adminlib-icon adminlib-crop-free"></div>
@@ -178,7 +179,7 @@ $page_info     = MultiVendorX()->rest->dashboard->get_current_page_and_submenu()
             ?>
 
             <div class="content-wrapper" id="<?php echo $page_info['id'] ? esc_attr( $page_info['id'] ) : ''; ?>"> 
-                 <?php if ( $page_info['error_msg'] ) { ?>
+                 <?php if ( !empty($page_info['error_msg']) ) { ?>
                     <div class="permission-wrapper">
                         <i class="adminlib-info red"></i>
                         <div class="title"><?php echo esc_html( $page_info['error_msg'] ); ?></div>

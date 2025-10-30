@@ -25,6 +25,10 @@ class Cron {
         if (!wp_next_scheduled('multivendorx_transaction_status_update')) {
             wp_schedule_event(time(), 'hourly', 'multivendorx_transaction_status_update');
         }
+
+        if (!wp_next_scheduled('multivendorx_clear_notifications')) {
+            wp_schedule_event(time(), 'daily', 'multivendorx_clear_notifications');
+        }
     }
 
     public function custom_cron_schedules( $schedules ) {
