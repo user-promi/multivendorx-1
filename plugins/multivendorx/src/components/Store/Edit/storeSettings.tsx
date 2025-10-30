@@ -716,7 +716,7 @@ const StoreSettings = ({ id }: { id: string | null }) => {
         <>
             <SuccessNotice message={successMsg} />
             <div className="container-wrapper">
-                <div className="card-wrapper width-65">
+                <div className="card-wrapper w-65">
                     <div className="card-content">
                         <div className="card-title">
                             Basic Details
@@ -943,7 +943,7 @@ const StoreSettings = ({ id }: { id: string | null }) => {
                     </div>
                 </div>
 
-                <div className="card-wrapper width-35">
+                <div className="card-wrapper w-35">
                     <div className="card-content">
                         <div className="card-title">
                             Store Media

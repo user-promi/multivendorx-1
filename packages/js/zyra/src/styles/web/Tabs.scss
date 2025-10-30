@@ -373,10 +373,10 @@
   }
 }
 
-.general-wrapper {
-  padding: 1rem;
-  border-radius: 0.313rem;
-}
+// .general-wrapper {
+//   padding: 1rem;
+//   border-radius: 0.313rem;
+// }
 
 .tab-content {
   position: relative;
@@ -456,7 +456,7 @@
 }
 
 .middle-child-container:has(.tabs-wrapper) {
-  padding-top: 2rem;
+  // padding-top: 2rem;
 }
 
 .tabs-item {
@@ -588,7 +588,7 @@
 
 .divider-section:first-child {
   padding: 1.5rem 0;
-  margin: 0 2rem;
+  // margin: 0 2rem;
 }
 
 .divider-section:not(:first-child) {

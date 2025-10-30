@@ -244,7 +244,7 @@ const AdminDashboard = () => {
       icon: "adminlib-module",
       content:
         <>
-          <div className="card-wrapper width-65">
+          <div className="card-wrapper w-65">
             <div className="row">
               <div className="column">
                 <div className="pro-banner-wrapper">
@@ -366,7 +366,7 @@ const AdminDashboard = () => {
             </div>
           </div>
 
-          <div className="card-wrapper width-35">
+          <div className="card-wrapper w-35">
             <div className="row">
               <div className="column">
                 <div className="card-header">
@@ -436,7 +436,7 @@ const AdminDashboard = () => {
       icon: "adminlib-pros-and-cons",
       content:
         <>
-          <div className="card-wrapper width-65">
+          <div className="card-wrapper w-65">
             <div className="row">
               <div className="column">
                 <div className="card-header">
@@ -500,7 +500,7 @@ const AdminDashboard = () => {
               </div>
             </div>
           </div>
-          <div className="card-wrapper width-35">
+          <div className="card-wrapper w-35">
             <div className="row">
               <div className="card-content">
                 <div className="right-pro-banner">

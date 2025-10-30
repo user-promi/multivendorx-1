@@ -1,130 +1,130 @@
-.wizard-container {
-  width: 100%;
-  max-width: 800px;
-  margin: 30px auto;
-}
+// .wizard-container {
+//   width: 100%;
+//   max-width: 800px;
+//   margin: 30px auto;
+// }
 
-.wizard-section {
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  margin-bottom: 15px;
-  overflow: hidden;
-  transition: box-shadow 0.2s, border-color 0.2s;
-}
+// .wizard-section {
+//   border: 1px solid #ddd;
+//   border-radius: 10px;
+//   margin-bottom: 15px;
+//   overflow: hidden;
+//   transition: box-shadow 0.2s, border-color 0.2s;
+// }
 
-.wizard-section.expanded {
-  border-color: #aaa;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-}
+// .wizard-section.expanded {
+//   border-color: #aaa;
+//   box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+// }
 
-.wizard-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px 20px;
-  cursor: pointer;
-  background-color: #f9f9f9;
-}
+// .wizard-header {
+//   display: flex;
+//   justify-content: space-between;
+//   align-items: center;
+//   padding: 15px 20px;
+//   cursor: pointer;
+//   background-color: #f9f9f9;
+// }
 
-.wizard-header:hover {
-  background-color: #f1f1f1;
-}
+// .wizard-header:hover {
+//   background-color: #f1f1f1;
+// }
 
-.wizard-title {
-  display: flex;
-  align-items: center;
-  font-weight: bold;
-  font-size: 16px;
-}
+// .wizard-title {
+//   display: flex;
+//   align-items: center;
+//   font-weight: bold;
+//   font-size: 16px;
+// }
 
-.chevron {
-  display: inline-block;
-  margin-right: 10px;
-  transition: transform 0.2s;
-}
+// .chevron {
+//   display: inline-block;
+//   margin-right: 10px;
+//   transition: transform 0.2s;
+// }
 
-.chevron.rotate {
-  transform: rotate(90deg);
-}
+// .chevron.rotate {
+//   transform: rotate(90deg);
+// }
 
-.wizard-progress {
-  background-color: #e0f0ff;
-  color: #0073e6;
-  padding: 2px 8px;
-  border-radius: 12px;
-  font-size: 12px;
-  font-weight: bold;
-}
+// .wizard-progress {
+//   background-color: #e0f0ff;
+//   color: #0073e6;
+//   padding: 2px 8px;
+//   border-radius: 12px;
+//   font-size: 12px;
+//   font-weight: bold;
+// }
 
-.wizard-steps {
-  padding: 10px 20px;
-  background-color: #fff;
-}
+// .wizard-steps {
+//   padding: 10px 20px;
+//   background-color: #fff;
+// }
 
-.wizard-step {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-top: 1px solid #eee;
-  padding: 10px 0;
-}
+// .wizard-step {
+//   display: flex;
+//   justify-content: space-between;
+//   align-items: center;
+//   border-top: 1px solid #eee;
+//   padding: 10px 0;
+// }
 
-.wizard-step:first-child {
-  border-top: none;
-}
+// .wizard-step:first-child {
+//   border-top: none;
+// }
 
-.step-info {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
+// .step-info {
+//   display: flex;
+//   align-items: center;
+//   gap: 10px;
+// }
 
-.step-status {
-  width: 20px;
-  height: 20px;
-  border: 1px solid #bbb;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+// .step-status {
+//   width: 20px;
+//   height: 20px;
+//   border: 1px solid #bbb;
+//   border-radius: 50%;
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+// }
 
-.step-status.completed {
-  background-color: #4caf50;
-  border-color: #4caf50;
-  color: white;
-}
+// .step-status.completed {
+//   background-color: #4caf50;
+//   border-color: #4caf50;
+//   color: white;
+// }
 
-.check {
-  font-size: 12px;
-  font-weight: bold;
-}
+// .check {
+//   font-size: 12px;
+//   font-weight: bold;
+// }
 
-.step-text {
-  display: flex;
-  flex-direction: column;
-}
+// .step-text {
+//   display: flex;
+//   flex-direction: column;
+// }
 
-.step-title {
-  font-weight: 500;
-  font-size: 14px;
-}
+// .step-title {
+//   font-weight: 500;
+//   font-size: 14px;
+// }
 
-.step-desc {
-  font-size: 12px;
-  color: #666;
-}
+// .step-desc {
+//   font-size: 12px;
+//   color: #666;
+// }
 
-.step-action {
-  background-color: #0073e6;
-  border: none;
-  color: white;
-  padding: 6px 12px;
-  border-radius: 5px;
-  font-size: 12px;
-  cursor: pointer;
-}
+// .step-action {
+//   background-color: #0073e6;
+//   border: none;
+//   color: white;
+//   padding: 6px 12px;
+//   border-radius: 5px;
+//   font-size: 12px;
+//   cursor: pointer;
+// }
 
-.step-action:hover {
-  background-color: #346291;
-}
+// .step-action:hover {
+//   background-color: #346291;
+// }

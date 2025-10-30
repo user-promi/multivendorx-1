@@ -21,7 +21,7 @@ const Overview = ({ id }: { id: string | null }) => {
         <>
 
             <div className="container-wrapper">
-                <div className="card-wrapper width-65">
+                <div className="card-wrapper w-65">
                     <div className="card-content">
                         <div className="analytics-container">
                             {overviewData.map((item, idx) => (
@@ -40,7 +40,7 @@ const Overview = ({ id }: { id: string | null }) => {
                     </div>
                 </div>
 
-                <div className="card-wrapper width-35">
+                <div className="card-wrapper w-35">
                     <div className="card-content">
                         <h3>Recent Activity (Static)</h3>
                         <div className="activity-wrapper">

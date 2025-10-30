@@ -1,13 +1,14 @@
 @use './config.scss' as *;
 
 .general-wrapper {
-    padding: 1rem;
     border-radius: 0.313rem;
+    margin: 1rem;
 
-    
+    &.bg-wrapper{
+        padding: 1.5rem;
+        background: #fff;
+    }
 }
-
-
 
 .card-header {
     display: flex;
@@ -67,7 +68,7 @@
 }
 
 .column {
-    padding: 2rem;
+    padding: 1.5rem;
     border-radius: 0.313rem;
     box-shadow: 0 0.125rem 0.5rem 0 rgb(223 222 225 / 43%);
     background: #fff;
@@ -102,8 +103,8 @@
         }
 
         .card-header {
-            padding-bottom: 0.5rem;
-            margin-bottom: 0.5rem;
+            // padding-bottom: 0.5rem;
+            // margin-bottom: 0.5rem;
         }
     }
 }
@@ -120,6 +121,9 @@
     width: 45%;
 }
 
+.w-40 {
+    width: 40%;
+}
 
 .analytics-container {
     display: flex;
@@ -180,13 +184,6 @@
 }
 
 // card styles start
-.width-35 {
-    width: 35%;
-}
-
-.width-65 {
-    width: 65%;
-}
 
 .container-wrapper:has(.column) {
     padding: 0;
@@ -334,131 +331,6 @@
 }
 
 // task end
-
-
-// setup wizard start
-.wizard-container {
-    width: 100%;
-    max-width: 50rem;
-    margin: 2rem auto;
-    padding: 1rem;
-    background: #fff;
-    border-radius: 0.313rem;
-
-    .wizard-section {
-        border: $border-light-small;
-        margin: 0.625rem;
-        border-radius: 0.313rem;
-    }
-
-    h5 {
-        font-size: 1.125rem;
-        padding: 0.5rem;
-    }
-}
-
-.wizard-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 20px;
-    cursor: pointer;
-}
-
-.wizard-title {
-    display: flex;
-    align-items: center;
-    font-weight: bold;
-    font-size: 16px;
-    gap: 0.5rem;
-
-    span {
-        font-size: 1.4rem;
-        transition: transform 0.2s;
-
-        &.rotate {
-            transform: rotate(90deg);
-        }
-    }
-}
-
-.wizard-steps {
-    padding: 10px 20px;
-    border-top: $border-light-small;
-}
-
-.wizard-step {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-top: 1px solid #eee;
-    // padding: 10px 0;
-}
-
-.wizard-step:first-child {
-    border-top: none;
-}
-
-.step-info {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.step-status {
-    width: 20px;
-    height: 20px;
-    border: 1px solid #bbb;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.step-status.completed {
-    background-color: #4caf50;
-    border-color: #4caf50;
-    color: white;
-}
-
-.check {
-    font-size: 12px;
-    font-weight: bold;
-}
-
-.step-text {
-    display: flex;
-    flex-direction: column;
-}
-
-.step-title {
-    font-weight: 500;
-    font-size: 14px;
-}
-
-.step-desc {
-    font-size: 12px;
-    color: #666;
-}
-
-.step-action {
-    background-color: #0073e6;
-    border: none;
-    color: white;
-    padding: 6px 12px;
-    border-radius: 5px;
-    font-size: 12px;
-    cursor: pointer;
-}
-
-.step-action:hover {
-    background-color: #346291;
-}
-
-// setup wizard start
-
-
-
 
 // payout page price section start --common
 .payout-wrapper {

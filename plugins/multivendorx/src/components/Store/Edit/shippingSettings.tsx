@@ -67,7 +67,7 @@ const ShippingSettings = ({ id }: { id: string |null }) => {
 			<SuccessNotice message={successMsg} />
 
 			<div className="container-wrapper">
-				<div className="card-wrapper width-65">
+				<div className="card-wrapper w-65">
 					<div className="card-content">
 						<div className="card-title">Shipping information</div>
 
