@@ -239,13 +239,8 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
         try {
 
             $slug = $request->get_param( 'slug' );
-            if ($request->get_param( 'slug' )) {
-                $table = "{$wpdb->prefix}"  . Utill::TABLES['store'];
-
-                $exists = $wpdb->get_var(
-                    $wpdb->prepare("SELECT COUNT(*) FROM {$table} WHERE slug = %s", $slug)
-                );
-
+            if (!empty($slug)) {
+                $exists =Store::store_slug_exists($slug);
                 return rest_ensure_response(['exists' => $exists > 0]);
             }
             
