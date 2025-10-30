@@ -29,14 +29,14 @@ class MultiVendorX_REST_Notifications_Controller extends \WP_REST_Controller {
         ] );
 
         register_rest_route(MultiVendorX()->rest_namespace, '/' . $this->rest_base . '/(?P<id>[\d]+)', [
-        //     [
-        //         'methods'             => \WP_REST_Server::READABLE,
-        //         'callback'            => [$this, 'get_item'],
-        //         'permission_callback' => [$this, 'get_items_permissions_check'],
-        //         'args'                => [
-        //             'id' => ['required' => true],
-        //         ],
-        //     ],
+            [
+                'methods'             => \WP_REST_Server::READABLE,
+                'callback'            => [$this, 'get_item'],
+                'permission_callback' => [$this, 'get_items_permissions_check'],
+                'args'                => [
+                    'id' => ['required' => true],
+                ],
+            ],
             [
                 'methods'             => \WP_REST_Server::EDITABLE,
                 'callback'            => [$this, 'update_item'],
@@ -69,7 +69,8 @@ class MultiVendorX_REST_Notifications_Controller extends \WP_REST_Controller {
         $header_notifications = $request->get_param('header');
 
         if ($header_notifications) {
-            $results = MultiVendorX()->notifications->get_all_notifications();
+            $store_id = $request->get_param('store_id');
+            $results = MultiVendorX()->notifications->get_all_notifications(!empty($store_id) ? $store_id : null);
 
             $formated_notifications = [];
 
@@ -174,6 +175,30 @@ class MultiVendorX_REST_Notifications_Controller extends \WP_REST_Controller {
 
         $is_dismissed = $request->get_param('is_dismissed');
         $id = $request->get_param('id');
+        $form_data = $request->get_param('formData');
+
+        if (!empty($form_data)) {
+
+            $data = [
+                'email_subject'  => $form_data['email_subject'],
+                'email_body'  => $form_data['email_body'],
+                'sms_content'  => $form_data['sms_content'],
+                'system_message'  => $form_data['system_message'],
+            ];
+
+            $updated = $wpdb->update(
+                        "{$wpdb->prefix}" . Utill::TABLES['system_events'],
+                        $data,
+                        ['id' => $form_data['id']],
+                        ['%s', '%s', '%s', '%s'],
+                        ['%d']
+                    );
+
+            return rest_ensure_response([
+                'success' => true,
+            ]);
+        }
+
 
         if ($is_dismissed) {
             $data = [
@@ -249,5 +274,14 @@ class MultiVendorX_REST_Notifications_Controller extends \WP_REST_Controller {
         }
     
     
+    }
+
+    public function get_item($request) {
+        $id = $request->get_param('id');
+
+        $results = MultiVendorX()->notifications->get_all_events($id);
+
+        return rest_ensure_response($results);
+
     }
 }

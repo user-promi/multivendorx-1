@@ -45,7 +45,7 @@ class Notifications {
                     'email_subject'  => 'New Store Approval',
                     'email_body'  => 'Store approved successfully',
                     'sms_content'  => 'Store approved successfully',
-                    'system_message'  => 'New Store Approval',
+                    'system_message'  => 'New Store Approval [store_name]',
                     'tag'   => 'Store',
                     'category'  => 'activity'
                 ],
@@ -153,23 +153,49 @@ class Notifications {
 
     }
 
-    public function get_all_events() {
+    public function get_all_events( $id = null ) {
         global $wpdb;
         $table = "{$wpdb->prefix}" . Utill::TABLES['system_events'];
         
         $events = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $table" ) );
 
+        if ( ! empty( $id ) ) {
+            $events = $wpdb->get_results(
+                $wpdb->prepare(
+                    "SELECT * FROM $table WHERE id = %d",
+                    $id )
+            );
+        } else {
+            $events = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $table" ) );
+        }
+
         return $events;
     } 
 
 
-    public function get_all_notifications() {
+    public function get_all_notifications( $store_id = null ) {
         global $wpdb;
         $table = "{$wpdb->prefix}" . Utill::TABLES['notifications'];
-        
-        $events = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $table WHERE is_dismissed = %d", 0 ) );
+
+        if ( ! empty( $store_id ) ) {
+            $events = $wpdb->get_results(
+                $wpdb->prepare(
+                    "SELECT * FROM $table WHERE store_id = %d AND is_dismissed = %d",
+                    $store_id,
+                    0
+                )
+            );
+        } else {
+            $events = $wpdb->get_results(
+                $wpdb->prepare(
+                    "SELECT * FROM $table WHERE is_dismissed = %d",
+                    0
+                )
+            );
+        }
 
         return $events;
-    } 
+    }
+
     
 }

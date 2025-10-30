@@ -2,17 +2,18 @@ import React, { useEffect, useState } from 'react';
 import { CommonPopup, getApiLink } from 'zyra';
 import axios from 'axios';
 
-const HeaderNotifications = () => {
+const Notifications = () => {
 
     const [notifications, setNotifications] = useState<[] | null>(null);
-    
+    console.log(appLocalizer.store_id)
     useEffect(() => {
         axios({
             method: 'GET',
             url: getApiLink(appLocalizer, 'notifications'),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
             params: {
-                header: true
+                header: true,
+                store_id: appLocalizer.store_id
             }
         })
         .then((response) => {
@@ -30,7 +31,7 @@ const HeaderNotifications = () => {
             setNotifications((prev) => prev.filter((n) => n.id !== id));
         });
     };
-// console.log(notifications)
+
     return(
         <>
             <div className="dropdown-menu notification">
@@ -79,15 +80,7 @@ const HeaderNotifications = () => {
                     </ul>
                 </div>
             </div>
-            {/* {notificationsLink && (
-            <div className="footer">
-                <a href={notificationsLink} className="admin-btn btn-purple">
-                <i className="adminlib-eye"></i> View all notifications
-                </a>
-            </div>
-            )} */}
         </>
-    );
-
+    )
 }
-export default HeaderNotifications;
+export default Notifications;

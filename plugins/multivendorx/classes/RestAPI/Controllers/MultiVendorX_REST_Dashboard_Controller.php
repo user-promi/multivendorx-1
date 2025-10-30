@@ -455,7 +455,7 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
             }
         }
 
-        $div_id      = 'dashboard';
+        $div_id = 'dashboard';
         $allowed = true;
         $error_msg = '';
         $content = '';
@@ -538,12 +538,12 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
      * Retrieve sanitized tab and subtab.
      */
     private function get_tab_and_subtab(): array {
-        if (get_option('permalink_structure')) {
+        if ( get_option( 'permalink_structure' ) ) {
             $tab = sanitize_key(get_query_var('tab') ?: 'dashboard');
             $sub = sanitize_key(get_query_var('subtab'));
         } else {
-            $tab = sanitize_key(wp_unslash($_REQUEST['tab'] ?? 'dashboard'));
-            $sub = sanitize_key(wp_unslash($_REQUEST['subtab'] ?? ''));
+            $tab = filter_input( INPUT_GET, 'tab', FILTER_DEFAULT ) ?? 'dashboard';
+            $sub  = filter_input( INPUT_GET, 'subtab', FILTER_DEFAULT );
         }
         return [$tab, $sub];
     }
@@ -590,25 +590,6 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
         }
 
         return [$id, $allowed];
-    }
-
-    /**
-     * Get store status error message.
-     */
-    private function get_store_status_message(string $status, bool $allowed, string $id): string {
-        switch ($status) {
-            case 'pending':
-                return esc_html__('Waiting for approval, your store is pending.', 'multivendorx');
-            case 'locked':
-                return esc_html__('Your account has been suspended by the admin.', 'multivendorx');
-            case 'reject':
-                return esc_html__('The application has been rejected.', 'multivendorx');
-            default:
-                if (!$allowed) {
-                    return esc_html__('You do not have permission to access this section.', 'multivendorx');
-                }
-                return '';
-        }
     }
 
     /**
