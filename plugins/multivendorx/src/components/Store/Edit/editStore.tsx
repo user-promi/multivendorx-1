@@ -18,7 +18,7 @@ const statusOptions = [
     { label: "Active", value: "active" },
     { label: "Pending", value: "pending" },
     { label: "Rejected", value: "rejected" },
-    { label: "Locked", value: "locked" },
+    { label: "Suspended", value: "suspended" },
 ];
 
 const EditStore = () => {

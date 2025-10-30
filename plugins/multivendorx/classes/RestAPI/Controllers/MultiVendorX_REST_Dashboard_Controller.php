@@ -501,7 +501,7 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
                 $error_msg = 'Waiting for approval. Your store is pending.';
                 break;
 
-            case 'locked':
+            case 'suspended':
                 $error_msg = 'Your account has been suspended by the admin.';
                 break;
 
