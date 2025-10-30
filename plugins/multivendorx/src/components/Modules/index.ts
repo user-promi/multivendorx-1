@@ -137,16 +137,6 @@ export default {
         },
         { type: 'separator', id: 'store_management', label: 'Store Management' },
         {
-            id: 'identity-verification',
-            name: __('Store Identity Verification', 'multivendorx'),
-            desc: "Confirms store owner identity using documents, address proof, or social profiles.",
-            icon: 'adminlib-identity-verification',
-            doc_link: 'https://multivendorx.com/docs/knowledgebase/identity-verification/',
-            settings_link: `${appLocalizer.settings_page_url}identity-verification`,
-            pro_module: true,
-            category: 'store_management'
-        },
-        {
             id: 'spmv',
             name: __('Single Product Multiple Vendor', 'multivendorx'),
             desc: "Allows more than one store to sell the same product with their own price and stock.",
@@ -549,16 +539,6 @@ export default {
             settings_link: '${appLocalizer.plugin_url}#&tab=announcement',
             pro_module: false,
             category: ['notification','marketplace_boosters'],
-        },
-        {
-            id: 'report-abuse',
-            name: __('Product Report Abuse', 'multivendorx'),
-            desc: "Customers flag products they believe are fake, misleading, or inappropriate.",
-            icon: 'adminlib-report-abuse',
-            doc_link: 'https://multivendorx.com/docs/knowledgebase/report-abuse',
-            settings_link: '${appLocalizer.plugin_url}#&tab=customer-support',
-            pro_module: false,
-            category: 'notification'
         },
         {
             id: 'knowladgebase',
