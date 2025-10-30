@@ -264,6 +264,8 @@ const Store = () => {
                                             inputClass="textarea-input"
                                             value={formData.description || ''}
                                             onChange={handleChange}
+                                            usePlainText={false}
+                                            tinymceApiKey={appLocalizer.settings_databases_value['marketplace-settings']['tinymce_api_section'] ?? ''}
                                         />
                                     </div>
 

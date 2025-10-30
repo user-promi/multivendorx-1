@@ -316,14 +316,14 @@ export default {
             ),
             options: [
                 {
-                    key: 'automatic_withdraw',
+                    key: 'automatic',
                     label: __('Automatic', 'multivendorx'),
-                    value: 'store_order',
+                    value: 'automatic',
                 },
                 {
-                    key: 'manual_manual',
+                    key: 'manual',
                     label: __('Manual', 'multivendorx'),
-                    value: 'per_item',
+                    value: 'manual',
                 },
             ],
         },

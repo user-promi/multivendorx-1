@@ -15,6 +15,7 @@ export default {
                 'Policies created by the admin are displayed by default. Stores can edit and override their own policies.',
                 'multivendorx'
             ),
+            usePlainText:false,
             label: __( 'Store policy', 'multivendorx' ),
             moduleEnabled: 'store-policy',
         },
@@ -25,6 +26,7 @@ export default {
                 'Admin-created shipping policies are displayed by default. Stores can modify them as needed.',
                 'multivendorx'
             ),
+            usePlainText:false,
             label: __( 'Shipping policy', 'multivendorx' ),
             moduleEnabled: 'store-policy',
         },
@@ -35,6 +37,7 @@ export default {
                 'Admin creates refund policies. Stores can adjust them for their store.',
                 'multivendorx'
             ),
+            usePlainText:false,
             label: __( 'Refund policy', 'multivendorx' ),
             moduleEnabled: 'store-policy',
         },
@@ -45,6 +48,7 @@ export default {
                 'Default cancellation, return, or exchange policies set by the admin are displayed. Stores can override them.',
                 'multivendorx'
             ),
+            usePlainText:false,
             label: __( 'Cancellation / return / exchange policy', 'multivendorx' ),
             moduleEnabled: 'store-policy',
         },
