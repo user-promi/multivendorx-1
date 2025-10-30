@@ -15,6 +15,7 @@ interface PaymentFormField {
   | "textarea"
   | "payment-tabs"
   | "multi-checkbox"
+  | "check-list"
   | "description"
   | "setup"
   | "setting-toggle";
@@ -41,6 +42,8 @@ interface PaymentFormField {
   dependentPlugin?: string;
   title?: string;
   link?: string;
+  check?: boolean;
+  hideCheckbox?: boolean;
 }
 
 interface PaymentMethod {
@@ -247,17 +250,28 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
       case "description":
         return (
           <>
-            <div className="description-wrapper">
-              <div className="title">
-                <i className="adminlib-error"></i>{field.title}
+            {field.title ? (
+              <div className="description-wrapper">
+                <div className="title">
+                  <i className="adminlib-error"></i>
+                  {field.title}
+                </div>
+
+                {field.des && (
+                  <p
+                    className="payment-description"
+                    dangerouslySetInnerHTML={{ __html: field.des }}
+                  />
+                )}
               </div>
-              {field.des && (
+            ) : (
+              field.des && (
                 <p
                   className="payment-description"
                   dangerouslySetInnerHTML={{ __html: field.des }}
-                ></p>
-              )}
-            </div>
+                />
+              )
+            )}
 
           </>
         );
@@ -266,17 +280,39 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
           <>
             <div className="wizard-step">
               <div className="step-info">
-                <div className="default-checkbox">
-                  <input type="checkbox" className="mvx-toggle-checkbox" id="step-checkbox-0-0" />
-                  <label htmlFor="step-checkbox-0-0"></label>
-                </div>
+                {!field.hideCheckbox && (
+                  <div className="default-checkbox">
+                    <input type="checkbox" className="mvx-toggle-checkbox" id="step-checkbox-0-0" />
+                    <label htmlFor="step-checkbox-0-0"></label>
+                  </div>
+                )}
                 <div className="step-text">
                   <span className="step-title">{field.title}</span>
                   <span className="step-desc">{field.des}</span>
                 </div>
               </div>
-              <a href={field.link} className="admin-btn btn-purple">Set Up <i className="adminlib-arrow-right"></i> </a>
+              {field.link && (
+                <a href={field.link} className="admin-btn btn-purple">Set Up <i className="adminlib-arrow-right"></i> </a>
+              )}
             </div>
+          </>
+        );
+      case "check-list":
+        return (
+          <>
+            <ul className="check-list">
+              {Array.isArray(field.options) &&
+                field.options.map((item: any, index: number) => (
+                  <li key={index}>
+                    {item.check ? (
+                      <i className="check adminlib-icon-yes"></i>
+                    ) : (
+                      <i className="close adminlib-cross"></i>
+                    )}
+                    {item.desc}
+                  </li>
+                ))}
+            </ul>
           </>
         );
       default:
@@ -366,7 +402,7 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
                         <li
                           onClick={() => toggleActiveTab(method.id)}
                         >
-                          <i className="adminlib-setting"></i>
+                          <i className="settings-icon adminlib-setting"></i>
                           <span>Settings</span>
                         </li>
                         <li
