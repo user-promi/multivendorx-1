@@ -4,107 +4,96 @@
     border-radius: 0.313rem;
     margin: 1rem;
 
-    &.bg-wrapper{
+    &.bg-wrapper {
         padding: 1.5rem;
         background: #fff;
     }
-}
 
-.card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    padding-bottom: 1rem;
-    margin-bottom: 1rem;
-    border-bottom: $border-light-small;
-
-    .left {
-        .title {
-            font-size: 1.125rem;
-            font-weight: 500;
-            display: flex;
-            gap: 0.5rem;
-            align-items: center;
-        }
-
-        .des {
-            font-size: 0.95rem;
-            padding-top: 0.45rem;
-            color: #00000094;
-        }
-    }
-
-    .right {
+    .row {
         display: flex;
-        gap: 0.5rem;
-
-        span {
-            font-size: 0.875rem;
-            color: #0000009e;
-        }
-
-        i {
-            font-size: 1.25rem;
-            padding: 0.5rem;
-            border-radius: 50%;
-            transition: all 0.4s ease;
-            cursor: pointer;
-
-            &:hover {
-                background: #5a59591a;
-            }
-        }
-
-        .admin-btn {
-            // padding: 0.313rem 0.5rem;
-
-            i {
-                padding: 0;
-                font-size: 1rem;
-            }
-        }
-    }
-}
-
-.column {
-    padding: 1.5rem;
-    border-radius: 0.313rem;
-    box-shadow: 0 0.125rem 0.5rem 0 rgb(223 222 225 / 43%);
-    background: #fff;
-    width: 100%;
-
-    .action-btn-wrapper {
-        display: flex;
-        flex-wrap: wrap;
         gap: 1rem;
-    }
-
-    h3 {
-        padding-bottom: 0.85rem;
-        margin: 0;
-    }
-
-    .admin-table-wrapper {
-        padding: 0;
+        padding-bottom: 1rem;
     }
 
     .column {
-        width: 94%;
-        padding: 1rem;
-        margin-bottom: 0.813rem;
-
-        .product-name {
-            font-size: 1.063rem;
-        }
-
-        .items {
-            padding: 0.313rem;
-        }
+        padding: 1.5rem;
+        border-radius: 0.313rem;
+        box-shadow: 0 0.125rem 0.5rem 0 rgb(223 222 225 / 43%);
+        background: #fff;
+        width: 100%;
 
         .card-header {
-            // padding-bottom: 0.5rem;
-            // margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding-bottom: 1rem;
+            margin-bottom: 1rem;
+            border-bottom: $border-light-small;
+
+            .left {
+                .title {
+                    font-size: 1.125rem;
+                    font-weight: 500;
+                    display: flex;
+                    gap: 0.5rem;
+                    align-items: center;
+                }
+
+                .des {
+                    font-size: 0.95rem;
+                    padding-top: 0.45rem;
+                    color: #00000094;
+                }
+            }
+
+            .right {
+                display: flex;
+                gap: 0.5rem;
+
+                span {
+                    font-size: 0.875rem;
+                    color: #0000009e;
+                }
+
+                i {
+                    font-size: 1.25rem;
+                    padding: 0.5rem;
+                    border-radius: 50%;
+                    transition: all 0.4s ease;
+                    cursor: pointer;
+
+                    &:hover {
+                        background: #5a59591a;
+                    }
+                }
+
+                .admin-btn {
+                    i {
+                        padding: 0;
+                        font-size: 1rem;
+                    }
+                }
+            }
+        }
+
+        h3 {
+            padding-bottom: 0.85rem;
+            margin: 0;
+        }
+
+        .column {
+            width: 94%;
+            padding: 1rem;
+            margin-bottom: 0.813rem;
+
+            .product-name {
+                font-size: 1.063rem;
+            }
+
+            .items {
+                padding: 0.313rem;
+            }
         }
     }
 }

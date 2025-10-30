@@ -129,7 +129,7 @@ export default {
                 },
                 {
                     id: 'store_deactivated_status',
-                    icon: "adminlib-ban",
+                    icon: 'adminlib-ban',
                     label: 'Deactivated',
                     connected: true,
                     enableOption: true,
@@ -138,13 +138,19 @@ export default {
                         {
                             key: 'deactivated_description',
                             type: 'description',
-                            title: "What deactivated stores can do",
-                            des: "Permanently banned stores lose all access due to severe violations such as fraud or repeated policy breaches. This action is irreversible.",
+                            title: 'What deactivated stores can do',
+                            des: 'Permanently banned stores lose all access due to severe violations such as fraud or repeated policy breaches. This action is irreversible.',
                         },
                         {
-                            key: 'deactivated_warning',
-                            type: 'note',
-                            des: "Warning: Deactivated stores may have their data and inventory permanently deleted after a grace period. This cannot be undone.",
+                            key: 'denied_permissions',
+                            type: 'check-list',
+                            options: [
+                                { desc: __('Log in to dashboard', 'multivendorx'), check: false },
+                                { desc: __('Access selling privileges', 'multivendorx'), check: false },
+                                { desc: __('View or manage product listings', 'multivendorx'), check: false },
+                                { desc: __('Submit reapplication or appeal', 'multivendorx'), check: false },
+                                { desc: __('Retain any marketplace privileges', 'multivendorx'), check: false },
+                            ],
                         },
                     ],
                 },
