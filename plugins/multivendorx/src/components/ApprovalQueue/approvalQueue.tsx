@@ -300,7 +300,7 @@ const ApprovalQueue = () => {
             />
 
             {/* Workboard Stats */}
-            <div className="work-board">
+            <div className="general-wrapper">
 
                 {/* <div className="row">
                     <div className="column">
