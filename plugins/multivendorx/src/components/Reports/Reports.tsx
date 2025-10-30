@@ -12,26 +12,33 @@ import axios from 'axios';
 const Reports = () => {
 
   function requestOrders() {
-    // axios({
-    //   method: "GET",
-    //   url: `${appLocalizer.apiUrl}/wc-analytics/`,
-    //   headers: { "X-WP-Nonce": appLocalizer.nonce },
-    // })
-    //   .then(response => console.log("analytics", response.data))
-    //   .catch(error => console.error(error));
+    axios({
+      method: "GET",
+      url: `${appLocalizer.apiUrl}/wc-analytics/`,
+      headers: { "X-WP-Nonce": appLocalizer.nonce },
+    })
+      .then(response => console.log("analytics", response.data))
+      .catch(error => console.error(error));
 
-      axios({
-        method: 'GET',
-        url: `${appLocalizer.apiUrl}/wc/v3/products`,
-        headers: { 'X-WP-Nonce': appLocalizer.nonce },
-        params: {
-          per_page: 100,                  // Number of orders to fetch
-          meta_key: 'multivendorx_store_id', // The meta key you want to check
-        },
-      })
+    axios({
+      method: "GET",
+      url: `${appLocalizer.apiUrl}/wc-analytics/reports/stock/stats`,
+      headers: { "X-WP-Nonce": appLocalizer.nonce },
+    })
+      .then(response => console.log("stock stats", response.data))
+      .catch(error => console.error(error));
+
+    axios({
+      method: 'GET',
+      url: `${appLocalizer.apiUrl}/wc/v3/products`,
+      headers: { 'X-WP-Nonce': appLocalizer.nonce },
+      params: {
+        per_page: 100,                  // Number of orders to fetch
+        meta_key: 'multivendorx_store_id', // The meta key you want to check
+      },
+    })
       .then(response => {
         const ordersWithMeta = response.data;
-        console.log('prodyct with the meta key:', ordersWithMeta);
       })
       .catch(error => {
         console.error('Error fetching orders:', error);

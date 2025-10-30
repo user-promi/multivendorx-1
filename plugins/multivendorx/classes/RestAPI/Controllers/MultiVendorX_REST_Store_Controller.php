@@ -5,6 +5,7 @@ use MultiVendorX\Store\StoreUtil;
 use MultiVendorX\Store\Store;
 use MultiVendorX\Utill;
 use MultiVendorX\Store\SocialVerification;
+use MultiVendorX\Commission\CommissionUtil;
 
 defined('ABSPATH') || exit;
 
@@ -357,7 +358,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             $formatted_stores = array();
             foreach ( $stores as $store ) {
                 $store_meta = Store::get_store_by_id( (int) $store['ID'] );
-
+                $commission = CommissionUtil::get_commission_summary_for_store((int) $store['ID']);
                 // Get primary owner information using Store object
                 $primary_owner_id = StoreUtil::get_primary_owner( $store['ID'] );
                 $primary_owner = $this->get_user_info( $primary_owner_id );
@@ -381,6 +382,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                         'store_banner' => $store_banner, // Add store banner
                         'address_1'   => $store_meta->meta_data['address_1'] ?? '',
                         'image' => ! empty( $store_meta->meta_data['image'] ) ? $store_meta->meta_data['image'] : null,
+                        'commission' => $commission,
                     )
                 );
             }
