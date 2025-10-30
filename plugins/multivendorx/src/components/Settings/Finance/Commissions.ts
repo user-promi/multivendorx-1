@@ -52,7 +52,7 @@ export default {
         "Tailor your marketplace commission plan to decide how much revenue stores earn from each sale.",
         'multivendorx'
     ),
-    icon: 'adminlib-rules',
+    icon: 'adminlib-commission',
     submitUrl: 'settings',
     modal: [
         {

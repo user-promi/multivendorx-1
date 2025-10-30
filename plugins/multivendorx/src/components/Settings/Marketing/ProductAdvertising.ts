@@ -8,7 +8,7 @@ export default {
         'Let stores promote their top products or unique offerings in site-wide placements.',
         'mvx-pro'
     ),
-    icon: 'adminlib-clock',
+    icon: 'adminlib-advertisement',
     submitUrl: 'settings',
     modal: [
         {

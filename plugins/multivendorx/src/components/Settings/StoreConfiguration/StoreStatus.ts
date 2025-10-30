@@ -8,7 +8,7 @@ export default {
         'Control access and visibility based on store approval status. Configure how pending, rejected, suspended, and approved stores behave within your marketplace.',
         'multivendorx'
     ),
-    icon: 'adminlib-store',
+    icon: 'adminlib-store-inventory',
     submitUrl: 'settings',
     modal: [
         {
@@ -28,13 +28,38 @@ export default {
                     // countBtn: true,
                     desc: 'Stores awaiting approval',
                     formFields: [
-
                         {
                             key: 'required_tasks',
                             type: 'description',
                             // label: __('Show Products on Storefront', 'multivendorx'),
                             title: "Access Permissions",
                             des: "Pending stores can log in to their dashboard but cannot configure any settings.",
+                        },
+                        {
+                            key: 'required_tasks',
+                            type: 'check-list',
+                            options: [
+                                {
+                                    desc: __('Block restricted or banned products.', 'multivendorx'),
+                                    check: true,
+                                },
+                                {
+                                    desc: __('Block restricted or banned products.', 'multivendorx'),
+                                    check: false,
+                                },
+                                {
+                                    desc: __('Block restricted or banned products.', 'multivendorx'),
+                                    check: true,
+                                },
+                                {
+                                    desc: __('Block restricted or banned products.', 'multivendorx'),
+                                    check: false,
+                                },
+                                {
+                                    desc: __('Block restricted or banned products.', 'multivendorx'),
+                                    check: false,
+                                },
+                            ]
                         },
                     ],
                 },
@@ -70,14 +95,45 @@ export default {
                     // countBtn: true,
                     desc: 'Temporarily inactive stores',
                     formFields: [
-
                         {
                             key: 'required_tasks',
                             type: 'setup',
                             // label: __('Show Products on Storefront', 'multivendorx'),
                             title: "Show Products on Storefront",
                             des: "Keep suspended store products visible to customers (non-purchasable).",
-                            link: "#"
+                            // link: "#"
+                        },
+                        {
+                            key: 'required_tasks',
+                            type: 'setup',
+                            // label: __('Show Products on Storefront', 'multivendorx'),
+                            title: "Show Products on Storefront",
+                            des: "Keep suspended store products visible to customers (non-purchasable).",
+                            // link: "#"
+                        },
+                        {
+                            key: 'required_tasks',
+                            type: 'setup',
+                            // label: __('Show Products on Storefront', 'multivendorx'),
+                            title: "Show Products on Storefront",
+                            des: "Keep suspended store products visible to customers (non-purchasable).",
+                            // link: "#"
+                        },
+                        {
+                            key: 'required_tasks',
+                            type: 'setup',
+                            // label: __('Show Products on Storefront', 'multivendorx'),
+                            title: "Show Products on Storefront",
+                            des: "Keep suspended store products visible to customers (non-purchasable).",
+                            // link: "#"
+                        },
+                        {
+                            key: 'required_tasks',
+                            type: 'setup',
+                            // label: __('Show Products on Storefront', 'multivendorx'),
+                            title: "Show Products on Storefront",
+                            des: "Keep suspended store products visible to customers (non-purchasable).",
+                            // link: "#"
                         },
                     ],
                 },
@@ -99,7 +155,8 @@ export default {
                             // label: __('Show Products on Storefront', 'multivendorx'),
                             title: "Dashboard Access Control",
                             des: "Manage dashboard menu items and capabilities for approved stores",
-                            link: "#"
+                            link: "#",
+                            hideCheckbox: true 
                         },
                     ],
                 },
