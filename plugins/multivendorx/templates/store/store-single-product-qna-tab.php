@@ -50,7 +50,7 @@ $login_url = add_query_arg('redirect_to', $current_url, $myaccount_url);
 
     <!-- Ask Question -->
     <?php if (is_user_logged_in()): ?>
-        <div id="qna-form" style="display:none; margin-top:20px;">
+        <div id="qna-form" style="display:none; margin-top:1.25rem;">
             <h4>Ask a Question</h4>
             <textarea id="qna-question" placeholder="Type your question..."></textarea><br>
             <button type="submit" id="qna-submit">Submit</button>

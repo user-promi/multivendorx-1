@@ -81,19 +81,19 @@ const TransactionDetailsModal: React.FC<Props> = ({ transaction, onClose }) => {
                 }
                 .transaction-modal {
                     background: #fff;
-                    padding: 20px;
-                    border-radius: 8px;
-                    max-width: 500px;
+                    padding: 1.25rem;
+                    border-radius: 0.5rem;
+                    max-width: 31.25rem
                     width: 90%;
                     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
                 }
                 .transaction-details-table {
                     width: 100%;
                     border-collapse: collapse;
-                    margin-bottom: 20px;
+                    margin-bottom: 1.25rem;
                 }
                 .transaction-details-table td {
-                    padding: 8px 12px;
+                    padding: 8px 0.75rem;
                     border-bottom: 1px solid #ddd;
                 }
                 .transaction-details-table td:first-child {

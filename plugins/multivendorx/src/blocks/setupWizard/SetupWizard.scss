@@ -6,8 +6,8 @@
 
 // .wizard-section {
 //   border: 1px solid #ddd;
-//   border-radius: 10px;
-//   margin-bottom: 15px;
+//   border-radius: 0.625rem;
+//   margin-bottom: 0.938rem;
 //   overflow: hidden;
 //   transition: box-shadow 0.2s, border-color 0.2s;
 // }
@@ -21,7 +21,7 @@
 //   display: flex;
 //   justify-content: space-between;
 //   align-items: center;
-//   padding: 15px 20px;
+//   padding: 15px 1.25rem;
 //   cursor: pointer;
 //   background-color: #f9f9f9;
 // }
@@ -34,12 +34,12 @@
 //   display: flex;
 //   align-items: center;
 //   font-weight: bold;
-//   font-size: 16px;
+//   font-size: 10.375rem;
 // }
 
 // .chevron {
 //   display: inline-block;
-//   margin-right: 10px;
+//   margin-right: 0.625rem;
 //   transition: transform 0.2s;
 // }
 
@@ -50,14 +50,14 @@
 // .wizard-progress {
 //   background-color: #e0f0ff;
 //   color: #0073e6;
-//   padding: 2px 8px;
-//   border-radius: 12px;
-//   font-size: 12px;
+//   padding: 2px 0.5rem;
+//   border-radius: 0.75rem;
+//   font-size: 0.75rem;
 //   font-weight: bold;
 // }
 
 // .wizard-steps {
-//   padding: 10px 20px;
+//   padding: 10px 1.25rem;
 //   background-color: #fff;
 // }
 
@@ -76,12 +76,12 @@
 // .step-info {
 //   display: flex;
 //   align-items: center;
-//   gap: 10px;
+//   gap: 0.625rem;
 // }
 
 // .step-status {
-//   width: 20px;
-//   height: 20px;
+//   width: 1.25rem;
+//   height: 1.25rem;
 //   border: 1px solid #bbb;
 //   border-radius: 50%;
 //   display: flex;
@@ -96,7 +96,7 @@
 // }
 
 // .check {
-//   font-size: 12px;
+//   font-size: 0.75rem;
 //   font-weight: bold;
 // }
 
@@ -107,11 +107,11 @@
 
 // .step-title {
 //   font-weight: 500;
-//   font-size: 14px;
+//   font-size: 0.875rem;
 // }
 
 // .step-desc {
-//   font-size: 12px;
+//   font-size: 0.75rem;
 //   color: #666;
 // }
 
@@ -119,9 +119,9 @@
 //   background-color: #0073e6;
 //   border: none;
 //   color: white;
-//   padding: 6px 12px;
-//   border-radius: 5px;
-//   font-size: 12px;
+//   padding: 6px 0.75rem;
+//   border-radius: 0.313rem
+//   font-size: 0.75rem;
 //   cursor: pointer;
 // }
 

@@ -324,23 +324,35 @@ const RefundedOrderOld: React.FC = () => {
   ];
 
   return (
-    <div className="admin-table-wrapper">
-      <Table
-        data={data}
-        columns={columns as any}
-        rowSelection={rowSelection}
-        onRowSelectionChange={setRowSelection}
-        defaultRowsPerPage={10}
-        pageCount={pageCount}
-        pagination={pagination}
-        searchFilter={searchFilter}
-        onPaginationChange={setPagination}
-        realtimeFilter={realtimeFilter}
-        handlePagination={requestApiForData}
-        perPageOption={[10, 25, 50]}
-        totalCounts={totalRows}
-      />
-      {error && <div className="error-message">{error}</div>}
+    <div className="row">
+      <div className="column">
+        <div className="card-header">
+          <div className="left">
+            <div className="title">
+              {__('Revenue Distribution', 'multivendorx')}
+            </div>
+            <div className="des">
+              {__('Total Orders:', 'multivendorx')}
+            </div>
+          </div>
+        </div>
+        <Table
+          data={data}
+          columns={columns as any}
+          rowSelection={rowSelection}
+          onRowSelectionChange={setRowSelection}
+          defaultRowsPerPage={10}
+          pageCount={pageCount}
+          pagination={pagination}
+          searchFilter={searchFilter}
+          onPaginationChange={setPagination}
+          realtimeFilter={realtimeFilter}
+          handlePagination={requestApiForData}
+          perPageOption={[10, 25, 50]}
+          totalCounts={totalRows}
+        />
+        {error && <div className="error-message">{error}</div>}
+      </div>
     </div>
   );
 };

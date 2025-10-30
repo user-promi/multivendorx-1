@@ -190,7 +190,7 @@ const Overview: React.FC<OverviewProps> = ({
   ];
   const salesIcon = new L.DivIcon({
     className: "custom-marker",
-    html: `<div style="background:#5007aa;color:#fff;border-radius:50%;padding:6px 10px;font-size:12px;">$</div>`,
+    html: `<div style="background:#5007aa;color:#fff;border-radius:50%;padding:6px 0.625rem;font-size:0.75rem;">$</div>`,
   });
 
   const [leaderboard, setLeaderboard] = useState<any[]>([]);
@@ -219,7 +219,7 @@ const Overview: React.FC<OverviewProps> = ({
 
 
   return (
-    <div className="dashboard-overview">
+    <>
       <div className="row">
         <div className="column w-65">
           <div className="card-header">
@@ -327,45 +327,6 @@ const Overview: React.FC<OverviewProps> = ({
         </div>
       </div>
       <div className="row">
-        {/* <div className="column">
-          <div className="card-header">
-            <div className="left">
-              <div className="title">
-                Top sold category
-              </div>
-            </div>
-          </div>
-          <div className="top-items">
-            <div className="items">
-              <div className="left-side">
-                <div className="icon">
-                  <i className="adminlib-pro-tag admin-icon red"></i>
-                </div>
-                <div className="details">
-                  <div className="item-title">Lather & Loom</div>
-                  <div className="sub-text">3 orders</div>
-                </div>
-              </div>
-              <div className="right-side">
-                <div className="price">$380</div>
-              </div>
-            </div>
-            <div className="items">
-              <div className="left-side">
-                <div className="icon">
-                  <i className="adminlib-pro-tag admin-icon green"></i>
-                </div>
-                <div className="details">
-                  <div className="item-title">Lather & Loom</div>
-                  <div className="sub-text">3 orders</div>
-                </div>
-              </div>
-              <div className="right-side">
-                <div className="price">$380</div>
-              </div>
-            </div>
-          </div>
-        </div> */}
         {leaderboard.map((section: any, sectionIndex: number) => (
           <div className="column" key={sectionIndex}>
             <div className="card-header">
@@ -463,24 +424,7 @@ const Overview: React.FC<OverviewProps> = ({
           </div>
         </div>
       </div>
-      {/* <div className="row">
-        <div className="column">
-          <Table
-            data={demoData}
-            columns={columns as ColumnDef<Record<string, any>, any>[]}
-            // rowSelection={rowSelection}
-            // onRowSelectionChange={setRowSelection}
-            defaultRowsPerPage={10}
-            // pageCount={pageCount}
-            // pagination={pagination}
-            // onPaginationChange={setPagination}
-            // handlePagination={requestApiForData}
-            perPageOption={[10, 25, 50]}
-            typeCounts={[]}
-          />
-        </div>
-      </div> */}
-    </div>
+    </>
   );
 };
 

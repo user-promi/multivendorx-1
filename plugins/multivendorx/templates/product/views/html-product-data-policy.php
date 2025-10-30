@@ -32,7 +32,7 @@ $_mvx_cancallation_policy = get_post_meta( $id, '_mvx_cancallation_policy', true
                             'theme_advanced_buttons1' => 'bold,italic,strikethrough,separator,bullist,numlist,separator,blockquote,separator,justifyleft,justifycenter,justifyright,separator,link,unlink,separator,undo,redo,separator',
                             'theme_advanced_buttons2' => '',
                         ),
-                        'editor_css'    => '<style>#wp-_mvx_shipping_policy-editor-container .wp-editor-area{height:100px; width:100%;}</style>',
+                        'editor_css'    => '<style>#wp-_mvx_shipping_policy-editor-container .wp-editor-area{height:6.25rem; width:100%;}</style>',
                     );
                     wp_editor( $_mvx_shipping_policy, '_mvx_shipping_policy', $shipping_policy_settings );
                     ?>
@@ -51,7 +51,7 @@ $_mvx_cancallation_policy = get_post_meta( $id, '_mvx_cancallation_policy', true
                             'theme_advanced_buttons1' => 'bold,italic,strikethrough,separator,bullist,numlist,separator,blockquote,separator,justifyleft,justifycenter,justifyright,separator,link,unlink,separator,undo,redo,separator',
                             'theme_advanced_buttons2' => '',
                         ),
-                        'editor_css'    => '<style>#wp-_mvx_refund_policy-editor-container .wp-editor-area{height:100px; width:100%;}</style>',
+                        'editor_css'    => '<style>#wp-_mvx_refund_policy-editor-container .wp-editor-area{height:6.25rem; width:100%;}</style>',
                     );
                     wp_editor( $_mvx_refund_policy, '_mvx_refund_policy', $refund_policy_settings );
                     ?>
@@ -70,7 +70,7 @@ $_mvx_cancallation_policy = get_post_meta( $id, '_mvx_cancallation_policy', true
                             'theme_advanced_buttons1' => 'bold,italic,strikethrough,separator,bullist,numlist,separator,blockquote,separator,justifyleft,justifycenter,justifyright,separator,link,unlink,separator,undo,redo,separator',
                             'theme_advanced_buttons2' => '',
                         ),
-                        'editor_css'    => '<style>#wp-_mvx_cancallation_policy-editor-container .wp-editor-area{height:100px; width:100%;}</style>',
+                        'editor_css'    => '<style>#wp-_mvx_cancallation_policy-editor-container .wp-editor-area{height:6.25rem; width:100%;}</style>',
                     );
                     wp_editor( $_mvx_cancallation_policy, '_mvx_cancallation_policy', $cancallation_policy_settings );
                     ?>
