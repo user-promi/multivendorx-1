@@ -600,7 +600,7 @@ export const Announcements: React.FC = () => {
 
                     <div className="content">
                         <div className="form-group-wrapper">
-                            <div className="form-group">
+                            <div className={`form-group ${validationErrors ? 'error-input' : ''}`}>
                                 <label htmlFor="title">Title</label>
                                 <BasicInput
                                     type="text"
@@ -608,9 +608,9 @@ export const Announcements: React.FC = () => {
                                     value={formData.title}
                                     onChange={handleChange}
                                 />
-                                {validationErrors.title && <div className="error-text red">{validationErrors.title}</div>}
+                                {validationErrors.title && <div className="invalid-feedback">{validationErrors.title}</div>}
                             </div>
-                            <div className="form-group">
+                            <div className={`form-group ${validationErrors ? 'error-input' : ''}`}>
                                 <label htmlFor="content">Enter Content</label>
                                 <TextArea
                                     name="content"
@@ -618,10 +618,10 @@ export const Announcements: React.FC = () => {
                                     value={formData.content}
                                     onChange={handleChange}
                                 />
-                                {validationErrors.content && <div className="error-text red">{validationErrors.content}</div>}
+                                {validationErrors.content && <div className="invalid-feedback">{validationErrors.content}</div>}
                             </div>
 
-                            <div className="form-group">
+                            <div className={`form-group ${validationErrors ? 'error-input' : ''}`}>
                                 <label htmlFor="stores">Stores</label>
                                 <SelectInput
                                     name="stores"
@@ -639,7 +639,7 @@ export const Announcements: React.FC = () => {
                                         }));
                                     }}
                                 />
-                                {validationErrors.stores && <p className="error-text red">{validationErrors.stores}</p>}
+                                {validationErrors.stores && <div className="invalid-feedback">{validationErrors.stores}</div>}
                             </div>
 
                             <div className="form-group">

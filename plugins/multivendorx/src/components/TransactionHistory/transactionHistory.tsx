@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { __ } from '@wordpress/i18n';
 import "../Announcements/announcements.scss";
-import TransactionHistoryTable from './transactionHistoryTable';
+import TransactionHistoryTable from './walletTransaction';
 import TransactionDataTable from './transactionDataTable';
 import { AdminBreadcrumbs, CalendarInput, getApiLink, SelectInput, CommonPopup, BasicInput, TextArea, ToggleSetting } from 'zyra';
 import axios from 'axios';
@@ -172,6 +172,7 @@ export const TransactionHistory: React.FC = () => {
                             type="single-select"
                             onChange={(newValue: any) => setSelectedStore(newValue)}
                             onInputChange={(inputValue: string) => handleSearch(inputValue)}
+                            size= "12rem"
                         />
                     </>
                 }

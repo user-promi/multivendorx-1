@@ -12,8 +12,8 @@ export default {
         {
             key: 'store_compliance_management',
             type: 'payment-tabs',
-            label: 'What Must Sellers Complete Before Selling?',
-            settingDescription: __('Check all requirements sellers must finish to activate their store', 'multivendorx'),
+            // label: 'What Must Sellers Complete Before Selling?',
+            // settingDescription: __('Check all requirements sellers must finish to activate their store', 'multivendorx'),
             modal: [
                 {
                     id: 'seller-verification',
@@ -21,8 +21,6 @@ export default {
                     label: 'Seller Verification',
                     connected: true,
                     disableBtn: true,
-                    countBtn: true,
-                    openForm: true,
                     enableOption: true,
                     desc: 'Verify store identity and business legitimacy',
                     formFields: [
@@ -81,9 +79,7 @@ export default {
                     id: 'product-compliance',
                     icon: "adminlib-product",
                     label: 'Product Compliance',
-                    openForm: true,
                     disableBtn: true,
-                    countBtn: true,
                     desc: 'Ensure product listings meet marketplace standards',
                     formFields: [
                         {
@@ -147,9 +143,7 @@ export default {
                     id: 'legal-policy',
                     icon: "adminlib-verification3",
                     label: 'Legal & Policy',
-                    openForm: true,
                     disableBtn: true,
-                    countBtn: true,
                     desc: 'Require acceptance of platform terms and policies',
                     formFields: [
                         {
@@ -213,7 +207,6 @@ export default {
                     id: 'financial-compliance',
                     icon: "adminlib-import",
                     label: 'Financial Compliance',
-                    openForm: true,
                     disableBtn: true,
                     countBtn: true,
                     desc: 'Verify tax information and monitor transactions',
@@ -264,7 +257,6 @@ export default {
                         },
                     ],
                 }
-
             ]
         },
     ],

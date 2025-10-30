@@ -487,24 +487,24 @@ const Orders: React.FC = () => {
                     </div>
                     <div className="row">
                         <div className="column">
-                    <Table
-                        data={data}
-                        columns={columns as ColumnDef<Record<string, any>, any>[]}
-                        rowSelection={rowSelection}
-                        onRowSelectionChange={setRowSelection}
-                        defaultRowsPerPage={10}
-                        pageCount={pageCount}
-                        pagination={pagination}
-                        onPaginationChange={setPagination}
-                        perPageOption={[10, 25, 50]}
-                        handlePagination={requestApiForData}
-                        totalCounts={totalRows}
-                        searchFilter={searchFilter}
-                        realtimeFilter={realtimeFilter}
-                        typeCounts={orderStatus}
-                        bulkActionComp={() => <BulkAction />}
-                    />
-                    </div>
+                            <Table
+                                data={data}
+                                columns={columns as ColumnDef<Record<string, any>, any>[]}
+                                rowSelection={rowSelection}
+                                onRowSelectionChange={setRowSelection}
+                                defaultRowsPerPage={10}
+                                pageCount={pageCount}
+                                pagination={pagination}
+                                onPaginationChange={setPagination}
+                                perPageOption={[10, 25, 50]}
+                                handlePagination={requestApiForData}
+                                totalCounts={totalRows}
+                                searchFilter={searchFilter}
+                                realtimeFilter={realtimeFilter}
+                                typeCounts={orderStatus}
+                                bulkActionComp={() => <BulkAction />}
+                            />
+                        </div>
                     </div>
                 </>
             )}

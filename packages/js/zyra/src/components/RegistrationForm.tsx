@@ -391,7 +391,6 @@ const CustomForm: React.FC<CustomFormProps> = ({
         //     content: <FormAnalytics formFields={formFieldList} />
         // },
     ];
-console.log('opendInput', opendInput)
 
     return (
         <div className="registration-from-wrapper">
@@ -422,7 +421,8 @@ console.log('opendInput', opendInput)
                         value={formFieldList[0]?.label}
                         onChange={(e) => handleFormFieldChange(0, 'label', e.target.value)}
                     />
-                    <DisplayButton
+                    <i className="adminlib-eye"></i>
+                    {/* <DisplayButton
                         wraperClass={'add-new-sections'}
                         children={
                             <div className="icon-wrapper">
@@ -436,7 +436,7 @@ console.log('opendInput', opendInput)
                             }
                         }}
                         btnType='button'
-                    />
+                    /> */}
                 </div>
 
                 {/* Form Fields */}

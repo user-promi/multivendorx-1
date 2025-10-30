@@ -287,21 +287,21 @@ const Commission: React.FC = () => {
             name: 'actionButton',
             render: () => (
                 <>
-                        <ExportAllCSVButton 
-                            filterData={currentFilterData}
-                        />
+                    <ExportAllCSVButton
+                        filterData={currentFilterData}
+                    />
                 </>
             ),
         },
         {
-        name: 'exportAll',
-        render: () => (
-            <i className="adminlib-more-vertical"></i>
-        ),
-    },
+            name: 'exportAll',
+            render: () => (
+                <div className="action-icons">
+                    <i className="adminlib-more-vertical"></i>
+                </div>
+            ),
+        },
     ];
-
-    
 
     // Export All CSV Button Component - Downloads ALL filtered data
     const ExportAllCSVButton: React.FC<{
@@ -371,7 +371,7 @@ const Commission: React.FC = () => {
                 disabled={isDownloading}
                 className="admin-btn btn-purple"
             >
-                <i className="adminlib-export"></i>
+                <span className="adminlib-export"></span>
                 Export Commissions
             </button>
         );
@@ -518,25 +518,24 @@ const Commission: React.FC = () => {
         },
         {
             id: 'createdAt',
-
             accessorKey: 'createdAt',
             enableSorting: true,
             header: __('Date', 'multivendorx'),
             cell: ({ row }) => {
                 const date = row.original.createdAt;
                 if (!date) return <TableCell>-</TableCell>;
-                
+
                 // Format the date for display
                 const formattedDate = new Date(date).toLocaleDateString('en-US', {
                     year: 'numeric',
                     month: 'short',
                     day: 'numeric'
                 });
-                
+
                 return (
-                    <TableCell title={`${formattedDate}` }>
+                    <TableCell title={`${formattedDate}`}>
                         {formattedDate}
-                        
+
                     </TableCell>
                 );
             },

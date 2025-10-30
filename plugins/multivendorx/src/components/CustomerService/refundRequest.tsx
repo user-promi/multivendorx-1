@@ -37,25 +37,27 @@ const RefundRequest: React.FC = () => {
     });
     const [pageCount, setPageCount] = useState(0);
     const [totalRows, setTotalRows] = useState<number>(0);
-    const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string>();
     const [selectedRefund, setSelectedRefund] = useState<RefundRow | null>(null);
     const [rejectReason, setRejectReason] = useState("");
     const [rejecting, setRejecting] = useState(false);
+    const [store, setStore] = useState<any[] | null>(null);
 
-    // Fetch total rows on mount
+    // Fetch store list and total refunds on mount
     useEffect(() => {
-        fetchTotalRows();
-    }, []);
+        axios({
+            method: 'GET',
+            url: getApiLink(appLocalizer, 'store'),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+        })
+            .then((response) => {
+                setStore(response.data.stores || []);
+            })
+            .catch(() => {
+                setError(__('Failed to load stores', 'multivendorx'));
+                setStore([]);
+            });
 
-    // Fetch data when pagination changes
-    useEffect(() => {
-        const currentPage = pagination.pageIndex + 1;
-        const rowsPerPage = pagination.pageSize;
-        requestData(rowsPerPage, currentPage);
-    }, [pagination]);
-
-    const fetchTotalRows = () => {
         axios({
             method: 'GET',
             url: getApiLink(appLocalizer, 'refund'),
@@ -63,64 +65,21 @@ const RefundRequest: React.FC = () => {
             params: { count: true },
         })
             .then((response) => {
-                setTotalRows(response.data || 0);
-                setPageCount(Math.ceil(response.data / pagination.pageSize));
+                const total = response.data || 0;
+                setTotalRows(total);
+                setPageCount(Math.ceil(total / pagination.pageSize));
             })
-            .catch((err) => {
+            .catch(() => {
                 setError(__('Failed to load total rows', 'multivendorx'));
-                console.error('Error fetching total rows:', err);
             });
-    };
+    }, [pagination.pageSize]);
 
-    // Fetch data from backend
-    const requestData = (
-        rowsPerPage = 10,
-        currentPage = 1,
-        filters = {}
-    ) => {
-        setLoading(true);
-        setError(undefined);
-
-        axios({
-            method: 'GET',
-            url: getApiLink(appLocalizer, 'refund'),
-            headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            params: {
-                page: currentPage,
-                row: rowsPerPage,
-                ...filters
-            },
-        })
-            .then((response) => {
-                console.log('Refund data received:', response.data);
-                setData(response.data || []);
-                setLoading(false);
-            })
-            .catch((err) => {
-                setError(__('Failed to load refund data', 'multivendorx'));
-                setData([]);
-                setLoading(false);
-                console.error('Error fetching refund data:', err);
-            });
-    };
-
-    // Handle pagination and filter changes
-    const handlePagination = (
-        rowsPerPage: number,
-        currentPage: number,
-        filterData: any
-    ) => {
-        requestData(rowsPerPage, currentPage, filterData);
-    };
-
-    // Function to safely render HTML content
-    const renderAmount = (amount: string) => {
-        if (!amount) return '-';
-        const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = amount;
-        const textContent = tempDiv.textContent || tempDiv.innerText || '';
-        return textContent || '-';
-    };
+    useEffect(() => {
+        const currentPage = pagination.pageIndex + 1;
+        const rowsPerPage = pagination.pageSize;
+        requestData(rowsPerPage, currentPage);
+        setPageCount(Math.ceil(totalRows / rowsPerPage));
+    }, [pagination, totalRows]);
 
     // Handle View Details - Redirect to order page
     const handleViewDetails = (rowData: RefundRow) => {
@@ -174,7 +133,7 @@ const RefundRequest: React.FC = () => {
         return axios({
             method: 'POST',
             url: getApiLink(appLocalizer, 'refund'),
-            headers: { 
+            headers: {
                 'X-WP-Nonce': appLocalizer.nonce,
                 'Content-Type': 'application/json'
             },
@@ -184,70 +143,31 @@ const RefundRequest: React.FC = () => {
                 reject_reason: rejectReason
             }
         })
-        .then((response) => {
-            console.log('Refund status updated successfully:', response.data);
-            setError(undefined);
-            return response;
-        })
-        .catch((err) => {
-            const errorMessage = err.response?.data?.message || __('Failed to update refund status', 'multivendorx');
-            setError(errorMessage);
-            console.error('Error updating refund status:', err);
-            throw err;
-        });
-    };
-
-    // Get product image URL - fallback to placeholder if not available
-    const getProductImage = (images: string[], productName: string, index: number) => {
-        if (images && images[index]) {
-            return images[index];
-        }
-        // Return placeholder or first available image
-        return 'https://via.placeholder.com/50?text=' + encodeURIComponent(productName.charAt(0).toUpperCase());
-    };
-
-    // Render products with images
-    const renderProductsWithImages = (row: RefundRow) => {
-        const productNames = row.products ? row.products.split(', ') : [];
-        const productImages = row.product_images || [];
-        
-        if (productNames.length === 0) {
-            return '-';
-        }
-
-        return (
-            <div className="product-wrapper">
-                {productNames.map((productName, index) => (
-                    <div key={index} className="product-item" >
-                        <img 
-                            src={getProductImage(productImages, productName, index)}
-                            alt={productName}
-                            onError={(e) => {
-                                const target = e.target as HTMLImageElement;
-                                target.src = 'https://via.placeholder.com/30?text=' + encodeURIComponent(productName.charAt(0).toUpperCase());
-                            }}
-                        />
-                        <span className="product-name">
-                            {productName}
-                        </span>
-                    </div>
-                ))}
-            </div>
-        );
+            .then((response) => {
+                console.log('Refund status updated successfully:', response.data);
+                setError(undefined);
+                return response;
+            })
+            .catch((err) => {
+                const errorMessage = err.response?.data?.message || __('Failed to update refund status', 'multivendorx');
+                setError(errorMessage);
+                console.error('Error updating refund status:', err);
+                throw err;
+            });
     };
 
     // Column definitions
     const columns: ColumnDef<RefundRow>[] = [
         {
             id: 'select',
-            header: ({ table }) => (
+            header: ({ table }: any) => (
                 <input
                     type="checkbox"
                     checked={table.getIsAllRowsSelected()}
                     onChange={table.getToggleAllRowsSelectedHandler()}
                 />
             ),
-            cell: ({ row }) => (
+            cell: ({ row }: any) => (
                 <input
                     type="checkbox"
                     checked={row.getIsSelected()}
@@ -256,92 +176,89 @@ const RefundRequest: React.FC = () => {
             ),
         },
         {
-            header: __('Product(s)', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.products || ''}>
-                    {renderProductsWithImages(row.original)}
+            id: 'order_id',
+            accessorKey: 'order_id',
+            enableSorting: true,
+            header: __('Order', 'multivendorx'),
+            cell: ({ row }: any) => {
+                const orderId = row.original.order_id;
+                const url = orderId
+                    ? `${appLocalizer.site_url.replace(/\/$/, '')}/wp-admin/post.php?post=${orderId}&action=edit`
+                    : '#';
+
+                return (
+                    <TableCell title={orderId ? `#${orderId}` : '-'}>
+                        {orderId ? (
+                            <a href={url} target="_blank" rel="noopener noreferrer" className="order-link">
+                                #{orderId}
+                            </a>
+                        ) : (
+                            '-'
+                        )}
+                    </TableCell>
+                );
+            },
+        },
+        {
+            header: __('Customer', 'multivendorx'),
+            cell: ({ row }: any) => (
+                <TableCell title={row.original.customer_name || ''}>
+                    {row.original.customer_name || '-'}
                 </TableCell>
             ),
         },
         {
             header: __('Store', 'multivendorx'),
-            cell: ({ row }) => (
+            cell: ({ row }: any) => (
                 <TableCell title={row.original.store_name || ''}>
                     {row.original.store_name || '-'}
                 </TableCell>
             ),
         },
         {
-            header: __('Order ID', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.orderNumber || ''}>
-                    {row.original.orderNumber || '-'}
+            header: __('Refund Amount', 'multivendorx'),
+            cell: ({ row }: any) => (
+                <TableCell title={row.original.amount || ''}>
+                    {appLocalizer.currency_symbol}
+                    {row.original.amount || '-'}
                 </TableCell>
             ),
         },
         {
-            header: __('Customer Name', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.customer || ''}>
-                    {row.original.customer || '-'}
-                </TableCell>
-            ),
-        },
-        {
-            header: __('Email', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.email || ''}>
-                    {row.original.email || '-'}
-                </TableCell>
-            ),
-        },
-        {
-            header: __('Amount', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={renderAmount(row.original.amount)}>
-                    <span dangerouslySetInnerHTML={{ __html: row.original.amount || '-' }} />
-                </TableCell>
-            ),
-        },
-        {
-            header: __('Reason', 'multivendorx'),
-            cell: ({ row }) => (
+            header: __('Refund Reason', 'multivendorx'),
+            cell: ({ row }: any) => (
                 <TableCell title={row.original.reason || ''}>
                     {row.original.reason || '-'}
                 </TableCell>
             ),
         },
         {
-            header: __('Date', 'multivendorx'),
-            enableSorting: true,
-            cell: ({ row }) => {
-                const rawDate = row.original.date;
-                const formattedDate = rawDate ? new Intl.DateTimeFormat('en-US', { 
-                    month: 'short', 
-                    day: 'numeric', 
-                    year: 'numeric' 
-                }).format(new Date(rawDate)) : '-';
-                return <TableCell title={formattedDate}>{formattedDate}</TableCell>;
-            }
-        },
-        {
             header: __('Status', 'multivendorx'),
-            cell: ({ row }) => (
+            cell: ({ row }: any) => (
                 <TableCell title={row.original.status || ''}>
-                    {row.original.status === "Approved" && (
-                        <span className="admin-badge green">Approved</span>
-                    )}
-                    {row.original.status === "Pending" && (
-                        <span className="admin-badge yellow">Pending</span>
-                    )}
-                    {row.original.status === "Rejected" && (
-                        <span className="admin-badge red">Rejected</span>
-                    )}
-                    {!['Approved', 'Pending', 'Rejected'].includes(row.original.status) && (
-                        <span className="admin-badge gray">{row.original.status}</span>
-                    )}
+                    {row.original.status
+                        ? row.original.status.charAt(0).toUpperCase() + row.original.status.slice(1)
+                        : '-'}
                 </TableCell>
             ),
+        },
+        {
+            id: 'date',
+            accessorKey: 'date',
+            enableSorting: true,
+            header: __('Date', 'multivendorx'),
+            cell: ({ row }: any) => {
+                const date = row.original.date;
+                if (!date) return <TableCell>-</TableCell>;
+
+                const formattedDate = new Date(date).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                });
+
+                return <TableCell title={formattedDate}>{formattedDate}</TableCell>;
+            },
         },
         {
             id: 'action',
@@ -377,6 +294,63 @@ const RefundRequest: React.FC = () => {
         },
     ];
 
+    // Fetch data from backend
+    function requestData(
+        rowsPerPage = 10,
+        currentPage = 1,
+        searchAction = 'order_id',
+        searchField = '',
+        store_id = '',
+        orderBy = '',
+        order = '',
+        startDate = new Date(0),
+        endDate = new Date()
+    ) {
+        setData(null);
+        axios({
+            method: 'GET',
+            url: getApiLink(appLocalizer, 'refund'),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            params: {
+                page: currentPage,
+                row: rowsPerPage,
+                searchField,
+                searchAction,
+                store_id,
+                orderBy,
+                order,
+                startDate,
+                endDate,
+            },
+        })
+            .then((response) => {
+                setData(response.data || []);
+            })
+            .catch(() => {
+                setError(__('Failed to load refund data', 'multivendorx'));
+                setData([]);
+            });
+    }
+
+    // Handle pagination & filter
+    const requestApiForData = (
+        rowsPerPage: number,
+        currentPage: number,
+        filterData: FilterData
+    ) => {
+        requestData(
+            rowsPerPage,
+            currentPage,
+            filterData?.searchAction,
+            filterData?.searchField,
+            filterData?.store_id,
+            filterData?.orderBy,
+            filterData?.order,
+            filterData?.date?.start_date,
+            filterData?.date?.end_date
+        );
+    };
+
     const searchFilter: RealtimeFilter[] = [
         {
             name: 'searchAction',
@@ -385,28 +359,10 @@ const RefundRequest: React.FC = () => {
                     <select
                         className="basic-select"
                         value={filterValue || ''}
-                        onChange={(e) => {
-                            updateFilter('searchAction', e.target.value || '');
-                        }}
+                        onChange={(e) => updateFilter('searchAction', e.target.value || '')}
                     >
-                        <option value="all">
-                            {__('All', 'multivendorx')}
-                        </option>
-                        <option value="order_number">
-                            {__('Order ID', 'multivendorx')}
-                        </option>
-                        <option value="products">
-                            {__('Products', 'multivendorx')}
-                        </option>
-                        <option value="customer_email">
-                            {__('Customer Email', 'multivendorx')}
-                        </option>
-                        <option value="customer">
-                            {__('Customer Name', 'multivendorx')}
-                        </option>
-                        <option value="store">
-                            {__('Store', 'multivendorx')}
-                        </option>
+                        <option value="order_id">{__('Order Id', 'multivendorx')}</option>
+                        <option value="customer">{__('Customer', 'multivendorx')}</option>
                     </select>
                 </div>
             ),
@@ -419,39 +375,33 @@ const RefundRequest: React.FC = () => {
                         name="searchField"
                         type="text"
                         placeholder={__('Search', 'multivendorx')}
-                        onChange={(e) => {
-                            updateFilter(e.target.name, e.target.value);
-                        }}
+                        onChange={(e) => updateFilter(e.target.name, e.target.value)}
                         value={filterValue || ''}
-                        className='basic-select'
+                        className="basic-select"
                     />
                     <i className="adminlib-search"></i>
                 </div>
             ),
         },
+    ];
+
+    const realtimeFilter: RealtimeFilter[] = [
         {
-            name: 'status',
+            name: 'store_id',
             render: (updateFilter, filterValue) => (
-                <div className="search-action">
+                <div className="group-field">
                     <select
-                        className="basic-select"
+                        name="store_id"
+                        onChange={(e) => updateFilter(e.target.name, e.target.value)}
                         value={filterValue || ''}
-                        onChange={(e) => {
-                            updateFilter('status', e.target.value || '');
-                        }}
+                        className="basic-select"
                     >
-                        <option value="all">
-                            {__('All Status', 'multivendorx')}
-                        </option>
-                        <option value="pending">
-                            {__('Pending', 'multivendorx')}
-                        </option>
-                        <option value="approved">
-                            {__('Approved', 'multivendorx')}
-                        </option>
-                        <option value="rejected">
-                            {__('Rejected', 'multivendorx')}
-                        </option>
+                        <option value="">{__('All Store', 'multivendorx')}</option>
+                        {store?.map((s: any) => (
+                            <option key={s.id} value={s.id}>
+                                {s.store_name.charAt(0).toUpperCase() + s.store_name.slice(1)}
+                            </option>
+                        ))}
                     </select>
                 </div>
             ),
@@ -461,12 +411,12 @@ const RefundRequest: React.FC = () => {
             render: (updateFilter) => (
                 <div className="right">
                     <CalendarInput
-                        wrapperClass=""
-                        inputClass=""
-                        onChange={(range: any) => updateFilter('date', { 
-                            start_date: range.startDate, 
-                            end_date: range.endDate 
-                        })}
+                        onChange={(range: any) => {
+                            updateFilter('date', {
+                                start_date: range.startDate,
+                                end_date: range.endDate,
+                            });
+                        }}
                     />
                 </div>
             ),
@@ -475,90 +425,87 @@ const RefundRequest: React.FC = () => {
 
     return (
         <>
-                {error && (
-                    <div className="admin-notice admin-notice-error">
-                        {error}
-                    </div>
-                )}
-
+            <div className="admin-table-wrapper">
                 <Table
                     data={data}
-                    columns={columns as ColumnDef<Record<string, any>, any>[]}
+                    columns={columns as any}
                     rowSelection={rowSelection}
                     onRowSelectionChange={setRowSelection}
                     defaultRowsPerPage={10}
                     pageCount={pageCount}
                     pagination={pagination}
+                    searchFilter={searchFilter}
                     onPaginationChange={setPagination}
-                    handlePagination={handlePagination}
+                    realtimeFilter={realtimeFilter}
+                    handlePagination={requestApiForData}
                     perPageOption={[10, 25, 50]}
                     totalCounts={totalRows}
-                    searchFilter={searchFilter}
-                    isLoading={loading}
                 />
+                {error && <div className="error-message">{error}</div>}
+            </div>
 
-                {/* Reject Refund Popup */}
-                {selectedRefund && (
-                    <CommonPopup
-                        open={!!selectedRefund}
-                        onClose={() => setSelectedRefund(null)}
-                        width="500px"
-                        header={
-                            <>
-                                <div className="title">
-                                    <i className="adminlib-close"></i>
-                                    Reject Refund Request
-                                </div>
-                                <p>Provide a reason for rejecting this refund request. The customer will be notified with this reason.</p>
-                            </>
-                        }
-                        footer={
-                            <>
-                                <button
-                                    type="button" 
-                                    onClick={() => setSelectedRefund(null)}
-                                    className="admin-btn btn-red"
-                                >
-                                    Cancel
-                                </button>
-                                <button 
-                                    onClick={handleRejectWithReason} 
-                                    disabled={rejecting || !rejectReason.trim()} 
-                                    className="admin-btn btn-purple"
-                                >
-                                    {rejecting ? "Rejecting..." : "Reject Refund"}
-                                </button>
-                            </>
-                        }
-                    >
-                        <div className="content">
-                            <div className="form-group-wrapper">
-                                <div className="form-group">
-                                    <label htmlFor="rejectReason">
-                                        Rejection Reason
-                                    </label>
-                                    <TextArea
-                                        name="rejectReason"
-                                        inputClass="textarea-input"
-                                        value={rejectReason}
-                                        onChange={(e) => setRejectReason(e.target.value)}
-                                        placeholder="Enter reason for rejecting this refund request..."
-                                    />
-                                </div>
-                                <div className="form-group">
-                                    <div className="refund-details">
-                                        <strong>Store:</strong> {selectedRefund.store_name}<br/>
-                                        <strong>Order ID:</strong> {selectedRefund.orderNumber}<br/>
-                                        <strong>Customer:</strong> {selectedRefund.customer}<br/>
-                                        <strong>Amount:</strong> <span dangerouslySetInnerHTML={{ __html: selectedRefund.amount }} /><br/>
-                                        <strong>Original Reason:</strong> {selectedRefund.reason}
-                                    </div>
+            {/* Reject Refund Popup */}
+            {selectedRefund && (
+                <CommonPopup
+                    open={!!selectedRefund}
+                    onClose={() => setSelectedRefund(null)}
+                    width="500px"
+                    header={
+                        <>
+                            <div className="title">
+                                <i className="adminlib-close"></i>
+                                Reject Refund Request
+                            </div>
+                            <p>Provide a reason for rejecting this refund request. The customer will be notified with this reason.</p>
+                        </>
+                    }
+                    footer={
+                        <>
+                            <button
+                                type="button"
+                                onClick={() => setSelectedRefund(null)}
+                                className="admin-btn btn-red"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={handleRejectWithReason}
+                                disabled={rejecting || !rejectReason.trim()}
+                                className="admin-btn btn-purple"
+                            >
+                                {rejecting ? "Rejecting..." : "Reject Refund"}
+                            </button>
+                        </>
+                    }
+                >
+                    <div className="content">
+                        <div className="form-group-wrapper">
+                            <div className="form-group">
+                                <label htmlFor="rejectReason">
+                                    Rejection Reason
+                                </label>
+                                <TextArea
+                                    name="rejectReason"
+                                    inputClass="textarea-input"
+                                    value={rejectReason}
+                                    onChange={(e) => setRejectReason(e.target.value)}
+                                    placeholder="Enter reason for rejecting this refund request..."
+                                />
+                            </div>
+                            <div className="form-group">
+                                <div className="refund-details">
+                                    <strong>Store:</strong> {selectedRefund.store_name}<br />
+                                    <strong>Order ID:</strong> {selectedRefund.orderNumber}<br />
+                                    <strong>Customer:</strong> {selectedRefund.customer}<br />
+                                    <strong>Amount:</strong> <span dangerouslySetInnerHTML={{ __html: selectedRefund.amount }} /><br />
+                                    <strong>Original Reason:</strong> {selectedRefund.reason}
                                 </div>
                             </div>
                         </div>
-                    </CommonPopup>
-                )}
-            
+                    </div>
+                </CommonPopup>
+            )}
+
         </>
     );
 };

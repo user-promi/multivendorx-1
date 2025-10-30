@@ -22,9 +22,9 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: .5rem 2rem;
+  padding: 1rem;
   background: #fff;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 
   .left-section {
     display: flex;
@@ -212,7 +212,7 @@
 }
 
 .title-section {
-  margin: 0 2rem 2rem;
+  margin: 0 1rem;
   padding: 1.5rem;
   background: #fff;
   border-radius: 0.313rem;
@@ -278,11 +278,16 @@
     display: flex;
     gap: 0.5rem;
     align-items: center;
+    
+    label{
+      font-size: 1rem;
 
-    div {
-      width: fit-content;
+      i{
+        font-size: 1.063rem;
+        color: $theme-color;
+        padding-right: 0.45rem;
+      }
     }
-
   }
 }
 
@@ -310,13 +315,17 @@
       line-height: 1.5rem;
     }
   }
+
+  .action-wrapper{
+      
+  }
 }
 
 .tab-title {
   padding: 1.5rem;
   align-items: center;
   background: #fff;
-  margin: 2rem;
+  margin: 1rem;
 
   .content {
     border-bottom: $border-light-small;
@@ -365,7 +374,7 @@
 }
 
 .general-wrapper {
-  padding: 2rem;
+  padding: 1rem;
   border-radius: 0.313rem;
 }
 
@@ -465,10 +474,15 @@
     color: #000;
     gap: 0.75rem;
     background-color: transparent;
-    padding-bottom: 0.5rem;
+    padding: 0.5rem 0;
     border-bottom: 0.126rem solid transparent;
     font-weight: 500;
     cursor: pointer;
+    transition: all 0.4s ease;
+
+    // &:hover{
+    //   background: #f3f3f3;
+    // }
 
     .menu-name {
       font-size: 0.938rem;
