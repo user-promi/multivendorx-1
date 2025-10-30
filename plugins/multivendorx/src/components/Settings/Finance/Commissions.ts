@@ -52,7 +52,7 @@ export default {
         "Tailor your marketplace commission plan to decide how much revenue stores earn from each sale.",
         'multivendorx'
     ),
-    icon: 'adminlib-rules',
+    icon: 'adminlib-commission',
     submitUrl: 'settings',
     modal: [
         {
@@ -292,6 +292,7 @@ export default {
                 'Define a fee to cover platform costs. Apply a fixed, percentage, or combined rate. Choose whether it’s paid by the customer at checkout or deducted from the store’s commission.',
                 'multivendorx'
             ),
+            desc: __('<ul><li><strong>Customer</strong> – The marketplace fee is added to the customer’s order total at checkout.</li><li><strong>Store</strong> – The marketplace fee is deducted from the store’s commission during payout.</li></ul>','multivendorx'),
             nestedFields: [
                 {
                     key: 'commission_fixed',

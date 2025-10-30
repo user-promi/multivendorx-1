@@ -383,7 +383,7 @@ const AdminDashboard = () => {
                 <div className="card-header">
                   <div className="left">
                     <div className="title">
-                      Extend Your Website
+                      Extend your website
                     </div>
                   </div>
                 </div>

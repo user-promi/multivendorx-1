@@ -154,33 +154,6 @@ export default {
                     ],
                 }
             ]
-        },
-        {
-            key: 'separator_content',
-            type: 'section',
-            hint: __("Email Verification", 'multivendorx'),
-            desc: __('Verify stores email addresses to prevent fake registrations and enhance security.')
-        },
-        {
-            key: 'registration_notice',
-            type: 'textarea',
-            desc: __(
-                'Policies created by the admin are displayed by default. Stores can edit and override their own policies.',
-                'multivendorx'
-            ),
-            moduleEnabled: 'identity-verification',
-            label: __('Registration Notice', 'multivendorx'),
-            moduleEnabled: 'store-policy',
-        },
-        {
-            key: 'login_notice',
-            type: 'textarea',
-            desc: __(
-                'Displayed if login is attempted before email verification.',
-                'multivendorx'
-            ),
-            label: __('Login Notice', 'multivendorx'),
-            moduleEnabled: 'identity-verification',
-        },
+        },        
     ],
 };
