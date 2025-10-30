@@ -80,7 +80,7 @@ class Frontend {
     public function mvx_checkout_user_location_map($checkout) {
         if ((true === WC()->cart->needs_shipping()) && apply_filters('mvx_is_allow_checkout_user_location', true)) {
             echo '<div class="woocommerce-billing-fields__field-wrapper">';
-            echo '<div id="mvx-user-locaton-map" style="width:100%;height:300px;margin-bottom:20px;"></div>';
+            echo '<div id="mvx-user-locaton-map" style="width:100%;height:18.75remmargin-bottom:1.25rem;"></div>';
             echo '</div>';
         }
     }

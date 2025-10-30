@@ -19,7 +19,7 @@ $enquiry_data = $args['enquiry_data'];
     <div style="width:600px; margin: 0 auto; ">
         <div class="email-container">
                 <div style="width:100%; background: #557DA1; padding: 40px 30px; border: 1px solid #557DA1;">
-                    <h2 style="font-family: Arial; line-height: 43px; text-align: center; color: #fff; font-size: 46px; font-weight: 700; margin: 0;padding: 0 0 0px 0;">
+                    <h2 style="font-family: Arial; line-height: 43px; text-align: center; color: #fff; font-size: 40.375rem; font-weight: 700; margin: 0;padding: 0 0 0px 0;">
                         <?php echo esc_html__( 'New Product Enquiry', 'catalogx' ) . esc_html( $product_title ); ?>
                     </h2>
                 </div>
@@ -27,7 +27,7 @@ $enquiry_data = $args['enquiry_data'];
                 <div style="width: 100%;">
             <p><?php esc_html_e( 'Dear Admin', 'catalogx' ); ?>,</p>
             <p><?php esc_html_e( 'Please find the product enquiry, details are given below', 'catalogx' ); ?>.</p>
-            <h3 style="font-size: 20px; color:#557da1; "><?php esc_html_e( 'Product Details', 'catalogx' ); ?></h3>
+            <h3 style="font-size: 1.25rem; color:#557da1; "><?php esc_html_e( 'Product Details', 'catalogx' ); ?></h3>
             <div class="table-wrapper">
                 <table cellspacing="0" cellpadding="6" style="width: 100%; border: 1px solid #eee;" border="1" bordercolor="#eee">
                     <thead>
@@ -104,7 +104,7 @@ $enquiry_data = $args['enquiry_data'];
                     </tbody>
                 </table>
             </div>
-            <h3 style="font-size: 20px; color:#557da1; margin-top: 1rem;"  ><?php esc_html_e( 'Customer Details', 'catalogx' ); ?></h3>
+            <h3 style="font-size: 1.25rem; color:#557da1; margin-top: 1rem;"  ><?php esc_html_e( 'Customer Details', 'catalogx' ); ?></h3>
             <p>
                 <strong><?php esc_html_e( 'Name', 'catalogx' ); ?> : </strong>
                 <?php echo esc_html( $enquiry_data['user_name'] ?? 'John Doe' ); ?>

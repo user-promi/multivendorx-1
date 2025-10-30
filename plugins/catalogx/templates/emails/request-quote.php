@@ -19,16 +19,16 @@ $customer_data = $args['customer_data'];
 
 <div class="email-container" style="border: 1px solid #557DA1;">
     <div style="background: #557DA1; padding: 30px 30px; border: 1px solid #557DA1;">
-            <h2 style="font-family: Arial; line-height: 43px; text-align: center; color: #fff; font-size: 46px; font-weight: 700; margin: 0;padding: 0 0 0px 0;">
+            <h2 style="font-family: Arial; line-height: 43px; text-align: center; color: #fff; font-size: 40.375rem; font-weight: 700; margin: 0;padding: 0 0 0px 0;">
                 <?php
                     // translators: %s is the admin's name.
                     printf( esc_html__( 'Dear %s', 'catalogx' ), esc_html( $args['admin'] ?? 'Admin' ) );
                 ?>
             </h2>
-            <p style=" color:#fff; margin-bottom:0; text-align: center; font-size:16px; "><?php esc_html_e( 'You have received a new quote request from a customer for the following product:', 'catalogx' ); ?></p>
+            <p style=" color:#fff; margin-bottom:0; text-align: center; font-size:10.375rem; "><?php esc_html_e( 'You have received a new quote request from a customer for the following product:', 'catalogx' ); ?></p>
     </div>
     
-    <div style="padding: 20px;">
+    <div style="padding: 1.25rem;">
     <div class="table-wrapper">
         <table cellspacing="0" cellpadding="6" style="width: 100%; border: 1px solid #eee;" border="1" bordercolor="#eee">
             <thead>

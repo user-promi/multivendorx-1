@@ -72,7 +72,7 @@ const Documentation: React.FC = () => {
                     <head>
                         <title>${doc.title}</title>
                         <style>
-                            body { font-family: Arial, sans-serif; padding: 20px; }
+                            body { font-family: Arial, sans-serif; padding: 1.25rem; }
                             h2 { color: #333; }
                             p { line-height: 1.5; }
                         </style>

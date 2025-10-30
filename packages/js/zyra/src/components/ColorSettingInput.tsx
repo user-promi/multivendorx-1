@@ -207,7 +207,7 @@ const ColorSettingInput: React.FC<ColorSettingProps> = (props) => {
                 {props.showPreview && (
                     <div className="preview-wrapper">
                         {/* Sidebar */}
-                        <div className="tabs-wrapper">
+                        <div className="tab-wrapper">
                             <div className="logo-wrapper">
                                 <img src="https://multivendorx.com/wp-content/uploads/2025/06/multivendorx-logo-180x40.png" alt="" />
                                 <i className="adminlib-menu"></i>

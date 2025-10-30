@@ -29,7 +29,7 @@ type StoreRow = {
 
 const salesIcon = new L.DivIcon({
   className: "custom-marker",
-  html: `<div style="background:#5007aa;color:#fff;border-radius:50%;padding:6px 10px;font-size:12px;">$</div>`,
+  html: `<div style="background:#5007aa;color:#fff;border-radius:50%;padding:6px 0.625rem;font-size:0.75rem;">$</div>`,
 });
 const analyticsData = [
   { icon: "adminlib-tools red", number: "230k", text: "Visitors" },

@@ -41,6 +41,7 @@
         width: 11rem;
     }
 }
+
 // welcome section end
 
 // section pro banner
@@ -95,9 +96,9 @@
         z-index: 1000;
 
         li {
-            padding: 8px 12px;
+            padding: 8px 0.75rem;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 0.875rem;
             color: #333;
             border-bottom: $border-light-small;
             display: flex;
@@ -656,6 +657,10 @@
 .free-vs-pro {
     margin-top: 1.125rem;
 
+    .buttons-wrapper {
+        margin-top: 0.5rem;
+    }
+
     table {
         width: 100%;
         border-collapse: collapse;
@@ -699,10 +704,6 @@
         td:nth-child(3) {
             width: 15%;
         }
-    }
-
-    .buttons-wrapper {
-        margin-top: 0.5rem;
     }
 }
 

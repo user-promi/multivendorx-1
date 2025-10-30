@@ -11,7 +11,7 @@
  // input style
  input[type="checkbox"] {
      border: 1px solid #8c8f94;
-     border-radius: 4px;
+     border-radius: 0.25rem;
      background: #fff;
      color: #50575e;
      cursor: pointer;
@@ -297,12 +297,12 @@
  .multivendorx-policies-accordion {
      .accordion-item {
          border: 1px solid #ddd;
-         border-radius: 5px;
-         margin-bottom: 10px;
+         border-radius: 0.313rem
+         margin-bottom: 0.625rem;
          overflow: hidden;
 
          .accordion-header {
-             padding: 15px;
+             padding: 0.938rem;
              background: #f7f7f7;
              cursor: pointer;
              font-weight: bold;
@@ -311,8 +311,8 @@
              &::after {
                  content: '+';
                  position: absolute;
-                 right: 20px;
-                 font-size: 18px;
+                 right: 1.25rem;
+                 font-size: 1.125rem;
                  transition: transform 0.2s;
              }
 
@@ -323,7 +323,7 @@
 
          .accordion-body {
              display: none;
-             padding: 15px;
+             padding: 0.938rem;
              background: #fff;
          }
      }
@@ -521,13 +521,13 @@
      .rating {
          display: flex;
          align-items: center;
-         gap: 5px;
-         margin-bottom: 8px;
+         gap: 0.313rem
+         margin-bottom: 0.5rem;
      }
 
      .rating i {
          cursor: pointer;
-         font-size: 20px;
+         font-size: 1.25rem;
          transition: color 0.2s;
      }
 
@@ -542,8 +542,8 @@
      }
 
      .rating .title {
-         margin-left: 8px;
-         font-size: 14px;
+         margin-left: 0.5rem;
+         font-size: 0.875rem;
      }
 
  }

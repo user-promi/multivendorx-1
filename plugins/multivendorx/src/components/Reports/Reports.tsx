@@ -145,23 +145,21 @@ const Reports = () => {
         description={'Manage all pending administrative actions including approvals, payouts, and notifications.'}
 
       />
-      <div className="admin-dashboard tab">
+      <div className="general-wrapper tab">
 
         <div className="row ">
           {/* Tab Titles */}
-          <div className="card-header">
-            <div className="left">
-              <div className="tab-titles">
-                {tabs.map((tab) => (
-                  <div
-                    key={tab.id}
-                    className={`title ${activeTab === tab.id ? "active" : ""}`}
-                    onClick={() => setActiveTab(tab.id)}
-                  >
-                    <p>{tab.label}</p>
-                  </div>
-                ))}
-              </div>
+          <div className="column admin-tab">
+            <div className="tab-titles">
+              {tabs.map((tab) => (
+                <div
+                  key={tab.id}
+                  className={`title ${activeTab === tab.id ? "active" : ""}`}
+                  onClick={() => setActiveTab(tab.id)}
+                >
+                  <p>{tab.label}</p>
+                </div>
+              ))}
             </div>
           </div>
         </div>

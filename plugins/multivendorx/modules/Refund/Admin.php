@@ -98,7 +98,7 @@ class Admin {
     //     // Enqueue WordPress built-in lightbox
     //     add_thickbox();
     
-    //     echo '<div style="display: flex; flex-wrap: wrap; gap: 8px;">';
+    //     echo '<div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">';
     
     //     foreach ( $image_ids as $attachment_id ) {
     //         $thumb_url = wp_get_attachment_image_url( $attachment_id, 'thumbnail' );
@@ -107,7 +107,7 @@ class Admin {
     //         if ( $thumb_url && $full_url ) {
     //             printf(
     //                 '<a href="%s" class="thickbox" rel="refund-images">
-    //                     <img src="%s" style="width:70px;height:70px;object-fit:cover;border-radius:4px;" />
+    //                     <img src="%s" style="width:4.375rem;height:4.375rem;object-fit:cover;border-radius:0.25rem;" />
     //                 </a>',
     //                 esc_url( $full_url ),
     //                 esc_url( $thumb_url )
