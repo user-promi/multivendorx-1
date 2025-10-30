@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, ReactNode } from "react";
 
 // Accepts searchIndex-style items directly
 type SearchItem = {
@@ -42,7 +42,8 @@ type AdminHeaderProps = {
   showDropdown?: boolean;
   dropdownOptions?: DropdownOption[];
 
-  notifications?: NotificationItem[];
+  // notifications?: NotificationItem[];
+  notifications?: ReactNode;
   messages?: NotificationItem[];
   notificationsLink?: string;
   messagesLink?: string;
@@ -189,7 +190,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
 
 
           {/* Notifications */}
-          {showNotifications && notifications && notifications.length > 0 && (
+          {showNotifications &&  (
             <div className="icon-wrapper">
               <i
                 className="admin-icon adminlib-notification"
@@ -200,39 +201,10 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
                   setMessageOpen(false);
                 }}
               ></i>
-              <span className="count">{notifications.length}</span>
+              {/* <span className="count">{notifications.length}</span> */}
 
               {notifOpen && (
-                <div className="dropdown-menu notification">
-                  <div className="title">
-                    Notifications <span className="admin-badge green">{notifications.length} New</span>
-                  </div>
-                  <div className="notification">
-                    <ul>
-                      {notifications.map((item, idx) => (
-                        <li key={idx}>
-                          <a href={item.link || "#"}>
-                            <div className={`icon admin-badge ${item.color || "green"}`}>
-                              <i className={item.icon || "adminlib-user-network-icon"}></i>
-                            </div>
-                            <div className="details">
-                              <span className="heading">{item.heading}</span>
-                              <span className="message">{item.message}</span>
-                              <span className="time">{item.time}</span>
-                            </div>
-                          </a>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  {notificationsLink && (
-                    <div className="footer">
-                      <a href={notificationsLink} className="admin-btn btn-purple">
-                        <i className="adminlib-eye"></i> View all notifications
-                      </a>
-                    </div>
-                  )}
-                </div>
+                notifications
               )}
             </div>
           )}
