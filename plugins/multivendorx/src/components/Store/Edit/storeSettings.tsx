@@ -26,7 +26,9 @@ const StoreSettings = ({ id }: { id: string | null }) => {
     const [newEmailValue, setNewEmailValue] = useState('');
     const statusOptions = [
         { label: "Active", value: "active" },
-        { label: "Inactive", value: "inactive" },
+        { label: "Pending", value: "pending" },
+        { label: "Rejected", value: "rejected" },
+        { label: "Suspended", value: "suspended" },
     ];
 
     const [imagePreviews, setImagePreviews] = useState<{ [key: string]: string }>({});
@@ -958,18 +960,19 @@ const StoreSettings = ({ id }: { id: string | null }) => {
                         <div className="form-group-wrapper">
                             <div className="form-group">
                                 <label htmlFor="store-email">Status</label>
-                                <select
-                                    // value={data.status}
-                                    // onChange={(e) => setData({ ...data, status: e.target.value })}
-                                    className="basic-select"
-                                >
-                                    <option value="Approved">Approved</option>
-                                    <option value="Pending">Pending</option>
-                                    <option value="Disapproved">Disapproved</option>
-                                </select>
-                                <div className="settings-metabox-description">
-                                    Add multiple email addresses. Press Enter or click Add after each email.
-                                </div>
+                                <SelectInput
+                                    name="status"
+                                    value={formData.status}
+                                    options={statusOptions}
+                                    type="single-select"
+                                    onChange={(newValue: any) => {
+                                        if (!newValue || Array.isArray(newValue)) return;
+
+                                        const updated = { ...formData, status: newValue.value };
+                                        setFormData(updated);
+                                        autoSave(updated);
+                                    }}
+                                />
                             </div>
                         </div>
                     </div>

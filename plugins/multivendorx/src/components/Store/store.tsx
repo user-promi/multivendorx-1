@@ -26,7 +26,7 @@ const Store = () => {
 
     const isTabActive = hash.includes('tab=stores');
     const isAddStore = hash.includes('create');
-    const isViewStore = hash.includes('view');
+    // const isViewStore = hash.includes('view');
     const iseditStore = hash.includes('edit');
 
     const generateSlug = (text: string) => {
@@ -163,12 +163,12 @@ const Store = () => {
 
     return (
         <>
-            {isTabActive && isViewStore && !isAddStore && <ViewStore />}
-            {isTabActive && iseditStore && !isViewStore && !isAddStore && (
+            {/* {isTabActive && isViewStore && !isAddStore && <ViewStore />} */}
+            {isTabActive && iseditStore && !isAddStore && (
                 <EditStore />
             )}
 
-            {!isAddStore && !isViewStore && !iseditStore && (
+            {!isAddStore && !iseditStore && (
                 <>
                     <AdminBreadcrumbs
                         activeTabIcon="adminlib-storefront"

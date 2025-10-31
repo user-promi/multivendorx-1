@@ -484,8 +484,14 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
         $should_update_meta = true;
 
         if ($withdraw_type === 'automatic' && $threshold_amount < $amount) {
-            $process = MultiVendorX()->payments->processor->process_payment($store_id, $amount);
-            $should_update_meta = ($process === false);
+
+            $payment_method = $store->get_meta('payment_method') ?? '';
+
+            if ( !empty($payment_method) && ($payment_method == 'stripe-connect' || $payment_method == 'paypal-payout')) {
+                do_action("multivendorx_process_{$payment_method}_payment", $store_id, $amount, null, null, null);
+            } else {
+                $should_update_meta = true;
+            }
         }
 
         if ($should_update_meta) {
@@ -497,7 +503,6 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
             'id'      => $store_id,
             'message' => __( 'Withdrawal request submitted successfully.', 'multivendorx' ),
         ]);
-
     }
 
 }

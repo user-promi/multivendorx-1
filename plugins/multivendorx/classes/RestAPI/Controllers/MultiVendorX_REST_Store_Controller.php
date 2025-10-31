@@ -643,6 +643,12 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             return rest_ensure_response( $response );
         }
 
+        $commission = CommissionUtil::get_commission_summary_for_store((int) $id);
+        // Get primary owner information using Store object
+        $primary_owner_id = StoreUtil::get_primary_owner( $id );
+        $primary_owner_info = $this->get_user_info( $primary_owner_id );
+    
+
         $response = [
             'id'          => $store->get_id(),
             'name'        => $store->get('name'),
@@ -650,6 +656,9 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             'description' => $store->get('description'),
             'who_created' => $store->get('who_created'),
             'status'      => $store->get('status'),
+            'create_time' => date( 'd-m-Y', strtotime( $store->get('create_time'))),
+            'commission'  => $commission,
+            'primary_owner_info'  => $primary_owner_info,
         ];
 
         // Add meta data
