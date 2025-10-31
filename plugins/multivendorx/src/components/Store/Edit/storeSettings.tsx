@@ -45,9 +45,8 @@ const StoreSettings = ({ id }: { id: string | null }) => {
     const [mapProvider, setMapProvider] = useState('');
     const [apiKey, setApiKey] = useState('');
     const appLocalizer = (window as any).appLocalizer;
-
-
     const { modules } = useModules.getState();
+
 
     const [addressData, setAddressData] = useState({
         location_address: '',
@@ -715,9 +714,10 @@ const StoreSettings = ({ id }: { id: string | null }) => {
     return (
         <>
             <SuccessNotice message={successMsg} />
-            <div className="container-wrapper">
+            <div className="container-wrapper ">
                 <div className="card-wrapper w-65">
-                    <div className="card-content">
+
+                    {/* <div className="card-content">
                         <div className="card-title">
                             Basic Details
                         </div>
@@ -757,7 +757,34 @@ const StoreSettings = ({ id }: { id: string | null }) => {
                                 />
                             </div>
                         </div>
+                    </div> */}
+                    <div className="card-content">
+                        <div className="card-title">
+                            Status
+                        </div>
+
+                        {errorMsg && <p className="error-text" style={{ color: "red", marginTop: "5px" }}>{errorMsg}</p>}
+
+                        {/* Updated Email Section */}
+                        <div className="form-group-wrapper">
+                            <div className="form-group">
+                                <label htmlFor="store-email">Status</label>
+                                <select
+                                    // value={data.status}
+                                    // onChange={(e) => setData({ ...data, status: e.target.value })}
+                                    className="basic-select"
+                                >
+                                    <option value="Approved">Approved</option>
+                                    <option value="Pending">Pending</option>
+                                    <option value="Disapproved">Disapproved</option>
+                                </select>
+                                <div className="settings-metabox-description">
+                                    Add multiple email addresses. Press Enter or click Add after each email.
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
 
                     <div className="card-content">
                         <div className="card-title">
@@ -950,71 +977,11 @@ const StoreSettings = ({ id }: { id: string | null }) => {
 
                 <div className="card-wrapper w-35">
                     <div className="card-content">
-                        <div className="card-title">
-                            Store Media
-                        </div>
-
-                        <div className="form-group-wrapper">
-                            <div className="form-group">
-                                <label htmlFor="product-name">Profile Image</label>
-                                <FileInput
-                                    value={formData.image}
-                                    inputClass="form-input"
-                                    name="image"
-                                    type="hidden"
-                                    onButtonClick={() => runUploader('image')}
-                                    imageWidth={75}
-                                    imageHeight={75}
-                                    openUploader="Upload Image"
-                                    imageSrc={imagePreviews.image}
-                                    buttonClass="admin-btn btn-purple"
-                                    descClass="settings-metabox-description"
-                                    onRemove={() => {
-                                        const updated = { ...formData, image: '' };
-                                        setFormData(updated);
-                                        setImagePreviews((prev) => ({ ...prev, image: '' }));
-                                        autoSave(updated);
-                                    }}
-                                    onReplace={() => runUploader('image')}
-                                />
-                                <div className="settings-metabox-description">Upload Profile image max size 500px X 500px</div>
-                            </div>
-                        </div>
-
-                        <div className="form-group-wrapper">
-                            <div className="form-group">
-                                <label htmlFor="product-name">Store Banner Image</label>
-                                <FileInput
-                                    value={formData.banner}
-                                    inputClass="form-input"
-                                    name="banner"
-                                    type="hidden"
-                                    onButtonClick={() => runUploader('banner')}
-                                    imageWidth={75}
-                                    imageHeight={75}
-                                    openUploader="Upload Image"
-                                    imageSrc={imagePreviews.banner}
-                                    buttonClass="admin-btn btn-purple"
-                                    descClass="settings-metabox-description"
-                                    onRemove={() => {
-                                        const updated = { ...formData, banner: '' };
-                                        setFormData(updated);
-                                        setImagePreviews((prev) => ({ ...prev, banner: '' }));
-                                        autoSave(updated);
-                                    }}
-                                    onReplace={() => runUploader('banner')}
-                                />
-                                <div className="settings-metabox-description">Upload banner image size 1200px X 390px</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="card-content">
                         <div className="card-title">Social information</div>
                         {/* Facebook */}
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <label htmlFor="facebook"><i className="adminlib-supervised-user-circle"></i> Facebook</label>
+                                <label htmlFor="facebook"><i className="adminlib-facebook-fill"></i> Facebook</label>
                                 <BasicInput
                                     name="facebook"
                                     wrapperClass="setting-form-input"
@@ -1028,7 +995,7 @@ const StoreSettings = ({ id }: { id: string | null }) => {
                         {/* x */}
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <label htmlFor="twitter"><i className="adminlib-supervised-user-circle"></i> X</label>
+                                <label htmlFor="twitter"><i className="adminlib-twitter"></i> X</label>
                                 <BasicInput
                                     name="twitter"
                                     wrapperClass="setting-form-input"
@@ -1042,7 +1009,7 @@ const StoreSettings = ({ id }: { id: string | null }) => {
                         {/* LinkedIn */}
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <label htmlFor="linkedin"><i className="adminlib-supervised-user-circle"></i> LinkedIn</label>
+                                <label htmlFor="linkedin"><i className="adminlib-linkedin-border"></i> LinkedIn</label>
                                 <BasicInput
                                     name="linkedin"
                                     wrapperClass="setting-form-input"
@@ -1056,7 +1023,7 @@ const StoreSettings = ({ id }: { id: string | null }) => {
                         {/* YouTube */}
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <label htmlFor="youtube"><i className="adminlib-supervised-user-circle"></i> YouTube</label>
+                                <label htmlFor="youtube"><i className="adminlib-youtube"></i> YouTube</label>
                                 <BasicInput
                                     name="youtube"
                                     wrapperClass="setting-form-input"

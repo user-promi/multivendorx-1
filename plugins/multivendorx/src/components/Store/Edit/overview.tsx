@@ -20,7 +20,7 @@ const Overview = ({ id }: { id: string | null }) => {
     return (
         <>
 
-            <div className="container-wrapper">
+            <div className="container-wrapper ">
                 <div className="card-wrapper w-65">
                     <div className="card-content">
                         <div className="analytics-container">
@@ -38,31 +38,112 @@ const Overview = ({ id }: { id: string | null }) => {
 
                         </div>
                     </div>
-                </div>
+                    <div className="card-content">
+                        <div className="card-header">
+                            <div className="left">
+                                <div className="title">
+                                    Next Opening Date
+                                </div>
+                            </div>
+                        </div>
 
+                        <div className="store-owner-details">
+                            <div className="profile">
+                                <div className="avater">
+                                    <span className="adminlib-calendar"></span>
+                                </div>
+                                <div className="details">
+                                    <div className="name">Repeats every two weeks</div>
+                                    <div className="des">Lorem ipsum dolor sit amet.</div>
+                                </div>
+                            </div>
+                            <div className="right-details">
+                                <div className="price">$356 .35</div>
+                                <div className="div">Lorem, ipsum dolor.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="card-content">
+                        <div className="card-header">
+                            <div className="left">
+                                <div className="title">
+                                    Next Opening Date
+                                </div>                                
+                            </div>
+                            
+                        </div>
+
+
+                        <div className="store-owner-details">
+                            <div className="profile">
+                                <div className="avater">
+                                    <span className="adminlib-calendar"></span>
+                                </div>
+                                <div className="details">
+                                    <div className="name">Repeats every two weeks</div>
+                                    <div className="des">Lorem ipsum dolor sit amet.</div>
+                                </div>
+                            </div>
+                            <div className="right-details">
+                                <div className="price">$356 .35</div>
+                                <div className="div">Lorem, ipsum dolor.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div className="card-wrapper w-35">
                     <div className="card-content">
-                        <h3>Recent Activity (Static)</h3>
-                        <div className="activity-wrapper">
-                            {activities.map((a, i) => (
-                                <div key={i} className="activity">
-                                    <span className="icon">
-                                        <i className={a.icon}></i>
-                                    </span>
-                                    <div className="details">
-                                        {a.text}
-                                        <span>2 minutes ago</span>
-                                    </div>
+                        <div className="card-header">
+                            <div className="left">
+                                <div className="title">
+                                    Store Owner
                                 </div>
-                            ))}
+                            </div>
+                        </div>
+
+                        <div className="store-owner-details owner">
+                            <div className="profile">
+                                <div className="avater">
+                                    <span>JD</span>
+                                </div>
+                                <div className="details">
+                                    <div className="name">John Doe</div>
+                                    <div className="des">Owner</div>
+                                </div>
+                            </div>
+                            <ul className="contact-details">
+                                <li>
+                                    <i className="adminlib-mail"></i>john@example.com
+                                </li>
+                                <li>
+                                    <i className="adminlib-form-phone"></i> +1 (555) 987-6543
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div className="card-content">
+                        <div className="card-header">
+                            <div className="left">
+                                <div className="title">
+                                    Repeating
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="store-owner-details">
+                            <div className="profile">
+                                <div className="avater">
+                                    <span className="adminlib-form-recaptcha"></span>
+                                </div>
+                                <div className="details">
+                                    <div className="name">Repeats every two weeks</div>
+                                    <div className="des">Monday @ 9.00 - 11.00 Am</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-
-
-
         </>
     );
 

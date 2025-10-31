@@ -282,7 +282,13 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
               <div className="step-info">
                 {!field.hideCheckbox && (
                   <div className="default-checkbox">
-                    <input type="checkbox" className="mvx-toggle-checkbox" id="step-checkbox-0-0" />
+                    <input
+                      type="checkbox"
+                      checked={!!fieldValue}
+                      onChange={(e) =>
+                        handleInputChange(methodId, field.key, e.target.checked)
+                      }
+                    />
                     <label htmlFor="step-checkbox-0-0"></label>
                   </div>
                 )}
