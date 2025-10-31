@@ -1,6 +1,84 @@
 @use '../config.scss' as *;
 
 
+// admin tab
+
+.admin-tab {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+// welcome section start
+.pro-banner-wrapper {
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+
+    .heading {
+        font-size: 1.75rem;
+        line-height: 2.313rem;
+        font-weight: 600;
+        color: #000000d1;
+    }
+
+    .description {
+        font-size: 0.9rem;
+        padding: 0.313rem 0;
+        margin-bottom: 2rem;
+        line-height: 1.313rem;
+    }
+
+    .button-wrapper {
+        display: flex;
+    }
+
+    a:hover {
+        color: #000;
+    }
+
+    img {
+        width: 11rem;
+    }
+}
+
+// welcome section end
+
+// section pro banner
+.pro-banner {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 0.313rem;
+    margin-top: 2rem;
+
+    .text {
+        font-size: 1.25rem;
+        color: #000;
+    }
+
+    .des {
+        padding-bottom: 0.813rem;
+    }
+}
+
+// pro banner end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 .header-search {
     ul {
         position: absolute;
@@ -18,9 +96,9 @@
         z-index: 1000;
 
         li {
-            padding: 8px 12px;
+            padding: 8px 0.75rem;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 0.875rem;
             color: #333;
             border-bottom: $border-light-small;
             display: flex;
@@ -59,29 +137,28 @@
     }
 }
 
-.admin-dashboard {
-    padding: 0 1rem;
+// .admin-dashboard {
+//     padding: 0 1rem;
 
-    .admin-table-wrapper {
-        margin: 0;
-    }
+//     .admin-table-wrapper {
+//         margin: 0;
+//     }
 
-    &.tab {
-        margin: 1rem;
-        background: #fff;
-        border-radius: 0.313rem;
+//     &.tab {
+//         margin: 1rem;
+//         background: #fff;
+//         border-radius: 0.313rem;
 
-        .column {
-            border: $border-light-small;
-        }
-    }
-
-}
+//         .column {
+//             border: $border-light-small;
+//         }
+//     }
+// }
 
 .tab-titles {
     display: flex;
     gap: 1.313rem;
-    padding-top: 1.313rem;
+    // padding-top: 1.313rem;
 
     .title {
         padding-bottom: 0.313rem;
@@ -110,83 +187,33 @@
     }
 }
 
-.admin-tab {
-    .card-header {
-        margin: 0;
-        padding: 0;
-        border: none;
-    }
-
-    .tab-titles {
-        padding: 0;
-    }
-}
-
 .row {
-    display: flex;
-    gap: 1rem;
-    padding-bottom: 1rem;
+    // display: flex;
+    // gap: 1rem;
+    // padding-bottom: 1rem;
 
     .header {
-        // margin-top: 0.5rem;
         width: 100%;
     }
 }
 
-.column {
-    // width: 100%;
-    // padding: 1.5rem;
-    // background: #fff;
-    // border-radius: 0.313rem;
+// .column {
+//     .action-btn-wrapper {
+//         display: flex;
+//         flex-wrap: wrap;
+//         gap: 1rem;
+//     }
 
-    .action-btn-wrapper {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 1rem;
-    }
+//     .header {
+//         display: flex;
+//         justify-content: space-between;
+//     }
 
-    .header {
-        display: flex;
-        justify-content: space-between;
-
-        .right {}
-    }
-
-    // h3,
-    // .title {
-    //     padding-bottom: 0.85rem;
-    //     font-size: 1.125rem;
-    //     color: #000;
-    //     font-weight: 500;
-
-    //     i {
-    //         padding-right: 0.313rem;
-    //         color: $theme-color;
-    //         font-size: 1.125rem;
-    //     }
-    // }
-
-    .admin-table-wrapper {
-        padding: 0;
-        margin: 0;
-    }
-}
-
-.w-65 {
-    width: 65%;
-}
-
-.w-35 {
-    width: 35%;
-}
-
-.w-45 {
-    width: 45%;
-}
-
-.w-40 {
-    width: 40% !important;
-}
+//     .admin-table-wrapper {
+//         padding: 0;
+//         margin: 0;
+//     }
+// }
 
 .header {
     padding: 1rem;
@@ -429,105 +456,6 @@
     }
 }
 
-.quick-links-wrapper {
-    a {
-        display: block;
-        padding: 0.625rem 0;
-        font-size: 0.9rem;
-
-        i {
-            padding-right: 0.125rem;
-        }
-    }
-}
-
-
-// action start
-.overview-card-wrapper {
-    display: flex;
-    gap: 1rem;
-    width: 100%;
-
-    &.tab {
-        cursor: pointer;
-        padding-top: 1rem;
-    }
-
-    .action {
-        width: 100%;
-        padding: 1rem;
-        border-radius: 0.313rem;
-
-        .title {
-            justify-content: space-between;
-            display: flex;
-            font-size: 2.5rem;
-            line-height: 2.5rem;
-            color: #000;
-            margin-bottom: 1.313rem;
-
-            i {
-                font-size: 1.5rem;
-            }
-        }
-
-        .description {
-            font-size: 1.125rem;
-            color: #000;
-            font-weight: 500;
-        }
-    }
-
-    .action:nth-child(1) {
-        background: #5007aa14;
-
-        i {
-            color: $theme-color;
-        }
-    }
-
-    .action:nth-child(2) {
-        background: #bfdeed;
-
-        i {
-            color: #003d66;
-        }
-    }
-
-    .action:nth-child(3) {
-        background: #d9f5f0;
-
-        i {
-            color: #06be9f;
-        }
-    }
-
-    .action:nth-child(4) {
-        background: #5007aa14;
-
-        i {
-            color: $theme-color;
-        }
-    }
-
-    .action:nth-child(5) {
-        background: #b89d0325;
-
-        i {
-            color: #b89d03;
-        }
-    }
-
-    .action:nth-child(6) {
-        background: #b8039a1f;
-
-        i {
-            color: #b8039a;
-        }
-    }
-}
-
-// action style end
 
 // top items start
 .top-items {
@@ -678,37 +606,7 @@
 // .column:has(.pro-banner-wrapper){
 //     background: transparent;
 // }
-.pro-banner-wrapper {
-    height: 100%;
-    display: flex;
-    justify-content: space-between;
 
-    .heading {
-        font-size: 1.75rem;
-        line-height: 2.313rem;
-        font-weight: 600;
-        color: #000000d1;
-    }
-
-    .description {
-        font-size: 0.9rem;
-        padding: 0.313rem 0;
-        margin-bottom: 2rem;
-        line-height: 1.313rem;
-    }
-
-    .button-wrapper {
-        display: flex;
-    }
-
-    a:hover {
-        color: #000;
-    }
-
-    img {
-        width: 11rem;
-    }
-}
 
 .right-pro-banner {
     .title {
@@ -755,31 +653,13 @@
 }
 
 
-// section pro banner
-.pro-banner {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-    border-radius: 0.313rem;
-    margin-top: 2rem;
-
-    .text {
-        font-size: 1.25rem;
-        color: #000;
-    }
-
-    .des {
-        padding-bottom: 0.813rem;
-    }
-}
-
-// pro banner end
-
 //  free vs pro tabel start
 .free-vs-pro {
     margin-top: 1.125rem;
+
+    .buttons-wrapper {
+        margin-top: 0.5rem;
+    }
 
     table {
         width: 100%;
@@ -824,10 +704,6 @@
         td:nth-child(3) {
             width: 15%;
         }
-    }
-
-    .buttons-wrapper {
-        margin-top: 0.5rem;
     }
 }
 

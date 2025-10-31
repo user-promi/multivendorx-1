@@ -5,8 +5,6 @@
 }
 
 .module-container {
-  padding: 2rem;
-
   .tab-name {
     margin-bottom: 1rem;
 
@@ -40,13 +38,13 @@
   .module-option-row {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
+    gap: 1rem;
     margin-top: 1rem;
 
     .module-separator {
       width: 100%;
       flex-basis: 100%;
-      margin: 40px 0 20px;
+      margin: 40px 0 1.25rem;
       border-bottom: 1px solid #ccc;
 
       .separator-title {

@@ -36,6 +36,9 @@ interface BasicInputProps {
     onBlur?: (e: FocusEvent<HTMLInputElement>) => void;
     postInsideText?: string;
     generate?: string;
+    clickBtnName?: string;
+    msg?: any;
+    onclickCallback?: ( e: React.MouseEvent< HTMLButtonElement > ) => void;
     proSetting?: boolean;
     description?: string;
     descClass?: string;
@@ -73,6 +76,9 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
             preText,
             postText,
             generate,
+            clickBtnName,
+            onclickCallback,
+            msg,
             proSetting,
             description,
             descClass,
@@ -185,6 +191,16 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
                                         dangerouslySetInnerHTML={{ __html: postInsideText }}
                                     />
                                 )}
+                                {clickBtnName && (
+                                    <DisplayButton
+                                        wraperClass="admin-btn btn-purple"
+                                        onClick={onclickCallback}
+                                    >
+                                        <>
+                                            <span className="text">{clickBtnName}</span>
+                                        </>
+                                    </DisplayButton>
+                                )}
                                 {generate &&
                                     ((!value || value === '') ? (
                                         <DisplayButton
@@ -256,6 +272,7 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
                 )}
 
                 {proSetting && <span className="admin-pro-tag"><i className="adminlib-pro-tag"></i>Pro</span>}
+                {msg && <div className={msg.type}>{msg.message}</div>}
             </>
         );
     }

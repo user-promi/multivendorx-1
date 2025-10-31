@@ -61,9 +61,9 @@ export const TransactionHistory: React.FC = () => {
             url: getApiLink(appLocalizer, `transaction/${selectedStore.value}`),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
         })
-        .then((response) => {
-            setData(response?.data || {});
-        })
+            .then((response) => {
+                setData(response?.data || {});
+            })
 
         axios({
             method: "GET",
@@ -71,7 +71,7 @@ export const TransactionHistory: React.FC = () => {
             headers: { "X-WP-Nonce": appLocalizer.nonce },
         })
             .then((response) => {
-              setStoreData(response.data || {});
+                setStoreData(response.data || {});
             })
     }, [selectedStore]);
 
@@ -91,9 +91,9 @@ export const TransactionHistory: React.FC = () => {
 
     const handleAmountChange = (value: number) => {
         if (value > data.available_balance) {
-        setError(`Amount cannot be greater than available balance (${data.available_balance})`);
+            setError(`Amount cannot be greater than available balance (${data.available_balance})`);
         } else {
-        setError(""); // clear error if valid
+            setError(""); // clear error if valid
         }
         setAmount(value);
     };
@@ -132,7 +132,7 @@ export const TransactionHistory: React.FC = () => {
                 setRequestWithdrawal(false);
             }
         });
-    };  
+    };
 
     const tabs = [
         {
@@ -172,15 +172,15 @@ export const TransactionHistory: React.FC = () => {
                             type="single-select"
                             onChange={(newValue: any) => setSelectedStore(newValue)}
                             onInputChange={(inputValue: string) => handleSearch(inputValue)}
-                            size= "12rem"
+                            size="12rem"
                         />
                     </>
                 }
             />
 
-            <div className="admin-dashboard">
+            <div className="general-wrapper">
                 <div className="row">
-                     <div className="column">
+                    <div className="column">
                         <div className="card-header">
                             <div className="left">
                                 <div className="title">

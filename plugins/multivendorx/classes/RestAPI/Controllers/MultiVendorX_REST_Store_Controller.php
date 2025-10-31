@@ -5,6 +5,7 @@ use MultiVendorX\Store\StoreUtil;
 use MultiVendorX\Store\Store;
 use MultiVendorX\Utill;
 use MultiVendorX\Store\SocialVerification;
+use MultiVendorX\Commission\CommissionUtil;
 
 defined('ABSPATH') || exit;
 
@@ -239,13 +240,8 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
         try {
 
             $slug = $request->get_param( 'slug' );
-            if ($request->get_param( 'slug' )) {
-                $table = "{$wpdb->prefix}"  . Utill::TABLES['store'];
-
-                $exists = $wpdb->get_var(
-                    $wpdb->prepare("SELECT COUNT(*) FROM {$table} WHERE slug = %s", $slug)
-                );
-
+            if (!empty($slug)) {
+                $exists =Store::store_slug_exists($slug);
                 return rest_ensure_response(['exists' => $exists > 0]);
             }
             
@@ -357,7 +353,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             $formatted_stores = array();
             foreach ( $stores as $store ) {
                 $store_meta = Store::get_store_by_id( (int) $store['ID'] );
-
+                $commission = CommissionUtil::get_commission_summary_for_store((int) $store['ID']);
                 // Get primary owner information using Store object
                 $primary_owner_id = StoreUtil::get_primary_owner( $store['ID'] );
                 $primary_owner = $this->get_user_info( $primary_owner_id );
@@ -381,6 +377,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                         'store_banner' => $store_banner, // Add store banner
                         'address_1'   => $store_meta->meta_data['address_1'] ?? '',
                         'image' => ! empty( $store_meta->meta_data['image'] ) ? $store_meta->meta_data['image'] : null,
+                        'commission' => $commission,
                     )
                 );
             }
@@ -601,7 +598,18 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                 'role_id'  => 'store_owner',
             ]);
         }
+        
+        $admin_email = get_option('admin_email');
+        $store_email = 'test@gmail.com';
+        $parameters = [
+            'admin_email'   => $admin_email,
+            'store_email'   => $store_email,
+            'store_id'      => $insert_id,
+            'category'   => 'activity'
+        ];
     
+        do_action('multivendorx_notify_new_store_approval', 'new_store_approval', $parameters);
+
         return rest_ensure_response( [
             'success' => true,
             'id'      => $insert_id,
@@ -654,6 +662,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
 
     public function update_item( $request ) {
         $id   = absint( $request->get_param( 'id' ) );
+
         $data = $request->get_json_params();
 
         $store = new \MultiVendorX\Store\Store( $id );
@@ -681,20 +690,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             }
             return;
         }
-    
-        // Handle adding store owners
-        if (!empty($data['store_owners']) || !empty($data['primary_owner'])) {
-            StoreUtil::add_store_users([
-                'store_id' => $data['id'],
-                'users'    => $data['store_owners'],
-                'role_id'  => 'store_owner',
-            ]);
-
-            StoreUtil::set_primary_owner($data['primary_owner'], $data['id']);
-    
-            return rest_ensure_response([ 'success' => true ]);
-        }
-    
+        
         // Update basic store info
         $store->set('name',        $data['name'] ?? $store->get('name'));
         $store->set('slug',        $data['slug'] ?? $store->get('slug'));
@@ -712,6 +708,19 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
         }
     
         $store->save();
+
+        // Handle adding store owners
+        if (!empty($data['store_owners']) || !empty($data['primary_owner'])) {
+            StoreUtil::add_store_users([
+                'store_id' => $data['id'],
+                'users'    => (array)$data['store_owners'],
+                'role_id'  => 'store_owner',
+            ]);
+
+            StoreUtil::set_primary_owner($data['primary_owner'], $data['id']);
+    
+            return rest_ensure_response([ 'success' => true ]);
+        }
     
         return rest_ensure_response([
             'success' => true,

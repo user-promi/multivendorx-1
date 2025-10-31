@@ -5,63 +5,17 @@ import Coupons from './coupon';
 import Transactions from './transaction';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import StoreOrders from './refundRequest';
 
 const ApprovalQueue = () => {
     const [productCount, setProductCount] = useState<number>(0);
     const [couponCount, setCouponCount] = useState<number>(0);
     const [transactionCount, setTransactionCount] = useState<number>(0);
     const [storeCount, setStoreCount] = useState<number>(0);
+    const [refundCount, setRefundCount] = useState(0);
 
     const [activeTab, setActiveTab] = useState("");
-    const [tasks, setTasks] = useState<string[]>([]);
-    const [showInput, setShowInput] = useState(false);
-    const [task, setTask] = useState("");
-    const [loading, setLoading] = useState(false);
-    console.log(appLocalizer)
-    useEffect(() => {
-        if (!appLocalizer.user_id) return;
 
-        const userEndpoint = `${appLocalizer.apiUrl}/wp/v2/users/${appLocalizer.user_id}`;
-
-        axios.get(userEndpoint, {
-            headers: { 'X-WP-Nonce': appLocalizer.nonce }
-        }).then(res => {
-            setTasks(res.data.meta?.multivendorx_dashboard_tasks || []);
-        }).catch(err => console.error(err));
-    }, [appLocalizer.user_id]);
-
-
-    const saveTasks = (updatedTasks: string[]) => {
-        const userEndpoint = `${appLocalizer.apiUrl}/wp/v2/users/${appLocalizer.user_id}`;
-
-        axios.patch(userEndpoint,
-            { meta: { multivendorx_dashboard_tasks: updatedTasks } },
-            { headers: { 'X-WP-Nonce': appLocalizer.nonce } }
-        ).then(res => {
-            setTasks(res.data.meta.multivendorx_dashboard_tasks);
-        }).catch(err => console.error(err));
-    };
-
-
-    const handleConfirm = async () => {
-        if (!task.trim()) return;
-
-        setLoading(true);
-        try {
-            await saveTasks([...tasks, task]);
-            setTask("");
-            setShowInput(false);
-        } catch (err) {
-            console.error(err);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const handleDelete = (index: number) => {
-        const updatedTasks = tasks.filter((_, idx) => idx !== index);
-        saveTasks(updatedTasks);
-    };
 
     const refreshCounts = () => {
         axios({
@@ -104,8 +58,21 @@ const ApprovalQueue = () => {
                 setTransactionCount(count);
             })
             .catch(() => setTransactionCount(0));
+        // Fetch total orders count
+        axios({
+            method: 'GET',
+            url: `${appLocalizer.apiUrl}/wc/v3/orders`,
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            params: { meta_key: 'multivendorx_store_id', status: 'refund-requested' },
+        })
+            .then((response) => {
+                const total = Number(response.headers['x-wp-total']) || 0;
+                setRefundCount(total);
+            })
+            .catch(() => {
+                setRefundCount(0);
+            });
     };
-
     const tabs = [
         ...(appLocalizer.settings_databases_value['general']['approve_store'] === "manually"
             ? [{
@@ -154,7 +121,7 @@ const ApprovalQueue = () => {
                     <Vendors onUpdated={refreshCounts} />
                 </>
         },
-        ...(Array.isArray(appLocalizer.settings_databases_value['privacy-settings'] ['enable_profile_deactivation_request'])
+        ...(Array.isArray(appLocalizer.settings_databases_value['privacy-settings']['enable_profile_deactivation_request'])
             && appLocalizer.settings_databases_value['privacy-settings']['enable_profile_deactivation_request'].includes("enable_profile_deactivation_request")
             ? [{
                 id: "coupons",
@@ -180,8 +147,8 @@ const ApprovalQueue = () => {
             }]
             : []
         ),
-        ...(Array.isArray(appLocalizer.settings_databases_value['store-capability'] ['products'])
-            && appLocalizer.settings_databases_value['store-capability'] ['products'].includes("publish_products")
+        ...(Array.isArray(appLocalizer.settings_databases_value['store-capability']['products'])
+            && appLocalizer.settings_databases_value['store-capability']['products'].includes("publish_products")
             ? [{
                 id: "product-approval",
                 label: "Products",
@@ -207,14 +174,13 @@ const ApprovalQueue = () => {
             }]
             : []
         ),
-        ...(Array.isArray(appLocalizer.settings_databases_value['store-capability'] ['coupons'])
-            && appLocalizer.settings_databases_value['store-capability'] ['coupons'].includes("publish_coupons")
+        ...(Array.isArray(appLocalizer.settings_databases_value['store-capability']['coupons'])
+            && appLocalizer.settings_databases_value['store-capability']['coupons'].includes("publish_coupons")
             ? [{
                 id: "coupon-approval",
                 label: "Coupons",
                 icon: "adminlib-calendar red",
                 des: "Need a quick approval",
-
                 count: couponCount,
                 content:
                     <>
@@ -257,29 +223,53 @@ const ApprovalQueue = () => {
                     <Transactions onUpdated={refreshCounts} />
                 </>
         },
+        ...(appLocalizer.settings_databases_value['disbursement']['withdraw_type'] === "manual"
+            ? [{
+                id: "withdrawal",
+                label: "Withdrawals",
+                icon: "adminlib-calendar blue",
+                des: "Queued for disbursement",
+                count: transactionCount,
+                content:
+                    <>
+                        <div className="card-header">
+                            <div className="left">
+                                <div className="title">
+                                    Withdrawals
+                                </div>
+                                <div className="des">Waiting for your response</div>
+                            </div>
+                            <div className="right">
+                                <i className="adminlib-more-vertical"></i>
+                            </div>
+                        </div>
+                        <Transactions onUpdated={refreshCounts} />
+                    </>
+            }]
+            : []
+        ),
         {
-            id: "withdrawal",
-            label: "Withdrawals",
+            id: "refund-requests",
+            label: "Refund Requests",
+            module: "marketplace-refund",
             icon: "adminlib-calendar blue",
-            des: "Queued for disbursement",
-
-            count: transactionCount,
-            content:
+            des: "Need your decision",
+            count: refundCount,
+            content: (
                 <>
                     <div className="card-header">
                         <div className="left">
-                            <div className="title">
-                                Withdrawals
-                            </div>
-                            <div className="des">Waiting for your response</div>
+                            <div className="title">Refund Requests</div>
+                            <div className="des">Need your decision</div>
                         </div>
                         <div className="right">
                             <i className="adminlib-more-vertical"></i>
                         </div>
                     </div>
-                    <Transactions onUpdated={refreshCounts} />
+                    <StoreOrders />
                 </>
-        }
+            ),
+        },
     ];
     useEffect(() => {
         if (!tabs.find(tab => tab.id === activeTab)) {
@@ -300,7 +290,7 @@ const ApprovalQueue = () => {
             />
 
             {/* Workboard Stats */}
-            <div className="work-board">
+            <div className="general-wrapper">
 
                 {/* <div className="row">
                     <div className="column">
@@ -472,17 +462,6 @@ const ApprovalQueue = () => {
 
                 <div className="row">
                     <div className="overview-card-wrapper tab">
-                        {/* {CustomerServicesStats.map(stat => (
-                            <div className="action" key={stat.id}>
-                                <div className="title">
-                                    {stat.count}
-                                    <i className={stat.icon}></i>
-                                </div>
-                                <div className="description">
-                                    {stat.label}
-                                </div>
-                            </div>
-                        ))} */}
                         {tabs.map((tab) => (
                             <div className={`tab-action ${activeTab === tab.id ? "active" : ""}`} key={tab.id} onClick={() => setActiveTab(tab.id)}>
                                 <div className="details-wrapper">

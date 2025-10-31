@@ -17,7 +17,7 @@
         align-items: center;
         justify-content: space-between;
         padding: 0.875rem 1.5rem;
-        height: 65px;
+        height: 4.063rem;
 
         img {
             width: auto;
@@ -187,14 +187,14 @@
 
                                 .user-avatar {
                                     border-radius: 50%;
-                                    height: 40px;
-                                    width: 40px;
+                                    height: 2.5rem;
+                                    width: 2.5rem;
                                     display: flex;
                                     justify-content: center;
                                     align-items: center;
                                     color: #fff;
                                     background: #9d72ff;
-                                    font-size: 14px;
+                                    font-size: 0.875rem;
                                     font-weight: 700;
                                     letter-spacing: .06em;
                                     flex-shrink: 0;
@@ -202,7 +202,7 @@
 
                                     span {
                                         color: #fff;
-                                        font-size: 14px;
+                                        font-size: 0.875rem;
                                         font-weight: 700;
                                         letter-spacing: .06em;
                                     }
@@ -261,7 +261,7 @@
                                 display: flex;
                                 align-items: center;
                                 color: #526484;
-                                font-size: 13px;
+                                font-size: 0.813rem;
                                 line-height: 1.4rem;
                                 font-weight: 500;
                                 padding: .575rem 0;
@@ -314,11 +314,11 @@
 }
 
 .content-wrapper {
-    .width-35 {
+    .w-35 {
         width: 35%;
     }
 
-    .width-65 {
+    .w-65 {
         width: 65%;
     }
 

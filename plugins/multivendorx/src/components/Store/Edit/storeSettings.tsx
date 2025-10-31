@@ -33,7 +33,7 @@ const StoreSettings = ({ id }: { id: string | null }) => {
     const [stateOptions, setStateOptions] = useState<{ label: string; value: string }[]>([]);
     const [successMsg, setSuccessMsg] = useState<string | null>(null);
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
-    
+
     // Map states
     const [map, setMap] = useState<any>(null);
     const [marker, setMarker] = useState<any>(null);
@@ -69,13 +69,13 @@ const StoreSettings = ({ id }: { id: string | null }) => {
             const emails = emailString.split(/[,\n]/)
                 .map(email => email.trim())
                 .filter(email => email !== '');
-            
+
             const badges = emails.map((email, index) => ({
                 id: index + 1,
                 email: email,
                 isValid: /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
             }));
-            
+
             setEmailBadges(badges);
         } else {
             setEmailBadges([]);
@@ -89,49 +89,49 @@ const StoreSettings = ({ id }: { id: string | null }) => {
             setLoading(false);
             return;
         }
-    
+
         axios({
             method: 'GET',
             url: getApiLink(appLocalizer, `store/${id}`),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
         })
-        .then((res) => {
-            const data = res.data || {};   
-                
-            // Set all form data
-            setFormData((prev) => ({ ...prev, ...data }));
-            
-            // Set address-specific data
-            setAddressData({
-                location_address: data.location_address || data.address || '',
-                location_lat: data.location_lat || '',
-                location_lng: data.location_lng || '',
-                address: data.address || data.location_address || '',
-                city: data.city || '',
-                state: data.state || '',
-                country: data.country || '',
-                zip: data.zip || '',
-                timezone: data.timezone || ''
+            .then((res) => {
+                const data = res.data || {};
+
+                // Set all form data
+                setFormData((prev) => ({ ...prev, ...data }));
+
+                // Set address-specific data
+                setAddressData({
+                    location_address: data.location_address || data.address || '',
+                    location_lat: data.location_lat || '',
+                    location_lng: data.location_lng || '',
+                    address: data.address || data.location_address || '',
+                    city: data.city || '',
+                    state: data.state || '',
+                    country: data.country || '',
+                    zip: data.zip || '',
+                    timezone: data.timezone || ''
+                });
+
+                setImagePreviews({
+                    image: data.image || '',
+                    banner: data.banner || '',
+                });
+                setLoading(false);
+            })
+            .catch((error) => {
+                console.error('Error loading store data:', error);
+                setLoading(false);
             });
-            
-            setImagePreviews({
-                image: data.image || '',
-                banner: data.banner || '',
-            });
-            setLoading(false);
-        })
-        .catch((error) => {
-            console.error('Error loading store data:', error);
-            setLoading(false);
-        });
     }, [id]);
 
     // Add email function
     const addEmail = () => {
         if (!newEmailValue.trim()) return;
-        
+
         const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newEmailValue.trim());
-        
+
         if (!isValidEmail) {
             setErrorMsg("Invalid email format");
             return;
@@ -145,12 +145,12 @@ const StoreSettings = ({ id }: { id: string | null }) => {
 
         const updatedBadges = [...emailBadges, newBadge];
         setEmailBadges(updatedBadges);
-        
+
         // Update form data with newline-separated emails
         const emailString = updatedBadges.map(badge => badge.email).join('\n');
         const updatedFormData = { ...formData, email: emailString };
         setFormData(updatedFormData);
-        
+
         setNewEmailValue('');
         setErrorMsg(null);
         autoSave(updatedFormData);
@@ -160,12 +160,12 @@ const StoreSettings = ({ id }: { id: string | null }) => {
     const removeEmail = (id: number) => {
         const updatedBadges = emailBadges.filter(badge => badge.id !== id);
         setEmailBadges(updatedBadges);
-        
+
         // Update form data
         const emailString = updatedBadges.map(badge => badge.email).join('\n');
         const updatedFormData = { ...formData, email: emailString };
         setFormData(updatedFormData);
-        
+
         autoSave(updatedFormData);
     };
 
@@ -183,10 +183,10 @@ const StoreSettings = ({ id }: { id: string | null }) => {
             <div className={`admin-badge ${badge.isValid ? 'green' : 'red'}`}>
                 <i className="adminlib-mail"></i>
                 <span>{badge.email}</span>
-                <i 
-                    className="adminlib-close remove-btn" 
+                <i
+                    className="adminlib-close remove-btn"
                     onClick={() => onRemove(badge.id)}
-                    // style={{ cursor: 'pointer', marginLeft: '8px' }}
+                // style={{ cursor: 'pointer', marginLeft: '8px' }}
                 ></i>
             </div>
         );
@@ -289,7 +289,7 @@ const StoreSettings = ({ id }: { id: string | null }) => {
 
     const initializeGoogleMap = () => {
         log('Initializing Google Map...');
-        
+
         // Add safety check for google.maps availability
         if (!window.google || !window.google.maps || !window.google.maps.Map) {
             log('Google Maps not fully loaded yet, retrying...');
@@ -349,7 +349,7 @@ const StoreSettings = ({ id }: { id: string | null }) => {
     const initializeMapboxMap = () => {
         log('Initializing Mapbox Map...');
         if (!(window as any).mapboxgl || !autocompleteInputRef.current) return;
-    
+
         // Clear any existing geocoder first
         const geocoderContainer = document.getElementById('store-location-autocomplete-container');
         if (geocoderContainer) {
@@ -444,13 +444,13 @@ const StoreSettings = ({ id }: { id: string | null }) => {
         }
 
         setAddressData(newAddressData);
-        
+
         // Merge with existing form data
         const updatedFormData = {
             ...formData,
             ...newAddressData
         };
-        
+
         setFormData(updatedFormData);
         autoSave(updatedFormData);
     };
@@ -485,7 +485,7 @@ const StoreSettings = ({ id }: { id: string | null }) => {
 
                 place.address_components.forEach((component: any) => {
                     const types = component.types;
-                    
+
                     if (types.includes('street_number')) {
                         streetNumber = component.long_name;
                     } else if (types.includes('route')) {
@@ -517,12 +517,12 @@ const StoreSettings = ({ id }: { id: string | null }) => {
             if (place.properties) {
                 components.address = place.properties.address || '';
             }
-            
+
             if (place.context) {
                 place.context.forEach((component: any) => {
                     const idParts = component.id.split('.');
                     const type = idParts[0];
-                    
+
                     if (type === 'postcode') {
                         components.zip = component.text;
                     } else if (type === 'place') {
@@ -541,20 +541,20 @@ const StoreSettings = ({ id }: { id: string | null }) => {
 
     const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
-        
+
         const newAddressData = {
             ...addressData,
             [name]: value
         };
-        
+
         setAddressData(newAddressData);
-        
+
         // Also update formData to maintain consistency
         const updatedFormData = {
             ...formData,
             [name]: value
         };
-        
+
         setFormData(updatedFormData);
         autoSave(updatedFormData);
     };
@@ -562,13 +562,13 @@ const StoreSettings = ({ id }: { id: string | null }) => {
     // Handle country select change (from old code)
     const handleCountryChange = (newValue: any) => {
         if (!newValue || Array.isArray(newValue)) return;
-        
-        const updated = { 
-            ...formData, 
-            country: newValue.value, 
+
+        const updated = {
+            ...formData,
+            country: newValue.value,
             state: '' // reset state when country changes
         };
-        
+
         setFormData(updated);
         autoSave(updated);
         fetchStatesByCountry(newValue.value);
@@ -577,12 +577,12 @@ const StoreSettings = ({ id }: { id: string | null }) => {
     // Handle state select change (from old code)
     const handleStateChange = (newValue: any) => {
         if (!newValue || Array.isArray(newValue)) return;
-        
-        const updated = { 
-            ...formData, 
-            state: newValue.value 
+
+        const updated = {
+            ...formData,
+            state: newValue.value
         };
-        
+
         setFormData(updated);
         autoSave(updated);
     };
@@ -604,7 +604,7 @@ const StoreSettings = ({ id }: { id: string | null }) => {
 
     //     // if (name === "email") {
     //     //     const emails = value.split(',').map(email => email.trim());
-            
+
     //     //     // Allow empty field (when user is deleting)
     //     //     if (value === '' || emails.length === 0) {
     //     //         updated.email = '';
@@ -612,9 +612,9 @@ const StoreSettings = ({ id }: { id: string | null }) => {
     //     //         setErrorMsg(null);
     //     //         return;
     //     //     }
-            
+
     //     //     const isValidEmail = emails.every(email => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email));
-            
+
     //     //     if (isValidEmail && emails.length > 0) {
     //     //         // Update the email field with the validated comma-separated emails
     //     //         updated.email = emails.join(', ');
@@ -665,7 +665,7 @@ const StoreSettings = ({ id }: { id: string | null }) => {
             autoSave(updated);
         }
     };
-    
+
     const runUploader = (key: string) => {
         const frame = (window as any).wp.media({
             title: 'Select or Upload Image',
@@ -685,11 +685,11 @@ const StoreSettings = ({ id }: { id: string | null }) => {
         frame.open();
     };
 
-	// Then update your autoSave function:
-	const autoSave = (updatedData: any) => {
+    // Then update your autoSave function:
+    const autoSave = (updatedData: any) => {
         // Format email data for backend
         const formattedData = { ...updatedData };
-        
+
         if (formattedData.email && typeof formattedData.email === 'string') {
             // Convert newline-separated emails to array for backend
             formattedData.emails = formattedData.email
@@ -697,7 +697,7 @@ const StoreSettings = ({ id }: { id: string | null }) => {
                 .map((email: string) => email.trim())
                 .filter((email: string) => email !== '');
         }
-        
+
         axios({
             method: 'PUT',
             url: getApiLink(appLocalizer, `store/${id}`),
@@ -710,13 +710,13 @@ const StoreSettings = ({ id }: { id: string | null }) => {
         }).catch((error) => {
             console.error('Save error:', error);
         });
-    };    
+    };
 
     return (
         <>
             <SuccessNotice message={successMsg} />
             <div className="container-wrapper">
-                <div className="card-wrapper width-65">
+                <div className="card-wrapper w-65">
                     <div className="card-content">
                         <div className="card-title">
                             Basic Details
@@ -734,12 +734,12 @@ const StoreSettings = ({ id }: { id: string | null }) => {
                         <div className="form-group-wrapper">
                             <div className="form-group">
                                 <label htmlFor="product-name">Slug</label>
-                                <BasicInput 
-                                    name="slug" 
-                                    wrapperClass="setting-form-input" 
-                                    descClass="settings-metabox-description" 
-                                    value={formData.slug} 
-                                    onChange={handleChange} 
+                                <BasicInput
+                                    name="slug"
+                                    wrapperClass="setting-form-input"
+                                    descClass="settings-metabox-description"
+                                    value={formData.slug}
+                                    onChange={handleChange}
                                 />
                                 <p>Your Site Url : {appLocalizer.store_page_url + '/' + formData.slug}</p>
                             </div>
@@ -749,7 +749,12 @@ const StoreSettings = ({ id }: { id: string | null }) => {
                                 <label htmlFor="description">Description</label>
                                 <TextArea name="description" wrapperClass="setting-from-textarea"
                                     inputClass="textarea-input"
-                                    descClass="settings-metabox-description" value={formData.description} onChange={handleChange} />
+                                    descClass="settings-metabox-description"
+                                    value={formData.description}
+                                    onChange={handleChange}
+                                    usePlainText={false}
+                                    tinymceApiKey={appLocalizer.settings_databases_value['marketplace-settings']['tinymce_api_section'] ?? ''}
+                                />
                             </div>
                         </div>
                     </div>
@@ -768,10 +773,10 @@ const StoreSettings = ({ id }: { id: string | null }) => {
                                 <div className="email-input-container">
                                     <div className="email-badges-container" >
                                         {emailBadges.map(badge => (
-                                            <EmailBadge 
-                                                key={badge.id} 
-                                                badge={badge} 
-                                                onRemove={removeEmail} 
+                                            <EmailBadge
+                                                key={badge.id}
+                                                badge={badge}
+                                                onRemove={removeEmail}
                                             />
                                         ))}
                                     </div>
@@ -785,8 +790,8 @@ const StoreSettings = ({ id }: { id: string | null }) => {
                                             onChange={(e) => setNewEmailValue(e.target.value)}
                                             onKeyPress={handleEmailKeyPress}
                                         />
-                                        <button 
-                                            className="admin-btn btn-purple" 
+                                        <button
+                                            className="admin-btn btn-purple"
                                             onClick={addEmail}
                                             type="button"
                                         >
@@ -821,12 +826,12 @@ const StoreSettings = ({ id }: { id: string | null }) => {
                         <div className="form-group-wrapper">
                             <div className="form-group">
                                 <label htmlFor="location_address">Address *</label>
-                                <BasicInput 
+                                <BasicInput
                                     name="location_address"
-                                    value={addressData.location_address} 
-                                    wrapperClass="setting-form-input" 
-                                    descClass="settings-metabox-description" 
-                                    onChange={handleAddressChange} 
+                                    value={addressData.location_address}
+                                    wrapperClass="setting-form-input"
+                                    descClass="settings-metabox-description"
+                                    onChange={handleAddressChange}
                                 />
                             </div>
                         </div>
@@ -834,22 +839,22 @@ const StoreSettings = ({ id }: { id: string | null }) => {
                         <div className="form-group-wrapper">
                             <div className="form-group">
                                 <label htmlFor="city">City</label>
-                                <BasicInput 
-                                    name="city" 
-                                    value={addressData.city} 
-                                    wrapperClass="setting-form-input" 
-                                    descClass="settings-metabox-description" 
-                                    onChange={handleAddressChange} 
+                                <BasicInput
+                                    name="city"
+                                    value={addressData.city}
+                                    wrapperClass="setting-form-input"
+                                    descClass="settings-metabox-description"
+                                    onChange={handleAddressChange}
                                 />
                             </div>
                             <div className="form-group">
                                 <label htmlFor="zip">Zip Code</label>
-                                <BasicInput 
-                                    name="zip" 
-                                    value={addressData.zip} 
-                                    wrapperClass="setting-form-input" 
-                                    descClass="settings-metabox-description" 
-                                    onChange={handleAddressChange} 
+                                <BasicInput
+                                    name="zip"
+                                    value={addressData.zip}
+                                    wrapperClass="setting-form-input"
+                                    descClass="settings-metabox-description"
+                                    onChange={handleAddressChange}
                                 />
                             </div>
                         </div>
@@ -878,49 +883,49 @@ const StoreSettings = ({ id }: { id: string | null }) => {
                             </div>
                         </div>
 
-                        {modules.includes( 'geo-location' ) && 
-                        <div>
-                            <div className="form-group-wrapper">
-                            <div className="form-group">
-                                <label htmlFor="store-location-autocomplete">Search Location</label>
-                                <div id="store-location-autocomplete-container">
-                                    <input
-                                        ref={autocompleteInputRef}
-                                        id="store-location-autocomplete"
-                                        type="text"
-                                        className="setting-form-input"
-                                        placeholder="Search your store address..."
-                                        defaultValue={addressData.location_address}
-                                    />
+                        {modules.includes('geo-location') &&
+                            <div>
+                                <div className="form-group-wrapper">
+                                    <div className="form-group">
+                                        <label htmlFor="store-location-autocomplete">Search Location</label>
+                                        <div id="store-location-autocomplete-container">
+                                            <input
+                                                ref={autocompleteInputRef}
+                                                id="store-location-autocomplete"
+                                                type="text"
+                                                className="setting-form-input"
+                                                placeholder="Search your store address..."
+                                                defaultValue={addressData.location_address}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="form-group-wrapper">
+                                    <div className="form-group">
+                                        <label>Location Map *</label>
+                                        <div
+                                            id="location-map"
+                                            style={{
+                                                height: '300px',
+                                                width: '100%',
+                                                borderRadius: '8px',
+                                                border: '1px solid #ddd',
+                                                marginTop: '8px'
+                                            }}
+                                        ></div>
+                                        <small style={{ color: '#666', marginTop: '5px', display: 'block' }}>
+                                            Click on the map or drag the marker to set your exact location
+                                        </small>
+                                    </div>
+                                    {/* Hidden coordinates */}
+                                    <input type="hidden" name="location_lat" value={addressData.location_lat} />
+                                    <input type="hidden" name="location_lng" value={addressData.location_lng} />
                                 </div>
                             </div>
-                        </div>
-                        <div className="form-group-wrapper">
-							<div className="form-group">
-								<label>Location Map *</label>
-								<div
-									id="location-map"
-									style={{
-										height: '300px',
-										width: '100%',
-										borderRadius: '8px',
-										border: '1px solid #ddd',
-										marginTop: '8px'
-									}}
-								></div>
-								<small style={{ color: '#666', marginTop: '5px', display: 'block' }}>
-									Click on the map or drag the marker to set your exact location
-								</small>
-							</div>
-                            {/* Hidden coordinates */}
-                            <input type="hidden" name="location_lat" value={addressData.location_lat} />
-                            <input type="hidden" name="location_lng" value={addressData.location_lng} />
-						</div>
-                        </div>
                         }
                         {/* Map Display */}
-						<div className="form-group-wrapper">
-							{/* <div className="form-group">
+                        <div className="form-group-wrapper">
+                            {/* <div className="form-group">
 								<label>Location Map *</label>
 								<div
 									id="location-map"
@@ -939,11 +944,11 @@ const StoreSettings = ({ id }: { id: string | null }) => {
                             {/* Hidden coordinates */}
                             {/* <input type="hidden" name="location_lat" value={addressData.location_lat} />
                             <input type="hidden" name="location_lng" value={addressData.location_lng} /> */}
-						</div>
+                        </div>
                     </div>
                 </div>
 
-                <div className="card-wrapper width-35">
+                <div className="card-wrapper w-35">
                     <div className="card-content">
                         <div className="card-title">
                             Store Media

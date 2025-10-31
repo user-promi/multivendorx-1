@@ -29,7 +29,7 @@ type StoreRow = {
 
 const salesIcon = new L.DivIcon({
   className: "custom-marker",
-  html: `<div style="background:#5007aa;color:#fff;border-radius:50%;padding:6px 10px;font-size:12px;">$</div>`,
+  html: `<div style="background:#5007aa;color:#fff;border-radius:50%;padding:6px 0.625rem;font-size:0.75rem;">$</div>`,
 });
 const analyticsData = [
   { icon: "adminlib-tools red", number: "230k", text: "Visitors" },
@@ -101,7 +101,7 @@ const Dashboard: React.FC = () => {
       </div>
 
       <div className="row">
-        <div className="column width-35 theme-bg">
+        <div className="column w-35 theme-bg">
           <div className="dashboard-view-section">
             <div className="title">
               Good Morning, Anna!
@@ -125,7 +125,7 @@ const Dashboard: React.FC = () => {
             </div>
           </div>
         </div>
-        <div className="column width-65">
+        <div className="column w-65">
           <div className="card">
             <div className="card-header">
               <div className="left">
@@ -348,7 +348,7 @@ const Dashboard: React.FC = () => {
       </div>
 
       <div className="row">
-        <div className="column width-65">
+        <div className="column w-65">
           <div className="card">
             <div className="card-header">
               <div className="left">
@@ -401,7 +401,7 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
 
-        <div className="column width-35">
+        <div className="column w-35">
           <div className="card">
             <div className="card-header">
               <div className="left">
@@ -463,7 +463,7 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
 
-        {/* <div className="column width-35">
+        {/* <div className="column w-35">
           <div className="card">
             <div className="card-header">
               <div className="left">

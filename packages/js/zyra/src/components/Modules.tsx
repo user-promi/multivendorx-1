@@ -217,7 +217,7 @@ const Modules: React.FC<ModuleProps> = ({
 
             />
 
-            <div className="module-container">
+            <div className="module-container general-wrapper">
                 <Dialog
                     className="admin-module-popup"
                     open={modelOpen}

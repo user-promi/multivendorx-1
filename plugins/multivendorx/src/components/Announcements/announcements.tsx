@@ -137,7 +137,7 @@ export const Announcements: React.FC = () => {
     ) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
-        
+
         // Clear field error when user types
         if (validationErrors[name]) {
             setValidationErrors((prev) => {
@@ -503,8 +503,6 @@ export const Announcements: React.FC = () => {
                 />
             ),
         },
-
-
     ];
 
     const BulkAction: React.FC = () => (
@@ -617,6 +615,8 @@ export const Announcements: React.FC = () => {
                                     inputClass="textarea-input"
                                     value={formData.content}
                                     onChange={handleChange}
+                                    usePlainText={false}
+                                    tinymceApiKey={appLocalizer.settings_databases_value['marketplace-settings']['tinymce_api_section'] ?? ''}
                                 />
                                 {validationErrors.content && <div className="invalid-feedback">{validationErrors.content}</div>}
                             </div>
@@ -666,24 +666,26 @@ export const Announcements: React.FC = () => {
                 </CommonPopup>
             )}
 
-            <div className="admin-table-wrapper">
-                <Table
-                    data={data}
-                    columns={columns as ColumnDef<Record<string, any>, any>[]}
-                    rowSelection={rowSelection}
-                    onRowSelectionChange={setRowSelection}
-                    defaultRowsPerPage={10}
-                    searchFilter={searchFilter}
-                    pageCount={pageCount}
-                    pagination={pagination}
-                    onPaginationChange={setPagination}
-                    handlePagination={requestApiForData}
-                    perPageOption={[10, 25, 50]}
-                    typeCounts={announcementStatus as AnnouncementStatus[]}
-                    bulkActionComp={() => <BulkAction />}
-                    totalCounts={totalRows}
-                    realtimeFilter={realtimeFilter}
-                />
+            <div className="general-wrapper bg-wrapper">
+                <div className="admin-table-wrapper">
+                    <Table
+                        data={data}
+                        columns={columns as ColumnDef<Record<string, any>, any>[]}
+                        rowSelection={rowSelection}
+                        onRowSelectionChange={setRowSelection}
+                        defaultRowsPerPage={10}
+                        searchFilter={searchFilter}
+                        pageCount={pageCount}
+                        pagination={pagination}
+                        onPaginationChange={setPagination}
+                        handlePagination={requestApiForData}
+                        perPageOption={[10, 25, 50]}
+                        typeCounts={announcementStatus as AnnouncementStatus[]}
+                        bulkActionComp={() => <BulkAction />}
+                        totalCounts={totalRows}
+                        realtimeFilter={realtimeFilter}
+                    />
+                </div>
             </div>
         </>
     );

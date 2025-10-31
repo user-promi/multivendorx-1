@@ -54,7 +54,7 @@ $product_fileds = MultiVendorX()->setting->get_setting('products_fields', array(
         </div>
 
         <div class="container-wrapper">
-            <div class="card-wrapper width-65">
+            <div class="card-wrapper w-65">
                 <div class="card-content">
                     <div class="card-title">Product Title</div>
 
@@ -86,7 +86,7 @@ $product_fileds = MultiVendorX()->setting->get_setting('products_fields', array(
                                     'theme_advanced_buttons1' => 'bold,italic,strikethrough,separator,bullist,numlist,separator,blockquote,separator,justifyleft,justifycenter,justifyright,separator,link,unlink,separator,undo,redo,separator',
                                     'theme_advanced_buttons2' => '',
                                 ),
-                                'editor_css' => '<style>#wp-product_excerpt-editor-container .wp-editor-area{height:100px; width:100%;}</style>',
+                                'editor_css' => '<style>#wp-product_excerpt-editor-container .wp-editor-area{height:6.25rem; width:100%;}</style>',
                             );
                             if (!apply_filters('mvx_vendor_product_excerpt_richedit', true)) {
                                 $settings['tinymce'] = $settings['quicktags'] = $settings['media_buttons'] = false;
@@ -109,7 +109,7 @@ $product_fileds = MultiVendorX()->setting->get_setting('products_fields', array(
                                     'theme_advanced_buttons1' => 'bold,italic,strikethrough,separator,bullist,numlist,separator,blockquote,separator,justifyleft,justifycenter,justifyright,separator,link,unlink,separator,undo,redo,separator',
                                     'theme_advanced_buttons2' => '',
                                 ),
-                                'editor_css' => '<style>#wp-product_description-editor-container .wp-editor-area{height:175px; width:100%;}</style>',
+                                'editor_css' => '<style>#wp-product_description-editor-container .wp-editor-area{height:10.938rem; width:100%;}</style>',
                             );
                             if (!apply_filters('mvx_vendor_product_description_richedit', true)) {
                                 $settings['tinymce'] = $settings['quicktags'] = $settings['media_buttons'] = false;
@@ -209,7 +209,7 @@ $product_fileds = MultiVendorX()->setting->get_setting('products_fields', array(
             </div>
 
             <!-- right section start -->
-            <div class="card-wrapper width-35">
+            <div class="card-wrapper w-35">
                 <div class="card-content">
                     <div class="pull-right full-1080">
                         <?php

@@ -52,7 +52,7 @@ return (
             <SuccessNotice message={successMsg} />
 
             <div className="container-wrapper">
-                <div className="card-wrapper width-65">
+                <div className="card-wrapper w-65">
                     <div className="card-content">
                         <div className="form-group-wrapper">
                             <div className="form-group">
@@ -76,7 +76,7 @@ return (
 
                 </div>
 
-                <div className="card-wrapper width-35">
+                <div className="card-wrapper w-35">
 					<div className="card-content">
 						<div className="card-title">
 							Facilitator value

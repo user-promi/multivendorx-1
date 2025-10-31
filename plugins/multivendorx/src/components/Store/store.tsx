@@ -19,7 +19,8 @@ const Store = () => {
     const [addStore, setaddStore] = useState(false);
     const [formData, setFormData] = useState<Record<string, string>>({});
     const [imagePreview, setImagePreview] = useState<string>('');
-    const [error, setError] = useState<string>('');
+    const [error, setError] = useState<{ type: string; message: string } | null>(null);
+
     const hash = location.hash;
     const navigate = useNavigate();
 
@@ -62,7 +63,6 @@ const Store = () => {
         if (name === 'name') {
             const newSlug = generateSlug(value);
             updated.slug = newSlug;
-            setError(''); // reset previous error
         }
 
         setFormData(updated);
@@ -72,8 +72,18 @@ const Store = () => {
     const handleNameBlur = async () => {
         if (!formData.slug) return;
         const exists = await checkSlugExists(formData.slug);
-        if (exists) setError(`Slug "${formData.slug}" already exists.`);
-        else setError('');
+        if (exists) 
+            // setError(`Slug "${formData.slug}" already exists.`);
+            setError({
+                type: 'error',
+                message: `Slug "${formData.slug}" already exists.`,
+            });
+
+        else 
+            setError({
+                type: 'success',
+                message: 'Available',
+            });
     };
 
     const handleSubmit = async () => {
@@ -84,11 +94,18 @@ const Store = () => {
         // Check again before submit (in case slug manually changed)
         const exists = await checkSlugExists(slug);
         if (exists) {
-            setError(`Slug "${slug}" already exists. Please choose another.`);
+            setError({
+                type: 'error',
+                message: `Slug "${formData.slug}" already exists.`,
+            });
             return;
         }
 
-        setError('');
+        setError({
+            type: '',
+            message: ''
+        });
+
         const payload = { ...formData, status: 'active' };
 
         try {
@@ -106,7 +123,10 @@ const Store = () => {
                 );
             }
         } catch (err) {
-            setError('Something went wrong while saving the store.');
+            setError({
+                type: 'error',
+                message: 'Something went wrong while saving the store.'
+            });
         }
     };
 
@@ -228,7 +248,7 @@ const Store = () => {
                                             name="name"
                                             value={formData.name || ''}
                                             onChange={handleChange}
-                                            onBlur={handleNameBlur}
+                                            // onBlur={handleNameBlur}
                                             required={true}
                                         />
                                     </div>
@@ -243,16 +263,18 @@ const Store = () => {
                                             value={formData.slug || ''}
                                             onChange={handleChange}
                                             required={true}
-                                            generate="submit"
+                                            clickBtnName='Check Slug'
+                                            onclickCallback={handleNameBlur}
+                                            msg={error}
                                         />
 
-                                        {error && (
+                                        {/* {error && (
                                             <div
                                                 className="invalid-feedback"
                                             >
                                                 {error}
                                             </div>
-                                        )}
+                                        )} */}
                                     </div>
 
                                     <div className="form-group">
@@ -264,6 +286,8 @@ const Store = () => {
                                             inputClass="textarea-input"
                                             value={formData.description || ''}
                                             onChange={handleChange}
+                                            usePlainText={false}
+                                            tinymceApiKey={appLocalizer.settings_databases_value['marketplace-settings']['tinymce_api_section'] ?? ''}
                                         />
                                     </div>
 

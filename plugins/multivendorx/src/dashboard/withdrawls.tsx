@@ -89,7 +89,7 @@ const History: React.FC = () => {
             </div>
 
             <div className="row">
-                <div className="column theme-bg width-65">
+                <div className="column theme-bg w-65">
                     <div className="card">
                         <div className="card-header">
                             <div className="left">
@@ -111,7 +111,7 @@ const History: React.FC = () => {
                         </div>
                     </div>
                 </div>
-                <div className="column width-35">
+                <div className="column w-35">
                     <div className="card-header">
                         <div className="left">
                             <div className="title">

@@ -1,97 +1,110 @@
-import { AdminBreadcrumbs, getApiLink } from 'zyra';
+import { AdminBreadcrumbs, getApiLink, useModules } from 'zyra';
 import RefundRequest from './refundRequest';
 import AbuseReports from './abuseReports';
-import StoreReviews from './storeReviews ';
 import './customerServices.scss';
 import '../AdminDashboard/adminDashboard.scss';
 import Qna from './qnaTable';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import StoreReviews from './storeReviews ';
 
 const CustomerServices = () => {
     const [abuseCount, setAbuseCount] = useState(0);
     const [qnaCount, setQnaCount] = useState(0);
     const [refundCount, setRefundCount] = useState(0);
     const [storeCount, setStoreCount] = useState(0);
+    const [storeReviewCount, setStoreReviewCount] = useState(0);
     const [activeTab, setActiveTab] = useState("products");
 
-    // Fetch total count on mount
+    // Modules from global store
+
+    const { modules } = useModules.getState();
+    /**
+     * Fetch counts on mount
+     */
     useEffect(() => {
         axios
             .get(getApiLink(appLocalizer, 'report-abuse'), {
                 headers: { 'X-WP-Nonce': appLocalizer.nonce },
                 params: { count: true },
             })
-            .then((res) => {
-                const total = res.data || 0;
-                setAbuseCount(total);
-            })
-            .catch(() => {
-                console.error('Failed to load total rows');
-            });
+            .then((res) => setAbuseCount(res.data || 0))
+            .catch(() => console.error('Failed to load abuse count'));
+
         axios({
             method: 'GET',
             url: getApiLink(appLocalizer, 'qna'),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
             params: { count: true },
         })
-            .then((response) => {
-                setQnaCount(response.data || 0);
-            })
-            .catch(() => {
-                console.error('Failed to load total rows');
-            });
+            .then((response) => setQnaCount(response.data || 0))
+            .catch(() => console.error('Failed to load qna count'));
+
         axios({
             method: 'GET',
             url: getApiLink(appLocalizer, 'refund'),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
             params: { count: true },
         })
-            .then((response) => {
-                setRefundCount(response.data || 0);
-            })
-            .catch(() => {
-                console.error('Failed to load total rows');
-            });
+            .then((response) => setRefundCount(response.data || 0))
+            .catch(() => console.error('Failed to load refund count'));
+
         axios({
             method: 'GET',
             url: getApiLink(appLocalizer, 'store'),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            params: { pending_withdraw: true } //important: use this param
+            params: { pending_withdraw: true },
         })
-            .then((response) => {
-                const count = response.data.length || 0; // response.data is an array of stores with pending withdraw
-                setStoreCount(count);
-            })
+            .then((response) => setStoreCount(response.data.length || 0))
             .catch(() => setStoreCount(0));
+        axios({
+            method: 'GET',
+            url: getApiLink(appLocalizer, 'review'),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            params: { count: true },
+        })
+            .then((response) => setStoreReviewCount(response.data || 0))
+            .catch(() => setStoreReviewCount(0));
     }, []);
 
-
+    /**
+     * Tabs — only visible if related module is active
+     */
     const tabs = [
         {
-            id: "products", label: "Questions", icon: "adminlib-calendar red", des: "Waiting for your response", count: qnaCount, content:
+            id: "questions",
+            label: "Questions",
+            module: "question-answer", // required module name
+            icon: "adminlib-calendar red",
+            des: "Waiting for your response",
+            count: qnaCount,
+            content: (
                 <>
                     <div className="card-header">
                         <div className="left">
-                            <div className="title">
-                                Questions
-                            </div>
+                            <div className="title">Questions</div>
                             <div className="des">Waiting for your response</div>
                         </div>
                         <div className="right">
                             <i className="adminlib-more-vertical"></i>
                         </div>
                     </div>
-                    <Qna /></>
+                    <Qna />
+                </>
+            ),
         },
         {
-            id: "review", label: "Store Reviews", icon: "adminlib-calendar green", count: 9, des: "Shared by customers", content:
+            id: "review",
+            label: "Store Reviews",
+            module: "store-review",
+            icon: "adminlib-calendar green",
+            count: storeReviewCount,
+            des: "Shared by customers",
+            content: (
                 <>
                     <div className="card-header">
                         <div className="left">
-                            <div className="title">
-                                Store Reviews
-                            </div>
+                            <div className="title">Store Reviews</div>
                             <div className="des">Shared by customers</div>
                         </div>
                         <div className="right">
@@ -100,15 +113,20 @@ const CustomerServices = () => {
                     </div>
                     <StoreReviews />
                 </>
+            ),
         },
         {
-            id: "reports", label: "Products Reported", icon: "adminlib-calendar yellow", des: "Flagged for abuse review", count: abuseCount, content:
+            id: "reports",
+            label: "Products Reported",
+            module: "report-abuse",
+            icon: "adminlib-calendar yellow",
+            des: "Flagged for abuse review",
+            count: abuseCount,
+            content: (
                 <>
                     <div className="card-header">
                         <div className="left">
-                            <div className="title">
-                                Products Reported
-                            </div>
+                            <div className="title">Products Reported</div>
                             <div className="des">Flagged for abuse review</div>
                         </div>
                         <div className="right">
@@ -117,15 +135,20 @@ const CustomerServices = () => {
                     </div>
                     <AbuseReports />
                 </>
+            ),
         },
         {
-            id: "refund-requests", label: "Refund Requests", icon: "adminlib-calendar blue", des: "Need your decision", count: refundCount, content:
+            id: "refund-requests",
+            label: "Refund Requests",
+            module: "marketplace-refund",
+            icon: "adminlib-calendar blue",
+            des: "Need your decision",
+            count: refundCount,
+            content: (
                 <>
                     <div className="card-header">
                         <div className="left">
-                            <div className="title">
-                                Refund Requests
-                            </div>
+                            <div className="title">Refund Requests</div>
                             <div className="des">Need your decision</div>
                         </div>
                         <div className="right">
@@ -134,11 +157,9 @@ const CustomerServices = () => {
                     </div>
                     <RefundRequest />
                 </>
+            ),
         },
-        // { id: "coupons", label: "Coupons", content: <Coupons onUpdated={refreshCounts} /> },
-        // { id: "transactions", label: "Withdrawal", content: <Transactions onUpdated={refreshCounts} /> },
-    ];
-
+    ].filter(tab => modules.includes(tab.module));
     return (
         <>
             <AdminBreadcrumbs
@@ -146,29 +167,22 @@ const CustomerServices = () => {
                 tabTitle="Customer Service"
                 description={'Manage store reviews, support requests, financial transactions, and reported issues.'}
             />
-            <div className="work-board">
+            <div className="general-wrapper">
                 <div className="row">
                     <div className="overview-card-wrapper tab">
-                        {/* {CustomerServicesStats.map(stat => (
-                            <div className="action" key={stat.id}>
-                                <div className="title">
-                                    {stat.count}
-                                    <i className={stat.icon}></i>
-                                </div>
-                                <div className="description">
-                                    {stat.label}
-                                </div>
-                            </div>
-                        ))} */}
                         {tabs.map((tab) => (
-                            <div className={`tab-action ${activeTab === tab.id ? "active" : ""}`} key={tab.id} onClick={() => setActiveTab(tab.id)}>
+                            <div
+                                key={tab.id}
+                                className={`tab-action ${activeTab === tab.id ? "active" : ""}`}
+                                onClick={() => setActiveTab(tab.id)}
+                            >
                                 <div className="details-wrapper">
                                     <i className={tab.icon}></i>
-                                    <div className="title">{tab.count} {tab.label}</div>
+                                    <div className="title">
+                                        {tab.count} {tab.label}
+                                    </div>
                                 </div>
-                                <div className="description">
-                                    {tab.des}
-                                </div>
+                                <div className="description">{tab.des}</div>
                             </div>
                         ))}
                     </div>
@@ -176,7 +190,6 @@ const CustomerServices = () => {
 
                 <div className="row">
                     <div className="column">
-                        {/* Tab Content */}
                         <div className="tab-content">
                             {tabs.map(
                                 (tab) =>
@@ -189,75 +202,6 @@ const CustomerServices = () => {
                         </div>
                     </div>
                 </div>
-
-                {/* <div className="row">
-                    <div className="column">
-                        <div className="card-header">
-                            <div className="left">
-                                <div className="title">
-                                    Store Reviews
-                                </div>
-                                <div className="des">View and manage all customer reviews for stores.</div>
-                            </div>
-                            <div className="right">
-                                <i className="adminlib-more-vertical"></i>
-                            </div>
-                        </div>
-                        <StoreReviews />
-                    </div>
-                </div>
-
-                <div className="row">
-                    <div className="column">
-                        <div className="card-header">
-                            <div className="left">
-                                <div className="title">
-                                    Refund Requests
-                                </div>
-                                <div className="des">Track and handle customer refund requests.</div>
-                            </div>
-                            <div className="right">
-                                <i className="adminlib-more-vertical"></i>
-                            </div>
-                        </div>
-                        <RefundRequest />
-                    </div>
-                </div>
-
-                <div className="row">
-                    <div className="column">
-                        <div className="card-header">
-                            <div className="left">
-                                <div className="title">
-                                    Abuse Reports
-                                </div>
-                                <div className="des">Monitor reported issues or complaints about products or stores.</div>
-                            </div>
-                            <div className="right">
-                                <i className="adminlib-more-vertical"></i>
-                            </div>
-                        </div>
-                        <AbuseReports />
-                    </div>
-                </div>
-
-
-                <div className="row">
-                    <div className="column">
-                        <div className="card-header">
-                            <div className="left">
-                                <div className="title">
-                                    Customer Questions
-                                </div>
-                                <div className="des">View, manage, and respond to customer questions about products.</div>
-                            </div>
-                            <div className="right">
-                                <i className="adminlib-more-vertical"></i>
-                            </div>
-                        </div>
-                        <Qna />
-                    </div>
-                </div> */}
             </div>
         </>
     );

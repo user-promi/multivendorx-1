@@ -166,17 +166,6 @@ const StoreTable: React.FC = () => {
         }).format(dateObj);
     };
 
-    // Get store image with fallback
-    const getStoreImage = (store: StoreRow) => {
-        if (store.store_image) {
-            return store.store_image;
-        }
-        // Fallback to placeholder with store initial
-        const storeName = store.store_name || 'Store';
-        const initial = storeName.charAt(0).toUpperCase();
-        return `https://via.placeholder.com/50/007cba/ffffff?text=${initial}`;
-    };
-
     // Column definitions with sorting enabled
     const columns: ColumnDef<StoreRow>[] = [
         {
@@ -315,8 +304,8 @@ const StoreTable: React.FC = () => {
                             return <span className="admin-badge yellow">Pending</span>;
                         case 'rejected':
                             return <span className="admin-badge red">Rejected</span>;
-                        case 'locked':
-                            return <span className="admin-badge blue">Locked</span>;
+                        case 'suspended':
+                            return <span className="admin-badge blue">Suspended</span>;
                         default:
                             return <span className="admin-badge gray">{status}</span>;
                     }
@@ -343,9 +332,9 @@ const StoreTable: React.FC = () => {
                                     {
                                         label: __('View Store', 'multivendorx'),
                                         icon: 'adminlib-eye',
-                                        onClick: ({ slug }) => {
-                                            if (!slug) return;
-                                            window.open(`${appLocalizer.site_url}/store/${slug}/`, '_blank');
+                                        onClick: () => {
+                                            if (!row.original.store_slug) return;
+                                            window.open(`${appLocalizer.site_url}/store/${row.original.store_slug}/`, '_blank');
                                         },
                                         hover: true,
                                     }
@@ -393,7 +382,7 @@ const StoreTable: React.FC = () => {
             ),
         },
     ];
-    
+
     const realtimeFilter: RealtimeFilter[] = [
         {
             name: 'date',
@@ -415,28 +404,30 @@ const StoreTable: React.FC = () => {
     ];
 
     return (
-        <div className="admin-table-wrapper">
-            {error && (
-                <div className="error-notice">
-                    {error}
-                </div>
-            )}
-            <Table
-                data={data}
-                columns={columns as ColumnDef<Record<string, any>, any>[]}
-                rowSelection={rowSelection}
-                onRowSelectionChange={setRowSelection}
-                defaultRowsPerPage={10}
-                pageCount={pageCount}
-                pagination={pagination}
-                onPaginationChange={setPagination}
-                handlePagination={requestApiForData}
-                perPageOption={[10, 25, 50]}
-                typeCounts={storeStatus as StoreStatus[]}
-                totalCounts={totalRows}
-                searchFilter={searchFilter}
-                realtimeFilter={realtimeFilter}
-            />
+        <div className="general-wrapper bg-wrapper">
+            <div className="admin-table-wrapper">
+                {error && (
+                    <div className="error-notice">
+                        {error}
+                    </div>
+                )}
+                <Table
+                    data={data}
+                    columns={columns as ColumnDef<Record<string, any>, any>[]}
+                    rowSelection={rowSelection}
+                    onRowSelectionChange={setRowSelection}
+                    defaultRowsPerPage={10}
+                    pageCount={pageCount}
+                    pagination={pagination}
+                    onPaginationChange={setPagination}
+                    handlePagination={requestApiForData}
+                    perPageOption={[10, 25, 50]}
+                    typeCounts={storeStatus as StoreStatus[]}
+                    totalCounts={totalRows}
+                    searchFilter={searchFilter}
+                    realtimeFilter={realtimeFilter}
+                />
+            </div>
         </div>
     );
 };
