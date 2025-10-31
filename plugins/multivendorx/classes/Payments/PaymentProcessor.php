@@ -81,7 +81,7 @@ class PaymentProcessor {
                 $format
             );
 
-            return false;
+            return;
         }
             
         do_action("multivendorx_process_{$payment_method}_payment", $store_id, $amount, $order_id, $transaction_id, $note);
