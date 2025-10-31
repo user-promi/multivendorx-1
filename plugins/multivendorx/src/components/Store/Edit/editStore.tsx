@@ -13,6 +13,8 @@ import Facilitator from './facilitator';
 import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import Overview from './overview';
+import Membership from './membership';
+import Financial from './financial';
 
 const statusOptions = [
     { label: "Active", value: "active" },
@@ -30,6 +32,27 @@ const EditStore = () => {
     const wrapperRef = useRef<HTMLDivElement>(null);
     const [editInfo, setEditInfo] = useState(false);
 
+    const [editName, setEditName] = useState(false);
+    const [editDesc, setEditDesc] = useState(false);
+
+    useEffect(() => {
+        const handleOutsideClick = (e: MouseEvent) => {
+            const target = e.target as HTMLElement;
+
+            // If clicked inside name or desc editing area, ignore
+            if (target.closest('.store-name') || target.closest('.store-description')) return;
+
+            if (editName || editDesc) {
+                autoSave({ name: data.name, description: data.description });
+            }
+
+            setEditName(false);
+            setEditDesc(false);
+        };
+
+        document.addEventListener("click", handleOutsideClick);
+        return () => document.removeEventListener("click", handleOutsideClick);
+    }, [editName, editDesc, data]);
     // Close dropdown on click outside
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -113,7 +136,7 @@ const EditStore = () => {
             type: 'file',
             content: {
                 id: 'overview',
-                name: 'overview',
+                name: 'Overview',
                 desc: 'Store Info',
                 hideTabHeader: true,
                 icon: 'adminlib-credit-card',
@@ -142,8 +165,8 @@ const EditStore = () => {
         {
             type: 'file',
             content: {
-                id: 'store-shipping',
-                name: 'Store Shipping',
+                id: 'shipping',
+                name: 'Shipping',
                 desc: 'Store Shipping',
                 hideTabHeader: true,
                 icon: 'adminlib-credit-card',
@@ -189,6 +212,26 @@ const EditStore = () => {
                 icon: 'adminlib-credit-card',
             },
         },
+        {
+            type: 'file',
+            content: {
+                id: 'membership',
+                name: 'membership',
+                desc: 'Membership',
+                hideTabHeader: true,
+                icon: 'adminlib-credit-card',
+            },
+        },
+        {
+            type: 'file',
+            content: {
+                id: 'financial',
+                name: 'Financial',
+                desc: 'Membership',
+                hideTabHeader: true,
+                icon: 'adminlib-credit-card',
+            },
+        },
     ];
 
     const getForm = (tabId: string) => {
@@ -201,7 +244,7 @@ const EditStore = () => {
                 return <StoreSquad id={editId} />;
             case 'payment':
                 return <PaymentSettings id={editId} />;
-            case 'store-shipping':
+            case 'shipping':
                 return <ShippingSettings id={editId} />;
             case 'store-policy':
                 return <PolicySettings id={editId} />;
@@ -209,6 +252,10 @@ const EditStore = () => {
                 return <StoreRegistration id={editId} />;
             case 'store-facilitator':
                 return <Facilitator id={editId} />;
+            case 'membership':
+                return <Membership id={editId} />;
+            case 'financial':
+                return <Financial id={editId} />;
             default:
                 return <div></div>;
         }
@@ -334,8 +381,8 @@ const EditStore = () => {
                                             </div>
                                             <div className="details">
                                                 <div className="name">
-                                                    <div className="store-name">
-                                                        {editInfo ? (
+                                                    <div className="store-name" onClick={() => setEditName(true)}>
+                                                        {editName ? (
                                                             <input
                                                                 type="text"
                                                                 value={data.name || ""}
@@ -344,78 +391,62 @@ const EditStore = () => {
                                                                 autoFocus
                                                             />
                                                         ) : (
-                                                            data.name
+                                                            data.name || "Store Name"
                                                         )}
 
                                                         <span
-                                                            className={`edit-icon admin-badge ${editInfo ? 'green' : 'blue'}`}
+                                                            className={`edit-icon  ${editName ? '' : 'admin-badge blue'}`}
                                                             onClick={(e) => {
                                                                 e.stopPropagation();
-
-                                                                if (editInfo) {
-                                                                    // Save
-                                                                    autoSave({ name: data.name, description: data.description });
-                                                                }
-
-                                                                setEditInfo(!editInfo);
+                                                                if (editName) autoSave({ name: data.name, description: data.description });
+                                                                setEditName(!editName);
                                                             }}
                                                         >
-                                                            <i className={editInfo ? "adminlib-check" : "adminlib-create"}></i>
-                                                            {editInfo ? "" : ""}
+                                                            <i className={editName ? "" : "adminlib-create"}></i>
                                                         </span>
                                                     </div>
-
-                                                    <span className="admin-badge green">{data.status} <i className="adminlib-creat"></i></span>
+                                                    <span className="admin-badge green">{data.status}</span>
                                                 </div>
 
-                                                <div className="des">
-                                                    {editInfo ? (
+                                                <div className="des" onClick={() => setEditDesc(true)}>
+                                                    {editDesc ? (
                                                         <textarea
                                                             value={data.description || ""}
                                                             onChange={(e) => setData({ ...data, description: e.target.value })}
                                                             className="textarea-input"
+                                                            autoFocus
                                                         />
                                                     ) : (
-                                                        data.description
+                                                        data.description || "Enter store description"
                                                     )}
+
                                                     <span
-                                                        className={`edit-icon admin-badge ${editInfo ? 'green' : 'blue'}`}
+                                                        className={`edit-icon admin-badge ${editDesc ? '' : 'blue'}`}
                                                         onClick={(e) => {
                                                             e.stopPropagation();
-
-                                                            if (editInfo) {
-                                                                // Save
-                                                                autoSave({ name: data.name, description: data.description });
-                                                            }
-
-                                                            setEditInfo(!editInfo);
+                                                            if (editDesc) autoSave({ name: data.name, description: data.description });
+                                                            setEditDesc(!editDesc);
                                                         }}
                                                     >
-                                                        <i className={editInfo ? "adminlib-check" : "adminlib-create"}></i>
-                                                        {editInfo ? "" : ""}
+                                                        <i className={editDesc ? "" : "adminlib-create"}></i>
                                                     </span>
                                                 </div>
-
-
-
-                                                {/* <ul className="contact-details">
+                                                <ul className="contact-details">
                                                     <li>
-                                                        <i className="adminlib-mail"></i>
-                                                        {data.email}
+
+                                                        <div className="reviews-wrapper">
+                                                            <i className="review adminlib-star"></i>
+                                                            <i className="review adminlib-star"></i>
+                                                            <i className="review adminlib-star"></i>
+                                                            <i className="review adminlib-star"></i>
+                                                            <i className="review adminlib-star"></i>
+                                                            5 Review
+                                                        </div>
                                                     </li>
-                                                    <li>
-                                                        <i className="adminlib-form-phone"></i>
-                                                        {data.phone}
-                                                    </li>
-                                                    <li>
-                                                        <i className="adminlib-star review"></i>
-                                                        4.2 <span>(26 review)</span>
-                                                    </li>
-                                                </ul> */}
+                                                </ul>
                                             </div>
                                         </div>
                                         <div className="right-section">
-
                                             <div className="tag-wrapper">
                                                 <div className="admin-badge green"><i className="adminlib-store-inventory"></i></div>
                                                 <div className="admin-badge blue"><i className="adminlib-geo-my-wp"></i></div>

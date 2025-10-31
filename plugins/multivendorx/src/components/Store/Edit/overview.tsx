@@ -47,34 +47,46 @@ const Overview = ({ id }: { id: string | null }) => {
                             </div>
                         </div>
 
-                        <div className="store-owner-details">
-                            <div className="profile">
-                                <div className="avater">
-                                    <span className="adminlib-calendar"></span>
-                                </div>
-                                <div className="details">
-                                    <div className="name">Repeats every two weeks</div>
-                                    <div className="des">Lorem ipsum dolor sit amet.</div>
-                                </div>
-                            </div>
-                            <div className="right-details">
-                                <div className="price">$356 .35</div>
-                                <div className="div">Lorem, ipsum dolor.</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="card-content">
-                        <div className="card-header">
-                            <div className="left">
+                        <div className="overview-wrapper">
+                            <div className="items">
                                 <div className="title">
-                                    Next Opening Date
-                                </div>                                
+                                    Slug
+                                </div>
+                                <div className="details">
+                                    <div className="sku">
+                                        http://localhost:8889/store/HomeShop/reviews/ <i className="adminlib-external"></i>
+
+                                    </div>
+                                </div>
                             </div>
-                            
+
+                            <div className="items">
+                                <div className="title">
+                                    Rating
+                                </div>
+                                <div className="details">
+                                    <div className="reviews-wrapper">
+                                        <i className="review adminlib-star"></i>
+                                        <i className="review adminlib-star"></i>
+                                        <i className="review adminlib-star"></i>
+                                        <i className="review adminlib-star"></i>
+                                        <i className="review adminlib-star"></i>
+                                        5 Review
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="items">
+                                <div className="title">
+                                    Vacation Mode
+                                </div>
+                                <div className="details">
+                                    <span className="admin-badge red">Inactive</span>
+                                </div>
+                            </div>
                         </div>
 
-
-                        <div className="store-owner-details">
+                        {/* <div className="store-owner-details">
                             <div className="profile">
                                 <div className="avater">
                                     <span className="adminlib-calendar"></span>
@@ -88,7 +100,7 @@ const Overview = ({ id }: { id: string | null }) => {
                                 <div className="price">$356 .35</div>
                                 <div className="div">Lorem, ipsum dolor.</div>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
                 <div className="card-wrapper w-35">

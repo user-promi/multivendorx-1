@@ -104,9 +104,9 @@
                     padding: 0.5rem 0;
                     font-size: 1rem;
                     position: relative;
-                    
 
-                    .edit-icon{
+
+                    .edit-icon {
                         top: 0.2rem;
                     }
                 }
@@ -219,6 +219,18 @@
     }
 }
 
+.reviews-wrapper {
+    display: flex;
+    gap: 0.313rem;
+
+    .review {
+        color: rgb(231, 178, 5) !important;  // common color and delete
+    }
+    span{
+        padding-left: 0.313rem;
+    }
+}
+
 .contact-details {
     display: flex;
     margin: 0;
@@ -277,7 +289,29 @@
     }
 }
 
+.overview-wrapper{
+    .items{
+        display: flex;
+        margin-bottom: 1rem;
 
+        .title{
+            width: 30%;
+            font-size: 0.95rem;
+            color: #000000c7;
+        }
+        .details{
+            width: 70%;
+            display: flex;
+            justify-content: start;
+
+            .sku{
+                display: flex;
+                gap: 0.5rem;
+                align-items: center;
+            }
+        }
+    }
+}
 // old store style (delete)
 .store-view-wrapper {
     padding: 2rem;

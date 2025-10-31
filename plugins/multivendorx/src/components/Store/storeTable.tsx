@@ -330,8 +330,8 @@ const StoreTable: React.FC = () => {
                             ...(row.original.status === 'active'
                                 ? [
                                     {
-                                        label: __('View Store', 'multivendorx'),
-                                        icon: 'adminlib-eye',
+                                        label: __('Storefront', 'multivendorx'),
+                                        icon: 'adminlib-storefront',
                                         onClick: () => {
                                             if (!row.original.store_slug) return;
                                             window.open(`${appLocalizer.site_url}/store/${row.original.store_slug}/`, '_blank');
@@ -342,7 +342,7 @@ const StoreTable: React.FC = () => {
                                 : []),
                             {
                                 label: __('Store Details', 'multivendorx'),
-                                icon: 'adminlib-store-support',
+                                icon: 'adminlib-report',
                                 onClick: (rowData) => {
                                     window.location.href = `?page=multivendorx#&tab=stores&edit/${rowData.id}`;
                                 },

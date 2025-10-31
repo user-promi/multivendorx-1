@@ -93,6 +93,6 @@ class Frontend {
      * @return void
      */
     public function woocommerce_product_policies_tab() {
-        MultiVendorX()->util->get_template( 'store-single-product-policy-tab.php' );
+        MultiVendorX()->util->get_template( 'store/store-single-product-policy-tab.php' );
     }
 }

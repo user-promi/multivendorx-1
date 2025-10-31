@@ -264,23 +264,6 @@
                 margin: 0;
             }
 
-            .description-wrapper {
-                padding: 1rem 1.5rem;
-                background: #a7a6a62b;
-                border-radius: 0.313rem;
-
-                .title {
-                    font-size: 1.063rem;
-                    font-weight: 500;
-
-                    i {
-                        font-size: 1.313rem;
-                        padding-right: 0.313rem;
-                        color: $theme-color;
-                    }
-                }
-            }
-
             .check-list {
                 margin: 0;
                 display: flex;
@@ -416,7 +399,7 @@
                 color: white;
                 padding: 6px 0.75rem;
                 border-radius: 0.313rem;
-                 font-size: 0.75rem;
+                font-size: 0.75rem;
                 cursor: pointer;
             }
 
@@ -451,6 +434,33 @@
         }
 
 
+    }
+}
+
+.description-wrapper {
+    padding: 1rem 1.5rem;
+    background: #a7a6a62b;
+    border-radius: 0.313rem;
+    width: 100%;
+
+    .title {
+        font-size: 1.063rem;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 0.45rem;
+
+        i {
+            font-size: 1.313rem;
+            padding-right: 0.313rem;
+            color: $theme-color;
+        }
+    }
+
+    .des {
+        padding-top: 0.5rem;
+        font-size: 0.95rem;
+        color: #000000b8;
     }
 }
 
