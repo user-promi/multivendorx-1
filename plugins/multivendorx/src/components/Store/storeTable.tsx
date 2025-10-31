@@ -254,6 +254,14 @@ const StoreTable: React.FC = () => {
             ),
         },
         {
+            header: __('Lifetime Earning', 'multivendorx'),
+            cell: ({ row }: any) => (
+                <TableCell title={row.original.commission.total_order_amount || ''}>
+                    {row.original.commission.total_order_amount || '-'}
+                </TableCell>
+            ),
+        },
+        {
             id: 'primary_owner',
             accessorKey: 'primary_owner',
             enableSorting: true,

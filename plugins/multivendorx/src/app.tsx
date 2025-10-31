@@ -31,19 +31,19 @@ const profileItems = [
   {
     title: "What's New",
     icon: "adminlib-person",
-    link: appLocalizer.pro_data.manage_plan_url,
+    link: appLocalizer?.pro_data?.manage_plan_url??'',
     targetBlank: true,
   },
   {
     title: "Get Support",
     icon: "adminlib-person",
-    link: appLocalizer.pro_data.manage_plan_url,
+    link: appLocalizer?.pro_data?.manage_plan_url??'',
     targetBlank: true,
   },
   {
     title: "FAQ",
     icon: "adminlib-person",
-    link: appLocalizer.pro_data.manage_plan_url,
+    link: appLocalizer?.pro_data?.manage_plan_url??'',
     targetBlank: true,
   },
 ];

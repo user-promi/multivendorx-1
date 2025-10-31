@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
-import { getApiLink, CommonPopup, BasicInput } from 'zyra';
+import { getApiLink, CommonPopup, BasicInput, SuccessNotice } from 'zyra';
 
 const History: React.FC = () => {
     const [data, setData] = useState<any>([]);
     const [amount, setAmount] = useState<number>(0);
     const [error, setError] = useState<string>("");
+    const [message, setMessage] = useState<string>("");
+
     const [requestWithdrawal, setRequestWithdrawal] = useState(false);
 
     useEffect(() => {
@@ -23,30 +25,31 @@ const History: React.FC = () => {
     }, []);
 
     const analyticsData = [
-        {
+        data.wallet_balance != null && {
             icon: "adminlib-tools red",
-            number: `${appLocalizer.currency_symbol}${Number(data.wallet_balance ?? 0).toFixed(2)}`,
-            text: "Wallet Balance"
+            number: `${appLocalizer.currency_symbol}${Number(data.wallet_balance).toFixed(2)}`,
+            text: "Wallet Balance",
         },
-        {
+        data.reserve_balance != null && {
             icon: "adminlib-book green",
-            number: `${appLocalizer.currency_symbol}${Number(data.reserve_balance ?? 0).toFixed(2)}`,
-            text: "Reserve Balance"
+            number: `${appLocalizer.currency_symbol}${Number(data.reserve_balance).toFixed(2)}`,
+            text: "Reserve Balance",
         },
-    ];
+    ].filter(Boolean); // removes null/undefined entries
+
     const analyticsData2 = [
-        {
+        data.locking_balance != null && {
             icon: "adminlib-global-community yellow",
-            number: `${appLocalizer.currency_symbol}${Number(data.locking_balance ?? 0).toFixed(2)}`,
-            text: "Locked"
+            number: `${appLocalizer.currency_symbol}${Number(data.locking_balance).toFixed(2)}`,
+            text: "Locked",
         },
-        {
+        data.locking_day != null && {
             icon: "adminlib-global-community yellow",
             number: `${data.locking_day} Days`,
-            text: "Locking Period"
+            text: "Locking Period",
         },
+    ].filter(Boolean);
 
-    ];
 
     const handleAmountChange = (value: number) => {
         if (value > data.available_balance) {
@@ -76,11 +79,13 @@ const History: React.FC = () => {
             if (res.data.success) {
                 setRequestWithdrawal(false);
             }
+            setMessage(res.data.message);
         });
     };
 
     return (
         <>
+            <SuccessNotice message={message} />
             <div className="page-title-wrapper">
                 <div className="page-title">
                     <div className="title">Withdrawls</div>

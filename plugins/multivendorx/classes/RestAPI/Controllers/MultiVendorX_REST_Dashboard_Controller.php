@@ -121,7 +121,7 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
                         'slug'       => 'withdrawls',
                         'icon'       => 'adminlib-contact-form',              
                     ),          
-                )
+                ),
                 'capability' => array( 'read_shop_coupons', 'edit_shop_coupons' ),
             ),
             'store_support' => array(
