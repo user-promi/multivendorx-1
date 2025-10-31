@@ -1,21 +1,13 @@
-import { Link, useLocation } from 'react-router-dom';
 import notifima from "../../assets/images/brand-icon.png";
 import catalogx from "../../assets/images/catalogx.png";
 import Mascot from "../../assets/images/multivendorx-mascot-scaled.png";
-interface Payment {
-  id: number;
-  customer: string;
-  amount: string;
-  method: string;
-  date: string;
-  status: 'Paid' | 'Pending' | 'Failed';
-}
+
 interface Section {
   title: string;
   features: Feature[];
 }
 interface Module {
-  id: number;
+  id: string;
   name: string;
   iconClass: string;
   pro?: boolean;
@@ -31,40 +23,113 @@ interface Feature {
 import "./adminDashboard.scss";
 import "../dashboard.scss";
 import { useEffect, useState } from 'react';
+import { getApiLink, sendApiResponse, useModules } from "zyra";
+import axios from "axios";
 
 const AdminDashboard = () => {
-  const location = useLocation();
-  const hash = location.hash;
-  const isTabActive = hash.includes('tab=dashboard');
+  const { modules, insertModule, removeModule } = useModules.getState();
+  const [installing, setInstalling] = useState<string>('');
+  const [pluginStatus, setPluginStatus] = useState<{ [key: string]: boolean }>({});
+  const [successMsg, setSuccessMsg] = useState<string>('');
 
-  // Dummy chart data
-  const data = [
-    { month: 'Jan', revenue: 4000 },
-    { month: 'Feb', revenue: 3000 },
-    { month: 'Mar', revenue: 5000 },
-    { month: 'Apr', revenue: 4780 },
-    { month: 'May', revenue: 5890 },
-    { month: 'Jun', revenue: 4390 },
-    { month: 'Jul', revenue: 6490 },
-  ];
-  const overviewData = [
-    { name: 'Pending Approvals', value: 18 },
-    { name: 'Active Disputes', value: 5 },
-    { name: 'Low Stock Items', value: 42 },
-    { name: 'Pending Payouts', value: 9 },
-  ];
-  const items = [
-    { text: "Set up seller Registration Form Fields", active: true },
-    { text: "Set up payments", active: true },
-    { text: "Set up taxes", active: false },
-    { text: "Set up shipping", active: true },
-    { text: "Set up commissions", active: false },
-    { text: "Set up product capabilities", active: true },
-    { text: "Set up allowed product types", active: true },
-    { text: "Set up commissions", active: false },
-    { text: "Set up product capabilities", active: true },
-    { text: "Set up allowed product types", active: true },
-  ];
+  // Check plugin installation status on component mount
+  useEffect(() => {
+    checkPluginStatus('woocommerce-catalog-enquiry');
+    checkPluginStatus('woocommerce-product-stock-alert');
+  }, []);
+
+  // Function to check if plugin is installed and active
+  const checkPluginStatus = async (slug: string) => {
+    try {
+      const response = await axios({
+        method: 'GET',
+        url: `${appLocalizer.apiUrl}/wp/v2/plugins`,
+        headers: {
+          'X-WP-Nonce': appLocalizer.nonce,
+        },
+      });
+
+      // Check if our plugin exists and is active
+      const plugins = response.data;
+      const pluginExists = plugins.some((plugin: any) =>
+        plugin.plugin.includes(slug) && plugin.status === 'active'
+      );
+
+      setPluginStatus(prev => ({
+        ...prev,
+        [slug]: pluginExists
+      }));
+
+    } catch (error) {
+      console.error(`Failed to check plugin status "${slug}":`, error);
+      setPluginStatus(prev => ({
+        ...prev,
+        [slug]: false
+      }));
+    }
+  };
+
+  const installOrActivatePlugin = async (slug: string, status = 'active') => {
+    if (!slug || installing) {
+      return; // Prevent multiple clicks
+    }
+
+    setInstalling(slug);
+
+    try {
+      const response = await axios({
+        method: 'POST',
+        url: `${appLocalizer.apiUrl}/wp/v2/plugins`,
+        headers: {
+          'X-WP-Nonce': appLocalizer.nonce,
+        },
+        data: {
+          slug,
+          status,
+        },
+      });
+
+      console.log(`Plugin "${slug}" ${status} successfully:`, response.data);
+
+      // Verify installation was successful
+      await checkPluginStatus(slug);
+
+      setSuccessMsg(`Plugin "${slug}" installed successfully!`);
+      setTimeout(() => setSuccessMsg(''), 3000);
+
+    } catch (error) {
+      console.error(`Failed to ${status} plugin "${slug}":`, error.response?.data || error);
+      setSuccessMsg(`Failed to install plugin "${slug}". Please try again.`);
+      setTimeout(() => setSuccessMsg(''), 3000);
+    } finally {
+      setInstalling('');
+    }
+  };
+
+  const handleOnChange = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+    moduleId: string
+  ) => {
+    const action = event.target.checked ? 'activate' : 'deactivate';
+    try {
+      if (action === 'activate') {
+        insertModule?.(moduleId);
+      } else {
+        removeModule?.(moduleId);
+      }
+      localStorage.setItem(`force_multivendorx_context_reload`, 'true');
+      await sendApiResponse(appLocalizer, getApiLink(appLocalizer, 'modules'), {
+        id: moduleId,
+        action,
+      });
+      setSuccessMsg(`Module ${action}d`);
+      setTimeout(() => setSuccessMsg(''), 2000);
+    } catch (error) {
+      setSuccessMsg(`Error: Failed to ${action} module`);
+      setTimeout(() => setSuccessMsg(''), 2000);
+    }
+  };
+
   const resources = [
     {
       title: "Documentation",
@@ -221,19 +286,20 @@ const AdminDashboard = () => {
     }
     return value; // text like "Basic" or "Advanced"
   };
-  const demoModules: Module[] = [
-    { id: 1, name: 'Identity verification', iconClass: 'adminlib-booking', hasToggle: true },
-    { id: 2, name: 'Staff manager', iconClass: 'adminlib-booking', pro: true },
-    { id: 3, name: 'Vacation mode', iconClass: 'adminlib-report', hasToggle: true },
-    { id: 4, name: 'Business hours', iconClass: 'adminlib-analytics', pro: true },
-    { id: 5, name: 'Store inventory', iconClass: 'adminlib-analytics', hasToggle: true },
-    { id: 6, name: 'Min/Max quantities', iconClass: 'adminlib-analytics', pro: true },
-    { id: 7, name: 'Wholesale', iconClass: 'adminlib-analytics', hasToggle: true },
-    { id: 8, name: 'PayPal marketplace (Real-time Split)', iconClass: 'adminlib-analytics', pro: true },
-    { id: 9, name: 'Stripe marketplace (Real-time Split)', iconClass: 'adminlib-booking', hasToggle: true },
-    { id: 10, name: 'Facilitator', iconClass: 'adminlib-booking', pro: true },
-    { id: 11, name: 'Notifications', iconClass: 'adminlib-booking', hasToggle: true },
-    { id: 12, name: 'Invoice & packing slip', iconClass: 'adminlib-setting', pro: true },
+
+  const Modules: Module[] = [
+    { id: 'store-policy', name: 'Identity verification', iconClass: 'adminlib-booking' },
+    { id: 'staff-manager', name: 'Staff manager', iconClass: 'adminlib-booking', pro: true },
+    { id: 'vacation-mode', name: 'Vacation mode', iconClass: 'adminlib-report' },
+    { id: 'business-hours', name: 'Business hours', iconClass: 'adminlib-analytics', pro: true },
+    { id: 'store-inventory', name: 'Store inventory', iconClass: 'adminlib-analytics' },
+    { id: 'min-max-quantities', name: 'Min/Max quantities', iconClass: 'adminlib-analytics', pro: true },
+    { id: 'wholesale', name: 'Wholesale', iconClass: 'adminlib-analytics' },
+    { id: 'paypal-marketplace', name: 'PayPal marketplace (Real-time Split)', iconClass: 'adminlib-analytics', pro: true },
+    { id: 'stripe-marketplace', name: 'Stripe marketplace (Real-time Split)', iconClass: 'adminlib-booking' },
+    { id: 'facilitator', name: 'Facilitator', iconClass: 'adminlib-booking', pro: true },
+    { id: 'notifications', name: 'Notifications', iconClass: 'adminlib-booking' },
+    { id: 'invoice-packing-slip', name: 'Invoice & packing slip', iconClass: 'adminlib-setting', pro: true },
   ];
 
   const [activeTab, setActiveTab] = useState("dashboard");
@@ -336,26 +402,31 @@ const AdminDashboard = () => {
                   </div>
                 </div>
                 <div className="mini-module">
-                  {demoModules.map((module) => (
+                  {Modules.map((module) => (
                     <div className="module-list-item" key={module.id}>
                       <div className="module-header">
                         <i className={`font ${module.iconClass}`}></i>
 
-                        {module.hasToggle && (
+                        {/*Updated condition (keeps your original structure) */}
+                        {(!module.pro || appLocalizer.khali_dabba) ? (
                           <div className="toggle-checkbox" data-tour={`id-showcase-tour`}>
                             <input
                               type="checkbox"
                               className="woo-toggle-checkbox"
                               id={`toggle-switch-${module.id}`}
+                              checked={modules.includes(module.id)}
+                              onChange={(e) => handleOnChange(e, module.id)}
                             />
                             <label
                               htmlFor={`toggle-switch-${module.id}`}
                               className="toggle-switch-is_hide_cart_checkout"
                             ></label>
                           </div>
+                        ) : (
+                          <span className="admin-pro-tag">
+                            <i className="adminlib-pro-tag"></i>Pro
+                          </span>
                         )}
-
-                        {module.pro && <span className="admin-pro-tag"><i className="adminlib-pro-tag"></i>Pro</span>}
                       </div>
 
                       <div className="module-name">{module.name}</div>
@@ -377,36 +448,77 @@ const AdminDashboard = () => {
                   </div>
                 </div>
                 <div className="cards-wrapper plugin">
-                  <div className="cards" >
+
+                  {/* CatalogX */}
+                  <div className="cards">
                     <div className="header">
                       <img src={catalogx} alt="" />
                       <div className="tag">
                         <span className="admin-badge green">Free</span>
-                        <a href="https://catalogx.com/" target="blank">
-                          Install
-                        </a>
+                        {!pluginStatus['woocommerce-catalog-enquiry'] ? (
+                          <a
+                            href="#"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              if (!installing) {
+                                installOrActivatePlugin('woocommerce-catalog-enquiry', 'active');
+                              }
+                            }}
+                            style={{
+                              pointerEvents: installing ? 'none' : 'auto',
+                              opacity: installing === 'woocommerce-catalog-enquiry' ? 0.6 : 1
+                            }}
+                          >
+                            {installing === 'woocommerce-catalog-enquiry' ? 'Installing...' : 'Install'}
+                          </a>
+                        ) : (
+                          <span style={{ color: '#00a32a', fontWeight: 'bold' }}>
+                            Installed
+                          </span>
+                        )}
                       </div>
                     </div>
                     <h3>CatalogX</h3>
                     <p>Turn your store into a product catalog with enquiry-based sales</p>
                   </div>
-                  <div className="cards" >
+
+                  {/* Notifima */}
+                  <div className="cards">
                     <div className="header">
                       <img src={notifima} alt="" />
                       <div className="tag">
                         <span className="admin-badge green">Free</span>
-                        <a href="http://notifima.com/" target="blank">
-                          Install
-                        </a>
+                        {!pluginStatus['woocommerce-product-stock-alert'] ? (
+                          <a
+                            href="#"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              if (!installing) {
+                                installOrActivatePlugin('woocommerce-product-stock-alert', 'active');
+                              }
+                            }}
+                            style={{
+                              pointerEvents: installing ? 'none' : 'auto',
+                              opacity: installing === 'woocommerce-product-stock-alert' ? 0.6 : 1
+                            }}
+                          >
+                            {installing === 'woocommerce-product-stock-alert' ? 'Installing...' : 'Install'}
+                          </a>
+                        ) : (
+                          <span style={{ color: '#00a32a', fontWeight: 'bold' }}>
+                            Installed
+                          </span>
+                        )}
                       </div>
                     </div>
                     <h3>Notifima</h3>
                     <p>Advanced stock alerts and wishlist features for WooCommerce</p>
-
                   </div>
+
                 </div>
               </div>
             </div>
+
             <div className="row">
               <div className="column">
                 <div className="cards-wrapper quick-link">
@@ -421,7 +533,6 @@ const AdminDashboard = () => {
                       </div>
                       <h3>{res.title}</h3>
                       <p>{res.desc}</p>
-
                     </div>
                   ))}
                 </div>
