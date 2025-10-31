@@ -457,6 +457,7 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
         }
 
         if($withdraw ){
+
             if ($threshold_amount < $amount) {
                 MultiVendorX()->payments->processor->process_payment( $store_id, $amount);
                 $store->delete_meta('request_withdrawal_amount');
@@ -468,7 +469,18 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
             ]);
         }
 
-        $store->update_meta('request_withdrawal_amount', $amount);
+        $withdraw_type = MultiVendorX()->setting->get_setting('withdraw_type', 'manual');
+
+        $should_update_meta = true;
+
+        if ($withdraw_type === 'automatic' && $threshold_amount < $amount) {
+            $process = MultiVendorX()->payments->processor->process_payment($store_id, $amount);
+            $should_update_meta = ($process === false);
+        }
+
+        if ($should_update_meta) {
+            $store->update_meta('request_withdrawal_amount', $amount);
+        }
         
         return rest_ensure_response([
             'success' => true,
