@@ -27,6 +27,27 @@ import HeaderNotification from './components/Notifications/HeaderNotifications';
 
 localStorage.setItem('force_multivendorx_context_reload', 'true');
 
+const profileItems = [
+  {
+    title: "What's New",
+    icon: "adminlib-person",
+    link: appLocalizer.pro_data.manage_plan_url,
+    targetBlank: true,
+  },
+  {
+    title: "Get Support",
+    icon: "adminlib-person",
+    link: appLocalizer.pro_data.manage_plan_url,
+    targetBlank: true,
+  },
+  {
+    title: "FAQ",
+    icon: "adminlib-person",
+    link: appLocalizer.pro_data.manage_plan_url,
+    targetBlank: true,
+  },
+];
+
 interface Products {
   title: string;
   description: string;
@@ -159,18 +180,19 @@ const App = () => {
         onSelectChange={handleSelectChange}
         selectValue={selectValue}
         free={appLocalizer.freeVersion}
-        pro={ appLocalizer.pro_data.version }
-        managePlanUrl={ appLocalizer.pro_data.manage_plan_url }
-        chatUrl= "https://tawk.to/chat/6504346eb1aaa13b7a77026c/1hac6pkpm"
-        showProfile={ true }
-        showDropdown={true} 
+        pro={appLocalizer.pro_data.version}
+        managePlanUrl={appLocalizer.pro_data.manage_plan_url}
+        chatUrl="https://tawk.to/chat/6504346eb1aaa13b7a77026c/1hac6pkpm"
+        showProfile={true}
+        profileItems={profileItems}   // <-- add this
+        showDropdown={true}
         dropdownOptions={[
           { value: 'all', label: 'Modules & Settings' },
           { value: 'modules', label: 'Modules' },
           { value: 'settings', label: 'Settings' },
         ]}
         showMessages={true}
-        notifications={<HeaderNotification/>}
+        notifications={<HeaderNotification />}
         showNotifications={true}
         messages={[
           {
@@ -184,6 +206,7 @@ const App = () => {
         ]}
         messagesLink="/messages"
       />
+
       <Route />
     </>
   );
