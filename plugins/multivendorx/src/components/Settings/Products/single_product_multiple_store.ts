@@ -15,7 +15,7 @@ export default {
         {
             key: 'singleproductmultistore_show_order',
             type: 'setting-toggle',
-            label: __( 'SPMV Product listing priority', 'multivendorx' ),
+            label: __( 'SPMV product listing priority', 'multivendorx' ),
             desc: __(
                 'Choose which version of SPMV product will be shown as the main listing on the shop page (e.g., top-rated store, min / max priced product).',
                 'multivendorx'
