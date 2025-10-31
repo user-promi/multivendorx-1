@@ -85,8 +85,8 @@ export default {
                         {
                             key: 'review_allow_selling',
                             type: 'setup',
-                            title: 'Keep selling active during review',
-                            des: 'Let stores continue selling and fulfilling orders while under review. Turn off to pause all sales activities.',
+                            title: 'Pause selling  during review',
+                            des: 'Prevent stores from selling and fulfilling orders while under review.',
                         },
                         {
                             key: 'review_withhold_payments',
