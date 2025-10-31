@@ -19,7 +19,7 @@ export default {
         {
             key: 'disbursement_order_status',
             type: 'checkbox',
-            label: __('Eligible Order Statuses for Commission Payout', 'multivendorx'),
+            label: __('Eligible order statuses for commission payout', 'multivendorx'),
             settingDescription: __("Select the order statuses after which commissions will be added to the store wallet.", 'multivendorx'),
             class: 'mvx-toggle-checkbox',
             options: [
@@ -27,6 +27,11 @@ export default {
                     key: 'completed',
                     label: __('Completed', 'multivendorx'),
                     value: 'completed',
+                },
+				{
+                    key: 'processing',
+                    label: __('Processing', 'multivendorx'),
+                    value: 'processing',
                 },
                 {
                     key: 'delivered',
@@ -37,23 +42,18 @@ export default {
                     key: 'shipped',
                     label: __('Shipped', 'multivendorx'),
                     value: 'shipped',
-                },
-                {
-                    key: 'processing',
-                    label: __('Processing', 'multivendorx'),
-                    value: 'processing',
-                },
+                },                
             ],
             selectDeselect: true,
         },  
         {
             key: 'commission_lock_period',
-            label: __('Lock period', 'multivendorx'),
-            settingDescription: __('Keep payouts on hold in a safety buffer as pending balance to cover refunds, cancellations, or disputes.', 'multivendorx'),
+            label: __('Clearance period', 'multivendorx'),
+            settingDescription: __('Set a clearance period to ensure transaction stability before releasing earnings. During this time, completed order payments remain in a pending balance to cover potential refunds, cancellations, or disputes. Once the clearance period ends, the pending funds automatically move to the store’s available payout balance.', 'multivendorx'),
             type: 'number',
             size: '8rem',
             preText:__('Wait', 'multivendorx'),
-            postText:__('before pending balance will be available for payout.', 'multivendorx'),
+            postText:__('as the clearance period before pending earnings become available for payout.', 'multivendorx'),
             postInsideText: __('days', 'multivendorx'),
         },
         {
