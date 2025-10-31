@@ -1,13 +1,42 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { BasicInput, SelectInput, getApiLink, SuccessNotice } from 'zyra';
 
 const Overview = ({ id }: { id: string | null }) => {
+    const navigate = useNavigate();
+    const [data, setData] = useState<any[]>([]);
+    const [storeData, setStoreData] = useState<any[]>([]);
+
+    useEffect(() => {
+        if (!id) return;
+
+        axios({
+            method: 'GET',
+            url: getApiLink(appLocalizer, `transaction/${id}`),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+        })
+            .then((response) => {
+                setData(response?.data || {});
+            })
+
+        axios({
+            method: "GET",
+            url: getApiLink(appLocalizer, `store/${id}`),
+            headers: { "X-WP-Nonce": appLocalizer.nonce },
+        })
+            .then((response) => {
+                setStoreData(response.data || {});
+            })
+    }, []);
+
+    console.log(storeData)
+    
     const overviewData = [
-        { icon: "adminlib-tools green", number: "$47,540.00", text: "Lifetime Earnings" },
-        { icon: "adminlib-book red", number: "344", text: "Available Balance" },
-        { icon: "adminlib-global-community yellow", number: "$42,786.00", text: "Pending Balance" },
-        { icon: "adminlib-global-community blue", number: "$42,786.00", text: "Requested Payout" },
+        { icon: "adminlib-tools green", number:  `${appLocalizer.currency_symbol}${Number(storeData.commission?.total_order_amount ?? 0).toFixed(2)}`, text: "Lifetime Earnings" },
+        { icon: "adminlib-book red", number: `${appLocalizer.currency_symbol}${Number(data.wallet_balance ?? 0).toFixed(2)}`, text: "Available Balance" },
+        { icon: "adminlib-global-community yellow", number: `${appLocalizer.currency_symbol}${Number(data.locking_balance ?? 0).toFixed(2)}`, text: "Pending Balance" },
+        { icon: "adminlib-global-community blue", number: `${appLocalizer.currency_symbol}${Number(storeData.request_withdrawal_amount ?? 0).toFixed(2)}`, text: "Requested Payout" },
     ];
     const activities = [
         { icon: 'adminlib-cart', text: 'New product "Wireless Gaming Headset" added by TechWorld' },
@@ -168,7 +197,11 @@ const Overview = ({ id }: { id: string | null }) => {
                                     View Application
                                 </div>
                                 <div className="details">
-                                    <div className="sku">
+                                    <div
+                                        className="sku"
+                                        onClick={() => {navigate(`?page=multivendorx#&tab=stores&edit/${id}/&subtab=store-application`);
+                                        }}
+                                    >
                                         <i className="adminlib-external"></i>
                                     </div>
                                 </div>
@@ -180,7 +213,7 @@ const Overview = ({ id }: { id: string | null }) => {
                                 </div>
                                 <div className="details">
                                     <div className="sku">
-                                        10 jan 2005
+                                        {storeData.create_time}
                                     </div>
                                 </div>
                             </div>
@@ -220,17 +253,17 @@ const Overview = ({ id }: { id: string | null }) => {
                                     <span>JD</span>
                                 </div>
                                 <div className="details">
-                                    <div className="name">John Doe</div>
+                                    <div className="name">{storeData.primary_owner_info?.name}</div>
                                     <div className="des">Owner</div>
                                 </div>
                             </div>
                             <ul className="contact-details">
                                 <li>
-                                    <i className="adminlib-mail"></i>john@example.com
+                                    <i className="adminlib-mail"></i>{storeData.primary_owner_info?.email}
                                 </li>
-                                <li>
+                                {/* <li>
                                     <i className="adminlib-form-phone"></i> +1 (555) 987-6543
-                                </li>
+                                </li> */}
                             </ul>
                         </div>
                     </div>

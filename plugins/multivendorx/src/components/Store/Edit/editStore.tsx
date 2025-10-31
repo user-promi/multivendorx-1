@@ -15,6 +15,7 @@ import axios from 'axios';
 import Overview from './overview';
 import Membership from './membership';
 import Financial from './financial';
+import "../viewStore.scss";
 
 const statusOptions = [
     { label: "Active", value: "active" },
@@ -40,7 +41,7 @@ const EditStore = () => {
             const target = e.target as HTMLElement;
 
             // If clicked inside name or desc editing area, ignore
-            if (target.closest('.store-name') || target.closest('.store-description')) return;
+            if (target.closest('.store-name') || target.closest('.des')) return;
 
             if (editName || editDesc) {
                 autoSave({ name: data.name, description: data.description });
@@ -53,6 +54,8 @@ const EditStore = () => {
         document.addEventListener("click", handleOutsideClick);
         return () => document.removeEventListener("click", handleOutsideClick);
     }, [editName, editDesc, data]);
+
+
     // Close dropdown on click outside
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -75,7 +78,8 @@ const EditStore = () => {
     const editId = editParts ? editParts[1] : null;
 
     const hashParams = new URLSearchParams(hash);
-    const currentTab = hashParams.get('subtab') || 'store';
+    const currentTab = hashParams.get('subtab') || 'store-overview';
+console.log(hashParams.get('subtab'))
 
     const prepareUrl = (tabId: string) => `?page=multivendorx#&tab=stores&edit/${editId}/&subtab=${tabId}`;
 
@@ -127,7 +131,7 @@ const EditStore = () => {
         {
             type: 'file',
             content: {
-                id: 'overview',
+                id: 'store-overview',
                 name: 'Overview',
                 desc: 'Store Info',
                 hideTabHeader: true,
@@ -208,7 +212,7 @@ const EditStore = () => {
 
     const getForm = (tabId: string) => {
         switch (tabId) {
-            case 'overview':
+            case 'store-overview':
                 return <Overview id={editId} />;
             case 'store':
                 return <StoreSettings id={editId} />;
@@ -370,7 +374,6 @@ const EditStore = () => {
                                                             className={`edit-icon  ${editName ? '' : 'admin-badge blue'}`}
                                                             onClick={(e) => {
                                                                 e.stopPropagation();
-                                                                if (editName) autoSave({ name: data.name, description: data.description });
                                                                 setEditName(!editName);
                                                             }}
                                                         >
@@ -399,7 +402,6 @@ const EditStore = () => {
                                                         className={`edit-icon admin-badge ${editDesc ? '' : 'blue'}`}
                                                         onClick={(e) => {
                                                             e.stopPropagation();
-                                                            if (editDesc) autoSave({ name: data.name, description: data.description });
                                                             setEditDesc(!editDesc);
                                                         }}
                                                     >
@@ -418,9 +420,9 @@ const EditStore = () => {
                                                         </div>
                                                     </li>
                                                 </ul>
-                                                {/* <div className="des">
-                                                    <b>Store url: </b>http://localhost:8889/store/HomeShop/reviews/ <i className="adminlib-external"></i>
-                                                </div> */}
+                                                <div className="des">
+                                                    <b>Store url: </b>{appLocalizer.store_page_url + '/' + data.slug} <i className="adminlib-external"></i>
+                                                </div>
                                             </div>
                                         </div>
                                         <div className="right-section">
