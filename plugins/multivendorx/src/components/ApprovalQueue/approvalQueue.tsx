@@ -77,7 +77,7 @@ const ApprovalQueue = () => {
         ...(appLocalizer.settings_databases_value['general']['approve_store'] === "manually"
             ? [{
                 id: "products",
-                label: "Stores",
+                label: "Questions",
                 icon: "adminlib-calendar red",
                 des: "Eager to join the marketplace",
                 count: storeCount,
@@ -293,174 +293,6 @@ const ApprovalQueue = () => {
             <div className="general-wrapper">
 
                 {/* <div className="row">
-                    <div className="column">
-                        <div className="card-header">
-                            <div className="left">
-                                <div className="title">
-                                    Review Store Submissions
-                                </div>
-                            </div>
-                            <div className="right">
-                                <span>Updated 1 month ago</span>
-                            </div>
-                        </div>
-                        <div className="overview-card-wrapper">
-                            <div className="action">
-                                <div className="title">
-                                    {productCount}
-                                    <i className="adminlib-cart"></i>
-                                </div>
-                                <div className="description">
-                                    Products Submitted
-                                </div>
-                            </div>
-                            <div className="action">
-                                <div className="title">
-                                    {storeCount}
-                                    <i className="adminlib-tools"></i>
-                                </div>
-                                <div className="description">
-                                    Pending Stores
-                                </div>
-                            </div>
-                        </div>
-                        <div className="overview-card-wrapper">
-                            <div className="action">
-                                <div className="title">
-                                    {couponCount}
-                                    <i className="adminlib-catalog"></i>
-                                </div>
-                                <div className="description">
-                                    Coupon Approvals
-                                </div>
-                            </div>
-                            <div className="action">
-                                <div className="title">
-                                    {transactionCount}
-                                    <i className="adminlib-module"></i>
-                                </div>
-                                <div className="description">
-                                    Withdrawal Requests
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div className="column">
-                        <div className="card-header">
-                            <div className="left">
-                                <div className="title">
-                                    Tasks
-                                </div>
-                            </div>
-                        </div>
-                        <div className="task-list-wrapper">
-                            <ul className="task-list">
-                                {tasks.map((t, idx) => (
-                                    <li key={idx} className="task-item">
-                                        <input type="checkbox" />
-                                        <span>{t}</span>
-                                        <i
-                                            className="adminlib-delete delete-icon"
-                                            onClick={() => handleDelete(idx)}
-                                        ></i>
-                                    </li>
-                                ))}
-                            </ul>
-
-                            {showInput && (
-                                <span className="add-mode">
-                                    <input
-                                        type="text"
-                                        value={task}
-                                        onChange={(e) => setTask(e.target.value)}
-                                        placeholder="Enter task"
-                                        className="basic-input"
-                                        autoFocus
-                                        disabled={loading} // disable input while saving
-                                    />
-                                    <div className="buttons-wrapper">
-                                        <button
-                                            className="admin-btn btn-red"
-                                            onClick={() => setShowInput(false)}
-                                            disabled={loading} // disable cancel while saving
-                                        >
-                                            <i className="adminlib-close"></i> Cancel
-                                        </button>
-                                        <button
-                                            className="admin-btn btn-purple"
-                                            onClick={handleConfirm}
-                                            disabled={!task.trim() || loading} // disable add button if empty or loading
-                                        >
-                                            {loading ? <i className="adminlib-spinner spinning"></i> : <i className="adminlib-plus-circle-o"></i>} Add
-                                        </button>
-                                    </div>
-                                </span>
-                            )}
-
-                            {!showInput && (
-                                <button className="admin-btn btn-purple" onClick={() => setShowInput(true)}>
-                                    <i className="adminlib-plus-circle-o"></i> Add Task
-                                </button>
-                            )}
-
-                        </div>
-                    </div>
-
-                    <div className="column">
-                        <div className="card-header">
-                            <div className="left">
-                                <div className="title">
-                                    Notification
-                                </div>
-                            </div>
-                            <div className="right">
-                                <div className="admin-btn btn-purple">
-                                    <i className="adminlib-eye"></i>
-                                    Show all notification
-                                </div>
-                            </div>
-                        </div>
-                        <div className="notification-wrapper">
-                            <ul>
-                                <li>
-                                    <div className="icon-wrapper">
-                                        <i className="adminlib-form-paypal-email blue"></i>
-                                    </div>
-                                    <div className="details">
-                                        <div className="notification-title">Lorem ipsum dolor sit amet.</div>
-                                        <div className="des">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</div>
-                                        <span>1d ago</span>
-                                    </div>
-
-                                </li>
-                                <li>
-                                    <div className="icon-wrapper">
-                                        <i className="adminlib-mail orange"></i>
-                                    </div>
-                                    <div className="details">
-                                        <div className="notification-title">Lorem ipsum dolor sit amet.</div>
-                                        <div className="des">Lorem ipsum dolor sit amet, consectetur adipisicing elit</div>
-                                        <span>34min ago</span>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="icon-wrapper">
-                                        <i className="adminlib-form-paypal-email green"></i>
-                                    </div>
-                                    <div className="details">
-                                        <div className="notification-title">Lorem ipsum dolor sit amet.</div>
-                                        <div className="des">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</div>
-                                        <span>34min ago</span>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div> */}
-
-
-                <div className="row">
                     <div className="overview-card-wrapper tab">
                         {tabs.map((tab) => (
                             <div className={`tab-action ${activeTab === tab.id ? "active" : ""}`} key={tab.id} onClick={() => setActiveTab(tab.id)}>
@@ -474,8 +306,23 @@ const ApprovalQueue = () => {
                             </div>
                         ))}
                     </div>
+                </div> */}
+                <div className="row ">
+                    {/* Tab Titles */}
+                    <div className="column admin-tab">
+                        <div className="tab-titles">
+                            {tabs.map((tab) => (
+                                <div
+                                    key={tab.id}
+                                    className={`title ${activeTab === tab.id ? "active" : ""}`}
+                                    onClick={() => setActiveTab(tab.id)}
+                                >
+                                    <p>{tab.label}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
                 </div>
-
                 <div className="row">
                     <div className="column">
                         {/* Tab Content */}

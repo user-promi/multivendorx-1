@@ -168,7 +168,7 @@ const CustomerServices = () => {
                 description={'Manage store reviews, support requests, financial transactions, and reported issues.'}
             />
             <div className="general-wrapper">
-                <div className="row">
+                {/* <div className="row">
                     <div className="overview-card-wrapper tab">
                         {tabs.map((tab) => (
                             <div
@@ -186,8 +186,23 @@ const CustomerServices = () => {
                             </div>
                         ))}
                     </div>
+                </div> */}
+                <div className="row ">
+                    {/* Tab Titles */}
+                    <div className="column admin-tab">
+                        <div className="tab-titles">
+                            {tabs.map((tab) => (
+                                <div
+                                    key={tab.id}
+                                    className={`title ${activeTab === tab.id ? "active" : ""}`}
+                                    onClick={() => setActiveTab(tab.id)}
+                                >
+                                    <p>{tab.label}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
                 </div>
-
                 <div className="row">
                     <div className="column">
                         <div className="tab-content">

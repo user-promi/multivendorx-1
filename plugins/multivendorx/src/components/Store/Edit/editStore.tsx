@@ -378,16 +378,9 @@ const EditStore = () => {
                                                         </span>
                                                     </div>
                                                     <span className="admin-badge green">{data.status}</span>
-
-                                                    <ul className="contact-details">
-                                                        <li>
-
-                                                            <div className="reviews-wrapper">
-                                                                <i className="review adminlib-star"></i>
-                                                                5 Review
-                                                            </div>
-                                                        </li>
-                                                    </ul>
+                                                    <div className="admin-badge green"><i className="adminlib-store-inventory"></i></div>
+                                                    <div className="admin-badge blue"><i className="adminlib-geo-my-wp"></i></div>
+                                                    <div className="admin-badge yellow"><i className="adminlib-staff-manager"></i></div>
                                                 </div>
 
                                                 <div className="des" onClick={() => setEditDesc(true)}>
@@ -413,16 +406,26 @@ const EditStore = () => {
                                                         <i className={editDesc ? "" : "adminlib-create"}></i>
                                                     </span>
                                                 </div>
-                                                <div className="des">
+                                                <ul className="contact-details">
+                                                    <li>
+                                                        <div className="reviews-wrapper">
+                                                            <i className="review adminlib-star"></i>
+                                                            <i className="review adminlib-star"></i>
+                                                            <i className="review adminlib-star"></i>
+                                                            <i className="review adminlib-star"></i>
+                                                            <i className="review adminlib-star"></i>
+                                                            5 Review
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                                {/* <div className="des">
                                                     <b>Store url: </b>http://localhost:8889/store/HomeShop/reviews/ <i className="adminlib-external"></i>
-                                                </div>
+                                                </div> */}
                                             </div>
                                         </div>
                                         <div className="right-section">
                                             <div className="tag-wrapper">
-                                                <div className="admin-badge green"><i className="adminlib-store-inventory"></i></div>
-                                                <div className="admin-badge blue"><i className="adminlib-geo-my-wp"></i></div>
-                                                <div className="admin-badge yellow"><i className="adminlib-staff-manager"></i></div>
+
                                             </div>
                                             {/* <div className="status-wrapper">
                                                 <span>Status: </span>

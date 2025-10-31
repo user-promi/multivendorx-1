@@ -278,11 +278,11 @@
     display: flex;
     gap: 0.5rem;
     align-items: center;
-    
-    label{
+
+    label {
       font-size: 1rem;
 
-      i{
+      i {
         font-size: 1.063rem;
         color: $theme-color;
         padding-right: 0.45rem;
@@ -316,9 +316,7 @@
     }
   }
 
-  .action-wrapper{
-      
-  }
+  .action-wrapper {}
 }
 
 .tab-title {
@@ -583,6 +581,11 @@
   .title {
     font-size: 1.15rem;
     width: auto;
+  }
+
+  span {
+    font-size: 1rem;
+    font-weight: 500;
   }
 }
 
