@@ -125,6 +125,7 @@ class Setting {
                 'multivendorx_tax_compliance_settings',
                 'multivendorx_custom_css_settings',
                 'multivendorx_single_product_multiple_store_settings',
+                'multivendorx_store_status_control_settings',
 			)
         );
 

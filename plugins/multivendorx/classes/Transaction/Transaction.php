@@ -97,6 +97,8 @@ class Transaction {
         );
 
         $transaction_id = $wpdb->insert_id;
+
+        do_action('multivendorx_after_create_transaction', $transaction_id, $commission);
         return $transaction_id;
     }
 

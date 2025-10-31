@@ -383,6 +383,7 @@ class FrontendScripts {
                 'tax-compliance',
                 'custom-css',
                 'single-product-multiple-store',
+                'store-status-control',
             )
 		);
 
