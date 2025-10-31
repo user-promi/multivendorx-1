@@ -44,7 +44,6 @@ export default {
                 },
             ],
             selectDeselect: true,
-            moduleEnabled: 'marketplace-refund',
         },
         {
             key: 'refund_days',
@@ -58,7 +57,6 @@ export default {
             size: '8rem',
             max: 365,
             postInsideText: 'days',
-            moduleEnabled: 'marketplace-refund',
         },
         {
             key: 'refund_reasons',
@@ -69,10 +67,11 @@ export default {
                 'Add one or more reasons that stores can select when handling refund requests.',
                 'multivendorx'
             ),
+            requiredEnable: true,
             defaultValues: [
-                { value: "Damaged or Defective Product", },
-                { value: "Wrong Item Delivered", },
-                { value: "Product Not as Described", },
+                { value: "Damaged or Defective Product",required:true ,deleteDisabled: true },
+                { value: "Wrong Item Delivered", required:true ,deleteDisabled: true},
+                { value: "Product Not as Described",required:true ,deleteDisabled: true },
                 { value: "Late Delivery", },
                 { value: "Changed Mind", },
             ],

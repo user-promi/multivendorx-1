@@ -17,11 +17,12 @@ export default {
                 'Define one or more product categories that are not allowed to be listed on your marketplace.',
                 'multivendorx'
             ),
+            requiredEnable: true,
             defaultValues: [
-                { value: "Weapons & ammunition", locked: true, iconClass: "adminlib-check", description: "", tag:"Primary",required: true },
-                { value: "Illegal drugs & substances", locked: true, iconClass: "adminlib-clock", description: "",tag:"Primary",required: true },
-                { value: "Counterfeit products", locked: true, iconClass: "adminlib-clock", description: "",tag:"Primary",required: true },
-                { value: "Stolen goods", locked: true, iconClass: "adminlib-clock", description: "",tag:"Primary",required: true },
+                { value: "Weapons & ammunition", iconClass: "adminlib-check", description: "",required: true,deleteDisabled: true },
+                { value: "Illegal drugs & substances",  iconClass: "adminlib-clock", description: "",required: true,deleteDisabled: true },
+                { value: "Counterfeit products",  iconClass: "adminlib-clock", description: "",required: true,deleteDisabled: true },
+                { value: "Stolen goods" },
             ],
             desc: __(
                 '<b>Note:</b> Ensure sellers are informed about disallowed items before publishing. Violations may result in product removal or account penalties.',
@@ -93,10 +94,11 @@ export default {
             type: 'multi-string',
             label: __('Reasons for abuse report', 'multivendorx'),
             placeholder: __('Add a reason for reporting a product', 'multivendorx'),
+            requiredEnable: true,
             defaultValues: [
-                { value: "Product not received" },
-                { value: "Product not as described" },
-                { value: "Product damaged/defective" },
+                { value: "Product not received",required:true ,deleteDisabled: true },
+                { value: "Product not as described",required:true ,deleteDisabled: true },
+                { value: "Product damaged/defective",required:true ,deleteDisabled: true },
                 { value: "Wrong item received" },
                 { value: "Order arrived late" },
             ],            

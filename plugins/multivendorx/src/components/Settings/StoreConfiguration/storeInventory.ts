@@ -16,9 +16,9 @@ export default {
             type: 'blocktext',
             label: __( 'no_label', 'multivendorx' ),
             blocktext: __(
-                '<b>Note: You can configure or customize the notification templates for these alerts from the Notification Settings section.</b>',
+                '<b>Note: You can configure or customize the notification templates for these alerts from the <a href="#&tab=settings&subtab=notifications">Notification Settings</a> section.</b>',
                 'multivendorx'
-            ),
+            ),            
         },
         {
             key: 'low_stock_notifications', // changed key

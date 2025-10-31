@@ -155,14 +155,5 @@ export default {
             ],
             selectDeselect: true,
         },
-        {
-            key: 'separator_store_policy_override',
-            type: 'section',
-            desc: __( 'Store owners can temporarily disable their profile, hiding it and its products from the marketplace.', 'multivendorx' ),
-            hint: __(
-                'Store profile controls',
-                'multivendorx'
-            ),
-        },  
     ],
 };
