@@ -468,6 +468,16 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
                 'id'      => $store_id,
             ]);
         }
+        
+        // Check if a withdrawal request already exists
+        $existing_request = $store->get_meta('request_withdrawal_amount');
+        if ( $existing_request ) {
+            return rest_ensure_response([
+                'success' => false,
+                'message' => __( 'You already have a pending withdrawal request.', 'multivendorx' ),
+                'id'      => $store_id,
+            ]);
+        }
 
         $withdraw_type = MultiVendorX()->setting->get_setting('withdraw_type', 'manual');
 
@@ -485,7 +495,9 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
         return rest_ensure_response([
             'success' => true,
             'id'      => $store_id,
+            'message' => __( 'Withdrawal request submitted successfully.', 'multivendorx' ),
         ]);
+
     }
 
 }

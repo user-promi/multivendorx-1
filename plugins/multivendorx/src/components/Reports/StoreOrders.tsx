@@ -106,9 +106,9 @@ const StoreOrders: React.FC = () => {
     };
 
     //Add Date Filtering — only if both are valid Date objects
-    if (startDate && endDate ){
+    if (startDate && endDate) {
       // Convert to UTC ISO8601 format (WooCommerce expects this)
-      params.after =startDate.toISOString();
+      params.after = startDate.toISOString();
       params.before = endDate.toISOString();
     }
 
