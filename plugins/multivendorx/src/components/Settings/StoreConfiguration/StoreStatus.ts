@@ -136,13 +136,13 @@ export default {
                     label: 'Active',
                     connected: true,
                     enableOption: true,
-                    desc: 'Stores in good standing',
+                    desc: 'Stores are fully approved and operational. They can manage products, orders, and payouts without restrictions.',
                     formFields: [
                         {
                             key: 'active_description',
                             type: 'description',
                             title: 'About active stores',
-                            des: 'The store is in good standing. Sellers can list products, fulfill orders, and receive payments without restriction.',
+                            des: '',
                         },
                         {
                             key: 'active_dashboard_access',
