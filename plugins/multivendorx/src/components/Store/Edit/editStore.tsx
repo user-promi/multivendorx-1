@@ -123,14 +123,6 @@ const EditStore = () => {
 
         frame.open();
     };
-
-    const overviewData = [
-        { icon: "adminlib-tools green", number: "$47,540.00", text: "Lifetime Earnings" },
-        { icon: "adminlib-book red", number: "344", text: "Available Balance" },
-        { icon: "adminlib-global-community yellow", number: "$42,786.00", text: "Pending Balance" },
-        { icon: "adminlib-global-community blue", number: "$42,786.00", text: "Requested Payout" },
-        { icon: "adminlib-global-community blue", number: "$42,786.00", text: "Requested Payout" },
-    ];
     const tabData = [
         {
             type: 'file',
@@ -212,26 +204,6 @@ const EditStore = () => {
                 icon: 'adminlib-credit-card',
             },
         },
-        {
-            type: 'file',
-            content: {
-                id: 'membership',
-                name: 'membership',
-                desc: 'Membership',
-                hideTabHeader: true,
-                icon: 'adminlib-credit-card',
-            },
-        },
-        {
-            type: 'file',
-            content: {
-                id: 'financial',
-                name: 'Financial',
-                desc: 'Membership',
-                hideTabHeader: true,
-                icon: 'adminlib-credit-card',
-            },
-        },
     ];
 
     const getForm = (tabId: string) => {
@@ -252,10 +224,10 @@ const EditStore = () => {
                 return <StoreRegistration id={editId} />;
             case 'store-facilitator':
                 return <Facilitator id={editId} />;
-            case 'membership':
-                return <Membership id={editId} />;
-            case 'financial':
-                return <Financial id={editId} />;
+            // case 'membership':
+            //     return <Membership id={editId} />;
+            // case 'financial':
+            //     return <Financial id={editId} />;
             default:
                 return <div></div>;
         }
@@ -406,6 +378,16 @@ const EditStore = () => {
                                                         </span>
                                                     </div>
                                                     <span className="admin-badge green">{data.status}</span>
+
+                                                    <ul className="contact-details">
+                                                        <li>
+
+                                                            <div className="reviews-wrapper">
+                                                                <i className="review adminlib-star"></i>
+                                                                5 Review
+                                                            </div>
+                                                        </li>
+                                                    </ul>
                                                 </div>
 
                                                 <div className="des" onClick={() => setEditDesc(true)}>
@@ -431,19 +413,9 @@ const EditStore = () => {
                                                         <i className={editDesc ? "" : "adminlib-create"}></i>
                                                     </span>
                                                 </div>
-                                                <ul className="contact-details">
-                                                    <li>
-
-                                                        <div className="reviews-wrapper">
-                                                            <i className="review adminlib-star"></i>
-                                                            <i className="review adminlib-star"></i>
-                                                            <i className="review adminlib-star"></i>
-                                                            <i className="review adminlib-star"></i>
-                                                            <i className="review adminlib-star"></i>
-                                                            5 Review
-                                                        </div>
-                                                    </li>
-                                                </ul>
+                                                <div className="des">
+                                                    <b>Store url: </b>http://localhost:8889/store/HomeShop/reviews/ <i className="adminlib-external"></i>
+                                                </div>
                                             </div>
                                         </div>
                                         <div className="right-section">

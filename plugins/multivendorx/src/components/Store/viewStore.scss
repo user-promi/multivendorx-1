@@ -93,6 +93,7 @@
                     align-items: center;
                     font-size: 1.625rem;
                     font-weight: 500;
+                    padding-bottom: 0.5rem;
 
                     .store-name {
                         position: relative;
@@ -101,7 +102,7 @@
                 }
 
                 .des {
-                    padding: 0.5rem 0;
+                    padding: 0.313rem 0;
                     font-size: 1rem;
                     position: relative;
 
@@ -224,9 +225,10 @@
     gap: 0.313rem;
 
     .review {
-        color: rgb(231, 178, 5) !important;  // common color and delete
+        color: rgb(231, 178, 5) !important; // common color and delete
     }
-    span{
+
+    span {
         padding-left: 0.313rem;
     }
 }
@@ -289,22 +291,23 @@
     }
 }
 
-.overview-wrapper{
-    .items{
+.overview-wrapper {
+    .items {
         display: flex;
         margin-bottom: 1rem;
 
-        .title{
+        .title {
             width: 30%;
             font-size: 0.95rem;
             color: #000000c7;
         }
-        .details{
+
+        .details {
             width: 70%;
             display: flex;
             justify-content: start;
 
-            .sku{
+            .sku {
                 display: flex;
                 gap: 0.5rem;
                 align-items: center;
@@ -312,6 +315,39 @@
         }
     }
 }
+
+.store-time-wrapper {
+    .title {
+        font-size: 1.25rem;
+        font-weight: 600;
+    }
+
+    .time-wrapper {
+        width: 10rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: start;
+        align-items: start;
+        gap: 0.5rem;
+        padding: 0.813rem;
+        background: #ebebeb;
+        border-radius: 0.313rem;
+        margin-top: 0.5rem;
+
+        .des {
+            font-size: 1.063rem;
+            color: #000;
+        }
+
+        .time {
+            font-size: 1.45rem;
+            font-weight: 600;
+            color: $theme-color;
+            line-height: 1.5rem;
+        }
+    }
+}
+
 // old store style (delete)
 .store-view-wrapper {
     padding: 2rem;

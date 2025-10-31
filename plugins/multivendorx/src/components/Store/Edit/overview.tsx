@@ -8,7 +8,6 @@ const Overview = ({ id }: { id: string | null }) => {
         { icon: "adminlib-book red", number: "344", text: "Available Balance" },
         { icon: "adminlib-global-community yellow", number: "$42,786.00", text: "Pending Balance" },
         { icon: "adminlib-global-community blue", number: "$42,786.00", text: "Requested Payout" },
-        { icon: "adminlib-global-community blue", number: "$42,786.00", text: "Requested Payout" },
     ];
     const activities = [
         { icon: 'adminlib-cart', text: 'New product "Wireless Gaming Headset" added by TechWorld' },
@@ -38,44 +37,153 @@ const Overview = ({ id }: { id: string | null }) => {
 
                         </div>
                     </div>
+                    <div className="row">
+                        <div className="column">
+                            <div className="card-header">
+                                <div className="left">
+                                    <div className="title">
+                                        Recent Payouts
+                                    </div>
+                                </div>
+                                <div className="right">
+                                    <i className="adminlib-external"></i>
+                                </div>
+                            </div>
+
+                            <div className="store-owner-details">
+                                <div className="profile">
+                                    <div className="avater">
+                                        <span className="adminlib-calendar"></span>
+                                    </div>
+                                    <div className="details">
+                                        <div className="name">$5,420</div>
+                                        <div className="des">Oct 15, 2024</div>
+                                    </div>
+                                </div>
+                                <div className="right-details">
+                                    {/* <div className="price">$356 .35</div>
+                                <div className="div">Lorem, ipsum dolor.</div> */}
+                                    <div className="admin-badge green">Completed</div>
+                                </div>
+                            </div>
+                            <div className="store-owner-details">
+                                <div className="profile">
+                                    <div className="avater">
+                                        <span className="adminlib-calendar"></span>
+                                    </div>
+                                    <div className="details">
+                                        <div className="name">$5,420</div>
+                                        <div className="des">Oct 15, 2024</div>
+                                    </div>
+                                </div>
+                                <div className="right-details">
+                                    {/* <div className="price">$356 .35</div>
+                                <div className="div">Lorem, ipsum dolor.</div> */}
+                                    <div className="admin-badge red">Pending</div>
+                                </div>
+                            </div>
+                            <div className="store-owner-details">
+                                <div className="profile">
+                                    <div className="avater">
+                                        <span className="adminlib-calendar"></span>
+                                    </div>
+                                    <div className="details">
+                                        <div className="name">$5,420</div>
+                                        <div className="des">Oct 15, 2024</div>
+                                    </div>
+                                </div>
+                                <div className="right-details">
+                                    {/* <div className="price">$356 .35</div>
+                                <div className="div">Lorem, ipsum dolor.</div> */}
+                                    <div className="admin-badge green">Completed</div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div className="column">
+                            <div className="card-header">
+                                <div className="left">
+                                    <div className="title">
+                                        Store Hours
+                                    </div>
+                                    <div className="des">
+                                        Manage your weekly schedule and special hours
+                                    </div>
+                                </div>
+                                <div className="right">
+                                    <i className="adminlib-external"></i>
+                                </div>
+                            </div>
+
+                            {/* <div className="store-owner-details">
+                            <div className="profile">
+                                <div className="avater">
+                                    <span className="adminlib-calendar"></span>
+                                </div>
+                                <div className="details">
+                                    <div className="name">$5,420</div>
+                                    <div className="des">Oct 15, 2024</div>
+                                </div>
+                            </div>
+                            <div className="right-details">
+                                <div className="price">$356 .35</div>
+                                <div className="div">Lorem, ipsum dolor.</div>
+                            </div>
+                        </div> */}
+
+                            <div className="store-time-wrapper">
+
+                                <div className="row">
+                                    <div className="time-wrapper">
+                                        <div className="des">Current Status</div>
+                                        <div className="time"><span className="admin-badge green">Open</span></div>
+                                    </div>
+                                    <div className="time-wrapper">
+                                        <div className="des">Next Opening</div>
+                                        <div className="time">Mon 9:00 AM</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div className="card-wrapper w-35">
                     <div className="card-content">
                         <div className="card-header">
                             <div className="left">
                                 <div className="title">
-                                    Next Opening Date
+                                    Store information
                                 </div>
+                            </div>
+                            <div className="right">
+                                <i className="adminlib-external"></i>
                             </div>
                         </div>
 
                         <div className="overview-wrapper">
                             <div className="items">
                                 <div className="title">
-                                    Slug
+                                    View Application
                                 </div>
                                 <div className="details">
                                     <div className="sku">
-                                        http://localhost:8889/store/HomeShop/reviews/ <i className="adminlib-external"></i>
-
+                                        <i className="adminlib-external"></i>
                                     </div>
                                 </div>
                             </div>
 
                             <div className="items">
                                 <div className="title">
-                                    Rating
+                                    Created on
                                 </div>
                                 <div className="details">
-                                    <div className="reviews-wrapper">
-                                        <i className="review adminlib-star"></i>
-                                        <i className="review adminlib-star"></i>
-                                        <i className="review adminlib-star"></i>
-                                        <i className="review adminlib-star"></i>
-                                        <i className="review adminlib-star"></i>
-                                        5 Review
+                                    <div className="sku">
+                                        10 jan 2005
                                     </div>
                                 </div>
                             </div>
-
                             <div className="items">
                                 <div className="title">
                                     Vacation Mode
@@ -85,31 +193,24 @@ const Overview = ({ id }: { id: string | null }) => {
                                 </div>
                             </div>
                         </div>
-
-                        {/* <div className="store-owner-details">
-                            <div className="profile">
-                                <div className="avater">
-                                    <span className="adminlib-calendar"></span>
-                                </div>
-                                <div className="details">
-                                    <div className="name">Repeats every two weeks</div>
-                                    <div className="des">Lorem ipsum dolor sit amet.</div>
-                                </div>
+                        <div className="description-wrapper">
+                            <div className="title">
+                                <i className="adminlib-error"></i>
+                                Gold Plan
+                                <span className="admin-badge green">Active</span>
                             </div>
-                            <div className="right-details">
-                                <div className="price">$356 .35</div>
-                                <div className="div">Lorem, ipsum dolor.</div>
-                            </div>
-                        </div> */}
+                            <div className="des">Renews on Dec 15, 2024</div>
+                        </div>
                     </div>
-                </div>
-                <div className="card-wrapper w-35">
                     <div className="card-content">
                         <div className="card-header">
                             <div className="left">
                                 <div className="title">
-                                    Store Owner
+                                    Primary Owner
                                 </div>
+                            </div>
+                            <div className="right">
+                                <i className="adminlib-external"></i>
                             </div>
                         </div>
 
@@ -133,12 +234,15 @@ const Overview = ({ id }: { id: string | null }) => {
                             </ul>
                         </div>
                     </div>
-                    <div className="card-content">
+                    {/* <div className="card-content">
                         <div className="card-header">
                             <div className="left">
                                 <div className="title">
                                     Repeating
                                 </div>
+                            </div>
+                            <div className="right">
+                                <i className="adminlib-external"></i>
                             </div>
                         </div>
 
@@ -153,7 +257,7 @@ const Overview = ({ id }: { id: string | null }) => {
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </>

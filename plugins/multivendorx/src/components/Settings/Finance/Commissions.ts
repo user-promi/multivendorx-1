@@ -16,7 +16,7 @@ const gatewayFields = gatewayList.flatMap(gateway => [
         postInsideText: __('%', 'multivendorx'),
         size: "8rem",
     },
-    {   
+    {
         key: 'devider',
         type: 'devider',
     }
@@ -37,7 +37,7 @@ const nestedFields = [
         postInsideText: __('%', 'multivendorx'),
         size: "8rem",
     },
-    {   
+    {
         key: 'devider',
         type: 'devider',
     },
@@ -118,8 +118,8 @@ export default {
                             value: 'product_price',
                         },
                     ],
-                    preInsideText:'$',
-                    size:"8rem",
+                    preInsideText: '$',
+                    size: "8rem",
                     skipFirstRow: true,
                     postText: "then",
                     dependent: {
@@ -137,6 +137,8 @@ export default {
                             value: 'product_qty',
                         },
                     ],
+                    preInsideText: '$',
+                    size: "8rem",
                     skipFirstRow: true,
                     postText: "then",
                     dependent: {
@@ -154,8 +156,8 @@ export default {
                             value: 'order_value',
                         },
                     ],
-                    size:"8rem",
-                    preInsideText:'$',
+                    size: "8rem",
+                    preInsideText: '$',
                     postText: "then",
                     dependent: {
                         key: 'rule_type',
@@ -169,7 +171,7 @@ export default {
                     preInsideText: __('$', 'multivendorx'),
                     size: "8rem",
                     preText: 'fixed',
-                    preTextFirstRow:"Fixed",
+                    preTextFirstRow: "Fixed",
                     postText: "+",
                 },
                 {
@@ -178,7 +180,7 @@ export default {
                     size: '8rem',
                     postInsideText: __('%', 'multivendorx'),
                     postText: "commission will be charged.",
-                    postTextFirstRow:"",
+                    postTextFirstRow: "",
                 },
             ],
             dependent: {
@@ -239,7 +241,7 @@ export default {
             ],
             look: 'toggle',
         },
-         {
+        {
             key: 'taxable_shipping',
             label: __('Enable taxable shipping', 'multivendorx'),
             settingDescription: __('Shipping charges will be treated as taxable items during checkout. Otherwise shipping costs will be tax-free.', 'multivendorx'),
@@ -292,8 +294,8 @@ export default {
                 'Define a fee to cover platform costs. Apply a fixed, percentage, or combined rate. Choose whether it’s paid by the customer at checkout or deducted from the store’s commission.',
                 'multivendorx'
             ),
-           desc: __('<ul><li><strong>Example 1 – Customer Pays the Fee:</strong> Fee: $2 + 10%. Product price: $100 → Customer pays $112. Store receives $100 (before commission or deductions).</li><li><strong>Example 2 – Store Pays the Fee:</strong> Fee: $2 + 10%. Product price: $100 → Customer pays $100. Store payout after deduction: $88.</li></ul>','multivendorx'),
-           nestedFields: [
+            desc: __('<ul><li><strong>Example 1 – Customer Pays the Fee:</strong> Fee: $2 + 10%. Product price: $100 → Customer pays $112. Store receives $100 (before commission or deductions).</li><li><strong>Example 2 – Store Pays the Fee:</strong> Fee: $2 + 10%. Product price: $100 → Customer pays $100. Store payout after deduction: $88.</li></ul>', 'multivendorx'),
+            nestedFields: [
                 {
                     key: 'commission_fixed',
                     type: 'text',
@@ -318,10 +320,10 @@ export default {
                     ],
                     // postText: "",
                 },
-                
+
             ],
         },
-        
+
         {
             key: 'facilitator_fees',
             type: 'nested',
@@ -344,16 +346,16 @@ export default {
                     size: "8rem",
                 },
             ],
-        },  
+        },
         {
             key: 'gateway_fees',
             type: 'nested',
             label: __('Gateway fees', 'multivendorx'),
-			settingDescription: __('Define the default fee that will be deducted from the store commission. If you want to charge different fees for each payment method, set the amounts here for gateways, bank transfers, or cash on delivery.', 'multivendorx'),
-            rowClass: 'single-line',            
+            settingDescription: __('Define the default fee that will be deducted from the store commission. If you want to charge different fees for each payment method, set the amounts here for gateways, bank transfers, or cash on delivery.', 'multivendorx'),
+            rowClass: 'single-line',
             single: true,
             desc: __('', 'multivendorx'),
             nestedFields
-        },      
+        },
     ],
 };

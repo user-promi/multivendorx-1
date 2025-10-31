@@ -12,9 +12,7 @@ const Financial = ({ id }: { id: string | null }) => {
                                     Recent Payouts
                                 </div>
                             </div>
-
                         </div>
-
 
                         <div className="store-owner-details">
                             <div className="profile">

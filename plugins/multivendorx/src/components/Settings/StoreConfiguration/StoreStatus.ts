@@ -12,6 +12,13 @@ export default {
     submitUrl: 'settings',
     modal: [
         {
+            key: 'separator_content',
+            type: 'section',
+            hint: __("What's included along with store commission", 'multivendorx'),
+            desc: __('The store application or reapproval request was denied due to incomplete, inaccurate, or non-compliant information. The vendor may update details and reapply for consideration. <br> Recommended Status Flow:
+Pending Approval → Under Review → Active → (Suspended / Declined / Deactivated)', 'multivendorx')
+        },
+        {
             key: 'store_compliance_management',
             type: 'payment-tabs',
             modal: [
