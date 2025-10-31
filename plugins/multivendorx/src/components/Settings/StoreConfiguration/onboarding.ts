@@ -93,12 +93,16 @@ export default {
                     label: __( 'Identity verification', 'multivendorx' ),
                     desc: __( 'Requires stores to submit government-issued documents, business address verification, Know Your Customer (KYC) compliance.', 'multivendorx' ),
                     value: 'identity_verification',
+                    proSetting: true,
+                    moduleEnabled: 'identity-verification',
                 },
                 {
                     key: 'store_policies',
                     label: __( 'Store policies', 'multivendorx' ),
                     desc: __( 'Merchants can override refund rules, shipping terms, and general conditions.', 'multivendorx' ),
                     value: 'store_policies',
+                    moduleEnabled: 'store-policy',
+
                 },
             ],
             selectDeselect: true,

@@ -103,20 +103,25 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
                     ),
                 ),
                 'capability' => array( 'read_shop_orders' ),
-
             ),
-            'transactions'  => array(
-                'key'        => 'transactions',
-                'name'       => 'Transactions',
-                'slug'       => 'transactions',
-                'icon'       => 'adminlib-contact-form',
-                'capability' => array( 'read_shop_coupons', 'edit_shop_coupons', 'delete_shop_coupons' ),
-            ),
-            'withdrawls'    => array(
-                'key'        => 'withdrawls',
-                'name'       => 'Withdrawls',
-                'slug'       => 'withdrawls',
-                'icon'       => 'adminlib-contact-form',
+            'wallet'         => array(
+                'name'       => 'Wallet',
+                'slug'       => 'wallet',
+                'icon'       => 'adminlib-order',
+                'submenu'    => array(
+                    'transactions'  => array(
+                        'key'        => 'transactions',
+                        'name'       => 'Transactions',
+                        'slug'       => 'transactions',
+                        'icon'       => 'adminlib-contact-form',  
+                     ),
+                     'withdrawls'    => array(
+                        'key'        => 'withdrawls',
+                        'name'       => 'Withdrawls',
+                        'slug'       => 'withdrawls',
+                        'icon'       => 'adminlib-contact-form',              
+                    ),          
+                )
                 'capability' => array( 'read_shop_coupons', 'edit_shop_coupons' ),
             ),
             'store_support' => array(
