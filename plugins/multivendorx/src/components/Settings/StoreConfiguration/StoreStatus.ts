@@ -14,8 +14,8 @@ export default {
         {
             key: 'separator_content',
             type: 'section',
-            hint: __("What's included along with store commission", 'multivendorx'),
-            desc: __('The store application or reapproval request was denied due to incomplete, inaccurate, or non-compliant information. The vendor may update details and reapply for consideration. <br> ', 'multivendorx')
+            label: __("Recommended Status Flow:Pending Approval → Under Review → Active → (Suspended / Declined / Deactivated)", 'multivendorx'),
+            desc: __('The store application or reapproval request was denied due to incomplete, inaccurate, or non-compliant information. The vendor may update details and reapply for consideration.', 'multivendorx')
         },
         {
             key: 'store_compliance_management',
@@ -32,8 +32,7 @@ export default {
                         {
                             key: 'pending_description',
                             type: 'description',
-                            title: 'What pending stores can do',
-                            des: '',
+                            des: 'The store is awaiting approval. Sellers can log in to their dashboard but cannot configure settings, add products, or begin selling until approved.',
                         },
                         {
                             key: 'pending_permissions',
@@ -44,6 +43,11 @@ export default {
                                 { desc: __('Add or edit products', 'multivendorx'), check: false },
                                 { desc: __('Process or fulfill orders', 'multivendorx'), check: false },
                             ],
+                        },
+                        {
+                            key: 'pending_description',
+                            label: 'What pending stores can do',
+                            des: 'What pending stores can do',
                         },
                     ],
                 },
@@ -56,10 +60,9 @@ export default {
                     desc: 'The application was rejected during onboarding. Sellers can log in to view the rejection reason and reapply with updated information but cannot sell or modify store details.',
                     formFields: [
                         {
-                            key: 'denied_description',
+                            key: 'pending_description',
                             type: 'description',
-                            title: 'What denied stores can do',
-                            des: '',
+                            des: 'The store is awaiting approval. Sellers can log in to their dashboard but cannot configure settings, add products, or begin selling until approved.',
                         },
                         {
                             key: 'denied_permissions',
@@ -72,6 +75,11 @@ export default {
                                 { desc: __('Sell or fulfill orders', 'multivendorx'), check: false },
                             ],
                         },
+                        {
+                            key: 'pending_description',
+                            label: 'What pending stores can do',
+                            des: 'What pending stores can do',
+                        },
                     ],
                 },
                 {
@@ -83,10 +91,9 @@ export default {
                     desc: 'The store is temporarily restricted while the platform reviews compliance or documentation. Selling and payouts may be paused until the review is complete.',
                     formFields: [
                         {
-                            key: 'review_description',
+                            key: 'pending_description',
                             type: 'description',
-                            title: 'About under review stores',
-                            des: '',
+                            des: 'The store is awaiting approval. Sellers can log in to their dashboard but cannot configure settings, add products, or begin selling until approved.',
                         },
                         {
                             key: 'review_allow_selling',
@@ -106,6 +113,11 @@ export default {
                             title: 'Restrict product uploads during review',
                             des: 'Prevent stores from listing new products during review. Existing listings stay active unless selling is disabled.',
                         },
+                        {
+                            key: 'pending_description',
+                            label: 'What pending stores can do',
+                            des: 'What pending stores can do',
+                        },
                     ],
                 },
                 {
@@ -117,10 +129,9 @@ export default {
                     desc: 'The store’s selling privileges are revoked due to policy or compliance violations. Listings are hidden or disabled, and payments are held until reactivation or successful appeal.',
                     formFields: [
                         {
-                            key: 'suspended_description',
+                            key: 'pending_description',
                             type: 'description',
-                            title: 'About suspended stores',
-                            des: '',
+                            des: 'The store is awaiting approval. Sellers can log in to their dashboard but cannot configure settings, add products, or begin selling until approved.',
                         },
                         {
                             key: 'suspended_show_products',
@@ -134,6 +145,11 @@ export default {
                             title: 'Freeze all pending payments',
                             des: 'Holds all earnings during suspension. Funds are released only after reinstatement or successful appeal.',
                         },
+                        {
+                            key: 'pending_description',
+                            label: 'What pending stores can do',
+                            des: 'What pending stores can do',
+                        },
                     ],
                 },
                 {
@@ -145,10 +161,9 @@ export default {
                     desc: 'Stores are fully approved and operational. They can manage products, orders, and payouts without restrictions.',
                     formFields: [
                         {
-                            key: 'active_description',
+                            key: 'pending_description',
                             type: 'description',
-                            title: 'About active stores',
-                            des: '',
+                            des: 'The store is awaiting approval. Sellers can log in to their dashboard but cannot configure settings, add products, or begin selling until approved.',
                         },
                         {
                             key: 'active_dashboard_access',
@@ -157,6 +172,11 @@ export default {
                             des: 'Control what dashboard sections and tools are available to active stores.',
                             link: '#',
                             hideCheckbox: true,
+                        },
+                        {
+                            key: 'pending_description',
+                            label: 'What pending stores can do',
+                            des: 'What pending stores can do',
                         },
                     ],
                 },
@@ -169,10 +189,9 @@ export default {
                     desc: 'Stores that are permanently closed, either by admin action or upon store owner’s request.Once deactivated, the store loses all access to dashboard, storefront, and selling privileges.',
                     formFields: [
                         {
-                            key: 'deactivated_description',
+                            key: 'pending_description',
                             type: 'description',
-                            title: 'What deactivated stores can do',
-                            des: '  ',
+                            des: 'The store is awaiting approval. Sellers can log in to their dashboard but cannot configure settings, add products, or begin selling until approved.',
                         },
                         {
                             key: 'denied_permissions',
@@ -184,6 +203,11 @@ export default {
                                 { desc: __('Submit reapplication or appeal', 'multivendorx'), check: false },
                                 { desc: __('Retain any marketplace privileges', 'multivendorx'), check: false },
                             ],
+                        },
+                        {
+                            key: 'pending_description',
+                            label: 'What pending stores can do',
+                            des: 'What pending stores can do',
                         },
                     ],
                 },
