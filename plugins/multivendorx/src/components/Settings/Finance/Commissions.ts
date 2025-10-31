@@ -328,8 +328,7 @@ export default {
             label: 'Facilitator fee',
             single: true,
             settingDescription: __('Set the facilitator fee as a fixed amount, a percentage, or both, deducted from the store commission. Store-wise fees can also be configured from the store edit page.', 'multivendorx'),
-            desc: __('Please make sure to assign a facilitator for your store from the <a href="#">Facilitator Settings</a> section before configuring fees.','multivendorx'),
-            nestedFields: [
+            desc: __('<ul><li>Admins can assign:</li><ul><li><strong>A global facilitator</strong> for the entire marketplace from <a href="#">here</a>.</li><li><strong>Individual facilitators</strong> for specific stores from the <em>Facilitator Settings</em> section or the <em>Store Edit</em> page.</li></ul><li><strong>Example:</strong> If a store earns $1000 commission and the facilitator fee is set to $50 + 5%, then the total facilitator fee = $50 + (5% of 1000) = $100, so the store receives $900 after facilitator deductions.</li></ul>', 'multivendorx'), nestedFields: [
                 {
                     key: 'facilitator_fixed',
                     type: 'number',
