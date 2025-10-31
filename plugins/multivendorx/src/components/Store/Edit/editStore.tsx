@@ -12,6 +12,7 @@ import StoreRegistration from './storeRegistrationForm';
 import Facilitator from './facilitator';
 import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
+import Overview from './overview';
 
 const statusOptions = [
     { label: "Active", value: "active" },
@@ -27,6 +28,7 @@ const EditStore = () => {
     const [actionMenu, setActionMenu] = useState(false);
     const [logoMenu, setLogoMenu] = useState(false);
     const wrapperRef = useRef<HTMLDivElement>(null);
+    const [editInfo, setEditInfo] = useState(false);
 
     // Close dropdown on click outside
     useEffect(() => {
@@ -110,6 +112,16 @@ const EditStore = () => {
         {
             type: 'file',
             content: {
+                id: 'overview',
+                name: 'overview',
+                desc: 'Store Info',
+                hideTabHeader: true,
+                icon: 'adminlib-credit-card',
+            },
+        },
+        {
+            type: 'file',
+            content: {
                 id: 'store',
                 name: 'General',
                 desc: 'Store Info',
@@ -181,6 +193,8 @@ const EditStore = () => {
 
     const getForm = (tabId: string) => {
         switch (tabId) {
+            case 'overview':
+                return <Overview id={editId} />;
             case 'store':
                 return <StoreSettings id={editId} />;
             case 'staff':
@@ -201,15 +215,16 @@ const EditStore = () => {
     };
     return (
         <>
-            <Tabs
-                tabData={tabData}
-                currentTab={currentTab}
-                getForm={getForm}
-                prepareUrl={prepareUrl}
-                appLocalizer={appLocalizer}
-                tabTitleSection={
-                    <>
-                        {/* <div className="tab-title">
+            <div className="store-page">
+                <Tabs
+                    tabData={tabData}
+                    currentTab={currentTab}
+                    getForm={getForm}
+                    prepareUrl={prepareUrl}
+                    appLocalizer={appLocalizer}
+                    tabTitleSection={
+                        <>
+                            {/* <div className="tab-title">
                             <div className="content">
                                 <div className="tab-wrapper">
                                     <div className="title"><i className="adminlib-storefront"></i>{data.name}</div>
@@ -241,256 +256,223 @@ const EditStore = () => {
                                 </div>
                             </div>
                         </div> */}
-                        <div className="general-wrapper">
-                            <div className="store-header">
-                                <div className="banner"
-                                    style={{
-                                        background: `url("${data.banner}")`,
-                                    }}>
-                                    <div className="edit-section">
-                                        <div className="edit-wrapper">
-                                            <span className="admin-btn btn-purple" onClick={(e) => {
-                                                e.stopPropagation();
-                                                setBannerMenu(true);
-                                                setLogoMenu(false);
-                                            }}><i className="adminlib-create"></i>Edit banner image</span>
-                                            {bannerMenu && (
-                                                <ul>
-                                                    {/* <li><i className="adminlib-cloud-upload"></i> Upload</li> */}
-                                                    <li
-                                                        onClick={(e) => {
-                                                            e.stopPropagation();
-                                                            runUploader('banner');
-                                                            setBannerMenu(false);
-                                                        }}>
-                                                        <i className="adminlib-cloud-upload"
-                                                        ></i> Upload
-                                                    </li>
-                                                    <li className="delete"
-                                                        onClick={(e) => {
-                                                            e.stopPropagation();
-                                                            const updated = { ...data, banner: "" };
-                                                            setData(updated);
-                                                            autoSave(updated);
-                                                            setBannerMenu(false);
-                                                        }}>
-                                                        <i className="adminlib-delete"></i> Delete</li>
-                                                </ul>
-                                            )}
+                            <div className="general-wrapper">
+                                <div className="store-header">
+                                    <div className="banner"
+                                        style={{
+                                            background: `url("${data.banner}")`,
+                                        }}>
+                                        <div className="edit-section">
+                                            <div className="edit-wrapper">
+                                                <span className="admin-btn btn-purple" onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    setBannerMenu(true);
+                                                    setLogoMenu(false);
+                                                }}><i className="adminlib-create"></i>Edit banner image</span>
+                                                {bannerMenu && (
+                                                    <ul>
+                                                        {/* <li><i className="adminlib-cloud-upload"></i> Upload</li> */}
+                                                        <li
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                runUploader('banner');
+                                                                setBannerMenu(false);
+                                                            }}>
+                                                            <i className="adminlib-cloud-upload"
+                                                            ></i> Upload
+                                                        </li>
+                                                        <li className="delete"
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                const updated = { ...data, banner: "" };
+                                                                setData(updated);
+                                                                autoSave(updated);
+                                                                setBannerMenu(false);
+                                                            }}>
+                                                            <i className="adminlib-delete"></i> Delete</li>
+                                                    </ul>
+                                                )}
+                                            </div>
                                         </div>
-                                    </div>
 
-                                </div>
-                                <div className="details-wrapper">
-                                    <div className="left-section">
-                                        <div className="store-logo">
-                                            <img src={data.image} alt="" />
-                                            <div className="edit-section">
-                                                <div className="edit-wrapper">
-                                                    <span className="admin-btn btn-purple" onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        setLogoMenu((prev) => !prev);
-                                                        setBannerMenu(false);
-                                                    }}><i className="adminlib-create"></i></span>
-                                                    {logoMenu && (
-                                                        <ul>
-                                                            <li
-                                                                onClick={(e) => {
-                                                                    e.stopPropagation();
-                                                                    runUploader('image');
-                                                                    setLogoMenu(false);
-                                                                }}>
-                                                                <i className="adminlib-cloud-upload"
-                                                                ></i> Upload
-                                                            </li>
-                                                            <li className="delete"
-                                                                onClick={(e) => {
-                                                                    e.stopPropagation();
-                                                                    const updated = { ...data, image: "" };
-                                                                    setData(updated);
-                                                                    autoSave(updated);
-                                                                    setLogoMenu(false);
-                                                                }}>
-                                                                <i className="adminlib-delete"></i> Delete</li>
-                                                        </ul>
+                                    </div>
+                                    <div className="details-wrapper">
+                                        <div className="left-section">
+                                            <div className="store-logo">
+                                                <img src={data.image} alt="" />
+                                                <div className="edit-section">
+                                                    <div className="edit-wrapper">
+                                                        <span className="admin-btn btn-purple" onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            setLogoMenu((prev) => !prev);
+                                                            setBannerMenu(false);
+                                                        }}><i className="adminlib-create"></i></span>
+                                                        {logoMenu && (
+                                                            <ul>
+                                                                <li
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation();
+                                                                        runUploader('image');
+                                                                        setLogoMenu(false);
+                                                                    }}>
+                                                                    <i className="adminlib-cloud-upload"
+                                                                    ></i> Upload
+                                                                </li>
+                                                                <li className="delete"
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation();
+                                                                        const updated = { ...data, image: "" };
+                                                                        setData(updated);
+                                                                        autoSave(updated);
+                                                                        setLogoMenu(false);
+                                                                    }}>
+                                                                    <i className="adminlib-delete"></i> Delete</li>
+                                                            </ul>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="details">
+                                                <div className="name">
+                                                    <div className="store-name">
+                                                        {editInfo ? (
+                                                            <input
+                                                                type="text"
+                                                                value={data.name || ""}
+                                                                onChange={(e) => setData({ ...data, name: e.target.value })}
+                                                                className="basic-input"
+                                                                autoFocus
+                                                            />
+                                                        ) : (
+                                                            data.name
+                                                        )}
+
+                                                        <span
+                                                            className={`edit-icon admin-badge ${editInfo ? 'green' : 'blue'}`}
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+
+                                                                if (editInfo) {
+                                                                    // Save
+                                                                    autoSave({ name: data.name, description: data.description });
+                                                                }
+
+                                                                setEditInfo(!editInfo);
+                                                            }}
+                                                        >
+                                                            <i className={editInfo ? "adminlib-check" : "adminlib-create"}></i>
+                                                            {editInfo ? "" : ""}
+                                                        </span>
+                                                    </div>
+
+                                                    <span className="admin-badge green">{data.status} <i className="adminlib-creat"></i></span>
+                                                </div>
+
+                                                <div className="des">
+                                                    {editInfo ? (
+                                                        <textarea
+                                                            value={data.description || ""}
+                                                            onChange={(e) => setData({ ...data, description: e.target.value })}
+                                                            className="textarea-input"
+                                                        />
+                                                    ) : (
+                                                        data.description
                                                     )}
+                                                    <span
+                                                        className={`edit-icon admin-badge ${editInfo ? 'green' : 'blue'}`}
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+
+                                                            if (editInfo) {
+                                                                // Save
+                                                                autoSave({ name: data.name, description: data.description });
+                                                            }
+
+                                                            setEditInfo(!editInfo);
+                                                        }}
+                                                    >
+                                                        <i className={editInfo ? "adminlib-check" : "adminlib-create"}></i>
+                                                        {editInfo ? "" : ""}
+                                                    </span>
                                                 </div>
+
+
+
+                                                {/* <ul className="contact-details">
+                                                    <li>
+                                                        <i className="adminlib-mail"></i>
+                                                        {data.email}
+                                                    </li>
+                                                    <li>
+                                                        <i className="adminlib-form-phone"></i>
+                                                        {data.phone}
+                                                    </li>
+                                                    <li>
+                                                        <i className="adminlib-star review"></i>
+                                                        4.2 <span>(26 review)</span>
+                                                    </li>
+                                                </ul> */}
                                             </div>
                                         </div>
-                                        <div className="details">
-                                            <div className="name">{data.name} <span className="adminlib-create edit-icon"></span> <span className="admin-badge green">{data.status}</span></div>
-                                            <div className="des">{data.description} </div>
+                                        <div className="right-section">
 
-                                            <ul className="contact-details">
-                                                <li>
-                                                    <i className="adminlib-mail"></i>
-                                                    {data.email}
-                                                </li>
-                                                <li>
-                                                    <i className="adminlib-form-phone"></i>
-                                                    {data.phone}
-                                                </li>
-                                                <li>
-                                                    <i className="adminlib-star review"></i>
-                                                    4.2 <span>(26 review)</span>
-                                                </li>
-                                            </ul>
+                                            <div className="tag-wrapper">
+                                                <div className="admin-badge green"><i className="adminlib-store-inventory"></i></div>
+                                                <div className="admin-badge blue"><i className="adminlib-geo-my-wp"></i></div>
+                                                <div className="admin-badge yellow"><i className="adminlib-staff-manager"></i></div>
+                                            </div>
+                                            {/* <div className="status-wrapper">
+                                                <span>Status: </span>
+                                                <SelectInput
+                                                    name="status"
+                                                    value={data.status}
+                                                    options={statusOptions}
+                                                    type="single-select"
+                                                    onChange={(newValue: any) => {
+                                                        if (!newValue || Array.isArray(newValue)) return;
+
+                                                        const updated = { ...data, status: newValue.value };
+                                                        setData(updated);
+                                                        autoSave(updated);
+                                                    }}
+                                                />
+                                            </div> */}
                                         </div>
                                     </div>
-                                    <div className="right-section">
-                                        <span>Status: </span>
-                                        <SelectInput
-                                            name="status"
-                                            value={data.status}
-                                            options={statusOptions}
-                                            type="single-select"
-                                            onChange={(newValue: any) => {
-                                                if (!newValue || Array.isArray(newValue)) return;
-
-                                                const updated = { ...data, status: newValue.value };
-                                                setData(updated);
-                                                autoSave(updated);
-                                            }}
-                                        />
-                                        <div className="admin-badge green"><i className="adminlib-store-inventory"></i></div>
-                                        <div className="admin-badge blue"><i className="adminlib-geo-my-wp"></i></div>
-                                        <div className="admin-badge yellow"><i className="adminlib-staff-manager"></i></div>
-                                    </div>
                                 </div>
+
                             </div>
+                        </>
+                    }
+                    Link={Link}
+                    settingName={'Store'}
+                    hideTitle={true}
+                    hideBreadcrumb={true}
+                // action={
 
-                        </div>
-                        <div className="general-wrapper">
-                            <div className="container-wrapper">
-                                <div className="card-wrapper w-65">
-                                    <div className="card-content">
-                                        <div className="analytics-container">
-                                            {overviewData.map((item, idx) => (
-                                                <div key={idx} className="analytics-item">
-                                                    <div className="analytics-icon">
-                                                        <i className={item.icon}></i>
-                                                    </div>
-                                                    <div className="details">
-                                                        <div className="number">{item.number}</div>
-                                                        <div className="text">{item.text}</div>
-                                                    </div>
-                                                </div>
-                                            ))}
-
-                                        </div>
-                                    </div>
-                                    <div className="card-content">
-                                        <div className="card-title">Next Opening Date</div>
-
-                                        <div className="store-owner-details">
-                                            <div className="profile">
-                                                <div className="avater">
-                                                    <span className="adminlib-calendar"></span>
-                                                </div>
-                                                <div className="details">
-                                                    <div className="name">Repeats every two weeks</div>
-                                                    <div className="des">Lorem ipsum dolor sit amet.</div>
-                                                </div>
-                                            </div>
-                                            <div className="right-details">
-                                                <div className="price">$356 .35</div>
-                                                <div className="div">Lorem, ipsum dolor.</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="card-content">
-                                        <div className="card-title">Next Opening Date</div>
-
-                                        <div className="store-owner-details">
-                                            <div className="profile">
-                                                <div className="avater">
-                                                    <span className="adminlib-calendar"></span>
-                                                </div>
-                                                <div className="details">
-                                                    <div className="name">Repeats every two weeks</div>
-                                                    <div className="des">Lorem ipsum dolor sit amet.</div>
-                                                </div>
-                                            </div>
-                                            <div className="right-details">
-                                                <div className="price">$356 .35</div>
-                                                <div className="div">Lorem, ipsum dolor.</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="card-wrapper w-35">
-                                    <div className="card-content">
-                                        <div className="card-title">Store Owner</div>
-
-                                        <div className="store-owner-details owner">
-                                            <div className="profile">
-                                                <div className="avater">
-                                                    <span>JD</span>
-                                                </div>
-                                                <div className="details">
-                                                    <div className="name">John Doe</div>
-                                                    <div className="des">Owner</div>
-                                                </div>
-                                            </div>
-                                            <ul className="contact-details">
-                                                <li>
-                                                    <i className="adminlib-mail"></i>john@example.com
-                                                </li>
-                                                <li>
-                                                    <i className="adminlib-form-phone"></i> +1 (555) 987-6543
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <div className="card-content">
-                                        <div className="card-title">Repeating</div>
-
-                                        <div className="store-owner-details">
-                                            <div className="profile">
-                                                <div className="avater">
-                                                    <span className="adminlib-form-recaptcha"></span>
-                                                </div>
-                                                <div className="details">
-                                                    <div className="name">Repeats every two weeks</div>
-                                                    <div className="des">Monday @ 9.00 - 11.00 Am</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </>
-                }
-                Link={Link}
-                settingName={'Store'}
-                hideTitle={true}
-                hideBreadcrumb={true}
-                action={
-
-                    <>
-                        <div className="edit-wrapper" ref={wrapperRef}>
-                            <span className="" onClick={(e) => {
-                                e.stopPropagation();
-                                setActionMenu((prev) => !prev);
-                                setLogoMenu(false);
-                                setBannerMenu(false);
-                            }}><i className="adminlib-more-vertical"></i></span>
-                            {actionMenu && (
-                                <ul>
-                                    {data.status == 'active' &&
-                                        <li>
-                                            <a href={`${appLocalizer.site_url}/store/${data.slug}`}><i className="adminlib-eye"></i> View Store</a>
-                                        </li>
-                                    }
-                                    <li><i className="adminlib-mail"></i> Send Mail</li>
-                                </ul>
-                            )}
-                        </div>
-                    </>
-                }
-            />
-
+                //     <>
+                //         <div className="edit-wrapper" ref={wrapperRef}>
+                //             <span className="" onClick={(e) => {
+                //                 e.stopPropagation();
+                //                 setActionMenu((prev) => !prev);
+                //                 setLogoMenu(false);
+                //                 setBannerMenu(false);
+                //             }}><i className="adminlib-more-vertical"></i></span>
+                //             {actionMenu && (
+                //                 <ul>
+                //                     {data.status == 'active' &&
+                //                         <li>
+                //                             <a href={`${appLocalizer.site_url}/store/${data.slug}`}><i className="adminlib-eye"></i> View Store</a>
+                //                         </li>
+                //                     }
+                //                     <li><i className="adminlib-mail"></i> Send Mail</li>
+                //                 </ul>
+                //             )}
+                //         </div>
+                //     </>
+                // }
+                />
+            </div>
         </>
     );
 };

@@ -47,6 +47,7 @@ const StoreSettings = ({ id }: { id: string | null }) => {
     const appLocalizer = (window as any).appLocalizer;
     const { modules } = useModules.getState();
 
+
     const [addressData, setAddressData] = useState({
         location_address: '',
         location_lat: '',
@@ -713,10 +714,10 @@ const StoreSettings = ({ id }: { id: string | null }) => {
     return (
         <>
             <SuccessNotice message={successMsg} />
-            <div className="container-wrapper bg-">
+            <div className="container-wrapper ">
                 <div className="card-wrapper w-65">
 
-                    <div className="card-content">
+                    {/* <div className="card-content">
                         <div className="card-title">
                             Basic Details
                         </div>
@@ -756,7 +757,34 @@ const StoreSettings = ({ id }: { id: string | null }) => {
                                 />
                             </div>
                         </div>
+                    </div> */}
+                    <div className="card-content">
+                        <div className="card-title">
+                            Status
+                        </div>
+
+                        {errorMsg && <p className="error-text" style={{ color: "red", marginTop: "5px" }}>{errorMsg}</p>}
+
+                        {/* Updated Email Section */}
+                        <div className="form-group-wrapper">
+                            <div className="form-group">
+                                <label htmlFor="store-email">Status</label>
+                                <select
+                                    // value={data.status}
+                                    // onChange={(e) => setData({ ...data, status: e.target.value })}
+                                    className="basic-select"
+                                >
+                                    <option value="Approved">Approved</option>
+                                    <option value="Pending">Pending</option>
+                                    <option value="Disapproved">Disapproved</option>
+                                </select>
+                                <div className="settings-metabox-description">
+                                    Add multiple email addresses. Press Enter or click Add after each email.
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
 
                     <div className="card-content">
                         <div className="card-title">
@@ -953,7 +981,7 @@ const StoreSettings = ({ id }: { id: string | null }) => {
                         {/* Facebook */}
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <label htmlFor="facebook"><i className="adminlib-supervised-user-circle"></i> Facebook</label>
+                                <label htmlFor="facebook"><i className="adminlib-facebook-fill"></i> Facebook</label>
                                 <BasicInput
                                     name="facebook"
                                     wrapperClass="setting-form-input"
@@ -967,7 +995,7 @@ const StoreSettings = ({ id }: { id: string | null }) => {
                         {/* x */}
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <label htmlFor="twitter"><i className="adminlib-supervised-user-circle"></i> X</label>
+                                <label htmlFor="twitter"><i className="adminlib-twitter"></i> X</label>
                                 <BasicInput
                                     name="twitter"
                                     wrapperClass="setting-form-input"
@@ -981,7 +1009,7 @@ const StoreSettings = ({ id }: { id: string | null }) => {
                         {/* LinkedIn */}
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <label htmlFor="linkedin"><i className="adminlib-supervised-user-circle"></i> LinkedIn</label>
+                                <label htmlFor="linkedin"><i className="adminlib-linkedin-border"></i> LinkedIn</label>
                                 <BasicInput
                                     name="linkedin"
                                     wrapperClass="setting-form-input"
@@ -995,7 +1023,7 @@ const StoreSettings = ({ id }: { id: string | null }) => {
                         {/* YouTube */}
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <label htmlFor="youtube"><i className="adminlib-supervised-user-circle"></i> YouTube</label>
+                                <label htmlFor="youtube"><i className="adminlib-youtube"></i> YouTube</label>
                                 <BasicInput
                                     name="youtube"
                                     wrapperClass="setting-form-input"

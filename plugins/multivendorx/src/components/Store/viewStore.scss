@@ -1,5 +1,20 @@
 @use '../config.scss' as *;
 
+// add main css(delete)
+.store-page {
+    .title-section {
+        background: transparent;
+        padding: 0;
+
+        .tabs-wrapper {
+            background: transparent;
+        }
+    }
+}
+
+// add main css(delete) end
+
+
 .store-header {
     background: #fff;
     border-radius: 0.313rem;
@@ -10,7 +25,7 @@
         border-top-left-radius: 0.313rem;
         border-top-right-radius: 0.313rem;
         position: relative;
-        background-position: center;
+        background-position: center !important;
 
         &:before {
             position: absolute;
@@ -37,11 +52,12 @@
         .left-section {
             display: flex;
             gap: 1rem;
+            width: 80%;
 
             .store-logo {
-                width: 5rem;
+                width: 3.5rem;
                 padding: 0.5rem;
-                height: 5rem;
+                height: 3.5rem;
                 box-shadow: 0 0.125rem 0.5rem 0 rgb(66 62 78 / 12%);
                 margin-top: -4rem;
                 background: #fff;
@@ -77,19 +93,69 @@
                     align-items: center;
                     font-size: 1.625rem;
                     font-weight: 500;
+
+                    .store-name {
+                        position: relative;
+                        padding-right: 2rem;
+                    }
                 }
 
                 .des {
                     padding: 0.5rem 0;
                     font-size: 1rem;
+                    position: relative;
+                    
+
+                    .edit-icon{
+                        top: 0.2rem;
+                    }
+                }
+
+                .edit-icon {
+                    position: absolute;
+                    right: 0;
+                    top: -0.2rem;
+                    opacity: 0;
+                    transition: all 0.4s ease;
+                }
+
+                .store-name:hover,
+                .des:hover {
+                    .edit-icon {
+                        opacity: 1;
+                        cursor: pointer;
+                    }
                 }
             }
         }
 
         .right-section {
-            display: flex;
-            gap: 0.5rem 0.5rem;
-            align-items: center;
+            .tag-wrapper {
+                display: flex;
+                gap: 0.625rem;
+                justify-content: end;
+
+                .admin-badge {
+                    padding: 0.5rem;
+                    font-size: 1.25rem;
+                }
+            }
+
+            .status-wrapper {
+                display: flex;
+                gap: 0.5rem;
+                padding-top: 0.625rem;
+                align-items: center;
+
+                label {
+                    font-size: 1.063rem;
+                    color: #000;
+                }
+
+                .select-wrapper {
+                    width: 9rem;
+                }
+            }
         }
     }
 }
@@ -105,6 +171,8 @@
             color: #000000ed;
             font-weight: 500;
             padding-bottom: 0.313rem;
+            position: relative;
+            padding-right: 0.625rem;
         }
     }
 }
@@ -129,20 +197,24 @@
 .store-owner-details {
     display: flex;
     justify-content: space-between;
-    .contact-details{
+
+    .contact-details {
         flex-direction: column;
         gap: 0.5rem;
     }
-    .right-details{
+
+    .right-details {
         text-align: right;
-        .price{
+
+        .price {
             font-size: 1.313rem;
             font-weight: 600;
             line-height: 1.5rem;
             padding-bottom: 0.125rem;
         }
     }
-    &.owner{
+
+    &.owner {
         flex-direction: column;
     }
 }
