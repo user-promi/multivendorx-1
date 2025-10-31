@@ -690,6 +690,21 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             }
             return;
         }
+
+        // Handle adding store owners
+        if (!empty($data['store_owners']) || !empty($data['primary_owner'])) {
+            StoreUtil::add_store_users([
+                'store_id' => $data['id'],
+                'users'    => (array)$data['store_owners'],
+                'role_id'  => 'store_owner',
+            ]);
+
+            StoreUtil::set_primary_owner($data['primary_owner'], $data['id']);
+    
+            unset($data['store_owners']);
+            unset($data['primary_owner']);
+            // return rest_ensure_response([ 'success' => true ]);
+        }
         
         // Update basic store info
         $store->set('name',        $data['name'] ?? $store->get('name'));
@@ -708,19 +723,6 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
         }
     
         $store->save();
-
-        // Handle adding store owners
-        if (!empty($data['store_owners']) || !empty($data['primary_owner'])) {
-            StoreUtil::add_store_users([
-                'store_id' => $data['id'],
-                'users'    => (array)$data['store_owners'],
-                'role_id'  => 'store_owner',
-            ]);
-
-            StoreUtil::set_primary_owner($data['primary_owner'], $data['id']);
-    
-            return rest_ensure_response([ 'success' => true ]);
-        }
     
         return rest_ensure_response([
             'success' => true,

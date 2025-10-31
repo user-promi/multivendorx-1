@@ -313,8 +313,8 @@ export default {
                     type: 'select',
                     label: 'and select who pays it,',
                     options: [
-                        { value: 'less_than', label: 'Customer' },
-                        { value: 'more_than', label: 'Store' },
+                        { value: 'customer', label: 'Customer' },
+                        { value: 'store', label: 'Store' },
                     ],
                     // postText: "",
                 },
