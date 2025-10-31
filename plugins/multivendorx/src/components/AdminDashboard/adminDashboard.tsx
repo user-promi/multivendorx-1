@@ -449,13 +449,29 @@ const AdminDashboard = () => {
                 </div>
                 <div className="cards-wrapper plugin">
 
-                  {/* CatalogX */}
-                  <div className="cards">
-                    <div className="header">
-                      <img src={catalogx} alt="" />
-                      <div className="tag">
-                        <span className="admin-badge green">Free</span>
-                        {!pluginStatus['woocommerce-catalog-enquiry'] ? (
+                  {/* Show PRO versions if free plugins are installed, otherwise show free versions */}
+                  {pluginStatus['woocommerce-catalog-enquiry'] ? (
+                    // CatalogX PRO
+                    <div className="cards">
+                      <div className="header">
+                        <img src={catalogx} alt="" />
+                        <div className="tag">
+                          <span className="admin-badge blue">Pro</span>
+                          <a href="https://multivendorx.com/pricing/" target="_blank">
+                            Get Pro
+                          </a>
+                        </div>
+                      </div>
+                      <h3>CatalogX Pro</h3>
+                      <p>Advanced product catalog with enhanced enquiry features and premium templates</p>
+                    </div>
+                  ) : (
+                    // CatalogX Free
+                    <div className="cards">
+                      <div className="header">
+                        <img src={catalogx} alt="" />
+                        <div className="tag">
+                          <span className="admin-badge green">Free</span>
                           <a
                             href="#"
                             onClick={(e) => {
@@ -471,24 +487,35 @@ const AdminDashboard = () => {
                           >
                             {installing === 'woocommerce-catalog-enquiry' ? 'Installing...' : 'Install'}
                           </a>
-                        ) : (
-                          <span style={{ color: '#00a32a', fontWeight: 'bold' }}>
-                            Installed
-                          </span>
-                        )}
+                        </div>
                       </div>
+                      <h3>CatalogX</h3>
+                      <p>Turn your store into a product catalog with enquiry-based sales</p>
                     </div>
-                    <h3>CatalogX</h3>
-                    <p>Turn your store into a product catalog with enquiry-based sales</p>
-                  </div>
+                  )}
 
-                  {/* Notifima */}
-                  <div className="cards">
-                    <div className="header">
-                      <img src={notifima} alt="" />
-                      <div className="tag">
-                        <span className="admin-badge green">Free</span>
-                        {!pluginStatus['woocommerce-product-stock-alert'] ? (
+                  {pluginStatus['woocommerce-product-stock-alert'] ? (
+                    // Notifima PRO
+                    <div className="cards">
+                      <div className="header">
+                        <img src={notifima} alt="" />
+                        <div className="tag">
+                          <span className="admin-badge blue">Pro</span>
+                          <a href="https://multivendorx.com/pricing/" target="_blank">
+                            Get Pro
+                          </a>
+                        </div>
+                      </div>
+                      <h3>Notifima Pro</h3>
+                      <p>Advanced stock alerts, wishlist features, and premium notification system</p>
+                    </div>
+                  ) : (
+                    // Notifima Free
+                    <div className="cards">
+                      <div className="header">
+                        <img src={notifima} alt="" />
+                        <div className="tag">
+                          <span className="admin-badge green">Free</span>
                           <a
                             href="#"
                             onClick={(e) => {
@@ -504,16 +531,12 @@ const AdminDashboard = () => {
                           >
                             {installing === 'woocommerce-product-stock-alert' ? 'Installing...' : 'Install'}
                           </a>
-                        ) : (
-                          <span style={{ color: '#00a32a', fontWeight: 'bold' }}>
-                            Installed
-                          </span>
-                        )}
+                        </div>
                       </div>
+                      <h3>Notifima</h3>
+                      <p>Advanced stock alerts and wishlist features for WooCommerce</p>
                     </div>
-                    <h3>Notifima</h3>
-                    <p>Advanced stock alerts and wishlist features for WooCommerce</p>
-                  </div>
+                  )}
 
                 </div>
               </div>
