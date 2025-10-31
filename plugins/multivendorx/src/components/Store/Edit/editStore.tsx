@@ -29,18 +29,13 @@ const EditStore = () => {
     const [logoMenu, setLogoMenu] = useState(false);
     const wrapperRef = useRef<HTMLDivElement>(null);
 
-    const bannerRef = useRef(null);
-    const logoRef = useRef(null);
-    const actionRef = useRef(null);
-
     // Close dropdown on click outside
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
-            if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
-                setBannerMenu(false);
-                setActionMenu(false);
-                setLogoMenu(false);
-            }
+            if ((event.target as HTMLElement).closest('.edit-section')) return;
+            setBannerMenu(false);
+            setActionMenu(false);
+            setLogoMenu(false);
         };
 
         document.addEventListener("mousedown", handleClickOutside);
@@ -59,6 +54,7 @@ const EditStore = () => {
     const currentTab = hashParams.get('subtab') || 'store';
 
     const prepareUrl = (tabId: string) => `?page=multivendorx#&tab=stores&edit/${editId}/&subtab=${tabId}`;
+
     const autoSave = (updatedData: { [key: string]: string }) => {
         axios({
             method: 'PUT',
@@ -85,6 +81,25 @@ const EditStore = () => {
                 setData(data);
             })
     }, [editId]);
+
+    const runUploader = (key: string) => {
+        const frame = (window as any).wp.media({
+            title: 'Select or Upload Image',
+            button: { text: 'Use this image' },
+            multiple: false,
+        });
+
+        frame.on('select', function () {
+            const attachment = frame.state().get('selection').first().toJSON();
+
+            const updated = { ...data, [key]: attachment.url };
+            setData(updated);
+            autoSave(updated);
+        });
+
+        frame.open();
+    };
+
 
     const tabData = [
         {
@@ -235,18 +250,38 @@ const EditStore = () => {
                         </div> */}
                         <div className="general-wrapper">
                             <div className="store-header">
-                                <div className="banner" style={{ background: `url("https://cus.dualcube.com/mvx1/wp-content/uploads/2025/10/images-4.jpg")` }}>
+                                <div className="banner" 
+                                    style={{
+                                        background: `url("${data.banner}")`,
+                                    }}>
                                     <div className="edit-section">
                                         <div className="edit-wrapper">
                                             <span className="admin-btn btn-purple" onClick={(e) => {
                                                 e.stopPropagation();
-                                                setBannerMenu((prev) => !prev);
+                                                setBannerMenu(true);
                                                 setLogoMenu(false);
                                             }}><i className="adminlib-create"></i>Edit banner image</span>
                                             {bannerMenu && (
                                                 <ul>
-                                                    <li><i className="adminlib-cloud-upload"></i> Upload</li>
-                                                    <li className="delete"><i className="adminlib-delete"></i> Delete</li>
+                                                    {/* <li><i className="adminlib-cloud-upload"></i> Upload</li> */}
+                                                    <li
+                                                        onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        runUploader('banner');
+                                                        setBannerMenu(false);
+                                                        }}>
+                                                        <i className="adminlib-cloud-upload"
+                                                        ></i> Upload
+                                                    </li>
+                                                    <li className="delete"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            const updated = { ...data, banner: "" };
+                                                            setData(updated);
+                                                            autoSave(updated);
+                                                            setBannerMenu(false);
+                                                            }}>
+                                                        <i className="adminlib-delete"></i> Delete</li>
                                                 </ul>
                                             )}
                                         </div>
@@ -256,7 +291,7 @@ const EditStore = () => {
                                 <div className="details-wrapper">
                                     <div className="left-section">
                                         <div className="store-logo">
-                                            <img src="https://cus.dualcube.com/mvx1/wp-content/uploads/2025/10/download-1-1.png" alt="" />
+                                            <img src={data.image} alt="" />
                                             <div className="edit-section">
                                                 <div className="edit-wrapper">
                                                     <span className="admin-btn btn-purple" onClick={(e) => {
@@ -266,25 +301,41 @@ const EditStore = () => {
                                                     }}><i className="adminlib-create"></i></span>
                                                     {logoMenu && (
                                                         <ul>
-                                                            <li><i className="adminlib-cloud-upload"></i> Upload</li>
-                                                            <li className="delete"><i className="adminlib-delete"></i> Delete</li>
+                                                            <li
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation();
+                                                                    runUploader('image');
+                                                                    setLogoMenu(false);
+                                                                    }}>
+                                                                <i className="adminlib-cloud-upload"
+                                                                ></i> Upload
+                                                            </li>
+                                                            <li className="delete"
+                                                                onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                const updated = { ...data, image: "" };
+                                                                setData(updated);
+                                                                autoSave(updated);
+                                                                setLogoMenu(false);
+                                                                }}>
+                                                            <i className="adminlib-delete"></i> Delete</li>
                                                         </ul>
                                                     )}
                                                 </div>
                                             </div>
                                         </div>
                                         <div className="details">
-                                            <div className="name">Reebok <span className="admin-badge green">Active</span></div>
-                                            <div className="des">Lorem ipsum dolor sit amet consectetur adipisicing elit. Incidunt, quas.</div>
+                                            <div className="name">{data.name} <span className="admin-badge green">{data.status}</span></div>
+                                            <div className="des">{data.description}</div>
 
                                             <ul className="contact-details">
                                                 <li>
                                                     <i className="adminlib-mail"></i>
-                                                    reebok@test.com
+                                                    {data.email}
                                                 </li>
                                                 <li>
                                                     <i className="adminlib-form-phone"></i>
-                                                    9874563120
+                                                    {data.phone}
                                                 </li>
                                                 <li>
                                                     <i className="adminlib-star review"></i>

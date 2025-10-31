@@ -21,13 +21,13 @@ export default {
                     label: 'Pending approval',
                     connected: true,
                     enableOption: true,
-                    desc: 'Stores awaiting approval',
+                    desc: ' The store is awaiting approval. Sellers can log in to their dashboard but cannot configure settings, add products, or begin selling until approved.',
                     formFields: [
                         {
                             key: 'pending_description',
                             type: 'description',
                             title: 'What pending stores can do',
-                            des: ' The store is awaiting approval. Sellers can log in to their dashboard but cannot configure settings, add products, or begin selling until approved.',
+                            des: '',
                         },
                         {
                             key: 'pending_permissions',
@@ -47,13 +47,13 @@ export default {
                     label: 'Declined',
                     connected: true,
                     enableOption: true,
-                    desc: 'Applications refused during onboarding',
+                    desc: 'The application was rejected during onboarding. Sellers can log in to view the rejection reason and reapply with updated information but cannot sell or modify store details.',
                     formFields: [
                         {
                             key: 'denied_description',
                             type: 'description',
                             title: 'What denied stores can do',
-                            des: 'The application was rejected during onboarding. Sellers can log in to view the rejection reason and reapply with updated information but cannot sell or modify store details.',
+                            des: '',
                         },
                         {
                             key: 'denied_permissions',
@@ -74,19 +74,19 @@ export default {
                     label: 'Under Review',
                     connected: true,
                     enableOption: true,
-                    desc: 'Stores being checked for compliance',
+                    desc: 'The store is temporarily restricted while the platform reviews compliance or documentation. Selling and payouts may be paused until the review is complete.',
                     formFields: [
                         {
                             key: 'review_description',
                             type: 'description',
                             title: 'About under review stores',
-                            des: 'SThe store is temporarily restricted while the platform reviews compliance or documentation. Selling and payouts may be paused until the review is complete.',
+                            des: '',
                         },
                         {
                             key: 'review_allow_selling',
                             type: 'setup',
-                            title: 'Selling during review',
-                            des: 'Let stores continue selling and fulfilling orders while under review. Turn off to pause all sales activities.',
+                            title: 'Pause selling  during review',
+                            des: 'Prevent stores from selling and fulfilling orders while under review.',
                         },
                         {
                             key: 'review_withhold_payments',
@@ -97,7 +97,7 @@ export default {
                         {
                             key: 'review_restrict_listings',
                             type: 'setup',
-                            title: 'Restrict adding new products',
+                            title: 'Restrict product uploads during review',
                             des: 'Prevent stores from listing new products during review. Existing listings stay active unless selling is disabled.',
                         },
                     ],
@@ -108,31 +108,25 @@ export default {
                     label: 'Suspended',
                     connected: true,
                     enableOption: true,
-                    desc: 'Stores with revoked selling privileges',
+                    desc: 'The store’s selling privileges are revoked due to policy or compliance violations. Listings are hidden or disabled, and payments are held until reactivation or successful appeal.',
                     formFields: [
                         {
                             key: 'suspended_description',
                             type: 'description',
                             title: 'About suspended stores',
-                            des: 'The store’s selling privileges are revoked due to policy or compliance violations. Listings are hidden or disabled, and payments are held until reactivation or successful appeal.',
+                            des: '',
                         },
                         {
                             key: 'suspended_show_products',
                             type: 'setup',
-                            title: 'Show products on storefront',
-                            des: 'Let customers view products but disable purchases. A message will indicate that the store is temporarily closed.',
-                        },
-                        {
-                            key: 'suspended_allow_login',
-                            type: 'setup',
-                            title: 'Dashboard access for store owners',
-                            des: 'Store owners can log in to see suspension reasons and contact support, but cannot sell or modify listings.',
+                            title: 'Keep store visible but disable checkout',
+                            des: 'Displays the store and its products but prevents customers from placing new orders.Freeze all pending payments',
                         },
                         {
                             key: 'suspended_hold_payments',
                             type: 'setup',
-                            title: 'Hold all payments',
-                            des: 'Keep earnings on hold during suspension. Funds release only after reactivation or a successful appeal.',
+                            title: 'Freeze all pending payments',
+                            des: 'Holds all earnings during suspension. Funds are released only after reinstatement or successful appeal.',
                         },
                     ],
                 },
@@ -142,13 +136,13 @@ export default {
                     label: 'Active',
                     connected: true,
                     enableOption: true,
-                    desc: 'Stores in good standing',
+                    desc: 'Stores are fully approved and operational. They can manage products, orders, and payouts without restrictions.',
                     formFields: [
                         {
                             key: 'active_description',
                             type: 'description',
                             title: 'About active stores',
-                            des: 'The store is in good standing. Sellers can list products, fulfill orders, and receive payments without restriction.',
+                            des: '',
                         },
                         {
                             key: 'active_dashboard_access',
@@ -166,13 +160,13 @@ export default {
                     label: 'Deactivated',
                     connected: true,
                     enableOption: true,
-                    desc: 'Permanently disabled stores',
+                    desc: 'Stores that are permanently closed, either by admin action or upon store owner’s request.Once deactivated, the store loses all access to dashboard, storefront, and selling privileges.',
                     formFields: [
                         {
                             key: 'deactivated_description',
                             type: 'description',
                             title: 'What deactivated stores can do',
-                            des: 'The store is permanently disabled following serious or repeated violations. No further selling or account access is permitted.',
+                            des: '  ',
                         },
                         {
                             key: 'denied_permissions',
