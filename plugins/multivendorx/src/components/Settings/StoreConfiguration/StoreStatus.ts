@@ -160,13 +160,13 @@ export default {
                     label: 'Deactivated',
                     connected: true,
                     enableOption: true,
-                    desc: 'Permanently disabled stores',
+                    desc: 'Stores that are permanently closed, either by admin action or upon store owner’s request.Once deactivated, the store loses all access to dashboard, storefront, and selling privileges.',
                     formFields: [
                         {
                             key: 'deactivated_description',
                             type: 'description',
                             title: 'What deactivated stores can do',
-                            des: 'The store is permanently disabled following serious or repeated violations. No further selling or account access is permitted.',
+                            des: '',
                         },
                         {
                             key: 'denied_permissions',
