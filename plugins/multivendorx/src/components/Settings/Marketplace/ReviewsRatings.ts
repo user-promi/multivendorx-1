@@ -41,10 +41,11 @@ export default {
                 'Define rating parameters such as packaging, delivery, behaviour, policies, etc.',
                 'multivendorx'
             ),
+            requiredEnable: true,
             defaultValues: [
-                { value: "Product quality",},
-                { value: "Customer service",},
-                { value: "Delivery experience",},
+                { value: "Product quality", required:true ,deleteDisabled: true},
+                { value: "Customer service", required:true ,deleteDisabled: true},
+                { value: "Delivery experience",required:true,deleteDisabled: true },
                 { value: "Value for money", },
                 { value: "Overall experience",},
             ],

@@ -23,6 +23,7 @@ export default {
                     key: 'tax_identification_documents',
                     label: __('Tax Identification Documents (TINs/VAT/GST/EIN/SSN/ITIN. etc.)', 'mvx-pro'),
                     value: 'tax_identification_documents',
+                    edit:true
                 },
                 {
                     key: 'business_registration',

@@ -156,6 +156,16 @@ class Modules {
                         'module_file'=> MultiVendorX()->plugin_path . 'modules/DistanceShipping/Module.php',
                         'module_class' => 'MultiVendorX\DistanceShipping\Module',
                     ),
+                    // 'announcement'=> array(
+                    //     'id'=> 'announcement',
+                    //     'module_file'=> MultiVendorX()->plugin_path . 'modules/Announcement/Module.php',
+                    //     'module_class' => 'MultiVendorX\Announcement\Module',
+                    // ),
+                    // 'knowladgebase'=> array(
+                    //     'id'=> 'knowladgebase',
+                    //     'module_file'=> MultiVendorX()->plugin_path . 'modules/Knowledgebase/Module.php',
+                    //     'module_class' => 'MultiVendorX\Knowledgebase\Module',
+                    // ),
 				)
             );
         }
