@@ -286,14 +286,13 @@ export default {
         {
             key: 'marketplace_fees',
             type: 'nested',
-            label: __('Marketplace fee', 'multivendorx'),
+            label: __('Marketplace fees', 'multivendorx'),
             single: true,
             settingDescription: __(
                 'Define a fee to cover platform costs. Apply a fixed, percentage, or combined rate. Choose whether it’s paid by the customer at checkout or deducted from the store’s commission.',
                 'multivendorx'
             ),
-           desc: __('<ul><li><strong>Example 1 – Customer Pays the Fee:</strong> Fee: $2 + 10%. Product price: $100 → Customer pays $112. Store receives $100 (before commission or deductions).</li><li><strong>Example 2 – Store Pays the Fee:</strong> Fee: $2 + 10%. Product price: $100 → Customer pays $100. Store payout after deduction: $88.</li></ul>','multivendorx'),
-           nestedFields: [
+           desc: __('<p>This fee can either be <strong>added to the customer’s order total</strong> or <strong>deducted from each store’s commission</strong>, depending on your selection.</p><ul><li><strong>Example 1 – Customer Pays the Fee:</strong> Suppose a customer places an order from Store A ($100) and Store B ($200), with a 2% marketplace fee. The fee is calculated on the total order amount ($300) and added at checkout. The customer pays <strong>$306</strong>, while both stores receive their full commissions.</li><li><strong>Example 2 – Store Pays the Fee:</strong> The fee is applied individually to each store’s earnings. For <strong>Store A</strong> (80% commission), normal earning is $80. After applying 2% fee ($2), payout is <strong>$78</strong>. For <strong>Store B</strong>, earning is $160, and after a $4 fee, payout is <strong>$156</strong>.</li></ul>', 'multivendorx'),nestedFields: [
                 {
                     key: 'commission_fixed',
                     type: 'text',
@@ -311,10 +310,10 @@ export default {
                 {
                     key: 'rule',
                     type: 'select',
-                    label: 'and select who pays it,',
+                    label: 'to be',
                     options: [
-                        { value: 'customer', label: 'Customer' },
-                        { value: 'store', label: 'Store' },
+                        { value: 'customer', label: 'added to the customer’s order total' },
+                        { value: 'store', label: 'deducted from the store’s commission' },
                     ],
                     // postText: "",
                 },
@@ -325,7 +324,7 @@ export default {
         {
             key: 'facilitator_fees',
             type: 'nested',
-            label: 'Facilitator fee',
+            label: 'Facilitator fees',
             single: true,
             settingDescription: __('Set the facilitator fee as a fixed amount, a percentage, or both, deducted from the store commission. Store-wise fees can also be configured from the store edit page.', 'multivendorx'),
             desc: __('<ul><li>Admins can assign:</li><ul><li><strong>A global facilitator</strong> for the entire marketplace from <a href="#">here</a>.</li><li><strong>Individual facilitators</strong> for specific stores from the <em>Facilitator Settings</em> section or the <em>Store Edit</em> page.</li></ul><li><strong>Example:</strong> If a store earns $1000 commission and the facilitator fee is set to $50 + 5%, then the total facilitator fee = $50 + (5% of 1000) = $100, so the store receives $900 after facilitator deductions.</li></ul>', 'multivendorx'), nestedFields: [
