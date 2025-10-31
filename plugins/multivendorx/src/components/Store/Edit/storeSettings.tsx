@@ -758,40 +758,12 @@ const StoreSettings = ({ id }: { id: string | null }) => {
                             </div>
                         </div>
                     </div> */}
-                    <div className="card-content">
-                        <div className="card-title">
-                            Status
-                        </div>
-
-                        {errorMsg && <p className="error-text" style={{ color: "red", marginTop: "5px" }}>{errorMsg}</p>}
-
-                        {/* Updated Email Section */}
-                        <div className="form-group-wrapper">
-                            <div className="form-group">
-                                <label htmlFor="store-email">Status</label>
-                                <select
-                                    // value={data.status}
-                                    // onChange={(e) => setData({ ...data, status: e.target.value })}
-                                    className="basic-select"
-                                >
-                                    <option value="Approved">Approved</option>
-                                    <option value="Pending">Pending</option>
-                                    <option value="Disapproved">Disapproved</option>
-                                </select>
-                                <div className="settings-metabox-description">
-                                    Add multiple email addresses. Press Enter or click Add after each email.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
 
                     <div className="card-content">
                         <div className="card-title">
                             Contact Information
                         </div>
 
-                        {errorMsg && <p className="error-text" style={{ color: "red", marginTop: "5px" }}>{errorMsg}</p>}
 
                         {/* Updated Email Section */}
                         <div className="form-group-wrapper">
@@ -827,6 +799,7 @@ const StoreSettings = ({ id }: { id: string | null }) => {
                                         </button>
                                     </div>
                                 </div>
+                                {errorMsg && <p className="invalid-feedback">{errorMsg}</p>}
                                 <div className="settings-metabox-description">
                                     Add multiple email addresses. Press Enter or click Add after each email.
                                 </div>
@@ -976,6 +949,32 @@ const StoreSettings = ({ id }: { id: string | null }) => {
                 </div>
 
                 <div className="card-wrapper w-35">
+                    <div className="card-content">
+                        <div className="card-title">
+                            Status
+                        </div>
+
+                        {/* Updated Email Section */}
+                        <div className="form-group-wrapper">
+                            <div className="form-group">
+                                <label htmlFor="store-email">Status</label>
+                                <select
+                                    // value={data.status}
+                                    // onChange={(e) => setData({ ...data, status: e.target.value })}
+                                    className="basic-select"
+                                >
+                                    <option value="Approved">Approved</option>
+                                    <option value="Pending">Pending</option>
+                                    <option value="Disapproved">Disapproved</option>
+                                </select>
+                                <div className="settings-metabox-description">
+                                    Add multiple email addresses. Press Enter or click Add after each email.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
                     <div className="card-content">
                         <div className="card-title">Social information</div>
                         {/* Facebook */}

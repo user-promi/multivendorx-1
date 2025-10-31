@@ -76,8 +76,6 @@ export default {
             placeholder: __('', 'multivendorx'),
             moduleEnabled: 'identity-verification',
             proSetting: true,
-            // iconEnable: true,
-            // descEnable: true,
             requiredEnable: true,
             name: 'abuse_report_reasons',
             defaultValues: [
@@ -85,7 +83,6 @@ export default {
                 { value: "Driving licence", locked: true, iconClass: "adminlib-clock", description: "Order is being processed",tag:"Primary",required: true },
             ],
             iconOptions: ["adminlib-check", "adminlib-clock", "adminlib-cart", "adminlib-store"], // dropdown options
-            proSetting: false,
             maxItems: 10,
             allowDuplicates: false
         },

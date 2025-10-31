@@ -84,7 +84,7 @@
         }
 
         i {
-            font-size: 1.25rem;
+            font-size: 1.063rem;
             padding: 0.5rem;
             border-radius: 50%;
             transition: all 0.4s ease;
@@ -224,7 +224,10 @@
             flex-direction: column;
             width: 100%;
             margin-bottom: 1rem;
-
+            .button-wrapper{
+                display: flex;
+                justify-content: start;
+            }
             label {
                 font-size: .875rem;
                 font-weight: 500;
