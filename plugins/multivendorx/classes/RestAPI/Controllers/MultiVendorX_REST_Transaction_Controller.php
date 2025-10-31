@@ -457,6 +457,7 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
         }
 
         if($withdraw ){
+
             if ($threshold_amount < $amount) {
                 MultiVendorX()->payments->processor->process_payment( $store_id, $amount);
                 $store->delete_meta('request_withdrawal_amount');
@@ -467,13 +468,36 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
                 'id'      => $store_id,
             ]);
         }
+        
+        // Check if a withdrawal request already exists
+        $existing_request = $store->get_meta('request_withdrawal_amount');
+        if ( $existing_request ) {
+            return rest_ensure_response([
+                'success' => false,
+                'message' => __( 'You already have a pending withdrawal request.', 'multivendorx' ),
+                'id'      => $store_id,
+            ]);
+        }
 
-        $store->update_meta('request_withdrawal_amount', $amount);
+        $withdraw_type = MultiVendorX()->setting->get_setting('withdraw_type', 'manual');
+
+        $should_update_meta = true;
+
+        if ($withdraw_type === 'automatic' && $threshold_amount < $amount) {
+            $process = MultiVendorX()->payments->processor->process_payment($store_id, $amount);
+            $should_update_meta = ($process === false);
+        }
+
+        if ($should_update_meta) {
+            $store->update_meta('request_withdrawal_amount', $amount);
+        }
         
         return rest_ensure_response([
             'success' => true,
             'id'      => $store_id,
+            'message' => __( 'Withdrawal request submitted successfully.', 'multivendorx' ),
         ]);
+
     }
 
 }

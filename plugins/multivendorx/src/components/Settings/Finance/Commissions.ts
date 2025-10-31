@@ -288,7 +288,7 @@ export default {
         {
             key: 'marketplace_fees',
             type: 'nested',
-            label: __('Marketplace fee', 'multivendorx'),
+            label: __('Marketplace fees', 'multivendorx'),
             single: true,
             settingDescription: __(
                 'Define a fee to cover platform costs. Apply a fixed, percentage, or combined rate. Choose whether it’s paid by the customer at checkout or deducted from the store’s commission.',
@@ -313,10 +313,10 @@ export default {
                 {
                     key: 'rule',
                     type: 'select',
-                    label: 'and select who pays it,',
+                    label: 'to be',
                     options: [
-                        { value: 'customer', label: 'Customer' },
-                        { value: 'store', label: 'Store' },
+                        { value: 'customer', label: 'added to the customer’s order total' },
+                        { value: 'store', label: 'deducted from the store’s commission' },
                     ],
                     // postText: "",
                 },
@@ -327,7 +327,7 @@ export default {
         {
             key: 'facilitator_fees',
             type: 'nested',
-            label: 'Facilitator fee',
+            label: 'Facilitator fees',
             single: true,
             settingDescription: __('Set the facilitator fee as a fixed amount, a percentage, or both, deducted from the store commission. Store-wise fees can also be configured from the store edit page.', 'multivendorx'),
             desc: __('<ul><li>Admins can assign:</li><ul><li><strong>A global facilitator</strong> for the entire marketplace from <a href="#">here</a>.</li><li><strong>Individual facilitators</strong> for specific stores from the <em>Facilitator Settings</em> section or the <em>Store Edit</em> page.</li></ul><li><strong>Example:</strong> If a store earns $1000 commission and the facilitator fee is set to $50 + 5%, then the total facilitator fee = $50 + (5% of 1000) = $100, so the store receives $900 after facilitator deductions.</li></ul>', 'multivendorx'), nestedFields: [

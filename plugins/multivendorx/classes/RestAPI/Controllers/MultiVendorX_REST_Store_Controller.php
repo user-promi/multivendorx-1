@@ -422,15 +422,15 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             return null;
         }
 
-        // Get user's first and last name
-        $first_name = get_user_meta( $user_id, 'first_name', true );
-        $last_name = get_user_meta( $user_id, 'last_name', true );
+        // // Get user's first and last name
+        // $first_name = get_user_meta( $user_id, 'first_name', true );
+        // $last_name = get_user_meta( $user_id, 'last_name', true );
         
-        // Combine names, fallback to display name if empty
-        $full_name = trim( $first_name . ' ' . $last_name );
-        if ( empty( $full_name ) ) {
+        // // Combine names, fallback to display name if empty
+        // $full_name = trim( $first_name . ' ' . $last_name );
+        // if ( empty( $full_name ) ) {
             $full_name = $user->display_name;
-        }
+        // }
 
         return [
             'id'    => $user_id,

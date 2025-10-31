@@ -152,14 +152,14 @@ class Admin {
                     'name'   => __( 'Status & Tools', 'multivendorx' ),
                     'subtab' => 'system-status',
                 ),
-                'announcement' => array(
-                    'name'   => __( 'Announcement', 'multivendorx' ),
-                    'subtab' => '',
-                ),
-                'knowledgebase' => array(
-                    'name'   => __( 'Knowledgebase', 'multivendorx' ),
-                    'subtab' => '',
-                ),
+                // 'announcement' => array(
+                //     'name'   => __( 'Announcement', 'multivendorx' ),
+                //     'subtab' => '',
+                // ),
+                // 'knowledgebase' => array(
+                //     'name'   => __( 'Knowledgebase', 'multivendorx' ),
+                //     'subtab' => '',
+                // ),
 
                 // 'blogs' => array(
                 //     'name'   => __( 'Blogs', 'multivendorx' ),

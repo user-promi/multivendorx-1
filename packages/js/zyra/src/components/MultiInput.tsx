@@ -12,6 +12,8 @@ interface MultiStringItem {
   description?: string;
   required?: boolean;
   tag?: string;
+  editDisabled?: boolean;
+  deleteDisabled?: boolean;
 }
 
 interface MultiStringProps {
@@ -232,17 +234,22 @@ const MultiInput: React.FC<MultiInputProps> = (props) => {
               {!item.locked && (
                 <div className="right-section">
                   <ul>
-                    <li className=" hover" onClick={() => handleEdit(index)}>
-                      <i className="adminlib-create"></i>
-                      <span>Edit</span>
-                    </li>
-                    <li className=" hover" onClick={() => handleDelete(index)}>
-                      <i className="adminlib-delete"></i>
-                      <span>Delete</span>
-                    </li>
+                    {!item.editDisabled && (
+                      <li className="hover" onClick={() => handleEdit(index)}>
+                        <i className="adminlib-create"></i>
+                        <span>Edit</span>
+                      </li>
+                    )}
+                    {!item.deleteDisabled && (
+                      <li className="hover" onClick={() => handleDelete(index)}>
+                        <i className="adminlib-delete"></i>
+                        <span>Delete</span>
+                      </li>
+                    )}
                   </ul>
                 </div>
               )}
+
             </div>
 
             {editIndex === index && (
@@ -337,7 +344,7 @@ const MultiInput: React.FC<MultiInputProps> = (props) => {
           <i className="adminlib-pro-tag"></i>Pro
         </span>
       )}
-      
+
       {description && (
         <p
           className={`${descClass} settings-metabox-description`}

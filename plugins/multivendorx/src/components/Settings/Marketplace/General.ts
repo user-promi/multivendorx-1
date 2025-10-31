@@ -54,12 +54,12 @@ export default {
             type: 'text',
             label: __( 'Store URL', 'multivendorx' ),
             desc: __(
-                'Set a custom slug for your store URL. For example, in the URL: https://yourdomain.com/[store]/store-slug, the default word [store] can be replaced with any slug you define here.',
+                'Set a custom slug for your store URL. For example, in the URL: https://yourdomain.com/store/sample-store, the default word [store] can be replaced with any slug you define here.',
                 'multivendorx'
             ),
             size:"8rem",
             preText: appLocalizer.site_url + '/',
-            postText: "/sample-store-slug/",
+            postText: "/sample-store/",
         },
         {
             key: 'section',

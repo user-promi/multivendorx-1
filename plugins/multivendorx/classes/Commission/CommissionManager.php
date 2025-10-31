@@ -45,15 +45,28 @@ class CommissionManager {
 
             $commission_type = MultiVendorX()->setting->get_setting( 'commission_type' );
 
-            $commission_amount = $shipping_amount = $tax_amount = $shipping_tax_amount = $facilitator_fee = $gateway_fee = 0;
-            $commission_rates = [];
+            $commission_amount = $shipping_amount = $tax_amount = $shipping_tax_amount = $gateway_fee = 0;
+            $commission_rates = $rules_array = [];
 
             if ( $commission_type == 'per_item' ) {
+                $rules_array = [
+                    'commission_amount' => [
+                        'type'   => $commission_type,
+                        'rules'  => []
+                    ] 
+                ];
+
                 foreach ( $order->get_items() as $item_id => $item ) {
                     $product_id = $item['variation_id'] ? $item['variation_id'] : $item['product_id'];
 
                     $item_commission = $this->get_item_commission( $product_id, $item_id, $item, $order, $vendor );
                     $commission_values = $this->get_commission_amount( $product_id, $item, $vendor );
+
+                    $rules_array['commission_amount']['rules'][ $product_id ] = [
+                            'fixed' => $commission_values['commission_fixed'],
+                            'percentage' => $commission_values['commission_val'],
+                    ];
+
                     $commission_rate = [
                         'mode' => 'store',
                         'type' => 'per_item',
@@ -67,6 +80,13 @@ class CommissionManager {
                 }
             } elseif ( $commission_type == 'store_order' ) {
                 $commission_per_store_order = MultiVendorX()->setting->get_setting( 'commission_per_store_order' );
+                $rules_array = [
+                    'commission_amount' => [
+                        'type'  => $commission_type,
+                        'rules' => []
+                    ]
+                ];
+
                 foreach ($commission_per_store_order as $row) {
                     if (array_key_exists('rule_type', $row)) {  
                         switch ($row['rule_type']) {
@@ -78,6 +98,13 @@ class CommissionManager {
                                     ($row['rule'] === 'more_than' && $order_total >  (float) $row['order_value'])
                                 ) {
                                     $commission_amount = $order_total * ((float) $row['commission_percentage'] / 100) + (float) $row['commission_fixed'];
+                                    $rules_array['commission_amount']['rules'][] = [
+                                        'rule_type'  => $row['rule_type'],
+                                        'rule'  => $row['rule'],
+                                        'value'  => $row['order_value'],
+                                        'fixed' => $row['commission_fixed'],
+                                        'percentage' => $row['commission_percentage']
+                                    ];
                                     break 2;
                                 }
                                 break;
@@ -105,7 +132,7 @@ class CommissionManager {
                                     }
     
                                     $base_value = $row['rule_type'] === 'price'
-                                        ? (float) wc_get_product($item['variation_id'] ?: $item['product_id'])->get_price()
+                                        ? (float) $row['product_price']
                                         : (float) $row['product_qty'];
     
                                     $compare_value = $row['rule_type'] === 'price'
@@ -117,6 +144,15 @@ class CommissionManager {
                                         ($row['rule'] === 'more_than' && $compare_value >  $base_value)
                                     ) {
                                         $commission_amount += $line_total * ((float) $row['commission_percentage'] / 100) + (float) $row['commission_fixed'];
+                                        $rules_array['commission_amount']['rules'][] = [
+                                            $item['product_id'] => [
+                                                'rule_type'  => $row['rule_type'],
+                                                'rule'  => $row['rule'],
+                                                'value'  => $base_value,
+                                                'fixed' => $row['commission_fixed'],
+                                                'percentage' => $row['commission_percentage']
+                                            ]
+                                        ];
                                     }
                                 }
     
@@ -131,6 +167,11 @@ class CommissionManager {
                 if ($commission_amount <= 0) {
                     $default_store_order_commission = reset($commission_per_store_order);                    
                     $commission_amount = (float) $order->get_subtotal() * ((float) $default_store_order_commission['commission_percentage'] / 100) + (float) $default_store_order_commission['commission_fixed'];
+                    $rules_array['commission_amount']['rules'][] = [
+                        'rule_type'  => 'global',
+                        'fixed' => $default_store_order_commission['commission_fixed'],
+                        'percentage' => $default_store_order_commission['commission_percentage']
+                    ];
                 }
 
             }
@@ -192,6 +233,10 @@ class CommissionManager {
                 );
 
                 $gateway_fee = (float) $commission_amount * ((float) $percentage_fee / 100) + (float) $fixed_fee;
+                $rules_array['gateway_fee'] = [
+                    'fixed'      => (float) $fixed_fee,
+                    'percentage' => (float) $percentage_fee,
+                ];
             }
 
             // in commission total add facilitator_fee and gateway fee.
@@ -206,16 +251,16 @@ class CommissionManager {
                 'total_order_amount'    => $order->get_total(),
                 'commission_amount'     => $commission_amount,
                 'gateway_fee'           => $gateway_fee ?? 0,
-                // 'marketplace_fees'      => $marketplace_fees ?? 0,
                 'shipping_amount'       => $shipping_amount,
                 'tax_amount'            => $tax_amount,
                 'shipping_tax_amount'   => $shipping_tax_amount,
                 'discount_amount'       => $order->get_discount_total(),
                 'commission_total'      => $commission_total,
                 'currency'              => get_woocommerce_currency(),
-                'status'                => $order->get_status() == 'cancelled' ? 'cancelled' : 'paid'
+                'status'                => $order->get_status() == 'cancelled' ? 'cancelled' : 'paid',
+                'rules_applied'         => serialize( $rules_array )
             ];
-            $format = [ "%d", "%d", "%d", "%f", "%f", "%f", "%f", "%f", "%f", "%f", "%f", "%s", "%s" ];
+            $format = [ "%d", "%d", "%d", "%f", "%f", "%f", "%f", "%f", "%f", "%f", "%f", "%s", "%s", "%s" ];
             
             $filtered = apply_filters(
                 'multivendorx_before_commission_insert',
@@ -225,8 +270,9 @@ class CommissionManager {
                 ],
                 $vendor, $commission_amount
             );
-
+            
             $data   = $filtered['data'];
+            file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":data:  : " . var_export($data, true) . "\n", FILE_APPEND);
             $format = $filtered['format'];
 
             if ( ! $commission_id ) {
