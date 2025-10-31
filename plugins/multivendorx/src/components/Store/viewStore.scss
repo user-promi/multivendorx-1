@@ -1,16 +1,41 @@
 @use '../config.scss' as *;
 
+// add main css(delete)
+.store-page {
+    .title-section {
+        background: transparent;
+        padding: 0;
+
+        .tabs-wrapper {
+            background: transparent;
+        }
+    }
+}
+
+// add main css(delete) end
+
+
 .store-header {
     background: #fff;
     border-radius: 0.313rem;
 
     .banner {
         height: 25rem;
-        background-size: cover;
-        background-repeat: no-repeat;
+        background-repeat: no-repeat !important;
         border-top-left-radius: 0.313rem;
         border-top-right-radius: 0.313rem;
         position: relative;
+        background-position: center !important;
+
+        &:before {
+            position: absolute;
+            content: "";
+            background: #3838381c;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
     }
 
     .edit-section {
@@ -27,11 +52,12 @@
         .left-section {
             display: flex;
             gap: 1rem;
+            width: 80%;
 
             .store-logo {
-                width: 5rem;
+                width: 3.5rem;
                 padding: 0.5rem;
-                height: 5rem;
+                height: 3.5rem;
                 box-shadow: 0 0.125rem 0.5rem 0 rgb(66 62 78 / 12%);
                 margin-top: -4rem;
                 background: #fff;
@@ -67,39 +93,148 @@
                     align-items: center;
                     font-size: 1.625rem;
                     font-weight: 500;
+
+                    .store-name {
+                        position: relative;
+                        padding-right: 2rem;
+                    }
                 }
 
                 .des {
                     padding: 0.5rem 0;
                     font-size: 1rem;
+                    position: relative;
+                    
+
+                    .edit-icon{
+                        top: 0.2rem;
+                    }
                 }
 
-                .contact-details {
-                    display: flex;
-                    margin: 0;
-                    list-style-type: none;
-                    gap: 1rem;
+                .edit-icon {
+                    position: absolute;
+                    right: 0;
+                    top: -0.2rem;
+                    opacity: 0;
+                    transition: all 0.4s ease;
+                }
 
-                    li {
-                        font-size: 1rem;
-
-                        i {
-                            margin-right: 0.313rem;
-                            color: $theme-color
-                        }
-
-                        .review {
-                            color: rgb(231, 178, 5);
-                        }
+                .store-name:hover,
+                .des:hover {
+                    .edit-icon {
+                        opacity: 1;
+                        cursor: pointer;
                     }
                 }
             }
         }
 
         .right-section {
-            display: flex;
-            gap: 0.5rem 0.5rem;
-            align-items: center;
+            .tag-wrapper {
+                display: flex;
+                gap: 0.625rem;
+                justify-content: end;
+
+                .admin-badge {
+                    padding: 0.5rem;
+                    font-size: 1.25rem;
+                }
+            }
+
+            .status-wrapper {
+                display: flex;
+                gap: 0.5rem;
+                padding-top: 0.625rem;
+                align-items: center;
+
+                label {
+                    font-size: 1.063rem;
+                    color: #000;
+                }
+
+                .select-wrapper {
+                    width: 9rem;
+                }
+            }
+        }
+    }
+}
+
+.profile {
+    display: flex;
+    gap: 0.75rem;
+    padding-bottom: 1rem;
+
+    .details {
+        .name {
+            font-size: 1.063rem;
+            color: #000000ed;
+            font-weight: 500;
+            padding-bottom: 0.313rem;
+            position: relative;
+            padding-right: 0.625rem;
+        }
+    }
+}
+
+.avater {
+    padding: 0.5rem;
+    border-radius: 50%;
+    background: $theme-color;
+    width: 1.5rem;
+    height: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    span {
+        color: #fff;
+        font-size: 1.25rem;
+        font-weight: 600;
+    }
+}
+
+.store-owner-details {
+    display: flex;
+    justify-content: space-between;
+
+    .contact-details {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .right-details {
+        text-align: right;
+
+        .price {
+            font-size: 1.313rem;
+            font-weight: 600;
+            line-height: 1.5rem;
+            padding-bottom: 0.125rem;
+        }
+    }
+
+    &.owner {
+        flex-direction: column;
+    }
+}
+
+.contact-details {
+    display: flex;
+    margin: 0;
+    list-style-type: none;
+    gap: 1rem;
+
+    li {
+        font-size: 1rem;
+
+        i {
+            margin-right: 0.313rem;
+            color: $theme-color
+        }
+
+        .review {
+            color: rgb(231, 178, 5);
         }
     }
 }

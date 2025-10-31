@@ -5,9 +5,10 @@ namespace MultiVendorX\RestAPI\Controllers;
 use MultiVendorX\Store\StoreUtil;
 use MultiVendorX\Store\Store;
 
-defined( 'ABSPATH' ) || exit;
+defined('ABSPATH') || exit;
 
-class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
+class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller
+{
 
 
     /**
@@ -17,44 +18,48 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
      */
     protected $rest_base = 'endpoints';
 
-    public function register_routes() {
+    public function register_routes()
+    {
         register_rest_route(
             MultiVendorX()->rest_namespace,
             '/' . $this->rest_base,
             array(
-				array(
-					'methods'             => \WP_REST_Server::READABLE,
-					'callback'            => array( $this, 'get_items' ),
-					'permission_callback' => array( $this, 'get_items_permissions_check' ),
-				),
-			)
+                array(
+                    'methods' => \WP_REST_Server::READABLE,
+                    'callback' => array($this, 'get_items'),
+                    'permission_callback' => array($this, 'get_items_permissions_check'),
+                ),
+            )
         );
     }
 
-    public function get_items_permissions_check( $request ) {
-        return current_user_can( 'read' );
+    public function get_items_permissions_check($request)
+    {
+        return current_user_can('read');
     }
 
-    public function get_items( $request ) {
+    public function get_items($request)
+    {
         $endpoints = $this->all_endpoints();
-        return rest_ensure_response( $endpoints );
+        return rest_ensure_response($endpoints);
     }
 
-    public function all_endpoints() {
+    public function all_endpoints()
+    {
         // Default endpoints
         $all_endpoints = array(
-            'dashboard'     => array(
-                'name'       => 'Dashboard',
-                'icon'       => 'adminlib-module',
-                'slug'       => 'dashboard',
-                'submenu'    => array(),
-                'capability' => array( 'edit_products' ),
+            'dashboard' => array(
+                'name' => 'Dashboard',
+                'icon' => 'adminlib-module',
+                'slug' => 'dashboard',
+                'submenu' => array(),
+                'capability' => array('edit_products'),
             ),
-            'products'      => array(
-                'name'            => 'Products',
-                'slug'            => 'products',
-                'icon'            => 'adminlib-single-product',
-                'submenu'         => array(),
+            'products' => array(
+                'name' => 'Products',
+                'slug' => 'products',
+                'icon' => 'adminlib-single-product',
+                'submenu' => array(),
                 /*
                 'submenu' => array(
                     array(
@@ -69,126 +74,125 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
                         'capability' => ['read_shop_orders', 'edit_shop_orders', 'delete_shop_orders']
                     ),
                 ),*/
-                'capability'      => array( 'manage_products' ),
-                'capability-edit' => array( 'manage_products' ),
+                'capability' => array('manage_products'),
+                'capability-edit' => array('manage_products'),
             ),
-            'coupons'       => array(
-                'name'       => 'Coupons',
-                'slug'       => 'coupons',
-                'icon'       => 'adminlib-contact-form',
-                'capability' => array( 'read_shop_coupons' ),
+            'coupons' => array(
+                'name' => 'Coupons',
+                'slug' => 'coupons',
+                'icon' => 'adminlib-contact-form',
+                'capability' => array('read_shop_coupons'),
             ),
-            'sales'         => array(
-                'name'       => 'Sales',
-                'slug'       => 'sales',
-                'icon'       => 'adminlib-order',
-                'submenu'    => array(
+            'sales' => array(
+                'name' => 'Sales',
+                'slug' => 'sales',
+                'icon' => 'adminlib-order',
+                'submenu' => array(
                     array(
-                        'key'        => 'orders',
-                        'name'       => 'Orders',
-                        'slug'       => 'orders',
-                        'capability' => array( 'read_shop_orders', 'edit_shop_orders', 'delete_shop_orders' ),
+                        'key' => 'orders',
+                        'name' => 'Orders',
+                        'slug' => 'orders',
+                        'capability' => array('read_shop_orders', 'edit_shop_orders', 'delete_shop_orders'),
                     ),
                     array(
-                        'key'        => 'refund',
-                        'name'       => 'Refund',
-                        'slug'       => 'refund',
-                        'capability' => array( 'read_shop_coupons', 'edit_shop_coupons' ),
+                        'key' => 'refund',
+                        'name' => 'Refund',
+                        'slug' => 'refund',
+                        'capability' => array('read_shop_coupons', 'edit_shop_coupons'),
                     ),
                     array(
-                        'key'        => 'commissions',
-                        'name'       => 'Commissions',
-                        'slug'       => 'commissions',
-                        'capability' => array( 'read_shop_coupons', 'edit_shop_coupons' ),
+                        'key' => 'commissions',
+                        'name' => 'Commissions',
+                        'slug' => 'commissions',
+                        'capability' => array('read_shop_coupons', 'edit_shop_coupons'),
                     ),
                 ),
-                'capability' => array( 'read_shop_orders' ),
+                'capability' => array('read_shop_orders'),
+
             ),
-            'wallet'         => array(
-                'name'       => 'Wallet',
-                'slug'       => 'wallet',
-                'icon'       => 'adminlib-order',
-                'submenu'    => array(
-                    'transactions'  => array(
-                        'key'        => 'transactions',
-                        'name'       => 'Transactions',
-                        'slug'       => 'transactions',
-                        'icon'       => 'adminlib-contact-form',  
-                     ),
-                     'withdrawls'    => array(
-                        'key'        => 'withdrawls',
-                        'name'       => 'Withdrawls',
-                        'slug'       => 'withdrawls',
-                        'icon'       => 'adminlib-contact-form',              
-                    ),          
+            'store_wallet' => array(
+                'name' => 'Wallet',
+                'icon' => 'adminlib-customer-service',
+                'slug' => 'store-wallet',
+                'submenu' => array(
+                    'transactions' => array(
+                        'key' => 'transactions',
+                        'name' => 'Transactions',
+                        'slug' => 'transactions',
+                    ),
+                    'withdrawls' => array(
+                        'key' => 'withdrawls',
+                        'name' => 'Withdrawls',
+                        'slug' => 'withdrawls',
+                    ),
                 ),
-                'capability' => array( 'read_shop_coupons', 'edit_shop_coupons' ),
+                'capability' => array('manage_payment'),
             ),
             'store_support' => array(
-				'name'       => 'Store Support',
-				'icon'       => 'adminlib-customer-service',
-				'slug'       => 'store-support',
-				'submenu'    => array(
-					array(
-						'key'        => 'support-tickets',
-						'name'       => 'Support Tickets',
-						'slug'       => 'support-tickets',
-						'capability' => array( 'read_shop_coupons', 'edit_shop_coupons', 'delete_shop_coupons' ),
-					),
-					array(
-						'key'        => 'customer-questions',
-						'name'       => 'Customer Questions',
-						'slug'       => 'customer-questions',
-						'capability' => array( 'read_shop_coupons', 'edit_shop_coupons' ),
-					),
-					array(
-						'key'        => 'store-follower',
-						'name'       => 'Store Follower',
-						'slug'       => 'store-follower',
-						'capability' => array( 'read_products', 'edit_products', 'delete_products' ),
-					),
-				),
-				'capability' => array( 'manage_users' ),
-			),
-            'reports'       => array(
-				'name'       => 'Stats / Report',
-				'slug'       => 'reports',
-				'icon'       => 'adminlib-report',
-				'submenu'    => array(
-					array(
-						'key'        => 'overview',
-						'name'       => 'Overview',
-						'slug'       => 'overview',
-						'capability' => array( 'read_shop_coupons', 'edit_shop_coupons', 'delete_shop_coupons' ),
-					),
-				),
-				'capability' => array( 'read_shop_coupons' ),
-			),
-            'resources'     => array(
-                'name'       => 'Resources',
-                'icon'       => 'adminlib-cart',
-                'slug'       => 'resources',
-                'submenu'    => array(
+                'name' => 'Store Support',
+                'icon' => 'adminlib-customer-service',
+                'slug' => 'store-support',
+                'submenu' => array(
                     array(
-                        'key'        => 'documentation',
-                        'name'       => 'Documentation',
-                        'slug'       => 'documentation',
-                        'capability' => array( 'read_shop_coupons', 'edit_shop_coupons' ),
+                        'key' => 'support-tickets',
+                        'name' => 'Support Tickets',
+                        'slug' => 'support-tickets',
+                        'capability' => array('read_shop_coupons', 'edit_shop_coupons', 'delete_shop_coupons'),
                     ),
                     array(
-                        'key'        => 'tools',
-                        'name'       => 'Tools',
-                        'slug'       => 'tools',
-                        'capability' => array( 'read_shop_coupons', 'edit_shop_coupons', 'delete_shop_coupons' ),
+                        'key' => 'customer-questions',
+                        'name' => 'Customer Questions',
+                        'slug' => 'customer-questions',
+                        'capability' => array('read_shop_coupons', 'edit_shop_coupons'),
+                    ),
+                    array(
+                        'key' => 'store-follower',
+                        'name' => 'Store Follower',
+                        'slug' => 'store-follower',
+                        'capability' => array('read_products', 'edit_products', 'delete_products'),
                     ),
                 ),
-                'capability' => array( 'manage_users' ),
+                'capability' => array('manage_users'),
             ),
-            'settings'      => array(
-                'name'       => 'Settings',
-                'slug'       => 'settings',
-                'icon'       => 'adminlib-setting',
-                'capability' => array( 'read_products' ),
+            'reports' => array(
+                'name' => 'Stats / Report',
+                'slug' => 'reports',
+                'icon' => 'adminlib-report',
+                'submenu' => array(
+                    array(
+                        'key' => 'overview',
+                        'name' => 'Overview',
+                        'slug' => 'overview',
+                        'capability' => array('read_shop_coupons', 'edit_shop_coupons', 'delete_shop_coupons'),
+                    ),
+                ),
+                'capability' => array('read_shop_coupons'),
+            ),
+            'resources' => array(
+                'name' => 'Resources',
+                'icon' => 'adminlib-cart',
+                'slug' => 'resources',
+                'submenu' => array(
+                    array(
+                        'key' => 'documentation',
+                        'name' => 'Documentation',
+                        'slug' => 'documentation',
+                        'capability' => array('read_shop_coupons', 'edit_shop_coupons'),
+                    ),
+                    array(
+                        'key' => 'tools',
+                        'name' => 'Tools',
+                        'slug' => 'tools',
+                        'capability' => array('read_shop_coupons', 'edit_shop_coupons', 'delete_shop_coupons'),
+                    ),
+                ),
+                'capability' => array('manage_users'),
+            ),
+            'settings' => array(
+                'name' => 'Settings',
+                'slug' => 'settings',
+                'icon' => 'adminlib-setting',
+                'capability' => array('read_products'),
                 // 'submenu' => array(
                 // array(
                 // 'key'  => 'general',
@@ -261,18 +265,18 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
                 // 'capability' => ['read_products', 'edit_products', 'upload_files']
                 // ),
                 // ),
-                'capability' => array( 'manage_products' ),
+                'capability' => array('manage_products'),
             ),
         );
 
-        $saved_endpoints = MultiVendorX()->setting->get_setting( 'menu_manager' );
+        $saved_endpoints = MultiVendorX()->setting->get_setting('menu_manager');
 
-        if ( ! empty( $saved_endpoints ) && is_array( $saved_endpoints ) ) {
+        if (!empty($saved_endpoints) && is_array($saved_endpoints)) {
             $visible_endpoints = array();
-            foreach ( $saved_endpoints as $key => $endpoint ) {
-                if ( isset( $endpoint['visible'] ) && $endpoint['visible'] ) {
-                    $visible_endpoints[ $key ] = array_merge(
-                        $all_endpoints[ $key ] ?? array(),
+            foreach ($saved_endpoints as $key => $endpoint) {
+                if (isset($endpoint['visible']) && $endpoint['visible']) {
+                    $visible_endpoints[$key] = array_merge(
+                        $all_endpoints[$key] ?? array(),
                         $endpoint
                     );
                 }
@@ -378,7 +382,7 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
     //         case 'pending':
     //             $error_msg = 'Waiting for approval your store is pending';
     //             break;
-    
+
     //         case 'locked':
     //             $error_msg = 'Your account has been suspended by the admin';
     //             break;
@@ -413,27 +417,29 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
     //     );
     // }
 
-    public function call_edit_product_template(): void {
-        $subtab = get_query_var( 'subtab' );
-        $value  = get_query_var( 'value' );
+    public function call_edit_product_template(): void
+    {
+        $subtab = get_query_var('subtab');
+        $value = get_query_var('value');
 
-        if ( $subtab === 'edit' ) {
-            if ( ! empty( $value ) ) {
+        if ($subtab === 'edit') {
+            if (!empty($value)) {
                 MultiVendorX()->store->products->call_edit_product();
-            } elseif ( MultiVendorX()->setting->get_setting( 'category_pyramid_guide' ) == 'yes' || MultiVendorX()->modules->is_active( 'spmv' ) ) {
-                    MultiVendorX()->store->products->call_add_product();
+            } elseif (MultiVendorX()->setting->get_setting('category_pyramid_guide') == 'yes' || MultiVendorX()->modules->is_active('spmv')) {
+                MultiVendorX()->store->products->call_add_product();
             }
         }
     }
 
-    public function get_current_page_and_submenu(): array {
-        $current_user        = wp_get_current_user();
-        $store_ids           = StoreUtil::get_stores_from_user_id($current_user->ID);
-        $active_store        = get_user_meta($current_user->ID, 'multivendorx_active_store', true);
-        $store               = new Store($active_store);
-        $store_status        = $store->get('status');
+    public function get_current_page_and_submenu(): array
+    {
+        $current_user = wp_get_current_user();
+        $store_ids = StoreUtil::get_stores_from_user_id($current_user->ID);
+        $active_store = get_user_meta($current_user->ID, 'multivendorx_active_store', true);
+        $store = new Store($active_store);
+        $store_status = $store->get('status');
         $capability_settings = MultiVendorX()->setting->get_setting(reset($current_user->roles), []);
-        $all_endpoints       = $this->all_endpoints();
+        $all_endpoints = $this->all_endpoints();
 
         // Early exit if no store found.
         if (empty($store_ids)) {
@@ -531,24 +537,25 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
         return [
             'active_store' => $active_store,
             'current_page' => $current_page,
-            'current_sub'  => $current_sub,
-            'error_msg'    => $error_msg,
-            'id'           => $id,
-            'content'      => $content,
+            'current_sub' => $current_sub,
+            'error_msg' => $error_msg,
+            'id' => $id,
+            'content' => $content,
         ];
-        
+
     }
 
     /**
      * Retrieve sanitized tab and subtab.
      */
-    private function get_tab_and_subtab(): array {
-        if ( get_option( 'permalink_structure' ) ) {
+    private function get_tab_and_subtab(): array
+    {
+        if (get_option('permalink_structure')) {
             $tab = sanitize_key(get_query_var('tab') ?: 'dashboard');
             $sub = sanitize_key(get_query_var('subtab'));
         } else {
-            $tab = filter_input( INPUT_GET, 'tab', FILTER_DEFAULT ) ?? 'dashboard';
-            $sub  = filter_input( INPUT_GET, 'subtab', FILTER_DEFAULT );
+            $tab = filter_input(INPUT_GET, 'tab', FILTER_DEFAULT) ?? 'dashboard';
+            $sub = filter_input(INPUT_GET, 'subtab', FILTER_DEFAULT);
         }
         return [$tab, $sub];
     }
@@ -556,7 +563,8 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
     /**
      * Check user capability for a section.
      */
-    private function user_has_section_capability(array $section, array $capability_settings): bool {
+    private function user_has_section_capability(array $section, array $capability_settings): bool
+    {
         if (empty($section['capability'])) {
             return true;
         }
@@ -573,8 +581,9 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
     /**
      * Resolve submenu access and ID.
      */
-    private function resolve_submenu_access(array $section, string $current_sub, array $capability_settings): array {
-        $id      = $current_sub;
+    private function resolve_submenu_access(array $section, string $current_sub, array $capability_settings): array
+    {
+        $id = $current_sub;
         $allowed = true;
 
         if (!empty($section['submenu'])) {
@@ -600,7 +609,8 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
     /**
      * Load content for special pages.
      */
-    private function get_page_content(string $id): ?string {
+    private function get_page_content(string $id): ?string
+    {
         if ('edit' === $id) {
             ob_start();
             $this->call_edit_product_template();
