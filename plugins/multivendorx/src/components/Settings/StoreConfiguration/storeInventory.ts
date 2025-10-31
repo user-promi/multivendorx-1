@@ -12,6 +12,15 @@ export default {
     submitUrl: 'settings',
     modal: [
         {
+            key: 'store_rating_page',
+            type: 'blocktext',
+            label: __( 'no_label', 'multivendorx' ),
+            blocktext: __(
+                '<b>Note: You can configure or customize the notification templates for these alerts from the Notification Settings section.</b>',
+                'multivendorx'
+            ),
+        },
+        {
             key: 'low_stock_notifications', // changed key
             type: 'nested',
             label: __('Low stock alerts', 'multivendorx'),

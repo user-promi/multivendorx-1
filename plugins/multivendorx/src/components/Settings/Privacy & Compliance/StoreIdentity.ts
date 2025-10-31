@@ -19,6 +19,7 @@ export default {
                 'multivendorx'
             ),
             moduleEnabled: 'identity-verification',
+            proSetting: true,
             options: [
                 {
                     key: 'icon1',
@@ -74,6 +75,7 @@ export default {
             label: __('Verification Methods', 'multivendorx'),
             placeholder: __('', 'multivendorx'),
             moduleEnabled: 'identity-verification',
+            proSetting: true,
             // iconEnable: true,
             // descEnable: true,
             requiredEnable: true,
@@ -98,6 +100,7 @@ export default {
             type: 'payment-tabs',
             label: 'Social Verification',
             moduleEnabled: 'identity-verification',
+            proSetting: true,
             // settingDescription: __('Allow stores to verify their identity by connecting social media accounts.', 'multivendorx'),
             modal: [
                 {

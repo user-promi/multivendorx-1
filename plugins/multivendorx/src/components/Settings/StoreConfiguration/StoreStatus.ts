@@ -166,7 +166,7 @@ export default {
                             key: 'deactivated_description',
                             type: 'description',
                             title: 'What deactivated stores can do',
-                            des: '',
+                            des: '  ',
                         },
                         {
                             key: 'denied_permissions',
