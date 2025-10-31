@@ -7,13 +7,14 @@ type SearchItem = {
   desc?: string;
   link: string;
 };
-interface Notification {
-  heading: string;
-  message: string;
-  time: string;
+interface ProfileItem {
+  title: string;
   icon?: string;
-  color?: string;
+  link?: string;
+  targetBlank?: boolean;
+  action?: () => void;
 }
+
 
 interface DropdownOption {
   value: string;
@@ -52,6 +53,7 @@ type AdminHeaderProps = {
   showProfile?: boolean;
   chatUrl?: string;
   managePlanUrl?: string;
+  profileItems?: ProfileItem[];
 };
 
 
@@ -76,6 +78,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
   showProfile,
   chatUrl,
   managePlanUrl,
+  profileItems
 }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
@@ -190,7 +193,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
 
 
           {/* Notifications */}
-          {showNotifications &&  (
+          {showNotifications && (
             <div className="icon-wrapper">
               <i
                 className="admin-icon adminlib-notification"
@@ -258,7 +261,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
             </div>
           )}
 
-          {showProfile && (
+          {showProfile && profileItems && (
             <div className="icon-wrapper">
               <i
                 className="admin-icon adminlib-user-circle"
@@ -272,20 +275,31 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
                 <div className="dropdown-menu">
                   <div className="dropdown-body">
                     <ul>
-                      <li>
-                      <a href={managePlanUrl} target="_blank" rel="noopener noreferrer">
-                          <i className="adminlib-person"></i>
-                          Manage Plan
-                        </a>
-                      </li>
-                      <li>
-                        <a onClick={(e) => {
-                          setContactSupportPopup(true);
-                        }}>
-                          <i className="adminlib-user-network-icon"></i>
-                          Contact Support
-                        </a>
-                      </li>
+                      {profileItems.map((item, index) => (
+                        <li key={index}>
+                          {item.link ? (
+                            <a
+                              href={item.link}
+                              target={item.targetBlank ? "_blank" : "_self"}
+                              rel={item.targetBlank ? "noopener noreferrer" : undefined}
+                            >
+                              {item.icon && <i className={item.icon}></i>}
+                              {item.title}
+                            </a>
+                          ) : (
+                            <a
+                              href="#"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                item.action?.();
+                              }}
+                            >
+                              {item.icon && <i className={item.icon}></i>}
+                              {item.title}
+                            </a>
+                          )}
+                        </li>
+                      ))}
                     </ul>
                   </div>
                 </div>
