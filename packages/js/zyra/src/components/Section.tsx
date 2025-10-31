@@ -15,7 +15,6 @@ const Section: React.FC< SectionProps > = ( { wrapperClass, hint, value, descrip
     return (
         <>
             <div className={ wrapperClass }>
-                { value && <span>{ value }</span> }
                 { hint && (
                     <p
                         className="title"
@@ -23,6 +22,7 @@ const Section: React.FC< SectionProps > = ( { wrapperClass, hint, value, descrip
                     ></p>
                 ) }
                 <div className="desc">{description}</div>
+                { value && <span>{ value }</span> }
             </div>
         </>
     );
