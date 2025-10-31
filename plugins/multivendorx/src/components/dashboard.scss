@@ -8,7 +8,10 @@
         padding: 1.5rem;
         background: #fff;
     }
-
+    &:has(.container-wrapper){
+        background: transparent;
+        padding: 0;
+    }
     .row {
         display: flex;
         gap: 1rem;
@@ -117,7 +120,7 @@
 .analytics-container {
     display: flex;
     justify-content: space-between;
-    padding-top: 2.5rem;
+    // padding-top: 2.5rem;
 
     .analytics-item {
         display: flex;
@@ -191,7 +194,7 @@
 
 .card-wrapper {
     display: flex;
-    // gap: 1rem;
+    gap: 1rem;
     flex-direction: column;
     // width: 100%;
 }
@@ -200,6 +203,7 @@
     box-shadow: 0 0.063rem 0.25rem #364a630d;
     background: #fff;
     padding: 1.5rem;
+    border-radius: 0.313rem;
 
     .card-title {
         font-size: 1.125rem;

@@ -45,8 +45,6 @@ const StoreSettings = ({ id }: { id: string | null }) => {
     const [mapProvider, setMapProvider] = useState('');
     const [apiKey, setApiKey] = useState('');
     const appLocalizer = (window as any).appLocalizer;
-
-
     const { modules } = useModules.getState();
 
     const [addressData, setAddressData] = useState({
@@ -715,8 +713,9 @@ const StoreSettings = ({ id }: { id: string | null }) => {
     return (
         <>
             <SuccessNotice message={successMsg} />
-            <div className="container-wrapper">
+            <div className="container-wrapper bg-">
                 <div className="card-wrapper w-65">
+
                     <div className="card-content">
                         <div className="card-title">
                             Basic Details
@@ -949,66 +948,6 @@ const StoreSettings = ({ id }: { id: string | null }) => {
                 </div>
 
                 <div className="card-wrapper w-35">
-                    <div className="card-content">
-                        <div className="card-title">
-                            Store Media
-                        </div>
-
-                        <div className="form-group-wrapper">
-                            <div className="form-group">
-                                <label htmlFor="product-name">Profile Image</label>
-                                <FileInput
-                                    value={formData.image}
-                                    inputClass="form-input"
-                                    name="image"
-                                    type="hidden"
-                                    onButtonClick={() => runUploader('image')}
-                                    imageWidth={75}
-                                    imageHeight={75}
-                                    openUploader="Upload Image"
-                                    imageSrc={imagePreviews.image}
-                                    buttonClass="admin-btn btn-purple"
-                                    descClass="settings-metabox-description"
-                                    onRemove={() => {
-                                        const updated = { ...formData, image: '' };
-                                        setFormData(updated);
-                                        setImagePreviews((prev) => ({ ...prev, image: '' }));
-                                        autoSave(updated);
-                                    }}
-                                    onReplace={() => runUploader('image')}
-                                />
-                                <div className="settings-metabox-description">Upload Profile image max size 500px X 500px</div>
-                            </div>
-                        </div>
-
-                        <div className="form-group-wrapper">
-                            <div className="form-group">
-                                <label htmlFor="product-name">Store Banner Image</label>
-                                <FileInput
-                                    value={formData.banner}
-                                    inputClass="form-input"
-                                    name="banner"
-                                    type="hidden"
-                                    onButtonClick={() => runUploader('banner')}
-                                    imageWidth={75}
-                                    imageHeight={75}
-                                    openUploader="Upload Image"
-                                    imageSrc={imagePreviews.banner}
-                                    buttonClass="admin-btn btn-purple"
-                                    descClass="settings-metabox-description"
-                                    onRemove={() => {
-                                        const updated = { ...formData, banner: '' };
-                                        setFormData(updated);
-                                        setImagePreviews((prev) => ({ ...prev, banner: '' }));
-                                        autoSave(updated);
-                                    }}
-                                    onReplace={() => runUploader('banner')}
-                                />
-                                <div className="settings-metabox-description">Upload banner image size 1200px X 390px</div>
-                            </div>
-                        </div>
-                    </div>
-
                     <div className="card-content">
                         <div className="card-title">Social information</div>
                         {/* Facebook */}

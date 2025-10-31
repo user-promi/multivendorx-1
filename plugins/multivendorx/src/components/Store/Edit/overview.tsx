@@ -20,7 +20,7 @@ const Overview = ({ id }: { id: string | null }) => {
     return (
         <>
 
-            <div className="container-wrapper">
+            <div className="container-wrapper ">
                 <div className="card-wrapper w-65">
                     <div className="card-content">
                         <div className="analytics-container">
