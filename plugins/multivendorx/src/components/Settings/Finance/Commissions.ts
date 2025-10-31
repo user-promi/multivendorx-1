@@ -299,7 +299,7 @@ export default {
                     type: 'text',
                     preInsideText: __('$', 'multivendorx'),
                     size: "8rem",
-                    preText: 'Charge a',
+                    preText: 'Charge a fixed',
                     postText: "+",
                 },
                 {
@@ -320,47 +320,12 @@ export default {
                 },
                 
             ],
-            // nestedFields: [
-            //     {
-            //     key: 'commission_type',
-            //     type: 'setting-toggle',
-            //     options: [
-            //     {
-            //         key: 'store_order',
-            //         label: __('Customer', 'multivendorx'),
-            //         value: 'store_order',
-            //     },
-            //     {
-            //         key: 'per_item',
-            //         label: __('Store', 'multivendorx'),
-            //         value: 'per_item',
-            //     },
-            //    ],
-            //         preText: __('Decide who pays the marketplace fee', 'multivendorx'),
-            //         postText: __('.The fee is applied as', 'multivendorx'),
-            //     },
-            //     {
-            //         key: 'marketplace_fixed', // updated key
-            //         type: 'number',
-            //         size: '5rem',
-            //         preInsideText: __('$', 'multivendorx'),
-            //         preText: 'fixed',
-            //         postText: "+",
-            //     },
-            //     {
-            //         key: 'marketplace_percentage', // updated key
-            //         type: 'number',
-            //         size: '5rem',
-            //         postText: __('.', 'multivendorx'),
-            //         postInsideText: __('%', 'multivendorx'),
-            //     },
-            // ],
         },
         
         {
             key: 'facilitator_fees',
             type: 'nested',
-            label: 'Facilitator Fees',
+            label: 'Facilitator fee',
             single: true,
             settingDescription: __('Set the facilitator fee as a fixed amount, a percentage, or both, deducted from the store commission. Store-wise fees can also be configured from the store edit page.', 'multivendorx'),
             desc: __('Please make sure to assign a facilitator for your store from the <a href="#">Facilitator Settings</a> section before configuring fees.','multivendorx'),
@@ -384,7 +349,7 @@ export default {
         {
             key: 'gateway_fees',
             type: 'nested',
-            label: __('Gateway Fees', 'multivendorx'),
+            label: __('Gateway fees', 'multivendorx'),
 			settingDescription: __('Define the default fee that will be deducted from the store commission. If you want to charge different fees for each payment method, set the amounts here for gateways, bank transfers, or cash on delivery.', 'multivendorx'),
             rowClass: 'single-line',            
             single: true,
