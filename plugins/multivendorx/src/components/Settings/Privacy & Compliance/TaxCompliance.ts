@@ -18,6 +18,7 @@ export default {
                     key: 'bank_account_details',
                     label: __('Bank Account Details', 'mvx-pro'),
                     value: 'bank_account_details',
+                    edit:true
                 },
                 {
                     key: 'tax_identification_documents',
@@ -29,6 +30,7 @@ export default {
                     key: 'business_registration',
                     label: __('Business registration', 'mvx-pro'),
                     value: 'business_registration',
+                    edit:true
                 },
             ],
             selectDeselect: true,

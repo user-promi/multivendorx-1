@@ -79,8 +79,8 @@ export default {
             requiredEnable: true,
             name: 'abuse_report_reasons',
             defaultValues: [
-                { value: "Passport", locked: true, iconClass: "adminlib-check", description: "Order is received by store", tag:"Primary",required: true },
-                { value: "Driving licence", locked: true, iconClass: "adminlib-clock", description: "Order is being processed",tag:"Primary",required: true },
+                { value: "Passport", locked: true, iconClass: "adminlib-check", description: "Order is received by store", required: true },
+                { value: "Driving licence", locked: true, iconClass: "adminlib-clock", description: "Order is being processed",required: true },
             ],
             iconOptions: ["adminlib-check", "adminlib-clock", "adminlib-cart", "adminlib-store"], // dropdown options
             maxItems: 10,
