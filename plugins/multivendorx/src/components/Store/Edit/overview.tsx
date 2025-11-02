@@ -243,7 +243,10 @@ const Overview = ({ id }: { id: string | null }) => {
                                 </div>
                             </div>
                             <div className="right">
-                                <i className="adminlib-external"></i>
+                                <i className="adminlib-external"
+                                    onClick={() => {navigate(`?page=multivendorx#&tab=stores&edit/${id}/&subtab=staff`)}}
+                                ></i>
+                                
                             </div>
                         </div>
 

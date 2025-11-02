@@ -408,7 +408,7 @@ console.log(hashParams.get('subtab'))
                                                         <i className={editDesc ? "" : "adminlib-create"}></i>
                                                     </span>
                                                 </div>
-                                                <ul className="contact-details">
+                                                {/* <ul className="contact-details">
                                                     <li>
                                                         <div className="reviews-wrapper">
                                                             <i className="review adminlib-star"></i>
@@ -419,9 +419,42 @@ console.log(hashParams.get('subtab'))
                                                             5 Review
                                                         </div>
                                                     </li>
+                                                </ul> */}
+                                                <ul className="contact-details">
+                                                    <li>
+                                                        <div className="reviews-wrapper">
+                                                        {data.total_reviews > 0 ? (
+                                                            <>
+                                                            {[...Array(5)].map((_, i) => (
+                                                                <i
+                                                                key={i}
+                                                                className={`review adminlib-star${
+                                                                    i < Math.round(data.average_rating) ? ' filled' : ''
+                                                                }`}
+                                                                ></i>
+                                                            ))}
+                                                            <span>
+                                                                {data.average_rating} ({data.total_reviews}{' '}
+                                                                {data.total_reviews === 1 ? 'Review' : 'Reviews'})
+                                                            </span>
+                                                            </>
+                                                        ) : (
+                                                            <span>No reviews yet</span>
+                                                        )}
+                                                        </div>
+                                                    </li>
                                                 </ul>
+
+
                                                 <div className="des">
-                                                    <b>Store url: </b>{appLocalizer.store_page_url + '/' + data.slug} <i className="adminlib-external"></i>
+                                                    <b>Store url: </b>{appLocalizer.store_page_url + '/' + data.slug}{' '}
+                                                    <a
+                                                        href={`${appLocalizer.store_page_url}/${data.slug}`}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                    >
+                                                        <i className="adminlib-external"></i>
+                                                    </a>
                                                 </div>
                                             </div>
                                         </div>
