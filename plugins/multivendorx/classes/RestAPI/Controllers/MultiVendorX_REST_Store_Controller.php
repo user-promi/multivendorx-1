@@ -6,6 +6,7 @@ use MultiVendorX\Store\Store;
 use MultiVendorX\Utill;
 use MultiVendorX\Store\SocialVerification;
 use MultiVendorX\Commission\CommissionUtil;
+use MultiVendorX\StoreReview\Util;
 
 defined('ABSPATH') || exit;
 
@@ -647,6 +648,12 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
         // Get primary owner information using Store object
         $primary_owner_id = StoreUtil::get_primary_owner( $id );
         $primary_owner_info = $this->get_user_info( $primary_owner_id );
+
+        $overall  = Util::get_overall_rating($id);
+    
+        //Get all reviews
+        $reviews = Util::get_reviews_by_store($id);
+        $total_reviews = count($reviews);
     
 
         $response = [
@@ -656,9 +663,11 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             'description' => $store->get('description'),
             'who_created' => $store->get('who_created'),
             'status'      => $store->get('status'),
-            'create_time' => date( 'd-m-Y', strtotime( $store->get('create_time'))),
+            'create_time' => date( 'M j, Y', strtotime( $store->get('create_time') ) ),
             'commission'  => $commission,
             'primary_owner_info'  => $primary_owner_info,
+            'overall_reviews'  => $overall,
+            'total_reviews'  => $total_reviews,
         ];
 
         // Add meta data
