@@ -46,7 +46,7 @@ export default {
                         },
                         {
                             key: 'pending_description',
-                            label: 'What pending stores can do',
+                            label: 'Message shown to pending stores: Your store is awaiting approval and will be activated soon.',
                             des: 'What pending stores can do',
                         },
                     ],
@@ -77,7 +77,7 @@ export default {
                         },
                         {
                             key: 'pending_description',
-                            label: 'What pending stores can do',
+                            label: 'Message shown to declined stores: Your application was declined. Please review and reapply.',
                             des: 'What pending stores can do',
                         },
                     ],
@@ -115,7 +115,7 @@ export default {
                         },
                         {
                             key: 'pending_description',
-                            label: 'What pending stores can do',
+                            label: 'Message shown to stores under review: Your store is under review. Sales and payouts are temporarily paused.',
                             des: 'What pending stores can do',
                         },
                     ],
@@ -147,7 +147,7 @@ export default {
                         },
                         {
                             key: 'pending_description',
-                            label: 'What pending stores can do',
+                            label: 'Message shown to suspended stores: Your store is suspended due to a policy issue. Contact support to resolve it.',
                             des: 'What pending stores can do',
                         },
                     ],
@@ -175,7 +175,7 @@ export default {
                         },
                         {
                             key: 'pending_description',
-                            label: 'What pending stores can do',
+                            label: 'Message shown to active stores: Your store is live and ready for business.',
                             des: 'What pending stores can do',
                         },
                     ],
@@ -206,7 +206,7 @@ export default {
                         },
                         {
                             key: 'pending_description',
-                            label: 'What pending stores can do',
+                            label: 'Message shown to deactivated stores: Your store has been closed. Access and selling privileges are disabled.',
                             des: 'What pending stores can do',
                         },
                     ],
