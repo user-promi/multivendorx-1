@@ -25,8 +25,8 @@ const StoreSettings = ({ id, data }: { id: string | null; data:any }) => {
     const [emailBadges, setEmailBadges] = useState<EmailBadge[]>([]);
     const [newEmailValue, setNewEmailValue] = useState('');
     const statusOptions = [
+        { label: "Pending approval", value: "pending" },
         { label: "Active", value: "active" },
-        { label: "Pending", value: "pending" },
         { label: "Rejected", value: "rejected" },
         { label: "Suspended", value: "suspended" },
     ];
