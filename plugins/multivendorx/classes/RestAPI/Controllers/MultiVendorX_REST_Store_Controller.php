@@ -649,7 +649,6 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
 
     public function update_item( $request ) {
         $id   = absint( $request->get_param( 'id' ) );
-
         $data = $request->get_json_params();
 
         $store = new \MultiVendorX\Store\Store( $id );
