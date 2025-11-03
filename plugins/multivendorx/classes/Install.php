@@ -138,6 +138,7 @@ class Install {
             `balance` float(20,2) NOT NULL,
             `locking_balance` float(20,2) NOT NULL,
             `currency` varchar(10) NOT NULL,
+            `payment_method` varchar(50) DEFAULT NULL,
             `narration` text NOT NULL,
             `status` enum('Pending','Processed','Completed', 'Failed') DEFAULT 'Pending',
             `available_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,

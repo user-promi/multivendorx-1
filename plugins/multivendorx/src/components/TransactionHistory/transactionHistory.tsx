@@ -7,6 +7,7 @@ import TransactionDataTable from './transactionDataTable';
 import { AdminBreadcrumbs, CalendarInput, getApiLink, SelectInput, CommonPopup, BasicInput, TextArea, ToggleSetting } from 'zyra';
 import axios from 'axios';
 import disbursement from '../Settings/Finance/disbursement';
+import { store } from '@wordpress/block-editor';
 
 
 export const TransactionHistory: React.FC = () => {
@@ -147,7 +148,7 @@ export const TransactionHistory: React.FC = () => {
         },
     ];
 
-
+    console.log(storeData)
     return (
         <>
             <AdminBreadcrumbs
@@ -192,11 +193,29 @@ export const TransactionHistory: React.FC = () => {
                             <div className="price">
                                 {appLocalizer.currency_symbol}{Number(data.available_balance ?? 0).toFixed(2)}
                             </div>
-                            <div className="des">Current available balance ready to transfer to stores.</div>
-                            <div className="admin-btn btn-purple" onClick={() => setRequestWithdrawal(true)}>
-                                Disburse payment
-                            </div>
+
+                            {storeData?.request_withdrawal_amount ? (
+                                <>
+                                    <div className="des">
+                                        Last withdrawal request: {appLocalizer.currency_symbol}
+                                        {Number(storeData.request_withdrawal_amount ?? 0).toFixed(2)}, is <strong>Pending</strong>.
+                                        <br />
+                                        Please clear the pending request before disbursing new payments.
+                                    </div>
+                                    <div className="admin-btn btn-purple disabled" style={{ opacity: 0.5, pointerEvents: 'none' }}>
+                                        Disburse payment
+                                    </div>
+                                </>
+                            ) : (
+                                <>
+                                    <div className="des">Current available balance ready to transfer to stores.</div>
+                                    <div className="admin-btn btn-purple" onClick={() => setRequestWithdrawal(true)}>
+                                        Disburse payment
+                                    </div>
+                                </>
+                            )}
                         </div>
+
                     </div>
                     <div className="column">
                         <div className="card-header">

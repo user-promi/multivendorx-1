@@ -436,6 +436,70 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
             ),
         },
         {
+            id: 'id',
+            accessorKey: 'id',
+            enableSorting: true,
+            header: __("ID", "multivendorx"),
+            cell: ({ row }) => <TableCell>#{row.original.id}</TableCell>,
+        },
+        {
+            id: 'status',
+            accessorKey: 'status',
+            enableSorting: true, // Enable sorting for status column
+            header: __('Status', 'multivendorx'),
+            cell: ({ row }) => (
+                <TableCell title={row.original.status || ''}>
+                    <span className={`status-badge status-${row.original.status?.toLowerCase()}`}>
+                        {row.original.status || '-'}
+                    </span>
+                </TableCell>
+            ),
+        },
+        {
+            id: 'transaction',
+            accessorKey: 'transaction_type',
+            enableSorting: true,
+            header: __('Transaction Type', 'multivendorx'),
+            cell: ({ row }) => {
+                const type = row.original.transaction_type?.toLowerCase();
+                const orderId = row.original.order_details;
+                const paymentMethod = row.original.payment_method;
+        
+                // Format helper → makes text human-readable
+                const formatText = (text) =>
+                    text
+                        ?.replace(/-/g, ' ')                // replace hyphens with spaces
+                        ?.replace(/\b\w/g, (c) => c.toUpperCase()) // capitalize each word
+                    || '-';
+        
+                let displayValue = '-';
+                let content = displayValue;
+        
+                // Dynamic output
+                if (type === 'commission') {
+                    displayValue = `Commission #${orderId || '-'}`;
+                    if (orderId) {
+                        const editLink = `${window.location.origin}/wp-admin/post.php?post=${orderId}&action=edit`;
+                        content = (
+                            <a href={editLink} target="_blank" rel="noopener noreferrer">
+                                {displayValue}
+                            </a>
+                        );
+                    } else {
+                        content = displayValue;
+                    }
+                } else if (type === 'withdrawal') {
+                    displayValue = `Withdrawal - ${formatText(paymentMethod)}`;
+                    content = displayValue;
+                } else if (row.original.transaction_type) {
+                    displayValue = formatText(row.original.transaction_type);
+                    content = displayValue;
+                }
+        
+                return <TableCell title={displayValue}>{content}</TableCell>;
+            },
+        },
+        {
             id: 'date',
             accessorKey: 'date',
             enableSorting: true,
@@ -453,46 +517,6 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                 }
                 return <TableCell title={formattedDate}>{formattedDate}</TableCell>;
             },
-        },
-        {
-            id: 'id',
-            accessorKey: 'id',
-            enableSorting: true,
-            header: __("Transaction ID", "multivendorx"),
-            cell: ({ row }) => <TableCell>#{row.original.id}</TableCell>,
-        },
-        {
-            id: 'order_details',
-            accessorKey: 'order_details',
-            enableSorting: true,
-            accessorFn: row => parseInt(row.order_details || '0'),
-            header: __('Order ID', 'multivendorx'),
-            cell: ({ row }) => {
-                const orderId = row.original.order_details;
-                const editLink = orderId
-                    ? `${window.location.origin}/wp-admin/post.php?post=${orderId}&action=edit`
-                    : '#';
-                return (
-                    <TableCell title={orderId || ''}>
-                        {orderId ? (
-                            <a href={editLink} target="_blank" rel="noopener noreferrer">
-                                #{orderId}
-                            </a>
-                        ) : '-'}
-                    </TableCell>
-                );
-            },
-        },
-        {
-            id: 'transaction_type',
-            accessorKey: 'transaction_type',
-            enableSorting: true,
-            header: __('Transaction Type', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.transaction_type || ''}>
-                    {row.original.transaction_type || '-'}
-                </TableCell>
-            ),
         },
         {
             id: 'credit',
@@ -526,30 +550,6 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                 const balance = row.original.balance;
                 return <TableCell>{balance ? `${appLocalizer.currency_symbol}${balance}` : '-'}</TableCell>;
             },
-        },
-        {
-            id: 'status',
-            accessorKey: 'status',
-            enableSorting: true, // Enable sorting for status column
-            header: __('Status', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.status || ''}>
-                    <span className={`status-badge status-${row.original.status?.toLowerCase()}`}>
-                        {row.original.status || '-'}
-                    </span>
-                </TableCell>
-            ),
-        },
-        {
-            id: 'payment_method',
-            accessorKey: 'payment_method',
-            enableSorting: true,
-            header: __('Payment Method', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.payment_method || ''}>
-                    {row.original.payment_method || '-'}
-                </TableCell>
-            ),
         },
     ];
 

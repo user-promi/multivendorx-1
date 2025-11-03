@@ -477,7 +477,8 @@ class CommissionManager {
         $commission_id = $vendor_order->get_meta( 'multivendorx_commission_id', true );
         $store_id = $vendor_order->get_meta( 'multivendorx_store_id', true );
         $vendor = Store::get_store_by_id( $store_id );
-        
+        $store = new Store((int) $store_id);
+
         if ($commission_id) {
 
             $refund_total = 0;
@@ -643,11 +644,12 @@ class CommissionManager {
                 'transaction_type' => 'Refund',
                 'amount'           => abs($refund_total),
                 'currency'         => get_woocommerce_currency(),
+                'payment_method'   => $store->get_meta('payment_method')??'',
                 'narration'        => "Withdrawal via refund",
                 'status'           => 'Completed',
             ];
 
-            $format = ["%d", "%d", "%d", "%s", "%s", "%f", "%s", "%s", "%s"];
+            $format = ["%d", "%d", "%d", "%s", "%s", "%f", "%s", "%s", "%s", "%s"];
 
             $wpdb->insert(
                 $wpdb->prefix . Utill::TABLES['transaction'],
