@@ -38,7 +38,7 @@ interface BasicInputProps {
     generate?: string;
     clickBtnName?: string;
     msg?: any;
-    onclickCallback?: ( e: React.MouseEvent< HTMLButtonElement > ) => void;
+    onclickCallback?: (e: React.MouseEvent<HTMLButtonElement>) => void;
     proSetting?: boolean;
     description?: string;
     descClass?: string;
@@ -197,7 +197,7 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
                                         onClick={onclickCallback}
                                     >
                                         <>
-                                            <span className="text">{clickBtnName}</span>
+                                            {clickBtnName}
                                         </>
                                     </DisplayButton>
                                 )}

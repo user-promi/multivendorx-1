@@ -414,11 +414,28 @@ export const Announcements: React.FC = () => {
         },
         {
             header: __('Status', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.status || ''}>
-                    {row.original.status ? row.original.status.charAt(0).toUpperCase() + row.original.status.slice(1) : '-'}
-                </TableCell>
-            ),
+            cell: ({ row }) => {
+                const status = row.original.status || '';
+
+                const getStatusBadge = (status: string) => {
+                    switch (status) {
+                        case 'publish':
+                            return <span className="admin-badge green">Publish</span>;
+                        case 'pending':
+                            return <span className="admin-badge yellow">Pending</span>;
+                        case 'draft':
+                            return <span className="admin-badge blue">Draft</span>;
+                        default:
+                            return <span className="admin-badge gray">{status}</span>;
+                    }
+                };
+
+                return (
+                    <TableCell title={row.original.status || ''}>
+                        {getStatusBadge(status)}
+                    </TableCell>
+                );
+            },
         },
         {
             header: __('Visible To', 'multivendorx'),
@@ -598,17 +615,19 @@ export const Announcements: React.FC = () => {
 
                     <div className="content">
                         <div className="form-group-wrapper">
-                            <div className={`form-group ${validationErrors ? 'error-input' : ''}`}>
+                            <div className={`form-group `}>
                                 <label htmlFor="title">Title</label>
                                 <BasicInput
                                     type="text"
                                     name="title"
                                     value={formData.title}
-                                    onChange={handleChange}
+                                    onChange={handleChange} 
+                                    msg={error}
+
                                 />
-                                {validationErrors.title && <div className="invalid-feedback">{validationErrors.title}</div>}
+                                {validationErrors.title && <div className="invalid-massage">{validationErrors.title}</div>}
                             </div>
-                            <div className={`form-group ${validationErrors ? 'error-input' : ''}`}>
+                            <div className={`form-group `}>
                                 <label htmlFor="content">Enter Content</label>
                                 <TextArea
                                     name="content"
@@ -618,10 +637,10 @@ export const Announcements: React.FC = () => {
                                     usePlainText={false}
                                     tinymceApiKey={appLocalizer.settings_databases_value['marketplace-settings']['tinymce_api_section'] ?? ''}
                                 />
-                                {validationErrors.content && <div className="invalid-feedback">{validationErrors.content}</div>}
+                                {validationErrors.content && <div className="invalid-massage">{validationErrors.content}</div>}
                             </div>
 
-                            <div className={`form-group ${validationErrors ? 'error-input' : ''}`}>
+                            <div className={`form-group `}>
                                 <label htmlFor="stores">Stores</label>
                                 <SelectInput
                                     name="stores"
@@ -639,7 +658,7 @@ export const Announcements: React.FC = () => {
                                         }));
                                     }}
                                 />
-                                {validationErrors.stores && <div className="invalid-feedback">{validationErrors.stores}</div>}
+                                {validationErrors.stores && <div className="invalid-massage">{validationErrors.stores}</div>}
                             </div>
 
                             <div className="form-group">

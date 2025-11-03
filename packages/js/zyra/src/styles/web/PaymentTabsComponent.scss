@@ -116,7 +116,7 @@
                 }
 
                 .settings-icon {
-                    color: blue;
+                    color: $theme-color
                 }
 
                 ul {
@@ -444,6 +444,7 @@
     background: #a7a6a62b;
     border-radius: 0.313rem;
     width: 100%;
+    box-sizing: border-box;
 
     .title {
         font-size: 1.063rem;
