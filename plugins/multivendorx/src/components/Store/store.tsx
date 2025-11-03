@@ -75,13 +75,13 @@ const Store = () => {
         if (exists) 
             // setError(`Slug "${formData.slug}" already exists.`);
             setError({
-                type: 'error',
+                type: 'invalid-massage',
                 message: `Slug "${formData.slug}" already exists.`,
             });
 
         else 
             setError({
-                type: 'success',
+                type: 'success-massage',
                 message: 'Available',
             });
     };
@@ -95,7 +95,7 @@ const Store = () => {
         const exists = await checkSlugExists(slug);
         if (exists) {
             setError({
-                type: 'error',
+                type: 'invalid-massage',
                 message: `Slug "${formData.slug}" already exists.`,
             });
             return;
@@ -124,7 +124,7 @@ const Store = () => {
             }
         } catch (err) {
             setError({
-                type: 'error',
+                type: 'invalid-massage',
                 message: 'Something went wrong while saving the store.'
             });
         }
@@ -241,7 +241,7 @@ const Store = () => {
                                 <div className="form-group-wrapper">
                                     <div className="form-group">
                                         <label htmlFor="store-name">
-                                            Store Name
+                                            Store name
                                         </label>
                                         <BasicInput
                                             type="text"
@@ -253,28 +253,21 @@ const Store = () => {
                                         />
                                     </div>
 
-                                    <div className={`form-group ${error ? 'error-input' : ''}`}>
+                                    <div className={`form-group`}>
                                         <label htmlFor="store-url">
-                                            Store Slug
+                                            Store slug
                                         </label>
                                         <BasicInput
                                             type="text"
                                             name="slug"
                                             value={formData.slug || ''}
+                                            wrapperClass="setting-form-input"
                                             onChange={handleChange}
                                             required={true}
                                             clickBtnName='Check Slug'
                                             onclickCallback={handleNameBlur}
                                             msg={error}
                                         />
-
-                                        {/* {error && (
-                                            <div
-                                                className="invalid-feedback"
-                                            >
-                                                {error}
-                                            </div>
-                                        )} */}
                                     </div>
 
                                     <div className="form-group">
@@ -293,7 +286,7 @@ const Store = () => {
 
                                     <div className="form-group">
                                         <label htmlFor="store-owner">
-                                            Set Primary Owner
+                                            Primary owner
                                         </label>
                                         <SelectInput
                                             name="store_owners"
@@ -321,7 +314,7 @@ const Store = () => {
 
                                     <div className="form-group">
                                         <label htmlFor="store-image">
-                                            Profile Image
+                                            Profile image
                                         </label>
                                         <FileInput
                                             value={formData.image || ''}

@@ -181,11 +181,11 @@ const StoreSettings = ({ id, data }: { id: string | null; data:any }) => {
     // Email Badge Component
     const EmailBadge: React.FC<{ badge: EmailBadge; onRemove: (id: number) => void }> = ({ badge, onRemove }) => {
         return (
-            <div className={`admin-badge ${badge.isValid ? 'green' : 'red'}`}>
+            <div className={`admin-badge ${badge.isValid ? 'yellow' : 'red'}`}>
                 <i className="adminlib-mail"></i>
                 <span>{badge.email}</span>
                 <i
-                    className="adminlib-close remove-btn"
+                    className="adminlib-delete remove-btn"
                     onClick={() => onRemove(badge.id)}
                 // style={{ cursor: 'pointer', marginLeft: '8px' }}
                 ></i>
@@ -801,7 +801,7 @@ const StoreSettings = ({ id, data }: { id: string | null; data:any }) => {
                                         </button>
                                     </div>
                                 </div>
-                                {errorMsg && <p className="invalid-feedback">{errorMsg}</p>}
+                                {errorMsg && <p className="invalid-massage">{errorMsg}</p>}
                                 <div className="settings-metabox-description">
                                     Add multiple email addresses. Press Enter or click Add after each email.
                                 </div>
@@ -895,7 +895,7 @@ const StoreSettings = ({ id, data }: { id: string | null; data:any }) => {
                                                 ref={autocompleteInputRef}
                                                 id="store-location-autocomplete"
                                                 type="text"
-                                                className="setting-form-input"
+                                                className="basic-input"
                                                 placeholder="Search your store address..."
                                                 defaultValue={addressData.location_address}
                                             />

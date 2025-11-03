@@ -236,12 +236,12 @@ const StoreTable: React.FC = () => {
                     <div className="table-content">
                         {row.original.email && (
                             <div>
-                                <b><i className="adminlib-mail"></i></b> {row.original.email}
+                                <i className="adminlib-mail"></i> {row.original.email}
                             </div>
                         )}
                         {row.original.phone && (
                             <div>
-                                <b><i className="adminlib-form-phone"></i></b>
+                                <i className="adminlib-form-phone"></i>
                                 {row.original.phone ? (row.original.phone) : '-'}
                             </div>
                         )}

@@ -272,10 +272,10 @@ a {
   }
 }
 
-.error-input:has(.basic-input) .basic-input{
-  border-color: red !important;
-  box-shadow: 0 0 0 3px #ff00001f !important;
-}
+// .error-input:has(.basic-input) .basic-input {
+//   border-color: red !important;
+//   box-shadow: 0 0 0 3px #ff00001f !important;
+// }
 
 .react-select input:focus {
   box-shadow: none;
@@ -299,11 +299,13 @@ a {
   &.inner-input {
     .input-wrapper {
       display: flex;
+      align-items: center;
       border: $border-light-small;
       border-radius: 0.313rem;
       align-items: center;
       background: #fff;
       padding: 0 0.5rem;
+      gap: 0.5rem;
 
       input {
         border: none !important;
@@ -331,6 +333,11 @@ a {
 
   .input-wrapper {
     display: flex;
+    gap: 0.5rem;
+
+    button {
+      width: 45%;
+    }
   }
 
   &.generate {
@@ -465,10 +472,37 @@ input[type="checkbox"]:focus {
     }
 
     .default-checkbox {
+      position: relative;
+
       label {
         padding: 0 0 0.313rem 0.313rem;
         font-size: 0.875rem;
         position: relative;
+      }
+
+      .edit-icon {
+        padding-left: 0.45rem;
+        position: absolute;
+        right: -2.313rem;
+        top: 0;
+        opacity: 0;
+        transition: all 0.4s ease;
+      }
+    }
+
+    .edit-option-wrapper {
+      display: inline-block;
+
+      .edit-option {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+    }
+
+    &:hover {
+      .edit-icon {
+        opacity: 1;
       }
     }
   }
@@ -1082,6 +1116,7 @@ input[type="checkbox"]:focus {
 }
 
 .action-icons {
+
   &:hover,
   &:has(.action-dropdown:hover) {
     .action-dropdown.hover {
@@ -1338,6 +1373,28 @@ input[type="checkbox"]:focus {
 }
 
 // input invalid error
-.invalid-feedback {
+.invalid-massage {
   color: red;
+}
+
+.success-massage {
+  color: green;
+}
+
+// placeholder image start
+.placeholder-400x400 {
+  content: "400 x 400";
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: #dfdcdc;
+  color: red;
+  font-size: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+
 }

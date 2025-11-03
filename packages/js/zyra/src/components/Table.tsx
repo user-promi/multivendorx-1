@@ -495,29 +495,31 @@ const Table: React.FC<TableProps> = ({
         <>
             {(typeCounts?.length > 0 || searchFilter) && (
                 <div className="admin-top-filter">
-                    {typeCounts && typeCounts.length > 0 && (
-                        <div className="admin-table-wrapper-filter">
-                            {typeCounts.map((countInfo, index) => (
-                                <div
-                                    key={index} // Add a key for better React performance
-                                    role="button"
-                                    tabIndex={0}
-                                    onClick={() => {
-                                        setFilterData({ typeCount: countInfo.key });
-                                    }}
-                                    className={
-                                        countInfo.key === typeCountActive
-                                            ? 'type-count-active'
-                                            : ''
-                                    }
-                                >
-                                    {`${countInfo.name} (${countInfo.count})`}
-                                    {index !== typeCounts.length - 1 && ' |'}{' '}
-                                </div>
-                            ))}
-                        </div>
+                    <div className="admin-table-wrapper-filter">
 
-                    )}
+                        {typeCounts && typeCounts.length > 0 && (
+                            <>
+                                {typeCounts.map((countInfo, index) => (
+                                    <div
+                                        key={index} // Add a key for better React performance
+                                        role="button"
+                                        tabIndex={0}
+                                        onClick={() => {
+                                            setFilterData({ typeCount: countInfo.key });
+                                        }}
+                                        className={
+                                            countInfo.key === typeCountActive
+                                                ? 'type-count-active'
+                                                : ''
+                                        }
+                                    >
+                                        {`${countInfo.name} (${countInfo.count})`}
+                                        {index !== typeCounts.length - 1 && ' |'}{' '}
+                                    </div>
+                                ))}
+                            </>
+                        )}
+                    </div>
                     <div className="table-action-wrapper">
                         {searchFilter && (
                             <div className="search-field">
@@ -681,10 +683,10 @@ const Table: React.FC<TableProps> = ({
                                                     (pagination.pageIndex + 1) * pagination.pageSize,
                                                     totalCounts
                                                 )} of ${totalCounts} entries `}
-
-                                                 Show
+                                            </div>
+                                            <div className="showing-number">
+                                                Show
                                                 <select
-                                                    className='basic-select'
                                                     value={
                                                         table.getState().pagination.pageSize
                                                     }

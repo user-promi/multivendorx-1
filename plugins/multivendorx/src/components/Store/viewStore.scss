@@ -27,6 +27,7 @@
         position: relative;
         background-position: center !important;
 
+
         &:before {
             position: absolute;
             content: "";
@@ -35,6 +36,9 @@
             left: 0;
             width: 100%;
             height: 100%;
+            border-top-left-radius: 0.313rem;
+            border-top-right-radius: 0.313rem;
+            
         }
     }
 
@@ -79,7 +83,6 @@
                         padding: 0.5rem;
                     }
                 }
-
                 img {
                     width: 100%;
                 }

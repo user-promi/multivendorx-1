@@ -131,44 +131,14 @@ console.log(storeData)
                             <div className="card-header">
                                 <div className="left">
                                     <div className="title">
-                                        Store Hours
+                                        Top Products
                                     </div>
-                                    <div className="des">
+                                    {/* <div className="des">
                                         Manage your weekly schedule and special hours
-                                    </div>
+                                    </div> */}
                                 </div>
                                 <div className="right">
                                     <i className="adminlib-external"></i>
-                                </div>
-                            </div>
-
-                            {/* <div className="store-owner-details">
-                            <div className="profile">
-                                <div className="avater">
-                                    <span className="adminlib-calendar"></span>
-                                </div>
-                                <div className="details">
-                                    <div className="name">$5,420</div>
-                                    <div className="des">Oct 15, 2024</div>
-                                </div>
-                            </div>
-                            <div className="right-details">
-                                <div className="price">$356 .35</div>
-                                <div className="div">Lorem, ipsum dolor.</div>
-                            </div>
-                        </div> */}
-
-                            <div className="store-time-wrapper">
-
-                                <div className="row">
-                                    <div className="time-wrapper">
-                                        <div className="des">Current Status</div>
-                                        <div className="time"><span className="admin-badge green">Open</span></div>
-                                    </div>
-                                    <div className="time-wrapper">
-                                        <div className="des">Next Opening</div>
-                                        <div className="time">Mon 9:00 AM</div>
-                                    </div>
                                 </div>
                             </div>
 
@@ -196,7 +166,8 @@ console.log(storeData)
                                 <div className="details">
                                     <div
                                         className="sku"
-                                        onClick={() => {navigate(`?page=multivendorx#&tab=stores&edit/${id}/&subtab=store-application`);
+                                        onClick={() => {
+                                            navigate(`?page=multivendorx#&tab=stores&edit/${id}/&subtab=store-application`);
                                         }}
                                     >
                                         <i className="adminlib-external"></i>
@@ -241,9 +212,8 @@ console.log(storeData)
                             </div>
                             <div className="right">
                                 <i className="adminlib-external"
-                                    onClick={() => {navigate(`?page=multivendorx#&tab=stores&edit/${id}/&subtab=staff`)}}
+                                    onClick={() => { navigate(`?page=multivendorx#&tab=stores&edit/${id}/&subtab=staff`) }}
                                 ></i>
-                                
                             </div>
                         </div>
 
@@ -265,6 +235,51 @@ console.log(storeData)
                                     <i className="adminlib-form-phone"></i> +1 (555) 987-6543
                                 </li> */}
                             </ul>
+                        </div>
+                    </div>
+                    <div className="card-content">
+                        <div className="card-header">
+                            <div className="left">
+                                <div className="title">
+                                    Store Hours
+                                </div>
+                                <div className="des">
+                                    Manage your weekly schedule and special hours
+                                </div>
+                            </div>
+                            <div className="right">
+                                <i className="adminlib-external"></i>
+                            </div>
+                        </div>
+
+                        {/* <div className="store-owner-details">
+                            <div className="profile">
+                                <div className="avater">
+                                    <span className="adminlib-calendar"></span>
+                                </div>
+                                <div className="details">
+                                    <div className="name">$5,420</div>
+                                    <div className="des">Oct 15, 2024</div>
+                                </div>
+                            </div>
+                            <div className="right-details">
+                                <div className="price">$356 .35</div>
+                                <div className="div">Lorem, ipsum dolor.</div>
+                            </div>
+                        </div> */}
+
+                        <div className="store-time-wrapper">
+
+                            <div className="row">
+                                <div className="time-wrapper">
+                                    <div className="des">Current Status</div>
+                                    <div className="time"><span className="admin-badge green">Open</span></div>
+                                </div>
+                                <div className="time-wrapper">
+                                    <div className="des">Next Opening</div>
+                                    <div className="time">Mon 9:00 AM</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     {/* <div className="card-content">
