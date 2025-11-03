@@ -4,6 +4,7 @@ import { __ } from "@wordpress/i18n";
 import { CommonPopup, getApiLink, Table, TableCell } from "zyra";
 import { ColumnDef } from "@tanstack/react-table";
 import axios from "axios";
+import {formatCurrency} from '../../services/commonFunction';
 
 // 👉 Type for an order line
 interface OrderItem {
@@ -335,19 +336,19 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({ open, onClose, commissi
             </div>
             <div className="items">
               <div className="text">Commission Amount</div>
-              <div className="value">{appLocalizer.currency_symbol}{commissionData?.amount}</div>
+              <div className="value">{formatCurrency(commissionData?.amount)}</div>
             </div>
             <div className="items">
               <div className="text">Shipping</div>
-              <div className="value">{appLocalizer.currency_symbol}{commissionData?.shipping}</div>
+              <div className="value">{formatCurrency(commissionData?.shipping)}</div>
             </div>
             <div className="items">
               <div className="text">Tax</div>
-              <div className="value">{appLocalizer.currency_symbol}{commissionData?.tax}</div>
+              <div className="value">{formatCurrency(commissionData?.tax)}</div>
             </div>
             <div className="items">
               <div className="text">Total</div>
-              <div className="value">{appLocalizer.currency_symbol}{commissionData?.total}</div>
+              <div className="value">{formatCurrency(commissionData?.total)}</div>
             </div>
 
           </div>

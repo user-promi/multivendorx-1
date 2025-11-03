@@ -493,6 +493,10 @@ class FrontendScripts {
                         'user_id'                  => get_current_user_id(),
                         'currency'                 => get_woocommerce_currency(),       // e.g., USD
                         'currency_symbol'          => get_woocommerce_currency_symbol(),
+                        'price_format'             => get_woocommerce_price_format(),
+                        'decimal_sep'              => wc_get_price_decimal_separator(),
+                        'thousand_sep'             => wc_get_price_thousand_separator(),
+                        'decimals'                 => wc_get_price_decimals(),
                         'payout_payment_options'   => $payment_admin_settings,
 						'module_page_url'          => admin_url( 'admin.php?page=multivendorx#&tab=modules' ),
 						'store_page_url'           => trailingslashit( site_url() ) . untrailingslashit( MultiVendorX()->setting->get_setting( 'store_url', 'store' ) ),

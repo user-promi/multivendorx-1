@@ -43,6 +43,10 @@ declare global {
         user_id:any;
         currency:any;
         currency_symbol:any;
+        price_format:any;
+        decimal_sep:any;
+        thousand_sep:any;
+        decimals:any;
         edit_order_capability:any;
         add_product_link:any;
         map_providor:any;
