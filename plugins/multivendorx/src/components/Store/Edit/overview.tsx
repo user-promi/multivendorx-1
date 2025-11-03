@@ -10,38 +10,38 @@ interface OverviewProps {
 
 const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
     const navigate = useNavigate();
-    const [data, setData] = useState<any[]>([]);
+    // const [data, setData] = useState<any[]>([]);
     // const [storeData, setStoreData] = useState<any[]>([]);
 
-    useEffect(() => {
-        if (!id) return;
+    // useEffect(() => {
+    //     if (!id) return;
 
-        axios({
-            method: 'GET',
-            url: getApiLink(appLocalizer, `transaction/${id}`),
-            headers: { 'X-WP-Nonce': appLocalizer.nonce },
-        })
-            .then((response) => {
-                setData(response?.data || {});
-            })
+    //     axios({
+    //         method: 'GET',
+    //         url: getApiLink(appLocalizer, `transaction/${id}`),
+    //         headers: { 'X-WP-Nonce': appLocalizer.nonce },
+    //     })
+    //         .then((response) => {
+    //             setData(response?.data || {});
+    //         })
 
-        // axios({
-        //     method: "GET",
-        //     url: getApiLink(appLocalizer, `store/${id}`),
-        //     headers: { "X-WP-Nonce": appLocalizer.nonce },
-        // })
-        //     .then((response) => {
-        //         setStoreData(response.data || {});
-        //     })
-    }, []);
+    //     // axios({
+    //     //     method: "GET",
+    //     //     url: getApiLink(appLocalizer, `store/${id}`),
+    //     //     headers: { "X-WP-Nonce": appLocalizer.nonce },
+    //     // })
+    //     //     .then((response) => {
+    //     //         setStoreData(response.data || {});
+    //     //     })
+    // }, []);
     
     const overviewData = [
         { icon: "adminlib-tools green", number:  `${appLocalizer.currency_symbol}${Number(storeData.commission?.total_order_amount ?? 0).toFixed(2)}`, text: "Lifetime Earnings" },
-        { icon: "adminlib-book red", number: `${appLocalizer.currency_symbol}${Number(data.wallet_balance ?? 0).toFixed(2)}`, text: "Available Balance" },
-        { icon: "adminlib-global-community yellow", number: `${appLocalizer.currency_symbol}${Number(data.locking_balance ?? 0).toFixed(2)}`, text: "Pending Balance" },
+        { icon: "adminlib-book red", number: `${appLocalizer.currency_symbol}${Number(storeData.transactions?.balance ?? 0).toFixed(2)}`, text: "Available Balance" },
+        { icon: "adminlib-global-community yellow", number: `${appLocalizer.currency_symbol}${Number(storeData.transactions?.locking_balance ?? 0).toFixed(2)}`, text: "Pending Balance" },
         { icon: "adminlib-global-community blue", number: `${appLocalizer.currency_symbol}${Number(storeData.request_withdrawal_amount ?? 0).toFixed(2)}`, text: "Requested Payout" },
     ];
-
+console.log(storeData)
     return (
         <>
 
@@ -253,13 +253,13 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                                     <span>JD</span>
                                 </div>
                                 <div className="details">
-                                    <div className="name">{storeData.primary_owner_info?.name}</div>
+                                    <div className="name">{storeData.primary_owner_info?.data?.display_name}</div>
                                     <div className="des">Owner</div>
                                 </div>
                             </div>
                             <ul className="contact-details">
                                 <li>
-                                    <i className="adminlib-mail"></i>{storeData.primary_owner_info?.email}
+                                    <i className="adminlib-mail"></i>{storeData.primary_owner_info?.data?.user_email}
                                 </li>
                                 {/* <li>
                                     <i className="adminlib-form-phone"></i> +1 (555) 987-6543
