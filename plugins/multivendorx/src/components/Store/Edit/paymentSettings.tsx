@@ -23,7 +23,7 @@ interface StorePaymentConfig {
 	[key: string]: PaymentProvider;
 }
 
-const PaymentSettings = ({ id }: { id: string|null }) => {
+const PaymentSettings = ({ id, data }: { id: string|null; data: any }) => {
 	const [formData, setFormData] = useState<{ [key: string]: any }>({}); // Use 'any' for simplicity here
 	const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
@@ -47,14 +47,18 @@ const PaymentSettings = ({ id }: { id: string|null }) => {
 	useEffect(() => {
 		if (!id) return;
 
-		axios({
-			method: 'GET',
-			url: getApiLink(appLocalizer, `store/${id}`),
-			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-		}).then((res) => {
-			const data = res.data || {};
-			setFormData((prev) => ({ ...prev, ...data }));
-		});
+		// axios({
+		// 	method: 'GET',
+		// 	url: getApiLink(appLocalizer, `store/${id}`),
+		// 	headers: { 'X-WP-Nonce': appLocalizer.nonce },
+		// }).then((res) => {
+		// 	const data = res.data || {};
+		// 	setFormData((prev) => ({ ...prev, ...data }));
+		// });
+
+		if (data) {
+			setFormData(data);
+		}
 	}, [id]);
 
 	useEffect(() => {
@@ -195,7 +199,6 @@ const PaymentSettings = ({ id }: { id: string|null }) => {
         }
     };
 
-
 	return (
 		<>
 			<SuccessNotice message={successMsg} />
@@ -210,7 +213,7 @@ const PaymentSettings = ({ id }: { id: string|null }) => {
 									wrapperClass="setting-form-input"
 									descClass="settings-metabox-description"
 									description={
-										(!paymentOptions && paymentOptions.length === 0)
+										(paymentOptions && paymentOptions.length === 0)
 											? "You haven’t enabled any payment methods yet. Configure payout options to allow stores to receive their earnings."
 											: ""
 									}

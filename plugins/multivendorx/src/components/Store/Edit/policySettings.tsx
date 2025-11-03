@@ -2,21 +2,25 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { BasicInput, TextArea, SuccessNotice, getApiLink } from 'zyra';
 
-const PolicySettings = ({ id }: { id: string | null }) => {
+const PolicySettings = ({ id, data }: { id: string | null; data: any }) => {
 	const [formData, setFormData] = useState<{ [key: string]: string }>({});
 	const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
 	useEffect(() => {
 		if (!id) return;
 
-		axios({
-			method: 'GET',
-			url: getApiLink(appLocalizer, `store/${id}`),
-			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-		}).then((res) => {
-			const data = res.data || {};
-			setFormData((prev) => ({ ...prev, ...data }));
-		});
+		// axios({
+		// 	method: 'GET',
+		// 	url: getApiLink(appLocalizer, `store/${id}`),
+		// 	headers: { 'X-WP-Nonce': appLocalizer.nonce },
+		// }).then((res) => {
+		// 	const data = res.data || {};
+		// 	setFormData((prev) => ({ ...prev, ...data }));
+		// });
+
+		if (data) {
+			setFormData(data);
+		}
 	}, [id]);
 
 	useEffect(() => {

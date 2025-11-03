@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { BasicInput, SelectInput, getApiLink, SuccessNotice } from 'zyra';
 
-const Facilitator = ({ id }: { id: string|null }) => {
+const Facilitator = ({ id, data }: { id: string|null; data: any }) => {
     const [formData, setFormData] = useState<{ [key: string]: any }>({});
     
     const [successMsg, setSuccessMsg] = useState<string | null>(null);
@@ -10,17 +10,21 @@ const Facilitator = ({ id }: { id: string|null }) => {
     useEffect(() => {
         if (!id) return;
 
-        axios({
-            method: 'GET',
-            url: getApiLink(appLocalizer, `store/${id}`),
-            headers: { 'X-WP-Nonce': appLocalizer.nonce },
-        })
-            .then((res) => {
-                const data = res.data || {};
-                setFormData((prev) => ({ ...prev, ...data }));
-            })
+        // axios({
+        //     method: 'GET',
+        //     url: getApiLink(appLocalizer, `store/${id}`),
+        //     headers: { 'X-WP-Nonce': appLocalizer.nonce },
+        // })
+        //     .then((res) => {
+        //         const data = res.data || {};
+        //         setFormData((prev) => ({ ...prev, ...data }));
+        //     })
+
+        if (data) {
+			setFormData(data);
+		}
     }, [id]);
-console.log(formData.facilitator)
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
 		const { name, value } = e.target;
 		setFormData((prev) => {
