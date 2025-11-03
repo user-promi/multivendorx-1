@@ -3,9 +3,7 @@
 use MultiVendorX\Store\StoreUtil;
 use MultiVendorX\Store\Store;
 
-$all_endpoints = MultiVendorX()->rest->dashboard->all_endpoints();
 $user          = wp_get_current_user();
-$store_ids     = StoreUtil::get_stores_from_user_id( $user->ID );
 $store_dashboard_logo = MultiVendorX()->setting->get_setting( 'store_dashboard_site_logo', array() );
 $page_info     = MultiVendorX()->rest->dashboard->get_current_page_and_submenu();
 
@@ -31,7 +29,7 @@ $page_info     = MultiVendorX()->rest->dashboard->get_current_page_and_submenu()
         </div>
 
             <ul class="dashboard-tabs">
-                <?php foreach ( $all_endpoints as $section ) : ?>
+                <?php foreach ( $page_info['all_endpoints'] as $section ) : ?>
                     <?php
                     $has_submenu = ! empty( $section['submenu'] );
                     $is_active   = ( $page_info['current_page'] === $section['slug'] && empty( $page_info['current_sub'] ) );
@@ -129,11 +127,13 @@ $page_info     = MultiVendorX()->rest->dashboard->get_current_page_and_submenu()
                                         <?php
                                         // Count stores excluding the active one.
                                         $active_store = $page_info['active_store'] ?? null;
+                                        $store_ids    = $page_info['store_ids'] ?? [];
 
                                         $available_stores = array_filter(
                                             $store_ids,
                                             function ( $id ) use ( $active_store ) {
-                                                return $id !== $active_store;
+                                                // Skip the active store if it exists in the list
+                                                return $active_store ? ( $id !== $active_store ) : true;
                                             }
                                         );
 
@@ -178,7 +178,7 @@ $page_info     = MultiVendorX()->rest->dashboard->get_current_page_and_submenu()
             
             ?>
 
-            <div class="content-wrapper" id="<?php echo $page_info['id'] ? esc_attr( $page_info['id'] ) : ''; ?>"> 
+            <div class="content-wrapper" id="<?php echo $page_info['id'] ? esc_attr( $page_info['id'] ) : ''; ?>">
                  <?php if ( !empty($page_info['error_msg']) ) { ?>
                     <div class="permission-wrapper">
                         <i class="adminlib-info red"></i>
