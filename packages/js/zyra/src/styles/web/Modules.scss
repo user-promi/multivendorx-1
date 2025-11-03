@@ -14,27 +14,6 @@
       font-weight: 500;
     }
   }
-
-  .category-filter {
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-
-    .category-item {
-      padding: 0.5rem 1.2rem;
-      background: #fff;
-      color: #000;
-      font-size: 0.95rem;
-      border-radius: 3.125rem;
-      cursor: pointer;
-
-      &.active {
-        background: $theme-color;
-        color: #fff;
-      }
-    }
-  }
-
   .module-option-row {
     display: flex;
     flex-wrap: wrap;

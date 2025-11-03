@@ -317,25 +317,21 @@ const StoreOrders: React.FC = () => {
     ];
 
     return (
-        <div className="row">
-            <div className="column">
-                <Table
-                    data={data}
-                    columns={columns as ColumnDef<Record<string, any>, any>[]}
-                    rowSelection={rowSelection}
-                    onRowSelectionChange={setRowSelection}
-                    defaultRowsPerPage={pagination.pageSize}
-                    pageCount={pageCount}
-                    pagination={pagination}
-                    onPaginationChange={setPagination}
-                    handlePagination={requestApiForData}
-                    perPageOption={[10, 25, 50]}
-                    realtimeFilter={realtimeFilter}
-                    searchFilter={searchFilter}
-                    totalCounts={totalRows}
-                />
-            </div>
-        </div>
+        <Table
+            data={data}
+            columns={columns as ColumnDef<Record<string, any>, any>[]}
+            rowSelection={rowSelection}
+            onRowSelectionChange={setRowSelection}
+            defaultRowsPerPage={pagination.pageSize}
+            pageCount={pageCount}
+            pagination={pagination}
+            onPaginationChange={setPagination}
+            handlePagination={requestApiForData}
+            perPageOption={[10, 25, 50]}
+            realtimeFilter={realtimeFilter}
+            searchFilter={searchFilter}
+            totalCounts={totalRows}
+        />
     );
 };
 

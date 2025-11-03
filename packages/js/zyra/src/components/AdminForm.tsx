@@ -1916,7 +1916,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                 <div
                     key={'g' + inputField.key}
                     className={`form-group ${inputField.classes ? inputField.classes : ''
-                        } ${inputField.proSetting ? 'pro-setting' : ''} ${(!inputField.proSetting && inputField.moduleEnabled && modules.includes(inputField.moduleEnabled) ) ? '' : 'module-enabled'}`}
+                        } ${inputField.proSetting ? 'pro-setting' : ''} ${(inputField.moduleEnabled && !modules.includes(inputField.moduleEnabled) ) ? 'module-enabled' : ''}`}
                     onClick={(e) => handleGroupClick(e, inputField)}
                 >
                     {inputField.label && inputField.type !== 'catalog-customizer' &&

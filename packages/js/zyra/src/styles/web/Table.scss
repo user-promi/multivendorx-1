@@ -220,6 +220,7 @@
                 border-bottom: $border-light-small;
                 background: $theme-background-color;
                 color: $theme-color;
+                border-radius: 0.313rem;
             }
 
             .header-col {
@@ -298,6 +299,7 @@
                 align-items: center;
                 width: 100%;
                 border-bottom: $border-light-small;
+                border-radius: 0.313rem;
 
 
                 .admin-column {
@@ -357,6 +359,10 @@
                             color: $theme-color;
                         }
                     }
+                    .order-link{
+                        color: $theme-color;
+                    }
+
                 }
 
                 .admin-column:nth-of-type(2) {

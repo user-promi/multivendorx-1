@@ -202,9 +202,10 @@ const StoreTable: React.FC = () => {
                 return (
                     <TableCell title={row.original.store_name || ''}>
                         <a
-                            onClick={() => {
-                                window.open(`${appLocalizer.site_url}/store/${row.original.store_slug}/`, '_blank');
+                            onClick={(rowData) => {
+                                 window.location.href = `?page=multivendorx#&tab=stores&edit/${rowData.id}`;
                             }}
+                            
                             className="product-wrapper"
                         >
                             {row.original.image ? (
@@ -333,6 +334,14 @@ const StoreTable: React.FC = () => {
                     rowData={row.original}
                     header={{
                         actions: [
+                            {
+                                label: __('Settings', 'multivendorx'),
+                                icon: 'adminlib-setting',
+                                onClick: (rowData) => {
+                                    window.location.href = `?page=multivendorx#&tab=stores&edit/${rowData.id}`;
+                                },
+                                hover: true
+                            },
                             ...(row.original.status === 'active'
                                 ? [
                                     {
@@ -346,14 +355,6 @@ const StoreTable: React.FC = () => {
                                     }
                                 ]
                                 : []),
-                            {
-                                label: __('Settings', 'multivendorx'),
-                                icon: 'adminlib-report',
-                                onClick: (rowData) => {
-                                    window.location.href = `?page=multivendorx#&tab=stores&edit/${rowData.id}`;
-                                },
-                                hover: true
-                            },
                             // {
                             //     label: __('Delete', 'multivendorx'),
                             //     icon: 'adminlib-vendor-form-delete',

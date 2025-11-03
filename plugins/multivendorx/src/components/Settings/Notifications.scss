@@ -72,6 +72,9 @@
                 font-weight: 500;
                 line-height: 1rem;
                 padding-bottom: 0.125rem;
+                display: flex;
+                gap: 0.5rem;
+                align-items: center;
             }
 
             .description {
@@ -179,8 +182,13 @@
 
     .view-toggle {
         display: flex;
-        justify-content: end;
+        justify-content: space-between;
         margin-bottom: 1.125rem;
+        align-items: center;
+
+        .category-item {
+            background: $theme-background-color;
+        }
     }
 }
 

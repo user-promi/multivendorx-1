@@ -1192,10 +1192,14 @@ input[type="checkbox"]:focus {
       border-radius: 0.313rem;
       width: 11rem;
       transform: translate(0, 30px);
+      margin: 0;
 
       ul {
-        padding: 0.313rem 0;
+        padding: 0.45rem;
         margin: 0;
+        flex-direction: column;
+        display: flex;
+        gap: 0.45rem;
 
         li {
           padding: 0 0.625rem;
@@ -1206,6 +1210,13 @@ input[type="checkbox"]:focus {
           font-weight: 500;
           cursor: pointer;
           transition: all 0.3s linear;
+          margin: 0;
+          border-radius: 0.313rem;
+          transition: all 0.4s ease;
+
+          &:hover {
+            background: #e6e2e29e;
+          }
 
           i {
             font-size: 1rem;
@@ -1396,3 +1407,24 @@ input[type="checkbox"]:focus {
 //   justify-content: center;
 //   align-items: center;
 // }
+
+// filter tabs (module , notification)
+.category-filter {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+
+  .category-item {
+    padding: 0.5rem 1.2rem;
+    background: #fff;
+    color: #000;
+    font-size: 0.95rem;
+    border-radius: 3.125rem;
+    cursor: pointer;
+
+    &.active {
+      background: $theme-color;
+      color: #fff;
+    }
+  }
+}
