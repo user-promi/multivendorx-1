@@ -328,10 +328,10 @@
             color: $theme-color;
         }
 
-        i {
-            font-size: 1.313rem;
-            color: $theme-color;
-        }
+        // i {
+        //     font-size: 1.313rem;
+        //     color: $theme-color;
+        // }
 
         h3 {
             font-size: 0.83rem;
@@ -364,6 +364,7 @@
         .cards {
             background: #f8f9fa;
             border: none;
+            width: 100%;
         }
 
         h3 {
@@ -374,17 +375,17 @@
             display: flex;
             align-items: center;
             gap: 0.813rem;
-
-            .admin-badge {
-                background: #d9f5f0a3;
-                color: #06be9fb3;
-            }
         }
     }
 
     &.quick-link {
         flex-direction: column;
         gap: 0;
+
+        .icon {
+            font-size: 1.313rem;
+            color: $theme-color;
+        }
 
         .header a {
             display: flex;

@@ -77,7 +77,7 @@ const ApprovalQueue = () => {
         ...(appLocalizer.settings_databases_value['general']['approve_store'] === "manually"
             ? [{
                 id: "products",
-                label: "Questions",
+                label: "Products",
                 icon: "adminlib-calendar red",
                 des: "Eager to join the marketplace",
                 count: storeCount,
