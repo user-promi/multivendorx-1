@@ -253,7 +253,9 @@ const StoreTable: React.FC = () => {
             header: __('Lifetime Earning', 'multivendorx'),
             cell: ({ row }: any) => (
                 <TableCell title={row.original.commission.total_order_amount || ''}>
-                    {row.original.commission.total_order_amount || '-'}
+                    {row.original.commission?.total_order_amount
+                        ? `${appLocalizer.currency_symbol}${row.original.commission.total_order_amount}`
+                        : '-'}
                 </TableCell>
             ),
         },
