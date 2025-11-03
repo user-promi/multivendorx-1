@@ -281,7 +281,7 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({ open, onClose, commissi
         </div>
 
         <div className="section right">
-          <div className="heading">{__("Commission Overview", "multivendorx")}</div>
+          <div className="heading">{__("Order Overview", "multivendorx")}</div>
           <div className="commission-details">
             <div className="items">
               <div className="text">Associated Order</div>
@@ -314,7 +314,13 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({ open, onClose, commissi
 
               </div>
             </div>
-            <div className="items">
+          </div>
+          <div className="popup-divider"></div>
+          
+          <div className="heading">{__("Commission Overview", "multivendorx")}</div>
+
+          <div className="commission-details">
+           <div className="items">
               <div className="text">Commission Status</div>
               <div className="value">
                 <span className={`admin-badge ${commissionData?.status === 'paid' ? 'green' : 'red'}`}>

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { TextArea, getApiLink, SuccessNotice } from 'zyra';
 
-const StoreRegistration = ({ id }: { id: string|null }) => {
+const StoreRegistration = ({ id }: { id: string | null }) => {
 	const [formData, setFormData] = useState<{ [key: string]: string }>({});
 	const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
@@ -91,7 +91,28 @@ const StoreRegistration = ({ id }: { id: string|null }) => {
 						{formData.registration_data &&
 							Object.entries(formData.registration_data).map(([label, value]) => (
 								<div className="form-details" key={label}>
-									<label className="label">{label} :</label> 
+									<label className="label">{label} :</label>
+									<div className="value">{value || "[Not Provided]"}</div>
+								</div>
+							))}
+					</div>
+					<div className="card-content">
+						<div className="card-title">Registation form details</div>
+
+						{/* Core Data */}
+						{formData.core_data &&
+							Object.entries(formData.core_data).map(([label, value]) => (
+								<div className="form-details" key={label}>
+									<label className="label">{label} :</label>
+									<div className="value">{value || "[Not Provided]"}</div>
+								</div>
+							))}
+
+						{/* Registration Data */}
+						{formData.registration_data &&
+							Object.entries(formData.registration_data).map(([label, value]) => (
+								<div className="form-details" key={label}>
+									<label className="label">{label} :</label>
 									<div className="value">{value || "[Not Provided]"}</div>
 								</div>
 							))}
@@ -100,6 +121,45 @@ const StoreRegistration = ({ id }: { id: string|null }) => {
 
 
 				<div className="card-wrapper w-35">
+					<div className="card-content">
+						<div className="card-header">
+							<div className="left">
+								<div className="title">
+									Submited by
+								</div>
+							</div>
+							{/* <div className="right">
+                                <i className="adminlib-external"
+                                    onClick={() => { navigate(`?page=multivendorx#&tab=stores&edit/${id}/&subtab=staff`) }}
+                                ></i>
+                            </div> */}
+						</div>
+
+						<div className="store-owner-details owner">
+							<div className="profile">
+								<div className="avater">
+									<span>JD</span>
+								</div>
+								<div className="details">
+									<div className="name">
+										jone jone
+										{/* {storeData.primary_owner_info?.data?.display_name ?? <Skeleton variant="text" width={150} />} */}
+									</div>
+									{/* <div className="des">Owner</div> */}
+								</div>
+							</div>
+							<ul className="contact-details">
+								<li>
+									<i className="adminlib-mail"></i>
+									{/* {storeData.primary_owner_info?.data?.user_email  ?? <Skeleton variant="text" width={150} />} */}
+									test@gmail.com
+								</li>
+								<li>
+									<i className="adminlib-form-phone"></i> +1 (555) 987-6543
+								</li>
+							</ul>
+						</div>
+					</div>
 					<div className="card-content">
 						<div className="card-title">
 							Note
@@ -130,6 +190,7 @@ const StoreRegistration = ({ id }: { id: string|null }) => {
 							</button>
 						</div>
 					</div>
+
 				</div>
 			</div>
 		</>
