@@ -1,20 +1,11 @@
-/**
- * External dependencies
- */
 import React, { useState, useEffect } from 'react';
 import { ReactSortable } from 'react-sortablejs';
-
-/**
- * Internal dependencies
- */
 import SimpleInput from './SimpleInput';
 import MultipleOptions from './MultipleOption';
+import { FormField } from './RegistrationForm';
 
-/**
- * Props and Types
- */
 interface SubField {
-    id: string | number;
+    id: number; // Use number for ReactSortable
     key: string;
     label: string;
     type: 'text' | 'select';
@@ -34,49 +25,63 @@ interface AddressFormField {
 interface AddressFieldProps {
     formField: AddressFormField;
     onChange: (key: string, value: any) => void;
+    opendInput: FormField | null;
+    setOpendInput: React.Dispatch<React.SetStateAction<FormField | null>>;
 }
 
-const AddressField: React.FC<AddressFieldProps> = ({ formField, onChange }) => {
-    const [subFields, setSubFields] = useState<SubField[]>(formField.fields ?? []);
+const AddressField: React.FC<AddressFieldProps> = ({ formField, onChange, opendInput, setOpendInput }) => {
+    const [subFields, setSubFields] = useState<SubField[]>(formField.fields || []);
 
-    // Sync with parent updates (important if external updates happen)
     useEffect(() => {
-        setSubFields(formField.fields ?? []);
+        setSubFields(formField.fields || []);
     }, [formField.fields]);
 
-    // Update parent (and eventually DB)
+    // Update parent
     const updateParent = (updated: SubField[]) => {
         setSubFields(updated);
-        onChange('fields', updated); // this should save to parent + DB
+        onChange('fields', updated);
+    };
+
+    // Subfield value change
+    const handleSubFieldChange = (id: number, key: string, value: any) => {
+        const updated = subFields.map(f => f.id === id ? { ...f, [key]: value } : f);
+        setSubFields(updated);
+        // Update parent value object
+        const valueObj = formField.value || {};
+        const changedField = updated.find(f => f.id === id);
+        if (changedField) {
+            onChange('value', { ...valueObj, [changedField.key]: value });
+        }
     };
 
     return (
-        <div className="address-field-wrapper" style={{ position: 'relative' }}>
+        <div className="address-field-wrapper">
             <ReactSortable
                 list={subFields}
-                setList={(newList: SubField[]) => {
-                    updateParent(newList);
-                }}
+                setList={updateParent}
                 handle=".drag-handle"
                 animation={150}
             >
-                {subFields.map((f) => (
-                    <div key={f.id} className="address-subfield">
+                {subFields.map(f => (
+                    <div
+                        key={f.id}
+                        className={`address-subfield ${opendInput?.id === f.id ? 'active' : ''}`}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            setOpendInput({ ...f, parentId: formField.id } as unknown as FormField);
+                        }}
+                    >
                         <div className="address-subfield-header">
-                            <span className="admin-badge gray drag-handle">
+                            <span className="admin-badge gray drag-handle" style={{ cursor: 'grab' }}>
                                 <i className="admin-font adminlib-drag"></i>
                             </span>
-                            {/* <label>{f.label}</label> */}
+                            <label>{f.label}</label>
                         </div>
 
-                        {/* Render actual field preview */}
                         {f.type === 'text' && (
                             <SimpleInput
-                                formField={{
-                                    label: f.label,
-                                    placeholder: f.placeholder,
-                                }}
-                                onChange={() => {}}
+                                formField={{ label: f.label, placeholder: f.placeholder }}
+                                onChange={(key, value) => handleSubFieldChange(f.id, key, value)}
                             />
                         )}
 
@@ -85,16 +90,11 @@ const AddressField: React.FC<AddressFieldProps> = ({ formField, onChange }) => {
                                 formField={{
                                     label: f.label,
                                     type: 'dropdown',
-                                    options:
-                                        f.options?.map((opt) => ({
-                                            id: opt,
-                                            label: opt,
-                                            value: opt,
-                                        })) || [],
+                                    options: f.options?.map(opt => ({ id: opt, value: opt, label: opt })) || [],
                                 }}
                                 type="dropdown"
                                 selected={false}
-                                onChange={() => {}}
+                                onChange={(key, value) => handleSubFieldChange(f.id, key, value)}
                             />
                         )}
                     </div>

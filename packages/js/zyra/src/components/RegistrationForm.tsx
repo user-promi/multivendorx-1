@@ -48,7 +48,7 @@ interface ImageItem {
     caption?: string;
 }
 
-interface FormField {
+export interface FormField {
     id: number;
     type: string;
     label: string;
@@ -123,20 +123,14 @@ const selectOptions: SelectOption[] = [
     { icon: 'adminlib-calendar icon-form-store-description', value: 'datepicker', label: 'Date Picker' },
     { icon: 'adminlib-alarm icon-form-address', value: 'TimePicker', label: 'Time Picker' },
     { icon: 'adminlib-divider icon-form-address', value: 'divider', label: 'Divider' },
-    { icon: 'adminlib-divider icon-form-address', value: 'address', label: 'Address test' },
 ];
 
 const selectOptionsStore: SelectOption[] = [
     { icon: 'adminlib-t-letter-bold icon-form-textbox', value: 'text', label: 'Store Name', name: 'name' },
     { icon: 'adminlib-text icon-form-textarea', value: 'textarea', label: 'Store Desc', name: 'description' },
-    { icon: 'adminlib-t-letter-bold icon-form-textbox', value: 'text', label: 'Address 1', name: 'address_1' },
-    { icon: 'adminlib-t-letter-bold icon-form-textbox', value: 'text', label: 'Address 2', name: 'address_2' },
     { icon: 'adminlib-t-letter-bold icon-form-textbox', value: 'text', label: 'Phone', name: 'phone' },
-    { icon: 'adminlib-dropdown-checklist icon-form-dropdown', value: 'dropdown', label: 'Country', name: 'country' },
-    { icon: 'adminlib-dropdown-checklist icon-form-dropdown', value: 'dropdown', label: 'State', name: 'state' },
-    { icon: 'adminlib-t-letter-bold icon-form-textbox', value: 'text', label: 'City', name: 'city' },
-    { icon: 'adminlib-t-letter-bold icon-form-textbox', value: 'text', label: 'Post Code', name: 'post_code' },
     { icon: 'adminlib-unread icon-form-email', value: 'email', label: 'Paypal Email', name: 'paypal_email' },
+    { icon: 'adminlib-divider icon-form-address', value: 'address', label: 'Address' },
 ];
 
 // Component
@@ -213,12 +207,12 @@ const CustomForm: React.FC<CustomFormProps> = ({
         } else if (type === 'address') {
             newFormField.label = 'Address';
             newFormField.fields = [
-                { id: randMaxId, key: 'address_1', label: 'Address Line 1', type: 'text', placeholder: 'Address Line 1', required: true },
-                { id: randMaxId, key: 'address_2', label: 'Address Line 2', type: 'text', placeholder: 'Address Line 2' },
-                { id: randMaxId, key: 'city', label: 'City', type: 'text', placeholder: 'City', required: true },
-                { id: randMaxId, key: 'state', label: 'State', type: 'select', options: ['Karnataka', 'Maharashtra', 'Delhi', 'Tamil Nadu'] },
-                { id: randMaxId, key: 'country', label: 'Country', type: 'select', options: ['India', 'USA', 'UK', 'Canada'] },
-                { id: randMaxId, key: 'postcode', label: 'Postal Code', type: 'text', placeholder: 'Postal Code', required: true },
+                { id: randMaxId + 1, key: 'address_1', label: 'Address Line 1', type: 'text', placeholder: 'Address Line 1', required: true },
+                { id: randMaxId + 2, key: 'address_2', label: 'Address Line 2', type: 'text', placeholder: 'Address Line 2' },
+                { id: randMaxId + 3, key: 'city', label: 'City', type: 'text', placeholder: 'City', required: true },
+                { id: randMaxId + 4, key: 'state', label: 'State', type: 'select', options: ['Karnataka', 'Maharashtra', 'Delhi', 'Tamil Nadu'] },
+                { id: randMaxId + 5, key: 'country', label: 'Country', type: 'select', options: ['India', 'USA', 'UK', 'Canada'] },
+                { id: randMaxId + 6, key: 'postcode', label: 'Postal Code', type: 'text', placeholder: 'Postal Code', required: true },
             ];
             newFormField.value = {}; // optional, to hold user-entered values later
         } else {
@@ -579,6 +573,8 @@ const CustomForm: React.FC<CustomFormProps> = ({
                                         <AddressField
                                             formField={formField}
                                             onChange={(key, value) => handleFormFieldChange(index, key, value)}
+                                            opendInput={opendInput} // pass current opened input
+                                            setOpendInput={setOpendInput} // allow subfields to set it
                                         />
                                     )}
                                     {formField.type === 'divider' && (
@@ -622,29 +618,46 @@ const CustomForm: React.FC<CustomFormProps> = ({
 
             {/* Meta Setting Modal outside registration-form-main-section */}
             <div className="registration-edit-form">
-                {opendInput && !opendInput.readonly && (
+                {opendInput && (
                     <>
-                        <SettingMetaBox
-                            formField={opendInput}
-                            opened={{ click: true }}
-                            onChange={(key, value) => {
-                                const index = formFieldList.findIndex(f => f.id === opendInput.id);
-                                if (index >= 0) {
-                                    handleFormFieldChange(index, key, value);
-                                    // Update the local open input so the UI updates immediately
-                                    setOpendInput({ ...formFieldList[index], [key]: value });
-                                }
-                            }}
-                            onTypeChange={(newType) => {
-                                const index = formFieldList.findIndex(f => f.id === opendInput.id);
-                                if (index >= 0) {
-                                    handleFormFieldTypeChange(index, newType);
-                                    // Update the local open input type
-                                    setOpendInput({ ...formFieldList[index], type: newType });
-                                }
-                            }}
-                            inputTypeList={selectOptions}
-                        />
+                        {opendInput.readonly ? (
+                            // MultivendorX Free field: allow only label & placeholder
+                            <SettingMetaBox
+                                formField={opendInput}
+                                opened={{ click: true }}
+                                metaType="setting-meta"
+                                inputTypeList={[]} // hide type dropdown
+                                onChange={(key, value) => {
+                                    if (key !== 'label' && key !== 'placeholder') return; // only allow label & placeholder
+                                    const index = formFieldList.findIndex(f => f.id === opendInput.id);
+                                    if (index >= 0) {
+                                        handleFormFieldChange(index, key, value);
+                                        setOpendInput({ ...formFieldList[index], [key]: value });
+                                    }
+                                }}
+                            />
+                        ) : (
+                            // Normal fields: full edit box
+                            <SettingMetaBox
+                                formField={opendInput}
+                                opened={{ click: true }}
+                                onChange={(key, value) => {
+                                    const index = formFieldList.findIndex(f => f.id === opendInput.id);
+                                    if (index >= 0) {
+                                        handleFormFieldChange(index, key, value);
+                                        setOpendInput({ ...formFieldList[index], [key]: value });
+                                    }
+                                }}
+                                onTypeChange={(newType) => {
+                                    const index = formFieldList.findIndex(f => f.id === opendInput.id);
+                                    if (index >= 0) {
+                                        handleFormFieldTypeChange(index, newType);
+                                        setOpendInput({ ...formFieldList[index], type: newType });
+                                    }
+                                }}
+                                inputTypeList={selectOptions}
+                            />
+                        )}
                     </>
                 )}
             </div>
