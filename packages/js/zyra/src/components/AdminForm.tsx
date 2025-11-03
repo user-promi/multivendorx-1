@@ -44,6 +44,7 @@ import PaymentTabsComponent from './PaymentTabsComponent';
 // import VerificationMethods from './VerificationMethods';
 import SystemInfo from './SystemInfo';
 import MultiInput from './MultiInput';
+import { useModules } from '../contexts/ModuleContext';
 
 // Types
 declare const wp: any;
@@ -285,7 +286,6 @@ interface AdminFormProps {
 const AdminForm: React.FC<AdminFormProps> = ({
     setting,
     updateSetting,
-    modules,
     appLocalizer,
     settings,
     storeTabSetting,
@@ -303,7 +303,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
         settings: '',
         plugin: '',
     });
-
+    const { modules, insertModule, removeModule } = useModules();
     useEffect(() => {
         if (settingChanged.current) {
             settingChanged.current = false;
@@ -1916,7 +1916,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                 <div
                     key={'g' + inputField.key}
                     className={`form-group ${inputField.classes ? inputField.classes : ''
-                        } ${inputField.proSetting ? 'pro-setting' : ''} ${(!inputField.proSetting && inputField.moduleEnabled) ? 'module-enabled' : ''}`}
+                        } ${inputField.proSetting ? 'pro-setting' : ''} ${(!inputField.proSetting && inputField.moduleEnabled && modules.includes(inputField.moduleEnabled) ) ? '' : 'module-enabled'}`}
                     onClick={(e) => handleGroupClick(e, inputField)}
                 >
                     {inputField.label && inputField.type !== 'catalog-customizer' &&

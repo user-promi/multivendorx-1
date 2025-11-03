@@ -25,10 +25,12 @@ const StoreSettings = ({ id, data }: { id: string | null; data:any }) => {
     const [emailBadges, setEmailBadges] = useState<EmailBadge[]>([]);
     const [newEmailValue, setNewEmailValue] = useState('');
     const statusOptions = [
-        { label: "Active", value: "active" },
-        { label: "Pending", value: "pending" },
-        { label: "Rejected", value: "rejected" },
+        { label: "Pending approval", value: "pending" },
+        { label: "Declined", value: "declined" },
+        { label: "Under review", value: "under_review" },
         { label: "Suspended", value: "suspended" },
+        { label: "Active", value: "active" },
+        { label: "Deactivated", value: "deactivated" },
     ];
 
     const [imagePreviews, setImagePreviews] = useState<{ [key: string]: string }>({});
