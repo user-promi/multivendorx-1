@@ -192,8 +192,8 @@ const EditStore = () => {
         {
             type: 'file',
             content: {
-                id: 'store-application',
-                name: 'Application',
+                id: 'application-details',
+                name: 'Application Details',
                 desc: 'Application',
                 hideTabHeader: true,
                 icon: 'adminlib-credit-card',
@@ -225,7 +225,7 @@ const EditStore = () => {
                 return <ShippingSettings id={editId} data={data} />;
             case 'store-policy':
                 return <PolicySettings id={editId} data={data} />;
-            case 'store-application':
+            case 'application-details':
                 return <StoreRegistration id={editId} />;
             case 'store-facilitator':
                 return <Facilitator id={editId} data={data} />;
