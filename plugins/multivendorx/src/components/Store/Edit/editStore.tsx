@@ -1,7 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
 import { FileInput, getApiLink, SelectInput, Tabs } from 'zyra';
-import Brand from '../../../assets/images/brand-logo.png';
-import BrandSmall from '../../../assets/images/brand-icon.png';
+import { Skeleton } from '@mui/material';
+
 import StoreSettings from './storeSettings';
 
 import PaymentSettings from './paymentSettings';
@@ -82,6 +82,8 @@ const EditStore = () => {
     const prepareUrl = (tabId: string) => `?page=multivendorx#&tab=stores&edit/${editId}/&subtab=${tabId}`;
 
     const autoSave = (updatedData: { [key: string]: string }) => {
+        if (!editId) return;
+        
         axios({
             method: 'PUT',
             url: getApiLink(appLocalizer, `store/${editId}`),
@@ -125,6 +127,7 @@ const EditStore = () => {
 
         frame.open();
     };
+
     const tabData = [
         {
             type: 'file',
@@ -369,8 +372,10 @@ const EditStore = () => {
                                                                 className="basic-input"
                                                                 autoFocus
                                                             />
+                                                        ) : data?.name ? (
+                                                            data.name
                                                         ) : (
-                                                            data?.name || "Store Name"
+                                                            <Skeleton variant="text" width={150} />
                                                         )}
 
                                                         <span
@@ -383,7 +388,12 @@ const EditStore = () => {
                                                             <i className={editName ? "" : "adminlib-create"}></i>
                                                         </span>
                                                     </div>
-                                                    <span className="admin-badge green">{data.status}</span>
+                                                    {data?.status ? (
+                                                        <span className="admin-badge green">{data.status}</span>
+                                                    ) : (
+                                                        <Skeleton variant="text" width={100} />
+                                                    )}
+
                                                     <div className="admin-badge green"><i className="adminlib-store-inventory"></i></div>
                                                     <div className="admin-badge blue"><i className="adminlib-geo-my-wp"></i></div>
                                                     <div className="admin-badge yellow"><i className="adminlib-staff-manager"></i></div>
@@ -397,8 +407,10 @@ const EditStore = () => {
                                                             className="textarea-input"
                                                             autoFocus
                                                         />
+                                                    ) : data?.description ? (
+                                                        data.description
                                                     ) : (
-                                                        data.description || "Enter store description"
+                                                        <Skeleton variant="text" width={150} />
                                                     )}
 
                                                     <span
@@ -449,14 +461,25 @@ const EditStore = () => {
 
 
                                                 <div className="des">
-                                                    <b>Store url: </b>{appLocalizer.store_page_url + '/' + data.slug}{' '}
-                                                    <a
-                                                        href={`${appLocalizer.store_page_url}/${data.slug}`}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                    >
-                                                        <i className="adminlib-external"></i>
-                                                    </a>
+                                                    <b>Store URL: </b>
+                                                        {appLocalizer.store_page_url + '/'}
+                                                        {data?.slug ? (
+                                                        <>
+                                                            {data.slug}{' '}
+                                                            <a
+                                                            href={`${appLocalizer.store_page_url}/${data.slug}`}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            >
+                                                            <i className="adminlib-external"></i>
+                                                            </a>
+                                                        </>
+                                                        ) : (
+                                                        <Skeleton
+                                                            variant="text"
+                                                            width={100}
+                                                        />
+                                                        )}
                                                 </div>
                                             </div>
                                         </div>

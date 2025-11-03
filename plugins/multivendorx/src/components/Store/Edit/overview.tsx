@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { BasicInput, SelectInput, getApiLink, SuccessNotice } from 'zyra';
+import { Skeleton } from '@mui/material';
 
 interface OverviewProps {
   id: string | null;
@@ -41,7 +42,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
         { icon: "adminlib-global-community yellow", number: `${appLocalizer.currency_symbol}${Number(storeData.transactions?.locking_balance ?? 0).toFixed(2)}`, text: "Pending Balance" },
         { icon: "adminlib-global-community blue", number: `${appLocalizer.currency_symbol}${Number(storeData.request_withdrawal_amount ?? 0).toFixed(2)}`, text: "Requested Payout" },
     ];
-console.log(storeData)
+
     return (
         <>
 
@@ -223,13 +224,14 @@ console.log(storeData)
                                     <span>JD</span>
                                 </div>
                                 <div className="details">
-                                    <div className="name">{storeData.primary_owner_info?.data?.display_name}</div>
+                                    <div className="name">{storeData.primary_owner_info?.data?.display_name ?? <Skeleton variant="text" width={150} />
+                                    }</div>
                                     <div className="des">Owner</div>
                                 </div>
                             </div>
                             <ul className="contact-details">
                                 <li>
-                                    <i className="adminlib-mail"></i>{storeData.primary_owner_info?.data?.user_email}
+                                    <i className="adminlib-mail"></i>{storeData.primary_owner_info?.data?.user_email  ?? <Skeleton variant="text" width={150} />}
                                 </li>
                                 {/* <li>
                                     <i className="adminlib-form-phone"></i> +1 (555) 987-6543

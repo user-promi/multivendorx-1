@@ -688,6 +688,7 @@ const StoreSettings = ({ id, data }: { id: string | null; data:any }) => {
 
     // Then update your autoSave function:
     const autoSave = (updatedData: any) => {
+        if (!id) return;
         // Format email data for backend
         const formattedData = { ...updatedData };
 
