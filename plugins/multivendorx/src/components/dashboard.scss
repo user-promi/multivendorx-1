@@ -237,7 +237,12 @@
 
             i {
                 font-size: 1.125rem;
-                color: #5007aa;
+                // color: #5007aa;
+
+                &.remove-btn{
+                    color: rgb(238, 8, 8);
+                    cursor: pointer;
+                }
             }
         }
     }
