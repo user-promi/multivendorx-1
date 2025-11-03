@@ -359,7 +359,6 @@ class FrontendScripts {
                 'products',
                 'policy',
                 'disbursement',
-                'products-capability',
                 'commissions',
                 'marketplace-settings',
                 'user-capability',
@@ -391,6 +390,7 @@ class FrontendScripts {
             $option_name                           = str_replace( '-', '_', 'multivendorx_' . $tab_name . '_settings' );
             $settings_databases_value[ $tab_name ] = MultiVendorX()->setting->get_option( $option_name );
         }
+
 
         $pages = get_pages();
         $woocommerce_pages = array(wc_get_page_id('shop'), wc_get_page_id('cart'), wc_get_page_id('checkout'), wc_get_page_id('myaccount'));

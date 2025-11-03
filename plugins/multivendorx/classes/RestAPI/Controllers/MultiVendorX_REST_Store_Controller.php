@@ -7,6 +7,7 @@ use MultiVendorX\Utill;
 use MultiVendorX\Store\SocialVerification;
 use MultiVendorX\Commission\CommissionUtil;
 use MultiVendorX\StoreReview\Util;
+use MultiVendorX\Transaction\Transaction;
 
 defined('ABSPATH') || exit;
 
@@ -645,6 +646,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
         }
 
         $commission = CommissionUtil::get_commission_summary_for_store((int) $id);
+        $transactions = Transaction::get_balances_for_store((int) $id);
         // Get primary owner information using Store object
         $primary_owner_id = StoreUtil::get_primary_owner( $id );
         $primary_owner_info = $this->get_user_info( $primary_owner_id );
@@ -665,6 +667,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             'status'      => $store->get('status'),
             'create_time' => date( 'M j, Y', strtotime( $store->get('create_time') ) ),
             'commission'  => $commission,
+            'transactions'  => $transactions,
             'primary_owner_info'  => $primary_owner_info,
             'overall_reviews'  => $overall,
             'total_reviews'  => $total_reviews,
