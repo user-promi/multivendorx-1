@@ -67,13 +67,14 @@ class PaymentProcessor {
                 'order_id'         => $order_id,
                 'entry_type'       => 'Dr',
                 'transaction_type' => 'Withdrawal',
+                'payment_method'   => '',
                 'amount'           => 0,
                 'currency'         => get_woocommerce_currency(),
                 'narration'        => "Withdrawal failed because store default payment method not found",
                 'status'           => 'Failed',
             ];
 
-            $format = ["%d", "%d", "%s", "%s", "%f", "%s", "%s", "%s"];
+            $format = ["%d", "%d", "%s", "%s", "%s", "%f", "%s", "%s", "%s"];
 
             $wpdb->insert(
                 $wpdb->prefix . Utill::TABLES['transaction'],
@@ -91,6 +92,7 @@ class PaymentProcessor {
     public function after_payment_complete($store_id, $method, $status, $order_id, $transaction_id, $note, $amount = null) {
         global $wpdb;
 
+        $store = new Store($store_id);
         $order         = $order_id > 0 ? wc_get_order($order_id) : null;
         $commission_id = $order ? $order->get_meta('multivendorx_commission_id', true) : null;
         $commission    = $commission_id ? CommissionUtil::get_commission_db($commission_id) : null;
@@ -105,13 +107,14 @@ class PaymentProcessor {
             'transaction_type' => 'Withdrawal',
             'amount'           => $amount,
             'currency'         => get_woocommerce_currency(),
+            'payment_method'   => $store->get_meta('payment_method'),
             'narration'        => $note ? $note : (($status === 'success')
                                     ? "Withdrawal released via {$method} Payment Processor"
                                     : "Withdrawal failed via {$method} Payment Processor"),
             'status'           => ($status === 'success') ? 'Completed' : 'Failed',
         ];
 
-        $format = ["%d", "%d", "%d", "%s", "%s", "%f", "%s", "%s", "%s"];
+        $format = ["%d", "%d", "%d", "%s", "%s", "%f", "%s", "%s", "%s", "%s"];
 
         $wpdb->insert(
             $wpdb->prefix . Utill::TABLES['transaction'],
@@ -188,6 +191,8 @@ class PaymentProcessor {
             $commission    = $commission_id ? CommissionUtil::get_commission_db($commission_id) : null;
 
             $amount = $commission ? (float) $commission->commission_total : 0.00;
+            $store = new Store((int) $commission->store_id);
+
                 $data = [
                 'store_id'         => (int) $commission->store_id,
                 'order_id'         => (int) $order_id,
@@ -196,11 +201,12 @@ class PaymentProcessor {
                 'transaction_type' => 'COD received',
                 'amount'           => $amount,
                 'currency'         => get_woocommerce_currency(),
+                'payment_method'   => $store->get_meta('payment_method')??'',
                 'narration'        => "COD payment received for order no. - " . $order_id,
                 'status'           => 'Completed',
             ];
 
-            $format = ["%d", "%d", "%d", "%s", "%s", "%f", "%s", "%s", "%s"];
+            $format = ["%d", "%d", "%d", "%s", "%s", "%f", "%s", "%s", "%s", "%s"];
 
             // check shipping
             // if shipping == admin then do nothing
