@@ -241,7 +241,7 @@ const Store = () => {
                                 <div className="form-group-wrapper">
                                     <div className="form-group">
                                         <label htmlFor="store-name">
-                                            Store Name
+                                            Store name
                                         </label>
                                         <BasicInput
                                             type="text"
@@ -255,7 +255,7 @@ const Store = () => {
 
                                     <div className={`form-group ${error ? 'error-input' : ''}`}>
                                         <label htmlFor="store-url">
-                                            Store Slug
+                                            Store slug
                                         </label>
                                         <BasicInput
                                             type="text"
@@ -293,7 +293,7 @@ const Store = () => {
 
                                     <div className="form-group">
                                         <label htmlFor="store-owner">
-                                            Set Primary Owner
+                                            Primary owner
                                         </label>
                                         <SelectInput
                                             name="store_owners"
@@ -321,7 +321,7 @@ const Store = () => {
 
                                     <div className="form-group">
                                         <label htmlFor="store-image">
-                                            Profile Image
+                                            Profile image
                                         </label>
                                         <FileInput
                                             value={formData.image || ''}
