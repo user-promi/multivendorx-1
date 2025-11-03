@@ -160,7 +160,6 @@ const Notification = () => {
         });
 
         setOpenChannel(channel)
-
     };
 
     useEffect(() => {
