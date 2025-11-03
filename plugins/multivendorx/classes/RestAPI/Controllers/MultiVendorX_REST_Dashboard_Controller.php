@@ -431,25 +431,35 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller
         }
     }
 
-    public function get_current_page_and_submenu(): array
-    {
+    public function get_current_page_and_submenu(){
+        $dashboard_array = [
+            'all_endpoints' => $this->all_endpoints() ?? [],
+            'store_ids' => [],
+            'active_store' => '',
+            'current_page' => '',
+            'current_sub' => '',
+            'error_msg' => '',
+            'id' => '',
+            'content' => '',
+        ];
+
         $current_user = wp_get_current_user();
-        $store_ids = StoreUtil::get_stores_from_user_id($current_user->ID);
-        $active_store = get_user_meta($current_user->ID, 'multivendorx_active_store', true);
-        $store = new Store($active_store);
+        $dashboard_array['store_ids'] = StoreUtil::get_stores_from_user_id($current_user->ID);
+        $dashboard_array['active_store'] = get_user_meta($current_user->ID, 'multivendorx_active_store', true);
+        $store = new Store($dashboard_array['active_store']);
         $store_status = $store->get('status');
         $capability_settings = MultiVendorX()->setting->get_setting(reset($current_user->roles), []);
-        $all_endpoints = $this->all_endpoints();
 
         // Early exit if no store found.
-        if (empty($store_ids)) {
-            return ['error_msg' => esc_html__('No active store selected for this user.', 'multivendorx')];
+        if (empty($dashboard_array['store_ids'])) {
+            $dashboard_array['error_msg'] =  esc_html__('No active store selected for this user.', 'multivendorx');
+            return $dashboard_array;
         }
 
         // Ensure active store is set.
-        if (empty($active_store)) {
-            update_user_meta($current_user->ID, 'multivendorx_active_store', reset($store_ids));
-            $active_store = reset($store_ids);
+        if (empty($dashboard_array['active_store'])) {
+            update_user_meta($current_user->ID, 'multivendorx_active_store', reset($dashboard_array['store_ids']));
+            $dashboard_array['active_store'] = reset($dashboard_array['store_ids']);
         }
 
         // Get sanitized current page and subtab.
@@ -457,7 +467,7 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller
 
         // Auto-redirect if submenu exists but not specified.
         if ($current_page && empty($current_sub)) {
-            foreach ($all_endpoints as $section) {
+            foreach ($dashboard_array['all_endpoints'] as $section) {
                 if ($section['slug'] === $current_page && !empty($section['submenu'])) {
                     $first_sub = $section['submenu'][0]['slug'];
                     wp_safe_redirect(StoreUtil::get_endpoint_url($current_page, $first_sub));
@@ -468,11 +478,9 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller
 
         $div_id = 'dashboard';
         $allowed = true;
-        $error_msg = '';
-        $content = '';
 
         // Resolve the current section and capability check.
-        foreach ($all_endpoints as $key => $section) {
+        foreach ($dashboard_array['all_endpoints'] as $key => $section) {
             if ($section['slug'] !== $current_page) {
                 continue;
             }
@@ -488,60 +496,37 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller
             break;
         }
 
-        // Handle store status restrictions.
-        // $error_msg = $this->get_store_status_message($store_status, $allowed, $div_id);
-
-        // // Load page content for special pages like 'edit'.
-        // if (empty($error_msg) ) {
-        //     $content = $this->get_page_content($div_id);
-        // } else {
-        //     $id = $div_id;
-        // }
-
-        // return [
-        //     'active_store' => $active_store,
-        //     'current_page' => $current_page,
-        //     'current_sub'  => $current_sub,
-        //     'error_msg'    => $error_msg,
-        //     'id'           => $id,
-        //     'content'      => $content,
-        // ];
-
         switch ($store_status) {
             case 'pending':
-                $error_msg = 'Waiting for approval. Your store is pending.';
+                $dashboard_array['error_msg'] = 'Waiting for approval. Your store is pending.';
                 break;
 
             case 'suspended':
-                $error_msg = 'Your account has been suspended by the admin.';
+                $dashboard_array['error_msg'] = 'Your account has been suspended by the admin.';
                 break;
 
             case 'reject':
-                $error_msg = 'The application has been rejected.';
+                $dashboard_array['error_msg'] = 'The application has been rejected.';
                 break;
 
             default:
                 if (!$allowed) {
-                    $error_msg = 'You do not have permission to access this section.';
+                    $dashboard_array['error_msg'] = 'You do not have permission to access this section.';
                     break;
                 }
 
                 if ($div_id === 'edit') {
-                    $content = $this->get_page_content($div_id);
+                    $dashboard_array['content'] = $this->get_page_content($div_id);
                 } else {
-                    $id = $div_id;
+                    $dashboard_array['id'] = $div_id;
                 }
                 break;
         }
 
-        return [
-            'active_store' => $active_store,
-            'current_page' => $current_page,
-            'current_sub' => $current_sub,
-            'error_msg' => $error_msg,
-            'id' => $id,
-            'content' => $content,
-        ];
+        $dashboard_array['current_page'] = $current_page;
+        $dashboard_array['current_sub'] = $current_sub;
+
+        return $dashboard_array;
 
     }
 
