@@ -471,7 +471,230 @@ class Notifications {
         'system_message'  => 'Commission payment processed for [store_name].',
         'tag'   => 'Commission',
         'category'  => 'activity'
-    ]
+    ],
+        'key' => [
+    'name'  => 'Readable Title',
+    'desc'  => 'Short explanation of the notification purpose.',
+    'admin_enabled'  => true,
+    'store_enabled'  => true,
+    'customer_enabled'  => true, // included only when true
+    'email_subject'  => 'Email subject',
+    'email_body'  => 'Email message body',
+    'sms_content'  => 'SMS text',
+    'system_message'  => 'System notification message',
+    'tag'   => 'Category',
+    'category'  => 'activity'
+],
+'product_review_received' => [
+    'name'  => 'New Review Received',
+    'desc'  => 'Notify stores when a new review is received for one of their products.',
+    'store_enabled'  => true,
+    'email_subject'  => 'New Review Received',
+    'email_body'  => '{rating}-star review received for "{product_name}" by {customer_name}.',
+    'sms_content'  => 'You received a {rating}-star review for {product_name}.',
+    'system_message'  => 'New review for {product_name} from {customer_name}.',
+    'tag'   => 'Product',
+    'category'  => 'activity'
+],
+
+'commission_processed' => [
+    'name'  => 'Commission Processed',
+    'desc'  => 'Notify stores when their commission payment is processed.',
+    'store_enabled'  => true,
+    'email_subject'  => 'Commission Processed',
+    'email_body'  => 'Commission payment of {amount} processed for your store.',
+    'sms_content'  => 'Commission of {amount} processed.',
+    'system_message'  => 'Commission payment processed for {store_name}.',
+    'tag'   => 'Commission',
+    'category'  => 'activity'
+],
+
+'order_completed' => [
+    'name'  => 'Order Completed',
+    'desc'  => 'Notify stores and customers when an order is completed.',
+    'store_enabled'  => true,
+    'customer_enabled'  => true,
+    'email_subject'  => 'Order Completed',
+    'email_body'  => 'Order #{order_id} successfully completed.',
+    'sms_content'  => 'Order #{order_id} is now completed.',
+    'system_message'  => 'Order #{order_id} completed successfully.',
+    'tag'   => 'Order',
+    'category'  => 'notification'
+],
+
+'commission_credit' => [
+    'name'  => 'Commission Credited',
+    'desc'  => 'Notify stores when commission is credited for an order.',
+    'store_enabled'  => true,
+    'email_subject'  => 'Commission Credited',
+    'email_body'  => 'Commission received for order #{order_id}.',
+    'sms_content'  => 'Commission credited for order #{order_id}.',
+    'system_message'  => 'Commission received for order #{order_id}.',
+    'tag'   => 'Commission',
+    'category'  => 'notification'
+],
+
+'withdrawal_debit' => [
+    'name'  => 'Withdrawal Released',
+    'desc'  => 'Notify stores when withdrawal is released.',
+    'store_enabled'  => true,
+    'email_subject'  => 'Withdrawal Released',
+    'email_body'  => 'Withdrawal released via {payment_processor} with Transaction ID #{txn_id}.',
+    'sms_content'  => 'Withdrawal released successfully.',
+    'system_message'  => 'Withdrawal released for {store_name}.',
+    'tag'   => 'Finance',
+    'category'  => 'notification'
+],
+
+'refund_debit' => [
+    'name'  => 'Refund Processed',
+    'desc'  => 'Notify stores, admins, and customers when a refund is processed.',
+    'admin_enabled'  => true,
+    'store_enabled'  => true,
+    'customer_enabled'  => true,
+    'email_subject'  => 'Refund Processed',
+    'email_body'  => 'Refund adjustment for order #{order_id}.',
+    'sms_content'  => 'Refund processed for order #{order_id}.',
+    'system_message'  => 'Refund processed for order #{order_id}.',
+    'tag'   => 'Refund',
+    'category'  => 'notification'
+],
+
+'adjustment_credit' => [
+    'name'  => 'Adjustment Credit',
+    'desc'  => 'Notify stores when admin gives adjustment credit.',
+    'store_enabled'  => true,
+    'email_subject'  => 'Adjustment Credit',
+    'email_body'  => 'Admin adjustment credit of {amount} {currency}.',
+    'sms_content'  => 'Credit of {amount} {currency} applied.',
+    'system_message'  => 'Adjustment credit: {amount} {currency}.',
+    'tag'   => 'Finance',
+    'category'  => 'notification'
+],
+
+'adjustment_debit' => [
+    'name'  => 'Adjustment Debit',
+    'desc'  => 'Notify stores when admin debits adjustment.',
+    'store_enabled'  => true,
+    'email_subject'  => 'Adjustment Debit',
+    'email_body'  => 'Admin adjustment debit of {amount} {currency}.',
+    'sms_content'  => 'Debit of {amount} {currency} applied.',
+    'system_message'  => 'Adjustment debit: {amount} {currency}.',
+    'tag'   => 'Finance',
+    'category'  => 'notification'
+],
+
+'order_new' => [
+    'name'  => 'New Order Received',
+    'desc'  => 'Notify stores when a new order is received.',
+    'store_enabled'  => true,
+    'email_subject'  => 'New Order Received',
+    'email_body'  => 'New order #{order_id} received.',
+    'sms_content'  => 'New order #{order_id} received.',
+    'system_message'  => 'Order #{order_id} received.',
+    'tag'   => 'Order',
+    'category'  => 'notification'
+],
+
+'order_cancelled' => [
+    'name'  => 'Order Cancelled',
+    'desc'  => 'Notify stores and customers when an order is cancelled.',
+    'store_enabled'  => true,
+    'customer_enabled'  => true,
+    'email_subject'  => 'Order Cancelled',
+    'email_body'  => 'Order #{order_id} has been cancelled.',
+    'sms_content'  => 'Order #{order_id} cancelled.',
+    'system_message'  => 'Order #{order_id} cancelled.',
+    'tag'   => 'Order',
+    'category'  => 'notification'
+],
+
+'order_ready_to_ship' => [
+    'name'  => 'Order Ready to Ship',
+    'desc'  => 'Notify stores when an order is ready to ship.',
+    'store_enabled'  => true,
+    'email_subject'  => 'Order Ready to Ship',
+    'email_body'  => 'Order #{order_id} is ready to ship.',
+    'sms_content'  => 'Order #{order_id} ready to ship.',
+    'system_message'  => 'Order #{order_id} ready to ship.',
+    'tag'   => 'Order',
+    'category'  => 'notification'
+],
+
+'order_shipped' => [
+    'name'  => 'Order Shipped',
+    'desc'  => 'Notify customers when an order is shipped.',
+    'customer_enabled'  => true,
+    'email_subject'  => 'Order Shipped',
+    'email_body'  => 'Order #{order_id} has been shipped.',
+    'sms_content'  => 'Order #{order_id} shipped.',
+    'system_message'  => 'Order #{order_id} shipped.',
+    'tag'   => 'Order',
+    'category'  => 'notification'
+],
+
+'order_delivered' => [
+    'name'  => 'Order Delivered',
+    'desc'  => 'Notify customers when their order is delivered.',
+    'customer_enabled'  => true,
+    'email_subject'  => 'Order Delivered',
+    'email_body'  => 'Order #{order_id} has been delivered.',
+    'sms_content'  => 'Order #{order_id} delivered.',
+    'system_message'  => 'Order #{order_id} delivered.',
+    'tag'   => 'Order',
+    'category'  => 'notification'
+],
+
+'order_return_requested' => [
+    'name'  => 'Return Requested',
+    'desc'  => 'Notify stores and customers when a return is requested.',
+    'store_enabled'  => true,
+    'customer_enabled'  => true,
+    'email_subject'  => 'Return Requested',
+    'email_body'  => 'Return request received for order #{order_id}.',
+    'sms_content'  => 'Return request for order #{order_id}.',
+    'system_message'  => 'Return request received for order #{order_id}.',
+    'tag'   => 'Refund',
+    'category'  => 'notification'
+],
+
+'system_announcement' => [
+    'name'  => 'System Announcement',
+    'desc'  => 'Notify stores about system-wide announcements.',
+    'store_enabled'  => true,
+    'email_subject'  => 'System Announcement',
+    'email_body'  => '{announcement_message}',
+    'sms_content'  => 'New system announcement available.',
+    'system_message'  => '{announcement_message}',
+    'tag'   => 'System',
+    'category'  => 'notification'
+],
+
+'system_maintenance' => [
+    'name'  => 'System Maintenance',
+    'desc'  => 'Notify stores and customers about scheduled maintenance.',
+    'store_enabled'  => true,
+    'customer_enabled'  => true,
+    'email_subject'  => 'System Maintenance Scheduled',
+    'email_body'  => 'Scheduled system maintenance on {date_time}.',
+    'sms_content'  => 'Maintenance on {date_time}.',
+    'system_message'  => 'System maintenance scheduled on {date_time}.',
+    'tag'   => 'System',
+    'category'  => 'notification'
+],
+
+'policy_update' => [
+    'name'  => 'Policy Update',
+    'desc'  => 'Notify stores and customers when marketplace policy is updated.',
+    'store_enabled'  => true,
+    'customer_enabled'  => true,
+    'email_subject'  => 'Policy Update',
+    'email_body'  => 'Marketplace policy has been updated. Please review the new terms.',
+    'sms_content'  => 'Policy update: Review new terms.',
+    'system_message'  => 'Marketplace policy updated.',
+    'tag'   => 'System',
+    'category'  => 'notification'
+]
         ];
 
         $count = $wpdb->get_var(
