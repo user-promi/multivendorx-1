@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import "./Notifications.scss";
 import { CommonPopup, getApiLink, TextArea, BasicInput } from 'zyra';
 import axios from 'axios';
@@ -20,37 +20,51 @@ interface RecipientBadgeProps {
 
 const RecipientBadge: React.FC<RecipientBadgeProps> = ({ recipient, onToggle, onDelete }) => {
     let iconClass = 'adminlib-mail';
-    if (recipient.label === 'Store') iconClass = 'adminlib-storefront';
-    else if (recipient.label === 'Admin') iconClass = 'adminlib-person';
-    else if (recipient.label === 'Customer') iconClass = 'adminlib-user-circle';
+    let badgeClass = 'red';
+
+    switch (recipient.label) {
+        case 'Store':
+            iconClass = 'adminlib-storefront';
+            badgeClass = 'blue';
+            break;
+        case 'Admin':
+            iconClass = 'adminlib-person';
+            badgeClass = ' green';
+            break;
+        case 'Customer':
+            iconClass = 'adminlib-user-circle';
+            badgeClass = 'yellow';
+            break;
+        default:
+            badgeClass = ' default-badge';
+    }
 
     return (
         <>
             {recipient.enabled && (
-                <div className="admin-badge green">
+                <div className={`admin-badge ${badgeClass}`} onClick={(e) => { e.stopPropagation(); onToggle(); }} role="button" tabIndex={0}>
                     <i className={iconClass}></i>
                     <span>{recipient.label}</span>
                 </div>
             )}
         </>
     );
-
 };
 
 // ------------------ Notification Component ------------------
-const Notification = () => {
-
-    const [notifications, setNotifications] = useState<[] | null>(null);
-    const [systemTags, setSystemTags] = useState([]);
-    const [openChannel, setOpenChannel] = useState<[] | null>(null);
+const Notification: React.FC = () => {
+    // Keep notifications as an array to avoid null checks everywhere
+    const [notifications, setNotifications] = useState<any[]>([]);
+    const [systemTags, setSystemTags] = useState<string[]>([]);
+    // openChannel holds 'mail' | 'sms' | 'system' | null
+    const [openChannel, setOpenChannel] = useState<string | null>(null);
 
     useEffect(() => {
         axios({
             method: 'GET',
             url: getApiLink(appLocalizer, 'notifications'),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
-        })
-        .then((response) => {
+        }).then((response) => {
             setNotifications(response.data || []);
         });
     }, []);
@@ -60,13 +74,14 @@ const Notification = () => {
     const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
     const [editingNotification, setEditingNotification] = useState<number | null>(null);
     const [notificationId, setNotificationId] = useState<number | null>(null);
-    const [formData, setFormData] = useState<Record<string, string>>({});
-    
+    const [formData, setFormData] = useState<Record<string, any>>({});
 
-    // ------------------ Handlers ------------------
+    // NEW: activeTag state
+    const [activeTag, setActiveTag] = useState<string>('All');
 
+    // ------------------ autosave effect (keeps almost same logic you had) ------------------
     useEffect(() => {
-        if (!notifications || !notificationId) return;
+        if (!notifications || notificationId == null) return;
 
         const filtered = notifications.filter(item => item.id === notificationId);
 
@@ -74,49 +89,46 @@ const Notification = () => {
             method: 'POST',
             url: getApiLink(appLocalizer, `notifications/${notificationId}`),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            data: { 
+            data: {
                 notifications: filtered
             }
-        })
-        .then((response) => {
+        }).then((response) => {
             if (response.data.success) {
                 setEditingNotification(null);
             }
         });
-
-    }, [notifications]);
+    }, [notifications, notificationId]);
 
     const toggleRecipient = (notifId: number, recipientId: number) => {
         setNotifications(prev =>
             prev.map(n =>
                 n.id === notifId
-                    ? { ...n, recipients: n.recipients.map(r => r.id === recipientId ? { ...r, enabled: !r.enabled } : r) }
+                    ? { ...n, recipients: n.recipients.map((r: any) => r.id === recipientId ? { ...r, enabled: !r.enabled } : r) }
                     : n
             )
         );
-
     };
-
 
     const deleteRecipient = (notifId: number, recipientId: number) => {
         setNotifications(prev =>
             prev.map(n =>
                 n.id === notifId
-                    ? { ...n, recipients: n.recipients.filter(r => r.id !== recipientId) }
+                    ? { ...n, recipients: n.recipients.filter((r: any) => r.id !== recipientId) }
                     : n
             )
         );
     };
 
-    const addRecipient = (notifId: number) => {
-        if (!newRecipientValue.trim()) return;
+    const addRecipient = (notifId: number | null) => {
+        if (!newRecipientValue.trim() || notifId == null) return;
         setNotifications(prev =>
             prev.map(n => {
                 if (n.id === notifId) {
-                    const newId = Math.max(...n.recipients.map(r => r.id), 0) + 1;
+                    const maxId = n.recipients && n.recipients.length ? Math.max(...n.recipients.map((r: any) => r.id)) : 0;
+                    const newId = maxId + 1;
                     return {
                         ...n,
-                        recipients: [...n.recipients, {
+                        recipients: [...(n.recipients || []), {
                             id: newId,
                             type: 'extra',
                             label: newRecipientValue,
@@ -132,8 +144,7 @@ const Notification = () => {
         setAddingRecipient(null);
     };
 
-    const toggleChannel = (notifId: number, channel: keyof typeof notifications[0]['channels']) => {
-
+    const toggleChannel = (notifId: number, channel: string) => {
         setNotifications(prev =>
             prev.map(n =>
                 n.id === notifId ? { ...n, channels: { ...n.channels, [channel]: !n.channels[channel] } } : n
@@ -141,77 +152,101 @@ const Notification = () => {
         );
     };
 
-    const openEditPannel = (notifId: number, channel: keyof typeof notifications[0]['channels']) => {
-        console.log('id', notifId)
-        console.log('channel', channel)
+    const openEditPannel = (notifId: number, channel: string) => {
         axios({
             method: 'GET',
             url: getApiLink(appLocalizer, `notifications/${notifId}`),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
-        })
-        .then((response) => {
-            console.log('response', response.data)
-            const notifData = Array.isArray(response.data)
-                ? response.data[0]
-                : response.data;
-
+        }).then((response) => {
+            const notifData = Array.isArray(response.data) ? response.data[0] : response.data;
             setFormData(notifData || {});
-            // setFormData(response.data || []);
         });
 
-        setOpenChannel(channel)
+        setOpenChannel(channel);
     };
 
     useEffect(() => {
         if (formData.system_message) {
-            const matches = formData.system_message.match(/\[[^\]]+\]/g) || [];
+            const matches = (formData.system_message as string).match(/\[[^\]]+\]/g) || [];
             setSystemTags(matches);
         } else {
             setSystemTags([]);
         }
     }, [formData.system_message]);
 
-    const handleAutoSave = (id: number) => {
-        
+    const handleAutoSave = (id: number | null) => {
+        if (id == null) return;
         axios({
             method: "POST",
-            url: getApiLink(appLocalizer, `notifications/${id}`), // your REST endpoint
+            url: getApiLink(appLocalizer, `notifications/${id}`),
             headers: { "X-WP-Nonce": appLocalizer.nonce },
             data: {
                 formData,
             },
         }).then(() => {
             setOpenChannel(null);
-        })
+        });
     };
+
+    // -------------- TAGS: auto-generate unique tags from notifications --------------
+    const uniqueTags = useMemo(() => {
+        const tags = Array.from(new Set((notifications || []).map(n => n.tag).filter(Boolean)));
+        return ['All', ...tags];
+    }, [notifications]);
+
+    // -------------- FILTERED NOTIFICATIONS based on activeTag --------------
+    const filteredNotifications = useMemo(() => {
+        if (!notifications) return [];
+        if (activeTag === 'All') return notifications;
+        return notifications.filter(n => n.tag === activeTag);
+    }, [notifications, activeTag]);
 
     // ------------------ Render ------------------
     return (
         <div className="notification-container">
+
             {/* View Toggle */}
             <div className="toggle-setting-wrapper view-toggle">
-                {['list', 'grid'].map(mode => (
-                    <div
-                        key={mode}
-                        role="button"
-                        tabIndex={0}
-                        onClick={() => setViewMode(mode as 'list' | 'grid')}
-                        onKeyDown={e => e.key === 'Enter' && setViewMode(mode as 'list' | 'grid')}
-                    >
-                        <input
-                            className="toggle-setting-form-input"
-                            type="radio"
-                            id={`${mode}-view`}
-                            name="view-mode"
-                            value={mode}
-                            checked={viewMode === mode}
-                            readOnly
-                        />
-                        <label htmlFor={`${mode}-view`}>
-                            <i className={mode === 'list' ? 'adminlib-editor-list-ul' : 'adminlib-module'}></i>
-                        </label>
-                    </div>
-                ))}
+
+                <div className="category-filter">
+                    {uniqueTags.map(tag => (
+                        <span
+                            key={tag}
+                            className={`category-item ${activeTag === tag ? 'active' : ''}`}
+                            role="button"
+                            tabIndex={0}
+                            onClick={(e) => { e.stopPropagation(); setActiveTag(tag); }}
+                            onKeyDown={(e) => { if (e.key === 'Enter') { e.stopPropagation(); setActiveTag(tag); } }}
+                        >
+                            {tag}
+                        </span>
+                    ))}
+                </div>
+
+                <div className="tabs-wrapper">
+                    {['list', 'grid'].map(mode => (
+                        <div
+                            key={mode}
+                            role="button"
+                            tabIndex={0}
+                            onClick={() => setViewMode(mode as 'list' | 'grid')}
+                            onKeyDown={e => e.key === 'Enter' && setViewMode(mode as 'list' | 'grid')}
+                        >
+                            <input
+                                className="toggle-setting-form-input"
+                                type="radio"
+                                id={`${mode}-view`}
+                                name="view-mode"
+                                value={mode}
+                                checked={viewMode === mode}
+                                readOnly
+                            />
+                            <label htmlFor={`${mode}-view`}>
+                                <i className={mode === 'list' ? 'adminlib-editor-list-ul' : 'adminlib-module'}></i>
+                            </label>
+                        </div>
+                    ))}
+                </div>
             </div>
 
             {/* List View */}
@@ -226,23 +261,24 @@ const Notification = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {notifications && notifications.map(notif => (
-                            <tr key={notif.id} onClick={() => {
-                                setEditingNotification(notif.id);
-                                setNotificationId(notif.id);
-                            }}>
+                        {filteredNotifications.map((notif: any) => (
+                            <tr key={notif.id} onClick={() => { setEditingNotification(notif.id); setNotificationId(notif.id); }}>
                                 <td>
                                     <div className="title-wrapper">
                                         <i className={`notification-icon ${notif.icon}`}></i>
                                         <div className="details">
-                                            <div className="title">{notif.event} {notif.tag} {notif.category}</div>
+                                            <div className="title">
+                                                {notif.event}
+                                                <span className="admin-badge yellow"> {notif.tag} </span>
+                                                <span className="admin-badge blue"> {notif.category} </span>
+                                            </div>
                                             <div className="description">{notif.description}</div>
                                         </div>
                                     </div>
                                 </td>
                                 <td>
                                     <div className="recipients-list">
-                                        {notif.recipients.map(r => (
+                                        {(notif.recipients || []).map((r: any) => (
                                             <RecipientBadge
                                                 key={r.id}
                                                 recipient={r}
@@ -254,10 +290,9 @@ const Notification = () => {
                                 </td>
                                 <td>
                                     <div className="system-column">
-                                        {Object.entries(notif.channels).map(([channel, enabled]) => {
+                                        {Object.entries(notif.channels || {}).map(([channel, enabled]: any) => {
                                             let iconClass = '';
                                             let badgeClass = 'admin-badge ';
-
                                             switch (channel) {
                                                 case 'mail':
                                                     iconClass = 'adminlib-mail';
@@ -272,7 +307,6 @@ const Notification = () => {
                                                     badgeClass += 'blue';
                                                     break;
                                             }
-
                                             return (
                                                 <>
                                                     {enabled && (
@@ -282,23 +316,18 @@ const Notification = () => {
                                                             onClick={(e) => {
                                                                 e.stopPropagation();
                                                                 setNotificationId(notif.id);
-                                                                openEditPannel(notif.id, channel as keyof typeof notif.channels);
-                                                                // toggleChannel(notif.id, channel as keyof typeof notif.channels);
+                                                                openEditPannel(notif.id, channel);
                                                             }}
                                                         ></i>
                                                     )}
                                                 </>
                                             );
-
                                         })}
                                     </div>
                                 </td>
                                 <td>
                                     <i className="adminlib-create"></i>
                                 </td>
-                                {/* <td><input type="checkbox" checked={notif.channels.mail} onChange={() => toggleChannel(notif.id, 'mail')} /></td>
-                                <td><input type="checkbox" checked={notif.channels.sms} onChange={() => toggleChannel(notif.id, 'sms')} /></td>
-                                <td><input type="checkbox" checked={notif.channels.system} onChange={() => toggleChannel(notif.id, 'system')} /></td> */}
                             </tr>
                         ))}
                     </tbody>
@@ -315,7 +344,9 @@ const Notification = () => {
                         <>
                             <div className="title">
                                 <i className="adminlib-cart"></i>
-                                Manage Contents
+                                {openChannel === "system" && "System Notification"}
+                                {openChannel === "sms" && "SMS Message"}
+                                {openChannel === "mail" && "Email Message"}
                             </div>
                             <p>Edit this event.</p>
                             <i
@@ -333,114 +364,100 @@ const Notification = () => {
                     }
                 >
                     <div className="content">
-                        
-                        <div className="title">
-                            {openChannel === "system" && "System Notification"}
-                            {openChannel === "sms" && "SMS Message"}
-                            {openChannel === "mail" && "Email Message"}
-                        </div>
 
-                        {openChannel === "system" && (
-                            <>
-                                <label>System Message</label>
-                                <TextArea
-                                    name="system_message"
-                                    inputClass="textarea-input"
-                                    value={formData.system_message || ""}
-                                    onChange={(e) => {
-                                        setFormData({
-                                            ...formData,
-                                            system_message: e.target.value,
-                                        })
+                        <div className="form-group-wrapper">
 
-                                        // handleAutoSave(formData.id);
-                                    }}
-                                    onBlur={() => {
-                                        handleAutoSave(formData.id);
-                                    }}
+                            <div className="form-group">
+                            {openChannel === "system" && (
+                                <>
+                                    <label>System Message</label>
+                                    <TextArea
+                                        name="system_message"
+                                        inputClass="textarea-input"
+                                        value={formData.system_message || ""}
+                                        onChange={(e) => {
+                                            setFormData({
+                                                ...formData,
+                                                system_message: e.target.value,
+                                            });
+                                        }}
+                                        onBlur={() => { handleAutoSave(formData.id); }}
                                     />
-                            </>
-                        )}
-
-                        {openChannel === "sms" && (
-                            <>
-                                <label>SMS Content</label>
-                                <TextArea
-                                    name="sms_content"
-                                    inputClass="textarea-input"
-                                    value={formData.sms_content || ""}
-                                    onChange={(e) => {
-                                        setFormData({
-                                            ...formData,
-                                            sms_content: e.target.value,
-                                        })
-
-                                        handleAutoSave(formData.id)
-                                    }}
-                                    onBlur={() => {
-                                        handleAutoSave(formData.id);
-                                    }}
-                                />
-                            </>
-                        )}
-
-                        {/* EMAIL MESSAGE EDITOR */}
-                        {openChannel === "mail" && (
-                            <>
-                                <label>Email Subject</label>
-                                <BasicInput
-                                    type="text"
-                                    name="title"
-                                    value={formData.email_subject || ""}
-                                    onChange={(e) => {
-
-                                        setFormData({
-                                            ...formData,
-                                            email_subject: e.target.value,
-                                        })
-
-                                        handleAutoSave(formData.id)
-                                    }}
-                                    onBlur={() => {
-                                        handleAutoSave(formData.id);
-                                    }}
-                                />
-
-                                <label>Email Body</label>
-                                <TextArea
-                                    name="sms_content"
-                                    inputClass="textarea-input"
-                                    value={formData.email_body || ""}
-                                    onChange={(e) => {
-                                        setFormData({
-                                            ...formData,
-                                            email_body: e.target.value,
-                                        })
-
-                                        handleAutoSave(formData.id)
-                                    }}
-                                    onBlur={() => {
-                                        handleAutoSave(formData.id);
-                                    }}
-                                />
-                            </>
-                        )}
-
-                        {systemTags?.length > 0 && (
-                            <div className="tag-list">
-                                <p>You can use these tags:</p>
-                                {systemTags.map((tag, idx) => (
-                                    <span
-                                        key={idx}
-                                        className="tag-item"
-                                        onClick={() => navigator.clipboard.writeText(tag)}
-                                    >
-                                        {tag}
-                                    </span>
-                                ))}
+                                </>
+                            )}
                             </div>
-                        )}
-                        
+
+                            <div className="form-group">
+                            {openChannel === "sms" && (
+                                <>
+                                    <label>SMS Content</label>
+                                    <TextArea
+                                        name="sms_content"
+                                        inputClass="textarea-input"
+                                        value={formData.sms_content || ""}
+                                        onChange={(e) => {
+                                            setFormData({
+                                                ...formData,
+                                                sms_content: e.target.value,
+                                            });
+                                            handleAutoSave(formData.id);
+                                        }}
+                                        onBlur={() => { handleAutoSave(formData.id); }}
+                                    />
+                                </>
+                            )}
+                            </div>
+
+                            <div className="form-group">
+                            {openChannel === "mail" && (
+                                <>
+                                    <label>Email Subject</label>
+                                    <BasicInput
+                                        type="text"
+                                        name="title"
+                                        value={formData.email_subject || ""}
+                                        onChange={(e) => {
+                                            setFormData({
+                                                ...formData,
+                                                email_subject: e.target.value,
+                                            });
+                                            handleAutoSave(formData.id);
+                                        }}
+                                        onBlur={() => { handleAutoSave(formData.id); }}
+                                    />
+                                    
+                                    <label>Email Body</label>
+                                    <TextArea
+                                        name="sms_content"
+                                        inputClass="textarea-input"
+                                        value={formData.email_body || ""}
+                                        onChange={(e) => {
+                                            setFormData({
+                                                ...formData,
+                                                email_body: e.target.value,
+                                            });
+                                            handleAutoSave(formData.id);
+                                        }}
+                                        onBlur={() => { handleAutoSave(formData.id); }}
+                                    />
+                                </>
+                            )}
+                            </div>
+                            {systemTags?.length > 0 && (
+                                <div className="tag-list">
+                                    <p>You can use these tags:</p>
+                                    {systemTags.map((tag, idx) => (
+                                        <span
+                                            key={idx}
+                                            className="tag-item"
+                                            onClick={() => navigator.clipboard.writeText(tag)}
+                                        >
+                                            {tag}
+                                        </span>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </CommonPopup>
             )}
@@ -465,21 +482,14 @@ const Notification = () => {
                             ></i>
                         </>
                     }
-                    // footer={
-                    //     <div className="drawer-footer">
-                    //         <button className="admin-btn btn-red" onClick={() => setEditingNotification(null)}>
-                    //             Cancel
-                    //         </button>
-                    //     </div>
-                    // }
                 >
                     <div className="content">
                         <div className="title">
                             System
                         </div>
                         <div className="drawer-recipients">
-                            {Object.entries(notifications && notifications.find(n => n.id === editingNotification)?.channels || {}).map(
-                                ([channel, enabled]) => {
+                            {Object.entries(notifications.find(n => n.id === editingNotification)?.channels || {}).map(
+                                ([channel, enabled]: any) => {
                                     let label = '';
                                     switch (channel) {
                                         case 'mail': label = 'Mail'; break;
@@ -500,8 +510,7 @@ const Notification = () => {
                                                     <span>{label}</span>
                                                     <div className="description">Lorem, ipsum.</div>
                                                 </div>
-                                                <i onClick={() => toggleChannel(editingNotification, channel as keyof typeof notifications[0]['channels'])} className={enabled ? 'adminlib-eye' : 'adminlib-eye-blocked'}></i>
-
+                                                <i onClick={() => toggleChannel(editingNotification, channel)} className={enabled ? 'adminlib-eye' : 'adminlib-eye-blocked'}></i>
                                             </div>
                                         </>
                                     );
@@ -514,7 +523,7 @@ const Notification = () => {
                         </div>
 
                         <div className="drawer-recipients">
-                            {notifications && notifications.find(n => n.id === editingNotification)?.recipients.map(r => (
+                            {notifications.find(n => n.id === editingNotification)?.recipients.map((r: any) => (
                                 <div key={r.id} className={`recipient ${r.enabled ? '' : 'disable'}`}>
                                     <span className="icon">
                                         <i className={
@@ -535,7 +544,6 @@ const Notification = () => {
                                     )}
                                 </div>
                             ))}
-
                         </div>
 
                         <div className="drawer-add-recipient">
@@ -559,7 +567,7 @@ const Notification = () => {
             {/* Grid View */}
             {viewMode === 'grid' && (
                 <div className="notification-grid">
-                    {notifications && notifications.map(notif => (
+                    {filteredNotifications.map((notif: any) => (
                         <div key={notif.id} className="notification-card">
                             <div className="card-body">
                                 <div className="title-wrapper">
@@ -570,7 +578,7 @@ const Notification = () => {
                                     </div>
                                 </div>
                                 <div className="recipients-list">
-                                    {notif.recipients.map(r => (
+                                    {(notif.recipients || []).map((r: any) => (
                                         <RecipientBadge
                                             key={r.id}
                                             recipient={r}
@@ -582,10 +590,9 @@ const Notification = () => {
                             </div>
                             <div className="card-footer">
                                 <div className="system-column">
-                                    {Object.entries(notif.channels).map(([channel, enabled]) => {
+                                    {Object.entries(notif.channels || {}).map(([channel, enabled]: any) => {
                                         let iconClass = '';
                                         let badgeClass = 'admin-badge ';
-
                                         switch (channel) {
                                             case 'mail':
                                                 iconClass = 'adminlib-mail';
@@ -600,15 +607,11 @@ const Notification = () => {
                                                 badgeClass += 'blue';
                                                 break;
                                         }
-
                                         return (
                                             <i
                                                 key={channel}
                                                 className={`${iconClass} ${badgeClass} ${!enabled ? 'disable' : ''}`}
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    toggleChannel(notif.id, channel as keyof typeof notif.channels);
-                                                }}
+                                                onClick={(e) => { e.stopPropagation(); toggleChannel(notif.id, channel); }}
                                             ></i>
                                         );
                                     })}

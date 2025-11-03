@@ -10,7 +10,7 @@ export default {
             name: __('Booking', 'multivendorx'),
             desc: "Allow customers to reserve appointments, equipment, or services.",
             icon: 'adminlib-booking',
-            doc_link: 'https://multivendorx.com/docs/knowledgebase/booking-product', 
+            doc_link: 'https://multivendorx.com/docs/knowledgebase/booking-product',
             req_pluging: [
                 { name: 'WooCommerce Booking', link: 'https://woocommerce.com/products/woocommerce-bookings/' }
             ],
@@ -172,7 +172,7 @@ export default {
             icon: 'adminlib-follow-store',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/follow-store',
             pro_module: false,
-            category: ['store_management','customer_experience'],
+            category: ['store_management', 'customer_experience'],
         },
         {
             id: 'store-review',
@@ -182,7 +182,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/store-review',
             settings_link: '${appLocalizer.settings_page_url}review-management',
             pro_module: false,
-            category: ['store_management','customer_experience'],
+            category: ['store_management', 'customer_experience'],
         },
         {
             id: 'business-hours',
@@ -416,7 +416,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/marketplace-refund',
             settings_link: '${appLocalizer.plugin_url}#&tab=customer-support',
             pro_module: false,
-            category: ['store_management','customer_experience'],
+            category: ['store_management', 'customer_experience'],
         },
         { type: 'separator', id: 'analytics_tools', label: 'Marketing Tools' },
         {
@@ -427,7 +427,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/store-analytics',
             settings_link: '${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=analytics',
             pro_module: true,
-            category: ['analytics_tools','store_management'],
+            category: ['analytics_tools', 'store_management'],
         },
         {
             id: 'store-seo',
@@ -437,7 +437,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/store-seo',
             settings_link: '${appLocalizer.settings_page_url}seo',
             pro_module: true,
-            category: ['analytics_tools','store_management'],
+            category: ['analytics_tools', 'store_management'],
         },
         { type: 'separator', id: 'marketplace_boosters', label: 'Marketplace Boosters' },
         {
@@ -449,7 +449,7 @@ export default {
             settings_link: '${appLocalizer.settings_page_url}non-compliance',
             pro_module: true,
             category: 'marketplace_boosters'
-        },{
+        }, {
             id: 'marketplace-membership',
             name: __('Marketplace Membership', 'multivendorx'),
             desc: "Admin defines membership levels with specific capabilities for different stores.",
@@ -465,17 +465,17 @@ export default {
             desc: "Share commission on a sale between the store and another designated user. Each participant receives their assigned portion automatically.",
             icon: 'adminlib-facilitator',
             doc_link: "/admin.php?page=multivendorx#&tab=settings&subtab=store-commissions",
-			settings_link: '${appLocalizer.settings_page_url}facilitator',
+            settings_link: '${appLocalizer.settings_page_url}facilitator',
             pro_module: true,
             category: 'marketplace_boosters'
-        },        
+        },
         {
             id: 'marketplace-fee',
             name: __('Marketplace Fee', 'multivendorx'),
             desc: "Set and manage platform fees for each order or store to cover operational costs",
             icon: 'adminlib-marketplace-fee',
             doc_link: "/admin.php?page=multivendorx#&tab=settings&subtab=store-commissions",
-			settings_link: '${appLocalizer.settings_page_url}store-commissions',
+            settings_link: '${appLocalizer.settings_page_url}store-commissions',
             pro_module: true,
             category: 'marketplace_boosters'
         },
@@ -487,7 +487,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/',
             settings_link: '${appLocalizer.settings_page_url}store-commissions',
             pro_module: false,
-            category: ['store_management','payment_management'],
+            category: ['store_management', 'payment_management'],
         },
         {
             id: 'advertisement',
@@ -505,9 +505,9 @@ export default {
             desc: "Stores set wholesale prices and bulk purchase rules for selected customer groups.",
             icon: 'adminlib-wholesale',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/wholesale',
-			settings_link: '${appLocalizer.settings_page_url}wholesale',
+            settings_link: '${appLocalizer.settings_page_url}wholesale',
             pro_module: true,
-            category: ['analytics_tools','store_management'],
+            category: ['analytics_tools', 'store_management'],
         },
         {
             id: 'store-inventory',
@@ -538,7 +538,7 @@ export default {
             doc_link: 'https://multivendorx.com/docs/knowledgebase/announcement/',
             settings_link: '${appLocalizer.plugin_url}#&tab=announcement',
             pro_module: false,
-            category: ['notification','marketplace_boosters'],
+            category: ['notification', 'marketplace_boosters'],
         },
         {
             id: 'knowladgebase',
@@ -632,7 +632,7 @@ export default {
             icon: 'adminlib-shipstation-module',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/shipstation/',
             pro_module: true,
-            category: ['integration','Shipping management'],    
+            category: ['integration', 'Shipping management'],
         },
         {
             id: 'geo-location',
@@ -640,7 +640,7 @@ export default {
             desc: "Geo Location",
             icon: 'adminlib-geo-location',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/shipstation/',
-           settings_link: '${appLocalizer.settings_page_url}geolocation',
+            settings_link: '${appLocalizer.settings_page_url}geolocation',
             pro_module: false,
             category: 'store_management'
         },

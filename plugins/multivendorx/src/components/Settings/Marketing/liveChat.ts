@@ -32,7 +32,7 @@ export default {
                 },
             ],
             // moduleEnabled: 'live-chat',
-            // proSetting: true,
+            proSetting: true,
         },
         {
             key: 'chat_provider',
