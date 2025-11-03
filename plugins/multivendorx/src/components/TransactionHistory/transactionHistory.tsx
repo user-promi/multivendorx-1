@@ -6,8 +6,6 @@ import TransactionHistoryTable from './walletTransaction';
 import TransactionDataTable from './transactionDataTable';
 import { AdminBreadcrumbs, CalendarInput, getApiLink, SelectInput, CommonPopup, BasicInput, TextArea, ToggleSetting } from 'zyra';
 import axios from 'axios';
-import disbursement from '../Settings/Finance/disbursement';
-
 
 export const TransactionHistory: React.FC = () => {
     const [data, setData] = useState<any[]>([]);
@@ -78,16 +76,34 @@ export const TransactionHistory: React.FC = () => {
     useEffect(() => {
         if (!storeData) return;
 
-        const existingOptions = Object.values(appLocalizer.payout_payment_options);
+        // Get all enabled payment methods from global options
+        const enabledMethods = Object.entries(appLocalizer.payout_payment_options)
+            .filter(([key, value]: [string, any]) => value.enable) // only enable=true
+            .map(([key, value]) => ({
+                value: key,
+                label: key.charAt(0).toUpperCase() + key.slice(1) // Capitalize
+            }));
+
+        // Store default option
         const defaultOption = {
             value: storeData.payment_method,
-            label: 'Store Default - ' + storeData.payment_method
+            label: `Store Default - ${storeData.payment_method}`
         };
 
-        // Prepend default to the top
-        const mergedOptions = [defaultOption, ...existingOptions];
+        // Merge default with enabled options
+        const mergedOptions = [defaultOption, ...enabledMethods];
+
         setOptionList(mergedOptions);
+
+        // Set default selected value
+        // If store default is enabled globally, use it; else fallback to first enabled method
+        const defaultSelected = enabledMethods.find(opt => opt.value === storeData.payment_method)
+            ? storeData.payment_method
+            : (enabledMethods[0]?.value || storeData.payment_method);
+
+        setPaymentMethod(defaultSelected);
     }, [storeData]);
+
 
     const handleAmountChange = (value: number) => {
         if (value > data.available_balance) {
@@ -147,7 +163,7 @@ export const TransactionHistory: React.FC = () => {
         },
     ];
 
-
+    console.log(storeData)
     return (
         <>
             <AdminBreadcrumbs
@@ -192,11 +208,29 @@ export const TransactionHistory: React.FC = () => {
                             <div className="price">
                                 {appLocalizer.currency_symbol}{Number(data.available_balance ?? 0).toFixed(2)}
                             </div>
-                            <div className="des">Current available balance ready to transfer to stores.</div>
-                            <div className="admin-btn btn-purple" onClick={() => setRequestWithdrawal(true)}>
-                                Disburse payment
-                            </div>
+
+                            {storeData?.request_withdrawal_amount ? (
+                                <>
+                                    <div className="des">
+                                        Last withdrawal request: {appLocalizer.currency_symbol}
+                                        {Number(storeData.request_withdrawal_amount ?? 0).toFixed(2)}, is <strong>Pending</strong>.
+                                        <br />
+                                        Please clear the pending request before disbursing new payments.
+                                    </div>
+                                    <div className="admin-btn btn-purple disabled" style={{ opacity: 0.5, pointerEvents: 'none' }}>
+                                        Disburse payment
+                                    </div>
+                                </>
+                            ) : (
+                                <>
+                                    <div className="des">Current available balance ready to transfer to stores.</div>
+                                    <div className="admin-btn btn-purple" onClick={() => setRequestWithdrawal(true)}>
+                                        Disburse payment
+                                    </div>
+                                </>
+                            )}
                         </div>
+
                     </div>
                     <div className="column">
                         <div className="card-header">
@@ -249,7 +283,7 @@ export const TransactionHistory: React.FC = () => {
                             <>
                                 <div className="title">
                                     <i className="adminlib-cart"></i>
-                                    Request withdrawal
+                                    Disburse payment
                                 </div>
                                 <i
                                     className="icon adminlib-close"
@@ -263,7 +297,7 @@ export const TransactionHistory: React.FC = () => {
                                     className="admin-btn btn-purple"
                                     onClick={() => handleWithdrawal()}
                                 >
-                                    Publish
+                                    Disburse
                                     <i className="adminlib-check"></i>
                                 </div>
 
@@ -286,28 +320,15 @@ export const TransactionHistory: React.FC = () => {
                                 </div>
                                 <div className="form-group">
                                     <label htmlFor="payment_method">Payment Processor</label>
-                                    {/* <SelectInput
-                                        name="payment_method"
-                                        value={paymentMethod}
-                                        options={optionList}
-                                        type="single-select"
-                                        onChange={(newValue) => {
-                                            if (newValue && newValue.value) {
-                                                setPaymentMethod(newValue.value);
-                                            }
-                                        }
-                                        }
-                                    /> */}
                                     <ToggleSetting
                                         wrapperClass="setting-form-input"
                                         descClass="settings-metabox-description"
                                         description="Choose your preferred payment processor."
                                         options={optionList}
                                         value={paymentMethod || ""}
-                                        onChange={(value) => {
-                                            setPaymentMethod(value)
-                                        }}
+                                        onChange={(value) => setPaymentMethod(value)}
                                     />
+
                                 </div>
                                 <div className="form-group">
                                     <label htmlFor="note">Note</label>

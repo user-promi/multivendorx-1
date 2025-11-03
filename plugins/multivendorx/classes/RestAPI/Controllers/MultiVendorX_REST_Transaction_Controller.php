@@ -181,7 +181,7 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
                 'amount'         => $row['amount'],
                 'balance'        => $row['balance'],
                 'status'         => $row['status'],
-                'payment_method' => $store->meta_data['payment_method'] ?? 'Not Saved',
+                'payment_method' => $row['payment_method'] ?? '',
                 'credit'         => $row['entry_type'] === 'Cr' ? $row['amount'] : 0,
                 'debit'          => $row['entry_type'] === 'Dr' ? $row['amount'] : 0,
                 'date'           => $row['created_at'],
@@ -273,7 +273,8 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
             'Debit',
             'Balance',
             'Status',
-            'Payment Method'
+            'Payment Method',
+            'Narration'
         );
 
         // Build CSV data
@@ -302,7 +303,8 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
                 $transaction['entry_type'] === 'Dr' ? $transaction['amount'] : 0,
                 $transaction['balance'],
                 $transaction['status'],
-                $store->meta_data['payment_method'] ?? 'Not Saved',
+                $transaction['payment_method']??'',
+                $transaction['narration'],
             ));
         }
 

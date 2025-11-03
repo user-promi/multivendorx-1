@@ -460,17 +460,6 @@ class FrontendScripts {
         
         $gateway_name = $settings && !empty($settings['custom_gateway_name']) ? $settings['custom_gateway_name'] : 'Custom Gateway';
 
-        $payout_payment_options = [
-            [
-                'value' => 'custom-gateway',
-                'label' => $gateway_name
-            ],
-            [
-                'value' => 'cash',
-                'label' => 'Cash'
-            ]
-        ];
-
         $localize_scripts = apply_filters(
             'multivendorx_localize_scripts',
             array(
@@ -491,7 +480,7 @@ class FrontendScripts {
                         'country_list'             => $country_list,
                         'store_owners'             => $owners_list,
                         'gateway_list'             => $gateway_list,
-                        'tinymceApiKey'             => MultiVendorX()->setting->get_setting( 'tinymce_api_section' ),
+                        'tinymceApiKey'            => MultiVendorX()->setting->get_setting( 'tinymce_api_section' ),
                         'default_logo'             => MultiVendorX()->plugin_url.'assets/images/WP-stdavatar.png',
                         'capabilities'             => StoreUtil::get_store_capability(),
                         'custom_roles'             => Roles::multivendorx_get_roles(),
@@ -504,7 +493,7 @@ class FrontendScripts {
                         'user_id'                  => get_current_user_id(),
                         'currency'                 => get_woocommerce_currency(),       // e.g., USD
                         'currency_symbol'          => get_woocommerce_currency_symbol(),
-                        'payout_payment_options'   => $payout_payment_options,
+                        'payout_payment_options'   => $payment_admin_settings,
 						'module_page_url'          => admin_url( 'admin.php?page=multivendorx#&tab=modules' ),
 						'store_page_url'           => trailingslashit( site_url() ) . untrailingslashit( MultiVendorX()->setting->get_setting( 'store_url', 'store' ) ),
                         'map_providor'             => MultiVendorX()->setting->get_setting( 'choose_map_api' ),
