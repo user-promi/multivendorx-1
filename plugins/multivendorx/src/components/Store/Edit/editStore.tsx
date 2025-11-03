@@ -286,6 +286,8 @@ const EditStore = () => {
                                         style={{
                                             background: `url("${data.banner}")`,
                                         }}>
+                                        {!data?.image && <div className="default-img-1500x900" />}
+
                                         <div className="edit-section">
                                             <div className="edit-wrapper">
                                                 <span className="admin-btn btn-purple" onClick={(e) => {

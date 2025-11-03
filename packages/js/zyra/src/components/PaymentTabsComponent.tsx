@@ -131,7 +131,7 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
 
   const renderField = (methodId: string, field: PaymentFormField) => {
     const fieldValue = value[methodId]?.[field.key];
-
+    console.log(fieldValue);
     switch (field.type) {
       case "payment-tabs":
         return (

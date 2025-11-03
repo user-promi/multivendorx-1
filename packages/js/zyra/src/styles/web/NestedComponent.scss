@@ -18,10 +18,12 @@
         }
         &.multiple {
             padding: 1rem;
-            margin-bottom: 1.5rem;
+            margin-top: 1.5rem;
             background: #ece2f92e;
         }
-
+        &:first-child{
+            margin-top: 0;
+        }
         .form-wrapper {
             display: flex;
             gap: 0.5rem;
@@ -74,9 +76,7 @@
         position: relative;
 
         .buttons-wrapper {
-            // position: absolute;
             width: fit-content;
-            // right: 0;
         }
     }
 }

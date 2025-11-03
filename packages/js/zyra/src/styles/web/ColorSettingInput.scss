@@ -40,7 +40,12 @@
                         background-color: #f0faff;
                     }
                 }
-
+                &:has(input:checked){
+                    label{
+                        border: $border-theme-small;
+                        background: $theme-background-color;
+                    }
+                }
                 span {
                     font-size: 0.875rem;
                     font-weight: 500;
@@ -108,7 +113,7 @@
     overflow: hidden;
     box-shadow: 0 4px 10px rgb(0 0 0 / 10%);
 
-    .tab-wrapper {
+    .left-wrapper {
         width: 10rem;
         display: flex;
         flex-direction: column;
