@@ -466,13 +466,13 @@ const Notification = () => {
                             ></i>
                         </>
                     }
-                    footer={
-                        <div className="drawer-footer">
-                            <button className="admin-btn btn-red" onClick={() => setEditingNotification(null)}>
-                                Cancel
-                            </button>
-                        </div>
-                    }
+                    // footer={
+                    //     <div className="drawer-footer">
+                    //         <button className="admin-btn btn-red" onClick={() => setEditingNotification(null)}>
+                    //             Cancel
+                    //         </button>
+                    //     </div>
+                    // }
                 >
                     <div className="content">
                         <div className="title">

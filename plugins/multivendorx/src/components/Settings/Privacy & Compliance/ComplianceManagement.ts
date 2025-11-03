@@ -207,7 +207,7 @@ export default {
                     icon: "adminlib-import",
                     label: 'Financial Compliance',
                     disableBtn: true,
-                    countBtn: true,
+                    // countBtn: true,
                     desc: 'Verify tax information and monitor transactions',
                     formFields: [
                         {

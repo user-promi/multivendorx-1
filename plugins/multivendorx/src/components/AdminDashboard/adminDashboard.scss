@@ -1097,3 +1097,25 @@
         color: $theme-color;
     }
 }
+
+
+.placeholder-400x400 {
+    position: relative;
+    height: 100%;
+    width: 100%;
+
+    &:after {
+        content: "400 x 400";
+        left: 0;
+        // position: absolute;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: #dfdcdc;
+        color: #0000007d;
+        font-size: 1.5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}

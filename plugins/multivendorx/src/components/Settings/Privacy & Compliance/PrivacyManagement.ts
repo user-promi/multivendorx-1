@@ -121,7 +121,7 @@ export default {
             ),
         },
         {
-            key: 'store_policy_override',
+            key: 'customer_information_access',
             type: 'checkbox',
             label: __( 'Customer information access', 'multivendorx' ),
             settingDescription: __( 'Choose what stores can see about customers', 'multivendorx' ),
