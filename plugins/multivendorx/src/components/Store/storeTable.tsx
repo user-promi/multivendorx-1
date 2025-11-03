@@ -203,7 +203,7 @@ const StoreTable: React.FC = () => {
                     <TableCell title={row.original.store_name || ''}>
                         <a
                             onClick={() => {
-                                window.location.href = `?page=multivendorx#&tab=stores&view&id=${row.original.id}`;
+                                window.open(`${appLocalizer.site_url}/store/${row.original.store_slug}/`, '_blank');
                             }}
                             className="product-wrapper"
                         >
@@ -347,7 +347,7 @@ const StoreTable: React.FC = () => {
                                 ]
                                 : []),
                             {
-                                label: __('Store Details', 'multivendorx'),
+                                label: __('Settings', 'multivendorx'),
                                 icon: 'adminlib-report',
                                 onClick: (rowData) => {
                                     window.location.href = `?page=multivendorx#&tab=stores&edit/${rowData.id}`;
