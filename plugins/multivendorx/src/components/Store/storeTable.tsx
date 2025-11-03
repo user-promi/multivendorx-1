@@ -16,11 +16,7 @@ type StoreRow = {
     status?: string;
     email?: string;
     phone?: string;
-    primary_owner?: {
-        id: number;
-        name: string;
-        email: string;
-    };
+    primary_owner?: any;
     applied_on?: string;
     store_image?: string;
     date?: string; // Add date field
@@ -240,12 +236,12 @@ const StoreTable: React.FC = () => {
                     <div className="table-content">
                         {row.original.email && (
                             <div>
-                                <b><i className="adminlib-mail"></i></b> {row.original.email}
+                                <i className="adminlib-mail"></i> {row.original.email}
                             </div>
                         )}
                         {row.original.phone && (
                             <div>
-                                <b><i className="adminlib-form-phone"></i></b>
+                                <i className="adminlib-form-phone"></i>
                                 {row.original.phone ? (row.original.phone) : '-'}
                             </div>
                         )}
@@ -265,21 +261,21 @@ const StoreTable: React.FC = () => {
             id: 'primary_owner',
             accessorKey: 'primary_owner',
             enableSorting: true,
-            accessorFn: (row) => row.primary_owner?.name || row.primary_owner?.email || '',
+            accessorFn: (row) => row.primary_owner?.data.display_name || row.primary_owner?.data.user_email || '',
             header: __('Primary Owner', 'multivendorx'),
             cell: ({ row }) => {
                 const primaryOwner = row.original.primary_owner;
                 return (
-                    <TableCell title={primaryOwner?.name || primaryOwner?.email || ''}>
+                    <TableCell title={primaryOwner?.data?.display_name || primaryOwner?.data?.user_email || ''}>
                         {primaryOwner ? (
                             <a
-                                href={`/wp-admin/user-edit.php?user_id=${primaryOwner.id}`}
+                                href={`/wp-admin/user-edit.php?user_id=${primaryOwner.ID}`}
                                 onClick={(e) => {
                                     e.preventDefault();
-                                    window.location.href = `/wp-admin/user-edit.php?user_id=${primaryOwner.id}`;
+                                    window.location.href = `/wp-admin/user-edit.php?user_id=${primaryOwner.ID}`;
                                 }}
                             >
-                                {primaryOwner.name || primaryOwner.email}
+                                {primaryOwner.data?.display_name || primaryOwner.data?.user_email}
                             </a>
                         ) : (
                             <span>-</span>

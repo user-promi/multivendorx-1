@@ -172,48 +172,40 @@ const MultiCheckBox: React.FC<MultiCheckBoxProps> = (props) => {
                                 />
 
                                 {editIndex === index ? (
-                                    <div className="edit-option">
-                                        <input
-                                            type="text"
-                                            value={editValue}
-                                            onChange={(e) => setEditValue(e.target.value)}
-                                            className="basic-input"
-                                        />
-                                        <button
-                                            className="admin-btn btn-green"
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                saveEditedOption(index);
-                                            }}
-                                        >
-                                            Save
-                                        </button>
-                                        <button
-                                            className="admin-btn btn-gray"
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                setEditIndex(null);
-                                            }}
-                                        >
-                                            Cancel
-                                        </button>
+                                    <div className="edit-option-wrapper">
+                                        <div className="edit-option">
+                                            <input
+                                                type="text"
+                                                value={editValue}
+                                                onChange={(e) => setEditValue(e.target.value)}
+                                                className="basic-input"
+                                            />
+                                            <span
+                                                className="save-icon admin-badge green"
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    saveEditedOption(index);
+                                                }}
+                                            >
+                                                <i className="adminlib-check"></i>
+                                            </span>
+                                        </div>
                                     </div>
+
                                 ) : (
                                     <>
                                         <label htmlFor={`${props.idPrefix}-${option.key}`}>
                                             {option.label}
                                         </label>
                                         {option.edit && (
-                                            <button
-                                                className="admin-btn btn-blue"
+                                            <span
                                                 onClick={(e) => {
                                                     e.stopPropagation();
                                                     setEditIndex(index);
                                                     setEditValue(option.label || option.value);
                                                 }}
-                                            >
-                                                Edit
-                                            </button>
+                                                className="admin-badge yellow edit-icon adminlib-create">
+                                            </span>
                                         )}
                                     </>
                                 )}

@@ -15,7 +15,7 @@ export default {
             key: 'separator_content',
             type: 'section',
             label: __("Recommended Status Flow:Pending Approval → Under Review → Active → (Suspended / Declined / Deactivated)", 'multivendorx'),
-            desc: __('The store application or reapproval request was denied due to incomplete, inaccurate, or non-compliant information. The vendor may update details and reapply for consideration.', 'multivendorx')
+            desc: __('Control how stores behave at different stages of their lifecycle. These settings determine what sellers can do and what customers see based on each stores approval status.', 'multivendorx')
         },
         {
             key: 'store_compliance_management',
@@ -62,7 +62,7 @@ export default {
                         {
                             key: 'pending_description',
                             type: 'description',
-                            des: 'The store is awaiting approval. Sellers can log in to their dashboard but cannot configure settings, add products, or begin selling until approved.',
+                            //des: 'The store is awaiting approval. Sellers can log in to their dashboard but cannot configure settings, add products, or begin selling until approved.',
                         },
                         {
                             key: 'denied_permissions',
@@ -85,7 +85,7 @@ export default {
                 {
                     id: 'store_under_review_status',
                     icon: 'adminlib-store-review',
-                    label: 'Under Review',
+                    label: 'Under review',
                     connected: true,
                     enableOption: true,
                     desc: 'The store is temporarily restricted while the platform reviews compliance or documentation. Selling and payouts may be paused until the review is complete.',
@@ -93,7 +93,7 @@ export default {
                         {
                             key: 'pending_description',
                             type: 'description',
-                            des: 'The store is awaiting approval. Sellers can log in to their dashboard but cannot configure settings, add products, or begin selling until approved.',
+                            //des: 'The store is awaiting approval. Sellers can log in to their dashboard but cannot configure settings, add products, or begin selling until approved.',
                         },
                         {
                             key: 'review_allow_selling',

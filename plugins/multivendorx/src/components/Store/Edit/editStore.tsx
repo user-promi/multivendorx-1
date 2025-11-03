@@ -79,8 +79,6 @@ const EditStore = () => {
 
     const hashParams = new URLSearchParams(hash);
     const currentTab = hashParams.get('subtab') || 'store-overview';
-console.log(hashParams.get('subtab'))
-
     const prepareUrl = (tabId: string) => `?page=multivendorx#&tab=stores&edit/${editId}/&subtab=${tabId}`;
 
     const autoSave = (updatedData: { [key: string]: string }) => {
@@ -213,21 +211,21 @@ console.log(hashParams.get('subtab'))
     const getForm = (tabId: string) => {
         switch (tabId) {
             case 'store-overview':
-                return <Overview id={editId} />;
+                return <Overview id={editId} storeData={data}/>;
             case 'store':
-                return <StoreSettings id={editId} />;
+                return <StoreSettings id={editId} data={data}/>;
             case 'staff':
-                return <StoreSquad id={editId} />;
+                return <StoreSquad id={editId}/>;
             case 'payment':
-                return <PaymentSettings id={editId} />;
+                return <PaymentSettings id={editId} data={data}/>;
             case 'shipping':
-                return <ShippingSettings id={editId} />;
+                return <ShippingSettings id={editId} data={data}/>;
             case 'store-policy':
-                return <PolicySettings id={editId} />;
+                return <PolicySettings id={editId} data={data}/>;
             case 'store-application':
                 return <StoreRegistration id={editId} />;
             case 'store-facilitator':
-                return <Facilitator id={editId} />;
+                return <Facilitator id={editId} data={data}/>;
             // case 'membership':
             //     return <Membership id={editId} />;
             // case 'financial':
@@ -322,7 +320,12 @@ console.log(hashParams.get('subtab'))
                                     <div className="details-wrapper">
                                         <div className="left-section">
                                             <div className="store-logo">
-                                                <img src={data.image} alt="" />
+                                                {data?.image ? (
+                                                    <img src={data.image} alt="" />
+                                                ) : (
+                                                    <div className="placeholder-400x400" />
+                                                )}
+
                                                 <div className="edit-section">
                                                     <div className="edit-wrapper">
                                                         <span className="admin-btn btn-purple" onClick={(e) => {
@@ -361,13 +364,13 @@ console.log(hashParams.get('subtab'))
                                                         {editName ? (
                                                             <input
                                                                 type="text"
-                                                                value={data.name || ""}
+                                                                value={data?.name || ""}
                                                                 onChange={(e) => setData({ ...data, name: e.target.value })}
                                                                 className="basic-input"
                                                                 autoFocus
                                                             />
                                                         ) : (
-                                                            data.name || "Store Name"
+                                                            data?.name || "Store Name"
                                                         )}
 
                                                         <span
@@ -423,24 +426,23 @@ console.log(hashParams.get('subtab'))
                                                 <ul className="contact-details">
                                                     <li>
                                                         <div className="reviews-wrapper">
-                                                        {data.total_reviews > 0 ? (
-                                                            <>
-                                                            {[...Array(5)].map((_, i) => (
-                                                                <i
-                                                                key={i}
-                                                                className={`review adminlib-star${
-                                                                    i < Math.round(data.average_rating) ? ' filled' : ''
-                                                                }`}
-                                                                ></i>
-                                                            ))}
-                                                            <span>
-                                                                {data.average_rating} ({data.total_reviews}{' '}
-                                                                {data.total_reviews === 1 ? 'Review' : 'Reviews'})
-                                                            </span>
-                                                            </>
-                                                        ) : (
-                                                            <span>No reviews yet</span>
-                                                        )}
+                                                            {data.total_reviews > 0 ? (
+                                                                <>
+                                                                    {[...Array(5)].map((_, i) => (
+                                                                        <i
+                                                                            key={i}
+                                                                            className={`review adminlib-star${i < Math.round(data.average_rating) ? ' filled' : ''
+                                                                                }`}
+                                                                        ></i>
+                                                                    ))}
+                                                                    <span>
+                                                                        {data.average_rating} ({data.total_reviews}{' '}
+                                                                        {data.total_reviews === 1 ? 'Review' : 'Reviews'})
+                                                                    </span>
+                                                                </>
+                                                            ) : (
+                                                                <span>No reviews yet</span>
+                                                            )}
                                                         </div>
                                                     </li>
                                                 </ul>

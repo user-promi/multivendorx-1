@@ -56,9 +56,10 @@ class Setting {
 
         $setting_keys = $this->get_settings_keys();
 
+        $all_options = get_options($setting_keys);
         // Get all setting from option table.
         foreach ( $setting_keys as $key ) {
-            $this->settings[ $key ] = get_option( $key, array() );
+            $this->settings[ $key ] = $all_options[ $key ];
         }
     }
 
