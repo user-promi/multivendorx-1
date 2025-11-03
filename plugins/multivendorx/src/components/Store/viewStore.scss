@@ -18,6 +18,7 @@
 .store-header {
     background: #fff;
     border-radius: 0.313rem;
+    padding: 1rem;
 
     .banner {
         height: 25rem;
@@ -38,7 +39,15 @@
             height: 100%;
             border-top-left-radius: 0.313rem;
             border-top-right-radius: 0.313rem;
-            
+
+        }
+
+        &:after{
+            position: absolute;
+            content: "1500 x 900";
+            top: 0;
+            left: 0;
+            width: 100%;
         }
     }
 
@@ -51,7 +60,7 @@
     .details-wrapper {
         display: flex;
         justify-content: space-between;
-        padding: 2.5rem;
+        padding: 1.5rem;
 
         .left-section {
             display: flex;
@@ -108,10 +117,12 @@
                     padding: 0.313rem 0;
                     font-size: 1rem;
                     position: relative;
+                    display: inline-block;
 
 
                     .edit-icon {
                         top: 0.2rem;
+                        right: -2rem;
                     }
                 }
 

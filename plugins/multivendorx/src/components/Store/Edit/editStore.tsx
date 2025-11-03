@@ -211,21 +211,21 @@ const EditStore = () => {
     const getForm = (tabId: string) => {
         switch (tabId) {
             case 'store-overview':
-                return <Overview id={editId} storeData={data}/>;
+                return <Overview id={editId} storeData={data} />;
             case 'store':
-                return <StoreSettings id={editId} data={data}/>;
+                return <StoreSettings id={editId} data={data} />;
             case 'staff':
-                return <StoreSquad id={editId}/>;
+                return <StoreSquad id={editId} />;
             case 'payment':
-                return <PaymentSettings id={editId} data={data}/>;
+                return <PaymentSettings id={editId} data={data} />;
             case 'shipping':
-                return <ShippingSettings id={editId} data={data}/>;
+                return <ShippingSettings id={editId} data={data} />;
             case 'store-policy':
-                return <PolicySettings id={editId} data={data}/>;
+                return <PolicySettings id={editId} data={data} />;
             case 'store-application':
                 return <StoreRegistration id={editId} />;
             case 'store-facilitator':
-                return <Facilitator id={editId} data={data}/>;
+                return <Facilitator id={editId} data={data} />;
             // case 'membership':
             //     return <Membership id={editId} />;
             // case 'financial':
@@ -383,7 +383,17 @@ const EditStore = () => {
                                                             <i className={editName ? "" : "adminlib-create"}></i>
                                                         </span>
                                                     </div>
-                                                    <span className="admin-badge green">{data.status}</span>
+                                                    {/* <span className="admin-badge green">{data.status}</span> */}
+                                                    {data.status === 'active' ? (
+                                                        <span className="admin-badge green">Active</span>
+                                                    ) : data.status === 'pending' ? (
+                                                        <span className="admin-badge yellow">Pending</span>
+                                                    ) : data.status === 'rejected' ? (
+                                                        <span className="admin-badge red">Rejected</span>
+                                                    ) : data.status === 'suspended' ? (
+                                                        <span className="admin-badge blue">Suspended</span>
+                                                    ) : null}
+
                                                     <div className="admin-badge green"><i className="adminlib-store-inventory"></i></div>
                                                     <div className="admin-badge blue"><i className="adminlib-geo-my-wp"></i></div>
                                                     <div className="admin-badge yellow"><i className="adminlib-staff-manager"></i></div>
@@ -402,7 +412,7 @@ const EditStore = () => {
                                                     )}
 
                                                     <span
-                                                        className={`edit-icon admin-badge ${editDesc ? '' : 'blue'}`}
+                                                        className={`edit-icon ${editDesc ? '' : 'admin-badge blue'}`}
                                                         onClick={(e) => {
                                                             e.stopPropagation();
                                                             setEditDesc(!editDesc);
