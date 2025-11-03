@@ -24,6 +24,7 @@ import BlockLayout from './BlockLayout';
 import ImageGallery from './ImageGallery';
 import FormTemplates from './FormTemplates';
 import FormAnalytics from './FormAnalytics';
+import AddressField from './AddressField';
 
 // Types
 export interface Option {
@@ -47,7 +48,7 @@ interface ImageItem {
     caption?: string;
 }
 
-interface FormField {
+export interface FormField {
     id: number;
     type: string;
     label: string;
@@ -64,6 +65,18 @@ interface FormField {
     column?: number;
     filesize?: number;
     disabled?: boolean;
+
+    // new for grouped/compound fields like address
+    fields?: Array<{
+        id: string | number;
+        key: string;
+        label: string;
+        type: 'text' | 'select';
+        placeholder?: string;
+        options?: string[];
+        required?: boolean;
+    }>;
+    value?: Record<string, any>;
 }
 
 interface ButtonSetting {
@@ -115,14 +128,9 @@ const selectOptions: SelectOption[] = [
 const selectOptionsStore: SelectOption[] = [
     { icon: 'adminlib-t-letter-bold icon-form-textbox', value: 'text', label: 'Store Name', name: 'name' },
     { icon: 'adminlib-text icon-form-textarea', value: 'textarea', label: 'Store Desc', name: 'description' },
-    { icon: 'adminlib-t-letter-bold icon-form-textbox', value: 'text', label: 'Address 1', name: 'address_1' },
-    { icon: 'adminlib-t-letter-bold icon-form-textbox', value: 'text', label: 'Address 2', name: 'address_2' },
     { icon: 'adminlib-t-letter-bold icon-form-textbox', value: 'text', label: 'Phone', name: 'phone' },
-    { icon: 'adminlib-dropdown-checklist icon-form-dropdown', value: 'dropdown', label: 'Country', name: 'country' },
-    { icon: 'adminlib-dropdown-checklist icon-form-dropdown', value: 'dropdown', label: 'State', name: 'state' },
-    { icon: 'adminlib-t-letter-bold icon-form-textbox', value: 'text', label: 'City', name: 'city' },
-    { icon: 'adminlib-t-letter-bold icon-form-textbox', value: 'text', label: 'Post Code', name: 'post_code' },
     { icon: 'adminlib-unread icon-form-email', value: 'email', label: 'Paypal Email', name: 'paypal_email' },
+    { icon: 'adminlib-divider icon-form-address', value: 'address', label: 'Address' },
 ];
 
 // Component
@@ -148,7 +156,7 @@ const CustomForm: React.FC<CustomFormProps> = ({
     const [buttonSetting, setButtonSetting] = useState<ButtonSetting>(formSetting.butttonsetting || {});
     const [opendInput, setOpendInput] = useState<FormField | null>(null);
     const [randMaxId, setRendMaxId] = useState<number>(0);
-    
+
     // State for image gallery
     const [showImageGallery, setShowImageGallery] = useState(false);
     const [selectedFieldForGallery, setSelectedFieldForGallery] = useState<FormField | null>(null);
@@ -185,7 +193,6 @@ const CustomForm: React.FC<CustomFormProps> = ({
             name: fixedName ?? `${type}-${getUniqueName()}`,
         };
 
-        // Set default values based on field type
         if (['multiselect', 'radio', 'dropdown', 'checkboxes'].includes(type)) {
             newFormField.label = DEFAULT_LABEL_SELECT;
             newFormField.options = DEFAULT_OPTIONS;
@@ -197,6 +204,17 @@ const CustomForm: React.FC<CustomFormProps> = ({
         } else if (type === 'block-layout') {
             newFormField.label = 'Content Block';
             newFormField.layout = { blocks: [] };
+        } else if (type === 'address') {
+            newFormField.label = 'Address';
+            newFormField.fields = [
+                { id: randMaxId + 1, key: 'address_1', label: 'Address Line 1', type: 'text', placeholder: 'Address Line 1', required: true },
+                { id: randMaxId + 2, key: 'address_2', label: 'Address Line 2', type: 'text', placeholder: 'Address Line 2' },
+                { id: randMaxId + 3, key: 'city', label: 'City', type: 'text', placeholder: 'City', required: true },
+                { id: randMaxId + 4, key: 'state', label: 'State', type: 'select', options: ['Karnataka', 'Maharashtra', 'Delhi', 'Tamil Nadu'] },
+                { id: randMaxId + 5, key: 'country', label: 'Country', type: 'select', options: ['India', 'USA', 'UK', 'Canada'] },
+                { id: randMaxId + 6, key: 'postcode', label: 'Postal Code', type: 'text', placeholder: 'Postal Code', required: true },
+            ];
+            newFormField.value = {}; // optional, to hold user-entered values later
         } else {
             newFormField.label = DEFAULT_LABEL_SIMPLE(type);
             newFormField.placeholder = DEFAULT_PLACEHOLDER(type);
@@ -206,16 +224,17 @@ const CustomForm: React.FC<CustomFormProps> = ({
         return newFormField;
     };
 
+
     const appendNewFormField = (index: number, type = 'text', fixedName?: string, readonly = false) => {
         if (proSettingChange()) return;
         const newField: FormField = getNewFormField(type, fixedName);
         if (readonly) newField.readonly = true;
         // const newFormFieldList = [...formFieldList.slice(0, index + 1), newField, ...formFieldList.slice(index + 1)];
-        
+
         const currentIndex = opendInput ? formFieldList.findIndex((field) => field.id === opendInput.id) : -1;
         const insertIndex = currentIndex !== -1 ? currentIndex + 1 : formFieldList.length;
         const newFormFieldList = [...formFieldList.slice(0, insertIndex), newField, ...formFieldList.slice(insertIndex)];
-        
+
         settingHasChanged.current = true;
         setFormFieldList(newFormFieldList);
         setOpendInput(newField);
@@ -240,7 +259,7 @@ const CustomForm: React.FC<CustomFormProps> = ({
         newFormFieldList[index] = { ...newFormFieldList[index], [key]: value };
         settingHasChanged.current = true;
         setFormFieldList(newFormFieldList);
-        
+
         // Update opened input if it's the same field
         if (opendInput?.id === newFormFieldList[index].id) {
             setOpendInput(newFormFieldList[index]);
@@ -251,15 +270,15 @@ const CustomForm: React.FC<CustomFormProps> = ({
         if (proSettingChange()) return;
         const selectedFormField = formFieldList[index];
         if (selectedFormField.type === newType) return;
-        
+
         const newFormField = getNewFormField(newType);
         newFormField.id = selectedFormField.id;
-        
+
         // Preserve some properties if needed
         if (selectedFormField.readonly) {
             newFormField.readonly = true;
         }
-        
+
         const newFormFieldList = [...formFieldList];
         newFormFieldList[index] = newFormField;
         settingHasChanged.current = true;
@@ -269,12 +288,12 @@ const CustomForm: React.FC<CustomFormProps> = ({
 
     const handleImageSelect = (images: ImageItem[]) => {
         if (!selectedFieldForGallery) return;
-        
+
         const index = formFieldList.findIndex(f => f.id === selectedFieldForGallery.id);
         if (index >= 0) {
             handleFormFieldChange(index, 'images', images);
         }
-        
+
         setShowImageGallery(false);
         setSelectedFieldForGallery(null);
     };
@@ -288,9 +307,9 @@ const CustomForm: React.FC<CustomFormProps> = ({
     };
 
     // Image Gallery Field Component
-    const ImageGalleryField: React.FC<{ formField: FormField; onChange: (key: string, value: any) => void }> = ({ 
-        formField, 
-        onChange 
+    const ImageGalleryField: React.FC<{ formField: FormField; onChange: (key: string, value: any) => void }> = ({
+        formField,
+        onChange
     }) => {
         return (
             <div className="image-gallery-field">
@@ -550,6 +569,14 @@ const CustomForm: React.FC<CustomFormProps> = ({
                                             }
                                         />
                                     )}
+                                    {formField.type === 'address' && (
+                                        <AddressField
+                                            formField={formField}
+                                            onChange={(key, value) => handleFormFieldChange(index, key, value)}
+                                            opendInput={opendInput} // pass current opened input
+                                            setOpendInput={setOpendInput} // allow subfields to set it
+                                        />
+                                    )}
                                     {formField.type === 'divider' && (
                                         <div className="divider-field">
                                             <hr />
@@ -591,29 +618,46 @@ const CustomForm: React.FC<CustomFormProps> = ({
 
             {/* Meta Setting Modal outside registration-form-main-section */}
             <div className="registration-edit-form">
-                {opendInput && !opendInput.readonly && (
+                {opendInput && (
                     <>
-                        <SettingMetaBox
-                            formField={opendInput}
-                            opened={{ click: true }}
-                            onChange={(key, value) => {
-                                const index = formFieldList.findIndex(f => f.id === opendInput.id);
-                                if (index >= 0) {
-                                    handleFormFieldChange(index, key, value);
-                                    // Update the local open input so the UI updates immediately
-                                    setOpendInput({ ...formFieldList[index], [key]: value });
-                                }
-                            }}
-                            onTypeChange={(newType) => {
-                                const index = formFieldList.findIndex(f => f.id === opendInput.id);
-                                if (index >= 0) {
-                                    handleFormFieldTypeChange(index, newType);
-                                    // Update the local open input type
-                                    setOpendInput({ ...formFieldList[index], type: newType });
-                                }
-                            }}
-                            inputTypeList={selectOptions}
-                        />
+                        {opendInput.readonly ? (
+                            // MultivendorX Free field: allow only label & placeholder
+                            <SettingMetaBox
+                                formField={opendInput}
+                                opened={{ click: true }}
+                                metaType="setting-meta"
+                                inputTypeList={[]} // hide type dropdown
+                                onChange={(key, value) => {
+                                    if (key !== 'label' && key !== 'placeholder') return; // only allow label & placeholder
+                                    const index = formFieldList.findIndex(f => f.id === opendInput.id);
+                                    if (index >= 0) {
+                                        handleFormFieldChange(index, key, value);
+                                        setOpendInput({ ...formFieldList[index], [key]: value });
+                                    }
+                                }}
+                            />
+                        ) : (
+                            // Normal fields: full edit box
+                            <SettingMetaBox
+                                formField={opendInput}
+                                opened={{ click: true }}
+                                onChange={(key, value) => {
+                                    const index = formFieldList.findIndex(f => f.id === opendInput.id);
+                                    if (index >= 0) {
+                                        handleFormFieldChange(index, key, value);
+                                        setOpendInput({ ...formFieldList[index], [key]: value });
+                                    }
+                                }}
+                                onTypeChange={(newType) => {
+                                    const index = formFieldList.findIndex(f => f.id === opendInput.id);
+                                    if (index >= 0) {
+                                        handleFormFieldTypeChange(index, newType);
+                                        setOpendInput({ ...formFieldList[index], type: newType });
+                                    }
+                                }}
+                                inputTypeList={selectOptions}
+                            />
+                        )}
                     </>
                 )}
             </div>
@@ -624,7 +668,7 @@ const CustomForm: React.FC<CustomFormProps> = ({
                     <div className="modal-content large">
                         <div className="modal-header">
                             <h3>Select Images</h3>
-                            <button 
+                            <button
                                 className="close-btn"
                                 onClick={() => {
                                     setShowImageGallery(false);
@@ -634,7 +678,7 @@ const CustomForm: React.FC<CustomFormProps> = ({
                                 <i className="admin-font adminlib-close"></i>
                             </button>
                         </div>
-                        <ImageGallery 
+                        <ImageGallery
                             onImageSelect={handleImageSelect}
                             multiple={true}
                             selectedImages={selectedFieldForGallery?.images || []}
