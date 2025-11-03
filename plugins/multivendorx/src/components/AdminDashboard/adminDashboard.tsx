@@ -288,18 +288,18 @@ const AdminDashboard = () => {
   };
 
   const Modules: Module[] = [
-    { id: 'store-policy', name: 'Identity verification', iconClass: 'adminlib-booking' },
+    { id: 'store-policy', name: 'Identity verification', iconClass: 'adminlib-booking', pro: true },
     { id: 'staff-manager', name: 'Staff manager', iconClass: 'adminlib-booking', pro: true },
-    { id: 'vacation-mode', name: 'Vacation mode', iconClass: 'adminlib-report' },
+    { id: 'vacation', name: 'Vacation mode', iconClass: 'adminlib-report', pro: true },
     { id: 'business-hours', name: 'Business hours', iconClass: 'adminlib-analytics', pro: true },
-    { id: 'store-inventory', name: 'Store inventory', iconClass: 'adminlib-analytics' },
+    { id: 'store-inventory', name: 'Store inventory', iconClass: 'adminlib-analytics' , pro: true},
     { id: 'min-max-quantities', name: 'Min/Max quantities', iconClass: 'adminlib-analytics', pro: true },
-    { id: 'wholesale', name: 'Wholesale', iconClass: 'adminlib-analytics' },
+    { id: 'wholesale', name: 'Wholesale', iconClass: 'adminlib-analytics' , pro: true},
     { id: 'paypal-marketplace', name: 'PayPal marketplace (Real-time Split)', iconClass: 'adminlib-analytics', pro: true },
-    { id: 'stripe-marketplace', name: 'Stripe marketplace (Real-time Split)', iconClass: 'adminlib-booking' },
-    { id: 'facilitator', name: 'Facilitator', iconClass: 'adminlib-booking', pro: true },
-    { id: 'notifications', name: 'Notifications', iconClass: 'adminlib-booking' },
-    { id: 'invoice-packing-slip', name: 'Invoice & packing slip', iconClass: 'adminlib-setting', pro: true },
+    { id: 'stripe-marketplace', name: 'Stripe marketplace (Real-time Split)', iconClass: 'adminlib-booking', pro: true },
+    { id: 'facilitator', name: 'Facilitator', iconClass: 'adminlib-booking', pro: true , pro: true},
+    { id: 'notifications', name: 'Notifications', iconClass: 'adminlib-booking', pro: true },
+    { id: 'invoice', name: 'Invoice & packing slip', iconClass: 'adminlib-setting', pro: true },
   ];
 
   const [activeTab, setActiveTab] = useState("dashboard");

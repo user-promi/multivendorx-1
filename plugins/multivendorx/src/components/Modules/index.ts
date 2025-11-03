@@ -256,7 +256,7 @@ export default {
         // },
         {
             id: 'paypal-marketplace',
-            name: __('PayPal Marketplace (Real time Split)', 'multivendorx'),
+            name: __('PayPal Marketplace', 'multivendorx'),
             desc: "Using split payment pay vendors instantly after a completed order",
             icon: 'adminlib-paypal-marketplace',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/paypal-marketplace-real-time-split/',
@@ -276,7 +276,7 @@ export default {
         // },
         {
             id: 'stripe-marketplace',
-            name: __('Stripe Marketplace (Real time Split)', 'multivendorx'),
+            name: __('Stripe Marketplace', 'multivendorx'),
             desc: "Automatically sends a store’s share immediately after a customer order is completed.",
             icon: 'adminlib-stripe-marketplace',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/stripe-marketplace',
