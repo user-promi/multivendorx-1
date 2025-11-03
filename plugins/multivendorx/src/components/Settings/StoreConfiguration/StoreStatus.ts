@@ -77,7 +77,7 @@ export default {
                         },
                         {
                             key: 'pending_description',
-                            label: 'Message shown to declined stores: Your application was declined. Please review and reapply.',
+                            label: 'Message shown to declined stores',
                             des: 'What pending stores can do',
                         },
                     ],

@@ -251,6 +251,7 @@
         align-items: start;
         background: $theme-background-color;
         border-radius: 0.313rem;
+        cursor: pointer;
 
         span {
             font-weight: 600;
@@ -305,5 +306,6 @@
     .recipient.disable {
         filter: grayscale(1);
         opacity: 0.8;
+        cursor: default;
     }
 }
