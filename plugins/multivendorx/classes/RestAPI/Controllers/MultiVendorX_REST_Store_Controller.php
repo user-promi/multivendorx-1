@@ -407,40 +407,6 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
         }
     }
 
-    /**
-     * Get user information by user ID
-     *
-     * @param int $user_id
-     * @return array|null
-     */
-    // private function get_user_info( $user_id ) {
-    //     if ( ! $user_id ) {
-    //         return null;
-    //     }
-
-    //     $user = get_userdata( $user_id );
-        
-    //     if ( ! $user ) {
-    //         return null;
-    //     }
-
-    //     // // Get user's first and last name
-    //     // $first_name = get_user_meta( $user_id, 'first_name', true );
-    //     // $last_name = get_user_meta( $user_id, 'last_name', true );
-        
-    //     // // Combine names, fallback to display name if empty
-    //     // $full_name = trim( $first_name . ' ' . $last_name );
-    //     // if ( empty( $full_name ) ) {
-    //         $full_name = $user->display_name;
-    //     // }
-
-    //     return [
-    //         'id'    => $user_id,
-    //         'name'  => $full_name,
-    //         'email' => $user->user_email,
-    //     ];
-    // }
-
     public function get_pending_stores( $request ) {
         global $wpdb;
     
@@ -683,7 +649,6 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
 
     public function update_item( $request ) {
         $id   = absint( $request->get_param( 'id' ) );
-
         $data = $request->get_json_params();
 
         $store = new \MultiVendorX\Store\Store( $id );
@@ -726,6 +691,10 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             unset($data['primary_owner']);
             // return rest_ensure_response([ 'success' => true ]);
         }
+
+        unset($data['commission']);
+        unset($data['transactions']);
+        unset($data['primary_owner_info']);
         
         // Update basic store info
         $store->set('name',        $data['name'] ?? $store->get('name'));

@@ -2,10 +2,11 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { BasicInput, SelectInput, getApiLink, SuccessNotice } from 'zyra';
+import { Skeleton } from '@mui/material';
 
 interface OverviewProps {
-  id: string | null;
-  storeData?: any;
+    id: string | null;
+    storeData?: any;
 }
 
 const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
@@ -34,14 +35,15 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
     //     //         setStoreData(response.data || {});
     //     //     })
     // }, []);
-    
+
     const overviewData = [
-        { icon: "adminlib-tools green", number:  `${appLocalizer.currency_symbol}${Number(storeData.commission?.total_order_amount ?? 0).toFixed(2)}`, text: "Lifetime Earnings" },
+        { icon: "adminlib-tools green", number: `${appLocalizer.currency_symbol}${Number(storeData.commission?.total_order_amount ?? 0).toFixed(2)}`, text: "Lifetime Earnings" },
         { icon: "adminlib-book red", number: `${appLocalizer.currency_symbol}${Number(storeData.transactions?.balance ?? 0).toFixed(2)}`, text: "Available Balance" },
         { icon: "adminlib-global-community yellow", number: `${appLocalizer.currency_symbol}${Number(storeData.transactions?.locking_balance ?? 0).toFixed(2)}`, text: "Pending Balance" },
         { icon: "adminlib-global-community blue", number: `${appLocalizer.currency_symbol}${Number(storeData.request_withdrawal_amount ?? 0).toFixed(2)}`, text: "Requested Payout" },
     ];
-console.log(storeData)
+    console.log(storeData)
+
     return (
         <>
 
@@ -150,6 +152,51 @@ console.log(storeData)
                         <div className="card-header">
                             <div className="left">
                                 <div className="title">
+                                    Store Hours
+                                </div>
+                                <div className="des">
+                                    Manage your weekly schedule and special hours
+                                </div>
+                            </div>
+                            <div className="right">
+                                <i className="adminlib-external"></i>
+                            </div>
+                        </div>
+
+                        {/* <div className="store-owner-details">
+                            <div className="profile">
+                                <div className="avater">
+                                    <span className="adminlib-calendar"></span>
+                                </div>
+                                <div className="details">
+                                    <div className="name">$5,420</div>
+                                    <div className="des">Oct 15, 2024</div>
+                                </div>
+                            </div>
+                            <div className="right-details">
+                                <div className="price">$356 .35</div>
+                                <div className="div">Lorem, ipsum dolor.</div>
+                            </div>
+                        </div> */}
+
+                        <div className="store-time-wrapper">
+
+                            <div className="row">
+                                <div className="time-wrapper">
+                                    <div className="des">Current Status</div>
+                                    <div className="time"><span className="admin-badge green">Open</span></div>
+                                </div>
+                                <div className="time-wrapper">
+                                    <div className="des">Next Opening</div>
+                                    <div className="time">Mon 9:00 AM</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="card-content">
+                        <div className="card-header">
+                            <div className="left">
+                                <div className="title">
                                     Store information
                                 </div>
                             </div>
@@ -223,63 +270,19 @@ console.log(storeData)
                                     <span>JD</span>
                                 </div>
                                 <div className="details">
-                                    <div className="name">{storeData.primary_owner_info?.data?.display_name}</div>
+                                    <div className="name">{storeData.primary_owner_info?.data?.display_name ?? <Skeleton variant="text" width={150} />
+                                    }</div>
                                     <div className="des">Owner</div>
                                 </div>
                             </div>
                             <ul className="contact-details">
                                 <li>
-                                    <i className="adminlib-mail"></i>{storeData.primary_owner_info?.data?.user_email}
+                                    <i className="adminlib-mail"></i>{storeData.primary_owner_info?.data?.user_email  ?? <Skeleton variant="text" width={150} />}
                                 </li>
                                 {/* <li>
                                     <i className="adminlib-form-phone"></i> +1 (555) 987-6543
                                 </li> */}
                             </ul>
-                        </div>
-                    </div>
-                    <div className="card-content">
-                        <div className="card-header">
-                            <div className="left">
-                                <div className="title">
-                                    Store Hours
-                                </div>
-                                <div className="des">
-                                    Manage your weekly schedule and special hours
-                                </div>
-                            </div>
-                            <div className="right">
-                                <i className="adminlib-external"></i>
-                            </div>
-                        </div>
-
-                        {/* <div className="store-owner-details">
-                            <div className="profile">
-                                <div className="avater">
-                                    <span className="adminlib-calendar"></span>
-                                </div>
-                                <div className="details">
-                                    <div className="name">$5,420</div>
-                                    <div className="des">Oct 15, 2024</div>
-                                </div>
-                            </div>
-                            <div className="right-details">
-                                <div className="price">$356 .35</div>
-                                <div className="div">Lorem, ipsum dolor.</div>
-                            </div>
-                        </div> */}
-
-                        <div className="store-time-wrapper">
-
-                            <div className="row">
-                                <div className="time-wrapper">
-                                    <div className="des">Current Status</div>
-                                    <div className="time"><span className="admin-badge green">Open</span></div>
-                                </div>
-                                <div className="time-wrapper">
-                                    <div className="des">Next Opening</div>
-                                    <div className="time">Mon 9:00 AM</div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                     {/* <div className="card-content">

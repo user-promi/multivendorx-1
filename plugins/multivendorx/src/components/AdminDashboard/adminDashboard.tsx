@@ -23,8 +23,9 @@ interface Feature {
 import "./adminDashboard.scss";
 import "../dashboard.scss";
 import { useEffect, useState } from 'react';
-import { getApiLink, sendApiResponse, useModules } from "zyra";
+import { getApiLink, ProPopup, sendApiResponse, useModules } from "zyra";
 import axios from "axios";
+import { Dialog } from "@mui/material";
 
 const AdminDashboard = () => {
   const { modules, insertModule, removeModule } = useModules.getState();
@@ -288,16 +289,16 @@ const AdminDashboard = () => {
   };
 
   const Modules: Module[] = [
-    { id: 'store-policy', name: 'Identity verification', iconClass: 'adminlib-booking', pro: true },
+    { id: 'marketplace-fee', name: 'Marketplace Fee', iconClass: 'adminlib-booking', pro: true },
     { id: 'staff-manager', name: 'Staff manager', iconClass: 'adminlib-booking', pro: true },
     { id: 'vacation', name: 'Vacation mode', iconClass: 'adminlib-report', pro: true },
     { id: 'business-hours', name: 'Business hours', iconClass: 'adminlib-analytics', pro: true },
-    { id: 'store-inventory', name: 'Store inventory', iconClass: 'adminlib-analytics' , pro: true},
+    { id: 'store-inventory', name: 'Store inventory', iconClass: 'adminlib-analytics', pro: true },
     { id: 'min-max-quantities', name: 'Min/Max quantities', iconClass: 'adminlib-analytics', pro: true },
-    { id: 'wholesale', name: 'Wholesale', iconClass: 'adminlib-analytics' , pro: true},
-    { id: 'paypal-marketplace', name: 'PayPal marketplace (Real-time Split)', iconClass: 'adminlib-analytics', pro: true },
-    { id: 'stripe-marketplace', name: 'Stripe marketplace (Real-time Split)', iconClass: 'adminlib-booking', pro: true },
-    { id: 'facilitator', name: 'Facilitator', iconClass: 'adminlib-booking', pro: true , pro: true},
+    { id: 'wholesale', name: 'Wholesale', iconClass: 'adminlib-analytics', pro: true },
+    { id: 'paypal-marketplace', name: 'PayPal marketplace', iconClass: 'adminlib-analytics', pro: true },
+    { id: 'stripe-marketplace', name: 'Stripe marketplace', iconClass: 'adminlib-booking', pro: true },
+    { id: 'facilitator', name: 'Facilitator', iconClass: 'adminlib-booking', pro: true },
     { id: 'notifications', name: 'Notifications', iconClass: 'adminlib-booking', pro: true },
     { id: 'invoice', name: 'Invoice & packing slip', iconClass: 'adminlib-setting', pro: true },
   ];
@@ -377,9 +378,11 @@ const AdminDashboard = () => {
                   </div>
                   <div className="des">Create, manage, and grow your marketplace with confidence. Trusted by thousands of entrepreneurs worldwide.</div>
                   <a href='https://multivendorx.com/pricing/' className="admin-btn btn-purple">
-                    Upgrade now - 15-day money-back guarantee*
+                    <i className="adminlib-pro-tag"></i>
+                    Upgrade now
                     <i className="adminlib-arrow-right icon-pro-btn"></i>
                   </a>
+                  <div className="des">15-day money-back guarantee</div>
                 </div>
               </div>
             </div>
@@ -423,7 +426,7 @@ const AdminDashboard = () => {
                             ></label>
                           </div>
                         ) : (
-                          <span className="admin-pro-tag">
+                          <span className="admin-pro-tag" onclick="">
                             <i className="adminlib-pro-tag"></i>Pro
                           </span>
                         )}
@@ -456,7 +459,7 @@ const AdminDashboard = () => {
                       <div className="header">
                         <img src={catalogx} alt="" />
                         <div className="tag">
-                          <span className="admin-badge blue">Pro</span>
+                          <span className="admin-badge red"><i className="adminlib-pro-tag"></i> Pro</span>
                           <a href="https://multivendorx.com/pricing/" target="_blank">
                             Get Pro
                           </a>
@@ -500,7 +503,7 @@ const AdminDashboard = () => {
                       <div className="header">
                         <img src={notifima} alt="" />
                         <div className="tag">
-                          <span className="admin-badge blue">Pro</span>
+                          <span className="admin-badge red"><i className="adminlib-pro-tag"></i> Pro</span>
                           <a href="https://multivendorx.com/pricing/" target="_blank">
                             Get Pro
                           </a>
@@ -548,7 +551,7 @@ const AdminDashboard = () => {
                   {resources.map((res, index) => (
                     <div className="cards" key={index}>
                       <div className="header">
-                        <i className={res.iconClass}></i>
+                        <i className={`icon ${res.iconClass}`}></i>
                         <a href={res.href} target="blank">
                           {res.linkText}
                           <i className="adminlib-external"></i>
@@ -677,6 +680,22 @@ const AdminDashboard = () => {
 
   return (
     <>
+      {/* <Dialog
+        className="admin-module-popup"
+        open={modelOpen}
+        onClose={() => setModelOpen(false)}
+      >
+        <button
+          className="admin-font adminlib-cross"
+          onClick={() => setModelOpen(false)}
+          aria-label="Close dialog"
+        ></button>
+        <ProPopup
+          proUrl={proPopupContent.proUrl}
+          title={proPopupContent.title}
+          messages={proPopupContent.messages}
+        />
+      </Dialog> */}
       <div className="general-wrapper">
         <div className="row">
           <div className="column admin-tab">

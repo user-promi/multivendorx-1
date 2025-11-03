@@ -272,7 +272,6 @@ class CommissionManager {
             );
             
             $data   = $filtered['data'];
-            file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":data:  : " . var_export($data, true) . "\n", FILE_APPEND);
             $format = $filtered['format'];
 
             if ( ! $commission_id ) {
