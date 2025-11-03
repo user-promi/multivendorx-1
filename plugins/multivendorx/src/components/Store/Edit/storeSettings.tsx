@@ -26,9 +26,11 @@ const StoreSettings = ({ id, data }: { id: string | null; data:any }) => {
     const [newEmailValue, setNewEmailValue] = useState('');
     const statusOptions = [
         { label: "Pending approval", value: "pending" },
-        { label: "Active", value: "active" },
-        { label: "Rejected", value: "rejected" },
+        { label: "Declined", value: "declined" },
+        { label: "Under review", value: "under_review" },
         { label: "Suspended", value: "suspended" },
+        { label: "Active", value: "active" },
+        { label: "Deactivated", value: "deactivated" },
     ];
 
     const [imagePreviews, setImagePreviews] = useState<{ [key: string]: string }>({});
