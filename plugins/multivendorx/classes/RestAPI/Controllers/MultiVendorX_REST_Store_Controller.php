@@ -7,6 +7,7 @@ use MultiVendorX\Utill;
 use MultiVendorX\Store\SocialVerification;
 use MultiVendorX\Commission\CommissionUtil;
 use MultiVendorX\StoreReview\Util;
+use MultiVendorX\Transaction\Transaction;
 
 defined('ABSPATH') || exit;
 
@@ -357,7 +358,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                 $commission = CommissionUtil::get_commission_summary_for_store((int) $store['ID']);
                 // Get primary owner information using Store object
                 $primary_owner_id = StoreUtil::get_primary_owner( $store['ID'] );
-                $primary_owner = $this->get_user_info( $primary_owner_id );
+                $primary_owner = get_userdata( $primary_owner_id );
     
                 // Get store image and banner from meta
                 $store_image = $store_meta->meta_data['image'] ?? '';
@@ -412,33 +413,33 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
      * @param int $user_id
      * @return array|null
      */
-    private function get_user_info( $user_id ) {
-        if ( ! $user_id ) {
-            return null;
-        }
+    // private function get_user_info( $user_id ) {
+    //     if ( ! $user_id ) {
+    //         return null;
+    //     }
 
-        $user = get_userdata( $user_id );
+    //     $user = get_userdata( $user_id );
         
-        if ( ! $user ) {
-            return null;
-        }
+    //     if ( ! $user ) {
+    //         return null;
+    //     }
 
-        // // Get user's first and last name
-        // $first_name = get_user_meta( $user_id, 'first_name', true );
-        // $last_name = get_user_meta( $user_id, 'last_name', true );
+    //     // // Get user's first and last name
+    //     // $first_name = get_user_meta( $user_id, 'first_name', true );
+    //     // $last_name = get_user_meta( $user_id, 'last_name', true );
         
-        // // Combine names, fallback to display name if empty
-        // $full_name = trim( $first_name . ' ' . $last_name );
-        // if ( empty( $full_name ) ) {
-            $full_name = $user->display_name;
-        // }
+    //     // // Combine names, fallback to display name if empty
+    //     // $full_name = trim( $first_name . ' ' . $last_name );
+    //     // if ( empty( $full_name ) ) {
+    //         $full_name = $user->display_name;
+    //     // }
 
-        return [
-            'id'    => $user_id,
-            'name'  => $full_name,
-            'email' => $user->user_email,
-        ];
-    }
+    //     return [
+    //         'id'    => $user_id,
+    //         'name'  => $full_name,
+    //         'email' => $user->user_email,
+    //     ];
+    // }
 
     public function get_pending_stores( $request ) {
         global $wpdb;
@@ -645,9 +646,10 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
         }
 
         $commission = CommissionUtil::get_commission_summary_for_store((int) $id);
+        $transactions = Transaction::get_balances_for_store((int) $id);
         // Get primary owner information using Store object
         $primary_owner_id = StoreUtil::get_primary_owner( $id );
-        $primary_owner_info = $this->get_user_info( $primary_owner_id );
+        $primary_owner_info = get_userdata( $primary_owner_id );
 
         $overall  = Util::get_overall_rating($id);
     
@@ -665,6 +667,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             'status'      => $store->get('status'),
             'create_time' => date( 'M j, Y', strtotime( $store->get('create_time') ) ),
             'commission'  => $commission,
+            'transactions'  => $transactions,
             'primary_owner_info'  => $primary_owner_info,
             'overall_reviews'  => $overall,
             'total_reviews'  => $total_reviews,

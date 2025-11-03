@@ -20,7 +20,7 @@ interface EmailBadge {
     isValid: boolean;
 }
 
-const StoreSettings = ({ id }: { id: string | null }) => {
+const StoreSettings = ({ id, data }: { id: string | null; data:any }) => {
     const [formData, setFormData] = useState<FormData>({});
     const [emailBadges, setEmailBadges] = useState<EmailBadge[]>([]);
     const [newEmailValue, setNewEmailValue] = useState('');
@@ -91,13 +91,13 @@ const StoreSettings = ({ id }: { id: string | null }) => {
             return;
         }
 
-        axios({
-            method: 'GET',
-            url: getApiLink(appLocalizer, `store/${id}`),
-            headers: { 'X-WP-Nonce': appLocalizer.nonce },
-        })
-            .then((res) => {
-                const data = res.data || {};
+        // axios({
+        //     method: 'GET',
+        //     url: getApiLink(appLocalizer, `store/${id}`),
+        //     headers: { 'X-WP-Nonce': appLocalizer.nonce },
+        // })
+        //     .then((res) => {
+        //         const data = res.data || {};
 
                 // Set all form data
                 setFormData((prev) => ({ ...prev, ...data }));
@@ -120,11 +120,11 @@ const StoreSettings = ({ id }: { id: string | null }) => {
                     banner: data.banner || '',
                 });
                 setLoading(false);
-            })
-            .catch((error) => {
-                console.error('Error loading store data:', error);
-                setLoading(false);
-            });
+            // })
+            // .catch((error) => {
+            //     console.error('Error loading store data:', error);
+            //     setLoading(false);
+            // });
     }, [id]);
 
     // Add email function
