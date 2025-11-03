@@ -628,7 +628,7 @@ export const Announcements: React.FC = () => {
                                 {validationErrors.title && <div className="invalid-massage">{validationErrors.title}</div>}
                             </div>
                             <div className={`form-group `}>
-                                <label htmlFor="content">Enter Content</label>
+                                <label htmlFor="content">Announcement message</label>
                                 <TextArea
                                     name="content"
                                     inputClass="textarea-input"
