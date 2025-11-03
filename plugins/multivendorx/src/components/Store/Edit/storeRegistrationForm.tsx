@@ -97,7 +97,7 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 							))}
 					</div>
 					<div className="card-content">
-						<div className="card-title">Store Application Details</div>
+						<div className="card-title">Registation form details</div>
 
 						{/* Core Data */}
 						{formData.core_data &&
