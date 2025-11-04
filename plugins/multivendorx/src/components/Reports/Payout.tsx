@@ -5,6 +5,7 @@ import { Bar, BarChart, CartesianGrid, Cell, Legend, Line, LineChart, Pie, PieCh
 import { Tooltip } from 'react-leaflet';
 import axios from 'axios';
 import { PaginationState, RowSelectionState } from '@tanstack/react-table';
+import {formatCurrency} from '../../services/commonFunction';
 
 const overview = [
   {
@@ -370,7 +371,7 @@ const Transactions: React.FC = () => {
       cell: ({ row }) => (
         <TableCell title={`${currencySymbol}${row.original.commission.total_order_amount || ''}`}>
           {row.original.commission.total_order_amount
-            ? `${currencySymbol}${row.original.commission.total_order_amount}`
+            ? formatCurrency(row.original.commission.total_order_amount)
             : '-'}
         </TableCell>
       ),
@@ -380,7 +381,7 @@ const Transactions: React.FC = () => {
       cell: ({ row }) => (
         <TableCell title={`${currencySymbol}${row.original.commission.shipping_amount || ''}`}>
           {row.original.commission.shipping_amount
-            ? `${currencySymbol}${row.original.commission.shipping_amount}`
+            ? formatCurrency(row.original.commission.shipping_amount)
             : '-'}
         </TableCell>
       ),
@@ -390,7 +391,7 @@ const Transactions: React.FC = () => {
       cell: ({ row }) => (
         <TableCell title={`${currencySymbol}${row.original.commission.tax_amount || ''}`}>
           {row.original.commission.tax_amount
-            ? `${currencySymbol}${row.original.commission.tax_amount}`
+            ? formatCurrency(row.original.commission.tax_amount)
             : '-'}
         </TableCell>
       ),
@@ -400,7 +401,7 @@ const Transactions: React.FC = () => {
       cell: ({ row }) => (
         <TableCell title={`${currencySymbol}${row.original.commission.commission_total || ''}`}>
           {row.original.commission.commission_total
-            ? `${currencySymbol}${row.original.commission.commission_total}`
+            ? formatCurrency(row.original.commission.commission_total)
             : '-'}
         </TableCell>
       ),
@@ -414,7 +415,7 @@ const Transactions: React.FC = () => {
 
         return (
           <TableCell title={`${currencySymbol}${adminEarnings}`}>
-            {`${currencySymbol}${adminEarnings}`}
+            {formatCurrency(adminEarnings)}
           </TableCell>
         );
       },

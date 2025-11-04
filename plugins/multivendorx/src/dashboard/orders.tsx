@@ -5,6 +5,7 @@ import { __ } from "@wordpress/i18n";
 import { CalendarInput, Table, TableCell } from "zyra";
 import { ColumnDef, RowSelectionState, PaginationState } from "@tanstack/react-table";
 import OrderDetails from "./order-details";
+import {formatCurrency} from '../services/commonFunction';
 
 // Type declarations
 type OrderStatus = {
@@ -332,7 +333,7 @@ const Orders: React.FC = () => {
             header: __("Total", "multivendorx"),
             cell: ({ row }) => (
                 <TableCell>
-                    {appLocalizer.currency_symbol}{row.original.total}
+                    {formatCurrency(row.original.total)}
                 </TableCell>
             ),
         },

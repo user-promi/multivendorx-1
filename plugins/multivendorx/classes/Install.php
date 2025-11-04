@@ -507,11 +507,36 @@ By signing and submitting, the Seller accepts all terms above.
             'who_can_report' =>'anyone',
             // You can add other keys here if needed, e.g. 'required_store_uploads' => [...]
         ];
+
+        $store_status_settings = [
+            'store_status_management' => [
+                'store_pending_status'  => [
+                    'pending_msg'   => 'Your store is awaiting approval and will be activated soon.'
+                ],
+                'store_denied_status'  => [
+                    'declined_msg'   => 'Your store is declined.'
+                ],
+                'store_under_review_status'  => [
+                    'review_msg'   => 'Your store is under review. Sales and payouts are temporarily paused.'
+                ],
+                'store_suspended_status'  => [
+                    'suspended_msg'   => 'Your store is suspended due to a policy issue. Contact support to resolve it.'
+                ],
+                'store_active_status'  => [
+                    'active_msg'   => 'Your store is live and ready for business.'
+                ],
+                'store_deactivated_status'  => [
+                    'deactivated_msg'   => 'Your store has been closed. Access and selling privileges are disabled.'
+                ],
+            ]
+        ];
+
         // 6. Save back to DB
         update_option('multivendorx_identity_verification_settings', $settings);
         update_option('multivendorx_order_actions_refunds_settings', $order_settings);
         update_option('multivendorx_legal_compliance_settings', $legal_settings);
         update_option('multivendorx_product_compliance_settings', $product_compliance_settings);        
+        update_option('multivendorx_store_status_control_settings', $store_status_settings);        
     }
     
 

@@ -8,6 +8,7 @@ import {
     RowSelectionState,
     PaginationState,
 } from '@tanstack/react-table';
+import {formatCurrency} from '../../services/commonFunction';
 
 type StoreRow = {
     id?: number;
@@ -526,7 +527,7 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
             header: __('Credit', 'multivendorx'),
             cell: ({ row }) => {
                 const credit = row.original.credit;
-                return <TableCell>{credit ? `${appLocalizer.currency_symbol}${credit}` : '-'}</TableCell>;
+                return <TableCell>{credit ? formatCurrency(credit) : '-'}</TableCell>;
             },
         },
         {
@@ -537,7 +538,7 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
             header: __('Debit', 'multivendorx'),
             cell: ({ row }) => {
                 const debit = row.original.debit;
-                return <TableCell>{debit ? `${appLocalizer.currency_symbol}${debit}` : '-'}</TableCell>;
+                return <TableCell>{debit ? formatCurrency(debit) : '-'}</TableCell>;
             },
         },
         {
@@ -548,7 +549,7 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
             header: __('Balance', 'multivendorx'),
             cell: ({ row }) => {
                 const balance = row.original.balance;
-                return <TableCell>{balance ? `${appLocalizer.currency_symbol}${balance}` : '-'}</TableCell>;
+                return <TableCell>{balance ? formatCurrency(balance) : '-'}</TableCell>;
             },
         },
     ];
@@ -628,15 +629,15 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
         })
             .then((response) => {
                 const data = response?.data || {};
-                const currency = appLocalizer.currency_symbol || '';
 
-                const dynamicOverview = [
-                    { id: 'commission', label: 'Commission', count: `${currency}${data.commission_total ?? '0'}`, icon: 'adminlib-star green' },
-                    { id: 'shipping', label: 'Shipping Tax', count: `${currency}${data.shipping_amount ?? '0'}`, icon: 'adminlib-clock blue' },
-                    { id: 'facilator', label: 'Facilitator Fee', count: `${currency}${data.facilitator_fee ?? '0'}`, icon: 'adminlib-star yellow' },
-                    { id: 'gateway_fees', label: 'Gateway Fees', count: `${currency}${data.gateway_fee ?? '0'}`, icon: 'adminlib-credit-card red' },
-                    { id: 'total_balance', label: 'Total Balance', count: `${currency}${data.balance ?? 0}`, icon: 'adminlib-star green' },
+               const dynamicOverview = [
+                    { id: 'commission', label: 'Commission', count: formatCurrency(data.commission_total), icon: 'adminlib-star green' },
+                    { id: 'shipping', label: 'Shipping Tax', count: formatCurrency(data.shipping_amount), icon: 'adminlib-clock blue' },
+                    { id: 'facilitator', label: 'Facilitator Fee', count: formatCurrency(data.facilitator_fee), icon: 'adminlib-star yellow' },
+                    { id: 'gateway_fees', label: 'Gateway Fees', count: formatCurrency(data.gateway_fee), icon: 'adminlib-credit-card red' },
+                    { id: 'total_balance', label: 'Total Balance', count: formatCurrency(data.balance), icon: 'adminlib-star green' },
                 ];
+
 
                 setOverview(dynamicOverview);
             })

@@ -7,6 +7,7 @@ import {
     PaginationState,
 } from '@tanstack/react-table';
 import axios from 'axios';
+import {formatCurrency} from '../services/commonFunction';
 
 type CouponRow = {
     id: number;
@@ -701,7 +702,7 @@ const AllCoupon: React.FC = () => {
             header: __('Amount', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell title={row.original.amount}>
-                    {appLocalizer.currency_symbol}{row.original.amount}
+                    {formatCurrency(row.original.amount)}
                 </TableCell>
             ),
         },

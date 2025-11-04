@@ -3,6 +3,7 @@ import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 import { CalendarInput, getApiLink, Table, TableCell } from 'zyra';
 import { ColumnDef, RowSelectionState, PaginationState } from '@tanstack/react-table';
+import {formatCurrency} from '../../services/commonFunction';
 
 interface StoreRow {
     id: number;
@@ -129,10 +130,11 @@ const StoreOrders: React.FC = () => {
                 const orders: StoreRow[] = response.data.map((order: any) => ({
                     id: order.id,
                     store_name: order.store_name || '-',
-                    amount: `${order.currency_symbol || ''}${order.total}`,
+                    amount: formatCurrency(order.total),
                     commission_amount: order.commission_amount
-                        ? `${order.currency_symbol || ''}${order.commission_amount}`
+                        ? formatCurrency(order.commission_amount)
                         : '-',
+
                     date: new Date(order.date_created).toLocaleDateString(undefined, {
                         year: 'numeric',
                         month: 'short',
