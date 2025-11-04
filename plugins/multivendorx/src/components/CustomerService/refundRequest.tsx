@@ -8,6 +8,7 @@ import {
     RowSelectionState,
     PaginationState,
 } from '@tanstack/react-table';
+import {formatCurrency} from '../../services/commonFunction';
 
 type RefundRow = {
     id: number;
@@ -219,8 +220,7 @@ const RefundRequest: React.FC = () => {
             header: __('Refund Amount', 'multivendorx'),
             cell: ({ row }: any) => (
                 <TableCell title={row.original.amount || ''}>
-                    {appLocalizer.currency_symbol}
-                    {row.original.amount || '-'}
+                    {formatCurrency(row.original.amount)}
                 </TableCell>
             ),
         },

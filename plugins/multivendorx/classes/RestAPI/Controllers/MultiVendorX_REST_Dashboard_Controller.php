@@ -496,17 +496,19 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller
             break;
         }
 
+        $status_settings = MultiVendorX()->setting->get_setting('store_status_management', []);
+
         switch ($store_status) {
             case 'pending':
-                $dashboard_array['error_msg'] = 'Waiting for approval. Your store is pending.';
+                $dashboard_array['error_msg'] = $status_settings['store_pending_status']['pending_msg'];
                 break;
 
             case 'suspended':
-                $dashboard_array['error_msg'] = 'Your account has been suspended by the admin.';
+                $dashboard_array['error_msg'] = $status_settings['store_suspended_status']['suspended_msg'];
                 break;
 
             case 'reject':
-                $dashboard_array['error_msg'] = 'The application has been rejected.';
+                $dashboard_array['error_msg'] = $status_settings['store_denied_status']['declined_msg'];
                 break;
 
             default:

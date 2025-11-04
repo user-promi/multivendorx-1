@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { BasicInput, SelectInput, getApiLink, SuccessNotice } from 'zyra';
 import { Skeleton } from '@mui/material';
+import {formatCurrency} from '../../../services/commonFunction';
 
 interface OverviewProps {
     id: string | null;
@@ -37,12 +38,28 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
     // }, []);
 
     const overviewData = [
-        { icon: "adminlib-tools green", number: `${appLocalizer.currency_symbol}${Number(storeData.commission?.total_order_amount ?? 0).toFixed(2)}`, text: "Lifetime Earnings" },
-        { icon: "adminlib-book red", number: `${appLocalizer.currency_symbol}${Number(storeData.transactions?.balance ?? 0).toFixed(2)}`, text: "Available Balance" },
-        { icon: "adminlib-global-community yellow", number: `${appLocalizer.currency_symbol}${Number(storeData.transactions?.locking_balance ?? 0).toFixed(2)}`, text: "Pending Balance" },
-        { icon: "adminlib-global-community blue", number: `${appLocalizer.currency_symbol}${Number(storeData.request_withdrawal_amount ?? 0).toFixed(2)}`, text: "Requested Payout" },
+        {
+            icon: "adminlib-tools green",
+            number: formatCurrency(storeData.commission?.total_order_amount ?? 0),
+            text: "Lifetime Earnings",
+        },
+        {
+            icon: "adminlib-book red",
+            number: formatCurrency(storeData.transactions?.balance ?? 0),
+            text: "Available Balance",
+        },
+        {
+            icon: "adminlib-global-community yellow",
+            number: formatCurrency(storeData.transactions?.locking_balance ?? 0),
+            text: "Pending Balance",
+        },
+        {
+            icon: "adminlib-global-community blue",
+            number: formatCurrency(storeData.request_withdrawal_amount ?? 0),
+            text: "Requested Payout",
+        },
     ];
-    console.log(storeData)
+
 
     return (
         <>

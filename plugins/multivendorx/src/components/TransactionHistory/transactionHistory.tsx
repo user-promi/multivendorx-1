@@ -6,6 +6,7 @@ import TransactionHistoryTable from './walletTransaction';
 import TransactionDataTable from './transactionDataTable';
 import { AdminBreadcrumbs, CalendarInput, getApiLink, SelectInput, CommonPopup, BasicInput, TextArea, ToggleSetting } from 'zyra';
 import axios from 'axios';
+import {formatCurrency} from '../../services/commonFunction';
 
 export const TransactionHistory: React.FC = () => {
     const [data, setData] = useState<any[]>([]);
@@ -206,14 +207,14 @@ export const TransactionHistory: React.FC = () => {
                         </div>
                         <div className="payout-wrapper">
                             <div className="price">
-                                {appLocalizer.currency_symbol}{Number(data.available_balance ?? 0).toFixed(2)}
+                                {formatCurrency(data.available_balance)}
                             </div>
 
                             {storeData?.request_withdrawal_amount ? (
                                 <>
                                     <div className="des">
-                                        Last withdrawal request: {appLocalizer.currency_symbol}
-                                        {Number(storeData.request_withdrawal_amount ?? 0).toFixed(2)}, is <strong>Pending</strong>.
+                                        Last withdrawal request:
+                                        {formatCurrency(storeData.request_withdrawal_amount)}, is <strong>Pending</strong>.
                                         <br />
                                         Please clear the pending request before disbursing new payments.
                                     </div>
@@ -248,7 +249,7 @@ export const TransactionHistory: React.FC = () => {
                                         <i className="adminlib-cart red"></i>
                                     </div>
                                     <div className="details">
-                                        <div className="number">{appLocalizer.currency_symbol}{Number(data.wallet_balance ?? 0).toFixed(2)}</div>
+                                        <div className="number">{formatCurrency(data.wallet_balance)}</div>
                                         <div className="text">Available balance</div>
                                     </div>
                                 </div>
@@ -257,7 +258,7 @@ export const TransactionHistory: React.FC = () => {
                                         <i className="adminlib-cart green"></i>
                                     </div>
                                     <div className="details">
-                                        <div className="number">{appLocalizer.currency_symbol}{Number(data.reserve_balance ?? 0).toFixed(2)}</div>
+                                        <div className="number">{formatCurrency(data.reserve_balance)}</div>
                                         <div className="text">Reserve balance</div>
                                     </div>
                                 </div>
@@ -266,7 +267,7 @@ export const TransactionHistory: React.FC = () => {
                                         <i className="adminlib-cart yellow"></i>
                                     </div>
                                     <div className="details">
-                                        <div className="number">{appLocalizer.currency_symbol}{Number(data.locking_balance ?? 0).toFixed(2)}</div>
+                                        <div className="number">{formatCurrency(data.locking_balance)}</div>
                                         <div className="text">Locked balance</div>
                                     </div>
                                 </div>

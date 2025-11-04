@@ -8,6 +8,7 @@ import {
     RowSelectionState,
     PaginationState,
 } from '@tanstack/react-table';
+import {formatCurrency} from '../../services/commonFunction';
 
 type StoreRow = {
     id?: number;
@@ -120,7 +121,7 @@ const TransactionDataTable: React.FC = ({ storeId }) => {
             cell: ({ row }) => (
                 <TableCell title={row.original.price || ''}>
                     {row.original.price
-                        ? `${appLocalizer.currency_symbol}${Number(row.original.price).toLocaleString()}`
+                        ? formatCurrency(row.original.price)
                         : '-'}
 
                 </TableCell>

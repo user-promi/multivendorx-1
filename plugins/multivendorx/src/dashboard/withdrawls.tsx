@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 import { getApiLink, CommonPopup, BasicInput, SuccessNotice } from 'zyra';
+import {formatCurrency} from '../services/commonFunction';
 
 const History: React.FC = () => {
     const [data, setData] = useState<any>([]);
@@ -27,12 +28,12 @@ const History: React.FC = () => {
     const analyticsData = [
         data.wallet_balance != null && {
             icon: "adminlib-tools red",
-            number: `${appLocalizer.currency_symbol}${Number(data.wallet_balance).toFixed(2)}`,
+            number: formatCurrency(data.wallet_balance),
             text: "Wallet Balance",
         },
         data.reserve_balance != null && {
             icon: "adminlib-book green",
-            number: `${appLocalizer.currency_symbol}${Number(data.reserve_balance).toFixed(2)}`,
+            number: formatCurrency(data.reserve_balance),
             text: "Reserve Balance",
         },
     ].filter(Boolean); // removes null/undefined entries
@@ -40,7 +41,7 @@ const History: React.FC = () => {
     const analyticsData2 = [
         data.locking_balance != null && {
             icon: "adminlib-global-community yellow",
-            number: `${appLocalizer.currency_symbol}${Number(data.locking_balance).toFixed(2)}`,
+            number: formatCurrency(data.locking_balance),
             text: "Locked",
         },
         data.locking_day != null && {
@@ -105,7 +106,7 @@ const History: React.FC = () => {
                         </div>
                         <div className="payout-wrapper">
                             <div className="price">
-                                {appLocalizer.currency_symbol}{Number(data.available_balance ?? 0).toFixed(2)}
+                                {formatCurrency(data.available_balance)}
                             </div>
                             <div className="des">Current available balance ready for withdrawal</div>
 
@@ -186,8 +187,7 @@ const History: React.FC = () => {
                             {Number(data?.thresold ?? 0) > 0 && (
                                 <div className="withdrawl-notice">
                                     <i className="adminlib-info"></i>{" "}
-                                    Withdrawal occurs only when your balance reaches {appLocalizer.currency_symbol}
-                                    {Number(data.thresold).toFixed(2)} or more. View payment calendar
+                                    Withdrawal occurs only when your balance reaches {formatCurrency(data.thresold)} or more. View payment calendar
                                 </div>
                             )}
                         </div>

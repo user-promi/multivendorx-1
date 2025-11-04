@@ -18,6 +18,7 @@ import { __ } from "@wordpress/i18n";
 import { CalendarInput, getApiLink, Table, TableCell } from "zyra";
 import axios from "axios";
 import { PaginationState, RowSelectionState, ColumnDef } from "@tanstack/react-table";
+import {formatCurrency} from '../../services/commonFunction';
 
 const overview = [
   { id: "sales", label: "Total Products", count: 15, icon: "adminlib-star red" },
@@ -267,7 +268,7 @@ const Revenue: React.FC = () => {
         store_name: product.store_name,
         itemsSold: product.total_sales ? parseInt(product.total_sales) : 0,
         netSales: product.price
-          ? `${appLocalizer.currency_symbol}${product.price}`
+          ? formatCurrency(product.price)
           : "-",
         category:
           product.categories?.map((c: any) => c.name).join(", ") || "-",
