@@ -279,7 +279,8 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
         return (
           <>
             <div className="wizard-step">
-              <div className="step-info">
+              <div className="step-info" onClick={() => handleInputChange(methodId, field.key, !fieldValue)}>
+
                 {!field.hideCheckbox && (
                   <div className="default-checkbox">
                     <input
@@ -289,7 +290,7 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
                         handleInputChange(methodId, field.key, e.target.checked)
                       }
                     />
-                    <label htmlFor="step-checkbox-0-0"></label>
+                    <label htmlFor={`step-checkbox-${methodId}-${field.key}`}></label>
                   </div>
                 )}
                 <div className="step-text">
@@ -350,8 +351,7 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
           >
             {/* Header */}
             <div className="payment-method">
-              
-              {!method.openForm && method.formFields && (
+              {method.formFields && method.formFields.length > 0 && !method.openForm && (
                 <div className="toggle-icon">
                   <i
                     className={`adminlib-${isEnabled && isActive ? "keyboard-arrow-down" : "pagination-right-arrow"
@@ -360,6 +360,7 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
                   />
                 </div>
               )}
+
 
               <div
                 className="details"
@@ -402,12 +403,12 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
                   <ul>
                     {isEnabled ? (
                       <>
-                        <li
-                          onClick={() => toggleActiveTab(method.id)}
-                        >
-                          <i className="settings-icon adminlib-setting"></i>
-                          <span>Settings</span>
-                        </li>
+                        {method.formFields && method.formFields.length > 0 && (
+                          <li onClick={() => toggleActiveTab(method.id)}>
+                            <i className="settings-icon adminlib-setting"></i>
+                            <span>Settings</span>
+                          </li>
+                        )}
                         <li
                           onClick={() =>
                             toggleEnable(method.id, false, method.icon)
@@ -435,24 +436,26 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
               </div>
             </div>
 
-            {method.formFields && method.formFields.length > 0 && (
-              <div
-                className={`${method.wrapperClass || ""} payment-method-form ${isEnabled && (isActive || method.openForm) ? "open" : ""}`}
-              >
-                {method.formFields.map((field) => (
-                  <div key={field.key} className="form-group">
-                    {field.label && <label>{field.label}</label>}
-                    <div className="input-content">
-                      {renderField(method.id, field)}
+            {
+              method.formFields && method.formFields.length > 0 && (
+                <div
+                  className={`${method.wrapperClass || ""} payment-method-form ${isEnabled && (isActive || method.openForm) ? "open" : ""}`}
+                >
+                  {method.formFields.map((field) => (
+                    <div key={field.key} className="form-group">
+                      {field.label && <label>{field.label}</label>}
+                      <div className="input-content">
+                        {renderField(method.id, field)}
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-            )}
+                  ))}
+                </div>
+              )
+            }
           </div>
         );
       })}
-    </div>
+    </div >
   );
 };
 
