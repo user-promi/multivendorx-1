@@ -8,7 +8,7 @@ import {
     RowSelectionState,
     PaginationState,
 } from '@tanstack/react-table';
-import {formatCurrency} from '../../services/commonFunction';
+import { formatCurrency } from '../../services/commonFunction';
 
 type RefundRow = {
     id: number;
@@ -425,6 +425,15 @@ const RefundRequest: React.FC = () => {
 
     return (
         <>
+            <div className="card-header">
+                <div className="left">
+                    <div className="title">Refund Requests</div>
+                    <div className="des">Need your decision</div>
+                </div>
+                <div className="right">
+                    <i className="adminlib-more-vertical"></i>
+                </div>
+            </div>
             <div className="admin-table-wrapper">
                 <Table
                     data={data}

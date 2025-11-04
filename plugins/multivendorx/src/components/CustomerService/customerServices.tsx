@@ -74,24 +74,11 @@ const CustomerServices = () => {
         {
             id: "questions",
             label: "Questions",
-            module: "question-answer", // required module name
+            module: "question-answer",
             icon: "adminlib-calendar red",
             des: "Waiting for your response",
             count: qnaCount,
-            content: (
-                <>
-                    <div className="card-header">
-                        <div className="left">
-                            <div className="title">Questions</div>
-                            <div className="des">Waiting for your response</div>
-                        </div>
-                        <div className="right">
-                            <i className="adminlib-more-vertical"></i>
-                        </div>
-                    </div>
-                    <Qna />
-                </>
-            ),
+            content: <Qna />
         },
         {
             id: "review",
@@ -100,42 +87,7 @@ const CustomerServices = () => {
             icon: "adminlib-calendar green",
             count: storeReviewCount,
             des: "Shared by customers",
-            content: (
-                <>
-                    <div className="card-header">
-                        <div className="left">
-                            <div className="title">Store Reviews</div>
-                            <div className="des">Shared by customers</div>
-                        </div>
-                        <div className="right">
-                            <i className="adminlib-more-vertical"></i>
-                        </div>
-                    </div>
-                    <StoreReviews />
-                </>
-            ),
-        },
-        {
-            id: "reports",
-            label: "Products Reported",
-            module: "report-abuse",
-            icon: "adminlib-calendar yellow",
-            des: "Flagged for abuse review",
-            count: abuseCount,
-            content: (
-                <>
-                    <div className="card-header">
-                        <div className="left">
-                            <div className="title">Products Reported</div>
-                            <div className="des">Flagged for abuse review</div>
-                        </div>
-                        <div className="right">
-                            <i className="adminlib-more-vertical"></i>
-                        </div>
-                    </div>
-                    <AbuseReports />
-                </>
-            ),
+            content: <StoreReviews />
         },
         {
             id: "refund-requests",
@@ -144,22 +96,19 @@ const CustomerServices = () => {
             icon: "adminlib-calendar blue",
             des: "Need your decision",
             count: refundCount,
-            content: (
-                <>
-                    <div className="card-header">
-                        <div className="left">
-                            <div className="title">Refund Requests</div>
-                            <div className="des">Need your decision</div>
-                        </div>
-                        <div className="right">
-                            <i className="adminlib-more-vertical"></i>
-                        </div>
-                    </div>
-                    <RefundRequest />
-                </>
-            ),
+            content: <RefundRequest />
         },
-    ].filter(tab => modules.includes(tab.module));
+        {
+            id: "support-ticket",
+            label: "Support Ticket",
+            icon: "adminlib-calendar yellow",
+            des: "Flagged for abuse review",
+            count: abuseCount,
+            content: <h1>Upcoming Feature</h1>,
+        },
+    ].filter(tab => !tab.module || modules.includes(tab.module));
+
+
     return (
         <>
             <AdminBreadcrumbs
@@ -168,25 +117,6 @@ const CustomerServices = () => {
                 description={'Manage store reviews, support requests, financial transactions, and reported issues.'}
             />
             <div className="general-wrapper">
-                {/* <div className="row">
-                    <div className="overview-card-wrapper tab">
-                        {tabs.map((tab) => (
-                            <div
-                                key={tab.id}
-                                className={`tab-action ${activeTab === tab.id ? "active" : ""}`}
-                                onClick={() => setActiveTab(tab.id)}
-                            >
-                                <div className="details-wrapper">
-                                    <i className={tab.icon}></i>
-                                    <div className="title">
-                                        {tab.count} {tab.label}
-                                    </div>
-                                </div>
-                                <div className="description">{tab.des}</div>
-                            </div>
-                        ))}
-                    </div>
-                </div> */}
                 <div className="row ">
                     {/* Tab Titles */}
                     <div className="column admin-tab">

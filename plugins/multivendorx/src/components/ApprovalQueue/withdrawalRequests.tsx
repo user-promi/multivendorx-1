@@ -97,7 +97,7 @@ const WithdrawalRequests: React.FC = () => {
             currentPage,
         );
     };
-    const handleSingleAction = (action:string,row:any) => {
+    const handleSingleAction = (action: string, row: any) => {
         let storeId = row.id;
         if (!storeId) return;
 
@@ -105,7 +105,7 @@ const WithdrawalRequests: React.FC = () => {
             method: 'PUT',
             url: getApiLink(appLocalizer, `transaction/${storeId}`),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            data: { withdraw :true,action, },
+            data: { withdraw: true, action, amount: row.withdraw_amount, store_id: row.id },
         })
             .then(() => requestData(pagination.pageSize, pagination.pageIndex + 1))
             .catch(console.error);
@@ -170,8 +170,8 @@ const WithdrawalRequests: React.FC = () => {
                     rowData={row.original}
                     header={{
                         actions: [
-                            { label: __('Approve', 'multivendorx'), icon: 'adminlib-check', onClick: (row:any) => handleSingleAction('approve', row), hover: true },
-                            { label: __('Reject', 'multivendorx'), icon: 'adminlib-close', onClick: (row:any) => handleSingleAction('reject', row), hover: true },
+                            { label: __('Approve', 'multivendorx'), icon: 'adminlib-check', onClick: (row: any) => handleSingleAction('approve', row), hover: true },
+                            { label: __('Reject', 'multivendorx'), icon: 'adminlib-close', onClick: (row: any) => handleSingleAction('reject', row), hover: true },
                         ],
                     }}
                 />

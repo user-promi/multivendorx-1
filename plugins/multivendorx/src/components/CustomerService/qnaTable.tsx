@@ -249,8 +249,9 @@ const Qna: React.FC = () => {
                                     setAnswer(rowData.answer_text || '');
                                 },
                             },
-                            { label: __('Delete', 'multivendorx'), icon: 'adminlib-delete', onClick: (rowData) => {
-                                    if(confirm(__('Are you sure you want to delete this question?', 'multivendorx'))) {
+                            {
+                                label: __('Delete', 'multivendorx'), icon: 'adminlib-delete', onClick: (rowData) => {
+                                    if (confirm(__('Are you sure you want to delete this question?', 'multivendorx'))) {
                                         axios.delete(getApiLink(appLocalizer, `qna/${rowData.id}`), { headers: { 'X-WP-Nonce': appLocalizer.nonce } })
                                             .then(() => requestData(pagination.pageSize, pagination.pageIndex + 1))
                                             .catch(() => alert(__('Failed to delete question', 'multivendorx')));
@@ -283,6 +284,15 @@ const Qna: React.FC = () => {
 
     return (
         <>
+            <div className="card-header">
+                <div className="left">
+                    <div className="title">Questions</div>
+                    <div className="des">Waiting for your response</div>
+                </div>
+                <div className="right">
+                    <i className="adminlib-more-vertical"></i>
+                </div>
+            </div>
             <div className="admin-table-wrapper">
                 <Table
                     data={data}
@@ -317,7 +327,7 @@ const Qna: React.FC = () => {
                     footer={
                         <>
                             <button
-                                type="button" 
+                                type="button"
                                 onClick={() => setSelectedQna(null)}
                                 className="admin-btn btn-red"
                             >
