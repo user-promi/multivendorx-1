@@ -73,7 +73,14 @@ const ShippingSettings = ({ id, data }: { id: string |null; data: any }) => {
 			<div className="container-wrapper">
 				<div className="card-wrapper w-65">
 					<div className="card-content">
-						<div className="card-title">Shipping information</div>
+
+						<div className="card-header">
+                            <div className="left">
+                                <div className="title">
+                                    Shipping information
+                                </div>
+                            </div>
+                        </div>
 
 						{/* Shipping Method Toggle */}
 						<div className="form-group-wrapper">

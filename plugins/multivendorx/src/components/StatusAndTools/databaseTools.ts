@@ -56,7 +56,7 @@ export default {
         {
             key: 'separator_content',
             type: 'section',
-            wrapperClass: 'divider-section color-red',
+            wrapperClass: 'divider-wrapper color-red',
             hint: __("Danger Zone", 'multivendorx'),
             desc: __('', 'multivendorx')
         },

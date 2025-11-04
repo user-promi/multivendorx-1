@@ -9,7 +9,7 @@ type TabContent = {
   desc?: string;
   icon?: string;
   link?: string;
-  hideTabHeader?:boolean,
+  hideTabHeader?: boolean,
   proDependent?: boolean;
 };
 
@@ -33,7 +33,7 @@ type TabsProps = {
   settingName?: string;
   onNavigate?: (url: string) => void;
   tabTitleSection?: React.ReactNode;
-  appLocalizer?:any;
+  appLocalizer?: any;
   submenuRender?: boolean;
   hideBreadcrumb?: boolean;
   action?: React.ReactNode;
@@ -108,9 +108,11 @@ const findTabDescription = (items: TabData[], activeTabId: string): ReactNode =>
 
       return (
         !tab.hideTabHeader && (
-          <div className="divider-section" key={tab.id}>
-            {tab.name && <div className="title">{tab.name}</div>}
-            {tab.desc && <div className="desc">{tab.desc}</div>}
+          <div className="divider-wrapper" key={tab.id}>
+            <div className="divider-section">
+              {tab.name && <div className="title">{tab.name}</div>}
+              {tab.desc && <div className="desc">{tab.desc}</div>}
+            </div>
           </div>
         )
       );

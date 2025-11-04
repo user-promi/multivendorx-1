@@ -1265,9 +1265,11 @@
     display: flex;
     align-items: center;
     font-size: 0.875rem;
-    background: $theme-background-color;
+    background: #fff;
     padding: 0.45rem;
     border-radius: 0.313rem;
+    width: fit-content;
+    gap: 0.313rem;
 
     .filter-item {
         cursor: pointer;
@@ -1275,18 +1277,18 @@
         padding: 0.313rem 0.625rem;
         font-weight: 600;
         color: #000000af;
+        font-size: 0.95rem;
+        transition: all 0.4s ease;
 
+        &:not(.active):hover {
+            background: #f3f1f1;
+        }
 
         &.active {
             // border-bottom: 0.125rem solid $theme-color;
             // color: #000;
-            background: #fff;
-            color: #000;
-        }
-
-        &:hover {
-            // background: $theme-background-color;
-            // color: $theme-color;
+            background: $theme-background-color;
+            color: $theme-color;
         }
     }
 }
@@ -1322,6 +1324,10 @@
         position: relative;
         border: none;
         border-collapse: collapse;
+        border: .063rem solid #d0d1d3;
+        border-bottom: 0;
+        // border-top-left-radius: 0.625rem;
+        // border-top-right-radius: 0.625rem;
 
         input[type="checkbox"] {
             min-height: 0.8rem;
@@ -1333,8 +1339,6 @@
                 width: 100%;
                 height: 3.125rem;
                 align-items: center;
-                border: .063rem solid #d0d1d3;
-                border-bottom: 0;
             }
 
             .header-col {
@@ -1416,6 +1420,7 @@
                 display: flex;
                 align-items: center;
                 width: 100%;
+                box-sizing: border-box;
                 // border-bottom: $border-light-small;
                 border-radius: 0.313rem;
                 background: #fff;
@@ -1430,9 +1435,9 @@
                     flex: 1 0 0;
                     border: none;
 
-                    div {
-                        // color: #000000e7;
-                        // font-weight: 600;
+                    .admin-badge {
+                        padding: 0.45rem;
+                        font-size: 0.9rem;
                     }
 
                     .table-row-custom {
@@ -1520,6 +1525,10 @@
 
             .admin-row:first-child {
                 margin-top: 0;
+            }
+
+            .admin-row:last-child {
+                margin-bottom: 0;
             }
 
             .dropdown-select {
@@ -1616,7 +1625,8 @@
     min-height: 3.125rem;
     // border-bottom-left-radius: 0.625rem;
     // border-bottom-right-radius: 0.625rem;
-    border-bottom: .063rem solid #d0d1d3;
+    border: .063rem solid #d0d1d3;
+    border-top: 0;
 
     .pagination-arrow {
         display: flex;

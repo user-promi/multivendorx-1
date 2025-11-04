@@ -206,7 +206,14 @@ const PaymentSettings = ({ id, data }: { id: string|null; data: any }) => {
 			<div className="container-wrapper">
 				<div className="card-wrapper w-65">
 					<div className="card-content">
-						<div className="card-title">Withdrawal methods</div>
+						<div className="card-header">
+                            <div className="left">
+                                <div className="title">
+                                    Withdrawal methods
+                                </div>
+                            </div>
+                        </div>
+
 						<div className="form-group-wrapper">
 							<div className="form-group">
 								<ToggleSetting
@@ -279,9 +286,13 @@ const PaymentSettings = ({ id, data }: { id: string|null; data: any }) => {
 				{/* Commission Amount */}
 				<div className="card-wrapper w-35">
 					<div className="card-content">
-						<div className="card-title">
-							Store-specific commission
-						</div>
+						<div className="card-header">
+                            <div className="left">
+                                <div className="title">
+                                    Store-specific commission
+                                </div>
+                            </div>
+                        </div>
 						<BlockText
                             blockTextClass="settings-metabox-note"
                             value="If no store-specific commission is set, the global commission will automatically apply."// Text or HTML content to display inside the block (safe HTML injected).
