@@ -513,8 +513,8 @@ By signing and submitting, the Seller accepts all terms above.
                 'store_pending_status'  => [
                     'pending_msg'   => 'Your store is awaiting approval and will be activated soon.'
                 ],
-                'store_denied_status'  => [
-                    'declined_msg'   => 'Your store is declined.'
+                'store_rejected_status'  => [
+                    'rejected_msg'   => 'Your store is rejected.'
                 ],
                 'store_under_review_status'  => [
                     'review_msg'   => 'Your store is under review. Sales and payouts are temporarily paused.'

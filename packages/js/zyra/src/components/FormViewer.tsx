@@ -51,6 +51,7 @@ interface FormFields {
 
 interface FormViewerProps {
     formFields: FormFields;
+    response?: any;
     onSubmit: ( data: Record<string, any> ) => void; 
 }
 
@@ -194,6 +195,7 @@ const enquiryCartTable: FormDataType = {
 
 const FormViewer: React.FC< FormViewerProps > = ( {
     formFields,
+    response,
     onSubmit,
 } ) => {
     const [ inputs, setInputs ] = useState< Record< string, any > >( {} );
@@ -207,6 +209,12 @@ const FormViewer: React.FC< FormViewerProps > = ( {
         ( field ) => field.type === 'recaptcha'
     );
     const siteKey = recaptchaField?.sitekey || null;
+    
+    useEffect(() => {
+        setInputs(response);
+    }, [response]);
+
+console.log('inputs', inputs)
 
     useEffect( () => {
         if ( ! siteKey ) return;

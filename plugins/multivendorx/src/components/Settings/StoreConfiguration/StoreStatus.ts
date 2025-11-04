@@ -14,7 +14,7 @@ export default {
         {
             key: 'separator_content',
             type: 'section',
-            label: __("Recommended Status Flow:Pending Approval → Under Review → Active → (Suspended / Declined / Deactivated)", 'multivendorx'),
+            label: __("Recommended Status Flow:Pending Approval → Under Review → Active → (Suspended / Rejected / Deactivated)", 'multivendorx'),
             desc: __('Control how stores behave at different stages of their lifecycle. These settings determine what sellers can do and what customers see based on each stores approval status.', 'multivendorx')
         },
         {
@@ -53,20 +53,20 @@ export default {
                     ],
                 },
                 {
-                    id: 'store_denied_status',
+                    id: 'store_rejected_status',
                     icon: 'adminlib-like',
-                    label: 'Declined',
+                    label: 'Rejected',
                     connected: true,
                     enableOption: true,
                     desc: 'The application was rejected during onboarding. Sellers can log in to view the rejection reason and reapply with updated information but cannot sell or modify store details.',
                     formFields: [
                         {
-                            key: 'declined_description',
+                            key: 'rejected_description',
                             type: 'description',
                             //des: 'The store is awaiting approval. Sellers can log in to their dashboard but cannot configure settings, add products, or begin selling until approved.',
                         },
                         {
-                            key: 'denied_permissions',
+                            key: 'rejected_permissions',
                             type: 'check-list',
                             options: [
                                 { desc: __('Log in to dashboard', 'multivendorx'), check: true },
@@ -77,8 +77,8 @@ export default {
                             ],
                         },
                         {
-                            key: 'declined_msg',
-                            label: 'Message shown to declined stores',
+                            key: 'rejected_msg',
+                            label: 'Message shown to rejected stores',
                             des: 'What pending stores can do',
                         },
                     ],

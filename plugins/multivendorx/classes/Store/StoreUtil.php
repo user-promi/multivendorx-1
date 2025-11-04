@@ -80,6 +80,15 @@ class StoreUtil {
         return $store ?: [];
     }
 
+    public static function get_store_by_primary_owner($status = 'active') {
+        global $wpdb;
+
+        $table = "{$wpdb->prefix}" . Utill::TABLES['store'];
+        $stores = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $table WHERE who_created = %d AND status = %s", get_current_user_id(), $status ), ARRAY_A );
+
+        return $stores ?: [];
+    }
+
     public function get_store_tabs( $store_id ) {
 
         $tabs = [
@@ -210,11 +219,14 @@ class StoreUtil {
             'status'    => 'status'
         ];
     
-        $core_data = [];
+        $core_data = $all_registration_data = [];
         foreach ( $core_fields as $field_key => $field_label ) {
             $core_data[$field_label] = $store->get( $field_key );
+            $all_registration_data[$field_key] = $store->get( $field_key );
         }
     
+        $all_registration_data['id'] = $store_id;
+
         // Get registration form data (serialized meta)
         $store_meta = $store->get_meta( 'multivendorx_registration_data' );
         $submitted_data = [];
@@ -245,14 +257,15 @@ class StoreUtil {
         $response = [
             'core_data'        => $core_data,
             'registration_data'=> [],
+            'all_registration_data'=> $all_registration_data,
             'primary_owner_info'    => $primary_owner_info,
             'store_application_note' => $store->get_meta('store_reject_note'),
-            'store_permanent_reject' => $store->get_meta('store_permanent_reject'),
+            'store_permanent_reject' => $store->get('status') === 'permanently_rejected',
         ];
     
         foreach ( $submitted_data as $field_name => $field_value ) {
             $label = $name_label_map[$field_name] ?? $field_name;
-
+            $response['all_registration_data'][$field_name] = $field_value;
             if ( $field_name == 'paypal_email' || $field_name == 'phone' ) {
                 $response['core_data'][$label] = $field_value;
             } else {
