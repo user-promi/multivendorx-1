@@ -171,7 +171,7 @@ const AdminDashboard = () => {
     },
     {
       title: "Vacation mode for stores",
-      desc: "Stores can pause their stores temporarily with automatic buyer notifications – no missed messages.",
+      desc: "Stores can pause their stores temporarily with automatic buyer notifications - no missed messages.",
       iconClass: "adminlib-vacation",
       linkText: "Explore Docs",
       href: "#",
@@ -185,21 +185,21 @@ const AdminDashboard = () => {
     },
     {
       title: "Autopilot notifications",
-      desc: "Automatic emails and alerts for every order, refund, and payout – everyone stays in the loop.",
+      desc: "Automatic emails and alerts for every order, refund, and payout - everyone stays in the loop.",
       iconClass: "adminlib-notification",
       linkText: "Join Discord",
       href: "#",
     },
     {
       title: "Verified stores only",
-      desc: "Screen stores with document verification and approval – build a trusted marketplace from day one.",
+      desc: "Screen stores with document verification and approval - build a trusted marketplace from day one.",
       iconClass: "adminlib-verification3",
       linkText: "Join Discord",
       href: "#",
     },
     {
       title: "Membership rewards & commission",
-      desc: "Charge your sellers a monthly or yearly membership fee to sell on your marketplace – predictable revenue every month.",
+      desc: "Charge your sellers a monthly or yearly membership fee to sell on your marketplace - predictable revenue every month.",
       iconClass: "adminlib-commission",
       linkText: "Join Discord",
       href: "#",
@@ -214,7 +214,7 @@ const AdminDashboard = () => {
         { name: "Store policies", free: true, pro: true },
         { name: "Store reviews", free: true, pro: true },
         { name: "Follow store", free: true, pro: true },
-        { name: "Privacy controls (hide details)", free: true, pro: true },
+        { name: "Privacy controls to show/hide store details)", free: true, pro: true },
         { name: "Confirm vendor identity with documents", free: false, pro: true },
         { name: "Bulk upload/download product via CSV", free: false, pro: true },
         { name: "Display store opening/closing times", free: false, pro: true },
@@ -225,9 +225,9 @@ const AdminDashboard = () => {
     {
       title: ' Get paid without hassle',
       features: [
-        { name: "Bank Transfer", free: true, pro: true },
-        { name: "PayPal Payout", free: true, pro: true },
-        { name: "Stripe Connect", free: true, pro: true },
+        { name: "Bank transfer", free: true, pro: true },
+        { name: "PayPal payout", free: true, pro: true },
+        { name: "Stripe connect", free: true, pro: true },
         { name: "Razorpay", free: true, pro: true },
         { name: "Real-time split payments", free: false, pro: true },
       ],
@@ -242,7 +242,7 @@ const AdminDashboard = () => {
         { name: "Invoices & packing slips", free: false, pro: true },
         { name: "Live chat", free: false, pro: true },
         { name: "Customer support", free: false, pro: true },
-        { name: "Enquiry", free: false, pro: true },
+        { name: "Product enquiry", free: false, pro: true },
       ],
     },
     {
@@ -258,9 +258,9 @@ const AdminDashboard = () => {
     {
       title: ' Sell in different ways',
       features: [
-        { name: "Optimize stores/products with Yoast or Rank Math", free: false, pro: true },
+        { name: "Optimize store & product SEO with Yoast or Rank Math", free: false, pro: true },
         { name: "Sales, revenue, and order reports", free: false, pro: true },
-        { name: "Vendor levels with different capabilities", free: false, pro: true },
+        { name: "Store with different capabilities as per subsctiption plan", free: false, pro: true },
         { name: "Paid product promotions", free: false, pro: true },
         { name: "Special pricing & bulk rules for groups", free: false, pro: true },
         { name: "Low-stock alerts, waitlists, inventory management", free: false, pro: true },
@@ -289,7 +289,7 @@ const AdminDashboard = () => {
   };
 
   const Modules: Module[] = [
-    { id: 'marketplace-fee', name: 'Marketplace Fee', iconClass: 'adminlib-booking', pro: true },
+    { id: 'marketplace-fee', name: 'Marketplace fee', iconClass: 'adminlib-booking', pro: true },
     { id: 'staff-manager', name: 'Staff manager', iconClass: 'adminlib-booking', pro: true },
     { id: 'vacation', name: 'Vacation mode', iconClass: 'adminlib-report', pro: true },
     { id: 'business-hours', name: 'Business hours', iconClass: 'adminlib-analytics', pro: true },
@@ -579,7 +579,7 @@ const AdminDashboard = () => {
                 <div className="card-header">
                   <div className="left">
                     <div className="title">
-                      Free vs Pro Comparison
+                      Free vs Pro comparison
                     </div>
                     <div className="des">See what you get with MultiVendorX Pro</div>
                   </div>
@@ -647,11 +647,11 @@ const AdminDashboard = () => {
                   <div className="title">Join 8,000+ successful marketplace owners</div>
                   <div className="des">Build, manage, and expand your marketplace with confidence. Loved by entrepreneurs globally.</div>
                   <ul>
-                    <li><i className="adminlib-check"></i>Flexible Selling Models</li>
-                    <li><i className="adminlib-check"></i>Effortless Inventory Control</li>
-                    <li><i className="adminlib-check"></i>Intelligent Alert System</li>
-                    <li><i className="adminlib-check"></i>Secure Seller Onboarding</li>
-                    <li><i className="adminlib-check"></i>Recurring Revenue Tools</li>
+                    <li><i className="adminlib-check"></i>Flexible selling models</li>
+                    <li><i className="adminlib-check"></i>Effortless inventory control</li>
+                    <li><i className="adminlib-check"></i>Intelligent alert system</li>
+                    <li><i className="adminlib-check"></i>Secure seller onboarding</li>
+                    <li><i className="adminlib-check"></i>Recurring revenue tools</li>
                   </ul>
 
                   <div className="button-wrapper">
