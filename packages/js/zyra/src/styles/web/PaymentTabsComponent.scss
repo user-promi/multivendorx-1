@@ -72,7 +72,6 @@
                         display: flex;
                         gap: 0.5rem;
                         justify-content: start;
-                        align-items: center;
                         padding: 0;
 
                         .title {
@@ -264,6 +263,7 @@
                 flex-wrap: wrap;
                 gap: 0.625rem;
                 margin: 0;
+                font-size: 0.95rem;
             }
 
             .check-list {
@@ -388,6 +388,7 @@
             .step-title {
                 font-weight: 500;
                 font-size: 0.875rem;
+                line-height: 0.875;
             }
 
             .step-desc {

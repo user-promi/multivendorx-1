@@ -587,6 +587,11 @@
     font-size: 1rem;
     font-weight: 500;
   }
+
+  &.color-red{
+    color: red;
+    background: #ff00000d;
+  }
 }
 
 .divider-section:first-child {

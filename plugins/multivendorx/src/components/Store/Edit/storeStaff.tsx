@@ -47,7 +47,7 @@ const StoreSquad = ({ id }: { id: string | null }) => {
                         {/* Other form groups remain the same */}
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <label>Store Owners</label>
+                                <label>Store owners</label>
                                 <SelectInput
                                     name="store_owners"
                                     options={appLocalizer.store_owners || []}
@@ -76,7 +76,7 @@ const StoreSquad = ({ id }: { id: string | null }) => {
                         </div>
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <label>Store Managers</label>
+                                <label>Store managers</label>
                                 <SelectInput
                                     name="store_managers"
                                     options={appLocalizer?.managers_list || []}
@@ -105,7 +105,7 @@ const StoreSquad = ({ id }: { id: string | null }) => {
                         </div>
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <label>Product Managers</label>
+                                <label>Product managers</label>
                                 <SelectInput
                                     name="product_managers"
                                     options={appLocalizer?.product_managers_list || []}
@@ -134,7 +134,7 @@ const StoreSquad = ({ id }: { id: string | null }) => {
                         </div>
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <label>Customer Supports</label>
+                                <label>Customer supports</label>
                                 <SelectInput
                                     name="customer_supports"
                                     options={appLocalizer?.customer_support_list || []}
@@ -163,7 +163,7 @@ const StoreSquad = ({ id }: { id: string | null }) => {
                         </div>
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <label>Order Assistants</label>
+                                <label>Order assistants</label>
                                 <SelectInput
                                     name="order_assistants"
                                     options={appLocalizer?.assistants_list || []}
@@ -228,7 +228,7 @@ const StoreSquad = ({ id }: { id: string | null }) => {
                         {/* FIXED: Corrected label typo and fixed primary_owner handling */}
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <label>Primary Owners</label>
+                                <label>Primary owners</label>
                                 <SelectInput
                                     name="primary_owner"
                                     options={appLocalizer?.store_owners || []}

@@ -667,8 +667,11 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                 $store->set('status', 'rejected');
     
                 // Save _reject_note if provided
-                if (!empty($data['_reject_note'])) {
-                    $store->update_meta('_reject_note', sanitize_text_field($data['_reject_note']));
+                if (!empty($data['store_permanent_reject'])) {
+                    $store->update_meta('store_permanent_reject', sanitize_text_field($data['store_permanent_reject']));
+                }
+                if (!empty($data['store_application_note'])) {
+                    $store->update_meta('store_reject_note', sanitize_text_field($data['store_application_note']));
                 }
     
                 $store->save();

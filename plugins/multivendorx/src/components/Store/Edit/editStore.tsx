@@ -59,7 +59,7 @@ const EditStore = () => {
     // Close dropdown on click outside
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
-            if ((event.target as HTMLElement).closest('.edit-section')) return;
+            if ((event.target as HTMLElement).closest('.edit-section') || (event.target as HTMLElement).closest('.edit-wrapper')) return;
             setBannerMenu(false);
             setActionMenu(false);
             setLogoMenu(false);
@@ -78,7 +78,7 @@ const EditStore = () => {
     const editId = editParts ? editParts[1] : null;
 
     const hashParams = new URLSearchParams(hash);
-    const currentTab = hashParams.get('subtab') || 'store-overview';
+    const currentTab = hashParams.get('subtab');
     const prepareUrl = (tabId: string) => `?page=multivendorx#&tab=stores&edit/${editId}/&subtab=${tabId}`;
 
     const autoSave = (updatedData: { [key: string]: string }) => {
@@ -107,6 +107,8 @@ const EditStore = () => {
             .then((res: any) => {
                 const data = res.data || {};
                 setData(data);
+                const currentTab = (data?.status === 'pending' || data?.status === 'rejected' ? 'application-details' : 'store-overview');
+
             })
     }, [editId]);
 
@@ -211,6 +213,15 @@ const EditStore = () => {
         },
     ];
 
+
+    // ✅ Filter tabData dynamically based on store status
+    // const storeStatus = data?.status;
+
+    const visibleTabs =
+        data?.status === 'pending' || data?.status === 'rejected'
+            ? tabData.filter(tab => tab.content.id === 'application-details') // show only Application tab
+            : tabData; // show all tabs
+
     const getForm = (tabId: string) => {
         switch (tabId) {
             case 'store-overview':
@@ -229,19 +240,46 @@ const EditStore = () => {
                 return <StoreRegistration id={editId} />;
             case 'store-facilitator':
                 return <Facilitator id={editId} data={data} />;
-            // case 'membership':
-            //     return <Membership id={editId} />;
-            // case 'financial':
-            //     return <Financial id={editId} />;
             default:
                 return <div></div>;
         }
     };
+
+
+    // const getForm = (tabId: string) => {
+    //     switch (tabId) {
+    //         case 'store-overview':
+    //             return <Overview id={editId} storeData={data} />;
+    //         case 'store':
+    //             return <StoreSettings id={editId} data={data} />;
+    //         case 'staff':
+    //             return <StoreSquad id={editId} />;
+    //         case 'payment':
+    //             return <PaymentSettings id={editId} data={data} />;
+    //         case 'shipping':
+    //             return <ShippingSettings id={editId} data={data} />;
+    //         case 'store-policy':
+    //             return <PolicySettings id={editId} data={data} />;
+    //         case 'application-details':
+    //             return <StoreRegistration id={editId} />;
+    //         case 'store-facilitator':
+    //             return <Facilitator id={editId} data={data} />;
+    //         // case 'membership':
+    //         //     return <Membership id={editId} />;
+    //         // case 'financial':
+    //         //     return <Financial id={editId} />;
+    //         default:
+    //             return <div></div>;
+    //     }
+    // };
+
+
     return (
         <>
             <div className="store-page">
                 <Tabs
-                    tabData={tabData}
+                    // tabData={tabData}
+                    tabData={visibleTabs}
                     currentTab={currentTab}
                     getForm={getForm}
                     prepareUrl={prepareUrl}
@@ -525,29 +563,35 @@ const EditStore = () => {
                     settingName={'Store'}
                     hideTitle={true}
                     hideBreadcrumb={true}
-                // action={
+                action={
 
-                //     <>
-                //         <div className="edit-wrapper" ref={wrapperRef}>
-                //             <span className="" onClick={(e) => {
-                //                 e.stopPropagation();
-                //                 setActionMenu((prev) => !prev);
-                //                 setLogoMenu(false);
-                //                 setBannerMenu(false);
-                //             }}><i className="adminlib-more-vertical"></i></span>
-                //             {actionMenu && (
-                //                 <ul>
-                //                     {data.status == 'active' &&
-                //                         <li>
-                //                             <a href={`${appLocalizer.site_url}/store/${data.slug}`}><i className="adminlib-eye"></i> View Store</a>
-                //                         </li>
-                //                     }
-                //                     <li><i className="adminlib-mail"></i> Send Mail</li>
-                //                 </ul>
-                //             )}
-                //         </div>
-                //     </>
-                // }
+                    <>
+                        <div className="edit-wrapper" ref={wrapperRef}>
+                            <span className="" onClick={(e) => {
+                                e.stopPropagation();
+                                setActionMenu((prev) => !prev);
+                                setLogoMenu(false);
+                                setBannerMenu(false);
+                            }}><i className="adminlib-more-vertical"></i></span>
+                            {actionMenu && (
+                                <ul>
+                                    {data.status == 'active' &&
+                                        <li>
+                                            <a
+                                                href={`${appLocalizer.store_page_url}/${data.slug}`}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                            >
+                                                Storefront
+                                            </a>
+                                        </li>
+                                    }
+                                    {/* <li><i className="adminlib-mail"></i> Send Mail</li> */}
+                                </ul>
+                            )}
+                        </div>
+                    </>
+                }
                 />
             </div>
         </>

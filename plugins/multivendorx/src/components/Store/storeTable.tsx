@@ -203,8 +203,8 @@ const StoreTable: React.FC = () => {
                 return (
                     <TableCell title={row.original.store_name || ''}>
                         <a
-                            onClick={(rowData) => {
-                                 window.location.href = `?page=multivendorx#&tab=stores&edit/${rowData.id}`;
+                            onClick={(row) => {
+                                 window.location.href = `?page=multivendorx#&tab=stores&edit/${row.id}`;
                             }}
                             className="product-wrapper"
                         >

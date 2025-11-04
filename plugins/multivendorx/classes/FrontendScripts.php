@@ -215,7 +215,7 @@ class FrontendScripts {
 					'version' => $version,
 				),
                 'multivendorx-single-product-multiple-vendor-script' => array(
-					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'modules/Spmv/js/' . MULTIVENDORX_PLUGIN_SLUG . '-frontend.min.js',
+					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'modules/SPMV/js/' . MULTIVENDORX_PLUGIN_SLUG . '-frontend.min.js',
 					'deps'    => array( 'jquery' ),
 					'version' => $version,
 				),
@@ -304,7 +304,7 @@ class FrontendScripts {
 					'version' => $version,
 				),
                 'multivendorx-admin-product-auto-search-script' => array(
-					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'modules/Spmv/js/' . MULTIVENDORX_PLUGIN_SLUG . '-admin-product-auto-search.min.js',
+					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'modules/SPMV/js/' . MULTIVENDORX_PLUGIN_SLUG . '-admin-product-auto-search.min.js',
 					'deps'    => array( 'jquery' ),
 					'version' => $version,
 				),
@@ -499,6 +499,7 @@ class FrontendScripts {
                         'decimals'                 => wc_get_price_decimals(),
                         'payout_payment_options'   => $payment_admin_settings,
 						'module_page_url'          => admin_url( 'admin.php?page=multivendorx#&tab=modules' ),
+						'plugin_url'               => admin_url( 'admin.php?page=multivendorx#&tab=' ),
 						'store_page_url'           => trailingslashit( site_url() ) . untrailingslashit( MultiVendorX()->setting->get_setting( 'store_url', 'store' ) ),
                         'map_providor'             => MultiVendorX()->setting->get_setting( 'choose_map_api' ),
                         'google_api_key'           => MultiVendorX()->setting->get_setting( 'google_api_key' ),

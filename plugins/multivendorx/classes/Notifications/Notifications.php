@@ -216,6 +216,18 @@ class Notifications
                 'category' => 'activity'
             ],
 
+            'payout_rejected' => [
+                'name' => 'Payout rejected',
+                'desc' => 'Notify stores when their payout is rejected.',
+                'store_enabled' => true,
+                'email_subject' => 'Payout rejected',
+                'email_body' => 'A payout of [amount] has been rejected by your administrator.',
+                'sms_content' => 'Payout of [amount] rejected.',
+                'system_message' => 'Payout rejected: [amount].',
+                'tag' => 'Payment',
+                'category' => 'activity'
+            ],
+
             'payout_failed' => [
                 'name' => 'Payout failed',
                 'desc' => 'Notify admin and store when payout processing fails.',
