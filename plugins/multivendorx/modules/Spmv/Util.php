@@ -5,7 +5,7 @@
  * @package MultiVendorX
  */
 
-namespace MultiVendorX\SPMV;
+namespace MultiVendorX\Spmv;
 use MultiVendorX\Utill;
 
 /**

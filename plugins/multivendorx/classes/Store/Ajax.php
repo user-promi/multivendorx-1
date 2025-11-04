@@ -1,7 +1,7 @@
 <?php
 
 namespace MultiVendorX\Store;
-use MultiVendorX\SPMV\Util;
+use MultiVendorX\Spmv\Util;
 
 defined('ABSPATH') || exit;
 
