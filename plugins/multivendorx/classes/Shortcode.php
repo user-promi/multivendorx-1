@@ -2,6 +2,8 @@
 
 namespace MultiVendorX;
 
+use MultiVendorX\Store\StoreUtil;
+
 /**
  * MultiVendorX Shortcode class
  *
@@ -61,6 +63,7 @@ class Shortcode {
     public function display_store_dashboard() {
         $this->frontend_scripts();
         ob_start();
+        global $wpdb;
 
         // <div id="multivendorx-vendor-dashboard">
         // </div> 
@@ -76,8 +79,22 @@ class Shortcode {
         } else if ( in_array( 'store_owner', $user->roles, true ) ) {
             MultiVendorX()->util->get_template( 'store/store-dashboard.php', [] );
         } else {
+    
+            $stores = StoreUtil::get_store_by_primary_owner('rejected');
+            $pending_stores = StoreUtil::get_store_by_primary_owner('pending');
+
             echo '<div class="mvx-dashboard-message">';
-            echo esc_html__('Signup has been disabled.', 'multivendorx');
+            if ( ! empty( $stores ) ) {
+                $reapply_url = get_permalink( MultiVendorX()->setting->get_setting( 'store_registration_page' ) );
+                printf(
+                    esc_html__( 'Your application is rejected by admin. %s', 'multivendorx' ),
+                    '<a href="' . esc_url( $reapply_url ) . '">' . esc_html__( 'Click here to reapply.', 'multivendorx' ) . '</a>'
+                );
+            } elseif (!empty($pending_stores)) {
+                echo esc_html__('Your application is pending.', 'multivendorx');
+            } else {
+                echo esc_html__('Signup has been disabled.', 'multivendorx');
+            }
             echo '</div>';
         }
 

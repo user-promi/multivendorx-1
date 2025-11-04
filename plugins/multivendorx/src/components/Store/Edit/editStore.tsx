@@ -218,7 +218,7 @@ const EditStore = () => {
     // const storeStatus = data?.status;
 
     const visibleTabs =
-        data?.status === 'pending' || data?.status === 'rejected'
+        data?.status === 'pending' || data?.status === 'rejected' || data?.status === 'permanently_rejected'
             ? tabData.filter(tab => tab.content.id === 'application-details') // show only Application tab
             : tabData; // show all tabs
 
@@ -438,6 +438,8 @@ const EditStore = () => {
                                                         <span className="admin-badge red">Rejected</span>
                                                     ) : data.status === 'suspended' ? (
                                                         <span className="admin-badge blue">Suspended</span>
+                                                    ) : data.status === 'permanently_rejected' ? (
+                                                        <span className="admin-badge red">Permanently Rejected</span>
                                                     ) :  (
                                                         <Skeleton variant="text" width={100} />
                                                     )}

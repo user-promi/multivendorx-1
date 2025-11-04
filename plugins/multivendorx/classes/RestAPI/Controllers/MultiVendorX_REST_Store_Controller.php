@@ -240,6 +240,32 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
         }
     
         try {
+            $store_registration = $request->get_param('store_registration');
+
+            if ($store_registration) {
+                $rejected_stores = StoreUtil::get_store_by_primary_owner('rejected');
+
+                $all_stores = [];
+                $response = [];
+
+                foreach($rejected_stores as $store) {
+                    $all_stores[] = [
+                        'key'   => $store['ID'],
+                        'value'   => $store['ID'],
+                        'label'   => $store['name'],
+                    ];
+
+                    $from_data = StoreUtil::get_store_registration_form(  $store['ID'] );
+                    $response[] = $from_data['all_registration_data'];
+
+                }
+                
+                // $response = StoreUtil::get_store_registration_form( reset($rejected_stores)['ID'] );
+                return rest_ensure_response([
+                    'all_stores' => $all_stores,
+                    'response'  => $response
+                ]);
+            }
 
             $slug = $request->get_param( 'slug' );
             if (!empty($slug)) {
@@ -500,8 +526,6 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
     
         $current_user = wp_get_current_user();
     
-        // Create store object
-        $store = new \MultiVendorX\Store\Store();
         $core_fields = [ 'name', 'slug', 'description', 'who_created', 'status' ];
         $store_data['who_created'] = $current_user->ID;
     
@@ -511,6 +535,19 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             $store_data['status'] = 'pending';
         }
     
+        if ( ! empty( $store_data['id'] ) ) {
+            // Load existing store
+            $store = new \MultiVendorX\Store\Store( (int) $store_data['id'] );
+
+            unset($store_data['id']);
+            unset($store_data['status']);
+            
+            $store_data['status'] = 'pending';
+        } else {
+            // Create store object
+            $store = new \MultiVendorX\Store\Store();
+        }
+
         // Set core fields
         foreach ( $core_fields as $field ) {
             if ( isset( $store_data[ $field ] ) ) {
@@ -664,12 +701,13 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                     return rest_ensure_response([ 'success' => true ]);
                 }
             } elseif (isset($data['status']) && $data['status'] === 'rejected') {
+                
                 $store->set('status', 'rejected');
-    
                 // Save _reject_note if provided
                 if (!empty($data['store_permanent_reject'])) {
-                    $store->update_meta('store_permanent_reject', sanitize_text_field($data['store_permanent_reject']));
+                    $store->set('status', 'permanently_rejected');
                 }
+
                 if (!empty($data['store_application_note'])) {
                     $store->update_meta('store_reject_note', sanitize_text_field($data['store_application_note']));
                 }
