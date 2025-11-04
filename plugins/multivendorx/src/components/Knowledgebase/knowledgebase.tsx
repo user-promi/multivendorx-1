@@ -547,7 +547,7 @@ export const KnowledgeBase: React.FC = () => {
                     </div>
                 </CommonPopup>
             )}
-            <div className="general-wrapper bg-wrapper">
+            <div className="general-wrapper">
                 <div className="admin-table-wrapper">
                     <Table
                         data={data}

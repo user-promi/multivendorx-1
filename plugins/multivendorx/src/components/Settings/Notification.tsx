@@ -200,26 +200,25 @@ const Notification: React.FC = () => {
         if (activeTag === 'All') return notifications;
         return notifications.filter(n => n.tag === activeTag);
     }, [notifications, activeTag]);
-
     // ------------------ Render ------------------
     return (
-        <div className="notification-container">
+        <div className="notification-container tab-bg">
 
             {/* View Toggle */}
             <div className="toggle-setting-wrapper view-toggle">
 
-                <div className="category-filter">
+                <div className="filter-wrapper">
                     {uniqueTags.map(tag => (
-                        <span
+                        <div
                             key={tag}
-                            className={`category-item ${activeTag === tag ? 'active' : ''}`}
+                            className={`filter-item ${activeTag === tag ? 'active' : ''}`}
                             role="button"
                             tabIndex={0}
                             onClick={(e) => { e.stopPropagation(); setActiveTag(tag); }}
                             onKeyDown={(e) => { if (e.key === 'Enter') { e.stopPropagation(); setActiveTag(tag); } }}
                         >
                             {tag}
-                        </span>
+                        </div>
                     ))}
                 </div>
 
@@ -251,87 +250,97 @@ const Notification: React.FC = () => {
 
             {/* List View */}
             {viewMode === 'list' && (
-                <table className="notification-table">
-                    <thead>
-                        <tr>
-                            <th>Event</th>
-                            <th>Recipients</th>
-                            <th>System</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {filteredNotifications.map((notif: any) => (
-                            <tr key={notif.id} onClick={() => { setEditingNotification(notif.id); setNotificationId(notif.id); }}>
-                                <td>
-                                    <div className="title-wrapper">
-                                        <i className={`notification-icon ${notif.icon}`}></i>
-                                        <div className="details">
-                                            <div className="title">
-                                                {notif.event}
-                                                <span className="admin-badge yellow"><i className="adminlib-follow-store"></i> {notif.tag} </span>
-                                                <span className="admin-badge blue"> {notif.category} </span>
-                                            </div>
-                                            {/* <div className="description">{notif.description}</div> */}
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div className="recipients-list">
-                                        {(notif.recipients || []).map((r: any) => (
-                                            <RecipientBadge
-                                                key={r.id}
-                                                recipient={r}
-                                                onToggle={() => toggleRecipient(notif.id, r.id)}
-                                                onDelete={r.canDelete ? () => deleteRecipient(notif.id, r.id) : undefined}
-                                            />
-                                        ))}
-                                    </div>
-                                </td>
-                                <td>
-                                    <div className="system-column">
-                                        {Object.entries(notif.channels || {}).map(([channel, enabled]: any) => {
-                                            let iconClass = '';
-                                            let badgeClass = 'admin-badge ';
-                                            switch (channel) {
-                                                case 'mail':
-                                                    iconClass = 'adminlib-mail';
-                                                    badgeClass += 'yellow';
-                                                    break;
-                                                case 'sms':
-                                                    iconClass = 'adminlib-enquiry';
-                                                    badgeClass += 'green';
-                                                    break;
-                                                case 'system':
-                                                    iconClass = 'adminlib-notification';
-                                                    badgeClass += 'blue';
-                                                    break;
-                                            }
-                                            return (
-                                                <>
-                                                    {enabled && (
-                                                        <i
-                                                            key={channel}
-                                                            className={`${iconClass} ${badgeClass} ${!enabled ? 'disable' : ''}`}
-                                                            onClick={(e) => {
-                                                                e.stopPropagation();
-                                                                setNotificationId(notif.id);
-                                                                openEditPannel(notif.id, channel);
-                                                            }}
-                                                        ></i>
-                                                    )}
-                                                </>
-                                            );
-                                        })}
-                                    </div>
-                                </td>
-                                <td>
-                                    <i className="adminlib-create"></i>
-                                </td>
+                <div className="table-wrapper">
+                    <table className="admin-table">
+                        <thead className="admin-table-header">
+                            <tr className='header-row'>
+                                <th className='header-col notificaton'>Event</th>
+                                <th className='header-col'>Recipients</th>
+                                <th className='header-col'>System</th>
+                                <th className='header-col action'>Action</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody className='admin-table-body'>
+                            {filteredNotifications.map((notif: any) => (
+                                <tr className="admin-row" key={notif.id} onClick={() => { setEditingNotification(notif.id); setNotificationId(notif.id); } }>
+                                    <td className="admin-column notificaton">
+                                        <div className="table-row-custom">
+                                            <div className="product-wrapper notification">
+                                                <i className={`item-icon notification-icon ${notif.icon}`}></i>
+                                                <div className="details">
+                                                    <div className="title">
+                                                        {notif.event}
+                                                        <span className="admin-badge yellow"><i className="adminlib-follow-store"></i> {notif.tag} </span>
+                                                        <span className="admin-badge blue"> {notif.category} </span>
+                                                    </div>
+                                                    <div className="des">{notif.description}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td className="admin-column">
+                                        <div className="table-row-custom">
+                                            <div className="recipients-list">
+                                                {(notif.recipients || []).map((r: any) => (
+                                                    <RecipientBadge
+                                                        key={r.id}
+                                                        recipient={r}
+                                                        onToggle={() => toggleRecipient(notif.id, r.id)}
+                                                        onDelete={r.canDelete ? () => deleteRecipient(notif.id, r.id) : undefined}
+                                                    />
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td className="admin-column">
+                                        <div className="table-row-custom">
+                                            <div className="system-column">
+                                                {Object.entries(notif.channels || {}).map(([channel, enabled]: any) => {
+                                                    let iconClass = '';
+                                                    let badgeClass = 'admin-badge ';
+                                                    switch (channel) {
+                                                        case 'mail':
+                                                            iconClass = 'adminlib-mail';
+                                                            badgeClass += 'yellow';
+                                                            break;
+                                                        case 'sms':
+                                                            iconClass = 'adminlib-enquiry';
+                                                            badgeClass += 'green';
+                                                            break;
+                                                        case 'system':
+                                                            iconClass = 'adminlib-notification';
+                                                            badgeClass += 'blue';
+                                                            break;
+                                                    }
+                                                    return (
+                                                        <>
+                                                            {enabled && (
+                                                                <i
+                                                                    key={channel}
+                                                                    className={`${iconClass} ${badgeClass} ${!enabled ? 'disable' : ''}`}
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation();
+                                                                        setNotificationId(notif.id);
+                                                                        openEditPannel(notif.id, channel);
+                                                                    }}
+                                                                ></i>
+                                                            )}
+                                                        </>
+                                                    );
+                                                })}
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td className="admin-column action">
+                                        <div className="table-row-custom">
+                                            <i className="adminlib-create"></i>
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             )}
 
             {openChannel && (
@@ -368,80 +377,80 @@ const Notification: React.FC = () => {
                         <div className="form-group-wrapper">
 
                             <div className="form-group">
-                            {openChannel === "system" && (
-                                <>
-                                    <label>System Message</label>
-                                    <TextArea
-                                        name="system_message"
-                                        inputClass="textarea-input"
-                                        value={formData.system_message || ""}
-                                        onChange={(e) => {
-                                            setFormData({
-                                                ...formData,
-                                                system_message: e.target.value,
-                                            });
-                                        }}
-                                        onBlur={() => { handleAutoSave(formData.id); }}
-                                    />
-                                </>
-                            )}
+                                {openChannel === "system" && (
+                                    <>
+                                        <label>System Message</label>
+                                        <TextArea
+                                            name="system_message"
+                                            inputClass="textarea-input"
+                                            value={formData.system_message || ""}
+                                            onChange={(e) => {
+                                                setFormData({
+                                                    ...formData,
+                                                    system_message: e.target.value,
+                                                });
+                                            }}
+                                            onBlur={() => { handleAutoSave(formData.id); }}
+                                        />
+                                    </>
+                                )}
                             </div>
 
                             <div className="form-group">
-                            {openChannel === "sms" && (
-                                <>
-                                    <label>SMS Content</label>
-                                    <TextArea
-                                        name="sms_content"
-                                        inputClass="textarea-input"
-                                        value={formData.sms_content || ""}
-                                        onChange={(e) => {
-                                            setFormData({
-                                                ...formData,
-                                                sms_content: e.target.value,
-                                            });
-                                            handleAutoSave(formData.id);
-                                        }}
-                                        onBlur={() => { handleAutoSave(formData.id); }}
-                                    />
-                                </>
-                            )}
+                                {openChannel === "sms" && (
+                                    <>
+                                        <label>SMS Content</label>
+                                        <TextArea
+                                            name="sms_content"
+                                            inputClass="textarea-input"
+                                            value={formData.sms_content || ""}
+                                            onChange={(e) => {
+                                                setFormData({
+                                                    ...formData,
+                                                    sms_content: e.target.value,
+                                                });
+                                                handleAutoSave(formData.id);
+                                            }}
+                                            onBlur={() => { handleAutoSave(formData.id); }}
+                                        />
+                                    </>
+                                )}
                             </div>
 
                             <div className="form-group">
-                            {openChannel === "mail" && (
-                                <>
-                                    <label>Email Subject</label>
-                                    <BasicInput
-                                        type="text"
-                                        name="title"
-                                        value={formData.email_subject || ""}
-                                        onChange={(e) => {
-                                            setFormData({
-                                                ...formData,
-                                                email_subject: e.target.value,
-                                            });
-                                            handleAutoSave(formData.id);
-                                        }}
-                                        onBlur={() => { handleAutoSave(formData.id); }}
-                                    />
-                                    
-                                    <label>Email Body</label>
-                                    <TextArea
-                                        name="sms_content"
-                                        inputClass="textarea-input"
-                                        value={formData.email_body || ""}
-                                        onChange={(e) => {
-                                            setFormData({
-                                                ...formData,
-                                                email_body: e.target.value,
-                                            });
-                                            handleAutoSave(formData.id);
-                                        }}
-                                        onBlur={() => { handleAutoSave(formData.id); }}
-                                    />
-                                </>
-                            )}
+                                {openChannel === "mail" && (
+                                    <>
+                                        <label>Email Subject</label>
+                                        <BasicInput
+                                            type="text"
+                                            name="title"
+                                            value={formData.email_subject || ""}
+                                            onChange={(e) => {
+                                                setFormData({
+                                                    ...formData,
+                                                    email_subject: e.target.value,
+                                                });
+                                                handleAutoSave(formData.id);
+                                            }}
+                                            onBlur={() => { handleAutoSave(formData.id); }}
+                                        />
+
+                                        <label>Email Body</label>
+                                        <TextArea
+                                            name="sms_content"
+                                            inputClass="textarea-input"
+                                            value={formData.email_body || ""}
+                                            onChange={(e) => {
+                                                setFormData({
+                                                    ...formData,
+                                                    email_body: e.target.value,
+                                                });
+                                                handleAutoSave(formData.id);
+                                            }}
+                                            onBlur={() => { handleAutoSave(formData.id); }}
+                                        />
+                                    </>
+                                )}
                             </div>
                             {systemTags?.length > 0 && (
                                 <div className="tag-list">

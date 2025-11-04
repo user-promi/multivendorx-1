@@ -24,11 +24,12 @@ a {
 
 .form-select-field-wrapper input:focus {
   box-shadow: none !important;
-
   /* for overwrite react components */
   outline: none;
 }
-
+body:has(.admin-main-wrapper){
+  background: #f2f5fd8f;
+}
 #admin-main-wrapper {
   margin-left: -1.25rem;
   font-family: Figtree, sans-serif;
@@ -1287,6 +1288,7 @@ input[type="checkbox"]:focus {
     border-radius: 0.313rem;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
+    padding: 0 0.625rem;
 
     option {
       background: #fff;

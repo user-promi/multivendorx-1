@@ -628,7 +628,7 @@ const Commission: React.FC = () => {
                 tabTitle="Commissions"
                 description={'Details of commissions earned by each store for every order, including order amount, commission rate, and payout status.'}
             />
-            <div className="general-wrapper bg-wrapper">
+            <div className="general-wrapper">
                 <div className="admin-table-wrapper">
                     <Table
                         data={data}

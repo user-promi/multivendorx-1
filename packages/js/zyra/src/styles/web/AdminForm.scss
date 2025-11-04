@@ -1,7 +1,7 @@
 @use '../../global.scss' as *;
 
 .dynamic-fields-wrapper {
-  padding-top: 2rem;
+  // padding-top: 2rem;
 
   .dynamic-form {
     display: flex;
@@ -9,11 +9,13 @@
     justify-content: space-between;
 
     .form-group {
-      margin: 1.25rem 0;
+      // margin: 1.25rem 0;
       display: flex;
       align-items: flex-start;
       gap: 1rem;
       width: 100%;
+      background: #fff;
+      padding: 1rem ;
 
       .settings-form-label {
         width: 22%;

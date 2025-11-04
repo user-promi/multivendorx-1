@@ -214,7 +214,7 @@
 .title-section {
   margin: 0 1rem;
   padding: 1.5rem;
-  background: #fff;
+  // background: #fff;
   border-radius: 0.313rem;
 
   .title-wrapper {
@@ -384,10 +384,14 @@
     padding: 0 1.8rem;
   }
 }
-
+.tab-content:has(.tab-bg){
+  .divider-section{
+    background: transparent;
+  }
+}
 .tabs-wrapper {
   // width: 100%;
-  background: #fff;
+  // background: #fff;
 
   .brand {
     padding: 2rem 0 1.5rem;
@@ -575,8 +579,10 @@
 
 // section divider start
 .divider-section {
-  padding: 1rem 0;
+  padding: 1rem;
   border-bottom: $border-light-small;
+  margin-top: 1rem;
+  background: #fff;
 
   .title {
     font-size: 1.15rem;

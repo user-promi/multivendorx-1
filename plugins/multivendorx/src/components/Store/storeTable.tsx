@@ -221,7 +221,7 @@ const StoreTable: React.FC = () => {
                                 <span className="title">
                                     {row.original.store_name || '-'}
                                 </span>
-                                <span>
+                                <span className="des">
                                     Since {formattedDate}
                                 </span>
                             </div>
