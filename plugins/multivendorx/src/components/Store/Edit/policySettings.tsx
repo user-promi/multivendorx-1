@@ -65,7 +65,7 @@ const PolicySettings = ({ id, data }: { id: string | null; data: any }) => {
 				<div className="card-wrapper w-65">
 					<div className="card-content">
 						<div className="card-title">
-							Shipping Policy
+							Shipping policy
 						</div>
 
 						<div className="form-group-wrapper">
@@ -84,7 +84,7 @@ const PolicySettings = ({ id, data }: { id: string | null; data: any }) => {
 					</div>
 					<div className="card-content">
 						<div className="card-title">
-							Refund Policy
+							Refund policy
 						</div>
 
 						<div className="form-group-wrapper">
@@ -103,7 +103,7 @@ const PolicySettings = ({ id, data }: { id: string | null; data: any }) => {
 					</div>
 					<div className="card-content">
 						<div className="card-title">
-							Cancellation/Return/Exchange Policy
+							Cancellation/Return/Exchange policy
 						</div>
 
 						<div className="form-group-wrapper">
