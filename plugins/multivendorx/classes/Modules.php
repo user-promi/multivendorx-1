@@ -123,7 +123,7 @@ class Modules {
 					),
                     'spmv' => array(
                         'id'           => 'spmv',
-						'module_file'  => MultiVendorX()->plugin_path . 'modules/Spmv/Module.php',
+						'module_file'  => MultiVendorX()->plugin_path . 'modules/SPMV/Module.php',
 						'module_class' => 'MultiVendorX\SPMV\Module',
 					),
                     'follow-store' => array(
