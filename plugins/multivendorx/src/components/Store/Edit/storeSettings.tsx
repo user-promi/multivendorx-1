@@ -127,7 +127,7 @@ const StoreSettings = ({ id, data }: { id: string | null; data:any }) => {
             //     console.error('Error loading store data:', error);
             //     setLoading(false);
             // });
-    }, [id]);
+    }, [data]);
 
     // Add email function
     const addEmail = () => {

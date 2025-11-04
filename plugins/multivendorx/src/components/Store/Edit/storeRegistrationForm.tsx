@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { TextArea, getApiLink, SuccessNotice } from 'zyra';
+import { Skeleton } from '@mui/material';
 
 const StoreRegistration = ({ id }: { id: string | null }) => {
 	const [formData, setFormData] = useState<{ [key: string]: string }>({});
@@ -75,47 +76,57 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 
 			<div className="container-wrapper">
 				<div className="card-wrapper w-65">
+					{formData.core_data?.status == 'pending' && (
+						<>
+							<div className="card-content">
+								<div className="card-title">Store Details</div>
+
+								{/* Core Data */}
+								{formData.core_data &&
+									Object.entries(formData.core_data).map(([label, value]) => (
+										<div className="form-details" key={label}>
+											<label className="label">{label} :</label>
+											<div className="value">{value || "[Not Provided]"}</div>
+										</div>
+									))}
+
+								{/* Registration Data */}
+								{/* {formData.registration_data &&
+									Object.entries(formData.registration_data).map(([label, value]) => (
+										<div className="form-details" key={label}>
+											<label className="label">{label} :</label>
+											<div className="value">{value || "[Not Provided]"}</div>
+										</div>
+									))} */}
+							</div>
+						</>
+					)}
 					<div className="card-content">
-						<div className="card-title">Store details</div>
+						<div className="card-title">
+							 {formData.core_data?.status === 'pending' || formData.core_data?.status === 'rejected' ? 'Registration Form Details' : 'Archive Data'}
+						</div>
 
 						{/* Core Data */}
-						{formData.core_data &&
+						{/* {formData.core_data &&
 							Object.entries(formData.core_data).map(([label, value]) => (
 								<div className="form-details" key={label}>
 									<label className="label">{label} :</label>
 									<div className="value">{value || "[Not Provided]"}</div>
 								</div>
-							))}
+							))} */}
 
 						{/* Registration Data */}
-						{formData.registration_data &&
+						{formData.registration_data && Object.keys(formData.registration_data).length > 0 ? (
 							Object.entries(formData.registration_data).map(([label, value]) => (
 								<div className="form-details" key={label}>
 									<label className="label">{label} :</label>
 									<div className="value">{value || "[Not Provided]"}</div>
 								</div>
-							))}
-					</div>
-					<div className="card-content">
-						<div className="card-title">Registation form details</div>
+							))
+						) : (
+							<div className="no-data">No registration data found</div>
+						)}
 
-						{/* Core Data */}
-						{formData.core_data &&
-							Object.entries(formData.core_data).map(([label, value]) => (
-								<div className="form-details" key={label}>
-									<label className="label">{label} :</label>
-									<div className="value">{value || "[Not Provided]"}</div>
-								</div>
-							))}
-
-						{/* Registration Data */}
-						{formData.registration_data &&
-							Object.entries(formData.registration_data).map(([label, value]) => (
-								<div className="form-details" key={label}>
-									<label className="label">{label} :</label>
-									<div className="value">{value || "[Not Provided]"}</div>
-								</div>
-							))}
 					</div>
 				</div>
 
@@ -142,8 +153,7 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 								</div>
 								<div className="details">
 									<div className="name">
-										jone jone
-										{/* {storeData.primary_owner_info?.data?.display_name ?? <Skeleton variant="text" width={150} />} */}
+										{formData.primary_owner_info?.data?.display_name ?? <Skeleton variant="text" width={150} />}
 									</div>
 									{/* <div className="des">Owner</div> */}
 								</div>
@@ -151,8 +161,7 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 							<ul className="contact-details">
 								<li>
 									<i className="adminlib-mail"></i>
-									{/* {storeData.primary_owner_info?.data?.user_email  ?? <Skeleton variant="text" width={150} />} */}
-									test@gmail.com
+									{formData.primary_owner_info?.data?.user_email  ?? <Skeleton variant="text" width={150} />}
 								</li>
 								<li>
 									<i className="adminlib-form-phone"></i> +1 (555) 987-6543
@@ -160,36 +169,52 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 							</ul>
 						</div>
 					</div>
-					<div className="card-content">
-						<div className="card-title">
-							Note
-						</div>
 
-						<div className="form-group-wrapper">
-							<div className="form-group">
-								<TextArea name="store_application_note" wrapperClass="setting-from-textarea"
-									placeholder='Optional note for approval or rejection'
-									inputClass="textarea-input"
-									descClass="settings-metabox-description" value={formData.store_application_note} onChange={handleChange} />
+				{formData.core_data?.status === 'pending' || formData.core_data?.status === 'rejected' && (
+					<>
+						<div className="card-content">
+							<div className="card-title">
+								Note
+							</div>
+
+							<div className="form-group-wrapper">
+								<div className="form-group">
+									<TextArea name="store_application_note" wrapperClass="setting-from-textarea"
+										placeholder='Optional note for approval or rejection'
+										inputClass="textarea-input"
+										descClass="settings-metabox-description" value={formData.store_application_note} onChange={handleChange} />
+								</div>
+								<div className="form-group">
+									<label className="checkbox-label">
+										<input
+											type="checkbox"
+											name="store_permanent_reject"
+											checked={formData.store_permanent_reject}
+											onChange={handleChange}
+										/>
+										Store Permanently Reject
+									</label>
+								</div>
+							</div>
+
+							<div className="buttons-wrapper" >
+								<button
+									className="admin-btn btn-green"
+									onClick={() => handleSubmit('approve')}
+								>
+									Approve
+								</button>
+
+								<button
+									className="admin-btn btn-red"
+									onClick={() => handleSubmit('rejected')}
+								>
+									Reject
+								</button>
 							</div>
 						</div>
-
-						<div className="buttons-wrapper" >
-							<button
-								className="admin-btn btn-green"
-								onClick={() => handleSubmit('approve')}
-							>
-								Approve
-							</button>
-
-							<button
-								className="admin-btn btn-red"
-								onClick={() => handleSubmit('rejected')}
-							>
-								Reject
-							</button>
-						</div>
-					</div>
+					</>
+				)}
 
 				</div>
 			</div>

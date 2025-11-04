@@ -215,7 +215,7 @@ class FrontendScripts {
 					'version' => $version,
 				),
                 'multivendorx-single-product-multiple-vendor-script' => array(
-					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'modules/Spmv/js/' . MULTIVENDORX_PLUGIN_SLUG . '-frontend.min.js',
+					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'modules/SPMV/js/' . MULTIVENDORX_PLUGIN_SLUG . '-frontend.min.js',
 					'deps'    => array( 'jquery' ),
 					'version' => $version,
 				),
@@ -304,7 +304,7 @@ class FrontendScripts {
 					'version' => $version,
 				),
                 'multivendorx-admin-product-auto-search-script' => array(
-					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'modules/Spmv/js/' . MULTIVENDORX_PLUGIN_SLUG . '-admin-product-auto-search.min.js',
+					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'modules/SPMV/js/' . MULTIVENDORX_PLUGIN_SLUG . '-admin-product-auto-search.min.js',
 					'deps'    => array( 'jquery' ),
 					'version' => $version,
 				),

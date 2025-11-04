@@ -207,9 +207,7 @@ class StoreUtil {
         $core_fields = [
             'name'        => 'Store Name',
             'description' => 'Store Description',
-            'slug'        => 'Store Slug',
-            'status'      => 'Store Status',
-            'who_created' => 'Who Created',
+            'status'    => 'status'
         ];
     
         $core_data = [];
@@ -240,15 +238,27 @@ class StoreUtil {
             }
         }
     
+        $primary_owner_id = StoreUtil::get_primary_owner( $store_id );
+        $primary_owner_info = get_userdata( $primary_owner_id );
+
         // Prepare structured response
         $response = [
             'core_data'        => $core_data,
             'registration_data'=> [],
+            'primary_owner_info'    => $primary_owner_info,
+            'store_application_note' => $store->get_meta('store_reject_note'),
+            'store_permanent_reject' => $store->get_meta('store_permanent_reject'),
         ];
     
         foreach ( $submitted_data as $field_name => $field_value ) {
             $label = $name_label_map[$field_name] ?? $field_name;
-            $response['registration_data'][$label] = $field_value;
+
+            if ( $field_name == 'paypal_email' || $field_name == 'phone' ) {
+                $response['core_data'][$label] = $field_value;
+            } else {
+                $response['registration_data'][$label] = $field_value;
+            }
+                
         }
     
         return $response;

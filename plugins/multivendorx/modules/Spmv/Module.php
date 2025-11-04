@@ -5,7 +5,7 @@
  * @package MultiVendorX
  */
 
-namespace MultiVendorX\Spmv;
+namespace MultiVendorX\SPMV;
 
 /**
  * MultiVendorX SPMV Module class
