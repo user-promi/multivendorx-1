@@ -5,7 +5,7 @@
  * @package MultiVendorX
  */
 
-namespace MultiVendorX\ReportAbuse;
+namespace MultiVendorX\Compliance;
 use MultiVendorX\FrontendScripts;
 
 

@@ -92,7 +92,7 @@ const Stores: React.FC = () => {
     const handleSingleAction = (action: string, storeId: number) => {
         if (!storeId) return;
 
-        if (action === 'reject') {
+        if (action === 'declined') {
             setRejectStoreId(storeId);
             setRejectPopupOpen(true);
             return;
@@ -121,7 +121,7 @@ const Stores: React.FC = () => {
             url: getApiLink(appLocalizer, `store/${rejectStoreId}`),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
             data: {
-                status: 'rejected',
+                status: 'declined',
                 _reject_note: rejectReason || '' // allow empty reason
             }
         })
@@ -187,7 +187,7 @@ const Stores: React.FC = () => {
                     header={{
                         actions: [
                             { label: __('Approve', 'multivendorx'), icon: 'adminlib-check', onClick: (rowData) => handleSingleAction('active', rowData.id!), hover: true },
-                            { label: __('Reject', 'multivendorx'), icon: 'adminlib-close', onClick: (rowData) => handleSingleAction('reject', rowData.id!), hover: true },
+                            { label: __('Reject', 'multivendorx'), icon: 'adminlib-close', onClick: (rowData) => handleSingleAction('declined', rowData.id!), hover: true },
                         ],
                     }}
                 />

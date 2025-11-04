@@ -81,7 +81,6 @@ const Products: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
             })
             .catch(() => setData([]));
     };
-    console.log(data)
     useEffect(() => {
         const currentPage = pagination.pageIndex + 1;
         requestData(pagination.pageSize, currentPage);

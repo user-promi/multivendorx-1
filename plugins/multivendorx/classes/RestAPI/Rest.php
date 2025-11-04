@@ -104,28 +104,48 @@ class Rest {
     public function filter_orders_by_store_id( $args, $request ) {
         $meta_key   = $request->get_param('meta_key');
         $meta_value = $request->get_param('value');
+        $refund_status = $request->get_param('refund_status'); 
     
-        if ( empty( $meta_key ) ) {
+        if ( empty( $meta_key ) && empty( $refund_status ) ) {
             return $args;
         }
     
-        $store_meta_query = [
-            'key'     => sanitize_key( $meta_key ),
-            'compare' => $meta_value ? '=' : 'EXISTS',
-        ];
+        $meta_query = [];
     
-        if ( $meta_value ) {
-            $store_meta_query['value'] = sanitize_text_field( $meta_value );
+        // 🔹 Original store meta query (unchanged)
+        if ( ! empty( $meta_key ) ) {
+            $store_meta_query = [
+                'key'     => sanitize_key( $meta_key ),
+                'compare' => $meta_value ? '=' : 'EXISTS',
+            ];
+        
+            if ( $meta_value ) {
+                $store_meta_query['value'] = sanitize_text_field( $meta_value );
+            }
+    
+            $meta_query[] = $store_meta_query;
         }
     
+        // 🔹 New refund status meta query
+        if ( ! empty( $refund_status ) ) {
+            $meta_query[] = [
+                'key'     => '_customer_refund_order',
+                'value'   => sanitize_text_field( $refund_status ),
+                'compare' => '=',
+            ];
+        }
+    
+        // 🔹 Merge all meta queries
         if ( isset( $args['meta_query'] ) ) {
             $args['meta_query']['relation'] = 'AND';
-            $args['meta_query'][] = $store_meta_query;
+            $args['meta_query'] = array_merge( $args['meta_query'], $meta_query );
         } else {
-            $args['meta_query'] = [ $store_meta_query ];
+            $args['meta_query'] = $meta_query;
         }
+    
         return $args;
     }
+    
     
 
     /**

@@ -1,11 +1,13 @@
 import { AdminBreadcrumbs, getApiLink } from 'zyra';
 import Products from './products';
 import Coupons from './coupon';
-import Transactions from './transaction';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import StoreOrders from './refundRequest';
 import Stores from './stores';
+import ReportAbuseTable from './pendingAbuseReports';
+import WithdrawalRequests from './withdrawalRequests';
+import RefundRequest from './refundRequest';
+import StoreOrders from './StoreOrders';
 
 const ApprovalQueue = () => {
     const [productCount, setProductCount] = useState<number>(0);
@@ -25,55 +27,53 @@ const ApprovalQueue = () => {
             params: { count: true, status: 'pending' },
         }).then((response) => setStoreCount(response.data || 0));
 
+        axios({
+            method: 'GET',
+            url: `${appLocalizer.apiUrl}/wc/v3/products`,
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            params: { per_page: 1, meta_key: 'multivendorx_store_id', status: 'pending' }
+        })
+            .then((response) => {
+                const totalCount = parseInt(response.headers['x-wp-total'], 10) || 0;
+                setProductCount(totalCount);
+            });
 
+        axios({
+            method: 'GET',
+            url: `${appLocalizer.apiUrl}/wc/v3/coupons`,
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            params: { per_page: 1, meta_key: 'multivendorx_store_id', status: 'pending' }
+        })
+            .then((response) => {
+                const totalCount = parseInt(response.headers['x-wp-total'], 10) || 0;
+                setCouponCount(totalCount);
+            });
 
-        // axios({
-        //     method: 'GET',
-        //     url: `${appLocalizer.apiUrl}/wc/v3/products`,
-        //     headers: { 'X-WP-Nonce': appLocalizer.nonce },
-        //     params: { per_page: 1, meta_key: 'multivendorx_store_id', status: 'pending' }
-        // })
-        //     .then((response) => {
-        //         const totalCount = parseInt(response.headers['x-wp-total'], 10) || 0;
-        //         setProductCount(totalCount);
-        //     });
-
-        // axios({
-        //     method: 'GET',
-        //     url: `${appLocalizer.apiUrl}/wc/v3/coupons`,
-        //     headers: { 'X-WP-Nonce': appLocalizer.nonce },
-        //     params: { per_page: 1, meta_key: 'multivendorx_store_id', status: 'pending' }
-        // })
-        //     .then((response) => {
-        //         const totalCount = parseInt(response.headers['x-wp-total'], 10) || 0;
-        //         setCouponCount(totalCount);
-        //     });
-
-        // axios({
-        //     method: 'GET',
-        //     url: getApiLink(appLocalizer, 'store'),
-        //     headers: { 'X-WP-Nonce': appLocalizer.nonce },
-        //     params: { pending_withdraw: true } //important: use this param
-        // })
-        //     .then((response) => {
-        //         const count = response.data.length || 0; // response.data is an array of stores with pending withdraw
-        //         setTransactionCount(count);
-        //     })
-        //     .catch(() => setTransactionCount(0));
-        // // Fetch total orders count
-        // axios({
-        //     method: 'GET',
-        //     url: `${appLocalizer.apiUrl}/wc/v3/orders`,
-        //     headers: { 'X-WP-Nonce': appLocalizer.nonce },
-        //     params: { meta_key: 'multivendorx_store_id', status: 'refund-requested' },
-        // })
-        //     .then((response) => {
-        //         const total = Number(response.headers['x-wp-total']) || 0;
-        //         setRefundCount(total);
-        //     })
-        //     .catch(() => {
-        //         setRefundCount(0);
-        //     });
+        axios({
+            method: 'GET',
+            url: getApiLink(appLocalizer, 'store'),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            params: { pending_withdraw: true } //important: use this param
+        })
+            .then((response) => {
+                const count = response.data.length || 0; // response.data is an array of stores with pending withdraw
+                setTransactionCount(count);
+            })
+            .catch(() => setTransactionCount(0));
+        // Fetch total orders count
+        axios({
+            method: 'GET',
+            url: `${appLocalizer.apiUrl}/wc/v3/orders`,
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            params: { meta_key: 'multivendorx_store_id', status: 'refund-requested' },
+        })
+            .then((response) => {
+                const total = Number(response.headers['x-wp-total']) || 0;
+                setRefundCount(total);
+            })
+            .catch(() => {
+                setRefundCount(0);
+            });
 
 
 
@@ -119,101 +119,34 @@ const ApprovalQueue = () => {
                     Upcoming Feature
                 </h1>
         },
+        {
+            id: "refund-requests",
+            label: "Refund Requests",
+            module: "marketplace-refund",
+            icon: "adminlib-calendar blue",
+            des: "Need your decision",
+            count: refundCount,
+            // content: <RefundRequest onUpdated={refreshCounts} />
+            content: <StoreOrders onUpdated={refreshCounts} />
+        },
+        {
+            id: "report-abuse",
+            label: "Product Abuse",
+            icon: "adminlib-calendar blue",
+            count: productCount,
+            des: "Waiting to be published",
+            content: <ReportAbuseTable onUpdated={refreshCounts} />
 
+        },
+        {
+            id: "withdrawal",
+            label: "Withdrawals",
+            icon: "adminlib-calendar blue",
+            des: "Queued for disbursement",
+            count: transactionCount,
+            content: <WithdrawalRequests onUpdated={refreshCounts} />
 
-
-
-
-        // {
-        //     id: "product-approval",
-        //     label: "Products",
-        //     icon: "adminlib-calendar blue",
-        //     count: productCount,
-        //     des: "Waiting to be published",
-
-        //     content:
-        //         <>
-        //             <div className="card-header">
-        //                 <div className="left">
-        //                     <div className="title">
-        //                         Products
-        //                     </div>
-        //                     <div className="des">Waiting for your response</div>
-        //                 </div>
-        //                 <div className="right">
-        //                     <i className="adminlib-more-vertical"></i>
-        //                 </div>
-        //             </div>
-        //             <Transactions onUpdated={refreshCounts} />
-        //         </>
-        // },
-        // {
-        //     id: "coupon-approval",
-        //     label: "Coupons",
-        //     icon: "adminlib-calendar red",
-        //     des: "Need a quick approval",
-        //     count: couponCount,
-        //     content:
-        //         <>
-        //             <div className="card-header">
-        //                 <div className="left">
-        //                     <div className="title">
-        //                         Coupons
-        //                     </div>
-        //                     <div className="des">Waiting for your response</div>
-        //                 </div>
-        //                 <div className="right">
-        //                     <i className="adminlib-more-vertical"></i>
-        //                 </div>
-        //             </div>
-        //             <Transactions onUpdated={refreshCounts} />
-        //         </>
-        // },
-
-        // {
-        //     id: "withdrawal",
-        //     label: "Withdrawals",
-        //     icon: "adminlib-calendar blue",
-        //     des: "Queued for disbursement",
-        //     count: transactionCount,
-        //     content:
-        //         <>
-        //             <div className="card-header">
-        //                 <div className="left">
-        //                     <div className="title">
-        //                         Withdrawals
-        //                     </div>
-        //                     <div className="des">Waiting for your response</div>
-        //                 </div>
-        //                 <div className="right">
-        //                     <i className="adminlib-more-vertical"></i>
-        //                 </div>
-        //             </div>
-        //             <Transactions onUpdated={refreshCounts} />
-        //         </>
-        // },
-        // {
-        //     id: "refund-requests",
-        //     label: "Refund Requests",
-        //     module: "marketplace-refund",
-        //     icon: "adminlib-calendar blue",
-        //     des: "Need your decision",
-        //     count: refundCount,
-        //     content: (
-        //         <>
-        //             <div className="card-header">
-        //                 <div className="left">
-        //                     <div className="title">Refund Requests</div>
-        //                     <div className="des">Need your decision</div>
-        //                 </div>
-        //                 <div className="right">
-        //                     <i className="adminlib-more-vertical"></i>
-        //                 </div>
-        //             </div>
-        //             <StoreOrders />
-        //         </>
-        //     ),
-        // },
+        },
     ];
 
 

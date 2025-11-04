@@ -5,7 +5,7 @@
  * @package MultiVendorX
  */
 
-namespace MultiVendorX\ReportAbuse;
+namespace MultiVendorX\Compliance;
 
 /**
  * MultiVendorX Report Abuse Module class
@@ -46,7 +46,7 @@ class Module {
         $this->container['frontend'] = new Frontend();
         $this->container['ajax'] = new Ajax();
         $this->container['util'] = new Util();
-        $this->container['rest'] = new MultiVendorX_REST_Report_Abuse_Controller();
+        $this->container['rest'] = new MultiVendorX_REST_Compliance_Controller();
     }
 
     /**

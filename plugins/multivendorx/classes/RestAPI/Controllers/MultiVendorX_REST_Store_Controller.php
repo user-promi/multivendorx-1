@@ -248,7 +248,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             }
             
             if ( $request->get_param( 'pending_withdraw' ) ) {
-                return rest_ensure_response( $this->get_stores_with_pending_withdraw() );
+                return rest_ensure_response( $this->get_stores_with_pending_withdraw( $request ) );
             }
             
             $options = $request->get_param( 'options' );
@@ -865,15 +865,16 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
     /**
      * Get stores with pending withdrawal requests
      *
-     * @return array
+     * @param WP_REST_Request $request
+     * @return array|int
      */
-    private function get_stores_with_pending_withdraw() {
+    private function get_stores_with_pending_withdraw( $request ) {
         $all_stores = StoreUtil::get_store_information(); // get all stores
         $stores_with_withdraw = [];
-
+    
         foreach ( $all_stores as $store ) {
             $store_meta = Store::get_store_by_id( (int) $store['ID'] );
-
+    
             // Check if request_withdrawal_amount exists and is non-zero
             if ( ! empty( $store_meta->meta_data['request_withdrawal_amount'] ) ) {
                 $stores_with_withdraw[] = [
@@ -887,8 +888,19 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                 ];
             }
         }
-
-        return $stores_with_withdraw;
+    
+        // ✅ If this is a count-only request
+        if ( $request->get_param( 'count' ) ) {
+            return count( $stores_with_withdraw );
+        }
+    
+        // ✅ Pagination
+        $page = max( 1, intval( $request->get_param( 'page' ) ) );
+        $limit = max( 1, intval( $request->get_param( 'row' ) ) );
+        $offset = ( $page - 1 ) * $limit;
+    
+        return array_slice( $stores_with_withdraw, $offset, $limit );
     }
+    
 
 }

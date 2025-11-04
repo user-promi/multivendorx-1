@@ -1,7 +1,7 @@
 <?php
-namespace MultiVendorX\ReportAbuse;
+namespace MultiVendorX\Compliance;
 
-use MultiVendorX\ReportAbuse\Util;
+use MultiVendorX\Compliance\Util;
 
 class Ajax {
     public function __construct() {
