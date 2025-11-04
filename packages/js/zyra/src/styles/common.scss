@@ -309,6 +309,7 @@ a {
 
       input {
         border: none !important;
+        padding: 0;
 
         /* for overwrite common style */
 
@@ -373,8 +374,8 @@ a {
 
 // color input style
 .setting-color-picker {
-  width: 3rem;
-  height: 3rem;
+  width: 2.5rem;
+  height: 2.5rem;
   padding: 0;
 }
 
@@ -394,7 +395,10 @@ input[type="radio"] {
   appearance: none;
   border-radius: 50%;
 }
-
+input[type="checkbox"]{
+  width: 1.125rem;
+  height: 1.125rem;
+}
 input[type="checkbox"]:checked {
   border: none;
 }
@@ -408,15 +412,18 @@ input.minus-icon::before {
   margin: -0.063rem .3rem 0 0 !important;
   line-height: 1rem;
   border-radius: 0.25rem;
-  font-size: 1.063rem;
+  font-size: 0.95rem;
 }
 
 input[type="checkbox"]:checked::before {
   content: "\e809";
+  padding: 0.063rem;
 }
 
 input.minus-icon::before {
   content: "\ef9e";
+  padding: 0.063rem;
+  font-size: 1rem;
 }
 
 input.minus-icon {
