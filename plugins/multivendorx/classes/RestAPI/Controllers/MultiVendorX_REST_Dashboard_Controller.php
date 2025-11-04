@@ -80,13 +80,13 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller
             'coupons' => array(
                 'name' => 'Coupons',
                 'slug' => 'coupons',
-                'icon' => 'adminlib-contact-form',
+                'icon' => 'adminlib-coupon',
                 'capability' => array('read_shop_coupons'),
             ),
             'sales' => array(
                 'name' => 'Sales',
                 'slug' => 'sales',
-                'icon' => 'adminlib-order',
+                'icon' => 'adminlib-sales',
                 'submenu' => array(
                     array(
                         'key' => 'orders',
@@ -112,7 +112,7 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller
             ),
             'store_wallet' => array(
                 'name' => 'Wallet',
-                'icon' => 'adminlib-customer-service',
+                'icon' => 'adminlib-wallet',
                 'slug' => 'store-wallet',
                 'submenu' => array(
                     'transactions' => array(
@@ -170,7 +170,7 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller
             ),
             'resources' => array(
                 'name' => 'Resources',
-                'icon' => 'adminlib-cart',
+                'icon' => 'adminlib-resources',
                 'slug' => 'resources',
                 'submenu' => array(
                     array(

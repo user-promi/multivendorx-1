@@ -6,6 +6,7 @@
   .dynamic-form {
     display: flex;
     flex-wrap: wrap;
+    justify-content: space-between;
 
     .form-group {
       margin: 1.25rem 0;
@@ -26,7 +27,7 @@
       }
 
       &.width-50 {
-        width: 50%;
+        width: 49%;
       }
 
       &.vertical {
@@ -101,7 +102,9 @@
     font-size: 0.875rem;
     margin: 0;
   }
-
+  a{
+    color: $theme-color;
+  }
   &.notice {
     flex-direction: column;
     align-items: start;
@@ -198,6 +201,7 @@
   .title {
     font-size: 1.313rem;
     margin-bottom: 0.4rem;
+    text-align: center;
   }
 
   button {
@@ -232,7 +236,7 @@
   &.small {
     width: 20%;
 
-    i {
+    .upload-icon {
       font-size: 1.8rem;
     }
 

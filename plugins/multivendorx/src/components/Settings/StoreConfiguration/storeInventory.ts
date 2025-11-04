@@ -16,7 +16,7 @@ export default {
             type: 'blocktext',
             label: __( 'no_label', 'multivendorx' ),
             blocktext: __(
-                '<b>Note: You can configure or customize the notification templates for these alerts from the <a href="#&tab=settings&subtab=notifications">Notification Settings</a> section.</b>',
+                '<b>Note: </b>You can configure or customize the notification templates for these alerts from the <b><a href="#&tab=settings&subtab=notifications">Notification Settings</a> </b> section.',
                 'multivendorx'
             ),            
         },

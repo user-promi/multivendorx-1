@@ -57,7 +57,12 @@ const ProPopup: React.FC<PopupProps> = (props) => {
                     {props.messages && (
                         <>
                             <div className="top-section">
-                                <div className="heading">{props.title}</div>
+                                <div className="heading">
+                                    {String(props.title)
+                                        .split('-')
+                                        .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
+                                        .join(' ')}
+                                </div>
                                 <div className="description">{props.moreText}</div>
                                 <div className="price">{selectedBtn.price}</div>
                                 <div className="select-wrapper">
@@ -152,7 +157,7 @@ const ProPopup: React.FC<PopupProps> = (props) => {
                                         className="admin-btn btn-purple"
                                         href={props.modulePageUrl}
                                     >
-                                       <i className="adminlib-eye"></i> {props.moduleButton}
+                                        <i className="adminlib-eye"></i> {props.moduleButton}
                                     </a>
                                 </div>
                             </div>

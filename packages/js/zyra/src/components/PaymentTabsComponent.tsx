@@ -350,7 +350,8 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
           >
             {/* Header */}
             <div className="payment-method">
-              {!method.openForm && (
+              
+              {!method.openForm && method.formFields && (
                 <div className="toggle-icon">
                   <i
                     className={`adminlib-${isEnabled && isActive ? "keyboard-arrow-down" : "pagination-right-arrow"
