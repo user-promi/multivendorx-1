@@ -87,7 +87,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                             <div className="card-header">
                                 <div className="left">
                                     <div className="title">
-                                        Recent Payouts
+                                        Recent payouts
                                     </div>
                                 </div>
                                 <div className="right">
@@ -150,7 +150,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                             <div className="card-header">
                                 <div className="left">
                                     <div className="title">
-                                        Top Products
+                                        Top products
                                     </div>
                                     {/* <div className="des">
                                         Manage your weekly schedule and special hours
@@ -169,7 +169,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                         <div className="card-header">
                             <div className="left">
                                 <div className="title">
-                                    Store Hours
+                                    Store hours
                                 </div>
                                 <div className="des">
                                     Manage your weekly schedule and special hours
@@ -200,11 +200,11 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 
                             <div className="row">
                                 <div className="time-wrapper">
-                                    <div className="des">Current Status</div>
+                                    <div className="des">Current status</div>
                                     <div className="time"><span className="admin-badge green">Open</span></div>
                                 </div>
                                 <div className="time-wrapper">
-                                    <div className="des">Next Opening</div>
+                                    <div className="des">Next opening</div>
                                     <div className="time">Mon 9:00 AM</div>
                                 </div>
                             </div>
@@ -225,7 +225,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                         <div className="overview-wrapper">
                             <div className="items">
                                 <div className="title">
-                                    View Application
+                                    View application
                                 </div>
                                 <div className="details">
                                     <div
@@ -251,7 +251,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                             </div>
                             <div className="items">
                                 <div className="title">
-                                    Vacation Mode
+                                    Vacation mode
                                 </div>
                                 <div className="details">
                                     <span className="admin-badge red">Inactive</span>
@@ -261,7 +261,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                         <div className="description-wrapper">
                             <div className="title">
                                 <i className="adminlib-error"></i>
-                                Gold Plan
+                                Gold plan
                                 <span className="admin-badge green">Active</span>
                             </div>
                             <div className="des">Renews on Dec 15, 2024</div>
@@ -271,7 +271,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                         <div className="card-header">
                             <div className="left">
                                 <div className="title">
-                                    Primary Owner
+                                    Primary owner
                                 </div>
                             </div>
                             <div className="right">
