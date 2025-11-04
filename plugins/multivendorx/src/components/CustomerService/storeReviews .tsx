@@ -319,6 +319,15 @@ const StoreReviews: React.FC = () => {
 
     return (
         <>
+            <div className="card-header">
+                <div className="left">
+                    <div className="title">Store Reviews</div>
+                    <div className="des">Shared by customers</div>
+                </div>
+                <div className="right">
+                    <i className="adminlib-more-vertical"></i>
+                </div>
+            </div>
             {error && <div className="error">{error}</div>}
             <Table
                 data={data || []}

@@ -439,6 +439,7 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
         $store_id = absint( $request->get_param( 'store_id' ) );
         $amount = (float) $request->get_param( 'amount' );
         $withdraw = $request->get_param( 'withdraw' );
+        $action = $request->get_param( 'action' );
 
         $store = new \MultiVendorX\Store\Store( $store_id );
         $disbursement = $request->get_param( 'disbursement' );
@@ -458,11 +459,21 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
             }
         }
 
-        if($withdraw ){
-
-            if ($threshold_amount < $amount) {
+        if( $withdraw ){
+            if ( $action === 'approve' && $threshold_amount < $amount) {
                 MultiVendorX()->payments->processor->process_payment( $store_id, $amount);
                 $store->delete_meta('request_withdrawal_amount');
+            }elseif($action === 'reject'){
+                $store->delete_meta('request_withdrawal_amount');
+
+                $parameters = [
+                    'store_email'   => 'test@gmail.com',
+                    'store_id'      => $store_id,
+                    'category'   => 'activity'
+                ];
+                
+                do_action('multivendorx_notify_payout_rejected', 'new_store_approval', $parameters);
+
             }
 
             return rest_ensure_response([
