@@ -83,7 +83,7 @@ return (
                 <div className="card-wrapper w-35">
 					<div className="card-content">
 						<div className="card-title">
-							Facilitator value
+							Facilitator payout share
 						</div>
 						<div className="form-group-wrapper">
 							<div className="form-group">

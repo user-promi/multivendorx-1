@@ -11,20 +11,43 @@ export default {
         {
             key: 'seller_agreement',
             type: 'textarea',
-            label: __('Seller Agreement', 'multivendorx'),
+            label: __('Seller agreement', 'multivendorx'),
             desc: __('Define the agreement outlining seller obligations and responsibilities on your marketplace.', 'multivendorx'),
         },
         {
             key: 'terms_conditions',
             type: 'textarea',
-            label: __('Terms & Conditions', 'multivendorx'),
+            label: __('Terms & conditions', 'multivendorx'),
             desc: __('Specify general terms and conditions that govern participation and transactions.', 'multivendorx'),
         },
         {
             key: 'anti_counterfeit_policy',
             type: 'textarea',
-            label: __('Anti-Counterfeit / Copyright Declaration', 'multivendorx'),
+            label: __('Anti-Counterfeit / copyright declaration', 'multivendorx'),
             desc: __('Declare your store’s compliance with intellectual property and anti-counterfeit laws.', 'multivendorx'),
         },
+        {
+            key: 'legal_document_handling',
+            type: 'setting-toggle',
+            label: __('Legal document handling', 'multivendorx'),
+            settingDescription: __('Control how stores interact with legal document templates. Choose whether stores can only access the pre-defined templates or are allowed to upload their customized versions.', 'multivendorx'),
+            desc: __(
+                '<li><strong>Download only</strong> – Stores can view and download compliance documents (like Seller Agreement, Terms & Conditions, Anti-Counterfeit Declaration) as PDF for offline reading. No upload or acknowledgment required.</li>' +
+                '<li><strong>Download and re-upload</strong> – Stores can download, sign, and re-upload signed copies as proof of acceptance. This ensures verified consent for all legal and policy agreements.</li>',
+                'multivendorx'
+            ),
+            options: [
+                {
+                    key: 'allow_download_only',
+                    label: __('Download only', 'multivendorx'),
+                    value: 'allow_download_only',
+                },
+                {
+                    key: 'allow_download_upload',
+                    label: __('Download and re-upload', 'multivendorx'),
+                    value: 'allow_download_upload',
+                },
+            ],
+        }
     ],
 };

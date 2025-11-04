@@ -16,13 +16,13 @@ export default {
             options: [
                 {
                     key: 'bank_account_details',
-                    label: __('Bank Account Details', 'mvx-pro'),
+                    label: __('Bank account details', 'mvx-pro'),
                     value: 'bank_account_details',
                     edit:true
                 },
                 {
                     key: 'tax_identification_documents',
-                    label: __('Tax Identification Documents (TINs/VAT/GST/EIN/SSN/ITIN. etc.)', 'mvx-pro'),
+                    label: __('Tax identification documents (TINs/VAT/GST/EIN/SSN/ITIN. etc.)', 'mvx-pro'),
                     value: 'tax_identification_documents',
                     edit:true
                 },

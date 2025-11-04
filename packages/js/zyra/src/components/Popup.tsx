@@ -144,7 +144,11 @@ const ProPopup: React.FC<PopupProps> = (props) => {
                                 <i className={`adminlib-${props.moduleName}`}></i>
                             </div>
                             <div className="popup-body">
-                                <h2>Activate {props.moduleName}</h2>
+                                <h2>Activate {String(props.moduleName)
+                                    .split('-')
+                                    .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
+                                    .join(' ')}
+                                </h2>
                                 <p>{props.message}</p>
 
                                 <div className="buttons-wrapper center">
@@ -152,7 +156,7 @@ const ProPopup: React.FC<PopupProps> = (props) => {
                                         className="admin-btn btn-purple"
                                         href={props.modulePageUrl}
                                     >
-                                       <i className="adminlib-eye"></i> {props.moduleButton}
+                                        <i className="adminlib-eye"></i> {props.moduleButton}
                                     </a>
                                 </div>
                             </div>

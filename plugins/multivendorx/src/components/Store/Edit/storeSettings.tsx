@@ -766,14 +766,14 @@ const StoreSettings = ({ id, data }: { id: string | null; data:any }) => {
 
                     <div className="card-content">
                         <div className="card-title">
-                            Contact Information
+                            Contact information
                         </div>
 
 
                         {/* Updated Email Section */}
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <label htmlFor="store-email">Store Email(s)</label>
+                                <label htmlFor="store-email">Store email(s)</label>
                                 <div className="email-input-container">
                                     <div className="email-badges-container" >
                                         {emailBadges.map(badge => (
@@ -806,7 +806,7 @@ const StoreSettings = ({ id, data }: { id: string | null; data:any }) => {
                                 </div>
                                 {errorMsg && <p className="invalid-massage">{errorMsg}</p>}
                                 <div className="settings-metabox-description">
-                                    Add multiple email addresses. Press Enter or click Add after each email.
+                                    Add multiple email addresses. Press "Enter" or click "Add" after each email.
                                 </div>
                             </div>
                         </div>
@@ -825,7 +825,7 @@ const StoreSettings = ({ id, data }: { id: string | null; data:any }) => {
 
                     <div className="card-content">
                         <div className="card-title">
-                            Communication Address
+                            Communication address
                         </div>
 
                         <div className="form-group-wrapper">
@@ -853,7 +853,7 @@ const StoreSettings = ({ id, data }: { id: string | null; data:any }) => {
                                 />
                             </div>
                             <div className="form-group">
-                                <label htmlFor="zip">Zip Code</label>
+                                <label htmlFor="zip">Zip code</label>
                                 <BasicInput
                                     name="zip"
                                     value={addressData.zip}
@@ -956,7 +956,7 @@ const StoreSettings = ({ id, data }: { id: string | null; data:any }) => {
                 <div className="card-wrapper w-35">
                     <div className="card-content">
                         <div className="card-title">
-                            Status
+                            Manage store status
                         </div>
 
                         {/* Updated Email Section */}

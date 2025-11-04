@@ -56,6 +56,7 @@ export default {
         {
             key: 'separator_content',
             type: 'section',
+            wrapperClass: 'divider-section color-red',
             hint: __("Danger Zone", 'multivendorx'),
             desc: __('', 'multivendorx')
         },
@@ -63,6 +64,7 @@ export default {
         {
             key: 'clear_notifications',
             type: 'number',
+            wrapperClass: 'red-text',
             label: __( 'Clear Notifications', 'multivendorx' ),
         },
         

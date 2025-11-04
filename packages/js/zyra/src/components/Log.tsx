@@ -123,7 +123,7 @@ const Log: React.FC< LogProps > = ( {
                     Download
                 </button>
                 <button
-                    className="admin-btn btn-red"
+                    className="admin-btn btn-red delete-btn"
                     onClick={ handleClearLog }
                 >   
                     <i className="adminlib-delete"></i>
