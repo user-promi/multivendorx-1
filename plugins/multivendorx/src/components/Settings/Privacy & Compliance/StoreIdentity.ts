@@ -95,7 +95,7 @@ export default {
         {
             key: 'all_verification_methods',
             type: 'payment-tabs',
-            label: 'Social Verification',
+            label: 'Social verification',
             moduleEnabled: 'identity-verification',
             proSetting: true,
             // settingDescription: __('Allow stores to verify their identity by connecting social media accounts.', 'multivendorx'),
@@ -103,7 +103,7 @@ export default {
                 {
                     id: 'google-connect',
                     icon: "adminlib-google",
-                    label: 'Google Connect',
+                    label: 'Google',
                     connected: false,
                     disableBtn: true,
                     desc: 'Connect and authenticate stores via Google accounts.',
@@ -116,7 +116,7 @@ export default {
                 {
                     id: 'twitter-connect',
                     icon: "adminlib-twitter",
-                    label: 'Twitter Connect',
+                    label: 'Twitter',
                     connected: false,
                     disableBtn: true,
                     countBtn: false,
@@ -130,7 +130,7 @@ export default {
                 {
                     id: 'facebook-connect',
                     icon: "adminlib-facebook",
-                    label: 'Facebook Connect',
+                    label: 'Facebook',
                     connected: false,
                     disableBtn: true,
                     countBtn: false,
@@ -143,7 +143,7 @@ export default {
                 {
                     id: 'linkedin-connect',
                     icon: "adminlib-linkedin",
-                    label: 'LinkedIn Connect',
+                    label: 'LinkedIn',
                     disableBtn: true,
                     countBtn: false,
                     desc: 'Connect and authenticate stores via LinkedIn accounts.',

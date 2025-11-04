@@ -11,19 +11,19 @@ export default {
         {
             key: 'seller_agreement',
             type: 'textarea',
-            label: __('Seller Agreement', 'multivendorx'),
+            label: __('Seller agreement', 'multivendorx'),
             desc: __('Define the agreement outlining seller obligations and responsibilities on your marketplace.', 'multivendorx'),
         },
         {
             key: 'terms_conditions',
             type: 'textarea',
-            label: __('Terms & Conditions', 'multivendorx'),
+            label: __('Terms & conditions', 'multivendorx'),
             desc: __('Specify general terms and conditions that govern participation and transactions.', 'multivendorx'),
         },
         {
             key: 'anti_counterfeit_policy',
             type: 'textarea',
-            label: __('Anti-Counterfeit / Copyright Declaration', 'multivendorx'),
+            label: __('Anti-Counterfeit / copyright declaration', 'multivendorx'),
             desc: __('Declare your store’s compliance with intellectual property and anti-counterfeit laws.', 'multivendorx'),
         },
         {

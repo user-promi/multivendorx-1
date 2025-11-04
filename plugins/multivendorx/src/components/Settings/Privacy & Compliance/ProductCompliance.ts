@@ -33,22 +33,22 @@ export default {
         {
             key: 'required_store_uploads',
             type: 'checkbox',
-            label: __('Required Store Uploads', 'mvx-pro'),
+            label: __('Required store uploads', 'mvx-pro'),
             desc: __('Select which documents or files stores must upload for compliance verification.', 'mvx-pro'),
             options: [
                 {
                     key: 'product_authenticity_certificates',
-                    label: __('Product Authenticity Certificates', 'mvx-pro'),
+                    label: __('Product authenticity certificates', 'mvx-pro'),
                     value: 'product_authenticity_certificates',
                 },
                 {
                     key: 'product_images_descriptions',
-                    label: __('Product Images & Descriptions', 'mvx-pro'),
+                    label: __('Product images & descriptions', 'mvx-pro'),
                     value: 'product_images_descriptions',
                 },
                 {
                     key: 'safety_certifications',
-                    label: __('Safety Certifications', 'mvx-pro'),
+                    label: __('Safety certifications', 'mvx-pro'),
                     value: 'safety_certifications',
                 },
             ],
