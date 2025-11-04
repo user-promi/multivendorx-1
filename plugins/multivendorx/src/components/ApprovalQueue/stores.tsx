@@ -22,7 +22,7 @@ export interface RealtimeFilter {
     render: (updateFilter: (key: string, value: any) => void, filterValue: any) => React.ReactNode;
 }
 
-const Vendors: React.FC = () => {
+const Stores: React.FC = () => {
     const [data, setData] = useState<StoreRow[] | null>(null);
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
     const [totalRows, setTotalRows] = useState<number>(0);
@@ -167,15 +167,15 @@ const Vendors: React.FC = () => {
         },
         {
             header: __('Status', 'multivendorx'),
-            cell: ({ row }) => 
-            <TableCell title={row.original.status || ''}>
-                {row.original.status === "active" && (
-                    <span className="admin-badge green">Active</span>
-                )}
-                {row.original.status === "pending" && (
-                    <span className="admin-badge yellow">Pending</span>
-                )}
-            </TableCell>,
+            cell: ({ row }) =>
+                <TableCell title={row.original.status || ''}>
+                    {row.original.status === "active" && (
+                        <span className="admin-badge green">Active</span>
+                    )}
+                    {row.original.status === "pending" && (
+                        <span className="admin-badge yellow">Pending</span>
+                    )}
+                </TableCell>,
         },
         {
             id: 'action',
@@ -212,6 +212,17 @@ const Vendors: React.FC = () => {
 
     return (
         <>
+            <div className="card-header">
+                <div className="left">
+                    <div className="title">
+                        Stores
+                    </div>
+                    <div className="des">Waiting for your response</div>
+                </div>
+                <div className="right">
+                    <i className="adminlib-more-vertical"></i>
+                </div>
+            </div>
             <div className="admin-table-wrapper">
                 <Table
                     data={data}
@@ -275,4 +286,4 @@ const Vendors: React.FC = () => {
     );
 };
 
-export default Vendors;
+export default Stores;
