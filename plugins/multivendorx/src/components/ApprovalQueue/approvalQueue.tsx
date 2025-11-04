@@ -1,4 +1,4 @@
-import { AdminBreadcrumbs, getApiLink } from 'zyra';
+import { AdminBreadcrumbs, getApiLink, useModules } from 'zyra';
 import Products from './products';
 import Coupons from './coupon';
 import { useEffect, useState } from 'react';
@@ -6,7 +6,6 @@ import axios from 'axios';
 import Stores from './stores';
 import ReportAbuseTable from './pendingAbuseReports';
 import WithdrawalRequests from './withdrawalRequests';
-import RefundRequest from './refundRequest';
 import StoreOrders from './StoreOrders';
 
 const ApprovalQueue = () => {
@@ -15,9 +14,9 @@ const ApprovalQueue = () => {
     const [transactionCount, setTransactionCount] = useState<number>(0);
     const [storeCount, setStoreCount] = useState<number>(0);
     const [refundCount, setRefundCount] = useState(0);
-
+    const { modules } = useModules.getState();
     const [activeTab, setActiveTab] = useState("");
-
+    const settings = appLocalizer.settings_databases_value || {};
 
     const refreshCounts = () => {
         axios({
@@ -74,12 +73,9 @@ const ApprovalQueue = () => {
             .catch(() => {
                 setRefundCount(0);
             });
-
-
-
-
     };
 
+    console.log(appLocalizer.settings_databases_value)
     const tabs = [
         {
             id: "stores",
@@ -87,37 +83,34 @@ const ApprovalQueue = () => {
             icon: "adminlib-calendar yellow",
             count: 9,
             des: "Awaiting verification check",
+            condition: settings?.general?.approve_store === "manually",
             content: <Stores onUpdated={refreshCounts} />
-
         },
         {
             id: "products",
             label: "Products",
             icon: "adminlib-calendar red",
             des: "Eager to join the marketplace",
-            count: productCount,
+            condition: settings?.["store-capability"]?.products?.includes("publish_products"),            count: productCount,
             content: <Products onUpdated={refreshCounts} />
-
         },
         {
             id: "coupons",
             label: "Coupons",
             icon: "adminlib-calendar green",
             count: couponCount,
+            condition: settings?.["store-capability"]?.coupons?.includes("publish_coupons"),
             des: "Requested deactivation",
             content: <Coupons onUpdated={refreshCounts} />
-
         },
         {
             id: "wholesale-customer",
             label: "Customers",
             icon: "adminlib-calendar yellow",
+            module: "wholesale",
             des: "Ready to become wholesalers",
             count: 9,
-            content:
-                <h1>
-                    Upcoming Feature
-                </h1>
+            content: <h1>Upcoming Feature</h1>
         },
         {
             id: "refund-requests",
@@ -126,28 +119,33 @@ const ApprovalQueue = () => {
             icon: "adminlib-calendar blue",
             des: "Need your decision",
             count: refundCount,
-            // content: <RefundRequest onUpdated={refreshCounts} />
             content: <StoreOrders onUpdated={refreshCounts} />
         },
         {
             id: "report-abuse",
             label: "Product Abuse",
+            module: "marketplace-compliance",
             icon: "adminlib-calendar blue",
             count: productCount,
             des: "Waiting to be published",
             content: <ReportAbuseTable onUpdated={refreshCounts} />
-
         },
         {
             id: "withdrawal",
             label: "Withdrawals",
             icon: "adminlib-calendar blue",
             des: "Queued for disbursement",
+            condition: settings?.disbursement?.withdraw_type === "manually",
             count: transactionCount,
             content: <WithdrawalRequests onUpdated={refreshCounts} />
-
         },
-    ];
+    ].filter(
+        (tab) =>
+            //Show if:
+            (!tab.module || modules.includes(tab.module)) && // module active or not required
+            (tab.condition === undefined || tab.condition)   // condition true or not set
+    );
+    
 
 
     useEffect(() => {
