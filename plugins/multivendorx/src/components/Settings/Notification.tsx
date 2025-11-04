@@ -269,10 +269,10 @@ const Notification: React.FC = () => {
                                         <div className="details">
                                             <div className="title">
                                                 {notif.event}
-                                                <span className="admin-badge yellow"> {notif.tag} </span>
+                                                <span className="admin-badge yellow"><i className="adminlib-follow-store"></i> {notif.tag} </span>
                                                 <span className="admin-badge blue"> {notif.category} </span>
                                             </div>
-                                            <div className="description">{notif.description}</div>
+                                            {/* <div className="description">{notif.description}</div> */}
                                         </div>
                                     </div>
                                 </td>

@@ -693,7 +693,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                 case 'time':
                     input = (
                         <BasicInput
-                            wrapperClass={inputField.wrapperClass || 'setting-form-input"'}
+                            wrapperClass={inputField.wrapperClass || 'setting-form-input'}
                             descClass="settings-metabox-description"
                             description={inputField.desc}
                             key={inputField.key}

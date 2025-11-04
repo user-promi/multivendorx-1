@@ -433,7 +433,7 @@ const Tabs: React.FC<TabsProps> = ({
         action={action}
       />
 
-      <div className="general-wrapper bg-wrapper">
+      <div className="general-wrapper">
         {HeaderSection && <HeaderSection />}
         <div className="middle-child-container">
           {menuStack.length > 1 && (
