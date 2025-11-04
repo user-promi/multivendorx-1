@@ -101,18 +101,19 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({ open, onClose, commissi
                 const mapped: OrderItem[] = order.line_items.map((item: any) => {
                   const subtotal = parseFloat(item.subtotal || "0");
                   const total = parseFloat(item.total || "0");
-                  const discount = subtotal > total
-                    ? `-${appLocalizer.currency_symbol}${(subtotal - total).toFixed(2)}`
-                    : undefined;
+                 const discount = subtotal > total
+                      ? `-${formatCurrency(subtotal - total)}`
+                      : undefined;
+
 
                   return {
                     id: item.product_id,
                     name: item.name,
                     sku: item.sku || "-",
-                    cost: `${appLocalizer.currency_symbol}${item.price}`,
+                    cost: formatCurrency(item.price),
                     discount,
                     qty: item.quantity,
-                    total: `${appLocalizer.currency_symbol}${item.total}`,
+                    total: formatCurrency(item.total),
                   };
                 });
                 setOrderItems(mapped);

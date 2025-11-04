@@ -4,6 +4,7 @@ import { __ } from "@wordpress/i18n";
 import { CalendarInput, getApiLink, Table, TableCell } from "zyra";
 import { ColumnDef, PaginationState } from "@tanstack/react-table";
 import TransactionDetailsModal from "./TransactionDetailsModal";
+import {formatCurrency} from '../services/commonFunction';
 
 type TransactionRow = {
     id: number;
@@ -221,7 +222,7 @@ const Transactions: React.FC = () => {
                         {credit ? (
                             <>
                                 {iconClass && <i className={iconClass}></i>}
-                                {`${appLocalizer.currency_symbol}${credit}`}
+                                {formatCurrency(credit)}
                             </>
                         ) : (
                             '-'
@@ -260,7 +261,7 @@ const Transactions: React.FC = () => {
                         {debit ? (
                             <>
                                 {iconClass && <i className={iconClass}></i>}
-                                {`${appLocalizer.currency_symbol}${debit}`}
+                                {formatCurrency(debit)}
                             </>
                         ) : (
                             '-'
@@ -299,7 +300,7 @@ const Transactions: React.FC = () => {
                         {balance ? (
                             <>
                                 {iconClass && <i className={iconClass}></i>}
-                                {`${appLocalizer.currency_symbol}${balance}`}
+                                {formatCurrency(balance)}
                             </>
                         ) : (
                             '-'
