@@ -206,7 +206,7 @@ const PaymentSettings = ({ id, data }: { id: string|null; data: any }) => {
 			<div className="container-wrapper">
 				<div className="card-wrapper w-65">
 					<div className="card-content">
-						<div className="card-title">Withdrawal Methods</div>
+						<div className="card-title">Withdrawal methods</div>
 						<div className="form-group-wrapper">
 							<div className="form-group">
 								<ToggleSetting
@@ -280,7 +280,7 @@ const PaymentSettings = ({ id, data }: { id: string|null; data: any }) => {
 				<div className="card-wrapper w-35">
 					<div className="card-content">
 						<div className="card-title">
-							Store-specific Commission
+							Store-specific commission
 						</div>
 						<BlockText
                             blockTextClass="settings-metabox-note"

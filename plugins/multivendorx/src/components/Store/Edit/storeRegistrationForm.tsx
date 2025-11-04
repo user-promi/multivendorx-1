@@ -76,7 +76,7 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 			<div className="container-wrapper">
 				<div className="card-wrapper w-65">
 					<div className="card-content">
-						<div className="card-title">Store Details</div>
+						<div className="card-title">Store details</div>
 
 						{/* Core Data */}
 						{formData.core_data &&
