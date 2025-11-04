@@ -94,9 +94,9 @@ export default {
         {
             key: 'payment_schedules',
             type: 'setting-toggle',
-            label: __('Payout frequency', 'multivendorx'),
-            settingDescription: __("Decide how often store commissions are released.", 'multivendorx'),
-            desc: __("<ul><li>If Manual is selected, stores handle withdrawals themselves from their dashboard.</li><li>Otherwise, commissions are automatically disbursed to stores based on the chosen schedule.</li></ul>", 'multivendorx'),
+            label: __('Automatic payout frequency', 'multivendorx'),
+            settingDescription: __("Define how and when store earnings are automatically released from their wallet.", 'multivendorx'),
+            desc: __("<ul><li>If Manual is selected, stores must request payouts manually from their dashboard.</li><li>Otherwise, commissions are automatically disbursed to stores based on the chosen schedule.</li></ul>", 'multivendorx'),
             options: [
                 {
                     key: 'mannual',
@@ -308,8 +308,8 @@ export default {
         {
             key: 'withdraw_type',
             type: 'setting-toggle',
-            label: __('Withdrawal approval', 'multivendorx'),
-            settingDescription: __("Choose whether withdrawal requests are auto-approved or require admin review.", 'multivendorx'),
+            label: __('Payout request approval', 'multivendorx'),
+            settingDescription: __("Control how payout requests are handled when stores initiate withdrawals manually.", 'multivendorx'),
             desc: __(
                 '<ul><li>Automatic - All withdrawal requests are automatically approved and paid when requested, if the payment method is Stripe or PayPal.</li><li>Manual: Admin must review and approve each request.</li></ul>',
                 'multivendorx'
