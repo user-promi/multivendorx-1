@@ -447,7 +447,7 @@ export default {
             icon: 'adminlib-marketplace-compliance',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/marketplace-memberhsip',
             settings_link: '${appLocalizer.settings_page_url}non-compliance',
-            pro_module: true,
+            // pro_module: true,
             category: 'marketplace_boosters'
         }, {
             id: 'marketplace-membership',

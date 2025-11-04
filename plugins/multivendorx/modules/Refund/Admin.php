@@ -74,7 +74,7 @@ class Admin {
             <label for="additional_massage"><?php _e( 'Please Provide Some Reason', 'multivendorx' ); ?></label>
             <textarea class="woocommerce-Input input-text" name="refund_admin_reason_text" id="refund_admin_reason_text"></textarea>
         </div>
-        <button type="submit" class="button cust-refund-status button-default" name="" value="<?php echo __('Update status', 'multivendorx'); ?>"><?php echo __('Update status', 'multivendorx'); ?></button>
+        <button type="submit" class="button cust-refund-status button-default" name="cust_refund_status" value="<?php echo __('Update status', 'multivendorx'); ?>"><?php echo __('Update status', 'multivendorx'); ?></button>
         <script>
             function refund_admin_reason(val){
                 var element = document.getElementById('reason_select_by_admin');
@@ -87,43 +87,10 @@ class Admin {
         <?php
     }
 
-    // public function mvx_order_customer_refund_images( $order ) {
-    //     $image_ids = $order->get_meta( '_customer_refund_product_img_ids', true );
-    
-    //     if ( empty( $image_ids ) ) {
-    //         echo '<p>' . esc_html__( 'No refund imacust_refund_statusges uploaded by the customer.', 'multivendorx' ) . '</p>';
-    //         return;
-    //     }
-    
-    //     // Enqueue WordPress built-in lightbox
-    //     add_thickbox();
-    
-    //     echo '<div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">';
-    
-    //     foreach ( $image_ids as $attachment_id ) {
-    //         $thumb_url = wp_get_attachment_image_url( $attachment_id, 'thumbnail' );
-    //         $full_url  = wp_get_attachment_url( $attachment_id );
-    
-    //         if ( $thumb_url && $full_url ) {
-    //             printf(
-    //                 '<a href="%s" class="thickbox" rel="refund-images">
-    //                     <img src="%s" style="width:4.375rem;height:4.375rem;object-fit:cover;border-radius:0.25rem;" />
-    //                 </a>',
-    //                 esc_url( $full_url ),
-    //                 esc_url( $thumb_url )
-    //             );
-    //         }
-    //     }
-    
-    //     echo '</div>';
-    // }
-    
-    
     public function mvx_refund_order_status_save( $order_id ){
         $order = wc_get_order( $order_id );
         if( empty( $order_id ) || ( $order_id && $order->get_type() != 'shop_order' )) return;
         if( $order->get_parent_id() == 0 ) return;
-
         if( !isset( $_POST['cust_refund_status'] ) ) return $order_id;
         if( isset( $_POST['refund_order_customer'] ) && $_POST['refund_order_customer'] ) {
             $order->update_meta_data('_customer_refund_order', wc_clean( wp_unslash( $_POST['refund_order_customer'] ) ) );

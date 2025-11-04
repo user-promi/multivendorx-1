@@ -131,10 +131,10 @@ class Modules {
 						'module_file'  => MultiVendorX()->plugin_path . 'modules/FollowStore/Module.php',
 						'module_class' => 'MultiVendorX\FollowStore\Module',
 					),
-                    'report-abuse' => array(
-                        'id'           => 'report-abuse',
-						'module_file'  => MultiVendorX()->plugin_path . 'modules/ReportAbuse/Module.php',
-						'module_class' => 'MultiVendorX\ReportAbuse\Module',
+                    'marketplace-compliance' => array(
+                        'id'           => 'marketplace-compliance',
+						'module_file'  => MultiVendorX()->plugin_path . 'modules/Compliance/Module.php',
+						'module_class' => 'MultiVendorX\Compliance\Module',
 					),
                     'geo-location'=> array(
                         'id'=> 'geo-location',

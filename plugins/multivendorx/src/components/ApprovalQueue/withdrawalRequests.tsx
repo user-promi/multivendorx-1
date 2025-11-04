@@ -34,7 +34,7 @@ const WithdrawalRequests: React.FC = () => {
             method: 'GET',
             url: getApiLink(appLocalizer, 'store'),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            params: { count: true },
+            params: { count: true, pending_withdraw: true },
         })
             .then((response) => {
                 setTotalRows(response.data || 0);
@@ -51,15 +51,15 @@ const WithdrawalRequests: React.FC = () => {
         requestData(rowsPerPage, currentPage);
         setPageCount(Math.ceil(totalRows / rowsPerPage));
     }, [pagination]);
-    const [ showDropdown, setShowDropdown ] = useState( false );
-    
-        const toggleDropdown = ( id: any ) => {
-            if ( showDropdown === id ) {
-                setShowDropdown( false );
-                return;
-            }
-            setShowDropdown( id );
-        };
+    const [showDropdown, setShowDropdown] = useState(false);
+
+    const toggleDropdown = (id: any) => {
+        if (showDropdown === id) {
+            setShowDropdown(false);
+            return;
+        }
+        setShowDropdown(id);
+    };
     // Fetch data from backend.
     function requestData(
         rowsPerPage = 10,
@@ -71,14 +71,16 @@ const WithdrawalRequests: React.FC = () => {
             url: getApiLink(appLocalizer, 'store'),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
             params: {
+                pending_withdraw: true,
                 page: currentPage,
                 row: rowsPerPage,
             },
         })
             .then((response) => {
-                console.log(response.data)
-                setData(response.data.transaction || []);
+                console.log(response.data);
+                setData(Array.isArray(response.data) ? response.data : []);
             })
+
             .catch(() => {
                 setData([]);
             });
@@ -95,7 +97,19 @@ const WithdrawalRequests: React.FC = () => {
             currentPage,
         );
     };
+    const handleSingleAction = (action:string,row:any) => {
+        let storeId = row.id;
+        if (!storeId) return;
 
+        axios({
+            method: 'PUT',
+            url: getApiLink(appLocalizer, `transaction/${storeId}`),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            data: { withdraw :true,action, },
+        })
+            .then(() => requestData(pagination.pageSize, pagination.pageIndex + 1))
+            .catch(console.error);
+    };
     // Column definitions
     const columns: ColumnDef<StoreRow>[] = [
         {
@@ -140,51 +154,45 @@ const WithdrawalRequests: React.FC = () => {
             ),
         },
         {
-            header: __('Action', 'multivendorx'),
+            header: __('Withdraw Amount', 'multivendorx'),
             cell: ({ row }) => (
-                <TableCell title="Action">
-                    <div className="action-section">
-                        <div className="action-icons">
-                            <i
-                                className="adminlib-more-vertical"
-                                onClick={() =>
-                                    toggleDropdown(row.original.order_id)
-                                }
-                            ></i>
-                            <div
-                                className={`action-dropdown ${showDropdown === row.original.order_id
-                                        ? 'show'
-                                        : ''
-                                    }`}
-                            >
-                        <ul>
-                            <li
-                                onClick={() =>
-                                    (window.location.href = `?page=multivendorx#&tab=stores&view&id=${row.original.id}`)
-                                }
-                            >
-                                <i className="adminlib-eye"></i>
-                                { __( 'View Store', 'multivendorx' ) }
-                            </li>
-                            <li
-                                onClick={() =>
-                                    (window.location.href = `?page=multivendorx#&tab=stores&edit/${row.original.id}`)
-                                }
-                            >
-                                <i className="adminlib-create"></i>
-                                { __( 'Edit Store', 'multivendorx' ) }
-                            </li>
-                        </ul>
-                        </div>
-                        </div>
-                    </div>
+                <TableCell title={row.original.withdraw_amount || ''}>
+                    {row.original.withdraw_amount || '-'}
                 </TableCell>
             ),
-        }
+        },
+        {
+            id: 'action',
+            header: __('Action', 'multivendorx'),
+            cell: ({ row }) => (
+                <TableCell
+                    type="action-dropdown"
+                    rowData={row.original}
+                    header={{
+                        actions: [
+                            { label: __('Approve', 'multivendorx'), icon: 'adminlib-check', onClick: (row:any) => handleSingleAction('approve', row), hover: true },
+                            { label: __('Reject', 'multivendorx'), icon: 'adminlib-close', onClick: (row:any) => handleSingleAction('reject', row), hover: true },
+                        ],
+                    }}
+                />
+            ),
+        },
     ];
+
 
     return (
         <>
+            <div className="card-header">
+                <div className="left">
+                    <div className="title">
+                        Withdrawals
+                    </div>
+                    <div className="des">Waiting for your response</div>
+                </div>
+                <div className="right">
+                    <i className="adminlib-more-vertical"></i>
+                </div>
+            </div>
             <div className="admin-table-wrapper">
                 <Table
                     data={data}

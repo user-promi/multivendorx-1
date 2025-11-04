@@ -4,7 +4,7 @@ import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 import { getApiLink, Table, TableCell, CommonPopup, TextArea, CalendarInput } from 'zyra';
 import { ColumnDef, RowSelectionState, PaginationState } from '@tanstack/react-table';
-import {formatCurrency} from '../../services/commonFunction';
+import { formatCurrency } from '../../services/commonFunction';
 
 type CouponRow = {
     id?: number;
@@ -203,61 +203,75 @@ const Coupons: React.FC = () => {
 
 
     return (
-        <div className="admin-table-wrapper">
-            <Table
-                data={data}
-                columns={columns as ColumnDef<Record<string, any>, any>[]}
-                rowSelection={rowSelection}
-                onRowSelectionChange={setRowSelection}
-                defaultRowsPerPage={10}
-                pageCount={pageCount}
-                pagination={pagination}
-                onPaginationChange={setPagination}
-                handlePagination={requestApiForData}
-                perPageOption={[10, 25, 50]}
-                typeCounts={[]}
-                totalCounts={totalRows}
-                realtimeFilter={realtimeFilter}
-            />
-
-            {/* Reject Coupon Popup */}
-            {rejectPopupOpen && (
-                <CommonPopup
-                    open={rejectPopupOpen}
-                    onClose={() => { setRejectPopupOpen(false); setRejectReason(''); setIsSubmitting(false); }}
-                    width="500px"
-                    header={
-                        <>
-                            <div className="title"><i className="adminlib-cart"></i>{__('Reason', 'multivendorx')}</div>
-                            <i onClick={() => { setRejectPopupOpen(false); setRejectReason(''); setIsSubmitting(false); }} className="icon adminlib-close"></i>
-                        </>
-                    }
-                    footer={
-                        <>
-                            <div className="admin-btn btn-red" onClick={() => { setRejectPopupOpen(false); setRejectReason(''); setIsSubmitting(false); }}>{__('Cancel', 'multivendorx')}</div>
-                            <button className="admin-btn btn-purple" onClick={submitReject} disabled={isSubmitting}>
-                                {isSubmitting ? __('Submitting...', 'multivendorx') : __('Reject', 'multivendorx')}
-                            </button>
-                        </>
-                    }
-                >
-                    <div className="content">
-                        <div className="form-group">
-                            <TextArea
-                                name="reject_reason"
-                                wrapperClass="setting-from-textarea"
-                                inputClass="textarea-input"
-                                descClass="settings-metabox-description"
-                                value={rejectReason}
-                                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setRejectReason(e.target.value)}
-                                placeholder="Enter reason for rejecting this coupon..."
-                                rows={4}
-                            />
-                        </div>
+        <>
+            <div className="card-header">
+                <div className="left">
+                    <div className="title">
+                        Coupons
                     </div>
-                </CommonPopup>
-            )}
-        </div>
+                    <div className="des">Waiting for your response</div>
+                </div>
+                <div className="right">
+                    <i className="adminlib-more-vertical"></i>
+                </div>
+            </div>
+            <div className="admin-table-wrapper">
+                <Table
+                    data={data}
+                    columns={columns as ColumnDef<Record<string, any>, any>[]}
+                    rowSelection={rowSelection}
+                    onRowSelectionChange={setRowSelection}
+                    defaultRowsPerPage={10}
+                    pageCount={pageCount}
+                    pagination={pagination}
+                    onPaginationChange={setPagination}
+                    handlePagination={requestApiForData}
+                    perPageOption={[10, 25, 50]}
+                    typeCounts={[]}
+                    totalCounts={totalRows}
+                    realtimeFilter={realtimeFilter}
+                />
+
+                {/* Reject Coupon Popup */}
+                {rejectPopupOpen && (
+                    <CommonPopup
+                        open={rejectPopupOpen}
+                        onClose={() => { setRejectPopupOpen(false); setRejectReason(''); setIsSubmitting(false); }}
+                        width="500px"
+                        header={
+                            <>
+                                <div className="title"><i className="adminlib-cart"></i>{__('Reason', 'multivendorx')}</div>
+                                <i onClick={() => { setRejectPopupOpen(false); setRejectReason(''); setIsSubmitting(false); }} className="icon adminlib-close"></i>
+                            </>
+                        }
+                        footer={
+                            <>
+                                <div className="admin-btn btn-red" onClick={() => { setRejectPopupOpen(false); setRejectReason(''); setIsSubmitting(false); }}>{__('Cancel', 'multivendorx')}</div>
+                                <button className="admin-btn btn-purple" onClick={submitReject} disabled={isSubmitting}>
+                                    {isSubmitting ? __('Submitting...', 'multivendorx') : __('Reject', 'multivendorx')}
+                                </button>
+                            </>
+                        }
+                    >
+                        <div className="content">
+                            <div className="form-group">
+                                <TextArea
+                                    name="reject_reason"
+                                    wrapperClass="setting-from-textarea"
+                                    inputClass="textarea-input"
+                                    descClass="settings-metabox-description"
+                                    value={rejectReason}
+                                    onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setRejectReason(e.target.value)}
+                                    placeholder="Enter reason for rejecting this coupon..."
+                                    rows={4}
+                                />
+                            </div>
+                        </div>
+                    </CommonPopup>
+                )}
+            </div>
+        </>
+
     );
 };
 

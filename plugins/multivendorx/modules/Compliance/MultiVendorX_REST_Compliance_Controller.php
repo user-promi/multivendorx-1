@@ -1,11 +1,11 @@
 <?php
 
-namespace MultiVendorX\ReportAbuse;
-use MultiVendorX\ReportAbuse\Util;
+namespace MultiVendorX\Compliance;
+use MultiVendorX\Compliance\Util;
 
 defined('ABSPATH') || exit;
 
-class MultiVendorX_REST_Report_Abuse_Controller extends \WP_REST_Controller {
+class MultiVendorX_REST_Compliance_Controller extends \WP_REST_Controller {
 
 	/**
 	 * Route base.
