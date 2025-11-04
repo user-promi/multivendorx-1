@@ -27,67 +27,27 @@ export default {
             desc: __('Declare your store’s compliance with intellectual property and anti-counterfeit laws.', 'multivendorx'),
         },
         {
-            key: 'separator_legal_compliance',
-            type: 'section',
-            hint: __('Legal Compliance Settings', 'multivendorx'),
-            desc: __('Manage how stores view, download, and acknowledge your platform’s compliance documents.', 'multivendorx')
-        },
-        {
-            key: 'allow_download_upload',
-            label: __('Allow store to download and re-upload legal documents', 'multivendorx'),
-            settingDescription: __('Let stores download each compliance document (Seller Agreement, Terms & Conditions, Anti-Counterfeit Declaration) as a PDF. Stores can sign and re-upload the signed copies to confirm acceptance.', 'multivendorx'),
-            desc: __('If disabled, stores can only read and accept the agreements directly within their dashboard.', 'multivendorx'),
-            type: 'checkbox',
-            options: [
-                {
-                    key: 'allow_download_upload',
-                    value: 'allow_download_upload',
-                },
-            ],
-            look: 'toggle',
-        },
-        {
-            key: 'allow_download_only',
-            label: __('Allow download only', 'multivendorx'),
-            settingDescription: __('Permit stores to download legal documents as PDF without requiring signed uploads.', 'multivendorx'),
-            desc: __('Useful when you want stores to read documents offline but not upload any files.', 'multivendorx'),
-            type: 'checkbox',
+            key: 'legal_document_handling',
+            type: 'setting-toggle',
+            label: __('Legal document handling', 'multivendorx'),
+            settingDescription: __('Control how stores interact with legal document templates. Choose whether stores can only access the pre-defined templates or are allowed to upload their customized versions.', 'multivendorx'),
+            desc: __(
+                '<li><strong>Download only</strong> – Stores can view and download compliance documents (like Seller Agreement, Terms & Conditions, Anti-Counterfeit Declaration) as PDF for offline reading. No upload or acknowledgment required.</li>' +
+                '<li><strong>Download and re-upload</strong> – Stores can download, sign, and re-upload signed copies as proof of acceptance. This ensures verified consent for all legal and policy agreements.</li>',
+                'multivendorx'
+            ),
             options: [
                 {
                     key: 'allow_download_only',
+                    label: __('Download only', 'multivendorx'),
                     value: 'allow_download_only',
                 },
-            ],
-            look: 'toggle',
-        },
-        {
-            key: 'require_signed_upload',
-            label: __('Require signed upload before approval', 'multivendorx'),
-            settingDescription: __('Force stores to upload signed versions before being marked as compliant.', 'multivendorx'),
-            desc: __('Ensures every store formally acknowledges and agrees to your platform’s legal terms.', 'multivendorx'),
-            type: 'checkbox',
-            options: [
                 {
-                    key: 'require_signed_upload',
-                    value: 'require_signed_upload',
+                    key: 'allow_download_upload',
+                    label: __('Download and re-upload', 'multivendorx'),
+                    value: 'allow_download_upload',
                 },
             ],
-            look: 'toggle',
-        },
-        {
-            key: 'auto_timestamp_pdf',
-            label: __('Auto-generate timestamped PDF copy', 'multivendorx'),
-            settingDescription: __('Automatically create a timestamped copy of each agreement when downloaded.', 'multivendorx'),
-            desc: __('The generated copy will be stored for administrative reference.', 'multivendorx'),
-            type: 'checkbox',
-            options: [
-                {
-                    key: 'auto_timestamp_pdf',
-                    value: 'auto_timestamp_pdf',
-                },
-            ],
-            look: 'toggle',
-        },
-
+        }
     ],
 };
