@@ -8,6 +8,7 @@ import {
     RowSelectionState,
     PaginationState,
 } from '@tanstack/react-table';
+import {formatCurrency} from '../../services/commonFunction';
 
 type StoreRow = {
     id?: number;
@@ -205,7 +206,6 @@ const StoreTable: React.FC = () => {
                             onClick={(rowData) => {
                                  window.location.href = `?page=multivendorx#&tab=stores&edit/${rowData.id}`;
                             }}
-                            
                             className="product-wrapper"
                         >
                             {row.original.image ? (
@@ -255,7 +255,7 @@ const StoreTable: React.FC = () => {
             cell: ({ row }: any) => (
                 <TableCell title={row.original.commission.total_order_amount || ''}>
                     {row.original.commission?.total_order_amount
-                        ? `${appLocalizer.currency_symbol}${row.original.commission.total_order_amount}`
+                        ? formatCurrency(row.original.commission.total_order_amount)
                         : '-'}
                 </TableCell>
             ),

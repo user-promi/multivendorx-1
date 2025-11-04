@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { __ } from '@wordpress/i18n';
 import { CalendarInput, getApiLink, Table, TableCell } from 'zyra';
 import axios from 'axios';
+import {formatCurrency} from '../../services/commonFunction';
 
 export interface RealtimeFilter {
   name: string;
@@ -151,8 +152,7 @@ const RefundedOrderOld: React.FC = () => {
       header: __('Refund Amount', 'multivendorx'),
       cell: ({ row }: any) => (
         <TableCell title={row.original.amount || ''}>
-          {appLocalizer.currency_symbol}
-          {row.original.amount || '-'}
+          {formatCurrency(row.original.amount)}
         </TableCell>
       ),
     },

@@ -4,6 +4,7 @@ import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 import { Table, getApiLink, TableCell } from 'zyra';
 import { ColumnDef, RowSelectionState, PaginationState } from '@tanstack/react-table';
+import {formatCurrency} from '../../services/commonFunction';
 
 type TransactionRow = {
     id: number;
@@ -118,7 +119,7 @@ const Transactions: React.FC = () => {
             header: __('Requested Amount', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell>
-                    {`${appLocalizer.currency_symbol}${Number(row.original.withdraw_amount).toFixed(2)}`}
+                    {formatCurrency(row.original.withdraw_amount)}
                 </TableCell>
             ),
         },

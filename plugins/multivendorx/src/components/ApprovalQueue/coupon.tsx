@@ -4,6 +4,7 @@ import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 import { getApiLink, Table, TableCell, CommonPopup, TextArea, CalendarInput } from 'zyra';
 import { ColumnDef, RowSelectionState, PaginationState } from '@tanstack/react-table';
+import {formatCurrency} from '../../services/commonFunction';
 
 type CouponRow = {
     id?: number;
@@ -156,7 +157,7 @@ const Coupons: React.FC = () => {
             header: __('Coupon Amount', 'multivendorx'),
             accessorFn: (row) => parseFloat(row.amount || '0'), // sorting numeric
             enableSorting: true,
-            cell: ({ row }) => <TableCell title={row.original?.amount ?? '-'}>{appLocalizer.currency_symbol}{row.original?.amount ?? '-'}</TableCell>
+            cell: ({ row }) => <TableCell title={row.original?.amount ?? '-'}>{formatCurrency(row.original?.amount)}</TableCell>
         },
         {
             header: __('Duration', 'multivendorx'),

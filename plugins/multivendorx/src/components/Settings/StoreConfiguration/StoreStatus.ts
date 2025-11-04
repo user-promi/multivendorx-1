@@ -18,7 +18,7 @@ export default {
             desc: __('Control how stores behave at different stages of their lifecycle. These settings determine what sellers can do and what customers see based on each stores approval status.', 'multivendorx')
         },
         {
-            key: 'store_compliance_management',
+            key: 'store_status_management',
             type: 'payment-tabs',
             modal: [
                 {
@@ -45,8 +45,9 @@ export default {
                             ],
                         },
                         {
-                            key: 'pending_description',
-                            label: 'Message shown to pending stores: Your store is awaiting approval and will be activated soon.',
+                            key: 'pending_msg',
+                            label: 'Message shown to pending stores:',
+                            type: 'text',
                             des: 'What pending stores can do',
                         },
                     ],
@@ -60,7 +61,7 @@ export default {
                     desc: 'The application was rejected during onboarding. Sellers can log in to view the rejection reason and reapply with updated information but cannot sell or modify store details.',
                     formFields: [
                         {
-                            key: 'pending_description',
+                            key: 'declined_description',
                             type: 'description',
                             //des: 'The store is awaiting approval. Sellers can log in to their dashboard but cannot configure settings, add products, or begin selling until approved.',
                         },
@@ -76,7 +77,7 @@ export default {
                             ],
                         },
                         {
-                            key: 'pending_description',
+                            key: 'declined_msg',
                             label: 'Message shown to declined stores',
                             des: 'What pending stores can do',
                         },
@@ -91,7 +92,7 @@ export default {
                     desc: 'The store is temporarily restricted while the platform reviews compliance or documentation. Selling and payouts may be paused until the review is complete.',
                     formFields: [
                         {
-                            key: 'pending_description',
+                            key: 'review_description',
                             type: 'description',
                             //des: 'The store is awaiting approval. Sellers can log in to their dashboard but cannot configure settings, add products, or begin selling until approved.',
                         },
@@ -114,8 +115,8 @@ export default {
                             des: 'Prevent stores from listing new products during review. Existing listings stay active unless selling is disabled.',
                         },
                         {
-                            key: 'pending_description',
-                            label: 'Message shown to stores under review: Your store is under review. Sales and payouts are temporarily paused.',
+                            key: 'review_msg',
+                            label: 'Message shown to stores under review:',
                             des: 'What pending stores can do',
                         },
                     ],
@@ -129,7 +130,7 @@ export default {
                     desc: 'The store’s selling privileges are revoked due to policy or compliance violations. Listings are hidden or disabled, and payments are held until reactivation or successful appeal.',
                     formFields: [
                         {
-                            key: 'pending_description',
+                            key: 'suspended_description',
                             type: 'description',
                             des: 'The store is awaiting approval. Sellers can log in to their dashboard but cannot configure settings, add products, or begin selling until approved.',
                         },
@@ -146,8 +147,8 @@ export default {
                             des: 'Holds all earnings during suspension. Funds are released only after reinstatement or successful appeal.',
                         },
                         {
-                            key: 'pending_description',
-                            label: 'Message shown to suspended stores: Your store is suspended due to a policy issue. Contact support to resolve it.',
+                            key: 'suspended_msg',
+                            label: 'Message shown to suspended stores:',
                             des: 'What pending stores can do',
                         },
                     ],
@@ -161,7 +162,7 @@ export default {
                     desc: 'Stores are fully approved and operational. They can manage products, orders, and payouts without restrictions.',
                     formFields: [
                         {
-                            key: 'pending_description',
+                            key: 'active_description',
                             type: 'description',
                             des: 'The store is awaiting approval. Sellers can log in to their dashboard but cannot configure settings, add products, or begin selling until approved.',
                         },
@@ -174,8 +175,8 @@ export default {
                             hideCheckbox: true,
                         },
                         {
-                            key: 'pending_description',
-                            label: 'Message shown to active stores: Your store is live and ready for business.',
+                            key: 'active_msg',
+                            label: 'Message shown to active stores:',
                             des: 'What pending stores can do',
                         },
                     ],
@@ -189,12 +190,12 @@ export default {
                     desc: 'Stores that are permanently closed, either by admin action or upon store owner’s request.Once deactivated, the store loses all access to dashboard, storefront, and selling privileges.',
                     formFields: [
                         {
-                            key: 'pending_description',
+                            key: 'deactivated_description',
                             type: 'description',
                             des: 'The store is awaiting approval. Sellers can log in to their dashboard but cannot configure settings, add products, or begin selling until approved.',
                         },
                         {
-                            key: 'denied_permissions',
+                            key: 'deactivated_permissions',
                             type: 'check-list',
                             options: [
                                 { desc: __('Log in to dashboard', 'multivendorx'), check: false },
@@ -205,8 +206,8 @@ export default {
                             ],
                         },
                         {
-                            key: 'pending_description',
-                            label: 'Message shown to deactivated stores: Your store has been closed. Access and selling privileges are disabled.',
+                            key: 'deactivated_msg',
+                            label: 'Message shown to deactivated stores:',
                             des: 'What pending stores can do',
                         },
                     ],
