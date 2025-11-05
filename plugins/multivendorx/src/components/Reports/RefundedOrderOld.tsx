@@ -324,18 +324,6 @@ const RefundedOrderOld: React.FC = () => {
   ];
 
   return (
-    <div className="row">
-      <div className="column">
-        <div className="card-header">
-          <div className="left">
-            <div className="title">
-              {__('Revenue Distribution', 'multivendorx')}
-            </div>
-            <div className="des">
-              {__('Total Orders:', 'multivendorx')}
-            </div>
-          </div>
-        </div>
         <Table
           data={data}
           columns={columns as any}
@@ -351,9 +339,6 @@ const RefundedOrderOld: React.FC = () => {
           perPageOption={[10, 25, 50]}
           totalCounts={totalRows}
         />
-        {error && <div className="error-message">{error}</div>}
-      </div>
-    </div>
   );
 };
 

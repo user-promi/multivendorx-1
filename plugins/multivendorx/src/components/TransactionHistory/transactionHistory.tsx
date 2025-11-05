@@ -6,7 +6,7 @@ import TransactionHistoryTable from './walletTransaction';
 import TransactionDataTable from './transactionDataTable';
 import { AdminBreadcrumbs, CalendarInput, getApiLink, SelectInput, CommonPopup, BasicInput, TextArea, ToggleSetting } from 'zyra';
 import axios from 'axios';
-import {formatCurrency} from '../../services/commonFunction';
+import { formatCurrency } from '../../services/commonFunction';
 
 export const TransactionHistory: React.FC = () => {
     const [data, setData] = useState<any[]>([]);
@@ -155,11 +155,13 @@ export const TransactionHistory: React.FC = () => {
         {
             id: "products",
             label: "Wallet transaction",
+            icon: "adminlib-store-analytics",
             content: <TransactionHistoryTable storeId={selectedStore?.value} dateRange={dateRange} />
         },
         {
             id: "stores",
             label: "Direct transaction",
+            icon: "adminlib-calendar",
             content: <TransactionDataTable storeId={selectedStore?.value} dateRange={dateRange} />
         },
     ];
@@ -196,8 +198,40 @@ export const TransactionHistory: React.FC = () => {
             />
 
             <div className="general-wrapper">
+                {/* Tab Titles */}
+                <div className="tab-titles">
+                    {tabs.map((tab) => (
+                        <div
+                            key={tab.id}
+                            className={`title ${activeTab === tab.id ? "active" : ""}`}
+                            onClick={() => setActiveTab(tab.id)}
+                        >
+                            <i className={`icon ${tab.icon}`}></i><p>{tab.label}</p>
+                        </div>
+                    ))}
+                </div>
                 <div className="row">
-                    <div className="column">
+                    <div className="col w-35">
+                        <div className="data-card-wrapper">
+                            <div className="data-card">
+                                <div className="title">Available balance</div>
+                                <div className="number">{formatCurrency(data.wallet_balance)} <i className="adminlib-dollar"></i></div>
+                            </div>
+                            <div className="data-card">
+                                <div className="title">Reserve balance</div>
+                                <div className="number">{formatCurrency(data.reserve_balance)} <i className="adminlib-bank"></i></div>
+                            </div>
+                            <div className="data-card">
+                                <div className="title">Locked balance</div>
+                                <div className="number">{formatCurrency(data.locking_balance)} <i className="adminlib-home "></i></div>
+                            </div>
+                            <div className="data-card">
+                                <div className="title">Available balance</div>
+                                <div className="number">{formatCurrency(data.wallet_balance)} <i className="adminlib-cart blue"></i></div>
+                            </div>                          
+                        </div>
+                    </div>
+                    <div className="column w-65">
                         <div className="card-header">
                             <div className="left">
                                 <div className="title">
@@ -233,47 +267,7 @@ export const TransactionHistory: React.FC = () => {
                         </div>
 
                     </div>
-                    <div className="column">
-                        <div className="card-header">
-                            <div className="left">
-                                <div className="title">
-                                    Wallet details
-                                </div>
-                            </div>
-                        </div>
-                        <div className="card-body">
-                            <div className="analytics-container">
 
-                                <div className="analytics-item">
-                                    <div className="analytics-icon">
-                                        <i className="adminlib-cart red"></i>
-                                    </div>
-                                    <div className="details">
-                                        <div className="number">{formatCurrency(data.wallet_balance)}</div>
-                                        <div className="text">Available balance</div>
-                                    </div>
-                                </div>
-                                <div className="analytics-item">
-                                    <div className="analytics-icon">
-                                        <i className="adminlib-cart green"></i>
-                                    </div>
-                                    <div className="details">
-                                        <div className="number">{formatCurrency(data.reserve_balance)}</div>
-                                        <div className="text">Reserve balance</div>
-                                    </div>
-                                </div>
-                                <div className="analytics-item">
-                                    <div className="analytics-icon">
-                                        <i className="adminlib-cart yellow"></i>
-                                    </div>
-                                    <div className="details">
-                                        <div className="number">{formatCurrency(data.locking_balance)}</div>
-                                        <div className="text">Locked balance</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 {requestWithdrawal && (
                     <CommonPopup
@@ -346,11 +340,22 @@ export const TransactionHistory: React.FC = () => {
                         </div>
                     </CommonPopup>
                 )}
-                <div className="row">
+
+                <div className="tab-content">
+                    {tabs.map(
+                        (tab) =>
+                            activeTab === tab.id && (
+                                <div key={tab.id} className="tab-panel">
+                                    {tab.content}
+                                </div>
+                            )
+                    )}
+                </div>
+                {/* <div className="row">
                     <div className="column">
                         <div className="card-header">
-                            <div className="left">
-                                <div className="tab-titles">
+                            <div className="left"> */}
+                {/* <div className="tab-titles">
                                     {tabs.map((tab) => (
                                         <div
                                             key={tab.id}
@@ -360,32 +365,21 @@ export const TransactionHistory: React.FC = () => {
                                             <p><i className="adminlib-cart"></i>{tab.label}</p>
                                         </div>
                                     ))}
-                                </div>
-                            </div>
-                            <div className="right">
-                                <CalendarInput
+                                </div> */}
+                {/* </div>
+                            <div className="right"> */}
+                {/* <CalendarInput
                                     wrapperClass=""
                                     inputClass=""
                                     showLabel={true}
                                     onChange={(range: any) => {
                                         setDateRange({ startDate: range.startDate, endDate: range.endDate });
                                     }}
-                                />
-                            </div>
-                        </div>
-
-                        <div className="tab-content">
-                            {tabs.map(
-                                (tab) =>
-                                    activeTab === tab.id && (
-                                        <div key={tab.id} className="tab-panel">
-                                            {tab.content}
-                                        </div>
-                                    )
-                            )}
+                                /> */}
+                {/* </div>
                         </div>
                     </div>
-                </div>
+                </div> */}
             </div>
         </>
     );

@@ -212,21 +212,46 @@ const Products: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
             </TableCell>,
         },
         {
-            id: 'action',
             header: __('Action', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell
-                    type="action-dropdown"
-                    rowData={row.original}
-                    header={{
-                        actions: [
-                            { label: __('Approve', 'multivendorx'), icon: 'adminlib-check', onClick: (rowData) => handleSingleAction('approve_product', rowData.id!), hover: true },
-                            { label: __('Reject', 'multivendorx'), icon: 'adminlib-close', onClick: (rowData) => handleSingleAction('reject_product', rowData.id!), hover: true },
-                        ],
-                    }}
-                />
-            ),
+            id: 'action',
+            cell: ({ row }) =>
+                <TableCell title={row.original.status || ''}>
+                    <div className="action-section">
+                        <ul className='small-action'>
+                            <li
+                                className="hover icon-green"
+                                onClick={() => handleSingleAction('approve_product', rowData.id!)}
+                            >
+                                <i className="adminlib-check"></i>
+                                <span>Approve</span>
+                            </li>
+
+                            <li className="hover icon-red" onClick={() => handleSingleAction('reject_product', rowData.id!)}
+                            >
+                                <i className="adminlib-close"></i>
+                                <span>Reject</span>
+                            </li>
+                        </ul>
+
+                    </div>
+                </TableCell>,
         },
+        // {
+        //     id: 'action',
+        //     header: __('Action', 'multivendorx'),
+        //     cell: ({ row }) => (
+        //         <TableCell
+        //             type="action-dropdown"
+        //             rowData={row.original}
+        //             header={{
+        //                 actions: [
+        //                     { label: __('Approve', 'multivendorx'), icon: 'adminlib-check', onClick: (rowData) => handleSingleAction('approve_product', rowData.id!), hover: true },
+        //                     { label: __('Reject', 'multivendorx'), icon: 'adminlib-close', onClick: (rowData) => handleSingleAction('reject_product', rowData.id!), hover: true },
+        //                 ],
+        //             }}
+        //         />
+        //     ),
+        // },
     ];
 
     const realtimeFilter: RealtimeFilter[] = [
@@ -246,17 +271,6 @@ const Products: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
 
     return (
         <>
-            <div className="card-header">
-                <div className="left">
-                    <div className="title">
-                        Products
-                    </div>
-                    <div className="des">Waiting for your response</div>
-                </div>
-                <div className="right">
-                    <i className="adminlib-more-vertical"></i>
-                </div>
-            </div>
             <Table
                 data={data}
                 columns={columns as ColumnDef<Record<string, any>, any>[]}

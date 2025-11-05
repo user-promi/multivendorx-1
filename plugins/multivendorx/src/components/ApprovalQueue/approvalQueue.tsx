@@ -91,7 +91,7 @@ const ApprovalQueue = () => {
             label: "Products",
             icon: "adminlib-calendar red",
             des: "Eager to join the marketplace",
-            condition: settings?.["store-capability"]?.products?.includes("publish_products"),            count: productCount,
+            condition: settings?.["store-capability"]?.products?.includes("publish_products"), count: productCount,
             content: <Products onUpdated={refreshCounts} />
         },
         {
@@ -145,7 +145,7 @@ const ApprovalQueue = () => {
             (!tab.module || modules.includes(tab.module)) && // module active or not required
             (tab.condition === undefined || tab.condition)   // condition true or not set
     );
-    
+
 
 
     useEffect(() => {
@@ -171,24 +171,30 @@ const ApprovalQueue = () => {
             <div className="general-wrapper">
                 <div className="row ">
                     {/* Tab Titles */}
-                    <div className="column admin-tab">
-                        
+                    <div className="overview-card-wrapper tab">
+                        {tabs.map((tab) => (
+                            <div className={`tab-action ${activeTab === tab.id ? "active" : ""}`} key={tab.id} onClick={() => setActiveTab(tab.id)}>
+                                <div className="details-wrapper">
+                                    <i className={`${tab.icon}`}></i>
+                                    <div className="title"><span>{tab.count} </span>{tab.label}</div>
+                                </div>
+                                <div className="description">
+                                    {tab.des}
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 </div>
-                <div className="row">
-                    <div className="column">
-                        {/* Tab Content */}
-                        <div className="tab-content">
-                            {tabs.map(
-                                (tab) =>
-                                    activeTab === tab.id && (
-                                        <div key={tab.id} className="tab-panel">
-                                            {tab.content}
-                                        </div>
-                                    )
-                            )}
-                        </div>
-                    </div>
+                {/* Tab Content */}
+                <div className="tab-content">
+                    {tabs.map(
+                        (tab) =>
+                            activeTab === tab.id && (
+                                <div key={tab.id} className="tab-panel">
+                                    {tab.content}
+                                </div>
+                            )
+                    )}
                 </div>
 
             </div>

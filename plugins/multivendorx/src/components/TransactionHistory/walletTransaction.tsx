@@ -255,7 +255,7 @@ const ExportAllTransactionCSVButton: React.FC<{
         <button
             onClick={handleExportAll}
             disabled={isDownloading || !storeId}
-            className="admin-btn btn-purple"
+            className="admin-btn btn-purple-bg"
         >
             <span className="adminlib-export"></span>
             Export All CSV
@@ -655,7 +655,7 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
 
     return (
         <>
-            <div className="analytics-container wallet">
+            {/* <div className="analytics-container wallet">
                 {overview.map((item, idx) => (
                     <div key={idx} className="analytics-item">
                         <div className="analytics-icon">
@@ -667,7 +667,7 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                         </div>
                     </div>
                 ))}
-            </div>
+            </div> */}
             <div className="admin-table-wrapper">
                 <Table
                     data={data}

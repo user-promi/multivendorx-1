@@ -293,18 +293,18 @@ const StoreOrders: React.FC = () => {
   ];
 
   return (
-    <div className="row">
-      <div className="column">
-        <div className="card-header">
-          <div className="left">
-            <div className="title">
-              {__('Revenue Distribution', 'multivendorx')}
-            </div>
-            <div className="des">
-              {__('Total Orders:', 'multivendorx')} {totalRows}
-            </div>
-          </div>
-        </div>
+    // <div className="row">
+    //   <div className="column">
+    //     <div className="card-header">
+    //       <div className="left">
+    //         <div className="title">
+    //           {__('Revenue Distribution', 'multivendorx')}
+    //         </div>
+    //         <div className="des">
+    //           {__('Total Orders:', 'multivendorx')} {totalRows}
+    //         </div>
+    //       </div>
+    //     </div>
 
         <Table
           data={data}
@@ -321,8 +321,8 @@ const StoreOrders: React.FC = () => {
           searchFilter={searchFilter}
           totalCounts={totalRows}
         />
-      </div>
-    </div>
+    //   </div>
+    // </div>
   );
 };
 

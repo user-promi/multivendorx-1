@@ -178,21 +178,46 @@ const Stores: React.FC = () => {
                 </TableCell>,
         },
         {
-            id: 'action',
             header: __('Action', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell
-                    type="action-dropdown"
-                    rowData={row.original}
-                    header={{
-                        actions: [
-                            { label: __('Approve', 'multivendorx'), icon: 'adminlib-check', onClick: (rowData) => handleSingleAction('active', rowData.id!), hover: true },
-                            { label: __('Reject', 'multivendorx'), icon: 'adminlib-close', onClick: (rowData) => handleSingleAction('declined', rowData.id!), hover: true },
-                        ],
-                    }}
-                />
-            ),
+            id: 'action',
+            cell: ({ row }) =>
+                <TableCell title={row.original.status || ''}>
+                    <div className="action-section">
+                        <ul className='small-action'>
+                            <li
+                                className="hover icon-green"
+                                onClick={() => handleSingleAction('active', rowData.id!)}
+                            >
+                                <i className="adminlib-check"></i>
+                                <span>Approve</span>
+                            </li>
+
+                            <li className="hover icon-red" onClick={() => handleSingleAction('declined', rowData.id!)}
+                            >
+                                <i className="adminlib-close"></i>
+                                <span>Reject</span>
+                            </li>
+                        </ul>
+
+                    </div>
+                </TableCell>,
         },
+        // {
+        //     id: 'action',
+        //     header: __('Action', 'multivendorx'),
+        //     cell: ({ row }) => (
+        //         <TableCell
+        //             type="action-dropdown"
+        //             rowData={row.original}
+        //             header={{
+        //                 actions: [
+        //                     { label: __('Approve', 'multivendorx'), icon: 'adminlib-check', onClick: (rowData) => handleSingleAction('active', rowData.id!), hover: true },
+        //                     { label: __('Reject', 'multivendorx'), icon: 'adminlib-close', onClick: (rowData) => handleSingleAction('declined', rowData.id!), hover: true },
+        //                 ],
+        //             }}
+        //         />
+        //     ),
+        // },
     ];
 
     const realtimeFilter: RealtimeFilter[] = [
@@ -212,17 +237,6 @@ const Stores: React.FC = () => {
 
     return (
         <>
-            <div className="card-header">
-                <div className="left">
-                    <div className="title">
-                        Stores
-                    </div>
-                    <div className="des">Waiting for your response</div>
-                </div>
-                <div className="right">
-                    <i className="adminlib-more-vertical"></i>
-                </div>
-            </div>
             <div className="admin-table-wrapper">
                 <Table
                     data={data}
