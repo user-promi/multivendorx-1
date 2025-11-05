@@ -92,8 +92,12 @@ const Policy = () => {
 
                     </div>
                     <div className="card-content">
-                        <div className="card-title">
-                            Refund Policy
+                        <div className="card-header">
+                            <div className="left">
+                                <div className="title">
+                                    Refund Policy
+                                </div>
+                            </div>
                         </div>
 
                         <div className="form-group-wrapper">

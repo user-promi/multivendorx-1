@@ -64,10 +64,13 @@ const PolicySettings = ({ id, data }: { id: string | null; data: any }) => {
 			<div className="container-wrapper">
 				<div className="card-wrapper w-65">
 					<div className="card-content">
-						<div className="card-title">
-							Shipping policy
-						</div>
-
+						<div className="card-header">
+                            <div className="left">
+                                <div className="title">
+                                    Shipping policy
+                                </div>
+                            </div>
+                        </div>
 						<div className="form-group-wrapper">
 							<div className="form-group">
 								<TextArea name="shipping_policy" wrapperClass="setting-from-textarea"
@@ -83,9 +86,13 @@ const PolicySettings = ({ id, data }: { id: string | null; data: any }) => {
 
 					</div>
 					<div className="card-content">
-						<div className="card-title">
-							Refund policy
-						</div>
+						<div className="card-header">
+                            <div className="left">
+                                <div className="title">
+                                    Refund policy
+                                </div>
+                            </div>
+                        </div>
 
 						<div className="form-group-wrapper">
 							<div className="form-group">
@@ -102,10 +109,13 @@ const PolicySettings = ({ id, data }: { id: string | null; data: any }) => {
 
 					</div>
 					<div className="card-content">
-						<div className="card-title">
-							Cancellation/Return/Exchange policy
-						</div>
-
+						<div className="card-header">
+                            <div className="left">
+                                <div className="title">
+                                    Cancellation/Return/Exchange policy
+                                </div>
+                            </div>
+                        </div>
 						<div className="form-group-wrapper">
 							<div className="form-group">
 								<TextArea name="exchange_policy" wrapperClass="setting-from-textarea"

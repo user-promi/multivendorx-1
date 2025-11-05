@@ -221,7 +221,7 @@ const StoreTable: React.FC = () => {
                                 <span className="title">
                                     {row.original.store_name || '-'}
                                 </span>
-                                <span>
+                                <span className="des">
                                     Since {formattedDate}
                                 </span>
                             </div>
@@ -411,7 +411,7 @@ const StoreTable: React.FC = () => {
     ];
 
     return (
-        <div className="general-wrapper bg-wrapper">
+        <div className="general-wrapper">
             <div className="admin-table-wrapper">
                 {error && (
                     <div className="error-notice">

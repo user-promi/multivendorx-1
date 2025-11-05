@@ -213,9 +213,10 @@
 
 .title-section {
   margin: 0 1rem;
-  padding: 1.5rem;
-  background: #fff;
+  padding: 1.5rem 0;
+  // background: #fff;
   border-radius: 0.313rem;
+  border-bottom: $border-light-small;
 
   .title-wrapper {
     font-weight: 500;
@@ -248,8 +249,8 @@
   }
 
   .description {
-    border-bottom: 0.063rem solid #e0e4e9;
-    padding: 0.625rem 0;
+    // border-bottom: 0.063rem solid #e0e4e9;
+    // padding: 0.625rem 0;
     padding-top: 0;
   }
 
@@ -295,7 +296,7 @@
   // padding-top: 0.5rem;
   display: flex;
   justify-content: space-between;
-  border-bottom: 0.063rem solid #e0e4e9;
+  // border-bottom: 0.063rem solid #e0e4e9;
 
   .pro-btn {
     color: #e35047;
@@ -385,9 +386,15 @@
   }
 }
 
+.tab-content:has(.tab-bg) {
+  .divider-wrapper {
+    background: transparent;
+  }
+}
+
 .tabs-wrapper {
   // width: 100%;
-  background: #fff;
+  // background: #fff;
 
   .brand {
     padding: 2rem 0 1.5rem;
@@ -574,32 +581,40 @@
 
 
 // section divider start
-.divider-section {
-  padding: 1rem 0;
-  border-bottom: $border-light-small;
+.divider-wrapper {
+  margin-top: 1rem;
+  background: #fff;
+  width: 100%;
 
-  .title {
-    font-size: 1.15rem;
-    width: auto;
-  }
+  .divider-section {
+    margin: 0 1rem;
+    border-bottom: $border-light-small;
+    padding: 1rem 0;
 
-  span {
-    font-size: 1rem;
-    font-weight: 500;
-  }
 
-  &.color-red{
-    color: red;
-    background: #ff00000d;
+    .title {
+      font-size: 1.15rem;
+      width: auto;
+    }
+
+    span {
+      font-size: 1rem;
+      font-weight: 500;
+    }
+
+    &.color-red {
+      color: red;
+      background: #ff00000d;
+    }
   }
 }
 
-.divider-section:first-child {
+.divider-wrapper:first-child {
   // padding: 1.5rem 0;
   // margin: 0 2rem;
 }
 
-.divider-section:not(:first-child) {
+.divider-wrapper:not(:first-child) {
   width: 100%;
 }
 

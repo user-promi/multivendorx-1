@@ -1,7 +1,7 @@
 @use '../../global.scss' as *;
 
 .dynamic-fields-wrapper {
-  padding-top: 2rem;
+  // padding-top: 2rem;
 
   .dynamic-form {
     display: flex;
@@ -9,11 +9,13 @@
     justify-content: space-between;
 
     .form-group {
-      margin: 1.25rem 0;
+      // margin: 1.25rem 0;
       display: flex;
       align-items: flex-start;
       gap: 1rem;
       width: 100%;
+      background: #fff;
+      padding: 1rem ;
 
       .settings-form-label {
         width: 22%;
@@ -27,7 +29,7 @@
       }
 
       &.width-50 {
-        width: 49%;
+        width: 47%;
       }
 
       &.vertical {
@@ -47,19 +49,21 @@
     .form-group.pro-setting {
       background: #e3504705;
       border: 0.063rem solid #6a2e2b1f;
-      padding: 1rem 0;
+      // padding: 1rem 0;
       position: relative;
       border-left: 0;
       border-right: 0;
+      margin-top: 1rem;
     }
     .form-group.module-enabled {
       background: #d9f5f059;
       border: 0.063rem solid #6a2e2b1f;
-      padding: 1rem 0;
+      // padding: 1rem 0;
       position: relative;
       border-left: 0;
       border-right: 0;
       box-shadow: -0.313rem 0 0 0 #d9f5f059, 0.313rem 0 0 0 #d9f5f059;
+      margin-top: 1rem;
 
       .adminlib-lock{
         color: blue;

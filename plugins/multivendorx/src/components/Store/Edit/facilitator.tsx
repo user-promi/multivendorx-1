@@ -82,9 +82,13 @@ return (
 
                 <div className="card-wrapper w-35">
 					<div className="card-content">
-						<div className="card-title">
-							Facilitator payout share
-						</div>
+                        <div className="card-header">
+                            <div className="left">
+                                <div className="title">
+                                     Facilitator payout share
+                                </div>
+                            </div>
+                        </div>
 						<div className="form-group-wrapper">
 							<div className="form-group">
 								<label htmlFor="product-name">Fixed</label>

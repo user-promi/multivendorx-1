@@ -260,7 +260,7 @@ const Modules: React.FC<ModuleProps> = ({
                     <h2>Modules</h2>
                 </div> */}
 
-                <div className="category-filter">
+                <div className="filter-wrapper">
                     {/* <div className="module-status-filter">
                         <button
                             className={`filter-button ${selectedFilter === 'Total' ? 'active' : ''}`}
@@ -297,7 +297,7 @@ const Modules: React.FC<ModuleProps> = ({
                                 <span
                                     key={category.id}
                                     id={category.id}
-                                    className={`category-item ${selectedCategory === category.id ? 'active' : ''}`}
+                                    className={`filter-item ${selectedCategory === category.id ? 'active' : ''}`}
                                     onClick={() => setSelectedCategory(category.id)}
                                 >
                                     {category.label}

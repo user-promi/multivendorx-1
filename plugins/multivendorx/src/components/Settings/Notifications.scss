@@ -1,7 +1,7 @@
 @use '../config.scss' as *;
 
 .notification-container {
-    padding: 1rem 0;
+    padding-top: 2rem;
     position: relative;
 
 
@@ -39,11 +39,11 @@
                 transition: all 0.4s ease;
 
                 &:nth-child(odd) {
-                    background: $background-color;
+                    // background: $background-color;
                 }
 
                 &:hover {
-                    background: #ece2f98f;
+                    // background: #ece2f98f;
                 }
 
                 td {
@@ -182,12 +182,15 @@
     .view-toggle {
         display: flex;
         justify-content: space-between;
-        margin-bottom: 1.125rem;
+        margin-bottom: 1.813rem;
         align-items: center;
 
         .category-item {
             background: $theme-background-color;
         }
+    }
+    .tabs-wrapper{
+        margin: 0 !important;
     }
 }
 
@@ -206,6 +209,7 @@
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+        background: #fff;
 
         .title-wrapper {
             border-bottom: $border-light-small;

@@ -495,7 +495,7 @@ const Table: React.FC<TableProps> = ({
         <>
             {(typeCounts?.length > 0 || searchFilter) && (
                 <div className="admin-top-filter">
-                    <div className="admin-table-wrapper-filter">
+                    <div className="filter-wrapper">
 
                         {typeCounts && typeCounts.length > 0 && (
                             <>
@@ -509,12 +509,12 @@ const Table: React.FC<TableProps> = ({
                                         }}
                                         className={
                                             countInfo.key === typeCountActive
-                                                ? 'type-count-active'
-                                                : ''
+                                                ? 'filter-item active'
+                                                : 'filter-item'
                                         }
                                     >
                                         {`${countInfo.name} (${countInfo.count})`}
-                                        {index !== typeCounts.length - 1 && ' |'}{' '}
+                                        {index !== typeCounts.length - 1 && ''}{' '}
                                     </div>
                                 ))}
                             </>

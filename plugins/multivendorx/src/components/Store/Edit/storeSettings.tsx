@@ -766,8 +766,12 @@ const StoreSettings = ({ id, data }: { id: string | null; data:any }) => {
                     </div> */}
 
                     <div className="card-content">
-                        <div className="card-title">
-                            Contact information
+                        <div className="card-header">
+                            <div className="left">
+                                <div className="title">
+                                     Contact information
+                                </div>
+                            </div>
                         </div>
 
 
@@ -825,8 +829,12 @@ const StoreSettings = ({ id, data }: { id: string | null; data:any }) => {
                     </div>
 
                     <div className="card-content">
-                        <div className="card-title">
-                            Communication address
+                        <div className="card-header">
+                            <div className="left">
+                                <div className="title">
+                                      Communication address
+                                </div>
+                            </div>
                         </div>
 
                         <div className="form-group-wrapper">
@@ -956,8 +964,12 @@ const StoreSettings = ({ id, data }: { id: string | null; data:any }) => {
 
                 <div className="card-wrapper w-35">
                     <div className="card-content">
-                        <div className="card-title">
-                            Manage store status
+                        <div className="card-header">
+                            <div className="left">
+                                <div className="title">
+                                      Manage store status
+                                </div>
+                            </div>
                         </div>
 
                         {/* Updated Email Section */}
@@ -983,7 +995,13 @@ const StoreSettings = ({ id, data }: { id: string | null; data:any }) => {
 
 
                     <div className="card-content">
-                        <div className="card-title">Social information</div>
+                        <div className="card-header">
+                            <div className="left">
+                                <div className="title">
+                                      Social information
+                                </div>
+                            </div>
+                        </div>
                         {/* Facebook */}
                         <div className="form-group-wrapper">
                             <div className="form-group">
