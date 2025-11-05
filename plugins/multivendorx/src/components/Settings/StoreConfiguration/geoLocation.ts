@@ -41,7 +41,7 @@ export default {
             defaulValue: 'google_map_set',
             label: __('Map provider', 'multivendorx'),
             settingDescription: __('Choose the service that powers your maps and location search.', 'multivendorx'),
-            desc: __('<ul><li>Google Maps - reliable and widely used, requires a Google API key.<li>Mapbox - customizable map provider, may also require an API key.</li></ul>', 'multivendorx'),
+            desc: __('<ul><li>Google Map - reliable and widely used, requires a Google API key.<li>Mapbox - customizable map provider, may also require an API key.</li></ul>', 'multivendorx'),
             options: [
                 {
                     key: 'google_map_set',
@@ -51,7 +51,7 @@ export default {
                 },
                 {
                     key: 'mapbox_api_set',
-                    label: __('Mapbox map', 'multivendorx'),
+                    label: __('Mapbox', 'multivendorx'),
                     value: __('mapbox_api_set', 'multivendorx'),
                     img: mapbox,
                 },

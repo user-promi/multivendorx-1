@@ -18,11 +18,13 @@ export default {
                 {
                     id: 'seller-verification',
                     icon: "adminlib-google",
-                    label: 'Seller Verification',
+                    label: 'Seller verification',
                     connected: true,
                     disableBtn: true,
                     enableOption: true,
                     desc: 'Verify store identity and business legitimacy',
+                    moduleEnabled: 'marketplace-compliance',
+                    proSetting: true,
                     formFields: [
                         {
                             key: 'enable_advertisement_in_subscription',
@@ -77,9 +79,11 @@ export default {
                 {
                     id: 'product-compliance',
                     icon: "adminlib-product",
-                    label: 'Product Compliance',
+                    label: 'Product compliance',
                     disableBtn: true,
                     desc: 'Ensure product listings meet marketplace standards',
+                    moduleEnabled: 'marketplace-compliance',
+                    proSetting: true,
                     formFields: [
                         {
                             key: 'prohibited_items_check',
@@ -141,7 +145,9 @@ export default {
                 {
                     id: 'legal-policy',
                     icon: "adminlib-verification3",
-                    label: 'Legal & Policy',
+                    label: 'Legal & policy',
+                    moduleEnabled: 'marketplace-compliance',
+                    proSetting: true,
                     disableBtn: true,
                     desc: 'Require acceptance of platform terms and policies',
                     formFields: [
@@ -205,8 +211,10 @@ export default {
                 {
                     id: 'financial-compliance',
                     icon: "adminlib-import",
-                    label: 'Financial Compliance',
+                    label: 'Financial compliance',
                     disableBtn: true,
+                    moduleEnabled: 'marketplace-compliance',
+                    proSetting: true,
                     // countBtn: true,
                     desc: 'Verify tax information and monitor transactions',
                     formFields: [
