@@ -1,6 +1,6 @@
 import { __ } from '@wordpress/i18n';
-const methods = appLocalizer?.all_payments
-    ? Object.entries(appLocalizer.all_payments).map(([_, value]) => value)
+const shippingMethods = appLocalizer?.all_shippings
+    ? Object.values(appLocalizer.all_shippings)
     : [];
 
 export default {
@@ -14,40 +14,13 @@ export default {
     submitUrl: 'settings',
     modal: [
         {
-            key: 'shipping_modules_overview',
+            key: 'shipping_modules',
             type: 'payment-tabs',
             label: __('Shipping methods available to stores ', 'multivendorx'),
             desc: __('See which shipping options your stores can offer to customers. Each method determines how shipping costs are calculated.', 'multivendorx'),
             buttonEnable: true,
             toggleType: 'icon',
-            modal: [
-                {
-                    id: 'zone-wise-shipping',
-                    icon: "adminlib-google",
-                    label: 'Zone based shipping',
-                    openForm: true,
-                    desc: 'Stores set different rates for different regions (like "East Coast" or "California").',
-                    formFields: [
-                        { key: 'client_id', type: 'description', label: 'Currently enabled zones', des: '<span class="admin-badge yellow">North America</span>  <span class="admin-badge blue">North America</span>  <span class="admin-badge yellow">North America</span>  <span class="admin-badge red">North America</span>' },
-                        { key: 'client_id', type: 'description', label: ' ', des: '<span class="admin-btn btn-purple"><i class="adminlib-plus-circle-o"></i>Add new Zone</span>' }
-                    ],
-                },
-                {
-                    id: 'country-wise-shipping',
-                    icon: "adminlib-twitter",
-                    label: 'Country-wise shipping',
-                    openForm: true,
-                    desc: 'Let store set specific shipping rates based on destination countries.',
-                },
-                {
-                    id: 'distance-based-shipping',
-                    icon: "adminlib-facebook",
-                    label: 'Distance-based shipping',
-                    openForm: true,
-                    desc: 'Calculate shipping costs based on actual distance between locations.',
-
-                },
-            ]
+            modal: shippingMethods
         },
 
         {

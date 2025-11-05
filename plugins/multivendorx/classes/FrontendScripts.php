@@ -485,6 +485,7 @@ class FrontendScripts {
                         'capabilities'             => StoreUtil::get_store_capability(),
                         'custom_roles'             => Roles::multivendorx_get_roles(),
                         'all_payments'             => MultiVendorX()->payments->get_all_payment_settings(),
+                        'all_shippings'            => apply_filters( 'multivendorx_get_all_shipping_methods',[]),
                         'all_store_settings'       => MultiVendorX()->payments->get_all_store_payment_settings(),
                         'freeVersion'              => MultiVendorX()->version,
                         'marketplace_site'         => get_bloginfo(),

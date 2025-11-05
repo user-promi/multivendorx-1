@@ -61,6 +61,7 @@ declare global {
         plugin_url:any;
         store_page_url:string;
         pro_data: any;
+        all_shippings:any;
     }
     interface Color{
         color: any;
