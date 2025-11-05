@@ -243,7 +243,7 @@ export default {
         },
         {
             key: 'taxable_shipping',
-            label: __('Enable taxable shipping', 'multivendorx'),
+            label: __('Tax on shipping', 'multivendorx'),
             settingDescription: __('Shipping charges will be treated as taxable items during checkout. Otherwise shipping costs will be tax-free.', 'multivendorx'),
             desc: __('', 'multivendorx'),
             type: 'checkbox',
@@ -294,7 +294,7 @@ export default {
                 'Define a fee to cover platform costs. Apply a fixed, percentage, or combined rate. Choose whether it’s paid by the customer at checkout or deducted from the store’s commission.',
                 'multivendorx'
             ),
-            desc: __('<ul><li><strong>Example 1 – Customer Pays the Fee:</strong> Fee: $2 + 10%. Product price: $100 → Customer pays $112. Store receives $100 (before commission or deductions).</li><li><strong>Example 2 – Store Pays the Fee:</strong> Fee: $2 + 10%. Product price: $100 → Customer pays $100. Store payout after deduction: $88.</li></ul>', 'multivendorx'),
+            desc: __('<ul><li><strong>When the fee is added to the customer’s order total:</strong>If the marketplace fee is $2 + 10% and the product price is $100 →  The <strong>customer pays $112</strong>.  The <strong>store receives $100</strong> (before commission or other deductions).</li><li><strong>When the fee is deducted from the store’s commission:</strong>  If the marketplace fee is $2 + 10% and the product price is $100 →  The <strong>customer pays $100</strong>.  The <strong>store receives $88</strong> after the marketplace fee is deducted.</li></ul>', 'multivendorx'),
             nestedFields: [
                 {
                     key: 'commission_fixed',
@@ -330,7 +330,8 @@ export default {
             label: 'Facilitator fees',
             single: true,
             settingDescription: __('Set the facilitator fee as a fixed amount, a percentage, or both, deducted from the store commission. Store-wise fees can also be configured from the store edit page.', 'multivendorx'),
-            desc: __('<ul><li>Admins can assign:</li><ul><li><strong>A global facilitator</strong> for the entire marketplace from <a href="#">here</a>.</li><li><strong>Individual facilitators</strong> for specific stores from the <em>Facilitator Settings</em> section or the <em>Store Edit</em> page.</li></ul><li><strong>Example:</strong> If a store earns $1000 commission and the facilitator fee is set to $50 + 5%, then the total facilitator fee = $50 + (5% of 1000) = $100, so the store receives $900 after facilitator deductions.</li></ul>', 'multivendorx'), nestedFields: [
+            desc: __(' <strong>Global facilitator:</strong> Assign a single facilitator for the entire marketplace from <a href="#">here</a>.<br><br> <strong>Individual facilitators:</strong> Set facilitators for specific stores from the <em>Facilitator Settings</em> section or the <em>Store Edit</em> page.<br><br> <strong>Example:</strong> If a store earns $1000 commission and the facilitator fee is $50 + 5%, then total facilitator fee = $50 + (5% of 1000) = $100 → the store receives $900 after facilitator deductions. ', 'multivendorx'),
+            nestedFields: [
                 {
                     key: 'facilitator_fixed',
                     type: 'number',

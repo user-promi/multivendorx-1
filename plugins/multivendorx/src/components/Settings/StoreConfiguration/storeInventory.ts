@@ -50,8 +50,6 @@ export default {
                         value: 'low_stock_alert',    // value that must be selected
                         set: true,                   // show when this value is selected
                     },
-                    moduleEnabled: 'store-inventory',
-                    proSetting: true,
                 },
             ],
         },
@@ -70,7 +68,9 @@ export default {
                             value: 'out_of_stock_alert',
                         },
                     ],
-                    look: 'toggle',
+                    look: 'toggle',                    
+                    moduleEnabled: 'store-inventory',
+                    proSetting: true,
                 },
                 {
                     key: 'out_of_stock_alert_threshold',

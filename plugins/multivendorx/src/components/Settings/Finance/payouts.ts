@@ -12,7 +12,7 @@ export default {
             type: 'blocktext',
             label: __( 'no_label', 'multivendorx' ),
             blocktext: __(
-                'From MultiVendorX 5.0.0, Wallet Support has been introduced. <b> Workflow: Customer makes a purchase ➝ Commission is credited to the store wallet ➝ Payout is released from the wallet based on the configured schedule.</b>',
+                'From MultiVendorX 5.0.0, Wallet Support has been introduced. <b> Workflow: Customer makes a purchase ➝ Commission is credited to the store wallet ➝ Payout is released from the wallet based on the configured payout frequency.</b>',
                 'multivendorx'
             ),
         },
@@ -308,10 +308,10 @@ export default {
         {
             key: 'withdraw_type',
             type: 'setting-toggle',
-            label: __('Payout request approval', 'multivendorx'),
+            label: __('Withdrawal request approval', 'multivendorx'),
             settingDescription: __("Control how payout requests are handled when stores initiate withdrawals manually.", 'multivendorx'),
             desc: __(
-                '<ul><li>Automatic - All withdrawal requests are automatically approved and paid when requested, if the payment method is Stripe or PayPal.</li><li>Manual: Admin must review and approve each request.</li></ul>',
+                '<ul><li>Automatic - All withdrawal requests are automatically approved and paid when requested, if the payment method is Stripe or PayPal.</li><li>Manual: Admin reviews and approves each withdrawal request before releasing funds..</li></ul>',
                 'multivendorx'
             ),
             options: [

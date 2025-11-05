@@ -11,7 +11,7 @@ export default {
         {
             key: 'financial_tax_required_uploads',
             type: 'checkbox',
-            label: __('Required Store Uploads', 'mvx-pro'),
+            label: __('Required store uploads', 'mvx-pro'),
             desc: __('Select which financial or tax-related documents stores must upload for compliance verification.', 'mvx-pro'),
             options: [
                 {
@@ -32,6 +32,8 @@ export default {
                     value: 'business_registration',
                     edit:true
                 },
+                moduleEnabled: 'marketplace-compliance',
+                proSetting: true,
             ],
             selectDeselect: true,
         },
