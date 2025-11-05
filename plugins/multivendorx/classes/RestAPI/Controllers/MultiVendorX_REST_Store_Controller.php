@@ -523,7 +523,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
     
         $registrations = $request->get_header( 'registrations' );
         $store_data    = $request->get_param('formData');
-    
+
         $current_user = wp_get_current_user();
     
         $core_fields = [ 'name', 'slug', 'description', 'who_created', 'status' ];
@@ -572,7 +572,11 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             $non_core_fields = [];
             foreach ( $store_data as $key => $value ) {
                 if ( ! in_array( $key, $core_fields, true ) && $key !== 'store_owners' ) {
-                    $non_core_fields[$key] = $value;
+                    if (in_array( $key, ['phone', 'paypal_email', 'address_1', 'address_2', 'city', 'state', 'country', 'postcode'], true )) {
+                        $store->update_meta( $key, $value );
+                    } else {
+                        $non_core_fields[$key] = $value;
+                    }
                 }
             }
     
