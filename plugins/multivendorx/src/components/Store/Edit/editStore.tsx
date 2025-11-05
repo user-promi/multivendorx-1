@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { FileInput, getApiLink, SelectInput, Tabs } from 'zyra';
+import { FileInput, getApiLink, SelectInput, Tabs, RadioInput, CommonPopup } from 'zyra';
 import { Skeleton } from '@mui/material';
 
 import StoreSettings from './storeSettings';
@@ -31,6 +31,7 @@ const EditStore = () => {
     const [actionMenu, setActionMenu] = useState(false);
     const [logoMenu, setLogoMenu] = useState(false);
     const [deleteModal, setDeleteModal] = useState(false);
+    const [deleteOption, setDeleteOption] = useState('');
     const wrapperRef = useRef<HTMLDivElement>(null);
     const [editInfo, setEditInfo] = useState(false);
 
@@ -133,25 +134,30 @@ const EditStore = () => {
     };
 
     const handleStoreDelete = () => {
-        console.log("Store delete clicked");
-
-        {data?.status == 'active' && (
-            setDeleteModal(true)
-        )}
-
-        // axios({
-        //     method: 'PUT',
-        //     url: getApiLink(appLocalizer, `store/${editId}`),
-        //     headers: { 'X-WP-Nonce': appLocalizer.nonce },
-        //     data: {'delete': true},
-        // }).then((res) => {
-        //     if (res.data.success) {
-        //         navigate(
-        //             `?page=multivendorx#&tab=stores`
-        //         );
-        //     }
-        // })
+        if (data?.status === 'active' || data?.status === 'under_review' || data?.status === 'suspended' || data?.status === 'deactivated') {
+            setDeleteModal(true);
+        } else {
+            deleteStoreApiCall('direct');
+        }
     };
+
+    const deleteStoreApiCall = (option) => {
+        axios({
+            method: 'PUT',
+            url: getApiLink(appLocalizer, `store/${editId}`),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            data: {
+                delete: true,
+                deleteOption: option,
+            },
+        }).then((res) => {
+            if (res.data.success) {
+                setDeleteModal(false);
+                navigate(`?page=multivendorx#&tab=stores`);
+            }
+        });
+    };
+
 
     const tabData = [
         {
@@ -235,10 +241,6 @@ const EditStore = () => {
             },
         },
     ];
-
-
-    // ✅ Filter tabData dynamically based on store status
-    // const storeStatus = data?.status;
 
     const visibleTabs =
         data?.status === 'pending' || data?.status === 'rejected' || data?.status === 'permanently_rejected'
@@ -615,13 +617,83 @@ const EditStore = () => {
                                         <li onClick={handleStoreDelete}><i className="adminlib-mail"></i> Store Delete</li>
                                     </ul>
                                 )}
-                                {/* {deleteModal && (
-                                    
-                                )} */}
                             </div>
                         </>
                     }
                 />
+
+                <CommonPopup
+                    open={deleteModal}
+                    onClose={setDeleteModal}
+                    width="500px"
+                    header={
+                        <>
+                            <div className="title">
+                                <i className="adminlib-cart"></i>
+                                Choose an Option
+                            </div>
+                            
+                        </>
+                    }
+                    footer={
+                        <>
+                            <button
+                                type="button" 
+                                onClick={() => setDeleteModal(false)}
+                                className="admin-btn btn-red"
+                            >
+                                Cancel
+                            </button>
+                            <button onClick={() => {
+                                        if (deleteOption) {
+                                            deleteStoreApiCall(deleteOption);
+                                        } else {
+                                            alert('Please choose an option first');
+                                        }
+                                    }} className="admin-btn btn-purple">
+                                Delete
+                            </button>
+                        </>
+                    }
+        
+                >
+                    <div className="content">
+                        <div className="form-group-wrapper">
+                            <div className="form-group">
+                                <RadioInput
+                                    wrapperClass="settings-form-group-radio"
+                                    inputWrapperClass="radio-basic-input-wrap"
+                                    inputClass="setting-form-input"
+                                    descClass="settings-metabox-description"
+                                    activeClass="radio-select-active"
+                                    name='store_delete_option'
+                                    keyName='store_delete_option'
+                                    options={[
+                                        // {
+                                        //     key: 'store_owner',
+                                        //     name: 'store_owner',
+                                        //     value: 'store_owner',
+                                        //     label: 'Store owner',
+                                        // },
+                                        {
+                                            key: 'product_assign_admin',
+                                            name: 'product_assign_admin',
+                                            value: 'product_assign_admin',
+                                            label: 'Product Assign to Admin',
+                                        },
+                                        {
+                                            key: 'permanent_delete',
+                                            name: 'permanent_delete',
+                                            value: 'permanent_delete',
+                                            label: 'Permanently Delete',
+                                        },
+                                    ]}
+                                    onChange={(e) => setDeleteOption(e.target.value)}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </CommonPopup>
             </div>
         </>
     );
