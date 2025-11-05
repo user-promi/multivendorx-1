@@ -689,14 +689,49 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
 
         $store = new \MultiVendorX\Store\Store( $id );
 
-        // if (!empty($data['delete'])) {
-        //     $delete_store = $store->delete_store_completely($id);
-        //     if ($delete_store) {
-        //         return rest_ensure_response([ 'success' => true ]);
-        //     } else {
-        //         unset($data['delete']);
-        //     }
-        // }
+        if ( ! empty( $data['delete'] ) ) {
+            $delete_option = isset( $data['deleteOption'] ) ? $data['deleteOption'] : '';
+
+            if ( in_array( $delete_option, array( 'direct', 'permanent_delete' ), true ) ) {
+                $delete_store = $store->delete_store_completely();
+
+                if ( $delete_store ) {
+                    return rest_ensure_response( [ 'success' => true ] );
+                }
+
+            } elseif ( $delete_option === 'product_assign_admin' ) {
+
+                $admins = get_users( array( 'role' => 'administrator', 'number' => 1 ) );
+                $admin_user_id = ! empty( $admins ) ? $admins[0]->ID : 1;
+
+                $products = wc_get_products( array(
+                    'limit'      => -1,
+                    'return'     => 'ids',
+                    'meta_key'   => 'multivendorx_store_id',
+                    'meta_value' => $id,
+                ) );
+
+                if ( ! empty( $products ) ) {
+                    foreach ( $products as $product_id ) {
+
+                        wp_update_post( array(
+                            'ID'          => $product_id,
+                            'post_author' => $admin_user_id,
+                        ) );
+
+                        delete_post_meta( $product_id, 'multivendorx_store_id' );
+                    }
+                }
+
+                $delete_store = $store->delete_store_completely();
+
+                return rest_ensure_response( [ 'success' => (bool) $delete_store ] );
+
+            } else {
+                unset( $data['delete'] );
+            }
+        }
+
         
         // Handle registration & core data
         if (!empty($data['registration_data']) || !empty($data['core_data'])) {
