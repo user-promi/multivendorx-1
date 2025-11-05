@@ -75,7 +75,7 @@ const CustomerServices = () => {
             id: "questions",
             label: "Questions",
             module: "question-answer",
-            icon: "adminlib-calendar",
+            icon: "adminlib-quote",
             des: "Waiting for your response",
             count: qnaCount,
             content: <Qna />
@@ -84,7 +84,7 @@ const CustomerServices = () => {
             id: "review",
             label: "Store Reviews",
             module: "store-review",
-            icon: "adminlib-calendar",
+            icon: "adminlib-store-review",
             count: storeReviewCount,
             des: "Shared by customers",
             content: <StoreReviews />
@@ -93,7 +93,7 @@ const CustomerServices = () => {
             id: "refund-requests",
             label: "Refund Requests",
             module: "marketplace-refund",
-            icon: "adminlib-calendar",
+            icon: "adminlib-follow-store",
             des: "Need your decision",
             count: refundCount,
             content: <RefundRequest />
@@ -101,7 +101,7 @@ const CustomerServices = () => {
         {
             id: "support-ticket",
             label: "Support Ticket",
-            icon: "adminlib-calendar",
+            icon: "adminlib-vacation",
             des: "Flagged for abuse review",
             count: abuseCount,
             content: <h1>Upcoming Feature</h1>,
@@ -128,19 +128,15 @@ const CustomerServices = () => {
                         </div>
                     ))}
                 </div>
-                <div className="row">
-                    <div className="column">
-                        <div className="tab-content">
-                            {tabs.map(
-                                (tab) =>
-                                    activeTab === tab.id && (
-                                        <div key={tab.id} className="tab-panel">
-                                            {tab.content}
-                                        </div>
-                                    )
-                            )}
-                        </div>
-                    </div>
+                <div className="tab-content">
+                    {tabs.map(
+                        (tab) =>
+                            activeTab === tab.id && (
+                                <div key={tab.id} className="tab-panel">
+                                    {tab.content}
+                                </div>
+                            )
+                    )}
                 </div>
             </div >
         </>

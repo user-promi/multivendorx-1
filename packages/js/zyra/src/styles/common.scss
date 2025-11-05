@@ -1,10 +1,11 @@
 @use '../global.scss' as *;
 @import 'https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap';
 
-body {
+body:has(.admin-main-wrapper) {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+  background: rgba(246, 248, 260, 0.5);
 }
 
 .sb-show-main {
@@ -27,9 +28,11 @@ a {
   /* for overwrite react components */
   outline: none;
 }
-body:has(.admin-main-wrapper){
+
+body:has(.admin-main-wrapper) {
   background: #f2f5fd8f;
 }
+
 #admin-main-wrapper {
   margin-left: -1.25rem;
   font-family: Figtree, sans-serif;
@@ -84,6 +87,7 @@ body:has(.admin-main-wrapper){
   background: $theme-background-color;
   color: $theme-color;
 }
+
 .btn-purple-bg {
   background: $theme-color;
   color: #fff;
@@ -400,10 +404,12 @@ input[type="radio"] {
   appearance: none;
   border-radius: 50%;
 }
-input[type="checkbox"]{
+
+input[type="checkbox"] {
   width: 1.125rem;
   height: 1.125rem;
 }
+
 input[type="checkbox"]:checked {
   border: none;
 }
@@ -1440,6 +1446,31 @@ input[type="checkbox"]:focus {
     &.active {
       background: $theme-color;
       color: #fff;
+    }
+  }
+}
+
+// tabs checklist style start
+.check-list {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+
+  li {
+    font-size: 1.063rem;
+    width: 50%;
+
+    i {
+      font-size: 1.125rem;
+      padding-right: 0.5rem;
+
+      &.check {
+        color: green;
+      }
+
+      &.close {
+        color: red;
+      }
     }
   }
 }

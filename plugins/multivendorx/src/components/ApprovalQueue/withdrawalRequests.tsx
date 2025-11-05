@@ -182,7 +182,7 @@ const WithdrawalRequests: React.FC = () => {
 
     return (
         <>
-            <div className="card-header">
+            {/* <div className="card-header">
                 <div className="left">
                     <div className="title">
                         Withdrawals
@@ -192,7 +192,7 @@ const WithdrawalRequests: React.FC = () => {
                 <div className="right">
                     <i className="adminlib-more-vertical"></i>
                 </div>
-            </div>
+            </div> */}
             <div className="admin-table-wrapper">
                 <Table
                     data={data}

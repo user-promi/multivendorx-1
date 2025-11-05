@@ -218,41 +218,6 @@
         margin-bottom: 1.313rem;
     }
 
-    .form-group-wrapper {
-        display: flex;
-        gap: 1rem;
-        align-items: end;
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-            margin-bottom: 1rem;
-
-            .button-wrapper {
-                display: flex;
-                justify-content: start;
-            }
-
-            label {
-                font-size: .875rem;
-                font-weight: 500;
-                color: #344357;
-                margin-bottom: .5rem;
-            }
-
-            i {
-                font-size: 1.125rem;
-                // color: #5007aa;
-
-                &.remove-btn {
-                    color: rgb(238, 8, 8);
-                    cursor: pointer;
-                }
-            }
-        }
-    }
-
     .form-details {
         display: flex;
         margin-bottom: 1rem;
@@ -293,6 +258,41 @@
 
 
 
+}
+
+.form-group-wrapper {
+    display: flex;
+    gap: 1rem;
+    align-items: end;
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        margin-bottom: 1rem;
+
+        .button-wrapper {
+            display: flex;
+            justify-content: start;
+        }
+
+        label {
+            font-size: .875rem;
+            font-weight: 500;
+            color: #344357;
+            margin-bottom: .5rem;
+        }
+
+        i {
+            font-size: 1.125rem;
+            // color: #5007aa;
+
+            &.remove-btn {
+                color: rgb(238, 8, 8);
+                cursor: pointer;
+            }
+        }
+    }
 }
 
 // card styles start
@@ -658,6 +658,20 @@
 
         .card-content {
             padding: 0;
+        }
+
+        .tab-content {
+            padding: 1.5rem;
+            box-sizing: border-box;
+
+            .divider-wrapper:first-child {
+                .divider-section {
+                    margin: 0;
+                    padding-top: 0;
+                    padding-bottom: .5rem;
+                    margin-bottom: 1rem;
+                }
+            }
         }
     }
 }

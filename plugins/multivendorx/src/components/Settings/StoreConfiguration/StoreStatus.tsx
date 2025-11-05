@@ -1,6 +1,13 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { BasicInput, TextArea, FileInput, SelectInput, SuccessNotice, getApiLink, Tabs } from 'zyra';
+import PendingApproval from './StoreStatus/PendingApproval';
+import Rejected from './StoreStatus/Rejected';
+import UnderReview from './StoreStatus/UnderReview';
+import PermanentlyRejected from './StoreStatus/PermanentlyRejected';
+import Active from './StoreStatus/Active';
+import Suspended from './StoreStatus/Suspended';
+import Deactivated from './StoreStatus/Deactivated';
 
 const StoreStatus = () => {
     const id = appLocalizer.store_id;
@@ -238,9 +245,49 @@ const StoreStatus = () => {
         {
             type: 'file',
             content: {
-                id: 'Permanently Rejected',
+                id: 'permanently-rejected',
                 name: 'Permanently Rejected',
                 desc: 'Permanently RejectedPermanently RejectedPermanently RejectedPermanently Rejected',
+                // hideTabHeader: true,
+                icon: 'form-address',
+            },
+        },
+        {
+            type: 'file',
+            content: {
+                id: 'active',
+                name: 'Active',
+                desc: 'Permanently RejectedPermanently RejectedPermanently RejectedPermanently Rejected',
+                // hideTabHeader: true,
+                icon: 'form-address',
+            },
+        },
+        {
+            type: 'file',
+            content: {
+                id: 'under-review',
+                name: 'Under Review',
+                desc: 'Under ReviewUnder ReviewUnder ReviewUnder ReviewUnder Review',
+                // hideTabHeader: true,
+                icon: 'form-address',
+            },
+        },
+        {
+            type: 'file',
+            content: {
+                id: 'suspended',
+                name: 'Suspended',
+                desc: 'Under ReviewUnder ReviewUnder ReviewUnder ReviewUnder Review',
+                // hideTabHeader: true,
+                icon: 'form-address',
+            },
+        },
+        {
+            type: 'file',
+            content: {
+                id: 'deactivated',
+                name: 'Deactivated',
+                desc: 'Under ReviewUnder ReviewUnder ReviewUnder ReviewUnder Review',
                 // hideTabHeader: true,
                 icon: 'form-address',
             },
@@ -250,9 +297,19 @@ const StoreStatus = () => {
     const getForm = (tabId: string) => {
         switch (tabId) {
             case 'pending-approval':
-                return <h1>pending-approval</h1>;
+                return <PendingApproval/>;
             case 'rejected':
-                return <h1>rejected</h1>;
+                return <Rejected/>;
+            case 'permanently-rejected':
+                return <PermanentlyRejected />;
+            case 'active':
+                return <Active />;
+            case 'under-review':
+                return <UnderReview />;
+            case 'suspended':
+                return <Suspended />;
+            case 'deactivated':
+                return <Deactivated />;
             default:
                 return <div></div>;
         }

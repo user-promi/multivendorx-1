@@ -114,11 +114,11 @@ const Reports = () => {
   ];
   const [activeTab, setActiveTab] = useState("overview");
   const tabs = [
-    { id: "overview", label: "Marketplace", icon: "adminlib-calendar", content: <Overview overview={overview} data={data} overviewData={overviewData} pieData={pieData} /> },
-    { id: "revenue", label: "Products", icon: "adminlib-calendar", content: <Revenue /> },
-    { id: "payout", label: "Stores", icon: "adminlib-calendar",  content: <Transactions /> },
-    { id: "StoreOrders",icon: "adminlib-calendar",  label: "Store Orders", content: <StoreOrders /> },
-    { id: "RefundedOrderOld", icon: "adminlib-calendar", label: "Refunded Orders", content: <RefundedOrderOld /> },
+    { id: "overview", label: "Marketplace", icon: "adminlib-marketplace-membership", content: <Overview overview={overview} data={data} overviewData={overviewData} pieData={pieData} /> },
+    { id: "revenue", label: "Products", icon: "adminlib-multi-product", content: <Revenue /> },
+    { id: "payout", label: "Stores", icon: "adminlib-store-inventory", content: <Transactions /> },
+    { id: "StoreOrders", icon: "adminlib-order", label: "Store Orders", content: <StoreOrders /> },
+    { id: "RefundedOrderOld", icon: "adminlib-marketplace-refund", label: "Refunded Orders", content: <RefundedOrderOld /> },
   ];
 
   const COLORS = ["#5007aa", "#00c49f", "#ff7300", "#d400ffff", "#004ec4ff"];
@@ -147,21 +147,16 @@ const Reports = () => {
       />
       <div className="general-wrapper tab">
 
-        <div className="row ">
-          {/* Tab Titles */}
-          <div className="column admin-tab">
-            <div className="tab-titles">
-              {tabs.map((tab) => (
-                <div
-                  key={tab.id}
-                  className={`title ${activeTab === tab.id ? "active" : ""}`}
-                  onClick={() => setActiveTab(tab.id)}
-                >
-                  <i className={`icon ${tab.icon}`}></i><p>{tab.label}</p>
-                </div>
-              ))}
+        <div className="tab-titles">
+          {tabs.map((tab) => (
+            <div
+              key={tab.id}
+              className={`title ${activeTab === tab.id ? "active" : ""}`}
+              onClick={() => setActiveTab(tab.id)}
+            >
+              <i className={`icon ${tab.icon}`}></i><p>{tab.label}</p>
             </div>
-          </div>
+          ))}
         </div>
 
         {tabs.map(

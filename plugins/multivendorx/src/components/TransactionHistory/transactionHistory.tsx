@@ -227,7 +227,7 @@ export const TransactionHistory: React.FC = () => {
                             </div>
                             <div className="data-card">
                                 <div className="title">Available balance</div>
-                                <div className="number">{formatCurrency(data.wallet_balance)} <i className="adminlib-cart "></i></div>
+                                <div className="number">{formatCurrency(data.wallet_balance)} <i className="adminlib-cart blue"></i></div>
                             </div>                          
                         </div>
                     </div>

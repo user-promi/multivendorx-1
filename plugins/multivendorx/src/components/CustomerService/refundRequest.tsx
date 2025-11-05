@@ -425,33 +425,21 @@ const RefundRequest: React.FC = () => {
 
     return (
         <>
-            <div className="card-header">
-                <div className="left">
-                    <div className="title">Refund Requests</div>
-                    <div className="des">Need your decision</div>
-                </div>
-                <div className="right">
-                    <i className="adminlib-more-vertical"></i>
-                </div>
-            </div>
-            <div className="admin-table-wrapper">
-                <Table
-                    data={data}
-                    columns={columns as any}
-                    rowSelection={rowSelection}
-                    onRowSelectionChange={setRowSelection}
-                    defaultRowsPerPage={10}
-                    pageCount={pageCount}
-                    pagination={pagination}
-                    searchFilter={searchFilter}
-                    onPaginationChange={setPagination}
-                    realtimeFilter={realtimeFilter}
-                    handlePagination={requestApiForData}
-                    perPageOption={[10, 25, 50]}
-                    totalCounts={totalRows}
-                />
-                {error && <div className="error-message">{error}</div>}
-            </div>
+            <Table
+                data={data}
+                columns={columns as any}
+                rowSelection={rowSelection}
+                onRowSelectionChange={setRowSelection}
+                defaultRowsPerPage={10}
+                pageCount={pageCount}
+                pagination={pagination}
+                searchFilter={searchFilter}
+                onPaginationChange={setPagination}
+                realtimeFilter={realtimeFilter}
+                handlePagination={requestApiForData}
+                perPageOption={[10, 25, 50]}
+                totalCounts={totalRows}
+            />
 
             {/* Reject Refund Popup */}
             {selectedRefund && (
