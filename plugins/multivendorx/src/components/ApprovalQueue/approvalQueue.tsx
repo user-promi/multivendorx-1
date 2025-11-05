@@ -171,8 +171,18 @@ const ApprovalQueue = () => {
             <div className="general-wrapper">
                 <div className="row ">
                     {/* Tab Titles */}
-                    <div className="column admin-tab">
-                        
+                    <div className="overview-card-wrapper tab">
+                        {tabs.map((tab) => (
+                            <div className={`tab-action ${activeTab === tab.id ? "active" : ""}`} key={tab.id} onClick={() => setActiveTab(tab.id)}>
+                                <div className="details-wrapper">
+                                    <i className={`${tab.icon}`}></i>
+                                    <div className="title"><span>{tab.count} </span>{tab.label}</div>
+                                </div>
+                                <div className="description">
+                                    {tab.des}
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 </div>
                 <div className="row">

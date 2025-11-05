@@ -75,7 +75,7 @@ const CustomerServices = () => {
             id: "questions",
             label: "Questions",
             module: "question-answer",
-            icon: "adminlib-calendar red",
+            icon: "adminlib-calendar",
             des: "Waiting for your response",
             count: qnaCount,
             content: <Qna />
@@ -84,7 +84,7 @@ const CustomerServices = () => {
             id: "review",
             label: "Store Reviews",
             module: "store-review",
-            icon: "adminlib-calendar green",
+            icon: "adminlib-calendar",
             count: storeReviewCount,
             des: "Shared by customers",
             content: <StoreReviews />
@@ -93,7 +93,7 @@ const CustomerServices = () => {
             id: "refund-requests",
             label: "Refund Requests",
             module: "marketplace-refund",
-            icon: "adminlib-calendar blue",
+            icon: "adminlib-calendar",
             des: "Need your decision",
             count: refundCount,
             content: <RefundRequest />
@@ -101,7 +101,7 @@ const CustomerServices = () => {
         {
             id: "support-ticket",
             label: "Support Ticket",
-            icon: "adminlib-calendar yellow",
+            icon: "adminlib-calendar",
             des: "Flagged for abuse review",
             count: abuseCount,
             content: <h1>Upcoming Feature</h1>,
@@ -117,21 +117,16 @@ const CustomerServices = () => {
                 description={'Manage store reviews, support requests, financial transactions, and reported issues.'}
             />
             <div className="general-wrapper">
-                <div className="row ">
-                    {/* Tab Titles */}
-                    <div className="tabs-wrapper">
-                        <div className="tab-titles">
-                            {tabs.map((tab) => (
-                                <div
-                                    key={tab.id}
-                                    className={`title ${activeTab === tab.id ? "active" : ""}`}
-                                    onClick={() => setActiveTab(tab.id)}
-                                >
-                                    <p>{tab.label}</p>
-                                </div>
-                            ))}
+                <div className="tab-titles">
+                    {tabs.map((tab) => (
+                        <div
+                            key={tab.id}
+                            className={`title ${activeTab === tab.id ? "active" : ""}`}
+                            onClick={() => setActiveTab(tab.id)}
+                        >
+                            <i className={`icon ${tab.icon}`}></i><p>{tab.label}</p>
                         </div>
-                    </div>
+                    ))}
                 </div>
                 <div className="row">
                     <div className="column">
@@ -147,7 +142,7 @@ const CustomerServices = () => {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div >
         </>
     );
 };

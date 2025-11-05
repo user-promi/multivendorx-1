@@ -114,11 +114,11 @@ const Reports = () => {
   ];
   const [activeTab, setActiveTab] = useState("overview");
   const tabs = [
-    { id: "overview", label: "Marketplace", content: <Overview overview={overview} data={data} overviewData={overviewData} pieData={pieData} /> },
-    { id: "revenue", label: "Products", content: <Revenue /> },
-    { id: "payout", label: "Stores", content: <Transactions /> },
-    { id: "StoreOrders", label: "Store Orders", content: <StoreOrders /> },
-    { id: "RefundedOrderOld", label: "Refunded Orders", content: <RefundedOrderOld /> },
+    { id: "overview", label: "Marketplace", icon: "adminlib-calendar", content: <Overview overview={overview} data={data} overviewData={overviewData} pieData={pieData} /> },
+    { id: "revenue", label: "Products", icon: "adminlib-calendar", content: <Revenue /> },
+    { id: "payout", label: "Stores", icon: "adminlib-calendar",  content: <Transactions /> },
+    { id: "StoreOrders",icon: "adminlib-calendar",  label: "Store Orders", content: <StoreOrders /> },
+    { id: "RefundedOrderOld", icon: "adminlib-calendar", label: "Refunded Orders", content: <RefundedOrderOld /> },
   ];
 
   const COLORS = ["#5007aa", "#00c49f", "#ff7300", "#d400ffff", "#004ec4ff"];
@@ -157,7 +157,7 @@ const Reports = () => {
                   className={`title ${activeTab === tab.id ? "active" : ""}`}
                   onClick={() => setActiveTab(tab.id)}
                 >
-                  <p>{tab.label}</p>
+                  <i className={`icon ${tab.icon}`}></i><p>{tab.label}</p>
                 </div>
               ))}
             </div>

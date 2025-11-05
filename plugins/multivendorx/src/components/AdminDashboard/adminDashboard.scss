@@ -1,8 +1,9 @@
 @use '../config.scss' as *;
 
-.admin-dashboard{
+.admin-dashboard {
     margin-top: 2rem !important; //overwrite general wrapper style
 }
+
 // admin tab
 
 .admin-tab {
@@ -161,15 +162,32 @@
     display: flex;
     gap: 1.313rem;
     // padding-top: 1.313rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: $border-light-small;
 
     .title {
         padding-bottom: 0.313rem;
         cursor: pointer;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        gap: 0.313rem;
+        align-items: center;
+        background: #fff;
+        padding: 1rem 1rem 0.313rem 1rem;
+        // border-radius: 0.313rem;
+        min-width: 10%;
+
+
+        .icon {
+            font-size: 1.625rem;
+        }
 
         p {
             font-size: .938rem;
             line-height: 1.5;
-            color: #000;
+            color: #707070;
             font-weight: 500;
 
             i {

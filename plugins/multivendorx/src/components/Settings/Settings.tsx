@@ -19,6 +19,7 @@ import {
 import ShowProPopup from '../Popup/popup';
 import { useLocation, Link } from 'react-router-dom';
 import Notifications from './Notification';
+import StoreStatus from './StoreConfiguration/StoreStatus.tsx';
 
 // Types
 type SettingItem = Record< string, any >;
@@ -232,6 +233,11 @@ const Settings: React.FC< SettingsProps > = () => {
         if ( currentTab === 'notifications' ) {
             return (
                 <Notifications />
+            );
+        }
+        if ( currentTab === 'store-status-control' ) {
+            return (
+                <StoreStatus />
             );
         }
 

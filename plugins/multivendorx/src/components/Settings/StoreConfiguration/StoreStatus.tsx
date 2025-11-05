@@ -1,18 +1,8 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { BasicInput, TextArea, FileInput, SelectInput, SuccessNotice, getApiLink, Tabs } from 'zyra';
-import GeneralSettings from './settings/general';
-import Appearance from './settings/Appearance';
-import SocialMedia from './settings/SocialMedia';
-import ContactInformation from './settings/ContactInformation';
-import BusinessAddress from './settings/BusinessAddress';
-import Withdrawl from './withdrawl';
-import Privacy from './settings/Privacy';
-import Verification from './settings/Verification';
-import ShippingDelivery from './settings/ShippingDelivery';
-import LiveChat from './settings/LiveChat';
 
-const settings = () => {
+const StoreStatus = () => {
     const id = appLocalizer.store_id;
     const [formData, setFormData] = useState<{ [key: string]: string }>({});
     const [successMsg, setSuccessMsg] = useState<string | null>(null);
@@ -20,7 +10,7 @@ const settings = () => {
 
     useEffect(() => {
         if (!id) return;
- 
+
         axios({
             method: 'GET',
             url: getApiLink(appLocalizer, `store/${id}`),
@@ -222,151 +212,67 @@ const settings = () => {
     }, []);
 
     // Build hash URL for a given tab
-    const prepareUrl = (tabId: string) => `#subtab=${tabId}`;
+    const prepareUrl = (tabId: string) => `#&tab=settings&subtab=store-status-control&tab=${tabId}`;
 
     const tabData = [
         {
             type: 'file',
             content: {
-                id: 'general',
-                name: 'General',
-                desc: 'general',
-                hideTabHeader: true,
+                id: 'pending-approval',
+                name: 'Pending Approval',
+                desc: 'Pending ApprovalPending ApprovalPending Approval',
+                // hideTabHeader: true,
                 icon: 'tools',
             },
         },
         {
             type: 'file',
             content: {
-                id: 'appearance',
-                name: 'Appearance',
-                desc: 'appearance',
-                hideTabHeader: true,
+                id: 'rejected',
+                name: 'Rejected',
+                desc: 'RejectedRejectedRejectedRejectedRejectedRejected',
+                // hideTabHeader: true,
                 icon: 'tools',
             },
         },
         {
             type: 'file',
             content: {
-                id: 'business-address',
-                name: 'Business Address',
-                desc: 'business-address',
-                hideTabHeader: true,
+                id: 'Permanently Rejected',
+                name: 'Permanently Rejected',
+                desc: 'Permanently RejectedPermanently RejectedPermanently RejectedPermanently Rejected',
+                // hideTabHeader: true,
                 icon: 'form-address',
-            },
-        },
-        {
-            type: 'file',
-            content: {
-                id: 'contact-information',
-                name: 'Contact Information',
-                desc: 'contact-information',
-                hideTabHeader: true,
-                icon: 'form-phone',
-            },
-        },
-        {
-            type: 'file',
-            content: {
-                id: 'social-media',
-                name: 'Social Media',
-                desc: 'social-media',
-                hideTabHeader: true,
-                icon: 'cohort',
-            },
-        },
-        {
-            type: 'file',
-            content: {
-                id: 'payout',
-                name: 'Payout',
-                desc: 'payout',
-                hideTabHeader: true,
-                icon: 'tools',
-            },
-        },
-        {
-            type: 'file',
-            content: {
-                id: 'privacy',
-                name: 'Privacy',
-                desc: 'privacy',
-                hideTabHeader: true,
-                icon: 'tools',
-            },
-        },
-        {
-            type: 'file',
-            content: {
-                id: 'shipping',
-                name: 'Shipping',
-                desc: 'shipping',
-                hideTabHeader: true,
-                icon: 'tools',
-            },
-        },
-        {
-            type: 'file',
-            content: {
-                id: 'verification',
-                name: 'Verification',
-                desc: 'verification',
-                hideTabHeader: true,
-                icon: 'tools',
-            },
-        },
-        {
-            type: 'file',
-            content: {
-                id: 'livechat',
-                name: 'Livechat',
-                desc: 'livechat',
-                hideTabHeader: true,
-                icon: 'tools',
             },
         },
     ];
 
     const getForm = (tabId: string) => {
         switch (tabId) {
-            case 'general':
-                return <GeneralSettings />;
-            case 'appearance':
-                return <Appearance />;
-            case 'business-address':
-                return <BusinessAddress />;
-            case 'contact-information':
-                return <ContactInformation />;
-            case 'social-media':
-                return <SocialMedia />;
-            case 'payout':
-                return <Withdrawl />;
-            case 'privacy':
-                return <Privacy />;
-            case 'shipping':
-                return <ShippingDelivery />;
-            case 'verification':
-                return <Verification />;
-            case 'livechat':
-                return <LiveChat/>;
+            case 'pending-approval':
+                return <h1>pending-approval</h1>;
+            case 'rejected':
+                return <h1>rejected</h1>;
             default:
                 return <div></div>;
         }
     };
     return (
         <>
-            <Tabs
-                tabData={tabData}
-                currentTab={currentTab}
-                getForm={getForm}
-                prepareUrl={prepareUrl}
-                appLocalizer={appLocalizer}
-                settingName="Settings"
-                supprot={[]}
-                Link={SimpleLink}
-                submenuRender={true} />
+            <div className="horizontal-tabs">
+                <Tabs
+                    tabData={tabData}
+                    currentTab={currentTab}
+                    getForm={getForm}
+                    prepareUrl={prepareUrl}
+                    appLocalizer={appLocalizer}
+                    settingName="Settings"
+                    supprot={[]}
+                    Link={SimpleLink}
+                    submenuRender={true} />
+            </div>
         </>
     );
 };
 
-export default settings;
+export default StoreStatus;

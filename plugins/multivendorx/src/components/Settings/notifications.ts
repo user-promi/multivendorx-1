@@ -7,6 +7,5 @@ export default {
     desc: __('Help customers discover stores and products near them by enabling location-based search and maps.', 'multivendorx'),
     icon: 'adminlib-form-section',
     submitUrl: 'settings',
-    modal: [],
-    
+    modal: [],    
 };

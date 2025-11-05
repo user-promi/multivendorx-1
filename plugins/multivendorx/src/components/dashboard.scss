@@ -47,6 +47,10 @@
             }
         }
     }
+
+    .col {
+        width: 100%;
+    }
 }
 
 .card-header {
@@ -105,19 +109,19 @@
 }
 
 .w-65 {
-    width: 65%;
+    width: 65% !important;
 }
 
 .w-35 {
-    width: 35%;
+    width: 35% !important;
 }
 
 .w-45 {
-    width: 45%;
+    width: 45% !important;
 }
 
 .w-40 {
-    width: 40%;
+    width: 40% !important;
 }
 
 .analytics-container {
@@ -224,10 +228,12 @@
             flex-direction: column;
             width: 100%;
             margin-bottom: 1rem;
-            .button-wrapper{
+
+            .button-wrapper {
                 display: flex;
                 justify-content: start;
             }
+
             label {
                 font-size: .875rem;
                 font-weight: 500;
@@ -239,7 +245,7 @@
                 font-size: 1.125rem;
                 // color: #5007aa;
 
-                &.remove-btn{
+                &.remove-btn {
                     color: rgb(238, 8, 8);
                     cursor: pointer;
                 }
@@ -343,9 +349,25 @@
     display: flex;
     gap: 1rem;
     width: 100%;
+    flex-wrap: wrap;
 
     &.tab {
         cursor: pointer;
+
+        .tab-action {
+            width: 24%;
+            box-sizing: border-box;
+        }
+
+        .details-wrapper {
+            align-items: end;
+
+            .title {
+                span {
+                    font-size: 3rem;
+                }
+            }
+        }
     }
 
     .action {
@@ -542,3 +564,102 @@
     border-radius: 0.25rem;
     margin-top: 0.5rem;
 }
+
+// data card design start
+.data-card-wrapper {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+
+    .data-card {
+        width: 48%;
+        background: #fff;
+        padding: 1.5rem;
+        border-radius: 0.313rem;
+        box-sizing: border-box;
+
+        .number {
+            font-size: 2rem;
+            line-height: 2rem;
+            margin-top: 0.813rem;
+            // font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: end;
+
+            i {
+                padding: 0.313rem;
+                color: $theme-color;
+            }
+        }
+
+        .title {
+            font-size: 0.95rem;
+            color: #00000094;
+        }
+    }
+}
+
+// horizontal-tabs start
+.horizontal-tabs {
+    display: flex;
+    gap: 2rem;
+
+    .horizontal-title-section {
+        width: 30%;
+        height: auto;
+        margin-top: 2.5rem;
+
+
+        .tabs-wrapper {
+            background: transparent;
+
+            .horizontal-tabs-item {
+                display: flex;
+                flex-direction: column;
+                gap: 0.25rem;
+                width: 100%;
+
+                .menu-item {
+                    padding: 0.813rem;
+                    transition: all 0.3s ease;
+                    border-radius: 0.313rem;
+                    margin-bottom: 0.313rem;
+                    cursor: pointer;
+                    margin: 0;
+
+                    i {
+                        padding-right: 0.5rem;
+                    }
+
+                    p {
+                        margin: 0;
+                        font-weight: 500;
+                    }
+
+                    &:hover {
+                        background: $theme-background-color;
+                        color: $theme-color;
+                    }
+
+                    &.active-current-tab,
+                    &.active-current-tab:hover {
+                        background: $theme-color;
+                        color: #fff;
+                    }
+                }
+            }
+        }
+    }
+
+    .general-wrapper {
+        width: 70%;
+        background: #fff;
+
+        .card-content {
+            padding: 0;
+        }
+    }
+}
+
+// horizontal-tabs end
