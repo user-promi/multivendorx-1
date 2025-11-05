@@ -13,7 +13,8 @@ interface BlockTextProps {
 const BlockText: React.FC<BlockTextProps> = ({ blockTextClass, value, title }) => {
     return (
         <>
-            <div className={blockTextClass}>
+
+            <div className={blockTextClass}>                
                 <i className="adminlib-info"></i>
 
                 <div className="details">

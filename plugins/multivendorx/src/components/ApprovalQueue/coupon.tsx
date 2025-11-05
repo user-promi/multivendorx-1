@@ -188,17 +188,42 @@ const Coupons: React.FC = () => {
             </TableCell>
         },
         {
-            id: 'action',
             header: __('Action', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell type="action-dropdown" rowData={row.original} header={{
-                    actions: [
-                        { label: __('Approve Coupon', 'multivendorx'), icon: 'adminlib-check', onClick: (rowData) => handleSingleAction('approve_coupon', rowData.id!), hover: true },
-                        { label: __('Reject Coupon', 'multivendorx'), icon: 'adminlib-close', onClick: (rowData) => handleSingleAction('reject_coupon', rowData.id!), hover: true },
-                    ]
-                }} />
-            )
-        }
+            id: 'action',
+            cell: ({ row }) =>
+                <TableCell title={row.original.status || ''}>
+                    <div className="action-section">
+                        <ul className='small-action'>
+                            <li
+                                className="hover icon-green"
+                                onClick={() => handleSingleAction('approve_coupon', rowData.id!)}
+                            >
+                                <i className="adminlib-check"></i>
+                                <span>Approve</span>
+                            </li>
+
+                            <li className="hover icon-red" onClick={() => handleSingleAction('reject_coupon', rowData.id!)}
+                            >
+                                <i className="adminlib-close"></i>
+                                <span>Reject</span>
+                            </li>
+                        </ul>
+
+                    </div>
+                </TableCell>,
+        },
+        // {
+        //     id: 'action',
+        //     header: __('Action', 'multivendorx'),
+        //     cell: ({ row }) => (
+        //         <TableCell type="action-dropdown" rowData={row.original} header={{
+        //             actions: [
+        //                 { label: __('Approve Coupon', 'multivendorx'), icon: 'adminlib-check', onClick: (rowData) => handleSingleAction('approve_coupon', rowData.id!), hover: true },
+        //                 { label: __('Reject Coupon', 'multivendorx'), icon: 'adminlib-close', onClick: (rowData) => handleSingleAction('reject_coupon', rowData.id!), hover: true },
+        //             ]
+        //         }} />
+        //     )
+        // }
     ];
 
 
