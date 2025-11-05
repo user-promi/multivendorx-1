@@ -162,7 +162,21 @@ const AdminDashboard = () => {
       href: "https://www.facebook.com/groups/226246620006065/",
     },
   ];
-  const featuresList = [
+  const featuresList = [    
+    {
+      title: "Membership rewards & commission",
+      desc: "Charge your sellers a monthly or yearly membership fee to sell on your marketplace - predictable revenue every month.",
+      iconClass: "adminlib-commission",
+      linkText: "Join Discord",
+      href: "#",
+    },
+    {
+      title: "Verified stores only",
+      desc: "Screen stores with document verification and approval - build a trusted marketplace from day one.",
+      iconClass: "adminlib-verification3",
+      linkText: "Join Discord",
+      href: "#",
+    },
     {
       title: "Diversified marketplace",
       desc: "Enable bookings, subscriptions, and auctions to boost sales and engagement.",
@@ -190,21 +204,7 @@ const AdminDashboard = () => {
       iconClass: "adminlib-notification",
       linkText: "Join Discord",
       href: "#",
-    },
-    {
-      title: "Verified stores only",
-      desc: "Screen stores with document verification and approval - build a trusted marketplace from day one.",
-      iconClass: "adminlib-verification3",
-      linkText: "Join Discord",
-      href: "#",
-    },
-    {
-      title: "Membership rewards & commission",
-      desc: "Charge your sellers a monthly or yearly membership fee to sell on your marketplace - predictable revenue every month.",
-      iconClass: "adminlib-commission",
-      linkText: "Join Discord",
-      href: "#",
-    },
+    }
   ];
 
   const sections: Section[] = [
@@ -290,12 +290,12 @@ const AdminDashboard = () => {
   };
 
   const Modules: Module[] = [
-    { id: 'marketplace-fee', name: 'Marketplace fee', iconClass: 'adminlib-booking', pro: true },
+    { id: 'spmv', name: 'Single product multiple vendor', iconClass: 'adminlib-booking', pro: false },
     { id: 'staff-manager', name: 'Staff manager', iconClass: 'adminlib-booking', pro: true },
     { id: 'vacation', name: 'Vacation mode', iconClass: 'adminlib-report', pro: true },
     { id: 'business-hours', name: 'Business hours', iconClass: 'adminlib-analytics', pro: true },
     { id: 'store-inventory', name: 'Store inventory', iconClass: 'adminlib-analytics', pro: true },
-    { id: 'min-max-quantities', name: 'Min/Max quantities', iconClass: 'adminlib-analytics', pro: true },
+    { id: 'min-max-quantities', name: 'Min/Max quantities', iconClass: 'adminlib-analytics', pro: false },
     { id: 'wholesale', name: 'Wholesale', iconClass: 'adminlib-analytics', pro: true },
     { id: 'paypal-marketplace', name: 'PayPal marketplace', iconClass: 'adminlib-analytics', pro: true },
     { id: 'stripe-marketplace', name: 'Stripe marketplace', iconClass: 'adminlib-booking', pro: true },

@@ -76,7 +76,6 @@ export default {
             settingDescription: __('Decide if only logged-in customers can submit abuse reports, or if reporting is open to everyone.', 'multivendorx'),
             desc: __('<ul><li>logged-in customers - Only registered and logged-in customers can report products.This helps prevent spam and ensures accountability.</li><li>Guests - Visitors who are not logged in can submit reports. Useful if you want to make reporting quick and easy without requiring sign-up.</li><li>Anyone - Both logged-in customers and guests can report products. This gives the widest access but may increase the risk of spam submissions.</li></ul>', 'multivendorx'),
                 moduleEnabled: 'marketplace-compliance',
-                proSetting: true,
             options: [
                 {
                     key: 'logged_in',
@@ -103,7 +102,6 @@ export default {
             placeholder: __('Add a reason for reporting a product', 'multivendorx'),
             requiredEnable: true,
                 moduleEnabled: 'marketplace-compliance',
-                proSetting: true,
             defaultValues: [
                 { value: "Product not received",required:true ,deleteDisabled: true },
                 { value: "Product not as described",required:true ,deleteDisabled: true },

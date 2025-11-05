@@ -1,4 +1,4 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { FileInput, getApiLink, SelectInput, Tabs } from 'zyra';
 import { Skeleton } from '@mui/material';
 
@@ -30,6 +30,7 @@ const EditStore = () => {
     const [bannerMenu, setBannerMenu] = useState(false);
     const [actionMenu, setActionMenu] = useState(false);
     const [logoMenu, setLogoMenu] = useState(false);
+    const [deleteModal, setDeleteModal] = useState(false);
     const wrapperRef = useRef<HTMLDivElement>(null);
     const [editInfo, setEditInfo] = useState(false);
 
@@ -80,7 +81,8 @@ const EditStore = () => {
     const hashParams = new URLSearchParams(hash);
     const currentTab = hashParams.get('subtab');
     const prepareUrl = (tabId: string) => `?page=multivendorx#&tab=stores&edit/${editId}/&subtab=${tabId}`;
-
+    const navigate = useNavigate();
+    
     const autoSave = (updatedData: { [key: string]: string }) => {
         if (!editId) return;
         
@@ -128,6 +130,27 @@ const EditStore = () => {
         });
 
         frame.open();
+    };
+
+    const handleStoreDelete = () => {
+        console.log("Store delete clicked");
+
+        {data?.status == 'active' && (
+            setDeleteModal(true)
+        )}
+
+        // axios({
+        //     method: 'PUT',
+        //     url: getApiLink(appLocalizer, `store/${editId}`),
+        //     headers: { 'X-WP-Nonce': appLocalizer.nonce },
+        //     data: {'delete': true},
+        // }).then((res) => {
+        //     if (res.data.success) {
+        //         navigate(
+        //             `?page=multivendorx#&tab=stores`
+        //         );
+        //     }
+        // })
     };
 
     const tabData = [
@@ -566,35 +589,38 @@ const EditStore = () => {
                     settingName={'Store'}
                     hideTitle={true}
                     hideBreadcrumb={true}
-                action={
+                    action={
 
-                    <>
-                        <div className="edit-wrapper" ref={wrapperRef}>
-                            <span className="" onClick={(e) => {
-                                e.stopPropagation();
-                                setActionMenu((prev) => !prev);
-                                setLogoMenu(false);
-                                setBannerMenu(false);
-                            }}><i className="adminlib-more-vertical"></i></span>
-                            {actionMenu && (
-                                <ul>
-                                    {data.status == 'active' &&
-                                        <li>
-                                            <a
-                                                href={`${appLocalizer.store_page_url}/${data.slug}`}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                            >
-                                                Storefront
-                                            </a>
-                                        </li>
-                                    }
-                                    <li><i className="adminlib-mail"></i> Store Delete</li>
-                                </ul>
-                            )}
-                        </div>
-                    </>
-                }
+                        <>
+                            <div className="edit-wrapper" ref={wrapperRef}>
+                                <span className="" onClick={(e) => {
+                                    e.stopPropagation();
+                                    setActionMenu((prev) => !prev);
+                                    setLogoMenu(false);
+                                    setBannerMenu(false);
+                                }}><i className="adminlib-more-vertical"></i></span>
+                                {actionMenu && (
+                                    <ul>
+                                        {data.status == 'active' &&
+                                            <li>
+                                                <a
+                                                    href={`${appLocalizer.store_page_url}/${data.slug}`}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                >
+                                                    Storefront
+                                                </a>
+                                            </li>
+                                        }
+                                        <li onClick={handleStoreDelete}><i className="adminlib-mail"></i> Store Delete</li>
+                                    </ul>
+                                )}
+                                {/* {deleteModal && (
+                                    
+                                )} */}
+                            </div>
+                        </>
+                    }
                 />
             </div>
         </>
