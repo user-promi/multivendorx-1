@@ -32,9 +32,9 @@ export default {
                     value: 'business_registration',
                     edit:true
                 },
-                moduleEnabled: 'marketplace-compliance',
-                proSetting: true,
             ],
+            moduleEnabled: 'marketplace-compliance',
+            proSetting: true,
             selectDeselect: true,
         },
     ],
