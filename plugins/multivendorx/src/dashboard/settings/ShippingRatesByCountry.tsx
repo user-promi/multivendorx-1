@@ -20,8 +20,11 @@ const ShippingRatesByCountry: React.FC = () => {
 
     // Extract countries and states from appLocalizer
     const countries: { [key: string]: string } = appLocalizer?.country_list || {};
-    const statesByCountry: { [countryCode: string]: { [stateCode: string]: string } } =
-        appLocalizer?.state_list || {};
+    const statesByCountry: {
+        [countryCode: string]: { [stateCode: string]: string } | [];
+    } = appLocalizer?.state_list || {};
+
+    console.log("state list", appLocalizer.state_list);
 
     // Fetch initial shipping rates
     useEffect(() => {
@@ -44,10 +47,10 @@ const ShippingRatesByCountry: React.FC = () => {
                 let shippingRates: ShippingCountryRate[] = [];
 
                 try {
-                    // Parse string or use array directly
-                    shippingRates = typeof data.multivendorx_shipping_rates === "string"
-                        ? JSON.parse(data.multivendorx_shipping_rates)
-                        : data.multivendorx_shipping_rates || [];
+                    shippingRates =
+                        typeof data.multivendorx_shipping_rates === "string"
+                            ? JSON.parse(data.multivendorx_shipping_rates)
+                            : data.multivendorx_shipping_rates || [];
                 } catch (e) {
                     console.error("Failed to parse shipping rates:", e);
                     shippingRates = [];
@@ -76,12 +79,11 @@ const ShippingRatesByCountry: React.FC = () => {
 
         try {
             const saveData = {
-                // Always save as JSON string
                 multivendorx_shipping_rates: JSON.stringify(
-                    updatedRates.map(rate => ({
+                    updatedRates.map((rate) => ({
                         country: rate.country || "",
                         cost: rate.cost || "0.00",
-                        states: (rate.states || []).map(state => ({
+                        states: (rate.states || []).map((state) => ({
                             state: state.state || "",
                             cost: state.cost || "0.00",
                         })),
@@ -136,7 +138,10 @@ const ShippingRatesByCountry: React.FC = () => {
     // State handlers
     const handleAddState = (countryIndex: number) => {
         const updated = [...rates];
-        updated[countryIndex].states = [...updated[countryIndex].states, { state: "", cost: "0.00" }];
+        updated[countryIndex].states = [
+            ...updated[countryIndex].states,
+            { state: "", cost: "0.00" },
+        ];
         autoSave(updated);
     };
 
@@ -147,13 +152,18 @@ const ShippingRatesByCountry: React.FC = () => {
         val: string
     ) => {
         const updated = [...rates];
-        updated[countryIndex].states[stateIndex] = { ...updated[countryIndex].states[stateIndex], [key]: val };
+        updated[countryIndex].states[stateIndex] = {
+            ...updated[countryIndex].states[stateIndex],
+            [key]: val,
+        };
         autoSave(updated);
     };
 
     const handleRemoveState = (countryIndex: number, stateIndex: number) => {
         const updated = [...rates];
-        updated[countryIndex].states = updated[countryIndex].states.filter((_, i) => i !== stateIndex);
+        updated[countryIndex].states = updated[countryIndex].states.filter(
+            (_, i) => i !== stateIndex
+        );
         autoSave(updated);
     };
 
@@ -173,10 +183,18 @@ const ShippingRatesByCountry: React.FC = () => {
                 </div>
             ) : (
                 rates.map((countryItem, index) => {
-                    const countryStates = statesByCountry[countryItem.country] || {};
+                    const countryCode = countryItem.country?.trim()?.toUpperCase() || "";
+                    const rawStates = statesByCountry[countryCode];
+                    const countryStates =
+                        Array.isArray(rawStates) && rawStates.length === 0
+                            ? {} // if empty array, treat as no states
+                            : (rawStates as Record<string, string>) || {};
 
                     return (
-                        <div key={index} className="country-block border p-3 mb-3 rounded-lg bg-white shadow-sm">
+                        <div
+                            key={index}
+                            className="country-block border p-3 mb-3 rounded-lg bg-white shadow-sm"
+                        >
                             <div className="flex gap-3 items-center mb-2">
                                 <div className="flex-1">
                                     <SelectInput
@@ -186,10 +204,16 @@ const ShippingRatesByCountry: React.FC = () => {
                                         options={[
                                             { value: "", label: "Select Country" },
                                             { value: "everywhere", label: "Everywhere Else" },
-                                            ...Object.entries(countries).map(([value, label]) => ({ value, label })),
+                                            ...(Array.isArray(countries)
+                                                ? countries
+                                                : Object.entries(countries).map(([value, label]) => ({
+                                                      value,
+                                                      label,
+                                                  }))),
                                         ]}
                                         onChange={(opt: any) =>
-                                            opt?.value && handleCountryChange(index, "country", opt.value)
+                                            opt?.value &&
+                                            handleCountryChange(index, "country", opt.value)
                                         }
                                     />
                                 </div>
@@ -200,7 +224,9 @@ const ShippingRatesByCountry: React.FC = () => {
                                         type="number"
                                         name={`cost-${index}`}
                                         value={countryItem.cost}
-                                        onChange={(e) => handleCountryChange(index, "cost", e.target.value)}
+                                        onChange={(e) =>
+                                            handleCountryChange(index, "cost", e.target.value)
+                                        }
                                         placeholder="0.00"
                                         min="0"
                                         step="0.01"
@@ -216,67 +242,91 @@ const ShippingRatesByCountry: React.FC = () => {
                                 </button>
                             </div>
 
-                            {countryItem.country && Object.keys(countryStates).length > 0 && (
-                                <div className="ml-6 mt-4 p-3 border rounded bg-gray-50">
-                                    <div className="text-sm font-medium mb-2">State Shipping Rates</div>
-                                    {countryItem.states.map((stateItem, sIndex) => (
-                                        <div key={sIndex} className="flex gap-3 items-center mb-2">
-                                            <div className="flex-1">
-                                                <SelectInput
-                                                    label="State"
-                                                    name={`state-${index}-${sIndex}`}
-                                                    value={stateItem.state}
-                                                    options={[
-                                                        { value: "", label: "Select State" },
-                                                        ...Object.entries(countryStates).map(([value, label]) => ({
-                                                            label,
-                                                            value,
-                                                        })),
-                                                    ]}
-                                                    onChange={(opt: any) =>
-                                                        opt?.value &&
-                                                        handleStateChange(index, sIndex, "state", opt.value)
-                                                    }
-                                                />
-                                            </div>
-                                            <div className="w-32">
-                                                <BasicInput
-                                                    label="Cost"
-                                                    type="number"
-                                                    name={`state-cost-${index}-${sIndex}`}
-                                                    value={stateItem.cost}
-                                                    onChange={(e) =>
-                                                        handleStateChange(index, sIndex, "cost", e.target.value)
-                                                    }
-                                                    placeholder="0.00"
-                                                    min="0"
-                                                    step="0.01"
-                                                />
-                                            </div>
-                                            <button
-                                                type="button"
-                                                className="admin-btn btn-red self-end"
-                                                onClick={() => handleRemoveState(index, sIndex)}
-                                            >
-                                                Remove
-                                            </button>
+                            {countryItem.country &&
+                                Object.keys(countryStates).length > 0 && (
+                                    <div className="ml-6 mt-4 p-3 border rounded bg-gray-50">
+                                        <div className="text-sm font-medium mb-2">
+                                            State Shipping Rates
                                         </div>
-                                    ))}
-                                    <button
-                                        type="button"
-                                        className="admin-btn btn-purple mt-2"
-                                        onClick={() => handleAddState(index)}
-                                    >
-                                        + Add State
-                                    </button>
-                                </div>
-                            )}
+                                        {countryItem.states.map((stateItem, sIndex) => (
+                                            <div
+                                                key={sIndex}
+                                                className="flex gap-3 items-center mb-2"
+                                            >
+                                                <div className="flex-1">
+                                                    <SelectInput
+                                                        label="State"
+                                                        name={`state-${index}-${sIndex}`}
+                                                        value={stateItem.state}
+                                                        options={[
+                                                            { value: "", label: "Select State" },
+                                                            ...Object.entries(
+                                                                countryStates
+                                                            ).map(([value, label]) => ({
+                                                                label,
+                                                                value,
+                                                            })),
+                                                        ]}
+                                                        onChange={(opt: any) =>
+                                                            opt?.value &&
+                                                            handleStateChange(
+                                                                index,
+                                                                sIndex,
+                                                                "state",
+                                                                opt.value
+                                                            )
+                                                        }
+                                                    />
+                                                </div>
+                                                <div className="w-32">
+                                                    <BasicInput
+                                                        label="Cost"
+                                                        type="number"
+                                                        name={`state-cost-${index}-${sIndex}`}
+                                                        value={stateItem.cost}
+                                                        onChange={(e) =>
+                                                            handleStateChange(
+                                                                index,
+                                                                sIndex,
+                                                                "cost",
+                                                                e.target.value
+                                                            )
+                                                        }
+                                                        placeholder="0.00"
+                                                        min="0"
+                                                        step="0.01"
+                                                    />
+                                                </div>
+                                                <button
+                                                    type="button"
+                                                    className="admin-btn btn-red self-end"
+                                                    onClick={() =>
+                                                        handleRemoveState(index, sIndex)
+                                                    }
+                                                >
+                                                    Remove
+                                                </button>
+                                            </div>
+                                        ))}
+                                        <button
+                                            type="button"
+                                            className="admin-btn btn-purple mt-2"
+                                            onClick={() => handleAddState(index)}
+                                        >
+                                            + Add State
+                                        </button>
+                                    </div>
+                                )}
                         </div>
                     );
                 })
             )}
 
-            <button type="button" className="admin-btn btn-purple mt-4" onClick={handleAddCountry}>
+            <button
+                type="button"
+                className="admin-btn btn-purple mt-4"
+                onClick={handleAddCountry}
+            >
                 + Add Country
             </button>
         </div>

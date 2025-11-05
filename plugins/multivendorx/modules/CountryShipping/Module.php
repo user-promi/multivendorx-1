@@ -46,6 +46,7 @@ class Module {
      */
     public function init_classes() {
         $this->container['frontend'] = new Frontend();
+        $this->container['admin'] = new Admin();
     }
 
     /**
