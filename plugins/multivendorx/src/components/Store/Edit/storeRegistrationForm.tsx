@@ -76,7 +76,7 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 
 			<div className="container-wrapper">
 				<div className="card-wrapper w-65">
-					{formData.core_data?.status == 'pending' && (
+					{(formData.core_data?.status == 'pending' || formData.core_data?.status == 'rejected') && (
 						<>
 							<div className="card-content">
 								<div className="card-title">Store Details</div>
@@ -170,7 +170,11 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 						</div>
 					</div>
 
-				{formData.core_data?.status === 'pending' || formData.core_data?.status === 'rejected' && (
+				{(
+					formData.core_data?.status === 'pending' ||
+					formData.core_data?.status === 'rejected' ||
+					formData.core_data?.status === 'permanently_rejected'
+				) && (
 					<>
 						<div className="card-content">
 							<div className="card-title">
@@ -184,34 +188,43 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 										inputClass="textarea-input"
 										descClass="settings-metabox-description" value={formData.store_application_note} onChange={handleChange} />
 								</div>
-								<div className="form-group">
-									<label className="checkbox-label">
-										<input
-											type="checkbox"
-											name="store_permanent_reject"
-											checked={formData.store_permanent_reject}
-											onChange={handleChange}
-										/>
-										Store Permanently Reject
-									</label>
+								{formData.core_data?.status != 'permanently_rejected' &&
+									<>
+									<div className="form-group">
+										<label className="checkbox-label">
+											<input
+												type="checkbox"
+												name="store_permanent_reject"
+												checked={formData.store_permanent_reject}
+												onChange={handleChange}
+											/>
+											Store Permanently Reject
+										</label>
+									</div>
+									</>
+								}
+							</div>
+
+							{formData.core_data?.status != 'permanently_rejected' && (
+								<>
+								<div className="buttons-wrapper" >
+									<button
+										className="admin-btn btn-green"
+										onClick={() => handleSubmit('approve')}
+									>
+										Approve
+									</button>
+
+									<button
+										className="admin-btn btn-red"
+										onClick={() => handleSubmit('rejected')}
+									>
+										Reject
+									</button>
 								</div>
-							</div>
-
-							<div className="buttons-wrapper" >
-								<button
-									className="admin-btn btn-green"
-									onClick={() => handleSubmit('approve')}
-								>
-									Approve
-								</button>
-
-								<button
-									className="admin-btn btn-red"
-									onClick={() => handleSubmit('rejected')}
-								>
-									Reject
-								</button>
-							</div>
+								</>
+							)}
+								
 						</div>
 					</>
 				)}

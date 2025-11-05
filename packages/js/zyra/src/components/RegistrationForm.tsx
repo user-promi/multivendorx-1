@@ -387,7 +387,7 @@ const CustomForm: React.FC<CustomFormProps> = ({
                         }}
                     />
                     <Elements
-                        label="MultivendorX Free"
+                        label="Store Specific"
                         selectOptions={selectOptionsStore}
                         onClick={(type) => {
                             const option = selectOptionsStore.find(o => o.value === type);

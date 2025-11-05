@@ -1,20 +1,61 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './storeRegistration.scss';
-import { FormViewer, getApiLink } from 'zyra';
+import { FormViewer, getApiLink,ToggleSetting } from 'zyra';
 import axios from 'axios';
 
 const RegistrationForm = () => {
     const [loading, setLoading] = useState(false);
     const [toast, setToast] = useState(false);
     const [responseMessage, setResponseMessage] = useState('');
+    const [responseData, setResponseData] = useState<any[]>([]);
+    const [stores, setStores] = useState<any[]>([]);
+    const [selectedStore, setSelectedStore] = useState<any>(null);
+    const [inputs, setInputs] = useState<Record<string, any>>({});
     const formData = registrationForm;
+
+    useEffect(() => {
+    
+        axios({
+        	method: 'GET',
+        	url: getApiLink(appLocalizer, `store`),
+        	headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            params: {"store_registration": true },
+
+        }).then((res) => {
+        	const data = res.data || {};
+            const storeList = data.all_stores || [];
+            const regData = data.response || [];
+            setStores(storeList);
+            setResponseData(regData);
+
+            if (storeList.length > 0 && regData.length > 0) {
+                const firstStore = storeList[0];
+                setSelectedStore(firstStore);
+                const match = regData.find(
+                    (item) => String(item.id) === String(firstStore.value)
+                    );
+                if (match) setInputs(match);
+            }
+        });
+
+    }, []);
+
+    const handleStoreChange = (val: string) => {
+        const store = stores.find((s) => s.value === val);
+        setSelectedStore(store);
+
+        const match = responseData.find(
+        (item) => String(item.id) === String(val)
+        );
+        setInputs(match || {});
+    };
 
     const onSubmit = (submittedFormData: Record<string, any>) => {
         setLoading(true);
     
         // Map form field keys to backend expected keys
         const mappedData: Record<string, any> = {};
-    
+
         // Core fields
         if (submittedFormData['name']) mappedData['name'] = submittedFormData['name'];
         if (submittedFormData['description'] || submittedFormData['description'])
@@ -29,7 +70,7 @@ const RegistrationForm = () => {
                 mappedData[key] = submittedFormData[key];
             }
         });
-        console.log(formData)
+
         // Send to API
         axios({
             method: 'POST',
@@ -64,11 +105,23 @@ const RegistrationForm = () => {
                     </div>
                 </section>
             )}
+            {stores.length > 0 && (
+                <div className="store-selector">
+                <ToggleSetting
+                    wrapperClass="setting-form-input"
+                    options={stores}
+                    value={selectedStore?.value || ""}
+                    onChange={(val: any) => handleStoreChange(val)}
+                />
+                </div>
+            )}
+
             <div className="modal-wrapper">
                 <div>{registrationForm.content_before_form}</div>
 
                 <FormViewer
                     formFields={formData.settings}
+                    response={inputs}
                     onSubmit={onSubmit}
                 />
                 <div>{registrationForm.content_after_form}</div>

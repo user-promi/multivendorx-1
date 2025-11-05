@@ -508,7 +508,7 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller
                 break;
 
             case 'reject':
-                $dashboard_array['error_msg'] = $status_settings['store_denied_status']['declined_msg'];
+                $dashboard_array['error_msg'] = $status_settings['store_rejected_status']['rejected_msg'];
                 break;
 
             default:
