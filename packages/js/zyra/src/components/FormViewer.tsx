@@ -214,8 +214,6 @@ const FormViewer: React.FC< FormViewerProps > = ( {
         setInputs(response);
     }, [response]);
 
-console.log('inputs', inputs)
-
     useEffect( () => {
         if ( ! siteKey ) return;
 

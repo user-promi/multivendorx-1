@@ -18,6 +18,7 @@ interface AdminBreadcrumbsProps {
   renderMenuItems?: (items: any[]) => React.ReactNode;
   tabData?: any[];
   buttons?: any[];
+  premium?: boolean;
   goPremium?: boolean;
   goPremiumLink?: string;
   description?: string;
@@ -33,6 +34,7 @@ const AdminBreadcrumbs: React.FC<AdminBreadcrumbsProps> = ({
   renderMenuItems,
   tabData = [],
   buttons = [],
+  premium = true,
   goPremium = false,
   goPremiumLink,
   description,
@@ -113,7 +115,7 @@ const AdminBreadcrumbs: React.FC<AdminBreadcrumbsProps> = ({
               </>
             )}
             <div className={submenuRender ? "horizontal-tabs-item" : "tabs-item"}>{renderMenuItems(tabData)}</div>
-            {!submenuRender && goPremium && (
+            {!submenuRender && goPremium && premium &&(
               <a href={goPremiumLink} className="menu-item pro-btn">
                 <i className="adminlib-pro-tag"></i> Upgrade<i className="adminlib-arrow-right"></i>
               </a>

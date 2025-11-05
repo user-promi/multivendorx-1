@@ -63,13 +63,32 @@ class StoreUtil {
       
     }
 
-    public static function get_stores_from_user_id($user_id) {
-        global $wpdb;
-        $table = "{$wpdb->prefix}" . Utill::TABLES['store_users'];
+    // public static function get_stores_from_user_id($user_id) {
+    //     global $wpdb;
+    //     $table = "{$wpdb->prefix}" . Utill::TABLES['store_users'];
 
-        $users = $wpdb->get_col( $wpdb->prepare("SELECT store_id FROM $table WHERE user_id = %d", $user_id) );
-        return $users;
+    //     $users = $wpdb->get_col( $wpdb->prepare("SELECT store_id FROM $table WHERE user_id = %d", $user_id) );
+    //     return $users;
+    // }
+    
+    public static function get_stores_from_user_id( $user_id ) {
+        global $wpdb;
+
+        $store_users = "{$wpdb->prefix}" . Utill::TABLES['store_users'];
+        $stores      = "{$wpdb->prefix}" . Utill::TABLES['store'];
+
+        return $wpdb->get_col( $wpdb->prepare(
+            "SELECT su.store_id
+            FROM {$store_users} su
+            JOIN {$stores} s ON s.ID = su.store_id
+            WHERE su.user_id = %d
+            AND s.status <> %s",
+            $user_id,
+            'permanently_rejected'
+        ) );
     }
+
+
 
     public static function get_store() {
         global $wpdb;

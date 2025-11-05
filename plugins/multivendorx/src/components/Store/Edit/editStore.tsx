@@ -284,6 +284,7 @@ const EditStore = () => {
                     getForm={getForm}
                     prepareUrl={prepareUrl}
                     appLocalizer={appLocalizer}
+                    premium={false}
                     tabTitleSection={
                         <>
                             {/* <div className="tab-title">
@@ -588,7 +589,7 @@ const EditStore = () => {
                                             </a>
                                         </li>
                                     }
-                                    {/* <li><i className="adminlib-mail"></i> Send Mail</li> */}
+                                    <li><i className="adminlib-mail"></i> Store Delete</li>
                                 </ul>
                             )}
                         </div>
