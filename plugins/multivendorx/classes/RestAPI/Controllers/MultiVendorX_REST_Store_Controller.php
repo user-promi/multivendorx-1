@@ -528,12 +528,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
     
         $core_fields = [ 'name', 'slug', 'description', 'who_created', 'status' ];
         $store_data['who_created'] = $current_user->ID;
-    
-        if ( MultiVendorX()->setting->get_setting( 'approve_store' ) == 'automatically' ) {
-            $store_data['status'] = 'active';
-        } else {
-            $store_data['status'] = 'pending';
-        }
+        $store_data['status'] = 'active';
     
         if ( ! empty( $store_data['id'] ) ) {
             // Load existing store
@@ -694,8 +689,17 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
 
         $store = new \MultiVendorX\Store\Store( $id );
 
+        // if (!empty($data['delete'])) {
+        //     $delete_store = $store->delete_store_completely($id);
+        //     if ($delete_store) {
+        //         return rest_ensure_response([ 'success' => true ]);
+        //     } else {
+        //         unset($data['delete']);
+        //     }
+        // }
+        
         // Handle registration & core data
-        if (!empty($data['registration_data']) && !empty($data['core_data'])) {
+        if (!empty($data['registration_data']) || !empty($data['core_data'])) {
 
             if (isset($data['status']) && $data['status'] === 'approve') {
                 $users = StoreUtil::get_store_users($id);
