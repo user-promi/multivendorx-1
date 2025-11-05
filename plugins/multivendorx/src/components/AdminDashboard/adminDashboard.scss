@@ -1,6 +1,8 @@
 @use '../config.scss' as *;
 
-
+.admin-dashboard{
+    margin-top: 2rem !important; //overwrite general wrapper style
+}
 // admin tab
 
 .admin-tab {
@@ -923,6 +925,7 @@
                 font-size: 0.75rem;
                 display: flex;
                 align-items: center;
+                left: 0;
 
                 i {
                     font-size: 0.813rem;
@@ -1113,7 +1116,7 @@
     display: flex;
     align-items: center;
     // border-bottom: $border-light-small;
-    margin: 3rem 0 1.813rem;
+    margin-bottom: 1.813rem;
     // padding-bottom: 1.25rem;
     justify-content: space-between;
 }

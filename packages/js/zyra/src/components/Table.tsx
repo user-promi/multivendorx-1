@@ -26,6 +26,7 @@ import type {
  */
 import BasicInput from './BasicInput';
 import '../styles/web/Table.scss';
+import { Skeleton } from '@mui/material';
 
 const PENALTY = 28;
 const COOLDOWN = 1;
@@ -496,29 +497,36 @@ const Table: React.FC<TableProps> = ({
             {(typeCounts?.length > 0 || searchFilter) && (
                 <div className="admin-top-filter">
                     <div className="filter-wrapper">
-
-                        {typeCounts && typeCounts.length > 0 && (
+                        {typeCounts ? (
+                            typeCounts.length > 0 ? (
+                                <>
+                                    {typeCounts.map((countInfo, index) => (
+                                        <div
+                                            key={index}
+                                            role="button"
+                                            tabIndex={0}
+                                            onClick={() => setFilterData({ typeCount: countInfo.key })}
+                                            className={
+                                                countInfo.key === typeCountActive
+                                                    ? "filter-item active"
+                                                    : "filter-item"
+                                            }
+                                        >
+                                            {`${countInfo.name} (${countInfo.count})`}
+                                        </div>
+                                    ))}
+                                </>
+                            ) : (
+                                <span>No types found</span>
+                            )
+                        ) : (
                             <>
-                                {typeCounts.map((countInfo, index) => (
-                                    <div
-                                        key={index} // Add a key for better React performance
-                                        role="button"
-                                        tabIndex={0}
-                                        onClick={() => {
-                                            setFilterData({ typeCount: countInfo.key });
-                                        }}
-                                        className={
-                                            countInfo.key === typeCountActive
-                                                ? 'filter-item active'
-                                                : 'filter-item'
-                                        }
-                                    >
-                                        {`${countInfo.name} (${countInfo.count})`}
-                                        {index !== typeCounts.length - 1 && ''}{' '}
-                                    </div>
-                                ))}
+                                <Skeleton variant="text" width={100} />
+                                <Skeleton variant="text" width={120} />
+                                <Skeleton variant="text" width={90} />
                             </>
                         )}
+
                     </div>
                     <div className="table-action-wrapper">
                         {searchFilter && (

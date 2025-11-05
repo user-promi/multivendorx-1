@@ -561,7 +561,7 @@ export const Announcements: React.FC = () => {
                 tabTitle="Announcements"
                 buttons={[
                     <div
-                        className="admin-btn btn-purple"
+                        className="admin-btn btn-purple-bg"
                         onClick={async () => {
                             setValidationErrors({});
                             await fetchStoreOptions(); // fetch stores when Add form opens

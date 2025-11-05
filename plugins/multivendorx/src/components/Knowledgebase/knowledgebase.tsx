@@ -463,7 +463,7 @@ export const KnowledgeBase: React.FC = () => {
                 tabTitle="Knowledge Base"
                 description={"Build your knowledge base: add new guides or manage existing ones in one place."}
                 buttons={[
-                    <div className="admin-btn btn-purple" onClick={() => {
+                    <div className="admin-btn btn-purple-bg" onClick={() => {
                         setValidationErrors({});
                         setAddEntry(true);
                     }}>

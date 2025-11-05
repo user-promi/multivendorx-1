@@ -1,7 +1,7 @@
 @use '../config.scss' as *;
 
 .notification-container {
-    padding-top: 2rem;
+    // padding-top: 2rem;
     position: relative;
 
 
@@ -185,9 +185,9 @@
         margin-bottom: 1.813rem;
         align-items: center;
 
-        .category-item {
-            background: $theme-background-color;
-        }
+        // .category-item {
+        //     background: $theme-background-color;
+        // }
     }
     .tabs-wrapper{
         margin: 0 !important;

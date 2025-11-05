@@ -697,7 +697,7 @@ const AdminDashboard = () => {
           messages={proPopupContent.messages}
         />
       </Dialog> */}
-      <div className="general-wrapper">
+      <div className="general-wrapper admin-dashboard">
         <div className="row">
           <div className="column admin-tab">
             <div className="tab-titles ">

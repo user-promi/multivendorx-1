@@ -126,8 +126,8 @@ const selectOptions: SelectOption[] = [
 ];
 
 const selectOptionsStore: SelectOption[] = [
-    { icon: 'adminlib-t-letter-bold icon-form-textbox', value: 'text', label: 'Store Name', name: 'name' },
-    { icon: 'adminlib-text icon-form-textarea', value: 'textarea', label: 'Store Desc', name: 'description' },
+    { icon: 'adminlib-t-letter-bold icon-form-textbox', value: 'text', label: 'Name', name: 'name' },
+    { icon: 'adminlib-text icon-form-textarea', value: 'textarea', label: 'Desc', name: 'description' },
     { icon: 'adminlib-t-letter-bold icon-form-textbox', value: 'text', label: 'Phone', name: 'phone' },
     { icon: 'adminlib-unread icon-form-email', value: 'email', label: 'Paypal Email', name: 'paypal_email' },
     { icon: 'adminlib-divider icon-form-address', value: 'address', label: 'Address' },
@@ -387,7 +387,7 @@ const CustomForm: React.FC<CustomFormProps> = ({
                         }}
                     />
                     <Elements
-                        label="Store Specific"
+                        label="Store setup details"
                         selectOptions={selectOptionsStore}
                         onClick={(type) => {
                             const option = selectOptionsStore.find(o => o.value === type);
