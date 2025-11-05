@@ -693,15 +693,19 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
         $data = $request->get_json_params();
 
         $store = new \MultiVendorX\Store\Store( $id );
-    
+
         // Handle registration & core data
         if (!empty($data['registration_data']) && !empty($data['core_data'])) {
+
             if (isset($data['status']) && $data['status'] === 'approve') {
                 $users = StoreUtil::get_store_users($id);
-                $user = get_userdata( reset($users) );
+                $user = get_userdata( empty($users['users']) ? $users['primary_owner'] : reset($users['users']) );
+                
                 if ( $user ) {
                     $user->set_role( 'store_owner' ); 
                     StoreUtil::set_primary_owner($user->ID, $id);
+                    $store->set('status', 'active');
+                    $store->save();
                     return rest_ensure_response([ 'success' => true ]);
                 }
             } elseif (isset($data['status']) && $data['status'] === 'rejected') {
@@ -713,7 +717,17 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                 }
 
                 if (!empty($data['store_application_note'])) {
-                    $store->update_meta('store_reject_note', sanitize_text_field($data['store_application_note']));
+                    $old_notes = unserialize($store->get_meta( 'store_reject_note' ));
+                    if ( ! is_array( $old_notes ) ) {
+                        $old_notes = [];
+                    }
+
+                    $old_notes[] = [
+                        'note' => sanitize_text_field( $data['store_application_note'] ),
+                        'date' => current_time( 'mysql' ),
+                    ];
+
+                    $store->update_meta( 'store_reject_note', serialize($old_notes) );
                 }
     
                 $store->save();

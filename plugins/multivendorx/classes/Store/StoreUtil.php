@@ -277,7 +277,7 @@ class StoreUtil {
             'registration_data'=> [],
             'all_registration_data'=> $all_registration_data,
             'primary_owner_info'    => $primary_owner_info,
-            'store_application_note' => $store->get_meta('store_reject_note'),
+            'store_application_note' => unserialize($store->get_meta('store_reject_note')),
             'store_permanent_reject' => $store->get('status') === 'permanently_rejected',
         ];
     

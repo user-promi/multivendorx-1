@@ -6,18 +6,26 @@ import { Skeleton } from '@mui/material';
 const StoreRegistration = ({ id }: { id: string | null }) => {
 	const [formData, setFormData] = useState<{ [key: string]: string }>({});
 	const [successMsg, setSuccessMsg] = useState<string | null>(null);
+	const [previousNotes, setPreviousNotes] = useState<{ note: string; date: string }[]>([]);
 
-	useEffect(() => {
-		if (!id) return;
-
+	const fetchStoreData = () => {
 		axios({
 			method: 'GET',
 			url: getApiLink(appLocalizer, `store/${id}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce, "registrations": 'registrations' },
-		}).then((res) => {
-			const data = res.data || {};
-			setFormData((prev) => ({ ...prev, ...data }));
-		});
+		})
+			.then((res) => {
+				const data = res.data || {};
+				if (Array.isArray(data.store_application_note)) {
+					setPreviousNotes(data.store_application_note);
+					delete data.store_application_note;
+				}
+				setFormData(data);
+			});
+	};
+
+	useEffect(() => {
+		if (id) fetchStoreData();
 	}, [id]);
 
 	useEffect(() => {
@@ -67,9 +75,11 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 						: 'Store rejected successfully!'
 				);
 				setFormData(updatedData); // update local state
+				window.location.reload();
 			}
 		});
 	};
+
 	return (
 		<>
 			<SuccessNotice message={successMsg} />
@@ -131,105 +141,123 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 				</div>
 
 
-				<div className="card-wrapper w-35">
-					<div className="card-content">
-						<div className="card-header">
-							<div className="left">
-								<div className="title">
-									Submited by
-								</div>
-							</div>
-							{/* <div className="right">
-                                <i className="adminlib-external"
-                                    onClick={() => { navigate(`?page=multivendorx#&tab=stores&edit/${id}/&subtab=staff`) }}
-                                ></i>
-                            </div> */}
-						</div>
-
-						<div className="store-owner-details owner">
-							<div className="profile">
-								<div className="avater">
-									<span>JD</span>
-								</div>
-								<div className="details">
-									<div className="name">
-										{formData.primary_owner_info?.data?.display_name ?? <Skeleton variant="text" width={150} />}
-									</div>
-									{/* <div className="des">Owner</div> */}
-								</div>
-							</div>
-							<ul className="contact-details">
-								<li>
-									<i className="adminlib-mail"></i>
-									{formData.primary_owner_info?.data?.user_email  ?? <Skeleton variant="text" width={150} />}
-								</li>
-								<li>
-									<i className="adminlib-form-phone"></i> +1 (555) 987-6543
-								</li>
-							</ul>
-						</div>
-					</div>
-
-				{(
-					formData.core_data?.status === 'pending' ||
-					formData.core_data?.status === 'rejected' ||
-					formData.core_data?.status === 'permanently_rejected'
+				{(formData.core_data?.status == 'pending' || 
+					formData.core_data?.status == 'rejected' ||
+					formData.core_data?.status == 'permanently_rejected' 
 				) && (
-					<>
+
+					<div className="card-wrapper w-35">
 						<div className="card-content">
-							<div className="card-title">
-								Note
+								
+							<div className="card-header">
+								<div className="left">
+									<div className="title">
+										Submited by
+									</div>
+								</div>
+								{/* <div className="right">
+									<i className="adminlib-external"
+										onClick={() => { navigate(`?page=multivendorx#&tab=stores&edit/${id}/&subtab=staff`) }}
+									></i>
+								</div> */}
 							</div>
 
-							<div className="form-group-wrapper">
-								<div className="form-group">
-									<TextArea name="store_application_note" wrapperClass="setting-from-textarea"
-										placeholder='Optional note for approval or rejection'
-										inputClass="textarea-input"
-										descClass="settings-metabox-description" value={formData.store_application_note} onChange={handleChange} />
-								</div>
-								{formData.core_data?.status != 'permanently_rejected' &&
-									<>
-									<div className="form-group">
-										<label className="checkbox-label">
-											<input
-												type="checkbox"
-												name="store_permanent_reject"
-												checked={formData.store_permanent_reject}
-												onChange={handleChange}
-											/>
-											Store Permanently Reject
-										</label>
+							<div className="store-owner-details owner">
+								<div className="profile">
+									<div className="avater">
+										<span>JD</span>
 									</div>
-									</>
-								}
+									<div className="details">
+										<div className="name">
+											{formData.primary_owner_info?.data?.display_name ?? <Skeleton variant="text" width={150} />}
+										</div>
+										{/* <div className="des">Owner</div> */}
+									</div>
+								</div>
+								<ul className="contact-details">
+									<li>
+										<i className="adminlib-mail"></i>
+										{formData.primary_owner_info?.data?.user_email  ?? <Skeleton variant="text" width={150} />}
+									</li>
+								</ul>
 							</div>
+								
+							
+						</div>
+
+					{/* {( formData.core_data?.status === 'permanently_rejected' ) && ( */}
+						<>
+							{previousNotes.length > 0 && (
+								<div className="card-content">
+
+									<div className="card-title">
+										Previous Notes
+									</div>
+									<div className="form-group-wrapper">
+										<div className="form-group">
+											<ul>
+												{previousNotes.map((item, idx) => (
+													<li key={idx}>
+														<strong>{item.date}:</strong> {item.note}
+													</li>
+												))}
+											</ul>
+
+										</div>
+									</div>
+								</div>
+							)}
 
 							{formData.core_data?.status != 'permanently_rejected' && (
-								<>
-								<div className="buttons-wrapper" >
-									<button
-										className="admin-btn btn-green"
-										onClick={() => handleSubmit('approve')}
-									>
-										Approve
-									</button>
+								<div className="card-content">
+									<div className="card-title">
+										Note
+									</div>
+									<div className="form-group-wrapper">
+											
+										<div className="form-group">
+											<TextArea name="store_application_note" wrapperClass="setting-from-textarea"
+												placeholder='Optional note for approval or rejection'
+												inputClass="textarea-input"
+												descClass="settings-metabox-description" 
+												value={formData.store_application_note || ''} 
+												onChange={handleChange} />
+										</div>
+										<div className="form-group">
+											<label className="checkbox-label">
+												<input
+													type="checkbox"
+													name="store_permanent_reject"
+													checked={formData.store_permanent_reject}
+													onChange={handleChange}
+												/>
+												Store Permanently Reject
+											</label>
+										</div>
+											
+									</div>
+									
+									<div className="buttons-wrapper" >
+										<button
+											className="admin-btn btn-green"
+											onClick={() => handleSubmit('approve')}
+										>
+											Approve
+										</button>
 
-									<button
-										className="admin-btn btn-red"
-										onClick={() => handleSubmit('rejected')}
-									>
-										Reject
-									</button>
+										<button
+											className="admin-btn btn-red"
+											onClick={() => handleSubmit('rejected')}
+										>
+											Reject
+										</button>
+									</div>
 								</div>
-								</>
 							)}
-								
-						</div>
-					</>
-				)}
+						</>
 
-				</div>
+					</div>
+				)}
 			</div>
 		</>
 	);

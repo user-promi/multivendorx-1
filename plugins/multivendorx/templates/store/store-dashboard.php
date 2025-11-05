@@ -182,7 +182,7 @@ $page_info     = MultiVendorX()->rest->dashboard->get_current_page_and_submenu()
                  <?php if ( !empty($page_info['error_msg']) ) { ?>
                     <div class="permission-wrapper">
                         <i class="adminlib-info red"></i>
-                        <div class="title"><?php echo esc_html( $page_info['error_msg'] ); ?></div>
+                        <div class="title"><?php echo wp_kses_post( $page_info['error_msg'] ); ?></div>
                         <div class="admin-btn btn-purple"><?php echo esc_html__( 'Contact Admin', 'multivendorx' ); ?></div>
                     </div>
 
