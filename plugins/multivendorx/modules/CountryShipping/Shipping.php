@@ -39,8 +39,47 @@ class Shipping extends \WC_Shipping_Method {
         $this->init_form_fields();
         $this->init_settings();
 
+        add_filter( 'woocommerce_cart_shipping_packages', array( $this, 'mvx_split_cart_by_vendor' ) );
+
+        add_action( 'woocommerce_cart_calculate_fees', array( $this, 'mvx_force_shipping_recalculation' ), 20, 1 );
         // Save settings in admin if you have any defined
         add_action( 'woocommerce_update_options_shipping_' . $this->id, array( $this, 'process_admin_options' ) );
+    }
+
+    public function mvx_force_shipping_recalculation() {
+        WC()->cart->calculate_shipping();
+    }
+    
+
+    public function mvx_split_cart_by_vendor( $packages ) {
+        $new_packages = array();
+    
+        foreach ( WC()->cart->get_cart() as $item_key => $item ) {
+            $product_id = $item['product_id'];
+            $store_id   = get_post_meta( $product_id, 'multivendorx_store_id', true );
+
+            if ( ! $store_id ) continue;
+    
+            if ( ! isset( $new_packages[ $store_id ] ) ) {
+                $new_packages[ $store_id ] = array(
+                    'contents'    => array(),
+                    'contents_cost' => 0,
+                    'applied_coupons' => WC()->cart->get_applied_coupons(),
+                    'destination' => array(
+                        'country'   => WC()->customer->get_shipping_country(),
+                        'state'     => WC()->customer->get_shipping_state(),
+                        'postcode'  => WC()->customer->get_shipping_postcode(),
+                        'city'      => WC()->customer->get_shipping_city(),
+                        'address'   => WC()->customer->get_shipping_address(),
+                        'address_2' => WC()->customer->get_shipping_address_2(),
+                    ),
+                );
+            }
+    
+            $new_packages[ $store_id ]['contents'][ $item_key ] = $item;
+            $new_packages[ $store_id ]['contents_cost'] += $item['line_total'];
+        }
+        return array_values( $new_packages );
     }
 
     /**
@@ -354,11 +393,11 @@ class Shipping extends \WC_Shipping_Method {
 
                 if( $local_pickup_cost ) {
                     $rate = array(
-                        'id'    => 'local_pickup:1',
+                        'id'    => 'local_pickup:' . $store_id,
                         'label' => __('Pickup from Store', 'multivendorx'),
                         'cost'  => $local_pickup_cost,
                         'taxes' => $tax_rate
-                    );
+                    );                    
                
                     // Register the rate
                     $this->add_rate( $rate );
@@ -367,6 +406,4 @@ class Shipping extends \WC_Shipping_Method {
         }
         
     }
-
-
 }
