@@ -66,13 +66,13 @@ export default {
         {
             key: 'separator_content',
             type: 'section',
-            hint: __("Identity Verification", 'multivendorx'),
+            hint: __("Identity verification", 'multivendorx'),
             desc: __('Verify store identity using government-issued documents or facial recognition. Ensures authenticity of users.')
         },
         {
             key: 'verification_methods',
             type: 'multi-string',
-            label: __('Verification Methods', 'multivendorx'),
+            label: __('Verification methods', 'multivendorx'),
             placeholder: __('', 'multivendorx'),
             moduleEnabled: 'identity-verification',
             proSetting: true,
@@ -89,7 +89,7 @@ export default {
         {
             key: 'separator_content',
             type: 'section',
-            hint: __("Social Verification", 'multivendorx'),
+            hint: __("Social verification", 'multivendorx'),
             desc: __('Allow stores to verify their identity by connecting social media accounts.')
         },
         {

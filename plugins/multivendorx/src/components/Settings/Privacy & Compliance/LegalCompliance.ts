@@ -36,6 +36,8 @@ export default {
                 '<li><strong>Download and re-upload</strong> – Stores can download, sign, and re-upload signed copies as proof of acceptance. This ensures verified consent for all legal and policy agreements.</li>',
                 'multivendorx'
             ),
+                moduleEnabled: 'marketplace-compliance',
+                proSetting: true,
             options: [
                 {
                     key: 'allow_download_only',
