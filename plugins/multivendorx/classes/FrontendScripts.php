@@ -656,7 +656,7 @@ class FrontendScripts {
                     'nonce'                    => wp_create_nonce( 'wp_rest' ),
                     'woo_nonce'                => wp_create_nonce( 'wc_store_api' ),
                     // 'country_list'             => WC()->countries->get_shipping_countries(),
-                    // 'state_list'               => WC()->countries->get_states(),
+                    'state_list'               => WC()->countries->get_states(),
                     'country_list'             => $country_list,
                     'color'                    => MultiVendorX()->setting->get_setting( 'store_color_settings' ),
                     'map_providor'             => MultiVendorX()->setting->get_setting( 'choose_map_api' ),
