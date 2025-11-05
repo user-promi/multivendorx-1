@@ -662,6 +662,58 @@ console.log('inputs', inputs)
                         return (
                             <section className="section-divider-container"></section>
                         );
+                    case 'address':
+                        return (
+                            <section className="form-pro-sections" key={field.id}>
+                                <label className="address-label">{field.label}</label>
+                                <div className="address-field-group">
+                                    {field.fields?.map((subField) => {
+                                        // Compute field name as "address-mhk75lu8_city", etc.
+                                        const inputName = `${subField.key}`;
+                                        const value = inputs[inputName] || '';
+
+                                        switch (subField.type) {
+                                            case 'text':
+                                                return (
+                                                    <div className="address-input-wrapper" key={subField.id}>
+                                                        <label htmlFor={inputName}>{subField.label}</label>
+                                                        <input
+                                                            type="text"
+                                                            id={inputName}
+                                                            name={inputName}
+                                                            placeholder={subField.placeholder}
+                                                            value={value}
+                                                            required={field.required || subField.required}
+                                                            onChange={(e) =>
+                                                                handleChange(inputName, e.target.value)
+                                                            }
+                                                        />
+                                                    </div>
+                                                );
+
+                                            case 'select':
+                                                return (
+                                                    <div className="multiselect-container" key={subField.id}>
+                                                        <label htmlFor={inputName}>{subField.label}</label>
+                                                        <Multiselect
+                                                            options={ subField.options ?? [] }
+                                                            onChange={ ( data ) =>
+                                                                handleChange(
+                                                                    field.name ?? '',
+                                                                    data
+                                                                )
+                                                            }
+                                                        />
+                                                    </div>
+                                                );
+
+                                            default:
+                                                return null;
+                                        }
+                                    })}
+                                </div>
+                            </section>
+                        );
                     default:
                         return null;
                 }

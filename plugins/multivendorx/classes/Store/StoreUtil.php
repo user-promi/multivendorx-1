@@ -233,7 +233,25 @@ class StoreUtil {
         if ( !empty($store_meta) && is_serialized($store_meta) ) {
             $submitted_data = unserialize($store_meta);
         }
-           
+
+       $meta_keys = [
+            'phone',
+            'paypal_email',
+            'address_1',
+            'address_2',
+            'city',
+            'state',
+            'country',
+            'postcode',
+        ];
+
+        foreach ( $meta_keys as $key ) {
+            $meta_value = $store->get_meta( $key );
+            if ( ! empty( $meta_value ) ) {
+                $submitted_data[ $key ] = $meta_value;
+            }
+        }
+
         // Fetch form settings
         $form_settings = MultivendorX()->setting->get_option(
             'multivendorx_store_registration_form_settings',
@@ -266,7 +284,7 @@ class StoreUtil {
         foreach ( $submitted_data as $field_name => $field_value ) {
             $label = $name_label_map[$field_name] ?? $field_name;
             $response['all_registration_data'][$field_name] = $field_value;
-            if ( $field_name == 'paypal_email' || $field_name == 'phone' ) {
+            if ( in_array($field_name, $meta_keys) ) {
                 $response['core_data'][$label] = $field_value;
             } else {
                 $response['registration_data'][$label] = $field_value;
