@@ -244,5 +244,40 @@ class Store {
         );
     }
 
+    public function delete_all_meta() {
+        global $wpdb;
+        $table = "{$wpdb->prefix}" . Utill::TABLES['store_meta'];
+
+        $deleted = $wpdb->delete(
+            $table,
+            [ 'store_id' => (int) $this->id ],
+            [ '%d' ]
+        );
+
+        return $deleted !== false;
+    }
+
+
+    public function delete_store_completely() {
+        global $wpdb;
+
+        $store_id = (int) $this->id;
+
+        if ( $store_id <= 0 ) {
+            return false;
+        }
+
+        // Table names
+        $store_table       = "{$wpdb->prefix}" . Utill::TABLES['store'];
+        $store_users_table = "{$wpdb->prefix}" . Utill::TABLES['store_users'];
+        $store_meta_table  = "{$wpdb->prefix}" . Utill::TABLES['store_meta'];
+
+        // Run deletions
+        $wpdb->delete( $store_meta_table, [ 'store_id' => $store_id ], [ '%d' ] );
+        $wpdb->delete( $store_users_table, [ 'store_id' => $store_id ], [ '%d' ] );
+        $wpdb->delete( $store_table, [ 'ID' => $store_id ], [ '%d' ] );
+
+        return true;
+    }
 
 }
