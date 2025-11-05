@@ -84,6 +84,10 @@ body:has(.admin-main-wrapper){
   background: $theme-background-color;
   color: $theme-color;
 }
+.btn-purple-bg {
+  background: $theme-color;
+  color: #fff;
+}
 
 .btn-yellow {
   background: #d3a93a;
@@ -534,7 +538,7 @@ input[type="checkbox"]:focus {
   margin-left: .25rem;
   padding: .125rem .438rem;
   position: absolute;
-  right: .25rem;
+  left: 50%;
   top: 0;
   transform: translateY(-50%);
   width: fit-content;
@@ -1418,25 +1422,24 @@ input[type="checkbox"]:focus {
 //   align-items: center;
 // }
 
+
 // filter tabs (module , notification)
+.category-filter {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
 
+  .category-item {
+    padding: 0.5rem 1.2rem;
+    background: #fff;
+    color: #000;
+    font-size: 0.95rem;
+    border-radius: 3.125rem;
+    cursor: pointer;
 
-// .category-filter {
-//   display: flex;
-//   gap: 0.5rem;
-//   flex-wrap: wrap;
-
-//   .category-item {
-//     padding: 0.5rem 1.2rem;
-//     background: #fff;
-//     color: #000;
-//     font-size: 0.95rem;
-//     border-radius: 3.125rem;
-//     cursor: pointer;
-
-//     &.active {
-//       background: $theme-color;
-//       color: #fff;
-//     }
-//   }
-// }
+    &.active {
+      background: $theme-color;
+      color: #fff;
+    }
+  }
+}

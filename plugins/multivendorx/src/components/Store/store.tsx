@@ -178,7 +178,7 @@ const Store = () => {
                         }
                         buttons={[
                             <div
-                                className="admin-btn btn-purple"
+                                className="admin-btn btn-purple-bg"
                                 onClick={() => {
                                     setFormData({}); // reset all fields
                                     setImagePreview(''); // reset image preview

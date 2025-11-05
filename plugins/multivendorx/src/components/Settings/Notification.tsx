@@ -207,11 +207,11 @@ const Notification: React.FC = () => {
             {/* View Toggle */}
             <div className="toggle-setting-wrapper view-toggle">
 
-                <div className="filter-wrapper">
+                <div className="category-filter">
                     {uniqueTags.map(tag => (
                         <div
                             key={tag}
-                            className={`filter-item ${activeTag === tag ? 'active' : ''}`}
+                            className={`category-item ${activeTag === tag ? 'active' : ''}`}
                             role="button"
                             tabIndex={0}
                             onClick={(e) => { e.stopPropagation(); setActiveTag(tag); }}

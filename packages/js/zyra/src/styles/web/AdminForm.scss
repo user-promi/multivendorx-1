@@ -47,23 +47,23 @@
     }
 
     .form-group.pro-setting {
-      background: #e3504705;
-      border: 0.063rem solid #6a2e2b1f;
+      // background: #e3504705;
+      border-top: 0.063rem solid rgb(227 80 71 / 18%);
       // padding: 1rem 0;
       position: relative;
       border-left: 0;
       border-right: 0;
-      margin-top: 1rem;
+      // margin-top: 1rem;
     }
     .form-group.module-enabled {
-      background: #d9f5f059;
-      border: 0.063rem solid #6a2e2b1f;
+      // background: #d9f5f059;
+      border-top: 0.063rem solid #d9f5f0;
       // padding: 1rem 0;
       position: relative;
       border-left: 0;
       border-right: 0;
-      box-shadow: -0.313rem 0 0 0 #d9f5f059, 0.313rem 0 0 0 #d9f5f059;
-      margin-top: 1rem;
+      // box-shadow: -0.313rem 0 0 0 #d9f5f059, 0.313rem 0 0 0 #d9f5f059;
+      // margin-top: 1rem;
 
       .adminlib-lock{
         color: blue;
