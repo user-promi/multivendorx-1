@@ -1940,7 +1940,11 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             },
                         }) : input}
                     </div>
-                    {(!inputField.proSetting && inputField.moduleEnabled) && (
+                    {(
+                        ((inputField.proSetting && appLocalizer?.khali_dabba) || (!inputField.proSetting)) &&                          
+                        inputField.moduleEnabled &&
+                        !modules.includes(inputField.moduleEnabled) 
+                    ) && (
                         <span className="admin-pro-tag module">
                             <i className={`adminlib-${inputField.moduleEnabled}`}></i>
                             {String(inputField.moduleEnabled)
