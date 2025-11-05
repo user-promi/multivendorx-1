@@ -29,15 +29,29 @@ const RegistrationForm = () => {
             setResponseData(regData);
 
             if (storeList.length > 0 && regData.length > 0) {
-                const firstStore = storeList[0];
-                setSelectedStore(firstStore);
-                const match = regData.find(
-                    (item) => String(item.id) === String(firstStore.value)
+                // const firstStore = storeList[0];
+                // setSelectedStore(firstStore);
+                // const match = regData.find(
+                //     (item) => String(item.id) === String(firstStore.value)
+                //     );
+                // if (match) setInputs(match);
+
+                const match = storeList.find((store) =>
+                    regData.some((item) => String(item.id) === String(store.value))
+                );
+
+                if (match) {
+                    setSelectedStore(match);
+
+                    // Find the corresponding registration data
+                    const matchData = regData.find(
+                        (item) => String(item.id) === String(match.value)
                     );
-                if (match) setInputs(match);
+
+                    if (matchData) setInputs(matchData);
+                }
             }
         });
-
     }, []);
 
     const handleStoreChange = (val: string) => {

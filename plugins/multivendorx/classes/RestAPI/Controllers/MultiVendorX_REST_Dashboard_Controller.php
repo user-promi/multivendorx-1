@@ -507,8 +507,13 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller
                 $dashboard_array['error_msg'] = $status_settings['store_suspended_status']['suspended_msg'];
                 break;
 
-            case 'reject':
-                $dashboard_array['error_msg'] = $status_settings['store_rejected_status']['rejected_msg'];
+            case 'rejected':
+                $reapply_link = sprintf(
+                    '<a href="%s">%s</a>',
+                    esc_url( get_permalink( MultiVendorX()->setting->get_setting( 'store_registration_page' ) ) ),
+                    esc_html__( 'Click here to reapply.', 'multivendorx' )
+                );
+                $dashboard_array['error_msg'] = $status_settings['store_rejected_status']['rejected_msg'] . ' ' . $reapply_link;
                 break;
 
             default:
