@@ -80,7 +80,7 @@ export default {
                 },
                 {
                     key: 'country_wise',
-                    label: __('Customer Confirm Delivery', 'multivendorx'),
+                    label: __('Customer confirm delivery', 'multivendorx'),
                     value: 'country_wise',
                 },
             ],
