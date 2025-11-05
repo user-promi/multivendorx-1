@@ -38,6 +38,7 @@ type TabsProps = {
   hideBreadcrumb?: boolean;
   action?: React.ReactNode;
   hideTitle?: boolean;
+  premium?: boolean;
 };
 
 // Helper functions outside component to avoid recreation on every render
@@ -175,7 +176,8 @@ const Tabs: React.FC<TabsProps> = ({
   submenuRender,
   hideBreadcrumb,
   action,
-  hideTitle
+  hideTitle,
+  premium
 }) => {
   const [activeTab, setActiveTab] = useState(currentTab);
   const [menuStack, setMenuStack] = useState<TabData[][]>([tabData]);
@@ -428,6 +430,7 @@ const Tabs: React.FC<TabsProps> = ({
         renderBreadcrumb={renderBreadcrumbLinks}
         renderMenuItems={renderAllMenuItems}
         tabData={tabData}
+        premium={premium}
         goPremium={!appLocalizer.khali_dabba}
         goPremiumLink={appLocalizer.shop_url}
         hideBreadcrumb={hideBreadcrumb}
