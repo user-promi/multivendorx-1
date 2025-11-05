@@ -213,9 +213,8 @@
 
 .title-section {
   margin: 0 1rem;
-  padding: 1.5rem 1.5rem 1.5rem 0;
+  padding: 1.5rem 1.5rem .5rem 0;
   // background: #fff;
-  border-radius: 0.313rem;
   border-bottom: $border-light-small;
 
   .title-wrapper {
@@ -386,10 +385,17 @@
   }
 }
 
-.tab-content:has(.tab-bg) {
-  .divider-wrapper {
-    background: transparent;
+.general-wrapper:has(.tab-bg) {
+
+  .middle-child-container {
+    border: none;
   }
+
+  .divider-wrapper {
+    // background: transparent;
+    display: none;
+  }
+
 }
 
 .tabs-wrapper {
@@ -422,9 +428,11 @@
   color: #121116;
   line-height: 1.5;
   // background-color: #fff;
+  border: $border-light-small;
 
   .tabs-wrapper {
     // margin: 0 2rem;
+    padding: 0 1rem 1rem ;
   }
 
   &.show-menu {
@@ -589,7 +597,7 @@
   .divider-section {
     margin: 0 1rem;
     border-bottom: $border-light-small;
-    padding: 1rem 0;
+    padding: 1rem 0 0.5rem 0;
 
 
     .title {
@@ -611,7 +619,7 @@
 
 .divider-wrapper:first-child {
   // padding: 1.5rem 0;
-  // margin: 0 2rem;
+  margin: 0;
 }
 
 .divider-wrapper:not(:first-child) {

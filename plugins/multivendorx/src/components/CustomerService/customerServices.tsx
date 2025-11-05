@@ -119,7 +119,7 @@ const CustomerServices = () => {
             <div className="general-wrapper">
                 <div className="row ">
                     {/* Tab Titles */}
-                    <div className="column admin-tab">
+                    <div className="tabs-wrapper">
                         <div className="tab-titles">
                             {tabs.map((tab) => (
                                 <div

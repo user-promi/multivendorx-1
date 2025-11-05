@@ -172,17 +172,7 @@ const ApprovalQueue = () => {
                 <div className="row ">
                     {/* Tab Titles */}
                     <div className="column admin-tab">
-                        <div className="tab-titles">
-                            {tabs.map((tab) => (
-                                <div
-                                    key={tab.id}
-                                    className={`title ${activeTab === tab.id ? "active" : ""}`}
-                                    onClick={() => setActiveTab(tab.id)}
-                                >
-                                    <p>{tab.label}</p>
-                                </div>
-                            ))}
-                        </div>
+                        
                     </div>
                 </div>
                 <div className="row">

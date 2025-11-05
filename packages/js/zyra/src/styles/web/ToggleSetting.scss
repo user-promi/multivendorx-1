@@ -240,6 +240,8 @@ div:has(.exclusion-modal) {
         &:first-child label {
             border-top-left-radius: 0.313rem;
             border-bottom-left-radius: 0.313rem;
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
         }
 
         input:checked+label {
