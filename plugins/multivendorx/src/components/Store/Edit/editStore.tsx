@@ -354,11 +354,17 @@ const EditStore = () => {
                         </div> */}
                             <div className="general-wrapper">
                                 <div className="store-header">
-                                    <div className="banner"
+                                    <div
+                                        className="banner"
                                         style={{
-                                            background: `url("${data.banner}")`,
-                                        }}>
-                                        {!data?.image && <div className="default-img-1500x900" />}
+                                            background: data?.banner && `url("${data.banner}")`,
+                                        }}
+                                        >
+                                        {Object.keys(data).length === 0 ? (
+                                            <Skeleton variant="rectangular" width="100%" height={200} />
+                                        ) : !data.banner ? (
+                                            <div className="default-img-1500x900" />
+                                        ) : null}
 
                                         <div className="edit-section">
                                             <div className="edit-wrapper">
