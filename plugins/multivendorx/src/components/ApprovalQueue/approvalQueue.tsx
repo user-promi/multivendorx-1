@@ -16,7 +16,7 @@ const ApprovalQueue = () => {
     const [reportAbuseCount, setReportAbuseCount] = useState<number>(0);
     const [withdrawCount, setWithdrawCount] = useState<number>(0);
 
-    const { modules } = useModules.getState();
+    const { modules } = useModules();
     const [activeTab, setActiveTab] = useState("");
     const settings = appLocalizer.settings_databases_value || {};
 

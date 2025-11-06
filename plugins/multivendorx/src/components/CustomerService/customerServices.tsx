@@ -18,7 +18,7 @@ const CustomerServices = () => {
 
     // Modules from global store
 
-    const { modules } = useModules.getState();
+    const { modules } = useModules();
     /**
      * Fetch counts on mount
      */
