@@ -1022,6 +1022,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             values={setting[inputField.key] || inputField.defaultValues || []}
                             name={inputField.key}
                             proSetting={isProSetting(inputField.proSetting ?? false)}
+                            moduleEnabled={inputField.moduleEnabled ? modules.includes(inputField.moduleEnabled) : false}
                             description={inputField.desc}
                             descClass="settings-metabox-description"
                             iconEnable={inputField.iconEnable}
@@ -1909,6 +1910,8 @@ const AdminForm: React.FC<AdminFormProps> = ({
                                 ) {
                                     settingChanged.current = true;
                                     updateSetting(inputField.key, data);
+                                } else {
+                                    console.warn("Blocked by hasAccess — no update triggered");
                                 }
                             }}
                         />
