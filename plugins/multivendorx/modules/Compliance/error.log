@@ -1,0 +1,28 @@
+06/11/2025 07:02:45:orders: : array (
+  0 => 
+  array (
+    'value' => 'Product not received',
+    'required' => true,
+    'deleteDisabled' => true,
+  ),
+  1 => 
+  array (
+    'value' => 'Product not as described',
+    'required' => true,
+    'deleteDisabled' => true,
+  ),
+  2 => 
+  array (
+    'value' => 'Product damaged/defective',
+    'required' => true,
+    'deleteDisabled' => true,
+  ),
+  3 => 
+  array (
+    'value' => 'Wrong item received',
+  ),
+  4 => 
+  array (
+    'value' => 'Order arrived late',
+  ),
+)

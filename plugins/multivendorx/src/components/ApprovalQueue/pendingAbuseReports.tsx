@@ -20,7 +20,11 @@ type ReportRow = {
     updated_at: string;
 };
 
-const ReportAbuseTable: React.FC = () => {
+interface Props {
+    onUpdated?: () => void;
+}
+
+const ReportAbuseTable: React.FC<Props> = ({ onUpdated }) => {
     const [data, setData] = useState<ReportRow[] | null>(null);
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
     const [totalRows, setTotalRows] = useState<number>(0);
@@ -161,6 +165,7 @@ const ReportAbuseTable: React.FC = () => {
                                             })
                                             .then(() => {
                                                 fetchData(pagination.pageSize, pagination.pageIndex + 1);
+                                                onUpdated?.();
                                             })
                                             .catch(() => {
                                                 alert(__('Failed to delete report', 'multivendorx'));

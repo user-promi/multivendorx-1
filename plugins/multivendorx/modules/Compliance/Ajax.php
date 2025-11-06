@@ -50,7 +50,6 @@ class Ajax {
     public function get_report_reasons() {
         // Get the saved reasons from settings
         $reasons = MultiVendorX()->setting->get_setting('abuse_report_reasons', []);
-    
         // Extract reason values
         $reason_list = [];
         foreach ( $reasons as $reason ) {

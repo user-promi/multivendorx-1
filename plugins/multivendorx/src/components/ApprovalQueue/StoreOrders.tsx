@@ -31,7 +31,11 @@ type FilterData = {
   order?: any;
 };
 
-const StoreOrders: React.FC = () => {
+interface Props {
+  onUpdated?: () => void;
+}
+
+const StoreOrders: React.FC<Props> = ({ onUpdated }) => {
   const [data, setData] = useState<StoreRow[]>([]);
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
   const [pagination, setPagination] = useState<PaginationState>({
@@ -323,7 +327,7 @@ const StoreOrders: React.FC = () => {
 
   return (
     <>
-    
+
       <div className="admin-table-wrapper">
         <Table
           data={data}
@@ -342,101 +346,8 @@ const StoreOrders: React.FC = () => {
         />
         {error && <div className="error-message">{error}</div>}
       </div>
-
-      {/* {selectedRefund && (
-        <CommonPopup
-          open={!!selectedRefund}
-          onClose={() => setSelectedRefund(null)}
-          width="500px"
-          header={
-            <>
-              <div className="title">
-                <i className="adminlib-close"></i>
-                Reject Refund Request
-              </div>
-              <p>Provide a reason for rejecting this refund request. The customer will be notified with this reason.</p>
-            </>
-          }
-          footer={
-            <>
-              <button
-                type="button"
-                onClick={() => setSelectedRefund(null)}
-                className="admin-btn btn-red"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleRejectWithReason}
-                disabled={rejecting || !rejectReason.trim()}
-                className="admin-btn btn-purple"
-              >
-                {rejecting ? "Rejecting..." : "Reject Refund"}
-              </button>
-            </>
-          }
-        >
-          <div className="content">
-            <div className="form-group-wrapper">
-              <div className="form-group">
-                <label htmlFor="rejectReason">
-                  Rejection Reason
-                </label>
-                <TextArea
-                  name="rejectReason"
-                  inputClass="textarea-input"
-                  value={rejectReason}
-                  onChange={(e) => setRejectReason(e.target.value)}
-                  placeholder="Enter reason for rejecting this refund request..."
-                />
-              </div>
-              <div className="form-group">
-                <div className="refund-details">
-                  <strong>Store:</strong> {selectedRefund.store_name}<br />
-                  <strong>Order ID:</strong> {selectedRefund.orderNumber}<br />
-                  <strong>Customer:</strong> {selectedRefund.customer}<br />
-                  <strong>Amount:</strong> <span dangerouslySetInnerHTML={{ __html: selectedRefund.amount }} /><br />
-                  <strong>Original Reason:</strong> {selectedRefund.reason}
-                </div>
-              </div>
-            </div>
-          </div>
-        </CommonPopup>
-      )} */}
-
     </>
   );
-  // return (
-  //   <div className="row">
-  //     <div className="card-header">
-  //       <div className="left">
-  //         <div className="title">
-  //           Refund Request
-  //         </div>
-  //         <div className="des">Waiting for your response</div>
-  //       </div>
-  //       <div className="right">
-  //         <i className="adminlib-more-vertical"></i>
-  //       </div>
-  //     </div>
-
-  //     <Table
-  //       data={data}
-  //       columns={columns as ColumnDef<Record<string, any>, any>[]}
-  //       rowSelection={rowSelection}
-  //       onRowSelectionChange={setRowSelection}
-  //       defaultRowsPerPage={pagination.pageSize}
-  //       pageCount={pageCount}
-  //       pagination={pagination}
-  //       onPaginationChange={setPagination}
-  //       handlePagination={requestApiForData}
-  //       perPageOption={[10, 25, 50]}
-  //       realtimeFilter={realtimeFilter}
-  //       searchFilter={searchFilter}
-  //       totalCounts={totalRows}
-  //     />
-  //   </div>
-  // );
 };
 
 export default StoreOrders;

@@ -20,75 +20,29 @@ const ApprovalQueue = () => {
     const [activeTab, setActiveTab] = useState("");
     const settings = appLocalizer.settings_databases_value || {};
 
-    const refreshCounts = () => {
-        axios({
-            method: 'GET',
-            url: getApiLink(appLocalizer, 'store'),
-            headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            params: { count: true, status: 'pending' },
-        }).then((response) => setStoreCount(response.data || 0));
-
-        axios({
-            method: 'GET',
-            url: `${appLocalizer.apiUrl}/wc/v3/products`,
-            headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            params: { per_page: 1, meta_key: 'multivendorx_store_id', status: 'pending' }
-        })
-            .then((response) => {
-                const totalCount = parseInt(response.headers['x-wp-total'], 10) || 0;
-                setProductCount(totalCount);
-            });
-
-        axios({
-            method: 'GET',
-            url: `${appLocalizer.apiUrl}/wc/v3/coupons`,
-            headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            params: { per_page: 1, meta_key: 'multivendorx_store_id', status: 'pending' }
-        })
-            .then((response) => {
-                const totalCount = parseInt(response.headers['x-wp-total'], 10) || 0;
-                setCouponCount(totalCount);
-            });
-
-        // Fetch total orders count
-        axios({
-            method: 'GET',
-            url: `${appLocalizer.apiUrl}/wc/v3/orders`,
-            headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            params: { meta_key: 'multivendorx_store_id', status: 'refund-requested' },
-        })
-            .then((response) => {
-                const total = Number(response.headers['x-wp-total']) || 0;
-                setRefundCount(total);
-            })
-            .catch(() => {
-                setRefundCount(0);
-            });
-
-        axios({
-            method: 'GET',
-            url: getApiLink(appLocalizer, 'report-abuse'),
-            headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            params: { count: true }
-        })
-            .then((response) => {
-                setReportAbuseCount(response.data || 0);
-            })
-            .catch(() =>  setReportAbuseCount(0));
-        axios({
-            method: 'GET',
-            url: getApiLink(appLocalizer, 'store'),
-            headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            params: { count: true, pending_withdraw: true },
-        })
-            .then((response) => {
-               setWithdrawCount(response.data || 0);
-            })
-            .catch(() => {
-                setWithdrawCount(0);
-            });
-
+    const refreshCounts = async () => {
+        try {
+            const [storeRes, productRes, couponRes, refundRes, abuseRes, withdrawRes] = await Promise.all([
+                axios.get(getApiLink(appLocalizer, 'store'), { params: { count: true, status: 'pending' }, headers: { 'X-WP-Nonce': appLocalizer.nonce } }),
+                axios.get(`${appLocalizer.apiUrl}/wc/v3/products`, { params: { per_page: 1, meta_key: 'multivendorx_store_id', status: 'pending' }, headers: { 'X-WP-Nonce': appLocalizer.nonce } }),
+                axios.get(`${appLocalizer.apiUrl}/wc/v3/coupons`, { params: { per_page: 1, meta_key: 'multivendorx_store_id', status: 'pending' }, headers: { 'X-WP-Nonce': appLocalizer.nonce } }),
+                axios.get(`${appLocalizer.apiUrl}/wc/v3/orders`, { params: { meta_key: 'multivendorx_store_id', refund_status: 'refund_request' }, headers: { 'X-WP-Nonce': appLocalizer.nonce } }),
+                axios.get(getApiLink(appLocalizer, 'report-abuse'), { params: { count: true }, headers: { 'X-WP-Nonce': appLocalizer.nonce } }),
+                axios.get(getApiLink(appLocalizer, 'store'), { params: { count: true, pending_withdraw: true }, headers: { 'X-WP-Nonce': appLocalizer.nonce } })
+            ]);
+    
+            setStoreCount(storeRes.data || 0);
+            setProductCount(parseInt(productRes.headers['x-wp-total'], 10) || 0);
+            setCouponCount(parseInt(couponRes.headers['x-wp-total'], 10) || 0);
+            setRefundCount(parseInt(refundRes.headers['x-wp-total'], 10) || 0);
+            setReportAbuseCount(abuseRes.data || 0);
+            setWithdrawCount(withdrawRes.data || 0);
+    
+        } catch (err) {
+            console.error(err);
+        }
     };
+    
 
     const tabs = [
         {
@@ -96,7 +50,7 @@ const ApprovalQueue = () => {
             label: "Stores",
             icon: "adminlib-calendar yellow",
             count: storeCount,
-            des: "Awaiting verification check",
+            des: "Eager to join the marketplace",
             condition: settings?.general?.approve_store === "manually",
             content: <Stores onUpdated={refreshCounts} />
         },
@@ -105,7 +59,7 @@ const ApprovalQueue = () => {
             label: "Products",
             icon: "adminlib-calendar red",
             count: productCount,
-            des: "Eager to join the marketplace",
+            des: "Waiting for your green light",
             condition: settings?.["store-capability"]?.products?.includes("publish_products"), count: productCount,
             content: <Products onUpdated={refreshCounts} />
         },
@@ -115,7 +69,7 @@ const ApprovalQueue = () => {
             icon: "adminlib-calendar green",
             count: couponCount,
             condition: settings?.["store-capability"]?.coupons?.includes("publish_coupons"),
-            des: "Requested deactivation",
+            des: "Need a quick approval",
             content: <Coupons onUpdated={refreshCounts} />
         },
         {
@@ -123,7 +77,7 @@ const ApprovalQueue = () => {
             label: "Customers",
             icon: "adminlib-calendar yellow",
             module: "wholesale",
-            des: "Ready to become wholesalers",
+            des: "Ready for your approval",
             count: 9,
             content: <h1>Upcoming Feature</h1>
         },
@@ -138,11 +92,11 @@ const ApprovalQueue = () => {
         },
         {
             id: "report-abuse",
-            label: "Product Abuse",
+            label: "Product Abused",
             module: "marketplace-compliance",
             icon: "adminlib-calendar blue",
             count: reportAbuseCount,
-            des: "Waiting to be published",
+            des: "Reported for review",
             content: <ReportAbuseTable onUpdated={refreshCounts} />
         },
         {
