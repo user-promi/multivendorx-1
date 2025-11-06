@@ -82,7 +82,7 @@ export default {
             type: 'nested',
             label: 'Commission value',
             desc: __(
-                'Define commission rates based on total order value. Multiple rules can be created for different order value ranges.',
+                'Set your default commission rate that will apply to all orders. You can choose between a fixed amount ($) or a percentage (%) of the order value. Additionally, you can create advanced commission rules below to automatically adjust rates based on specific conditions like product price, quantity, or total order value.',
                 'multivendorx'
             ),
             addButtonLabel: 'Add new',
