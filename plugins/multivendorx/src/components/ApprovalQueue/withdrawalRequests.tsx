@@ -51,15 +51,8 @@ const WithdrawalRequests: React.FC = () => {
         requestData(rowsPerPage, currentPage);
         setPageCount(Math.ceil(totalRows / rowsPerPage));
     }, [pagination]);
-    const [showDropdown, setShowDropdown] = useState(false);
 
-    const toggleDropdown = (id: any) => {
-        if (showDropdown === id) {
-            setShowDropdown(false);
-            return;
-        }
-        setShowDropdown(id);
-    };
+
     // Fetch data from backend.
     function requestData(
         rowsPerPage = 10,
@@ -77,7 +70,6 @@ const WithdrawalRequests: React.FC = () => {
             },
         })
             .then((response) => {
-                console.log(response.data);
                 setData(Array.isArray(response.data) ? response.data : []);
             })
 

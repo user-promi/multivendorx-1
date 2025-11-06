@@ -9,11 +9,13 @@ import WithdrawalRequests from './withdrawalRequests';
 import StoreOrders from './StoreOrders';
 
 const ApprovalQueue = () => {
+    const [storeCount, setStoreCount] = useState<number>(0);
     const [productCount, setProductCount] = useState<number>(0);
     const [couponCount, setCouponCount] = useState<number>(0);
-    const [transactionCount, setTransactionCount] = useState<number>(0);
-    const [storeCount, setStoreCount] = useState<number>(0);
-    const [refundCount, setRefundCount] = useState(0);
+    const [refundCount, setRefundCount] = useState<number>(0);
+    const [reportAbuseCount, setReportAbuseCount] = useState<number>(0);
+    const [withdrawCount, setWithdrawCount] = useState<number>(0);
+
     const { modules } = useModules.getState();
     const [activeTab, setActiveTab] = useState("");
     const settings = appLocalizer.settings_databases_value || {};
@@ -48,17 +50,6 @@ const ApprovalQueue = () => {
                 setCouponCount(totalCount);
             });
 
-        axios({
-            method: 'GET',
-            url: getApiLink(appLocalizer, 'store'),
-            headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            params: { pending_withdraw: true } //important: use this param
-        })
-            .then((response) => {
-                const count = response.data.length || 0; // response.data is an array of stores with pending withdraw
-                setTransactionCount(count);
-            })
-            .catch(() => setTransactionCount(0));
         // Fetch total orders count
         axios({
             method: 'GET',
@@ -73,15 +64,38 @@ const ApprovalQueue = () => {
             .catch(() => {
                 setRefundCount(0);
             });
+
+        axios({
+            method: 'GET',
+            url: getApiLink(appLocalizer, 'report-abuse'),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            params: { count: true }
+        })
+            .then((response) => {
+                setReportAbuseCount(response.data || 0);
+            })
+            .catch(() =>  setReportAbuseCount(0));
+        axios({
+            method: 'GET',
+            url: getApiLink(appLocalizer, 'store'),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            params: { count: true, pending_withdraw: true },
+        })
+            .then((response) => {
+               setWithdrawCount(response.data || 0);
+            })
+            .catch(() => {
+                setWithdrawCount(0);
+            });
+
     };
 
-    console.log(appLocalizer.settings_databases_value)
     const tabs = [
         {
             id: "stores",
             label: "Stores",
             icon: "adminlib-calendar yellow",
-            count: 9,
+            count: storeCount,
             des: "Awaiting verification check",
             condition: settings?.general?.approve_store === "manually",
             content: <Stores onUpdated={refreshCounts} />
@@ -90,6 +104,7 @@ const ApprovalQueue = () => {
             id: "products",
             label: "Products",
             icon: "adminlib-calendar red",
+            count: productCount,
             des: "Eager to join the marketplace",
             condition: settings?.["store-capability"]?.products?.includes("publish_products"), count: productCount,
             content: <Products onUpdated={refreshCounts} />
@@ -126,7 +141,7 @@ const ApprovalQueue = () => {
             label: "Product Abuse",
             module: "marketplace-compliance",
             icon: "adminlib-calendar blue",
-            count: productCount,
+            count: reportAbuseCount,
             des: "Waiting to be published",
             content: <ReportAbuseTable onUpdated={refreshCounts} />
         },
@@ -135,8 +150,8 @@ const ApprovalQueue = () => {
             label: "Withdrawals",
             icon: "adminlib-calendar blue",
             des: "Queued for disbursement",
-            condition: settings?.disbursement?.withdraw_type === "manually",
-            count: transactionCount,
+            condition: settings?.disbursement?.withdraw_type === "manual",
+            count: withdrawCount,
             content: <WithdrawalRequests onUpdated={refreshCounts} />
         },
     ].filter(
@@ -145,8 +160,6 @@ const ApprovalQueue = () => {
             (!tab.module || modules.includes(tab.module)) && // module active or not required
             (tab.condition === undefined || tab.condition)   // condition true or not set
     );
-
-
 
     useEffect(() => {
         if (!tabs.find(tab => tab.id === activeTab)) {
