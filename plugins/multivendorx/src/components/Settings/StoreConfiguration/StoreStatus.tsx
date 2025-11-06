@@ -1,44 +1,27 @@
-import { useEffect, useState } from 'react';
-import axios from 'axios';
-import { BasicInput, TextArea, FileInput, SelectInput, SuccessNotice, getApiLink, Tabs } from 'zyra';
-import PendingApproval from './StoreStatus/PendingApproval';
-import Rejected from './StoreStatus/Rejected';
-import UnderReview from './StoreStatus/UnderReview';
-import PermanentlyRejected from './StoreStatus/PermanentlyRejected';
-import Active from './StoreStatus/Active';
-import Suspended from './StoreStatus/Suspended';
-import Deactivated from './StoreStatus/Deactivated';
+// /* global appLocalizer */
+import React, { useEffect, useState, JSX } from 'react';
 import { useLocation, Link } from 'react-router-dom';
+import { SettingProvider, useSetting } from '../../../contexts/SettingContext';
+import { getTemplateData } from '../../../services/templateService';
+import {
+    getAvailableSettings,
+    getSettingById,
+    AdminForm,
+    Tabs,
+    useModules,
+} from 'zyra';
 
-const StoreStatus = () => {
-    const id = appLocalizer.store_id;
-    const [formData, setFormData] = useState<{ [key: string]: string }>({});
-    const [successMsg, setSuccessMsg] = useState<string | null>(null);
-    const [stateOptions, setStateOptions] = useState<{ label: string; value: string }[]>([]);
+// Types
+type SettingItem = Record<string, any>;
 
-    const location = new URLSearchParams( useLocation().hash.substring( 1 ) );
+const StoreStatus: React.FC = () => {
+    const location = new URLSearchParams(useLocation().hash.substring(1));
+    const initialTab = location.get('tabId') || 'pending-approval';
 
-    useEffect(() => {
-        if (!id) return;
-
-        axios({
-            method: 'GET',
-            url: getApiLink(appLocalizer, `store/${id}`),
-            headers: { 'X-WP-Nonce': appLocalizer.nonce },
-        })
-            .then((res) => {
-                const data = res.data || {};
-                setFormData((prev) => ({ ...prev, ...data }));
-            })
-    }, [id]);
-
-    useEffect(() => {
-        if (successMsg) {
-            const timer = setTimeout(() => setSuccessMsg(null), 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [successMsg]);
-    
+    const settingsArray: SettingItem[] = getAvailableSettings(
+        getTemplateData('storeStatus'),
+        []
+    );
 
     const tabData = [
         {
@@ -121,43 +104,62 @@ const StoreStatus = () => {
         },
     ];
 
-    const getForm = (tabId: string) => {
-        switch (tabId) {
-            case 'pending-approval':
-                return <PendingApproval/>;
-            case 'rejected':
-                return <Rejected/>;
-            case 'permanently-rejected':
-                return <PermanentlyRejected />;
-            case 'active':
-                return <Active />;
-            case 'under-review':
-                return <UnderReview />;
-            case 'suspended':
-                return <Suspended />;
-            case 'deactivated':
-                return <Deactivated />;
-            default:
-                return <div></div>;
+    const GetForm = (currentTab: string | null): JSX.Element | null => {
+        const { setting, settingName, setSetting, updateSetting } = useSetting();
+        const { modules } = useModules();
+        const [storeTabSetting, setStoreTabSetting] = useState<any>(null);
+
+        if (!currentTab) return null;
+
+        const settingModal = getSettingById(settingsArray as any, currentTab);
+
+        // Initialize settings for current tab
+        if (settingName !== currentTab) {
+            setSetting(
+                currentTab,
+                appLocalizer.settings_databases_value[currentTab] || {}
+            );
         }
+
+        useEffect(() => {
+            if (settingName === currentTab) {
+                appLocalizer.settings_databases_value[settingName] = setting;
+            }
+
+        }, [setting, settingName, currentTab]);
+
+        return settingName === currentTab ? (
+            <AdminForm
+                settings={settingModal as any}
+                proSetting={appLocalizer.pro_settings_list}
+                setting={setting}
+                updateSetting={updateSetting}
+                appLocalizer={appLocalizer}
+                modules={modules}
+                storeTabSetting={storeTabSetting}
+            />
+        ) : (
+            <>Loading...</>
+        );
     };
 
     return (
-        <>
+        <SettingProvider>
             <div className="horizontal-tabs">
                 <Tabs
-                    tabData={tabData}
-                    currentTab={ location.get( 'tabId' ) as string }
-                    getForm={getForm}
+                    tabData={tabData as any}
+                    currentTab={initialTab}
+                    getForm={GetForm}
                     prepareUrl={ ( tabid: string ) =>
-                    `?page=multivendorx#&tab=settings&subtab=store-status-control&tabId=${ tabid }`}
+                        `?page=multivendorx#&tab=settings&subtab=store-status-control&tabId=${ tabid }`}
                     appLocalizer={appLocalizer}
                     settingName="Settings"
                     supprot={[]}
                     Link={Link}
-                    submenuRender={true} />
+                    submenuRender={true}
+                />
             </div>
-        </>
+        </SettingProvider>
     );
 };
 
