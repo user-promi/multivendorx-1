@@ -330,7 +330,7 @@ export const KnowledgeBase: React.FC = () => {
             ),
         },
         {
-            header: __('Title', 'multivendorx'),
+            header: __('Name your article', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell title={row.original.title || ''}>
                     {truncateText(row.original.title || '', 30)} {/* truncate to 30 chars */}
@@ -338,7 +338,7 @@ export const KnowledgeBase: React.FC = () => {
             ),
         },
         {
-            header: __('Content', 'multivendorx'),
+            header: __('Write your explanation or tutorial.', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell title={row.original.content || ''}>
                     {truncateText(row.original.content || '', 50)} {/* truncate to 50 chars */}

@@ -322,7 +322,7 @@ const AdminDashboard = () => {
 
                     <div className="button-wrapper">
 
-                      <a href='https://multivendorx.com/pricing/' className="admin-btn btn-purple">
+                      <a href='https://multivendorx.com/pricing/' target="blank" className="admin-btn btn-purple">
                         <i className="adminlib-pro-tag"></i>
                         Upgrade Now
                         <i className="adminlib-arrow-right icon-pro-btn"></i>
@@ -378,7 +378,7 @@ const AdminDashboard = () => {
                     Join 8,000+ successful marketplace owners
                   </div>
                   <div className="des">Create, manage, and grow your marketplace with confidence. Trusted by thousands of entrepreneurs worldwide.</div>
-                  <a href='https://multivendorx.com/pricing/' className="admin-btn btn-purple">
+                  <a href='https://multivendorx.com/pricing/' target="blank" className="admin-btn btn-purple">
                     <i className="adminlib-pro-tag"></i>
                     Upgrade now
                     <i className="adminlib-arrow-right icon-pro-btn"></i>
@@ -712,7 +712,7 @@ const AdminDashboard = () => {
               ))}
             </div>
             <div className="right">
-              <a href='https://multivendorx.com/pricing/' className="admin-btn btn-purple">
+              <a href='https://multivendorx.com/pricing/' target="black" className="admin-btn btn-purple">
                 <i className="adminlib-pro-tag"></i>
                 Upgrade Now
                 <i className="adminlib-arrow-right icon-pro-btn"></i>

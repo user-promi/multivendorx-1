@@ -27,7 +27,7 @@ class PaypalPayout {
                 [
                     'key'   => 'payment_mode',
                     'type'  => 'setting-toggle',
-                    'label' => __('Payment Mode', 'multivendorx'),
+                    'label' => __('Payment mode', 'multivendorx'),
                     'options' => [
                         ['key' => 'sandbox', 'label' => __('Sandbox', 'multivendorx'), 'value' => 'sandbox'],
                         ['key' => 'live', 'label' => __('Live', 'multivendorx'), 'value' => 'live'],
@@ -42,7 +42,7 @@ class PaypalPayout {
                 [
                     'key'         => 'client_secret',
                     'type'        => 'text',
-                    'label'       => 'Client Secret Key',
+                    'label'       => 'Client secret key',
                     'placeholder' => 'Enter Secret Key',
                 ]
             ]

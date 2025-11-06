@@ -29,12 +29,11 @@
       }
 
       &.width-50 {
-        width: 47%;
+        width: 50%;
       }
 
       &.vertical {
         flex-direction: column;
-        margin-bottom: 2rem;
 
         &.settings-input-content {
           width: fit-content;
