@@ -504,6 +504,11 @@ input[type="checkbox"]:focus {
           font-size: 0.813rem;
           padding-top: 0.063rem;
         }
+
+        .admin-pro-tag{
+          margin-left: 1.5rem;
+          top: 0;
+        }
       }
 
       .edit-icon {
@@ -1156,12 +1161,14 @@ input[type="checkbox"]:focus {
       left: -50%;
       transform: translate(-75%, 0);
       height: 1rem;
-      position: absolute;
+      position: absolute;x
 
       ul {
         display: flex;
         gap: 0.125rem;
         margin: 0;
+        min-width: 4rem;
+        justify-content: end;
 
         li {
           position: relative;

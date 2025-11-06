@@ -296,7 +296,6 @@ const StoreOrders: React.FC<Props> = ({ onUpdated }) => {
       },
     },
     {
-      id: 'action',
       header: __('Action', 'multivendorx'),
       cell: ({ row }) => {
         const orderId = row.original.id;

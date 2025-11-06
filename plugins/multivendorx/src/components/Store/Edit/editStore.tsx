@@ -556,11 +556,13 @@ const EditStore = () => {
                                                         <>
                                                             {data.slug}{' '}
 
-                                                            <i className="adminlib-create" onClick={() => {
+                                                            <span className="edit-icon admin-badge blue" onClick={() => {
                                                                 navigate(`?page=multivendorx#&tab=stores&edit/${data.id}/&subtab=store`, {
                                                                     state: { highlightTarget: "store-slug" },
                                                                 });
-                                                            }}></i>
+                                                            }}>
+                                                                <i className="adminlib-create" ></i>
+                                                            </span>
                                                         </>
                                                     ) : (
                                                         <Skeleton

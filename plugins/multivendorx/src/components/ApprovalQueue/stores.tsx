@@ -159,13 +159,23 @@ const Stores: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
                     <TableCell title={store_name || ''}>
                         {id ? (
                             <a
-                                href={storeLink}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-purple-600 hover:underline"
-                            >
-                                {store_name || '-'}
-                            </a>
+                             href={storeLink}
+                            className="product-wrapper"
+                        >
+                            {/* {row.original.image ? (
+                                <img
+                                    src={row.original.image}
+                                    alt={row.original.store_name}
+                                />
+                            ) : (
+                                <i className="adminlib-store-inventory"></i>
+                            )} */}
+
+                            <div className="details">
+                                <span className="title">{store_name || '-'}</span>
+                                <span><b>SKU:</b> </span>
+                            </div>
+                        </a>
                         ) : (
                             store_name || '-'
                         )}
@@ -192,23 +202,23 @@ const Stores: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
                 return <TableCell title={formattedDate}>{formattedDate}</TableCell>;
             },
         },
-        {
-            header: __('Status', 'multivendorx'),
-            cell: ({ row }) =>
-                <TableCell title={row.original.status || ''}>
-                    {row.original.status === "active" && (
-                        <span className="admin-badge green">Active</span>
-                    )}
-                    {row.original.status === "pending" && (
-                        <span className="admin-badge yellow">Pending</span>
-                    )}
-                </TableCell>,
-        },
+        // {
+        //     header: __('Status', 'multivendorx'),
+        //     cell: ({ row }) =>
+        //         <TableCell title={row.original.status || ''}>
+        //             {row.original.status === "active" && (
+        //                 <span className="admin-badge green">Active</span>
+        //             )}
+        //             {row.original.status === "pending" && (
+        //                 <span className="admin-badge yellow">Pending</span>
+        //             )}
+        //         </TableCell>,
+        // },
         {
             header: __('Action', 'multivendorx'),
             cell: ({ row }) =>
                 <TableCell title={row.original.status || ''}>
-                    <span className="admin-btn btn-purple" onClick={() => { handleSingleAction('active', row.original.id!)}}><i className="adminlib-check"></i> Approve</span>
+                    <span className="admin-btn btn-purple" onClick={() => { handleSingleAction('active', row.original.id!) }}><i className="adminlib-check"></i> Approve</span>
 
                     <span className="admin-btn btn-red" onClick={() => handleSingleAction('declined', row.original.id!)}><i className="adminlib-close"></i> Reject</span>
                 </TableCell>,

@@ -34,6 +34,7 @@
 
       &.vertical {
         flex-direction: column;
+        box-sizing: border-box;
 
         &.settings-input-content {
           width: fit-content;

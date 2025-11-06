@@ -420,6 +420,7 @@
         .header a {
             display: flex;
             gap: 0.313rem;
+            align-items: center;
 
             i {
                 font-size: 0.813rem;
@@ -954,6 +955,7 @@
                 display: flex;
                 align-items: center;
                 left: 0;
+                top: 0;
 
                 i {
                     font-size: 0.813rem;
