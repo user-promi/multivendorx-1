@@ -437,7 +437,7 @@ export const Announcements: React.FC = () => {
             },
         },
         {
-            header: __('Visible To', 'multivendorx'),
+            header: __('Recipients', 'multivendorx'),
             cell: ({ row }) => {
                 const storeString = row.original.store_name;
         
