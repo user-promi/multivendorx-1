@@ -21,7 +21,7 @@ class CashPayment {
             'label'     => 'Cash',
             'enableOption' => true,
             'disableBtn'=> true,
-            'desc'      => '',
+            'desc'      => 'Confirm and record payouts made directly to stores via cash.',
             'formFields' => []
         ];
     }
