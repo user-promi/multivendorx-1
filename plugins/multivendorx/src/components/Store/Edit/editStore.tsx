@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { FileInput, getApiLink, SelectInput, Tabs, RadioInput, CommonPopup, ToggleSetting } from 'zyra';
+import { ToggleSetting, getApiLink, SelectInput, Tabs, RadioInput, CommonPopup } from 'zyra';
 import { Skeleton } from '@mui/material';
 
 import StoreSettings from './storeSettings';
@@ -37,6 +37,7 @@ const EditStore = () => {
 
     const [editName, setEditName] = useState(false);
     const [editDesc, setEditDesc] = useState(false);
+    const [selectedOwner, setSelectedOwner] = useState(null);
 
     useEffect(() => {
         const handleOutsideClick = (e: MouseEvent) => {
@@ -83,10 +84,10 @@ const EditStore = () => {
     const currentTab = hashParams.get('subtab');
     const prepareUrl = (tabId: string) => `?page=multivendorx#&tab=stores&edit/${editId}/&subtab=${tabId}`;
     const navigate = useNavigate();
-
+    
     const autoSave = (updatedData: { [key: string]: string }) => {
         if (!editId) return;
-
+        
         axios({
             method: 'PUT',
             url: getApiLink(appLocalizer, `store/${editId}`),
@@ -142,14 +143,22 @@ const EditStore = () => {
     };
 
     const deleteStoreApiCall = (option) => {
+
+        const payload = {
+            delete: true,
+            deleteOption: option,
+        };
+
+        // If changing store owner, get selected value from ref
+        if (option === "set_store_owner" && selectedOwner) {
+            payload.new_owner_id = selectedOwner.value;
+        }
+
         axios({
             method: 'PUT',
             url: getApiLink(appLocalizer, `store/${editId}`),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            data: {
-                delete: true,
-                deleteOption: option,
-            },
+            data: payload,
         }).then((res) => {
             if (res.data.success) {
                 setDeleteModal(false);
@@ -157,7 +166,6 @@ const EditStore = () => {
             }
         });
     };
-
 
     const tabData = [
         {
@@ -631,7 +639,7 @@ const EditStore = () => {
                                 <i className="adminlib-cart"></i>
                                 Choose an Option
                             </div>
-
+                            
                         </>
                     }
                     footer={
@@ -644,22 +652,44 @@ const EditStore = () => {
                                 Cancel
                             </button>
                             <button onClick={() => {
-                                if (deleteOption) {
-                                    deleteStoreApiCall(deleteOption);
-                                } else {
-                                    alert('Please choose an option first');
-                                }
-                            }} className="admin-btn btn-purple">
+                                        if (deleteOption) {
+                                            deleteStoreApiCall(deleteOption);
+                                        }
+                                    }} className="admin-btn btn-purple">
                                 Delete
                             </button>
                         </>
                     }
-
+        
                 >
                     <div className="content">
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <RadioInput
+                                <ToggleSetting
+                                    wrapperClass="setting-form-input"
+                                    descClass="settings-metabox-description"
+                                    key='store_delete_option'
+                                    options={[
+                                        {
+                                            value: 'set_store_owner',
+                                            label: 'Change Store owner',
+                                        },
+                                        {
+                                            value: 'product_assign_admin',
+                                            label: 'Product Assign to Admin',
+                                        },
+                                        {
+                                            value: 'permanent_delete',
+                                            label: 'Permanently Delete',
+                                        },
+                                    ]}
+                                    // value={selectedReview.status}
+                                    onChange={(value) => {
+                                        setDeleteOption(value);
+                                        setSelectedOwner(null);
+                                    }}
+                                />
+                                {/* <RadioInput
                                     wrapperClass="settings-form-group-radio"
                                     inputWrapperClass="radio-basic-input-wrap"
                                     inputClass="setting-form-input"
@@ -668,12 +698,12 @@ const EditStore = () => {
                                     name='store_delete_option'
                                     keyName='store_delete_option'
                                     options={[
-                                        // {
-                                        //     key: 'store_owner',
-                                        //     name: 'store_owner',
-                                        //     value: 'store_owner',
-                                        //     label: 'Store owner',
-                                        // },
+                                        {
+                                            key: 'set_store_owner',
+                                            name: 'set_store_owner',
+                                            value: 'set_store_owner',
+                                            label: 'Change Store owner',
+                                        },
                                         {
                                             key: 'product_assign_admin',
                                             name: 'product_assign_admin',
@@ -687,9 +717,25 @@ const EditStore = () => {
                                             label: 'Permanently Delete',
                                         },
                                     ]}
-                                    onChange={(e) => setDeleteOption(e.target.value)}
-                                />
+                                    onChange={(e) => {
+                                        setDeleteOption(e.target.value);
+                                        setSelectedOwner(null);
+                                    }}
+                                /> */}
                             </div>
+                            {deleteOption == 'set_store_owner' && (
+                                <SelectInput
+                                    name="new_owner"
+                                    value={selectedOwner?.value}
+                                    options={appLocalizer.store_owners}
+                                    type="single-select"
+                                    onChange={(val) => {
+                                         if (val) {
+                                            setSelectedOwner(val);
+                                        }
+                                    }}
+                                />
+                            )}
                         </div>
                     </div>
                 </CommonPopup>
