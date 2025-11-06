@@ -642,9 +642,9 @@ const EditStore = () => {
                         <>
                             <div className="title">
                                 <i className="adminlib-storefront"></i>
-                                Choose an Option
+                                Manage store deletion
                             </div>
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus eaque corporis, corrupti iste iure sint.</p>
+                            <p>Choose the appropriate action to take when deleting this store.</p>
                             <i
                                 onClose={() => setDeleteModal(false)}
                                 className="icon adminlib-close"
@@ -674,7 +674,7 @@ const EditStore = () => {
                     <div className="content">
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <label htmlFor="title">Lorem ipsum dolor sit.</label>
+                                <label htmlFor="title">Deletion method</label>
                                 <ToggleSetting
                                     wrapperClass="setting-form-input"
                                     descClass="settings-metabox-description"
@@ -683,12 +683,12 @@ const EditStore = () => {
                                         {
                                             value: 'set_store_owner',
                                             key: 'set_store_owner',
-                                            label: 'Change Store owner',
+                                            label: 'Change store owner',
                                         },
                                         {
                                             value: 'product_assign_admin',
                                             key: 'product_assign_admin',
-                                            label: 'Product Assign to Admin',
+                                            label: 'Assign product to Admin',
                                         },
                                         {
                                             value: 'permanent_delete',
@@ -739,7 +739,7 @@ const EditStore = () => {
                             <div className="form-group">
                                 {deleteOption == 'set_store_owner' && (
                                     <>
-                                        <label htmlFor="title">Lorem ipsum dolor sit.</label>
+                                        <label htmlFor="title">Assign new store owner</label>
                                         <SelectInput
                                             name="new_owner"
                                             value={selectedOwner?.value}
