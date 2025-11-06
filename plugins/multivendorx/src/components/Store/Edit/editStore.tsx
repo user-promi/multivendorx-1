@@ -306,7 +306,6 @@ const EditStore = () => {
     //     }
     // };
 
-
     return (
         <>
             <div className="store-page">
@@ -697,12 +696,11 @@ const EditStore = () => {
                                             label: 'Permanently Delete',
                                         },
                                     ]}
-                                    // value={selectedReview.status}
+                                    value={deleteOption}
                                     onChange={(value) => {
                                         setDeleteOption(value);
                                         setSelectedOwner(null);
                                     }}
-                                    value="permanent_delete"
                                 />
                                 {/* <RadioInput
                                     wrapperClass="settings-form-group-radio"

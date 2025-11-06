@@ -15,7 +15,7 @@ type TabContent = {
 
 type TabData = {
   name?: string;
-  type: 'file' | 'folder';
+  type: 'file' | 'folder' | 'heading';
   content: TabContent | TabData[];
 };
 
@@ -329,6 +329,14 @@ const Tabs: React.FC<TabsProps> = ({
 
   // Render single menu item
   const renderSingleMenuItem = (item: TabData, index: number) => {
+    if (item.type === 'heading') {
+      return (
+        <div key={`heading-${item.name}-${index}`} className="tab-heading">
+          {item.name}
+        </div>
+      );
+    }
+
     if (isFile(item)) {
       const tab = item.content;
       if (!tab.id || !tab.name) return null;
@@ -347,7 +355,12 @@ const Tabs: React.FC<TabsProps> = ({
             }
           }}
         >
-          <p className="menu-name">{tab.name}</p>
+          {/* <p className="menu-name">{tab.name}</p> */}
+          <p className="menu-name">
+            {submenuRender && tab.icon && <i className={`adminlib-${tab.icon}`}></i>}
+            {tab.name}
+          </p>
+
         </Link>
       );
     }

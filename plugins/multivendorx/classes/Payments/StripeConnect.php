@@ -211,7 +211,7 @@ class StripeConnect
                 [
                     'key'   => 'payment_mode',
                     'type'  => 'setting-toggle',
-                    'label' => __('Payment Mode', 'multivendorx'),
+                    'label' => __('Payment mode', 'multivendorx'),
                     'options' => [
                         ['key' => 'test', 'label' => __('Test', 'multivendorx'), 'value' => 'test'],
                         ['key' => 'live', 'label' => __('Live', 'multivendorx'), 'value' => 'live'],
@@ -220,14 +220,14 @@ class StripeConnect
                 [
                     'key'         => 'client_id',
                     'type'        => 'text',
-                    'label'       => __('Stripe Client ID', 'multivendorx'),
+                    'label'       => __('Stripe client ID', 'multivendorx'),
                     'placeholder' => __('Enter Stripe Client ID', 'multivendorx'),
                 ],
                 [
                     'key'         => 'secret_key',
                     'type'        => 'password',
-                    'label'       => __('Secret Key', 'multivendorx'),
-                    'placeholder' => __('Enter Secret Key', 'multivendorx'),
+                    'label'       => __('Secret key', 'multivendorx'),
+                    'placeholder' => __('Enter secret key', 'multivendorx'),
                 ]
             ]
         ];

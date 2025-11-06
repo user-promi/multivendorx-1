@@ -239,9 +239,9 @@ const StoreTable: React.FC = () => {
         {
             header: __('Lifetime Earning', 'multivendorx'),
             cell: ({ row }: any) => (
-                <TableCell title={row.original.commission.total_order_amount || ''}>
-                    {row.original.commission?.total_order_amount
-                        ? formatCurrency(row.original.commission.total_order_amount)
+                <TableCell title={row.original.commission.commission_total || ''}>
+                    {row.original.commission?.commission_total
+                        ? formatCurrency(row.original.commission.commission_total)
                         : '-'}
                 </TableCell>
             ),
@@ -313,6 +313,7 @@ const StoreTable: React.FC = () => {
                             return <span className="admin-badge gray">{formattedStatus}</span>;
                     }
                 };
+
                 return (
                     <TableCell title={`${status} - ${formattedDate}`}>
                         {getStatusBadge(status)}

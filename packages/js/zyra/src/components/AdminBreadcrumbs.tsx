@@ -125,15 +125,20 @@ const AdminBreadcrumbs: React.FC<AdminBreadcrumbsProps> = ({
         )}
       </div>
 
+
       {/* render multiple notices */}
-      {notices.length > 0 &&
-        notices.map((html, i) => (
-          <div
-            key={i}
-            className="wp-admin-notice"
-            dangerouslySetInnerHTML={{ __html: html }}
-          />
-        ))}
+      {!submenuRender && 
+        notices.length > 0 && 
+          notices.map((html, i) => (
+            <div
+              key={i}
+              className="wp-admin-notice"
+              dangerouslySetInnerHTML={{ __html: html }}
+            />
+          ))
+      }
+
+      
     </>
   );
 };

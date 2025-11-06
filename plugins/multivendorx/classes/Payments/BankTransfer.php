@@ -23,7 +23,7 @@ class BankTransfer {
             'label'     => 'Bank Transfer',
             'enableOption' => true,
             'disableBtn'=> true,
-            'desc'      => 'Bank transfer',
+            'desc'      => 'Transfer payouts directly to store’s bank accounts.',
             'formFields' => [
                 [
                     'key'         => 'bank_name',
