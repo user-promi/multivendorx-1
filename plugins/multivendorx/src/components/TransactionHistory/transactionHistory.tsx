@@ -161,7 +161,7 @@ export const TransactionHistory: React.FC = () => {
         {
             id: "stores",
             label: "Direct transaction",
-            icon: "adminlib-bank",
+            icon: "adminlib-calendar",
             content: <TransactionDataTable storeId={selectedStore?.value} dateRange={dateRange} />
         },
     ];
@@ -183,12 +183,12 @@ export const TransactionHistory: React.FC = () => {
                 }
                 customContent={
                     <>
-                        <label><i className="adminlib-tools"></i>Switch store</label>
+                        <label><i className="adminlib-switch-store"></i>Switch store</label>
                         <SelectInput
                             name="store"
                             value={selectedStore?.value || ""}
                             options={filteredStores}
-                            type="single-select"
+                            type="select"
                             onChange={(newValue: any) => setSelectedStore(newValue)}
                             onInputChange={(inputValue: string) => handleSearch(inputValue)}
                             size="12rem"
@@ -227,8 +227,8 @@ export const TransactionHistory: React.FC = () => {
                             </div>
                             <div className="data-card">
                                 <div className="title">Available balance</div>
-                                <div className="number">{formatCurrency(data.wallet_balance)} <i className="adminlib-cart"></i></div>
-                            </div>                          
+                                <div className="number">{formatCurrency(data.wallet_balance)} <i className="adminlib-cart blue"></i></div>
+                            </div>
                         </div>
                     </div>
                     <div className="column w-65">

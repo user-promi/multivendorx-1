@@ -206,29 +206,11 @@ const Stores: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
         },
         {
             header: __('Action', 'multivendorx'),
-            id: 'action',
             cell: ({ row }) =>
                 <TableCell title={row.original.status || ''}>
-                    <div className="action-section">
-                        <ul className='small-action'>
-                            <li
-                                className="admin-badge green hover"
-                                onClick={() => {
-                                    handleSingleAction('active', row.original.id!)
-                                }
-                                }
-                            >
-                                <i className="adminlib-check"></i>
-                                <span>Approve</span>
-                            </li>
+                    <span className="admin-btn btn-purple" onClick={() => { handleSingleAction('active', row.original.id!)}}><i className="adminlib-check"></i> Approve</span>
 
-                            <li className="admin-badge red hover" onClick={() => handleSingleAction('declined', row.original.id!)}
-                            >
-                                <i className="adminlib-close"></i>
-                                <span>Reject</span>
-                            </li>
-                        </ul>
-                    </div>
+                    <span className="admin-btn btn-red" onClick={() => handleSingleAction('declined', row.original.id!)}><i className="adminlib-close"></i> Reject</span>
                 </TableCell>,
         },
     ];

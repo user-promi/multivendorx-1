@@ -197,24 +197,8 @@ const Coupons: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
             id: 'action',
             cell: ({ row }) =>
                 <TableCell title={row.original.status || ''}>
-                    <div className="action-section">
-                        <ul className='small-action'>
-                            <li
-                                className="hover admin-badge green"
-                                onClick={() => handleSingleAction('approve_coupon', row.original.id!)}
-                            >
-                                <i className="adminlib-check"></i>
-                                <span>Approve</span>
-                            </li>
-
-                            <li className="hover admin-badge red" onClick={() => handleSingleAction('reject_coupon', row.original.id!)}
-                            >
-                                <i className="adminlib-close"></i>
-                                <span>Reject</span>
-                            </li>
-                        </ul>
-
-                    </div>
+                    <span className="admin-btn btn-purple" onClick={() => { handleSingleAction('approve_coupon', row.original.id!) }}><i className="adminlib-check"></i> Approve</span>
+                    <span className="admin-btn btn-red" onClick={() => handleSingleAction('reject_coupon', row.original.id!)}><i className="adminlib-close"></i> Reject</span>
                 </TableCell>,
         },
         // {
