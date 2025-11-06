@@ -104,7 +104,7 @@ const CustomerServices = () => {
             icon: "adminlib-vacation",
             des: "Flagged for abuse review",
             count: abuseCount,
-            content: <h1>Upcoming Feature</h1>,
+            content: <div className="row"><div className="column"><h1>Upcoming Feature</h1></div></div>,
         },
     ].filter(tab => !tab.module || modules.includes(tab.module));
 

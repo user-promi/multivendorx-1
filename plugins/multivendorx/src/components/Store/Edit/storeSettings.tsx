@@ -20,7 +20,7 @@ interface EmailBadge {
     isValid: boolean;
 }
 
-const StoreSettings = ({ id, data }: { id: string | null; data:any }) => {
+const StoreSettings = ({ id, data }: { id: string | null; data: any }) => {
     const [formData, setFormData] = useState<FormData>({});
     const [emailBadges, setEmailBadges] = useState<EmailBadge[]>([]);
     const [newEmailValue, setNewEmailValue] = useState('');
@@ -102,32 +102,32 @@ const StoreSettings = ({ id, data }: { id: string | null; data:any }) => {
         //     .then((res) => {
         //         const data = res.data || {};
 
-                // Set all form data
-                setFormData((prev) => ({ ...prev, ...data }));
+        // Set all form data
+        setFormData((prev) => ({ ...prev, ...data }));
 
-                // Set address-specific data
-                setAddressData({
-                    location_address: data.location_address || data.address || '',
-                    location_lat: data.location_lat || '',
-                    location_lng: data.location_lng || '',
-                    address: data.address || data.location_address || '',
-                    city: data.city || '',
-                    state: data.state || '',
-                    country: data.country || '',
-                    zip: data.zip || '',
-                    timezone: data.timezone || ''
-                });
+        // Set address-specific data
+        setAddressData({
+            location_address: data.location_address || data.address || '',
+            location_lat: data.location_lat || '',
+            location_lng: data.location_lng || '',
+            address: data.address || data.location_address || '',
+            city: data.city || '',
+            state: data.state || '',
+            country: data.country || '',
+            zip: data.zip || '',
+            timezone: data.timezone || ''
+        });
 
-                setImagePreviews({
-                    image: data.image || '',
-                    banner: data.banner || '',
-                });
-                setLoading(false);
-            // })
-            // .catch((error) => {
-            //     console.error('Error loading store data:', error);
-            //     setLoading(false);
-            // });
+        setImagePreviews({
+            image: data.image || '',
+            banner: data.banner || '',
+        });
+        setLoading(false);
+        // })
+        // .catch((error) => {
+        //     console.error('Error loading store data:', error);
+        //     setLoading(false);
+        // });
     }, [data]);
 
     // Add email function
@@ -769,7 +769,7 @@ const StoreSettings = ({ id, data }: { id: string | null; data:any }) => {
                         <div className="card-header">
                             <div className="left">
                                 <div className="title">
-                                     Contact information
+                                    Contact information
                                 </div>
                             </div>
                         </div>
@@ -832,7 +832,7 @@ const StoreSettings = ({ id, data }: { id: string | null; data:any }) => {
                         <div className="card-header">
                             <div className="left">
                                 <div className="title">
-                                      Communication address
+                                    Communication address
                                 </div>
                             </div>
                         </div>
@@ -919,17 +919,17 @@ const StoreSettings = ({ id, data }: { id: string | null; data:any }) => {
                                         <label>Location Map *</label>
                                         <div
                                             id="location-map"
-                                            style={{
-                                                height: '300px',
-                                                width: '100%',
-                                                borderRadius: '8px',
-                                                border: '1px solid #ddd',
-                                                marginTop: '8px'
-                                            }}
+                                        // style={{
+                                        //     height: '300px',
+                                        //     width: '100%',
+                                        //     borderRadius: '8px',
+                                        //     border: '1px solid #ddd',
+                                        //     marginTop: '8px'
+                                        // }}
                                         ></div>
-                                        <small style={{ color: '#666', marginTop: '5px', display: 'block' }}>
+                                        <span className="settings-metabox-description">
                                             Click on the map or drag the marker to set your exact location
-                                        </small>
+                                        </span>
                                     </div>
                                     {/* Hidden coordinates */}
                                     <input type="hidden" name="location_lat" value={addressData.location_lat} />
@@ -967,7 +967,7 @@ const StoreSettings = ({ id, data }: { id: string | null; data:any }) => {
                         <div className="card-header">
                             <div className="left">
                                 <div className="title">
-                                      Manage store status
+                                    Manage store status
                                 </div>
                             </div>
                         </div>
@@ -992,13 +992,37 @@ const StoreSettings = ({ id, data }: { id: string | null; data:any }) => {
                             </div>
                         </div>
                     </div>
+                    <div className="card-content">
+                        <div className="card-header">
+                            <div className="left">
+                                <div className="title">
+                                    Manage store Slug
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Updated Email Section */}
+                        <div id="store-slug" className="form-group-wrapper">
+                            <div className="form-group">
+                                <label htmlFor="store-email">Slug</label>
+                                <BasicInput
+                                    name="slug"
+                                    wrapperClass="setting-form-input"
+                                    descClass="settings-metabox-description"
+                                    value={formData.slug}
+                                    onChange={handleChange}
+                                />
+                                <div className="settings-metabox-description">Your Site Url : {appLocalizer.store_page_url + '/' + formData.slug}</div>
+                            </div>
+                        </div>
+                    </div>
 
 
                     <div className="card-content">
                         <div className="card-header">
                             <div className="left">
                                 <div className="title">
-                                      Social information
+                                    Social information
                                 </div>
                             </div>
                         </div>

@@ -290,18 +290,18 @@ const AdminDashboard = () => {
   };
 
   const Modules: Module[] = [
-    { id: 'spmv', name: 'Single product multiple vendor', iconClass: 'adminlib-booking', pro: false },
-    { id: 'staff-manager', name: 'Staff manager', iconClass: 'adminlib-booking', pro: true },
-    { id: 'vacation', name: 'Vacation mode', iconClass: 'adminlib-report', pro: true },
-    { id: 'business-hours', name: 'Business hours', iconClass: 'adminlib-analytics', pro: true },
-    { id: 'store-inventory', name: 'Store inventory', iconClass: 'adminlib-analytics', pro: true },
-    { id: 'min-max-quantities', name: 'Min/Max quantities', iconClass: 'adminlib-analytics', pro: false },
-    { id: 'wholesale', name: 'Wholesale', iconClass: 'adminlib-analytics', pro: true },
-    { id: 'paypal-marketplace', name: 'PayPal marketplace', iconClass: 'adminlib-analytics', pro: true },
-    { id: 'stripe-marketplace', name: 'Stripe marketplace', iconClass: 'adminlib-booking', pro: true },
-    { id: 'facilitator', name: 'Facilitator', iconClass: 'adminlib-booking', pro: true },
-    { id: 'notifications', name: 'Notifications', iconClass: 'adminlib-booking', pro: true },
-    { id: 'invoice', name: 'Invoice & packing slip', iconClass: 'adminlib-setting', pro: true },
+    { id: 'spmv', name: 'Single product multiple vendor', iconClass: 'adminlib-spmv', pro: false },
+    { id: 'staff-manager', name: 'Staff manager', iconClass: 'adminlib-staff-manager', pro: true },
+    { id: 'vacation', name: 'Vacation mode', iconClass: 'adminlib-vacation', pro: true },
+    { id: 'business-hours', name: 'Business hours', iconClass: 'adminlib-business-hours', pro: true },
+    { id: 'store-inventory', name: 'Store inventory', iconClass: 'adminlib-store-inventory', pro: true },
+    { id: 'min-max-quantities', name: 'Min/Max quantities', iconClass: 'adminlib-min-max', pro: false },
+    { id: 'wholesale', name: 'Wholesale', iconClass: 'adminlib-wholesale', pro: true },
+    { id: 'paypal-marketplace', name: 'PayPal marketplace', iconClass: 'adminlib-paypal-marketplace', pro: true },
+    { id: 'stripe-marketplace', name: 'Stripe marketplace', iconClass: 'adminlib-stripe-marketplace', pro: true },
+    { id: 'facilitator', name: 'Facilitator', iconClass: 'adminlib-facilitator', pro: true },
+    { id: 'notifications', name: 'Notifications', iconClass: 'adminlib-notifications', pro: true },
+    { id: 'invoice', name: 'Invoice & packing slip', iconClass: 'adminlib-invoice', pro: true },
   ];
 
   const [activeTab, setActiveTab] = useState("dashboard");

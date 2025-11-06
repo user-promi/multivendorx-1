@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { FileInput, getApiLink, SelectInput, Tabs, RadioInput, CommonPopup } from 'zyra';
+import { FileInput, getApiLink, SelectInput, Tabs, RadioInput, CommonPopup, ToggleSetting } from 'zyra';
 import { Skeleton } from '@mui/material';
 
 import StoreSettings from './storeSettings';
@@ -83,10 +83,10 @@ const EditStore = () => {
     const currentTab = hashParams.get('subtab');
     const prepareUrl = (tabId: string) => `?page=multivendorx#&tab=stores&edit/${editId}/&subtab=${tabId}`;
     const navigate = useNavigate();
-    
+
     const autoSave = (updatedData: { [key: string]: string }) => {
         if (!editId) return;
-        
+
         axios({
             method: 'PUT',
             url: getApiLink(appLocalizer, `store/${editId}`),
@@ -384,7 +384,6 @@ const EditStore = () => {
                                                 )}
                                             </div>
                                         </div>
-
                                     </div>
                                     <div className="details-wrapper">
                                         <div className="left-section">
@@ -466,7 +465,7 @@ const EditStore = () => {
                                                         <span className="admin-badge blue">Suspended</span>
                                                     ) : data.status === 'permanently_rejected' ? (
                                                         <span className="admin-badge red">Permanently Rejected</span>
-                                                    ) :  (
+                                                    ) : (
                                                         <Skeleton variant="text" width={100} />
                                                     )}
 
@@ -530,7 +529,7 @@ const EditStore = () => {
                                                                     </span>
                                                                 </>
                                                             ) : (
-                                                                <span>No reviews yet</span>
+                                                                <span><i className="adminlib-star"></i> (0) Review</span>
                                                             )}
                                                         </div>
                                                     </li>
@@ -539,24 +538,24 @@ const EditStore = () => {
 
                                                 <div className="des">
                                                     <b>Store URL: </b>
-                                                        {appLocalizer.store_page_url + '/'}
-                                                        {data?.slug ? (
+                                                    {appLocalizer.store_page_url + '/'}
+                                                    {data?.slug ? (
                                                         <>
                                                             {data.slug}{' '}
                                                             <a
-                                                            href={`${appLocalizer.store_page_url}/${data.slug}`}
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
+                                                                href={`${appLocalizer.store_page_url}/${data.slug}`}
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
                                                             >
-                                                            <i className="adminlib-external"></i>
+                                                                <i className="adminlib-create"></i>
                                                             </a>
                                                         </>
-                                                        ) : (
+                                                    ) : (
                                                         <Skeleton
                                                             variant="text"
                                                             width={100}
                                                         />
-                                                        )}
+                                                    )}
                                                 </div>
                                             </div>
                                         </div>
@@ -600,7 +599,7 @@ const EditStore = () => {
                                     setActionMenu((prev) => !prev);
                                     setLogoMenu(false);
                                     setBannerMenu(false);
-                                }}><i className="adminlib-more-vertical"></i></span>
+                                }}><i className="action-icon adminlib-more-vertical"></i></span>
                                 {actionMenu && (
                                     <ul>
                                         {data.status == 'active' &&
@@ -610,11 +609,11 @@ const EditStore = () => {
                                                     target="_blank"
                                                     rel="noopener noreferrer"
                                                 >
-                                                    Storefront
+                                                    <i className="adminlib-storefront"></i> Storefront
                                                 </a>
                                             </li>
                                         }
-                                        <li onClick={handleStoreDelete}><i className="adminlib-mail"></i> Store Delete</li>
+                                        <li onClick={handleStoreDelete}><i className="adminlib-delete"></i> Store Delete</li>
                                     </ul>
                                 )}
                             </div>
@@ -632,30 +631,30 @@ const EditStore = () => {
                                 <i className="adminlib-cart"></i>
                                 Choose an Option
                             </div>
-                            
+
                         </>
                     }
                     footer={
                         <>
                             <button
-                                type="button" 
+                                type="button"
                                 onClick={() => setDeleteModal(false)}
                                 className="admin-btn btn-red"
                             >
                                 Cancel
                             </button>
                             <button onClick={() => {
-                                        if (deleteOption) {
-                                            deleteStoreApiCall(deleteOption);
-                                        } else {
-                                            alert('Please choose an option first');
-                                        }
-                                    }} className="admin-btn btn-purple">
+                                if (deleteOption) {
+                                    deleteStoreApiCall(deleteOption);
+                                } else {
+                                    alert('Please choose an option first');
+                                }
+                            }} className="admin-btn btn-purple">
                                 Delete
                             </button>
                         </>
                     }
-        
+
                 >
                     <div className="content">
                         <div className="form-group-wrapper">

@@ -284,7 +284,7 @@ const Qna: React.FC = () => {
 
     return (
         <>
-            {/* <div className="card-header">
+            <div className="card-header">
                 <div className="left">
                     <div className="title">Questions</div>
                     <div className="des">Waiting for your response</div>
@@ -293,7 +293,7 @@ const Qna: React.FC = () => {
                     <i className="adminlib-more-vertical"></i>
                 </div>
             </div>
-            <div className="admin-table-wrapper"> */}
+            {/* <div className="admin-table-wrapper"> */}
                 <Table
                     data={data}
                     columns={columns as ColumnDef<Record<string, any>, any>[]}

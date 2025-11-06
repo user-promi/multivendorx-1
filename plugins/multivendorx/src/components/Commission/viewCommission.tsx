@@ -4,7 +4,7 @@ import { __ } from "@wordpress/i18n";
 import { CommonPopup, getApiLink, Table, TableCell } from "zyra";
 import { ColumnDef } from "@tanstack/react-table";
 import axios from "axios";
-import {formatCurrency} from '../../services/commonFunction';
+import { formatCurrency } from '../../services/commonFunction';
 
 // 👉 Type for an order line
 interface OrderItem {
@@ -101,9 +101,9 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({ open, onClose, commissi
                 const mapped: OrderItem[] = order.line_items.map((item: any) => {
                   const subtotal = parseFloat(item.subtotal || "0");
                   const total = parseFloat(item.total || "0");
-                 const discount = subtotal > total
-                      ? `-${formatCurrency(subtotal - total)}`
-                      : undefined;
+                  const discount = subtotal > total
+                    ? `-${formatCurrency(subtotal - total)}`
+                    : undefined;
 
 
                   return {
@@ -136,23 +136,23 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({ open, onClose, commissi
   }, [commissionId]);
 
   const popupColumns: ColumnDef<OrderItem>[] = [
-    {
-      id: "select",
-      header: ({ table }) => (
-        <input
-          type="checkbox"
-          checked={table.getIsAllRowsSelected()}
-          onChange={table.getToggleAllRowsSelectedHandler()}
-        />
-      ),
-      cell: ({ row }) => (
-        <input
-          type="checkbox"
-          checked={row.getIsSelected()}
-          onChange={row.getToggleSelectedHandler()}
-        />
-      ),
-    },
+    // {
+    //   id: "select",
+    //   header: ({ table }) => (
+    //     <input
+    //       type="checkbox"
+    //       checked={table.getIsAllRowsSelected()}
+    //       onChange={table.getToggleAllRowsSelectedHandler()}
+    //     />
+    //   ),
+    //   cell: ({ row }) => (
+    //     <input
+    //       type="checkbox"
+    //       checked={row.getIsSelected()}
+    //       onChange={row.getToggleSelectedHandler()}
+    //     />
+    //   ),
+    // },
     {
       header: __("Product", "multivendorx"),
       cell: ({ row }) => {
@@ -168,6 +168,17 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({ open, onClose, commissi
                 rel="noopener noreferrer"
                 className="product-wrapper"
               >
+                {/* {row.original.image ? (
+                  <img
+                    src={row.original.image}
+                    alt={row.original.store_name}
+                  />
+                ) : (
+                  <i className="item-icon adminlib-store-inventory"></i>
+                )} */}
+
+                <i className="item-icon adminlib-multi-product"></i>
+
                 <div className="details">
                   {productName}
                   <div className="sub-text">Sku: {row.original.sku ?? "-"}</div>
@@ -210,7 +221,7 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({ open, onClose, commissi
       header={
         <>
           <div className="title">
-            <i className="adminlib-cart"></i>
+            <i className="adminlib-commission"></i>
             {__("View Commission", "multivendorx")}{" "}
             {commissionId ? `#${commissionId}` : ""}
           </div>
@@ -250,15 +261,21 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({ open, onClose, commissi
               )}
             </div>
             <div className="details">
-              <div className="email">
-                <i className="adminlib-mail"></i>
-                <b>Email:</b> {storeData?.email}
-              </div>
-              <div className="method">
-                <i className="adminlib-form-paypal-email"></i>
-                <b>Payment Method:</b>{" "}
-                <span className="admin-badge blue">{orderData?.payment_method_title}</span>
-              </div>
+              {storeData?.email && (
+                <div className="email">
+                  <i className="adminlib-mail"></i>
+                  <b>Email:</b> {storeData.email}
+                </div>
+              )}
+
+              {orderData?.payment_method_title && (
+                <div className="method">
+                  <i className="adminlib-form-paypal-email"></i>
+                  <b>Payment Method:</b>{" "}
+                  <span className="admin-badge blue">{orderData.payment_method_title}</span>
+                </div>
+              )}
+
             </div>
           </div>
 
@@ -318,11 +335,11 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({ open, onClose, commissi
             </div>
           </div>
           <div className="popup-divider"></div>
-          
+
           <div className="heading">{__("Commission Overview", "multivendorx")}</div>
 
           <div className="commission-details">
-           <div className="items">
+            <div className="items">
               <div className="text">Commission Status</div>
               <div className="value">
                 <span className={`admin-badge ${commissionData?.status === 'paid' ? 'green' : 'red'}`}>
