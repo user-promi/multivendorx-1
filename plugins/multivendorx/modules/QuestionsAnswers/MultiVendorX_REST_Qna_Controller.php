@@ -72,9 +72,10 @@ class MultiVendorX_REST_Qna_Controller extends \WP_REST_Controller {
 
 
     /**
-     * Get QnA items with optional pagination and date filter
+     * Get QnA items with optional pagination, date filters, and counters
      */
     public function get_items( $request ) {
+        // --- Step 1: Verify Nonce ---
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             return new \WP_Error(
@@ -83,68 +84,143 @@ class MultiVendorX_REST_Qna_Controller extends \WP_REST_Controller {
                 [ 'status' => 403 ]
             );
         }
-
+    
+        // --- Step 2: Collect Request Parameters ---
         $store_id   = $request->get_param( 'store_id' );
         $limit      = max( intval( $request->get_param( 'row' ) ), 10 );
         $page       = max( intval( $request->get_param( 'page' ) ), 1 );
         $offset     = ( $page - 1 ) * $limit;
-        $start_date = $request->get_param('startDate');
-        $end_date   = $request->get_param('endDate');
-        $count = $request->get_param( 'count' );
-        $args = array();
+        $start_date = sanitize_text_field( $request->get_param( 'startDate' ) );
+        $end_date   = sanitize_text_field( $request->get_param( 'endDate' ) );
+        $count      = $request->get_param( 'count' );
+        $status     = sanitize_text_field( $request->get_param( 'status' ) );
+        $search     = sanitize_text_field( $request->get_param( 'searchField' ) );
+        $orderBy     = sanitize_text_field( $request->get_param( 'orderBy' ) );
+        $order     = sanitize_text_field( $request->get_param( 'order' ) );
 
+        $args = [];
+    
         if ( $store_id ) {
             $args['store_id'] = intval( $store_id );
         }
-
-        // Count only
+    
+        // --- Step 3: Handle Search on Product ---
+        if ( ! empty( $search ) ) {
+            $product_query = new \WC_Product_Query( [
+                'limit'      => -1,
+                'return'     => 'ids',
+                's'          => $search,
+                'meta_query' => [
+                    [
+                        'key'     => '_multivendorx_store_id',
+                        'compare' => 'EXISTS',
+                    ],
+                ],
+            ] );
+    
+            $matched_product_ids = $product_query->get_products();
+    
+            if ( empty( $matched_product_ids ) ) {
+                // No matching product found
+                return rest_ensure_response([
+                    'items'      => [],
+                    'all'        => 0,
+                    'answered'   => 0,
+                    'unanswered' => 0,
+                ]);
+            }
+    
+            $args['product_ids'] = $matched_product_ids;
+        }
+    
+        // --- Step 4: Count Only Request ---
         if ( $count ) {
             $args['count'] = true;
             $total_count = Util::get_question_information( $args );
             return rest_ensure_response( (int) $total_count );
         }
-
-        $args['limit'] = $limit;
+    
+        // --- Step 5: Build Base Query Args ---
+        $args['limit']  = $limit;
         $args['offset'] = $offset;
-
+    
         if ( $start_date ) {
-            $args['start_date'] = sanitize_text_field( $start_date );
+            $args['start_date'] = $start_date;
         }
         if ( $end_date ) {
-            $args['end_date'] = sanitize_text_field( $end_date );
+            $args['end_date'] = $end_date;
+        }
+    
+        // --- Step 6: Add Filter by Status (from frontend tabs) ---
+        if ( $status === 'has_answer' ) {
+            $args['has_answer'] = true;
+        } elseif ( $status === 'no_answer' ) {
+            $args['no_answer'] = true;
+        }
+        if ( $orderBy && $order ) {
+            $args['orderBy'] = $orderBy;
+            $args['order']   = $order;
         }
 
+        // --- Step 7: Fetch Question Data ---
         $questions = Util::get_question_information( $args );
-
-        // Format response
+    
+        // --- Step 8: Format Data ---
         $formatted = array_map( function( $q ) {
-        $product = wc_get_product( $q['product_id'] );
-        $first_name = get_the_author_meta( 'first_name', $q['question_by'] );
-        $last_name  = get_the_author_meta( 'last_name', $q['question_by'] );
-        $author_name = ($first_name && $last_name)
-            ? $first_name . ' ' . $last_name
-            : get_the_author_meta( 'display_name', $q['question_by'] );
-            
+            $product = wc_get_product( $q['product_id'] );
+            $first_name = get_the_author_meta( 'first_name', $q['question_by'] );
+            $last_name  = get_the_author_meta( 'last_name', $q['question_by'] );
+            $author_name = ($first_name && $last_name)
+                ? $first_name . ' ' . $last_name
+                : get_the_author_meta( 'display_name', $q['question_by'] );
+    
+            $store_obj = MultivendorX()->store->get_store_by_id( $q['store_id'] );
+    
             return [
                 'id'                  => (int) $q['id'],
                 'product_id'          => (int) $q['product_id'],
                 'product_name'        => $product ? $product->get_name() : '',
                 'product_link'        => $product ? get_permalink( $product->get_id() ) : '',
+                'store_id'            => $q['store_id'],
+                'store_name'          => $store_obj->get('name'),
                 'question_text'       => $q['question_text'],
                 'answer_text'         => $q['answer_text'],
                 'question_by'         => (int) $q['question_by'],
                 'author_name'         => $author_name,
                 'question_date'       => $q['question_date'],
+                'answer_by'           => isset( $q['answer_by'] ) ? (int) $q['answer_by'] : 0,
+                'answer_date'         => $q['answer_date'] ?? '',
                 'time_ago'            => human_time_diff( strtotime( $q['question_date'] ), current_time( 'timestamp' ) ) . ' ago',
                 'total_votes'         => (int) $q['total_votes'],
                 'question_visibility' => $q['question_visibility'],
             ];
-        }, $questions );
-
-        return rest_ensure_response( $formatted );
-    }
-
+        }, $questions ?: [] );
     
+        // --- Step 9: Get Counters ---
+        $base_args = $args;
+        unset( $base_args['limit'], $base_args['offset'], $base_args['has_answer'], $base_args['no_answer'] );
+        $base_args['count'] = true;
+    
+        $all_count = Util::get_question_information( $base_args );
+    
+        $answered_args = $base_args;
+        $answered_args['has_answer'] = true;
+        $answered_count = Util::get_question_information( $answered_args );
+    
+        $unanswered_args = $base_args;
+        $unanswered_args['no_answer'] = true;
+        $unanswered_count = Util::get_question_information( $unanswered_args );
+    
+        // --- Step 10: Return Final Response ---
+        return rest_ensure_response([
+            'items'      => $formatted,
+            'all'        => (int) $all_count,
+            'answered'   => (int) $answered_count,
+            'unanswered' => (int) $unanswered_count,
+        ]);
+    }
+    
+
     public function create_item( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
@@ -274,6 +350,12 @@ class MultiVendorX_REST_Qna_Controller extends \WP_REST_Controller {
             );
         }
     
+        // ✅ Add answer_by (current user ID)
+        $current_user_id = get_current_user_id();
+        if ( $current_user_id ) {
+            $data_to_update['answer_by'] = $current_user_id;
+        }
+    
         // Save via Util helper
         $updated = Util::update_question( $id, $data_to_update );
     
@@ -281,8 +363,13 @@ class MultiVendorX_REST_Qna_Controller extends \WP_REST_Controller {
             return rest_ensure_response( [ 'success' => false ] );
         }
     
-        return rest_ensure_response( [ 'success' => true ] );
+        return rest_ensure_response( [
+            'success' => true,
+            'updated_by' => $current_user_id,
+            'updated_at' => current_time( 'mysql' ),
+        ] );
     }
+    
     
     public function delete_item( $request ) {
         // Verify nonce

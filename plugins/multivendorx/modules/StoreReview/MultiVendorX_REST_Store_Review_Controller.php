@@ -70,11 +70,11 @@ class MultiVendorX_REST_Store_Review_Controller extends \WP_REST_Controller {
         return current_user_can('edit_stores');
     }
 
-
     /**
-     * Get QnA items with optional pagination and date filter
+     * Get review items with optional pagination, date filters, and counters
      */
     public function get_items( $request ) {
+        // --- Step 1: Verify Nonce ---
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             return new \WP_Error(
@@ -83,82 +83,116 @@ class MultiVendorX_REST_Store_Review_Controller extends \WP_REST_Controller {
                 [ 'status' => 403 ]
             );
         }
-    
+
+        // --- Step 2: Collect Request Parameters ---
         $store_id   = $request->get_param( 'store_id' );
         $limit      = max( intval( $request->get_param( 'row' ) ), 10 );
         $page       = max( intval( $request->get_param( 'page' ) ), 1 );
         $offset     = ( $page - 1 ) * $limit;
-        $start_date = $request->get_param( 'startDate' );
-        $end_date   = $request->get_param( 'endDate' );
+        $start_date = sanitize_text_field( $request->get_param( 'startDate' ) );
+        $end_date   = sanitize_text_field( $request->get_param( 'endDate' ) );
         $count      = $request->get_param( 'count' );
-        $status      = $request->get_param( 'status' );
-    
+        $status     = sanitize_text_field( $request->get_param( 'status' ) );
+        $orderBy     = sanitize_text_field( $request->get_param( 'orderBy' ) );
+        $order     = sanitize_text_field( $request->get_param( 'order' ) );
         $args = [];
-    
+
+        // --- Step 3: Apply Store Filter ---
         if ( $store_id ) {
             $args['store_id'] = intval( $store_id );
         }
-        if ( $status ) {
-            $args['status'] = intval( $status );
-        }
-        //Return count only
+
+        // --- Step 4: Handle Count-Only Request ---
         if ( $count ) {
             $args['count'] = true;
             $total_count = Util::get_review_information( $args );
             return rest_ensure_response( (int) $total_count );
         }
-    
-        // 🔹 Add pagination & date filters
+
+        // --- Step 5: Add Filters (status, date, pagination) ---
+        if ( $status ) {
+            $args['status'] = $status;
+        }
+
         $args['limit']  = $limit;
         $args['offset'] = $offset;
-    
-        if ( $start_date ) {
-            $args['start_date'] = sanitize_text_field( $start_date );
-        }
-        if ( $end_date ) {
-            $args['end_date'] = sanitize_text_field( $end_date );
-        }
-    
-        // 🔹 Fetch raw review data
-        $reviews = Util::get_review_information( $args );
-    
-        // 🔹 Format response
-        $formatted = [];
-    
-        if ( ! empty( $reviews ) ) {
-            foreach ( $reviews as $review ) {
-                $customer = get_userdata( $review['customer_id'] );
-                $customer_name = $customer ? $customer->display_name : __( 'Guest', 'multivendorx' );
-    
-                $formatted[] = [
-                    'review_id'      => (int) $review['review_id'],
-                    'store_id'       => (int) $review['store_id'],
-                    'customer_id'    => (int) $review['customer_id'],
-                    'customer_name'  => $customer_name,
-                    'order_id'       => (int) $review['order_id'],
-                    'overall_rating' => round( floatval( $review['overall_rating'] ), 2 ),
-                    'review_title'   => sanitize_text_field( $review['review_title'] ),
-                    'review_content' => wp_strip_all_tags( $review['review_content'] ),
-                    'status'         => ucfirst( sanitize_text_field( $review['status'] ) ),
-                    'reported'       => (int) $review['reported'],
-                    'reply'          => $review['reply'] ?? '',
-                    'reply_date'     => $review['reply_date'] ?? '',
-                    'date_created'   => $review['date_created'],
-                    'date_modified'  => $review['date_modified'],
-                    'review_images'  => !empty($review['review_images'])
-                        ? maybe_unserialize( $review['review_images'] )
-                        : [],
-                    // Optional — show human readable time difference
-                    'time_ago'       => human_time_diff( strtotime( $review['date_created'] ), current_time( 'timestamp' ) ) . ' ' . __( 'ago', 'multivendorx' ),
-                ];
-            }
-        }
-    
-        return rest_ensure_response( $formatted );
-    }
-    
 
-    
+        if ( $start_date ) {
+            $args['start_date'] = $start_date;
+        }
+
+        if ( $end_date ) {
+            $args['end_date'] = $end_date;
+        }
+
+        // --- Step 5.1: Add Sorting ---
+        if ( ! empty( $orderBy ) && ! empty( $order ) ) {
+            $args['order_by']  = $orderBy;
+            $args['order_dir'] = ! empty( $order ) ? strtoupper( $order ) : 'DESC';
+        } else {
+            // Fallback default sort
+            $args['order_by']  = 'date_created';
+            $args['order_dir'] = 'DESC';
+        }
+
+        // --- Step 6: Fetch Review Data ---
+        $reviews = Util::get_review_information( $args );
+
+        // --- Step 7: Format Data for Response ---
+        $formatted = array_map( function( $review ) {
+            $customer = get_userdata( $review['customer_id'] );
+            $customer_name = $customer ? $customer->display_name : __( 'Guest', 'multivendorx' );
+            $store_obj = MultivendorX()->store->get_store_by_id( (int) $review['store_id'] );
+
+            return [
+                'review_id'      => (int) $review['review_id'],
+                'store_id'       => (int) $review['store_id'],
+                'store_name'     => $store_obj->get('name'),
+                'customer_id'    => (int) $review['customer_id'],
+                'customer_name'  => $customer_name,
+                'order_id'       => (int) $review['order_id'],
+                'overall_rating' => round( floatval( $review['overall_rating'] ), 2 ),
+                'review_title'   => sanitize_text_field( $review['review_title'] ),
+                'review_content' => wp_strip_all_tags( $review['review_content'] ),
+                'status'         => ucfirst( sanitize_text_field( $review['status'] ) ),
+                'reported'       => (int) $review['reported'],
+                'reply'          => $review['reply'] ?? '',
+                'reply_date'     => $review['reply_date'] ?? '',
+                'date_created'   => $review['date_created'],
+                'date_modified'  => $review['date_modified'],
+            ];
+        }, $reviews ?: [] );
+
+        // --- Step 8: Get Status Counters ---
+        $base_args = $args;
+        unset( $base_args['limit'], $base_args['offset'], $base_args['status'] );
+        $base_args['count'] = true;
+
+        $all_args = $base_args;
+        $all_count = Util::get_review_information( $all_args );
+
+        $pending_args = $base_args;
+        $pending_args['status'] = 'pending';
+        $pending_count = Util::get_review_information( $pending_args );
+
+        $approved_args = $base_args;
+        $approved_args['status'] = 'approved';
+        $approved_count = Util::get_review_information( $approved_args );
+
+        $rejected_args = $base_args;
+        $rejected_args['status'] = 'rejected';
+        $rejected_count = Util::get_review_information( $rejected_args );
+
+        // --- Step 9: Return Final Response ---
+        return rest_ensure_response([
+            'items'    => $formatted,
+            'all'      => (int) $all_count,
+            'pending'  => (int) $pending_count,
+            'approved' => (int) $approved_count,
+            'rejected' => (int) $rejected_count,
+        ]);
+    }
+
     public function create_item( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
