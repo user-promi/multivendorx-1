@@ -38,9 +38,10 @@ export default {
             iconEnable: false,
             moduleEnabled: 'store-review',
             settingDescription: __(
-                'Define rating parameters such as packaging, delivery, behaviour, policies, etc.',
+                'Define the key factors customers will use to evaluate each store.',
                 'multivendorx'
             ),
+            desc: __( 'Give customers a fair way to share feedback! Define what they rate, like product quality, delivery, or service. You’ll start with five default parameters that can be edited or removed, but make sure at least three stay active for balanced, detailed reviews.', 'multivendorx' ),
             requiredEnable: true,
             defaultValues: [
                 { value: "Product quality", required:true ,deleteDisabled: true},
