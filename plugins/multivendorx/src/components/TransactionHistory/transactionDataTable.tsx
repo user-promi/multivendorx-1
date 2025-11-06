@@ -18,7 +18,7 @@ type StoreRow = {
 };
 
 const TransactionDataTable: React.FC = ({ storeId }) => {
-    const [data, setData] = useState<StoreRow[] | null>(null);
+    const [data, setData] = useState<StoreRow[] | []>([]);
 
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
     const [totalRows, setTotalRows] = useState<number>(0);
@@ -50,7 +50,7 @@ const TransactionDataTable: React.FC = ({ storeId }) => {
         rowsPerPage = 10,
         currentPage = 1,
     ) {
-        setData(null);
+        setData([]);
         axios({
             method: 'GET',
             url: getApiLink(appLocalizer, 'products'),
@@ -74,7 +74,7 @@ const TransactionDataTable: React.FC = ({ storeId }) => {
         rowsPerPage: number,
         currentPage: number,
     ) => {
-        setData(null);
+        setData([]);
         requestData(
             rowsPerPage,
             currentPage,

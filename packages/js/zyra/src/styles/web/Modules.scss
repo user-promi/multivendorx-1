@@ -14,6 +14,7 @@
       font-weight: 500;
     }
   }
+
   .module-option-row {
     display: flex;
     flex-wrap: wrap;
@@ -166,27 +167,13 @@
         }
       }
 
-      @keyframes animate {
-        0% {
-          transform: scale(1);
-        }
 
-        50% {
-          transform: scale(1.03);
-        }
-
-        100% {
-          transform: scale(1);
-        }
-      }
 
     }
 
     .module-list-item.highlight {
-      animation: animate 2.5s ease-in-out infinite;
-      border: $border-theme-small;
 
-      label{
+      label {
         border: dashed 0.063rem $theme-color;
       }
     }
