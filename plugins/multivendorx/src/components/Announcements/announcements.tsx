@@ -217,7 +217,6 @@ export const Announcements: React.FC = () => {
         }
 
         setSubmitting(true);
-
         try {
             const endpoint = editId
                 ? getApiLink(appLocalizer, `announcement/${editId}`)
@@ -241,7 +240,7 @@ export const Announcements: React.FC = () => {
                 setFormData({ title: '', url: '', content: '', stores: [], status: 'draft' });
                 setEditId(null);
                 await fetchTotalRows();
-                requestData(pagination.pageSize, pagination.pageIndex + 1, page);
+                requestData(pagination.pageSize, pagination.pageIndex + 1);
             } else {
                 setError(__('Failed to save announcement', 'multivendorx'));
             }
@@ -440,22 +439,28 @@ export const Announcements: React.FC = () => {
         {
             header: __('Visible To', 'multivendorx'),
             cell: ({ row }) => {
-                const storeString = row.original.store_name || '';
-                const stores = storeString.split(',').map(s => s.trim()); // Split string into array and trim spaces
+                const storeString = row.original.store_name;
+        
+                // 🔹 If store_name is empty, null, or undefined → show All Stores
+                if (!storeString) {
+                    return <TableCell>{__('All Stores', 'multivendorx')}</TableCell>;
+                }
+        
+                // 🔹 Otherwise, split and format store names
+                const stores = storeString.split(',').map(s => s.trim());
                 let displayStores = stores;
-
+        
                 if (stores.length > 2) {
                     displayStores = [...stores.slice(0, 2), '...'];
                 }
-
+        
                 return (
                     <TableCell title={stores.join(', ')}>
                         {displayStores.join(', ')}
                     </TableCell>
                 );
             },
-        },
-
+        },        
         {
             id: 'date',
             accessorKey: 'date',
@@ -621,7 +626,7 @@ export const Announcements: React.FC = () => {
                                     type="text"
                                     name="title"
                                     value={formData.title}
-                                    onChange={handleChange} 
+                                    onChange={handleChange}
                                     msg={error}
 
                                 />

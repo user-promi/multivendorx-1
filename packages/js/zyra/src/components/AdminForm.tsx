@@ -1893,8 +1893,23 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             buttonEnable={inputField.buttonEnable}//Flag to enable/disable action buttons in the UI.
                             value={value || {}}
                             onChange={(data) => {
-                                settingChanged.current = true;
-                                updateSetting(inputField.key, data);
+                                if (
+                                    hasAccess(
+                                        inputField.proSetting ?? false,
+                                        String(
+                                            inputField.moduleEnabled ?? ''
+                                        ),
+                                        String(
+                                            inputField.dependentSetting ?? ''
+                                        ),
+                                        String(
+                                            inputField.dependentPlugin ?? ''
+                                        )
+                                    )
+                                ) {
+                                    settingChanged.current = true;
+                                    updateSetting(inputField.key, data);
+                                }
                             }}
                         />
                     );
@@ -1916,7 +1931,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                 <div
                     key={'g' + inputField.key}
                     className={`form-group ${inputField.classes ? inputField.classes : ''
-                        } ${inputField.proSetting ? 'pro-setting' : ''} ${(inputField.moduleEnabled && !modules.includes(inputField.moduleEnabled) ) ? 'module-enabled' : ''}`}
+                        } ${inputField.proSetting ? 'pro-setting' : ''} ${(inputField.moduleEnabled && !modules.includes(inputField.moduleEnabled)) ? 'module-enabled' : ''}`}
                     onClick={(e) => handleGroupClick(e, inputField)}
                 >
                     {inputField.label && inputField.type !== 'catalog-customizer' &&
@@ -1941,19 +1956,19 @@ const AdminForm: React.FC<AdminFormProps> = ({
                         }) : input}
                     </div>
                     {(
-                        ((inputField.proSetting && appLocalizer?.khali_dabba) || (!inputField.proSetting)) &&                          
+                        ((inputField.proSetting && appLocalizer?.khali_dabba) || (!inputField.proSetting)) &&
                         inputField.moduleEnabled &&
-                        !modules.includes(inputField.moduleEnabled) 
+                        !modules.includes(inputField.moduleEnabled)
                     ) && (
-                        <span className="admin-pro-tag module">
-                            <i className={`adminlib-${inputField.moduleEnabled}`}></i>
-                            {String(inputField.moduleEnabled)
-                                .split('-')
-                                .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
-                                .join(' ')}
-                            <i className="adminlib-lock"></i>
-                        </span>
-                    )}
+                            <span className="admin-pro-tag module">
+                                <i className={`adminlib-${inputField.moduleEnabled}`}></i>
+                                {String(inputField.moduleEnabled)
+                                    .split('-')
+                                    .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
+                                    .join(' ')}
+                                <i className="adminlib-lock"></i>
+                            </span>
+                        )}
                 </div>
             );
             return fieldContent;

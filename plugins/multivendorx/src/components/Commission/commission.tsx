@@ -384,7 +384,6 @@ const Commission: React.FC = () => {
         currentPage: number,
         filterData: FilterData
     ) => {
-        console.log(filterData);
         setCurrentFilterData(filterData);
         setData(null);
         requestData(
