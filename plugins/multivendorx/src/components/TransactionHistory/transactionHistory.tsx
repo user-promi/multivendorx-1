@@ -210,65 +210,67 @@ export const TransactionHistory: React.FC = () => {
                         </div>
                     ))}
                 </div>
-                <div className="row">
-                    <div className="col w-35">
-                        <div className="data-card-wrapper">
-                            <div className="data-card">
-                                <div className="title">Available balance</div>
-                                <div className="number">{formatCurrency(data.wallet_balance)} <i className="adminlib-dollar"></i></div>
-                            </div>
-                            <div className="data-card">
-                                <div className="title">Reserve balance</div>
-                                <div className="number">{formatCurrency(data.reserve_balance)} <i className="adminlib-bank"></i></div>
-                            </div>
-                            <div className="data-card">
-                                <div className="title">Locked balance</div>
-                                <div className="number">{formatCurrency(data.locking_balance)} <i className="adminlib-home "></i></div>
-                            </div>
-                            <div className="data-card">
-                                <div className="title">Available balance</div>
-                                <div className="number">{formatCurrency(data.wallet_balance)} <i className="adminlib-cart blue"></i></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="column w-65">
-                        <div className="card-header">
-                            <div className="left">
-                                <div className="title">
-                                    Withdrawable balance
+                {activeTab === "products" && (
+                    <div className="row">
+                        <div className="col w-35">
+                            <div className="data-card-wrapper">
+                                <div className="data-card">
+                                    <div className="title">Available balance</div>
+                                    <div className="number">{formatCurrency(data.wallet_balance)} <i className="adminlib-dollar"></i></div>
+                                </div>
+                                <div className="data-card">
+                                    <div className="title">Reserve balance</div>
+                                    <div className="number">{formatCurrency(data.reserve_balance)} <i className="adminlib-bank"></i></div>
+                                </div>
+                                <div className="data-card">
+                                    <div className="title">Locked balance</div>
+                                    <div className="number">{formatCurrency(data.locking_balance)} <i className="adminlib-home "></i></div>
+                                </div>
+                                <div className="data-card">
+                                    <div className="title">Available balance</div>
+                                    <div className="number">{formatCurrency(data.wallet_balance)} <i className="adminlib-cart blue"></i></div>
                                 </div>
                             </div>
                         </div>
-                        <div className="payout-wrapper">
-                            <div className="price">
-                                {formatCurrency(data.available_balance)}
+                        <div className="column w-65">
+                            <div className="card-header">
+                                <div className="left">
+                                    <div className="title">
+                                        Withdrawable balance
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="payout-wrapper">
+                                <div className="price">
+                                    {formatCurrency(data.available_balance)}
+                                </div>
+
+                                {storeData?.request_withdrawal_amount ? (
+                                    <>
+                                        <div className="des">
+                                            Last withdrawal request:
+                                            {formatCurrency(storeData.request_withdrawal_amount)}, is <strong>Pending</strong>.
+                                            <br />
+                                            Please clear the pending request before disbursing new payments.
+                                        </div>
+                                        <div className="admin-btn btn-purple disabled" style={{ opacity: 0.5, pointerEvents: 'none' }}>
+                                            Disburse payment
+                                        </div>
+                                    </>
+                                ) : (
+                                    <>
+                                        <div className="des">Current available balance ready to transfer to stores.</div>
+                                        <div className="admin-btn btn-purple" onClick={() => setRequestWithdrawal(true)}>
+                                            Disburse payment
+                                        </div>
+                                    </>
+                                )}
                             </div>
 
-                            {storeData?.request_withdrawal_amount ? (
-                                <>
-                                    <div className="des">
-                                        Last withdrawal request:
-                                        {formatCurrency(storeData.request_withdrawal_amount)}, is <strong>Pending</strong>.
-                                        <br />
-                                        Please clear the pending request before disbursing new payments.
-                                    </div>
-                                    <div className="admin-btn btn-purple disabled" style={{ opacity: 0.5, pointerEvents: 'none' }}>
-                                        Disburse payment
-                                    </div>
-                                </>
-                            ) : (
-                                <>
-                                    <div className="des">Current available balance ready to transfer to stores.</div>
-                                    <div className="admin-btn btn-purple" onClick={() => setRequestWithdrawal(true)}>
-                                        Disburse payment
-                                    </div>
-                                </>
-                            )}
                         </div>
 
                     </div>
-
-                </div>
+                )}
                 {requestWithdrawal && (
                     <CommonPopup
                         open={requestWithdrawal}
