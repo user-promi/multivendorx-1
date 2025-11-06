@@ -448,14 +448,14 @@ const Commission: React.FC = () => {
                 );
             },
         },
-        // {
-        //     id: 'totalOrderAmount',
-        //     accessorKey: 'totalOrderAmount',
-        //     accessorFn: row => parseFloat(row.totalOrderAmount || '0'),
-        //     enableSorting: true,
-        //     header: __('Order Amount', 'multivendorx'),
-        //     cell: ({ row }) => <TableCell title={row.original.totalOrderAmount ? `${row.original.totalOrderAmount}` : '-'}>{formatCurrency(row.original.totalOrderAmount)}</TableCell>,
-        // },
+        {
+            id: 'totalOrderAmount',
+            accessorKey: 'totalOrderAmount',
+            accessorFn: row => parseFloat(row.totalOrderAmount || '0'),
+            enableSorting: true,
+            header: __('Order Amount', 'multivendorx'),
+            cell: ({ row }) => <TableCell title={row.original.totalOrderAmount ? `${row.original.totalOrderAmount}` : '-'}>{formatCurrency(row.original.totalOrderAmount)}</TableCell>,
+        },
         {
             id: 'commissionSummary',
             accessorKey: 'commissionAmount',
@@ -468,10 +468,6 @@ const Commission: React.FC = () => {
                         <ul className="details">
                             <li>
                                 <div className="item">
-                                    <div className="title">{formatCurrency(row.original.totalOrderAmount)}</div>
-                                    <div className="des">Order amount</div>
-                                </div>
-                                <div className="item">
                                     <div className="title">{formatCurrency(row.original.commissionAmount)}</div>
                                     <div className="des">Commission Earned</div>
                                 </div>
@@ -481,22 +477,22 @@ const Commission: React.FC = () => {
                             </li> */}
                             <li>
                                 <div className="item">
-                                    <div className="title">{formatCurrency(row.original.facilitatorFee)} (-)</div>
-                                    <div className="des">Facilitator Fee</div>
+                                    <div className="title">+ {formatCurrency(row.original.shippingAmount)} </div>
+                                    <div className="des">Shipping</div>
                                 </div>
                                 <div className="item">
-                                    <div className="title">{formatCurrency(row.original.facilitatorFee)} (-) (d)</div>
-                                    <div className="des">Marketplace free</div>
+                                    <div className="title">+ {formatCurrency(row.original.taxAmount)}</div>
+                                    <div className="des">Tax</div>
                                 </div>
                             </li>
                             <li>
                                 <div className="item">
-                                    <div className="title">{formatCurrency(row.original.shippingAmount)} (+)</div>
-                                    <div className="des">Shipping</div>
+                                    <div className="title">- {formatCurrency(row.original.facilitatorFee)}</div>
+                                    <div className="des">Facilitator Fee</div>
                                 </div>
                                 <div className="item">
-                                    <div className="title">{formatCurrency(row.original.taxAmount)} (+)</div>
-                                    <div className="des">Tax</div>
+                                    <div className="title">- {formatCurrency(row.original.facilitatorFee)} (d)</div>
+                                    <div className="des">Marketplace free</div>
                                 </div>
                             </li>
                         </ul>
@@ -588,64 +584,63 @@ const Commission: React.FC = () => {
                 );
             },
         },
-        {
-            id: 'action',
-            header: __('Action', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell>
-                    <div
-                        className="admin-badge yellow hover"
-                        role="button"
-                        tabIndex={0}
-                        onClick={() => {
-                            const rowData: any = row.original;
-                            setSelectedCommissionId(rowData.id ?? null);
-                            setViewCommission(true);
-                        }}
-                    >
-                        <i className="adminlib-eye"></i>
-                    </div>
-                </TableCell>
-            ),
-        }
-
         // {
         //     id: 'action',
         //     header: __('Action', 'multivendorx'),
         //     cell: ({ row }) => (
-        //         <TableCell
-        //             type="action-dropdown"
-        //             rowData={row.original}
-        //             header={{
-        //                 actions: [
-        //                     {
-        //                         label: __('View Commission', 'multivendorx'),
-        //                         icon: 'adminlib-eye',
-        //                         onClick: (rowData: any) => {
-        //                             setSelectedCommissionId(rowData.id ?? null);
-        //                             setViewCommission(true);
-        //                         },
-        //                         hover: true,
-        //                     },
-        //                     {
-        //                         label: __('Regenerate Commission', 'multivendorx'),
-        //                         icon: 'adminlib-refresh',
-        //                         onClick: (rowData: any) => {
-        //                             if (rowData?.orderId) {
-        //                                 const url = `${appLocalizer.site_url.replace(/\/$/, '')}/wp-admin/admin.php?page=wc-orders&action=edit&id=${rowData.orderId}`;
-        //                                 window.open(url, '_blank');
-        //                             } else {
-        //                                 alert(__('Order ID missing for this commission.', 'multivendorx'));
-        //                             }
-        //                         },
-
-        //                         hover: true,
-        //                     },
-        //                 ],
-        //             }}
-        //         />
+        //         <TableCell>
+        //             <div
+        //                 className="admin-badge yellow hover"
+        //                 role="button"
+        //                 tabIndex={0}
+        //                 onClick={() => {
+        //                     const rowData: any = row.original;
+        //                     setSelectedCommissionId(rowData.id ?? null);
+        //                     setViewCommission(true);
+        //                 }}
+        //             >
+        //                 <i className="adminlib-eye"></i>
+        //             </div>
+        //         </TableCell>
         //     ),
         // }
+        {
+            id: 'action',
+            header: __('Action', 'multivendorx'),
+            cell: ({ row }) => (
+                <TableCell
+                    type="action-dropdown"
+                    rowData={row.original}
+                    header={{
+                        actions: [
+                            {
+                                label: __('View Commission', 'multivendorx'),
+                                icon: 'adminlib-eye',
+                                onClick: (rowData: any) => {
+                                    setSelectedCommissionId(rowData.id ?? null);
+                                    setViewCommission(true);
+                                },
+                                hover: true,
+                            },
+                            {
+                                label: __('Regenerate Commission', 'multivendorx'),
+                                icon: 'adminlib-refresh',
+                                onClick: (rowData: any) => {
+                                    if (rowData?.orderId) {
+                                        const url = `${appLocalizer.site_url.replace(/\/$/, '')}/wp-admin/admin.php?page=wc-orders&action=edit&id=${rowData.orderId}`;
+                                        window.open(url, '_blank');
+                                    } else {
+                                        alert(__('Order ID missing for this commission.', 'multivendorx'));
+                                    }
+                                },
+
+                                hover: true,
+                            },
+                        ],
+                    }}
+                />
+            ),
+        }
     ];
 
     const realtimeFilter: RealtimeFilter[] = [

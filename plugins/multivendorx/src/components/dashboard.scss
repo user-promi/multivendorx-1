@@ -293,6 +293,10 @@
             }
         }
     }
+
+    .settings-metabox-note {
+        margin-bottom: 1rem;
+    }
 }
 
 // card styles start
@@ -603,10 +607,9 @@
 // horizontal-tabs start
 .horizontal-tabs {
     display: flex;
-    gap: 2rem;
 
     .horizontal-title-section {
-        width: 30%;
+        width: 20%;
         height: auto;
         margin-top: 2.5rem;
 
@@ -635,6 +638,8 @@
                     p {
                         margin: 0;
                         font-weight: 500;
+                        font-size: 1rem;
+                        line-height: 1rem;
                     }
 
                     &:hover {
@@ -653,7 +658,7 @@
     }
 
     .general-wrapper {
-        width: 70%;
+        width: 80%;
         background: #fff;
 
         .card-content {

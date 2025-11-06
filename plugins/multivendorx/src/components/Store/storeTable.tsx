@@ -8,7 +8,7 @@ import {
     RowSelectionState,
     PaginationState,
 } from '@tanstack/react-table';
-import {formatCurrency} from '../../services/commonFunction';
+import { formatCurrency } from '../../services/commonFunction';
 
 type StoreRow = {
     id?: number;
@@ -204,7 +204,7 @@ const StoreTable: React.FC = () => {
                     <TableCell title={row.original.store_name || ''}>
                         <a
                             onClick={() => {
-                                 window.location.href = `?page=multivendorx#&tab=stores&edit/${row.original.id}`;
+                                window.location.href = `?page=multivendorx#&tab=stores&edit/${row.original.id}`;
                             }}
                             className="product-wrapper"
                         >
@@ -302,6 +302,10 @@ const StoreTable: React.FC = () => {
                         year: 'numeric',
                     }).format(dateObj);
                 }
+                const formattedStatus = status
+                    ?.replace(/[-_]/g, " ")         
+                    .toLowerCase()                   
+                    .replace(/^\w/, c => c.toUpperCase());
 
                 const getStatusBadge = (status: string) => {
                     switch (status) {
@@ -311,13 +315,18 @@ const StoreTable: React.FC = () => {
                             return <span className="admin-badge yellow">Pending</span>;
                         case 'rejected':
                             return <span className="admin-badge red">Rejected</span>;
+                        case 'permanently_rejected':
+                            return <span className="admin-badge red">Permanently Rejected</span>;
+                        case 'under_review':
+                            return <span className="admin-badge yellow">Under Review</span>;
                         case 'suspended':
-                            return <span className="admin-badge blue">Suspended</span>;
+                            return <span className="admin-badge red">Suspended</span>;
+                        case 'deactivated':
+                            return <span className="admin-badge red">Deactivated</span>;
                         default:
-                            return <span className="admin-badge gray">{status}</span>;
+                            return <span className="admin-badge gray">{formattedStatus}</span>;
                     }
                 };
-
                 return (
                     <TableCell title={`${status} - ${formattedDate}`}>
                         {getStatusBadge(status)}

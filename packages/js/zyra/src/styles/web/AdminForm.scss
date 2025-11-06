@@ -15,7 +15,7 @@
       gap: 1rem;
       width: 100%;
       background: #fff;
-      padding: 1rem ;
+      padding: 1rem;
 
       .settings-form-label {
         width: 22%;
@@ -48,24 +48,21 @@
 
     .form-group.pro-setting {
       // background: #e3504705;
-      border-top: 0.063rem solid rgb(227 80 71 / 18%);
+      // border-top: 0.063rem solid rgb(227 80 71 / 18%);
       // padding: 1rem 0;
       position: relative;
-      border-left: 0;
-      border-right: 0;
       // margin-top: 1rem;
     }
+
     .form-group.module-enabled {
       // background: #d9f5f059;
-      border-top: 0.063rem solid #d9f5f0;
+      // border-top: 0.063rem solid #d9f5f0;
       // padding: 1rem 0;
       position: relative;
-      border-left: 0;
-      border-right: 0;
       // box-shadow: -0.313rem 0 0 0 #d9f5f059, 0.313rem 0 0 0 #d9f5f059;
       // margin-top: 1rem;
 
-      .adminlib-lock{
+      .adminlib-lock {
         color: blue;
       }
     }
@@ -74,73 +71,81 @@
 
 // metabox description start
 .settings-metabox-note {
-  background: #ece2f991;
-  padding: 0.5rem 0.8rem;
-  display: flex;
-  align-items: start;
-  gap: 0.5rem;
-  border: 0.063rem solid $theme-color;
-  border-radius: 0.313rem;
-  // margin: 0.625rem 0;
-  width: 100%;
-  box-sizing: border-box;
+  background: #fff;
+  padding: 0 1rem;
+  width: 100%;  
 
-  i {
-    font-size: 1.313rem;
-    color: $theme-color;
-  }
-
-  ul,
-  li {
-    margin: 0;
-  }
-
-  .title {
-    font-size: 1.2rem;
-    font-weight: 500;
-    color: $theme-color;
-    line-height: 1.5rem;
-  }
-
-  p {
-    font-size: 0.875rem;
-    margin: 0;
-  }
-  a{
-    color: $theme-color;
-  }
-  &.notice {
-    flex-direction: column;
+  .metabox-note-wrapper {
+    background: #ece2f991;
+    padding: 0.5rem 0.8rem;
+    display: flex;
     align-items: start;
-    width: 100%;
+    gap: 0.5rem;
+    border: 0.063rem solid $theme-color;
+    border-radius: 0.313rem;
+    // margin: 0.625rem 0;
+    box-sizing: border-box;
+  }
+
+    i {
+      font-size: 1.313rem;
+      color: $theme-color;
+    }
+
+    ul,
+    li {
+      margin: 0;
+    }
 
     .title {
-      display: flex;
-      gap: 0.5rem;
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: $theme-color;
+      line-height: 1.5rem;
+    }
 
-      h3 {
-        margin: 0;
+    p {
+      font-size: 0.875rem;
+      margin: 0;
+    }
+
+    a {
+      color: $theme-color;
+    }
+
+    &.notice {
+      flex-direction: column;
+      align-items: start;
+      width: 100%;
+
+      .title {
+        display: flex;
+        gap: 0.5rem;
+
+        h3 {
+          margin: 0;
+        }
       }
     }
-  }
 
-  &.green {
-    background: #d9f5f0d8;
-    border-color: #06be9f;
+    &.green {
+      background: #d9f5f0d8;
+      border-color: #06be9f;
 
-    i {
-      color: #06be9f;
+      i {
+        color: #06be9f;
+      }
     }
-  }
 
-  &.yellow {
-    background: #fff0e1e3;
-    border-color: #ff9f43;
+    &.yellow {
+      background: #fff0e1e3;
+      border-color: #ff9f43;
 
-    i {
-      color: #ff9f43;
+      i {
+        color: #ff9f43;
+      }
     }
-  }
+  
 }
 
 .settings-metabox-description {

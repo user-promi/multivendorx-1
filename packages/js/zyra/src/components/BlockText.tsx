@@ -14,7 +14,8 @@ const BlockText: React.FC<BlockTextProps> = ({ blockTextClass, value, title }) =
     return (
         <>
 
-            <div className={blockTextClass}>                
+            <div className={blockTextClass}>
+                <div className="metabox-note-wrapper">
                 <i className="adminlib-info"></i>
 
                 <div className="details">
@@ -22,6 +23,7 @@ const BlockText: React.FC<BlockTextProps> = ({ blockTextClass, value, title }) =
                     <p
                         dangerouslySetInnerHTML={{ __html: value }}
                     ></p>
+                </div>
                 </div>
             </div>
         </>
