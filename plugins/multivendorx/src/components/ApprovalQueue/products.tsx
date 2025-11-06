@@ -213,7 +213,6 @@ const Products: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
         },
         {
             header: __('Action', 'multivendorx'),
-            id: 'action',
             cell: ({ row }) =>
                 <TableCell title={row.original.status || ''}>
                      <span className="admin-btn btn-purple" onClick={() => { handleSingleAction('approve_product', row.original.id!)}}><i className="adminlib-check"></i> Approve</span>

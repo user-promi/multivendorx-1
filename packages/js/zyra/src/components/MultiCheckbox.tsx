@@ -196,7 +196,7 @@ const MultiCheckBox: React.FC<MultiCheckBoxProps> = (props) => {
                                     <>
                                         <label htmlFor={`${props.idPrefix}-${option.key}`}>
                                             {option.label}
-
+                                            { option.proSetting && <span className="admin-pro-tag"><i className="adminlib-pro-tag"></i>Pro</span> }
                                             <div className="label-des">{option.desc}</div>
                                         </label>
                                         {option.edit && (
@@ -224,6 +224,7 @@ const MultiCheckBox: React.FC<MultiCheckBoxProps> = (props) => {
                         dangerouslySetInnerHTML={{ __html: props.description }}
                     ></p>
                 )}
+                { props.proSetting && <span className="admin-pro-tag"><i className="adminlib-pro-tag"></i>Pro</span> }
             </div>
 
             {/* Add New Section */}
