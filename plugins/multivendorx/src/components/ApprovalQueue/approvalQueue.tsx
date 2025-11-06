@@ -48,7 +48,7 @@ const ApprovalQueue = () => {
         {
             id: "stores",
             label: "Stores",
-            icon: "adminlib-calendar yellow",
+            icon: "adminlib-storefront yellow",
             count: storeCount,
             des: "Eager to join the marketplace",
             condition: settings?.general?.approve_store === "manually",
@@ -57,7 +57,7 @@ const ApprovalQueue = () => {
         {
             id: "products",
             label: "Products",
-            icon: "adminlib-calendar red",
+            icon: "adminlib-multi-product red",
             count: productCount,
             des: "Waiting for your green light",
             condition: settings?.["store-capability"]?.products?.includes("publish_products"), count: productCount,
@@ -66,7 +66,7 @@ const ApprovalQueue = () => {
         {
             id: "coupons",
             label: "Coupons",
-            icon: "adminlib-calendar green",
+            icon: "adminlib-coupon green",
             count: couponCount,
             condition: settings?.["store-capability"]?.coupons?.includes("publish_coupons"),
             des: "Need a quick approval",
@@ -75,7 +75,7 @@ const ApprovalQueue = () => {
         {
             id: "wholesale-customer",
             label: "Customers",
-            icon: "adminlib-calendar yellow",
+            icon: "adminlib-user-circle yellow",
             module: "wholesale",
             des: "Ready for your approval",
             count: 9,
@@ -85,7 +85,7 @@ const ApprovalQueue = () => {
             id: "refund-requests",
             label: "Refund Requests",
             module: "marketplace-refund",
-            icon: "adminlib-calendar blue",
+            icon: "adminlib-marketplace-refund blue",
             des: "Need your decision",
             count: refundCount,
             content: <StoreOrders onUpdated={refreshCounts} />
@@ -94,7 +94,7 @@ const ApprovalQueue = () => {
             id: "report-abuse",
             label: "Product Abused",
             module: "marketplace-compliance",
-            icon: "adminlib-calendar blue",
+            icon: "adminlib-product blue",
             count: reportAbuseCount,
             des: "Reported for review",
             content: <ReportAbuseTable onUpdated={refreshCounts} />
@@ -102,7 +102,7 @@ const ApprovalQueue = () => {
         {
             id: "withdrawal",
             label: "Withdrawals",
-            icon: "adminlib-calendar blue",
+            icon: "adminlib-bank blue",
             des: "Queued for disbursement",
             condition: settings?.disbursement?.withdraw_type === "manual",
             count: withdrawCount,

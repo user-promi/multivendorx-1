@@ -212,7 +212,7 @@ const Stores: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
                     <div className="action-section">
                         <ul className='small-action'>
                             <li
-                                className="hover icon-green"
+                                className="admin-badge green hover"
                                 onClick={() => {
                                     handleSingleAction('active', row.original.id!)
                                 }
@@ -222,13 +222,12 @@ const Stores: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
                                 <span>Approve</span>
                             </li>
 
-                            <li className="hover icon-red" onClick={() => handleSingleAction('declined', row.original.id!)}
+                            <li className="admin-badge red hover" onClick={() => handleSingleAction('declined', row.original.id!)}
                             >
                                 <i className="adminlib-close"></i>
                                 <span>Reject</span>
                             </li>
                         </ul>
-
                     </div>
                 </TableCell>,
         },
@@ -251,6 +250,17 @@ const Stores: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
 
     return (
         <>
+            <div className="card-header">
+                <div className="left">
+                    <div className="title">
+                        Stores
+                    </div>
+                    <div className="des">Waiting for your response</div>
+                </div>
+                <div className="right">
+                    <i className="adminlib-more-vertical"></i>
+                </div>
+            </div>
             <div className="admin-table-wrapper">
                 <Table
                     data={data}

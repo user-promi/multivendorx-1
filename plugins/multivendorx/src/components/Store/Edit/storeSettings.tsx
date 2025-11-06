@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import { BasicInput, TextArea, FileInput, getApiLink, SuccessNotice, SelectInput, useModules } from 'zyra';
+import { useLocation } from "react-router-dom";
 
 declare global {
     interface Window {
@@ -208,6 +209,20 @@ const StoreSettings = ({ id, data }: { id: string | null; data: any }) => {
             fetchStatesByCountry(formData.country);
         }
     }, [formData.country]);
+
+    const location = useLocation();
+
+    useEffect(() => {
+        const highlightId = location.state?.highlightTarget;
+        if (highlightId) {
+        const target = document.getElementById(highlightId);
+        if (target) {
+            target.scrollIntoView({ behavior: "smooth", block: "center" });
+            target.classList.add("highlight-section");
+
+        }
+        }
+    }, [location.state]);
 
     // Load map scripts based on provider
     useEffect(() => {
@@ -1001,7 +1016,6 @@ const StoreSettings = ({ id, data }: { id: string | null; data: any }) => {
                             </div>
                         </div>
 
-                        {/* Updated Email Section */}
                         <div id="store-slug" className="form-group-wrapper">
                             <div className="form-group">
                                 <label htmlFor="store-email">Slug</label>

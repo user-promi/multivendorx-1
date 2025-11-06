@@ -8,7 +8,7 @@ import {
     RowSelectionState,
     PaginationState,
 } from '@tanstack/react-table';
-import {formatCurrency} from '../../services/commonFunction';
+import { formatCurrency } from '../../services/commonFunction';
 
 type StoreRow = {
     id?: number;
@@ -257,7 +257,7 @@ const ExportAllTransactionCSVButton: React.FC<{
             disabled={isDownloading || !storeId}
             className="admin-btn btn-purple-bg"
         >
-            <span className="adminlib-export"></span>
+            <span className="adminlib-import"></span>
             Export All CSV
         </button>
     );
@@ -465,17 +465,17 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                 const type = row.original.transaction_type?.toLowerCase();
                 const orderId = row.original.order_details;
                 const paymentMethod = row.original.payment_method;
-        
+
                 // Format helper → makes text human-readable
                 const formatText = (text) =>
                     text
                         ?.replace(/-/g, ' ')                // replace hyphens with spaces
                         ?.replace(/\b\w/g, (c) => c.toUpperCase()) // capitalize each word
                     || '-';
-        
+
                 let displayValue = '-';
                 let content = displayValue;
-        
+
                 // Dynamic output
                 if (type === 'commission') {
                     displayValue = `Commission #${orderId || '-'}`;
@@ -496,7 +496,7 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                     displayValue = formatText(row.original.transaction_type);
                     content = displayValue;
                 }
-        
+
                 return <TableCell title={displayValue}>{content}</TableCell>;
             },
         },
@@ -630,7 +630,7 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
             .then((response) => {
                 const data = response?.data || {};
 
-               const dynamicOverview = [
+                const dynamicOverview = [
                     { id: 'commission', label: 'Commission', count: formatCurrency(data.commission_total), icon: 'adminlib-star green' },
                     { id: 'shipping', label: 'Shipping Tax', count: formatCurrency(data.shipping_amount), icon: 'adminlib-clock blue' },
                     { id: 'facilitator', label: 'Facilitator Fee', count: formatCurrency(data.facilitator_fee), icon: 'adminlib-star yellow' },

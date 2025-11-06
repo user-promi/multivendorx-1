@@ -690,48 +690,57 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
         $store = new \MultiVendorX\Store\Store( $id );
 
         if ( ! empty( $data['delete'] ) ) {
-            $delete_option = isset( $data['deleteOption'] ) ? $data['deleteOption'] : '';
+            $delete_option = $data['deleteOption'] ?? '';
 
-            if ( in_array( $delete_option, array( 'direct', 'permanent_delete' ), true ) ) {
-                $delete_store = $store->delete_store_completely();
+            switch ( $delete_option ) {
+                case 'direct':
+                case 'permanent_delete':
+                    $deleted = $store->delete_store_completely();
+                    return rest_ensure_response( [ 'success' => (bool) $deleted ] );
 
-                if ( $delete_store ) {
-                    return rest_ensure_response( [ 'success' => true ] );
-                }
+                case 'product_assign_admin':
+                    $admins = get_users( [ 'role' => 'administrator', 'number' => 1 ] );
+                    $admin_user_id = $admins[0]->ID ?? 1;
 
-            } elseif ( $delete_option === 'product_assign_admin' ) {
+                    $products = wc_get_products( [
+                        'limit'      => -1,
+                        'return'     => 'ids',
+                        'meta_key'   => 'multivendorx_store_id',
+                        'meta_value' => $id,
+                    ] );
 
-                $admins = get_users( array( 'role' => 'administrator', 'number' => 1 ) );
-                $admin_user_id = ! empty( $admins ) ? $admins[0]->ID : 1;
-
-                $products = wc_get_products( array(
-                    'limit'      => -1,
-                    'return'     => 'ids',
-                    'meta_key'   => 'multivendorx_store_id',
-                    'meta_value' => $id,
-                ) );
-
-                if ( ! empty( $products ) ) {
-                    foreach ( $products as $product_id ) {
-
-                        wp_update_post( array(
-                            'ID'          => $product_id,
-                            'post_author' => $admin_user_id,
-                        ) );
-
-                        delete_post_meta( $product_id, 'multivendorx_store_id' );
+                    if ( $products ) {
+                        foreach ( $products as $product_id ) {
+                            wp_update_post( [
+                                'ID'          => $product_id,
+                                'post_author' => $admin_user_id,
+                            ] );
+                            delete_post_meta( $product_id, 'multivendorx_store_id' );
+                        }
                     }
-                }
 
-                $delete_store = $store->delete_store_completely();
+                    $deleted = $store->delete_store_completely();
+                    return rest_ensure_response( [ 'success' => (bool) $deleted ] );
 
-                return rest_ensure_response( [ 'success' => (bool) $delete_store ] );
+                case 'set_store_owner':
+                    if ( empty( $data['new_owner_id'] ) ) {
+                        return rest_ensure_response( [ 'success' => false, 'message' => 'New owner ID missing.' ] );
+                    }
 
-            } else {
-                unset( $data['delete'] );
+                    StoreUtil::add_store_users( [
+                        'store_id' => $id,
+                        'users'    => (array) $data['new_owner_id'],
+                        'role_id'  => 'store_owner',
+                    ] );
+
+                    StoreUtil::set_primary_owner( $data['new_owner_id'], $id );
+                    return rest_ensure_response( [ 'success' => true ] );
+
+                default:
+                    unset( $data['delete'] );
+                    break;
             }
         }
-
         
         // Handle registration & core data
         if (!empty($data['registration_data']) || !empty($data['core_data'])) {

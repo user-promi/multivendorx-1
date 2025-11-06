@@ -46,4 +46,17 @@
         gap: 0.5rem;
         border-top: $border-light-small;
     }
+
+    .admin-table-header{
+        background: $theme-background-color;
+        color: $theme-color;
+    }
+
+    .admin-table{
+        .admin-table-body{
+            tr:last-child{
+                border-bottom: $border-light-small;
+            }
+        }
+    }
 }

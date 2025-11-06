@@ -82,7 +82,7 @@ export default {
             type: 'nested',
             label: 'Commission value',
             desc: __(
-                'Define commission rates based on total order value. Multiple rules can be created for different order value ranges.',
+                'Set your default commission rate that will apply to all orders. You can choose between a fixed amount ($) or a percentage (%) of the order value. Additionally, you can create advanced commission rules below to automatically adjust rates based on specific conditions like product price, quantity, or total order value.',
                 'multivendorx'
             ),
             addButtonLabel: 'Add new',
@@ -294,8 +294,8 @@ export default {
                 'Define a fee to cover platform costs. Apply a fixed, percentage, or combined rate. Choose whether it’s paid by the customer at checkout or deducted from the store’s commission.',
                 'multivendorx'
             ),
-            desc: __('<ul><li><strong>When the fee is added to the customer’s order total:</strong>If the marketplace fee is $2 + 10% and the product price is $100 →  The <strong>customer pays $112</strong>.  The <strong>store receives $100</strong> (before commission or other deductions).</li><li><strong>When the fee is deducted from the store’s commission:</strong>  If the marketplace fee is $2 + 10% and the product price is $100 →  The <strong>customer pays $100</strong>.  The <strong>store receives $88</strong> after the marketplace fee is deducted.</li></ul>', 'multivendorx'),
-            nestedFields: [
+            desc: __('<strong>Example setup:</strong><br>Product price = $100<br>Marketplace fee = $2 + 10%<ul><li><strong>Case 1 – Fee added to the customer’s order total:</strong><br>Customer pays = $100 + ($2 + 10% of $100) = $112<li><strong>Case 2 – Fee deducted from the store’s commission:</strong><br>Customer pays = $100<br>Marketplace fee = $2 + 10% of $100 = $12<br>Store receives = $100 - $12 = $88</li></ul>', 'multivendorx'),
+                 nestedFields: [
                 {
                     key: 'commission_fixed',
                     type: 'text',
