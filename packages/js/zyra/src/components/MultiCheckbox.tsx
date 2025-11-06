@@ -196,6 +196,8 @@ const MultiCheckBox: React.FC<MultiCheckBoxProps> = (props) => {
                                     <>
                                         <label htmlFor={`${props.idPrefix}-${option.key}`}>
                                             {option.label}
+
+                                            <div className="label-des">{option.desc}</div>
                                         </label>
                                         {option.edit && (
                                             <span
@@ -208,6 +210,7 @@ const MultiCheckBox: React.FC<MultiCheckBoxProps> = (props) => {
                                                     <span className="admin-badge yellow adminlib-create"></span>
                                             </span>
                                         )}
+
                                     </>
                                 )}
                             </div>

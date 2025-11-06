@@ -494,8 +494,16 @@ input[type="checkbox"]:focus {
 
       label {
         padding: 0 0 0.313rem 0.313rem;
-        font-size: 0.875rem;
+        font-size: 0.9rem;
         position: relative;
+        font-weight: 500;
+
+        .label-des {
+          line-height: 1rem;
+          color: #00000078;
+          font-size: 0.813rem;
+          padding-top: 0.063rem;
+        }
       }
 
       .edit-icon {
@@ -827,6 +835,11 @@ input[type="checkbox"]:focus {
 .settings-input-content {
   // position: relative;
   width: 72%;
+
+  .after {
+    font-size: 0.95rem;
+    color: #0000009c;
+  }
 
   // multi input style start
   .settings-basic-child-wrap {
