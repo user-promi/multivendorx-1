@@ -556,13 +556,12 @@ const EditStore = () => {
                                                     {data?.slug ? (
                                                         <>
                                                             {data.slug}{' '}
-                                                            <a
-                                                                href={`${appLocalizer.store_page_url}/${data.slug}`}
-                                                                target="_blank"
-                                                                rel="noopener noreferrer"
-                                                            >
-                                                                <i className="adminlib-create"></i>
-                                                            </a>
+                                                            
+                                                            <i className="adminlib-create" onClick={() => {
+                                                                navigate(`?page=multivendorx#&tab=stores&edit/${data.id}/&subtab=store`, {
+                                                                    state: { highlightTarget: "store-slug" },
+                                                                    });
+                                                            }}></i>
                                                         </>
                                                     ) : (
                                                         <Skeleton
