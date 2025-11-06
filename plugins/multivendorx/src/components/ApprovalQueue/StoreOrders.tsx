@@ -327,7 +327,17 @@ const StoreOrders: React.FC<Props> = ({ onUpdated }) => {
 
   return (
     <>
-
+      <div className="card-header">
+        <div className="left">
+          <div className="title">
+            Store Orders
+          </div>
+          <div className="des">Waiting for your response</div>
+        </div>
+        <div className="right">
+          <i className="adminlib-more-vertical"></i>
+        </div>
+      </div>
       <div className="admin-table-wrapper">
         <Table
           data={data}

@@ -219,14 +219,14 @@ const Products: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
                     <div className="action-section">
                         <ul className='small-action'>
                             <li
-                                className="hover icon-green"
+                                className="hover admin-badge green"
                                 onClick={() => handleSingleAction('approve_product', row.original.id!)}
                             >
                                 <i className="adminlib-check"></i>
                                 <span>Approve</span>
                             </li>
 
-                            <li className="hover icon-red" onClick={() => handleSingleAction('reject_product', row.original.id!)}
+                            <li className="hover admin-badge red" onClick={() => handleSingleAction('reject_product', row.original.id!)}
                             >
                                 <i className="adminlib-close"></i>
                                 <span>Reject</span>
@@ -255,6 +255,17 @@ const Products: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
 
     return (
         <>
+            <div className="card-header">
+                <div className="left">
+                    <div className="title">
+                        Products
+                    </div>
+                    <div className="des">Waiting for your response</div>
+                </div>
+                <div className="right">
+                    <i className="adminlib-more-vertical"></i>
+                </div>
+            </div>
             <Table
                 data={data}
                 columns={columns as ColumnDef<Record<string, any>, any>[]}
