@@ -28,31 +28,6 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({ open, onClose, commissi
   const [storeData, setStoreData] = useState<any>(null);
   const [orderData, setOrderData] = useState<any>(null);
 
-  const [pagination, setPagination] = useState({
-    pageIndex: 0,
-    pageSize: 5,
-  });
-  // 👉 Demo data (replace later with API data if needed)
-  const demoData: OrderItem[] = [
-    {
-      id: 1,
-      name: "Charcoal Detox",
-      sku: "8678",
-      cost: "$95.00",
-      discount: "-$5.00",
-      qty: 1,
-      total: "$95.00",
-    },
-    {
-      id: 2,
-      name: "Lavender Soap",
-      sku: "9023",
-      cost: "$12.00",
-      qty: 2,
-      total: "$24.00",
-    },
-  ];
-
   // Add new state
   const [orderItems, setOrderItems] = useState<OrderItem[]>([]);
 
@@ -96,15 +71,31 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({ open, onClose, commissi
               const order = orderRes.data || {};
               setOrderData(order);
 
-              // ✅ Convert WooCommerce line_items → OrderItem[]
+              //Convert WooCommerce line_items → OrderItem[]
               if (Array.isArray(order.line_items)) {
-                const mapped: OrderItem[] = order.line_items.map((item: any) => {
+                const fetchProductImages = order.line_items.map(async (item) => {
                   const subtotal = parseFloat(item.subtotal || "0");
                   const total = parseFloat(item.total || "0");
                   const discount = subtotal > total
                     ? `-${formatCurrency(subtotal - total)}`
                     : undefined;
 
+                  let imageUrl = null;
+
+                  //Fetch product image using product_id
+                  if (item.product_id) {
+                    try {
+                      const productRes = await axios({
+                        method: "GET",
+                        url: `${appLocalizer.apiUrl}/wc/v3/products/${item.product_id}`,
+                        headers: { "X-WP-Nonce": appLocalizer.nonce },
+                      });
+                      const product = productRes.data;
+                      imageUrl = product?.images?.[0]?.src || null;
+                    } catch (err) {
+                      imageUrl = null;
+                    }
+                  }
 
                   return {
                     id: item.product_id,
@@ -114,12 +105,18 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({ open, onClose, commissi
                     discount,
                     qty: item.quantity,
                     total: formatCurrency(item.total),
+                    image: imageUrl, //add product image here
                   };
                 });
-                setOrderItems(mapped);
+
+                // Wait for all product image requests
+                Promise.all(fetchProductImages).then((mapped) => {
+                  setOrderItems(mapped);
+                });
               } else {
                 setOrderItems([]);
               }
+
             })
             .catch(() => {
               setOrderData(null);
@@ -153,11 +150,51 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({ open, onClose, commissi
     //     />
     //   ),
     // },
+    // {
+    //   header: __("Product", "multivendorx"),
+    //   cell: ({ row }) => {
+    //     const productId = row.original.id; // make sure this is the WooCommerce product ID
+    //     const productName = row.original.name ?? "-";
+
+    //     return (
+    //       <TableCell title={productName}>
+    //         {productId ? (
+    //           <a
+    //             href={`${appLocalizer.site_url.replace(/\/$/, '')}/wp-admin/post.php?post=${productId}&action=edit`}
+    //             target="_blank"
+    //             rel="noopener noreferrer"
+    //             className="product-wrapper"
+    //           >
+    //             {/* {row.original.image ? (
+    //               <img
+    //                 src={row.original.image}
+    //                 alt={row.original.store_name}
+    //               />
+    //             ) : (
+    //               <i className="item-icon adminlib-store-inventory"></i>
+    //             )} */}
+
+    //             <i className="item-icon adminlib-multi-product"></i>
+
+    //             <div className="details">
+    //               {productName}
+    //               <div className="sub-text">Sku: {row.original.sku ?? "-"}</div>
+    //             </div>
+    //           </a>
+    //         ) : (
+    //           productName
+    //         )}
+
+    //       </TableCell>
+    //     );
+    //   },
+    // },
     {
       header: __("Product", "multivendorx"),
       cell: ({ row }) => {
-        const productId = row.original.id; // make sure this is the WooCommerce product ID
+        const productId = row.original.id; // WooCommerce product ID
         const productName = row.original.name ?? "-";
+        const productImage = row.original.image; // ✅ image from your mapped data
 
         return (
           <TableCell title={productName}>
@@ -168,16 +205,15 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({ open, onClose, commissi
                 rel="noopener noreferrer"
                 className="product-wrapper"
               >
-                {/* {row.original.image ? (
+                {productImage ? (
                   <img
-                    src={row.original.image}
-                    alt={row.original.store_name}
+                    src={productImage}
+                    alt={productName}
+                    className="product-thumb"
                   />
                 ) : (
-                  <i className="item-icon adminlib-store-inventory"></i>
-                )} */}
-
-                <i className="item-icon adminlib-multi-product"></i>
+                  <i className="item-icon adminlib-multi-product"></i>
+                )}
 
                 <div className="details">
                   {productName}
@@ -187,7 +223,6 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({ open, onClose, commissi
             ) : (
               productName
             )}
-
           </TableCell>
         );
       },

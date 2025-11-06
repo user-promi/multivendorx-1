@@ -2,14 +2,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
-import { DateRangePicker, RangeKeyDict, Range } from 'react-date-range';
-import { Table, getApiLink, TableCell, CalendarInput, CommonPopup, TextArea } from 'zyra';
+import { Table, getApiLink, TableCell, CalendarInput, CommonPopup, TextArea, ToggleSetting } from 'zyra';
 import {
     ColumnDef,
     RowSelectionState,
     PaginationState,
 } from '@tanstack/react-table';
-import EditQna from './editQna';
 export interface RealtimeFilter {
     name: string;
     render: (updateFilter: (key: string, value: any) => void, filterValue: any) => React.ReactNode;
@@ -28,6 +26,14 @@ type QnaRow = {
     time_ago: string;
     total_votes: number;
     question_visibility: string;
+    store_id?: string;
+    store_name?: string;
+};
+
+type Status = {
+    key: string;
+    name: string;
+    count: number;
 };
 
 type StoreQnaRow = {
@@ -39,8 +45,16 @@ type StoreQnaRow = {
     author_name?: string;
     question_date?: string;
     time_ago?: string;
+    question_visibility?: string;
 };
 
+type FilterData = {
+    searchField: string;
+    typeCount?: any;
+    store?: string;
+    orderBy?: any;
+    order?: any;
+};
 
 const Qna: React.FC = () => {
     const [error, setError] = useState<string>();
@@ -50,6 +64,8 @@ const Qna: React.FC = () => {
     const [data, setData] = useState<QnaRow[] | null>(null);
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
     const [totalRows, setTotalRows] = useState<number>(0);
+    const [status, setStatus] = useState<Status[] | null>(null);
+    const [store, setStore] = useState<any[] | null>(null);
 
     const [pagination, setPagination] = useState<PaginationState>({
         pageIndex: 0,
@@ -60,6 +76,18 @@ const Qna: React.FC = () => {
 
     // Fetch total rows on mount
     useEffect(() => {
+        axios({
+            method: 'GET',
+            url: getApiLink(appLocalizer, 'store'),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+        })
+            .then((response) => {
+                setStore(response.data.stores);
+            })
+            .catch(() => {
+                setError(__('Failed to load stores', 'multivendorx'));
+                setStore([]);
+            });
         axios({
             method: 'GET',
             url: getApiLink(appLocalizer, 'qna'),
@@ -87,6 +115,11 @@ const Qna: React.FC = () => {
     function requestData(
         rowsPerPage = 10,
         currentPage = 1,
+        typeCount = '',
+        store = '',
+        searchField = '',
+        orderBy = '',
+        order = '',
         startDate = new Date(0),
         endDate = new Date(),
     ) {
@@ -98,12 +131,34 @@ const Qna: React.FC = () => {
             params: {
                 page: currentPage,
                 row: rowsPerPage,
+                status: typeCount === 'all' ? '' : typeCount,
+                store_id: store,
+                searchField,
+                orderBy,
+                order,
                 startDate,
                 endDate
             },
         })
             .then((response) => {
-                setData(response.data || []);
+                setData(response.data.items || []);
+                setStatus([
+                    {
+                        key: 'all',
+                        name: 'All',
+                        count: response.data.all || 0,
+                    },
+                    {
+                        key: 'has_answer',
+                        name: 'Answered',
+                        count: response.data.answered || 0,
+                    },
+                    {
+                        key: 'no_answer',
+                        name: 'Unanswered',
+                        count: response.data.unanswered || 0,
+                    },
+                ]);
             })
             .catch(() => {
                 setError(__('Failed to load Q&A', 'multivendorx'));
@@ -121,6 +176,11 @@ const Qna: React.FC = () => {
         requestData(
             rowsPerPage,
             currentPage,
+            filterData?.typeCount,
+            filterData?.store,
+            filterData?.searchField,
+            filterData?.orderBy,
+            filterData?.order,
             filterData?.date?.start_date,
             filterData?.date?.end_date
         );
@@ -133,12 +193,23 @@ const Qna: React.FC = () => {
         try {
             await axios.put(
                 getApiLink(appLocalizer, `qna/${selectedQna.id}`),
-                { answer_text: answer },
+                {
+                    answer_text: answer,
+                    question_visibility: selectedQna.question_visibility || 'public',
+                },
                 { headers: { "X-WP-Nonce": appLocalizer.nonce } }
             );
+
+            // Update table data after save
             setData((prev) =>
                 prev.map((q) =>
-                    q.id === selectedQna.id ? { ...q, answer_text: answer } : q
+                    q.id === selectedQna.id
+                        ? {
+                            ...q,
+                            answer_text: answer,
+                            question_visibility: selectedQna.question_visibility || 'public',
+                        }
+                        : q
                 )
             );
             setSelectedQna(null);
@@ -150,6 +221,7 @@ const Qna: React.FC = () => {
             setSaving(false);
         }
     };
+
 
     const columns: ColumnDef<QnaRow>[] = [
         {
@@ -188,6 +260,7 @@ const Qna: React.FC = () => {
             cell: ({ row }) => <TableCell title={row.original.author_name || ''}>{row.original.author_name ?? '-'}</TableCell>
         },
         {
+            id:'question_date',
             header: __('Date', 'multivendorx'),
             accessorFn: row => row.question_date ? new Date(row.question_date).getTime() : 0, // numeric timestamp for sorting
             enableSorting: true,
@@ -198,32 +271,31 @@ const Qna: React.FC = () => {
             }
         },
         {
-            header: __('Time Ago', 'multivendorx'),
-            accessorFn: row => {
-                // Parse "2 weeks ago", "3 days ago", etc., to approximate days
-                const str = row.time_ago || '';
-                const parts = str.split(' ');
-                if (parts.length < 2) return 0;
-                const value = parseInt(parts[0]) || 0;
-                const unit = parts[1].toLowerCase();
-                switch (unit) {
-                    case 'minute':
-                    case 'minutes': return value / 60; // fraction of hour
-                    case 'hour':
-                    case 'hours': return value; // in hours
-                    case 'day':
-                    case 'days': return value * 24; // in hours
-                    case 'week':
-                    case 'weeks': return value * 24 * 7;
-                    case 'month':
-                    case 'months': return value * 24 * 30;
-                    case 'year':
-                    case 'years': return value * 24 * 365;
-                    default: return 0;
-                }
+            header: __('Store', 'multivendorx'),
+            cell: ({ row }) => {
+                const { store_id, store_name } = row.original;
+                const baseUrl = `${window.location.origin}/wp-admin/admin.php?page=multivendorx#&tab=stores`;
+                const storeLink = store_id
+                    ? `${baseUrl}&edit/${store_id}/&subtab=application-details`
+                    : '#';
+
+                return (
+                    <TableCell title={store_name || ''}>
+                        {store_id ? (
+                            <a
+                                href={storeLink}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-purple-600 hover:underline"
+                            >
+                                {store_name || '-'}
+                            </a>
+                        ) : (
+                            store_name || '-'
+                        )}
+                    </TableCell>
+                );
             },
-            enableSorting: true,
-            cell: ({ row }) => <TableCell title={row.original.time_ago || ''}>{row.original.time_ago ?? '-'}</TableCell>
         },
         {
             header: __('Votes', 'multivendorx'),
@@ -244,10 +316,11 @@ const Qna: React.FC = () => {
                             {
                                 label: __('Answer', 'multivendorx'),
                                 icon: 'adminlib-eye', // you can change the icon
-                                onClick: (rowData) => {
+                                onClick: (rowData: any) => {
                                     setSelectedQna(rowData);
                                     setAnswer(rowData.answer_text || '');
                                 },
+                                hover: true,
                             },
                             {
                                 label: __('Delete', 'multivendorx'), icon: 'adminlib-delete', onClick: (rowData) => {
@@ -268,6 +341,27 @@ const Qna: React.FC = () => {
 
     const realtimeFilter: RealtimeFilter[] = [
         {
+            name: 'store',
+            render: (updateFilter: (key: string, value: string) => void, filterValue: string | undefined) => (
+                <div className="   group-field">
+                    <select
+                        name="store"
+                        onChange={(e) => updateFilter(e.target.name, e.target.value)}
+                        value={filterValue || ''}
+                        className="basic-select"
+                    >
+                        <option value="">All Store</option>
+                        {store?.map((s: any) => (
+                            <option key={s.id} value={s.id}>
+                                {s.store_name.charAt(0).toUpperCase() + s.store_name.slice(1)}
+                            </option>
+                        ))}
+                    </select>
+
+                </div>
+            ),
+        },
+        {
             name: 'date',
             render: (updateFilter) => (
                 <div className="right">
@@ -281,6 +375,25 @@ const Qna: React.FC = () => {
         },
     ];
 
+    const searchFilter: RealtimeFilter[] = [
+        {
+            name: 'searchField',
+            render: (updateFilter, filterValue) => (
+                <div className="search-section">
+                    <input
+                        name="searchField"
+                        type="text"
+                        placeholder={__('Search', 'multivendorx')}
+                        onChange={(e) => {
+                            updateFilter(e.target.name, e.target.value);
+                        }}
+                        value={filterValue || ''}
+                    />
+                    <i className="adminlib-search"></i>
+                </div>
+            ),
+        },
+    ];
 
     return (
         <>
@@ -294,20 +407,22 @@ const Qna: React.FC = () => {
                 </div>
             </div>
             {/* <div className="admin-table-wrapper"> */}
-                <Table
-                    data={data}
-                    columns={columns as ColumnDef<Record<string, any>, any>[]}
-                    rowSelection={rowSelection}
-                    onRowSelectionChange={setRowSelection}
-                    defaultRowsPerPage={10}
-                    pageCount={pageCount}
-                    pagination={pagination}
-                    onPaginationChange={setPagination}
-                    perPageOption={[10, 25, 50]}
-                    totalCounts={totalRows}
-                    realtimeFilter={realtimeFilter}
-                    handlePagination={requestApiForData}
-                />
+            <Table
+                data={data}
+                columns={columns as ColumnDef<Record<string, any>, any>[]}
+                rowSelection={rowSelection}
+                onRowSelectionChange={setRowSelection}
+                defaultRowsPerPage={10}
+                pageCount={pageCount}
+                pagination={pagination}
+                onPaginationChange={setPagination}
+                perPageOption={[10, 25, 50]}
+                totalCounts={totalRows}
+                realtimeFilter={realtimeFilter}
+                handlePagination={requestApiForData}
+                typeCounts={status as Status[]}
+                searchFilter={searchFilter}
+            />
             {/* </div> */}
 
             {selectedQna && (
@@ -338,27 +453,44 @@ const Qna: React.FC = () => {
                             </button>
                         </>
                     }
-
                 >
-
                     <div className="content">
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <label htmlFor="title">Question:  {selectedQna.question_text}</label>
+                                <label htmlFor="question">{__("Question", "multivendorx")}: {selectedQna.question_text}</label>
                                 <TextArea
-                                    name="content"
+                                    name="answer"
                                     inputClass="textarea-input"
                                     value={answer}
                                     onChange={(e) => setAnswer(e.target.value)}
                                 />
                             </div>
-                            <span className="space"></span>
+                        </div>
+
+                        <div className="form-group-wrapper">
+                            <div className="form-group">
+                                <label htmlFor="visibility">{__("Visibility", "multivendorx")}</label>
+                                <ToggleSetting
+                                    wrapperClass="setting-form-input"
+                                    descClass="settings-metabox-description"
+                                    description="Select whether this question is visible to the public or private."
+                                    options={[
+                                        { key: 'public', value: 'public', label: __('Public', 'multivendorx') },
+                                        { key: 'private', value: 'private', label: __('Private', 'multivendorx') },
+                                    ]}
+                                    value={selectedQna.question_visibility || 'public'}
+                                    onChange={(value) =>
+                                        setSelectedQna((prev) => prev ? { ...prev, question_visibility: value } : prev)
+                                    }
+                                />
+                            </div>
                         </div>
                     </div>
 
                     {error && <p className="error-text">{error}</p>}
                 </CommonPopup>
             )}
+
         </>
     );
 };

@@ -260,10 +260,17 @@ class Util {
             $query .= ' WHERE ' . implode( $condition, $where );
         }
 
-        // 🔹 Order results
+        // 🔹 Order results safely
         if ( !isset( $args['count'] ) ) {
-            $order_by  = $args['order_by']  ?? 'date_created';
-            $order_dir = $args['order_dir'] ?? 'DESC';
+            $allowed_columns = [ 'date_created', 'overall_rating', 'status', 'store_id', 'customer_id' ];
+            $order_by  = isset( $args['order_by'] ) && in_array( $args['order_by'], $allowed_columns, true )
+                ? $args['order_by']
+                : 'date_created';
+
+            $order_dir = isset( $args['order_dir'] ) && in_array( strtoupper( $args['order_dir'] ), [ 'ASC', 'DESC' ], true )
+                ? strtoupper( $args['order_dir'] )
+                : 'DESC';
+
             $query .= " ORDER BY " . esc_sql( $order_by ) . " " . esc_sql( $order_dir );
         }
 
@@ -279,6 +286,7 @@ class Util {
             return $wpdb->get_results( $query, ARRAY_A ) ?? [];
         }
     }
+
     public static function update_review( $id, $data ) {
         global $wpdb;
     

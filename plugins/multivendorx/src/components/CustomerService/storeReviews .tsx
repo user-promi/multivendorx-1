@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
-import { Table, TableCell, CommonPopup, getApiLink, ToggleSetting } from 'zyra';
+import { Table, TableCell, CommonPopup, getApiLink, ToggleSetting, CalendarInput } from 'zyra';
 import { ColumnDef, RowSelectionState, PaginationState } from '@tanstack/react-table';
 
 type Review = {
@@ -22,7 +22,27 @@ type Review = {
     date_modified: string;
     review_images: string[];
     time_ago: string;
+    store_name?:string;
 };
+
+type Status = {
+    key: string;
+    name: string;
+    count: number;
+};
+
+type FilterData = {
+    searchField: string;
+    typeCount?: any;
+    store?: string;
+    orderBy?: any;
+    order?: any;
+};
+
+export interface RealtimeFilter {
+    name: string;
+    render: (updateFilter: (key: string, value: any) => void, filterValue: any) => React.ReactNode;
+}
 
 const StoreReviews: React.FC = () => {
     const [data, setData] = useState<Review[]>([]);
@@ -30,7 +50,8 @@ const StoreReviews: React.FC = () => {
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
     const [totalRows, setTotalRows] = useState<number>(0);
     const [pageCount, setPageCount] = useState<number>(0);
-    const [loading, setLoading] = useState<boolean>(false);
+    const [status, setStatus] = useState<Status[] | null>(null);
+    const [store, setStore] = useState<any[] | null>(null);
     const [selectedReview, setSelectedReview] = useState<Review | null>(null);
     const [replyText, setReplyText] = useState<string>('');
 
@@ -41,6 +62,18 @@ const StoreReviews: React.FC = () => {
 
     // Fetch total rows on mount
     useEffect(() => {
+        axios({
+            method: 'GET',
+            url: getApiLink(appLocalizer, 'store'),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+        })
+            .then((response) => {
+                setStore(response.data.stores);
+            })
+            .catch(() => {
+                setError(__('Failed to load stores', 'multivendorx'));
+                setStore([]);
+            });
         axios({
             method: 'GET',
             url: getApiLink(appLocalizer, 'review'),
@@ -68,6 +101,11 @@ const StoreReviews: React.FC = () => {
     function requestData(
         rowsPerPage = 10,
         currentPage = 1,
+        typeCount = '',
+        store = '',
+        searchField = '',
+        orderBy = '',
+        order = '',
         startDate = new Date(0),
         endDate = new Date(),
     ) {
@@ -79,12 +117,39 @@ const StoreReviews: React.FC = () => {
             params: {
                 page: currentPage,
                 row: rowsPerPage,
+                status: typeCount === 'all' ? '' : typeCount,
+                store_id: store,
+                searchField,
+                orderBy,
+                order,
                 startDate,
                 endDate
             },
         })
             .then((response) => {
-                setData(response.data || []);
+                setData(response.data.items || []);
+                setStatus([
+                    {
+                        key: 'all',
+                        name: 'All',
+                        count: response.data.all || 0,
+                    },
+                    {
+                        key: 'approved',
+                        name: 'Approved',
+                        count: response.data.approved || 0,
+                    },
+                    {
+                        key: 'pending',
+                        name: 'Pending',
+                        count: response.data.pending || 0,
+                    },
+                    {
+                        key: 'rejected',
+                        name: 'Rejected',
+                        count: response.data.rejected || 0,
+                    },
+                ]);
             })
             .catch(() => {
                 setError(__('Failed to load Q&A', 'multivendorx'));
@@ -102,10 +167,71 @@ const StoreReviews: React.FC = () => {
         requestData(
             rowsPerPage,
             currentPage,
+            filterData?.typeCount,
+            filterData?.store,
+            filterData?.searchField,
+            filterData?.orderBy,
+            filterData?.order,
             filterData?.date?.start_date,
             filterData?.date?.end_date
         );
     };
+
+    const realtimeFilter: RealtimeFilter[] = [
+        {
+            name: 'store',
+            render: (updateFilter: (key: string, value: string) => void, filterValue: string | undefined) => (
+                <div className="   group-field">
+                    <select
+                        name="store"
+                        onChange={(e) => updateFilter(e.target.name, e.target.value)}
+                        value={filterValue || ''}
+                        className="basic-select"
+                    >
+                        <option value="">All Store</option>
+                        {store?.map((s: any) => (
+                            <option key={s.id} value={s.id}>
+                                {s.store_name.charAt(0).toUpperCase() + s.store_name.slice(1)}
+                            </option>
+                        ))}
+                    </select>
+
+                </div>
+            ),
+        },
+        {
+            name: 'date',
+            render: (updateFilter) => (
+                <div className="right">
+                    <CalendarInput
+                        wrapperClass=""
+                        inputClass=""
+                        onChange={(range: any) => updateFilter('date', { start_date: range.startDate, end_date: range.endDate })}
+                    />
+                </div>
+            ),
+        },
+    ];
+
+    const searchFilter: RealtimeFilter[] = [
+        {
+            name: 'searchField',
+            render: (updateFilter, filterValue) => (
+                <div className="search-section">
+                    <input
+                        name="searchField"
+                        type="text"
+                        placeholder={__('Search', 'multivendorx')}
+                        onChange={(e) => {
+                            updateFilter(e.target.name, e.target.value);
+                        }}
+                        value={filterValue || ''}
+                    />
+                    <i className="adminlib-search"></i>
+                </div>
+            ),
+        },
+    ];
 
     // 🔹 Handle reply saving
     const handleSaveReply = async () => {
@@ -118,7 +244,9 @@ const StoreReviews: React.FC = () => {
                     status: selectedReview.status,
                 },
                 { headers: { 'X-WP-Nonce': appLocalizer.nonce } }
-            );
+            ).then(()=>{
+                requestData(pagination.pageSize, pagination.pageIndex + 1);
+            });
 
             setData((prev) =>
                 prev.map((r) =>
@@ -137,7 +265,6 @@ const StoreReviews: React.FC = () => {
         }
     };
 
-    console.log(appLocalizer)
     // 🔹 Table Columns
     const columns: ColumnDef<Review>[] = [
         {
@@ -154,31 +281,6 @@ const StoreReviews: React.FC = () => {
                 </TableCell>
             ),
         },
-        {
-            id: 'order',
-            header: __('Order', 'multivendorx'),
-            cell: ({ row }) => {
-                const orderId = row.original.order_id;
-                const orderLink = `${appLocalizer.site_url}admin.php?page=wc-orders&action=edit&id=${orderId}`;
-                return (
-                    <TableCell title={`Order #${orderId}`}>
-                        {orderId ? (
-                            <a
-                                href={orderLink}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                style={{ color: '#0073aa', textDecoration: 'underline' }}
-                            >
-                                #{orderId}
-                            </a>
-                        ) : (
-                            '-'
-                        )}
-                    </TableCell>
-                );
-            },
-        },
-
         {
             id: 'rating',
             header: __('Rating', 'multivendorx'),
@@ -245,13 +347,42 @@ const StoreReviews: React.FC = () => {
             ),
         },
         {
-            id: 'time_ago',
-            header: __('Time ago', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.time_ago}>
-                    {row.original.time_ago}
-                </TableCell>
-            ),
+            id: 'date_created',
+            header: __('Date', 'multivendorx'),
+            accessorFn: row => row.date_created ? new Date(row.date_created).getTime() : 0, // numeric timestamp for sorting
+            enableSorting: true,
+            cell: ({ row }) => {
+                const rawDate = row.original.date_created;
+                const formattedDate = rawDate ? new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).format(new Date(rawDate)) : '-';
+                return <TableCell title={formattedDate}>{formattedDate}</TableCell>;
+            }
+        },
+        {
+            header: __('Store', 'multivendorx'),
+            cell: ({ row }) => {
+                const { store_id, store_name } = row.original;
+                const baseUrl = `${window.location.origin}/wp-admin/admin.php?page=multivendorx#&tab=stores`;
+                const storeLink = store_id
+                    ? `${baseUrl}&edit/${store_id}/&subtab=application-details`
+                    : '#';
+
+                return (
+                    <TableCell title={store_name || ''}>
+                        {store_id ? (
+                            <a
+                                href={storeLink}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-purple-600 hover:underline"
+                            >
+                                {store_name || '-'}
+                            </a>
+                        ) : (
+                            store_name || '-'
+                        )}
+                    </TableCell>
+                );
+            },
         },
         {
             id: 'action',
@@ -341,6 +472,9 @@ const StoreReviews: React.FC = () => {
                 handlePagination={requestApiForData}
                 perPageOption={[10, 25, 50]}
                 totalCounts={totalRows}
+                typeCounts={status as Status[]}
+                // searchFilter={searchFilter}
+                realtimeFilter={realtimeFilter}
             />
             {selectedReview && (
                 <CommonPopup

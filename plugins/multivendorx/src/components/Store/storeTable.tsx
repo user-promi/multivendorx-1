@@ -149,20 +149,6 @@ const StoreTable: React.FC = () => {
         );
     };
 
-    // Format date function
-    const formatDate = (dateString: string) => {
-        if (!dateString) return '-';
-
-        const dateObj = new Date(dateString);
-        if (isNaN(dateObj.getTime())) return '-';
-
-        return new Intl.DateTimeFormat('en-US', {
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric',
-        }).format(dateObj);
-    };
-
     // Column definitions with sorting enabled
     const columns: ColumnDef<StoreRow>[] = [
         {
