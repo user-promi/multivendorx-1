@@ -25,7 +25,7 @@ export interface RealtimeFilter {
     render: (updateFilter: (key: string, value: any) => void, filterValue: any) => React.ReactNode;
 }
 
-const Coupons: React.FC = () => {
+const Coupons: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
     const [data, setData] = useState<CouponRow[] | null>(null);
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
     const [totalRows, setTotalRows] = useState<number>(0);
@@ -58,8 +58,12 @@ const Coupons: React.FC = () => {
         if (!statusUpdate) return;
 
         axios.put(`${appLocalizer.apiUrl}/wc/v3/coupons/${couponId}`, { status: statusUpdate }, { headers: { 'X-WP-Nonce': appLocalizer.nonce } })
-            .then(() => requestApiForData(pagination.pageSize, pagination.pageIndex + 1, filterData))
+            .then(() => {
+                requestApiForData(pagination.pageSize, pagination.pageIndex + 1, filterData);
+                onUpdated?.();
+            })
             .catch(console.error);
+
     };
 
     const submitReject = () => {
@@ -76,6 +80,7 @@ const Coupons: React.FC = () => {
                 setRejectReason('');
                 setRejectCouponId(null);
                 requestApiForData(pagination.pageSize, pagination.pageIndex + 1, filterData);
+                onUpdated?.();
             })
             .catch(console.error)
             .finally(() => setIsSubmitting(false));
@@ -196,13 +201,13 @@ const Coupons: React.FC = () => {
                         <ul className='small-action'>
                             <li
                                 className="hover icon-green"
-                                onClick={() => handleSingleAction('approve_coupon', rowData.id!)}
+                                onClick={() => handleSingleAction('approve_coupon', row.original.id!)}
                             >
                                 <i className="adminlib-check"></i>
                                 <span>Approve</span>
                             </li>
 
-                            <li className="hover icon-red" onClick={() => handleSingleAction('reject_coupon', rowData.id!)}
+                            <li className="hover icon-red" onClick={() => handleSingleAction('reject_coupon', row.original.id!)}
                             >
                                 <i className="adminlib-close"></i>
                                 <span>Reject</span>

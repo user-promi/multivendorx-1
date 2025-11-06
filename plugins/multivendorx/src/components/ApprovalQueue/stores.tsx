@@ -22,7 +22,7 @@ export interface RealtimeFilter {
     render: (updateFilter: (key: string, value: any) => void, filterValue: any) => React.ReactNode;
 }
 
-const Stores: React.FC = () => {
+const Stores: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
     const [data, setData] = useState<StoreRow[] | null>(null);
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
     const [totalRows, setTotalRows] = useState<number>(0);
@@ -107,7 +107,10 @@ const Stores: React.FC = () => {
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
             data: { status: statusValue },
         })
-            .then(() => requestData(pagination.pageSize, pagination.pageIndex + 1))
+            .then(() => {
+                requestData(pagination.pageSize, pagination.pageIndex + 1);
+                onUpdated?.();
+            })
             .catch(console.error);
     };
 
@@ -130,6 +133,7 @@ const Stores: React.FC = () => {
                 setRejectReason('');
                 setRejectStoreId(null);
                 requestData(pagination.pageSize, pagination.pageIndex + 1);
+                onUpdated?.();
             })
             .catch(console.error)
             .finally(() => setIsSubmitting(false));
@@ -144,7 +148,30 @@ const Stores: React.FC = () => {
         },
         {
             header: __('Store', 'multivendorx'),
-            cell: ({ row }) => <TableCell title={row.original.store_name || ''}>{row.original.store_name || '-'}</TableCell>,
+            cell: ({ row }) => {
+                const { id, store_name } = row.original;
+                const baseUrl = `${window.location.origin}/wp-admin/admin.php?page=multivendorx#&tab=stores`;
+                const storeLink = id
+                    ? `${baseUrl}&edit/${id}/&subtab=application-details`
+                    : '#';
+
+                return (
+                    <TableCell title={store_name || ''}>
+                        {id ? (
+                            <a
+                                href={storeLink}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-purple-600 hover:underline"
+                            >
+                                {store_name || '-'}
+                            </a>
+                        ) : (
+                            store_name || '-'
+                        )}
+                    </TableCell>
+                );
+            },
         },
         {
             header: __('Email', 'multivendorx'),
@@ -186,13 +213,16 @@ const Stores: React.FC = () => {
                         <ul className='small-action'>
                             <li
                                 className="hover icon-green"
-                                onClick={() => handleSingleAction('active', rowData.id!)}
+                                onClick={() => {
+                                    handleSingleAction('active', row.original.id!)
+                                }
+                                }
                             >
                                 <i className="adminlib-check"></i>
                                 <span>Approve</span>
                             </li>
 
-                            <li className="hover icon-red" onClick={() => handleSingleAction('declined', rowData.id!)}
+                            <li className="hover icon-red" onClick={() => handleSingleAction('declined', row.original.id!)}
                             >
                                 <i className="adminlib-close"></i>
                                 <span>Reject</span>
@@ -202,22 +232,6 @@ const Stores: React.FC = () => {
                     </div>
                 </TableCell>,
         },
-        // {
-        //     id: 'action',
-        //     header: __('Action', 'multivendorx'),
-        //     cell: ({ row }) => (
-        //         <TableCell
-        //             type="action-dropdown"
-        //             rowData={row.original}
-        //             header={{
-        //                 actions: [
-        //                     { label: __('Approve', 'multivendorx'), icon: 'adminlib-check', onClick: (rowData) => handleSingleAction('active', rowData.id!), hover: true },
-        //                     { label: __('Reject', 'multivendorx'), icon: 'adminlib-close', onClick: (rowData) => handleSingleAction('declined', rowData.id!), hover: true },
-        //                 ],
-        //             }}
-        //         />
-        //     ),
-        // },
     ];
 
     const realtimeFilter: RealtimeFilter[] = [

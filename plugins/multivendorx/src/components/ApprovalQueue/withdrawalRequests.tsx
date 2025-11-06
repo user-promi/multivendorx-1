@@ -16,8 +16,11 @@ type StoreRow = {
     status?: string;
 };
 
-const WithdrawalRequests: React.FC = () => {
+interface Props {
+    onUpdated?: () => void;
+}
 
+const WithdrawalRequests: React.FC<Props> = ({ onUpdated }) => {
     const [data, setData] = useState<StoreRow[] | null>(null);
 
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
@@ -51,15 +54,8 @@ const WithdrawalRequests: React.FC = () => {
         requestData(rowsPerPage, currentPage);
         setPageCount(Math.ceil(totalRows / rowsPerPage));
     }, [pagination]);
-    const [showDropdown, setShowDropdown] = useState(false);
 
-    const toggleDropdown = (id: any) => {
-        if (showDropdown === id) {
-            setShowDropdown(false);
-            return;
-        }
-        setShowDropdown(id);
-    };
+
     // Fetch data from backend.
     function requestData(
         rowsPerPage = 10,
@@ -77,7 +73,6 @@ const WithdrawalRequests: React.FC = () => {
             },
         })
             .then((response) => {
-                console.log(response.data);
                 setData(Array.isArray(response.data) ? response.data : []);
             })
 
@@ -107,7 +102,10 @@ const WithdrawalRequests: React.FC = () => {
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
             data: { withdraw: true, action, amount: row.withdraw_amount, store_id: row.id },
         })
-            .then(() => requestData(pagination.pageSize, pagination.pageIndex + 1))
+            .then(() => {
+                requestData(pagination.pageSize, pagination.pageIndex + 1);
+                onUpdated?.();
+            })
             .catch(console.error);
     };
     // Column definitions

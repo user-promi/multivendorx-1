@@ -205,7 +205,7 @@ class FrontendScripts {
 					'version' => $version,
 				),
                 'multivendorx-report-abuse-frontend-script' => array(
-					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'modules/ReportAbuse/js/' . MULTIVENDORX_PLUGIN_SLUG . '-frontend.min.js',
+					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'modules/Compliance/js/' . MULTIVENDORX_PLUGIN_SLUG . '-frontend.min.js',
 					'deps'    => array( 'jquery' ),
 					'version' => $version,
 				),

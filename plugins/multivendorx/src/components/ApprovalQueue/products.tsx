@@ -220,13 +220,13 @@ const Products: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
                         <ul className='small-action'>
                             <li
                                 className="hover icon-green"
-                                onClick={() => handleSingleAction('approve_product', rowData.id!)}
+                                onClick={() => handleSingleAction('approve_product', row.original.id!)}
                             >
                                 <i className="adminlib-check"></i>
                                 <span>Approve</span>
                             </li>
 
-                            <li className="hover icon-red" onClick={() => handleSingleAction('reject_product', rowData.id!)}
+                            <li className="hover icon-red" onClick={() => handleSingleAction('reject_product', row.original.id!)}
                             >
                                 <i className="adminlib-close"></i>
                                 <span>Reject</span>
@@ -236,22 +236,6 @@ const Products: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
                     </div>
                 </TableCell>,
         },
-        // {
-        //     id: 'action',
-        //     header: __('Action', 'multivendorx'),
-        //     cell: ({ row }) => (
-        //         <TableCell
-        //             type="action-dropdown"
-        //             rowData={row.original}
-        //             header={{
-        //                 actions: [
-        //                     { label: __('Approve', 'multivendorx'), icon: 'adminlib-check', onClick: (rowData) => handleSingleAction('approve_product', rowData.id!), hover: true },
-        //                     { label: __('Reject', 'multivendorx'), icon: 'adminlib-close', onClick: (rowData) => handleSingleAction('reject_product', rowData.id!), hover: true },
-        //                 ],
-        //             }}
-        //         />
-        //     ),
-        // },
     ];
 
     const realtimeFilter: RealtimeFilter[] = [
