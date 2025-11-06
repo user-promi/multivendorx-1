@@ -74,7 +74,7 @@ export default {
             type: 'text',
             label: __( 'Tinymce API', 'multivendorx' ),
             desc: __(
-                'To enable styling tools (rich text editing) <a href="https://www.tiny.cloud/blog/how-to-get-tinymce-cloud-up-in-less-than-5-minutes/" target="_blank">get the API key</a> and paste it here.This allows them to format their product descriptions and other content with ease.',
+                'Get your <a href="https://www.tiny.cloud/blog/how-to-get-tinymce-cloud-up-in-less-than-5-minutes/" target="_blank">TinyMCE API key</a> and paste it here, to unlock visual editing tools across the marketplace. Admin and stores can easily format text, add links, lists, and other styling to their store descriptions, announcements, knowledge base posts, and product details-no coding needed.',
                 'multivendorx'
             ),
         },        
