@@ -73,13 +73,13 @@ export default {
             key: 'verification_methods',
             type: 'multi-string',
             label: __('Verification methods', 'multivendorx'),
-            moduleEnabled: 'identity-verification',
-            proSetting: true,
+            moduleEnabled: 'marketplace-compliance',
+            // proSetting: true,
             requiredEnable: true,
-            name: 'abuse_report_reasons',
+            // name: 'abuse_report_reasons',
             defaultValues: [
-                { value: "Passport", locked: true, iconClass: "adminlib-check", description: "Order is received by store", required: true },
-                { value: "Driving licence", locked: true, iconClass: "adminlib-clock", description: "Order is being processed",required: true },
+                { value: "Passport",  iconClass: "adminlib-check", description: "Order is received by store", required: true },
+                { value: "Driving licence",  iconClass: "adminlib-clock", description: "Order is being processed",required: true },
             ],
             iconOptions: ["adminlib-check", "adminlib-clock", "adminlib-cart", "adminlib-store"], // dropdown options
             maxItems: 10,

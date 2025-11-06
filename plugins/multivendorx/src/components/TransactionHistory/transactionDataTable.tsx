@@ -64,7 +64,6 @@ const TransactionDataTable: React.FC = ({ storeId }) => {
                 setData(response.data || []);
             })
             .catch(() => {
-                setError(__('Failed to load stores', 'multivendorx'));
                 setData([]);
             });
     }

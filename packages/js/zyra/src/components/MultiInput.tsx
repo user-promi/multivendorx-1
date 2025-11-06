@@ -333,7 +333,11 @@ const MultiInput: React.FC<MultiInputProps> = (props) => {
 
         {/* Add new item button */}
         <li className="buttons-wrapper">
-          <span className="admin-btn btn-purple" onClick={handleAddNew}>
+          <span className="admin-btn btn-purple" onClick={() => {
+            if (proSetting || !moduleEnabled) return;
+            handleAddNew();
+          }}
+          >
             <i className="adminlib-plus-circle-o"></i> Add New
           </span>
         </li>
