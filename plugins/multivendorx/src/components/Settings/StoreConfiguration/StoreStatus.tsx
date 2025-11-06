@@ -227,7 +227,7 @@ const StoreStatus = () => {
             content: {
                 id: 'pending-approval',
                 name: 'Pending Approval',
-                desc: 'Pending ApprovalPending ApprovalPending Approval',
+                desc: 'Stores awaiting admin review',
                 // hideTabHeader: true,
                 icon: 'tools',
             },
@@ -237,7 +237,7 @@ const StoreStatus = () => {
             content: {
                 id: 'rejected',
                 name: 'Rejected',
-                desc: 'RejectedRejectedRejectedRejectedRejectedRejected',
+                desc: 'Applications needing revision',
                 // hideTabHeader: true,
                 icon: 'tools',
             },
@@ -247,7 +247,7 @@ const StoreStatus = () => {
             content: {
                 id: 'permanently-rejected',
                 name: 'Permanently Rejected',
-                desc: 'Permanently RejectedPermanently RejectedPermanently RejectedPermanently Rejected',
+                desc: 'Permanently denied applications.',
                 // hideTabHeader: true,
                 icon: 'form-address',
             },
@@ -257,7 +257,7 @@ const StoreStatus = () => {
             content: {
                 id: 'active',
                 name: 'Active',
-                desc: 'Permanently RejectedPermanently RejectedPermanently RejectedPermanently Rejected',
+                desc: 'Fully operational stores.',
                 // hideTabHeader: true,
                 icon: 'form-address',
             },
@@ -267,7 +267,7 @@ const StoreStatus = () => {
             content: {
                 id: 'under-review',
                 name: 'Under Review',
-                desc: 'Under ReviewUnder ReviewUnder ReviewUnder ReviewUnder Review',
+                desc: 'Temporary compliance check.',
                 // hideTabHeader: true,
                 icon: 'form-address',
             },
@@ -277,7 +277,7 @@ const StoreStatus = () => {
             content: {
                 id: 'suspended',
                 name: 'Suspended',
-                desc: 'Under ReviewUnder ReviewUnder ReviewUnder ReviewUnder Review',
+                desc: 'Policy violation enforcement',
                 // hideTabHeader: true,
                 icon: 'form-address',
             },
@@ -287,7 +287,7 @@ const StoreStatus = () => {
             content: {
                 id: 'deactivated',
                 name: 'Deactivated',
-                desc: 'Under ReviewUnder ReviewUnder ReviewUnder ReviewUnder Review',
+                desc: 'Permanently closed',
                 // hideTabHeader: true,
                 icon: 'form-address',
             },

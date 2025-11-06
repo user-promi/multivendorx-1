@@ -309,7 +309,7 @@ export default {
             key: 'withdraw_type',
             type: 'setting-toggle',
             label: __('Withdrawal request approval', 'multivendorx'),
-            settingDescription: __("Control how payout requests are handled when stores initiate withdrawals manually.", 'multivendorx'),
+            settingDescription: __("Control how withdrawl requests are handled when stores initiate withdrawals manually.", 'multivendorx'),
             desc: __(
                 '<ul><li>Automatic - All withdrawal requests are automatically approved and paid when requested, if the payment method is Stripe or PayPal.</li><li>Manual: Admin reviews and approves each withdrawal request before releasing funds..</li></ul>',
                 'multivendorx'

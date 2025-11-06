@@ -4,20 +4,20 @@ const UnderReview = () => {
 
     const modules = [
         {
-            title: "Pause Selling During Review",
-            description: "Prevent stores from selling and fulfilling orders while under review.",
+            title: "Pause selling products",
+           // description: "Prevent stores from selling and fulfilling orders while under review.",
             key: "pause_selling",
             icon: "adminlib-cart",
         },
         {
-            title: "Hold Payments Until Review Complete",
-            description: "Keep earnings on hold until the review concludes. Payments will release once compliance is cleared.",
+            title: "Hold payments release",
+           // description: "Keep earnings on hold until the review concludes. Payments will release once compliance is cleared.",
             key: "hold_payments",
             icon: "adminlib-cart",
         },
         {
-            title: "Restrict Product Uploads During Review",
-            description: "Prevent stores from listing new products during review. Existing listings stay active unless selling is disabled.",
+            title: "Restrict new product uploads",
+            //description: "Prevent stores from listing new products during review. Existing listings stay active unless selling is disabled.",
             key: "restrict_product_uploads",
             icon: "adminlib-product",
         },
@@ -62,19 +62,6 @@ const UnderReview = () => {
                             </div>
                         ))}
                     </div>
-                </div>
-            </div>
-
-            <div className="form-group-wrapper">
-                <div className="form-group">
-                    <label>Message shown to pending stores:</label>
-                    <BasicInput
-                        name="phone"
-                        // value={formData.phone} 
-                        wrapperClass="setting-form-input"
-                        descClass="settings-metabox-description"
-                    // onChange={handleChange} 
-                    />
                 </div>
             </div>
         </>

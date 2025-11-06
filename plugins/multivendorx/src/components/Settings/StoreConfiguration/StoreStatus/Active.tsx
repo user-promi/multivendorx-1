@@ -43,18 +43,7 @@ const Active = () => {
                 </div>
             </div>
 
-            <div className="form-group-wrapper">
-                <div className="form-group">
-                    <label>Message shown to pending stores:</label>
-                    <BasicInput
-                        name="phone"
-                        // value={formData.phone} 
-                        wrapperClass="setting-form-input"
-                        descClass="settings-metabox-description"
-                    // onChange={handleChange} 
-                    />
-                </div>
-            </div>
+          
         </>
     );
 };
