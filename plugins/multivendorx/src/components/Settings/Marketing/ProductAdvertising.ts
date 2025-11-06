@@ -23,7 +23,7 @@ export default {
                     type: 'number',
                     size: '8rem',
                     preText: __('Each store can promote up to', 'multivendorx'),
-                    postText: __('products for free,and additionally promote up to', 'multivendorx'),
+                    postText: __('products for free, and additionally promote up to', 'multivendorx'),
                 },
                 {
                     key: 'promotion_slot_cost',
