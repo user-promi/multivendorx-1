@@ -155,13 +155,13 @@ export const TransactionHistory: React.FC = () => {
         {
             id: "products",
             label: "Wallet transaction",
-            icon: "adminlib-store-analytics",
+            icon: "adminlib-wallet",
             content: <TransactionHistoryTable storeId={selectedStore?.value} dateRange={dateRange} />
         },
         {
             id: "stores",
             label: "Direct transaction",
-            icon: "adminlib-calendar",
+            icon: "adminlib-direct-transaction",
             content: <TransactionDataTable storeId={selectedStore?.value} dateRange={dateRange} />
         },
     ];
