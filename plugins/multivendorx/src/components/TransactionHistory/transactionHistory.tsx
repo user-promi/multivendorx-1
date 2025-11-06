@@ -155,13 +155,13 @@ export const TransactionHistory: React.FC = () => {
         {
             id: "products",
             label: "Wallet transaction",
-            icon: "adminlib-wallet",
+            icon: "adminlib-dollar",
             content: <TransactionHistoryTable storeId={selectedStore?.value} dateRange={dateRange} />
         },
         {
             id: "stores",
             label: "Direct transaction",
-            icon: "adminlib-direct-transaction",
+            icon: "adminlib-bank",
             content: <TransactionDataTable storeId={selectedStore?.value} dateRange={dateRange} />
         },
     ];
@@ -227,7 +227,7 @@ export const TransactionHistory: React.FC = () => {
                             </div>
                             <div className="data-card">
                                 <div className="title">Available balance</div>
-                                <div className="number">{formatCurrency(data.wallet_balance)} <i className="adminlib-cart blue"></i></div>
+                                <div className="number">{formatCurrency(data.wallet_balance)} <i className="adminlib-cart"></i></div>
                             </div>                          
                         </div>
                     </div>

@@ -1527,6 +1527,32 @@
                         color: $theme-color;
                     }
 
+                    .details {
+                        margin: 0;
+
+                        li {
+                            margin-bottom: 0.5rem;
+                            display: flex;
+                            gap: 0.625rem;
+
+                            span {
+                                font-weight: 600;
+                            }
+
+                            .item {
+                                .title {
+                                    font-size: 1.063rem;
+                                    font-weight: 600;
+                                }
+
+                                .des {
+                                    font-size: 0.813rem;
+                                    color: #00000073;
+                                }
+                            }
+                        }
+                    }
+
                 }
 
                 .admin-column:nth-of-type(2) {
@@ -1842,10 +1868,11 @@
                 display: none;
             }
 
-            &.icon-red{
+            &.icon-red {
                 color: red;
             }
-            &.icon-green{
+
+            &.icon-green {
                 color: green;
             }
         }

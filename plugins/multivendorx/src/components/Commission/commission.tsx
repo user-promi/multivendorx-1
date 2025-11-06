@@ -11,7 +11,7 @@ import {
 } from '@tanstack/react-table';
 import { useLocation } from 'react-router-dom';
 import ViewCommission from './viewCommission';
-import {formatCurrency} from '../../services/commonFunction';
+import { formatCurrency } from '../../services/commonFunction';
 
 export interface RealtimeFilter {
     name: string;
@@ -372,7 +372,7 @@ const Commission: React.FC = () => {
                 disabled={isDownloading}
                 className="admin-btn btn-purple-bg"
             >
-                <span className="adminlib-export"></span>
+                <span className="adminlib-import"></span>
                 Export Commissions
             </button>
         );
@@ -448,62 +448,109 @@ const Commission: React.FC = () => {
                 );
             },
         },
+        // {
+        //     id: 'totalOrderAmount',
+        //     accessorKey: 'totalOrderAmount',
+        //     accessorFn: row => parseFloat(row.totalOrderAmount || '0'),
+        //     enableSorting: true,
+        //     header: __('Order Amount', 'multivendorx'),
+        //     cell: ({ row }) => <TableCell title={row.original.totalOrderAmount ? `${row.original.totalOrderAmount}` : '-'}>{formatCurrency(row.original.totalOrderAmount)}</TableCell>,
+        // },
         {
-            id: 'totalOrderAmount',
-            accessorKey: 'totalOrderAmount',
-            accessorFn: row => parseFloat(row.totalOrderAmount || '0'),
-            enableSorting: true,
-            header: __('Order Amount', 'multivendorx'),
-            cell: ({ row }) => <TableCell title={row.original.totalOrderAmount ? `${row.original.totalOrderAmount}` : '-'}>{formatCurrency(row.original.totalOrderAmount)}</TableCell>,
-        },
-        {
-            id: 'commissionAmount',
+            id: 'commissionSummary',
             accessorKey: 'commissionAmount',
             accessorFn: row => parseFloat(row.commissionAmount || '0'),
             enableSorting: true,
-            header: __('Commi.. Earned', 'multivendorx'),
-            cell: ({ row }) => <TableCell title={row.original.commissionAmount ? `${row.original.commissionAmount}` : '-'}>{formatCurrency(row.original.commissionAmount)}</TableCell>,
+            header: __('Commission Summary', 'multivendorx'),
+            cell: ({ row }) =>
+                <TableCell title={row.original.commissionAmount ? `${row.original.commissionAmount}` : '-'}>
+                    <>
+                        <ul className="details">
+                            <li>
+                                <div className="item">
+                                    <div className="title">{formatCurrency(row.original.totalOrderAmount)}</div>
+                                    <div className="des">Order amount</div>
+                                </div>
+                                <div className="item">
+                                    <div className="title">{formatCurrency(row.original.commissionAmount)}</div>
+                                    <div className="des">Commission Earned</div>
+                                </div>
+                            </li>
+                            {/* <li>
+                                
+                            </li> */}
+                            <li>
+                                <div className="item">
+                                    <div className="title">{formatCurrency(row.original.facilitatorFee)} (-)</div>
+                                    <div className="des">Facilitator Fee</div>
+                                </div>
+                                <div className="item">
+                                    <div className="title">{formatCurrency(row.original.facilitatorFee)} (-) (d)</div>
+                                    <div className="des">Marketplace free</div>
+                                </div>
+                            </li>
+                            <li>
+                                <div className="item">
+                                    <div className="title">{formatCurrency(row.original.shippingAmount)} (+)</div>
+                                    <div className="des">Shipping</div>
+                                </div>
+                                <div className="item">
+                                    <div className="title">{formatCurrency(row.original.taxAmount)} (+)</div>
+                                    <div className="des">Tax</div>
+                                </div>
+                            </li>
+                        </ul>
+                    </>
+                </TableCell>,
         },
         {
-            id: 'facilitatorFee',
+            id: 'totalEarned',
             accessorKey: 'facilitatorFee',
             accessorFn: row => parseFloat(row.facilitatorFee || '0'),
             enableSorting: true,
-            header: __('Facilitator Fee', 'multivendorx'),
+            header: __('Total Earned', 'multivendorx'),
             cell: ({ row }) => <TableCell title={row.original.facilitatorFee ? `${appLocalizer.currency_symbol}${row.original.facilitatorFee}` : '-'}>{formatCurrency(row.original.facilitatorFee)}</TableCell>,
         },
-        {
-            id: 'gatewayFee',
-            accessorKey: 'gatewayFee',
-            accessorFn: row => parseFloat(row.gatewayFee || '0'),
-            enableSorting: true,
-            header: __('Gateway Fee', 'multivendorx'),
-            cell: ({ row }) => <TableCell title={row.original.gatewayFee ? `${appLocalizer.currency_symbol}${row.original.gatewayFee}` : '-'}>{formatCurrency(row.original.gatewayFee)}</TableCell>,
-        },
-        {
-            id: 'shippingAmount',
-            accessorKey: 'shippingAmount',
-            accessorFn: row => parseFloat(row.shippingAmount || '0'),
-            enableSorting: true,
-            header: __('Shipping Amount', 'multivendorx'),
-            cell: ({ row }) => <TableCell title={row.original.shippingAmount ? `${appLocalizer.currency_symbol}${row.original.shippingAmount}` : '-'}>{formatCurrency(row.original.shippingAmount)}</TableCell>,
-        },
-        {
-            id: 'taxAmount',
-            accessorKey: 'taxAmount',
-            accessorFn: row => parseFloat(row.taxAmount || '0'),
-            enableSorting: true,
-            header: __('Tax Amount', 'multivendorx'),
-            cell: ({ row }) => <TableCell title={row.original.taxAmount ? `${appLocalizer.currency_symbol}${row.original.taxAmount}` : '-'}>{formatCurrency(row.original.taxAmount)}</TableCell>,
-        },
-        {
-            id: 'commissionTotal',
-            accessorKey: 'commissionTotal',
-            accessorFn: row => parseFloat(row.commissionTotal || '0'),
-            enableSorting: true,
-            header: __('Commi.. Total', 'multivendorx'),
-            cell: ({ row }) => <TableCell title={row.original.commissionTotal ? `${appLocalizer.currency_symbol}${row.original.commissionTotal}` : '-'}>{formatCurrency(row.original.commissionTotal)}</TableCell>,
-        },
+        // {
+        //     id: 'facilitatorFee',
+        //     accessorKey: 'facilitatorFee',
+        //     accessorFn: row => parseFloat(row.facilitatorFee || '0'),
+        //     enableSorting: true,
+        //     header: __('Facilitator Fee', 'multivendorx'),
+        //     cell: ({ row }) => <TableCell title={row.original.facilitatorFee ? `${appLocalizer.currency_symbol}${row.original.facilitatorFee}` : '-'}>{formatCurrency(row.original.facilitatorFee)}</TableCell>,
+        // },
+        // {
+        //     id: 'gatewayFee',
+        //     accessorKey: 'gatewayFee',
+        //     accessorFn: row => parseFloat(row.gatewayFee || '0'),
+        //     enableSorting: true,
+        //     header: __('Gateway Fee', 'multivendorx'),
+        //     cell: ({ row }) => <TableCell title={row.original.gatewayFee ? `${appLocalizer.currency_symbol}${row.original.gatewayFee}` : '-'}>{formatCurrency(row.original.gatewayFee)}</TableCell>,
+        // },
+        // {
+        //     id: 'shippingAmount',
+        //     accessorKey: 'shippingAmount',
+        //     accessorFn: row => parseFloat(row.shippingAmount || '0'),
+        //     enableSorting: true,
+        //     header: __('Shipping Amount', 'multivendorx'),
+        //     cell: ({ row }) => <TableCell title={row.original.shippingAmount ? `${appLocalizer.currency_symbol}${row.original.shippingAmount}` : '-'}>{formatCurrency(row.original.shippingAmount)}</TableCell>,
+        // },
+        // {
+        //     id: 'taxAmount',
+        //     accessorKey: 'taxAmount',
+        //     accessorFn: row => parseFloat(row.taxAmount || '0'),
+        //     enableSorting: true,
+        //     header: __('Tax Amount', 'multivendorx'),
+        //     cell: ({ row }) => <TableCell title={row.original.taxAmount ? `${appLocalizer.currency_symbol}${row.original.taxAmount}` : '-'}>{formatCurrency(row.original.taxAmount)}</TableCell>,
+        // },
+        // {
+        //     id: 'commissionTotal',
+        //     accessorKey: 'commissionTotal',
+        //     accessorFn: row => parseFloat(row.commissionTotal || '0'),
+        //     enableSorting: true,
+        //     header: __('Commi.. Total', 'multivendorx'),
+        //     cell: ({ row }) => <TableCell title={row.original.commissionTotal ? `${appLocalizer.currency_symbol}${row.original.commissionTotal}` : '-'}>{formatCurrency(row.original.commissionTotal)}</TableCell>,
+        // },
         {
             header: __('Paid Status', 'multivendorx'),
             cell: ({ row }) => (
@@ -545,39 +592,60 @@ const Commission: React.FC = () => {
             id: 'action',
             header: __('Action', 'multivendorx'),
             cell: ({ row }) => (
-                <TableCell
-                    type="action-dropdown"
-                    rowData={row.original}
-                    header={{
-                        actions: [
-                            {
-                                label: __('View Commission', 'multivendorx'),
-                                icon: 'adminlib-eye',
-                                onClick: (rowData: any) => {
-                                    setSelectedCommissionId(rowData.id ?? null);
-                                    setViewCommission(true);
-                                },
-                                hover: true,
-                            },
-                            {
-                                label: __('Regenerate Commission', 'multivendorx'),
-                                icon: 'adminlib-refresh',
-                                onClick: (rowData: any) => {
-                                    if (rowData?.orderId) {
-                                        const url = `${appLocalizer.site_url.replace(/\/$/, '')}/wp-admin/admin.php?page=wc-orders&action=edit&id=${rowData.orderId}`;
-                                        window.open(url, '_blank');
-                                    } else {
-                                        alert(__('Order ID missing for this commission.', 'multivendorx'));
-                                    }
-                                },
-
-                                hover: true,
-                            },
-                        ],
-                    }}
-                />
+                <TableCell>
+                    <div
+                        className="admin-badge yellow hover"
+                        role="button"
+                        tabIndex={0}
+                        onClick={() => {
+                            const rowData: any = row.original;
+                            setSelectedCommissionId(rowData.id ?? null);
+                            setViewCommission(true);
+                        }}
+                    >
+                        <i className="adminlib-eye"></i>
+                    </div>
+                </TableCell>
             ),
         }
+
+        // {
+        //     id: 'action',
+        //     header: __('Action', 'multivendorx'),
+        //     cell: ({ row }) => (
+        //         <TableCell
+        //             type="action-dropdown"
+        //             rowData={row.original}
+        //             header={{
+        //                 actions: [
+        //                     {
+        //                         label: __('View Commission', 'multivendorx'),
+        //                         icon: 'adminlib-eye',
+        //                         onClick: (rowData: any) => {
+        //                             setSelectedCommissionId(rowData.id ?? null);
+        //                             setViewCommission(true);
+        //                         },
+        //                         hover: true,
+        //                     },
+        //                     {
+        //                         label: __('Regenerate Commission', 'multivendorx'),
+        //                         icon: 'adminlib-refresh',
+        //                         onClick: (rowData: any) => {
+        //                             if (rowData?.orderId) {
+        //                                 const url = `${appLocalizer.site_url.replace(/\/$/, '')}/wp-admin/admin.php?page=wc-orders&action=edit&id=${rowData.orderId}`;
+        //                                 window.open(url, '_blank');
+        //                             } else {
+        //                                 alert(__('Order ID missing for this commission.', 'multivendorx'));
+        //                             }
+        //                         },
+
+        //                         hover: true,
+        //                     },
+        //                 ],
+        //             }}
+        //         />
+        //     ),
+        // }
     ];
 
     const realtimeFilter: RealtimeFilter[] = [
