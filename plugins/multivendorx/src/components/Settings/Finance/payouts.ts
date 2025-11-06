@@ -49,7 +49,7 @@ export default {
         {
             key: 'commission_lock_period',
             label: __('Clearance period', 'multivendorx'),
-            settingDescription: __('Set a clearance period to ensure transaction stability before releasing earnings. During this time, completed order payments remain in a pending balance to cover potential refunds, cancellations, or disputes. Once the clearance period ends, the pending funds automatically move to the store’s available payout balance.', 'multivendorx'),
+            settingDescription: __('Set a clearance period to ensure transaction stability before releasing earnings. During this time, completed order payments remain in a pending balance to cover potential refunds, cancellations, or disputes. Once the clearance period ends, the pending funds automatically move to the store’s available wallet balance.', 'multivendorx'),
             type: 'number',
             size: '8rem',
             preText:__('Wait', 'multivendorx'),
@@ -96,7 +96,7 @@ export default {
             type: 'setting-toggle',
             label: __('Automatic payout frequency', 'multivendorx'),
             settingDescription: __("Define how and when store earnings are automatically released from their wallet.", 'multivendorx'),
-            desc: __("<ul><li>If Manual is selected, stores must request payouts manually from their dashboard.</li><li>Otherwise, commissions are automatically disbursed to stores based on the chosen schedule.</li></ul>", 'multivendorx'),
+            desc: __("<ul><li>If Manual is selected, stores must request payouts from their dashboard. The admin can also manually release payouts to stores when needed.</li><li>Otherwise, commissions are automatically disbursed to stores based on the chosen schedule.</li></ul>", 'multivendorx'),
             options: [
                 {
                     key: 'mannual',
