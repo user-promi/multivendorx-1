@@ -8,12 +8,15 @@ import PermanentlyRejected from './StoreStatus/PermanentlyRejected';
 import Active from './StoreStatus/Active';
 import Suspended from './StoreStatus/Suspended';
 import Deactivated from './StoreStatus/Deactivated';
+import { useLocation, Link } from 'react-router-dom';
 
 const StoreStatus = () => {
     const id = appLocalizer.store_id;
     const [formData, setFormData] = useState<{ [key: string]: string }>({});
     const [successMsg, setSuccessMsg] = useState<string | null>(null);
     const [stateOptions, setStateOptions] = useState<{ label: string; value: string }[]>([]);
+
+    const location = new URLSearchParams( useLocation().hash.substring( 1 ) );
 
     useEffect(() => {
         if (!id) return;
@@ -35,193 +38,13 @@ const StoreStatus = () => {
             return () => clearTimeout(timer);
         }
     }, [successMsg]);
-    useEffect(() => {
-        if (formData.country) {
-            fetchStatesByCountry(formData.country);
-        }
-    }, [formData.country]);
-
-
-    const fetchStatesByCountry = (countryCode: string) => {
-        axios({
-            method: 'GET',
-            url: getApiLink(appLocalizer, `states/${countryCode}`),
-            headers: { 'X-WP-Nonce': appLocalizer.nonce },
-        }).then((res) => {
-            setStateOptions(res.data || []);
-        })
-    };
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const { name, value } = e.target;
-        const updated = { ...formData, [name]: value };
-        setFormData(updated);
-        autoSave(updated);
-    };
-
-    const autoSave = (updatedData: { [key: string]: string }) => {
-        axios({
-            method: 'PUT',
-            url: getApiLink(appLocalizer, `store/${id}`),
-            headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            data: updatedData,
-        }).then((res) => {
-            if (res.data.success) {
-                setSuccessMsg('Store saved successfully!');
-            }
-        })
-    };
-
-    // const [activeTab, setActiveTab] = useState("general");
-
-    // const settingTabs = [
-    //     { id: "general", label: "General", icon: "tools", content: <GeneralSettings /> },
-    //     { id: "appearance", label: "Appearance", icon: "appearance", content: <Appearance /> },
-    //     { id: "business-address", label: "Business Address", icon: "form-address", content: <BusinessAddress /> },
-    //     { id: "contact-information", label: "Contact Information", icon: "form-phone", content: <ContactInformation /> },
-    //     { id: "social-media", label: "Social Media", icon: "cohort", content: <SocialMedia /> },
-
-
-    //     { id: "payout", label: "Payout", icon: "tools", content: <Withdrawl /> },
-
-    //     { id: "privacy", label: "Privacy", icon: "security", content: <Privacy /> },
-    //     {
-    //         id: "seo-visibility", label: "SEO & visibility", icon: "bulk-action", content:
-    //             <>
-    //                 <div className="card-wrapper">
-    //                     <div className="card-content">
-    //                         <div className="card-title">SEO & Visibility</div>
-    //                         <div className="form-group-wrapper">
-    //                             <div className="form-group">
-    //                                 <label htmlFor="product-name">Meta Title</label>
-    //                                 <BasicInput name="phone" value={formData.phone} wrapperClass="setting-form-input" descClass="settings-metabox-description" onChange={handleChange} />
-    //                             </div>
-    //                         </div>
-
-    //                         <div className="form-group-wrapper">
-    //                             <div className="form-group">
-    //                                 <label htmlFor="product-name">Description</label>
-    //                                 <TextArea
-    //                                     name="content"
-    //                                     inputClass="textarea-input"
-    //                                     // value={formData.content}
-    //                                     // onChange={handleChange}
-    //                                 />
-    //                             </div>
-    //                         </div>
-    //                         <div className="form-group-wrapper">
-    //                             <div className="form-group">
-    //                                 <label htmlFor="product-name">Keywords</label>
-    //                                 <BasicInput name="phone" wrapperClass="setting-form-input" descClass="settings-metabox-description" />
-    //                             </div>
-    //                         </div>
-    //                         <div className="form-group-wrapper">
-    //                             <div className="form-group">
-    //                                 <label htmlFor="product-name">Tracking ID</label>
-    //                                 <BasicInput name="phone" wrapperClass="setting-form-input" descClass="settings-metabox-description" />
-    //                             </div>
-    //                         </div>
-    //                     </div>
-    //                 </div>
-    //             </>
-    //     },
-    //     // {
-    //     //     id: "Shipping", label: "Shipping", icon: "cart", content:
-    //     //         <>
-    //     //             <div className="card-wrapper">
-    //     //                 <div className="card-content">
-    //     //                     <div className="card-title">Shipping & Delivery</div>
-    //     //                     <div className="form-group-wrapper">
-    //     //                         <div className="form-group">
-    //     //                             <label htmlFor="product-name">Shipping Zones</label>
-    //     //                             <BasicInput name="phone" value={formData.phone} wrapperClass="setting-form-input" descClass="settings-metabox-description" onChange={handleChange} />
-    //     //                         </div>
-    //     //                     </div>
-
-    //     //                     <div className="form-group-wrapper">
-    //     //                         <div className="form-group">
-    //     //                             <label htmlFor="product-name">Shipping Methods</label>
-    //     //                             <BasicInput name="phone" wrapperClass="setting-form-input" descClass="settings-metabox-description" />
-    //     //                         </div>
-    //     //                     </div>
-    //     //                     <div className="form-group-wrapper">
-    //     //                         <div className="form-group">
-    //     //                             <label htmlFor="product-name">Delivery Preferences</label>
-    //     //                             <BasicInput name="phone" wrapperClass="setting-form-input" descClass="settings-metabox-description" />
-    //     //                         </div>
-    //     //                     </div>
-    //     //                 </div>
-    //     //             </div>
-    //     //         </>
-    //     // },
-    //     { id: "shipping", label: "Shipping & Delivery", icon: "tools", content: <ShippingDelivery /> },
-    //     { id: "verification", label: "Verification", icon: "tools", content: <Verification /> },
-    //     { id: "livechat", label: "Livechat", icon: "tools", content: <Livechat /> },
-    // ];
-    // return (
-    //     <>
-    //         {successMsg && (
-    //             <>
-    //                 <div className="admin-notice-wrapper">
-    //                     <i className="admin-font adminlib-icon-yes"></i>
-    //                     <div className="notice-details">
-    //                         <div className="title">Great!</div>
-    //                         <div className="desc">{successMsg}</div>
-    //                     </div>
-    //                 </div>
-    //             </>
-    //         )}
-
-    //         <div className="settings-tab-wrapper">
-    //             <div className="left-side">
-    //                 {settingTabs.map((tab) => (
-    //                     <div
-    //                         key={tab.id}
-    //                         className={`title ${activeTab === tab.id ? "active" : ""}`}
-    //                         onClick={() => setActiveTab(tab.id)}
-    //                     >
-    //                         <p><i className={`adminlib-${tab.icon}`}></i>{tab.label}</p>
-    //                     </div>
-    //                 ))}
-    //             </div>
-    //             <div className="content">
-    //                 {settingTabs.map(
-    //                     (tab) =>
-    //                         activeTab === tab.id && (
-    //                             <div key={tab.id} className="tab-panel">
-    //                                 {tab.content}
-    //                             </div>
-    //                         )
-    //                 )}
-    //             </div>
-    //         </div>
-    //     </>
-    // );
-
-    const SimpleLink = ({ to, children, onClick, className }: any) => (
-        <a href={to} onClick={onClick} className={className}>
-            {children}
-        </a>
-    );
-
-    const getCurrentTabFromUrl = () => {
-        const hash = window.location.hash.replace(/^#/, "");
-        const hashParams = new URLSearchParams(hash);
-        return hashParams.get("subtab") || "general";
-    };
-
-    const [currentTab, setCurrentTab] = useState(getCurrentTabFromUrl());
-
-    useEffect(() => {
-        const handleHashChange = () => setCurrentTab(getCurrentTabFromUrl());
-        window.addEventListener("hashchange", handleHashChange);
-        return () => window.removeEventListener("hashchange", handleHashChange);
-    }, []);
-
-    // Build hash URL for a given tab
-    const prepareUrl = (tabId: string) => `#&tab=settings&subtab=store-status-control&tab=${tabId}`;
+    
 
     const tabData = [
+        {
+            type: 'heading',
+            name: 'Phase 1',
+        },
         {
             type: 'file',
             content: {
@@ -251,6 +74,10 @@ const StoreStatus = () => {
                 // hideTabHeader: true,
                 icon: 'form-address',
             },
+        },
+        {
+            type: 'heading',
+            name: 'Phase 2',
         },
         {
             type: 'file',
@@ -314,18 +141,20 @@ const StoreStatus = () => {
                 return <div></div>;
         }
     };
+
     return (
         <>
             <div className="horizontal-tabs">
                 <Tabs
                     tabData={tabData}
-                    currentTab={currentTab}
+                    currentTab={ location.get( 'tabId' ) as string }
                     getForm={getForm}
-                    prepareUrl={prepareUrl}
+                    prepareUrl={ ( tabid: string ) =>
+                    `?page=multivendorx#&tab=settings&subtab=store-status-control&tabId=${ tabid }`}
                     appLocalizer={appLocalizer}
                     settingName="Settings"
                     supprot={[]}
-                    Link={SimpleLink}
+                    Link={Link}
                     submenuRender={true} />
             </div>
         </>

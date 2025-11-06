@@ -306,7 +306,6 @@ const EditStore = () => {
     //     }
     // };
 
-
     return (
         <>
             <div className="store-page">
@@ -673,22 +672,24 @@ const EditStore = () => {
                                 <ToggleSetting
                                     wrapperClass="setting-form-input"
                                     descClass="settings-metabox-description"
-                                    key='store_delete_option'
                                     options={[
                                         {
                                             value: 'set_store_owner',
+                                            key: 'set_store_owner',
                                             label: 'Change Store owner',
                                         },
                                         {
                                             value: 'product_assign_admin',
+                                            key: 'product_assign_admin',
                                             label: 'Product Assign to Admin',
                                         },
                                         {
                                             value: 'permanent_delete',
+                                            key: 'permanent_delete',
                                             label: 'Permanently Delete',
                                         },
                                     ]}
-                                    // value={selectedReview.status}
+                                    value={deleteOption}
                                     onChange={(value) => {
                                         setDeleteOption(value);
                                         setSelectedOwner(null);

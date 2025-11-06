@@ -219,11 +219,13 @@ const PaymentSettings = ({ id, data }: { id: string|null; data: any }) => {
 								<ToggleSetting
 									wrapperClass="setting-form-input"
 									descClass="settings-metabox-description"
-									description={
-										(paymentOptions && paymentOptions.length === 0)
-											? "You haven’t enabled any payment methods yet. Configure payout options to allow stores to receive their earnings."
-											: ""
-									}
+									description={(paymentOptions && paymentOptions.length === 0)
+										? `You haven’t enabled any payment methods yet. Configure payout options 
+											<a href="?page=multivendorx#&tab=settings&subtab=payment-integration" 
+												>
+												from here
+											</a> to allow stores to receive their earnings.`
+										: ""}
 									options={paymentOptions}
 									value={formData.payment_method || ""}
 									onChange={(value) => handleToggleChange(value, 'payment_method')}
