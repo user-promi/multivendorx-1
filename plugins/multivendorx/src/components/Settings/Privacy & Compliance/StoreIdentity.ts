@@ -73,7 +73,6 @@ export default {
             key: 'verification_methods',
             type: 'multi-string',
             label: __('Verification methods', 'multivendorx'),
-            placeholder: __('', 'multivendorx'),
             moduleEnabled: 'identity-verification',
             proSetting: true,
             requiredEnable: true,

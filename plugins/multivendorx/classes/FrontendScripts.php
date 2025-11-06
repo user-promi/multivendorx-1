@@ -498,6 +498,7 @@ class FrontendScripts {
                         'decimal_sep'              => wc_get_price_decimal_separator(),
                         'thousand_sep'             => wc_get_price_thousand_separator(),
                         'decimals'                 => wc_get_price_decimals(),
+                        'shop_url'                 => MULTIVENDORX_PRO_SHOP_URL,
                         'payout_payment_options'   => $payment_admin_settings,
 						'module_page_url'          => admin_url( 'admin.php?page=multivendorx#&tab=modules' ),
 						'plugin_url'               => admin_url( 'admin.php?page=multivendorx#&tab=' ),
