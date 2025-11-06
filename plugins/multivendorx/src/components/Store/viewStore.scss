@@ -63,6 +63,7 @@
         position: absolute;
         right: 1rem;
         bottom: 1rem;
+        z-index: 9;
     }
 
     .details-wrapper {
@@ -253,6 +254,7 @@
 
     span {
         padding-left: 0.313rem;
+        display: flex;
     }
 }
 

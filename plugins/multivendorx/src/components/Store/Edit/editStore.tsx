@@ -84,10 +84,10 @@ const EditStore = () => {
     const currentTab = hashParams.get('subtab');
     const prepareUrl = (tabId: string) => `?page=multivendorx#&tab=stores&edit/${editId}/&subtab=${tabId}`;
     const navigate = useNavigate();
-    
+
     const autoSave = (updatedData: { [key: string]: string }) => {
         if (!editId) return;
-        
+
         axios({
             method: 'PUT',
             url: getApiLink(appLocalizer, `store/${editId}`),
@@ -358,7 +358,7 @@ const EditStore = () => {
                                         style={{
                                             background: data?.banner && `url("${data.banner}")`,
                                         }}
-                                        >
+                                    >
                                         {Object.keys(data).length === 0 ? (
                                             <Skeleton variant="rectangular" width="100%" height={200} />
                                         ) : !data.banner ? (
@@ -542,7 +542,7 @@ const EditStore = () => {
                                                                     </span>
                                                                 </>
                                                             ) : (
-                                                                <span><i className="adminlib-star"></i> (0) Review</span>
+                                                                <span><i className="adminlib-star-o"></i> <i className="adminlib-star-o"></i> <i className="adminlib-star-o"></i> <i className="adminlib-star-o"></i> <i className="adminlib-star-o"></i> (0) Review</span>
                                                             )}
                                                         </div>
                                                     </li>
@@ -555,11 +555,11 @@ const EditStore = () => {
                                                     {data?.slug ? (
                                                         <>
                                                             {data.slug}{' '}
-                                                            
+
                                                             <i className="adminlib-create" onClick={() => {
                                                                 navigate(`?page=multivendorx#&tab=stores&edit/${data.id}/&subtab=store`, {
                                                                     state: { highlightTarget: "store-slug" },
-                                                                    });
+                                                                });
                                                             }}></i>
                                                         </>
                                                     ) : (
@@ -635,15 +635,20 @@ const EditStore = () => {
 
                 <CommonPopup
                     open={deleteModal}
-                    onClose={setDeleteModal}
-                    width="500px"
+                    onClose={() => setDeleteModal(false)}
+                    width="600px"
+                    height="50%"
                     header={
                         <>
                             <div className="title">
-                                <i className="adminlib-cart"></i>
+                                <i className="adminlib-storefront"></i>
                                 Choose an Option
                             </div>
-                            
+                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus eaque corporis, corrupti iste iure sint.</p>
+                            <i
+                                onClose={() => setDeleteModal(false)}
+                                className="icon adminlib-close"
+                            ></i>
                         </>
                     }
                     footer={
@@ -656,22 +661,24 @@ const EditStore = () => {
                                 Cancel
                             </button>
                             <button onClick={() => {
-                                        if (deleteOption) {
-                                            deleteStoreApiCall(deleteOption);
-                                        }
-                                    }} className="admin-btn btn-purple">
+                                if (deleteOption) {
+                                    deleteStoreApiCall(deleteOption);
+                                }
+                            }} className="admin-btn btn-purple">
                                 Delete
                             </button>
                         </>
                     }
-        
+
                 >
                     <div className="content">
                         <div className="form-group-wrapper">
                             <div className="form-group">
+                                <label htmlFor="title">Lorem ipsum dolor sit.</label>
                                 <ToggleSetting
                                     wrapperClass="setting-form-input"
                                     descClass="settings-metabox-description"
+                                    // key='store_delete_option'
                                     options={[
                                         {
                                             value: 'set_store_owner',
@@ -729,19 +736,24 @@ const EditStore = () => {
                                     }}
                                 /> */}
                             </div>
-                            {deleteOption == 'set_store_owner' && (
-                                <SelectInput
-                                    name="new_owner"
-                                    value={selectedOwner?.value}
-                                    options={appLocalizer.store_owners}
-                                    type="single-select"
-                                    onChange={(val) => {
-                                         if (val) {
-                                            setSelectedOwner(val);
-                                        }
-                                    }}
-                                />
-                            )}
+                            <div className="form-group">
+                                {deleteOption == 'set_store_owner' && (
+                                    <>
+                                        <label htmlFor="title">Lorem ipsum dolor sit.</label>
+                                        <SelectInput
+                                            name="new_owner"
+                                            value={selectedOwner?.value}
+                                            options={appLocalizer.store_owners}
+                                            type="single-select"
+                                            onChange={(val) => {
+                                                if (val) {
+                                                    setSelectedOwner(val);
+                                                }
+                                            }}
+                                        />
+                                    </>
+                                )}
+                            </div>
                         </div>
                     </div>
                 </CommonPopup>

@@ -215,14 +215,22 @@ const StoreSettings = ({ id, data }: { id: string | null; data: any }) => {
     useEffect(() => {
         const highlightId = location.state?.highlightTarget;
         if (highlightId) {
-        const target = document.getElementById(highlightId);
-        if (target) {
-            target.scrollIntoView({ behavior: "smooth", block: "center" });
-            target.classList.add("highlight-section");
+            const target = document.getElementById(highlightId);
 
-        }
+            if (target) {
+                target.scrollIntoView({ behavior: "smooth", block: "center" });
+                target.classList.add("highlight");
+                const handleClick = () => {
+                    target.classList.remove("highlight");
+                    document.removeEventListener("click", handleClick);
+                };
+                setTimeout(() => {
+                    document.addEventListener("click", handleClick);
+                }, 200);
+            }
         }
     }, [location.state]);
+
 
     // Load map scripts based on provider
     useEffect(() => {
@@ -1007,7 +1015,7 @@ const StoreSettings = ({ id, data }: { id: string | null; data: any }) => {
                             </div>
                         </div>
                     </div>
-                    <div className="card-content">
+                    <div id="store-slug" className="card-content">
                         <div className="card-header">
                             <div className="left">
                                 <div className="title">
@@ -1016,7 +1024,7 @@ const StoreSettings = ({ id, data }: { id: string | null; data: any }) => {
                             </div>
                         </div>
 
-                        <div id="store-slug" className="form-group-wrapper">
+                        <div className="form-group-wrapper">
                             <div className="form-group">
                                 <label htmlFor="store-email">Slug</label>
                                 <BasicInput
