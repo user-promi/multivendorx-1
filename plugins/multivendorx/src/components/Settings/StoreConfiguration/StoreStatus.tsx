@@ -43,7 +43,7 @@ const StoreStatus = () => {
     const tabData = [
         {
             type: 'heading',
-            name: 'Phase 1',
+            name: 'Activation Flow',
         },
         {
             type: 'file',
@@ -77,7 +77,7 @@ const StoreStatus = () => {
         },
         {
             type: 'heading',
-            name: 'Phase 2',
+            name: 'Post-Activation Flow',
         },
         {
             type: 'file',
