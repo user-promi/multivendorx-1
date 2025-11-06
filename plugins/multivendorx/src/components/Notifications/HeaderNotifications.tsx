@@ -5,7 +5,7 @@ import axios from 'axios';
 const HeaderNotifications = () => {
 
     const [notifications, setNotifications] = useState<[] | null>(null);
-    
+
     useEffect(() => {
         axios({
             method: 'GET',
@@ -15,9 +15,9 @@ const HeaderNotifications = () => {
                 header: true
             }
         })
-        .then((response) => {
-            setNotifications(response.data || []);
-        });
+            .then((response) => {
+                setNotifications(response.data || []);
+            });
     }, []);
 
     const dismissNotification = (id: number) => {
@@ -30,45 +30,47 @@ const HeaderNotifications = () => {
             setNotifications((prev) => prev.filter((n) => n.id !== id));
         });
     };
-// console.log(notifications)
-    return(
+    // console.log(notifications)
+    return (
         <>
             <div className="dropdown-menu notification">
                 <div className="title">
-                    Notifications 
+                    Notifications
                     {notifications && notifications.length > 0 && (
-                        <span className="admin-badge green">
+                        <span className="admin-badge yellow">
                             {notifications.length} New
                         </span>
                     )}
                 </div>
                 <div className="notification">
                     <ul>
-                         {notifications && notifications.length > 0 ? (
+                        {notifications && notifications.length > 0 ? (
                             notifications.map((item, idx) => (
                                 <li key={idx}>
-                                    {/* <a href={item.link || "#"}> */}
-                                    <div 
-                                    className={`icon admin-badge green`}
-                                    >
-                                        <i className={item.icon || "adminlib-user-network-icon"}></i>
-                                    </div>
-                                    <div className="details">
-                                        <span className="heading">{item.title}</span>
-                                        <span className="message">{item.message}</span>
-                                        <span className="time">{item.time}</span>
-                                    </div>
+                                    <div className="item">
+                                        {/* <a href={item.link || "#"}> */}
+                                        <div
+                                            className={`icon admin-badge green`}
+                                        >
+                                            <i className={item.icon || "adminlib-user-network-icon"}></i>
+                                        </div>
+                                        <div className="details">
+                                            <span className="heading">{item.title}</span>
+                                            <span className="message">{item.message}</span>
+                                            <span className="time">{item.time}</span>
+                                        </div>
 
-                                    <button
-                                        className="dismiss-btn"
-                                        onClick={() => dismissNotification(item.id)}
-                                        title="Dismiss"
-                                    >
-                                        <i className="adminlib-close"></i>
-                                    </button>
+                                        <span
+                                            className="admin-badge red"
+                                            onClick={() => dismissNotification(item.id)}
+                                            title="Dismiss"
+                                        >
+                                            <i className="adminlib-close"></i>
+                                        </span>
+                                    </div>
                                     {/* </a> */}
                                 </li>
-                        ))) : (
+                            ))) : (
                             <li className="empty-state">
                                 <div className="no-notifications">
                                     <i className="adminlib-info"></i>
