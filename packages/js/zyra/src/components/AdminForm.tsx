@@ -1022,7 +1022,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             values={setting[inputField.key] || inputField.defaultValues || []}
                             name={inputField.key}
                             proSetting={isProSetting(inputField.proSetting ?? false)}
-                            moduleEnabled={inputField.moduleEnabled ? modules.includes(inputField.moduleEnabled) : false}
+                            moduleEnabled={inputField.moduleEnabled ? modules.includes(inputField.moduleEnabled) : true}
                             description={inputField.desc}
                             descClass="settings-metabox-description"
                             iconEnable={inputField.iconEnable}
@@ -1250,6 +1250,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             wrapperClass={
                                 inputField.look === 'toggle' ? 'toggle-btn' : inputField.selectDeselect === true ? 'checkbox-list-side-by-side' : 'simple-checkbox'
                             }
+                            moduleEnabled={inputField.moduleEnabled ? modules.includes(inputField.moduleEnabled) : true}
                             descClass="settings-metabox-description"
                             description={inputField.desc}
                             selectDeselectClass="admin-btn btn-purple select-deselect-trigger"

@@ -41,6 +41,7 @@ interface MultiCheckBoxProps {
     descClass?: string;
     hintInnerClass?: string;
     khali_dabba: boolean;
+    moduleEnabled?: boolean;
 }
 
 const MultiCheckBox: React.FC<MultiCheckBoxProps> = (props) => {
@@ -115,7 +116,7 @@ const MultiCheckBox: React.FC<MultiCheckBoxProps> = (props) => {
                                 checked={allSelected}
                                 onChange={(e) => {
                                     // If locked, show popup and stop
-                                    if (props.proSetting || !props.khali_dabba) {
+                                    if (props.proSetting || !props.khali_dabba || !props.moduleEnabled) {
                                         e.preventDefault();
                                         props.proChanged?.();
                                         return;
