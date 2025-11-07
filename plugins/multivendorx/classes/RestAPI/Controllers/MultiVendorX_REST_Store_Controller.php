@@ -802,6 +802,8 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
         unset($data['commission']);
         unset($data['transactions']);
         unset($data['primary_owner_info']);
+        unset($data['overall_reviews']);
+        unset($data['total_reviews']);
         
         // Update basic store info
         $store->set('name',        $data['name'] ?? $store->get('name'));
@@ -809,6 +811,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
         $store->set('description', $data['description'] ?? $store->get('description'));
         $store->set('who_created', 'admin');
         $store->set('status',      $data['status'] ?? $store->get('status'));
+        $store->set('create_time',      $data['create_time'] ?? $store->get('create_time'));
     
         // Save all other meta dynamically
         if (is_array($data)) {
