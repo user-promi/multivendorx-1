@@ -51,7 +51,7 @@ const StoreSettings = ({ id, data }: { id: string | null; data: any }) => {
     const [mapProvider, setMapProvider] = useState('');
     const [apiKey, setApiKey] = useState('');
     const appLocalizer = (window as any).appLocalizer;
-    const { modules } = useModules.getState();
+    const { modules } = useModules();
 
 
     const [addressData, setAddressData] = useState({
