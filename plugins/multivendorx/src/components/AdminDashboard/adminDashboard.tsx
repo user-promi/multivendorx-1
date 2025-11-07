@@ -319,11 +319,10 @@ const AdminDashboard = () => {
 
   const [activeTab, setActiveTab] = useState("dashboard");
   const isPro = !!appLocalizer.khali_dabba;
-
   const renderUpgradeButton = (label = "Upgrade Now") => {
     if (isPro) return null; // Already Pro → hide button completely
     return (
-      <a href="https://multivendorx.com/pricing/" target="_blank" className="admin-btn btn-purple">
+      <a href={appLocalizer.shop_url} target="_blank" className="admin-btn btn-purple">
         <i className="adminlib-pro-tag"></i>
         {label}
         <i className="adminlib-arrow-right icon-pro-btn"></i>
