@@ -1606,6 +1606,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                 case 'multi-checkbox-table':
                     input = (
                         <MultiCheckboxTable
+                            khali_dabba={appLocalizer?.khali_dabba ?? false}
                             rows={inputField.rows ?? []} // row array
                             columns={inputField.columns ?? []} // columns array
                             description={String(inputField.desc)}
@@ -1637,6 +1638,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             moduleChange={(moduleEnabled) => {
                                 setModelOpen(true);
                             }}
+                            proChanged={() => setModelOpen(true)}
                         />
                     );
                     break;

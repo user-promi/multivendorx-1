@@ -346,6 +346,7 @@ interface Column {
     key: string;
     label: string;
     moduleEnabled?: string;
+    proSetting?: string;
 }
 
 interface Row {
@@ -373,6 +374,8 @@ interface MultiCheckboxTableProps {
     modules: string[];
     storeTabSetting: Record<string, string[]>;
     moduleChange: (module: string) => void;
+    proChanged?: () => void;
+    khali_dabba: boolean;
 }
 
 const MultiCheckboxTable: React.FC<MultiCheckboxTableProps> = ({
@@ -384,6 +387,8 @@ const MultiCheckboxTable: React.FC<MultiCheckboxTableProps> = ({
     proSetting,
     modules,
     moduleChange,
+    proChanged,
+    khali_dabba
 }) => {
 
     const [openGroup, setOpenGroup] = useState<string | null>(() => {
@@ -443,6 +448,11 @@ const MultiCheckboxTable: React.FC<MultiCheckboxTableProps> = ({
                                                         setting[column.key].includes(row.key)
                                                     }
                                                     onChange={(e) => {
+                                                        if (column.proSetting && !khali_dabba) {
+                                                            proChanged?.();
+                                                            return;
+                                                        }
+
                                                         if (
                                                             column.moduleEnabled &&
                                                             !modules.includes(
@@ -529,6 +539,10 @@ const MultiCheckboxTable: React.FC<MultiCheckboxTableProps> = ({
                                                                     }
                                                                     disabled={!hasExists}
                                                                     onChange={(e) => {
+                                                                        if (column.proSetting && !khali_dabba) {
+                                                                            proChanged?.();
+                                                                            return;
+                                                                        }
                                                                         if (
                                                                             column.moduleEnabled &&
                                                                             !modules.includes(
