@@ -81,6 +81,7 @@ export default {
                 '<a href="https://docs.mapbox.com/help/getting-started/access-tokens/" target="_blank">Click here to generate access token.</a>',
                 'multivendorx'
             ),
+			moduleEnabled: 'geo-location',
             dependent: {
                 key: 'choose_map_api',
                 set: true,
