@@ -16,7 +16,7 @@ const ApprovalQueue = () => {
     const [reportAbuseCount, setReportAbuseCount] = useState<number>(0);
     const [withdrawCount, setWithdrawCount] = useState<number>(0);
 
-    const { modules } = useModules.getState();
+    const { modules } = useModules();
     const [activeTab, setActiveTab] = useState("");
     const settings = appLocalizer.settings_databases_value || {};
 
@@ -59,7 +59,7 @@ const ApprovalQueue = () => {
             label: "Products",
             icon: "adminlib-multi-product red",
             count: productCount,
-            des: "Waiting for your green light",
+            des: "Pending your approval",
             condition: settings?.["store-capability"]?.products?.includes("publish_products"), count: productCount,
             content: <Products onUpdated={refreshCounts} />
         },
@@ -69,7 +69,7 @@ const ApprovalQueue = () => {
             icon: "adminlib-coupon green",
             count: couponCount,
             condition: settings?.["store-capability"]?.coupons?.includes("publish_coupons"),
-            des: "Need a quick approval",
+            des: "Need a quick review",
             content: <Coupons onUpdated={refreshCounts} />
         },
         {
@@ -92,11 +92,11 @@ const ApprovalQueue = () => {
         },
         {
             id: "report-abuse",
-            label: "Product Abused",
+            label: "Abused Product",
             module: "marketplace-compliance",
             icon: "adminlib-product blue",
             count: reportAbuseCount,
-            des: "Reported for review",
+            des: "Reported for assessment",
             content: <ReportAbuseTable onUpdated={refreshCounts} />
         },
         {

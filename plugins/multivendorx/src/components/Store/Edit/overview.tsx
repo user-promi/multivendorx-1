@@ -40,7 +40,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
     const overviewData = [
         {
             icon: "adminlib-tools green",
-            number: formatCurrency(storeData.commission?.total_order_amount ?? 0),
+            number: formatCurrency(storeData.commission?.commission_total ?? 0),
             text: "Lifetime Earnings",
         },
         {

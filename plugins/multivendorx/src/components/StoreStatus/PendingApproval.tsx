@@ -31,11 +31,11 @@ const PendingApproval = () => {
                 <div className="form-group">
                     <label>Message shown to pending stores:</label>
                     <BasicInput
-                        name="phone"
+                        name="pending_msg"
                         // value={formData.phone} 
                         wrapperClass="setting-form-input"
                         descClass="settings-metabox-description"
-                    // onChange={handleChange} 
+                        onChange={handleChange} 
                     />
                 </div>
             </div>

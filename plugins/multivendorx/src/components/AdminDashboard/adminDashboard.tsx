@@ -29,7 +29,7 @@ import axios from "axios";
 import { Dialog } from "@mui/material";
 
 const AdminDashboard = () => {
-  const { modules, insertModule, removeModule } = useModules.getState();
+  const { modules, insertModule, removeModule } = useModules();
   const [installing, setInstalling] = useState<string>('');
   const [pluginStatus, setPluginStatus] = useState<{ [key: string]: boolean }>({});
   const [successMsg, setSuccessMsg] = useState<string>('');
